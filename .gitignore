@@ -11,7 +11,7 @@ Thumbs.db
 .vscode/
 .idea/
 node_modules/
-config.js
+/config.js
 
 # client proposal (third-party PII) & bulky source
 *.pdf
