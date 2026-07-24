@@ -211,8 +211,10 @@ window.AtlasWorld = (function () {
   /* ---- Phase 3: instanced props scattered along the real road network ----
      Trees + lamps as InstancedMesh (one draw call per species). y-up kit
      geometry is baked then rotated to our z-up world once. */
-  async function populateProps(roads, heroes = []) {
+  async function populateProps(roads, heroes = [], opts = {}) {
     if (!roads || !roads.length) return;
+    const wantTrees = opts.trees !== false, wantLamps = opts.lamps !== false;
+    if (!wantTrees && !wantLamps) return;
     const dummy = new THREE.Object3D();
     const treeIds = A.idsByKind("tree");
     const lampId = "lamp";
@@ -242,6 +244,8 @@ window.AtlasWorld = (function () {
     });
 
     // trees — split across species
+    if (!wantTrees) treePts.length = 0;
+    if (!wantLamps) lampPts.length = 0;
     for (let s = 0; s < treeIds.length; s++) {
       const mine = treePts.filter((_, i) => i % treeIds.length === s);
       if (!mine.length) continue;

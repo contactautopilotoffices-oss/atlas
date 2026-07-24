@@ -190,7 +190,7 @@ let map = null;
 let selectedId = null;
 const shortlisted = new Set();   // building ids the user has starred — client-agnostic, drives the leaderboard star
 let night = false;
-let showLabels = false; // calm first frame — labels are a choice, not the default
+let showLabels = true; // ON by default — property name tags visible immediately
 let propertyMarkers = {};     // id → mapboxgl.Marker (dot)
 let labelMarkers   = {};      // id → mapboxgl.Marker (name tag)
 let debugMode = new URLSearchParams(window.location.search).has("debug");
@@ -393,13 +393,12 @@ function integrateBasemap() {
     "source-layer": "building",
     filter: ["all",
       ["==", ["get", "extrude"], "true"],
-      ["!=", ["get", "underground"], "true"],
-      ["has", "height"]
+      ["!=", ["get", "underground"], "true"]
     ],
     paint: {
       "fill-extrusion-color": contextRamp(),
-      "fill-extrusion-height": ["get", "height"],
-      "fill-extrusion-base": ["get", "min_height"],
+      "fill-extrusion-height": ["coalesce", ["get", "height"], ["get", "render_height"], 14],
+      "fill-extrusion-base": ["coalesce", ["get", "min_height"], ["get", "render_min_height"], 0],
       "fill-extrusion-opacity": 1,
       "fill-extrusion-vertical-gradient": true,
     }
@@ -593,9 +592,15 @@ async function initWorld() {
       const b = D.BUILDINGS.find(x => x.id === w.id);
       return b ? [b.lng, b.lat] : null;
     }).filter(Boolean);
-    resolveClientRoads()
-      .then(roads => AtlasWorld.populateProps(roads, heroCoords))
-      .catch(e => console.warn("[Atlas] props skipped:", e.message));
+    // Client opt-out: CLIENT.props = false kills all props; {trees:false} / {lamps:false} are granular.
+    const propCfg = window.CLIENT ? window.CLIENT.props : undefined;
+    if (propCfg === false) {
+      console.log("[Atlas] props disabled by client config");
+    } else {
+      resolveClientRoads()
+        .then(roads => AtlasWorld.populateProps(roads, heroCoords, propCfg || {}))
+        .catch(e => console.warn("[Atlas] props skipped:", e.message));
+    }
 
     // Phase 2 — Class C procedural context (opt-in: ?classc=on; needs a human eyeball)
     if (new URLSearchParams(location.search).get("classc") === "on") initClassC();
@@ -1477,11 +1482,11 @@ function buildingShots(b) {
   const size = Math.max(b.w || 50, b.d || 50);
   const bear = facadeBearing(b);
   const anchor = buildingAnchor(b);
-  const pad = { right: 430, left: 60, top: 70, bottom: 60 };
+  const pad = { right: 320, left: 220, top: 160, bottom: 90 };
   const big = size > 80, mid = size > 55;
   return {
-    // 1 — Hero reveal: façade-on, low pitch, building ~45% of frame. The landing shot.
-    hero:    { center: anchor, zoom: big ? 16.7 : mid ? 17.1 : 17.5, pitch: 32, bearing: bear, padding: pad },
+    // 1 — Hero reveal: 3D helicopter view (58° pitch / 30° bearing), building centered & crystal clear.
+    hero:    { center: anchor, zoom: big ? 16.8 : mid ? 17.2 : 17.5, pitch: 58, bearing: 30, padding: pad },
     // 2 — Arrival: you're almost at the junction; entrance + lobby read; cars pass.
     arrival: { center: anchor, zoom: big ? 17.4 : 17.8, pitch: 16, bearing: bear, padding: pad },
     // 3 — Executive street level: opposite footpath, façade fills the screen.
@@ -1630,10 +1635,11 @@ async function fetchRoute(profile, startLng, startLat, endLng, endLat) {
 /** Per-building nearest station if the client data provides one (stnLng/
     stnLat/stnName); falls back to the BKC Aqua Line 3 station. */
 function stationFor(b) {
+  const fallbackLng = MAP_CENTER[0], fallbackLat = MAP_CENTER[1];
   return {
-    lng: b.stnLng != null ? b.stnLng : BKC_STATION.lng,
-    lat: b.stnLat != null ? b.stnLat : BKC_STATION.lat,
-    name: b.stnName || BKC_STATION.name,
+    lng: b.stnLng != null ? b.stnLng : fallbackLng,
+    lat: b.stnLat != null ? b.stnLat : fallbackLat,
+    name: b.stnName || "Nearest Metro Station",
   };
 }
 
@@ -1646,6 +1652,8 @@ function removeRouteLayers() {
   });
 }
 
+let currentTransitType = "metro"; // "metro" | "railway" | "bus"
+
 function clearMetroRoute() {
   if (metroPopup) { metroPopup.remove(); metroPopup = null; }
   removeRouteLayers();
@@ -1653,70 +1661,105 @@ function clearMetroRoute() {
   metroBuildingId = null;
 }
 
-/* ---------- card HTML ---------- */
-function modeTabHTML(mode, emoji, label) {
-  const on = metroMode === mode;
-  return `<button data-mode="${mode}" style="flex:1;padding:3px 4px;border-radius:5px;cursor:pointer;
-    border:1px solid ${on ? ROUTE_BLUE : "rgba(255,255,255,.18)"};
-    background:${on ? "rgba(47,125,240,.28)" : "transparent"};
-    color:${on ? "#bcd6ff" : "rgba(255,255,255,.7)"};
-    font:600 9px system-ui,sans-serif;display:flex;align-items:center;justify-content:center;gap:2px;">${emoji} ${label}</button>`;
+function getTransitNode(b, type) {
+  if (b.transitDetails && b.transitDetails[type]) {
+    const t = b.transitDetails[type];
+    return {
+      name: t.name,
+      lng: t.coords[0],
+      lat: t.coords[1],
+      mode: t.mode || (type === "railway" ? "driving" : "walking"),
+      icon: t.icon || (type === "railway" ? "🚆" : type === "bus" ? "🚌" : "🚇"),
+      distText: t.distText,
+      durationText: t.durationText,
+      routes: t.routes
+    };
+  }
+  const st = stationFor(b);
+  return {
+    name: st.name,
+    lng: st.lng,
+    lat: st.lat,
+    mode: "walking",
+    icon: "🚇",
+    distText: "",
+    durationText: ""
+  };
 }
 
-function busChipsHTML(b) {
-  const routes = (b.busRoutes || "").split(/[,+]/).map(s => s.trim()).filter(Boolean);
-  if (!routes.length || /n\/a/i.test(b.busRoutes || "")) return "";
-  return `<div style="margin-top:5px;padding-top:4px;border-top:1px solid rgba(255,255,255,.10)">
+/* ---------- card HTML ---------- */
+function modeTabHTML(type, emoji, label) {
+  const on = currentTransitType === type;
+  return `<button data-transit-type="${type}" style="flex:1;padding:4px 6px;border-radius:6px;cursor:pointer;
+    border:1px solid ${on ? ROUTE_BLUE : "rgba(255,255,255,.18)"};
+    background:${on ? "rgba(47,125,240,.35)" : "rgba(255,255,255,.05)"};
+    color:${on ? "#ffffff" : "rgba(255,255,255,.7)"};
+    font:600 10px system-ui,sans-serif;display:flex;align-items:center;justify-content:center;gap:3px;transition:all 0.15s ease;">${emoji} ${label}</button>`;
+}
+
+function busChipsHTML(node) {
+  if (!node.routes || !node.routes.length) return "";
+  return `<div style="margin-top:5px;padding-top:4px;border-top:1px solid rgba(255,255,255,.12)">
     <div style="display:flex;flex-wrap:wrap;gap:3px;align-items:center;">
-      <span style="font-size:8px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.5px;">Feeders</span>
-      ${routes.map(r => `<span style="background:rgba(47,125,240,.16);border:1px solid rgba(47,125,240,.55);color:#9ec2ff;font-size:8px;font-weight:700;padding:1px 5px;border-radius:4px;">${r}</span>`).join("")}
+      <span style="font-size:8px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.5px;">Routes:</span>
+      ${node.routes.map(r => `<span style="background:rgba(47,125,240,.2);border:1px solid rgba(47,125,240,.6);color:#9ec2ff;font-size:8.5px;font-weight:700;padding:1px 5px;border-radius:4px;">${r}</span>`).join("")}
     </div>
   </div>`;
 }
 
-function metroCardHTML(b, st) {
-  return `<div style="font-family:system-ui,sans-serif;color:#fff;background:rgba(16,21,30,.85);
-      border:1px solid rgba(20,184,196,.45);border-radius:16px;padding:5px 8px;min-width:auto;max-width:180px;
-      box-shadow:0 4px 14px rgba(0,0,0,.45);backdrop-filter:blur(8px)">
-    <div style="display:flex;align-items:center;gap:6px;white-space:nowrap;">
-      <span style="font-size:10px;font-weight:700;color:#14b8c4;">${st.name}</span>
-      <span class="md-summary" style="font-size:10px;color:rgba(255,255,255,.85);">…</span>
+function metroCardHTML(b, node) {
+  return `<div style="font-family:system-ui,sans-serif;color:#fff;background:rgba(16,21,30,.92);
+      border:1px solid rgba(47,125,240,.55);border-radius:12px;padding:8px 10px;min-width:180px;max-width:220px;
+      box-shadow:0 6px 20px rgba(0,0,0,.5);backdrop-filter:blur(10px)">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:6px;margin-bottom:6px;">
+      <div style="display:flex;align-items:center;gap:4px;overflow:hidden;">
+        <span style="font-size:12px;">${node.icon}</span>
+        <span style="font-size:11px;font-weight:700;color:#60a5fa;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;">${node.name}</span>
+      </div>
     </div>
-    <div style="display:flex;gap:3px;margin-top:3px;">
-      ${modeTabHTML("walking", "🚶", "Walk")}
-      ${modeTabHTML("driving", "🚗", "Drive")}
+    <div class="md-summary" style="font-size:11px;color:rgba(255,255,255,.9);margin-bottom:6px;font-weight:600;">
+      ${node.durationText ? `<b>${node.durationText}</b> (${node.distText})` : 'Calculating route…'}
     </div>
+    <div style="display:flex;gap:4px;">
+      ${modeTabHTML("metro", "🚇", "Metro")}
+      ${modeTabHTML("railway", "🚆", "Railway")}
+      ${modeTabHTML("bus", "🚌", "Bus")}
+    </div>
+    ${busChipsHTML(node)}
   </div>`;
 }
 
 function summaryHTML(route, mode) {
-  if (!route) return `<span style="color:#ff9b9b">Route unavailable</span>`;
+  if (!route) return `<span style="color:#ff9b9b">Direct route</span>`;
   const km = (route.distance / 1000).toFixed(2);
   const min = Math.ceil(route.duration / 60);
-  return `<b style="font-size:15px;">~${min} min</b> <span style="color:rgba(255,255,255,.6);"> · ${km} km ${mode === "driving" ? "drive" : "walk"}</span>`;
+  return `<b style="font-size:12px;color:#38bdf8;">~${min} min</b> <span style="color:rgba(255,255,255,.7);"> · ${km} km ${mode === "driving" ? "drive" : "walk"}</span>`;
 }
 
-/* ---------- route drawing (bold Google-style blue with white casing) ---------- */
-function drawActiveRoute(b, st) {
+/* ---------- route drawing (Google-style blue polyline with white casing) ---------- */
+function drawActiveRoute(b, node) {
   removeRouteLayers();
-  const routes = routeCache[`${b.id}-${st.lng},${st.lat}`];
-  const route = routes ? (metroMode === "driving" ? routes.drive : routes.walk) : null;
+  const cacheKey = `${b.id}-${currentTransitType}-${node.lng},${node.lat}`;
+  const routeObj = routeCache[cacheKey];
+  const route = routeObj ? routeObj[node.mode] : null;
 
   const el = document.querySelector(".metro-dist-popup .md-summary");
-  if (el) el.innerHTML = summaryHTML(route, metroMode);
-  if (!route) return;
+  if (el && route) el.innerHTML = summaryHTML(route, node.mode);
 
-  const coordinates = route.geometry.coordinates;
+  const [blng, blat] = buildingAnchor(b);
+  const coords = route ? route.geometry.coordinates : [[blng, blat], [node.lng, node.lat]];
+  const geom = route ? route.geometry : { type: "LineString", coordinates: coords };
+
   map.addSource("bkc-walking-route-src", {
     type: "geojson",
-    data: { type: "Feature", properties: {}, geometry: route.geometry }
+    data: { type: "Feature", properties: {}, geometry: geom }
   });
   map.addLayer({
     id: "bkc-walking-route-casing",
     type: "line",
     source: "bkc-walking-route-src",
     layout: { "line-cap": "round", "line-join": "round" },
-    paint: { "line-color": "#ffffff", "line-width": 8.5, "line-opacity": 0.9 }
+    paint: { "line-color": "#ffffff", "line-width": 8.5, "line-opacity": 0.95 }
   });
   map.addLayer({
     id: "bkc-walking-route",
@@ -1729,7 +1772,7 @@ function drawActiveRoute(b, st) {
     type: "geojson",
     data: {
       type: "FeatureCollection",
-      features: [coordinates[0], coordinates[coordinates.length - 1]].map(c => ({
+      features: [coords[0], coords[coords.length - 1]].map(c => ({
         type: "Feature", properties: {}, geometry: { type: "Point", coordinates: c }
       }))
     }
@@ -1739,26 +1782,23 @@ function drawActiveRoute(b, st) {
     type: "circle",
     source: "bkc-walking-route-ends",
     paint: {
-      "circle-radius": 5.5,
+      "circle-radius": 6,
       "circle-color": "#ffffff",
       "circle-stroke-color": ROUTE_BLUE,
-      "circle-stroke-width": 3
+      "circle-stroke-width": 3.5
     }
   });
-
 }
 
-function wireModeTabs(b, st) {
-  document.querySelectorAll(".metro-dist-popup [data-mode]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      metroMode = btn.dataset.mode;
-      document.querySelectorAll(".metro-dist-popup [data-mode]").forEach(x => {
-        const on = x.dataset.mode === metroMode;
-        x.style.border = `1px solid ${on ? ROUTE_BLUE : "rgba(255,255,255,.18)"}`;
-        x.style.background = on ? "rgba(47,125,240,.28)" : "transparent";
-        x.style.color = on ? "#bcd6ff" : "rgba(255,255,255,.7)";
-      });
-      drawActiveRoute(b, st);
+function wireModeTabs(b) {
+  document.querySelectorAll(".metro-dist-popup [data-transit-type]").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const type = btn.getAttribute("data-transit-type");
+      if (type) {
+        currentTransitType = type;
+        showMetroDistance(b);
+      }
     });
   });
 }
@@ -1766,31 +1806,31 @@ function wireModeTabs(b, st) {
 async function showMetroDistance(b) {
   clearMetroRoute();
   if (!b.lat || !b.lng) return;
-  if (!document.getElementById("t-dist").classList.contains("on")) return; // Only show if toggle is active
+  if (!document.getElementById("t-dist")?.classList.contains("on")) return;
   metroBuildingId = b.id;
 
-  const st = stationFor(b);
+  const node = getTransitNode(b, currentTransitType);
   const [blng, blat] = buildingAnchor(b);
-  const cacheKey = `${b.id}-${st.lng},${st.lat}`;
+  const cacheKey = `${b.id}-${currentTransitType}-${node.lng},${node.lat}`;
 
-  // Small world-chip anchored at the station so it never covers the building.
-  metroPopup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false, offset: [0, -12], maxWidth: "180px", className: "metro-dist-popup" })
-    .setLngLat([st.lng, st.lat])
-    .setHTML(metroCardHTML(b, st))
+  const bHeight = b.h || (b.floors ? b.floors * 3.2 : 30);
+  const heightOffset = -Math.round(bHeight * 2.2 + 35);
+
+  // Card anchored above the building roof so the 3D structure & facade stay 100% visible
+  metroPopup = new mapboxgl.Popup({ closeButton: false, closeOnClick: false, offset: [0, heightOffset], maxWidth: "220px", className: "metro-dist-popup" })
+    .setLngLat([blng, blat])
+    .setHTML(metroCardHTML(b, node))
     .addTo(map);
-  wireModeTabs(b, st);
+
+  wireModeTabs(b);
   currentRouteId = b.id;
 
-  // Fetch BOTH modes once, in parallel, then draw the active one
   if (!routeCache[cacheKey]) {
-    const [walk, drive] = await Promise.all([
-      fetchRoute("walking", blng, blat, st.lng, st.lat),
-      fetchRoute("driving", blng, blat, st.lng, st.lat),
-    ]);
-    routeCache[cacheKey] = { walk, drive };
+    const route = await fetchRoute(node.mode, blng, blat, node.lng, node.lat);
+    routeCache[cacheKey] = { [node.mode]: route };
   }
-  if (metroBuildingId !== b.id) return; // user moved on meanwhile
-  drawActiveRoute(b, st);
+  if (metroBuildingId !== b.id) return;
+  drawActiveRoute(b, node);
 }
 
 /* ============================================================
@@ -1810,6 +1850,8 @@ function openCard(b) {
   const best = units[0];
   const card = document.getElementById("card");
   const fitColor = best ? D.FIT_COLORS[best.fit] : "#888";
+  const hasWT = !(window.CLIENT && window.CLIENT.walkthrough === false);
+  const hasShortlist = !(window.CLIENT && window.CLIENT.shortlist === false);
 
   card.innerHTML = `
     <button id="cardClose" aria-label="close">✕</button>
@@ -1825,7 +1867,7 @@ function openCard(b) {
 
     <div class="compact-cta">
       <button class="btn-explore" id="cardExpand">View Details</button>
-      <button class="btn-walk" id="wtBtnCompact">Walkthrough</button>
+      ${hasWT ? `<button class="btn-walk" id="wtBtnCompact">Walkthrough</button>` : ""}
     </div>
 
     <div class="detail-sections">
@@ -1852,8 +1894,17 @@ function openCard(b) {
       <div class="floor-detail" id="floorDetail">Click a highlighted floor to inspect the unit.</div>
     </div>
 
+    ${b.pdf ? `<div class="sec"><h4>Property details — per shared proposal</h4>
+      <div class="unit" style="border-left-color:${fitColor}"><div class="unit-grid">
+        ${Object.entries(b.pdf).map(([k, v]) => `<span>${k}</span><span>${v}</span>`).join("")}
+      </div></div>
+    </div>` : ""}
+
     <div class="sec"><h4>Connectivity — decision-maker view</h4>
       <div class="conn">
+        ${Array.isArray(b.transit) && b.transit.length ? b.transit.map(t => `
+        <div class="conn-row"><span class="ic ${t.cls || "bus"}">${t.ic || "•"}</span>
+          <div>${t.text}${t.sub ? `<div class="muted">${t.sub}</div>` : ""}</div></div>`).join("") : `
         <div class="conn-row"><span class="ic aqua">M3</span>
           <div><b>${b.aqua} km</b> to BKC Aqua Line (Line&nbsp;3) · ~${Math.max(1, Math.round(b.aqua * 14.4))} min walk
           <div class="muted">Operational since Oct 2024 · ~7 min peak frequency</div></div></div>
@@ -1863,7 +1914,7 @@ function openCard(b) {
         <div class="conn-row"><span class="ic rail">R</span>
           <div>Bandra suburban rail <b>${b.bandra ? b.bandra + " km" : "—"}</b> · BEST feeders + BKC AC shuttle</div></div>
         <div class="conn-row"><span class="ic bus">B</span>
-          <div>${b.busStops || "—"}<div class="muted">Routes: ${b.busRoutes || "—"}</div></div></div>
+          <div>${b.busStops || "—"}<div class="muted">Routes: ${b.busRoutes || "—"}</div></div></div>`}
       </div>
     </div>
 
@@ -1871,10 +1922,11 @@ function openCard(b) {
       <div class="poshwrap">${(b.posh || []).map(p => `<span class="posh">★ ${p}</span>`).join("")}</div>
     </div>
 
+    ${(hasShortlist || hasWT) ? `
     <div class="card-cta">
-      <button class="btn-primary" id="pitchBtn">${shortlisted.has(b.id) ? "✓ Added to shortlist" : ((window.CLIENT && window.CLIENT.shortlistText) || `Add to ${D.META.client} shortlist`)}</button>
-      <button class="btn-primary" id="wtBtn" style="margin-top:10px; background:#f0a020; color:#121214; border:none;">Virtual Walkthrough</button>
-    </div>
+      ${hasShortlist ? `<button class="btn-primary" id="pitchBtn">${shortlisted.has(b.id) ? "✓ Added to shortlist" : ((window.CLIENT && window.CLIENT.shortlistText) || `Add to ${D.META.client} shortlist`)}</button>` : ""}
+      ${hasWT ? `<button class="btn-primary" id="wtBtn" style="margin-top:10px; background:#f0a020; color:#121214; border:none;">Virtual Walkthrough</button>` : ""}
+    </div>` : ""}
     </div>`;
 
   // Land in compact mode — small, bottom-left, out of the building's way.
@@ -1882,7 +1934,10 @@ function openCard(b) {
   card.className = "compact";
   requestAnimationFrame(() => card.classList.add("open"));
 
-  document.getElementById("cardClose").onclick = () => closeCard();
+  document.getElementById("cardClose").onclick = (e) => {
+    if (e) e.stopPropagation();
+    closeCard();
+  };
   document.getElementById("cardExpand")?.addEventListener("click", () => card.classList.remove("compact"));
   document.getElementById("wtBtnCompact")?.addEventListener("click", () => openWalkthrough(b));
   document.getElementById("pitchBtn")?.addEventListener("click", () => toggleShortlist(b.id));
@@ -1927,7 +1982,14 @@ function floorStackSVG(b, units) {
 }
 
 function closeCard() {
-  document.getElementById("card").classList.remove("open");
+  const card = document.getElementById("card");
+  if (card) card.classList.remove("open", "compact");
+  
+  if (typeof metroPopup !== "undefined" && metroPopup) {
+    metroPopup.remove();
+    metroPopup = null;
+  }
+  
   stopHeroOrbit();
   hideShotBar();
   setCinematicFocus(false, null);   // the world comes back
@@ -2124,7 +2186,8 @@ async function refreshWeather() {
 }
 
 function applyWeatherToWorld() {
-  const mm = WX.precip || 0;
+  // CLIENT.rain === false: never draw rain on the lens (chip + cloud dimming stay live)
+  const mm = (window.CLIENT && window.CLIENT.rain === false) ? 0 : (WX.precip || 0);
   if (map.setRain) {                       // GL JS ≥ 3.9
     if (mm > 0.05) {
       const k = Math.min(1, mm / 8);       // 8 mm/h ≈ full monsoon

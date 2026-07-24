@@ -100,6 +100,7 @@ canvas{display:block}
 #card{position:fixed;right:-460px;top:78px;bottom:16px;width:430px;background:var(--panel2);border:1px solid var(--line);
   border-radius:14px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);z-index:16;overflow-y:auto;transition:right .45s cubic-bezier(.2,.8,.2,1);
   box-shadow:-20px 0 60px rgba(0,0,0,.4)}
+#card:not(.open){display:none !important}
 #card.open{right:16px}
 #cardClose{position:absolute;top:12px;right:12px;background:rgba(255,255,255,.08);border:none;color:var(--txt);
   width:28px;height:28px;border-radius:8px;cursor:pointer;font-size:13px}
@@ -252,7 +253,7 @@ canvas{display:block}
   <div class="toggles">
     <button class="tg" id="t-cine">◐ Cinematic</button>
     <button class="tg" id="t-theme">🌅 Theme: Dawn</button>
-    <button class="tg" id="t-labels">🏷 Labels</button>
+    <button class="tg on" id="t-labels">🏷 Labels</button>
     <button class="tg ghost" id="t-dist">📍 Metro distance</button>
     <button class="tg" id="t-traffic">🚗 Traffic</button>
     <button class="tg ghost" id="t-filters">⚖ Brief</button>
@@ -375,7 +376,11 @@ function applyClientText(){
   const setTxt = (sel, val, html) => { const el = document.querySelector(sel); if(el && val != null){ if(html) el.innerHTML = val; else el.textContent = val; } };
   try{
     if(_C.gate) setTxt("#gate .sub", _C.gate.sub);
-    if(_C.brand){ setTxt("#brand .t", _C.brand.title, true); setTxt("#brand .s", _C.brand.sub); }
+    if(_C.brand){
+      setTxt("#brand .t", _C.brand.title, true);
+      setTxt("#brand .s", _C.brand.sub);
+      document.title = _C.brand.title.replace(/<[^>]*>/g, "");
+    }
     if(_C.lb){ setTxt("#lb h3", _C.lb.title); setTxt("#lb .why", _C.lb.why, true); }
     setTxt("#winnerBtn", _C.winnerBtnText);
     setTxt("#hint", _C.hint);
