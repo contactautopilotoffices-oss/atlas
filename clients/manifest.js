@@ -6,5 +6,6 @@
 window.CLIENT_MANIFEST = {
   "FLIPDEMOACC": { slug: "flipkart-andheri", pass: "FLIP1234" },
   "VFSDEMOACC":  { slug: "vfs-bkc",          pass: "VFS1234" },
-  "CPDEMOACC":   { slug: "cp-delhi",         pass: "CP1234" }
+  "CPDEMOACC":   { slug: "cp-delhi",         pass: "CP1234" },
+  "INVDEMOACC":  { slug: "invesco-andheri",  pass: "INV1234" }
 };

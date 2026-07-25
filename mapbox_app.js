@@ -1723,7 +1723,7 @@ function metroCardHTML(b, node) {
     <div style="display:flex;gap:4px;">
       ${modeTabHTML("metro", "🚇", "Metro")}
       ${modeTabHTML("railway", "🚆", "Railway")}
-      ${modeTabHTML("bus", "🚌", "Bus")}
+      ${window.CLIENT && window.CLIENT.slug === "invesco-andheri" ? "" : modeTabHTML("bus", "🚌", "Bus")}
     </div>
     ${busChipsHTML(node)}
   </div>`;
@@ -1731,8 +1731,20 @@ function metroCardHTML(b, node) {
 
 function summaryHTML(route, mode) {
   if (!route) return `<span style="color:#ff9b9b">Direct route</span>`;
+  
   const km = (route.distance / 1000).toFixed(2);
   const min = Math.ceil(route.duration / 60);
+
+  // If we're on Invesco, show the approx locations from data.js
+  if (window.CLIENT && window.CLIENT.slug === "invesco-andheri" && metroBuildingId) {
+      const b = BUILDINGS.find(x => x.id === metroBuildingId);
+      if (b && b.aqua) {
+          const approxDist = b.aqua < 1 ? `~${Math.round(b.aqua * 1000)}m` : `~${b.aqua}km`;
+          const approxMin = Math.max(1, Math.round(b.aqua * 14.4));
+          return `<b style="font-size:12px;color:#38bdf8;">~${approxMin} min</b> <span style="color:rgba(255,255,255,.7);"> · ${approxDist} walk</span>`;
+      }
+  }
+
   return `<b style="font-size:12px;color:#38bdf8;">~${min} min</b> <span style="color:rgba(255,255,255,.7);"> · ${km} km ${mode === "driving" ? "drive" : "walk"}</span>`;
 }
 
@@ -1858,8 +1870,8 @@ function openCard(b) {
     <div class="card-head">
       <div class="card-block">${b.block}${b.grade ? ` &nbsp;·&nbsp; <span class="grade-chip grade-${b.grade[0]}">Grade ${b.grade}</span>` : ""}</div>
       <div class="card-title">${b.name}</div>
-      ${best ? `<div class="card-rank">Ranks <b>#${best.rank}</b> of ${D.OPTIONS.length} ·
-        <b>${best.scoreLabel || (best.score.toFixed(2) + "/10")}</b> <span class="chip" style="background:${fitColor}">${best.fit}</span>${best.hops ? ` <span class="chip" style="background:${best.hops > 2 ? "#d1495b" : "#14b8c4"};color:#fff">${best.hops} hops</span>` : ""}</div>` :
+      ${best ? (window.CLIENT && window.CLIENT.slug === "invesco-andheri" ? `<div class="card-rank">Options available</div>` : `<div class="card-rank">Ranks <b>#${best.rank}</b> of ${D.OPTIONS.length} ·
+        <b>${best.scoreLabel || (best.score.toFixed(2) + "/10")}</b> <span class="chip" style="background:${fitColor}">${best.fit}</span>${best.hops ? ` <span class="chip" style="background:${best.hops > 2 ? "#d1495b" : "#14b8c4"};color:#fff">${best.hops} hops</span>` : ""}</div>`) :
         `<div class="card-rank">Context landmark</div>`}
       <div class="card-sub">${b.tenants || ""}</div>
       ${b.gradeNote ? `<div class="card-sub grade-note">🏆 ${b.gradeNote}</div>` : ""}
@@ -1876,10 +1888,10 @@ function openCard(b) {
       <div class="units">
         ${units.map(u => `<div class="unit" data-rank="${u.rank}" style="border-left-color:${D.FIT_COLORS[u.fit]}">
           <div class="unit-top"><b>${u.floor} floor</b> · ${u.carpet.toLocaleString()} sqft carpet
-            <span class="unit-score">#${u.rank} · ${u.scoreLabel || u.score.toFixed(2)}</span></div>
+            ${window.CLIENT && window.CLIENT.slug === "invesco-andheri" ? "" : `<span class="unit-score">#${u.rank} · ${u.scoreLabel || u.score.toFixed(2)}</span>`}</div>
           <div class="unit-grid">
-            <span>Chargeable</span><span>${u.charge.toLocaleString()} sqft</span>
-            <span>Efficiency</span><span>${Math.round(u.eff * 100)}%</span>
+            <span>${typeof u.charge === "string" ? "Built-up" : "Chargeable"}</span><span>${u.charge.toLocaleString()}${typeof u.charge === "string" ? "" : " sqft"}</span>
+            <span>Efficiency</span><span>${u.eff != null ? Math.round(u.eff * 100) + "%" : "T.B.D"}</span>
             <span>Furnishing</span><span>${u.furn}</span>
             <span>Parking</span><span>${u.parking}</span>
             <span>Possession</span><span>${u.poss}</span>
@@ -2011,18 +2023,26 @@ function closeCard() {
    ============================================================ */
 function buildLeaderboard() {
   const lb = document.getElementById("lb-list");
-  lb.innerHTML = D.OPTIONS.map(o => {
+  const isInvesco = window.CLIENT && window.CLIENT.slug === "invesco-andheri";
+  
+  if (isInvesco) {
+      const lbTab = document.getElementById("lb-tab");
+      if (lbTab) lbTab.innerHTML = "▶ Options";
+  }
+
+  const sortedOptions = [...D.OPTIONS].sort((a, b) => a.rank - b.rank);
+  lb.innerHTML = sortedOptions.map((o, idx) => {
     const c = D.FIT_COLORS[o.fit];
     const bldg = D.BUILDINGS.find(x => x.id === o.bldg);
     const grade = bldg && bldg.grade ? `Grade ${bldg.grade} · ` : "";
-    return `<div class="lb-row${o.rank > 3 ? " lb-extra" : ""}${shortlisted.has(o.bldg) ? " shortlisted" : ""}" data-bldg="${o.bldg}">
-      <div class="lb-rank">${o.rank}</div>
+    return `<div class="lb-row${idx > 2 ? " lb-extra" : ""}${shortlisted.has(o.bldg) ? " shortlisted" : ""}" data-bldg="${o.bldg}">
+      ${isInvesco ? "" : `<div class="lb-rank">${o.rank}</div>`}
       <div class="lb-main">
         <div class="lb-name">${o.unit}<span class="lb-star" title="Shortlisted">★</span></div>
         <div class="lb-meta"><span class="dot" style="background:${c}"></span>${grade}${o.fit} · ${o.floor} · ${o.carpet.toLocaleString()} sqft · ${o.aqua} km</div>
-        <div class="lb-bar"><span style="width:${o.bar != null ? o.bar : o.score * 10}%;background:${c}"></span></div>
+        ${isInvesco ? "" : `<div class="lb-bar"><span style="width:${o.bar != null ? o.bar : o.score * 10}%;background:${c}"></span></div>`}
       </div>
-      <div class="lb-score">${o.scoreLabel ? o.score : o.score.toFixed(1)}</div>
+      ${isInvesco ? "" : `<div class="lb-score">${o.scoreLabel ? o.score : o.score.toFixed(1)}</div>`}
     </div>`;
   }).join("") + `<button id="lb-expand">See all ${D.OPTIONS.length} options ▾</button>`;
 
