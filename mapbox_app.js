@@ -188,7 +188,7 @@ if (window.CLIENT && window.CLIENT.registry) {
 /* ---- State ---- */
 let map = null;
 let selectedId = null;
-const stationLabelMarkers = [];   // HTML station name chips (see addMetroLines)
+const stationLabelMarkers = [];   // { marker, el, name } — station pins (see addMetroLines)
 const shortlisted = new Set();   // building ids the user has starred — client-agnostic, drives the leaderboard star
 let night = false;
 let showLabels = true; // ON by default — property name tags visible immediately
@@ -1277,6 +1277,7 @@ function addMetroLines() {
     const wrap = document.createElement("div");
     wrap.className = "mm-stn";
     wrap.style.cssText = `display:flex;flex-direction:column;align-items:center;cursor:pointer;
+      transition:opacity .28s ease, filter .28s ease;
       ${showLabels ? "" : "display:none;"}`;
 
     const pin = document.createElement("div");
@@ -1286,7 +1287,7 @@ function addMetroLines() {
       background:${accent};border:2.5px solid #fff;
       box-shadow:0 3px 10px rgba(0,0,0,.55);
       display:flex;align-items:center;justify-content:center;
-      transition:transform .16s ease, box-shadow .16s ease;`;
+      transition:transform .28s cubic-bezier(.2,.8,.2,1), box-shadow .16s ease;`;
     const glyph = document.createElement("span");
     glyph.textContent = "M";
     glyph.style.cssText = `transform:rotate(45deg);color:#fff;font:700 14px/1 system-ui,sans-serif;`;
@@ -1316,7 +1317,8 @@ function addMetroLines() {
     const m = new mapboxgl.Marker({ element: wrap, anchor: "top", offset: [0, -6] })
       .setLngLat(f.geometry.coordinates)
       .addTo(map);
-    stationLabelMarkers.push(m);
+    // keep the raw name too — a building's stnName carries the " · Line" suffix
+    stationLabelMarkers.push({ marker: m, el: wrap, pin, tag, name, fullName: f.properties.name });
   });
 
   // Animated train — a calm glowing dot on the Aqua line, at a transit-like pace
@@ -1551,11 +1553,43 @@ function flyToShot(b, shot) {
 function focusBuilding(b) { flyToShot(b, "hero"); }
 
 /* Cinematic focus — everything that isn't the star recedes (luxury-auto style). */
+/* When a building is selected, only ITS nearest station stays at full weight —
+   every other pin recedes. Focus should isolate the pair being evaluated; 27 equally
+   bright pins tell the viewer nothing about which one the walk time refers to. */
+function setStationFocus(on, stationName) {
+  if (!stationLabelMarkers.length) return;
+  const want = (stationName || "").replace(/ · .*$/, "").trim();
+  stationLabelMarkers.forEach(st => {
+    const isTarget = on && st.name === want;
+    if (!on) {
+      st.el.style.opacity = "1";
+      st.el.style.filter = "none";
+      st.el.style.zIndex = "";
+      st.pin.style.transform = "rotate(-45deg)";
+      st.tag.style.fontWeight = "600";
+      return;
+    }
+    st.el.style.opacity = isTarget ? "1" : "0.22";
+    st.el.style.filter = isTarget ? "none" : "grayscale(0.85)";
+    st.el.style.zIndex = isTarget ? "5" : "";
+    st.pin.style.transform = isTarget ? "rotate(-45deg) scale(1.25)" : "rotate(-45deg) scale(0.85)";
+    st.tag.style.fontWeight = isTarget ? "700" : "600";
+  });
+}
+
 function setCinematicFocus(on, keepId) {
   // context city dims; roads/greenery soften
   const dim = (layer, prop, v) => { if (map.getLayer(layer)) map.setPaintProperty(layer, prop, v); };
-  dim("context-buildings", "fill-extrusion-opacity", on ? 0.45 : 1);
-  ["metro-aqua", "metro-yellow", "metro-aqua-glow"].forEach(l => dim(l, "line-opacity", on ? 0.5 : 1));
+  dim("context-buildings", "fill-extrusion-opacity", on ? 0.28 : 1);
+
+  // Isolate the pair: the selected building's own station stays lit, and the metro
+  // line it sits on keeps its weight while the other line recedes.
+  const star = keepId ? D.BUILDINGS.find(x => x.id === keepId) : null;
+  setStationFocus(on, star && star.stnName);
+  const onYellow = !!(star && /Yellow/i.test(star.stnName || ""));
+  dim("metro-aqua",      "line-opacity", on ? (onYellow ? 0.15 : 0.85) : 1);
+  dim("metro-aqua-glow", "line-opacity", on ? (onYellow ? 0.08 : 0.6)  : 1);
+  dim("metro-yellow",    "line-opacity", on ? (onYellow ? 0.85 : 0.15) : 1);
   // other option buildings recede; the star stays full
   D.BUILDINGS.filter(x => x.isOption).forEach(x => {
     const isStar = x.id === keepId;
@@ -2594,8 +2628,8 @@ function wireUI() {
       m.getElement().style.display = showLabels ? "" : "none";
     });
     // Station name chips are markers, not a layer — drive them directly.
-    stationLabelMarkers.forEach(m => {
-      m.getElement().style.display = showLabels ? "flex" : "none";
+    stationLabelMarkers.forEach(s => {
+      s.el.style.display = showLabels ? "flex" : "none";
     });
   });
 
