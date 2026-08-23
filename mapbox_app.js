@@ -1199,10 +1199,14 @@ function addMetroLines() {
     ]
   };
 
+  // Set CLIENT.metroLine = true to draw the flat schematic line again. Default OFF:
+  // it is a 2D sketch lying over a 3D city and undercuts everything around it. The
+  // real fix is a modelled elevated viaduct, not a nicer polyline.
+  const DRAW_METRO_LINE = !!(window.CLIENT && window.CLIENT.metroLine);
   map.addSource("metro-lines", { type: "geojson", data: metroData });
 
   // 1. Aqua Line Outer Glow
-  map.addLayer({
+  if (DRAW_METRO_LINE) map.addLayer({
     id: "metro-aqua-glow",
     type: "line",
     source: "metro-lines",
@@ -1219,7 +1223,7 @@ function addMetroLines() {
   });
 
   // 2. Aqua Line Core
-  map.addLayer({
+  if (DRAW_METRO_LINE) map.addLayer({
     id: "metro-aqua",
     type: "line",
     source: "metro-lines",
@@ -1232,7 +1236,7 @@ function addMetroLines() {
   });
 
   // 3. Yellow Line (Upcoming - Dashed)
-  map.addLayer({
+  if (DRAW_METRO_LINE) map.addLayer({
     id: "metro-yellow",
     type: "line",
     source: "metro-lines",
@@ -1323,54 +1327,11 @@ function addMetroLines() {
     stationLabelMarkers.push({ marker: m, el: wrap, pin, tag, name, fullName: f.properties.name });
   });
 
-  // Animated train — a calm glowing dot on the Aqua line, at a transit-like pace
-  const trainEl = document.createElement('div');
-  trainEl.style.cssText = `
-    width:12px; height:12px; border-radius:50%;
-    background:#ffffff; border:3px solid #14b8c4;
-    box-shadow:0 0 10px 2px rgba(20,184,196,0.8);
-  `;
-  const trainMarker = new mapboxgl.Marker({ element: trainEl, anchor: 'center' })
-    .setLngLat(metroData.features[0].geometry.coordinates[0])
-    .addTo(map);
-
-  let trainProgress = 0;
-  let trainDirection = 1;
-  const trainCoords = metroData.features[0].geometry.coordinates;
-  const TRAIN_SPEED = 0.00025; // ~1 min end-to-end — reads as transit, not a racing sprite
-
-  function animateTrain() {
-    trainProgress += TRAIN_SPEED * trainDirection;
-
-    // Reverse direction at ends
-    if (trainProgress >= 1) {
-      trainProgress = 1;
-      trainDirection = -1;
-    }
-    if (trainProgress <= 0) {
-      trainProgress = 0;
-      trainDirection = 1;
-    }
-
-    const totalSegments = trainCoords.length - 1;
-    const currentSegmentFloat = trainProgress * totalSegments;
-    const segmentIndex = Math.min(Math.floor(currentSegmentFloat), totalSegments - 1);
-    const segmentProgress = currentSegmentFloat - segmentIndex;
-
-    const p1 = trainCoords[segmentIndex];
-    const p2 = trainCoords[segmentIndex + 1];
-    
-    // Linear interpolation
-    const lng = p1[0] + (p2[0] - p1[0]) * segmentProgress;
-    const lat = p1[1] + (p2[1] - p1[1]) * segmentProgress;
-    
-    trainMarker.setLngLat([lng, lat]);
-    
-    requestAnimationFrame(animateTrain);
-  }
-  
-  // Start animation loop
-  animateTrain();
+  /* REMOVED — animated "train" dot.
+     A glowing sprite sliding along the line at a fixed 0.00025/frame, bound to nothing.
+     No live train position feeds it, so it was ambient animation dressed as live data —
+     the exact thing the brief forbids ("no ambient animation unless it is bound to real
+     data and labelled with its source"). It also has no line left to run along. */
 }
 
 /* ============================================================
@@ -1589,6 +1550,7 @@ function setCinematicFocus(on, keepId) {
   const star = keepId ? D.BUILDINGS.find(x => x.id === keepId) : null;
   setStationFocus(on, star && star.stnName);
   const onYellow = !!(star && /Yellow/i.test(star.stnName || ""));
+  // dim() already no-ops on a missing layer, so this is safe with the line off
   dim("metro-aqua",      "line-opacity", on ? (onYellow ? 0.15 : 0.85) : 1);
   dim("metro-aqua-glow", "line-opacity", on ? (onYellow ? 0.08 : 0.6)  : 1);
   dim("metro-yellow",    "line-opacity", on ? (onYellow ? 0.85 : 0.15) : 1);
@@ -2078,18 +2040,20 @@ function injectDeckCSS() {
      The brand line ("ATLAS by Autopilot · <client> — <city> Digital Twin") wrapped
      to three lines on narrow viewports, pushing #top past the 78px that #lb and
      #card reserve, so the header sat on top of the leaderboard. Clamp it instead. */
-  #top{flex-wrap:nowrap;gap:12px;align-items:flex-start}
-  #brand{min-width:0;max-width:min(38vw,400px)}
-  #brand .t,#brand .s{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
-  .toggles{justify-content:flex-end;max-width:62vw}
-  @media (max-width:1100px){
-    #brand{max-width:30vw}
-    #brand .s{display:none}          /* subtitle is the first thing to go */
-  }
-  @media (max-width:860px){
+  /* Toolbar wins the space it needs; the brand shrinks into what is left and
+     ellipsises. Fixed vw budgets on both sides overflowed and let the buttons
+     overlap the title. */
+  #top{flex-wrap:nowrap;gap:16px;align-items:flex-start}
+  #brand{flex:0 1 auto;min-width:0;overflow:hidden}
+  #brand .t,#brand .s{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block;max-width:100%}
+  #top .spacer{display:none}
+  .toggles{flex:0 0 auto;margin-left:auto;justify-content:flex-end}
+  @media (max-width:1280px){ #brand .s{display:none} }
+  @media (max-width:1024px){
     #brand .t{font-size:13px}
     .tg{padding:6px 9px;font-size:11px}
   }
+  @media (max-width:820px){ #brand{display:none} }
 
   /* leaderboard right-hand figure — metro proximity, not a price */
   #lb-list .lb-fig{flex:none;min-width:52px;text-align:right;font-size:17px;font-weight:700;

@@ -1,0 +1,1051 @@
+================================================================================
+ATLAS — BASILIC FLY STUDIO · FULL DATA VERIFICATION SHEET
+Generated 2026-08-23 from the live build (branch atlas-build, commit fc545a1)
+Sources read verbatim: clients/basilic-fly/{data,config,geo}.js · data/*.json ·
+evidence/ledger.jsonl
+================================================================================
+
+HOW TO READ THIS
+  DECK-STATED   = taken from "Basilic Fly inventory options .pdf" (11pp broker deck).
+                  Client-stated, UNCONFIRMED. Never independently verified.
+  ROUTED        = re-derived by us via Mapbox Directions on 2026-08-23. Does not
+                  rely on the deck. This is what the app puts on screen.
+  OSM/REGISTRY  = coordinate provenance. "footprint" = named OSM polygon.
+                  "project pin" = registry/place-verified point, no surveyed polygon.
+  Anything with no backing is NULL and renders as an empty state — never guessed.
+
+SHORTLIST BUILT: 6 properties. Budget band ₹8,000–9,500/seat (client-stated).
+Sort on screen = ROUTED walking distance to nearest metro, ascending.
+
+================================================================================
+SECTION A — THE SIX PROPERTIES (everything the app projects)
+================================================================================
+
+--------------------------------------------------------------------------------
+1. Primeco Union City — Tower B
+   Locality: Whitefield
+--------------------------------------------------------------------------------
+  COORDINATE   12.9890573, 77.7326259
+    precision  surveyed OSM footprint polygon
+    provenance 12.989057, 77.732626 (OSM way/137772088 'SJR Primeco Union City', 15-pt polygon)
+    confidence verified · ledger row `geo-primeco`
+    footprint  osm way/137772088 (named SJR Primeco Union City) — ledger geo-primeco
+
+  CONNECTIVITY — ROUTED BY US (this is what the card and the row show)
+    Nearest metro      Pattandur Agrahara  (579 m straight line)
+    Walk               692 m · 9 min
+    Drive to station   1025 m · 5 min
+    Kempegowda Intl    37.9 km · 81 min drive
+    Method             mapbox-directions · computed 2026-08-23T07:05:00.401Z
+
+  DECK-STATED (unconfirmed — shown only where the deck actually has an entry)
+    Deck nearest metro Whitefield (Kadugodi) · 0.8 km
+       vs routed:      Pattandur Agrahara · 692 m walk
+    Per-seat cost      ₹9,800/seat  (OVER band top by ₹300)
+    Total floors       2 Basement + Ground + 12
+    Floor offered      Part of 2nd floor
+    Condition          Warm shell
+    Parking            1 car park / 1000 sqft
+    Distance to KIA    39 km
+
+  VFX STUDIOS WITHIN 1 KM  (4 found)
+     173 m  88 Pictures — Animation / VFX / games  [approx. coordinate]
+            88 Pictures official site: https://88.pictures/bangalore/
+     432 m  DNEG — VFX — feature film
+            DNEG official site: https://www.dneg.com/location/bengaluru
+     525 m  DeMeg Studios — 3D animation / VFX  [approx. coordinate]
+            DeMeg Studios official site: https://www.demegstudios.com/
+     833 m  Astra Studios — VFX / animation / virtual production
+            Astra Studios official site: https://theastrastudios.com/studio
+
+  MEDIA ON FILE  (4 photo, 5 video)
+    [photo] Exterior — podium plaza & tower  (unconfirmed)
+            Still frame from the site video supplied by Autopilot Offices
+    [photo] Lobby atrium & café  (unconfirmed)
+            Still frame from the site video supplied by Autopilot Offices
+    [photo] Café & breakout  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+    [photo] Basement parking — Level Q2  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+    [video] Site video  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+    [video] Site video  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+    [video] Site video  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+    [video] Site video  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+    [video] Site video  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+
+--------------------------------------------------------------------------------
+2. Sumadhura Capitol
+   Locality: Whitefield
+--------------------------------------------------------------------------------
+  COORDINATE   12.9849593, 77.7502982
+    precision  surveyed OSM footprint polygon
+    provenance 12.984959, 77.750298 (OSM way/1004340436 'Sumadhura Capitol Towers', 17-pt polygon)
+    confidence verified · ledger row `geo-sumadhura`
+    footprint  osm way/1004340436 (named Sumadhura Capitol Towers) — ledger geo-sumadhura
+
+  CONNECTIVITY — ROUTED BY US (this is what the card and the row show)
+    Nearest metro      Kadugodi Tree Park  (364 m straight line)
+    Walk               538 m · 7 min
+    Drive to station   744 m · 4 min
+    Kempegowda Intl    36.4 km · 77 min drive
+    Method             mapbox-directions · computed 2026-08-23T07:05:01.481Z
+
+  DECK-STATED (unconfirmed — shown only where the deck actually has an entry)
+    Deck nearest metro Kadugodi Tree Park · ~1.1 km
+       vs routed:      Kadugodi Tree Park · 538 m walk
+    Per-seat cost      ₹10,200/seat  (OVER band top by ₹700)
+    Total floors       Wing A & B: 3 Basements + Ground + 11
+    Floor offered      Part of 1st floor
+    Condition          Warm shell
+    Parking            1 car park / 1000 sqft
+    Distance to KIA    ~36 km
+
+  VFX STUDIOS WITHIN 1 KM  (0 found)
+    None found within 1 km.
+
+  MEDIA ON FILE  (3 photo, 1 video)
+    [photo] Exterior — Capitol frontage  (verified)
+            Still frame from the site video supplied by Autopilot Offices
+    [photo] Exterior — full elevation, SUMADHURA signage  (verified)
+            Still frame from the site video supplied by Autopilot Offices
+    [photo] Street context — Purple Line viaduct adjacent  (verified)
+            Still frame from the site video supplied by Autopilot Offices
+    [video] Site video  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+
+--------------------------------------------------------------------------------
+3. Starmark Camelot
+   Locality: Whitefield
+--------------------------------------------------------------------------------
+  COORDINATE   12.9849722, 77.7266886
+    precision  surveyed OSM footprint polygon
+    provenance 12.9849722, 77.7266886 (OSM way/1303625869 'Starmark Camelot', 9-pt polygon)
+    confidence verified · ledger row `geo-starmark`
+    footprint  osm way/1303625869 (named Starmark Camelot) — ledger geo-starmark
+
+  CONNECTIVITY — ROUTED BY US (this is what the card and the row show)
+    Nearest metro      Sri Sathya Sai Hospital  (430 m straight line)
+    Walk               723 m · 10 min
+    Drive to station   962 m · 3 min
+    Kempegowda Intl    38.5 km · 83 min drive
+    Method             mapbox-directions · computed 2026-08-23T07:05:04.014Z
+
+  DECK-STATED (unconfirmed — shown only where the deck actually has an entry)
+    Deck nearest metro NO DECK ENTRY
+    Per-seat cost      UNCONFIRMED — no deck entry
+    Total floors       UNCONFIRMED — no deck entry
+    Floor offered      UNCONFIRMED — no deck entry
+    Condition          UNCONFIRMED — no deck entry
+    Parking            UNCONFIRMED — no deck entry
+    Distance to KIA    UNCONFIRMED — no deck entry
+
+  VFX STUDIOS WITHIN 1 KM  (2 found)
+     643 m  88 Pictures — Animation / VFX / games  [approx. coordinate]
+            88 Pictures official site: https://88.pictures/bangalore/
+     871 m  DNEG — VFX — feature film
+            DNEG official site: https://www.dneg.com/location/bengaluru
+
+  MEDIA ON FILE  (6 photo, 10 video)
+    [photo] Exterior — corner elevation  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+    [photo] Lift lobby  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+    [photo] Meeting room  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+    [photo] Warm shell floor plate  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+    [photo] Basement parking  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+    [photo] Basement parking — services  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+    [video] Site video  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+    [video] Site video  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+    [video] Site video  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+    [video] Site video  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+    [video] Site video  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+    [video] Site video  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+    [video] Site video  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+    [video] Site video  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+    [video] Site video  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+    [video] Site video  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+
+--------------------------------------------------------------------------------
+4. Total Environment — Imagine
+   Locality: EPIP Zone · ITPL Main Road
+--------------------------------------------------------------------------------
+  COORDINATE   12.9876277, 77.7307563
+    precision  surveyed OSM footprint polygon
+    provenance 12.9876277, 77.7307563 (OSM way/1145006727 'Total Environment - Imagine', 8-pt polygon)
+    confidence verified · ledger row `geo-totalenv-v2`
+    footprint  osm way/1145006727 (named Total Environment - Imagine) — ledger geo-totalenv-v2
+
+  CONNECTIVITY — ROUTED BY US (this is what the card and the row show)
+    Nearest metro      Pattandur Agrahara  (760 m straight line)
+    Walk               831 m · 10 min
+    Drive to station   810 m · 5 min
+    Kempegowda Intl    37.7 km · 80 min drive
+    Method             mapbox-directions · computed 2026-08-23T07:34:08.716Z
+
+  DECK-STATED (unconfirmed — shown only where the deck actually has an entry)
+    Deck nearest metro Hoodi · 1.2 km
+       vs routed:      Pattandur Agrahara · 831 m walk
+    Per-seat cost      ₹9,600/seat  (OVER band top by ₹100)
+    Total floors       Basement + Ground + 21
+    Floor offered      9th or 10th or 11th floor
+    Condition          Warm shell
+    Parking            1 car park / 1000 sqft
+    Distance to KIA    39.6 km
+
+  VFX STUDIOS WITHIN 1 KM  (4 found)
+     145 m  88 Pictures — Animation / VFX / games  [approx. coordinate]
+            88 Pictures official site: https://88.pictures/bangalore/
+     475 m  DNEG — VFX — feature film
+            DNEG official site: https://www.dneg.com/location/bengaluru
+     781 m  DeMeg Studios — 3D animation / VFX  [approx. coordinate]
+            DeMeg Studios official site: https://www.demegstudios.com/
+     990 m  Astra Studios — VFX / animation / virtual production
+            Astra Studios official site: https://theastrastudios.com/studio
+
+  MEDIA ON FILE  (2 photo, 0 video)
+    [photo] Entrance signage — #78 ITPL Main Road  (verified)
+            Supplied by Autopilot Offices
+    [photo] Main gate — Total Environment campus  (verified)
+            Supplied by Autopilot Offices
+    NOTE: 2 photograph(s) — below the three-photo minimum. Not padded.
+
+--------------------------------------------------------------------------------
+5. Y Living
+   Locality: Kaveri Nagara · Whitefield
+--------------------------------------------------------------------------------
+  COORDINATE   12.9854982, 77.707817
+    precision  project pin (no surveyed footprint)
+    provenance 12.9854982, 77.707817 (Graphite India Road, Kaveri Nagara 560048); 56 m from the earlier point
+    confidence verified · ledger row `geo-yliving-v3`
+    footprint  NONE — renders as a box at the pin, not a traced polygon
+
+  CONNECTIVITY — ROUTED BY US (this is what the card and the row show)
+    Nearest metro      Seetharampalya  (527 m straight line)
+    Walk               585 m · 8 min
+    Drive to station   1156 m · 4 min
+    Kempegowda Intl    38 km · 82 min drive
+    Method             mapbox-directions · computed 2026-08-23T10:37:14.009Z
+
+  DECK-STATED (unconfirmed — shown only where the deck actually has an entry)
+    Deck nearest metro Garudacharpalya · 2.4 km
+       vs routed:      Seetharampalya · 585 m walk
+    Per-seat cost      ₹9,600/seat  (OVER band top by ₹100)
+    Total floors       Basement + Ground + 8
+    Floor offered      5th & 6th floor
+    Condition          Warm shell
+    Parking            1 car park / 1000 sqft
+    Distance to KIA    42.8 km
+
+  VFX STUDIOS WITHIN 1 KM  (0 found)
+    None found within 1 km.
+
+  MEDIA ON FILE  (1 photo, 0 video)
+    [photo] Architect’s render — not a photograph  (unconfirmed)
+            Supplied by Autopilot Offices
+    NOTE: 1 photograph(s) — below the three-photo minimum. Not padded.
+
+--------------------------------------------------------------------------------
+6. Purva Gainz
+   Locality: Electronic City · Hosur Road
+--------------------------------------------------------------------------------
+  COORDINATE   12.8662484, 77.6568443
+    precision  project pin (no surveyed footprint)
+    provenance 12.8662484, 77.6568443 — Hosur Road, Chikkathoguru, Bengaluru South 560500 (Electronic City)
+    confidence unconfirmed · ledger row `geo-purva`
+    footprint  NONE — renders as a box at the pin, not a traced polygon
+
+  CONNECTIVITY — ROUTED BY US (this is what the card and the row show)
+    Nearest metro      Beratena Agrahara  (288 m straight line)
+    Walk               1425 m · 17 min
+    Drive to station   2809 m · 8 min
+    Kempegowda Intl    53.4 km · 120 min drive
+    Method             mapbox-directions · computed 2026-08-23T07:05:07.171Z
+
+  DECK-STATED (unconfirmed — shown only where the deck actually has an entry)
+    Deck nearest metro NO DECK ENTRY
+    Per-seat cost      UNCONFIRMED — no deck entry
+    Total floors       UNCONFIRMED — no deck entry
+    Floor offered      UNCONFIRMED — no deck entry
+    Condition          UNCONFIRMED — no deck entry
+    Parking            UNCONFIRMED — no deck entry
+    Distance to KIA    UNCONFIRMED — no deck entry
+
+  VFX STUDIOS WITHIN 1 KM  (0 found)
+    None found within 1 km.
+
+  MEDIA ON FILE  (3 photo, 1 video)
+    [photo] Bare shell floor plate  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+    [photo] Bare shell — corner glazing  (unconfirmed)
+            Still frame from the site video supplied by Autopilot Offices
+    [photo] Bare shell — full floor plate depth  (unconfirmed)
+            Still frame from the site video supplied by Autopilot Offices
+    [video] Site video  (unconfirmed)
+            Supplied by Autopilot Offices, origin unstated
+
+================================================================================
+SECTION B — METRO STATIONS (all verified OSM railway=station nodes)
+================================================================================
+PURPLE LINE — Whitefield stretch (OPERATIONAL). 11 stations.
+Track geometry: REAL, from OSM route relation 7841331 (dual tracks collapsed to
+one centreline through a 275 m corridor projection).
+    Singayyanapalya                          12.9965445, 77.6927176
+    Garudacharpalya                          12.9934505, 77.7036768
+    Seetharampalya                           12.9808558, 77.7087854
+    Hoodi                                    12.9888029, 77.711326
+    Kundalahalli                             12.977594, 77.7155586
+    Nallurahalli                             12.9766408, 77.7248845
+    Sri Sathya Sai Hospital                  12.9811949, 77.7275361
+    Pattandur Agrahara                       12.9876393, 77.7377718
+    Kadugodi Tree Park                       12.9856503, 77.7470121
+    Hopefarm Channasandra                    12.9873426, 77.7538033
+    Whitefield (Kadugodi)                    12.9957428, 77.7579489
+
+YELLOW LINE — Hosur Road corridor. 16 stations. Added only because Purva Gainz
+sits on Hosur Road (Purple Line is 14 km away from it).
+ALIGNMENT CAVEAT: straight-line between stations — indicative, NOT surveyed track.
+    Rashtreeya Vidyalaya Road                12.9215807, 77.5802015
+    Ragigudda                                12.9170807, 77.5883015
+    Jayadeva Hospital                        12.916731, 77.5999663
+    BTM Layout                               12.9165878, 77.6081182
+    Central Silk Board                       12.9165816, 77.620567
+    Bommanahalli                             12.9106157, 77.6264782
+    Hongasandra                              12.9016952, 77.6319861
+    Kudlu Gate                               12.8899259, 77.6392156
+    Singasandra                              12.8808178, 77.6448456
+    Hosa Road                                12.8707491, 77.652447
+    Beratena Agrahara                        12.863878, 77.6579036
+    Electronic City                          12.8565053, 77.6635228
+    Infosys Foundation Konappana Agrahara    12.8464399, 77.6711872
+    Huskur Road                              12.8391572, 77.6773716
+    Biocon Hebbagodi                         12.8290325, 77.6813744
+    Delta Electronics Bommasandra            12.8193944, 77.6883453
+
+================================================================================
+SECTION C — DECK OPTIONS THAT ARE *NOT* IN THE BUILD
+================================================================================
+These are in the broker deck and fully ledgered, but do not appear in the app.
+Confirm whether they should be added or stay out.
+
+  International Technology Park — Explorer Block
+    Per-seat cost, International Technology Park
+        = 10900
+    Total floors, International Technology Park
+        = Basement + Ground + 13
+    Total BUA, International Technology Park
+        = 2,01,000 sqft; floor plate 20,000 sqft
+    Floors offered, ITPL
+        = Explorer Block 9th floor, warm shell
+    Distance to KIA, ITPL (deck)
+        = Approx. 40-45 km
+    Nearest metro, ITPL (deck)
+        = Pattandur Agrahara, 0.35 km
+    Nearest bus stand, ITPL (deck)
+        = ITPL Bus Stop, 0.15 km
+    Coordinate (already resolved): 12.985708, 77.734660 (OSM way/130510408 'Explorer', 79-pt polygon, inside International Tech Park)
+
+  Brigade Utopia — Elysium
+    Per-seat cost, Brigade Utopia Elysium
+        = 9500
+    Total floors, Brigade Utopia Elysium
+        = 2 Basement + Ground + 18
+    Total BUA, Brigade Utopia Elysium
+        = 4,62,000 sqft; floor plate 22,000 sqft
+    Floors offered, Brigade Utopia Elysium
+        = 2nd or 3rd floor, warm shell
+    Distance to KIA, Brigade Utopia Elysium (deck)
+        = Approx. 40 km
+    Nearest metro, Brigade Utopia Elysium (deck)
+        = Nallurhalli, 7.8 km
+    Nearest bus stand, Brigade Utopia Elysium (deck)
+        = Varthuru Police Station, 0.6 km
+    Coordinate (already resolved): 12.9340241, 77.7442895 (OSM way/1274696767 'Elysium', Brigade Utopia complex, 10-pt polygon)
+
+  ALSO NOT BUILT: "Verman" — named in the brief's shortlist, absent from the deck,
+  never resolved to a coordinate. No data collected.
+
+================================================================================
+SECTION D — FULL EVIDENCE LEDGER (93 rows, verbatim)
+================================================================================
+Format:  [confidence/method] row-id
+         claim = value
+
+[unconfirmed/document] deck-source
+  Broker deck identity
+    = Basilic Fly inventory options .pdf — 11 pages, 6 property options, South & East Bangalore
+    source: Basilic Fly inventory options .pdf (supplied in repo, extracted via pypdf to recon/basilic_deck_text.txt)
+    note:   client-stated is never verified; all deck figures below are inputs to be re-derived via Mappls once credentials land
+
+[unconfirmed/client-stated] deck-req-area
+  Client area requirement
+    = 5,000 sqft (approximate)
+    source: Broker deck p3
+
+[unconfirmed/client-stated] deck-req-type
+  Client property type
+    = Furnished / Warm Shell, immediate possession, Grade A
+    source: Broker deck p3
+
+[unconfirmed/client-stated] primeco-cost
+  Per-seat cost, Primeco Union City Tower B
+    = 9800
+    source: Broker deck p4
+    note:   budget band 8000-9500 -> 300 over band top
+
+[unconfirmed/client-stated] primeco-floors
+  Total floors, Primeco Union City Tower B
+    = 2 Basement + Ground + 12
+    source: Broker deck p4
+
+[unconfirmed/client-stated] primeco-bua
+  Total BUA, Primeco Union City
+    = 12,65,850 sqft; floor plate 18,500 sqft
+    source: Broker deck p4
+
+[unconfirmed/client-stated] primeco-offered
+  Floors offered, Primeco Union City
+    = Part of 2nd floor, warm shell
+    source: Broker deck p4
+
+[unconfirmed/client-stated] primeco-kia-km
+  Distance to KIA, Primeco Union City (deck)
+    = 39 km
+    source: Broker deck p4
+    note:   re-derive via Mappls Distance Matrix; user estimate 38-42 km consistent
+
+[unconfirmed/client-stated] primeco-metro
+  Nearest metro, Primeco Union City (deck)
+    = Whitefield (Kadugodi), 0.8 km
+    source: Broker deck p4
+    note:   verify via Mappls Nearby Places
+
+[unconfirmed/client-stated] primeco-bus
+  Nearest bus stand, Primeco Union City (deck)
+    = ITPL Bus Stop, 1.0 km
+    source: Broker deck p4
+
+[unconfirmed/client-stated] totalenv-cost
+  Per-seat cost, Total Environment (Mahadevapura)
+    = 9600
+    source: Broker deck p5
+    note:   100 over band top
+
+[unconfirmed/client-stated] totalenv-floors
+  Total floors, Total Environment
+    = Basement + Ground + 21
+    source: Broker deck p5
+
+[unconfirmed/client-stated] totalenv-bua
+  Total BUA, Total Environment
+    = 4.63 lakh sqft; floor plate 20,000 sqft
+    source: Broker deck p5
+
+[unconfirmed/client-stated] totalenv-offered
+  Floors offered, Total Environment
+    = 9th or 10th or 11th floor, warm shell
+    source: Broker deck p5
+
+[unconfirmed/client-stated] totalenv-kia-km
+  Distance to KIA, Total Environment (deck)
+    = 39.6 km
+    source: Broker deck p5
+    note:   user estimate 36-40 km consistent
+
+[unconfirmed/client-stated] totalenv-metro
+  Nearest metro, Total Environment (deck)
+    = Hoodi Junction, 1.2 km
+    source: Broker deck p5
+    note:   brief names this property 'Total Environment Workcations, ITPL Main Road' but deck says Mahadevapura — name/location mismatch to reconcile
+
+[unconfirmed/client-stated] totalenv-bus
+  Nearest bus stand, Total Environment (deck)
+    = Hope Farm Circle, ~1.5 km
+    source: Broker deck p5
+
+[unconfirmed/client-stated] sumadhura-cost
+  Per-seat cost, Sumadhura Capitol
+    = 10200
+    source: Broker deck p6
+    note:   700 over band top
+
+[unconfirmed/client-stated] sumadhura-floors
+  Total floors, Sumadhura Capitol
+    = Wing A & B: 3 Basements + Ground + 11
+    source: Broker deck p6
+
+[unconfirmed/client-stated] sumadhura-bua
+  Total BUA, Sumadhura Capitol
+    = 16,87,840 sqft; 65,175 sqft per wing
+    source: Broker deck p6
+
+[unconfirmed/client-stated] sumadhura-offered
+  Floors offered, Sumadhura Capitol
+    = Part of 1st floor, warm shell
+    source: Broker deck p6
+
+[unconfirmed/client-stated] sumadhura-kia-km
+  Distance to KIA, Sumadhura Capitol (deck)
+    = ~36 km
+    source: Broker deck p6
+    note:   user table estimates Kadugodi 40-44 km — deck/user delta ~4-8 km, flag
+
+[unconfirmed/client-stated] sumadhura-metro
+  Nearest metro, Sumadhura Capitol (deck)
+    = Kadugodi Tree Park, ~1.1 km
+    source: Broker deck p6
+
+[unconfirmed/client-stated] sumadhura-bus
+  Nearest bus stand, Sumadhura Capitol (deck)
+    = Hope Farm Circle, ~1.4 km
+    source: Broker deck p6
+
+[unconfirmed/client-stated] yliving-cost
+  Per-seat cost, Y Living
+    = 9600
+    source: Broker deck p7
+    note:   100 over band top
+
+[unconfirmed/client-stated] yliving-floors
+  Total floors, Y Living
+    = Basement + Ground + 8
+    source: Broker deck p7
+
+[unconfirmed/client-stated] yliving-bua
+  Total BUA, Y Living
+    = 1,16,400 sqft; floor plate 11,640 sqft
+    source: Broker deck p7
+
+[unconfirmed/client-stated] yliving-offered
+  Floors offered, Y Living
+    = 5th & 6th floor, warm shell
+    source: Broker deck p7
+
+[unconfirmed/client-stated] yliving-kia-km
+  Distance to KIA, Y Living (deck)
+    = 42.8 km
+    source: Broker deck p7
+    note:   user estimate 38-42 km; deck 42.8 slightly above — flag
+
+[unconfirmed/client-stated] yliving-metro
+  Nearest metro, Y Living (deck)
+    = Garudacharpalya, 2.4 km
+    source: Broker deck p7
+
+[unconfirmed/client-stated] yliving-bus
+  Nearest bus stand, Y Living (deck)
+    = Doddanekundi Main, 0.22 km
+    source: Broker deck p7
+
+[unconfirmed/client-stated] itpl-cost
+  Per-seat cost, International Technology Park
+    = 10900
+    source: Broker deck p8
+    note:   1400 over band top — highest in deck
+
+[unconfirmed/client-stated] itpl-floors
+  Total floors, International Technology Park
+    = Basement + Ground + 13
+    source: Broker deck p8
+
+[unconfirmed/client-stated] itpl-bua
+  Total BUA, International Technology Park
+    = 2,01,000 sqft; floor plate 20,000 sqft
+    source: Broker deck p8
+
+[unconfirmed/client-stated] itpl-offered
+  Floors offered, ITPL
+    = Explorer Block 9th floor, warm shell
+    source: Broker deck p8
+
+[unconfirmed/client-stated] itpl-kia-km
+  Distance to KIA, ITPL (deck)
+    = Approx. 40-45 km
+    source: Broker deck p8
+
+[unconfirmed/client-stated] itpl-metro
+  Nearest metro, ITPL (deck)
+    = Pattandur Agrahara, 0.35 km
+    source: Broker deck p8
+    note:   best metro proximity in deck
+
+[unconfirmed/client-stated] itpl-bus
+  Nearest bus stand, ITPL (deck)
+    = ITPL Bus Stop, 0.15 km
+    source: Broker deck p8
+
+[unconfirmed/client-stated] brigade-cost
+  Per-seat cost, Brigade Utopia Elysium
+    = 9500
+    source: Broker deck p9
+    note:   exactly at band top — only option inside band
+
+[unconfirmed/client-stated] brigade-floors
+  Total floors, Brigade Utopia Elysium
+    = 2 Basement + Ground + 18
+    source: Broker deck p9
+
+[unconfirmed/client-stated] brigade-bua
+  Total BUA, Brigade Utopia Elysium
+    = 4,62,000 sqft; floor plate 22,000 sqft
+    source: Broker deck p9
+
+[unconfirmed/client-stated] brigade-offered
+  Floors offered, Brigade Utopia Elysium
+    = 2nd or 3rd floor, warm shell
+    source: Broker deck p9
+
+[unconfirmed/client-stated] brigade-kia-km
+  Distance to KIA, Brigade Utopia Elysium (deck)
+    = Approx. 40 km
+    source: Broker deck p9
+
+[unconfirmed/client-stated] brigade-metro
+  Nearest metro, Brigade Utopia Elysium (deck)
+    = Nallurhalli, 7.8 km
+    source: Broker deck p9
+    note:   worst metro proximity in deck — metro is client's top priority, so this ranks last on the stated sort
+
+[unconfirmed/client-stated] brigade-bus
+  Nearest bus stand, Brigade Utopia Elysium (deck)
+    = Varthuru Police Station, 0.6 km
+    source: Broker deck p9
+
+[unconfirmed/client-stated] user-est-kia-cluster
+  User geography estimate, Whitefield cluster to KIA
+    = all five Whitefield-area buildings ~38-44 km from KIA
+    source: User message 2026-08-22 (self-described 'good estimates, verify before printing')
+    note:   explicitly marked for verification; verify via Mappls before printing anywhere
+
+[unconfirmed/client-stated] user-delta-purva
+  Deck error flagged by user: Purva Gainz (Electronic City) KIA distance
+    = deck says ~40 km; Electronic City is 15-20 km further south than Whitefield, so real figure is materially higher
+    source: User message 2026-08-22
+    note:   Purva Gainz is not in the extracted deck text (pp10-11 are image-only, may contain it) — re-extract those pages as images; deck-vs-reality delta to quantify via Mappls
+
+[unconfirmed/client-stated] budget-band
+  Client budget band
+    = 8000-9500 per seat
+    source: ATLAS_BUILD_PROMPT.md §9
+    note:   every deck option is at or above band top (9500-10900); only Brigade Utopia at exactly 9500 — major report finding
+
+[unconfirmed/client-stated] shortlist-mismatch
+  Shortlist composition
+    = brief names Y Living, Total Environment Workcations (ITPL Main Rd), Starmark Camelot, Verman + Primeco, Sumadhura; deck lists Primeco, Total Environment (Mahadevapura), Sumadhura, Y Living, ITPL, Brigade Utopia
+    source: ATLAS_BUILD_PROMPT.md vs broker deck
+    note:   Starmark Camelot and Verman have no deck entries; ITPL and Brigade Utopia are deck-only; user table adds Purva Gainz. N is fluid — build for N
+
+[verified/api] geo-primeco
+  Coordinates + footprint, Primeco Union City Tower B
+    = 12.989057, 77.732626 (OSM way/137772088 'SJR Primeco Union City', 15-pt polygon)
+    source: https://overpass-api.de/api/interpreter (POST: way(137772088); out geom;) + name-match query way["name"~"Primeco|Union City",i] in bbox 12.90,77.60,13.05,77.85
+    note:   raw response saved recon/osm/basilic-names2.json + basilic-footprints.json
+
+[verified/api] geo-itpl
+  Coordinates + footprint, ITPL Explorer Block
+    = 12.985708, 77.734660 (OSM way/130510408 'Explorer', 79-pt polygon, inside International Tech Park)
+    source: https://overpass-api.de/api/interpreter (POST: way(130510408); out geom;) + way["name"~"Explorer",i] in bbox 12.93,77.68,13.03,77.80
+    note:   raw response saved recon/osm/basilic-itpl.json + basilic-footprints.json; deck 'Exporer Block' typo read as Explorer Block
+
+[verified/api] geo-sumadhura
+  Coordinates + footprint, Sumadhura Capitol
+    = 12.984959, 77.750298 (OSM way/1004340436 'Sumadhura Capitol Towers', 17-pt polygon)
+    source: https://overpass-api.de/api/interpreter (POST: way(1004340436); out geom;) + Nominatim search 'Sumadhura Capitol Towers, Bangalore'
+    note:   raw response saved recon/osm/basilic-nominatim-sumadhura2.json + basilic-footprints.json
+
+[verified/api] geo-brigade
+  Coordinates + footprint, Brigade Utopia Elysium
+    = 12.9340241, 77.7442895 (OSM way/1274696767 'Elysium', Brigade Utopia complex, 10-pt polygon)
+    source: https://nominatim.openstreetmap.org/search?format=json&limit=5&q=Brigade%20Utopia%2C%20Varthur%2C%20Bengaluru + Overpass way(1274696767); out geom;
+    note:   raw response saved recon/osm/basilic-nominatim-brigade.json + basilic-brigade-geom.json; sits ~15 km south of the Whitefield/ITPL cluster on Varthur-Sarjapur Rd — deck's Varthur address confirmed
+
+[unconfirmed/api] geo-totalenv
+  Coordinates, Total Environment (Mahadevapura)
+    = 12.9912395, 77.6897334 — Mahadevapura suburb node centroid (OSM node/574853138), NOT the building
+    source: https://overpass-api.de/api/interpreter (POST: node["place"~"suburb"]["name"~"Mahadevapura"])
+    note:   building not found in OSM by name (Total Environment / Workcations queries empty); deck locality Mahadevapura confirmed in OSM, so locality centroid used per protocol — REPLACE with real footprint when found
+
+[unconfirmed/api] geo-yliving
+  Coordinates, Y Living
+    = 12.9696365, 77.7497448 — Whitefield suburb node centroid (OSM node/377219489), NOT the building
+    source: https://overpass-api.de/api/interpreter (POST: node["place"~"suburb"]["name"~"Whitefield"])
+    note:   building not found in OSM by name (Y Living / YLiving queries empty); deck locality Whitefield confirmed in OSM, so locality centroid used per protocol — REPLACE with real footprint when found
+
+[verified/api] geo-stn-whitefield
+  Purple Line station node, Whitefield (Kadugodi)
+    = 12.9957428, 77.7579489 (OSM node/5760197744, railway=station)
+    source: https://overpass-api.de/api/interpreter (POST: node["railway"~"station|halt"] in bbox 12.93,77.68,13.03,77.80)
+    note:   raw response saved recon/osm/basilic-metro_stations.json
+
+[verified/api] geo-stn-kadugodi-tree-park
+  Purple Line station node, Kadugodi Tree Park
+    = 12.9856503, 77.7470121 (OSM node/11941186870, railway=station)
+    source: https://overpass-api.de/api/interpreter (POST: node["railway"~"station|halt"] in bbox 12.93,77.68,13.03,77.80)
+    note:   raw response saved recon/osm/basilic-metro_stations.json
+
+[verified/api] geo-stn-hopefarm
+  Purple Line station node, Hopefarm Channasandra
+    = 12.9873426, 77.7538033 (OSM node/5760197745, railway=station)
+    source: https://overpass-api.de/api/interpreter (POST: node["railway"~"station|halt"] in bbox 12.93,77.68,13.03,77.80)
+    note:   raw response saved recon/osm/basilic-metro_stations.json
+
+[verified/api] geo-stn-pattandur
+  Purple Line station node, Pattandur Agrahara
+    = 12.9876393, 77.7377718 (OSM node/5760197749, railway=station)
+    source: https://overpass-api.de/api/interpreter (POST: node["railway"~"station|halt"] in bbox 12.93,77.68,13.03,77.80)
+    note:   deck's 'ITPL' metro = Pattandur Agrahara; raw response saved recon/osm/basilic-metro_stations.json
+
+[verified/api] geo-stn-sathya-sai
+  Purple Line station node, Sri Sathya Sai Hospital
+    = 12.9811949, 77.7275361 (OSM node/5760197751, railway=station)
+    source: https://overpass-api.de/api/interpreter (POST: node["railway"~"station|halt"] in bbox 12.93,77.68,13.03,77.80)
+    note:   raw response saved recon/osm/basilic-metro_stations.json
+
+[verified/api] geo-stn-nallurhalli
+  Purple Line station node, Nallurahalli
+    = 12.9766408, 77.7248845 (OSM node/5760197754, railway=station)
+    source: https://overpass-api.de/api/interpreter (POST: node["railway"~"station|halt"] in bbox 12.93,77.68,13.03,77.80)
+    note:   deck spelling 'Nallurhalli'; OSM name 'Nallurahalli'; raw response saved recon/osm/basilic-metro_stations.json
+
+[verified/api] geo-stn-kundalahalli
+  Purple Line station node, Kundalahalli
+    = 12.977594, 77.7155586 (OSM node/5760197755, railway=station)
+    source: https://overpass-api.de/api/interpreter (POST: node["railway"~"station|halt"] in bbox 12.93,77.68,13.03,77.80)
+    note:   raw response saved recon/osm/basilic-metro_stations.json
+
+[verified/api] geo-stn-hoodi
+  Purple Line station node, Hoodi
+    = 12.9888029, 77.711326 (OSM node/5760197761, railway=station)
+    source: https://overpass-api.de/api/interpreter (POST: node["railway"~"station|halt"] in bbox 12.93,77.68,13.03,77.80)
+    note:   deck says 'Hoodi Junction'; OSM metro station name is 'Hoodi'; raw response saved recon/osm/basilic-metro_stations.json
+
+[verified/api] geo-stn-seetharamapalya
+  Purple Line station node, Seetharampalya
+    = 12.9808558, 77.7087854 (OSM node/5760197757, railway=station)
+    source: https://overpass-api.de/api/interpreter (POST: node["railway"~"station|halt"] in bbox 12.93,77.68,13.03,77.80)
+    note:   raw response saved recon/osm/basilic-metro_stations.json
+
+[verified/api] geo-stn-garudacharpalya
+  Purple Line station node, Garudacharpalya
+    = 12.9934505, 77.7036768 (OSM node/5760197762, railway=station)
+    source: https://overpass-api.de/api/interpreter (POST: node["railway"~"station|halt"] in bbox 12.93,77.68,13.03,77.80)
+    note:   raw response saved recon/osm/basilic-metro_stations.json
+
+[verified/api] geo-stn-singayyanapalya
+  Purple Line station node, Singayyanapalya
+    = 12.9965445, 77.6927176 (OSM node/5760197764, railway=station)
+    source: https://overpass-api.de/api/interpreter (POST: node["railway"~"station|halt"] in bbox 12.93,77.68,13.03,77.80)
+    note:   western end of the drawn stretch; raw response saved recon/osm/basilic-metro_stations.json
+
+[unconfirmed/api] geo-purple-alignment
+  Purple Line Whitefield-stretch alignment
+    = straight-through-stations polyline (Singayyanapalya → Whitefield (Kadugodi))
+    source: OSM railway=subway geometry fetched (recon/osm/basilic-purple-geom.json, basilic-purple-rel.json) but NOT used: dual tracks + incomplete route relation produce gaps up to 17.5 km when chained
+    note:   stations are verified OSM nodes; connecting segments are straight lines, indicative only — refine from relation/1798771 geometry later
+
+[verified/document] geo-primeco-confirm2
+  Second independent confirmation, Primeco Union City Tower B coordinates
+    = Google Maps place pin 12.9884285, 77.7332557 (resolved from user-supplied share link, place name 'Primeco Union City (PUCA)') falls inside the existing OSM polygon bbox (lng 77.7315-77.7336, lat 12.9880-12.9901) used for geo-primeco
+    source: https://maps.app.goo.gl/5yQw6xCdh99MQyTT9 (user-supplied, resolved via redirect)
+    note:   upgrades geo-primeco from single-source (OSM name-match) to two independent signals: OSM polygon + Google Maps place pin. No coordinate change needed — pin corroborates existing placement.
+
+[verified/api] geo-starmark
+  Coordinates + footprint, Starmark Camelot
+    = 12.9849722, 77.7266886 (OSM way/1303625869 'Starmark Camelot', 9-pt polygon)
+    source: Overpass API name-match in Whitefield bbox
+    note:   raw response recon/osm/basilic-starmark.json
+
+[derived/api] conn-osrm-walk-derived
+  Walk times to metro are DERIVED, not routed
+    = road distance / 80 m per min (4.8 km/h)
+    source: OSRM public demo server
+    note:   VERIFIED DEFECT: the public OSRM demo hosts only the car profile — /foot/, /walking/ and /driving/ return byte-identical results (589m/48s = 44.7 km/h). Drive times are valid; walk times are derived from distance and must not be presented as footpath routing.
+
+[verified/document] comp-dneg-itpl
+  DNEG occupies the same building as the ITPL shortlist option
+    = DNEG Bengaluru: 8th Floor, Explorer Building, ITPL, Whitefield Road 560066 — 4 m from ITPL footprint centroid
+    source: DNEG official site + OSM way/130510408 (Explorer)
+    note:   two independent signals: DNEG's own published address and the OSM-named Explorer building. Material for a VFX tenant.
+
+[verified/api] deck-metro-discrepancy
+  Deck metro distances disagree with routed distances
+    = itpl deck 0.35 km vs routed 1913 m; primeco deck names Whitefield (Kadugodi) 0.8 km vs nearest routed Pattandur Agrahara 589 m; sumadhura deck ~1.1 km vs routed 402 m
+    source: broker deck vs OSRM
+    note:   routed figures shown in UI; deck figures no longer displayed. Discrepancy is evidence the numbers were checked.
+
+[unconfirmed/document] geo-purva
+  Coordinates, Purva Gainz
+    = 12.8662484, 77.6568443 — Hosur Road, Chikkathoguru, Bengaluru South 560500 (Electronic City)
+    source: Google Maps place pin 'Purva Gainz', user-supplied share link
+    note:   SINGLE SOURCE. Building-precision pin (not a locality centroid) so it is placed as-is, but no OSM footprint exists — Overpass name search in the South Bengaluru bbox returned only Purva Westend and Purvankara (u/c), both ~2.8 km north and unrelated. Needs a second signal to reach verified.
+
+[verified/api] geo-yellow-line
+  Namma Metro Yellow Line alignment + stations
+    = 16 stations, Rashtreeya Vidyalaya Road to Delta Electronics Bommasandra
+    source: OSM route relation 19421944 + railway=station nodes
+    note:   added because the shortlist widened past Whitefield; raw response recon/osm/yellow-stations.json. Alignment between stations is indicative, not surveyed (same caveat as Purple Line).
+
+[verified/api] CORRECTION-deck-metro-discrepancy
+  RETRACTS deck-metro-discrepancy
+    = The earlier claim that deck metro distances were wrong was itself an artefact
+    source: self-review of OSRM outputs vs straight-line distances
+    note:   OSRM's car profile detours around divided carriageways. ITPL: straight line to Pattandur Agrahara is 400 m and the DECK SAID 0.35 km — the deck was accurate; the 1913 m 'walk' was a car detour (4.8x). Same artefact inflated starmark (2.6x) and purva (10.5x). Walk times are now suppressed entirely where the detour ratio >= 2.5 and straight-line distance is shown instead. Do not repeat the earlier claim.
+
+[verified/document] comp-purva-none
+  VFX studios within 1 km of Purva Gainz
+    = none
+    source: Exa web search (Electronic City / Hosur Road VFX studios) + distance check against the four geocoded studios
+    note:   Nearest known VFX studio is DNEG at 15.7 km. Bengaluru's VFX cluster sits in Whitefield/ITPL and central (Indiranagar, Kodihalli, Jeevan Bima Nagar); no studio found on the Hosur Road corridor. Material trade-off: Purva has the best metro proximity on the list (288 m) and the worst industry-cluster proximity.
+
+[verified/api] geo-totalenv-v2
+  Coordinates + footprint, Total Environment — Imagine
+    = 12.9876277, 77.7307563 (OSM way/1145006727 'Total Environment - Imagine', 8-pt polygon)
+    source: Overpass name-match + company's own published address (No.78 ITPL Main Road, EPIP Zone, Whitefield 560066)
+    note:   TWO independent signals: OSM named footprint, and the address published by Total Environment itself (also on their LinkedIn as HQ, and in filings for CIN U45202KA1996PTC020790). askmap lists 12.988145,77.73167 — 110 m from the OSM centroid, same site. Their /workcations page matches the deck's product name.
+
+[verified/api] CORRECTION-geo-totalenv
+  RETRACTS geo-totalenv
+    = Total Environment was placed 4.46 km from its real location
+    source: self-review after the client supplied the street address
+    note:   The deck gave the locality as 'Mahadevapura', so the fallback used the Mahadevapura suburb centroid (12.9912395,77.6897334). The real address is EPIP Zone / ITPL Main Road — 4.46 km east. Every derived figure for this property was wrong: nearest station was reported as Singayyanapalya 1045 m, actually Pattandur Agrahara 831 m; competitors reported as none within 1 km, actually four (88 Pictures at 145 m). Deck locality fields are not a substitute for an address.
+
+[verified/document] media-totalenv-none
+  Licensed photography for Total Environment — Imagine
+    = none available
+    source: Wikimedia Commons search
+    note:   Commons holds two Total Environment images ('In That Quiet Earth', 'The Magic Faraway Tree') but both are different residential projects, not the Imagine office building. Using either would repeat the wrong-building error. The developer's own site carries images of Imagine but they are copyrighted; the clean route is a media pack from Total Environment, who have every incentive to supply one.
+
+[unconfirmed/document] geo-yliving-v2
+  Coordinates, Y Living (Y@Whitefield)
+    = 12.9851, 77.7075 — Graphite India Road, Kaveri Nagara, Bengaluru 560048
+    source: RERA-linked coordinate, supplied by Autopilot Offices
+    note:   SINGLE SOURCE. Reverse-geocodes to a real built-up address, and at building precision rather than a locality centroid, so it is placed as given. NOT corroborated: Overpass finds no Y Living / Y@Whitefield within 220 m (nearest named neighbours are BMW, Sri Moonstone Park Apartments, Wing 1/2). Note the deck said 'Garudacharpalya 2.4 km'; from this point Garudacharpalya is 1.02 km and the nearest station is Seetharampalya at 0.49 km — the deck matches neither this point nor the old centroid.
+
+[verified/document] CORRECTION-geo-yliving
+  RETRACTS geo-yliving
+    = Y Living was placed 4.89 km from the RERA coordinate
+    source: self-review after the client supplied a RERA-linked point
+    note:   Old placement was the Whitefield locality centroid (12.9696365,77.7497448). Derived figures were wrong: nearest station reported as Kadugodi Tree Park 2213 m and flagged NOT WALKABLE; actually Seetharampalya 577 m / 8 min. Y Living moves from last to second on metro proximity. Third locality-centroid fallback to be corrected by a real address — the pattern is now unambiguous.
+
+[verified/document] geo-yliving-confirm2
+  Second independent confirmation, Y Living coordinates
+    = Cityinfo Services and JLL both place 'Y@Whitefield' / 'Y Residences' (Y-Living Properties) at 'Jn of Graphite India, Ashraya Layout, Garudachar Palya, Mahadevapura' / 'Sy. no 10/2, Graphite India Road' — matching the RERA point's reverse-geocode (Graphite India Road, Kaveri Nagara, 560048)
+    source: Cityinfo Services property listing + JLL Homes listing
+    note:   Upgrades geo-yliving-v2 from single-source to two independent signals: the RERA-linked point and two separate commercial listings agreeing on the Graphite India Road junction.
+
+[verified/document] yliving-name-ambiguity
+  Multiple distinct 'Y' projects exist in Whitefield
+    = ylivingwhitefield.com = No.15 Brookfield Main Road, Doddanekundi. Cityinfo/JLL Y@Whitefield = Jn of Graphite India, Garudachar Palya. PropTiger 'Gen Y Y Whitefield' = Doddanekundi, different developer (Gen Y Social Communities At Whitefield LLP).
+    source: Exa search across listing sites
+    note:   MEDIA HAZARD. The only site carrying a project gallery is the Brookfield Main Road one, which is NOT the shortlisted building. Using its images would put a different building on the card. Photography for this property must come from the agent handling THIS address.
+
+[unconfirmed/document] yliving-floors-discrepancy
+  Deck floor count disagrees with the commercial listing
+    = deck: Basement + Ground + 8, floors offered 5th & 6th. Cityinfo: Basement + Ground + 9 Floors, floor offered Eighth, 11,640 sqft
+    source: broker deck vs Cityinfo Services
+    note:   Could be the same building at different letting stages, or two buildings. Worth resolving before the figures are quoted to a tenant.
+
+[verified/document] CORRECTION-geo-yliving-confirm2
+  RETRACTS geo-yliving-confirm2
+    = Y Living was upgraded to verified on a signal too weak to carry it
+    source: self-review prompted by a third-party coordinate check
+    note:   The upgrade rested on a zoom-17 reverse-geocode returning 'Graphite India Road', matching the Cityinfo/JLL address. At zoom 18 the same point returns 'Aforserve, Kundalahalli Main Road, Channama Layout, EPIP Zone' — nearest building is Aforserve, not Y Living. 'Ashraya Layout, Garudachar Palya' does not geocode. Graphite India Road runs several km and the listing says 'Jn of Graphite India', a junction never confirmed to be this point. Road-level agreement is NOT building-level confirmation. Reverted to unconfirmed.
+
+[verified/document] yliving-rejected-candidate
+  Rejected alternative coordinate for Y Living
+    = 12.98402, 77.73229 — reverse-geocodes to 'Yello Living', a hostel on Pattandur Agrahara Road
+    source: third-party suggestion, checked against Nominatim
+    note:   'Yello Living' is a different business from 'Y Living'/'Y@Whitefield'. Not used.
+
+[verified/document] coords-third-party-crosscheck
+  Third-party coordinate set cross-checked
+    = Sumadhura, Primeco and Starmark agree within 9-19 m — same OSM ways (Mapcarta is an OSM front-end). No conflict.
+    source: Mapcarta W1004340436 / W137772088 / W1303625869 vs Atlas
+    note:   Their objection that 7-10 min walks are implausible misreads the figures: each walk is to that property's OWN nearest station, and they are different stations (Sumadhura->Kadugodi Tree Park 364 m, Primeco->Pattandur Agrahara 579 m). Sumadhura<->Primeco is 1.97 km, not the 2.7 km quoted. Their Total Environment source (pursuit-of-a-radical-rhapsody) is a different, residential project; OSM way/1145006727 'Total Environment - Imagine' stands.
+
+[verified/document] media-sources-exhausted
+  Photography routes tried for Total Environment and Y Living
+    = none produced a usable, correctly-identified image
+    source: Wikimedia Commons; supplied site videos; KartaView street-level imagery
+    note:   1) Wikimedia: two Total Environment images exist but are different residential projects ('In That Quiet Earth', 'The Magic Faraway Tree'); nothing for Imagine or Y Living. 2) Site videos: none supplied for either property, so no frames to extract. 3) KartaView (open CC-BY-SA street-level): 156 frames within 200 m of Total Environment, closest 75 m — but they are forward-facing dashcam shots through a windscreen and capture traffic, not the facade; sampled frames unusable. 4) ylivingwhitefield.com has a gallery but is a DIFFERENT address (No.15 Brookfield Main Road) — see yliving-name-ambiguity. Remaining route is a media pack from the operator/agent.
+
+[verified/photograph] geo-totalenv-confirm3
+  Third confirmation, Total Environment — Imagine address
+    = Site signage photographed at the gate reads: 'TotalEnvironment Imagine — Regd. Office: #78, ITPL Main Road, EPIP Zone, Whitefield, Bangalore - 560066'
+    source: Photograph supplied by Autopilot Offices
+    note:   The building's own signage states the exact address independently verified earlier against OSM way/1145006727 and the operator's published address. Strongest confirmation of any property in the set.
+
+[verified/photograph] media-yliving-rejected
+  Rejected image supplied as Y Living
+    = 'Y LIVING ELEVATION.png' — entrance pillar signage reads TORRE GARIBALDI
+    source: Supplied by Autopilot Offices; rejected on inspection
+    note:   A real photograph, but of a different building: the entrance signage and diamond logo read 'Torre Garibaldi'. Not attached. Y Living is the weakest-sourced property in the set and a wrong-building photograph there would discredit the verified figures beside it.
+
+[unconfirmed/document] media-yliving-render
+  Y Living image supplied is a render
+    = 'Y LIVING FASCADE.png' — CGI architectural visualisation
+    source: Supplied by Autopilot Offices
+    note:   Attached but flagged is_render and counts_as_photograph=false, badged RENDER in the gallery strip and captioned 'ARCHITECT'S RENDER — NOT A PHOTOGRAPH' in the lightbox. Whether it depicts Y Living is client-stated and unverified. Y Living still has ZERO photographs.
+
+[verified/document] geo-yliving-v3
+  Coordinates, Y Living / Y@Whitefield — registry-verified project pin
+    = 12.9854982, 77.707817 (Graphite India Road, Kaveri Nagara 560048); 56 m from the earlier point
+    source: RERA PRM/KA/RERA/1251/446/PR/130722/005066 (Mixed Development) + named Y@Whitefield map listing exposing this coordinate + Cityinfo/JLL address 'Jn of Graphite India, Ashraya Layout, Garudachar Palya'
+    note:   PROJECT-level, not footprint-level. RERA records the project as Mixed Development with 19 commercial-office units; the B+G+9 commercial block (~11,640 sqft/floor, ~100,287 sqft) is a separate component. No surveyed polygon exists for that block, so the pin marks the project, not the building. Carried as coord_precision='project'. Supersedes geo-yliving-v2 (12.9851,77.7075) which had no map-bound name.
+
+[verified/document] yliving-rera-crosscheck
+  Same RERA number appears against a residential listing
+    = PropTiger lists PRM/KA/RERA/1251/446/PR/130722/005066 under 'Gen Y Y Whitefield', Doddanekundi, as 1BHK/2BHK from 357 sqft
+    source: PropTiger vs Aurum PropTech / Horizon / ylivingwhitefield.com
+    note:   CONSISTENT, not contradictory. RERA classifies the project as Mixed Development, so the residential and commercial components share one registration. 'Gen Y Social Communities At Whitefield LLP' is the developer entity; Y@Whitefield / Y-Living is the project brand. This independently supports the client's note that the back gate is the residential side and the commercial block is separate.
+
+================================================================================
+SECTION E — CORRECTIONS, RETRACTIONS AND OPEN FLAGS
+================================================================================
+Things we got wrong and fixed, plus things still unresolved. Read this part.
+
+  • user-delta-purva  [unconfirmed]
+    Deck error flagged by user: Purva Gainz (Electronic City) KIA distance
+      deck says ~40 km; Electronic City is 15-20 km further south than Whitefield, so real figure is materially higher
+      note: Purva Gainz is not in the extracted deck text (pp10-11 are image-only, may contain it) — re-extract those pages as images; deck-vs-reality delta to quantify via Mappls
+
+  • shortlist-mismatch  [unconfirmed]
+    Shortlist composition
+      brief names Y Living, Total Environment Workcations (ITPL Main Rd), Starmark Camelot, Verman + Primeco, Sumadhura; deck lists Primeco, Total Environment (Mahadevapura), Sumadhura, Y Living, ITPL, Brigade Utopia
+      note: Starmark Camelot and Verman have no deck entries; ITPL and Brigade Utopia are deck-only; user table adds Purva Gainz. N is fluid — build for N
+
+  • deck-metro-discrepancy  [verified]
+    Deck metro distances disagree with routed distances
+      itpl deck 0.35 km vs routed 1913 m; primeco deck names Whitefield (Kadugodi) 0.8 km vs nearest routed Pattandur Agrahara 589 m; sumadhura deck ~1.1 km vs routed 402 m
+      note: routed figures shown in UI; deck figures no longer displayed. Discrepancy is evidence the numbers were checked.
+
+  • CORRECTION-deck-metro-discrepancy  [verified]
+    RETRACTS deck-metro-discrepancy
+      The earlier claim that deck metro distances were wrong was itself an artefact
+      note: OSRM's car profile detours around divided carriageways. ITPL: straight line to Pattandur Agrahara is 400 m and the DECK SAID 0.35 km — the deck was accurate; the 1913 m 'walk' was a car detour (4.8x). Same artefact inflated starmark (2.6x) and purva (10.5x). Walk times are now suppressed entirely where the detour ratio >= 2.5 and straight-line distance is shown instead. Do not repeat the earlier claim.
+
+  • comp-purva-none  [verified]
+    VFX studios within 1 km of Purva Gainz
+      none
+      note: Nearest known VFX studio is DNEG at 15.7 km. Bengaluru's VFX cluster sits in Whitefield/ITPL and central (Indiranagar, Kodihalli, Jeevan Bima Nagar); no studio found on the Hosur Road corridor. Material trade-off: Purva has the best metro proximity on the list (288 m) and the worst industry-cluster proximity.
+
+  • CORRECTION-geo-totalenv  [verified]
+    RETRACTS geo-totalenv
+      Total Environment was placed 4.46 km from its real location
+      note: The deck gave the locality as 'Mahadevapura', so the fallback used the Mahadevapura suburb centroid (12.9912395,77.6897334). The real address is EPIP Zone / ITPL Main Road — 4.46 km east. Every derived figure for this property was wrong: nearest station was reported as Singayyanapalya 1045 m, actually Pattandur Agrahara 831 m; competitors reported as none within 1 km, actually four (88 Pictures at 145 m). Deck locality fields are not a substitute for an address.
+
+  • media-totalenv-none  [verified]
+    Licensed photography for Total Environment — Imagine
+      none available
+      note: Commons holds two Total Environment images ('In That Quiet Earth', 'The Magic Faraway Tree') but both are different residential projects, not the Imagine office building. Using either would repeat the wrong-building error. The developer's own site carries images of Imagine but they are copyrighted; the clean route is a media pack from Total Environment, who have every incentive to supply one.
+
+  • CORRECTION-geo-yliving  [verified]
+    RETRACTS geo-yliving
+      Y Living was placed 4.89 km from the RERA coordinate
+      note: Old placement was the Whitefield locality centroid (12.9696365,77.7497448). Derived figures were wrong: nearest station reported as Kadugodi Tree Park 2213 m and flagged NOT WALKABLE; actually Seetharampalya 577 m / 8 min. Y Living moves from last to second on metro proximity. Third locality-centroid fallback to be corrected by a real address — the pattern is now unambiguous.
+
+  • yliving-name-ambiguity  [verified]
+    Multiple distinct 'Y' projects exist in Whitefield
+      ylivingwhitefield.com = No.15 Brookfield Main Road, Doddanekundi. Cityinfo/JLL Y@Whitefield = Jn of Graphite India, Garudachar Palya. PropTiger 'Gen Y Y Whitefield' = Doddanekundi, different developer (Gen Y Social Communities At Whitefield LLP).
+      note: MEDIA HAZARD. The only site carrying a project gallery is the Brookfield Main Road one, which is NOT the shortlisted building. Using its images would put a different building on the card. Photography for this property must come from the agent handling THIS address.
+
+  • yliving-floors-discrepancy  [unconfirmed]
+    Deck floor count disagrees with the commercial listing
+      deck: Basement + Ground + 8, floors offered 5th & 6th. Cityinfo: Basement + Ground + 9 Floors, floor offered Eighth, 11,640 sqft
+      note: Could be the same building at different letting stages, or two buildings. Worth resolving before the figures are quoted to a tenant.
+
+  • CORRECTION-geo-yliving-confirm2  [verified]
+    RETRACTS geo-yliving-confirm2
+      Y Living was upgraded to verified on a signal too weak to carry it
+      note: The upgrade rested on a zoom-17 reverse-geocode returning 'Graphite India Road', matching the Cityinfo/JLL address. At zoom 18 the same point returns 'Aforserve, Kundalahalli Main Road, Channama Layout, EPIP Zone' — nearest building is Aforserve, not Y Living. 'Ashraya Layout, Garudachar Palya' does not geocode. Graphite India Road runs several km and the listing says 'Jn of Graphite India', a junction never confirmed to be this point. Road-level agreement is NOT building-level confirmation. Reverted to unconfirmed.
+
+  • yliving-rejected-candidate  [verified]
+    Rejected alternative coordinate for Y Living
+      12.98402, 77.73229 — reverse-geocodes to 'Yello Living', a hostel on Pattandur Agrahara Road
+      note: 'Yello Living' is a different business from 'Y Living'/'Y@Whitefield'. Not used.
+
+  • coords-third-party-crosscheck  [verified]
+    Third-party coordinate set cross-checked
+      Sumadhura, Primeco and Starmark agree within 9-19 m — same OSM ways (Mapcarta is an OSM front-end). No conflict.
+      note: Their objection that 7-10 min walks are implausible misreads the figures: each walk is to that property's OWN nearest station, and they are different stations (Sumadhura->Kadugodi Tree Park 364 m, Primeco->Pattandur Agrahara 579 m). Sumadhura<->Primeco is 1.97 km, not the 2.7 km quoted. Their Total Environment source (pursuit-of-a-radical-rhapsody) is a different, residential project; OSM way/1145006727 'Total Environment - Imagine' stands.
+
+  • media-sources-exhausted  [verified]
+    Photography routes tried for Total Environment and Y Living
+      none produced a usable, correctly-identified image
+      note: 1) Wikimedia: two Total Environment images exist but are different residential projects ('In That Quiet Earth', 'The Magic Faraway Tree'); nothing for Imagine or Y Living. 2) Site videos: none supplied for either property, so no frames to extract. 3) KartaView (open CC-BY-SA street-level): 156 frames within 200 m of Total Environment, closest 75 m — but they are forward-facing dashcam shots through a windscreen and capture traffic, not the facade; sampled frames unusable. 4) ylivingwhitefield.com has a gallery but is a DIFFERENT address (No.15 Brookfield Main Road) — see yliving-name-ambiguity. Remaining route is a media pack from the operator/agent.
+
+  • media-yliving-rejected  [verified]
+    Rejected image supplied as Y Living
+      'Y LIVING ELEVATION.png' — entrance pillar signage reads TORRE GARIBALDI
+      note: A real photograph, but of a different building: the entrance signage and diamond logo read 'Torre Garibaldi'. Not attached. Y Living is the weakest-sourced property in the set and a wrong-building photograph there would discredit the verified figures beside it.
+
+  • media-yliving-render  [unconfirmed]
+    Y Living image supplied is a render
+      'Y LIVING FASCADE.png' — CGI architectural visualisation
+      note: Attached but flagged is_render and counts_as_photograph=false, badged RENDER in the gallery strip and captioned 'ARCHITECT'S RENDER — NOT A PHOTOGRAPH' in the lightbox. Whether it depicts Y Living is client-stated and unverified. Y Living still has ZERO photographs.
+
+  • yliving-rera-crosscheck  [verified]
+    Same RERA number appears against a residential listing
+      PropTiger lists PRM/KA/RERA/1251/446/PR/130722/005066 under 'Gen Y Y Whitefield', Doddanekundi, as 1BHK/2BHK from 357 sqft
+      note: CONSISTENT, not contradictory. RERA classifies the project as Mixed Development, so the residential and commercial components share one registration. 'Gen Y Social Communities At Whitefield LLP' is the developer entity; Y@Whitefield / Y-Living is the project brand. This independently supports the client's note that the back gate is the residential side and the commercial block is separate.
+
+================================================================================
+SECTION F — IN THE DATA BUT *NOT* ON SCREEN (verify whether this is intended)
+================================================================================
+  • Per-seat cost — held for primeco (9800), sumadhura (10200), totalenv (9600),
+    yliving (9600). NOT rendered anywhere in the current UI. Starmark and Purva
+    have no cost at all.
+  • Total BUA / floor plate — ledgered for all four deck properties
+    (primeco-bua, totalenv-bua, sumadhura-bua, yliving-bua). Not rendered.
+  • Nearest bus stand — ledgered for all four deck properties. Not rendered.
+  • Deck KIA distances — held in data, superseded on screen by our routed figure.
+  • Budget band ₹8,000–9,500 — stated in the panel copy, but no option is
+    scored or flagged against it in the UI.
+
+================================================================================
+SECTION G — KNOWN GAPS / BLOCKERS
+================================================================================
+  • Mappls credentials never landed. Every deck figure stays "client-stated,
+    unconfirmed". Our routed distances come from Mapbox, not Mappls.
+  • Y Living: RERA number PRM/KA/RERA/1251/446/PR/130722/005066 also appears on a
+    PropTiger *residential* listing ("Gen Y Y Whitefield", Doddanekundi) — a
+    different location. We pin the Graphite India Road project. FLAG FOR REVIEW.
+  • Y Living: the only image supplied is a CGI render, labelled RENDER on screen.
+    A second supplied image was rejected — its signage read TORRE GARIBALDI.
+  • Total Environment: 2 photographs only (both site signage). Below the
+    three-photo minimum; the card says so rather than padding.
+  • Sumadhura, Y Living, Purva: zero VFX studios found within 1 km.
+  • Starmark and Purva have no deck entry at all — floors, condition, parking and
+    cost are genuinely unknown, not omitted.
+  • Purva Gainz KIA distance: deck said ~40 km; our routed figure is 53.4 km /
+    120 min. The deck figure was wrong, as the user flagged.
+  • MISMATCH FOUND WHILE COMPILING THIS SHEET — Purva Gainz. Its coordinate is
+    flagged coordConfirmed:true + coordPrecision:"project" in data.js, so the card
+    prints the project-pin banner whose copy reads "verified against RERA
+    registration and a named map listing". Purva has no RERA row: its only
+    provenance is a Google Maps place pin, and ledger row `geo-purva` is
+    confidence:unconfirmed. The on-screen claim is stronger than the evidence.
+    Either soften the banner copy per-property or drop Purva back to unconfirmed.
+  • FLYDEMOACC gate password is still the placeholder FLY1234 — rotate before
+    this goes to the client.
+================================================================================
+END
+================================================================================
