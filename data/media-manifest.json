@@ -283,6 +283,44 @@
   ],
   "primeco": [
     {
+      "file": "media/primeco/primeco-f03-1ad2c66f-hd.jpg",
+      "original_file": "media/primeco/primeco-f03-1ad2c66f.jpg",
+      "thumb": "media/primeco/primeco-f03-1ad2c66f-thumb.jpg",
+      "kind": "photo",
+      "hash": "1ad2c66f",
+      "bytes": 353131,
+      "width": 2048,
+      "height": 1144,
+      "orientation": "landscape",
+      "label": "Exterior \u2014 podium plaza & tower",
+      "source": "Still frame from the site video supplied by Autopilot Offices",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "is_enhanced": false
+    },
+    {
+      "file": "media/primeco/primeco-f04-ef1f895c-hd.jpg",
+      "original_file": "media/primeco/primeco-f04-ef1f895c.jpg",
+      "thumb": "media/primeco/primeco-f04-ef1f895c-thumb.jpg",
+      "kind": "photo",
+      "hash": "ef1f895c",
+      "bytes": 499086,
+      "width": 2048,
+      "height": 1144,
+      "orientation": "landscape",
+      "label": "Lobby atrium & caf\u00e9",
+      "source": "Still frame from the site video supplied by Autopilot Offices",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "is_enhanced": false
+    },
+    {
       "file": "media/primeco/primeco-04-a5673065-hd.jpg",
       "kind": "photo",
       "hash": "a56730655bb2",
@@ -405,6 +443,69 @@
   ],
   "sumadhura": [
     {
+      "file": "media/sumadhura/sumadhura-f01-99103c12-hd.jpg",
+      "original_file": "media/sumadhura/sumadhura-f01-99103c12.jpg",
+      "thumb": "media/sumadhura/sumadhura-f01-99103c12-thumb.jpg",
+      "kind": "photo",
+      "hash": "99103c12",
+      "bytes": 485250,
+      "width": 2048,
+      "height": 1144,
+      "orientation": "landscape",
+      "label": "Exterior \u2014 Capitol frontage",
+      "source": "Still frame from the site video supplied by Autopilot Offices",
+      "captured_at": null,
+      "confidence": "verified",
+      "confirmations": [
+        "supplied-by-client",
+        "building's own signage legible in frame (SUMADHURA / CAPITOL)"
+      ],
+      "is_enhanced": false,
+      "derived_from_video": "media/sumadhura/sumadhura-01-60fc0744.mov"
+    },
+    {
+      "file": "media/sumadhura/sumadhura-f02-c47d0ca3-hd.jpg",
+      "original_file": "media/sumadhura/sumadhura-f02-c47d0ca3.jpg",
+      "thumb": "media/sumadhura/sumadhura-f02-c47d0ca3-thumb.jpg",
+      "kind": "photo",
+      "hash": "c47d0ca3",
+      "bytes": 473673,
+      "width": 2048,
+      "height": 1144,
+      "orientation": "landscape",
+      "label": "Exterior \u2014 full elevation, SUMADHURA signage",
+      "source": "Still frame from the site video supplied by Autopilot Offices",
+      "captured_at": null,
+      "confidence": "verified",
+      "confirmations": [
+        "supplied-by-client",
+        "building's own signage legible (SUMADHURA / CAPITOL)"
+      ],
+      "is_enhanced": false,
+      "derived_from_video": "media/sumadhura/sumadhura-01-60fc0744.mov"
+    },
+    {
+      "file": "media/sumadhura/sumadhura-f03-e9ebbed4-hd.jpg",
+      "original_file": "media/sumadhura/sumadhura-f03-e9ebbed4.jpg",
+      "thumb": "media/sumadhura/sumadhura-f03-e9ebbed4-thumb.jpg",
+      "kind": "photo",
+      "hash": "e9ebbed4",
+      "bytes": 452675,
+      "width": 2048,
+      "height": 1144,
+      "orientation": "landscape",
+      "label": "Street context \u2014 Purple Line viaduct adjacent",
+      "source": "Still frame from the site video supplied by Autopilot Offices",
+      "captured_at": null,
+      "confidence": "verified",
+      "confirmations": [
+        "supplied-by-client",
+        "building's own signage legible (SUMADHURA / CAPITOL)"
+      ],
+      "is_enhanced": false,
+      "derived_from_video": "media/sumadhura/sumadhura-01-60fc0744.mov"
+    },
+    {
       "file": "media/sumadhura/sumadhura-01-60fc0744.mov",
       "kind": "video",
       "hash": "60fc074476f6",
@@ -441,6 +542,46 @@
       "original_file": "media/purva/purva-01-8806cf3f.jpg",
       "is_enhanced": true,
       "enhancement_model": "bytedance_image_upscale (Higgsfield) \u2014 4K super-resolution"
+    },
+    {
+      "file": "media/purva/purva-f02-cfb973fc-hd.jpg",
+      "original_file": "media/purva/purva-f02-cfb973fc.jpg",
+      "thumb": "media/purva/purva-f02-cfb973fc-thumb.jpg",
+      "kind": "photo",
+      "hash": "cfb973fc",
+      "bytes": 278039,
+      "width": 1142,
+      "height": 2048,
+      "orientation": "portrait",
+      "label": "Bare shell \u2014 corner glazing",
+      "source": "Still frame from the site video supplied by Autopilot Offices",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "is_enhanced": false,
+      "derived_from_video": "media/purva/purva-02-4ec64810.mp4"
+    },
+    {
+      "file": "media/purva/purva-f03-e9228ead-hd.jpg",
+      "original_file": "media/purva/purva-f03-e9228ead.jpg",
+      "thumb": "media/purva/purva-f03-e9228ead-thumb.jpg",
+      "kind": "photo",
+      "hash": "e9228ead",
+      "bytes": 259275,
+      "width": 1142,
+      "height": 2048,
+      "orientation": "portrait",
+      "label": "Bare shell \u2014 full floor plate depth",
+      "source": "Still frame from the site video supplied by Autopilot Offices",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "is_enhanced": false,
+      "derived_from_video": "media/purva/purva-02-4ec64810.mp4"
     },
     {
       "file": "media/purva/purva-02-472fde76.mp4",

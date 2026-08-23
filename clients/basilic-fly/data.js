@@ -41,6 +41,7 @@ const ST = {
   nallurhalli: { lng:77.7248845, lat:12.9766408, name:"Nallurahalli · Purple Line", src:"geo-stn-nallurhalli" },
   saisathya:   { lng:77.7275361, lat:12.9811949, name:"Sri Sathya Sai Hospital · Purple Line", src:"geo-stn-saisathya" },
   beratena:    { lng:77.6579036, lat:12.8638780, name:"Beratena Agrahara · Yellow Line", src:"geo-stn-beratena" },
+  seetharampalya: { lng:77.7087854, lat:12.9808558, name:"Seetharampalya · Purple Line", src:"geo-stn-seetharampalya" },
 };
 
 /* ---------------------------------------------------------------------------
@@ -109,7 +110,7 @@ function stn(s){ return { stnLng:s.lng, stnLat:s.lat, stnName:s.name }; }
 
 const BUILDINGS = [
   { id:"primeco", name:"Primeco Union City — Tower B", block:"Whitefield", isOption:true, type:"tower",
-    ...geoToMeters(12.989057, 77.732626), ...stn(ST.whitefield),
+    ...geoToMeters(12.989057, 77.732626), ...stn(ST.pattandur),
     w:55, d:45, h:42, floors:13, color:0x9aa7b5 },
   { id:"sumadhura", name:"Sumadhura Capitol", block:"Whitefield", isOption:true, type:"tower",
     ...geoToMeters(12.984959, 77.750298), ...stn(ST.kadugodi),
@@ -124,7 +125,7 @@ const BUILDINGS = [
     ...geoToMeters(12.9876277, 77.7307563), ...stn(ST.pattandur),   // OSM way/1145006727 — CONFIRMED footprint
     w:50, d:40, h:70, floors:22, color:0x9aa7b5 },
   { id:"yliving", name:"Y Living", block:"Kaveri Nagara", isOption:true, type:"block",
-    ...geoToMeters(12.9851, 77.7075), ...stn(ST.hoodi),   // RERA-linked coordinate (single-source)
+    ...geoToMeters(12.9851, 77.7075), ...stn(ST.seetharampalya),   // RERA-linked coordinate (single-source)
     w:40, d:35, h:29, floors:9, color:0x9aa7b5 }
 ];
 

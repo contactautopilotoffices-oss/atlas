@@ -1208,10 +1208,13 @@ function addMetroLines() {
     source: "metro-lines",
     filter: ["==", "line", "aqua"],
     paint: {
-      "line-color": "#14b8c4",
-      "line-width": 8,
-      "line-opacity": 0.3,
-      "line-blur": 6
+      // Colour follows the client's own line definition, not BKC's teal. The glow is
+      // now a thin casing rather than an 8px blur — a metro line is context, not the
+      // brightest object on the map.
+      "line-color": ["coalesce", ["literal", (window.BKC_LINE3 && window.BKC_LINE3.color) || "#14b8c4"], "#14b8c4"],
+      "line-width": 5.5,
+      "line-opacity": 0.18,
+      "line-blur": 2
     }
   });
 
@@ -1222,9 +1225,9 @@ function addMetroLines() {
     source: "metro-lines",
     filter: ["==", "line", "aqua"],
     paint: {
-      "line-color": "#14b8c4",
-      "line-width": 3,
-      "line-opacity": 0.9
+      "line-color": ["coalesce", ["literal", (window.BKC_LINE3 && window.BKC_LINE3.color) || "#14b8c4"], "#14b8c4"],
+      "line-width": ["interpolate", ["linear"], ["zoom"], 10, 1.6, 14, 2.4, 17, 3.2],
+      "line-opacity": 0.72
     }
   });
 
@@ -1235,10 +1238,9 @@ function addMetroLines() {
     source: "metro-lines",
     filter: ["==", "line", "yellow"],
     paint: {
-      "line-color": "#f2c200",
-      "line-width": 4,
-      "line-opacity": 0.5,
-      "line-dasharray": [3, 3],
+      "line-color": ["coalesce", ["literal", (window.BKC_LINE2 && window.BKC_LINE2.color) || "#f2c200"], "#f2c200"],
+      "line-width": ["interpolate", ["linear"], ["zoom"], 10, 1.6, 14, 2.4, 17, 3.2],
+      "line-opacity": 0.72,
     }
   });
 
