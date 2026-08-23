@@ -121,7 +121,7 @@
       "enhancement_model": "bytedance_image_upscale (Higgsfield) \u2014 4K super-resolution"
     },
     {
-      "file": "media/starmark/starmark-04-0e90cce1.mp4",
+      "file": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/property-media/starmark/starmark-04-0e90cce1.mp4",
       "kind": "video",
       "hash": "0e90cce18b05",
       "bytes": 2592347,
@@ -134,10 +134,11 @@
       "confirmations": [
         "supplied-by-client"
       ],
-      "label": "Site video"
+      "label": "Site video",
+      "local_file": "media/starmark/starmark-04-0e90cce1.mp4"
     },
     {
-      "file": "media/starmark/starmark-06-a7a6b575.mp4",
+      "file": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/property-media/starmark/starmark-06-a7a6b575.mp4",
       "kind": "video",
       "hash": "a7a6b575c092",
       "bytes": 4678744,
@@ -150,10 +151,11 @@
       "confirmations": [
         "supplied-by-client"
       ],
-      "label": "Site video"
+      "label": "Site video",
+      "local_file": "media/starmark/starmark-06-a7a6b575.mp4"
     },
     {
-      "file": "media/starmark/starmark-08-a574d7f9.mp4",
+      "file": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/property-media/starmark/starmark-08-a574d7f9.mp4",
       "kind": "video",
       "hash": "a574d7f90c4b",
       "bytes": 4442061,
@@ -166,10 +168,11 @@
       "confirmations": [
         "supplied-by-client"
       ],
-      "label": "Site video"
+      "label": "Site video",
+      "local_file": "media/starmark/starmark-08-a574d7f9.mp4"
     },
     {
-      "file": "media/starmark/starmark-09-ceeade13.mp4",
+      "file": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/property-media/starmark/starmark-09-ceeade13.mp4",
       "kind": "video",
       "hash": "ceeade138d0d",
       "bytes": 6492677,
@@ -182,10 +185,11 @@
       "confirmations": [
         "supplied-by-client"
       ],
-      "label": "Site video"
+      "label": "Site video",
+      "local_file": "media/starmark/starmark-09-ceeade13.mp4"
     },
     {
-      "file": "media/starmark/starmark-10-2625456f.mp4",
+      "file": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/property-media/starmark/starmark-10-2625456f.mp4",
       "kind": "video",
       "hash": "2625456fbc02",
       "bytes": 2614292,
@@ -198,10 +202,11 @@
       "confirmations": [
         "supplied-by-client"
       ],
-      "label": "Site video"
+      "label": "Site video",
+      "local_file": "media/starmark/starmark-10-2625456f.mp4"
     },
     {
-      "file": "media/starmark/starmark-11-5d4c76e7.mp4",
+      "file": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/property-media/starmark/starmark-11-5d4c76e7.mp4",
       "kind": "video",
       "hash": "5d4c76e7a1b7",
       "bytes": 1665988,
@@ -214,10 +219,11 @@
       "confirmations": [
         "supplied-by-client"
       ],
-      "label": "Site video"
+      "label": "Site video",
+      "local_file": "media/starmark/starmark-11-5d4c76e7.mp4"
     },
     {
-      "file": "media/starmark/starmark-12-00039071.mp4",
+      "file": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/property-media/starmark/starmark-12-00039071.mp4",
       "kind": "video",
       "hash": "000390716cee",
       "bytes": 6859443,
@@ -230,10 +236,11 @@
       "confirmations": [
         "supplied-by-client"
       ],
-      "label": "Site video"
+      "label": "Site video",
+      "local_file": "media/starmark/starmark-12-00039071.mp4"
     },
     {
-      "file": "media/starmark/starmark-15-bd84b69e.mp4",
+      "file": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/property-media/starmark/starmark-15-bd84b69e.mp4",
       "kind": "video",
       "hash": "bd84b69e6d39",
       "bytes": 2592344,
@@ -246,10 +253,11 @@
       "confirmations": [
         "supplied-by-client"
       ],
-      "label": "Site video"
+      "label": "Site video",
+      "local_file": "media/starmark/starmark-15-bd84b69e.mp4"
     },
     {
-      "file": "media/starmark/starmark-16-0c24828c.mp4",
+      "file": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/property-media/starmark/starmark-16-0c24828c.mp4",
       "kind": "video",
       "hash": "0c24828c6024",
       "bytes": 6492677,
@@ -262,10 +270,11 @@
       "confirmations": [
         "supplied-by-client"
       ],
-      "label": "Site video"
+      "label": "Site video",
+      "local_file": "media/starmark/starmark-16-0c24828c.mp4"
     },
     {
-      "file": "media/starmark/starmark-17-5405cf7a.mp4",
+      "file": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/property-media/starmark/starmark-17-5405cf7a.mp4",
       "kind": "video",
       "hash": "5405cf7a0e41",
       "bytes": 4679467,
@@ -278,7 +287,8 @@
       "confirmations": [
         "supplied-by-client"
       ],
-      "label": "Site video"
+      "label": "Site video",
+      "local_file": "media/starmark/starmark-17-5405cf7a.mp4"
     }
   ],
   "primeco": [
@@ -361,7 +371,7 @@
       "enhancement_model": "bytedance_image_upscale (Higgsfield) \u2014 4K super-resolution"
     },
     {
-      "file": "media/primeco/primeco-01-3b735711.mp4",
+      "file": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/property-media/primeco/primeco-01-3b735711.mp4",
       "kind": "video",
       "hash": "3b735711d59e",
       "bytes": 8138819,
@@ -374,10 +384,11 @@
       "confirmations": [
         "supplied-by-client"
       ],
-      "label": "Site video"
+      "label": "Site video",
+      "local_file": "media/primeco/primeco-01-3b735711.mp4"
     },
     {
-      "file": "media/primeco/primeco-02-d2cc8300.mp4",
+      "file": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/property-media/primeco/primeco-02-d2cc8300.mp4",
       "kind": "video",
       "hash": "d2cc83003d99",
       "bytes": 5117762,
@@ -390,10 +401,11 @@
       "confirmations": [
         "supplied-by-client"
       ],
-      "label": "Site video"
+      "label": "Site video",
+      "local_file": "media/primeco/primeco-02-d2cc8300.mp4"
     },
     {
-      "file": "media/primeco/primeco-03-d3c6eb12.mp4",
+      "file": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/property-media/primeco/primeco-03-d3c6eb12.mp4",
       "kind": "video",
       "hash": "d3c6eb12f5ad",
       "bytes": 2832834,
@@ -406,10 +418,11 @@
       "confirmations": [
         "supplied-by-client"
       ],
-      "label": "Site video"
+      "label": "Site video",
+      "local_file": "media/primeco/primeco-03-d3c6eb12.mp4"
     },
     {
-      "file": "media/primeco/primeco-05-5ccddf8f.mp4",
+      "file": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/property-media/primeco/primeco-05-5ccddf8f.mp4",
       "kind": "video",
       "hash": "5ccddf8f57c8",
       "bytes": 5615192,
@@ -422,10 +435,11 @@
       "confirmations": [
         "supplied-by-client"
       ],
-      "label": "Site video"
+      "label": "Site video",
+      "local_file": "media/primeco/primeco-05-5ccddf8f.mp4"
     },
     {
-      "file": "media/primeco/primeco-07-a0867ac4.mp4",
+      "file": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/property-media/primeco/primeco-07-a0867ac4.mp4",
       "kind": "video",
       "hash": "a0867ac4354f",
       "bytes": 6503214,
@@ -438,7 +452,8 @@
       "confirmations": [
         "supplied-by-client"
       ],
-      "label": "Site video"
+      "label": "Site video",
+      "local_file": "media/primeco/primeco-07-a0867ac4.mp4"
     }
   ],
   "sumadhura": [
@@ -506,7 +521,7 @@
       "derived_from_video": "media/sumadhura/sumadhura-01-60fc0744.mov"
     },
     {
-      "file": "media/sumadhura/sumadhura-01-60fc0744.mov",
+      "file": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/property-media/sumadhura/sumadhura-01-60fc0744.mov",
       "kind": "video",
       "hash": "60fc074476f6",
       "bytes": 909717,
@@ -519,7 +534,8 @@
       "confirmations": [
         "supplied-by-client"
       ],
-      "label": "Site video"
+      "label": "Site video",
+      "local_file": "media/sumadhura/sumadhura-01-60fc0744.mov"
     }
   ],
   "purva": [
@@ -584,7 +600,7 @@
       "derived_from_video": "media/purva/purva-02-4ec64810.mp4"
     },
     {
-      "file": "media/purva/purva-02-472fde76.mp4",
+      "file": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/property-media/purva/purva-02-472fde76.mp4",
       "kind": "video",
       "hash": "472fde76d749",
       "bytes": 11093368,
@@ -597,7 +613,8 @@
       "confirmations": [
         "supplied-by-client"
       ],
-      "label": "Site video"
+      "label": "Site video",
+      "local_file": "media/purva/purva-02-472fde76.mp4"
     }
   ],
   "totalenv": [

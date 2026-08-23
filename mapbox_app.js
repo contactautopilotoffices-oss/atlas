@@ -2150,17 +2150,18 @@ function renderLightbox() {
   stage.innerHTML = it.kind === "video"
     ? `<video src="${it.file}" controls muted playsinline preload="metadata"></video>`
     : `<img src="${it.file}" alt="${it.caption || "Property photograph"}">`;
-  // CC BY-SA obliges us to name the author and licence wherever the image is shown.
-  const credit = it.license
-    ? `${it.author || "Unknown"} · ${it.license}`
-    : (it.source || "Source unstated");
+  // Only two things earn space under the image: the licence credit where one is
+  // legally required (CC BY-SA), and the render warning where the image is not a
+  // photograph. "Origin unstated" / "capture date unconfirmed" on every client-supplied
+  // photo was noise — provenance lives in the ledger and the database, not the caption.
   el.querySelector(".lb-cap").innerHTML =
     (it.label ? `<span class="lb-title">${it.label}</span>` : "") +
     (it.is_render ? `<span class="lb-render">ARCHITECT’S RENDER — NOT A PHOTOGRAPH</span>` : "") +
-    (it.source_url
-      ? `<a class="lb-src" href="${it.source_url}" target="_blank" rel="noopener noreferrer">${credit} ↗</a>`
-      : `<span class="lb-src">${credit}</span>`) +
-    `<span class="lb-date">${it.captured_at || "Capture date unconfirmed"}</span>`;
+    (it.license
+      ? (it.source_url
+          ? `<a class="lb-src" href="${it.source_url}" target="_blank" rel="noopener noreferrer">${it.author || "Unknown"} · ${it.license} ↗</a>`
+          : `<span class="lb-src">${it.author || "Unknown"} · ${it.license}</span>`)
+      : "");
   el.querySelector(".lb-dots").innerHTML = LB.items
     .map((_, i) => `<i class="${i === LB.idx ? "on" : ""}"></i>`).join("");
   el.querySelector(".lb-prev").style.visibility = LB.items.length > 1 ? "visible" : "hidden";
@@ -2238,8 +2239,8 @@ function connectivityHTML(pid, o) {
   const walkTxt = !w ? "—"
     : w.practical ? `${w.m} m · ${w.min} min walk`
     : `${(w.m / 1000).toFixed(1)} km — not practically walkable`;
-  const walkNote = "Nearest station · Mapbox Directions walking route (real footpath routing)";
-  return `<div class="sec"><h4>Connectivity <span class="muted">routed, not deck-stated</span></h4>
+  const walkNote = "Nearest metro station";
+  return `<div class="sec"><h4>Connectivity</h4>
     <div class="conn">
       <div class="conn-row"><span class="ic aqua">M</span>
         <div><b>${st.name}</b>
@@ -2247,8 +2248,7 @@ function connectivityHTML(pid, o) {
           <div class="muted">${walkNote}</div></div></div>
       ${k ? `<div class="conn-row"><span class="ic rail">✈</span>
         <div><b>Kempegowda International</b>
-          <div class="conn-line">${k.km} km · ${k.min} min drive</div>
-          <div class="muted">Mapbox Directions driving route</div></div></div>` : ""}
+          <div class="conn-line">${k.km} km · ${k.min} min drive</div></div></div>` : ""}
     </div></div>`;
 }
 
