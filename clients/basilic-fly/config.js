@@ -27,7 +27,7 @@ window.CLIENT = {
   registry: {
     primeco:   { renderMode:"extrusion", heightMeters:42, color:"#9aa7b5", footprintName:"Primeco Union City — Tower B" },
     sumadhura: { renderMode:"extrusion", heightMeters:38, color:"#9aa7b5", footprintName:"Sumadhura Capitol" },
-    totalenv:  { renderMode:"extrusion", heightMeters:70, color:"#9aa7b5" },  // no OSM footprint — fallback box at unconfirmed locality centroid
+    totalenv:  { renderMode:"extrusion", heightMeters:70, color:"#9aa7b5", footprintName:"Total Environment — Imagine" },
     yliving:   { renderMode:"extrusion", heightMeters:29, color:"#9aa7b5" },  // no OSM footprint — fallback box at unconfirmed locality centroid
     starmark:  { renderMode:"extrusion", heightMeters:38, color:"#9aa7b5", footprintName:"Starmark Camelot" },
     purva:     { renderMode:"extrusion", heightMeters:45, color:"#9aa7b5" },   // no OSM footprint — box at Google place pin

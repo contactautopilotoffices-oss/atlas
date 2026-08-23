@@ -22,17 +22,17 @@
   },
   {
     "id": "totalenv",
-    "name": "Total Environment",
-    "lng": 77.6897334,
-    "lat": 12.9912395,
-    "confirmed": false
+    "name": "Total Environment \u2014 Imagine",
+    "lng": 77.7307563,
+    "lat": 12.9876277,
+    "confirmed": true
   },
   {
     "id": "yliving",
     "name": "Y Living",
-    "lng": 77.7497448,
-    "lat": 12.9696365,
-    "confirmed": false
+    "lng": 77.7075,
+    "lat": 12.9851,
+    "confirmed": true
   },
   {
     "id": "purva",

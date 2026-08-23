@@ -1,0 +1,29 @@
+-- ATLAS 006 — Y Living relocated to its RERA-linked coordinate.
+-- Was the Whitefield locality centroid; 4.89 km correction.
+-- coord_confirmed stays FALSE: building-precision but single-source, no OSM footprint.
+begin;
+
+update properties set lat=12.9851, lng=77.7075, coord_confirmed=false,
+  coord_source='RERA-linked coordinate (single source, no OSM corroboration)'
+  where id='yliving';
+
+delete from property_competitors;
+
+insert into property_station_links (property_id,station_id,is_nearest,walk_m,walk_min,drive_m,drive_min,method,source_url) values ('primeco','pattandur-agrahara',true,692,9,1025,5,'mapbox-directions','https://api.mapbox.com/directions/v5/mapbox/walking') on conflict (property_id,station_id) do update set station_id=excluded.station_id,walk_m=excluded.walk_m,walk_min=excluded.walk_min,drive_m=excluded.drive_m,drive_min=excluded.drive_min;
+insert into property_station_links (property_id,station_id,is_nearest,walk_m,walk_min,drive_m,drive_min,method,source_url) values ('sumadhura','kadugodi-tree-park',true,538,7,744,4,'mapbox-directions','https://api.mapbox.com/directions/v5/mapbox/walking') on conflict (property_id,station_id) do update set station_id=excluded.station_id,walk_m=excluded.walk_m,walk_min=excluded.walk_min,drive_m=excluded.drive_m,drive_min=excluded.drive_min;
+insert into property_station_links (property_id,station_id,is_nearest,walk_m,walk_min,drive_m,drive_min,method,source_url) values ('starmark','sri-sathya-sai-hospital',true,723,10,962,3,'mapbox-directions','https://api.mapbox.com/directions/v5/mapbox/walking') on conflict (property_id,station_id) do update set station_id=excluded.station_id,walk_m=excluded.walk_m,walk_min=excluded.walk_min,drive_m=excluded.drive_m,drive_min=excluded.drive_min;
+insert into property_station_links (property_id,station_id,is_nearest,walk_m,walk_min,drive_m,drive_min,method,source_url) values ('totalenv','pattandur-agrahara',true,831,10,810,5,'mapbox-directions','https://api.mapbox.com/directions/v5/mapbox/walking') on conflict (property_id,station_id) do update set station_id=excluded.station_id,walk_m=excluded.walk_m,walk_min=excluded.walk_min,drive_m=excluded.drive_m,drive_min=excluded.drive_min;
+insert into property_station_links (property_id,station_id,is_nearest,walk_m,walk_min,drive_m,drive_min,method,source_url) values ('yliving','seetharampalya',true,577,8,1149,4,'mapbox-directions','https://api.mapbox.com/directions/v5/mapbox/walking') on conflict (property_id,station_id) do update set station_id=excluded.station_id,walk_m=excluded.walk_m,walk_min=excluded.walk_min,drive_m=excluded.drive_m,drive_min=excluded.drive_min;
+insert into property_station_links (property_id,station_id,is_nearest,walk_m,walk_min,drive_m,drive_min,method,source_url) values ('purva','beratena-agrahara',true,1425,17,2809,8,'mapbox-directions','https://api.mapbox.com/directions/v5/mapbox/walking') on conflict (property_id,station_id) do update set station_id=excluded.station_id,walk_m=excluded.walk_m,walk_min=excluded.walk_min,drive_m=excluded.drive_m,drive_min=excluded.drive_min;
+insert into property_competitors (property_id,name,category,lat,lng,distance_m,source_url,source_name,confidence) values ('primeco','88 Pictures','Animation / VFX / games',12.9889029,77.7310416,173,'https://88.pictures/bangalore/','88 Pictures official site','unconfirmed');
+insert into property_competitors (property_id,name,category,lat,lng,distance_m,source_url,source_name,confidence) values ('primeco','DNEG','VFX — feature film',12.9857365,77.7346869,432,'https://www.dneg.com/location/bengaluru','DNEG official site','verified');
+insert into property_competitors (property_id,name,category,lat,lng,distance_m,source_url,source_name,confidence) values ('primeco','DeMeg Studios','3D animation / VFX',12.9922533,77.7361863,525,'https://www.demegstudios.com/','DeMeg Studios official site','unconfirmed');
+insert into property_competitors (property_id,name,category,lat,lng,distance_m,source_url,source_name,confidence) values ('primeco','Astra Studios','VFX / animation / virtual production',12.9863725,77.739803,833,'https://theastrastudios.com/studio','Astra Studios official site','verified');
+insert into property_competitors (property_id,name,category,lat,lng,distance_m,source_url,source_name,confidence) values ('starmark','88 Pictures','Animation / VFX / games',12.9889029,77.7310416,643,'https://88.pictures/bangalore/','88 Pictures official site','unconfirmed');
+insert into property_competitors (property_id,name,category,lat,lng,distance_m,source_url,source_name,confidence) values ('starmark','DNEG','VFX — feature film',12.9857365,77.7346869,871,'https://www.dneg.com/location/bengaluru','DNEG official site','verified');
+insert into property_competitors (property_id,name,category,lat,lng,distance_m,source_url,source_name,confidence) values ('totalenv','88 Pictures','Animation / VFX / games',12.9889029,77.7310416,145,'https://88.pictures/bangalore/','88 Pictures official site','unconfirmed');
+insert into property_competitors (property_id,name,category,lat,lng,distance_m,source_url,source_name,confidence) values ('totalenv','DNEG','VFX — feature film',12.9857365,77.7346869,475,'https://www.dneg.com/location/bengaluru','DNEG official site','verified');
+insert into property_competitors (property_id,name,category,lat,lng,distance_m,source_url,source_name,confidence) values ('totalenv','DeMeg Studios','3D animation / VFX',12.9922533,77.7361863,781,'https://www.demegstudios.com/','DeMeg Studios official site','unconfirmed');
+insert into property_competitors (property_id,name,category,lat,lng,distance_m,source_url,source_name,confidence) values ('totalenv','Astra Studios','VFX / animation / virtual production',12.9863725,77.739803,990,'https://theastrastudios.com/studio','Astra Studios official site','verified');
+
+commit;

@@ -5,10 +5,8 @@
       "category": "Animation / VFX / games",
       "lat": 12.9889029,
       "lng": 77.7310416,
-      "address": "7th Floor, Crescent Tower A, Prestige Shantiniketan, Whitefield, Bengaluru 560048",
       "source_url": "https://88.pictures/bangalore/",
       "source_name": "88 Pictures official site",
-      "osm": "way/194740174 (Prestige Shantiniketan) \u2014 complex centroid, tower-level position unconfirmed",
       "distance_m": 173,
       "confidence": "unconfirmed"
     },
@@ -17,10 +15,8 @@
       "category": "VFX \u2014 feature film",
       "lat": 12.9857365,
       "lng": 77.7346869,
-      "address": "8th Floor, Explorer Building, ITPL, Whitefield Road, Bengaluru 560066",
       "source_url": "https://www.dneg.com/location/bengaluru",
       "source_name": "DNEG official site",
-      "osm": "way/130510408 (Explorer)",
       "distance_m": 432,
       "confidence": "verified"
     },
@@ -29,10 +25,8 @@
       "category": "3D animation / VFX",
       "lat": 12.9922533,
       "lng": 77.7361863,
-      "address": "Nandi Infotech, KIADB Plot 8, Sadaramangala Industrial Area, Mahadevapura, Bengaluru 560048",
       "source_url": "https://www.demegstudios.com/",
       "source_name": "DeMeg Studios official site",
-      "osm": "way/179321523 (Sadaramangala Industrial Area) \u2014 area centroid, unit-level position unconfirmed",
       "distance_m": 525,
       "confidence": "unconfirmed"
     },
@@ -41,10 +35,8 @@
       "category": "VFX / animation / virtual production",
       "lat": 12.9863725,
       "lng": 77.739803,
-      "address": "2nd Floor, Block B, Brigade Tech Park, Whitefield, Bengaluru 560066",
       "source_url": "https://theastrastudios.com/studio",
       "source_name": "Astra Studios official site",
-      "osm": "way/1302227114 (Brigade Tech Park)",
       "distance_m": 833,
       "confidence": "verified"
     }
@@ -56,10 +48,8 @@
       "category": "Animation / VFX / games",
       "lat": 12.9889029,
       "lng": 77.7310416,
-      "address": "7th Floor, Crescent Tower A, Prestige Shantiniketan, Whitefield, Bengaluru 560048",
       "source_url": "https://88.pictures/bangalore/",
       "source_name": "88 Pictures official site",
-      "osm": "way/194740174 (Prestige Shantiniketan) \u2014 complex centroid, tower-level position unconfirmed",
       "distance_m": 643,
       "confidence": "unconfirmed"
     },
@@ -68,15 +58,54 @@
       "category": "VFX \u2014 feature film",
       "lat": 12.9857365,
       "lng": 77.7346869,
-      "address": "8th Floor, Explorer Building, ITPL, Whitefield Road, Bengaluru 560066",
       "source_url": "https://www.dneg.com/location/bengaluru",
       "source_name": "DNEG official site",
-      "osm": "way/130510408 (Explorer)",
       "distance_m": 871,
       "confidence": "verified"
     }
   ],
-  "totalenv": [],
+  "totalenv": [
+    {
+      "name": "88 Pictures",
+      "category": "Animation / VFX / games",
+      "lat": 12.9889029,
+      "lng": 77.7310416,
+      "source_url": "https://88.pictures/bangalore/",
+      "source_name": "88 Pictures official site",
+      "distance_m": 145,
+      "confidence": "unconfirmed"
+    },
+    {
+      "name": "DNEG",
+      "category": "VFX \u2014 feature film",
+      "lat": 12.9857365,
+      "lng": 77.7346869,
+      "source_url": "https://www.dneg.com/location/bengaluru",
+      "source_name": "DNEG official site",
+      "distance_m": 475,
+      "confidence": "verified"
+    },
+    {
+      "name": "DeMeg Studios",
+      "category": "3D animation / VFX",
+      "lat": 12.9922533,
+      "lng": 77.7361863,
+      "source_url": "https://www.demegstudios.com/",
+      "source_name": "DeMeg Studios official site",
+      "distance_m": 781,
+      "confidence": "unconfirmed"
+    },
+    {
+      "name": "Astra Studios",
+      "category": "VFX / animation / virtual production",
+      "lat": 12.9863725,
+      "lng": 77.739803,
+      "source_url": "https://theastrastudios.com/studio",
+      "source_name": "Astra Studios official site",
+      "distance_m": 990,
+      "confidence": "verified"
+    }
+  ],
   "yliving": [],
   "purva": []
 }

@@ -80,7 +80,7 @@ const OPTIONS = [
     condition:null, conditionSrc:null,
     parking:null, parkingSrc:null,
     coordSrc:"geo-purva", coordConfirmed:true },   // building-precision pin, but only one source
-  { bldg:"totalenv", name:"Total Environment", locality:"Mahadevapura",
+  { bldg:"totalenv", name:"Total Environment — Imagine", locality:"EPIP Zone · ITPL Main Road",
     costPerSeat: 9600, costSrc:"totalenv-cost",
     floorsTotal:"Basement + Ground + 21", floorsSrc:"totalenv-floors",
     floorOffered:"9th or 10th or 11th floor", offeredSrc:"totalenv-offered",
@@ -88,8 +88,8 @@ const OPTIONS = [
     metroName:"Hoodi", metroDist:"1.2 km", metroSrc:"totalenv-metro", metroKm:1.2,
     kia:"39.6 km", kiaSrc:"totalenv-kia-km",
     parking:"1 car park / 1000 sqft", parkingSrc:"deck-source",
-    coordSrc:"geo-totalenv", coordConfirmed:false },   // OSM locality centroid, not the building
-  { bldg:"yliving", name:"Y Living", locality:"Whitefield",
+    coordSrc:"geo-totalenv-v2", coordConfirmed:true },   // OSM way/1145006727, No.78 ITPL Main Rd
+  { bldg:"yliving", name:"Y Living", locality:"Kaveri Nagara · Whitefield",
     costPerSeat: 9600, costSrc:"yliving-cost",
     floorsTotal:"Basement + Ground + 8", floorsSrc:"yliving-floors",
     floorOffered:"5th & 6th floor", offeredSrc:"yliving-offered",
@@ -97,7 +97,7 @@ const OPTIONS = [
     metroName:"Garudacharpalya", metroDist:"2.4 km", metroSrc:"yliving-metro", metroKm:2.4,
     kia:"42.8 km", kiaSrc:"yliving-kia-km",
     parking:"1 car park / 1000 sqft", parkingSrc:"deck-source",
-    coordSrc:"geo-yliving", coordConfirmed:false },     // OSM locality centroid, not the building
+    coordSrc:"geo-yliving-v2", coordConfirmed:true },   // RERA-linked point; no OSM footprint to corroborate
 ];
 
 /* ---------------------------------------------------------------------------
@@ -120,11 +120,11 @@ const BUILDINGS = [
   { id:"purva", name:"Purva Gainz", block:"Electronic City", isOption:true, type:"tower",
     ...geoToMeters(12.8662484, 77.6568443), ...stn(ST.beratena),   // Google Maps place pin — single-source
     w:55, d:45, h:45, floors:14, color:0x9aa7b5 },
-  { id:"totalenv", name:"Total Environment", block:"Mahadevapura", isOption:true, type:"tower",
-    ...geoToMeters(12.9912395, 77.6897334), ...stn(ST.hoodi),   // UNCONFIRMED: locality centroid
+  { id:"totalenv", name:"Total Environment — Imagine", block:"EPIP Zone", isOption:true, type:"tower",
+    ...geoToMeters(12.9876277, 77.7307563), ...stn(ST.pattandur),   // OSM way/1145006727 — CONFIRMED footprint
     w:50, d:40, h:70, floors:22, color:0x9aa7b5 },
-  { id:"yliving", name:"Y Living", block:"Whitefield", isOption:true, type:"block",
-    ...geoToMeters(12.9696365, 77.7497448), ...stn(ST.garudachar),   // UNCONFIRMED: locality centroid
+  { id:"yliving", name:"Y Living", block:"Kaveri Nagara", isOption:true, type:"block",
+    ...geoToMeters(12.9851, 77.7075), ...stn(ST.hoodi),   // RERA-linked coordinate (single-source)
     w:40, d:35, h:29, floors:9, color:0x9aa7b5 }
 ];
 

@@ -1,0 +1,37 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-08-23T07:32:20Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "way",
+  "id": 1145006727,
+  "bounds": {
+    "minlat": 12.9867125,
+    "minlon": 77.7300025,
+    "maxlat": 12.9883084,
+    "maxlon": 77.7315610
+  },
+  "geometry": [
+    { "lat": 12.9883084, "lon": 77.7301989 },
+    { "lat": 12.9877401, "lon": 77.7300968 },
+    { "lat": 12.9872151, "lon": 77.7300025 },
+    { "lat": 12.9869253, "lon": 77.7308915 },
+    { "lat": 12.9867125, "lon": 77.7315442 },
+    { "lat": 12.9877135, "lon": 77.7315563 },
+    { "lat": 12.9880979, "lon": 77.7315610 },
+    { "lat": 12.9883084, "lon": 77.7301989 }
+  ],
+  "tags": {
+    "landuse": "commercial",
+    "name": "Total Environment - Imagine",
+    "office": "architect"
+  }
+}
+
+  ]
+}
