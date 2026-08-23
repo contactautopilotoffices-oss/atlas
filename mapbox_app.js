@@ -2000,6 +2000,10 @@ function injectDeckCSS() {
   s.textContent = `
   #card .card-warn{margin-top:6px;font-size:10px;letter-spacing:.04em;text-transform:uppercase;
     color:#e0a34d;font-weight:600}
+  #card .card-ok{margin-top:6px;font-size:10px;letter-spacing:.04em;text-transform:uppercase;
+    color:#8fd6a8;font-weight:600}
+  #card .card-ok-sub{margin-top:4px;font-size:10px;letter-spacing:0;text-transform:none;
+    color:var(--mut);font-weight:400;line-height:1.5}
   #card .muted{color:var(--mut);font-weight:400}
   #card .deck-empty{font-size:12px;color:var(--mut);padding:14px;border:1px dashed rgba(255,255,255,.14);
     border-radius:10px;text-align:center}
@@ -2093,6 +2097,7 @@ function injectDeckCSS() {
   #lb-list .lb-fig i{display:block;font-style:normal;font-size:8px;font-weight:600;
     letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin-top:2px}
   #lb-list .lb-unconf{color:#e0a34d;font-weight:600;font-size:9px}
+  #lb-list .lb-proj{color:#8fd6a8;font-weight:600;font-size:9px}
   #lb-list .lb-row{gap:12px;align-items:center}
   #lb-list .lb-row .lb-meta{max-height:none;opacity:1;margin:2px 0 0}  /* always readable, not hover-only */
 
@@ -2308,7 +2313,12 @@ async function openTruthFirstCard(b) {
   const items = (man[b.id] || []).map(m => ({ ...m, caption: b.name }));
 
   const conn = CONNECTIVITY && CONNECTIVITY[b.id];
+  // Three states, not two. A binary confirmed/unconfirmed flag was too blunt: a project
+  // location verified against a statutory registry is materially stronger than a locality
+  // centroid, but weaker than a surveyed footprint polygon. Say which.
+  const precision = o && o.coordPrecision;                 // "project" | undefined
   const unconf = (o && o.coordConfirmed === false) || (conn && conn.coord_confirmed === false);
+  const projectPin = !unconf && precision === "project";
   const fact = (k, v) => v == null ? "" : `<span>${k}</span><span>${v}</span>`;
 
   card.innerHTML = `
@@ -2317,6 +2327,10 @@ async function openTruthFirstCard(b) {
       <div class="card-block">${o ? o.locality : b.block}</div>
       <div class="card-title">${b.name}</div>
       ${unconf ? `<div class="card-warn">Location unconfirmed — locality centroid, not a surveyed footprint</div>` : ""}
+      ${projectPin ? `<div class="card-ok">Location verified — project coordinate
+        <div class="card-ok-sub">Project location verified against RERA registration and a named map listing.
+        Commercial office component confirmed within the mixed-development project.
+        Pin represents the project location, not a surveyed building footprint.</div></div>` : ""}
     </div>
 
     <div class="compact-cta"><button class="btn-explore" id="cardExpand">View Details</button></div>
@@ -2335,7 +2349,9 @@ async function openTruthFirstCard(b) {
       <div class="sec prov-sec"><h4>Provenance</h4>
         <div class="deck-note">Building and space details are client-stated from the broker deck and
         unconfirmed. Distances are re-derived independently and do not rely on the deck.
-        Coordinates ${unconf ? "are a locality centroid, not a surveyed footprint" : "match a named OSM footprint"}.</div>
+        Coordinates ${unconf ? "are a locality centroid, not a surveyed footprint"
+          : projectPin ? "are a registry-verified project location, not a surveyed building footprint"
+          : "match a named OSM footprint"}.</div>
       </div>
     </div>`;
 
@@ -2550,7 +2566,8 @@ async function buildLeaderboard() {
       const figCol = !w ? "var(--mut)" : w.practical ? "#8fd6a8" : "#e0a34d";
       const stn = c ? c.nearest_station.name : (o.metroName || "—");
       const unconfirmedTag = o.coordConfirmed === false
-        ? ` <span class="lb-unconf">· location unconfirmed</span>` : "";
+        ? ` <span class="lb-unconf">· location unconfirmed</span>`
+        : o.coordPrecision === "project" ? ` <span class="lb-proj">· project pin</span>` : "";
       return `<div class="lb-row${idx > 2 ? " lb-extra" : ""}${shortlisted.has(o.bldg) ? " shortlisted" : ""}" data-bldg="${o.bldg}">
         <div class="lb-rank">${idx + 1}</div>
         <div class="lb-main">

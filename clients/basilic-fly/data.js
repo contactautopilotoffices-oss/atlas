@@ -2,10 +2,11 @@
    BASILIC FLY STUDIO — DATA LAYER (Whitefield / Mahadevapura / Varthur, Bengaluru)
    Source of truth: "Basilic Fly inventory options .pdf" broker deck (11 pp) —
    ALL property figures are client-stated / unconfirmed (evidence/ledger.jsonl).
-   Coordinates: Overpass/Nominatim geocode pass 2026-08-22 (ledger geo-* rows,
-   raw responses recon/osm/). 4 of 6 properties matched named OSM footprints;
-   Total Environment and Y Living sit at OSM-confirmed locality centroids and
-   are flagged unconfirmed everywhere they render.
+   Coordinates: 5 of 6 properties match a named OSM footprint polygon. Y Living is a
+   REGISTRY-VERIFIED PROJECT PIN (RERA PRM/KA/RERA/1251/446/PR/130722/005066 + a named
+   Y@Whitefield map listing) — the project location is verified, but no surveyed polygon
+   exists for its commercial block, so it carries coordPrecision:"project" and renders
+   as a project pin rather than a footprint. Ledger geo-* rows; raw responses recon/osm/.
 
    TRUTH CONTRACT:
    - Every numeric field carries `src` = evidence/ledger.jsonl row id.
@@ -98,7 +99,7 @@ const OPTIONS = [
     metroName:"Garudacharpalya", metroDist:"2.4 km", metroSrc:"yliving-metro", metroKm:2.4,
     kia:"42.8 km", kiaSrc:"yliving-kia-km",
     parking:"1 car park / 1000 sqft", parkingSrc:"deck-source",
-    coordSrc:"geo-yliving-v2", coordConfirmed:false },  // RERA point only — road matches, building position unconfirmed
+    coordSrc:"geo-yliving-v3", coordConfirmed:true, coordPrecision:"project" },   // project location verified; not a surveyed footprint
 ];
 
 /* ---------------------------------------------------------------------------
@@ -125,7 +126,7 @@ const BUILDINGS = [
     ...geoToMeters(12.9876277, 77.7307563), ...stn(ST.pattandur),   // OSM way/1145006727 — CONFIRMED footprint
     w:50, d:40, h:70, floors:22, color:0x9aa7b5 },
   { id:"yliving", name:"Y Living", block:"Kaveri Nagara", isOption:true, type:"block",
-    ...geoToMeters(12.9851, 77.7075), ...stn(ST.seetharampalya),   // RERA-linked coordinate (single-source)
+    ...geoToMeters(12.9854982, 77.707817), ...stn(ST.seetharampalya),   // RERA PRM/KA/RERA/1251/446/PR/130722/005066 + named map listing
     w:40, d:35, h:29, floors:9, color:0x9aa7b5 }
 ];
 

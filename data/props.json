@@ -30,9 +30,10 @@
   {
     "id": "yliving",
     "name": "Y Living",
-    "lng": 77.7075,
-    "lat": 12.9851,
-    "confirmed": true
+    "lng": 77.707817,
+    "lat": 12.9854982,
+    "confirmed": true,
+    "precision": "project"
   },
   {
     "id": "purva",

@@ -549,18 +549,30 @@
       "name": "Seetharampalya",
       "lat": 12.9808558,
       "lng": 77.7087854,
-      "straight_m": 492
+      "straight_m": 527
     },
     "walk": {
-      "m": 577,
+      "m": 585,
       "min": 8,
       "kmh": 4.6,
       "geometry": {
         "type": "LineString",
         "coordinates": [
           [
-            77.7075,
-            12.98514
+            77.707821,
+            12.98554
+          ],
+          [
+            77.707849,
+            12.985538
+          ],
+          [
+            77.70788,
+            12.985518
+          ],
+          [
+            77.707892,
+            12.985481
           ],
           [
             77.707892,
@@ -672,17 +684,17 @@
       "method": "mapbox-directions/walking"
     },
     "drive": {
-      "m": 1149,
+      "m": 1156,
       "min": 4,
       "method": "mapbox-directions/driving"
     },
     "kia": {
       "km": 38,
-      "min": 81
+      "min": 82
     },
     "method": "mapbox-directions",
     "source_url": "https://api.mapbox.com/directions/v5/mapbox/{profile}/...",
-    "computed_at": "2026-08-23T07:38:14.497Z"
+    "computed_at": "2026-08-23T10:37:14.009Z"
   },
   "purva": {
     "nearest_station": {
