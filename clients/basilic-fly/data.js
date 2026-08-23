@@ -81,7 +81,7 @@ const OPTIONS = [
     floorOffered:null, offeredSrc:null,
     condition:null, conditionSrc:null,
     parking:null, parkingSrc:null,
-    coordSrc:"geo-purva", coordConfirmed:true },   // building-precision pin, but only one source
+    coordSrc:"geo-purva", coordConfirmed:true, coordPrecision:"project" },   // Google named-place pin; no surveyed footprint
   { bldg:"totalenv", name:"Total Environment — Imagine", locality:"EPIP Zone · ITPL Main Road",
     costPerSeat: 9600, costSrc:"totalenv-cost",
     floorsTotal:"Basement + Ground + 21", floorsSrc:"totalenv-floors",
