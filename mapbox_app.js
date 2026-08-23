@@ -2029,6 +2029,9 @@ function injectDeckCSS() {
     background:#14171b;transition:transform .18s ease,box-shadow .18s ease}
   #card .gal-item:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.45)}
   #card .gal-item img,#card .gal-item video{width:100%;height:100%;object-fit:cover;display:block}
+  #card .gal-render{position:absolute;left:4px;bottom:4px;background:rgba(224,163,77,.94);
+    color:#1a1204;font:700 7.5px/1 system-ui,sans-serif;letter-spacing:.08em;
+    padding:2px 4px;border-radius:3px;pointer-events:none}
   #card .gal-play{position:absolute;inset:0;display:grid;place-items:center;font-size:19px;
     color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.7);pointer-events:none}
   #card .gal-cell{flex:none;width:118px;margin:0;scroll-snap-align:start}
@@ -2064,6 +2067,8 @@ function injectDeckCSS() {
   #lightbox .lb-src{color:#aab4c0;text-decoration:none}
   #lightbox a.lb-src:hover{color:#e8edf2;text-decoration:underline}
   #lightbox .lb-title{color:#f2f6fa;font-weight:600;letter-spacing:.06em}
+  #lightbox .lb-render{background:rgba(224,163,77,.94);color:#1a1204;font-weight:700;
+    padding:2px 6px;border-radius:3px;letter-spacing:.06em}
 
   /* ── layout: stop panels fighting for space ──────────────────────────
      The brand line ("ATLAS by Autopilot · <client> — <city> Digital Twin") wrapped
@@ -2182,6 +2187,7 @@ function renderLightbox() {
     : (it.source || "Source unstated");
   el.querySelector(".lb-cap").innerHTML =
     (it.label ? `<span class="lb-title">${it.label}</span>` : "") +
+    (it.is_render ? `<span class="lb-render">ARCHITECT’S RENDER — NOT A PHOTOGRAPH</span>` : "") +
     (it.source_url
       ? `<a class="lb-src" href="${it.source_url}" target="_blank" rel="noopener noreferrer">${credit} ↗</a>`
       : `<span class="lb-src">${credit}</span>`) +
@@ -2224,7 +2230,8 @@ function lbKeys(e) {
 
 /* ---- gallery strip inside the card ---- */
 function galleryHTML(items) {
-  const photos = items.filter(i => i.kind === "photo").length;
+  const photos = items.filter(i => i.kind === "photo" && !i.is_render).length;
+  const renders = items.filter(i => i.is_render).length;
   const vids = items.filter(i => i.kind === "video").length;
   if (!items.length) {
     // Honest empty state. No placeholder image, no grey box, no building icon
@@ -2233,6 +2240,7 @@ function galleryHTML(items) {
       <div class="deck-empty">No verified photographs available for this property.</div></div>`;
   }
   const count = [photos ? `${photos} photograph${photos > 1 ? "s" : ""}` : null,
+                 renders ? `${renders} render${renders > 1 ? "s" : ""}` : null,
                  vids ? `${vids} video${vids > 1 ? "s" : ""}` : null].filter(Boolean).join(" · ");
   return `<div class="sec"><h4>Photographs <span class="muted">${count}</span></h4>
     <div class="gal" id="gal">
@@ -2242,6 +2250,7 @@ function galleryHTML(items) {
             ${it.kind === "video"
               ? `<video src="${it.file}#t=0.5" muted playsinline preload="metadata"></video><span class="gal-play">▶</span>`
               : `<img src="${it.thumb || it.file}" loading="${i < 3 ? "eager" : "lazy"}" alt="${it.label || ""}">`}
+            ${it.is_render ? `<span class="gal-render">RENDER</span>` : ""}
           </button>
           ${it.label ? `<figcaption class="gal-label">${it.label}</figcaption>` : ""}
         </figure>`).join("")}

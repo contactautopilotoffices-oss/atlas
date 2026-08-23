@@ -599,5 +599,70 @@
       ],
       "label": "Site video"
     }
+  ],
+  "totalenv": [
+    {
+      "file": "media/totalenv/totalenv-01-dc32a40e-hd.jpg",
+      "original_file": "media/totalenv/totalenv-01-dc32a40e.jpg",
+      "thumb": "media/totalenv/totalenv-01-dc32a40e-thumb.jpg",
+      "kind": "photo",
+      "hash": "dc32a40e",
+      "bytes": 1221974,
+      "width": 2048,
+      "height": 1373,
+      "orientation": "landscape",
+      "label": "Entrance signage \u2014 #78 ITPL Main Road",
+      "source": "Supplied by Autopilot Offices",
+      "captured_at": null,
+      "confidence": "verified",
+      "confirmations": [
+        "supplied-by-client",
+        "signage states the registered address: TotalEnvironment Imagine, #78 ITPL Main Road, EPIP Zone, Whitefield 560066"
+      ],
+      "is_enhanced": false
+    },
+    {
+      "file": "media/totalenv/totalenv-02-782003e2-hd.jpg",
+      "original_file": "media/totalenv/totalenv-02-782003e2.jpg",
+      "thumb": "media/totalenv/totalenv-02-782003e2-thumb.jpg",
+      "kind": "photo",
+      "hash": "782003e2",
+      "bytes": 744603,
+      "width": 2048,
+      "height": 1321,
+      "orientation": "landscape",
+      "label": "Main gate \u2014 Total Environment campus",
+      "source": "Supplied by Autopilot Offices",
+      "captured_at": null,
+      "confidence": "verified",
+      "confirmations": [
+        "supplied-by-client",
+        "gate wall reads 'imagine...! THE TOTAL ENVIRONMENT CAMPUS'"
+      ],
+      "is_enhanced": false
+    }
+  ],
+  "yliving": [
+    {
+      "file": "media/yliving/yliving-01-27e95112-hd.jpg",
+      "original_file": "media/yliving/yliving-01-27e95112.jpg",
+      "thumb": "media/yliving/yliving-01-27e95112-thumb.jpg",
+      "kind": "photo",
+      "hash": "27e95112",
+      "bytes": 673611,
+      "width": 2048,
+      "height": 1256,
+      "orientation": "landscape",
+      "label": "Architect\u2019s render \u2014 not a photograph",
+      "source": "Supplied by Autopilot Offices",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "client-stated"
+      ],
+      "is_enhanced": false,
+      "is_render": true,
+      "counts_as_photograph": false
+    }
   ]
 }
