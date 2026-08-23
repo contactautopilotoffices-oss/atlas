@@ -51,8 +51,13 @@ MyHandler.extensions_map.update({
 })
 
 if __name__ == '__main__':
-    socketserver.TCPServer.allow_reuse_address = True
-    with socketserver.TCPServer(("", PORT), MyHandler) as httpd:
+    # ThreadingHTTPServer, NOT TCPServer: the single-threaded server handles one
+    # request at a time, so Mapbox GL's parallel tile/worker fetches queue behind
+    # each other and the map intermittently never fires 'load'. Same cause made
+    # gallery images hang mid-download.
+    http.server.ThreadingHTTPServer.allow_reuse_address = True
+    http.server.ThreadingHTTPServer.daemon_threads = True
+    with http.server.ThreadingHTTPServer(("", PORT), MyHandler) as httpd:
         print(f"Serving at http://localhost:{PORT} (Ctrl+C to stop)")
         try:
             httpd.serve_forever()

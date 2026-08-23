@@ -1,0 +1,115 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-08-22T13:02:35Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 12343221572,
+  "lat": 12.9515365,
+  "lon": 77.7019470,
+  "tags": {
+    "name": "Sumadhura Infracon",
+    "office": "estate_agent"
+  }
+},
+{
+  "type": "node",
+  "id": 12366591902,
+  "lat": 12.9664834,
+  "lon": 77.7171499,
+  "tags": {
+    "name": "Happy Living for Ladies",
+    "tourism": "guest_house"
+  }
+},
+{
+  "type": "way",
+  "id": 627710068,
+  "center": {
+    "lat": 12.9929170,
+    "lon": 77.7022119
+  },
+  "tags": {
+    "building": "office",
+    "name": "Brigade Nalapad Centre"
+  }
+},
+{
+  "type": "way",
+  "id": 628341397,
+  "center": {
+    "lat": 12.9870873,
+    "lon": 77.7396275
+  },
+  "tags": {
+    "building": "commercial",
+    "building:colour": "#eecfaf",
+    "building:levels": "10",
+    "building:material": "plaster",
+    "name": "Brigade Bhuwalka Icon",
+    "roof:shape": "flat"
+  }
+},
+{
+  "type": "way",
+  "id": 1071180319,
+  "center": {
+    "lat": 13.0277059,
+    "lon": 77.7503561
+  },
+  "tags": {
+    "building": "yes",
+    "building:levels": "3",
+    "name": "Sumadhura Eden Garden Club House"
+  }
+},
+{
+  "type": "way",
+  "id": 1346398151,
+  "center": {
+    "lat": 12.9911880,
+    "lon": 77.7142803
+  },
+  "tags": {
+    "building": "construction",
+    "building:levels": "8",
+    "building:levels:underground": "2",
+    "construction": "office",
+    "name": "Sumadhura Hive (u/c)"
+  }
+},
+{
+  "type": "way",
+  "id": 1346398152,
+  "center": {
+    "lat": 12.9911506,
+    "lon": 77.7136398
+  },
+  "tags": {
+    "building": "construction",
+    "building:levels": "8",
+    "building:levels:underground": "2",
+    "construction": "office",
+    "name": "Sumadhura Nexus (u/c)"
+  }
+},
+{
+  "type": "way",
+  "id": 1512651708,
+  "center": {
+    "lat": 12.9564032,
+    "lon": 77.7252615
+  },
+  "tags": {
+    "building": "yes",
+    "name": "Sumadhura Experience Center"
+  }
+}
+
+  ]
+}

@@ -1,0 +1,347 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-08-22T13:02:35Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 253514986,
+  "lat": 12.9385595,
+  "lon": 77.7071370,
+  "tags": {
+    "alt_name": "Bellandur Road",
+    "internet_access": "no",
+    "name": "Belandur Road",
+    "name:kn": "ಬೆಳಂದೂರು ರಸ್ತೆ",
+    "network": "IR",
+    "operator": "SWR",
+    "platforms": "2",
+    "railway": "halt",
+    "ref": "BLRR",
+    "wikidata": "Q63369374",
+    "wikipedia": "en:Belandur Road railway station"
+  }
+},
+{
+  "type": "node",
+  "id": 1177705836,
+  "lat": 12.9963995,
+  "lon": 77.7614229,
+  "tags": {
+    "internet_access": "no",
+    "name": "Whitefield",
+    "name:kn": "ವೈಟ್‌ಫೀಲ್ಡ್",
+    "name:ml": "വൈറ്റ്ഫീൽഡ്",
+    "network": "IR",
+    "operator": "SWR",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "WFD",
+    "train": "yes",
+    "wikidata": "Q59155364",
+    "wikipedia": "en:Whitefield (Bangalore) railway station"
+  }
+},
+{
+  "type": "node",
+  "id": 4639561294,
+  "lat": 12.9959233,
+  "lon": 77.7192796,
+  "tags": {
+    "alt_name": "Hoodi (H)",
+    "internet_access": "no",
+    "name": "Hoodi",
+    "network": "IR",
+    "operator": "SWR",
+    "platforms": "2",
+    "public_transport": "station",
+    "railway": "halt",
+    "ref": "HDIH",
+    "train": "yes",
+    "wikidata": "Q55613932",
+    "wikipedia": "en:Hoodi Halt railway station"
+  }
+},
+{
+  "type": "node",
+  "id": 5760197744,
+  "lat": 12.9957428,
+  "lon": 77.7579489,
+  "tags": {
+    "alt_name": "Kadugodi",
+    "code": "WHTM",
+    "colour": "#e542de",
+    "name": "Whitefield (Kadugodi)",
+    "name:kn": "ವೈಟ್‌ಫೀಲ್ಡ್ (ಕಾಡುಗೋಡಿ)",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "old_name": "Whitefield",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q112683422",
+    "wikipedia": "en:Whitefield (Kadugodi) metro station"
+  }
+},
+{
+  "type": "node",
+  "id": 5760197745,
+  "lat": 12.9873426,
+  "lon": 77.7538033,
+  "tags": {
+    "alt_name": "Hope Farm",
+    "code": "UWVL",
+    "colour": "#e542de",
+    "name": "Hopefarm Channasandra",
+    "name:kn": "ಹೋಪ್ ಫಾರ್ಮ್ ಚನ್ನಸಂದ್ರ",
+    "name:ta": "ஹோப்ஃபார்ம் சன்னசந்த்ரா",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "old_name": "Channasandra",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikipedia": "en:Channasandra metro station"
+  }
+},
+{
+  "type": "node",
+  "id": 5760197749,
+  "lat": 12.9876393,
+  "lon": 77.7377718,
+  "tags": {
+    "alt_name": "ITPL Main Gate",
+    "code": "ITPL",
+    "colour": "#e542de",
+    "name": "Pattandur Agrahara",
+    "name:kn": "ಪಟ್ಟಂದೂರು ಅಗ್ರಹಾರ",
+    "name:ta": "பட்டந்தூர் அக்ரஹாரா",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikipedia": "en:Pattandur Agrahara metro station"
+  }
+},
+{
+  "type": "node",
+  "id": 5760197751,
+  "lat": 12.9811949,
+  "lon": 77.7275361,
+  "tags": {
+    "alt_name": "Satya Sai Hospital",
+    "code": "SSHP",
+    "colour": "#e542de",
+    "name": "Sri Sathya Sai Hospital",
+    "name:kn": "ಶ್ರೀ ಸತ್ಯ ಸಾಯಿ ಆಸ್ಪತ್ರೆ",
+    "name:ta": "ஸ்ரீ சத்ய சாய் மருத்துவமனை",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikipedia": "en:Sri Sathya Sai Hospital metro station"
+  }
+},
+{
+  "type": "node",
+  "id": 5760197754,
+  "lat": 12.9766408,
+  "lon": 77.7248845,
+  "tags": {
+    "alt_name": "Nallurhalli",
+    "code": "VDHP",
+    "colour": "#e542de",
+    "name": "Nallurahalli",
+    "name:kn": "ನಲ್ಲೂರಹಳ್ಳಿ",
+    "name:ta": "நல்லூரஹள்ளி",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "public_transport": "station",
+    "railway": "station",
+    "ref": "VDHP",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikipedia": "en:Nallurhalli metro station"
+  }
+},
+{
+  "type": "node",
+  "id": 5760197755,
+  "lat": 12.9775940,
+  "lon": 77.7155586,
+  "tags": {
+    "code": "KDNH",
+    "colour": "#e542de",
+    "name": "Kundalahalli",
+    "name:kn": "ಕುಂದಲಹಳ್ಳಿ",
+    "name:ta": "குன்டலஹள்ளி",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikipedia": "en:Kundalahalli metro station"
+  }
+},
+{
+  "type": "node",
+  "id": 5760197757,
+  "lat": 12.9808558,
+  "lon": 77.7087854,
+  "tags": {
+    "alt_name": "Sitaramapalya",
+    "code": "VWIA",
+    "name": "Seetharampalya",
+    "name:kn": "ಸೀತಾರಾಮ ಪಾಳ್ಯ",
+    "name:ta": "சீத்தாராம்பாள்யா",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikipedia": "en:Sitharama Palya metro station"
+  }
+},
+{
+  "type": "node",
+  "id": 5760197761,
+  "lat": 12.9888029,
+  "lon": 77.7113260,
+  "tags": {
+    "code": "DKIA",
+    "colour": "#e542de",
+    "name": "Hoodi",
+    "name:kn": "ಹೂಡಿ",
+    "name:ta": "ஹூடி",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "old_name": "Hoodi Junction",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikipedia": "en:Hoodi Junction metro station"
+  }
+},
+{
+  "type": "node",
+  "id": 5760197762,
+  "lat": 12.9934505,
+  "lon": 77.7036768,
+  "tags": {
+    "alt_name": "ಗರುಡಾಚಾರ್ ಪಾಳ್ಯ",
+    "code": "GDCP",
+    "colour": "#e542de",
+    "name": "Garudacharpalya",
+    "name:kn": "ಗರುಡಾಚಾರ್ ಪಾಳ್ಯ",
+    "name:ml": "ഗരുഡാചാര് പാല്യ",
+    "name:ta": "கருடசார்பால்யா",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikipedia": "en:Garudacharapalya metro station"
+  }
+},
+{
+  "type": "node",
+  "id": 5760197764,
+  "lat": 12.9965445,
+  "lon": 77.6927176,
+  "tags": {
+    "alt_name": "Mahadevapura",
+    "code": "MDVP",
+    "colour": "#e542de",
+    "name": "Singayyanapalya",
+    "name:kn": "ಸಿಂಗಯ್ಯನಪಾಳ್ಯ",
+    "name:ml": "സിംഗയ്യനപാളയ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "old_name": "Mahadevapura",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "public_transport": "station",
+    "railway": "station",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q112683430",
+    "wikipedia": "en:Singayyanapalya metro station"
+  }
+},
+{
+  "type": "node",
+  "id": 6066044631,
+  "lat": 12.9959216,
+  "lon": 77.7273348,
+  "tags": {
+    "internet_access": "no",
+    "name": "Whitefield Panel Cabin",
+    "network": "IR",
+    "operator": "SWR",
+    "railway": "technical_station",
+    "ref": "WHPC"
+  }
+},
+{
+  "type": "node",
+  "id": 11941186870,
+  "lat": 12.9856503,
+  "lon": 77.7470121,
+  "tags": {
+    "alt_name": "Tree Park",
+    "code": "KDGD",
+    "name": "Kadugodi Tree Park",
+    "name:kn": "ಕಾಡುಗೋಡಿ ಟ್ರೀ ಪಾರ್ಕ್",
+    "name:ta": "கடுகோடி மரப் பூங்கா",
+    "network": "Namma Metro",
+    "network:wikidata": "Q279343",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "old_name": "Kadugodi",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "public_transport": "station",
+    "public_transport:version": "2",
+    "railway": "station",
+    "ref": "KDGD",
+    "shelter": "yes",
+    "station": "subway",
+    "subway": "yes",
+    "website": "https://english.brmc.co.in",
+    "wheelchair": "yes",
+    "wikipedia": "en:Kadugodi metro station"
+  }
+}
+
+  ]
+}

@@ -1,0 +1,352 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-08-23T06:10:00Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 514298503,
+  "lat": 12.9977825,
+  "lon": 77.7368222,
+  "tags": {
+    "highway": "bus_stop",
+    "loc_name": "SADARAMANGALA",
+    "name": "Sadaramangala Cross"
+  }
+},
+{
+  "type": "node",
+  "id": 569886518,
+  "lat": 12.9995723,
+  "lon": 77.7367453,
+  "tags": {
+    "highway": "bus_stop",
+    "name": "Sadaramangala",
+    "name:kn": "ರಂಗಸ್ವಾಮಿ ನೇತ್ರಾಲಯ"
+  }
+},
+{
+  "type": "node",
+  "id": 1601001714,
+  "lat": 12.9989026,
+  "lon": 77.7375086,
+  "tags": {
+    "name": "Sadaramangala",
+    "name:kn": "ಸಾದರಮಂಗಲ",
+    "name:kn:iso15919": "Sādaramaṅgala",
+    "place": "village"
+  }
+},
+{
+  "type": "node",
+  "id": 12534145128,
+  "lat": 12.9892717,
+  "lon": 77.7266513,
+  "tags": {
+    "bench": "yes",
+    "bin": "no",
+    "highway": "bus_stop",
+    "lit": "no",
+    "name": "Prestige Shantiniketan",
+    "shelter": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 12534184755,
+  "lat": 12.9892717,
+  "lon": 77.7266513,
+  "tags": {
+    "bench": "yes",
+    "bin": "no",
+    "highway": "bus_stop",
+    "lit": "no",
+    "name": "Prestige Shantiniketan",
+    "shelter": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 91003802,
+  "center": {
+    "lat": 12.9903957,
+    "lon": 77.7304330
+  },
+  "tags": {
+    "building": "commercial",
+    "building:levels": "10",
+    "name": "Prestige Shantiniketan Commercial Complex"
+  }
+},
+{
+  "type": "way",
+  "id": 116117199,
+  "center": {
+    "lat": 12.9901453,
+    "lon": 77.7274085
+  },
+  "tags": {
+    "access": "private",
+    "highway": "residential",
+    "name": "Prestige Shantiniketan Outer Road",
+    "oneway": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 122737532,
+  "center": {
+    "lat": 12.9937201,
+    "lon": 77.7290742
+  },
+  "tags": {
+    "developer": "Prestige Group",
+    "landuse": "residential",
+    "name": "Prestige Shantiniketan Residential Complex"
+  }
+},
+{
+  "type": "way",
+  "id": 130510408,
+  "center": {
+    "lat": 12.9857365,
+    "lon": 77.7346869
+  },
+  "tags": {
+    "building": "office",
+    "building:levels": "12",
+    "name": "Explorer",
+    "roof:shape": "flat"
+  }
+},
+{
+  "type": "way",
+  "id": 150212364,
+  "center": {
+    "lat": 12.9901522,
+    "lon": 77.7272844
+  },
+  "tags": {
+    "access": "private",
+    "highway": "residential",
+    "name": "Prestige Shantiniketan Outer Road",
+    "oneway": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 150212372,
+  "center": {
+    "lat": 12.9892988,
+    "lon": 77.7269551
+  },
+  "tags": {
+    "access": "private",
+    "highway": "residential",
+    "name": "Prestige Shantiniketan Outer Road",
+    "oneway": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 179321523,
+  "center": {
+    "lat": 12.9922533,
+    "lon": 77.7361863
+  },
+  "tags": {
+    "landuse": "industrial",
+    "name": "Sadaramangala Industrial Area",
+    "name:kn": "ಸದರಮಂಗಳ ಕೈಗಾರಿಕಾ"
+  }
+},
+{
+  "type": "way",
+  "id": 194740174,
+  "center": {
+    "lat": 12.9889029,
+    "lon": 77.7310416
+  },
+  "tags": {
+    "building": "commercial",
+    "building:levels": "15",
+    "name": "Prestige Shantiniketan"
+  }
+},
+{
+  "type": "way",
+  "id": 244012928,
+  "center": {
+    "lat": 12.9934550,
+    "lon": 77.7290940
+  },
+  "tags": {
+    "access": "private",
+    "cycleway": "track",
+    "highway": "residential",
+    "name": "Prestige Shantiniketan Inner Road",
+    "oneway": "no",
+    "surface": "concrete"
+  }
+},
+{
+  "type": "way",
+  "id": 747220489,
+  "center": {
+    "lat": 12.9894236,
+    "lon": 77.7271228
+  },
+  "tags": {
+    "access": "private",
+    "highway": "residential",
+    "name": "Prestige Shantiniketan Outer Road",
+    "oneway": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 747220490,
+  "center": {
+    "lat": 12.9892386,
+    "lon": 77.7272280
+  },
+  "tags": {
+    "access": "private",
+    "highway": "residential",
+    "name": "Prestige Shantiniketan Outer Road",
+    "oneway": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 1084466989,
+  "center": {
+    "lat": 12.9914630,
+    "lon": 77.7294074
+  },
+  "tags": {
+    "building": "commercial",
+    "building:levels": "15",
+    "name": "Prestige Shantiniketan Commercial Complex"
+  }
+},
+{
+  "type": "way",
+  "id": 1238777268,
+  "center": {
+    "lat": 12.9967592,
+    "lon": 77.7265435
+  },
+  "tags": {
+    "depot": "bus",
+    "industrial": "depot",
+    "landuse": "industrial",
+    "name": "BMTC Depot 51 (Sadaramangala)",
+    "name:kn": "ಬೆಂ.ಮ.ಸಾ.ಸಂ. ಡೆಪೋ ೫೧ ಸದರಮಂಗಳ",
+    "operator": "BMTC"
+  }
+},
+{
+  "type": "way",
+  "id": 1256756134,
+  "center": {
+    "lat": 12.9896956,
+    "lon": 77.7264030
+  },
+  "tags": {
+    "location": "outdoor",
+    "name": "Prestige Shantiniketan Substation",
+    "power": "substation",
+    "substation": "minor_distribution"
+  }
+},
+{
+  "type": "way",
+  "id": 1302227114,
+  "center": {
+    "lat": 12.9863725,
+    "lon": 77.7398030
+  },
+  "tags": {
+    "landuse": "commercial",
+    "name": "Brigade Tech Park"
+  }
+},
+{
+  "type": "way",
+  "id": 1306885067,
+  "center": {
+    "lat": 12.9923570,
+    "lon": 77.7286826
+  },
+  "tags": {
+    "name": "Prestige Shantiniketan",
+    "name:ta": "ப்ரிஸ்டீஜ் சாந்திநிகேத்தன்",
+    "place": "neighbourhood"
+  }
+},
+{
+  "type": "relation",
+  "id": 9740084,
+  "center": {
+    "lat": 12.9834081,
+    "lon": 77.6031044
+  },
+  "tags": {
+    "from": "Shivajinagara Bus Station",
+    "name": "311E: Shivajinagara Bus Station => Ayyappa Nagara Muneshwara Temple Sadaramangala",
+    "name:kn": "೩೧೧ ಈ",
+    "network": "BMTC",
+    "operator": "BMTC",
+    "public_transport:version": "2",
+    "ref": "311E",
+    "route": "bus",
+    "to": "Ayyappa Nagara Muneshwara Temple Sadaramangala",
+    "type": "route"
+  }
+},
+{
+  "type": "relation",
+  "id": 9740101,
+  "center": {
+    "lat": 12.9834081,
+    "lon": 77.6031044
+  },
+  "tags": {
+    "from": "Shivajinagara Bus Station",
+    "name": "300K: Shivajinagara Bus Station => Sadaramangala Gate",
+    "network": "BMTC",
+    "operator": "BMTC",
+    "public_transport:version": "2",
+    "ref": "300K",
+    "route": "bus",
+    "to": "Sadaramangala Gate",
+    "type": "route"
+  }
+},
+{
+  "type": "relation",
+  "id": 9740102,
+  "center": {
+    "lat": 12.9834081,
+    "lon": 77.6031044
+  },
+  "tags": {
+    "from": "Shivajinagara Bus Station",
+    "name": "300F: Shivajinagara Bus Station => Ayyappa Nagara Muneshwara Temple Sadaramangala",
+    "network": "BMTC",
+    "operator": "BMTC",
+    "public_transport:version": "2",
+    "ref": "300F",
+    "route": "bus",
+    "to": "Ayyappa Nagara Muneshwara Temple Sadaramangala",
+    "type": "route"
+  }
+}
+
+  ]
+}

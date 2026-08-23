@@ -1,0 +1,489 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-08-23T06:06:02Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 3844336213,
+  "lat": 12.9743134,
+  "lon": 77.6149588,
+  "tags": {
+    "level": "1",
+    "name": "Purvayya & Co.",
+    "office": "lawyer"
+  }
+},
+{
+  "type": "node",
+  "id": 4846789824,
+  "lat": 12.9749455,
+  "lon": 77.6197537,
+  "tags": {
+    "amenity": "school",
+    "name": "Purvankara academy of excellence",
+    "name:en": "Purvankara academy of excellence"
+  }
+},
+{
+  "type": "node",
+  "id": 6298979526,
+  "lat": 12.9045096,
+  "lon": 77.6024215,
+  "tags": {
+    "access": "private",
+    "barrier": "gate",
+    "name": "Purva Heights Main Gate"
+  }
+},
+{
+  "type": "node",
+  "id": 12492736827,
+  "lat": 12.9758627,
+  "lon": 77.6156730,
+  "tags": {
+    "name": "Puravankara",
+    "office": "company"
+  }
+},
+{
+  "type": "way",
+  "id": 70807228,
+  "center": {
+    "lat": 12.9582721,
+    "lon": 77.7077989
+  },
+  "tags": {
+    "landuse": "residential",
+    "name": "Purva Rivera",
+    "operator": "Purva",
+    "residential": "apartments"
+  }
+},
+{
+  "type": "way",
+  "id": 90389093,
+  "center": {
+    "lat": 12.9878716,
+    "lon": 77.6953861
+  },
+  "tags": {
+    "barrier": "wall",
+    "landuse": "residential",
+    "name": "Purva Parkridge Villas"
+  }
+},
+{
+  "type": "way",
+  "id": 133524189,
+  "center": {
+    "lat": 12.9061006,
+    "lon": 77.6471892
+  },
+  "tags": {
+    "landuse": "residential",
+    "name": "Purva Fairmont",
+    "residential": "apartments"
+  }
+},
+{
+  "type": "way",
+  "id": 133524190,
+  "center": {
+    "lat": 12.9067530,
+    "lon": 77.6449995
+  },
+  "tags": {
+    "landuse": "residential",
+    "name": "Purva Vantage",
+    "residential": "apartments"
+  }
+},
+{
+  "type": "way",
+  "id": 155272120,
+  "center": {
+    "lat": 12.9873584,
+    "lon": 77.6669265
+  },
+  "tags": {
+    "barrier": "wall",
+    "developer": "Purvankara",
+    "landuse": "residential",
+    "name": "Purva Seasons",
+    "residential": "apartments"
+  }
+},
+{
+  "type": "way",
+  "id": 172468949,
+  "center": {
+    "lat": 12.9586002,
+    "lon": 77.7055935
+  },
+  "tags": {
+    "landuse": "residential",
+    "name": "Purva Fountainsquare",
+    "operator": "Purva",
+    "residential": "apartments"
+  }
+},
+{
+  "type": "way",
+  "id": 173564836,
+  "center": {
+    "lat": 12.9992873,
+    "lon": 77.6272660
+  },
+  "tags": {
+    "building": "apartments",
+    "building:levels": "7",
+    "name": "Purva Park Apartments - Block D"
+  }
+},
+{
+  "type": "way",
+  "id": 232978094,
+  "center": {
+    "lat": 12.9151504,
+    "lon": 77.6766618
+  },
+  "tags": {
+    "landuse": "residential",
+    "name": "Purva Sunshine",
+    "residential": "apartments"
+  }
+},
+{
+  "type": "way",
+  "id": 285466414,
+  "center": {
+    "lat": 12.9042299,
+    "lon": 77.6030148
+  },
+  "tags": {
+    "landuse": "residential",
+    "name": "Purva Heights Apartments"
+  }
+},
+{
+  "type": "way",
+  "id": 311624603,
+  "center": {
+    "lat": 13.0045419,
+    "lon": 77.6150992
+  },
+  "tags": {
+    "addr:city": "Bangalore",
+    "addr:housenumber": "10",
+    "addr:postcode": "560005",
+    "addr:street": "Hall Road",
+    "building": "apartments",
+    "building:levels": "5",
+    "name": "Purva Parkway",
+    "roof:colour": "white"
+  }
+},
+{
+  "type": "way",
+  "id": 323094314,
+  "center": {
+    "lat": 12.9060664,
+    "lon": 77.6471965
+  },
+  "tags": {
+    "access": "private",
+    "highway": "residential",
+    "name": "Purva Fairmont Road"
+  }
+},
+{
+  "type": "way",
+  "id": 343885049,
+  "center": {
+    "lat": 12.9991682,
+    "lon": 77.6275926
+  },
+  "tags": {
+    "landuse": "residential",
+    "name": "Purva Park Apartments",
+    "residential": "apartments"
+  }
+},
+{
+  "type": "way",
+  "id": 346482687,
+  "center": {
+    "lat": 12.9790750,
+    "lon": 77.7496685
+  },
+  "tags": {
+    "addr:city": "Bangalore",
+    "addr:postcode": "560066",
+    "addr:street": "6th cross Holly Cross School Road",
+    "building": "residential",
+    "building:levels": "4",
+    "name": "Apurva Ethreal"
+  }
+},
+{
+  "type": "way",
+  "id": 346757481,
+  "center": {
+    "lat": 12.9850108,
+    "lon": 77.6230444
+  },
+  "tags": {
+    "building": "apartments",
+    "building:levels": "3",
+    "name": "Camelot Apartments",
+    "name:kn": "ಕಾಮೆಲೋಟ್"
+  }
+},
+{
+  "type": "way",
+  "id": 351084439,
+  "center": {
+    "lat": 12.9993032,
+    "lon": 77.6267630
+  },
+  "tags": {
+    "addr:city": "Bangalore",
+    "addr:housenumber": "55",
+    "addr:postcode": "560005",
+    "addr:street": "Jeevanahalli Main Road",
+    "building": "yes",
+    "building:levels": "3",
+    "name": "Purva Carnation Apartments"
+  }
+},
+{
+  "type": "way",
+  "id": 351810703,
+  "center": {
+    "lat": 13.0001880,
+    "lon": 77.6228367
+  },
+  "tags": {
+    "addr:city": "Bangalore",
+    "addr:housenumber": "97/2",
+    "addr:postcode": "560005",
+    "addr:street": "Wheeler Road Extension",
+    "building": "apartments",
+    "building:colour": "cyan",
+    "building:levels": "4",
+    "building:material": "plaster",
+    "name": "Camelot",
+    "name:kn": "ಕಾಮೆಲೋಟ್",
+    "roof:colour": "white",
+    "roof:shape": "flat"
+  }
+},
+{
+  "type": "way",
+  "id": 444787055,
+  "center": {
+    "lat": 12.9995914,
+    "lon": 77.6278524
+  },
+  "tags": {
+    "landuse": "residential",
+    "name": "Purva Iris Apartments",
+    "residential": "apartments"
+  }
+},
+{
+  "type": "way",
+  "id": 469608710,
+  "center": {
+    "lat": 12.9991818,
+    "lon": 77.6275378
+  },
+  "tags": {
+    "landuse": "recreation_ground",
+    "name": "Purva Park Club House"
+  }
+},
+{
+  "type": "way",
+  "id": 512484550,
+  "center": {
+    "lat": 12.9164330,
+    "lon": 77.6719540
+  },
+  "tags": {
+    "addr:city": "Bangalore",
+    "addr:housenumber": "49/1",
+    "addr:postcode": "560035",
+    "addr:street": "Sarjapur Road",
+    "landuse": "residential",
+    "name": "Purva Whitehall",
+    "residential": "apartments"
+  }
+},
+{
+  "type": "way",
+  "id": 525510292,
+  "center": {
+    "lat": 12.9043698,
+    "lon": 77.6027216
+  },
+  "tags": {
+    "amenity": "community_centre",
+    "building": "yes",
+    "name": "Purva Heights Club House"
+  }
+},
+{
+  "type": "way",
+  "id": 609989202,
+  "center": {
+    "lat": 12.9064607,
+    "lon": 77.6911777
+  },
+  "tags": {
+    "building": "apartments",
+    "name": "Apurva Elite"
+  }
+},
+{
+  "type": "way",
+  "id": 672624976,
+  "center": {
+    "lat": 12.9040331,
+    "lon": 77.6026770
+  },
+  "tags": {
+    "building": "apartments",
+    "building:levels": "13",
+    "name": "Purva Heights Tower A"
+  }
+},
+{
+  "type": "way",
+  "id": 672625374,
+  "center": {
+    "lat": 12.9044371,
+    "lon": 77.6033365
+  },
+  "tags": {
+    "building": "apartments",
+    "building:levels": "13",
+    "name": "Purva Heights Tower B"
+  }
+},
+{
+  "type": "way",
+  "id": 672625435,
+  "center": {
+    "lat": 12.9039799,
+    "lon": 77.6033402
+  },
+  "tags": {
+    "building": "apartments",
+    "building:levels": "13",
+    "name": "Purva Heights Tower C"
+  }
+},
+{
+  "type": "way",
+  "id": 672625599,
+  "center": {
+    "lat": 12.9043599,
+    "lon": 77.6028931
+  },
+  "tags": {
+    "access": "private",
+    "leisure": "swimming_pool",
+    "lit": "no",
+    "location": "outdoor",
+    "name": "Purva Heights Swimming Pool"
+  }
+},
+{
+  "type": "way",
+  "id": 1114994689,
+  "center": {
+    "lat": 12.9001727,
+    "lon": 77.6478471
+  },
+  "tags": {
+    "landuse": "construction",
+    "name": "Purva Meraki (u/c)"
+  }
+},
+{
+  "type": "way",
+  "id": 1192698535,
+  "center": {
+    "lat": 12.9421062,
+    "lon": 77.6853354
+  },
+  "tags": {
+    "alt_name": "Purva Codename AI",
+    "construction": "residential",
+    "landuse": "construction",
+    "name": "Purva Weaves (u/c)",
+    "name:kn": "ಪುರವಂಕರ",
+    "source": "https://parivesh.nic.in/newupgrade/#/report/ec?proposalId=109368093&legacyApplicationId=0"
+  }
+},
+{
+  "type": "way",
+  "id": 1212109880,
+  "center": {
+    "lat": 13.0001423,
+    "lon": 77.6666326
+  },
+  "tags": {
+    "landuse": "residential",
+    "name": "Purva Midtown",
+    "residential": "apartments"
+  }
+},
+{
+  "type": "way",
+  "id": 1285817666,
+  "center": {
+    "lat": 12.9317065,
+    "lon": 77.7199784
+  },
+  "tags": {
+    "construction": "residential",
+    "landuse": "construction",
+    "name": "Purvankara (u/c)",
+    "source": "https://parivesh.nic.in/newupgrade/#/report/ec?proposalId=816272378&legacyApplicationId=0"
+  }
+},
+{
+  "type": "way",
+  "id": 1303625869,
+  "center": {
+    "lat": 12.9848791,
+    "lon": 77.7265910
+  },
+  "tags": {
+    "landuse": "commercial",
+    "name": "Starmark Camelot"
+  }
+},
+{
+  "type": "way",
+  "id": 1414809445,
+  "center": {
+    "lat": 13.0490445,
+    "lon": 77.6981541
+  },
+  "tags": {
+    "landuse": "residential",
+    "name": "Purva Oakshire",
+    "residential": "single_family"
+  }
+}
+
+  ]
+}

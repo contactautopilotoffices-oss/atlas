@@ -1,0 +1,2825 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-08-22T13:02:35Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "way",
+  "id": 144106294,
+  "center": {
+    "lat": 12.9971878,
+    "lon": 77.6892108
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 259063035,
+  "center": {
+    "lat": 12.9833780,
+    "lon": 77.7082610
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 452475467,
+  "center": {
+    "lat": 12.9895894,
+    "lon": 77.7542526
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "1",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 458948592,
+  "center": {
+    "lat": 12.9772777,
+    "lon": 77.7188100
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 458948598,
+  "center": {
+    "lat": 12.9914049,
+    "lon": 77.7077521
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 458948600,
+  "center": {
+    "lat": 12.9820013,
+    "lon": 77.7084576
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 458951602,
+  "center": {
+    "lat": 12.9829688,
+    "lon": 77.7313098
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 458951605,
+  "center": {
+    "lat": 12.9866031,
+    "lon": 77.7434838
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 458951609,
+  "center": {
+    "lat": 12.9772528,
+    "lon": 77.7264733
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 494676178,
+  "center": {
+    "lat": 12.9846012,
+    "lon": 77.7519216
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 549187816,
+  "center": {
+    "lat": 12.9917124,
+    "lon": 77.7559805
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 549187817,
+  "center": {
+    "lat": 12.9861214,
+    "lon": 77.7533928
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 549187818,
+  "center": {
+    "lat": 12.9849291,
+    "lon": 77.7489658
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 549187823,
+  "center": {
+    "lat": 12.9797051,
+    "lon": 77.7103221
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 549187824,
+  "center": {
+    "lat": 12.9864720,
+    "lon": 77.7097666
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 607901215,
+  "center": {
+    "lat": 12.9869830,
+    "lon": 77.7537174
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 607901216,
+  "center": {
+    "lat": 12.9846369,
+    "lon": 77.7519342
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 607901217,
+  "center": {
+    "lat": 12.9849686,
+    "lon": 77.7490034
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 607901219,
+  "center": {
+    "lat": 12.9876557,
+    "lon": 77.7376261
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 607901220,
+  "center": {
+    "lat": 12.9829909,
+    "lon": 77.7312899
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 607901223,
+  "center": {
+    "lat": 12.9772750,
+    "lon": 77.7264615
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 607901225,
+  "center": {
+    "lat": 12.9773041,
+    "lon": 77.7188254
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 607901228,
+  "center": {
+    "lat": 12.9797179,
+    "lon": 77.7103474
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 607901229,
+  "center": {
+    "lat": 12.9820088,
+    "lon": 77.7085016
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 607901230,
+  "center": {
+    "lat": 12.9833820,
+    "lon": 77.7083066
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 607901231,
+  "center": {
+    "lat": 12.9864552,
+    "lon": 77.7098017
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 607901233,
+  "center": {
+    "lat": 12.9914090,
+    "lon": 77.7077881
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 607901234,
+  "center": {
+    "lat": 12.9972316,
+    "lon": 77.6892160
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1127946863,
+  "center": {
+    "lat": 12.9896290,
+    "lon": 77.7545103
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "1",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190021587,
+  "center": {
+    "lat": 12.9886955,
+    "lon": 77.7533842
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "1",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190021590,
+  "center": {
+    "lat": 12.9896473,
+    "lon": 77.7544519
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "construction": "subway",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "1",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190022373,
+  "center": {
+    "lat": 12.9891845,
+    "lon": 77.7541370
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "construction": "subway",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "1",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190022374,
+  "center": {
+    "lat": 12.9894693,
+    "lon": 77.7544049
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "1",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190023141,
+  "center": {
+    "lat": 12.9893280,
+    "lon": 77.7546003
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro Phase 2, Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190023142,
+  "center": {
+    "lat": 12.9884335,
+    "lon": 77.7543712
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro Phase 2, Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190024586,
+  "center": {
+    "lat": 12.9936961,
+    "lon": 77.7573530
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro Phase 2, Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190024587,
+  "center": {
+    "lat": 12.9944538,
+    "lon": 77.7575851
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro Phase 2, Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "crossover",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190024588,
+  "center": {
+    "lat": 12.9920112,
+    "lon": 77.7563528
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro Phase 2, Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190024589,
+  "center": {
+    "lat": 12.9940221,
+    "lon": 77.7572123
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190024590,
+  "center": {
+    "lat": 12.9903596,
+    "lon": 77.7554629
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro Phase 2, Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190025013,
+  "center": {
+    "lat": 12.9903596,
+    "lon": 77.7554629
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190025567,
+  "center": {
+    "lat": 12.9879013,
+    "lon": 77.7529770
+  },
+  "tags": {
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190025568,
+  "center": {
+    "lat": 12.9876302,
+    "lon": 77.7510842
+  },
+  "tags": {
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190025606,
+  "center": {
+    "lat": 12.9879082,
+    "lon": 77.7529383
+  },
+  "tags": {
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190025607,
+  "center": {
+    "lat": 12.9879047,
+    "lon": 77.7529380
+  },
+  "tags": {
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190025715,
+  "center": {
+    "lat": 12.9876451,
+    "lon": 77.7513675
+  },
+  "tags": {
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190025716,
+  "center": {
+    "lat": 12.9872628,
+    "lon": 77.7497396
+  },
+  "tags": {
+    "covered": "yes",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190025790,
+  "center": {
+    "lat": 12.9872271,
+    "lon": 77.7497542
+  },
+  "tags": {
+    "covered": "yes",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190025806,
+  "center": {
+    "lat": 12.9877610,
+    "lon": 77.7524846
+  },
+  "tags": {
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190025875,
+  "center": {
+    "lat": 12.9871914,
+    "lon": 77.7497681
+  },
+  "tags": {
+    "covered": "yes",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190026745,
+  "center": {
+    "lat": 12.9882080,
+    "lon": 77.7522647
+  },
+  "tags": {
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190026746,
+  "center": {
+    "lat": 12.9881467,
+    "lon": 77.7518801
+  },
+  "tags": {
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190026766,
+  "center": {
+    "lat": 12.9880743,
+    "lon": 77.7521727
+  },
+  "tags": {
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190026856,
+  "center": {
+    "lat": 12.9880112,
+    "lon": 77.7501861
+  },
+  "tags": {
+    "covered": "yes",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190026873,
+  "center": {
+    "lat": 12.9881008,
+    "lon": 77.7501861
+  },
+  "tags": {
+    "covered": "yes",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190026993,
+  "center": {
+    "lat": 12.9879562,
+    "lon": 77.7501855
+  },
+  "tags": {
+    "covered": "yes",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190027096,
+  "center": {
+    "lat": 12.9882588,
+    "lon": 77.7520664
+  },
+  "tags": {
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190027158,
+  "center": {
+    "lat": 12.9883526,
+    "lon": 77.7519217
+  },
+  "tags": {
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190027473,
+  "center": {
+    "lat": 12.9886530,
+    "lon": 77.7520124
+  },
+  "tags": {
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190027613,
+  "center": {
+    "lat": 12.9885022,
+    "lon": 77.7521354
+  },
+  "tags": {
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "1",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190027802,
+  "center": {
+    "lat": 12.9887981,
+    "lon": 77.7501200
+  },
+  "tags": {
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190027803,
+  "center": {
+    "lat": 12.9886755,
+    "lon": 77.7517359
+  },
+  "tags": {
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190027804,
+  "center": {
+    "lat": 12.9887971,
+    "lon": 77.7508852
+  },
+  "tags": {
+    "covered": "yes",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190027910,
+  "center": {
+    "lat": 12.9888475,
+    "lon": 77.7507326
+  },
+  "tags": {
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190028149,
+  "center": {
+    "lat": 12.9905323,
+    "lon": 77.7538319
+  },
+  "tags": {
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190031170,
+  "center": {
+    "lat": 12.9871639,
+    "lon": 77.7509522
+  },
+  "tags": {
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190031171,
+  "center": {
+    "lat": 12.9869614,
+    "lon": 77.7510472
+  },
+  "tags": {
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190031172,
+  "center": {
+    "lat": 12.9871836,
+    "lon": 77.7514163
+  },
+  "tags": {
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190031173,
+  "center": {
+    "lat": 12.9871669,
+    "lon": 77.7512954
+  },
+  "tags": {
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190031174,
+  "center": {
+    "lat": 12.9870879,
+    "lon": 77.7510120
+  },
+  "tags": {
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190031175,
+  "center": {
+    "lat": 12.9871670,
+    "lon": 77.7510757
+  },
+  "tags": {
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190031176,
+  "center": {
+    "lat": 12.9871757,
+    "lon": 77.7508184
+  },
+  "tags": {
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190031177,
+  "center": {
+    "lat": 12.9873514,
+    "lon": 77.7512248
+  },
+  "tags": {
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190031178,
+  "center": {
+    "lat": 12.9873139,
+    "lon": 77.7508649
+  },
+  "tags": {
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190031179,
+  "center": {
+    "lat": 12.9875587,
+    "lon": 77.7515843
+  },
+  "tags": {
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190031180,
+  "center": {
+    "lat": 12.9873583,
+    "lon": 77.7509775
+  },
+  "tags": {
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190031181,
+  "center": {
+    "lat": 12.9873587,
+    "lon": 77.7511814
+  },
+  "tags": {
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190031182,
+  "center": {
+    "lat": 12.9871916,
+    "lon": 77.7507746
+  },
+  "tags": {
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190031183,
+  "center": {
+    "lat": 12.9871573,
+    "lon": 77.7508385
+  },
+  "tags": {
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190031184,
+  "center": {
+    "lat": 12.9870853,
+    "lon": 77.7508146
+  },
+  "tags": {
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190031185,
+  "center": {
+    "lat": 12.9870142,
+    "lon": 77.7508101
+  },
+  "tags": {
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190031186,
+  "center": {
+    "lat": 12.9870124,
+    "lon": 77.7509277
+  },
+  "tags": {
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190031187,
+  "center": {
+    "lat": 12.9874534,
+    "lon": 77.7509483
+  },
+  "tags": {
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190032204,
+  "center": {
+    "lat": 12.9864717,
+    "lon": 77.7500266
+  },
+  "tags": {
+    "covered": "yes",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190032205,
+  "center": {
+    "lat": 12.9865571,
+    "lon": 77.7499946
+  },
+  "tags": {
+    "covered": "yes",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190032206,
+  "center": {
+    "lat": 12.9865917,
+    "lon": 77.7499839
+  },
+  "tags": {
+    "covered": "yes",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190032207,
+  "center": {
+    "lat": 12.9866310,
+    "lon": 77.7499673
+  },
+  "tags": {
+    "covered": "yes",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190032208,
+  "center": {
+    "lat": 12.9866688,
+    "lon": 77.7499539
+  },
+  "tags": {
+    "covered": "yes",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190032209,
+  "center": {
+    "lat": 12.9867035,
+    "lon": 77.7499385
+  },
+  "tags": {
+    "covered": "yes",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190032210,
+  "center": {
+    "lat": 12.9867415,
+    "lon": 77.7499271
+  },
+  "tags": {
+    "covered": "yes",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190032211,
+  "center": {
+    "lat": 12.9867782,
+    "lon": 77.7499111
+  },
+  "tags": {
+    "covered": "yes",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190032212,
+  "center": {
+    "lat": 12.9868155,
+    "lon": 77.7498965
+  },
+  "tags": {
+    "covered": "yes",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190032213,
+  "center": {
+    "lat": 12.9868536,
+    "lon": 77.7498824
+  },
+  "tags": {
+    "covered": "yes",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190032214,
+  "center": {
+    "lat": 12.9868888,
+    "lon": 77.7498691
+  },
+  "tags": {
+    "covered": "yes",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190032215,
+  "center": {
+    "lat": 12.9869260,
+    "lon": 77.7498535
+  },
+  "tags": {
+    "covered": "yes",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190032216,
+  "center": {
+    "lat": 12.9869622,
+    "lon": 77.7498404
+  },
+  "tags": {
+    "covered": "yes",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190032217,
+  "center": {
+    "lat": 12.9870014,
+    "lon": 77.7498255
+  },
+  "tags": {
+    "covered": "yes",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190032218,
+  "center": {
+    "lat": 12.9870343,
+    "lon": 77.7498110
+  },
+  "tags": {
+    "covered": "yes",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190032219,
+  "center": {
+    "lat": 12.9870731,
+    "lon": 77.7497944
+  },
+  "tags": {
+    "covered": "yes",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190032220,
+  "center": {
+    "lat": 12.9871104,
+    "lon": 77.7497779
+  },
+  "tags": {
+    "covered": "yes",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190032221,
+  "center": {
+    "lat": 12.9865176,
+    "lon": 77.7500100
+  },
+  "tags": {
+    "covered": "yes",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "yard",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190032222,
+  "center": {
+    "lat": 12.9874815,
+    "lon": 77.7508082
+  },
+  "tags": {
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190032223,
+  "center": {
+    "lat": 12.9875473,
+    "lon": 77.7511023
+  },
+  "tags": {
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190032224,
+  "center": {
+    "lat": 12.9875480,
+    "lon": 77.7509369
+  },
+  "tags": {
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190032225,
+  "center": {
+    "lat": 12.9873008,
+    "lon": 77.7497235
+  },
+  "tags": {
+    "covered": "yes",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190426421,
+  "center": {
+    "lat": 12.9881576,
+    "lon": 77.7501874
+  },
+  "tags": {
+    "covered": "yes",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190426422,
+  "center": {
+    "lat": 12.9881214,
+    "lon": 77.7512708
+  },
+  "tags": {
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190426423,
+  "center": {
+    "lat": 12.9880755,
+    "lon": 77.7514866
+  },
+  "tags": {
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1190426424,
+  "center": {
+    "lat": 12.9880317,
+    "lon": 77.7513299
+  },
+  "tags": {
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "yard",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1240358636,
+  "center": {
+    "lat": 12.9866492,
+    "lon": 77.7434903
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1240358637,
+  "center": {
+    "lat": 12.9876117,
+    "lon": 77.7376232
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1429910821,
+  "center": {
+    "lat": 12.9875090,
+    "lon": 77.7522606
+  },
+  "tags": {
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "maxspeed": "80",
+    "railway": "subway",
+    "service": "siding",
+    "usage": "branch",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1490672053,
+  "center": {
+    "lat": 12.9876147,
+    "lon": 77.7390118
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "crossover",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1490672054,
+  "center": {
+    "lat": 12.9876127,
+    "lon": 77.7368268
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "crossover",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1490672055,
+  "center": {
+    "lat": 12.9942422,
+    "lon": 77.7006122
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "designation": "Namma Metro - Reach 1A",
+    "electrified": "rail",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Reach 1A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ",
+    "network": "Namma Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "railway": "subway",
+    "service": "crossover",
+    "subway": "yes",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1551136768,
+  "center": {
+    "lat": 12.9580569,
+    "lon": 77.6634387
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "colour": "blue",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Phase 2A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ - ಹಂತ 2A",
+    "network": "Namma Metro",
+    "railway": "subway",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1551136769,
+  "center": {
+    "lat": 12.9477146,
+    "lon": 77.6988358
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "colour": "blue",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Phase 2A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ - ಹಂತ 2A",
+    "network": "Namma Metro",
+    "railway": "subway",
+    "service": "siding",
+    "voltage": "750"
+  }
+},
+{
+  "type": "way",
+  "id": 1551136770,
+  "center": {
+    "lat": 12.9580570,
+    "lon": 77.6634125
+  },
+  "tags": {
+    "bridge": "viaduct",
+    "colour": "blue",
+    "frequency": "0",
+    "gauge": "1435",
+    "layer": "2",
+    "maxspeed": "80",
+    "name": "Namma Metro - Phase 2A",
+    "name:kn": "ನಮ್ಮ ಮೆಟ್ರೋ - ಹಂತ 2A",
+    "network": "Namma Metro",
+    "railway": "subway",
+    "voltage": "750"
+  }
+},
+{
+  "type": "relation",
+  "id": 1798771,
+  "center": {
+    "lat": 12.9485830,
+    "lon": 77.6093801
+  },
+  "tags": {
+    "colour": "#e542de",
+    "duration": "01:20",
+    "from": "Whitefield (Kadugodi)",
+    "interval": "10",
+    "interval:conditional": "8 @ (Mo-Sa 10:57-15:21; Su 10:33-20:01; PH 07:14-20:01); 15 @ (Mo-Sa 22:01-00:00; Su,PH 22:45-00:00); 20 @ (Mo-Sa 05:00-05:20); 14 @ (Su,PH 22:31-22:45)",
+    "name": "Purple Line (Whitefield (Kadugodi) → Challaghatta)",
+    "name:kn": "ನೇರಳೆ ಪಥ (ವೈಟ್‌ಫೀಲ್ಡ್ (ಕಾಡುಗೋಡಿ) -> ಚಲ್ಲಘಟ್ಟ)",
+    "network": "Namma Metro",
+    "network:wikidata": "Q279343",
+    "opening_hours": "Mo 04:15-00:00; Tu-Sa,PH 05:00-00:00; Su 07:00-00:00",
+    "operator": "BMRCL",
+    "public_transport:version": "2",
+    "ref": "Purple",
+    "route": "subway",
+    "to": "Challaghatta",
+    "type": "route",
+    "wikidata": "Q7261433",
+    "wikipedia": "en:Purple Line (Namma Metro)"
+  }
+},
+{
+  "type": "relation",
+  "id": 1798772,
+  "center": {
+    "lat": 12.9581241,
+    "lon": 77.5249190
+  },
+  "tags": {
+    "colour": "#009933",
+    "duration": "01:01",
+    "from": "Silk Institute",
+    "interval": "10",
+    "name": "Green Line (Silk Institute -> Madavara)",
+    "name:kn": "ಹಸಿರು ಪಥ (ರೇಷ್ಮೆ ಸಂಸ್ಥೆ -> ಮದವರ)",
+    "network": "Namma Metro",
+    "network:wikidata": "Q279343",
+    "opening_hours": "Mo 04:15-00:00; Tu-Sa,PH 05:00-00:00; Su 07:00-00:00",
+    "operator": "BMRCL",
+    "public_transport:version": "2",
+    "ref": "Green",
+    "route": "subway",
+    "to": "Madavara",
+    "type": "route",
+    "wikidata": "Q17054000",
+    "wikipedia": "en:Green Line (Namma Metro)"
+  }
+},
+{
+  "type": "relation",
+  "id": 7841331,
+  "center": {
+    "lat": 12.9486216,
+    "lon": 77.6093412
+  },
+  "tags": {
+    "colour": "#e542de",
+    "duration": "01:20",
+    "from": "Challaghatta",
+    "interval": "10",
+    "interval:conditional": "8 @ (Mo-Sa 12:20-16:36; Su 12:00-21:28; PH 08:56-21:28); 15 @ (Mo-Sa 05:20-06:00,23:05-00:00; Su 07:00-07:50,23:05-00:00; PH 23:05-00:00); 11 @ (Mo-Sa 06:00-06:54); 20 @ (Mo-Sa 05:00-05:20)",
+    "name": "Purple Line (Challaghatta → Whitefield (Kadugodi))",
+    "name:kn": "ನೇರಳೆ ಪಥ (ಚಲ್ಲಘಟ್ಟ -> ವೈಟ್‌ಫೀಲ್ಡ್ (ಕಾಡುಗೋಡಿ))",
+    "network": "Namma Metro",
+    "network:wikidata": "Q279343",
+    "opening_hours": "Mo 04:15-00:00; Tu-Sa,PH 05:00-00:00; Su 07:00-00:00",
+    "operator": "BMRCL",
+    "public_transport:version": "2",
+    "ref": "Purple",
+    "route": "subway",
+    "to": "Whitefield (Kadugodi)",
+    "type": "route",
+    "wikidata": "Q7261433",
+    "wikipedia": "en:Purple Line (Namma Metro)"
+  }
+},
+{
+  "type": "relation",
+  "id": 7842287,
+  "center": {
+    "lat": 12.9581321,
+    "lon": 77.5249422
+  },
+  "tags": {
+    "colour": "#009933",
+    "duration": "01:01",
+    "from": "Madavara",
+    "interval": "10",
+    "name": "Green Line (Madavara -> Silk Institute)",
+    "name:kn": "ಹಸಿರು ಪಥ (ಮದವರ -> ರೇಷ್ಮೆ ಸಂಸ್ಥೆ)",
+    "network": "Namma Metro",
+    "network:wikidata": "Q279343",
+    "opening_hours": "Mo 04:15-00:00; Tu-Sa,PH 05:00-00:00; Su 07:00-00:00",
+    "operator": "BMRCL",
+    "public_transport:version": "2",
+    "ref": "Green",
+    "route": "subway",
+    "to": "Silk Institute",
+    "type": "route",
+    "wikidata": "Q17054000",
+    "wikipedia": "en:Green Line (Namma Metro)"
+  }
+},
+{
+  "type": "relation",
+  "id": 16176489,
+  "center": {
+    "lat": 12.9477850,
+    "lon": 77.5517483
+  },
+  "tags": {
+    "colour": "#009933",
+    "duration": "00:48",
+    "from": "Silk Institute",
+    "interval": "5",
+    "name": "Green Line (Silk Institute -> Peenya Industry)",
+    "name:kn": "ಹಸಿರು ಪಥ (ರೇಷ್ಮೆ ಸಂಸ್ಥೆ -> ಪೀಣ್ಯ ಕೈಗಾರಿಕ)",
+    "network": "Namma Metro",
+    "network:wikidata": "Q279343",
+    "opening_hours": "Mo-Sa 07:20-11:00,16:44-19:55",
+    "operator": "BMRCL",
+    "public_transport:version": "2",
+    "ref": "Green",
+    "route": "subway",
+    "to": "Peenya Industry",
+    "type": "route",
+    "wikidata": "Q17054000",
+    "wikipedia": "en:Green Line (Namma Metro)"
+  }
+},
+{
+  "type": "relation",
+  "id": 16176490,
+  "center": {
+    "lat": 12.9475966,
+    "lon": 77.5521313
+  },
+  "tags": {
+    "colour": "#009933",
+    "duration": "00:48",
+    "from": "Peenya Industry",
+    "interval": "5",
+    "name": "Green Line (Peenya Industry -> Silk Institute)",
+    "name:kn": "ಹಸಿರು ಪಥ (ಪೀಣ್ಯ ಕೈಗಾರಿಕ -> ರೇಷ್ಮೆ ಸಂಸ್ಥೆ)",
+    "network": "Namma Metro",
+    "network:wikidata": "Q279343",
+    "opening_hours": "Mo-Sa 06:36-10:16,16:31-19:08",
+    "operator": "BMRCL",
+    "public_transport:version": "2",
+    "ref": "Green",
+    "route": "subway",
+    "to": "Silk Institute",
+    "type": "route",
+    "wikidata": "Q17054000",
+    "wikipedia": "en:Green Line (Namma Metro)"
+  }
+},
+{
+  "type": "relation",
+  "id": 17038841,
+  "center": {
+    "lat": 12.9732221,
+    "lon": 77.6343447
+  },
+  "tags": {
+    "colour": "#e542de",
+    "duration": "00:57",
+    "from": "Mysuru Road",
+    "interval": "10",
+    "interval:conditional": "20 @ (Mo-Sa 05:00-05:20); 15 @ (Mo-Sa 05:20-06:17,23:22-24:00); 5 @ (Mo-Sa 07:22-11:34,17:27-21:27); 8 @ (Mo-Sa 12:37-17:22)",
+    "name": "Purple Line (Mysuru Road → Pattandur Agrahara)",
+    "name:kn": "ನೇರಳೆ ಪಥ (ಮೈಸೂರು ರಸ್ತೆ -> ಪಟ್ಟಂದೂರು ಅಗ್ರಹಾರ)",
+    "network": "Namma Metro",
+    "network:wikidata": "Q279343",
+    "opening_hours": "Mo-Sa 05:00-24:00",
+    "operator": "BMRCL",
+    "public_transport:version": "2",
+    "ref": "Purple",
+    "route": "subway",
+    "to": "Pattandur Agrahara",
+    "type": "route",
+    "wikidata": "Q7261433",
+    "wikipedia": "en:Purple Line (Namma Metro)"
+  }
+},
+{
+  "type": "relation",
+  "id": 17038842,
+  "center": {
+    "lat": 12.9731813,
+    "lon": 77.6343580
+  },
+  "tags": {
+    "colour": "#e542de",
+    "duration": "00:57",
+    "from": "Pattandur Agrahara",
+    "interval": "10",
+    "interval:conditional": "12 @ (Mo-Sa 05:08-05:25); 5 @ (Mo-Sa 08:25-11:02,17:56-20:26); 8 @ (Mo-Sa 11:02-15:26); 15 @ (Mo-Sa 22:06-24:00)",
+    "name": "Purple Line (Pattandur Agrahara → Mysuru Road)",
+    "name:kn": "ನೇರಳೆ ಪಥ (ಪಟ್ಟಂದೂರು ಅಗ್ರಹಾರ -> ಮೈಸೂರು ರಸ್ತೆ)",
+    "network": "Namma Metro",
+    "network:wikidata": "Q279343",
+    "opening_hours": "Mo-Sa 05:00-24:00",
+    "operator": "BMRCL",
+    "public_transport:version": "2",
+    "ref": "Purple",
+    "route": "subway",
+    "to": "Mysuru Road",
+    "type": "route",
+    "wikidata": "Q7261433",
+    "wikipedia": "en:Purple Line (Namma Metro)"
+  }
+},
+{
+  "type": "relation",
+  "id": 19421927,
+  "center": {
+    "lat": 12.8708715,
+    "lon": 77.6340211
+  },
+  "tags": {
+    "colour": "yellow",
+    "duration": "00:40",
+    "from": "Delta Electronics Bommasandra",
+    "name": "Yellow Line (Delta Electronics Bommasandra → Rashtreeya Vidyalaya Road)",
+    "name:kn": "ಹಳಡಿ ಮಾರ್ಗ (ಡೆಲ್ಟಾ ಎಲೆಕ್ಟ್ರಾನಿಕ್ಸ್ ಬೊಮ್ಮಸಂದ್ರ → ರಾಷ್ಟ್ರೀಯ ವಿದ್ಯಾಲಯ ರಸ್ತೆ )",
+    "network": "Namma Metro",
+    "network:wikidata": "Q279343",
+    "opening_hours": "Mo-Sa,PH 06:30-00:00; Su 07:00-00:00",
+    "operator": "Bangalore Metro Rail Corporation Limited",
+    "public_transport:version": "2",
+    "ref": "Yellow",
+    "roundtrip": "no",
+    "route": "subway",
+    "start_date": "2025-08-11",
+    "to": "Rashtreeya Vidyalaya Road",
+    "type": "route",
+    "wikidata": "Q39071595",
+    "wikipedia": "en:Yellow Line (Namma Metro)"
+  }
+},
+{
+  "type": "relation",
+  "id": 19421944,
+  "center": {
+    "lat": 12.8700240,
+    "lon": 77.6343758
+  },
+  "tags": {
+    "colour": "yellow",
+    "duration": "00:40",
+    "from": "Rashtreeya Vidyalaya Road",
+    "name": "Yellow Line (Rashtreeya Vidyalaya Road → Delta Electronics Bommasandra)",
+    "name:kn": "ಹಳಡಿ ಮಾರ್ಗ (ರಾಷ್ಟ್ರೀಯ ವಿದ್ಯಾಲಯ ರಸ್ತೆ → ಡೆಲ್ಟಾ ಎಲೆಕ್ಟ್ರಾನಿಕ್ಸ್ ಬೊಮ್ಮಸಂದ್ರ)",
+    "network": "Namma Metro",
+    "network:wikidata": "Q279343",
+    "opening_hours": "Mo-Sa,PH 06:30-00:00; Su 07:00-00:00",
+    "public_transport:version": "2",
+    "ref": "Yellow",
+    "route": "subway",
+    "start_date": "2025-08-10",
+    "to": "Delta Electronics Bommasandra",
+    "type": "route",
+    "wikidata": "Q39071595",
+    "wikipedia": "en:Yellow Line (Namma Metro)"
+  }
+}
+
+  ]
+}

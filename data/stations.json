@@ -1,0 +1,164 @@
+[
+  {
+    "id": "singayyanapalya",
+    "name": "Singayyanapalya",
+    "lng": 77.6927176,
+    "lat": 12.9965445
+  },
+  {
+    "id": "garudacharpalya",
+    "name": "Garudacharpalya",
+    "lng": 77.7036768,
+    "lat": 12.9934505
+  },
+  {
+    "id": "seetharampalya",
+    "name": "Seetharampalya",
+    "lng": 77.7087854,
+    "lat": 12.9808558
+  },
+  {
+    "id": "hoodi",
+    "name": "Hoodi",
+    "lng": 77.711326,
+    "lat": 12.9888029
+  },
+  {
+    "id": "kundalahalli",
+    "name": "Kundalahalli",
+    "lng": 77.7155586,
+    "lat": 12.977594
+  },
+  {
+    "id": "nallurahalli",
+    "name": "Nallurahalli",
+    "lng": 77.7248845,
+    "lat": 12.9766408
+  },
+  {
+    "id": "sri-sathya-sai-hospital",
+    "name": "Sri Sathya Sai Hospital",
+    "lng": 77.7275361,
+    "lat": 12.9811949
+  },
+  {
+    "id": "pattandur-agrahara",
+    "name": "Pattandur Agrahara",
+    "lng": 77.7377718,
+    "lat": 12.9876393
+  },
+  {
+    "id": "kadugodi-tree-park",
+    "name": "Kadugodi Tree Park",
+    "lng": 77.7470121,
+    "lat": 12.9856503
+  },
+  {
+    "id": "hopefarm-channasandra",
+    "name": "Hopefarm Channasandra",
+    "lng": 77.7538033,
+    "lat": 12.9873426
+  },
+  {
+    "id": "whitefield-kadugodi-",
+    "name": "Whitefield (Kadugodi)",
+    "lng": 77.7579489,
+    "lat": 12.9957428
+  },
+  {
+    "id": "rashtreeya-vidyalaya-road",
+    "name": "Rashtreeya Vidyalaya Road",
+    "lng": 77.5802015,
+    "lat": 12.9215807
+  },
+  {
+    "id": "ragigudda",
+    "name": "Ragigudda",
+    "lng": 77.5883015,
+    "lat": 12.9170807
+  },
+  {
+    "id": "jayadeva-hospital",
+    "name": "Jayadeva Hospital",
+    "lng": 77.5999663,
+    "lat": 12.916731
+  },
+  {
+    "id": "btm-layout",
+    "name": "BTM Layout",
+    "lng": 77.6081182,
+    "lat": 12.9165878
+  },
+  {
+    "id": "central-silk-board",
+    "name": "Central Silk Board",
+    "lng": 77.620567,
+    "lat": 12.9165816
+  },
+  {
+    "id": "bommanahalli",
+    "name": "Bommanahalli",
+    "lng": 77.6264782,
+    "lat": 12.9106157
+  },
+  {
+    "id": "hongasandra",
+    "name": "Hongasandra",
+    "lng": 77.6319861,
+    "lat": 12.9016952
+  },
+  {
+    "id": "kudlu-gate",
+    "name": "Kudlu Gate",
+    "lng": 77.6392156,
+    "lat": 12.8899259
+  },
+  {
+    "id": "singasandra",
+    "name": "Singasandra",
+    "lng": 77.6448456,
+    "lat": 12.8808178
+  },
+  {
+    "id": "hosa-road",
+    "name": "Hosa Road",
+    "lng": 77.652447,
+    "lat": 12.8707491
+  },
+  {
+    "id": "beratena-agrahara",
+    "name": "Beratena Agrahara",
+    "lng": 77.6579036,
+    "lat": 12.863878
+  },
+  {
+    "id": "electronic-city",
+    "name": "Electronic City",
+    "lng": 77.6635228,
+    "lat": 12.8565053
+  },
+  {
+    "id": "infosys-foundation-konappana-agrahara",
+    "name": "Infosys Foundation Konappana Agrahara",
+    "lng": 77.6711872,
+    "lat": 12.8464399
+  },
+  {
+    "id": "huskur-road",
+    "name": "Huskur Road",
+    "lng": 77.6773716,
+    "lat": 12.8391572
+  },
+  {
+    "id": "biocon-hebbagodi",
+    "name": "Biocon Hebbagodi",
+    "lng": 77.6813744,
+    "lat": 12.8290325
+  },
+  {
+    "id": "delta-electronics-bommasandra",
+    "name": "Delta Electronics Bommasandra",
+    "lng": 77.6883453,
+    "lat": 12.8193944
+  }
+]

@@ -43,38 +43,63 @@ window.AtlasWorld = (function () {
   let FACADES = null;
   function buildFacades() {
     if (FACADES) return FACADES;
+
+    /* Facade grammar traced to reference photography of the shortlist itself
+       (references/ — Starmark Camelot corner elevation, media/starmark/starmark-07):
+       these are NOT punched-window towers. They are horizontal RIBBON GLAZING between
+       pale concrete SPANDREL BANDS. The previous build drew a dense grid of high-contrast
+       lit squares on a near-black wall, which read as an arcade sprite rather than a
+       Grade-A office block — wrong silhouette, wrong material, wrong value range. */
     const palettes = [
-      { wall: "#2f6f8f", lit: ["#ffdf9e", "#bfe9ff"] }, // teal-blue glass
-      { wall: "#3f5fa8", lit: ["#ffe0a0", "#d6e4ff"] }, // cobalt glass
-      { wall: "#b98a4a", lit: ["#fff0c0", "#ffe1a8"] }, // bronze / gold
-      { wall: "#2f8f6a", lit: ["#f6ffb0", "#c4ffe6"] }, // emerald glass
-      { wall: "#8a5fb0", lit: ["#ffd6f0", "#e6d0ff"] }, // amethyst curtain
-      { wall: "#c85a52", lit: ["#ffe6b0", "#ffd0c0"] }, // terracotta accent
+      { band: "#d9d5cc", glass: "#2c4f4a", mullion: "#8f9490" }, // cream band / green ribbon (Starmark)
+      { band: "#cfd3d6", glass: "#33454f", mullion: "#899097" }, // grey band / slate ribbon
+      { band: "#d5d0c6", glass: "#2f4450", mullion: "#8d9298" }, // warm stone / blue-grey ribbon
+      { band: "#c9ccd0", glass: "#2a3f47", mullion: "#868c91" }, // pale concrete / teal ribbon
     ];
+
     FACADES = palettes.map((p) => {
       const cw = 256, ch = 256;
       const mk = () => { const c = document.createElement("canvas"); c.width = cw; c.height = ch; return c; };
       const c1 = mk(), c2 = mk(), c3 = mk();
       const x1 = c1.getContext("2d"), x2 = c2.getContext("2d"), x3 = c3.getContext("2d");
-      x1.fillStyle = p.wall; x1.fillRect(0, 0, cw, ch);
-      x2.fillStyle = "#000"; x2.fillRect(0, 0, cw, ch);
-      x3.fillStyle = "#dedede"; x3.fillRect(0, 0, cw, ch);
-      const ww = 16, wh = 24, px = 8, py = 12;
-      for (let y = py; y < ch; y += wh + py) for (let x = px; x < cw; x += ww + px) {
-        x1.fillStyle = "#0c1622"; x1.fillRect(x, y, ww, wh);
-        x3.fillStyle = "#0d0d0d"; x3.fillRect(x, y, ww, wh);
-        if (Math.random() < 0.42) {                     // far more windows lit = alive
-          const lit = p.lit[Math.random() < 0.5 ? 0 : 1];
-          x1.fillStyle = lit; x1.fillRect(x, y, ww, wh);
-          x2.fillStyle = lit; x2.fillRect(x, y, ww, wh);
+
+      // base = spandrel band colour; emissive black; roughness matte
+      x1.fillStyle = p.band; x1.fillRect(0, 0, cw, ch);
+      x2.fillStyle = "#000";  x2.fillRect(0, 0, cw, ch);
+      x3.fillStyle = "#c8c8c8"; x3.fillRect(0, 0, cw, ch);   // concrete: matte
+
+      // One floor = 32px: 20px glazed ribbon over a 12px spandrel band.
+      const FLOOR = 32, GLASS_H = 20;
+      for (let y = 0; y < ch; y += FLOOR) {
+        // glazed ribbon
+        x1.fillStyle = p.glass; x1.fillRect(0, y, cw, GLASS_H);
+        x3.fillStyle = "#1e1e1e"; x3.fillRect(0, y, cw, GLASS_H);   // glass: smooth/reflective
+
+        // vertical mullion rhythm — 16px bay, matching the reference's bay spacing
+        x1.fillStyle = p.mullion;
+        for (let x = 0; x < cw; x += 16) x1.fillRect(x, y, 1.5, GLASS_H);
+
+        // shadow line under the band overhang — this is what gives the facade depth
+        x1.fillStyle = "rgba(0,0,0,0.20)";
+        x1.fillRect(0, y + GLASS_H, cw, 2);
+
+        // Lit panes: sparse and warm. 42% at full white previously made every tower a
+        // Christmas tree; a real office at dusk shows a scattered handful.
+        for (let x = 0; x < cw; x += 16) {
+          if (Math.random() < 0.10) {
+            const warm = Math.random() < 0.75 ? "#e8dcc0" : "#cfe0e6";
+            x1.fillStyle = warm;      x1.fillRect(x + 2, y + 3, 12, GLASS_H - 6);
+            x2.fillStyle = "#4a4436"; x2.fillRect(x + 2, y + 3, 12, GLASS_H - 6);  // low emissive
+          }
         }
       }
-      const T = (c) => { const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(0.05, 0.03); return t; };
+
+      const T = (c) => { const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(0.018, 0.030); return t; };
       return new THREE.MeshStandardMaterial({
-        map: T(c1), emissive: 0xffffff, emissiveMap: T(c2), emissiveIntensity: 1.0,
-        roughnessMap: T(c3), roughness: 0.62, metalness: 0.1, envMapIntensity: 0.7,
+        map: T(c1), emissive: 0xffffff, emissiveMap: T(c2), emissiveIntensity: 0.45,
+        roughnessMap: T(c3), roughness: 0.55, metalness: 0.12, envMapIntensity: 0.9,
         transparent: false, opacity: 1, depthWrite: true, depthTest: true,
-        side: THREE.DoubleSide,          // solid, opaque facade — windows are panes on a solid wall
+        side: THREE.DoubleSide,          // solid, opaque facade
       });
     });
     return FACADES;
@@ -84,7 +109,7 @@ window.AtlasWorld = (function () {
   let ROOFMAT = null;
   function roofMat() {
     return ROOFMAT || (ROOFMAT = new THREE.MeshStandardMaterial({
-      color: 0x2b2f36, roughness: 0.9, metalness: 0.08, side: THREE.DoubleSide }));
+      color: 0x6b7078, roughness: 0.92, metalness: 0.06, side: THREE.DoubleSide }));
   }
 
   /* ---- build one building's geometry (z-up world metres) ---- */
@@ -136,17 +161,20 @@ window.AtlasWorld = (function () {
     g.add(body);
     if (opts.id) buildings[opts.id] = { group: g, body, mat: bodyMat, baseColor: bodyMat.color.getHex() };
 
-    // rooftop plant
-    const ru = roofUnits(box, heightM, rnd);
-    if (ru.length) g.add(new THREE.Mesh(mergeGeometries(ru, false), roofMat()));
-
-    // Class A flourish: entrance canopy (offset, no coincident geometry)
-    if ((opts.cls || "A") === "A") {
-      const alu = A.materials().aluminium; alu.side = THREE.DoubleSide;
-      const canopy = new THREE.Mesh(new THREE.BoxGeometry(Math.min(box.w, 14), 5, 0.6), alu);
-      canopy.position.set(box.cx, box.minY - 2.5, 4.5);
-      g.add(canopy);
+    // Rooftop plant is randomly generated (count, size and position all from rnd()),
+    // so it is invented detail on a specific, identifiable building. Off by default;
+    // opts.roofPlant must be explicitly set for a client that wants massing filler.
+    if (opts.roofPlant) {
+      const ru = roofUnits(box, heightM, rnd);
+      if (ru.length) g.add(new THREE.Mesh(mergeGeometries(ru, false), roofMat()));
     }
+
+    // REMOVED — invented entrance canopy.
+    // It was placed at (box.cx, box.minY - 2.5), i.e. 2.5 m outside the footprint's
+    // southern edge, with no knowledge of where the real entrance is. On Sumadhura
+    // Capitol that edge faces Whitefield Road, so the canopy rendered as a slab lying
+    // in the carriageway. Geometry a tenant reads as part of the building must come
+    // from the footprint, not from a guess.
     scene.add(g);
     map.triggerRepaint();
     return g;
@@ -192,7 +220,7 @@ window.AtlasWorld = (function () {
   function setHighlight(id, on) {
     const b = buildings[id]; if (!b) return;
     b.mat.emissive.setHex(on ? 0x2fbf71 : 0xffffff);
-    b.mat.emissiveIntensity = on ? 0.55 : (getRig(themeModeRef()).eDeg < 2 ? 1.8 : 1.1);
+    b.mat.emissiveIntensity = on ? 0.30 : (getRig(themeModeRef()).eDeg < 2 ? 0.85 : 0.45);
     map.triggerRepaint();
   }
   function setSelected(id, on) {
@@ -279,7 +307,7 @@ window.AtlasWorld = (function () {
     renderer.toneMappingExposure = rig.exposure;
     // night: lift window/lobby glow across all facades
     const night = rig.eDeg < 2;
-    buildFacades().forEach((m) => { m.emissiveIntensity = night ? 1.8 : 1.1; });
+    buildFacades().forEach((m) => { m.emissiveIntensity = night ? 0.85 : 0.45; });
     map.triggerRepaint();
   }
 

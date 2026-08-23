@@ -4,6 +4,8 @@
   "private": true,
   "description": "ATLAS by Autopilot — BKC Digital Twin",
   "scripts": {
+    "start": "python3 serve.py",
+    "dev": "python3 serve.py",
     "build": "node scripts/build-config.js"
   }
 }

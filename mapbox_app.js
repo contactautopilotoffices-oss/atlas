@@ -188,6 +188,7 @@ if (window.CLIENT && window.CLIENT.registry) {
 /* ---- State ---- */
 let map = null;
 let selectedId = null;
+const stationLabelMarkers = [];   // HTML station name chips (see addMetroLines)
 const shortlisted = new Set();   // building ids the user has starred — client-agnostic, drives the leaderboard star
 let night = false;
 let showLabels = true; // ON by default — property name tags visible immediately
@@ -675,35 +676,42 @@ function addCustomThreeLayer(b, reg) {
       const geometry = new THREE.ExtrudeGeometry(shape, { depth: heightM, bevelEnabled: false });
 
       function createBuildingTextures(){
+        /* Same facade grammar as world_layer.js buildFacades(), traced to reference
+           photography of the shortlist (media/starmark/starmark-07 — cream spandrel
+           bands over dark ribbon glazing). The previous version drew a punched-window
+           grid where the dark panes covered ~44% of the texture, so the tower read as
+           a black box with glowing squares regardless of the registry wall colour. */
         const cw = 256, ch = 256;
         const c1=document.createElement("canvas"); c1.width=cw; c1.height=ch;
         const c2=document.createElement("canvas"); c2.width=cw; c2.height=ch;
         const c3=document.createElement("canvas"); c3.width=cw; c3.height=ch;
         const ctx1=c1.getContext("2d"), ctx2=c2.getContext("2d"), ctx3=c3.getContext("2d");
-        
-        // Walls (using registry colors)
-        const wallColor = reg.color || b.color || "#5a636c";
-        ctx1.fillStyle = wallColor; ctx1.fillRect(0,0,cw,ch);
-        ctx2.fillStyle = "#000000"; ctx2.fillRect(0,0,cw,ch); // Emissive map (walls don't glow)
-        ctx3.fillStyle = "#e0e0e0"; ctx3.fillRect(0,0,cw,ch); // Roughness map (walls are matte)
-        
-        // Windows
-        const winW = 16, winH = 24, padX = 8, padY = 12;
-        for(let y=padY; y<ch; y+=winH+padY) {
-          for(let x=padX; x<cw; x+=winW+padX) {
-            // Dark glass
-            ctx1.fillStyle = "#0a0f14"; ctx1.fillRect(x,y,winW,winH);
-            ctx3.fillStyle = "#111111"; ctx3.fillRect(x,y,winW,winH); // Glass is smooth
-            
-            // Randomly lit windows
-            if(Math.random() < 0.25) {
-              const lit = Math.random() < 0.5 ? "#fceaba" : "#d8f2f2"; // Warm or cool light
-              ctx1.fillStyle = lit; ctx1.fillRect(x,y,winW,winH);
-              ctx2.fillStyle = lit; ctx2.fillRect(x,y,winW,winH); // Lit windows glow in emissive map
+
+        const band    = reg.color || b.color || "#cfd3d6";   // registry colour = the concrete band
+        const glass   = "#2f4450";
+        const mullion = "#8d9298";
+
+        ctx1.fillStyle = band;      ctx1.fillRect(0,0,cw,ch);
+        ctx2.fillStyle = "#000000"; ctx2.fillRect(0,0,cw,ch);
+        ctx3.fillStyle = "#c8c8c8"; ctx3.fillRect(0,0,cw,ch);
+
+        const FLOOR = 32, GLASS_H = 20;
+        for(let y=0; y<ch; y+=FLOOR){
+          ctx1.fillStyle = glass;   ctx1.fillRect(0, y, cw, GLASS_H);
+          ctx3.fillStyle = "#1e1e1e"; ctx3.fillRect(0, y, cw, GLASS_H);
+          ctx1.fillStyle = mullion;
+          for(let x=0; x<cw; x+=16) ctx1.fillRect(x, y, 1.5, GLASS_H);
+          ctx1.fillStyle = "rgba(0,0,0,0.20)";
+          ctx1.fillRect(0, y + GLASS_H, cw, 2);
+          for(let x=0; x<cw; x+=16){
+            if(Math.random() < 0.10){
+              const warm = Math.random() < 0.75 ? "#e8dcc0" : "#cfe0e6";
+              ctx1.fillStyle = warm;      ctx1.fillRect(x+2, y+3, 12, GLASS_H-6);
+              ctx2.fillStyle = "#4a4436"; ctx2.fillRect(x+2, y+3, 12, GLASS_H-6);
             }
           }
         }
-        
+
         const tex = {
           map: new THREE.CanvasTexture(c1),
           emissiveMap: new THREE.CanvasTexture(c2),
@@ -711,7 +719,7 @@ function addCustomThreeLayer(b, reg) {
         };
         Object.values(tex).forEach(t => {
           t.wrapS = t.wrapT = THREE.RepeatWrapping;
-          t.repeat.set(0.04, 0.02);
+          t.repeat.set(0.018, 0.030);
         });
         return tex;
       }
@@ -722,10 +730,11 @@ function addCustomThreeLayer(b, reg) {
         map: textures.map,
         emissive: "#ffffff",
         emissiveMap: textures.emissiveMap,
-        emissiveIntensity: 0.9,
+        emissiveIntensity: 0.45,
         roughnessMap: textures.roughnessMap,
-        metalness: 0.25,
-        transparent: false // Solid walls!
+        metalness: 0.12,
+        transparent: false, // Solid walls!
+        side: THREE.DoubleSide // extruded side-face winding is unreliable — without this, far walls cull and the tower looks hollow
       });
 
       const mesh = new THREE.Mesh(geometry, mat);
@@ -1151,12 +1160,18 @@ function addFallbackBox(b, reg, heightM, color) {
    METRO LINES (simplified GeoJSON layers — Aqua + Yellow)
    ============================================================ */
 function addMetroLines() {
-  // This is BKC transit data (real Line 3 alignment + indicative 2B).
-  // Other clients bring their own geography — don't paint BKC's lines on it.
-  if ((window.CLIENT_SLUG || "vfs-bkc") !== "vfs-bkc") return;
+  // Gate on DATA, not on client slug. The old guard was `slug !== "vfs-bkc" -> return`,
+  // which meant a client shipping its own verified alignment (basilic-fly carries the
+  // Namma Metro Purple and Yellow lines in config.js) got no metro layer at all: no
+  // line, no station dots, no station names. The point of the guard is only to avoid
+  // painting BKC's Mumbai coordinates onto another city — so check for own data first.
+  const hasOwnLines = !!((window.BKC_LINE3 && window.BKC_LINE3.path) ||
+                         (window.BKC_LINE2 && window.BKC_LINE2.path));
+  const isBkc = (window.CLIENT_SLUG || "vfs-bkc") === "vfs-bkc";
+  if (!hasOwnLines && !isBkc) return;
 
-  // Aqua Line: REAL tunnel alignment from OSM (metro_line3.js), not schematic.
-  // Yellow Line: indicative alignment (under construction, not yet surveyed).
+  // Line 3 / primary: REAL alignment from client config where supplied; the hardcoded
+  // fallback below is Mumbai BKC and must ONLY be used by the BKC client.
   const aquaPath = (window.BKC_LINE3 && window.BKC_LINE3.path) || [
     [72.8260, 18.9750], [72.8340, 18.9990], [72.8445, 19.0180], [72.8570, 19.0380],
     [72.8612, 19.0610], [72.8655, 19.0820], [72.8710, 19.1050],
@@ -1166,19 +1181,21 @@ function addMetroLines() {
     features: [
       {
         type: "Feature",
-        properties: { line: "aqua", name: "Aqua Line — Metro Line 3" },
+        properties: { line: "aqua", name: (window.BKC_LINE3 && window.BKC_LINE3.name) || "Aqua Line — Metro Line 3" },
         geometry: { type: "LineString", coordinates: aquaPath }
       },
-      {
+      ...((window.BKC_LINE2 && window.BKC_LINE2.path) || isBkc ? [{
         type: "Feature",
-        properties: { line: "yellow", name: (D.METRO && D.METRO.yellow && D.METRO.yellow.name) || "Yellow Line — Metro Line 2B" },
+        properties: { line: "yellow",
+          name: (window.BKC_LINE2 && window.BKC_LINE2.name) ||
+                (D.METRO && D.METRO.yellow && D.METRO.yellow.name) || "Yellow Line — Metro Line 2B" },
         geometry: {
           type: "LineString",
           coordinates: (window.BKC_LINE2 && window.BKC_LINE2.path) || [
             [72.8520, 19.0520], [72.8590, 19.0590], [72.8640, 19.0640], [72.8700, 19.0700], [72.8780, 19.0760],
           ]
         }
-      },
+      }] : []),
     ]
   };
 
@@ -1249,35 +1266,57 @@ function addMetroLines() {
   };
   map.addSource("metro-stations", { type: "geojson", data: stationData });
 
-  map.addLayer({
-    id: "metro-station-dots",
-    type: "circle",
-    source: "metro-stations",
-    paint: {
-      "circle-radius": ["case", ["==", ["get", "status"], "open"], 5.5, 4.5],
-      "circle-color": ["case", ["==", ["get", "status"], "open"], "#ffffff", "#0b0f16"],
-      "circle-stroke-width": 2.5,
-      "circle-stroke-color": ["match", ["get", "line"], "aqua", "#14b8c4", "#f2c200"],
-    }
-  });
+  /* Google-Maps-style station pins: a large teardrop with the metro glyph and the
+     name beneath. Clicking one FRAMES the station together with the selected
+     building via fitBounds, so both are on screen at a readable scale — instead of
+     leaving the user to pan and hunt for the relationship between them. */
+  stationData.features.forEach(f => {
+    const name = f.properties.name.replace(/ · .*$/, "");
+    const accent = f.properties.line === "aqua" ? "#7b2d8e" : "#d9a410";
 
-  map.addLayer({
-    id: "metro-station-labels",
-    type: "symbol",
-    source: "metro-stations",
-    layout: {
-      "text-field": ["get", "name"],
-      "text-size": 11,
-      "text-offset": [0, 1.1],
-      "text-anchor": "top",
-      "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"],
-      "visibility": showLabels ? "visible" : "none",
-    },
-    paint: {
-      "text-color": "#ffffff",
-      "text-halo-color": "rgba(5,10,16,0.85)",
-      "text-halo-width": 1.5,
-    }
+    const wrap = document.createElement("div");
+    wrap.className = "mm-stn";
+    wrap.style.cssText = `display:flex;flex-direction:column;align-items:center;cursor:pointer;
+      ${showLabels ? "" : "display:none;"}`;
+
+    const pin = document.createElement("div");
+    pin.style.cssText = `
+      width:30px;height:30px;border-radius:50% 50% 50% 4px;
+      transform:rotate(-45deg);
+      background:${accent};border:2.5px solid #fff;
+      box-shadow:0 3px 10px rgba(0,0,0,.55);
+      display:flex;align-items:center;justify-content:center;
+      transition:transform .16s ease, box-shadow .16s ease;`;
+    const glyph = document.createElement("span");
+    glyph.textContent = "M";
+    glyph.style.cssText = `transform:rotate(45deg);color:#fff;font:700 14px/1 system-ui,sans-serif;`;
+    pin.appendChild(glyph);
+
+    const tag = document.createElement("div");
+    tag.textContent = name;
+    tag.style.cssText = `margin-top:5px;background:rgba(12,17,24,.92);color:#eef3f8;
+      border:1px solid ${accent};border-radius:4px;padding:2px 7px;
+      font:600 10px/1.3 system-ui,sans-serif;letter-spacing:.02em;
+      white-space:nowrap;box-shadow:0 2px 7px rgba(0,0,0,.45);`;
+
+    wrap.appendChild(pin); wrap.appendChild(tag);
+    wrap.addEventListener("mouseenter", () => {
+      pin.style.transform = "rotate(-45deg) scale(1.14)";
+      pin.style.boxShadow = "0 5px 16px rgba(0,0,0,.65)";
+    });
+    wrap.addEventListener("mouseleave", () => {
+      pin.style.transform = "rotate(-45deg)";
+      pin.style.boxShadow = "0 3px 10px rgba(0,0,0,.55)";
+    });
+    wrap.addEventListener("click", (e) => {
+      e.stopPropagation();
+      frameStationWithBuilding(f.geometry.coordinates, name);
+    });
+
+    const m = new mapboxgl.Marker({ element: wrap, anchor: "top", offset: [0, -6] })
+      .setLngLat(f.geometry.coordinates)
+      .addTo(map);
+    stationLabelMarkers.push(m);
   });
 
   // Animated train — a calm glowing dot on the Aqua line, at a transit-like pace
@@ -1519,9 +1558,13 @@ function setCinematicFocus(on, keepId) {
   ["metro-aqua", "metro-yellow", "metro-aqua-glow"].forEach(l => dim(l, "line-opacity", on ? 0.5 : 1));
   // other option buildings recede; the star stays full
   D.BUILDINGS.filter(x => x.isOption).forEach(x => {
-    if (x.id === keepId) return;
-    if (window.AtlasWorld && CITYKIT && AtlasWorld.hasBuilding(x.id)) AtlasWorld.setGhost(x.id, on);
-    else dim(`db-building-${x.id}`, "fill-extrusion-opacity", on ? 0.3 : 1);
+    const isStar = x.id === keepId;
+    // The star must be RESTORED to full, never merely skipped: selecting B after A left B
+    // ghosted from A's focus pass (setSelected only recolours, it does not clear transparency),
+    // so the selected building rendered at 0.18 opacity — see-through hero.
+    const ghost = on && !isStar;
+    if (window.AtlasWorld && CITYKIT && AtlasWorld.hasBuilding(x.id)) AtlasWorld.setGhost(x.id, ghost);
+    else dim(`db-building-${x.id}`, "fill-extrusion-opacity", ghost ? 0.3 : 1);
   });
 }
 
@@ -1662,6 +1705,8 @@ function clearMetroRoute() {
 }
 
 function getTransitNode(b, type) {
+  // Never silently serve metro data under a railway/bus heading.
+  if (!b.transitDetails || !b.transitDetails[type]) type = "metro";
   if (b.transitDetails && b.transitDetails[type]) {
     const t = b.transitDetails[type];
     return {
@@ -1687,7 +1732,49 @@ function getTransitNode(b, type) {
   };
 }
 
+
+/* Frame a station together with the selected building, Google-Maps style: one
+   fitBounds so the pair is on screen at a readable scale. Falls back to easing to
+   the station alone when nothing is selected. */
+function frameStationWithBuilding(stationLngLat, stationName) {
+  const b = selectedId ? D.BUILDINGS.find(x => x.id === selectedId) : null;
+  if (!b) {
+    map.easeTo({ center: stationLngLat, zoom: Math.max(map.getZoom(), 15.5),
+                 pitch: 45, duration: 900, essential: true });
+    return;
+  }
+  const [blng, blat] = buildingAnchor(b);
+  const bounds = new mapboxgl.LngLatBounds(stationLngLat, stationLngLat)
+    .extend([blng, blat]);
+  // Left padding clears the leaderboard rail; right clears the open property card.
+  const cardOpen = document.getElementById("card")?.classList.contains("open");
+  map.fitBounds(bounds, {
+    padding: { top: 110, bottom: 150,
+               left: 360, right: cardOpen ? 470 : 80 },
+    maxZoom: 16.5, pitch: 45, duration: 1100, essential: true,
+  });
+}
+
 /* ---------- card HTML ---------- */
+/* A transit mode is offered ONLY where the building actually carries data for it.
+   Previously all three tabs rendered unconditionally; with no transitDetails on the
+   record every tab fell through to the same metro station via getTransitNode(), so
+   Metro / Railway / Bus displayed one identical distance — presenting surveyed
+   railway and bus connectivity that was never collected. A tab is a claim. */
+const TRANSIT_MODES = [
+  { type: "metro",   icon: "🚇", label: "Metro" },
+  { type: "railway", icon: "🚆", label: "Railway" },
+  { type: "bus",     icon: "🚌", label: "Bus" },
+];
+function availableTransitModes(b) {
+  if (!b || !b.transitDetails) {
+    // Only the nearest metro station is known for this record.
+    return [TRANSIT_MODES[0]];
+  }
+  const out = TRANSIT_MODES.filter(m => m.type === "metro" || b.transitDetails[m.type]);
+  return out.length ? out : [TRANSIT_MODES[0]];
+}
+
 function modeTabHTML(type, emoji, label) {
   const on = currentTransitType === type;
   return `<button data-transit-type="${type}" style="flex:1;padding:4px 6px;border-radius:6px;cursor:pointer;
@@ -1720,11 +1807,9 @@ function metroCardHTML(b, node) {
     <div class="md-summary" style="font-size:11px;color:rgba(255,255,255,.9);margin-bottom:6px;font-weight:600;">
       ${node.durationText ? `<b>${node.durationText}</b> (${node.distText})` : 'Calculating route…'}
     </div>
-    <div style="display:flex;gap:4px;">
-      ${modeTabHTML("metro", "🚇", "Metro")}
-      ${modeTabHTML("railway", "🚆", "Railway")}
-      ${window.CLIENT && window.CLIENT.slug === "invesco-andheri" ? "" : modeTabHTML("bus", "🚌", "Bus")}
-    </div>
+    ${availableTransitModes(b).length > 1 ? `<div style="display:flex;gap:4px;">
+      ${availableTransitModes(b).map(m => modeTabHTML(m.type, m.icon, m.label)).join("")}
+    </div>` : ""}
     ${busChipsHTML(node)}
   </div>`;
 }
@@ -1857,7 +1942,368 @@ function floorLevels(floorStr) {
   return (s.match(/\d+/g) || []).map(Number);
 }
 
+/* ═══════════════════════════════════════════════════════════════════
+   TRUTH-FIRST PROPERTY DECK  (schema: costPerSeat / metroName / kia)
+   The legacy openCard() reads FIT_COLORS / carpet / charge / eff, none of
+   which exist in this schema — it threw before rendering, which is why the
+   property details panel came up empty. This renders the real fields, plus
+   an in-frame media gallery (never a new tab, never a raw storage URL).
+   ═══════════════════════════════════════════════════════════════════ */
+
+function isTruthFirstSchema() {
+  return !!(D.OPTIONS && D.OPTIONS.length && D.OPTIONS.some(o => o.coordSrc !== undefined));
+}
+
+
+/* ---- deck + gallery + lightbox styling. One accent (green) stays reserved for
+   selection; everything here is neutral so the hero keeps the eye. ---- */
+let DECK_CSS_DONE = false;
+function injectDeckCSS() {
+  if (DECK_CSS_DONE) return; DECK_CSS_DONE = true;
+  const s = document.createElement("style");
+  s.textContent = `
+  #card .card-warn{margin-top:6px;font-size:10px;letter-spacing:.04em;text-transform:uppercase;
+    color:#e0a34d;font-weight:600}
+  #card .muted{color:var(--mut);font-weight:400}
+  #card .deck-empty{font-size:12px;color:var(--mut);padding:14px;border:1px dashed rgba(255,255,255,.14);
+    border-radius:10px;text-align:center}
+  #card .deck-note{font-size:11px;color:var(--mut);line-height:1.5;margin-top:8px}
+  #card .prov{color:var(--mut);opacity:.5;margin-left:4px;cursor:help;font-style:normal}
+
+  /* cost vs band — the number is bigger than its label, per TYPE */
+  #card .band{padding:2px 0}
+  #card .band-top{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px}
+  #card .band-top b{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  #card .band-top span{font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase}
+  #card .band-track{position:relative;height:5px;border-radius:3px;background:rgba(255,255,255,.09)}
+  #card .band-fill{position:absolute;left:0;top:0;height:100%;border-radius:3px;
+    background:linear-gradient(90deg,#3f7f5f,#8fd6a8)}
+  #card .band-mark{position:absolute;top:-3px;width:2px;height:11px;background:rgba(255,255,255,.55);
+    transform:translateX(-1px)}
+  #card .band-legend{display:flex;justify-content:space-between;margin-top:6px;font-size:9px;
+    letter-spacing:.05em;text-transform:uppercase;color:var(--mut);font-variant-numeric:tabular-nums}
+
+  /* scrollable filmstrip — contain, never cover; a cropped tower is a lie */
+  #card .gal{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;
+    padding-bottom:6px;-webkit-overflow-scrolling:touch}
+  #card .gal::-webkit-scrollbar{height:5px}
+  #card .gal::-webkit-scrollbar-thumb{background:rgba(255,255,255,.18);border-radius:3px}
+  #card .gal-item{position:relative;flex:none;width:118px;height:82px;padding:0;border:0;
+    border-radius:9px;overflow:hidden;cursor:pointer;scroll-snap-align:start;
+    background:#14171b;transition:transform .18s ease,box-shadow .18s ease}
+  #card .gal-item:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.45)}
+  #card .gal-item img,#card .gal-item video{width:100%;height:100%;object-fit:cover;display:block}
+  #card .gal-play{position:absolute;inset:0;display:grid;place-items:center;font-size:19px;
+    color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.7);pointer-events:none}
+  #card .gal-cell{flex:none;width:118px;margin:0;scroll-snap-align:start}
+  #card .gal-cell .gal-item{width:100%;scroll-snap-align:unset}
+  #card .gal-label{margin-top:5px;font-size:9px;letter-spacing:.05em;text-transform:uppercase;
+    color:var(--mut);line-height:1.35;white-space:normal}
+
+  /* in-frame lightbox — never a new tab, never a raw storage URL */
+  #lightbox{position:fixed;inset:0;z-index:9000;display:none}
+  #lightbox.on{display:block}
+  #lightbox .lb-backdrop{position:absolute;inset:0;background:rgba(6,8,10,.93);
+    backdrop-filter:blur(14px)}
+  /* flex column, not grid: a 1fr grid row still grows past the viewport when the
+     image is taller than its track, which let the caption ride up over the photo.
+     flex:1 + min-height:0 actually clamps the stage. */
+  #lightbox .lb-shell{position:absolute;inset:0;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;padding:52px 76px 26px}
+  #lightbox .lb-stage{flex:1 1 auto;min-height:0;width:100%;display:flex;
+    align-items:center;justify-content:center}
+  #lightbox .lb-stage img,#lightbox .lb-stage video{max-width:100%;max-height:100%;
+    object-fit:contain;border-radius:11px;box-shadow:0 22px 70px rgba(0,0,0,.6)}
+  #lightbox .lb-x{position:absolute;top:18px;right:20px;width:36px;height:36px;border:0;
+    border-radius:50%;background:rgba(255,255,255,.09);color:#e8edf2;font-size:15px;cursor:pointer;
+    transition:background .15s ease}
+  #lightbox .lb-x:hover{background:rgba(255,255,255,.17)}
+  #lightbox .lb-nav{position:absolute;top:50%;transform:translateY(-50%);width:42px;height:42px;
+    border:0;border-radius:50%;background:rgba(255,255,255,.08);color:#e8edf2;font-size:24px;
+    line-height:1;cursor:pointer;transition:background .15s ease}
+  #lightbox .lb-nav:hover{background:rgba(255,255,255,.18)}
+  #lightbox .lb-prev{left:20px} #lightbox .lb-next{right:20px}
+  #lightbox .lb-cap{flex:none;display:flex;gap:16px;align-items:center;margin-top:16px;
+    font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:#8b96a3}
+  #lightbox .lb-src{color:#aab4c0;text-decoration:none}
+  #lightbox a.lb-src:hover{color:#e8edf2;text-decoration:underline}
+  #lightbox .lb-title{color:#f2f6fa;font-weight:600;letter-spacing:.06em}
+
+  /* ── layout: stop panels fighting for space ──────────────────────────
+     The brand line ("ATLAS by Autopilot · <client> — <city> Digital Twin") wrapped
+     to three lines on narrow viewports, pushing #top past the 78px that #lb and
+     #card reserve, so the header sat on top of the leaderboard. Clamp it instead. */
+  #top{flex-wrap:nowrap;gap:12px;align-items:flex-start}
+  #brand{min-width:0;max-width:min(38vw,400px)}
+  #brand .t,#brand .s{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+  .toggles{justify-content:flex-end;max-width:62vw}
+  @media (max-width:1100px){
+    #brand{max-width:30vw}
+    #brand .s{display:none}          /* subtitle is the first thing to go */
+  }
+  @media (max-width:860px){
+    #brand .t{font-size:13px}
+    .tg{padding:6px 9px;font-size:11px}
+  }
+
+  /* leaderboard right-hand figure — metro proximity, not a price */
+  #lb-list .lb-fig{flex:none;min-width:52px;text-align:right;font-size:17px;font-weight:700;
+    font-variant-numeric:tabular-nums;line-height:1.05;letter-spacing:-.01em}
+  #lb-list .lb-fig i{display:block;font-style:normal;font-size:8px;font-weight:600;
+    letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin-top:2px}
+  #lb-list .lb-unconf{color:#e0a34d;font-weight:600;font-size:9px}
+  #lb-list .lb-row{gap:12px;align-items:center}
+  #lb-list .lb-row .lb-meta{max-height:none;opacity:1;margin:2px 0 0}  /* always readable, not hover-only */
+
+  /* connectivity */
+  #card .conn-line{font-size:12px;color:var(--txt);margin:2px 0 3px;font-variant-numeric:tabular-nums}
+
+  /* competitors */
+  #card .comp{display:flex;flex-direction:column;gap:2px}
+  #card .comp-row{display:flex;gap:12px;align-items:flex-start;padding:9px 0;
+    border-bottom:1px solid rgba(255,255,255,.06)}
+  #card .comp-row:last-child{border-bottom:none}
+  #card .comp-d{flex:none;min-width:46px;font-size:13px;font-weight:700;
+    font-variant-numeric:tabular-nums;color:#8fd6a8;padding-top:1px}
+  #card .comp-main{min-width:0;flex:1}
+  #card .comp-name{font-size:12px;font-weight:600}
+  #card .comp-flag{font-style:normal;font-size:9px;font-weight:500;color:#e0a34d;
+    letter-spacing:.04em;text-transform:uppercase}
+  #card .comp-cat{font-size:10px;color:var(--mut);margin-top:1px}
+  #card .comp-src{display:inline-block;margin-top:3px;font-size:9px;letter-spacing:.04em;
+    text-transform:uppercase;color:#7d8894;text-decoration:none}
+  #card .comp-src:hover{color:#aab4c0;text-decoration:underline}
+
+  /* breathing room — QUIET: whitespace is the cheapest luxury signal */
+  #card .detail-sections .sec{padding:16px 18px}
+  #card .detail-sections .sec h4{margin-bottom:10px}
+  #lightbox .lb-cap{flex-wrap:wrap;justify-content:center}
+  #lightbox .lb-dots{flex:none;display:flex;gap:6px;margin-top:12px}
+  #lightbox .lb-dots i{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.24)}
+  #lightbox .lb-dots i.on{background:#e8edf2}
+  @media (max-width:720px){
+    #lightbox .lb-shell{padding:46px 14px 20px}
+    #lightbox .lb-prev{left:6px} #lightbox .lb-next{right:6px}
+  }`;
+  document.head.appendChild(s);
+}
+
+let MEDIA_MANIFEST = null, CONNECTIVITY = null, COMPETITORS = null;
+async function loadJSON(url, cacheVar) {
+  try { const r = await fetch(url, { cache: "no-store" }); return r.ok ? await r.json() : {}; }
+  catch { return {}; }
+}
+async function loadMediaManifest() {
+  if (MEDIA_MANIFEST) return MEDIA_MANIFEST;
+  MEDIA_MANIFEST = await loadJSON("data/media-manifest.json");
+  return MEDIA_MANIFEST;
+}
+async function loadDeckData() {
+  if (!CONNECTIVITY) CONNECTIVITY = await loadJSON("data/connectivity.json");
+  if (!COMPETITORS)  COMPETITORS  = await loadJSON("data/competitors.json");
+}
+
+/* ---- in-frame lightbox. Opens OVER the scene; the scene is never unloaded,
+   so closing returns to the exact camera position it was left at. ---- */
+let LB = { items: [], idx: 0, prevFocus: null };
+
+function ensureLightbox() {
+  let el = document.getElementById("lightbox");
+  if (el) return el;
+  el = document.createElement("div");
+  el.id = "lightbox";
+  el.innerHTML = `
+    <div class="lb-backdrop"></div>
+    <div class="lb-shell" role="dialog" aria-modal="true" aria-label="Property media">
+      <button class="lb-x" aria-label="Close">✕</button>
+      <button class="lb-nav lb-prev" aria-label="Previous">‹</button>
+      <div class="lb-stage"></div>
+      <button class="lb-nav lb-next" aria-label="Next">›</button>
+      <div class="lb-cap"></div>
+      <div class="lb-dots"></div>
+    </div>`;
+  document.body.appendChild(el);
+  el.querySelector(".lb-x").onclick = closeLightbox;
+  el.querySelector(".lb-backdrop").onclick = closeLightbox;
+  el.querySelector(".lb-prev").onclick = () => stepLightbox(-1);
+  el.querySelector(".lb-next").onclick = () => stepLightbox(1);
+  return el;
+}
+
+function renderLightbox() {
+  const el = ensureLightbox();
+  const it = LB.items[LB.idx];
+  if (!it) return;
+  const stage = el.querySelector(".lb-stage");
+  // object-fit:contain — the set mixes portrait and landscape; cropping to fill
+  // would slice the top off a tower, and the facade is the entire point.
+  stage.innerHTML = it.kind === "video"
+    ? `<video src="${it.file}" controls muted playsinline preload="metadata"></video>`
+    : `<img src="${it.file}" alt="${it.caption || "Property photograph"}">`;
+  // CC BY-SA obliges us to name the author and licence wherever the image is shown.
+  const credit = it.license
+    ? `${it.author || "Unknown"} · ${it.license}`
+    : (it.source || "Source unstated");
+  el.querySelector(".lb-cap").innerHTML =
+    (it.label ? `<span class="lb-title">${it.label}</span>` : "") +
+    (it.source_url
+      ? `<a class="lb-src" href="${it.source_url}" target="_blank" rel="noopener noreferrer">${credit} ↗</a>`
+      : `<span class="lb-src">${credit}</span>`) +
+    `<span class="lb-date">${it.captured_at || "Capture date unconfirmed"}</span>`;
+  el.querySelector(".lb-dots").innerHTML = LB.items
+    .map((_, i) => `<i class="${i === LB.idx ? "on" : ""}"></i>`).join("");
+  el.querySelector(".lb-prev").style.visibility = LB.items.length > 1 ? "visible" : "hidden";
+  el.querySelector(".lb-next").style.visibility = LB.items.length > 1 ? "visible" : "hidden";
+}
+
+function stepLightbox(d) {
+  if (!LB.items.length) return;
+  LB.idx = (LB.idx + d + LB.items.length) % LB.items.length;
+  renderLightbox();
+}
+
+function openLightbox(items, idx) {
+  LB.items = items; LB.idx = idx; LB.prevFocus = document.activeElement;
+  const el = ensureLightbox();
+  renderLightbox();
+  el.classList.add("on");
+  document.addEventListener("keydown", lbKeys);
+  el.querySelector(".lb-x").focus();
+}
+
+function closeLightbox() {
+  const el = document.getElementById("lightbox");
+  if (!el) return;
+  el.querySelectorAll("video").forEach(v => v.pause());
+  el.classList.remove("on");
+  document.removeEventListener("keydown", lbKeys);
+  if (LB.prevFocus && LB.prevFocus.focus) LB.prevFocus.focus();
+}
+
+function lbKeys(e) {
+  if (e.key === "Escape") { e.preventDefault(); closeLightbox(); }
+  else if (e.key === "ArrowLeft") stepLightbox(-1);
+  else if (e.key === "ArrowRight") stepLightbox(1);
+}
+
+/* ---- gallery strip inside the card ---- */
+function galleryHTML(items) {
+  const photos = items.filter(i => i.kind === "photo").length;
+  const vids = items.filter(i => i.kind === "video").length;
+  if (!items.length) {
+    // Honest empty state. No placeholder image, no grey box, no building icon
+    // standing in for a building.
+    return `<div class="sec"><h4>Photographs</h4>
+      <div class="deck-empty">No verified photographs available for this property.</div></div>`;
+  }
+  const count = [photos ? `${photos} photograph${photos > 1 ? "s" : ""}` : null,
+                 vids ? `${vids} video${vids > 1 ? "s" : ""}` : null].filter(Boolean).join(" · ");
+  return `<div class="sec"><h4>Photographs <span class="muted">${count}</span></h4>
+    <div class="gal" id="gal">
+      ${items.map((it, i) => `
+        <figure class="gal-cell">
+          <button class="gal-item" data-i="${i}" aria-label="Open ${it.label || "media"}">
+            ${it.kind === "video"
+              ? `<video src="${it.file}#t=0.5" muted playsinline preload="metadata"></video><span class="gal-play">▶</span>`
+              : `<img src="${it.thumb || it.file}" loading="${i < 3 ? "eager" : "lazy"}" alt="${it.label || ""}">`}
+          </button>
+          ${it.label ? `<figcaption class="gal-label">${it.label}</figcaption>` : ""}
+        </figure>`).join("")}
+    </div>
+    ${photos > 0 && photos < 3
+      ? `<div class="deck-note">${photos} photograph${photos > 1 ? "s" : ""} on file — below the three-photo minimum. Not padded.</div>`
+      : ""}
+  </div>`;
+}
+
+function connectivityHTML(pid, o) {
+  const c = CONNECTIVITY && CONNECTIVITY[pid];
+  if (!c) return `<div class="sec"><h4>Connectivity</h4>
+    <div class="deck-empty">Distances not yet computed for this property.</div></div>`;
+  const w = c.walk, d = c.drive, k = c.kia, st = c.nearest_station;
+  const walkTxt = !w ? "—"
+    : w.practical ? `${w.m} m · ${w.min} min walk`
+    : `${(w.m / 1000).toFixed(1)} km — not practically walkable`;
+  const walkNote = "Nearest station · Mapbox Directions walking route (real footpath routing)";
+  return `<div class="sec"><h4>Connectivity <span class="muted">routed, not deck-stated</span></h4>
+    <div class="conn">
+      <div class="conn-row"><span class="ic aqua">M</span>
+        <div><b>${st.name}</b>
+          <div class="conn-line">${walkTxt}${d ? ` · ${d.min} min drive` : ""}</div>
+          <div class="muted">${walkNote}</div></div></div>
+      ${k ? `<div class="conn-row"><span class="ic rail">✈</span>
+        <div><b>Kempegowda International</b>
+          <div class="conn-line">${k.km} km · ${k.min} min drive</div>
+          <div class="muted">Mapbox Directions driving route</div></div></div>` : ""}
+    </div></div>`;
+}
+
+function competitorsHTML(pid) {
+  const list = (COMPETITORS && COMPETITORS[pid]) || [];
+  if (!list.length) return `<div class="sec"><h4>VFX studios nearby <span class="muted">1 km radius</span></h4>
+    <div class="deck-empty">None found within 1 km.</div></div>`;
+  return `<div class="sec"><h4>VFX studios nearby <span class="muted">1 km radius</span></h4>
+    <div class="comp">
+      ${list.map(c => `<div class="comp-row">
+        <span class="comp-d">${c.distance_m < 1000 ? c.distance_m + " m" : (c.distance_m/1000).toFixed(1) + " km"}</span>
+        <div class="comp-main">
+          <div class="comp-name">${c.name}${c.confidence === "unconfirmed" ? ` <i class="comp-flag">approx.</i>` : ""}</div>
+          <div class="comp-cat">${c.category}</div>
+          <a class="comp-src" href="${c.source_url}" target="_blank" rel="noopener noreferrer">${c.source_name} ↗</a>
+        </div></div>`).join("")}
+    </div></div>`;
+}
+
+async function openTruthFirstCard(b) {
+  injectDeckCSS();
+  const o = D.OPTIONS.find(x => x.bldg === b.id);
+  const card = document.getElementById("card");
+  const man = await loadMediaManifest();
+  await loadDeckData();
+  const items = (man[b.id] || []).map(m => ({ ...m, caption: b.name }));
+
+  const conn = CONNECTIVITY && CONNECTIVITY[b.id];
+  const unconf = (o && o.coordConfirmed === false) || (conn && conn.coord_confirmed === false);
+  const fact = (k, v) => v == null ? "" : `<span>${k}</span><span>${v}</span>`;
+
+  card.innerHTML = `
+    <button id="cardClose" aria-label="close">✕</button>
+    <div class="card-head">
+      <div class="card-block">${o ? o.locality : b.block}</div>
+      <div class="card-title">${b.name}</div>
+      ${unconf ? `<div class="card-warn">Location unconfirmed — locality centroid, not a surveyed footprint</div>` : ""}
+    </div>
+
+    <div class="compact-cta"><button class="btn-explore" id="cardExpand">View Details</button></div>
+
+    <div class="detail-sections">
+      ${galleryHTML(items)}
+      ${connectivityHTML(b.id, o)}
+      ${o ? `<div class="sec"><h4>The space</h4>
+        <div class="unit"><div class="unit-grid">
+          ${fact("Total floors", o.floorsTotal)}
+          ${fact("Floor offered", o.floorOffered)}
+          ${fact("Condition", o.condition)}
+          ${fact("Parking", o.parking)}
+        </div></div></div>` : ""}
+      ${competitorsHTML(b.id)}
+      <div class="sec prov-sec"><h4>Provenance</h4>
+        <div class="deck-note">Building and space details are client-stated from the broker deck and
+        unconfirmed. Distances are re-derived independently and do not rely on the deck.
+        Coordinates ${unconf ? "are a locality centroid, not a surveyed footprint" : "match a named OSM footprint"}.</div>
+      </div>
+    </div>`;
+
+  card.className = "compact";
+  requestAnimationFrame(() => card.classList.add("open"));
+  document.getElementById("cardClose").onclick = (e) => { if (e) e.stopPropagation(); closeCard(); };
+  document.getElementById("cardExpand")?.addEventListener("click", () => card.classList.remove("compact"));
+  card.querySelectorAll(".gal-item").forEach(el =>
+    el.addEventListener("click", () => openLightbox(items, +el.dataset.i)));
+}
+
 function openCard(b) {
+  if (isTruthFirstSchema()) return openTruthFirstCard(b);
   const units = D.OPTIONS.filter(o => o.bldg === b.id).sort((x, y) => x.rank - y.rank);
   const best = units[0];
   const card = document.getElementById("card");
@@ -2021,7 +2467,9 @@ function closeCard() {
 /* ============================================================
    LEADERBOARD (same data/HTML as app.js)
    ============================================================ */
-function buildLeaderboard() {
+async function buildLeaderboard() {
+  injectDeckCSS();
+  await loadDeckData();
   const lb = document.getElementById("lb-list");
   const isInvesco = window.CLIENT && window.CLIENT.slug === "invesco-andheri";
   
@@ -2030,8 +2478,43 @@ function buildLeaderboard() {
       if (lbTab) lbTab.innerHTML = "▶ Options";
   }
 
-  const sortedOptions = [...D.OPTIONS].sort((a, b) => a.rank - b.rank);
+  // Truth-first schema (basilic-fly and any future client built the same way): options carry
+  // costPerSeat/metroName/kia/coordConfirmed, not the older rank/fit/carpet/aqua/score workbook
+  // fields. buildLeaderboard() used to assume the workbook shape unconditionally, so this schema
+  // threw inside the .map() (D.FIT_COLORS undefined, o.carpet undefined) and left #lb-list empty —
+  // the panel rendered its header/footer chrome but no rows, ever, for this client.
+  const isTruthFirst = isTruthFirstSchema();
+
+  const walkM = (id) => {
+    const c = (typeof CONNECTIVITY === "object" && CONNECTIVITY) ? CONNECTIVITY[id] : null;
+    return c && c.walk ? c.walk.m : Number.MAX_SAFE_INTEGER;
+  };
+  const sortedOptions = isTruthFirst
+    ? [...D.OPTIONS].sort((a, b) => walkM(a.bldg) - walkM(b.bldg))   // nearest metro first, by routed distance
+    : [...D.OPTIONS].sort((a, b) => a.rank - b.rank);
+
   lb.innerHTML = sortedOptions.map((o, idx) => {
+    if (isTruthFirst) {
+      // Metro proximity is the stated top priority, so it is the figure on the row —
+      // and it is the routed distance, not the deck's number.
+      const c = (typeof CONNECTIVITY === "object" && CONNECTIVITY) ? CONNECTIVITY[o.bldg] : null;
+      const w = c && c.walk;
+      const fig = !w ? `—<i>&nbsp;</i>`
+        : w.practical ? `${w.min}<i>min walk</i>`
+        : `${(w.m/1000).toFixed(1)}<i>km</i>`;
+      const figCol = !w ? "var(--mut)" : w.practical ? "#8fd6a8" : "#e0a34d";
+      const stn = c ? c.nearest_station.name : (o.metroName || "—");
+      const unconfirmedTag = o.coordConfirmed === false
+        ? ` <span class="lb-unconf">· location unconfirmed</span>` : "";
+      return `<div class="lb-row${idx > 2 ? " lb-extra" : ""}${shortlisted.has(o.bldg) ? " shortlisted" : ""}" data-bldg="${o.bldg}">
+        <div class="lb-rank">${idx + 1}</div>
+        <div class="lb-main">
+          <div class="lb-name">${o.name}<span class="lb-star" title="Shortlisted">★</span>${unconfirmedTag}</div>
+          <div class="lb-meta">${o.locality} · ${stn}</div>
+        </div>
+        <div class="lb-fig" style="color:${figCol}">${fig}</div>
+      </div>`;
+    }
     const c = D.FIT_COLORS[o.fit];
     const bldg = D.BUILDINGS.find(x => x.id === o.bldg);
     const grade = bldg && bldg.grade ? `Grade ${bldg.grade} · ` : "";
@@ -2110,11 +2593,9 @@ function wireUI() {
     Object.values(labelMarkers).forEach(m => {
       m.getElement().style.display = showLabels ? "" : "none";
     });
-    // Also toggle Mapbox label layers visibility
-    ["metro-station-labels"].forEach(id => {
-      if (map.getLayer(id)) {
-        map.setLayoutProperty(id, "visibility", showLabels ? "visible" : "none");
-      }
+    // Station name chips are markers, not a layer — drive them directly.
+    stationLabelMarkers.forEach(m => {
+      m.getElement().style.display = showLabels ? "flex" : "none";
     });
   });
 
@@ -2149,6 +2630,9 @@ function wireUI() {
   });
 
   set("winnerBtn", () => selectBuilding(D.META.winner));
+  // Truth contract: a CTA implying "we have a winner" must not render when there isn't one —
+  // e.g. basilic-fly ships winner:null deliberately (selection is the only accent, no verdict crowned).
+  if (!D.META.winner) document.getElementById("winnerBtn")?.style.setProperty("display", "none");
 
   set("t-traffic", e => {
     trafficOn = !trafficOn;

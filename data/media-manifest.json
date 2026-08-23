@@ -1,0 +1,462 @@
+{
+  "starmark": [
+    {
+      "file": "media/starmark/starmark-07-097f1831-hd.jpg",
+      "kind": "photo",
+      "hash": "097f18313c56",
+      "bytes": 168245,
+      "width": 2048,
+      "height": 1152,
+      "orientation": "landscape",
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Exterior \u2014 corner elevation",
+      "thumb": "media/starmark/starmark-07-097f1831-thumb.jpg",
+      "original_file": "media/starmark/starmark-07-097f1831.jpg",
+      "is_enhanced": true,
+      "enhancement_model": "bytedance_image_upscale (Higgsfield) \u2014 4K super-resolution"
+    },
+    {
+      "file": "media/starmark/starmark-01-0880ce8d-hd.jpg",
+      "kind": "photo",
+      "hash": "0880ce8dddd0",
+      "bytes": 93954,
+      "width": 2048,
+      "height": 1152,
+      "orientation": "landscape",
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Lift lobby",
+      "thumb": "media/starmark/starmark-01-0880ce8d-thumb.jpg",
+      "original_file": "media/starmark/starmark-01-0880ce8d.jpg",
+      "is_enhanced": true,
+      "enhancement_model": "bytedance_image_upscale (Higgsfield) \u2014 4K super-resolution"
+    },
+    {
+      "file": "media/starmark/starmark-13-48ca28c4-hd.jpg",
+      "kind": "photo",
+      "hash": "48ca28c4340e",
+      "bytes": 112972,
+      "width": 2048,
+      "height": 1152,
+      "orientation": "landscape",
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Meeting room",
+      "thumb": "media/starmark/starmark-13-48ca28c4-thumb.jpg",
+      "original_file": "media/starmark/starmark-13-48ca28c4.jpg",
+      "is_enhanced": true,
+      "enhancement_model": "bytedance_image_upscale (Higgsfield) \u2014 4K super-resolution"
+    },
+    {
+      "file": "media/starmark/starmark-14-a90d8f87-hd.jpg",
+      "kind": "photo",
+      "hash": "a90d8f87ddf5",
+      "bytes": 80294,
+      "width": 2048,
+      "height": 1152,
+      "orientation": "landscape",
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Warm shell floor plate",
+      "thumb": "media/starmark/starmark-14-a90d8f87-thumb.jpg",
+      "original_file": "media/starmark/starmark-14-a90d8f87.jpg",
+      "is_enhanced": true,
+      "enhancement_model": "bytedance_image_upscale (Higgsfield) \u2014 4K super-resolution"
+    },
+    {
+      "file": "media/starmark/starmark-03-8b55e24b-hd.jpg",
+      "kind": "photo",
+      "hash": "8b55e24b6392",
+      "bytes": 82433,
+      "width": 2048,
+      "height": 1152,
+      "orientation": "landscape",
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Basement parking",
+      "thumb": "media/starmark/starmark-03-8b55e24b-thumb.jpg",
+      "original_file": "media/starmark/starmark-03-8b55e24b.jpg",
+      "is_enhanced": true,
+      "enhancement_model": "bytedance_image_upscale (Higgsfield) \u2014 4K super-resolution"
+    },
+    {
+      "file": "media/starmark/starmark-18-7e5a8a30-hd.jpg",
+      "kind": "photo",
+      "hash": "7e5a8a3084ef",
+      "bytes": 87543,
+      "width": 1152,
+      "height": 2048,
+      "orientation": "portrait",
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Basement parking \u2014 services",
+      "thumb": "media/starmark/starmark-18-7e5a8a30-thumb.jpg",
+      "original_file": "media/starmark/starmark-18-7e5a8a30.jpg",
+      "is_enhanced": true,
+      "enhancement_model": "bytedance_image_upscale (Higgsfield) \u2014 4K super-resolution"
+    },
+    {
+      "file": "media/starmark/starmark-04-0e90cce1.mp4",
+      "kind": "video",
+      "hash": "0e90cce18b05",
+      "bytes": 2592347,
+      "width": null,
+      "height": null,
+      "orientation": null,
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Site video"
+    },
+    {
+      "file": "media/starmark/starmark-06-a7a6b575.mp4",
+      "kind": "video",
+      "hash": "a7a6b575c092",
+      "bytes": 4678744,
+      "width": null,
+      "height": null,
+      "orientation": null,
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Site video"
+    },
+    {
+      "file": "media/starmark/starmark-08-a574d7f9.mp4",
+      "kind": "video",
+      "hash": "a574d7f90c4b",
+      "bytes": 4442061,
+      "width": null,
+      "height": null,
+      "orientation": null,
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Site video"
+    },
+    {
+      "file": "media/starmark/starmark-09-ceeade13.mp4",
+      "kind": "video",
+      "hash": "ceeade138d0d",
+      "bytes": 6492677,
+      "width": null,
+      "height": null,
+      "orientation": null,
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Site video"
+    },
+    {
+      "file": "media/starmark/starmark-10-2625456f.mp4",
+      "kind": "video",
+      "hash": "2625456fbc02",
+      "bytes": 2614292,
+      "width": null,
+      "height": null,
+      "orientation": null,
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Site video"
+    },
+    {
+      "file": "media/starmark/starmark-11-5d4c76e7.mp4",
+      "kind": "video",
+      "hash": "5d4c76e7a1b7",
+      "bytes": 1665988,
+      "width": null,
+      "height": null,
+      "orientation": null,
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Site video"
+    },
+    {
+      "file": "media/starmark/starmark-12-00039071.mp4",
+      "kind": "video",
+      "hash": "000390716cee",
+      "bytes": 6859443,
+      "width": null,
+      "height": null,
+      "orientation": null,
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Site video"
+    },
+    {
+      "file": "media/starmark/starmark-15-bd84b69e.mp4",
+      "kind": "video",
+      "hash": "bd84b69e6d39",
+      "bytes": 2592344,
+      "width": null,
+      "height": null,
+      "orientation": null,
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Site video"
+    },
+    {
+      "file": "media/starmark/starmark-16-0c24828c.mp4",
+      "kind": "video",
+      "hash": "0c24828c6024",
+      "bytes": 6492677,
+      "width": null,
+      "height": null,
+      "orientation": null,
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Site video"
+    },
+    {
+      "file": "media/starmark/starmark-17-5405cf7a.mp4",
+      "kind": "video",
+      "hash": "5405cf7a0e41",
+      "bytes": 4679467,
+      "width": null,
+      "height": null,
+      "orientation": null,
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Site video"
+    }
+  ],
+  "primeco": [
+    {
+      "file": "media/primeco/primeco-04-a5673065-hd.jpg",
+      "kind": "photo",
+      "hash": "a56730655bb2",
+      "bytes": 269384,
+      "width": 1152,
+      "height": 2048,
+      "orientation": "portrait",
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Caf\u00e9 & breakout",
+      "thumb": "media/primeco/primeco-04-a5673065-thumb.jpg",
+      "original_file": "media/primeco/primeco-04-a5673065.jpg",
+      "is_enhanced": true,
+      "enhancement_model": "bytedance_image_upscale (Higgsfield) \u2014 4K super-resolution"
+    },
+    {
+      "file": "media/primeco/primeco-06-e873ab28-hd.jpg",
+      "kind": "photo",
+      "hash": "e873ab28631d",
+      "bytes": 145037,
+      "width": 2048,
+      "height": 1152,
+      "orientation": "landscape",
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Basement parking \u2014 Level Q2",
+      "thumb": "media/primeco/primeco-06-e873ab28-thumb.jpg",
+      "original_file": "media/primeco/primeco-06-e873ab28.jpg",
+      "is_enhanced": true,
+      "enhancement_model": "bytedance_image_upscale (Higgsfield) \u2014 4K super-resolution"
+    },
+    {
+      "file": "media/primeco/primeco-01-3b735711.mp4",
+      "kind": "video",
+      "hash": "3b735711d59e",
+      "bytes": 8138819,
+      "width": null,
+      "height": null,
+      "orientation": null,
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Site video"
+    },
+    {
+      "file": "media/primeco/primeco-02-d2cc8300.mp4",
+      "kind": "video",
+      "hash": "d2cc83003d99",
+      "bytes": 5117762,
+      "width": null,
+      "height": null,
+      "orientation": null,
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Site video"
+    },
+    {
+      "file": "media/primeco/primeco-03-d3c6eb12.mp4",
+      "kind": "video",
+      "hash": "d3c6eb12f5ad",
+      "bytes": 2832834,
+      "width": null,
+      "height": null,
+      "orientation": null,
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Site video"
+    },
+    {
+      "file": "media/primeco/primeco-05-5ccddf8f.mp4",
+      "kind": "video",
+      "hash": "5ccddf8f57c8",
+      "bytes": 5615192,
+      "width": null,
+      "height": null,
+      "orientation": null,
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Site video"
+    },
+    {
+      "file": "media/primeco/primeco-07-a0867ac4.mp4",
+      "kind": "video",
+      "hash": "a0867ac4354f",
+      "bytes": 6503214,
+      "width": null,
+      "height": null,
+      "orientation": null,
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Site video"
+    }
+  ],
+  "sumadhura": [
+    {
+      "file": "media/sumadhura/sumadhura-01-60fc0744.mov",
+      "kind": "video",
+      "hash": "60fc074476f6",
+      "bytes": 909717,
+      "width": null,
+      "height": null,
+      "orientation": null,
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Site video"
+    }
+  ],
+  "purva": [
+    {
+      "file": "media/purva/purva-01-8806cf3f-hd.jpg",
+      "kind": "photo",
+      "hash": "8806cf3f4952",
+      "bytes": 181993,
+      "width": 1536,
+      "height": 2048,
+      "orientation": "portrait",
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Bare shell floor plate",
+      "thumb": "media/purva/purva-01-8806cf3f-thumb.jpg",
+      "original_file": "media/purva/purva-01-8806cf3f.jpg",
+      "is_enhanced": true,
+      "enhancement_model": "bytedance_image_upscale (Higgsfield) \u2014 4K super-resolution"
+    },
+    {
+      "file": "media/purva/purva-02-472fde76.mp4",
+      "kind": "video",
+      "hash": "472fde76d749",
+      "bytes": 11093368,
+      "width": null,
+      "height": null,
+      "orientation": null,
+      "source": "Supplied by Autopilot Offices, origin unstated",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "label": "Site video"
+    }
+  ]
+}

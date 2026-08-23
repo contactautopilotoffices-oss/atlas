@@ -1,0 +1,44 @@
+[
+  {
+    "id": "primeco",
+    "name": "Primeco Union City \u2014 Tower B",
+    "lng": 77.7326259,
+    "lat": 12.9890573,
+    "confirmed": true
+  },
+  {
+    "id": "sumadhura",
+    "name": "Sumadhura Capitol",
+    "lng": 77.7502982,
+    "lat": 12.9849593,
+    "confirmed": true
+  },
+  {
+    "id": "starmark",
+    "name": "Starmark Camelot",
+    "lng": 77.7266886,
+    "lat": 12.9849722,
+    "confirmed": true
+  },
+  {
+    "id": "totalenv",
+    "name": "Total Environment",
+    "lng": 77.6897334,
+    "lat": 12.9912395,
+    "confirmed": false
+  },
+  {
+    "id": "yliving",
+    "name": "Y Living",
+    "lng": 77.7497448,
+    "lat": 12.9696365,
+    "confirmed": false
+  },
+  {
+    "id": "purva",
+    "name": "Purva Gainz",
+    "lng": 77.6568443,
+    "lat": 12.8662484,
+    "confirmed": true
+  }
+]

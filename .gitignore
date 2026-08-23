@@ -5,6 +5,17 @@
 !autopilot-logo*.png
 trim-*.ps1
 
+# Property media: curated photos DO commit (small, and the gallery needs them).
+# Videos never do — 78MB of clips belongs in Supabase Storage, not git history.
+!media/**/*.jpg
+!media/**/*.jpeg
+!media/**/*.png
+*.mp4
+*.MP4
+*.mov
+*.MOV
+
+
 # OS / editor
 .DS_Store
 Thumbs.db
@@ -12,9 +23,13 @@ Thumbs.db
 .idea/
 node_modules/
 /config.js
+.env
 
 # client proposal (third-party PII) & bulky source
 *.pdf
 prd.txt
 osm.xml
 osm2.xml
+
+# 4K PNG masters from the upscale pass — working files, served copies live alongside originals
+media/_enhanced/

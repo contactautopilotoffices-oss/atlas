@@ -1,0 +1,69 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-08-22T13:05:39Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 377219489,
+  "tags": {
+    "alt_name": "ವೈಟ್ ಫೀಲ್ಡ್",
+    "int_name": "Whitefield",
+    "is_in:city": "Bangalore",
+    "name": "Whitefield",
+    "name:kn": "ವೈಟ್‌ಫೀಲ್ಡ್‌",
+    "name:ml": "വൈറ്റ്ഫീൽഡ്",
+    "name:ta": "வொயிட்ஃபீல்டு",
+    "name:te": "వైట్‌ఫీల్డ్",
+    "old_name": "Whitefield",
+    "pin": "560066",
+    "place": "suburb",
+    "wikidata": "Q5321082",
+    "wikipedia": "en:Whitefield, Bangalore"
+  }
+},
+{
+  "type": "node",
+  "id": 574853138,
+  "tags": {
+    "is_in": "Bangalore;Karnataka;India",
+    "name": "Mahadevapura",
+    "name:kn": "ಮಹಾದೇವಪುರ",
+    "name:ta": "மஹாதேவபுரா",
+    "place": "suburb",
+    "wikidata": "Q2240888",
+    "wikimedia_commons": "Category:Mahadevapura",
+    "wikipedia": "en:Mahadevapura, Bangalore"
+  }
+},
+{
+  "type": "node",
+  "id": 833667967,
+  "tags": {
+    "alt_name": "Varthuru",
+    "name": "Varthur",
+    "name:kn": "ವರ್ತೂರು",
+    "name:ml": "വർത്തൂർ",
+    "name:ta": "வர்தூர்",
+    "place": "suburb",
+    "wikidata": "Q7916202",
+    "wikimedia_commons": "Category:Varthur",
+    "wikipedia": "en:Varthur"
+  }
+},
+{
+  "type": "node",
+  "id": 1457440304,
+  "tags": {
+    "name": "Hoodi",
+    "name:kn": "ಹೂಡಿ",
+    "place": "suburb"
+  }
+}
+
+  ]
+}

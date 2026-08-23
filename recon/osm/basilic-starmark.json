@@ -1,0 +1,37 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-08-23T06:06:02Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "way",
+  "id": 1303625869,
+  "bounds": {
+    "minlat": 12.9843522,
+    "minlon": 77.7258494,
+    "maxlat": 12.9854059,
+    "maxlon": 77.7273327
+  },
+  "geometry": [
+    { "lat": 12.9854059, "lon": 77.7268109 },
+    { "lat": 12.9853850, "lon": 77.7268714 },
+    { "lat": 12.9851197, "lon": 77.7273327 },
+    { "lat": 12.9843522, "lon": 77.7269266 },
+    { "lat": 12.9843882, "lon": 77.7268599 },
+    { "lat": 12.9848196, "lon": 77.7258494 },
+    { "lat": 12.9849498, "lon": 77.7259258 },
+    { "lat": 12.9849237, "lon": 77.7268095 },
+    { "lat": 12.9854059, "lon": 77.7268109 }
+  ],
+  "tags": {
+    "landuse": "commercial",
+    "name": "Starmark Camelot"
+  }
+}
+
+  ]
+}

@@ -1,0 +1,452 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-08-22T13:04:36Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 251104654,
+  "lat": 12.9775585,
+  "lon": 77.7150021,
+  "tags": {
+    "bench": "no",
+    "bin": "no",
+    "bus": "yes",
+    "covered": "no",
+    "highway": "bus_stop",
+    "lit": "no",
+    "loc_name": "WHITEFIELD",
+    "name": "SAP ITPL",
+    "passenger_information_display": "no",
+    "public_transport": "platform",
+    "shelter": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 825453261,
+  "lat": 12.9874754,
+  "lon": 77.7360728,
+  "tags": {
+    "alt_name": "ITPL Main Gate",
+    "bench": "yes",
+    "bus": "yes",
+    "highway": "bus_stop",
+    "name": "ITPL",
+    "name:en": "ITPL",
+    "network": "BMTC",
+    "network:wikidata": "Q3345039",
+    "operator": "BMTC",
+    "public_transport": "platform",
+    "shelter": "yes",
+    "wheelchair": "limited"
+  }
+},
+{
+  "type": "node",
+  "id": 1098024028,
+  "lat": 12.9773007,
+  "lon": 77.7192566,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "loc_name": "WHITEFIELD",
+    "name": "I Gate ITPL Road",
+    "network": "BMTC",
+    "network:wikidata": "Q3345039",
+    "operator": "BMTC",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 1127347248,
+  "lat": 12.9770273,
+  "lon": 77.7193814,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "loc_name": "WHITEFIELD",
+    "name": "I Gate ITPL Road",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 1382528617,
+  "lat": 12.9862452,
+  "lon": 77.7316850,
+  "tags": {
+    "bench": "no",
+    "bus": "yes",
+    "highway": "bus_stop",
+    "loc_name": "WHITEFIELD",
+    "name": "ITPL Back Gate",
+    "network": "BMTC",
+    "network:wikidata": "Q3345039",
+    "operator": "BMTC",
+    "public_transport": "platform",
+    "shelter": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 1382528650,
+  "lat": 12.9864828,
+  "lon": 77.7315457,
+  "tags": {
+    "bench": "no",
+    "bus": "yes",
+    "highway": "bus_stop",
+    "loc_name": "WHITEFIELD",
+    "name": "ITPL Back Gate",
+    "public_transport": "platform",
+    "shelter": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2475474263,
+  "lat": 12.9877152,
+  "lon": 77.7369166,
+  "tags": {
+    "alt_name": "ITPL Main Gate",
+    "bench": "yes",
+    "bin": "no",
+    "bus": "yes",
+    "departures_board": "no",
+    "highway": "bus_stop",
+    "name": "ITPL",
+    "name:en": "ITPL",
+    "network": "BMTC",
+    "network:wikidata": "Q3345039",
+    "operator": "BMTC",
+    "public_transport": "platform",
+    "shelter": "yes",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2477322389,
+  "lat": 12.9805104,
+  "lon": 77.7272748,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "loc_name": "WHITEFIELD",
+    "name": "SJR Park ITPL",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 2477322390,
+  "lat": 12.9804194,
+  "lon": 77.7275164,
+  "tags": {
+    "bench": "no",
+    "bin": "no",
+    "bus": "yes",
+    "highway": "bus_stop",
+    "lit": "no",
+    "loc_name": "WHITEFIELD",
+    "name": "SJR Park ITPL",
+    "public_transport": "platform",
+    "shelter": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 2477328112,
+  "lat": 12.9777295,
+  "lon": 77.7149595,
+  "tags": {
+    "bench": "no",
+    "bin": "no",
+    "bus": "yes",
+    "covered": "no",
+    "highway": "bus_stop",
+    "lit": "no",
+    "loc_name": "WHITEFIELD",
+    "name": "SAP ITPL",
+    "passenger_information_display": "no",
+    "public_transport": "platform",
+    "shelter": "no"
+  }
+},
+{
+  "type": "node",
+  "id": 11100902652,
+  "lat": 12.9875406,
+  "lon": 77.7360756,
+  "tags": {
+    "alt_name": "ITPL Main Gate",
+    "bus": "yes",
+    "name": "ITPL",
+    "name:en": "ITPL",
+    "network": "BMTC",
+    "operator": "BMTC",
+    "public_transport": "stop_position"
+  }
+},
+{
+  "type": "node",
+  "id": 11100902653,
+  "lat": 12.9876620,
+  "lon": 77.7369161,
+  "tags": {
+    "alt_name": "ITPL Main Gate",
+    "bus": "yes",
+    "name": "ITPL",
+    "name:en": "ITPL",
+    "network": "BMTC",
+    "operator": "BMTC",
+    "public_transport": "stop_position"
+  }
+},
+{
+  "type": "node",
+  "id": 13353633839,
+  "lat": 12.9878346,
+  "lon": 77.7371697,
+  "tags": {
+    "alt_name": "ITPL Main Gate",
+    "bench": "yes",
+    "bin": "no",
+    "bus": "yes",
+    "departures_board": "no",
+    "highway": "bus_stop",
+    "name": "ITPL",
+    "name:en": "ITPL",
+    "network": "BMTC",
+    "network:wikidata": "Q3345039",
+    "operator": "BMTC",
+    "public_transport": "platform",
+    "shelter": "yes",
+    "wheelchair": "no"
+  }
+},
+{
+  "type": "way",
+  "id": 130510408,
+  "center": {
+    "lat": 12.9857365,
+    "lon": 77.7346869
+  },
+  "tags": {
+    "building": "office",
+    "building:levels": "12",
+    "name": "Explorer",
+    "roof:shape": "flat"
+  }
+},
+{
+  "type": "way",
+  "id": 130510409,
+  "center": {
+    "lat": 12.9854478,
+    "lon": 77.7364656
+  },
+  "tags": {
+    "building": "office",
+    "building:levels": "6",
+    "name": "Creator",
+    "roof:shape": "flat"
+  }
+},
+{
+  "type": "way",
+  "id": 150212366,
+  "center": {
+    "lat": 12.9772062,
+    "lon": 77.7262126
+  },
+  "tags": {
+    "depot": "bus",
+    "industrial": "depot",
+    "landuse": "industrial",
+    "name": "BMTC Depot 18 (ITPL)",
+    "name:kn": "ಬೆಂ.ಮ.ಸಾ.ಸಂ. ಡೆಪೋ ೧೮",
+    "operator": "BMTC"
+  }
+},
+{
+  "type": "way",
+  "id": 150212371,
+  "center": {
+    "lat": 12.9859546,
+    "lon": 77.7368058
+  },
+  "tags": {
+    "building": "office",
+    "building:levels": "14",
+    "name": "Discoverer",
+    "roof:shape": "flat"
+  }
+},
+{
+  "type": "way",
+  "id": 255778134,
+  "center": {
+    "lat": 12.9859081,
+    "lon": 77.7359024
+  },
+  "tags": {
+    "building": "office",
+    "building:levels": "12",
+    "name": "Innovator",
+    "roof:shape": "flat"
+  }
+},
+{
+  "type": "way",
+  "id": 346833576,
+  "center": {
+    "lat": 12.9587991,
+    "lon": 77.7220799
+  },
+  "tags": {
+    "building": "yes",
+    "check_date": "2024-09-30",
+    "craft": "metal_construction",
+    "name": "Dream Space Creator",
+    "phone": "+91 9036470669"
+  }
+},
+{
+  "type": "way",
+  "id": 1002994429,
+  "center": {
+    "lat": 12.9912880,
+    "lon": 77.7138092
+  },
+  "tags": {
+    "highway": "primary",
+    "name": "ITPL Main Road",
+    "oneway": "yes",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1084026308,
+  "center": {
+    "lat": 12.9903481,
+    "lon": 77.7138869
+  },
+  "tags": {
+    "highway": "primary",
+    "name": "ITPL Main Road",
+    "oneway": "yes",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1085652635,
+  "center": {
+    "lat": 12.9595947,
+    "lon": 77.7198336
+  },
+  "tags": {
+    "amenity": "school",
+    "check_date": "2025-11-21",
+    "grades": "0-5",
+    "name": "Little Explorers Academy"
+  }
+},
+{
+  "type": "way",
+  "id": 1123146961,
+  "center": {
+    "lat": 12.9911202,
+    "lon": 77.7137370
+  },
+  "tags": {
+    "highway": "primary",
+    "name": "ITPL Main Road",
+    "oneway": "yes",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1152481905,
+  "center": {
+    "lat": 12.9863374,
+    "lon": 77.7325996
+  },
+  "tags": {
+    "addr:city": "Bangalore",
+    "addr:housenumber": "Plot 4",
+    "addr:postcode": "560066",
+    "addr:street": "Whitefield Road",
+    "barrier": "wall",
+    "brand": "Holiday Inn Express",
+    "brand:wikidata": "Q5880423",
+    "check_date": "2025-05-21",
+    "internet_access": "wlan",
+    "landuse": "commercial",
+    "name": "Holiday Inn Express Bengaluru Whitefield ITPL",
+    "payment:american_express": "yes",
+    "payment:diners_club": "yes",
+    "payment:mastercard": "yes",
+    "payment:visa": "yes",
+    "phone": "+91 80-6719-6666",
+    "tourism": "hotel",
+    "website": "https://www.ihg.com/holidayinnexpress/hotels/us/en/whitefield/blrep/hoteldetail",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 1156186710,
+  "center": {
+    "lat": 12.9905274,
+    "lon": 77.7139626
+  },
+  "tags": {
+    "highway": "primary",
+    "name": "ITPL Main Road",
+    "oneway": "yes",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1190136202,
+  "center": {
+    "lat": 12.9846573,
+    "lon": 77.7365257
+  },
+  "tags": {
+    "name": "ITPL",
+    "operator": "KPTCL",
+    "operator:wikidata": "Q17064153",
+    "power": "substation",
+    "substation": "transmission",
+    "voltage": "220000"
+  }
+},
+{
+  "type": "way",
+  "id": 1240356909,
+  "center": {
+    "lat": 12.9399398,
+    "lon": 77.7000761
+  },
+  "tags": {
+    "building": "office",
+    "building:levels": "10",
+    "building:levels:underground": "2",
+    "name": "Creator"
+  }
+}
+
+  ]
+}
