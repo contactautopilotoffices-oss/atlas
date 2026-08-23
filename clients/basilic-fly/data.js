@@ -98,7 +98,7 @@ const OPTIONS = [
     metroName:"Garudacharpalya", metroDist:"2.4 km", metroSrc:"yliving-metro", metroKm:2.4,
     kia:"42.8 km", kiaSrc:"yliving-kia-km",
     parking:"1 car park / 1000 sqft", parkingSrc:"deck-source",
-    coordSrc:"geo-yliving-v2", coordConfirmed:true },   // RERA point + Cityinfo/JLL both at Jn of Graphite India
+    coordSrc:"geo-yliving-v2", coordConfirmed:false },  // RERA point only — road matches, building position unconfirmed
 ];
 
 /* ---------------------------------------------------------------------------
