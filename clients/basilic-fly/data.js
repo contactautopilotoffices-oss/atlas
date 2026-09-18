@@ -1,6 +1,6 @@
 /* ============================================================================
-   BASILIC FLY STUDIO — DATA LAYER (Whitefield / Mahadevapura / Varthur, Bengaluru)
-   Source of truth: "Basilic Fly inventory options .pdf" broker deck (11 pp) —
+   WHITEFIELD — DATA LAYER (Whitefield / Mahadevapura / Varthur, Bengaluru)
+   Source of truth: the inventory options broker deck (11 pp) —
    ALL property figures are client-stated / unconfirmed (evidence/ledger.jsonl).
    Coordinates: 5 of 6 properties match a named OSM footprint polygon. Y Living is a
    REGISTRY-VERIFIED PROJECT PIN (RERA PRM/KA/RERA/1251/446/PR/130722/005066 + a named
@@ -145,10 +145,10 @@ const NEIGHBORHOODS = [];
 const RIVER_PATH = [];
 
 const META = {
-  client:"Basilic Fly Studio shortlist",
-  business:"VFX studio office — ~5,000 sqft across Whitefield, Mahadevapura & Varthur (deck brief, unconfirmed)",
+  client:"client",
+  business:"Office requirement — ~5,000 sqft across Whitefield, Mahadevapura & Varthur (deck brief, unconfirmed)",
   brief:"Metro connectivity is the top priority · budget band ₹8,000–9,500/seat · all deck figures client-stated/unconfirmed",
-  prepared:"Autopilot Offices · Basilic Fly inventory options deck (2026)",
+  prepared:"Autopilot Offices · Whitefield inventory options deck (2026)",
   winner:null   // no pre-crowned winner — selection is the only accent; engine hides #winnerBtn when winner is null (mapbox_app.js wireUI)
 };
 
