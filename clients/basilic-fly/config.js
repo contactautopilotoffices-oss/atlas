@@ -1,18 +1,21 @@
-/* BASILIC FLY STUDIO — client config (gate, framing, registry, Purple Line overrides) */
+/* WHITEFIELD (Bengaluru) — client config (gate, framing, registry, Purple Line overrides).
+   Client-neutral presentation: no client name in the header, leaderboard or shortlist
+   copy, so the same view can be shown to any prospect. Routing still uses the slug. */
 window.CLIENT = {
   slug: "basilic-fly",
   gate: { id: "FLYDEMOACC", pass: "FLY1234",   // PLACEHOLDER — rotate before deploy; real password supplied by user out of band
           sub: "Invitation-only geospatial experience · Bengaluru office options" },
   brand: {
-    title: 'ATLAS <span style="color:var(--mut);font-weight:400">by Autopilot · Basilic Fly Studio — Whitefield Digital Twin</span>',
+    title: 'ATLAS <span style="color:var(--mut);font-weight:400">by Autopilot · Whitefield Digital Twin</span>',
     sub: "Geospatial intelligence view · Whitefield · Mahadevapura · Varthur · Electronic City · Bengaluru"
   },
   lb: {
-    title: "Options for Basilic Fly Studio",
+    title: "Options for Clients",
     why: 'Every figure is <b>client-stated from the broker deck (unconfirmed)</b> until Mappls verification lands. Band: <b>₹8,000–9,500/seat</b>. Metro connectivity is the top priority.'
   },
   tierColors: false,         // no verdict colouring — truth-first: selected property is the only accent
   shortlist: true,
+  shortlistText: "Add to shortlist",   // client-neutral button copy
   walkthrough: false,        // no verified media yet — honest empty states instead
   props: false,              // no street props — roads layer is BKC geography, not Whitefield
   rain: false,

@@ -1,4 +1,4 @@
-/* BASILIC FLY — building footprints (Whitefield/ITPL cluster, Bengaluru).
+/* WHITEFIELD — building footprints (Whitefield/ITPL cluster, Bengaluru).
    4 of 6 deck properties matched to named OSM polygons (see evidence/ledger.jsonl
    rows geo-primeco / geo-sumadhura / geo-starmark; raw Overpass/Nominatim
    responses in recon/osm/). Total Environment (Mahadevapura) and Y Living are NOT
