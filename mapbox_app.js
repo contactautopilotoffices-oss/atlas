@@ -2312,6 +2312,17 @@ function galleryHTML(items) {
   </div>`;
 }
 
+/* An hour reads as an hour. Past 60 minutes a raw minute count stops being
+   legible — "63 min" makes the reader do the division — so anything from 60 up
+   renders as hours. Used everywhere a duration reaches the client view. */
+function fmtMin(m) {
+  if (m == null || isNaN(m)) return "—";
+  m = Math.round(m);
+  if (m < 60) return `${m} min`;
+  const h = Math.floor(m / 60), r = m % 60;
+  return r ? `${h} hr ${r} min` : `${h} hr`;
+}
+
 function connectivityHTML(pid, o) {
   const c = CONNECTIVITY && CONNECTIVITY[pid];
   if (!c) return `<div class="sec"><h4>Connectivity</h4>
@@ -2321,7 +2332,7 @@ function connectivityHTML(pid, o) {
   // object carrying its own name; kia stays readable so the older files still work.
   const air = c.airport || (c.kia ? { name: "Kempegowda International", ...c.kia } : null);
   const walkTxt = !w ? "—"
-    : w.practical ? `${w.m} m · ${w.min} min walk`
+    : w.practical ? `${w.m} m · ${fmtMin(w.min)} walk`
     : `${(w.m / 1000).toFixed(1)} km — not practically walkable`;
   // Routed distances and straight-line estimates are not the same claim. Say which.
   const estimated = c.routed === false;
@@ -2330,17 +2341,17 @@ function connectivityHTML(pid, o) {
     <div class="conn">
       <div class="conn-row"><span class="ic aqua">M</span>
         <div><b>${st.name}</b>
-          <div class="conn-line">${walkTxt}${d ? ` · ${d.min} min drive` : ""}</div>
+          <div class="conn-line">${walkTxt}${d ? ` · ${fmtMin(d.min)} drive` : ""}</div>
           <div class="muted">${walkNote}</div></div></div>
       ${c.office ? `<div class="conn-row"><span class="ic bus">•</span>
         <div><b>${c.office.name}</b>
-          <div class="conn-line">${c.office.km} km · ${c.office.min} min drive</div></div></div>` : ""}
+          <div class="conn-line">${c.office.km} km · ${fmtMin(c.office.min)} drive</div></div></div>` : ""}
       ${air ? `<div class="conn-row"><span class="ic rail">✈</span>
         <div><b>${air.name}</b>
-          <div class="conn-line">${air.km} km · ${air.min} min drive</div></div></div>` : ""}
+          <div class="conn-line">${air.km} km · ${fmtMin(air.min)} drive</div></div></div>` : ""}
       ${c.airport_alt ? `<div class="conn-row"><span class="ic rail">✈</span>
         <div><b>${c.airport_alt.name}</b>
-          <div class="conn-line">${c.airport_alt.km} km · ${c.airport_alt.min} min drive</div></div></div>` : ""}
+          <div class="conn-line">${c.airport_alt.km} km · ${fmtMin(c.airport_alt.min)} drive</div></div></div>` : ""}
     </div>
     ${estimated && c.method ? `<div class="deck-note">${c.method}</div>` : ""}</div>`;
 }
@@ -2383,13 +2394,13 @@ function talentHTML(pid) {
         <span class="ic" style="background:${bd.color};color:#0c1118">${bd.label.split("-")[1] || ""}</span>
         <div><b>${bd.label}</b>
           ${bd.items.length
-            ? bd.items.map(L => `<div class="conn-line">${L.name} <span class="muted">· ${L.km} km · ~${L.min} min · ${L.profile}</span>
+            ? bd.items.map(L => `<div class="conn-line">${L.name} <span class="muted">· ${L.km} km · ~${fmtMin(L.min)} · ${L.profile}</span>
                 <div class="muted">${L.supply}</div></div>`).join("")
             : `<div class="conn-line muted">No mapped locality falls in this band for this address.</div>`}
         </div></div>`).join("")}
       ${c.beyond.length ? `<div class="conn-row"><span class="ic bus">·</span>
         <div><b>Beyond 50 min</b>
-          ${c.beyond.map(L => `<div class="conn-line muted">${L.name} · ${L.km} km · ~${L.min} min</div>`).join("")}
+          ${c.beyond.map(L => `<div class="conn-line muted">${L.name} · ${L.km} km · ~${fmtMin(L.min)}</div>`).join("")}
         </div></div>` : ""}
     </div>
     ${c.signals.length ? `<div class="unit" style="margin-top:10px"><div class="unit-grid">
@@ -2743,7 +2754,7 @@ async function buildLeaderboard() {
       const c = (typeof CONNECTIVITY === "object" && CONNECTIVITY) ? CONNECTIVITY[o.bldg] : null;
       const w = c && c.walk;
       const fig = !w ? `—<i>&nbsp;</i>`
-        : w.practical ? `${w.min}<i>min walk</i>`
+        : w.practical ? (w.min < 60 ? `${w.min}<i>min walk</i>` : `${fmtMin(w.min)}<i>walk</i>`)
         : `${(w.m/1000).toFixed(1)}<i>km</i>`;
       const figCol = !w ? "var(--mut)" : w.practical ? "#8fd6a8" : "#e0a34d";
       const stn = c ? c.nearest_station.name : (o.metroName || "—");
