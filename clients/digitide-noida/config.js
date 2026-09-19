@@ -69,20 +69,23 @@ window.CLIENT = {
    between stations; this polyline does not. It is drawn only when
    CLIENT.metroLine is set, which it is not, so it serves as station ordering
    and panel metadata rather than as a map claim.
-   Stations omitted deliberately: Sector 52, Sector 34, City Centre and the Aqua
-   Line interchange. No verified coordinate was obtained for them in this pass,
-   and none of them is the nearest station to any shortlisted property.
+   Sector 52 was added once a verified coordinate for it came back from the
+   Google Maps pass; it anchors the southern end of the drawn stretch and is the
+   Blue Line side of the Sector 51 Aqua Line walking transfer. Sector 34 and City
+   Centre stay out: neither is the nearest station to any shortlisted property.
 --------------------------------------------------------------------------- */
 window.BKC_LINE3 = {
   name: "Delhi Metro Blue Line — Noida eastern stretch",
   color: "#2b6cb0",
   path: [
+    [77.3723810, 28.5871560],
     [77.3722988, 28.5976310],
     [77.3727259, 28.6064930],
     [77.3736097, 28.6169948],
     [77.3749300, 28.6279412]
   ],
   stations: [
+    { name:"Noida Sector 52", lng:77.3723810, lat:28.5871560 },
     { name:"Noida Sector 61", lng:77.3722988, lat:28.5976310 },
     { name:"Noida Sector 59", lng:77.3727259, lat:28.6064930 },
     { name:"Noida Sector 62", lng:77.3736097, lat:28.6169948 },

@@ -8,21 +8,25 @@
    - Every sheet-derived field carries `src` = the evidence/ledger.jsonl row id.
    - Fields the sheet leaves as "TBD" are null here and render "Unconfirmed".
      A TBD is not a zero and not a blank.
-   - COORDINATES. Every coordinate below is now geocoded against OpenStreetMap
-     (Nominatim), not placed by hand. Google Maps is blocked by this environment's
-     egress policy, so OSM is the geocoder of record; the OSM object id behind each
-     pin is in the comment on its line and in evidence/ledger.jsonl.
-     `coordPrecision` still records how tight each pin is — "building" (an OSM
-     polygon for the building itself), "street" (the named street the plot sits on,
-     from a published address) or "sector" (the OSM sector polygon's centroid).
-     That field drives nothing in the UI any more; it is kept because the team
-     should know which pins a site visit would move and which it would not.
+   - COORDINATES are Google Maps place pins, read in a browser session by the
+     client and cross-checked against OpenStreetMap here. Where the two disagreed
+     Google won, because it resolved four of the six to named place records that
+     OSM does not carry at all. The two sources agree to 31 m on Knowledge
+     Boulevard — the one building we already had an OSM polygon for — which is
+     what gave confidence in the rest.
+     `coordPrecision` records how tight each pin is: "poi" (Google resolved a
+     named place record), "plot" (Google resolved the plot address point),
+     "building" (an OSM building polygon) or "sector" (a sector centroid, used
+     only where no building record exists anywhere). It drives nothing in the UI;
+     it is kept so the team knows which pins a site visit would move.
    - SORT ORDER is the client's, not the engine's. `displayOrder` below fixes the
      running order the client asked for — Magnus, A-20, C-57, Knowledge Boulevard,
      A-23 — and the engine honours it instead of its default nearest-metro sort.
-   - METRO DISTANCES are the client's own stated figures for their own shortlist.
-     Where the coordinate-derived distance was checked against them it agrees to
-     within ~0.1 km on four of the five; see connectivity.json.
+   - METRO AND OFFICE DISTANCES are Google Maps routed figures — real walking and
+     driving routes, not straight lines and not estimates. They run longer than
+     the figures in the client's own review table, which is what a routed path
+     does against an as-the-crow-flies estimate; both are recorded in the ledger.
+     Magnus Tower is the exception and is flagged inline below.
    ============================================================================ */
 
 /* No budget band was given in the workbook. The engine reads BAND for the brief
@@ -45,6 +49,8 @@ const ST = {
   sec59:    { lng:77.3727259, lat:28.6064930, name:"Noida Sector 59 · Blue Line",       src:"geo-stn-sec59" },
   sec62:    { lng:77.3736097, lat:28.6169948, name:"Noida Sector 62 · Blue Line",       src:"geo-stn-sec62" },
   eleccity: { lng:77.3749300, lat:28.6279412, name:"Noida Electronic City · Blue Line", src:"geo-stn-eleccity" },
+  sec52:    { lng:77.3723810, lat:28.5871560, name:"Noida Sector 52 · Blue Line",       src:"geo-stn-sec52" },
+  sec51:    { lng:77.3753600, lat:28.5855900, name:"Sector 51 · Aqua Line",             src:"geo-stn-sec51" },
 };
 
 /* ---------------------------------------------------------------------------
@@ -59,7 +65,7 @@ const OPTIONS = [
     floorPlate:"~27,000 sqft", plateSrc:"techm-plate",
     offeredArea:"As per requirement", offeredAreaSrc:"techm-offered-area",
     condition:"Warm shell", conditionSrc:"techm-condition",
-    metroName:"Noida Sector 59", metroDist:"0.8 km", metroSrc:"techm-metro",
+    metroName:"Noida Sector 59", metroDist:"1.0 km walk · 14 min", metroSrc:"techm-metro",
     officeDist:"~1 km to Digitide Sector 58", officeSrc:"techm-office-dist",
     parking:"Surface parking", parkingSrc:"techm-parking",
     powerBackup:"100%", powerSrc:"techm-power",
@@ -70,7 +76,7 @@ const OPTIONS = [
     lastOccupier:"Tech Mahindra", occupierSrc:"techm-occupier",
     pros:"Larger floor plate. Older building, but the landlord is upgrading it with new infrastructure and structural improvements.", prosSrc:"techm-pros",
     cons:"Older building.", consSrc:"techm-cons",
-    coordSrc:"geo-techm", coordPrecision:"sector" },   // OSM way 71644071 (Sector 60 landuse)
+    coordSrc:"geo-techm", coordPrecision:"poi" },   // Google place record "Tech Mahindra"
 
   { bldg:"padget", displayOrder:5, name:"A-23 — former Padget", locality:"Block A · Sector 60",
     buildingArea:"2,10,000 sqft", areaSrc:"padget-area",
@@ -79,7 +85,7 @@ const OPTIONS = [
     floorPlate:"~25,000 sqft", plateSrc:"padget-plate",
     offeredArea:"As per requirement", offeredAreaSrc:"padget-offered-area",
     condition:"Warm shell", conditionSrc:"padget-condition",
-    metroName:"Noida Sector 59", metroDist:"0.7 km", metroSrc:"padget-metro",
+    metroName:"Noida Sector 59", metroDist:"1.1 km walk · 15 min", metroSrc:"padget-metro",
     officeDist:"~1 km to Digitide Sector 58", officeSrc:"padget-office-dist",
     parking:"Surface parking", parkingSrc:"padget-parking",
     powerBackup:"100%", powerSrc:"padget-power",
@@ -91,7 +97,7 @@ const OPTIONS = [
     buildingAge:"6 years old", ageSrc:"padget-age",
     pros:"Larger floor plate. The building is not old — it is about 6 years old, so it is effectively a new asset.", prosSrc:"padget-pros",
     cons:null, consSrc:null,                                // sheet leaves Cons blank
-    coordSrc:"geo-padget", coordPrecision:"street" },   // Maharaja Agrasen Marg, Sector 60 — OSM way 1096498279
+    coordSrc:"geo-padget", coordPrecision:"plot" },   // Google A-23 plot address point
 
   { bldg:"tv18", displayOrder:3, name:"C-57 — former TV18", locality:"Sector 57",
     buildingArea:"~72,000 sqft", areaSrc:"tv18-area",
@@ -100,7 +106,7 @@ const OPTIONS = [
     floorPlate:"~18,000 sqft", plateSrc:"tv18-plate",
     offeredArea:"As per requirement", offeredAreaSrc:"tv18-offered-area",
     condition:"Bare shell", conditionSrc:"tv18-condition",
-    metroName:"Noida Sector 59", metroDist:"2.5 km", metroSrc:"tv18-metro",
+    metroName:"Noida Sector 59", metroDist:"2.7 km walk · 37 min", metroSrc:"tv18-metro",
     officeDist:"~1 km to Digitide Sector 58", officeSrc:"tv18-office-dist",
     parking:"1 slot / 1,000 sqft, leased, chargeable at INR 3,500 / slot / month", parkingSrc:"tv18-parking",
     powerBackup:"100%", powerSrc:"tv18-power",
@@ -111,7 +117,7 @@ const OPTIONS = [
     lastOccupier:"TV18", occupierSrc:"tv18-occupier",
     pros:"Building is old but well maintained.", prosSrc:"tv18-pros",
     cons:"Comparatively smaller floor plate.", consSrc:"tv18-cons",
-    coordSrc:"geo-tv18", coordPrecision:"sector" },   // OSM way 71621507 (Sector 57 landuse)
+    coordSrc:"geo-tv18", coordPrecision:"plot" },   // Google plot geocode "c, 57, Block B, Sector 57"
 
   { bldg:"magnus", displayOrder:1, name:"Magnus Tower", locality:"Sector 67",
     buildingArea:"~2,20,000 sqft", areaSrc:"magnus-area",
@@ -132,8 +138,9 @@ const OPTIONS = [
     pros:"Brand-new B++ grade asset: modern infrastructure, double-height lift lobbies, 6 lifts per floor plus 2 service lifts, a green belt in front, larger floor plates and a wider approach road with connectivity to Noida, Delhi and Ghaziabad. The sheet calls out access to the Mamura, Khoda, East Delhi, Ghaziabad (Indirapuram, Vaishali, Vasundhara, Crossings Republik) and Noida residential talent pools, reached mainly by shared autos and e-rickshaws.", prosSrc:"magnus-pros",
     cons:"Metro connectivity 1.8 km.", consSrc:"magnus-cons",
     priority:true, prioritySrc:"magnus-priority",
+    magnusNote:"This is the Sector 67 development, not the Magnus Tower at Plot 6, Sector 73 — a separate, occupied 11-storey building 1.45 km to the south. Everything shown here is measured to the Sector 67 site. A plot number or map pin from the landlord will sharpen the distances further.", magnusNoteSrc:"magnus-identity",
     catchmentNote:"Client read: the immediate catchment is the Sector 71 / 72 / 73 residential belt, and travel time to the Sector 15 area runs 30-40 minutes.", catchmentNoteSrc:"magnus-catchment-note",
-    coordSrc:"geo-magnus", coordPrecision:"sector" },   // OSM way 71834192 (Sector 67 landuse)
+    coordSrc:"geo-magnus", coordPrecision:"sector" },   // Sector 67 centroid — see magnusNote
 
   { bldg:"kboulevard", displayOrder:4, name:"Knowledge Boulevard", locality:"Plot A-8A · Sector 62",
     buildingArea:"Towers A & B: ~6,66,260 sqft", areaSrc:"kb-area",
@@ -142,7 +149,7 @@ const OPTIONS = [
     floorPlate:"~95,000 sqft", plateSrc:"kb-plate",
     offeredArea:null, offeredAreaSrc:null,                  // sheet says TBD
     condition:"Warm shell", conditionSrc:"kb-condition",
-    metroName:"Noida Electronic City", metroDist:"1 km", metroSrc:"kb-metro",
+    metroName:"Noida Electronic City", metroDist:"1.4 km walk · 20 min", metroSrc:"kb-metro",
     officeDist:"~4 km to Digitide Sector 58", officeSrc:"kb-office-dist",
     parking:"1 slot / 1,200 sqft, leased, included in rentals at INR 5,000 / month / car", parkingSrc:"kb-parking",
     powerBackup:"100%", powerSrc:"kb-power",
@@ -153,7 +160,7 @@ const OPTIONS = [
     lastOccupier:null, occupierSrc:null,
     pros:"Tech campus, A-grade, metro connectivity.", prosSrc:"kb-pros",
     cons:"Scarcity of larger contiguous floor plates, higher rental, highly congested, narrow approach road.", consSrc:"kb-cons",
-    coordSrc:"geo-kboulevard", coordPrecision:"building" },   // OSM way 634075406, footprint in geo.js
+    coordSrc:"geo-kboulevard", coordPrecision:"building" },   // OSM way 634075406 + polygon; Google agrees to 31 m
 ];
 
 /* ---------------------------------------------------------------------------
@@ -166,16 +173,16 @@ function stn(s){ return { stnLng:s.lng, stnLat:s.lat, stnName:s.name }; }
 
 const BUILDINGS = [
   { id:"techm", name:"A-20 — former Tech Mahindra", block:"Sector 60", isOption:true, type:"block",
-    ...geoToMeters(28.6032082, 77.3671992), ...stn(ST.sec59),   // OSM way 71644071
+    ...geoToMeters(28.604926, 77.368878), ...stn(ST.sec59),   // Google place "Tech Mahindra"
     w:55, d:45, h:10, floors:3, color:0x9aa7b5 },
   { id:"padget", name:"A-23 — former Padget", block:"Sector 60", isOption:true, type:"block",
-    ...geoToMeters(28.6002101, 77.3674556), ...stn(ST.sec59),   // OSM way 1096498279
+    ...geoToMeters(28.603648, 77.368607), ...stn(ST.sec59),   // Google A-23 plot address point
     w:52, d:45, h:10, floors:3, color:0x9aa7b5 },
   { id:"tv18", name:"C-57 — former TV18", block:"Sector 57", isOption:true, type:"block",
-    ...geoToMeters(28.6050343, 77.3534679), ...stn(ST.sec59),   // OSM way 71621507
+    ...geoToMeters(28.603910, 77.352742), ...stn(ST.sec59),   // Google plot geocode, Block B Sector 57
     w:45, d:37, h:13, floors:4, color:0x9aa7b5 },
   { id:"magnus", name:"Magnus Tower", block:"Sector 67", isOption:true, type:"block",
-    ...geoToMeters(28.6048230, 77.3847901), ...stn(ST.sec61),   // OSM way 71834192
+    ...geoToMeters(28.6048230, 77.3847901), ...stn(ST.sec61),   // OSM way 71834192 — Sector 67 centroid; Google has no Sector 67 building record
     w:62, d:52, h:19, floors:6, color:0x9aa7b5 },
   { id:"kboulevard", name:"Knowledge Boulevard", block:"Sector 62", isOption:true, type:"tower",
     ...geoToMeters(28.6301158, 77.3679468), ...stn(ST.eleccity),   // OSM way 634075406 — footprint in geo.js
@@ -204,7 +211,7 @@ const RIVER_PATH = [];
 const POI = [
   /* --- [2] Digitide's existing Noida office ------------------------------ */
   { id:"digitide-58", layer:"anchor", name:"Digitide Solutions — Sector 58",
-    lat:28.6065664, lng:77.3590182, precision:"sector",          // OSM way 71651922
+    lat:28.604613, lng:77.358912, precision:"poi",          // Google place "Digitide Solutions Ltd"
     note:"2nd & 3rd floor, Plot A-94/5 & A-94/6, Sector 58, Noida 201301. The incumbent office every option is measured against.",
     src:"BSI client directory — Digitide Solutions Limited",
     srcUrl:"https://www.bsigroup.com/en-ZA/products-and-services/assessment-and-certification/validation-and-verification/client-directory-profile/E2E_SE-0047219867-014" },
