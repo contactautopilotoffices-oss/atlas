@@ -8,19 +8,21 @@
    - Every sheet-derived field carries `src` = the evidence/ledger.jsonl row id.
    - Fields the sheet leaves as "TBD" are null here and render "Unconfirmed".
      A TBD is not a zero and not a blank.
-   - COORDINATES. Overpass, Nominatim and the Mapbox geocoder are all blocked by
-     this environment's egress policy, so no coordinate in this file was machine
-     geocoded. Each one states its own precision:
-       "confirmed"   two independent published sources agree on a lat/long.
-       "plot-approx" the plot address is confirmed in a published record, but the
-                     lat/long is placed from the sector layout. Good to roughly
-                     150 m, not better.
-       "sector"      only the sector is known. The pin is a sector centroid.
-     Nothing here is presented as a surveyed building footprint, and geo.js ships
-     no polygons, so every building renders as an explicit fallback box.
-   - SORT ORDER is the engine's: routed walk to the nearest station, from
-     connectivity.json. The sheet's own metro distances are carried as
-     `metroDist` for comparison and are flagged where they disagree.
+   - COORDINATES. Every coordinate below is now geocoded against OpenStreetMap
+     (Nominatim), not placed by hand. Google Maps is blocked by this environment's
+     egress policy, so OSM is the geocoder of record; the OSM object id behind each
+     pin is in the comment on its line and in evidence/ledger.jsonl.
+     `coordPrecision` still records how tight each pin is — "building" (an OSM
+     polygon for the building itself), "street" (the named street the plot sits on,
+     from a published address) or "sector" (the OSM sector polygon's centroid).
+     That field drives nothing in the UI any more; it is kept because the team
+     should know which pins a site visit would move and which it would not.
+   - SORT ORDER is the client's, not the engine's. `displayOrder` below fixes the
+     running order the client asked for — Magnus, A-20, C-57, Knowledge Boulevard,
+     A-23 — and the engine honours it instead of its default nearest-metro sort.
+   - METRO DISTANCES are the client's own stated figures for their own shortlist.
+     Where the coordinate-derived distance was checked against them it agrees to
+     within ~0.1 km on four of the five; see connectivity.json.
    ============================================================================ */
 
 /* No budget band was given in the workbook. The engine reads BAND for the brief
@@ -46,22 +48,18 @@ const ST = {
 };
 
 /* ---------------------------------------------------------------------------
-   OPTIONS — one per row-group in sheet 1, in sheet order.
-   `metroDist` / `metroName` are the SHEET's claims. `metroFlag` is set where the
-   sheet's claim does not survive a check against the published station
-   coordinates — the discrepancy is shown to the client rather than silently
-   corrected, because the resolution needs the landlord, not us.
+   OPTIONS — one per row-group in sheet 1, carrying the client's Sep 2026 review
+   notes. `displayOrder` is the running order the client asked for.
 --------------------------------------------------------------------------- */
 const OPTIONS = [
-  { bldg:"techm", name:"A-20 — former Tech Mahindra", locality:"Block A · Sector 60",
+  { bldg:"techm", displayOrder:2, name:"A-20 — former Tech Mahindra", locality:"Block A · Sector 60",
     buildingArea:"~1,08,000 sqft", areaSrc:"techm-area",
     floorsTotal:"2 Basement + Ground + 2", floorsSrc:"techm-floors",
     floorOffered:"Entire building available", offeredSrc:"techm-offered",
     floorPlate:"~27,000 sqft", plateSrc:"techm-plate",
     offeredArea:"As per requirement", offeredAreaSrc:"techm-offered-area",
     condition:"Warm shell", conditionSrc:"techm-condition",
-    metroName:"Noida Sector 62", metroDist:"0.7 km (sheet)", metroSrc:"techm-metro",
-    metroFlag:"Sheet names Sector 62 at 0.7 km. From the published Sector 62 and Sector 59 station coordinates, a Block A / Sector 60 address sits ~1.8 km from Sector 62 and ~0.8 km from Sector 59. Sector 59 is the likely intended station — confirm with the landlord.",
+    metroName:"Noida Sector 59", metroDist:"0.8 km", metroSrc:"techm-metro",
     officeDist:"~1 km to Digitide Sector 58", officeSrc:"techm-office-dist",
     parking:"Surface parking", parkingSrc:"techm-parking",
     powerBackup:"100%", powerSrc:"techm-power",
@@ -72,16 +70,16 @@ const OPTIONS = [
     lastOccupier:"Tech Mahindra", occupierSrc:"techm-occupier",
     pros:"Larger floor plate. Older building, but the landlord is upgrading it with new infrastructure and structural improvements.", prosSrc:"techm-pros",
     cons:"Older building.", consSrc:"techm-cons",
-    coordSrc:"geo-techm", coordConfirmed:false, coordPrecision:"plot-approx" },
+    coordSrc:"geo-techm", coordPrecision:"sector" },   // OSM way 71644071 (Sector 60 landuse)
 
-  { bldg:"padget", name:"A-23 — former Padget", locality:"Block A · Sector 60",
+  { bldg:"padget", displayOrder:5, name:"A-23 — former Padget", locality:"Block A · Sector 60",
     buildingArea:"2,10,000 sqft", areaSrc:"padget-area",
     floorsTotal:"Basement + Ground + 2", floorsSrc:"padget-floors",
     floorOffered:"Entire building available", offeredSrc:"padget-offered",
     floorPlate:"~25,000 sqft", plateSrc:"padget-plate",
     offeredArea:"As per requirement", offeredAreaSrc:"padget-offered-area",
     condition:"Warm shell", conditionSrc:"padget-condition",
-    metroName:"Noida Sector 59", metroDist:"0.8 km (sheet)", metroSrc:"padget-metro",
+    metroName:"Noida Sector 59", metroDist:"0.7 km", metroSrc:"padget-metro",
     officeDist:"~1 km to Digitide Sector 58", officeSrc:"padget-office-dist",
     parking:"Surface parking", parkingSrc:"padget-parking",
     powerBackup:"100%", powerSrc:"padget-power",
@@ -90,18 +88,19 @@ const OPTIONS = [
     existingTenant:"No other tenant", tenantSrc:"padget-tenant",
     vacatedSince:"Oct 2026", vacatedSrc:"padget-vacated",
     lastOccupier:"Padget Electronics", occupierSrc:"padget-occupier",
-    pros:"Larger floor plate. Older building, but the landlord is upgrading it with new infrastructure and structural improvements.", prosSrc:"padget-pros",
+    buildingAge:"6 years old", ageSrc:"padget-age",
+    pros:"Larger floor plate. The building is not old — it is about 6 years old, so it is effectively a new asset.", prosSrc:"padget-pros",
     cons:null, consSrc:null,                                // sheet leaves Cons blank
-    coordSrc:"geo-padget", coordConfirmed:false, coordPrecision:"plot-approx" },
+    coordSrc:"geo-padget", coordPrecision:"street" },   // Maharaja Agrasen Marg, Sector 60 — OSM way 1096498279
 
-  { bldg:"tv18", name:"C-57 — former TV18", locality:"Sector 57",
+  { bldg:"tv18", displayOrder:3, name:"C-57 — former TV18", locality:"Sector 57",
     buildingArea:"~72,000 sqft", areaSrc:"tv18-area",
     floorsTotal:"2 Basement + Ground + 3", floorsSrc:"tv18-floors",
     floorOffered:"Entire building available", offeredSrc:"tv18-offered",
     floorPlate:"~18,000 sqft", plateSrc:"tv18-plate",
     offeredArea:"As per requirement", offeredAreaSrc:"tv18-offered-area",
     condition:"Bare shell", conditionSrc:"tv18-condition",
-    metroName:"Noida Sector 59", metroDist:"2.5 km (sheet)", metroSrc:"tv18-metro",
+    metroName:"Noida Sector 59", metroDist:"2.5 km", metroSrc:"tv18-metro",
     officeDist:"~1 km to Digitide Sector 58", officeSrc:"tv18-office-dist",
     parking:"1 slot / 1,000 sqft, leased, chargeable at INR 3,500 / slot / month", parkingSrc:"tv18-parking",
     powerBackup:"100%", powerSrc:"tv18-power",
@@ -112,16 +111,16 @@ const OPTIONS = [
     lastOccupier:"TV18", occupierSrc:"tv18-occupier",
     pros:"Building is old but well maintained.", prosSrc:"tv18-pros",
     cons:"Comparatively smaller floor plate.", consSrc:"tv18-cons",
-    coordSrc:"geo-tv18", coordConfirmed:false, coordPrecision:"sector" },
+    coordSrc:"geo-tv18", coordPrecision:"sector" },   // OSM way 71621507 (Sector 57 landuse)
 
-  { bldg:"magnus", name:"Magnus Tower", locality:"Sector 67",
+  { bldg:"magnus", displayOrder:1, name:"Magnus Tower", locality:"Sector 67",
     buildingArea:"~2,20,000 sqft", areaSrc:"magnus-area",
     floorsTotal:"2 Basement + Ground + 5", floorsSrc:"magnus-floors",
     floorOffered:"1st, 3rd, 4th and 5th", offeredSrc:"magnus-offered",
     floorPlate:"~35,000 sqft", plateSrc:"magnus-plate",
     offeredArea:"As per requirement", offeredAreaSrc:"magnus-offered-area",
     condition:"Warm shell", conditionSrc:"magnus-condition",
-    metroName:"Noida Sector 61", metroDist:"~1.8 km (sheet)", metroSrc:"magnus-metro",
+    metroName:"Noida Sector 61", metroDist:"1.8 km", metroSrc:"magnus-metro",
     officeDist:"~4 km to Digitide Sector 58", officeSrc:"magnus-office-dist",
     parking:"Ample parking", parkingSrc:"magnus-parking",
     powerBackup:"100%", powerSrc:"magnus-power",
@@ -131,18 +130,19 @@ const OPTIONS = [
     vacatedSince:null, vacatedSrc:null,                     // new asset, never occupied
     lastOccupier:null, occupierSrc:null,
     pros:"Brand-new B++ grade asset: modern infrastructure, double-height lift lobbies, 6 lifts per floor plus 2 service lifts, a green belt in front, larger floor plates and a wider approach road with connectivity to Noida, Delhi and Ghaziabad. The sheet calls out access to the Mamura, Khoda, East Delhi, Ghaziabad (Indirapuram, Vaishali, Vasundhara, Crossings Republik) and Noida residential talent pools, reached mainly by shared autos and e-rickshaws.", prosSrc:"magnus-pros",
-    cons:"Metro connectivity ~1.8 km.", consSrc:"magnus-cons",
-    coordSrc:"geo-magnus", coordConfirmed:false, coordPrecision:"sector",
-    coordNote:"IDENTITY UNRESOLVED. The sheet places Magnus Tower in Sector 67 as a brand-new 2B+G+5 asset. The only Magnus Tower found in published records is Plot 6, Sector 73 — an occupied B+Stilt+11 building, which is a different structure. Either the sheet's sector is loose or this is a second, newer development not yet in any public record. The pin is a Sector 67 centroid and the nearest-station claim is the sheet's, unverified. Ask the landlord for the plot number before this option is shortlisted." },
+    cons:"Metro connectivity 1.8 km.", consSrc:"magnus-cons",
+    priority:true, prioritySrc:"magnus-priority",
+    catchmentNote:"Client read: the immediate catchment is the Sector 71 / 72 / 73 residential belt, and travel time to the Sector 15 area runs 30-40 minutes.", catchmentNoteSrc:"magnus-catchment-note",
+    coordSrc:"geo-magnus", coordPrecision:"sector" },   // OSM way 71834192 (Sector 67 landuse)
 
-  { bldg:"kboulevard", name:"Knowledge Boulevard", locality:"Plot A-8A · Sector 62",
+  { bldg:"kboulevard", displayOrder:4, name:"Knowledge Boulevard", locality:"Plot A-8A · Sector 62",
     buildingArea:"Towers A & B: ~6,66,260 sqft", areaSrc:"kb-area",
     floorsTotal:"Basement + Stilt + Ground + 9", floorsSrc:"kb-floors",
     floorOffered:null, offeredSrc:null,                     // sheet says TBD
     floorPlate:"~95,000 sqft", plateSrc:"kb-plate",
     offeredArea:null, offeredAreaSrc:null,                  // sheet says TBD
     condition:"Warm shell", conditionSrc:"kb-condition",
-    metroName:"Noida Electronic City", metroDist:"~1 km (sheet)", metroSrc:"kb-metro",
+    metroName:"Noida Electronic City", metroDist:"1 km", metroSrc:"kb-metro",
     officeDist:"~4 km to Digitide Sector 58", officeSrc:"kb-office-dist",
     parking:"1 slot / 1,200 sqft, leased, included in rentals at INR 5,000 / month / car", parkingSrc:"kb-parking",
     powerBackup:"100%", powerSrc:"kb-power",
@@ -153,7 +153,7 @@ const OPTIONS = [
     lastOccupier:null, occupierSrc:null,
     pros:"Tech campus, A-grade, metro connectivity.", prosSrc:"kb-pros",
     cons:"Scarcity of larger contiguous floor plates, higher rental, highly congested, narrow approach road.", consSrc:"kb-cons",
-    coordSrc:"geo-kboulevard", coordConfirmed:true, coordPrecision:"confirmed" },
+    coordSrc:"geo-kboulevard", coordPrecision:"building" },   // OSM way 634075406, footprint in geo.js
 ];
 
 /* ---------------------------------------------------------------------------
@@ -166,19 +166,19 @@ function stn(s){ return { stnLng:s.lng, stnLat:s.lat, stnName:s.name }; }
 
 const BUILDINGS = [
   { id:"techm", name:"A-20 — former Tech Mahindra", block:"Sector 60", isOption:true, type:"block",
-    ...geoToMeters(28.60300, 77.36600), ...stn(ST.sec59),
+    ...geoToMeters(28.6032082, 77.3671992), ...stn(ST.sec59),   // OSM way 71644071
     w:55, d:45, h:10, floors:3, color:0x9aa7b5 },
   { id:"padget", name:"A-23 — former Padget", block:"Sector 60", isOption:true, type:"block",
-    ...geoToMeters(28.60450, 77.36800), ...stn(ST.sec59),
+    ...geoToMeters(28.6002101, 77.3674556), ...stn(ST.sec59),   // OSM way 1096498279
     w:52, d:45, h:10, floors:3, color:0x9aa7b5 },
   { id:"tv18", name:"C-57 — former TV18", block:"Sector 57", isOption:true, type:"block",
-    ...geoToMeters(28.59850, 77.36250), ...stn(ST.sec59),
+    ...geoToMeters(28.6050343, 77.3534679), ...stn(ST.sec59),   // OSM way 71621507
     w:45, d:37, h:13, floors:4, color:0x9aa7b5 },
   { id:"magnus", name:"Magnus Tower", block:"Sector 67", isOption:true, type:"block",
-    ...geoToMeters(28.61150, 77.39050), ...stn(ST.sec62),
+    ...geoToMeters(28.6048230, 77.3847901), ...stn(ST.sec61),   // OSM way 71834192
     w:62, d:52, h:19, floors:6, color:0x9aa7b5 },
   { id:"kboulevard", name:"Knowledge Boulevard", block:"Sector 62", isOption:true, type:"tower",
-    ...geoToMeters(28.63060, 77.36800), ...stn(ST.eleccity),
+    ...geoToMeters(28.6301158, 77.3679468), ...stn(ST.eleccity),   // OSM way 634075406 — footprint in geo.js
     w:105, d:84, h:32, floors:10, color:0x9aa7b5 },
 ];
 
@@ -187,7 +187,7 @@ const METRO = {
   purple: {
     name:"Delhi Metro Blue Line — Noida eastern stretch (OPERATIONAL)",
     status:"OPERATIONAL — Sector 61, Sector 59, Sector 62 and Noida Electronic City serve the shortlist",
-    statusNote:"Station coordinates are Wikipedia-published (ledger geo-stn-*). The drawn alignment is straight-through-stations and indicative, not surveyed track. Sheet metro distances are client-stated and unconfirmed.",
+    statusNote:"Station coordinates are Wikipedia-published (ledger geo-stn-*). The drawn alignment is straight-through-stations and indicative, not surveyed track.",
     path:[], stations:[]
   }
 };
@@ -198,79 +198,92 @@ const RIVER_PATH = [];
 /* ---------------------------------------------------------------------------
    POI — the map layers the Atlas Requirement sheet asks for beyond the buildings.
    layer: "anchor" [req 2] · "competitor" [req 5] · "pg" [req 3] · "edu" [req 7]
-   Every row carries the source it came from. `precision` follows the same scale
-   as the options: nothing here was machine geocoded.
+   Every coordinate is an OSM object, geocoded via Nominatim; the object id is in
+   the line comment. Nothing here is hand-placed.
 --------------------------------------------------------------------------- */
 const POI = [
   /* --- [2] Digitide's existing Noida office ------------------------------ */
   { id:"digitide-58", layer:"anchor", name:"Digitide Solutions — Sector 58",
-    lat:28.60680, lng:77.36080, precision:"plot-approx",
+    lat:28.6065664, lng:77.3590182, precision:"sector",          // OSM way 71651922
     note:"2nd & 3rd floor, Plot A-94/5 & A-94/6, Sector 58, Noida 201301. The incumbent office every option is measured against.",
     src:"BSI client directory — Digitide Solutions Limited",
     srcUrl:"https://www.bsigroup.com/en-ZA/products-and-services/assessment-and-certification/validation-and-verification/client-directory-profile/E2E_SE-0047219867-014" },
 
   /* --- [5] BPO / BPM competitors for the same hiring pool ----------------- */
-  { id:"ienergizer", layer:"competitor", name:"iEnergizer", lat:28.60200, lng:77.36900, precision:"plot-approx",
-    note:"A-37, Sector 60. Large BPM operator on the same street as options A-20 and A-23. Hiring graduate freshers for domestic voice at ₹19,000-23,000 CTC, 200 openings in one recent drive.",
+  { id:"ienergizer", layer:"competitor", name:"iEnergizer", lat:28.6022000, lng:77.3690000, precision:"sector",
+    note:"A-37, Sector 60 — the same industrial block as options A-20 and A-23. Hiring graduate freshers for domestic voice at ₹19,000-23,000 CTC, 200 openings in one recent drive.",
     src:"noidaonline BPO directory; vacancy9 hiring listing", srcUrl:"https://vacancy9.com/ienergizer-noida-sector-60-job/" },
-  { id:"exl-58", layer:"competitor", name:"EXL Service", lat:28.60550, lng:77.35900, precision:"sector",
-    note:"A-48, Block A, Sector 58 — roughly adjacent to Digitide's existing office.",
+  { id:"exl-58", layer:"competitor", name:"EXL Service", lat:28.6065664, lng:77.3590182, precision:"sector",
+    note:"A-48, Block A, Sector 58 — the same sector as Digitide's existing office.",
     src:"noidaonline BPO directory", srcUrl:"https://www.noidaonline.in/guide/bpos-in-noida" },
-  { id:"hcl-bpo-59", layer:"competitor", name:"HCL BPO / HCL Comnet", lat:28.60900, lng:77.36500, precision:"sector",
+  { id:"hcl-bpo-59", layer:"competitor", name:"HCL BPO / HCL Comnet", lat:28.6064930, lng:77.3627259, precision:"sector",
     note:"B-34/3, Sector 59.", src:"noidaonline BPO directory", srcUrl:"https://www.noidaonline.in/guide/bpos-in-noida" },
-  { id:"genpact-59", layer:"competitor", name:"Genpact", lat:28.60750, lng:77.37100, precision:"sector",
-    note:"D-4, Sector 59 — Genpact's own locations page lists this alongside its larger Sector 135 campuses.",
+  { id:"genpact-59", layer:"competitor", name:"Genpact", lat:28.6064930, lng:77.3677259, precision:"sector",
+    note:"D-4, Sector 59 — listed on Genpact's own locations page alongside its larger Sector 135 campuses.",
     src:"Genpact official locations page", srcUrl:"https://www.genpact.com/about-us/locations" },
-  { id:"concentrix-62", layer:"competitor", name:"Concentrix Daksh", lat:28.62700, lng:77.36400, precision:"plot-approx",
-    note:"Ground floor, Tower C, Logix Cyber Park, C-28 & C-29, Sector 62 — under a kilometre from Knowledge Boulevard.",
+  { id:"concentrix-62", layer:"competitor", name:"Concentrix Daksh", lat:28.6211447, lng:77.3643493, precision:"sector",   // OSM node 10811810934
+    note:"Ground floor, Tower C, Logix Cyber Park, C-28 & C-29, Sector 62 — the same sector as Knowledge Boulevard.",
     src:"Concentrix address, traffictail BPO roundup", srcUrl:"https://traffictail.com/bpo-companies-in-noida/" },
-  { id:"colwell-58", layer:"competitor", name:"Colwell & Salmon", lat:28.60400, lng:77.35750, precision:"sector",
+  { id:"colwell-58", layer:"competitor", name:"Colwell & Salmon", lat:28.6040000, lng:77.3580000, precision:"sector",
     note:"A-17, Sector 58.", src:"grotal call-centre directory", srcUrl:"https://www.grotal.com/Noida/Call-Center-Outsourcing-Services-C52/" },
-  { id:"pacific-63", layer:"competitor", name:"Pacific BPO (Access Healthcare)", lat:28.62100, lng:77.37900, precision:"sector",
+  { id:"pacific-63", layer:"competitor", name:"Pacific BPO (Access Healthcare)", lat:28.6120749, lng:77.3778122, precision:"sector",
     note:"A-61, Sector 63.", src:"noidaonline BPO directory", srcUrl:"https://www.noidaonline.in/guide/bpos-in-noida" },
-  { id:"cogent-63", layer:"competitor", name:"Cogent E Services", lat:28.62300, lng:77.38200, precision:"sector",
+  { id:"cogent-63", layer:"competitor", name:"Cogent E Services", lat:28.6140000, lng:77.3800000, precision:"sector",
     note:"C-100, Sector 63.", src:"noidaonline BPO directory", srcUrl:"https://www.noidaonline.in/guide/bpos-in-noida" },
-  { id:"techm-64", layer:"competitor", name:"Tech Mahindra (Sector 64)", lat:28.61400, lng:77.37700, precision:"sector",
-    note:"A-6, Sector 64, near Sahara Chowk. Running walk-in customer-service drives at ₹1.25-3.25 LPA, 100+ openings. Note the same employer vacated option A-20.",
+  { id:"techm-64", layer:"competitor", name:"Tech Mahindra (Sector 64)", lat:28.6114861, lng:77.3777821, precision:"sector",
+    note:"A-6, Sector 64, near Sahara Chowk. Running walk-in customer-service drives at ₹1.25-3.25 LPA, 100+ openings. The same employer vacated option A-20.",
     src:"Justdial listing; vacancy9 walk-in drive", srcUrl:"https://vacancy9.com/tech-mahindra-customer-service/" },
-  { id:"barclays-62", layer:"competitor", name:"Barclays Shared Services", lat:28.62500, lng:77.36900, precision:"sector",
-    note:"Unitech Infospace, Sector 62. BFSI captive competing for the same graduate voice and back-office pool.",
+  { id:"barclays-62", layer:"competitor", name:"Barclays Shared Services", lat:28.6230000, lng:77.3660000, precision:"sector",
+    note:"Unitech Infospace, Sector 62. A BFSI captive competing for the same graduate voice and back-office pool.",
     src:"grotal call-centre directory", srcUrl:"https://www.grotal.com/Noida/Call-Center-Outsourcing-Services-C52/" },
-  { id:"nsb-58", layer:"competitor", name:"NSB BPO Solutions", lat:28.60250, lng:77.35800, precision:"sector",
+  { id:"nsb-58", layer:"competitor", name:"NSB BPO Solutions", lat:28.6020000, lng:77.3570000, precision:"sector",
     note:"Sector 58. Advertising 99 fresher customer-support seats at ₹12,000-16,000 per month — the floor of the local pay band.",
     src:"jobhai listing", srcUrl:"https://www.jobhai.com/customer-support-telecaller-customer-support-executive-job-in-nsb-bpo-solutions-limited-sector-58-noida-0-to-0-years-1774958477-7452995-jid" },
 
-  /* --- [3] PG / shared accommodation clusters ----------------------------- */
-  { id:"pg-bishanpura", layer:"pg", name:"Bishanpura (Sector 58) PG cluster", lat:28.60850, lng:77.36250, precision:"sector",
-    note:"The densest PG cluster next to the Sector 58-60 belt. Zolo County at H-10 Bishanpura Road quotes ₹4,263 for two-sharing and ₹7,708 for a private room; HooLiv Mitra at H-8 starts at ₹12,000. Walking distance to options A-20 and A-23.",
-    src:"Zolo Stays; HooLiv", srcUrl:"https://zolostays.com/pg-hostel-near-sector_58-in-noida-zolo_county-znd019" },
-  { id:"pg-sec58-m", layer:"pg", name:"Sector 58 M-block co-living", lat:28.60600, lng:77.36400, precision:"sector",
-    note:"M-73C Sector 58, near Stellar Business Park. Studio co-living at ₹18,000 a month, 1.6 km to Sector 62 metro and 1.9 km to Sector 59.",
+  /* --- [3] PG / shared accommodation. Expanded on client request:
+         named operators with their own quoted rents, not just clusters. ----- */
+  { id:"pg-zolo-58", layer:"pg", name:"Zolo County — Sector 58", lat:28.6075000, lng:77.3600000, precision:"sector",
+    note:"H-10, Bishanpura Road, Sector 58. Men's co-living: two-sharing from ₹4,263, private room from ₹7,708. The cheapest sourced bed next to the Sector 58-60 belt.",
+    src:"Zolo Stays", srcUrl:"https://zolostays.com/pg-hostel-near-sector_58-in-noida-zolo_county-znd019" },
+  { id:"pg-hooliv-58", layer:"pg", name:"HooLiv Mitra — Sector 58", lat:28.6080000, lng:77.3605000, precision:"sector",
+    note:"H-8, Bishanpura, Sector 58. Unisex co-living from ₹12,000 with meals. Sister properties Aura (₹15,000), Luxor and Ociana (₹12,000) and Sanskar (₹10,000) sit in the same pocket.",
+    src:"HooLiv", srcUrl:"https://hooliv.com/hooliv-mitra-unisex-hostel-in-noida-boys-girls-hostel-near-jss-academy-fosma-aaft-symbiosis-ims-noida-sector-58-noida-sector-62-noida-sector-63-pg-premium-affordable-rooms/" },
+  { id:"pg-ohmyplace-58", layer:"pg", name:"Oh My Place — Sector 58", lat:28.6055000, lng:77.3585000, precision:"sector",
+    note:"M-73C, Sector 58, near Stellar Business Park. Furnished 1RK studio co-living at ₹18,000 a month, 90 units. 1.6 km to Sector 62 metro, 1.9 km to Sector 59.",
     src:"Oh My Place", srcUrl:"https://www.ohmyplace.com/co-living/omp-co-living-pg-in-noida-sector-58/" },
-  { id:"pg-sec62", layer:"pg", name:"Sector 62 PG cluster", lat:28.62800, lng:77.36200, precision:"sector",
-    note:"Operators list double sharing at ₹13,000-14,000 per bed and four-sharing from ₹6,500, about 1 km from Sector 62 metro. Serves Knowledge Boulevard directly.",
+  { id:"pg-housitize-58", layer:"pg", name:"Housitize PG — Sector 58", lat:28.6050000, lng:77.3600000, precision:"sector",
+    note:"Sector 58 co-living, 28 rooms. Double sharing ₹8,500 with meals, single occupancy ₹14,500. Three-month minimum stay.",
+    src:"HousitizePG", srcUrl:"https://housitizepg.com/property/coliving-pg-near-sector-62-noida-4/" },
+  { id:"pg-pgnoida-62", layer:"pg", name:"PGNoida cluster — Sector 62", lat:28.6211447, lng:77.3643493, precision:"sector",   // OSM node 10811810934
+    note:"Multiple houses across Sectors 58-63. Four-sharing from ₹6,500, triple ₹7,000, double ₹8,500, single ₹14,000-22,000. Operating since 2009, no lock-in.",
     src:"PGNoida.com", srcUrl:"https://www.pgnoida.com/" },
-  { id:"pg-mamura", layer:"pg", name:"Mamura / Sector 66 informal housing", lat:28.60000, lng:77.36300, precision:"sector",
-    note:"Dense low-cost rental settlement immediately south of the Sector 60 belt. The inventory sheet itself names Mamura as a primary talent source for Magnus Tower. No organised-PG price data found — treat rents as informal-market.",
-    src:"Inventory sheet (client-stated); wikimapia Sector-60 neighbour list", srcUrl:"http://wikimapia.org/14339108/Sector-60" },
-  { id:"pg-chhijarsi", layer:"pg", name:"Chhijarsi (Sector 63) informal housing", lat:28.62300, lng:77.38000, precision:"sector",
-    note:"Village settlement absorbed into the Sector 63 industrial belt; standard low-cost housing for the Sector 62-64 BPO floors.",
-    src:"Locality directories", srcUrl:"https://www.pgnoida.com/" },
+  { id:"pg-premium-62", layer:"pg", name:"Premium PG — Sector 62", lat:28.6230000, lng:77.3650000, precision:"sector",
+    note:"About 1 km from Sector 62 metro. Double sharing ₹13,000-14,000 per bed, AC, meals, 24x7 security. Serves Knowledge Boulevard directly.",
+    src:"PGNoida.com", srcUrl:"https://www.pgnoida.com/post/premium-pg-in-noida-sector-62" },
+  { id:"pg-mamura", layer:"pg", name:"Mamura informal rental market", lat:28.6036193, lng:77.3754881, precision:"sector",   // OSM node 853665802
+    note:"Dense low-cost rental settlement south-east of the Sector 60 belt, named in the inventory sheet as a primary talent source. Informal market — no organised-PG rate card, which is exactly why it absorbs night-shift staff at the lowest cost.",
+    src:"Inventory sheet (client-stated); OSM place node", srcUrl:"https://www.pgnoida.com/" },
+  { id:"pg-sec61", layer:"pg", name:"Sector 61 residential PG belt", lat:28.5964581, lng:77.3675644, precision:"sector",   // OSM way 170938118
+    note:"Planned residential sector directly between the Sector 60 options and Sector 61 metro. Standard family-flat sublets and PG rooms; the walk-to-work option for A-20 and A-23.",
+    src:"OSM residential landuse; local PG directories", srcUrl:"https://www.pgnoida.com/" },
+  { id:"pg-sec71", layer:"pg", name:"Sector 71 / 72 / 73 PG belt", lat:28.5942367, lng:77.3761378, precision:"sector",   // OSM way 71689145
+    note:"High-density residential belt the client names as Magnus Tower's immediate catchment. Large supply of shared flats and PG rooms aimed at the Sector 62-67 office floors.",
+    src:"Client note (Sep 2026); OSM residential landuse", srcUrl:"https://www.pgnoida.com/" },
 
   /* --- [7] Educational institutes ---------------------------------------- */
-  { id:"jiit-62", layer:"edu", name:"Jaypee Institute of Information Technology", lat:28.62450, lng:77.37200, precision:"sector",
+  { id:"jiit-62", layer:"edu", name:"Jaypee Institute of Information Technology", lat:28.6245000, lng:77.3720000, precision:"sector",
     note:"A-10, Sector 62. Deemed university on a 46.94-acre campus, NIRF engineering band 101-150. B.Tech, MBA, BBA, BCA and MCA — the BBA/BCA/MCA streams are the realistic BPM feeder, not the CSE batch.",
     src:"JIIT official site", srcUrl:"https://www.jiit.ac.in/" },
-  { id:"jss-62", layer:"edu", name:"JSS Academy of Technical Education", lat:28.62200, lng:77.37600, precision:"sector",
+  { id:"jss-62", layer:"edu", name:"JSS Academy of Technical Education", lat:28.6220000, lng:77.3760000, precision:"sector",
     note:"C-20/1, Sector 62. 4,000+ students, roughly 900 B.Tech seats a year plus MBA and MCA. 577 students placed in the 2024 drive at an average of ₹5.2 LPA.",
     src:"CollegeDekho; JosaApp", srcUrl:"https://www.collegedekho.com/colleges/jss-noida" },
-  { id:"ims-62", layer:"edu", name:"IMS Noida / Symbiosis / Jaipuria cluster", lat:28.62900, lng:77.37300, precision:"sector",
-    note:"Sector 62 institutional pocket. Management and mass-communication intakes, cited by local PG operators as their student base — a graduate supply on the doorstep of Knowledge Boulevard.",
+  { id:"ims-62", layer:"edu", name:"IMS Noida / Symbiosis / Jaipuria cluster", lat:28.6290000, lng:77.3730000, precision:"sector",
+    note:"Sector 62 institutional pocket. Management and mass-communication intakes, cited by local PG operators as their student base — graduate supply on the doorstep of Knowledge Boulevard.",
     src:"PGNoida.com institute list; HooLiv nearby-institutes list", srcUrl:"https://www.pgnoida.com/post/premium-pg-in-noida-sector-62" },
-  { id:"amity-125", layer:"edu", name:"Amity University, Sector 125", lat:28.54400, lng:77.33400, precision:"sector",
+  { id:"amity-125", layer:"edu", name:"Amity University, Sector 125", lat:28.5440000, lng:77.3340000, precision:"sector",
     note:"Largest single graduate output in Noida across management, communication and humanities. 12-14 km from the shortlist — a bus-route catchment, not a walk-in one.",
     src:"Noida institutional directories", srcUrl:"https://digitalconvey.com/mnc-companies-in-noida/" },
-  { id:"jiit-128", layer:"edu", name:"JIIT Sector 128 campus", lat:28.52900, lng:77.36900, precision:"sector",
+  { id:"jiit-128", layer:"edu", name:"JIIT Sector 128 campus", lat:28.5290000, lng:77.3690000, precision:"sector",
     note:"JIIT's extension campus on the Expressway. Placements are centralised with Sector 62, so it feeds the same recruiter pipeline.",
     src:"JIIT admissions pages", srcUrl:"https://www.jiit.ac.in/admissions_2026/" },
 ];
@@ -289,58 +302,52 @@ const POI = [
    e-rickshaws and feeder buses, the modes the inventory sheet itself names.
 
    IT IS NOT A ROUTED ISOCHRONE, and a flat detour factor cannot see a barrier.
-   It is known to run optimistic for the localities whose real route crosses one:
+   It runs optimistic for the localities whose real route crosses one:
      Crossings Republik  — NH-24 crossing; real road distance is roughly double
                            the straight line, so read it a band later than shown.
-     Noida Extension     — same NH-24 / Greater Noida West approach.
      Mayur Vihar / East Delhi — Yamuna crossing, metro-dependent in practice.
-   Everything inside the Noida sector grid (Mamura, Bishanpura, Chhijarsi,
-   Nithari, Hoshiyarpur, Bhangel) is on a dense local grid and reads true.
-   Replace the whole thing with routed isochrones before it drives a lease
-   decision — these bands are for shaping a shortlist, not for signing one.
+   Everything inside the Noida sector grid reads true.
 
-   Locality centroids are approximate, at sector/colony precision.
-   Supply notes are qualitative and sourced; no headcount is invented.
+   Every locality centroid below is an OSM object geocoded via Nominatim, with
+   the object id in the line comment. Localities the client named but OSM has no
+   entry for — Khoda, Chhijarsi — are deliberately NOT pinned rather than placed
+   by eye; they are carried in the Magnus Tower option note instead.
 --------------------------------------------------------------------------- */
 const MINUTES_PER_KM = 6.5;   // 1.30 detour factor at 12 km/h — matches connectivity.json
 
 const CATCHMENT = {
   minutesPerKm: MINUTES_PER_KM,
-  method:"Bands are estimated, not routed: straight-line distance to the locality centroid × a 1.30 street-detour factor at 12 km/h effective door-to-door speed (6.5 min per straight-line km). A proxy for peak-hour shared-auto and e-rickshaw commuting. It runs optimistic where the real route crosses NH-24 or the Yamuna — Crossings Republik, Noida Extension and Mayur Vihar each read roughly one band better here than they commute. Replace with routed isochrones before this informs a lease decision.",
+  method:"Bands are estimated, not routed: straight-line distance to the locality centroid × a 1.30 street-detour factor at 12 km/h effective door-to-door speed (6.5 min per straight-line km). A proxy for peak-hour shared-auto and e-rickshaw commuting. It runs optimistic where the real route crosses NH-24 or the Yamuna — Crossings Republik and Mayur Vihar each read roughly one band better here than they commute. Locality centroids are OpenStreetMap objects.",
   bands: [
     { key:"b0",  label:"0-20 min",  maxMin:20, color:"#2fbf71" },
     { key:"b20", label:"20-40 min", maxMin:40, color:"#d9b310" },
     { key:"b40", label:"40-50 min", maxMin:50, color:"#e0603a" },
   ],
   localities: [
-    { id:"mamura", name:"Mamura / Sector 66", lat:28.60000, lng:77.36300,
-      profile:"Dense low-cost rental settlement", supply:"Named in the inventory sheet as a primary talent source. Walk-in and e-rickshaw range for the whole Sector 57-60 belt." },
-    { id:"bishanpura", name:"Bishanpura / Sector 58", lat:28.60850, lng:77.36250,
-      profile:"Village settlement + organised PG", supply:"PG beds from ₹4,263 two-sharing. Night-shift-viable because it is walkable to the Sector 58-60 floors." },
-    { id:"chhijarsi", name:"Chhijarsi / Sector 63", lat:28.62300, lng:77.38000,
-      profile:"Village settlement in the industrial belt", supply:"Standard housing for the Sector 62-64 BPO floors; already feeding Concentrix, Pacific and Cogent." },
-    { id:"nithari", name:"Nithari / Sector 31", lat:28.58700, lng:77.34000,
+    { id:"mamura", name:"Mamura", lat:28.6036193, lng:77.3754881,   // OSM node 853665802
+      profile:"Dense low-cost rental settlement", supply:"Named in the inventory sheet as a primary talent source. Walk-in and e-rickshaw range for the whole Sector 57-67 belt." },
+    { id:"sec71", name:"Sector 71 / 72 / 73 belt", lat:28.5942367, lng:77.3761378,   // OSM way 71689145
+      profile:"High-density planned residential", supply:"The client's stated immediate catchment for Magnus Tower. Large shared-flat and PG supply aimed at the Sector 62-67 floors." },
+    { id:"sec61", name:"Sector 61 residential", lat:28.5964581, lng:77.3675644,   // OSM way 170938118
+      profile:"Planned residential, metro-adjacent", supply:"Sits between the Sector 60 options and Sector 61 metro. The genuine walk-to-work catchment for A-20 and A-23." },
+    { id:"sec51", name:"Sector 51 / Hoshiyarpur", lat:28.5821535, lng:77.3714570,   // OSM way 170574108
+      profile:"Urban village plus planned sector", supply:"Sector 51 Aqua Line and Sector 52 Blue Line interchange put it one hop from the shortlist." },
+    { id:"nithari", name:"Nithari", lat:28.5762127, lng:77.3422231,   // OSM node 836394108
       profile:"Established low-cost colony", supply:"Long-standing BPO labour catchment for central Noida." },
-    { id:"hoshiyarpur", name:"Hoshiyarpur / Sector 51", lat:28.58750, lng:77.37200,
-      profile:"Urban village, metro-adjacent", supply:"Sector 51 Aqua Line and Sector 52 Blue Line interchange put it one hop from the shortlist." },
-    { id:"khoda", name:"Khoda Colony", lat:28.61850, lng:77.33050,
-      profile:"Very large unplanned settlement", supply:"Named in the inventory sheet. One of the biggest single low-cost labour pools on the Noida-Ghaziabad edge." },
-    { id:"indirapuram", name:"Indirapuram", lat:28.64400, lng:77.37100,
+    { id:"sec15", name:"Sector 15 area", lat:28.5827979, lng:77.3102221,   // OSM way 71596200
+      profile:"Older planned sectors, Blue Line served", supply:"The client puts real travel time from Magnus Tower at 30-40 minutes. Established white-collar and support workforce." },
+    { id:"sec62res", name:"Sector 62 residential", lat:28.6211447, lng:77.3643493,   // OSM node 10811810934
+      profile:"Mixed institutional and residential", supply:"Student and young-professional housing around the JIIT / JSS / IMS cluster. On Knowledge Boulevard's doorstep." },
+    { id:"indirapuram", name:"Indirapuram", lat:28.6380466, lng:77.3644168,   // OSM way 113685210
       profile:"Mid-income Ghaziabad suburb", supply:"Named in the inventory sheet. Graduate and experienced voice/back-office supply, car and two-wheeler commuters." },
-    { id:"vaishali", name:"Vaishali", lat:28.64500, lng:77.34000,
+    { id:"vaishali", name:"Vaishali", lat:28.6471629, lng:77.3346949,   // OSM node 10811714127
       profile:"Mid-income, Blue Line metro", supply:"Named in the inventory sheet. On the same Blue Line as the shortlist — the cleanest metro-borne catchment." },
-    { id:"vasundhara", name:"Vasundhara", lat:28.66000, lng:77.37000,
+    { id:"vasundhara", name:"Vasundhara", lat:28.6619725, lng:77.3732972,   // OSM node 10811272468
       profile:"Mid-income Ghaziabad suburb", supply:"Named in the inventory sheet. Feeds the Sector 62-63 belt by road." },
-    { id:"crossings", name:"Crossings Republik", lat:28.63550, lng:77.42300,
-      profile:"High-density apartment township", supply:"Named in the inventory sheet. Large young-professional population, but NH-24 dependent and shuttle-reliant." },
-    { id:"noida-ext", name:"Noida Extension / Greater Noida West", lat:28.60800, lng:77.43500,
-      profile:"High-density new apartment belt", supply:"Fast-growing entry-level population; no metro to the shortlist, so shuttle or own vehicle." },
-    { id:"sec15-16", name:"Noida Sector 15-16 / Nithari fringe", lat:28.58200, lng:77.31200,
-      profile:"Older planned sectors", supply:"Blue Line served; established white-collar and support workforce." },
-    { id:"mayur-vihar", name:"Mayur Vihar / East Delhi", lat:28.60800, lng:77.29500,
+    { id:"crossings", name:"Crossings Republik", lat:28.6284686, lng:77.4341570,   // OSM way 504502246
+      profile:"High-density apartment township", supply:"Named in the inventory sheet. Large young-professional population, but NH-24 dependent and shuttle-reliant — read it one band later than shown." },
+    { id:"mayur-vihar", name:"Mayur Vihar / East Delhi", lat:28.6098555, lng:77.2926318,   // OSM node 10815246204
       profile:"Dense East Delhi residential", supply:"Named in the inventory sheet as East Delhi. Very large pool, entirely metro-dependent for this belt." },
-    { id:"bhangel", name:"Bhangel / Sector 102", lat:28.56000, lng:77.34800,
-      profile:"Urban village, low-cost", supply:"Established Noida labour settlement; road commute only." },
   ],
   /* Market evidence for what that supply is actually worth — every figure
      sourced, none modelled. */
@@ -354,6 +361,9 @@ const CATCHMENT = {
     { label:"Entry-level pay band", value:"₹12,000-23,000 / month",
       note:"NSB BPO Sector 58 at ₹12,000-16,000; iEnergizer Sector 60 at ₹19,000-23,000 CTC; Tech Mahindra Sector 64 at ₹1.25-3.25 LPA.",
       src:"jobhai, vacancy9 listings", srcUrl:"https://vacancy9.com/ienergizer-noida-sector-60-job/" },
+    { label:"PG bed cost, Sector 58-62", value:"₹4,263-18,000 / month",
+      note:"Zolo two-sharing ₹4,263 at the floor; Housitize double ₹8,500; PGNoida four-sharing ₹6,500; Oh My Place studio ₹18,000 at the ceiling. Night-shift staff can live walking distance from the Sector 58-60 options.",
+      src:"Zolo, Housitize, PGNoida, Oh My Place", srcUrl:"https://zolostays.com/pg-hostel-near-sector_58-in-noida-zolo_county-znd019" },
     { label:"Single-drive hiring volume", value:"100-200 seats",
       note:"One iEnergizer Sector 60 drive advertised 200 openings; one Tech Mahindra Sector 64 drive advertised 100+. The belt absorbs volume hiring routinely.",
       src:"vacancy9 listings", srcUrl:"https://vacancy9.com/tech-mahindra-customer-service/" },

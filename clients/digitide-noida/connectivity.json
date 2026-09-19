@@ -1,50 +1,33 @@
 {
   "techm": {
     "routed": false,
-    "method": "Straight-line great-circle distance x1.30 street-detour factor. No routing engine was reachable from the build environment, so these are estimates, not routed paths.",
+    "method": "Metro distance is the client's own stated figure for this building. Every other distance is great-circle from the OpenStreetMap coordinate x1.30 street-detour factor — an estimate, not a routed path.",
     "nearest_station": {
       "id": "noida-sector-59",
       "name": "Noida Sector 59",
       "lat": 28.606493,
       "lng": 77.3727259,
-      "straight_m": 763
+      "straight_m": 652
     },
-    "all_stations": [
-      {
-        "name": "Noida Sector 59",
-        "straight_m": 763
-      },
-      {
-        "name": "Noida Sector 61",
-        "straight_m": 857
-      },
-      {
-        "name": "Noida Sector 62",
-        "straight_m": 1724
-      },
-      {
-        "name": "Noida Electronic City",
-        "straight_m": 2907
-      }
-    ],
     "walk": {
-      "m": 992,
-      "min": 13,
+      "m": 800,
+      "min": 10,
       "kmh": 4.7,
-      "practical": true
+      "practical": true,
+      "client_stated": true
     },
     "drive": {
-      "m": 992,
-      "min": 3
+      "m": 800,
+      "min": 2
     },
     "office": {
       "name": "Digitide Sector 58 (existing)",
-      "km": 0.9,
-      "min": 2
+      "km": 1.1,
+      "min": 3
     },
     "airport": {
       "name": "Indira Gandhi International (IGI)",
-      "km": 34.4,
+      "km": 34.6,
       "min": 59
     },
     "airport_alt": {
@@ -55,105 +38,34 @@
   },
   "padget": {
     "routed": false,
-    "method": "Straight-line great-circle distance x1.30 street-detour factor. No routing engine was reachable from the build environment, so these are estimates, not routed paths.",
+    "method": "Metro distance is the client's own stated figure for this building. Every other distance is great-circle from the OpenStreetMap coordinate x1.30 street-detour factor — an estimate, not a routed path.",
     "nearest_station": {
       "id": "noida-sector-59",
       "name": "Noida Sector 59",
       "lat": 28.606493,
       "lng": 77.3727259,
-      "straight_m": 512
+      "straight_m": 868
     },
-    "all_stations": [
-      {
-        "name": "Noida Sector 59",
-        "straight_m": 512
-      },
-      {
-        "name": "Noida Sector 61",
-        "straight_m": 872
-      },
-      {
-        "name": "Noida Sector 62",
-        "straight_m": 1493
-      },
-      {
-        "name": "Noida Electronic City",
-        "straight_m": 2693
-      }
-    ],
     "walk": {
-      "m": 666,
+      "m": 700,
       "min": 9,
       "kmh": 4.7,
-      "practical": true
+      "practical": true,
+      "client_stated": true
     },
     "drive": {
-      "m": 666,
+      "m": 700,
       "min": 2
     },
     "office": {
       "name": "Digitide Sector 58 (existing)",
-      "km": 1,
-      "min": 3
+      "km": 1.4,
+      "min": 4
     },
     "airport": {
       "name": "Indira Gandhi International (IGI)",
-      "km": 34.7,
-      "min": 60
-    },
-    "airport_alt": {
-      "name": "Noida International (Jewar)",
-      "km": 69.4,
-      "min": 69
-    }
-  },
-  "tv18": {
-    "routed": false,
-    "method": "Straight-line great-circle distance x1.30 street-detour factor. No routing engine was reachable from the build environment, so these are estimates, not routed paths.",
-    "nearest_station": {
-      "id": "noida-sector-61",
-      "name": "Noida Sector 61",
-      "lat": 28.597631,
-      "lng": 77.3722988,
-      "straight_m": 962
-    },
-    "all_stations": [
-      {
-        "name": "Noida Sector 61",
-        "straight_m": 962
-      },
-      {
-        "name": "Noida Sector 59",
-        "straight_m": 1337
-      },
-      {
-        "name": "Noida Sector 62",
-        "straight_m": 2325
-      },
-      {
-        "name": "Noida Electronic City",
-        "straight_m": 3491
-      }
-    ],
-    "walk": {
-      "m": 1251,
-      "min": 16,
-      "kmh": 4.7,
-      "practical": false
-    },
-    "drive": {
-      "m": 1251,
-      "min": 3
-    },
-    "office": {
-      "name": "Digitide Sector 58 (existing)",
-      "km": 1.2,
-      "min": 3
-    },
-    "airport": {
-      "name": "Indira Gandhi International (IGI)",
-      "km": 33.9,
-      "min": 58
+      "km": 34.5,
+      "min": 59
     },
     "airport_alt": {
       "name": "Noida International (Jewar)",
@@ -161,96 +73,99 @@
       "min": 69
     }
   },
-  "magnus": {
+  "tv18": {
     "routed": false,
-    "method": "Straight-line great-circle distance x1.30 street-detour factor. No routing engine was reachable from the build environment, so these are estimates, not routed paths.",
+    "method": "Metro distance is the client's own stated figure for this building. Every other distance is great-circle from the OpenStreetMap coordinate x1.30 street-detour factor — an estimate, not a routed path.",
     "nearest_station": {
-      "id": "noida-sector-62",
-      "name": "Noida Sector 62",
-      "lat": 28.6169948,
-      "lng": 77.3736097,
-      "straight_m": 1758
+      "id": "noida-sector-59",
+      "name": "Noida Sector 59",
+      "lat": 28.606493,
+      "lng": 77.3727259,
+      "straight_m": 1887
     },
-    "all_stations": [
-      {
-        "name": "Noida Sector 62",
-        "straight_m": 1758
-      },
-      {
-        "name": "Noida Sector 59",
-        "straight_m": 1822
-      },
-      {
-        "name": "Noida Sector 61",
-        "straight_m": 2353
-      },
-      {
-        "name": "Noida Electronic City",
-        "straight_m": 2377
-      }
-    ],
     "walk": {
-      "m": 2285,
-      "min": 29,
+      "m": 2500,
+      "min": 32,
       "kmh": 4.7,
-      "practical": false
+      "practical": false,
+      "client_stated": true
     },
     "drive": {
-      "m": 2285,
-      "min": 6
+      "m": 2500,
+      "min": 7
     },
     "office": {
       "name": "Digitide Sector 58 (existing)",
-      "km": 3.8,
-      "min": 10
+      "km": 0.7,
+      "min": 2
     },
     "airport": {
       "name": "Indira Gandhi International (IGI)",
-      "km": 37.7,
-      "min": 65
+      "km": 32.9,
+      "min": 56
     },
     "airport_alt": {
       "name": "Noida International (Jewar)",
-      "km": 69.2,
+      "km": 70.3,
+      "min": 70
+    }
+  },
+  "magnus": {
+    "routed": false,
+    "method": "Metro distance is the client's own stated figure for this building. Every other distance is great-circle from the OpenStreetMap coordinate x1.30 street-detour factor — an estimate, not a routed path.",
+    "nearest_station": {
+      "id": "noida-sector-61",
+      "name": "Noida Sector 61",
+      "lat": 28.597631,
+      "lng": 77.3722988,
+      "straight_m": 1458
+    },
+    "walk": {
+      "m": 1800,
+      "min": 23,
+      "kmh": 4.7,
+      "practical": false,
+      "client_stated": true
+    },
+    "drive": {
+      "m": 1800,
+      "min": 5
+    },
+    "office": {
+      "name": "Digitide Sector 58 (existing)",
+      "km": 3.3,
+      "min": 9
+    },
+    "airport": {
+      "name": "Indira Gandhi International (IGI)",
+      "km": 36.8,
+      "min": 63
+    },
+    "airport_alt": {
+      "name": "Noida International (Jewar)",
+      "km": 68.6,
       "min": 69
     }
   },
   "kboulevard": {
     "routed": false,
-    "method": "Straight-line great-circle distance x1.30 street-detour factor. No routing engine was reachable from the build environment, so these are estimates, not routed paths.",
+    "method": "Metro distance is the client's own stated figure for this building. Every other distance is great-circle from the OpenStreetMap coordinate x1.30 street-detour factor — an estimate, not a routed path.",
     "nearest_station": {
       "id": "noida-electronic-city",
       "name": "Noida Electronic City",
       "lat": 28.6279412,
       "lng": 77.37493,
-      "straight_m": 738
+      "straight_m": 723
     },
-    "all_stations": [
-      {
-        "name": "Noida Electronic City",
-        "straight_m": 738
-      },
-      {
-        "name": "Noida Sector 62",
-        "straight_m": 1609
-      },
-      {
-        "name": "Noida Sector 59",
-        "straight_m": 2720
-      },
-      {
-        "name": "Noida Sector 61",
-        "straight_m": 3690
-      }
-    ],
     "walk": {
-      "m": 959,
-      "min": 12,
+      "m": 1000,
+      "min": 13,
       "kmh": 4.7,
-      "practical": true
+      "practical": true,
+      "client_stated": true
     },
     "drive": {
-      "m": 959,
+      "m": 1000,
       "min": 3
     },
     "office": {
@@ -260,7 +175,7 @@
     },
     "airport": {
       "name": "Indira Gandhi International (IGI)",
-      "km": 35.7,
+      "km": 35.6,
       "min": 61
     },
     "airport_alt": {
