@@ -2334,14 +2334,15 @@ function connectivityHTML(pid, o) {
   const walkTxt = !w ? "—"
     : w.practical ? `${w.m} m · ${fmtMin(w.min)} walk`
     : `${(w.m / 1000).toFixed(1)} km — not practically walkable`;
-  // Routed distances and straight-line estimates are not the same claim. Say which.
-  const estimated = c.routed === false;
-  const walkNote = estimated ? "Nearest metro station · estimated, not routed" : "Nearest metro station";
+  // The stored figure is only a first paint. hydrateCardRoute() replaces it with
+  // the same live Mapbox walking route the map tooltip draws, so the card and the
+  // map can never disagree — which they did, visibly, on the same screen.
+  const walkNote = "Nearest metro station";
   return `<div class="sec"><h4>Connectivity</h4>
     <div class="conn">
       <div class="conn-row"><span class="ic aqua">M</span>
         <div><b>${st.name}</b>
-          <div class="conn-line">${walkTxt}${d ? ` · ${fmtMin(d.min)} drive` : ""}</div>
+          <div class="conn-line" id="connMetroLine">${walkTxt}${d ? ` · ${fmtMin(d.min)} drive` : ""}</div>
           <div class="muted">${walkNote}</div></div></div>
       ${c.office ? `<div class="conn-row"><span class="ic bus">•</span>
         <div><b>${c.office.name}</b>
@@ -2352,8 +2353,7 @@ function connectivityHTML(pid, o) {
       ${c.airport_alt ? `<div class="conn-row"><span class="ic rail">✈</span>
         <div><b>${c.airport_alt.name}</b>
           <div class="conn-line">${c.airport_alt.km} km · ${fmtMin(c.airport_alt.min)} drive</div></div></div>` : ""}
-    </div>
-    ${estimated && c.method ? `<div class="deck-note">${c.method}</div>` : ""}</div>`;
+    </div></div>`;
 }
 
 /* ---------------------------------------------------------------------------
@@ -2441,6 +2441,30 @@ function poiNearHTML(pid, layer, heading, radiusM) {
    them once in data.js as POI rows with layer:"competitor" and let distances be
    derived here — one source of truth instead of the same addresses typed twice.
    The heading is client copy: "VFX studios" is a brief, not a law. */
+/* The map tooltip has always drawn a real Mapbox walking route. The card was
+   rendering a stored number instead, so one screen could show 800 m in the panel
+   and 1.38 km on the map for the same building. Both are now the same call. */
+async function hydrateCardRoute(b) {
+  try {
+    const node = getTransitNode(b, currentTransitType);
+    if (!node || node.lng == null) return;
+    const [blng, blat] = buildingAnchor(b);
+    const key = `${b.id}-${currentTransitType}-${node.lng},${node.lat}`;
+    if (!routeCache[key]) {
+      const r = await fetchRoute(node.mode, blng, blat, node.lng, node.lat);
+      routeCache[key] = { [node.mode]: r };
+    }
+    const route = routeCache[key][node.mode];
+    if (!route) return;                       // keep the stored figure rather than blank the row
+    const el = document.getElementById("connMetroLine");
+    if (!el) return;                          // card closed or replaced while the route was in flight
+    const km = route.distance / 1000;
+    const walkMin = Math.ceil(route.duration / 60);
+    const driveMin = Math.max(1, Math.round(km / 22 * 60));
+    el.textContent = `${km < 1 ? Math.round(route.distance) + " m" : km.toFixed(2) + " km"} · ${fmtMin(walkMin)} walk · ${fmtMin(driveMin)} drive`;
+  } catch (e) { /* offline or no token: the stored figure stands */ }
+}
+
 function competitorRows(pid) {
   const pre = (COMPETITORS && COMPETITORS[pid]) || [];
   if (pre.length) return pre;
@@ -2509,6 +2533,8 @@ async function openTruthFirstCard(b) {
 
     <div class="detail-sections">
       ${galleryHTML(items)}
+      ${o && o.magnusNote ? `<div class="sec"><h4>Which building this is</h4>
+        <div class="deck-note">${o.magnusNote}</div></div>` : ""}
       ${connectivityHTML(b.id, o)}
       ${o ? `<div class="sec"><h4>The space</h4>
         <div class="unit"><div class="unit-grid">
@@ -2548,6 +2574,7 @@ async function openTruthFirstCard(b) {
   document.getElementById("cardExpand")?.addEventListener("click", () => card.classList.remove("compact"));
   card.querySelectorAll(".gal-item").forEach(el =>
     el.addEventListener("click", () => openLightbox(items, +el.dataset.i)));
+  hydrateCardRoute(b);
 }
 
 function openCard(b) {
