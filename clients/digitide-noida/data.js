@@ -14,11 +14,20 @@
      OSM does not carry at all. The two sources agree to 31 m on Knowledge
      Boulevard — the one building we already had an OSM polygon for — which is
      what gave confidence in the rest.
-     `coordPrecision` records how tight each pin is: "poi" (Google resolved a
-     named place record), "plot" (Google resolved the plot address point),
-     "building" (an OSM building polygon) or "sector" (a sector centroid, used
-     only where no building record exists anywhere). It drives nothing in the UI;
-     it is kept so the team knows which pins a site visit would move.
+     `coordPrecision` records how tight each pin is, and it applies to EVERY pin
+     in this file, POI layers included:
+       "poi"      a named place record resolved it (Google or OSM).
+       "plot"     the plot address point resolved it.
+       "building" an OSM building polygon.
+       "landuse"  an OSM named commercial landuse polygon for that employer.
+       "sector"   the plot itself is not mapped anywhere, so the pin sits on the
+                  OSM polygon for the sector its published address names. Several
+                  pins share one sector anchor; the renderer fans them out around
+                  it so they stay clickable.
+     Nothing in this file is placed by eye. Every line carries the OSM object id
+     or Google place that produced it. Where no record exists at all the entry is
+     dropped rather than estimated — that is why Khoda, Chhijarsi and the JIIT
+     Sector 128 campus appear in notes but never as pins.
    - SORT ORDER is the client's, not the engine's. `displayOrder` below fixes the
      running order the client asked for — Magnus, A-20, C-57, Knowledge Boulevard,
      A-23 — and the engine honours it instead of its default nearest-metro sort.
@@ -217,54 +226,54 @@ const POI = [
     srcUrl:"https://www.bsigroup.com/en-ZA/products-and-services/assessment-and-certification/validation-and-verification/client-directory-profile/E2E_SE-0047219867-014" },
 
   /* --- [5] BPO / BPM competitors for the same hiring pool ----------------- */
-  { id:"ienergizer", layer:"competitor", name:"iEnergizer", lat:28.6022000, lng:77.3690000, precision:"sector",
+  { id:"ienergizer", layer:"competitor", name:"iEnergizer", lat:28.6039578, lng:77.3648303, precision:"landuse",   // OSM way 1360555821 — named "iEnergizer" commercial landuse
     note:"A-37, Sector 60 — the same industrial block as options A-20 and A-23. Hiring graduate freshers for domestic voice at ₹19,000-23,000 CTC, 200 openings in one recent drive.",
     src:"noidaonline BPO directory; vacancy9 hiring listing", srcUrl:"https://vacancy9.com/ienergizer-noida-sector-60-job/" },
-  { id:"exl-58", layer:"competitor", name:"EXL Service", lat:28.6065664, lng:77.3590182, precision:"sector",
+  { id:"exl-58", layer:"competitor", name:"EXL Service", lat:28.6065664, lng:77.3590182, precision:"sector",   // OSM way 71651922 — Sector 58 anchor; plot A-48 not mapped
     note:"A-48, Block A, Sector 58 — the same sector as Digitide's existing office.",
     src:"noidaonline BPO directory", srcUrl:"https://www.noidaonline.in/guide/bpos-in-noida" },
-  { id:"hcl-bpo-59", layer:"competitor", name:"HCL BPO / HCL Comnet", lat:28.6064930, lng:77.3627259, precision:"sector",
+  { id:"hcl-bpo-59", layer:"competitor", name:"HCL BPO / HCL Comnet", lat:28.6080248, lng:77.3676283, precision:"sector",   // OSM way 71649651 — Sector 59 anchor; plot B-34/3 not mapped
     note:"B-34/3, Sector 59.", src:"noidaonline BPO directory", srcUrl:"https://www.noidaonline.in/guide/bpos-in-noida" },
-  { id:"genpact-59", layer:"competitor", name:"Genpact", lat:28.6064930, lng:77.3677259, precision:"sector",
+  { id:"genpact-59", layer:"competitor", name:"Genpact", lat:28.6080248, lng:77.3676283, precision:"sector",   // OSM way 71649651 — Sector 59 anchor; plot D-4 not mapped
     note:"D-4, Sector 59 — listed on Genpact's own locations page alongside its larger Sector 135 campuses.",
     src:"Genpact official locations page", srcUrl:"https://www.genpact.com/about-us/locations" },
-  { id:"concentrix-62", layer:"competitor", name:"Concentrix Daksh", lat:28.6211447, lng:77.3643493, precision:"sector",   // OSM node 10811810934
+  { id:"concentrix-62", layer:"competitor", name:"Concentrix Daksh", lat:28.6118616, lng:77.3663002, precision:"landuse",   // OSM way 1360555823 — named "Logix Cyber Park" commercial landuse
     note:"Ground floor, Tower C, Logix Cyber Park, C-28 & C-29, Sector 62 — the same sector as Knowledge Boulevard.",
     src:"Concentrix address, traffictail BPO roundup", srcUrl:"https://traffictail.com/bpo-companies-in-noida/" },
-  { id:"colwell-58", layer:"competitor", name:"Colwell & Salmon", lat:28.6040000, lng:77.3580000, precision:"sector",
+  { id:"colwell-58", layer:"competitor", name:"Colwell & Salmon", lat:28.6065664, lng:77.3590182, precision:"sector",   // OSM way 71651922 — Sector 58 anchor; plot A-17 not mapped
     note:"A-17, Sector 58.", src:"grotal call-centre directory", srcUrl:"https://www.grotal.com/Noida/Call-Center-Outsourcing-Services-C52/" },
-  { id:"pacific-63", layer:"competitor", name:"Pacific BPO (Access Healthcare)", lat:28.6120749, lng:77.3778122, precision:"sector",
+  { id:"pacific-63", layer:"competitor", name:"Pacific BPO (Access Healthcare)", lat:28.6166308, lng:77.3807004, precision:"sector",   // OSM way 71686932 — Sector 63 Road anchor; plot A-61 not mapped
     note:"A-61, Sector 63.", src:"noidaonline BPO directory", srcUrl:"https://www.noidaonline.in/guide/bpos-in-noida" },
-  { id:"cogent-63", layer:"competitor", name:"Cogent E Services", lat:28.6140000, lng:77.3800000, precision:"sector",
+  { id:"cogent-63", layer:"competitor", name:"Cogent E Services", lat:28.6166308, lng:77.3807004, precision:"sector",   // OSM way 71686932 — Sector 63 Road anchor; plot C-100 not mapped
     note:"C-100, Sector 63.", src:"noidaonline BPO directory", srcUrl:"https://www.noidaonline.in/guide/bpos-in-noida" },
-  { id:"techm-64", layer:"competitor", name:"Tech Mahindra (Sector 64)", lat:28.6114861, lng:77.3777821, precision:"sector",
+  { id:"techm-64", layer:"competitor", name:"Tech Mahindra (Sector 64)", lat:28.6144555, lng:77.3772344, precision:"sector",   // OSM way 357481072 — Sector 64 anchor; plot A-6 not mapped
     note:"A-6, Sector 64, near Sahara Chowk. Running walk-in customer-service drives at ₹1.25-3.25 LPA, 100+ openings. The same employer vacated option A-20.",
     src:"Justdial listing; vacancy9 walk-in drive", srcUrl:"https://vacancy9.com/tech-mahindra-customer-service/" },
-  { id:"barclays-62", layer:"competitor", name:"Barclays Shared Services", lat:28.6230000, lng:77.3660000, precision:"sector",
+  { id:"barclays-62", layer:"competitor", name:"Barclays Shared Services", lat:28.6211447, lng:77.3643493, precision:"sector",   // OSM node 10811810934 — Sector 62 anchor
     note:"Unitech Infospace, Sector 62. A BFSI captive competing for the same graduate voice and back-office pool.",
     src:"grotal call-centre directory", srcUrl:"https://www.grotal.com/Noida/Call-Center-Outsourcing-Services-C52/" },
-  { id:"nsb-58", layer:"competitor", name:"NSB BPO Solutions", lat:28.6020000, lng:77.3570000, precision:"sector",
+  { id:"nsb-58", layer:"competitor", name:"NSB BPO Solutions", lat:28.6065664, lng:77.3590182, precision:"sector",   // OSM way 71651922 — Sector 58 anchor
     note:"Sector 58. Advertising 99 fresher customer-support seats at ₹12,000-16,000 per month — the floor of the local pay band.",
     src:"jobhai listing", srcUrl:"https://www.jobhai.com/customer-support-telecaller-customer-support-executive-job-in-nsb-bpo-solutions-limited-sector-58-noida-0-to-0-years-1774958477-7452995-jid" },
 
   /* --- [3] PG / shared accommodation. Expanded on client request:
          named operators with their own quoted rents, not just clusters. ----- */
-  { id:"pg-zolo-58", layer:"pg", name:"Zolo County — Sector 58", lat:28.6075000, lng:77.3600000, precision:"sector",
+  { id:"pg-zolo-58", layer:"pg", name:"Zolo County — Sector 58", lat:28.6065664, lng:77.3590182, precision:"sector",   // OSM way 71651922 — Sector 58 anchor; H-10 Bishanpura not mapped
     note:"H-10, Bishanpura Road, Sector 58. Men's co-living: two-sharing from ₹4,263, private room from ₹7,708. The cheapest sourced bed next to the Sector 58-60 belt.",
     src:"Zolo Stays", srcUrl:"https://zolostays.com/pg-hostel-near-sector_58-in-noida-zolo_county-znd019" },
-  { id:"pg-hooliv-58", layer:"pg", name:"HooLiv Mitra — Sector 58", lat:28.6080000, lng:77.3605000, precision:"sector",
+  { id:"pg-hooliv-58", layer:"pg", name:"HooLiv Mitra — Sector 58", lat:28.6065664, lng:77.3590182, precision:"sector",   // OSM way 71651922 — Sector 58 anchor; H-8 Bishanpura not mapped
     note:"H-8, Bishanpura, Sector 58. Unisex co-living from ₹12,000 with meals. Sister properties Aura (₹15,000), Luxor and Ociana (₹12,000) and Sanskar (₹10,000) sit in the same pocket.",
     src:"HooLiv", srcUrl:"https://hooliv.com/hooliv-mitra-unisex-hostel-in-noida-boys-girls-hostel-near-jss-academy-fosma-aaft-symbiosis-ims-noida-sector-58-noida-sector-62-noida-sector-63-pg-premium-affordable-rooms/" },
-  { id:"pg-ohmyplace-58", layer:"pg", name:"Oh My Place — Sector 58", lat:28.6055000, lng:77.3585000, precision:"sector",
+  { id:"pg-ohmyplace-58", layer:"pg", name:"Oh My Place — Sector 58", lat:28.6065664, lng:77.3590182, precision:"sector",   // OSM way 71651922 — Sector 58 anchor; M-73C not mapped
     note:"M-73C, Sector 58, near Stellar Business Park. Furnished 1RK studio co-living at ₹18,000 a month, 90 units. 1.6 km to Sector 62 metro, 1.9 km to Sector 59.",
     src:"Oh My Place", srcUrl:"https://www.ohmyplace.com/co-living/omp-co-living-pg-in-noida-sector-58/" },
-  { id:"pg-housitize-58", layer:"pg", name:"Housitize PG — Sector 58", lat:28.6050000, lng:77.3600000, precision:"sector",
+  { id:"pg-housitize-58", layer:"pg", name:"Housitize PG — Sector 58", lat:28.6065664, lng:77.3590182, precision:"sector",   // OSM way 71651922 — Sector 58 anchor
     note:"Sector 58 co-living, 28 rooms. Double sharing ₹8,500 with meals, single occupancy ₹14,500. Three-month minimum stay.",
     src:"HousitizePG", srcUrl:"https://housitizepg.com/property/coliving-pg-near-sector-62-noida-4/" },
   { id:"pg-pgnoida-62", layer:"pg", name:"PGNoida cluster — Sector 62", lat:28.6211447, lng:77.3643493, precision:"sector",   // OSM node 10811810934
     note:"Multiple houses across Sectors 58-63. Four-sharing from ₹6,500, triple ₹7,000, double ₹8,500, single ₹14,000-22,000. Operating since 2009, no lock-in.",
     src:"PGNoida.com", srcUrl:"https://www.pgnoida.com/" },
-  { id:"pg-premium-62", layer:"pg", name:"Premium PG — Sector 62", lat:28.6230000, lng:77.3650000, precision:"sector",
+  { id:"pg-premium-62", layer:"pg", name:"Premium PG — Sector 62", lat:28.6211447, lng:77.3643493, precision:"sector",   // OSM node 10811810934 — Sector 62 anchor
     note:"About 1 km from Sector 62 metro. Double sharing ₹13,000-14,000 per bed, AC, meals, 24x7 security. Serves Knowledge Boulevard directly.",
     src:"PGNoida.com", srcUrl:"https://www.pgnoida.com/post/premium-pg-in-noida-sector-62" },
   { id:"pg-mamura", layer:"pg", name:"Mamura informal rental market", lat:28.6036193, lng:77.3754881, precision:"sector",   // OSM node 853665802
@@ -278,21 +287,18 @@ const POI = [
     src:"Client note (Sep 2026); OSM residential landuse", srcUrl:"https://www.pgnoida.com/" },
 
   /* --- [7] Educational institutes ---------------------------------------- */
-  { id:"jiit-62", layer:"edu", name:"Jaypee Institute of Information Technology", lat:28.6245000, lng:77.3720000, precision:"sector",
-    note:"A-10, Sector 62. Deemed university on a 46.94-acre campus, NIRF engineering band 101-150. B.Tech, MBA, BBA, BCA and MCA — the BBA/BCA/MCA streams are the realistic BPM feeder, not the CSE batch.",
+  { id:"jiit-62", layer:"edu", name:"Jaypee Institute of Information Technology", lat:28.6300443, lng:77.3720823, precision:"poi",   // OSM node 714377672 — named "Jaypee Institute of Information Technology, Noida"
+    note:"A-10, Sector 62. Deemed university on a 46.94-acre campus, NIRF engineering band 101-150. B.Tech, MBA, BBA, BCA and MCA — the BBA/BCA/MCA streams are the realistic BPM feeder, not the CSE batch. JIIT also runs a Sector 128 campus on the Expressway with centralised placements, so it feeds the same recruiter pipeline; it has no OSM record of its own, so it is not pinned separately.",
     src:"JIIT official site", srcUrl:"https://www.jiit.ac.in/" },
-  { id:"jss-62", layer:"edu", name:"JSS Academy of Technical Education", lat:28.6220000, lng:77.3760000, precision:"sector",
+  { id:"jss-62", layer:"edu", name:"JSS Academy of Technical Education", lat:28.6139258, lng:77.3595011, precision:"poi",   // OSM way 1162537992 — named "JSS Academy of Technical Education"
     note:"C-20/1, Sector 62. 4,000+ students, roughly 900 B.Tech seats a year plus MBA and MCA. 577 students placed in the 2024 drive at an average of ₹5.2 LPA.",
     src:"CollegeDekho; JosaApp", srcUrl:"https://www.collegedekho.com/colleges/jss-noida" },
-  { id:"ims-62", layer:"edu", name:"IMS Noida / Symbiosis / Jaipuria cluster", lat:28.6290000, lng:77.3730000, precision:"sector",
+  { id:"ims-62", layer:"edu", name:"IMS Noida / Symbiosis / Jaipuria cluster", lat:28.6305337, lng:77.3689271, precision:"poi",   // OSM way 352775383 — named "IMS Law College"
     note:"Sector 62 institutional pocket. Management and mass-communication intakes, cited by local PG operators as their student base — graduate supply on the doorstep of Knowledge Boulevard.",
     src:"PGNoida.com institute list; HooLiv nearby-institutes list", srcUrl:"https://www.pgnoida.com/post/premium-pg-in-noida-sector-62" },
-  { id:"amity-125", layer:"edu", name:"Amity University, Sector 125", lat:28.5440000, lng:77.3340000, precision:"sector",
+  { id:"amity-125", layer:"edu", name:"Amity University, Sector 125", lat:28.5432229, lng:77.3327483, precision:"poi",   // OSM way 502875300 — named "Amity University, Noida"
     note:"Largest single graduate output in Noida across management, communication and humanities. 12-14 km from the shortlist — a bus-route catchment, not a walk-in one.",
     src:"Noida institutional directories", srcUrl:"https://digitalconvey.com/mnc-companies-in-noida/" },
-  { id:"jiit-128", layer:"edu", name:"JIIT Sector 128 campus", lat:28.5290000, lng:77.3690000, precision:"sector",
-    note:"JIIT's extension campus on the Expressway. Placements are centralised with Sector 62, so it feeds the same recruiter pipeline.",
-    src:"JIIT admissions pages", srcUrl:"https://www.jiit.ac.in/admissions_2026/" },
 ];
 
 /* ---------------------------------------------------------------------------
