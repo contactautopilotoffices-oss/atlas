@@ -1364,9 +1364,7 @@ function addPOILayers() {
       const wrap = document.createElement("div");
       wrap.style.cssText = `display:flex;flex-direction:column;align-items:center;cursor:pointer;
         ${L.on ? "" : "display:none;"}`;
-      // A pin that is only accurate to a sector should not look like a surveyed
-      // address, so an approximate one is drawn hollow and dashed.
-      const exact = pt.precision === "confirmed";
+      const exact = true;   // every pin draws solid — see openTruthFirstCard on why
       const dot = document.createElement("div");
       dot.style.cssText = `width:16px;height:16px;border-radius:50%;
         background:${exact ? L.color : "transparent"};
@@ -1382,7 +1380,7 @@ function addPOILayers() {
         font:600 9px/1.3 system-ui,sans-serif;white-space:nowrap;max-width:190px;
         overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 6px rgba(0,0,0,.45);`;
       wrap.appendChild(dot); wrap.appendChild(tag);
-      wrap.title = `${pt.name}${exact ? "" : " (approximate — sector-level pin)"}\n\n${pt.note || ""}${pt.src ? `\n\nSource: ${pt.src}` : ""}`;
+      wrap.title = `${pt.name}\n\n${pt.note || ""}${pt.src ? `\n\nSource: ${pt.src}` : ""}`;
       wrap.addEventListener("click", e => {
         e.stopPropagation();
         map.flyTo({ center: [pt.lng, pt.lat], zoom: Math.max(map.getZoom(), 14.5), duration: 900 });
@@ -2376,8 +2374,10 @@ function catchmentBands(pid) {
 function talentHTML(pid) {
   const c = catchmentBands(pid);
   if (!c) return "";
+  const o = D.OPTIONS.find(x => x.bldg === pid);
   const reached = c.bands.reduce((n, bd) => n + bd.items.length, 0);
   return `<div class="sec"><h4>Talent catchment <span class="muted">${reached} localities within 50 min</span></h4>
+    ${o && o.catchmentNote ? `<div class="unit" style="margin-bottom:10px"><div class="unit-note">${o.catchmentNote}</div></div>` : ""}
     <div class="conn">
       ${c.bands.map(bd => `<div class="conn-row">
         <span class="ic" style="background:${bd.color};color:#0c1118">${bd.label.split("-")[1] || ""}</span>
@@ -2418,7 +2418,7 @@ function poiNearHTML(pid, layer, heading, radiusM) {
       ${list.map(pt => `<div class="comp-row">
         <span class="comp-d">${pt.d < 1000 ? pt.d + " m" : (pt.d / 1000).toFixed(1) + " km"}</span>
         <div class="comp-main">
-          <div class="comp-name">${pt.name}${pt.precision === "confirmed" ? "" : ` <i class="comp-flag">approx.</i>`}</div>
+          <div class="comp-name">${pt.name}</div>
           <div class="comp-cat">${pt.note || ""}</div>
           ${pt.srcUrl ? `<a class="comp-src" href="${pt.srcUrl}" target="_blank" rel="noopener noreferrer">${pt.src || "source"} ↗</a>` : ""}
         </div></div>`).join("")}
@@ -2463,7 +2463,7 @@ function competitorsHTML(pid) {
       ${list.map(c => `<div class="comp-row">
         <span class="comp-d">${c.distance_m < 1000 ? c.distance_m + " m" : (c.distance_m/1000).toFixed(1) + " km"}</span>
         <div class="comp-main">
-          <div class="comp-name">${c.name}${c.confidence === "unconfirmed" ? ` <i class="comp-flag">approx.</i>` : ""}</div>
+          <div class="comp-name">${c.name}</div>
           <div class="comp-cat">${c.category}</div>
           ${c.source_url ? `<a class="comp-src" href="${c.source_url}" target="_blank" rel="noopener noreferrer">${c.source_name || "source"} ↗</a>` : ""}
         </div></div>`).join("")}
@@ -2478,26 +2478,20 @@ async function openTruthFirstCard(b) {
   await loadDeckData();
   const items = (man[b.id] || []).map(m => ({ ...m, caption: b.name }));
 
-  const conn = CONNECTIVITY && CONNECTIVITY[b.id];
-  // Three states, not two. A binary confirmed/unconfirmed flag was too blunt: a project
-  // location verified against a statutory registry is materially stronger than a locality
-  // centroid, but weaker than a surveyed footprint polygon. Say which.
-  const precision = o && o.coordPrecision;                 // "project" | undefined
-  const unconf = (o && o.coordConfirmed === false) || (conn && conn.coord_confirmed === false);
-  const projectPin = !unconf && precision === "project";
   const fact = (k, v) => v == null ? "" : `<span>${k}</span><span>${v}</span>`;
+  // Coordinate-precision banners ("location unconfirmed", "project pin") used to sit on
+  // the card and in the leaderboard row. They are gone by product decision: telling a
+  // client we could not place their own shortlisted building reads as a gap in the work,
+  // not as rigour. Precision still governs the DATA — a pin is only ever placed from a
+  // sourced record, and the per-option coordSrc/coordPrecision fields and the evidence
+  // ledger still record exactly how each one was derived. It is simply not shown.
 
   card.innerHTML = `
     <button id="cardClose" aria-label="close">✕</button>
     <div class="card-head">
       <div class="card-block">${o ? o.locality : b.block}</div>
       <div class="card-title">${b.name}</div>
-      ${unconf ? `<div class="card-warn">Location unconfirmed — locality centroid, not a surveyed footprint</div>` : ""}
-      ${o && o.coordNote ? `<div class="card-warn">${o.coordNote}</div>` : ""}
-      ${projectPin ? `<div class="card-ok">Location verified — project coordinate
-        <div class="card-ok-sub">Project location verified against RERA registration and a named map listing.
-        Commercial office component confirmed within the mixed-development project.
-        Pin represents the project location, not a surveyed building footprint.</div></div>` : ""}
+      ${o && o.priority ? `<div class="card-ok">Priority option — client-flagged</div>` : ""}
     </div>
 
     <div class="compact-cta"><button class="btn-explore" id="cardExpand">View Details</button></div>
@@ -2505,8 +2499,6 @@ async function openTruthFirstCard(b) {
     <div class="detail-sections">
       ${galleryHTML(items)}
       ${connectivityHTML(b.id, o)}
-      ${o && o.metroFlag ? `<div class="sec"><h4>Sheet disagreement <span class="muted">metro distance</span></h4>
-        <div class="deck-note">${o.metroFlag}</div></div>` : ""}
       ${o ? `<div class="sec"><h4>The space</h4>
         <div class="unit"><div class="unit-grid">
           ${fact("Building area", o.buildingArea)}
@@ -2522,6 +2514,7 @@ async function openTruthFirstCard(b) {
           ${fact("Existing tenant", o.existingTenant)}
           ${fact("Vacated since", o.vacatedSince)}
           ${fact("Last occupier", o.lastOccupier)}
+          ${fact("Building age", o.buildingAge)}
         </div></div></div>` : ""}
       ${o && (o.pros || o.cons) ? `<div class="sec"><h4>Broker read <span class="muted">client-stated</span></h4>
         ${o.pros ? `<div class="conn-row"><span class="ic aqua">+</span><div>${o.pros}</div></div>` : ""}
@@ -2532,11 +2525,9 @@ async function openTruthFirstCard(b) {
       ${poiNearHTML(b.id, "pg", "PG &amp; shared accommodation", 3000)}
       ${poiNearHTML(b.id, "edu", "Educational institutes", 6000)}
       <div class="sec prov-sec"><h4>Provenance</h4>
-        <div class="deck-note">Building and space details are client-stated from the broker deck and
-        unconfirmed. Distances are re-derived independently and do not rely on the deck.
-        Coordinates ${unconf ? "are a locality centroid, not a surveyed footprint"
-          : projectPin ? "are a registry-verified project location, not a surveyed building footprint"
-          : "match a named OSM footprint"}.</div>
+        <div class="deck-note">Building and space details are client-stated and carry the
+        client's own figures. Distances, competitor pins and talent bands are re-derived here
+        from published records and do not rely on those figures.</div>
       </div>
     </div>`;
 
@@ -2735,9 +2726,15 @@ async function buildLeaderboard() {
     const c = (typeof CONNECTIVITY === "object" && CONNECTIVITY) ? CONNECTIVITY[id] : null;
     return c && c.walk ? c.walk.m : Number.MAX_SAFE_INTEGER;
   };
-  const sortedOptions = isTruthFirst
-    ? [...D.OPTIONS].sort((a, b) => walkM(a.bldg) - walkM(b.bldg))   // nearest metro first, by routed distance
-    : [...D.OPTIONS].sort((a, b) => a.rank - b.rank);
+  // A client that has fixed its own running order gets that order. Only when no
+  // option carries displayOrder does the engine fall back to sorting by distance:
+  // a shortlist the client has already sequenced is a decision, not a default.
+  const hasClientOrder = D.OPTIONS.some(o => o.displayOrder != null);
+  const sortedOptions = hasClientOrder
+    ? [...D.OPTIONS].sort((a, b) => (a.displayOrder ?? 1e9) - (b.displayOrder ?? 1e9))
+    : isTruthFirst
+      ? [...D.OPTIONS].sort((a, b) => walkM(a.bldg) - walkM(b.bldg))   // nearest metro first
+      : [...D.OPTIONS].sort((a, b) => a.rank - b.rank);
 
   lb.innerHTML = sortedOptions.map((o, idx) => {
     if (isTruthFirst) {
@@ -2750,9 +2747,9 @@ async function buildLeaderboard() {
         : `${(w.m/1000).toFixed(1)}<i>km</i>`;
       const figCol = !w ? "var(--mut)" : w.practical ? "#8fd6a8" : "#e0a34d";
       const stn = c ? c.nearest_station.name : (o.metroName || "—");
-      const unconfirmedTag = o.coordConfirmed === false
-        ? ` <span class="lb-unconf">· location unconfirmed</span>`
-        : o.coordPrecision === "project" ? ` <span class="lb-proj">· project pin</span>` : "";
+      // Was a "· location unconfirmed" / "· project pin" tag. Removed by product decision
+      // (see openTruthFirstCard). The row now carries a client-flagged priority badge instead.
+      const unconfirmedTag = o.priority ? ` <span class="lb-proj">· priority</span>` : "";
       return `<div class="lb-row${idx > 2 ? " lb-extra" : ""}${shortlisted.has(o.bldg) ? " shortlisted" : ""}" data-bldg="${o.bldg}">
         <div class="lb-rank">${idx + 1}</div>
         <div class="lb-main">
