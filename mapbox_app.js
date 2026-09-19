@@ -1353,11 +1353,39 @@ function addPOILayers() {
   const toolbar = document.querySelector("#top .toggles");
   const anchorBtn = document.getElementById("t-reset");
 
+  const rowsFor = L => L.key === "catchment"
+    ? ((D.CATCHMENT && D.CATCHMENT.localities) || [])
+        .map(x => ({ ...x, note: `${x.profile} — ${x.supply}`, precision: "sector" }))
+    : (Array.isArray(D.POI) ? D.POI.filter(pt => pt.layer === L.key) : []);
+
+  // Pins whose plot is not separately mapped share their sector's anchor, so
+  // several land on the exact same coordinate and only the top one is clickable.
+  // Fan co-located pins around the anchor, deterministic by index, ~70 m — inside
+  // the sector the anchor already represents, so no claim changes.
+  // This has to run across ALL layers at once, not per layer: the PG and talent
+  // layers both pin Mamura, and per-layer fanning left them stacked on each other.
+  // Materialise once. rowsFor() builds fresh objects for the catchment layer, so
+  // calling it twice would key the Map on objects the render pass never sees.
+  const layerRows = new Map(layers.map(L => [L.key, rowsFor(L)]));
+  const buckets = {};
+  layerRows.forEach(rows => rows.forEach(pt => {
+    (buckets[`${pt.lat.toFixed(5)},${pt.lng.toFixed(5)}`] ||= []).push(pt);
+  }));
+  const placed = new Map();
+  Object.values(buckets).forEach(group => {
+    if (group.length < 2) return;
+    const rMetres = 70, latPerM = 1 / 111000;
+    group.forEach((pt, i) => {
+      const a = (2 * Math.PI * i) / group.length;
+      placed.set(pt, [
+        pt.lat + Math.cos(a) * rMetres * latPerM,
+        pt.lng + Math.sin(a) * rMetres * latPerM / Math.cos(pt.lat * Math.PI / 180)
+      ]);
+    });
+  });
+
   layers.forEach(L => {
-    const rows = L.key === "catchment"
-      ? ((D.CATCHMENT && D.CATCHMENT.localities) || [])
-          .map(x => ({ ...x, note: `${x.profile} — ${x.supply}`, precision: "sector" }))
-      : (Array.isArray(D.POI) ? D.POI.filter(pt => pt.layer === L.key) : []);
+    const rows = layerRows.get(L.key);
     if (!rows.length) return;
 
     poiMarkerSets[L.key] = rows.map(pt => {
@@ -1384,9 +1412,10 @@ function addPOILayers() {
       wrap.addEventListener("click", e => {
         e.stopPropagation();
         map.flyTo({ center: [pt.lng, pt.lat], zoom: Math.max(map.getZoom(), 14.5), duration: 900 });
-      });
+      });   // flies to the real coordinate, not the fanned-out marker position
+      const [dLat, dLng] = placed.get(pt) || [pt.lat, pt.lng];
       return new mapboxgl.Marker({ element: wrap, anchor: "top", offset: [0, -4] })
-        .setLngLat([pt.lng, pt.lat]).addTo(map);
+        .setLngLat([dLng, dLat]).addTo(map);
     });
 
     const btn = document.createElement("button");
