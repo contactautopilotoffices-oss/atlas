@@ -303,6 +303,10 @@ window.__initMapboxApp = function() {
     // Property markers (teal dots) + name labels
     initDbMarkers();
 
+    // Client-declared context layers (offices, competitors, PG, institutes,
+    // talent catchment) — no-op for clients that declare none.
+    addPOILayers();
+
     // Wire UI toggles
     wireUI();
 
@@ -1335,6 +1339,73 @@ function addMetroLines() {
 }
 
 /* ============================================================
+   CLIENT CONTEXT LAYERS (POI)
+   A client declares CLIENT.poiLayers = [{key,label,icon,color,on}] and ships the
+   rows in D.POI (layer === key) or, for the "catchment" key, in
+   D.CATCHMENT.localities. Each layer gets a toggle chip and a marker set.
+   Clients that declare nothing get nothing: this is additive, never a default.
+   ============================================================ */
+const poiMarkerSets = {};
+
+function addPOILayers() {
+  const layers = (window.CLIENT && window.CLIENT.poiLayers) || [];
+  if (!layers.length) return;
+  const toolbar = document.querySelector("#top .toggles");
+  const anchorBtn = document.getElementById("t-reset");
+
+  layers.forEach(L => {
+    const rows = L.key === "catchment"
+      ? ((D.CATCHMENT && D.CATCHMENT.localities) || [])
+          .map(x => ({ ...x, note: `${x.profile} — ${x.supply}`, precision: "sector" }))
+      : (Array.isArray(D.POI) ? D.POI.filter(pt => pt.layer === L.key) : []);
+    if (!rows.length) return;
+
+    poiMarkerSets[L.key] = rows.map(pt => {
+      const wrap = document.createElement("div");
+      wrap.style.cssText = `display:flex;flex-direction:column;align-items:center;cursor:pointer;
+        ${L.on ? "" : "display:none;"}`;
+      // A pin that is only accurate to a sector should not look like a surveyed
+      // address, so an approximate one is drawn hollow and dashed.
+      const exact = pt.precision === "confirmed";
+      const dot = document.createElement("div");
+      dot.style.cssText = `width:16px;height:16px;border-radius:50%;
+        background:${exact ? L.color : "transparent"};
+        border:2px ${exact ? "solid" : "dashed"} ${L.color};
+        box-shadow:0 2px 7px rgba(0,0,0,.5);
+        display:flex;align-items:center;justify-content:center;
+        font:700 9px/1 system-ui,sans-serif;color:${exact ? "#0c1118" : L.color};`;
+      dot.textContent = L.icon || "";
+      const tag = document.createElement("div");
+      tag.textContent = pt.name;
+      tag.style.cssText = `margin-top:4px;background:rgba(12,17,24,.9);color:#eef3f8;
+        border:1px solid ${L.color};border-radius:4px;padding:1px 6px;
+        font:600 9px/1.3 system-ui,sans-serif;white-space:nowrap;max-width:190px;
+        overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 6px rgba(0,0,0,.45);`;
+      wrap.appendChild(dot); wrap.appendChild(tag);
+      wrap.title = `${pt.name}${exact ? "" : " (approximate — sector-level pin)"}\n\n${pt.note || ""}${pt.src ? `\n\nSource: ${pt.src}` : ""}`;
+      wrap.addEventListener("click", e => {
+        e.stopPropagation();
+        map.flyTo({ center: [pt.lng, pt.lat], zoom: Math.max(map.getZoom(), 14.5), duration: 900 });
+      });
+      return new mapboxgl.Marker({ element: wrap, anchor: "top", offset: [0, -4] })
+        .setLngLat([pt.lng, pt.lat]).addTo(map);
+    });
+
+    const btn = document.createElement("button");
+    btn.className = "tg" + (L.on ? " on" : " ghost");
+    btn.id = `t-poi-${L.key}`;
+    btn.textContent = `${L.icon ? L.icon + " " : ""}${L.label} · ${rows.length}`;
+    btn.addEventListener("click", () => {
+      const on = !btn.classList.contains("on");
+      btn.classList.toggle("on", on);
+      btn.classList.toggle("ghost", !on);
+      poiMarkerSets[L.key].forEach(m => { m.getElement().style.display = on ? "flex" : "none"; });
+    });
+    if (toolbar) toolbar.insertBefore(btn, anchorBtn || null);
+  });
+}
+
+/* ============================================================
    DATABASE PROPERTY MARKERS + LABELS (PRD §24)
    ONLY database buildings get custom markers.
    ============================================================ */
@@ -2109,8 +2180,20 @@ async function loadMediaManifest() {
   return MEDIA_MANIFEST;
 }
 async function loadDeckData() {
-  if (!CONNECTIVITY) CONNECTIVITY = await loadJSON("data/connectivity.json");
-  if (!COMPETITORS)  COMPETITORS  = await loadJSON("data/competitors.json");
+  // Per-client files win over the shared data/ pair. The shared pair holds the
+  // BKC/Whitefield set, so loading it unconditionally handed every new client
+  // another city's competitor pins and walk distances keyed by ids that happened
+  // not to collide — silent wrong-city data waiting for an id clash.
+  const slug = window.CLIENT_SLUG || (window.CLIENT && window.CLIENT.slug);
+  const pick = async (name) => {
+    if (slug) {
+      const own = await loadJSON(`clients/${slug}/${name}`);
+      if (own && Object.keys(own).length) return own;
+    }
+    return await loadJSON(`data/${name}`);
+  };
+  if (!CONNECTIVITY) CONNECTIVITY = await pick("connectivity.json");
+  if (!COMPETITORS)  COMPETITORS  = await pick("competitors.json");
 }
 
 /* ---- in-frame lightbox. Opens OVER the scene; the scene is never unloaded,
@@ -2235,35 +2318,154 @@ function connectivityHTML(pid, o) {
   const c = CONNECTIVITY && CONNECTIVITY[pid];
   if (!c) return `<div class="sec"><h4>Connectivity</h4>
     <div class="deck-empty">Distances not yet computed for this property.</div></div>`;
-  const w = c.walk, d = c.drive, k = c.kia, st = c.nearest_station;
+  const w = c.walk, d = c.drive, st = c.nearest_station;
+  // `kia` was the Bengaluru airport key. Clients now ship a generic `airport`
+  // object carrying its own name; kia stays readable so the older files still work.
+  const air = c.airport || (c.kia ? { name: "Kempegowda International", ...c.kia } : null);
   const walkTxt = !w ? "—"
     : w.practical ? `${w.m} m · ${w.min} min walk`
     : `${(w.m / 1000).toFixed(1)} km — not practically walkable`;
-  const walkNote = "Nearest metro station";
+  // Routed distances and straight-line estimates are not the same claim. Say which.
+  const estimated = c.routed === false;
+  const walkNote = estimated ? "Nearest metro station · estimated, not routed" : "Nearest metro station";
   return `<div class="sec"><h4>Connectivity</h4>
     <div class="conn">
       <div class="conn-row"><span class="ic aqua">M</span>
         <div><b>${st.name}</b>
           <div class="conn-line">${walkTxt}${d ? ` · ${d.min} min drive` : ""}</div>
           <div class="muted">${walkNote}</div></div></div>
-      ${k ? `<div class="conn-row"><span class="ic rail">✈</span>
-        <div><b>Kempegowda International</b>
-          <div class="conn-line">${k.km} km · ${k.min} min drive</div></div></div>` : ""}
+      ${c.office ? `<div class="conn-row"><span class="ic bus">•</span>
+        <div><b>${c.office.name}</b>
+          <div class="conn-line">${c.office.km} km · ${c.office.min} min drive</div></div></div>` : ""}
+      ${air ? `<div class="conn-row"><span class="ic rail">✈</span>
+        <div><b>${air.name}</b>
+          <div class="conn-line">${air.km} km · ${air.min} min drive</div></div></div>` : ""}
+      ${c.airport_alt ? `<div class="conn-row"><span class="ic rail">✈</span>
+        <div><b>${c.airport_alt.name}</b>
+          <div class="conn-line">${c.airport_alt.km} km · ${c.airport_alt.min} min drive</div></div></div>` : ""}
+    </div>
+    ${estimated && c.method ? `<div class="deck-note">${c.method}</div>` : ""}</div>`;
+}
+
+/* ---------------------------------------------------------------------------
+   TALENT CATCHMENT — D.CATCHMENT, optional. Renders the client's drive-time
+   bands around one property, plus whatever sourced market signals the client
+   shipped. Band membership is computed here from straight-line distance and the
+   client's own minutes-per-km assumption, and the panel states that, because a
+   proxy dressed as an isochrone is the kind of number that ends up in a board
+   pack unchallenged.
+--------------------------------------------------------------------------- */
+function catchmentBands(pid) {
+  const K = D.CATCHMENT;
+  const b = D.BUILDINGS.find(x => x.id === pid);
+  if (!K || !b || !Array.isArray(K.localities)) return null;
+  const mpk = K.minutesPerKm || 5;
+  const bands = K.bands.map(bd => ({ ...bd, items: [] }));
+  const beyond = [];
+  K.localities.forEach(L => {
+    const km = haversineMeters(b.lat, b.lng, L.lat, L.lng) / 1000;
+    const min = Math.round(km * mpk);
+    const row = { ...L, km: +km.toFixed(1), min };
+    const band = bands.find(bd => min <= bd.maxMin);
+    (band ? band.items : beyond).push(row);
+  });
+  bands.forEach(bd => bd.items.sort((a, z) => a.min - z.min));
+  return { bands, beyond: beyond.sort((a, z) => a.min - z.min), method: K.method, signals: K.marketSignals || [] };
+}
+
+function talentHTML(pid) {
+  const c = catchmentBands(pid);
+  if (!c) return "";
+  const reached = c.bands.reduce((n, bd) => n + bd.items.length, 0);
+  return `<div class="sec"><h4>Talent catchment <span class="muted">${reached} localities within 50 min</span></h4>
+    <div class="conn">
+      ${c.bands.map(bd => `<div class="conn-row">
+        <span class="ic" style="background:${bd.color};color:#0c1118">${bd.label.split("-")[1] || ""}</span>
+        <div><b>${bd.label}</b>
+          ${bd.items.length
+            ? bd.items.map(L => `<div class="conn-line">${L.name} <span class="muted">· ${L.km} km · ~${L.min} min · ${L.profile}</span>
+                <div class="muted">${L.supply}</div></div>`).join("")
+            : `<div class="conn-line muted">No mapped locality falls in this band for this address.</div>`}
+        </div></div>`).join("")}
+      ${c.beyond.length ? `<div class="conn-row"><span class="ic bus">·</span>
+        <div><b>Beyond 50 min</b>
+          ${c.beyond.map(L => `<div class="conn-line muted">${L.name} · ${L.km} km · ~${L.min} min</div>`).join("")}
+        </div></div>` : ""}
+    </div>
+    ${c.signals.length ? `<div class="unit" style="margin-top:10px"><div class="unit-grid">
+      ${c.signals.map(sg => `<span>${sg.label}</span><span>${sg.value}${sg.srcUrl
+        ? ` <a class="comp-src" href="${sg.srcUrl}" target="_blank" rel="noopener noreferrer">${sg.src} ↗</a>` : ""}
+        <div class="muted">${sg.note}</div></span>`).join("")}
+    </div></div>` : ""}
+    ${c.method ? `<div class="deck-note">${c.method}</div>` : ""}</div>`;
+}
+
+/* Nearby PG beds and institutes, from the same POI list the map layers use.
+   Night-shift operations live or die on these two, so they get a card section
+   rather than being map-only. */
+function poiNearHTML(pid, layer, heading, radiusM) {
+  const b = D.BUILDINGS.find(x => x.id === pid);
+  if (!b || !Array.isArray(D.POI)) return "";
+  const list = D.POI.filter(pt => pt.layer === layer)
+    .map(pt => ({ ...pt, d: Math.round(haversineMeters(b.lat, b.lng, pt.lat, pt.lng)) }))
+    .filter(pt => pt.d <= radiusM)
+    .sort((a, z) => a.d - z.d);
+  const km = (radiusM / 1000).toFixed(radiusM % 1000 ? 1 : 0);
+  if (!list.length) return `<div class="sec"><h4>${heading} <span class="muted">${km} km radius</span></h4>
+    <div class="deck-empty">None mapped within ${km} km.</div></div>`;
+  return `<div class="sec"><h4>${heading} <span class="muted">${km} km radius</span></h4>
+    <div class="comp">
+      ${list.map(pt => `<div class="comp-row">
+        <span class="comp-d">${pt.d < 1000 ? pt.d + " m" : (pt.d / 1000).toFixed(1) + " km"}</span>
+        <div class="comp-main">
+          <div class="comp-name">${pt.name}${pt.precision === "confirmed" ? "" : ` <i class="comp-flag">approx.</i>`}</div>
+          <div class="comp-cat">${pt.note || ""}</div>
+          ${pt.srcUrl ? `<a class="comp-src" href="${pt.srcUrl}" target="_blank" rel="noopener noreferrer">${pt.src || "source"} ↗</a>` : ""}
+        </div></div>`).join("")}
     </div></div>`;
 }
 
+/* Competitors come from one of two places. A client can ship a precomputed
+   competitors.json keyed by property id (the Whitefield pattern), or it can list
+   them once in data.js as POI rows with layer:"competitor" and let distances be
+   derived here — one source of truth instead of the same addresses typed twice.
+   The heading is client copy: "VFX studios" is a brief, not a law. */
+function competitorRows(pid) {
+  const pre = (COMPETITORS && COMPETITORS[pid]) || [];
+  if (pre.length) return pre;
+  const b = D.BUILDINGS.find(x => x.id === pid);
+  if (!b || !Array.isArray(D.POI)) return [];
+  return D.POI
+    .filter(pt => pt.layer === "competitor")
+    .map(pt => ({
+      name: pt.name,
+      category: pt.note || "",
+      source_url: pt.srcUrl,
+      source_name: pt.src,
+      distance_m: Math.round(haversineMeters(b.lat, b.lng, pt.lat, pt.lng)),
+      // A sector centroid is not a surveyed address; the row says so rather than
+      // implying the pin is where the door is.
+      confidence: pt.precision === "confirmed" ? "verified" : "unconfirmed"
+    }))
+    .sort((a, z) => a.distance_m - z.distance_m);
+}
+
 function competitorsHTML(pid) {
-  const list = (COMPETITORS && COMPETITORS[pid]) || [];
-  if (!list.length) return `<div class="sec"><h4>VFX studios nearby <span class="muted">1 km radius</span></h4>
-    <div class="deck-empty">None found within 1 km.</div></div>`;
-  return `<div class="sec"><h4>VFX studios nearby <span class="muted">1 km radius</span></h4>
+  const C = window.CLIENT || {};
+  const label = C.competitorLabel || "VFX studios nearby";
+  const radiusTxt = C.competitorRadius || "1 km radius";
+  const radiusM = (parseFloat(radiusTxt) || 1) * 1000;
+  const list = competitorRows(pid).filter(c => c.distance_m <= radiusM);
+  if (!list.length) return `<div class="sec"><h4>${label} <span class="muted">${radiusTxt}</span></h4>
+    <div class="deck-empty">None found within ${radiusTxt.replace(" radius", "")}.</div></div>`;
+  return `<div class="sec"><h4>${label} <span class="muted">${radiusTxt}</span></h4>
     <div class="comp">
       ${list.map(c => `<div class="comp-row">
         <span class="comp-d">${c.distance_m < 1000 ? c.distance_m + " m" : (c.distance_m/1000).toFixed(1) + " km"}</span>
         <div class="comp-main">
           <div class="comp-name">${c.name}${c.confidence === "unconfirmed" ? ` <i class="comp-flag">approx.</i>` : ""}</div>
           <div class="comp-cat">${c.category}</div>
-          <a class="comp-src" href="${c.source_url}" target="_blank" rel="noopener noreferrer">${c.source_name} ↗</a>
+          ${c.source_url ? `<a class="comp-src" href="${c.source_url}" target="_blank" rel="noopener noreferrer">${c.source_name || "source"} ↗</a>` : ""}
         </div></div>`).join("")}
     </div></div>`;
 }
@@ -2291,6 +2493,7 @@ async function openTruthFirstCard(b) {
       <div class="card-block">${o ? o.locality : b.block}</div>
       <div class="card-title">${b.name}</div>
       ${unconf ? `<div class="card-warn">Location unconfirmed — locality centroid, not a surveyed footprint</div>` : ""}
+      ${o && o.coordNote ? `<div class="card-warn">${o.coordNote}</div>` : ""}
       ${projectPin ? `<div class="card-ok">Location verified — project coordinate
         <div class="card-ok-sub">Project location verified against RERA registration and a named map listing.
         Commercial office component confirmed within the mixed-development project.
@@ -2302,14 +2505,32 @@ async function openTruthFirstCard(b) {
     <div class="detail-sections">
       ${galleryHTML(items)}
       ${connectivityHTML(b.id, o)}
+      ${o && o.metroFlag ? `<div class="sec"><h4>Sheet disagreement <span class="muted">metro distance</span></h4>
+        <div class="deck-note">${o.metroFlag}</div></div>` : ""}
       ${o ? `<div class="sec"><h4>The space</h4>
         <div class="unit"><div class="unit-grid">
+          ${fact("Building area", o.buildingArea)}
           ${fact("Total floors", o.floorsTotal)}
+          ${fact("Floor plate", o.floorPlate)}
           ${fact("Floor offered", o.floorOffered)}
+          ${fact("Offered area", o.offeredArea)}
           ${fact("Condition", o.condition)}
           ${fact("Parking", o.parking)}
+          ${fact("Power backup", o.powerBackup)}
+          ${fact("Common cafeteria", o.cafeteria)}
+          ${fact("Availability", o.availability)}
+          ${fact("Existing tenant", o.existingTenant)}
+          ${fact("Vacated since", o.vacatedSince)}
+          ${fact("Last occupier", o.lastOccupier)}
         </div></div></div>` : ""}
+      ${o && (o.pros || o.cons) ? `<div class="sec"><h4>Broker read <span class="muted">client-stated</span></h4>
+        ${o.pros ? `<div class="conn-row"><span class="ic aqua">+</span><div>${o.pros}</div></div>` : ""}
+        ${o.cons ? `<div class="conn-row"><span class="ic yellow">−</span><div>${o.cons}</div></div>` : ""}
+      </div>` : ""}
+      ${talentHTML(b.id)}
       ${competitorsHTML(b.id)}
+      ${poiNearHTML(b.id, "pg", "PG &amp; shared accommodation", 3000)}
+      ${poiNearHTML(b.id, "edu", "Educational institutes", 6000)}
       <div class="sec prov-sec"><h4>Provenance</h4>
         <div class="deck-note">Building and space details are client-stated from the broker deck and
         unconfirmed. Distances are re-derived independently and do not rely on the deck.
