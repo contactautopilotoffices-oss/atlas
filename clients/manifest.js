@@ -8,5 +8,6 @@ window.CLIENT_MANIFEST = {
   "VFSDEMOACC":  { slug: "vfs-bkc",          pass: "VFS1234" },
   "CPDEMOACC":   { slug: "cp-delhi",         pass: "CP1234" },
   "INVDEMOACC":  { slug: "invesco-andheri",  pass: "INV1234" },
-  "FLYDEMOACC":  { slug: "basilic-fly",      pass: "FLY1234" }   // PLACEHOLDER pass — rotate before deploy (real one supplied out of band)
+  "FLYDEMOACC":  { slug: "basilic-fly",      pass: "FLY1234" },  // PLACEHOLDER pass — rotate before deploy (real one supplied out of band)
+  "DIGDEMOACC":  { slug: "digitide-noida",   pass: "DIG1234" }   // PLACEHOLDER pass — rotate before deploy
 };
