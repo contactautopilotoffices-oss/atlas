@@ -228,17 +228,27 @@ window.__initMapboxApp = function() {
      - right-drag = rotate (Mapbox default)
      Wheel deltas are batched to one Mapbox update per frame to stay smooth. */
   map.scrollZoom.disable();
-  let wheelFrame = null, wheelAcc = { dx: 0, dy: 0, pinch: false };
+  let wheelFrame = null, wheelAcc = { dx: 0, dy: 0, pinch: false, shift: false };
+  // THE VIBRATION FIX. The gesture mode used to be re-decided on every frame from
+  // that frame's deltas, so a two-finger pan — where dx/dy wobble frame to frame —
+  // alternated between panBy and setBearing many times a second. That reads as the
+  // screen shaking. The mode is now latched once per gesture and held until the
+  // fingers lift (60 ms of no wheel events ends the gesture).
+  let gestureMode = null, gestureEndTimer = null;
+  const GESTURE_IDLE_MS = 60;
   map.getCanvas().addEventListener("wheel", (e) => {
     e.preventDefault();
     const dMode = e.deltaMode === 1 ? 16 : 1;
     wheelAcc.dx += e.deltaX * dMode;
     wheelAcc.dy += e.deltaY * dMode;
     wheelAcc.pinch = wheelAcc.pinch || e.ctrlKey || e.metaKey;
+    wheelAcc.shift = wheelAcc.shift || e.shiftKey;
+    clearTimeout(gestureEndTimer);
+    gestureEndTimer = setTimeout(() => { gestureMode = null; }, GESTURE_IDLE_MS);
     if (wheelFrame) return;
     wheelFrame = requestAnimationFrame(() => {
-      const dx = wheelAcc.dx, dy = wheelAcc.dy, pinch = wheelAcc.pinch;
-      wheelAcc = { dx: 0, dy: 0, pinch: false };
+      const dx = wheelAcc.dx, dy = wheelAcc.dy, pinch = wheelAcc.pinch, shift = wheelAcc.shift;
+      wheelAcc = { dx: 0, dy: 0, pinch: false, shift: false };
       wheelFrame = null;
 
       // Pinch / ctrl+scroll = zoom
@@ -253,8 +263,17 @@ window.__initMapboxApp = function() {
         return;
       }
 
-      // Dominant horizontal two-finger swipe = orbit/rotate bearing
-      if (Math.abs(dx) > Math.abs(dy) * 1.5) {
+      // A two-finger swipe pans, in every direction. It used to orbit whenever the
+      // motion was mostly horizontal — the one thing people do constantly when
+      // reading a map — so a plain left-to-right pan swung the camera instead.
+      // Orbit is deliberate now: hold Shift, or right-drag, which Mapbox already
+      // provides. The mode is still latched per gesture so it cannot change
+      // halfway through a swipe.
+      if (gestureMode === null && (Math.abs(dx) > 1 || Math.abs(dy) > 1)) {
+        gestureMode = shift ? "orbit" : "pan";
+      }
+
+      if (gestureMode === "orbit") {
         const b = selectedId ? D.BUILDINGS.find(x => x.id === selectedId) : null;
         const newBearing = map.getBearing() + dx * 0.12;
         if (b && b.lng != null && b.lat != null) {
@@ -265,7 +284,6 @@ window.__initMapboxApp = function() {
         return;
       }
 
-      // Default: pan
       map.panBy([-dx, -dy], { duration: 0 });
     });
   }, { passive: false });
@@ -1439,6 +1457,28 @@ function addPOILayers() {
 function initDbMarkers() {
   const dbBuildings = D.BUILDINGS.filter(b => b.isOption && b.lat && b.lng);
 
+  // A-20 and A-23 sit 144 m apart in the same block. At the opening zoom that is
+  // about five pixels, so their name chips landed exactly on top of each other and
+  // the pair read as one building. Group properties that are close enough to
+  // collide and stack their labels vertically instead. The dots stay on their true
+  // coordinates; only the chip above them moves.
+  const NEAR_M = 400, rad = d => d * Math.PI / 180;
+  const gapM = (a, b) => {
+    const dLat = rad(b.lat - a.lat), dLng = rad(b.lng - a.lng);
+    const x = Math.sin(dLat / 2) ** 2 +
+      Math.cos(rad(a.lat)) * Math.cos(rad(b.lat)) * Math.sin(dLng / 2) ** 2;
+    return 2 * 6371000 * Math.asin(Math.sqrt(x));
+  };
+  const labelTier = {};
+  const clusters = [];
+  dbBuildings.forEach(b => {
+    const c = clusters.find(g => g.some(x => gapM(x, b) < NEAR_M));
+    if (c) c.push(b); else clusters.push([b]);
+  });
+  // Northernmost first, so the stack reads top-down the way the map does.
+  clusters.forEach(g => g.slice().sort((x, y) => y.lat - x.lat)
+    .forEach((b, i) => { labelTier[b.id] = i; }));
+
   dbBuildings.forEach(b => {
     const isWinner = b.id === D.META.winner;
 
@@ -1484,7 +1524,7 @@ function initDbMarkers() {
     const labelMarker = new mapboxgl.Marker({
       element: tag,
       anchor: "bottom",
-      offset: [0, -10]
+      offset: [0, -10 - (labelTier[b.id] || 0) * 20]
     })
       .setLngLat([anchorLngLat[0], anchorLngLat[1], heightM + 5]) // altitude lifts it above the roofline
       .addTo(map);
@@ -1584,11 +1624,16 @@ function buildingShots(b) {
   const size = Math.max(b.w || 50, b.d || 50);
   const bear = facadeBearing(b);
   const anchor = buildingAnchor(b);
-  const pad = { right: 320, left: 220, top: 160, bottom: 90 };
+  // The detail card is 430px wide and sits over the right of the map, so padding
+  // has to clear it or the building the camera just flew to ends up behind the
+  // card. 320 left ~110px of the subject covered.
+  const cardW = (document.getElementById("card")?.offsetWidth) || 430;
+  const pad = { right: Math.min(cardW + 30, Math.round(window.innerWidth * 0.55)), left: 220, top: 160, bottom: 90 };
   const big = size > 80, mid = size > 55;
   return {
     // 1 — Hero reveal: 3D helicopter view (58° pitch / 30° bearing), building centered & crystal clear.
-    hero:    { center: anchor, zoom: big ? 16.8 : mid ? 17.2 : 17.5, pitch: 58, bearing: 30, padding: pad },
+    // Low-rise Noida plots are small; the old ceiling of 17.5 left them as specks.
+    hero:    { center: anchor, zoom: big ? 17.1 : mid ? 17.6 : 18.0, pitch: 58, bearing: 30, padding: pad },
     // 2 — Arrival: you're almost at the junction; entrance + lobby read; cars pass.
     arrival: { center: anchor, zoom: big ? 17.4 : 17.8, pitch: 16, bearing: bear, padding: pad },
     // 3 — Executive street level: opposite footpath, façade fills the screen.
@@ -2809,10 +2854,15 @@ async function buildLeaderboard() {
       // and it is the routed distance, not the deck's number.
       const c = (typeof CONNECTIVITY === "object" && CONNECTIVITY) ? CONNECTIVITY[o.bldg] : null;
       const w = c && c.walk;
+      // One unit for the whole column. It used to print minutes for walkable rows
+      // and kilometres for the rest, so the list mixed units and could not be read
+      // down. Every row is a walk time now; the distance moves to the meta line so
+      // nothing is lost.
       const fig = !w ? `—<i>&nbsp;</i>`
-        : w.practical ? (w.min < 60 ? `${w.min}<i>min walk</i>` : `${fmtMin(w.min)}<i>walk</i>`)
-        : `${(w.m/1000).toFixed(1)}<i>km</i>`;
+        : w.min < 60 ? `${w.min}<i>min walk</i>`
+        : `${fmtMin(w.min)}<i>walk</i>`;
       const figCol = !w ? "var(--mut)" : w.practical ? "#8fd6a8" : "#e0a34d";
+      const figDist = w ? ` · ${w.m < 1000 ? w.m + " m" : (w.m / 1000).toFixed(1) + " km"}` : "";
       const stn = c ? c.nearest_station.name : (o.metroName || "—");
       // Was a "· location unconfirmed" / "· project pin" tag. Removed by product decision
       // (see openTruthFirstCard). The row now carries a client-flagged priority badge instead.
@@ -2821,7 +2871,7 @@ async function buildLeaderboard() {
         <div class="lb-rank">${idx + 1}</div>
         <div class="lb-main">
           <div class="lb-name">${o.name}<span class="lb-star" title="Shortlisted">★</span>${unconfirmedTag}</div>
-          <div class="lb-meta">${o.locality} · ${stn}</div>
+          <div class="lb-meta">${o.locality} · ${stn}${figDist}</div>
         </div>
         <div class="lb-fig" style="color:${figCol}">${fig}</div>
       </div>`;

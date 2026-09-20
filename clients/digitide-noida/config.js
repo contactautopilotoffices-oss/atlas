@@ -57,7 +57,7 @@ window.CLIENT = {
     magnus:     { renderMode:"extrusion", heightMeters:19, color:"#9aa7b5" },
     kboulevard: { renderMode:"extrusion", heightMeters:32, color:"#9aa7b5" },
   },
-  hint: "Click any property · toggle the talent, competitor, PG and institute layers above"
+  hint: "Click any property · two-finger swipe pans · shift-swipe or right-drag orbits · pinch zooms"
 };
 
 /* ---------------------------------------------------------------------------
