@@ -385,6 +385,36 @@ function showPortfolio(){
   });
   h += `</div></div>`;
 
+  /* Movement strategy: the same facilities, grouped by how much runway each
+     one still has. Horizon decides posture; the pressure board decides order. */
+  const horizons = [
+    { k:"now",  lo:-999, hi:12, t:"Decide now",              c:"#e0603a",
+      p:"Inside one year. Too late to run a site search, shortlist, fit-out and migration in sequence, so each of these is either a renewal on better terms or a consolidation into space the group already holds. Treat a new city here as the exception, not the plan." },
+    { k:"plan", lo:13,   hi:24, t:"Plan now, move next year", c:"#e0a91f",
+      p:"Twelve to twenty-four months. This is the window where a relocation is actually deliverable: enough runway to validate a candidate city on the ground, negotiate, fit out and migrate without paying for two sites for long. This is where the wage and rent arbitrage gets captured." },
+    { k:"opt",  lo:25,   hi:51, t:"Option window",            c:"#1f8f77",
+      p:"Two to four years out. Nothing forces a decision, which makes these the cheapest places to experiment: pilot a tier-2 or tier-3 site now against one of these leases and the result is evidence by the time the lease actually closes." }
+  ];
+  const rowsH = visible().map(f => ({ f, m: monthsLeft(f.leaseEnd), s: pressureScore(f) }))
+    .filter(x => x.s != null);
+  h += `<div class="sec"><h4>Movement strategy</h4>`;
+  for (const hz of horizons){
+    const set = rowsH.filter(x => x.m >= hz.lo && x.m <= hz.hi);
+    if (!set.length) continue;
+    const cities = [...new Set(set.map(x => (window.DG_CITIES[x.f.city]||{}).name || x.f.location))];
+    const calls = set.filter(x => /call/i.test(x.f.centreType)).length;
+    h += `<div style="margin-bottom:12px">
+      <div style="display:flex;align-items:baseline;gap:8px">
+        <span class="dot" style="background:${hz.c};width:8px;height:8px"></span>
+        <span style="font-size:12px;font-weight:700">${hz.t}</span>
+        <span style="font-size:10px;color:var(--dim);font-family:var(--num)">${set.length} facilities · ${calls} call centre${calls===1?"":"s"}</span>
+      </div>
+      <div class="para" style="margin-top:5px">${hz.p}</div>
+      <div class="note"><b style="color:var(--mut)">Sites:</b> ${cities.map(esc).join(", ")}.</div>
+    </div>`;
+  }
+  h += `<div class="note">Horizon sets the posture, the pressure board above sets the order within each horizon. Anything closing beyond FY30 is deliberately left out: a decision taken now against a 2034 lease is a guess.</div></div>`;
+
   /* Pin precision, stated at portfolio level so a coarse pin is never a surprise */
   const gp = {};
   for (const f of window.DG_FACILITIES){
