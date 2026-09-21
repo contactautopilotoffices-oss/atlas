@@ -447,6 +447,32 @@ function showPortfolio(){
   }
   h += `<div class="note">Horizon sets the posture, the pressure board above sets the order within each horizon. Anything closing beyond FY30 is deliberately left out: a decision taken now against a 2034 lease is a guess.</div></div>`;
 
+  /* The incentive map does not agree with the wage map, and that is the point
+     of putting it on the same screen. */
+  h += `<div class="sec"><h4>What the incentive map changes</h4>
+    <div class="para">States pay employers to open delivery centres, and several pay materially more outside their own capital. That money offsets one-off move cost, which is the number a relocation case usually loses on. Three findings change the shortlist before any of the detail matters.</div>
+    <div class="movelist" style="margin-top:10px">
+
+      <div class="mv"><div class="i" style="background:#e0603a">1</div><div class="c">
+        <div class="h" data-city="kolkata">West Bengal is currently the weakest, not the strongest</div>
+        <div class="d">The Revocation of West Bengal Incentive Schemes Act 2025 retrospectively cancelled the schemes that IT and ITeS units draw their cash incentives from, and the Act is under challenge in the Calcutta High Court. What is left is a property tax exemption and extra floor area, no cash. A successor policy worth about ₹5,000 crore was expected around Oct 2026, with an IT park at Siliguri and a unit at Durgapur named in budget papers. <b>Do not underwrite a Durgapur or Siliguri move on 2018-policy language.</b> Wait for the new notification and negotiate a bespoke package.</div>
+      </div></div>
+
+      <div class="mv"><div class="i" style="background:#e0a91f">2</div><div class="c">
+        <div class="h" data-city="noida">The ₹1 lakh per seat central subsidy no longer exists</div>
+        <div class="d">The India BPO Promotion Scheme closed to claims in Aug 2024 and has no BPO-specific successor. The live central instrument pays up to ₹3,000 per employee per month for two years, but it is <b>additive against the employer's national headcount baseline, not per site</b>. Seats merely moved out of a metro generate little or no benefit. If this is in a business case as a relocation saving, it is wrong. Uttar Pradesh's own policy also still ties its per-seat BPO subsidy to the dead scheme, which Invest UP needs to confirm.</div>
+      </div></div>
+
+      <div class="mv"><div class="i" style="background:#1f8f77">3</div><div class="c">
+        <div class="h" data-city="indore">The best per-head money is where Digitide already operates</div>
+        <div class="d">Punjab pays a reported ₹5,000 per employee per month for five years, and Madhya Pradesh ₹4,000 to ₹5,000 per employee per month for three years plus up to ₹3,000 per seat per month of rent. Digitide already holds Mohali in Punjab and Indore and Chhindwara in MP. <b>Scaling an existing site may beat opening a new one</b>, because the incentive is the same and the setup risk is gone. Both figures are press-sourced and need gazette verification before they reach a model, and Punjab's reported ₹25 crore investment floor may exclude a seat-leased centre entirely.</div>
+      </div></div>
+
+    </div>
+    <div class="note">One trap worth naming: Tamil Nadu's headline payroll subsidy of 30, 20 and 10 percent applies only to roles paying at least ₹1 lakh a month, so it excludes every voice agent. It looks generous in a summary and is worth nothing to this portfolio.</div>
+    <div class="note">Government policy documents were not reachable from the research environment, so entries marked press-sourced rest on advisory and press summaries. Each names the specific figure to check against the gazette. Open any location to see its state's position in full.</div>
+  </div>`;
+
   /* Pin precision, stated at portfolio level so a coarse pin is never a surprise */
   const gp = {};
   for (const f of window.DG_FACILITIES){
@@ -544,9 +570,15 @@ function candidateCard(c, key){
   }
   const tt = window.DG_TALENT[key];
   const talent = tt ? `<div class="cm">Indicative: agent gross ${inr(tt.salary[0])} to ${inr(tt.salary[1])}, attrition ${esc(tt.attrition)}, competing employers ${esc(tt.compCount)}.</div>` : "";
+  const ti = window.DG_INCENTIVES[t.stateKey];
+  const incLine = ti
+    ? (ti.perHead
+        ? `<div class="cm"><b>Incentive:</b> ${esc(ti.perHead)} under ${esc(ti.policy)}.${ti.confidence !== "verified" ? " Press-sourced, verify before modelling." : ""}</div>`
+        : `<div class="cm"><b>Incentive:</b> no claimable per-head cash today. ${esc(ti.risk || "")}</div>`)
+    : "";
   return `<div class="cand"><div class="cn"><span>${esc(t.name)}, ${esc(t.state)}</span>
       <span style="color:${TIER_COLOR[t.tier]};font-size:10.5px">${TIER_NAME[t.tier]}</span></div>
-    <div class="cm">${wage}</div>${rent}${talent}
+    <div class="cm">${wage}</div>${rent}${talent}${incLine}
     ${t.catchment ? `<div class="cm">${esc(t.catchment)}</div>` : ""}</div>`;
 }
 
@@ -616,6 +648,26 @@ function renderCity(key, c, focusSr){
       }
     }
     h += `<div class="note">Direct lines only: rent and agent pay. Supervision, telecom, facilities opex, transport and attrition replacement are excluded, so treat this as a comparison between cities rather than a budget.</div></div>`;
+  }
+
+  /* what the state pays you to be there: the leg that offsets move cost */
+  const inc = window.DG_INCENTIVES[c.stateKey], cen = window.DG_INCENTIVES.central;
+  if (inc){
+    const conf = inc.confidence === "verified"
+      ? `<span class="pill ok">Government or Big-4 sourced</span>`
+      : `<span class="pill warm">Press / advisory sourced</span>`;
+    h += `<div class="sec"><h4>Government incentives</h4>
+      <div class="kv"><span class="k">Policy</span><span class="v" style="font-family:var(--font);text-align:right">${esc(inc.policy)}</span></div>
+      ${inc.perHead ? `<div class="kv"><span class="k">Per-head cash</span><span class="v">${esc(inc.perHead)}</span></div>` : ""}
+      <div class="kv"><span class="k">Valid</span><span class="v" style="font-family:var(--font)">${esc(inc.validTill||"not stated")}</span></div>
+      <div class="para" style="margin-top:9px"><b>Tier bias.</b> ${esc(inc.tierBias)}</div>
+      <ul style="margin:9px 0 0;padding-left:16px;font-size:10.5px;color:var(--mut);line-height:1.6">
+        ${inc.items.map(i => `<li style="margin-bottom:4px">${esc(i)}</li>`).join("")}</ul>
+      <div class="row2" style="margin-top:9px">${conf}${inc.srcUrl ? `<span class="pill">Source: ${cite(inc.srcUrl)}</span>` : ""}</div>
+      ${inc.risk ? `<div class="note" style="color:#ffb09b;margin-top:9px"><b>Risk.</b> ${esc(inc.risk)}</div>` : ""}
+      ${inc.verify ? `<div class="note"><b style="color:var(--mut)">Verify before modelling.</b> ${esc(inc.verify)}</div>` : ""}
+      <div class="note" style="margin-top:9px"><b style="color:var(--mut)">Central, on top.</b> ${esc(cen.perHead)}, ${esc(cen.validTill)}. ${esc(cen.risk)} Source: ${cite(cen.srcUrl)}.</div>
+    </div>`;
   }
 
   /* competitors, with indicative density */

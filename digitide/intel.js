@@ -153,7 +153,7 @@ window.DG_CITIES = {
     presence: "high", players: ["Concentrix", "Teleperformance", "Wipro", "TCS", "Genpact", "Firstsource", "Cognizant"],
     catchment: "Large English+Bengali+Hindi pool built over two decades of Sector V ITES; both facilities (Technopolis to Oct 2027, Millennium City to Jun 2030) sit in the state's highest wage band.",
     candidates: ["durgapur", "siliguri"],
-    strategy: "The Technopolis lease (Oct 2027) is the trigger. Note the fine print: Durgapur and Siliguri are municipal corporations, which keeps them in the same Zone A wage band as Kolkata, the statutory floor moves nothing. The material gains are rent (Durgapur at a third of Sector V) and an untapped catchment. Directional today: both towns need an on-ground talent and infrastructure validation before anything moves."
+    strategy: "The Technopolis lease (Oct 2027) is the trigger, but two findings have weakened the case for moving inside West Bengal. First, Durgapur and Siliguri are municipal corporations, which keeps them in the same Zone A wage band as Kolkata, so the statutory floor moves nothing. Second, the state's 2025 Revocation Act cancelled the schemes that IT and ITeS incentives flow from, so there is no cash incentive to offset a move either. What is left is rent, where Durgapur runs about a third of Sector V, and an untapped catchment. A successor state policy was expected around Oct 2026 with an IT park at Siliguri named in budget papers, which is worth waiting for rather than pre-empting. Treat this as watch-and-negotiate, not a move to plan."
   },
   bhubaneswar: {
     name: "Bhubaneswar", state: "Odisha", stateKey: "odisha", tier: 2,
@@ -642,3 +642,188 @@ window.DG_DATAQUALITY.push(
   { sr:[9], site:"Dr. ITM, Sector 62, Noida", field:"Pin code", tracker:"201309", found:"201301 in several sources",
     severity:"check", why:"Sector 62 addresses appear under both pin codes in public records. Worth confirming against the lease deed rather than assuming either." }
 );
+
+/* ---------------------------------------------------------------------------
+   DG_INCENTIVES — what a state pays an employer to open a delivery centre
+   there, keyed by the same stateKey as DG_WAGES. This is the leg that offsets
+   one-off move cost, and it is the one nobody looks up.
+
+   Confidence is honest and it matters here more than anywhere else in this
+   tool: government policy PDFs were not reachable from the research
+   environment, so figures marked "unconfirmed" rest on advisory-firm or press
+   summaries. Each of those names, in `verify`, the exact number to check
+   against the gazette before it reaches a business case.
+     perHead   the per-employee or per-seat cash line, the one that scales
+     tierBias  whether the policy pays more OUTSIDE the state capital
+     risk      anything that could make the whole entry worthless
+--------------------------------------------------------------------------- */
+window.DG_INCENTIVES = {
+  central: {
+    state: "Central (Government of India)",
+    policy: "Employment Linked Incentive / PM Viksit Bharat Rozgar Yojana",
+    tierBias: "None. The replacement scheme is location-neutral.",
+    perHead: "Up to ₹3,000 per employee per month for 24 months (non-manufacturing)",
+    items: [
+      "ELI Part B: up to ₹3,000/employee/month for 2 years above a baseline headcount measured Aug 2024 to Jul 2025, paid through EPFO every six months",
+      "ELI Part A: one month's EPF wage up to ₹15,000 for employees joining EPF for the first time",
+      "Eligibility caps at ₹1 lakh/month gross wages, which covers every agent role"
+    ],
+    validTill: "1 Aug 2025 to 31 Jul 2027",
+    srcUrl: "https://ibps.stpi.in/",
+    confidence: "verified",
+    risk: "The India BPO Promotion Scheme and its ₹1 lakh per seat funding closed to claims on 16 Aug 2024 and has no BPO-specific successor. More important for this portfolio: ELI is headcount-ADDITIVE against the employer's national baseline, not per site, so seats merely moved out of a metro generate little or no benefit. Model it on net group headcount growth, never on the new site's headcount."
+  },
+  up: {
+    state: "Uttar Pradesh", policy: "IT & ITeS Policy 2022",
+    tierBias: "Strongest documented tier bias of any state here, and it points exactly where this portfolio is already looking.",
+    perHead: "₹20,000 per employee recruitment assistance, Tier-2 and Tier-3 cities ONLY",
+    items: [
+      "Capital subsidy graded by region: 25% in Gautam Buddha Nagar and Ghaziabad against 35% in Bundelkhand and Purvanchal, a 10-point swing away from the NCR belt",
+      "Operating expense subsidy 10% on lease rent, bandwidth and power, up to ₹20 crore a year for 5 years",
+      "100% stamp duty exemption; 100% electricity duty exemption for 10 years",
+      "100% EPF reimbursement up to ₹1 crore a year"
+    ],
+    validTill: "Five years from 19 Nov 2022",
+    srcUrl: "https://invest.up.gov.in/it-and-ites-policy-of-uttar-pradesh-2022/",
+    confidence: "verified",
+    verify: "The ₹100 crore capex cap and the land reimbursement band come from secondary summaries rather than the gazette.",
+    risk: "The policy's 50%-per-seat BPO subsidy is drafted for units 'under the India BPO Promotion Scheme', and that scheme has been closed since Aug 2024. Confirm with Invest UP whether the clause still stands alone."
+  },
+  karnataka: {
+    state: "Karnataka", policy: "IT Policy 2025-2030 (notified 15 Nov 2025)",
+    tierBias: "'Beyond Bengaluru' is the organising principle of the whole policy rather than a percentage uplift. Mysuru, Mangaluru, Hubballi-Dharwad, Belagavi, Tumakuru, Kalaburagi and Shivamogga are the named targets.",
+    perHead: "₹50,000 per employee relocation grant, Bengaluru to Beyond Bengaluru",
+    items: [
+      "Recruitment assistance by headcount, Beyond Bengaluru only: 100-250 heads 10% capped ₹35 lakh · 251-500 20% capped ₹1.2 crore · 501-700 30% capped ₹3 crore · 701-999 50% capped ₹7 crore · 1,000+ a negotiated package",
+      "Talent relocation: 50% of one-time cost up to ₹50,000 per employee moved out of Bengaluru",
+      "100% employer EPF reimbursement for 6 months for women and other specified categories",
+      "Electricity tariff rebate, property tax reimbursement and rental assistance, all Beyond Bengaluru"
+    ],
+    validTill: "2025 to 2030",
+    srcUrl: "https://www.pwc.in/research-insights/news_alert/tax-insights/government-of-karnataka-notifies-the-it-policy-2025-2030.html",
+    confidence: "verified",
+    verify: "Whether an occupier BPO qualifies for the 20% / ₹5 crore capex subsidy or only a park developer.",
+    risk: "Operational guidelines were still awaited, so quantum is subject to them."
+  },
+  wb: {
+    state: "West Bengal", policy: "IT & Electronics Policy 2018, read against the Revocation Act 2025",
+    tierBias: "None reliably claimable today. Location differentials used to flow from the general incentive scheme zones, and those schemes have been revoked.",
+    perHead: null,
+    items: [
+      "50% property tax exemption for 12 years, available to 12 Aug 2030",
+      "Additional 15% Floor Area Ratio for IT/ITeS buildings",
+      "Cash incentives historically flowed from the Commerce & Industries and MSME schemes, which the 2025 Act revoked"
+    ],
+    validTill: "Property tax exemption is time-bound to 12 Aug 2030",
+    srcUrl: "https://prsindia.org/files/bills_acts/acts_states/west-bengal/2025/Act4of2025WB.pdf",
+    confidence: "unconfirmed",
+    risk: "MATERIAL. The Revocation of West Bengal Incentive Schemes Act 2025, notified 2 Apr 2025, retrospectively cancelled the incentive schemes of 1993 to 2021. The IT department's own Sep 2024 clarification routes IT/ITeS fiscal benefits through exactly those schemes, so cash incentives are in effect suspended and are under challenge in the Calcutta High Court. A successor policy backed by about ₹5,000 crore was expected around Oct 2026, with an IT park at Siliguri and a unit at Durgapur named in budget papers. Do not underwrite a West Bengal site on 2018-policy language; wait for the new notification."
+  },
+  tamilnadu: {
+    state: "Tamil Nadu", policy: "ICT Policy 2018 with the Industrial Policy 2021 district framework",
+    tierBias: "Yes on capital: an extra 10% in Category B districts and 25% in Category C, plus a further 5% for BPO/ITeS located anywhere outside the capital. Coimbatore, Salem, Tiruchirappalli and Vellore are Category B.",
+    perHead: "Training subsidy ₹4,000 per employee per month, ₹6,000 for women",
+    items: [
+      "Capital subsidy up to ₹1.5 crore, with the tier uplift above",
+      "Extra 5% where women are half the workforce; extra 2% where 4% are persons with disability",
+      "100% electricity tax exemption for 5 years; 50% stamp duty reimbursement",
+      "TIDEL Neo mini IT parks already operating at Villupuram, Salem, Thanjavur, Vellore, Tiruppur and Karaikudi, with one park per district targeted by 2030"
+    ],
+    validTill: "Industrial Policy 2021 framework lapsed 31 Mar 2025; the ICT Policy 2018 has no stated end date",
+    srcUrl: "https://investingintamilnadu.com/DIGIGOV/StaticAttachment?AttachmentFileName=/pdf/poli_noti/TN_Sector-Wise_Incentives.pdf",
+    confidence: "unconfirmed",
+    risk: "The headline payroll subsidy of 30/20/10% applies only to roles paying at least ₹1 lakh a month, which excludes every voice agent. Do not let it into a business case for this portfolio. The governing framework also lapsed in Mar 2025, so confirm with Guidance Tamil Nadu which instrument a 2026 application runs under."
+  },
+  telangana: {
+    state: "Telangana", policy: "2nd ICT Policy 2021-2026, with the GRID and Rural Technology Centres policies",
+    tierBias: "Sharp first-mover structure: at Tier-2 locations the first three companies get a 50% investment subsidy capped at ₹40 lakh, dropping to 10% capped ₹8 lakh after that. Warangal, Karimnagar, Nizamabad and Khammam are named targets.",
+    perHead: "Training subsidy ₹2,500 per person per month for 6 months",
+    items: [
+      "Tier-2: 50% investment subsidy capped ₹40 lakh for the first three companies at a location, 10% capped ₹8 lakh thereafter",
+      "Rental subsidy 25% per sq ft for 3 years for the first three companies, 10% thereafter",
+      "25% reimbursement of internet and telephone charges for 3 years",
+      "GRID policy: special negotiated package for units creating 500 or more jobs"
+    ],
+    validTill: "Term ran 2021 to 2026 and has now elapsed",
+    srcUrl: "https://telangana.gov.in/wp-content/uploads/2023/05/Telangana-2nd-ICT-Policy-2021.pdf",
+    confidence: "unconfirmed",
+    risk: "Timing. The governing policy's term has elapsed and the successor was still in draft, so a 2026-27 application may land in a policy gap. The caps are also small against a multi-hundred-seat centre, so the practical route is the negotiated package the policy allows for 500-plus job units. Reported direction of the draft successor is toward frontier tech, which would likely make a conventional voice centre ineligible."
+  },
+  punjab: {
+    state: "Punjab", policy: "Industrial & Business Development Policy 2026 (launched Mar 2026)",
+    tierBias: "Geographic rather than tier-graded: an extra 25% for border districts and the Kandi region. No explicit Mohali-versus-rest grading was found.",
+    perHead: "₹5,000 per employee per month for 5 years (IT/ITeS)",
+    items: [
+      "Employment generation subsidy ₹5,000/employee/month for 5 years for IT/ITeS units",
+      "₹7,500/employee/month for 5 years for the first 10 GCC units",
+      "75% net SGST reimbursement for 10 to 15 years",
+      "Capital subsidy up to 20% of fixed capital investment, capped ₹10 crore",
+      "Menu structure: investors pick from up to 20 incentives, aggregate support available up to 100% of fixed capital investment"
+    ],
+    validTill: "Not stated in available sources",
+    srcUrl: "https://www.babushahi.com/full-news.php?id=218115",
+    confidence: "unconfirmed",
+    verify: "Whether ₹5,000 is genuinely per employee per month rather than annual, and the reported ₹25 crore investment floor with a 50-worker minimum.",
+    risk: "All figures come from launch press coverage, not the gazette. The ₹25 crore capex floor is a real obstacle for a seat-leased centre with low fixed assets and may force an owned-fitout model purely to qualify. If both check out this is the strongest per-head offer in the country and warrants a direct approach to Invest Punjab."
+  },
+  mp: {
+    state: "Madhya Pradesh", policy: "IT, ITeS & ESDM Investment Promotion Policy 2023",
+    tierBias: "Inverted. The richer rental and seat assistance goes to Category A districts, which are Bhopal, Indore, Jabalpur, Gwalior and Ujjain. Every MP city is a national tier-2 though, so the state is a tier-2 play even where the policy favours its own larger towns.",
+    perHead: "₹4,000 to ₹5,000 per employee per month for up to 3 years, plus up to ₹3,000 per seat per month rent",
+    items: [
+      "Employment Generation Assistance ₹4,000/employee/month to 1,000 heads, ₹4,500 for 1,001-1,500, ₹5,000 for 1,501-2,000, for up to 3 years, ceiling ₹15 crore",
+      "Rental assistance up to ₹3,000 per seat per month for 3 years in Category A districts, overall cap ₹10 crore",
+      "Capital assistance 25% of gross fixed capital investment up to ₹30 crore over 7 years",
+      "100% stamp duty and registration assistance on qualifying leases",
+      "The policy names BPO and BPM explicitly as qualifying activities, which is unusually clear"
+    ],
+    validTill: "2023 to 2028",
+    srcUrl: "https://invest.mp.gov.in/wp-content/uploads/2025/02/MP-IT-ITeS-ESDM-Investment-Promotion-Policy-2023.pdf",
+    confidence: "unconfirmed",
+    verify: "Whether Employment Generation Assistance is genuinely per employee per MONTH. If it is annual, the economics change by an order of magnitude.",
+    risk: "Capital assistance and rental assistance appear to be alternative routes, not cumulative: a unit elects one."
+  },
+  maharashtra: {
+    state: "Maharashtra", policy: "IT & ITeS Policy 2023, now read with MIISP 2025",
+    tierBias: "Zone I is the Mumbai and Pune metropolitan corporations, Zone II is everywhere else and is richer. Nagpur, Nashik, Chh. Sambhajinagar and Kolhapur are named targets.",
+    perHead: "EPF reimbursement under MIISP 2025, quantum by zone unverified",
+    items: [
+      "Stamp duty exemption 50 to 100% by location; electricity duty exemption for 10 to 15 years",
+      "Property tax charged at residential rates for registered IT/ITeS units",
+      "Rural BPO: 20% capital subsidy capped ₹25 lakh, for units with at least 50 trained seats",
+      "MIISP 2025 brings BPO and KPO into the mainstream services incentive basket for the first time: net SGST refund, EPF reimbursement, interest subsidy"
+    ],
+    validTill: "IT Policy 2023 five years or until superseded; MIISP 2025 runs to 30 Dec 2030",
+    srcUrl: "https://industry.maharashtra.gov.in/sites/default/files/2025-09/it-policy-booklet_1_11zon.pdf",
+    confidence: "unconfirmed",
+    risk: "Two frameworks are live at once and which one a BPO claims under needs a written ruling from the Directorate of Industries. The Rural BPO caps are far too small to move a metro-exit decision on their own; the meaningful items are the SGST refund, EPF reimbursement and the electricity duty waiver."
+  },
+  odisha: {
+    state: "Odisha", policy: "IT Policy 2025 and BPO Policy 2021",
+    tierBias: "By design: the BPO Policy sets seat thresholds and incentive levels by class of city, and the IT Policy names Cuttack, Rourkela, Sambalpur and Berhampur as growth centres outside Bhubaneswar. The per-class rupee differential is not published.",
+    perHead: "₹50,000 per employee skill-certification reimbursement (IT Policy 2025)",
+    items: [
+      "Capital subsidy up to 30% of fixed capital investment for smaller projects, 20 to 25% for large ones",
+      "BPO Policy: performance-linked incentives against new employment, minimum 25 seats, 3-year operating guarantee",
+      "Special upfront negotiated package available case by case for large BPO investments"
+    ],
+    validTill: "BPO Policy 2021 runs about 5 years from notification, so roughly Dec 2026",
+    srcUrl: "https://investodisha.gov.in/odisha-BPO-policy",
+    confidence: "unconfirmed",
+    risk: "Two structural exclusions, both confirmed: a unit taking the BPO Policy cannot take similar benefits under any other Odisha policy, so the two policies are alternatives rather than additive; and any entity that took central IBPS support is barred from the state BPO Policy for that unit."
+  },
+  gujarat: {
+    state: "Gujarat", policy: "IT/ITeS Policy 2022-27",
+    tierBias: "None. Bands are set by project size, not city tier. Vadodara, Surat and Rajkot are promoted as tier-2 destinations without any published differential over Ahmedabad.",
+    perHead: "One-time ₹50,000 per male and ₹60,000 per female employee retained 12 months",
+    items: [
+      "CAPEX support 25% up to ₹50 crore for projects below ₹250 crore gross fixed capital investment",
+      "OPEX support 15% up to ₹20 crore a year covering lease rent, bandwidth, cloud and power",
+      "Skill development support up to ₹50,000 per person by direct transfer"
+    ],
+    validTill: "FY 2022-23 to FY 2026-27",
+    srcUrl: "https://directorit.gujarat.gov.in/IT-Policy",
+    confidence: "verified",
+    risk: "The policy runs only to FY 2026-27, so a centre commissioning in that year should register under it before it lapses. The OPEX support is unusually well suited to a seat-leased BPO with low fixed assets, which is the mechanism most other states lack."
+  }
+};
