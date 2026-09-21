@@ -11,3 +11,6 @@ window.CLIENT_MANIFEST = {
   "FLYDEMOACC":  { slug: "basilic-fly",      pass: "FLY1234" },  // PLACEHOLDER pass — rotate before deploy (real one supplied out of band)
   "DIGDEMOACC":  { slug: "digitide-noida",   pass: "DIG1234" }   // PLACEHOLDER pass — rotate before deploy
 };
+/* The Digitide GROUP command centre (pan-India portfolio view) is a separate
+   app at /digitide/ with its own gate — DIGGRPACC, defined in digitide/app.js.
+   It is not routed through this manifest because it is not a mapbox_app client. */
