@@ -9,8 +9,10 @@ window.CLIENT_MANIFEST = {
   "CPDEMOACC":   { slug: "cp-delhi",         pass: "CP1234" },
   "INVDEMOACC":  { slug: "invesco-andheri",  pass: "INV1234" },
   "FLYDEMOACC":  { slug: "basilic-fly",      pass: "FLY1234" },  // PLACEHOLDER pass — rotate before deploy (real one supplied out of band)
-  "DIGDEMOACC":  { slug: "digitide-noida",   pass: "DIG1234" }   // PLACEHOLDER pass — rotate before deploy
+  "DIGDEMOACC":  { slug: "digitide-noida",   pass: "DIG1234" },  // PLACEHOLDER pass — rotate before deploy
+  /* The Digitide GROUP command centre is a separate app at /digitide/ with its
+     own gate. It is listed here with a `redirect` rather than a `slug` so that
+     signing in at the site root sends you there instead of failing with
+     "Invalid Demo ID", which is what happened when the root URL was tried. */
+  "DIGITIDE-GRP":{ redirect: "/digitide/",  pass: "K2SY-2K5J" }
 };
-/* The Digitide GROUP command centre (pan-India portfolio view) is a separate
-   app at /digitide/ with its own gate — DIGGRPACC, defined in digitide/app.js.
-   It is not routed through this manifest because it is not a mapbox_app client. */

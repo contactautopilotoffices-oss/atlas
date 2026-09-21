@@ -342,9 +342,12 @@ canvas{display:block}
 const LS_KEY = "atlas_auth";
 const MANIFEST = window.CLIENT_MANIFEST || {};
 
-function lookupClient(id){
-  return MANIFEST[id && id.toUpperCase()] || null;
-}
+/* Ids and passcodes are matched ignoring case, spaces and hyphens, so a
+   credential read off a screenshot or dictated on a call still works. */
+const normId = (v) => String(v || "").trim().toUpperCase().replace(/[\s-]/g, "");
+const MANIFEST_BY_KEY = Object.fromEntries(
+  Object.entries(MANIFEST).map(([k, v]) => [normId(k), v]));
+function lookupClient(id){ return MANIFEST_BY_KEY[normId(id)] || null; }
 
 /* Dynamically load a client's config/data/geo scripts. Returns Promise. */
 function loadClientScripts(slug){
@@ -421,7 +424,8 @@ function enterExperience(){
   const id = document.getElementById("gateId").value.trim().toUpperCase();
   const pass = document.getElementById("gatePass").value.trim();
   const client = lookupClient(id);
-  if(client && pass.toUpperCase() === client.pass.toUpperCase()){
+  if(client && normId(pass) === normId(client.pass)){
+    if(client.redirect){ window.location.href = client.redirect; return; }
     try{ localStorage.setItem(LS_KEY, JSON.stringify({id, slug: client.slug, t:Date.now()})); }catch(e){}
     fadeOut(gate);
     startAppForSlug(client.slug);
@@ -469,7 +473,7 @@ if(cached){
   try{
     const data = JSON.parse(cached);
     const client = lookupClient(data.id);
-    if(client && data.slug === client.slug && Date.now()-(data.t||0) < 1000*60*60*24*7){ // 7 days loose session
+    if(client && !client.redirect && data.slug === client.slug && Date.now()-(data.t||0) < 1000*60*60*24*7){ // 7 days loose session
       gate.remove();
       startAppForSlug(client.slug);
     }else{ throw new Error("expired"); }
