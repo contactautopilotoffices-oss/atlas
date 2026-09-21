@@ -105,16 +105,33 @@ function locOf(f){
   const c = window.DG_CITIES[f.city];
   return c ? { lng: c.lng, lat: c.lat, precision: "city", source: "city centroid" } : null;
 }
-function pressureScore(f){
+/* Relocation pressure, 0 to 100, for one facility.
+
+   Three parts, each with a stated ceiling, and the ceilings total exactly 100:
+     urgency  0-50  how soon the lease closes, the only part that is a deadline
+     gravity  0-30  what the seat city costs, so a Tier 1 site scores higher
+     weight   0-20  how much operation sits there, a call centre above a
+                    collection desk above a training room
+   A facility with no dated lease, or one closing beyond FY30, scores null and
+   is excluded rather than given a zero, because there is no decision to rank. */
+const SCORE_PARTS = {
+  urgency: { max: 50, label: "Lease urgency",      of: "months to lease close" },
+  gravity: { max: 30, label: "Seat cost gravity",  of: "tier of the city it sits in" },
+  weight:  { max: 20, label: "Operational weight", of: "what kind of centre it is" }
+};
+function scoreParts(f){
   const m = monthsLeft(f.leaseEnd);
-  if (m == null) return null;                       // owned, or no end date recorded
-  let s = m <= 6 ? 55 : m <= 12 ? 48 : m <= 18 ? 40 : m <= 24 ? 32 : m <= 36 ? 20 : m <= 51 ? 10 : 0;
-  if (s === 0) return null;                          // beyond the FY30 window
+  if (m == null) return null;
+  const urgency = m <= 6 ? 50 : m <= 12 ? 44 : m <= 18 ? 36 : m <= 24 ? 30
+                : m <= 36 ? 20 : m <= 51 ? 10 : 0;
+  if (urgency === 0) return null;                    // beyond the FY30 window
   const c = window.DG_CITIES[f.city];
-  s += c ? (c.tier === 1 ? 25 : c.tier === 2 ? 12 : 4) : 0;
-  s += /call/i.test(f.centreType) ? 15 : /collection/i.test(f.centreType) ? 6 : 2;
-  return Math.min(100, s);
+  const gravity = c ? (c.tier === 1 ? 30 : c.tier === 2 ? 16 : 6) : 0;
+  const weight = /call/i.test(f.centreType) ? 20 : /collection/i.test(f.centreType) ? 10 : 4;
+  return { urgency, gravity, weight, total: urgency + gravity + weight, months: m };
 }
+function pressureScore(f){ const p = scoreParts(f); return p ? p.total : null; }
+const scoreBand = (n) => n >= 75 ? "hot" : n >= 50 ? "warm" : "ok";
 
 /* ------------------------------------------------- the portfolio index ----
    One number for the whole estate, built from the four legs the brief names.
@@ -390,6 +407,7 @@ function renderBoard(){
         <div class="b-name">${esc(c.name || x.f.location)} · ${esc(x.f.facility)}</div>
         <div class="b-meta"><span class="dot" style="background:${TIER_COLOR[c.tier]||"#888"}"></span>${TIER_NAME[c.tier]||""} · ${esc(x.f.centreType)} · <span class="b-ref">Row ${x.f.sr}</span></div>
       </div>
+      <div class="b-score ${scoreBand(x.s)}" title="Relocation pressure ${x.s} of 100">${x.s}</div>
       <div class="b-exp ${expiryClass(x.m)}">${fyLabel(x.f.leaseEnd)}<span class="mo">${x.m} mo</span></div>
     </div>`; }).join("");
   $("#board-foot").textContent = `${rows.length} leased facilities closing FY27 to FY30`
@@ -601,6 +619,7 @@ function showPortfolio(){
   const gp = {};
   for (const f of window.DG_FACILITIES){
     const g = window.DG_GEO && window.DG_GEO[f.sr];
+    const sp = scoreParts(f);
     const k = g ? g.precision : "city";
     gp[k] = (gp[k]||0) + 1;
   }
@@ -724,19 +743,28 @@ function renderCity(key, c, focusSr){
   for (const f of facs.sort((a,b) => (monthsLeft(a.leaseEnd) ?? 9999) - (monthsLeft(b.leaseEnd) ?? 9999))){
     const m = monthsLeft(f.leaseEnd);
     const g = window.DG_GEO && window.DG_GEO[f.sr];
+    const sp = scoreParts(f);
     const pill = f.leaseEnd == null
       ? `<span class="pill ok">Owned, no end date</span>`
       : `<span class="pill ${m<=12?"hot":m<=24?"warm":"ok"}">Lease ends ${dmy(f.leaseEnd)} · ${m} mo</span>`;
     h += `<div class="fac${m!=null&&m<=12?" urgent":""}${f.sr===focusSr?" focused":""}" id="fac-${f.sr}"
         data-sr="${f.sr}" role="button" tabindex="0"
         aria-label="${esc(f.facility)}, tracker row ${f.sr}. Select to locate on the map.">
-      <div class="fn"><span>${esc(f.facility)}</span><span class="sr">Row ${f.sr}</span></div>
+      <div class="fn"><span>${esc(f.facility)}</span>${sp ? `<span class="fscore ${scoreBand(sp.total)}" title="Relocation pressure ${sp.total} of 100">${sp.total}</span>` : ``}</div>
       <div class="addr">${esc(f.address)}</div>
       <div class="row2">${pill}<span class="pill">${esc(f.centreType)}</span><span class="pill">${esc(f.officeType)}</span>
         <span class="pill">Lessor: ${esc(f.lessor.length>32?f.lessor.slice(0,30)+"…":f.lessor)}</span>
         ${g ? `<span class="pill">Pin: ${esc(g.precision)}${g.confidence === "verified" ? " · verified" : ""}</span>` : `<span class="pill">Pin: city</span>`}</div>
       ${f.sr === focusSr ? `<div class="facdet">
-        <div class="kv"><span class="k">Tracker row</span><span class="v">${f.sr}</span></div>
+        ${sp ? `<div class="scorebox">
+          <div class="sb-h">Relocation pressure <b>${sp.total}</b> <span>of 100</span></div>
+          ${Object.entries(SCORE_PARTS).map(([k, meta]) => `
+            <div class="sb-r"><span class="sb-l">${meta.label}<small>${meta.of}</small></span>
+              <span class="sb-t"><span class="sb-f" style="width:${sp[k] / meta.max * 100}%"></span></span>
+              <span class="sb-v">${sp[k]}<span>/${meta.max}</span></span></div>`).join("")}
+          <div class="sb-tot"><span>Total</span><span class="sb-v">${sp.total}<span>/100</span></span></div>
+          <div class="note">Urgency is the only part that is a deadline. The other two say how much is at stake if the deadline is missed, not how bad the site is.</div>
+        </div>` : `<div class="note">No dated lease, so no relocation pressure score. Nothing here is on a clock.</div>`}
         <div class="kv"><span class="k">Region · state</span><span class="v" style="font-family:var(--font)">${esc(f.region)} · ${esc(f.state)}</span></div>
         <div class="kv"><span class="k">Lease term</span><span class="v">${f.leaseStart ? dmy(f.leaseStart) + " to " + dmy(f.leaseEnd) : "Owned, no dated term"}</span></div>
         ${m != null ? `<div class="kv"><span class="k">Runs out in</span><span class="v ${m<=12?"delta-neg":""}">${m} months · ${fyLabel(f.leaseEnd)}</span></div>` : ""}

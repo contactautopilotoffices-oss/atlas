@@ -162,7 +162,7 @@ body.resizing .grip{pointer-events:auto}
 #board .why{padding:0 16px 11px;font-size:10.5px;color:var(--mut);line-height:1.5;border-bottom:1px solid var(--line)}
 #board .why b{color:var(--t1);font-weight:600}
 #board-list{overflow-y:auto;padding:7px;flex:1;background:rgba(10,14,22,.30)}
-.b-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:var(--r-sm);min-height:44px;
+.b-row{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:var(--r-sm);min-height:44px;
   cursor:pointer;transition:background .16s var(--ease),box-shadow .16s var(--ease)}
 .b-row:hover{background:rgba(255,255,255,.055)}
 .b-row.active{background:rgba(224,96,58,.20);box-shadow:inset 0 0 0 1.5px rgba(224,96,58,.75)}
@@ -177,6 +177,34 @@ body.resizing .grip{pointer-events:auto}
 .b-meta{font-size:9.5px;color:var(--dim);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .dot{width:6px;height:6px;border-radius:50%;display:inline-block;flex:none;margin-right:4px;vertical-align:0}
 .b-exp{font-size:10px;font-weight:700;text-align:right;flex:none;line-height:1.3;font-family:var(--num)}
+/* the score that drives the ranking, shown on the row that the ranking made */
+.b-score{flex:none;width:28px;height:22px;border-radius:6px;display:grid;place-items:center;
+  font-family:var(--num);font-size:11px;font-weight:700;letter-spacing:-.3px}
+.b-score.hot{background:rgba(224,96,58,.20);color:#ff9d84}
+.b-score.warm{background:rgba(224,169,31,.18);color:#f0d27e}
+.b-score.ok{background:rgba(255,255,255,.07);color:var(--mut)}
+.fscore{flex:none;min-width:26px;height:20px;padding:0 6px;border-radius:6px;display:grid;place-items:center;
+  font-family:var(--num);font-size:11px;font-weight:700}
+.fscore.hot{background:rgba(224,96,58,.22);color:#ff9d84}
+.fscore.warm{background:rgba(224,169,31,.20);color:#f0d27e}
+.fscore.ok{background:rgba(255,255,255,.08);color:var(--mut)}
+
+/* score breakdown inside the selected property */
+.scorebox{margin-bottom:10px;padding:10px 11px;border-radius:var(--r-sm);
+  background:rgba(255,255,255,.035);border:1px solid var(--line2)}
+.sb-h{font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:var(--dim);margin-bottom:9px}
+.sb-h b{font-family:var(--num);font-size:15px;color:#fff;letter-spacing:-.3px}
+.sb-h span{font-size:9.5px}
+.sb-r{display:grid;grid-template-columns:1fr 74px 44px;gap:9px;align-items:center;margin-bottom:6px}
+.sb-l{font-size:10.5px;color:var(--mut);line-height:1.3}
+.sb-l small{display:block;color:var(--dim);font-size:9px;margin-top:1px}
+.sb-t{height:5px;border-radius:3px;background:rgba(255,255,255,.07);overflow:hidden}
+.sb-f{display:block;height:100%;border-radius:3px;background:var(--t1)}
+.sb-v{font-family:var(--num);font-size:11px;font-weight:700;text-align:right}
+.sb-v span{color:var(--dim);font-weight:400;font-size:9px}
+.sb-tot{display:grid;grid-template-columns:1fr 74px 44px;gap:9px;padding-top:7px;margin-top:2px;
+  border-top:1px solid var(--line);font-size:10.5px;font-weight:700}
+.sb-tot>span:first-child{grid-column:1 / 3}
 .b-exp .mo{display:block;font-weight:400;color:var(--dim);font-size:9px}
 .exp-red{color:#ff8a70}.exp-amber{color:#e8c04a}.exp-ok{color:var(--dim)}
 #board .foot{padding:8px 16px;border-top:1px solid var(--line);font-size:9.5px;color:var(--dim);line-height:1.5}
