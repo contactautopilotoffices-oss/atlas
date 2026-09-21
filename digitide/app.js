@@ -22,9 +22,15 @@
    ============================================================================ */
 "use strict";
 
-/* Access gate. Client-side demo gate, same pattern as clients/manifest.js.
-   Placeholder passcode: rotate before the link is shared. */
-const GATE = { id: "DIGGRPACC", pass: "DGRP1234" };
+/* Access gate, same pattern as clients/manifest.js.
+
+   WHAT THIS DOES AND DOES NOT DO. It gates the interface, not the data. The
+   check runs in the browser, so the passcode below is readable by anyone who
+   opens dev tools, and facilities.js is fetchable directly by URL whether or
+   not anyone signs in. It keeps a casual visitor out of the view; it does not
+   protect the tracker. Making the data actually private means moving it behind
+   a server-side session, which is a deliberate piece of work, not a setting. */
+const GATE = { id: "DIGITIDE-GRP", pass: "K2SY-2K5J" };
 
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
@@ -46,8 +52,9 @@ const SEAT_SQFT = 50;   // stated assumption for per-seat rent maths, shown wher
 /* ------------------------------------------------------------------ gate -- */
 (function gate(){
   const go = () => {
-    const id = $("#g-id").value.trim().toUpperCase(), pw = $("#g-pw").value;
-    if (id === GATE.id && pw === GATE.pass) {
+    const norm = (v) => v.trim().toUpperCase().replace(/[\s-]/g, "");
+    const id = norm($("#g-id").value), pw = norm($("#g-pw").value);
+    if (id === norm(GATE.id) && pw === norm(GATE.pass)) {
       sessionStorage.setItem("dg-auth", "1"); $("#gate").remove(); boot();
     } else $("#g-err").textContent = "Not recognised. Access is issued per person.";
   };
