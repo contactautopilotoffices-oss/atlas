@@ -33,6 +33,7 @@
   --spec:inset 0 1px 0 rgba(255,255,255,.30), inset 0 0 0 .5px rgba(255,255,255,.12),
          inset 0 -1px 0 rgba(0,0,0,.34);
   --r-lg:16px; --r-md:12px; --r-sm:9px;
+  --board-w:326px; --panel-w:474px;
   --ease:cubic-bezier(.32,.72,0,1);
 }
 
@@ -109,8 +110,53 @@ canvas{display:block}
 .tg.on{background:rgba(255,255,255,.94);color:#0b0f16;border-color:transparent;font-weight:600;
   box-shadow:var(--e1)}
 
+/* resize grips: a wide invisible hit area over a thin visible line, so the
+   target is comfortable without a chunky divider on screen */
+.grip{position:absolute;top:0;bottom:0;width:14px;z-index:6;cursor:col-resize;
+  background:transparent;border:none;padding:0}
+.grip-r{right:0} .grip-l{left:0}
+.grip::after{content:"";position:absolute;top:50%;transform:translateY(-50%);
+  left:calc(50% - 1px);width:2px;height:40px;border-radius:2px;background:rgba(255,255,255,.14);
+  transition:background .16s var(--ease),height .16s var(--ease)}
+.grip:hover::after,.grip:focus-visible::after{background:rgba(255,255,255,.55);height:72px}
+body.resizing{cursor:col-resize;user-select:none}
+body.resizing *{pointer-events:none}
+body.resizing .grip{pointer-events:auto}
+
+/* ---------------- portfolio index ---------------- */
+#idx-pill{position:relative;pointer-events:auto;display:flex;align-items:center;gap:9px;
+  border-radius:999px;padding:6px 14px 6px 11px;cursor:pointer;color:var(--txt);
+  font:inherit;margin-left:18px;min-height:38px}
+#idx-pill:hover{border-color:rgba(255,255,255,.22)}
+#idx-pill .idx-n{font-family:var(--num);font-size:19px;font-weight:700;letter-spacing:-.5px;line-height:1}
+#idx-pill .idx-l{font-size:9px;color:var(--dim);line-height:1.15;text-align:left;text-transform:uppercase;letter-spacing:.5px}
+#idx-pill .idx-bar{display:flex;width:56px;height:5px;border-radius:3px;overflow:hidden;gap:1px}
+#idx-pill .idx-bar i{display:block;height:100%}
+#idx-pop{position:fixed;top:64px;left:50%;transform:translateX(-50%) translateY(-6px);
+  width:min(560px,92vw);border-radius:var(--r-lg);padding:16px 18px 15px;z-index:30;
+  opacity:0;transition:opacity .18s var(--ease),transform .18s var(--ease)}
+#idx-pop.show{opacity:1;transform:translateX(-50%) translateY(0)}
+#idx-pop h5{margin:0 0 3px;font-size:13px;letter-spacing:.2px}
+#idx-pop .lede{font-size:10.5px;color:var(--mut);line-height:1.55;margin-bottom:12px}
+.fr{display:grid;grid-template-columns:15px 1fr 46px 52px;gap:9px;align-items:center;
+  padding:7px 0;border-bottom:1px solid var(--line2);font-size:11px}
+.fr:last-of-type{border-bottom:none}
+.fr .sw{width:9px;height:9px;border-radius:2px}
+.fr .nm{color:#fff;font-weight:600}
+.fr .nm small{display:block;color:var(--dim);font-weight:400;font-size:9.5px;margin-top:2px;line-height:1.4}
+.fr .sc,.fr .sh{font-family:var(--num);text-align:right;font-variant-numeric:tabular-nums}
+.fr .sc{color:var(--mut)}
+.fr .sh{font-weight:700}
+.frh{display:grid;grid-template-columns:15px 1fr 46px 52px;gap:9px;font-size:8.5px;
+  text-transform:uppercase;letter-spacing:.6px;color:var(--dim);padding-bottom:5px;
+  border-bottom:1px solid var(--line)}
+.frh span:nth-child(3),.frh span:nth-child(4){text-align:right}
+.frt{display:grid;grid-template-columns:15px 1fr 46px 52px;gap:9px;padding-top:9px;
+  margin-top:3px;border-top:1px solid var(--line);font-size:11px;font-weight:700}
+.frt .sh,.frt .sc{font-family:var(--num);text-align:right}
+
 /* ---------------- left board ---------------- */
-#board{position:fixed;left:16px;top:74px;bottom:16px;width:326px;border-radius:var(--r-lg);
+#board{position:fixed;left:16px;top:74px;bottom:16px;width:var(--board-w);border-radius:var(--r-lg);
   display:flex;flex-direction:column;z-index:15;overflow:hidden}
 #board h3{margin:0;padding:14px 16px 3px;font-size:12.5px;letter-spacing:.3px}
 #board .why{padding:0 16px 11px;font-size:10.5px;color:var(--mut);line-height:1.5;border-bottom:1px solid var(--line)}
@@ -136,7 +182,7 @@ canvas{display:block}
 #board .foot{padding:8px 16px;border-top:1px solid var(--line);font-size:9.5px;color:var(--dim);line-height:1.5}
 
 /* ---------------- right panel ---------------- */
-#panel{position:fixed;right:16px;top:74px;bottom:16px;width:474px;
+#panel{position:fixed;right:16px;top:74px;bottom:16px;width:var(--panel-w);
   border-radius:var(--r-lg);z-index:16;overflow:hidden;display:flex;flex-direction:column}
 #p-head{padding:14px 18px 12px;border-bottom:1px solid var(--line);position:relative;flex:none}
 #p-back{background:none;border:none;color:var(--dim);font:inherit;font-size:10.5px;cursor:pointer;padding:0 0 5px;display:none}
@@ -254,15 +300,13 @@ tr.cur td:first-child::after{content:" ← this site";font-size:8.5px;color:var(
 /* legend / hint */
 /* Anchored just right of the board rather than centred on the viewport: at
    projector widths a viewport-centred legend slides under the right panel. */
-#legend{position:fixed;left:358px;bottom:16px;z-index:14;
-  max-width:calc(100vw - 358px - 506px);border-radius:var(--r-md);padding:9px 14px;
+#legend{position:fixed;left:calc(var(--board-w) + 32px);bottom:16px;z-index:14;
+  max-width:calc(100vw - var(--board-w) - var(--panel-w) - 96px);border-radius:var(--r-md);padding:9px 14px;
   font-size:10px;color:var(--mut);display:flex;gap:10px 14px;align-items:center;flex-wrap:wrap}
 #legend .sw{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:0}
 #legend .hollow{background:transparent;border:1.6px solid var(--cand);width:7px;height:7px}
 #legend .sep{width:1px;height:14px;background:var(--line)}
 #legend>span{white-space:nowrap}
-@media (max-width:1180px){ #panel{width:420px} }
-@media (max-width:1180px){ #legend{max-width:calc(100vw - 358px - 452px)} }
 @media (max-width:1000px){ #board{display:none} #legend{display:none} }
 @media (max-width:760px){ #panel{right:8px;left:8px;width:auto} }
 </style>
@@ -287,18 +331,24 @@ tr.cur td:first-child::after{content:" ← this site";font-size:8.5px;color:var(
     <div class="t">ATLAS <span>· Digitide Portfolio Command Centre</span></div>
     <div class="s" id="brand-sub">Tracker as on 1 Sep 2026</div>
   </div>
+  <button id="idx-pill" class="glass" aria-expanded="false" aria-controls="idx-pop">
+    <span class="idx-n" id="idx-n">--</span>
+    <span class="idx-l">Portfolio<br>index</span>
+    <span class="idx-bar" id="idx-bar" aria-hidden="true"></span>
+  </button>
   <div class="spacer"></div>
   <div class="chips" id="filters"></div>
 </div>
+<div id="idx-pop" class="glass" role="dialog" aria-label="Portfolio index breakdown" hidden></div>
 
-<div id="board" class="glass">
+<div id="board" class="glass"><div class="grip grip-r" data-grip="board" role="separator" aria-label="Resize board" tabindex="0"></div>
   <h3>Relocation pressure board</h3>
   <div class="why">Leased facilities closing inside <b>FY27 to FY30</b>, ranked by how soon the lease ends, what the seat city costs, and how movable the operation is.</div>
   <div id="board-list"></div>
   <div class="foot" id="board-foot"></div>
 </div>
 
-<div id="panel" class="glass">
+<div id="panel" class="glass"><div class="grip grip-l" data-grip="panel" role="separator" aria-label="Resize panel" tabindex="0"></div>
   <div id="p-head">
     <button id="p-back">← Portfolio overview</button>
     <div id="p-title"></div>

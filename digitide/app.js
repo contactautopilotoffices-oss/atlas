@@ -50,7 +50,7 @@ const TIER_NAME  = { 1: "Tier 1", 2: "Tier 2", 3: "Tier 3" };
 const SEAT_SQFT = 50;   // stated assumption for per-seat rent maths, shown wherever used
 
 /* ------------------------------------------------------------------ gate -- */
-(function gate(){
+function initGate(){
   const go = () => {
     const norm = (v) => v.trim().toUpperCase().replace(/[\s-]/g, "");
     const id = norm($("#g-id").value), pw = norm($("#g-pw").value);
@@ -61,7 +61,7 @@ const SEAT_SQFT = 50;   // stated assumption for per-seat rent maths, shown wher
   if (sessionStorage.getItem("dg-auth") === "1") { $("#gate").remove(); boot(); return; }
   $("#g-go").addEventListener("click", go);
   $("#gate").addEventListener("keydown", e => { if (e.key === "Enter") go(); });
-})();
+}
 
 /* --------------------------------------------------------------- helpers -- */
 function monthsLeft(iso){
@@ -125,6 +125,118 @@ function pressureScore(f){
   return Math.min(100, s);
 }
 
+/* ------------------------------------------------- the portfolio index ----
+   One number for the whole estate, built from the four legs the brief names.
+
+   THE ARITHMETIC, stated so it can be checked rather than trusted:
+     · each factor gets a score from 0 to 100, computed from the data below
+     · each factor carries a stated weight, and the weights total exactly 100
+     · contribution   = score x weight / 100
+     · the index      = the sum of the four contributions
+     · share of index = contribution / index x 100, and the four shares total
+                        exactly 100 because they are parts of that same sum
+   Displayed shares are rounded by largest remainder, not independently, so the
+   integers on screen also total exactly 100 rather than 99 or 101.
+
+   The weights are a stated judgement, not a derived fact, and the panel says
+   so. Everything else is computed.
+------------------------------------------------------------------------- */
+const INDEX_WEIGHTS = { wage: 30, rent: 25, competition: 20, talent: 25 };
+
+/* Linear scale with clamping: `lo` maps to 0, `hi` maps to 100. */
+const scale = (v, lo, hi) => Math.max(0, Math.min(100, ((v - lo) / (hi - lo)) * 100));
+const mean = (a) => a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0;
+
+/* Lowest statutory unskilled floor reachable from a given city: the cheapest
+   zone in its own state, or any of its named candidates' zones. */
+function bestFloorFrom(c){
+  const here = wageRow(c.stateKey, c.wageZone);
+  if (!here || here.unskilled == null) return null;
+  let best = here.unskilled;
+  const own = window.DG_WAGES[c.stateKey];
+  if (own) for (const z of Object.values(own.zones))
+    if (z.unskilled != null && z.unskilled < best) best = z.unskilled;
+  for (const k of c.candidates || []){
+    const t = window.DG_CITIES[k]; if (!t) continue;
+    const w = wageRow(t.stateKey, t.wageZone);
+    if (w && w.unskilled != null && w.unskilled < best) best = w.unskilled;
+  }
+  return { current: here.unskilled, best };
+}
+
+function portfolioIndex(){
+  /* Scored over the facilities a decision is actually live on, which is the
+     same set the pressure board ranks. Scoring the whole estate would dilute
+     it with leases nobody can act on. */
+  const rows = visible().filter(f => pressureScore(f) != null);
+  const cityOf = (f) => window.DG_CITIES[f.city];
+
+  const wageCuts = [], rentCuts = [], attrition = [];
+  let contested = 0, wageCov = 0, rentCov = 0, talentCov = 0;
+
+  for (const f of rows){
+    const c = cityOf(f); if (!c) continue;
+
+    const bf = bestFloorFrom(c);
+    if (bf){ wageCuts.push((bf.current - bf.best) / bf.current * 100); wageCov++; }
+
+    const hereRent = perSeatRent(c.rent);
+    if (hereRent){
+      const opts = (c.candidates || []).map(k => perSeatRent((window.DG_CITIES[k]||{}).rent))
+        .filter(v => v != null);
+      if (opts.length){ rentCuts.push((hereRent - Math.min(...opts)) / hereRent * 100); rentCov++; }
+    }
+
+    if (/very high|high/i.test(c.presence || "")) contested++;
+
+    const t = window.DG_TALENT[f.city];
+    if (t && t.attrition){
+      const m = t.attrition.match(/(\d+)\s*-\s*(\d+)/);
+      if (m){ attrition.push((+m[1] + +m[2]) / 2); talentCov++; }
+    }
+  }
+
+  const scores = {
+    /* a 25% statutory cut is treated as the practical ceiling */
+    wage: scale(mean(wageCuts), 0, 25),
+    /* an 80% rent cut is the practical ceiling; the observed portfolio mean is
+       around 65%, so the factor still discriminates instead of pinning at 100 */
+    rent: scale(mean(rentCuts), 0, 80),
+    /* already a percentage of facilities, so it needs no scaling */
+    competition: rows.length ? (contested / rows.length) * 100 : 0,
+    /* 15% annual churn scores 0, 65% scores 100 */
+    talent: scale(mean(attrition), 15, 65)
+  };
+
+  const contrib = {}; let index = 0;
+  for (const k of Object.keys(INDEX_WEIGHTS)){
+    contrib[k] = scores[k] * INDEX_WEIGHTS[k] / 100;
+    index += contrib[k];
+  }
+
+  /* Largest remainder, so the four printed integers total exactly 100. */
+  let shares = {};
+  if (index > 0){
+    const exact = {}, floors = {};
+    for (const k of Object.keys(contrib)){
+      exact[k] = contrib[k] / index * 100;
+      floors[k] = Math.floor(exact[k]);
+    }
+    let left = 100 - Object.values(floors).reduce((a, b) => a + b, 0);
+    const order = Object.keys(exact).sort((a, b) => (exact[b] - floors[b]) - (exact[a] - floors[a]));
+    shares = { ...floors };
+    for (let i = 0; i < left; i++) shares[order[i % order.length]]++;
+  } else {
+    for (const k of Object.keys(contrib)) shares[k] = 0;
+  }
+
+  return { rows: rows.length, scores, contrib, index,
+    shares, weights: INDEX_WEIGHTS,
+    coverage: { wage: wageCov, rent: rentCov, competition: rows.length, talent: talentCov },
+    raw: { wageCut: mean(wageCuts), rentCut: mean(rentCuts),
+           contested, attrition: mean(attrition) } };
+}
+
 /* ----------------------------------------------------------------- state -- */
 let map, selected = null, selectedSr = null, regionFilter = "All", soonOnly = false;
 
@@ -148,6 +260,7 @@ function boot(){
     map.on("error", () => {});
   } catch (e) { map = null; }
   buildFilters(); renderBoard(); showPortfolio(); updateBrand(); updateLegend();
+  renderIndex(); wireIndex(); wireResize();
   $("#p-back").addEventListener("click", () => select(null));
 }
 
@@ -267,7 +380,7 @@ function buildFilters(){
   wrap.appendChild(s);
 }
 function redraw(){
-  buildFilters(); renderBoard(); refreshMap(); updateBrand();
+  buildFilters(); renderBoard(); refreshMap(); updateBrand(); renderIndex();
   if (!selected) showPortfolio();
 }
 
@@ -746,6 +859,125 @@ function renderCity(key, c, focusSr){
   }
 }
 
+/* ------------------------------------------------------- index rendering -- */
+const FACTOR_META = {
+  wage:        { label:"Statutory wage headroom", color:"#e0603a",
+                 how:"Mean cut available on the unskilled floor, against the cheapest zone in the same state or a named candidate" },
+  rent:        { label:"Real estate headroom",    color:"#e0a91f",
+                 how:"Mean cut available on rent per seat, against the cheapest candidate market" },
+  competition: { label:"Competitor pressure",     color:"#4f9cd9",
+                 how:"Share of these facilities sitting in high or very high competitor density catchments" },
+  talent:      { label:"Talent churn and cost",   color:"#1f8f77",
+                 how:"Mean annualised voice attrition of the catchments these facilities sit in" }
+};
+
+function renderIndex(){
+  const r = portfolioIndex();
+  const n = Math.round(r.index);
+  $("#idx-n").textContent = n;
+  $("#idx-bar").innerHTML = Object.keys(FACTOR_META)
+    .map(k => `<i style="width:${r.shares[k]}%;background:${FACTOR_META[k].color}"></i>`).join("");
+  $("#idx-pill").setAttribute("title", `Portfolio index ${n} of 100. Click for the breakdown.`);
+
+  const sumShares = Object.values(r.shares).reduce((a,b)=>a+b,0);
+  const sumW = Object.values(r.weights).reduce((a,b)=>a+b,0);
+  const rows = Object.keys(FACTOR_META).map(k => {
+    const m = FACTOR_META[k];
+    return `<div class="fr">
+      <span class="sw" style="background:${m.color}"></span>
+      <span class="nm">${m.label}<small>${m.how}. ${r.coverage[k]} of ${r.rows} facilities carry the data.</small></span>
+      <span class="sc">${r.scores[k].toFixed(0)} <span style="color:var(--dim);font-size:9px">/100</span></span>
+      <span class="sh" style="color:${m.color}">${r.shares[k]}%</span>
+    </div>`;
+  }).join("");
+
+  $("#idx-pop").innerHTML = `
+    <h5>Portfolio index ${n} <span style="color:var(--dim);font-weight:400;font-size:11px">of 100</span></h5>
+    <div class="lede">How much room there is to improve, across the ${r.rows} facilities with a live decision${regionFilter!=="All"?` in ${esc(regionFilter)}`:""}. Higher means more headroom, not worse performance. The right-hand column is each leg's share of that total, and the four shares add to 100 by construction.</div>
+    <div class="frh"><span></span><span>Factor</span><span>Score</span><span>Share</span></div>
+    ${rows}
+    <div class="frt"><span></span><span>Total</span><span class="sc">${n}</span><span class="sh">${sumShares}%</span></div>
+    <div class="note">Weights are a stated judgement: wage ${r.weights.wage}, real estate ${r.weights.rent}, competition ${r.weights.competition}, talent ${r.weights.talent}, totalling ${sumW}. Each factor's share is its score times its weight, divided by the index. Shares are rounded by largest remainder so the printed figures total exactly 100 rather than 99 or 101.</div>
+    <div class="note">Underlying means: ${r.raw.wageCut.toFixed(1)}% statutory cut available, ${r.raw.rentCut.toFixed(1)}% rent cut available, ${r.raw.contested} of ${r.rows} facilities in contested catchments, ${r.raw.attrition.toFixed(0)}% mean attrition.</div>
+    <div class="note">Scores are those means placed on a stated scale: a 25% statutory cut scores 100, an 80% rent cut scores 100, competitor pressure is already a percentage so it is used as is, and attrition runs 15% for 0 to 65% for 100. Change a scale and only the scores move; the shares still total 100.</div>`;
+
+  /* If either total ever drifts, say so on screen rather than print a wrong
+     number quietly. */
+  if (sumShares !== 100 || sumW !== 100)
+    $("#idx-pop").innerHTML += `<div class="note" style="color:#ffb09b">Totals check failed: shares ${sumShares}, weights ${sumW}. Do not use these figures.</div>`;
+  return r;
+}
+
+function wireIndex(){
+  const pill = $("#idx-pill"), pop = $("#idx-pop");
+  const close = () => { pop.classList.remove("show"); pill.setAttribute("aria-expanded","false");
+    setTimeout(() => { if (!pop.classList.contains("show")) pop.hidden = true; }, 180); };
+  const open = () => { pop.hidden = false; requestAnimationFrame(() => pop.classList.add("show"));
+    pill.setAttribute("aria-expanded","true"); };
+  pill.addEventListener("click", e => {
+    e.stopPropagation();
+    pop.classList.contains("show") ? close() : open();
+  });
+  document.addEventListener("click", e => {
+    if (pop.classList.contains("show") && !pop.contains(e.target) && e.target !== pill) close();
+  });
+  document.addEventListener("keydown", e => { if (e.key === "Escape") close(); });
+}
+
+/* ------------------------------------------------------ resizable panes -- */
+function wireResize(){
+  const MIN = { board: 240, panel: 340 }, MAX = { board: 560, panel: 760 };
+  const varOf = { board: "--board-w", panel: "--panel-w" };
+  const root = document.documentElement;
+
+  /* restore, clamped, because a width saved on a wide screen must not swallow
+     a narrow one */
+  for (const k of ["board","panel"]){
+    const v = Number(localStorage.getItem("dg-w-" + k));
+    if (v) setW(k, v);
+  }
+  function setW(k, px){
+    const cap = Math.min(MAX[k], Math.max(MIN[k], px), window.innerWidth * 0.45);
+    root.style.setProperty(varOf[k], Math.round(cap) + "px");
+    try { localStorage.setItem("dg-w-" + k, String(Math.round(cap))); } catch (e) {}
+    return cap;
+  }
+  document.querySelectorAll(".grip").forEach(g => {
+    const k = g.dataset.grip;
+    g.addEventListener("pointerdown", e => {
+      e.preventDefault();
+      const startX = e.clientX;
+      const startW = document.getElementById(k).getBoundingClientRect().width;
+      document.body.classList.add("resizing");
+      g.setPointerCapture(e.pointerId);
+      const move = (ev) => {
+        const d = ev.clientX - startX;
+        setW(k, k === "board" ? startW + d : startW - d);   // panel grows leftward
+        if (map) map.resize();
+      };
+      const up = () => {
+        document.body.classList.remove("resizing");
+        g.removeEventListener("pointermove", move);
+        g.removeEventListener("pointerup", up);
+        g.removeEventListener("pointercancel", up);
+      };
+      g.addEventListener("pointermove", move);
+      g.addEventListener("pointerup", up);
+      g.addEventListener("pointercancel", up);
+    });
+    /* keyboard: the grip is a real control, so arrows resize it too */
+    g.addEventListener("keydown", e => {
+      const step = e.shiftKey ? 48 : 16;
+      if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+      e.preventDefault();
+      const w = document.getElementById(k).getBoundingClientRect().width;
+      const d = (e.key === "ArrowRight" ? step : -step) * (k === "board" ? 1 : -1);
+      setW(k, w + d);
+      if (map) map.resize();
+    });
+  });
+}
+
 /* ------------------------------------------------------------------ misc -- */
 function updateBrand(){
   const F = visible();
@@ -761,7 +993,10 @@ function updateLegend(){
      lumping them together would overstate the map. */
   const exact = window.DG_FACILITIES.filter(f => g[f.sr] &&
     (g[f.sr].precision === "building" || g[f.sr].precision === "street")).length;
-  el.textContent = n
-    ? `${exact} of ${window.DG_FACILITIES.length} located to building or street`
-    : `Pin size = facilities at that site`;
+  el.textContent = "Pin size = facilities at that site";
 }
+
+/* Everything above is declared before the gate runs. Booting any earlier put
+   boot() inside the temporal dead zone of the state bindings and blanked the
+   page for anyone who reloaded after signing in. */
+initGate();
