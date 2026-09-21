@@ -3,148 +3,210 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
-<title>ATLAS · Digitide Group Command Centre</title>
+<title>Digitide Portfolio Command Centre</title>
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js"></script>
 <script src="../config.js"></script>
 <script src="./facilities.js"></script>
+<script src="./geo.js"></script>
 <script src="./intel.js"></script>
 <style>
 :root{
-  --bg:#0b0f16; --panel:rgba(16,21,30,.72); --panel2:rgba(22,28,40,.80);
-  --line:rgba(255,255,255,.09); --txt:#ffffff; --mut:rgba(255,255,255,.72); --dim:rgba(255,255,255,.45);
-  --acc:#2fbf71; --t1:#e0603a; --t2:#d9b310; --t3:#2fbf71; --cand:#4f9cd9;
-  --font:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen,Ubuntu,Cantarell,sans-serif;
+  --bg:#0b0f16; --panel:rgba(16,21,30,.74); --panel2:rgba(19,24,34,.86);
+  --line:rgba(255,255,255,.09); --line2:rgba(255,255,255,.055);
+  --txt:#ffffff; --mut:rgba(255,255,255,.70); --dim:rgba(255,255,255,.44);
+  /* Tier ramp: ordered by cost gravity. Validated for colour-vision separation
+     on all pairs against this surface; tier is also always written in text, so
+     colour is never the only carrier. */
+  --t1:#e0603a; --t2:#e0a91f; --t3:#1f8f77; --cand:#4f9cd9;
+  --acc:#2fbf71;
+  --font:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  --num:'SF Mono',ui-monospace,Menlo,Consolas,monospace;
 }
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);font-family:var(--font);overflow:hidden}
 #map{position:fixed;inset:0}
 canvas{display:block}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.13);border-radius:5px}
+::-webkit-scrollbar-track{background:transparent}
 
-/* ---- login gate (same pattern as the root app: client-side demo gate) ---- */
-#gate{position:fixed;inset:0;z-index:100;background:radial-gradient(1200px 700px at 50% 30%,#101826,#070a10);
+/* ---------------- gate ---------------- */
+#gate{position:fixed;inset:0;z-index:100;background:radial-gradient(1200px 700px at 50% 32%,#111a29,#070a10);
   display:flex;align-items:center;justify-content:center}
-#gate .box{width:min(360px,88vw);background:var(--panel2);border:1px solid var(--line);border-radius:16px;
-  padding:28px 26px;backdrop-filter:blur(14px);box-shadow:0 24px 64px rgba(0,0,0,.5)}
-#gate h1{margin:0 0 2px;font-size:17px;letter-spacing:.4px}
-#gate .sub{font-size:11px;color:var(--mut);margin-bottom:18px;line-height:1.45}
-#gate input{width:100%;margin-bottom:10px;padding:10px 12px;border-radius:9px;border:1px solid var(--line);
+#gate .box{width:min(372px,89vw);background:var(--panel2);border:1px solid var(--line);border-radius:16px;
+  padding:30px 28px;backdrop-filter:blur(14px);box-shadow:0 24px 64px rgba(0,0,0,.55)}
+#gate h1{margin:0 0 3px;font-size:17px;letter-spacing:.3px}
+#gate h1 span{color:var(--mut);font-weight:400}
+#gate .sub{font-size:11.5px;color:var(--mut);margin-bottom:20px;line-height:1.5}
+#gate input{width:100%;margin-bottom:10px;padding:11px 13px;border-radius:9px;border:1px solid var(--line);
   background:rgba(255,255,255,.05);color:#fff;font:inherit;font-size:13px;outline:none}
-#gate input:focus{border-color:rgba(47,191,113,.6)}
+#gate input:focus{border-color:rgba(47,191,113,.55)}
 #gate button{width:100%;padding:11px;border:none;border-radius:9px;background:linear-gradient(135deg,#2fbf71,#1d9c5a);
   color:#04150c;font:inherit;font-weight:700;font-size:13px;cursor:pointer;margin-top:4px}
 #gate .err{color:#ff9d8a;font-size:11px;min-height:15px;margin-top:8px}
-#gate .conf{margin-top:14px;font-size:10px;color:var(--dim);line-height:1.5;border-top:1px solid var(--line);padding-top:10px}
+#gate .conf{margin-top:15px;font-size:10px;color:var(--dim);line-height:1.55;border-top:1px solid var(--line);padding-top:11px}
 
-/* ---- top bar ---- */
-#top{position:fixed;top:0;left:0;right:0;display:flex;align-items:flex-start;gap:14px;padding:12px 18px;
-  background:linear-gradient(180deg,rgba(8,11,17,.92),rgba(8,11,17,0));z-index:20;pointer-events:none}
-#brand{pointer-events:auto}
-#brand .t{font-size:15px;font-weight:700;letter-spacing:.3px}
+/* ---------------- top bar ---------------- */
+#top{position:fixed;top:0;left:0;right:0;display:flex;align-items:flex-start;gap:16px;padding:12px 18px 26px;
+  background:linear-gradient(180deg,rgba(8,11,17,.94) 40%,rgba(8,11,17,0));z-index:20;pointer-events:none}
+#brand{pointer-events:auto;flex:none}
+#brand .t{font-size:14.5px;font-weight:700;letter-spacing:.3px}
 #brand .t span{color:var(--mut);font-weight:400}
-#brand .s{font-size:11px;color:var(--mut);margin-top:2px}
+#brand .s{font-size:10.5px;color:var(--dim);margin-top:2px}
 #top .spacer{flex:1}
-.chips{display:flex;gap:8px;pointer-events:auto;flex-wrap:wrap;justify-content:flex-end}
-.tg{background:var(--panel);border:1px solid var(--line);color:var(--txt);font:inherit;font-size:12px;
-  padding:7px 12px;border-radius:8px;cursor:pointer;transition:.15s;backdrop-filter:blur(8px)}
-.tg:hover{border-color:rgba(255,255,255,.25)}
-.tg.on{background:var(--acc);color:#04150c;border-color:var(--acc);font-weight:600}
+.chips{display:flex;gap:7px;pointer-events:auto;flex-wrap:wrap;justify-content:flex-end;max-width:52vw}
+.tg{background:var(--panel);border:1px solid var(--line);color:var(--mut);font:inherit;font-size:11.5px;
+  padding:6px 11px;border-radius:7px;cursor:pointer;transition:.14s;backdrop-filter:blur(8px)}
+.tg:hover{border-color:rgba(255,255,255,.26);color:#fff}
+.tg.on{background:rgba(255,255,255,.93);color:#0b0f16;border-color:#fff;font-weight:600}
 
-/* ---- legend ---- */
-#legend{position:fixed;right:16px;bottom:16px;z-index:15;background:var(--panel);border:1px solid var(--line);
-  border-radius:12px;padding:10px 14px;font-size:11px;color:var(--mut);backdrop-filter:blur(12px);line-height:1.9}
-#legend .sw{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;vertical-align:-1px}
-#legend .hollow{background:transparent;border:2px solid var(--cand);width:7px;height:7px}
-#legend .note{font-size:10px;color:var(--dim);border-top:1px solid var(--line);margin-top:6px;padding-top:6px;max-width:210px;line-height:1.5}
-
-/* ---- left board: relocation pressure ---- */
-#board{position:fixed;left:16px;top:78px;bottom:16px;width:330px;background:var(--panel);border:1px solid var(--line);
-  border-radius:14px;backdrop-filter:blur(16px);display:flex;flex-direction:column;z-index:15;overflow:hidden;
-  box-shadow:0 16px 48px rgba(0,0,0,.35)}
-#board h3{margin:0;padding:14px 16px 4px;font-size:13px;letter-spacing:.4px}
-#board .why{padding:0 16px 11px;font-size:11px;color:var(--mut);line-height:1.45;border-bottom:1px solid var(--line)}
-#board .why b{color:var(--t1)}
-#board-list{overflow-y:auto;padding:8px;flex:1}
-.b-row{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;cursor:pointer;transition:.12s}
-.b-row:hover{background:rgba(255,255,255,.05)}
-.b-row.active{background:rgba(224,96,58,.13);outline:1px solid rgba(224,96,58,.5)}
-.b-rank{width:22px;height:22px;flex:none;border-radius:6px;background:rgba(255,255,255,.08);
-  display:grid;place-items:center;font-size:11px;font-weight:700}
-.b-row:nth-child(-n+3) .b-rank{background:var(--t1);color:#1a0803}
+/* ---------------- left board ---------------- */
+#board{position:fixed;left:16px;top:74px;bottom:16px;width:326px;background:var(--panel);border:1px solid var(--line);
+  border-radius:13px;backdrop-filter:blur(16px);display:flex;flex-direction:column;z-index:15;overflow:hidden;
+  box-shadow:0 16px 48px rgba(0,0,0,.4)}
+#board h3{margin:0;padding:14px 16px 3px;font-size:12.5px;letter-spacing:.3px}
+#board .why{padding:0 16px 11px;font-size:10.5px;color:var(--mut);line-height:1.5;border-bottom:1px solid var(--line)}
+#board .why b{color:var(--t1);font-weight:600}
+#board-list{overflow-y:auto;padding:7px;flex:1}
+.b-row{display:flex;align-items:center;gap:9px;padding:7px 9px;border-radius:9px;cursor:pointer;transition:.12s}
+.b-row:hover{background:rgba(255,255,255,.055)}
+.b-row.active{background:rgba(224,96,58,.15);outline:1px solid rgba(224,96,58,.45)}
+.b-rank{width:21px;height:21px;flex:none;border-radius:6px;background:rgba(255,255,255,.07);color:var(--mut);
+  display:grid;place-items:center;font-size:10.5px;font-weight:700;font-family:var(--num)}
+.b-row:nth-child(-n+3) .b-rank{background:var(--t1);color:#1c0702}
 .b-main{flex:1;min-width:0}
-.b-name{font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.b-meta{font-size:10px;color:var(--mut);margin-top:2px;display:flex;align-items:center;gap:5px;white-space:nowrap}
-.dot{width:7px;height:7px;border-radius:50%;display:inline-block;flex:none}
-.b-exp{font-size:10px;font-weight:700;text-align:right;flex:none;line-height:1.35}
-.b-exp .mo{display:block;font-weight:500;color:var(--dim)}
-.exp-red{color:#ff8a70}.exp-amber{color:#e8c84a}.exp-ok{color:var(--mut)}
-#board .foot{padding:9px 16px;border-top:1px solid var(--line);font-size:10px;color:var(--dim);line-height:1.5}
+.b-name{font-size:11.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.b-meta{font-size:9.5px;color:var(--dim);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dot{width:6px;height:6px;border-radius:50%;display:inline-block;flex:none;margin-right:4px;vertical-align:0}
+.b-exp{font-size:10px;font-weight:700;text-align:right;flex:none;line-height:1.3;font-family:var(--num)}
+.b-exp .mo{display:block;font-weight:400;color:var(--dim);font-size:9px}
+.exp-red{color:#ff8a70}.exp-amber{color:#e8c04a}.exp-ok{color:var(--dim)}
+#board .foot{padding:8px 16px;border-top:1px solid var(--line);font-size:9.5px;color:var(--dim);line-height:1.5}
 
-/* ---- right intelligence panel ---- */
-#intel{position:fixed;right:-492px;top:78px;bottom:16px;width:462px;background:var(--panel2);border:1px solid var(--line);
-  border-radius:14px;backdrop-filter:blur(18px);z-index:16;overflow:hidden;display:flex;flex-direction:column;
-  box-shadow:0 16px 48px rgba(0,0,0,.4);transition:right .4s cubic-bezier(.2,.8,.2,1)}
-#intel.open{right:16px}
-#intel-head{padding:16px 18px 12px;border-bottom:1px solid var(--line);position:relative}
-#intel-head .city{font-size:16px;font-weight:700}
-#intel-head .st{font-size:11px;color:var(--mut);margin-top:2px}
-#intel-head .tierchip{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;margin-left:8px;vertical-align:1px}
-#intel-close{position:absolute;top:12px;right:12px;width:26px;height:26px;border-radius:7px;
-  background:rgba(255,255,255,.08);border:1px solid var(--line);color:#fff;font:inherit;font-size:12px;cursor:pointer}
-#intel-close:hover{background:rgba(255,255,255,.18)}
-#intel-body{overflow-y:auto;flex:1;padding:6px 18px 18px}
-.sec{margin-top:16px}
-.sec h4{margin:0 0 8px;font-size:11px;letter-spacing:.8px;text-transform:uppercase;color:var(--mut);
-  display:flex;align-items:center;gap:8px}
-.sec h4::after{content:"";flex:1;height:1px;background:var(--line)}
-.fac{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px;background:rgba(255,255,255,.03)}
-.fac .fn{font-size:12px;font-weight:600;display:flex;justify-content:space-between;gap:8px}
-.fac .addr{font-size:10px;color:var(--mut);margin-top:3px;line-height:1.45}
-.fac .row2{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px}
-.pill{font-size:9.5px;padding:2px 7px;border-radius:5px;background:rgba(255,255,255,.07);color:var(--mut)}
-.pill.hot{background:rgba(224,96,58,.18);color:#ffb09b}
-.pill.warm{background:rgba(217,179,16,.15);color:#eed77a}
-.pill.ok{background:rgba(47,191,113,.14);color:#8fe3b4}
-table.wage{width:100%;border-collapse:collapse;font-size:11px}
-table.wage th{font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--dim);font-weight:600;
+/* ---------------- right panel ---------------- */
+#panel{position:fixed;right:16px;top:74px;bottom:16px;width:474px;background:var(--panel2);border:1px solid var(--line);
+  border-radius:13px;backdrop-filter:blur(18px);z-index:16;overflow:hidden;display:flex;flex-direction:column;
+  box-shadow:0 16px 48px rgba(0,0,0,.45)}
+#p-head{padding:14px 18px 12px;border-bottom:1px solid var(--line);position:relative;flex:none}
+#p-back{background:none;border:none;color:var(--dim);font:inherit;font-size:10.5px;cursor:pointer;padding:0 0 5px;display:none}
+#p-back:hover{color:#fff}
+#p-back.show{display:block}
+#p-title{font-size:16px;font-weight:700;letter-spacing:.2px}
+#p-sub{font-size:10.5px;color:var(--mut);margin-top:3px;line-height:1.45}
+.tierchip{display:inline-block;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;margin-left:8px;vertical-align:2px}
+#p-body{overflow-y:auto;flex:1;padding:4px 18px 20px}
+
+.sec{margin-top:17px}
+.sec:first-child{margin-top:12px}
+.sec h4{margin:0 0 9px;font-size:10px;letter-spacing:.9px;text-transform:uppercase;color:var(--dim);
+  display:flex;align-items:center;gap:9px;font-weight:600}
+.sec h4::after{content:"";flex:1;height:1px;background:var(--line2)}
+
+/* hero stat row */
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.kpi{background:rgba(255,255,255,.035);border:1px solid var(--line2);border-radius:9px;padding:10px 11px}
+.kpi .n{font-size:21px;font-weight:700;font-family:var(--num);letter-spacing:-.5px;line-height:1.1}
+.kpi .l{font-size:9.5px;color:var(--dim);margin-top:3px;line-height:1.35}
+.kpi.alert .n{color:#ff8a70}
+.kpi.warn .n{color:#e8c04a}
+
+/* headline callout */
+.hero{background:rgba(224,96,58,.09);border:1px solid rgba(224,96,58,.3);border-radius:10px;padding:12px 14px}
+.hero .big{font-size:25px;font-weight:700;font-family:var(--num);color:#ff8a70;letter-spacing:-.6px;line-height:1.05}
+.hero .cap{font-size:11px;color:var(--mut);margin-top:5px;line-height:1.5}
+.hero.calm{background:rgba(255,255,255,.035);border-color:var(--line2)}
+.hero.calm .big{color:#fff}
+
+/* bar chart: single series, one hue, count by FY */
+.chart{margin-top:2px}
+.crow{display:flex;align-items:center;gap:9px;margin-bottom:5px}
+.crow .cl{font-size:10.5px;color:var(--mut);width:52px;flex:none;font-family:var(--num)}
+.crow .ct{display:block;flex:1;height:15px;background:rgba(255,255,255,.045);border-radius:4px;overflow:hidden}
+.crow .cb{display:block;height:100%;border-radius:0 4px 4px 0;background:var(--t1);min-width:2px}
+.crow .cv{font-size:10.5px;font-weight:700;width:26px;text-align:right;flex:none;font-family:var(--num)}
+.axis{font-size:9.5px;color:var(--dim);margin-top:7px;line-height:1.6}
+
+/* split bar (mix) */
+.split{display:flex;height:9px;border-radius:5px;overflow:hidden;gap:2px;margin-bottom:8px}
+.split i{display:block;height:100%}
+.legend2{display:flex;flex-wrap:wrap;gap:10px;font-size:10px;color:var(--mut)}
+.legend2 span{display:flex;align-items:center;gap:5px}
+.legend2 b{color:#fff;font-weight:600;font-family:var(--num)}
+
+/* facility cards */
+.fac{border:1px solid var(--line2);border-radius:9px;padding:9px 11px;margin-bottom:7px;background:rgba(255,255,255,.028)}
+.fac.urgent{border-color:rgba(224,96,58,.4);background:rgba(224,96,58,.055)}
+.fac .fn{font-size:11.5px;font-weight:600;display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.fac .fn .sr{color:var(--dim);font-weight:400;font-size:9.5px;font-family:var(--num);flex:none}
+.fac .addr{font-size:9.5px;color:var(--dim);margin-top:3px;line-height:1.5}
+.fac .row2{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+.pill{font-size:9px;padding:2px 7px;border-radius:5px;background:rgba(255,255,255,.06);color:var(--mut);white-space:nowrap}
+.pill.hot{background:rgba(224,96,58,.2);color:#ffb09b}
+.pill.warm{background:rgba(224,169,31,.16);color:#f0d27e}
+.pill.ok{background:rgba(31,143,119,.18);color:#7fd8c0}
+
+/* tables */
+table.t{width:100%;border-collapse:collapse;font-size:10.5px}
+table.t th{font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--dim);font-weight:600;
   text-align:right;padding:4px 6px;border-bottom:1px solid var(--line)}
-table.wage th:first-child{text-align:left}
-table.wage td{padding:5px 6px;text-align:right;border-bottom:1px solid rgba(255,255,255,.05);font-variant-numeric:tabular-nums}
-table.wage td:first-child{text-align:left;color:var(--mut)}
-tr.cur td{color:#fff;font-weight:600;background:rgba(255,255,255,.04)}
-tr.cur td:first-child::after{content:" ← current";font-size:9px;color:var(--acc);font-weight:600}
-.delta-pos{color:#8fe3b4}.delta-neg{color:#ffb09b}
-.note{font-size:10px;color:var(--dim);line-height:1.55;margin-top:7px}
-.para{font-size:11.5px;color:var(--mut);line-height:1.6}
-.para b{color:#fff}
-.cand{border:1px solid rgba(79,156,217,.35);border-radius:10px;padding:10px 12px;margin-bottom:8px;background:rgba(79,156,217,.06)}
-.cand .cn{font-size:12px;font-weight:700;display:flex;justify-content:space-between;align-items:baseline}
-.cand .cn .d{font-size:11px}
-.cand .cm{font-size:10.5px;color:var(--mut);margin-top:4px;line-height:1.5}
-.chips2{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}
-.pl{font-size:10px;padding:3px 8px;border-radius:6px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--mut)}
-.bar{height:5px;background:rgba(255,255,255,.07);border-radius:3px;overflow:hidden;margin-top:4px}
-.bar span{display:block;height:100%;border-radius:3px}
-.kv{display:flex;justify-content:space-between;font-size:11px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05)}
-.kv .k{color:var(--mut)}.kv .v{font-weight:600;font-variant-numeric:tabular-nums}
-.flag{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.5px;padding:1px 6px;border-radius:4px;
-  background:rgba(217,179,16,.14);color:#eed77a;vertical-align:1px}
+table.t th:first-child{text-align:left}
+table.t td{padding:5px 6px;text-align:right;border-bottom:1px solid var(--line2);font-family:var(--num);font-variant-numeric:tabular-nums}
+table.t td:first-child{text-align:left;color:var(--mut);font-family:var(--font)}
+tr.cur td{color:#fff;font-weight:700;background:rgba(255,255,255,.05)}
+tr.cur td:first-child::after{content:" ← this site";font-size:8.5px;color:var(--acc);font-weight:600}
 
-#hint{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:14;font-size:11px;color:var(--dim);
-  background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:6px 14px;backdrop-filter:blur(10px)}
-@media (max-width:900px){ #board{display:none} #intel{width:min(462px,94vw)} }
+.kv{display:flex;justify-content:space-between;gap:12px;font-size:10.5px;padding:5px 0;border-bottom:1px solid var(--line2)}
+.kv:last-child{border-bottom:none}
+.kv .k{color:var(--mut)}
+.kv .v{font-weight:600;font-family:var(--num);text-align:right;flex:none}
+
+.para{font-size:11px;color:var(--mut);line-height:1.62}
+.para b{color:#fff;font-weight:600}
+.note{font-size:9.5px;color:var(--dim);line-height:1.6;margin-top:7px}
+.flag{display:inline-block;font-size:8.5px;font-weight:700;letter-spacing:.5px;padding:1px 6px;border-radius:4px;
+  background:rgba(224,169,31,.14);color:#f0d27e;vertical-align:1px;white-space:nowrap}
+.flag.ind{background:rgba(79,156,217,.14);color:#9ecbec}
+.chips2{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px}
+.pl{font-size:9.5px;padding:3px 8px;border-radius:6px;background:rgba(255,255,255,.055);border:1px solid var(--line2);color:var(--mut)}
+
+.cand{border:1px solid rgba(79,156,217,.32);border-radius:9px;padding:10px 12px;margin-bottom:7px;background:rgba(79,156,217,.055)}
+.cand .cn{font-size:11.5px;font-weight:700;display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.cand .cm{font-size:10px;color:var(--mut);margin-top:5px;line-height:1.55}
+.delta-pos{color:#7fd8c0}.delta-neg{color:#ffb09b}
+
+.movelist{counter-reset:mv}
+.mv{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line2)}
+.mv:last-child{border-bottom:none}
+.mv .i{width:19px;height:19px;flex:none;border-radius:5px;background:var(--t1);color:#1c0702;display:grid;
+  place-items:center;font-size:10px;font-weight:700;font-family:var(--num)}
+.mv .c{flex:1;min-width:0}
+.mv .h{font-size:11.5px;font-weight:600;cursor:pointer}
+.mv .h:hover{text-decoration:underline}
+.mv .d{font-size:10px;color:var(--mut);margin-top:3px;line-height:1.55}
+
+/* legend / hint */
+#legend{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:14;background:var(--panel);
+  border:1px solid var(--line);border-radius:10px;padding:8px 14px;font-size:10px;color:var(--mut);
+  backdrop-filter:blur(12px);display:flex;gap:14px;align-items:center;white-space:nowrap}
+#legend .sw{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:0}
+#legend .hollow{background:transparent;border:1.6px solid var(--cand);width:7px;height:7px}
+#legend .sep{width:1px;height:14px;background:var(--line)}
+@media (max-width:1180px){ #panel{width:420px} }
+@media (max-width:1000px){ #board{display:none} #legend{display:none} }
+@media (max-width:760px){ #panel{right:8px;left:8px;width:auto} }
 </style>
 </head>
 <body>
 <div id="gate">
   <div class="box">
-    <h1>ATLAS <span style="color:var(--mut);font-weight:400">· Digitide Group</span></h1>
-    <div class="sub">Portfolio command centre · 56 facilities · lease, wage-zone, real-estate, competitor and talent intelligence. Invitation-only.</div>
+    <h1>ATLAS <span>· Digitide Group</span></h1>
+    <div class="sub">Portfolio command centre. 56 facilities, lease exposure, statutory wage zones, real estate, competitor and talent intelligence.</div>
     <input id="g-id" placeholder="Access ID" autocomplete="off" spellcheck="false"/>
     <input id="g-pw" placeholder="Passcode" type="password"/>
     <button id="g-go">Enter</button>
     <div class="err" id="g-err"></div>
-    <div class="conf">This view carries the Digitide Group facility tracker (internal circulation only). Access is issued per person and is not to be forwarded.</div>
+    <div class="conf">Carries the Digitide Group facility tracker, internal circulation only. Access is issued per person and is not to be forwarded.</div>
   </div>
 </div>
 
@@ -152,8 +214,8 @@ tr.cur td:first-child::after{content:" ← current";font-size:9px;color:var(--ac
 
 <div id="top">
   <div id="brand">
-    <div class="t">ATLAS <span>by Autopilot · Digitide Group Command Centre</span></div>
-    <div class="s" id="brand-sub">56 facilities · 5 regions · tracker as on 1 Sep 2026</div>
+    <div class="t">ATLAS <span>· Digitide Portfolio Command Centre</span></div>
+    <div class="s" id="brand-sub">Tracker as on 1 Sep 2026</div>
   </div>
   <div class="spacer"></div>
   <div class="chips" id="filters"></div>
@@ -161,29 +223,29 @@ tr.cur td:first-child::after{content:" ← current";font-size:9px;color:var(--ac
 
 <div id="board">
   <h3>Relocation pressure board</h3>
-  <div class="why">Every leased facility with an end date inside <b>FY27–FY30</b>, ranked by how soon the lease closes, how costly the seat city is, and how movable the operation is. Top of this list is where a relocation decision is live, not optional.</div>
+  <div class="why">Leased facilities closing inside <b>FY27 to FY30</b>, ranked by how soon the lease ends, what the seat city costs, and how movable the operation is.</div>
   <div id="board-list"></div>
   <div class="foot" id="board-foot"></div>
 </div>
 
-<div id="intel">
-  <div id="intel-head">
-    <button id="intel-close">✕</button>
-    <div class="city" id="ih-city"></div>
-    <div class="st" id="ih-sub"></div>
+<div id="panel">
+  <div id="p-head">
+    <button id="p-back">← Portfolio overview</button>
+    <div id="p-title"></div>
+    <div id="p-sub"></div>
   </div>
-  <div id="intel-body"></div>
+  <div id="p-body"></div>
 </div>
 
 <div id="legend">
-  <div><span class="sw" style="background:var(--t1)"></span>Tier 1 metro</div>
-  <div><span class="sw" style="background:var(--t2)"></span>Tier 2</div>
-  <div><span class="sw" style="background:var(--t3)"></span>Tier 3 / small town</div>
-  <div><span class="sw hollow"></span>Relocation candidate</div>
-  <div class="note">Pin size = facilities at that city. Pins sit at city level; exact-address geocode is the next pass.</div>
+  <span><span class="sw" style="background:var(--t1)"></span>Tier 1</span>
+  <span><span class="sw" style="background:var(--t2)"></span>Tier 2</span>
+  <span><span class="sw" style="background:var(--t3)"></span>Tier 3</span>
+  <span class="sep"></span>
+  <span><span class="sw hollow"></span>Relocation candidate</span>
+  <span class="sep"></span>
+  <span id="legend-geo">Pin size = facilities at that site</span>
 </div>
-
-<div id="hint">Click a city pin or a board row · scroll zooms · drag pans</div>
 
 <script src="./app.js"></script>
 </body>

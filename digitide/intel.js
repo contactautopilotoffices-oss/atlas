@@ -516,3 +516,70 @@ window.DG_WAGES = {
     note: "Zone I unskilled and skilled are notified figures; semi-skilled and Zone II/III skilled cells derived from the uniform skill step."
   }
 };
+
+/* ---------------------------------------------------------------------------
+   DG_TALENT — INDICATIVE market metrics per city.
+   These are directional planning bands, NOT audited figures, and every one of
+   them renders behind an "Indicative" chip in the UI. They exist because a
+   board-level comparison needs a consistent yardstick across 30-odd cities,
+   and a blank cell compares to nothing. Bands, never false precision.
+     pool       size of the addressable entry-level voice/back-office pool
+     grads      annual graduate output band for the catchment
+     english    business-English readiness of that pool
+     attrition  annualised voice attrition band observed in that market tier
+     salary     entry-level agent monthly gross, INR band
+     compCount  organised BPO/BPM/ITES employers competing for the same pool
+   Tier bands are consistent by design: a Tier-1 metro carries 2-3x the
+   attrition and ~1.6x the wage of a Tier-3 town, which is the whole argument.
+--------------------------------------------------------------------------- */
+window.DG_TALENT = {
+  /* Tier 1 metros: deepest pools, highest cost, worst churn */
+  delhi:      { pool:"Very deep",  grads:"250k+",   english:"High",        attrition:"55-75%", salary:[22000,30000], compCount:"40+" },
+  noida:      { pool:"Very deep",  grads:"250k+",   english:"High",        attrition:"55-75%", salary:[22000,30000], compCount:"40+" },
+  bangalore:  { pool:"Very deep",  grads:"200k+",   english:"Very high",   attrition:"55-75%", salary:[23000,32000], compCount:"50+" },
+  hyderabad:  { pool:"Very deep",  grads:"180k+",   english:"High",        attrition:"45-60%", salary:[21000,28000], compCount:"35+" },
+  chennai:    { pool:"Very deep",  grads:"200k+",   english:"High",        attrition:"45-60%", salary:[20000,27000], compCount:"35+" },
+  navimumbai: { pool:"Very deep",  grads:"150k+",   english:"High",        attrition:"45-60%", salary:[22000,29000], compCount:"30+" },
+  thane:      { pool:"Very deep",  grads:"150k+",   english:"High",        attrition:"45-60%", salary:[22000,29000], compCount:"30+" },
+  mumbai:     { pool:"Very deep",  grads:"150k+",   english:"High",        attrition:"50-65%", salary:[23000,31000], compCount:"30+" },
+  pune:       { pool:"Deep",       grads:"140k+",   english:"High",        attrition:"45-60%", salary:[21000,28000], compCount:"30+" },
+  kolkata:    { pool:"Deep",       grads:"160k+",   english:"Moderate-high",attrition:"35-50%", salary:[16000,22000], compCount:"25+" },
+  ahmedabad:  { pool:"Deep",       grads:"120k+",   english:"Moderate",    attrition:"40-55%", salary:[17000,23000], compCount:"15+" },
+
+  /* Tier 2: the working middle, and where the portfolio already has proof */
+  lucknow:    { pool:"Deep",       grads:"120k+",   english:"Moderate",    attrition:"25-40%", salary:[14000,20000], compCount:"10-15" },
+  jaipur:     { pool:"Deep",       grads:"110k+",   english:"Moderate",    attrition:"30-45%", salary:[15000,21000], compCount:"10-15" },
+  indore:     { pool:"Moderate",   grads:"90k+",    english:"Moderate",    attrition:"25-40%", salary:[14000,20000], compCount:"10-15" },
+  coimbatore: { pool:"Moderate",   grads:"80k+",    english:"Moderate-high",attrition:"20-35%", salary:[14000,19000], compCount:"8-12" },
+  mohali:     { pool:"Moderate",   grads:"70k+",    english:"High",        attrition:"30-45%", salary:[16000,22000], compCount:"8-12" },
+  bhubaneswar:{ pool:"Moderate",   grads:"80k+",    english:"Moderate",    attrition:"25-40%", salary:[14000,19000], compCount:"8-12" },
+  nagpur:     { pool:"Moderate",   grads:"85k+",    english:"Moderate",    attrition:"25-40%", salary:[14000,19000], compCount:"6-10" },
+  baroda:     { pool:"Moderate",   grads:"60k+",    english:"Moderate",    attrition:"30-45%", salary:[15000,20000], compCount:"6-10" },
+  patna:      { pool:"Deep",       grads:"130k+",   english:"Low-moderate",attrition:"20-35%", salary:[12000,17000], compCount:"<5" },
+  guwahati:   { pool:"Moderate",   grads:"50k+",    english:"Moderate",    attrition:"20-35%", salary:[13000,18000], compCount:"<5" },
+  jalandhar:  { pool:"Moderate",   grads:"45k+",    english:"Moderate",    attrition:"25-40%", salary:[13000,18000], compCount:"<5" },
+  ludhiana:   { pool:"Moderate",   grads:"50k+",    english:"Moderate",    attrition:"25-40%", salary:[13000,18000], compCount:"<5" },
+  raipur:     { pool:"Moderate",   grads:"55k+",    english:"Low-moderate",attrition:"20-35%", salary:[12000,17000], compCount:"<5" },
+  jamshedpur: { pool:"Moderate",   grads:"40k+",    english:"Moderate",    attrition:"20-35%", salary:[13000,18000], compCount:"<5" },
+  nasik:      { pool:"Moderate",   grads:"65k+",    english:"Moderate",    attrition:"20-35%", salary:[14000,19000], compCount:"5-8" },
+  kolhapur:   { pool:"Shallow",    grads:"35k+",    english:"Moderate",    attrition:"18-30%", salary:[12000,17000], compCount:"<5" },
+
+  /* Tier 3 and small town: cheapest seats, stickiest agents, thinnest supply */
+  bellary:    { pool:"Shallow",    grads:"25k+",    english:"Moderate",    attrition:"15-30%", salary:[12000,16000], compCount:"<5" },
+  hissar:     { pool:"Shallow",    grads:"25k+",    english:"Low-moderate",attrition:"15-30%", salary:[11000,16000], compCount:"<5" },
+  chhindwara: { pool:"Very shallow",grads:"8k+",    english:"Low",         attrition:"10-20%", salary:[10000,14000], compCount:"None mapped" },
+  munnar:     { pool:"Very shallow",grads:"5k+",    english:"Moderate",    attrition:"10-20%", salary:[12000,17000], compCount:"None mapped" },
+  srirampur:  { pool:"Very shallow",grads:"10k+",   english:"Low",         attrition:"10-20%", salary:[10000,14000], compCount:"None mapped" },
+  mithapur:   { pool:"Very shallow",grads:"5k+",    english:"Low",         attrition:"10-20%", salary:[11000,15000], compCount:"None mapped" },
+
+  /* Relocation candidates */
+  durgapur:   { pool:"Moderate",   grads:"45k+",    english:"Moderate",    attrition:"18-32%", salary:[12000,17000], compCount:"<5" },
+  siliguri:   { pool:"Moderate",   grads:"40k+",    english:"Moderate",    attrition:"18-32%", salary:[12000,17000], compCount:"<5" },
+  kanpur:     { pool:"Deep",       grads:"100k+",   english:"Low-moderate",attrition:"20-35%", salary:[12000,17000], compCount:"<5" },
+  aurangabad: { pool:"Moderate",   grads:"55k+",    english:"Moderate",    attrition:"20-35%", salary:[13000,18000], compCount:"<5" },
+  mysore:     { pool:"Moderate",   grads:"60k+",    english:"High",        attrition:"20-35%", salary:[15000,20000], compCount:"6-10" },
+  hubli:      { pool:"Moderate",   grads:"55k+",    english:"Moderate",    attrition:"18-32%", salary:[13000,18000], compCount:"<5" },
+  madurai:    { pool:"Deep",       grads:"90k+",    english:"Moderate",    attrition:"18-32%", salary:[13000,18000], compCount:"6-10" },
+  trichy:     { pool:"Moderate",   grads:"70k+",    english:"Moderate-high",attrition:"18-32%", salary:[13000,18000], compCount:"<5" },
+  warangal:   { pool:"Moderate",   grads:"50k+",    english:"Moderate",    attrition:"18-32%", salary:[12000,17000], compCount:"<5" }
+};

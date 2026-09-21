@@ -1,0 +1,1 @@
+window.DG_GEO = {};
