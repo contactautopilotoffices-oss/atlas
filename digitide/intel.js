@@ -39,7 +39,7 @@ window.DG_CITIES = {
     presence: "very high", players: ["Concentrix", "Teleperformance", "EXL", "Genpact", "iEnergizer", "Tech Mahindra BPS", "Startek", "WNS"],
     catchment: "Bottomless NCR hiring pool and the most contested: every large BPS employer bids for the same agents, so attrition, not availability, is the Noida problem.",
     candidates: ["lucknow", "kanpur"],
-    strategy: "UP split its wage schedule in Apr 2026 and put Noida alone (with Ghaziabad) in the top category — the floor here now runs about ₹680/month above Lucknow or Kanpur on unskilled and ₹840 on skilled. Stack that on rent (Sector 62-grade space at 2–3x a Vibhuti Khand floor) and NCR churn, and the case writes itself. Digitide already runs a full-floor Lucknow call centre — scale where the model is proven before the Sector-62 lease closes Mar 2027."
+    strategy: "UP split its wage schedule in Apr 2026 and put Noida alone (with Ghaziabad) in the top category, the floor here now runs about ₹680/month above Lucknow or Kanpur on unskilled and ₹840 on skilled. Stack that on rent (Sector 62-grade space at 2–3x a Vibhuti Khand floor) and NCR churn, and the case writes itself. Digitide already runs a full-floor Lucknow call centre, scale where the model is proven before the Sector-62 lease closes Mar 2027."
   },
   jaipur: {
     name: "Jaipur", state: "Rajasthan", stateKey: "rajasthan", tier: 2,
@@ -48,7 +48,7 @@ window.DG_CITIES = {
       note: "Vaishali Nagar ~₹16 psf; C-Scheme Grade A ~₹58 psf." },
     presence: "medium", players: ["Genpact", "Teleperformance", "Infosys BPM"],
     catchment: "Large Hindi-belt graduate pool with an established BPS base; comfortable tier-2 economics.",
-    strategy: "Collection centre lease ends 30 Sep 2026 — this month. Renew or move is a live decision today, not a plan. City economics are sound; the urgency is purely the calendar."
+    strategy: "Collection centre lease ends 30 Sep 2026, this month. Renew or move is a live decision today, not a plan. City economics are sound; the urgency is purely the calendar."
   },
   jalandhar: {
     name: "Jalandhar", state: "Punjab", stateKey: "punjab", tier: 2,
@@ -62,7 +62,7 @@ window.DG_CITIES = {
     market: "Vibhuti Khand, Gomti Nagar", rent: { low: 30, high: 90, grade: "mixed", asOf: "2025",
       note: "Better buildings (Levana Cyber Heights class) at the top end; solid mid-grade floors ₹30–50 psf." },
     presence: "medium", players: ["HCLTech", "Teleperformance", "Tech Mahindra BPS"],
-    catchment: "One of the largest graduate outputs in the Hindi belt, materially lower attrition than NCR, and Digitide already operates two facilities here including a full-floor call centre — the model is proven.",
+    catchment: "One of the largest graduate outputs in the Hindi belt, materially lower attrition than NCR, and Digitide already operates two facilities here including a full-floor call centre, the model is proven.",
     strategy: "Lucknow is the receiving end of the NCR argument, not a candidate to leave. The Summit Building lease runs to Mar 2029; treat it as the anchor to scale into."
   },
   ludhiana: {
@@ -77,7 +77,7 @@ window.DG_CITIES = {
     market: "Industrial Area Phase 7", rent: { low: 25, high: 65, grade: "B", asOf: "2025",
       note: "Phase 7/9 industrial-area floors; cheaper than Chandigarh Sector 17." },
     presence: "medium", players: ["Teleperformance", "IDS Infotech"],
-    catchment: "Tricity (Chandigarh–Mohali–Panchkula) pool: strong English voice catchment for the North at tier-2 cost. Lease runs to Sep 2030 — a settled site.",
+    catchment: "Tricity (Chandigarh–Mohali–Panchkula) pool: strong English voice catchment for the North at tier-2 cost. Lease runs to Sep 2030, a settled site.",
   },
   hissar: {
     name: "Hissar", state: "Haryana", stateKey: "haryana", tier: 3,
@@ -95,13 +95,13 @@ window.DG_CITIES = {
     presence: "very high", players: ["Infosys BPM", "Accenture Ops", "Concentrix", "Teleperformance", "Genpact", "Firstsource", "[24]7.ai"],
     catchment: "The deepest multilingual ITES pool in India, and the most expensive to hold: every employer in the sector bids for it.",
     candidates: ["mysore", "hubli", "bellary"],
-    strategy: "Karnataka went zonal in May 2026: Bengaluru (Zone 1) now sits about ₹2,100/employee/month above Zone 2 corporations like Mysuru, Hubballi and Ballari — a real statutory delta for the first time, though the notification is under litigation. Add rent at half or less and lower churn, and Digitide's own Ballari call centre already proves the delivery model. Krimson Square runs to May 2028; SS Plaza to 2034 is the long-hold anchor. Grow the next Karnataka seat outside Bengaluru rather than adding a third city facility."
+    strategy: "Karnataka went zonal in May 2026: Bengaluru (Zone 1) now sits about ₹2,100/employee/month above Zone 2 corporations like Mysuru, Hubballi and Ballari, a real statutory delta for the first time, though the notification is under litigation. Add rent at half or less and lower churn, and Digitide's own Ballari call centre already proves the delivery model. Krimson Square runs to May 2028; SS Plaza to 2034 is the long-hold anchor. Grow the next Karnataka seat outside Bengaluru rather than adding a third city facility."
   },
   bellary: {
     name: "Ballari", state: "Karnataka", stateKey: "karnataka", tier: 3,
     lat: 15.1394, lng: 76.9214, wageZone: "Zone 2",
     presence: "low", players: [],
-    catchment: "Existing Digitide call centre — the in-house proof that tier-3 Karnataka voice delivery works. North Karnataka graduate pool with almost no competing BPS employer."
+    catchment: "Existing Digitide call centre, the in-house proof that tier-3 Karnataka voice delivery works. North Karnataka graduate pool with almost no competing BPS employer."
   },
   hyderabad: {
     name: "Hyderabad / Secunderabad", state: "Telangana", stateKey: "telangana", tier: 1,
@@ -109,9 +109,9 @@ window.DG_CITIES = {
     market: "MG Rd Ranigunj / Begumpet", rent: { low: 40, high: 70, grade: "mixed", asOf: "2025",
       note: "Begumpet/Secunderabad corridor; materially cheaper than HITEC City." },
     presence: "very high", players: ["Genpact", "Concentrix", "Teleperformance", "HGS", "Sutherland", "Cognizant", "[24]7.ai"],
-    catchment: "Deep Telugu+English pool. Six of the group's facilities sit on one EFC stack in Ranigunj — heavy single-building, single-partner concentration.",
+    catchment: "Deep Telugu+English pool. Six of the group's facilities sit on one EFC stack in Ranigunj, heavy single-building, single-partner concentration.",
     candidates: ["warangal"],
-    strategy: "Five of six Ranigunj floors close Jan 2029 and one closes Mar 2027 — a natural decision window on the whole stack at once. Telangana's Jun 2026 restructure is zonal, but Warangal's corporation status keeps it in Zone I alongside Hyderabad, so the statutory floor moves nothing; the case there is TSIIC-subsidised space and the Tech Mahindra BPS precedent, keeping Secunderabad as the client-facing core."
+    strategy: "Five of six Ranigunj floors close Jan 2029 and one closes Mar 2027, a natural decision window on the whole stack at once. Telangana's Jun 2026 restructure is zonal, but Warangal's corporation status keeps it in Zone I alongside Hyderabad, so the statutory floor moves nothing; the case there is TSIIC-subsidised space and the Tech Mahindra BPS precedent, keeping Secunderabad as the client-facing core."
   },
   munnar: {
     name: "Munnar", state: "Kerala", stateKey: "kerala", tier: 3,
@@ -124,7 +124,7 @@ window.DG_CITIES = {
     lat: 11.0168, lng: 76.9558, wageZone: "Zone A",
     market: "Puliyakulam", rent: { low: null, high: null },
     presence: "medium", players: ["Sutherland", "KGiSL", "Vee Healthtek"],
-    catchment: "Strong engineering-college output, Tamil+English voice pool, visibly lower attrition than Chennai. Digitide already holds three floors in one building here — a working tier-2 hub.",
+    catchment: "Strong engineering-college output, Tamil+English voice pool, visibly lower attrition than Chennai. Digitide already holds three floors in one building here, a working tier-2 hub.",
     strategy: "One of the three Manchester Square leases ends Oct 2026 (next month) and another Dec 2027. The city works; the near action is simply renewing or re-stacking the floors on better terms."
   },
   chennai: {
@@ -135,7 +135,7 @@ window.DG_CITIES = {
     presence: "very high", players: ["Sutherland", "Concentrix", "Teleperformance", "WNS", "Firstsource", "HGS"],
     catchment: "Deep Tamil+English pool; RVI Tower leases run to 2029/2030, so this is a settled anchor rather than a pressure point.",
     candidates: ["madurai", "trichy"],
-    strategy: "TN's Zone A/B wage spread is about ₹70/month, and Madurai and Trichy are Zone A corporations anyway — so this is an expansion play (rent at a third, untapped catchment, ELCOT space), not a statutory-wage one. No forced move: both Chennai leases are long."
+    strategy: "TN's Zone A/B wage spread is about ₹70/month, and Madurai and Trichy are Zone A corporations anyway, so this is an expansion play (rent at a third, untapped catchment, ELCOT space), not a statutory-wage one. No forced move: both Chennai leases are long."
   },
 
   /* -------------------------------- EAST ------------------------------- */
@@ -153,7 +153,7 @@ window.DG_CITIES = {
     presence: "high", players: ["Concentrix", "Teleperformance", "Wipro", "TCS", "Genpact", "Firstsource", "Cognizant"],
     catchment: "Large English+Bengali+Hindi pool built over two decades of Sector V ITES; both facilities (Technopolis to Oct 2027, Millennium City to Jun 2030) sit in the state's highest wage band.",
     candidates: ["durgapur", "siliguri"],
-    strategy: "The Technopolis lease (Oct 2027) is the trigger. Note the fine print: Durgapur and Siliguri are municipal corporations, which keeps them in the same Zone A wage band as Kolkata — the statutory floor moves nothing. The material gains are rent (Durgapur at a third of Sector V) and an untapped catchment. Directional today: both towns need an on-ground talent and infrastructure validation before anything moves."
+    strategy: "The Technopolis lease (Oct 2027) is the trigger. Note the fine print: Durgapur and Siliguri are municipal corporations, which keeps them in the same Zone A wage band as Kolkata, the statutory floor moves nothing. The material gains are rent (Durgapur at a third of Sector V) and an untapped catchment. Directional today: both towns need an on-ground talent and infrastructure validation before anything moves."
   },
   bhubaneswar: {
     name: "Bhubaneswar", state: "Odisha", stateKey: "odisha", tier: 2,
@@ -161,15 +161,15 @@ window.DG_CITIES = {
     market: "Rasulgarh / Infocity", rent: { low: 35, high: 75, grade: "mixed", asOf: "2025",
       note: "Infocity fitted space quoted ~₹75 psf; broader city floors materially lower." },
     presence: "medium", players: ["Concentrix", "Infosys BPM", "TCS", "Sutherland"],
-    catchment: "Government-backed IT push, good graduate output, low cost. Collection lease ends Dec 2026 — a near-term renew-or-move call.",
+    catchment: "Government-backed IT push, good graduate output, low cost. Collection lease ends Dec 2026, a near-term renew-or-move call.",
     strategy: "Lease closes 31 Dec 2026. City fundamentals argue renew; the decision is terms, not geography."
   },
   patna: {
     name: "Patna", state: "Bihar", stateKey: "bihar", tier: 2,
     lat: 25.5941, lng: 85.1376, wageZone: "Statewide",
     presence: "low", players: ["iEnergizer"],
-    catchment: "Very large, very young labour pool; almost no organised BPS employer — deep for collections, unproven for scaled voice.",
-    strategy: "Lease ends 10 Nov 2026 — inside the quarter. Renew-or-move decision is live now."
+    catchment: "Very large, very young labour pool; almost no organised BPS employer, deep for collections, unproven for scaled voice.",
+    strategy: "Lease ends 10 Nov 2026, inside the quarter. Renew-or-move decision is live now."
   },
   guwahati: {
     name: "Guwahati", state: "Assam", stateKey: "assam", tier: 2,
@@ -184,11 +184,11 @@ window.DG_CITIES = {
     name: "Navi Mumbai", state: "Maharashtra", stateKey: "maharashtra", tier: 1,
     lat: 19.1550, lng: 73.0000, wageZone: "Zone I",
     market: "Airoli / Rabale, Thane–Belapur Rd", rent: { low: 70, high: 110, grade: "A", asOf: "Q3 2025",
-      note: "This belt led MMR leasing in 2025 and has the fastest 3-yr rent growth in the country — the cost line only goes up here." },
+      note: "This belt led MMR leasing in 2025 and has the fastest 3-yr rent growth in the country, the cost line only goes up here." },
     presence: "high", players: ["WNS", "Teleperformance", "Concentrix", "Firstsource", "IGT Solutions", "TCS BPS"],
     catchment: "Deep central-suburban catchment along the Thane–Belapur ITES spine; five facilities across Airoli and Rabale make this the group's densest cluster.",
     candidates: ["nasik", "aurangabad"],
-    strategy: "Airoli 3 closes 23 Dec 2026 and Airoli 4 in May 2027 — two live decisions. Note the wage trap: Nashik and Sambhajinagar are also Zone I under Maharashtra's schedule, so the statutory floor moves nothing; the case is rent (₹19–65 vs ₹70–110 psf) and lower churn. Consolidating the two expiring EFC floors into the Rabale/Kolshet holds is the zero-risk alternative."
+    strategy: "Airoli 3 closes 23 Dec 2026 and Airoli 4 in May 2027, two live decisions. Note the wage trap: Nashik and Sambhajinagar are also Zone I under Maharashtra's schedule, so the statutory floor moves nothing; the case is rent (₹19–65 vs ₹70–110 psf) and lower churn. Consolidating the two expiring EFC floors into the Rabale/Kolshet holds is the zero-risk alternative."
   },
   thane: {
     name: "Thane", state: "Maharashtra", stateKey: "maharashtra", tier: 1,
@@ -198,14 +198,14 @@ window.DG_CITIES = {
     presence: "high", players: ["WNS", "Teleperformance", "Tech Mahindra BPS", "Firstsource"],
     catchment: "Same central-line catchment as Navi Mumbai from the north side; four facilities including the four-floor Kolshet block.",
     candidates: ["nasik", "aurangabad"],
-    strategy: "MBC Park 8th floor closes May 2027; the rest run 2028–29. Same Maharashtra Zone-I wage trap as Airoli — any move west or north is a rent-and-attrition case, not a statutory one."
+    strategy: "MBC Park 8th floor closes May 2027; the rest run 2028–29. Same Maharashtra Zone-I wage trap as Airoli, any move west or north is a rent-and-attrition case, not a statutory one."
   },
   mumbai: {
     name: "Mumbai (Borivali)", state: "Maharashtra", stateKey: "maharashtra", tier: 1,
     lat: 19.2307, lng: 72.8567, wageZone: "Zone I",
     presence: "high", players: ["Teleperformance", "WNS", "Concentrix"],
     catchment: "Western-suburb collection catchment.",
-    strategy: "Collection centre, lease ends 4 Dec 2026. Candidate to fold into the Thane cluster when it closes — same catchment, one less lease."
+    strategy: "Collection centre, lease ends 4 Dec 2026. Candidate to fold into the Thane cluster when it closes, same catchment, one less lease."
   },
   pune: {
     name: "Pune", state: "Maharashtra", stateKey: "maharashtra", tier: 1,
@@ -215,7 +215,7 @@ window.DG_CITIES = {
     presence: "high", players: ["Infosys BPM", "WNS", "EXL", "Concentrix", "Teleperformance", "Genpact"],
     catchment: "Deep multilingual pool (Marathi, Hindi, English); the owned Pimpri floor is the only zero-rent asset in the portfolio.",
     candidates: ["kolhapur", "aurangabad", "nasik"],
-    strategy: "Almonte closes Mar 2027 — decision live. Kharadi is the group's priciest Pune space; the owned Devi IT Park floor and cheaper Pimpri stock are the natural absorbers before any new lease is signed. Kolhapur (existing Digitide site) covers the southern-Maharashtra collection catchment already."
+    strategy: "Almonte closes Mar 2027, decision live. Kharadi is the group's priciest Pune space; the owned Devi IT Park floor and cheaper Pimpri stock are the natural absorbers before any new lease is signed. Kolhapur (existing Digitide site) covers the southern-Maharashtra collection catchment already."
   },
   mithapur: {
     name: "Mithapur", state: "Gujarat", stateKey: "gujarat", tier: 3,
@@ -241,14 +241,14 @@ window.DG_CITIES = {
     name: "Shrirampur", state: "Maharashtra", stateKey: "maharashtra", tier: 3,
     lat: 19.6220, lng: 74.6560, wageZone: "Zone II",
     presence: "low", players: [],
-    catchment: "Training room in a municipal-council town — the one Maharashtra site actually inside the cheaper Zone II band."
+    catchment: "Training room in a municipal-council town, the one Maharashtra site actually inside the cheaper Zone II band."
   },
   nasik: {
     name: "Nashik", state: "Maharashtra", stateKey: "maharashtra", tier: 2,
     lat: 19.9975, lng: 73.7898, wageZone: "Zone I",
     market: "City", rent: { low: 28, high: 65, grade: "B", asOf: "2025", note: "No institutional Grade A; furnished floors mid-range." },
     presence: "low", players: ["WNS (Nashik)", "eClerx (Nashik)"],
-    catchment: "Strong graduate output, very low BPS density, half the rent of the Thane–Belapur belt; Digitide already holds a collection centre here to Jan 2027 — a ready expansion beachhead."
+    catchment: "Strong graduate output, very low BPS density, half the rent of the Thane–Belapur belt; Digitide already holds a collection centre here to Jan 2027, a ready expansion beachhead."
   },
   baroda: {
     name: "Vadodara", state: "Gujarat", stateKey: "gujarat", tier: 2,
@@ -278,14 +278,14 @@ window.DG_CITIES = {
     name: "Chhindwara", state: "Madhya Pradesh", stateKey: "mp", tier: 3,
     lat: 22.0574, lng: 78.9382, wageZone: "Statewide",
     presence: "low", players: [],
-    catchment: "Village-delivery site (Ambara) — the in-house rural-sourcing proof point; lease to Jan 2028."
+    catchment: "Village-delivery site (Ambara), the in-house rural-sourcing proof point; lease to Jan 2028."
   },
   raipur: {
     name: "Raipur", state: "Chhattisgarh", stateKey: "chhattisgarh", tier: 2,
     lat: 21.2514, lng: 81.6296, wageZone: "Zone A",
     market: "Devendra Nagar Rd", rent: { low: 35, high: 70, grade: "B", asOf: "2025", note: "Floor-wise quotes; furnished Pandri/Telibandha ~₹40–60 psf." },
     presence: "low", players: [],
-    catchment: "State-capital collection catchment; lease ends 20 Nov 2026 — near-term renewal call.",
+    catchment: "State-capital collection catchment; lease ends 20 Nov 2026, near-term renewal call.",
     strategy: "Lease closes 20 Nov 2026. Renew-or-move is live this quarter; footprint is small."
   },
 
@@ -295,7 +295,7 @@ window.DG_CITIES = {
     lat: 23.5204, lng: 87.3119, wageZone: "Zone A",
     market: "Bidhannagar (Durgapur)", rent: { low: 20, high: 40, grade: "B", asOf: "2025", note: "No Grade A market; floor-wise commercial stock." },
     presence: "low", players: [],
-    catchment: "~170 km from Kolkata. NIT Durgapur plus a dense engineering-college belt; effectively no organised BPS employer competing for the pool. Untested at scale — needs an on-ground validation pass."
+    catchment: "~170 km from Kolkata. NIT Durgapur plus a dense engineering-college belt; effectively no organised BPS employer competing for the pool. Untested at scale, needs an on-ground validation pass."
   },
   siliguri: {
     name: "Siliguri", state: "West Bengal", stateKey: "wb", tier: 3, candidateOnly: true,
@@ -316,7 +316,7 @@ window.DG_CITIES = {
     lat: 19.8762, lng: 75.3433, wageZone: "Zone I",
     market: "City / Beed Bypass", rent: { low: 19, high: 27, grade: "B", asOf: "2025", note: "Thin data; no published Grade A market." },
     presence: "low", players: [],
-    catchment: "Industrial city, Marathi+Hindi pool, very low BPS density. Zone I under the wage schedule — the saving vs MMR is rent and churn, not the floor."
+    catchment: "Industrial city, Marathi+Hindi pool, very low BPS density. Zone I under the wage schedule, the saving vs MMR is rent and churn, not the floor."
   },
   mysore: {
     name: "Mysuru", state: "Karnataka", stateKey: "karnataka", tier: 2, candidateOnly: true,
@@ -367,14 +367,14 @@ window.DG_WAGES = {
   delhi: {
     state: "Delhi (NCT)", zoneSystem: "flat",
     zones: { "Statewide": { unskilled: 18456, semiSkilled: 20371, skilled: 22411, clerical: 24356 } },
-    zoneDefinition: "Single rate across the NCT — the highest floor in the country",
+    zoneDefinition: "Single rate across the NCT, the highest floor in the country",
     effective: "2025-04-01 (still in force Sep 2026; next revision due Oct 2026)",
     note: "Delhi skipped the Oct 2025 and Apr 2026 VDA revisions; the Apr 2025 order remains the current legal rate."
   },
   rajasthan: {
     state: "Rajasthan", zoneSystem: "flat",
     zones: { "Statewide": { unskilled: 7410, semiSkilled: 7722, skilled: 8034, highlySkilled: 9334 } },
-    zoneDefinition: "One rate statewide — the lowest statutory floor among major states",
+    zoneDefinition: "One rate statewide, the lowest statutory floor among major states",
     effective: "2024-10-01 onward (latest notified)"
   },
   punjab: {
@@ -382,7 +382,7 @@ window.DG_WAGES = {
     zones: { "Statewide": { unskilled: 13486, semiSkilled: 14383, skilled: 15414 } },
     zoneDefinition: "One rate statewide; S&E staff also graded A–D for clerical roles",
     effective: "2026-05-01 onward",
-    note: "Large hike notified May 2026 — up from ~9,854 unskilled two months earlier."
+    note: "Large hike notified May 2026, up from ~9,854 unskilled two months earlier."
   },
   up: {
     state: "Uttar Pradesh", zoneSystem: "district categories",
@@ -393,7 +393,7 @@ window.DG_WAGES = {
     },
     zoneDefinition: "Cat I: Gautam Buddha Nagar (Noida) & Ghaziabad · Cat II: Nagar Nigam districts (Lucknow, Kanpur…) · Cat III: rest",
     effective: "2026-04-01 to 2026-09-30",
-    note: "UP's first geographic split, notified Apr 2026 — Noida now carries a higher floor than Lucknow or Kanpur."
+    note: "UP's first geographic split, notified Apr 2026, Noida now carries a higher floor than Lucknow or Kanpur."
   },
   haryana: {
     state: "Haryana", zoneSystem: "flat",
@@ -428,7 +428,7 @@ window.DG_WAGES = {
     zones: { "Statewide (Ernakulam DA)": { unskilled: 14020, semiSkilled: 14286, skilled: 14553, highlySkilled: 14804 } },
     zoneDefinition: "Kerala uses employment grades with district-wise DA, mapped here approximately at Ernakulam DA",
     effective: "2026-01-01 (DA re-indexed Apr 2026)",
-    note: "Kerala runs a separate IT/ITeS scheduled employment (≈15,944–26,400/month) that likely governs call-centre staff — check which schedule applies before costing."
+    note: "Kerala runs a separate IT/ITeS scheduled employment (≈15,944–26,400/month) that likely governs call-centre staff, check which schedule applies before costing."
   },
   tamilnadu: {
     state: "Tamil Nadu", zoneSystem: "Zone A/B",
@@ -436,7 +436,7 @@ window.DG_WAGES = {
       "Zone A": { unskilled: 14044, semiSkilled: 14139, skilled: 14233 },
       "Zone B": { unskilled: 13972, semiSkilled: 14067, skilled: 14161 }
     },
-    zoneDefinition: "Zone A: corporations & special-grade municipalities (Chennai, Coimbatore, Madurai…) · Zone B: rest — the zone spread is only ~₹70",
+    zoneDefinition: "Zone A: corporations & special-grade municipalities (Chennai, Coimbatore, Madurai…) · Zone B: rest, the zone spread is only ~₹70",
     effective: "2026-04-01 to 2027-03-31"
   },
   wb: {
@@ -457,7 +457,7 @@ window.DG_WAGES = {
     },
     zoneDefinition: "Area A: major corporations incl. Jamshedpur NAC/Mango/Adityapur · Area C: rural",
     effective: "2026-04-01 to 2026-09-30",
-    note: "Public trackers only publish anchor cells for Jharkhand — the full matrix needs the Labour Dept table."
+    note: "Public trackers only publish anchor cells for Jharkhand, the full matrix needs the Labour Dept table."
   },
   odisha: {
     state: "Odisha", zoneSystem: "flat",

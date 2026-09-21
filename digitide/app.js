@@ -22,7 +22,7 @@
 const GATE = { id: "DIGGRPACC", pass: "DGRP1234" };
 
 const $ = (s) => document.querySelector(s);
-const fmt = (n) => n == null ? "—" : "₹" + Math.round(n).toLocaleString("en-IN");
+const fmt = (n) => n == null ? "n/a" : "₹" + Math.round(n).toLocaleString("en-IN");
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
 
 const TODAY = new Date();
@@ -37,7 +37,7 @@ const SEAT_SQFT = 50; // stated assumption for per-seat rent arithmetic, shown i
     if (id === GATE.id && pw === GATE.pass) {
       sessionStorage.setItem("dg-auth", "1");
       $("#gate").remove(); boot();
-    } else $("#g-err").textContent = "Not recognised. Access is issued per person — ask Autopilot.";
+    } else $("#g-err").textContent = "Not recognised. Access is issued per person, ask Autopilot.";
   };
   if (sessionStorage.getItem("dg-auth") === "1") { $("#gate").remove(); boot(); return; }
   $("#g-go").addEventListener("click", go);
@@ -52,7 +52,7 @@ function monthsLeft(iso){
 }
 function expiryClass(m){ return m == null ? "exp-ok" : m <= 12 ? "exp-red" : m <= 24 ? "exp-amber" : "exp-ok"; }
 function fy(iso){
-  if (!iso) return "—";
+  if (!iso) return "n/a";
   const d = new Date(iso); const y = d.getMonth() >= 3 ? d.getFullYear() + 1 : d.getFullYear();
   return "FY" + String(y).slice(2);
 }
@@ -98,7 +98,7 @@ function cityAgg(){
 /* ---------------------------------------------------------------- boot ---- */
 function boot(){
   const token = window.MAPBOX_TOKEN || "";
-  if (!token || /REPLACE/.test(token)) { $("#hint").textContent = "MAPBOX_TOKEN missing — run scripts/build-config.js"; }
+  if (!token || /REPLACE/.test(token)) { $("#hint").textContent = "MAPBOX_TOKEN missing, run scripts/build-config.js"; }
   try {
     mapboxgl.accessToken = token;
     map = new mapboxgl.Map({
@@ -260,7 +260,7 @@ function wageTable(c){
   for (const [name, z] of Object.entries(w.zones)){
     const cur = name === c.wageZone;
     html += `<tr class="${cur ? "cur" : ""}"><td>${esc(name)}</td>${used.map(l =>
-      `<td>${z[l] != null ? fmt(z[l]) : "—"}</td>`).join("")}</tr>`;
+      `<td>${z[l] != null ? fmt(z[l]) : "n/a"}</td>`).join("")}</tr>`;
   }
   html += `</table><div class="note">${esc(w.zoneDefinition || "")} · ${esc(w.state)}, shops &amp; establishments schedule, effective ${esc(w.effective || "n/a")}. Monthly floors incl. VDA. <span class="flag">VALIDATE VS GAZETTE</span></div>`;
   if (w.note) html += `<div class="note">${esc(w.note)}</div>`;
@@ -278,8 +278,8 @@ function candidateCard(c, key){
       ? `Statutory floor <b class="delta-pos">₹${d.toLocaleString("en-IN")}/employee/month lower</b> (unskilled)` +
         (dsk != null ? `, ₹${dsk.toLocaleString("en-IN")} lower on skilled.` : ".")
       : d < 0
-      ? `Statutory floor <b class="delta-neg">₹${Math.abs(d).toLocaleString("en-IN")}/month HIGHER</b> — the case there is market wages and rent, not the statutory floor.`
-      : `Same statutory floor (${t.stateKey === c.stateKey ? "same state and zone class" : "flat-rate states"}) — the saving, if any, is market wages, attrition and rent.`;
+      ? `Statutory floor <b class="delta-neg">₹${Math.abs(d).toLocaleString("en-IN")}/month HIGHER</b>, the case there is market wages and rent, not the statutory floor.`
+      : `Same statutory floor (${t.stateKey === c.stateKey ? "same state and zone class" : "flat-rate states"}), the saving, if any, is market wages, attrition and rent.`;
   }
   let rentLine = "";
   if (c.rent && t.rent && c.rent.low != null && t.rent.low != null){
@@ -287,7 +287,7 @@ function candidateCard(c, key){
     const d = perSeat(c.rent) - perSeat(t.rent);
     rentLine = `<div class="cm">Rent ${t.rent.low}–${t.rent.high} vs ${c.rent.low}–${c.rent.high} ₹/sq ft/mo here → about <b class="${d > 0 ? "delta-pos" : "delta-neg"}">₹${Math.abs(d).toLocaleString("en-IN")}/seat/month ${d > 0 ? "saved" : "added"}</b> at ${SEAT_SQFT} sq ft a seat.</div>`;
   } else if (t.rent && t.rent.low == null){
-    rentLine = `<div class="cm">No published office market for ${esc(t.name)} — rent to be confirmed by a local broker check.</div>`;
+    rentLine = `<div class="cm">No published office market for ${esc(t.name)}, rent to be confirmed by a local broker check.</div>`;
   }
   return `<div class="cand"><div class="cn"><span>${esc(t.name)}, ${esc(t.state)}</span>
       <span class="d" style="color:${TIER_COLOR[t.tier]}">${TIER_NAME[t.tier]}</span></div>
@@ -325,7 +325,7 @@ function renderIntel(key, c, focusSr){
       <span class="v">${fmt(((c.rent.low + c.rent.high) / 2) * SEAT_SQFT)} / mo</span></div>
     <div class="note">${esc(c.rent.note || "")} As of ${esc(c.rent.asOf || "n/a")}. <span class="flag">BROKER-CHECK BEFORE COMMIT</span></div>`;
   } else {
-    html += `<div class="note">No published office market data for this location — to be confirmed by local broker check before any commitment.</div>`;
+    html += `<div class="note">No published office market data for this location, to be confirmed by local broker check before any commitment.</div>`;
   }
   html += `</div>`;
 
