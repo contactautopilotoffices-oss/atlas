@@ -47,7 +47,6 @@ const linkify = (txt) => esc(txt).replace(/https?:\/\/[^\s)<"']+/g,
 const TODAY = new Date();
 const TIER_COLOR = { 1: "#e0603a", 2: "#e0a91f", 3: "#1f8f77" };
 const TIER_NAME  = { 1: "Tier 1", 2: "Tier 2", 3: "Tier 3" };
-const SEAT_SQFT = 50;   // stated assumption for per-seat rent maths, shown wherever used
 
 /* ------------------------------------------------------------------ gate -- */
 function initGate(){
@@ -91,20 +90,12 @@ function wageRow(stateKey, zone){
   const w = window.DG_WAGES[stateKey];
   return w && w.zones ? w.zones[zone] || null : null;
 }
-function perSeatRent(rent){
-  return (rent && rent.low != null) ? Math.round(((rent.low + rent.high) / 2) * SEAT_SQFT) : null;
-}
-/* Indicative direct cost of one seat per month: the rent that seat occupies
-   plus the midpoint entry agent gross. It is deliberately only those two
-   lines, because they are the two the location decision actually moves.
-   It is NOT a loaded cost: no supervision, no telecom, no facilities opex,
-   no attrition replacement. Comparable across cities, not a budget figure. */
-function seatCost(cityKey){
-  const c = window.DG_CITIES[cityKey], t = window.DG_TALENT[cityKey];
-  if (!c || !t) return null;
-  const rent = perSeatRent(c.rent);
-  const pay = Math.round((t.salary[0] + t.salary[1]) / 2);
-  return { rent, pay, total: rent != null ? rent + pay : null };
+/* Rent is compared as quoted per sq ft per month and never converted into a
+   cost per seat. A seat figure needs a fit-out density assumption this tool has
+   no business making, and it anchors a commercial conversation that belongs
+   elsewhere. Midpoint of a quoted range, used only to compare two markets. */
+function rentMid(rent){
+  return (rent && rent.low != null) ? (rent.low + rent.high) / 2 : null;
 }
 /* Where a facility sits on the map. Building coordinate when geo.js has one,
    otherwise the city centroid, and the pin says which it is. */
@@ -180,9 +171,9 @@ function portfolioIndex(){
     const bf = bestFloorFrom(c);
     if (bf){ wageCuts.push((bf.current - bf.best) / bf.current * 100); wageCov++; }
 
-    const hereRent = perSeatRent(c.rent);
+    const hereRent = rentMid(c.rent);
     if (hereRent){
-      const opts = (c.candidates || []).map(k => perSeatRent((window.DG_CITIES[k]||{}).rent))
+      const opts = (c.candidates || []).map(k => rentMid((window.DG_CITIES[k]||{}).rent))
         .filter(v => v != null);
       if (opts.length){ rentCuts.push((hereRent - Math.min(...opts)) / hereRent * 100); rentCov++; }
     }
@@ -698,10 +689,10 @@ function candidateCard(c, key){
       : `<b>Same statutory floor</b>${t.stateKey===c.stateKey?" (same state and zone class)":""}. Any saving comes from market wages, churn and rent, not the wage schedule.`;
   }
   let rent = "";
-  const a = perSeatRent(c.rent), b = perSeatRent(t.rent);
+  const a = rentMid(c.rent), b = rentMid(t.rent);
   if (a != null && b != null){
-    const d = a - b;
-    rent = `<div class="cm">Rent ₹${t.rent.low} to ₹${t.rent.high} against ₹${c.rent.low} to ₹${c.rent.high} per sq ft here, about <b class="${d>0?"delta-pos":"delta-neg"}">${inr(Math.abs(d))} per seat per month ${d>0?"saved":"added"}</b> at ${SEAT_SQFT} sq ft a seat.</div>`;
+    const pct = Math.round((a - b) / a * 100);
+    rent = `<div class="cm">Rent <b>₹${t.rent.low} to ₹${t.rent.high}</b> per sq ft per month against <b>₹${c.rent.low} to ₹${c.rent.high}</b> here, about <b class="${pct>0?"delta-pos":"delta-neg"}">${Math.abs(pct)}% ${pct>0?"lower":"higher"}</b> on the quoted midpoints.</div>`;
   } else if (t.rent && t.rent.low == null){
     rent = `<div class="cm">No published office market for ${esc(t.name)}. Rent to be established by a local broker check.</div>`;
   }
@@ -765,40 +756,12 @@ function renderCity(key, c, focusSr){
   h += `<div class="sec"><h4>Real estate</h4>`;
   if (c.rent && c.rent.low != null){
     h += `<div class="kv"><span class="k">${esc(c.market||c.name)}${c.rent.grade?" · Grade "+esc(c.rent.grade):""}</span><span class="v">₹${c.rent.low} to ₹${c.rent.high} /sq ft/mo</span></div>
-      <div class="kv"><span class="k">Indicative rent per seat at ${SEAT_SQFT} sq ft</span><span class="v">${inr(perSeatRent(c.rent))} /mo</span></div>
       <div class="note">${esc(c.rent.note||"")} Quoted range as of ${esc(c.rent.asOf||"n/a")}.
         ${c.rent.srcUrl ? "Source: " + cite(c.rent.srcUrl) + "." : ""} <span class="flag">BROKER-CHECK BEFORE COMMIT</span></div>`;
   } else {
     h += `<div class="note">No published office market data for this location. To be established by a local broker check before any commitment.</div>`;
   }
   h += `</div>`;
-
-  /* the synthesis: what one seat costs here, and against the options */
-  const sc = seatCost(key);
-  if (sc && sc.total != null){
-    h += `<div class="sec"><h4>Indicative seat cost <span class="flag ind">INDICATIVE</span></h4>
-      <div class="hero calm"><div class="big">${inr(sc.total)}</div>
-        <div class="cap">per seat per month, direct: ${inr(sc.rent)} rent at ${SEAT_SQFT} sq ft plus ${inr(sc.pay)} entry agent gross.</div></div>`;
-    const opts = (c.candidates||[]).map(k => ({ k, n: window.DG_CITIES[k], s: seatCost(k) }))
-      .filter(o => o.n && o.s && o.s.total != null);
-    if (opts.length){
-      h += `<table class="t" style="margin-top:10px"><tr><th>Against</th><th>Rent</th><th>Pay</th><th>Seat</th><th>Delta</th></tr>
-        <tr class="cur"><td>${esc(c.name)}</td><td>${inr(sc.rent)}</td><td>${inr(sc.pay)}</td><td>${inr(sc.total)}</td><td>—</td></tr>`;
-      for (const o of opts){
-        const d = sc.total - o.s.total;
-        h += `<tr><td>${esc(o.n.name)}</td><td>${inr(o.s.rent)}</td><td>${inr(o.s.pay)}</td><td>${inr(o.s.total)}</td>
-          <td class="${d>0?"delta-pos":d<0?"delta-neg":""}">${d>0?"-":d<0?"+":""}${inr(Math.abs(d))}</td></tr>`;
-      }
-      const best = opts.map(o => sc.total - o.s.total).sort((a,b) => b - a)[0];
-      h += `</table>`;
-      if (best > 0){
-        h += `<div class="note">Delta is the monthly saving per seat against this location. The best option here saves ${inr(best)} a seat, so a 500-seat operation is about <b style="color:#fff">${inr(best*500*12)} a year</b> before any one-off move cost. That is the order of magnitude that justifies a relocation; a smaller gap is an argument for renegotiating the lease, not leaving.</div>`;
-      } else {
-        h += `<div class="note">No option on this list is cheaper per seat than staying. The case for moving from here, if there is one, rests on capacity, attrition or client requirement rather than cost.</div>`;
-      }
-    }
-    h += `<div class="note">Direct lines only: rent and agent pay. Supervision, telecom, facilities opex, transport and attrition replacement are excluded, so treat this as a comparison between cities rather than a budget.</div></div>`;
-  }
 
   /* what the state pays you to be there: the leg that offsets move cost */
   const inc = window.DG_INCENTIVES[c.stateKey], cen = window.DG_INCENTIVES.central;
@@ -864,7 +827,7 @@ const FACTOR_META = {
   wage:        { label:"Statutory wage headroom", color:"#e0603a",
                  how:"Mean cut available on the unskilled floor, against the cheapest zone in the same state or a named candidate" },
   rent:        { label:"Real estate headroom",    color:"#e0a91f",
-                 how:"Mean cut available on rent per seat, against the cheapest candidate market" },
+                 how:"Mean cut available on quoted rent per sq ft, against the cheapest candidate market" },
   competition: { label:"Competitor pressure",     color:"#4f9cd9",
                  how:"Share of these facilities sitting in high or very high competitor density catchments" },
   talent:      { label:"Talent churn and cost",   color:"#1f8f77",
