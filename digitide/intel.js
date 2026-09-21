@@ -616,3 +616,11 @@ window.DG_DATAQUALITY = [
   { sr:[46], site:"Mithapur, Gujarat", field:"District", tracker:"District Jamnagar", found:"Devbhumi Dwarka",
     severity:"note", why:"Devbhumi Dwarka was carved out of Jamnagar in 2013. Historically correct, currently out of date." }
 ];
+
+/* Two further tracker discrepancies surfaced by the final geocoding batch. */
+window.DG_DATAQUALITY.push(
+  { sr:[6], site:"Madhok Complex, Ludhiana", field:"Pin code", tracker:"144001", found:"141001",
+    severity:"fix", why:"144001 is Jalandhar. Madhok Complex on Ferozepur Road, Gurdev Nagar is Ludhiana 141001. Two Punjab facilities in the tracker currently carry the same pin code." },
+  { sr:[9], site:"Dr. ITM, Sector 62, Noida", field:"Pin code", tracker:"201309", found:"201301 in several sources",
+    severity:"check", why:"Sector 62 addresses appear under both pin codes in public records. Worth confirming against the lease deed rather than assuming either." }
+);

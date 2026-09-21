@@ -186,13 +186,18 @@ tr.cur td:first-child::after{content:" ← this site";font-size:8.5px;color:var(
 .mv .d{font-size:10px;color:var(--mut);margin-top:3px;line-height:1.55}
 
 /* legend / hint */
-#legend{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:14;background:var(--panel);
+/* Anchored just right of the board rather than centred on the viewport: at
+   projector widths a viewport-centred legend slides under the right panel. */
+#legend{position:fixed;left:358px;bottom:16px;z-index:14;background:var(--panel);
+  max-width:calc(100vw - 358px - 506px);
   border:1px solid var(--line);border-radius:10px;padding:8px 14px;font-size:10px;color:var(--mut);
-  backdrop-filter:blur(12px);display:flex;gap:14px;align-items:center;white-space:nowrap}
+  backdrop-filter:blur(12px);display:flex;gap:10px 14px;align-items:center;flex-wrap:wrap}
 #legend .sw{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:0}
 #legend .hollow{background:transparent;border:1.6px solid var(--cand);width:7px;height:7px}
 #legend .sep{width:1px;height:14px;background:var(--line)}
+#legend>span{white-space:nowrap}
 @media (max-width:1180px){ #panel{width:420px} }
+@media (max-width:1180px){ #legend{max-width:calc(100vw - 358px - 452px)} }
 @media (max-width:1000px){ #board{display:none} #legend{display:none} }
 @media (max-width:760px){ #panel{right:8px;left:8px;width:auto} }
 </style>
