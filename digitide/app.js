@@ -385,6 +385,21 @@ function showPortfolio(){
   });
   h += `</div></div>`;
 
+  /* Pin precision, stated at portfolio level so a coarse pin is never a surprise */
+  const gp = {};
+  for (const f of window.DG_FACILITIES){
+    const g = window.DG_GEO && window.DG_GEO[f.sr];
+    const k = g ? g.precision : "city";
+    gp[k] = (gp[k]||0) + 1;
+  }
+  const precOrder = ["building","street","locality","city"];
+  const precLabel = { building:"Pinned to the building", street:"Pinned to the street or plot",
+    locality:"Pinned to the locality or sector", city:"City centroid only" };
+  h += `<div class="sec"><h4>Map precision</h4>`;
+  for (const k of precOrder) if (gp[k])
+    h += `<div class="kv"><span class="k">${precLabel[k]}</span><span class="v">${gp[k]}</span></div>`;
+  h += `<div class="note">Every facility card states which of these its own pin carries. A coarse pin is shown as coarse rather than nudged onto a nearby building, because a pin that looks exact and is not is worse than one that admits it.</div></div>`;
+
   h += `<div class="sec"><h4>How to read this</h4>
     <div class="para">Facility rows, addresses, lessors and lease dates come from the Digitide tracker and are reproduced as given. Wage floors are the latest notified state rates. Rents are quoted market ranges. Talent and competitor figures are <span class="flag ind">INDICATIVE</span> planning bands, there to make thirty cities comparable on one yardstick, and are not audited.</div>
     <div class="note">${esc(window.DG_META.disclaimer)}</div></div>`;
