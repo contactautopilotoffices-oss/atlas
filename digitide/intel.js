@@ -35,7 +35,7 @@ window.DG_CITIES = {
     name: "Noida", state: "Uttar Pradesh", stateKey: "up", tier: 1,
     lat: 28.5900, lng: 77.3600, wageZone: "Category I",
     market: "Sector 58 / 62", rent: { low: 40, high: 90, grade: "mixed", asOf: "2025",
-      note: "Sector 62 Grade-A IT parks quote ₹65–95 psf; Sector 58 industrial-conversion stock sits at the lower end." },
+      note: "Sector 62 Grade-A IT parks quote ₹65–95 psf; Sector 58 industrial-conversion stock sits at the lower end.", srcUrl: "https://propliners.in/noida-one-sector-62-noida" },
     presence: "very high", players: ["Concentrix", "Teleperformance", "EXL", "Genpact", "iEnergizer", "Tech Mahindra BPS", "Startek", "WNS"],
     catchment: "Bottomless NCR hiring pool and the most contested: every large BPS employer bids for the same agents, so attrition, not availability, is the Noida problem.",
     candidates: ["lucknow", "kanpur"],
@@ -45,7 +45,7 @@ window.DG_CITIES = {
     name: "Jaipur", state: "Rajasthan", stateKey: "rajasthan", tier: 2,
     lat: 26.9124, lng: 75.7873, wageZone: "Statewide",
     market: "Khatipura Rd / C-Scheme", rent: { low: 16, high: 58, grade: "mixed", asOf: "2025",
-      note: "Vaishali Nagar ~₹16 psf; C-Scheme Grade A ~₹58 psf." },
+      note: "Vaishali Nagar ~₹16 psf; C-Scheme Grade A ~₹58 psf.", srcUrl: "https://www.dhamuandcompany.com/commercial-property-for-rent-jaipur/" },
     presence: "medium", players: ["Genpact", "Teleperformance", "Infosys BPM"],
     catchment: "Large Hindi-belt graduate pool with an established BPS base; comfortable tier-2 economics.",
     strategy: "Collection centre lease ends 30 Sep 2026, this month. Renew or move is a live decision today, not a plan. City economics are sound; the urgency is purely the calendar."
@@ -60,7 +60,7 @@ window.DG_CITIES = {
     name: "Lucknow", state: "Uttar Pradesh", stateKey: "up", tier: 2,
     lat: 26.8467, lng: 80.9462, wageZone: "Category II",
     market: "Vibhuti Khand, Gomti Nagar", rent: { low: 30, high: 90, grade: "mixed", asOf: "2025",
-      note: "Better buildings (Levana Cyber Heights class) at the top end; solid mid-grade floors ₹30–50 psf." },
+      note: "Better buildings (Levana Cyber Heights class) at the top end; solid mid-grade floors ₹30–50 psf.", srcUrl: "https://www.squareyards.com/rent/office-spaces-for-rent-in-vibhuti-khand-lucknow" },
     presence: "medium", players: ["HCLTech", "Teleperformance", "Tech Mahindra BPS"],
     catchment: "One of the largest graduate outputs in the Hindi belt, materially lower attrition than NCR, and Digitide already operates two facilities here including a full-floor call centre, the model is proven.",
     strategy: "Lucknow is the receiving end of the NCR argument, not a candidate to leave. The Summit Building lease runs to Mar 2029; treat it as the anchor to scale into."
@@ -75,7 +75,7 @@ window.DG_CITIES = {
     name: "Mohali", state: "Punjab", stateKey: "punjab", tier: 2,
     lat: 30.7046, lng: 76.7179, wageZone: "Statewide",
     market: "Industrial Area Phase 7", rent: { low: 25, high: 65, grade: "B", asOf: "2025",
-      note: "Phase 7/9 industrial-area floors; cheaper than Chandigarh Sector 17." },
+      note: "Phase 7/9 industrial-area floors; cheaper than Chandigarh Sector 17.", srcUrl: "https://www.realestateindia.com/mohali-property/office-space-for-rent-in-phase-7-mohali.htm" },
     presence: "medium", players: ["Teleperformance", "IDS Infotech"],
     catchment: "Tricity (Chandigarh–Mohali–Panchkula) pool: strong English voice catchment for the North at tier-2 cost. Lease runs to Sep 2030, a settled site.",
   },
@@ -91,7 +91,7 @@ window.DG_CITIES = {
     name: "Bengaluru", state: "Karnataka", stateKey: "karnataka", tier: 1,
     lat: 12.9716, lng: 77.5946, wageZone: "Zone 1",
     market: "BTM / Bommanahalli (Hosur Rd)", rent: { low: 50, high: 100, grade: "mixed", asOf: "2025",
-      note: "Conventional office ₹50–100 psf on this corridor; tech parks at the upper end." },
+      note: "Conventional office ₹50–100 psf on this corridor; tech parks at the upper end.", srcUrl: "https://www.bangaloreoffices.com/btm-layout/" },
     presence: "very high", players: ["Infosys BPM", "Accenture Ops", "Concentrix", "Teleperformance", "Genpact", "Firstsource", "[24]7.ai"],
     catchment: "The deepest multilingual ITES pool in India, and the most expensive to hold: every employer in the sector bids for it.",
     candidates: ["mysore", "hubli", "bellary"],
@@ -107,7 +107,7 @@ window.DG_CITIES = {
     name: "Hyderabad / Secunderabad", state: "Telangana", stateKey: "telangana", tier: 1,
     lat: 17.4399, lng: 78.4983, wageZone: "Zone I",
     market: "MG Rd Ranigunj / Begumpet", rent: { low: 40, high: 70, grade: "mixed", asOf: "2025",
-      note: "Begumpet/Secunderabad corridor; materially cheaper than HITEC City." },
+      note: "Begumpet/Secunderabad corridor; materially cheaper than HITEC City.", srcUrl: "https://www.squareyards.com/rent/office-spaces-for-rent-in-begumpet-hyderabad" },
     presence: "very high", players: ["Genpact", "Concentrix", "Teleperformance", "HGS", "Sutherland", "Cognizant", "[24]7.ai"],
     catchment: "Deep Telugu+English pool. Six of the group's facilities sit on one EFC stack in Ranigunj, heavy single-building, single-partner concentration.",
     candidates: ["warangal"],
@@ -131,7 +131,7 @@ window.DG_CITIES = {
     name: "Chennai", state: "Tamil Nadu", stateKey: "tamilnadu", tier: 1,
     lat: 12.9200, lng: 80.2100, wageZone: "Zone A",
     market: "Pallikaranai (Velachery–Tambaram Rd)", rent: { low: 25, high: 45, grade: "mixed", asOf: "2025",
-      note: "Standalone B-grade floors on this corridor ~₹25–31 psf; institutional Grade A elsewhere in Chennai runs ₹45+." },
+      note: "Standalone B-grade floors on this corridor ~₹25–31 psf; institutional Grade A elsewhere in Chennai runs ₹45+.", srcUrl: "https://property.sulekha.com/commercial-office-space-for-rent/velachery-chennai" },
     presence: "very high", players: ["Sutherland", "Concentrix", "Teleperformance", "WNS", "Firstsource", "HGS"],
     catchment: "Deep Tamil+English pool; RVI Tower leases run to 2029/2030, so this is a settled anchor rather than a pressure point.",
     candidates: ["madurai", "trichy"],
@@ -149,7 +149,7 @@ window.DG_CITIES = {
     name: "Kolkata", state: "West Bengal", stateKey: "wb", tier: 1,
     lat: 22.5800, lng: 88.4200, wageZone: "Zone A",
     market: "Sector V, Bidhannagar", rent: { low: 50, high: 65, grade: "A", asOf: "2025",
-      note: "Warm-shell Grade A; ~14.6 mn sq ft stock, the largest Grade-A pool in the metro." },
+      note: "Warm-shell Grade A; ~14.6 mn sq ft stock, the largest Grade-A pool in the metro.", srcUrl: "https://www.exospace.in/post/best-office-space-in-kolkata-salt-lake-city" },
     presence: "high", players: ["Concentrix", "Teleperformance", "Wipro", "TCS", "Genpact", "Firstsource", "Cognizant"],
     catchment: "Large English+Bengali+Hindi pool built over two decades of Sector V ITES; both facilities (Technopolis to Oct 2027, Millennium City to Jun 2030) sit in the state's highest wage band.",
     candidates: ["durgapur", "siliguri"],
@@ -159,7 +159,7 @@ window.DG_CITIES = {
     name: "Bhubaneswar", state: "Odisha", stateKey: "odisha", tier: 2,
     lat: 20.2961, lng: 85.8245, wageZone: "Statewide",
     market: "Rasulgarh / Infocity", rent: { low: 35, high: 75, grade: "mixed", asOf: "2025",
-      note: "Infocity fitted space quoted ~₹75 psf; broader city floors materially lower." },
+      note: "Infocity fitted space quoted ~₹75 psf; broader city floors materially lower.", srcUrl: "https://www.99acres.com/commercial-property-for-rent-in-infocity-bhubaneswar-ffid" },
     presence: "medium", players: ["Concentrix", "Infosys BPM", "TCS", "Sutherland"],
     catchment: "Government-backed IT push, good graduate output, low cost. Collection lease ends Dec 2026, a near-term renew-or-move call.",
     strategy: "Lease closes 31 Dec 2026. City fundamentals argue renew; the decision is terms, not geography."
@@ -184,7 +184,7 @@ window.DG_CITIES = {
     name: "Navi Mumbai", state: "Maharashtra", stateKey: "maharashtra", tier: 1,
     lat: 19.1550, lng: 73.0000, wageZone: "Zone I",
     market: "Airoli / Rabale, Thane–Belapur Rd", rent: { low: 70, high: 110, grade: "A", asOf: "Q3 2025",
-      note: "This belt led MMR leasing in 2025 and has the fastest 3-yr rent growth in the country, the cost line only goes up here." },
+      note: "This belt led MMR leasing in 2025 and has the fastest 3-yr rent growth in the country, the cost line only goes up here.", srcUrl: "https://ilovenavimumbai.com/airoli-office-rents/" },
     presence: "high", players: ["WNS", "Teleperformance", "Concentrix", "Firstsource", "IGT Solutions", "TCS BPS"],
     catchment: "Deep central-suburban catchment along the Thane–Belapur ITES spine; five facilities across Airoli and Rabale make this the group's densest cluster.",
     candidates: ["nasik", "aurangabad"],
@@ -194,7 +194,7 @@ window.DG_CITIES = {
     name: "Thane", state: "Maharashtra", stateKey: "maharashtra", tier: 1,
     lat: 19.2183, lng: 72.9781, wageZone: "Zone I",
     market: "Wagle Estate / Kolshet / GB Rd", rent: { low: 90, high: 140, grade: "mixed", asOf: "2025",
-      note: "Corridor quotes; older industrial-estate B-grade floors trade below this range." },
+      note: "Corridor quotes; older industrial-estate B-grade floors trade below this range.", srcUrl: "https://thanerealestatenews.com/thane-commercial-real-estate-2025/" },
     presence: "high", players: ["WNS", "Teleperformance", "Tech Mahindra BPS", "Firstsource"],
     catchment: "Same central-line catchment as Navi Mumbai from the north side; four facilities including the four-floor Kolshet block.",
     candidates: ["nasik", "aurangabad"],
@@ -211,7 +211,7 @@ window.DG_CITIES = {
     name: "Pune", state: "Maharashtra", stateKey: "maharashtra", tier: 1,
     lat: 18.5600, lng: 73.9000, wageZone: "Zone I",
     market: "Kharadi / Pimpri", rent: { low: 50, high: 100, grade: "mixed", asOf: "2025-26",
-      note: "Kharadi Grade A ~₹93–100 psf; Pimpri materially cheaper at ₹50–90. The owned Devi IT Park floor carries no rent line at all." },
+      note: "Kharadi Grade A ~₹93–100 psf; Pimpri materially cheaper at ₹50–90. The owned Devi IT Park floor carries no rent line at all.", srcUrl: "https://myhq.in/blog/office-space/eon-it-park-kharadi-guide" },
     presence: "high", players: ["Infosys BPM", "WNS", "EXL", "Concentrix", "Teleperformance", "Genpact"],
     catchment: "Deep multilingual pool (Marathi, Hindi, English); the owned Pimpri floor is the only zero-rent asset in the portfolio.",
     candidates: ["kolhapur", "aurangabad", "nasik"],
@@ -233,7 +233,7 @@ window.DG_CITIES = {
   kolhapur: {
     name: "Kolhapur", state: "Maharashtra", stateKey: "maharashtra", tier: 2,
     lat: 16.7050, lng: 74.2433, wageZone: "Zone I",
-    market: "Shivaji Peth", rent: { low: 35, high: 35, grade: "B", asOf: "2025", note: "Thin listing depth; single Tarabai Park reference." },
+    market: "Shivaji Peth", rent: { low: 35, high: 35, grade: "B", asOf: "2025", note: "Thin listing depth; single Tarabai Park reference.", srcUrl: "https://www.99acres.com/commercial-office-space-for-rent-in-kolhapur-ffid" },
     presence: "low", players: [],
     catchment: "Southern-Maharashtra collection catchment; existing Digitide site."
   },
@@ -246,7 +246,7 @@ window.DG_CITIES = {
   nasik: {
     name: "Nashik", state: "Maharashtra", stateKey: "maharashtra", tier: 2,
     lat: 19.9975, lng: 73.7898, wageZone: "Zone I",
-    market: "City", rent: { low: 28, high: 65, grade: "B", asOf: "2025", note: "No institutional Grade A; furnished floors mid-range." },
+    market: "City", rent: { low: 28, high: 65, grade: "B", asOf: "2025", note: "No institutional Grade A; furnished floors mid-range.", srcUrl: "https://www.squareyards.com/rent/office-spaces-for-rent-in-nashik" },
     presence: "low", players: ["WNS (Nashik)", "eClerx (Nashik)"],
     catchment: "Strong graduate output, very low BPS density, half the rent of the Thane–Belapur belt; Digitide already holds a collection centre here to Jan 2027, a ready expansion beachhead."
   },
@@ -268,7 +268,7 @@ window.DG_CITIES = {
     name: "Indore", state: "Madhya Pradesh", stateKey: "mp", tier: 2,
     lat: 22.7196, lng: 75.8577, wageZone: "Statewide",
     market: "Vijay Nagar", rent: { low: 64, high: 112, grade: "mixed", asOf: "2025",
-      note: "Small-unit listing skew; large warm-shell floors likely at or below the low end." },
+      note: "Small-unit listing skew; large warm-shell floors likely at or below the low end.", srcUrl: "https://www.squareyards.com/rent/office-spaces-for-rent-in-vijay-nagar-indore" },
     presence: "medium", players: ["TaskUs", "Teleperformance", "Infosys BPM", "TCS"],
     catchment: "MP's commercial capital: strong graduate pool, growing ITES base, tier-2 cost. Two facilities incl. the new Brilliant Sapphire lease to Aug 2029.",
     candidates: ["chhindwara"],
@@ -283,7 +283,7 @@ window.DG_CITIES = {
   raipur: {
     name: "Raipur", state: "Chhattisgarh", stateKey: "chhattisgarh", tier: 2,
     lat: 21.2514, lng: 81.6296, wageZone: "Zone A",
-    market: "Devendra Nagar Rd", rent: { low: 35, high: 70, grade: "B", asOf: "2025", note: "Floor-wise quotes; furnished Pandri/Telibandha ~₹40–60 psf." },
+    market: "Devendra Nagar Rd", rent: { low: 35, high: 70, grade: "B", asOf: "2025", note: "Floor-wise quotes; furnished Pandri/Telibandha ~₹40–60 psf.", srcUrl: "https://www.99acres.com/commercial-office-space-for-rent-in-raipur-ffid" },
     presence: "low", players: [],
     catchment: "State-capital collection catchment; lease ends 20 Nov 2026, near-term renewal call.",
     strategy: "Lease closes 20 Nov 2026. Renew-or-move is live this quarter; footprint is small."
@@ -293,28 +293,28 @@ window.DG_CITIES = {
   durgapur: {
     name: "Durgapur", state: "West Bengal", stateKey: "wb", tier: 3, candidateOnly: true,
     lat: 23.5204, lng: 87.3119, wageZone: "Zone A",
-    market: "Bidhannagar (Durgapur)", rent: { low: 20, high: 40, grade: "B", asOf: "2025", note: "No Grade A market; floor-wise commercial stock." },
+    market: "Bidhannagar (Durgapur)", rent: { low: 20, high: 40, grade: "B", asOf: "2025", note: "No Grade A market; floor-wise commercial stock.", srcUrl: "https://www.realestateindia.com/durgapur-property/commercial-property-for-rent-in-bidhannagar-durgapur.htm" },
     presence: "low", players: [],
     catchment: "~170 km from Kolkata. NIT Durgapur plus a dense engineering-college belt; effectively no organised BPS employer competing for the pool. Untested at scale, needs an on-ground validation pass."
   },
   siliguri: {
     name: "Siliguri", state: "West Bengal", stateKey: "wb", tier: 3, candidateOnly: true,
     lat: 26.7271, lng: 88.3953, wageZone: "Zone A",
-    market: "Sevoke Rd corridor", rent: { low: 55, high: 75, grade: "B", asOf: "2025", note: "Small-format, retail-driven pricing; large floors thin." },
+    market: "Sevoke Rd corridor", rent: { low: 55, high: 75, grade: "B", asOf: "2025", note: "Small-format, retail-driven pricing; large floors thin.", srcUrl: "https://www.siliguriproperty.com/commercial-officespace" },
     presence: "low", players: [],
     catchment: "North Bengal + NE gateway: Bengali, Hindi and Nepali voice pool, North Bengal University. No organised ITES employer at scale; same validation caveat as Durgapur."
   },
   kanpur: {
     name: "Kanpur", state: "Uttar Pradesh", stateKey: "up", tier: 2, candidateOnly: true,
     lat: 26.4499, lng: 80.3319, wageZone: "Category II",
-    market: "Kakadeo / Lajpat Nagar", rent: { low: 17, high: 22, grade: "B", asOf: "2025", note: "No Grade A office market." },
+    market: "Kakadeo / Lajpat Nagar", rent: { low: 17, high: 22, grade: "B", asOf: "2025", note: "No Grade A office market.", srcUrl: "https://property.sulekha.com/commercial-property-for-rent/kanpur" },
     presence: "low", players: [],
     catchment: "UP's second-largest graduate pool with almost no BPS employer bidding for it; the cheapest credible Hindi-belt voice catchment on this map."
   },
   aurangabad: {
     name: "Chh. Sambhajinagar", state: "Maharashtra", stateKey: "maharashtra", tier: 2, candidateOnly: true,
     lat: 19.8762, lng: 75.3433, wageZone: "Zone I",
-    market: "City / Beed Bypass", rent: { low: 19, high: 27, grade: "B", asOf: "2025", note: "Thin data; no published Grade A market." },
+    market: "City / Beed Bypass", rent: { low: 19, high: 27, grade: "B", asOf: "2025", note: "Thin data; no published Grade A market.", srcUrl: "https://www.realestateindia.com/property-detail/office-space-for-rent-in-beed-bypass-road-aurangabad-5160-sq-ft-2-30-lac-1113027.htm" },
     presence: "low", players: [],
     catchment: "Industrial city, Marathi+Hindi pool, very low BPS density. Zone I under the wage schedule, the saving vs MMR is rent and churn, not the floor."
   },
@@ -328,21 +328,21 @@ window.DG_CITIES = {
   hubli: {
     name: "Hubballi", state: "Karnataka", stateKey: "karnataka", tier: 2, candidateOnly: true,
     lat: 15.3647, lng: 75.1240, wageZone: "Zone 2",
-    market: "Vidya Nagar / Aryabhata Tech Park", rent: { low: 45, high: 45, grade: "B", asOf: "2025", note: "Single published listing; broker check needed." },
+    market: "Vidya Nagar / Aryabhata Tech Park", rent: { low: 45, high: 45, grade: "B", asOf: "2025", note: "Single published listing; broker check needed.", srcUrl: "https://www.indiamart.com/proddetail/commercial-office-space-for-rent-22224704533.html" },
     presence: "low", players: ["Infosys (Hubballi)"],
     catchment: "North Karnataka's education hub (Deshpande ecosystem, KLE colleges) with minimal BPS competition."
   },
   madurai: {
     name: "Madurai", state: "Tamil Nadu", stateKey: "tamilnadu", tier: 2, candidateOnly: true,
     lat: 9.9252, lng: 78.1198, wageZone: "Zone A",
-    market: "ELCOT IT Park / Anna Nagar", rent: { low: 14, high: 37, grade: "B", asOf: "2025", note: "ELCOT government space typically below listed private rates." },
+    market: "ELCOT IT Park / Anna Nagar", rent: { low: 14, high: 37, grade: "B", asOf: "2025", note: "ELCOT government space typically below listed private rates.", srcUrl: "https://www.99acres.com/commercial-office-space-for-rent-in-madurai-ffid" },
     presence: "medium", players: ["HCLTech", "Zoho (region)", "Techmango"],
     catchment: "Very large Tamil voice pool, ELCOT-subsidised space, rents a third of Chennai's corridor."
   },
   trichy: {
     name: "Tiruchirappalli", state: "Tamil Nadu", stateKey: "tamilnadu", tier: 2, candidateOnly: true,
     lat: 10.7905, lng: 78.7047, wageZone: "Zone A",
-    market: "Thillai Nagar / Cantonment", rent: { low: 25, high: 41, grade: "B", asOf: "2025", note: "No published Grade A market." },
+    market: "Thillai Nagar / Cantonment", rent: { low: 25, high: 41, grade: "B", asOf: "2025", note: "No published Grade A market.", srcUrl: "https://www.99acres.com/commercial-office-space-for-rent-in-trichy-ffid" },
     presence: "low", players: [],
     catchment: "NIT Trichy plus a strong college belt; BHEL-town labour stability, low BPS competition."
   },
@@ -368,6 +368,7 @@ window.DG_WAGES = {
     state: "Delhi (NCT)", zoneSystem: "flat",
     zones: { "Statewide": { unskilled: 18456, semiSkilled: 20371, skilled: 22411, clerical: 24356 } },
     zoneDefinition: "Single rate across the NCT, the highest floor in the country",
+    srcUrl: "https://labour.delhi.gov.in/labour/current-minimum-wage-rate",
     effective: "2025-04-01 (still in force Sep 2026; next revision due Oct 2026)",
     note: "Delhi skipped the Oct 2025 and Apr 2026 VDA revisions; the Apr 2025 order remains the current legal rate."
   },
@@ -375,12 +376,14 @@ window.DG_WAGES = {
     state: "Rajasthan", zoneSystem: "flat",
     zones: { "Statewide": { unskilled: 7410, semiSkilled: 7722, skilled: 8034, highlySkilled: 9334 } },
     zoneDefinition: "One rate statewide, the lowest statutory floor among major states",
+    srcUrl: "https://academy.salarybox.in/minimum-wages/rajasthan",
     effective: "2024-10-01 onward (latest notified)"
   },
   punjab: {
     state: "Punjab", zoneSystem: "flat",
     zones: { "Statewide": { unskilled: 13486, semiSkilled: 14383, skilled: 15414 } },
     zoneDefinition: "One rate statewide; S&E staff also graded A–D for clerical roles",
+    srcUrl: "https://labourlawhelp.com/punjab-minimum-wages/",
     effective: "2026-05-01 onward",
     note: "Large hike notified May 2026, up from ~9,854 unskilled two months earlier."
   },
@@ -392,6 +395,7 @@ window.DG_WAGES = {
       "Category III": { unskilled: 12356, semiSkilled: 13590, skilled: 15224 }
     },
     zoneDefinition: "Cat I: Gautam Buddha Nagar (Noida) & Ghaziabad · Cat II: Nagar Nigam districts (Lucknow, Kanpur…) · Cat III: rest",
+    srcUrl: "https://labourlawhelp.com/uttar-pradesh-minimum-wages/",
     effective: "2026-04-01 to 2026-09-30",
     note: "UP's first geographic split, notified Apr 2026, Noida now carries a higher floor than Lucknow or Kanpur."
   },
@@ -399,6 +403,7 @@ window.DG_WAGES = {
     state: "Haryana", zoneSystem: "flat",
     zones: { "Statewide": { unskilled: 15221, semiSkilled: 16781, skilled: 18501, highlySkilled: 19426 } },
     zoneDefinition: "One uniform rate across the state",
+    srcUrl: "https://labourlawhelp.com/haryana-minimum-wages/",
     effective: "2026-04-01 onward"
   },
   karnataka: {
@@ -409,6 +414,7 @@ window.DG_WAGES = {
       "Zone 3": { unskilled: 19319, semiSkilled: 21251, skilled: 23376, highlySkilled: 25714 }
     },
     zoneDefinition: "Zone 1: Greater Bengaluru · Zone 2: other municipal corporations + district HQs · Zone 3: rest of state",
+    srcUrl: "https://labourlawhelp.com/karnataka-minimum-wages/",
     effective: "2026-05-22 onward (FY 2026-27)",
     note: "The ~60% May 2026 hike is under legal challenge; if stayed, the earlier 4-zone schedule (≈14,559–19,972) revives. Track the case before pricing anything off this table."
   },
@@ -420,6 +426,7 @@ window.DG_WAGES = {
       "Zone III": { unskilled: 14000, semiSkilled: 15000, skilled: 16500, highlySkilled: 18000 }
     },
     zoneDefinition: "Zone I: municipal corporations (GHMC, Warangal…) · Zone II: municipalities · Zone III: gram panchayat areas",
+    srcUrl: "https://labourlawhelp.com/telangana-minimum-wages/",
     effective: "2026-06-01 onward",
     note: "First comprehensive re-fixation since state formation; Zone II/III skilled cells inferred from the notified ₹1,000 zone step."
   },
@@ -427,6 +434,7 @@ window.DG_WAGES = {
     state: "Kerala", zoneSystem: "grades + district DA",
     zones: { "Statewide (Ernakulam DA)": { unskilled: 14020, semiSkilled: 14286, skilled: 14553, highlySkilled: 14804 } },
     zoneDefinition: "Kerala uses employment grades with district-wise DA, mapped here approximately at Ernakulam DA",
+    srcUrl: "https://academy.salarybox.in/minimum-wages/kerala",
     effective: "2026-01-01 (DA re-indexed Apr 2026)",
     note: "Kerala runs a separate IT/ITeS scheduled employment (≈15,944–26,400/month) that likely governs call-centre staff, check which schedule applies before costing."
   },
@@ -437,6 +445,7 @@ window.DG_WAGES = {
       "Zone B": { unskilled: 13972, semiSkilled: 14067, skilled: 14161 }
     },
     zoneDefinition: "Zone A: corporations & special-grade municipalities (Chennai, Coimbatore, Madurai…) · Zone B: rest, the zone spread is only ~₹70",
+    srcUrl: "https://labourlawhelp.com/tamil-nadu-minimum-wages/",
     effective: "2026-04-01 to 2027-03-31"
   },
   wb: {
@@ -446,6 +455,7 @@ window.DG_WAGES = {
       "Zone B": { unskilled: 9760,  semiSkilled: 10736, skilled: 11810, highlySkilled: 12990 }
     },
     zoneDefinition: "Zone A: corporation, municipal and notified-authority areas (Kolkata, Durgapur, Siliguri all qualify) · Zone B: rest of state",
+    srcUrl: "https://labourlawhelp.com/west-bengal-minimum-wages/",
     effective: "2026-07-01 to 2026-12-31",
     note: "Zone B semi/skilled cells derived from WB's uniform 10% skill step. 'Skilled' explicitly covers clerks and data-entry operators."
   },
@@ -456,6 +466,7 @@ window.DG_WAGES = {
       "Area C": { unskilled: 12150 }
     },
     zoneDefinition: "Area A: major corporations incl. Jamshedpur NAC/Mango/Adityapur · Area C: rural",
+    srcUrl: "https://labourlawhelp.com/jharkhand-minimum-wages/",
     effective: "2026-04-01 to 2026-09-30",
     note: "Public trackers only publish anchor cells for Jharkhand, the full matrix needs the Labour Dept table."
   },
@@ -463,18 +474,21 @@ window.DG_WAGES = {
     state: "Odisha", zoneSystem: "flat",
     zones: { "Statewide": { unskilled: 12272, semiSkilled: 13572, skilled: 14872, highlySkilled: 16172, clerical: 14872 } },
     zoneDefinition: "Single zone; the skilled tier explicitly includes clerical",
+    srcUrl: "https://academy.salarybox.in/minimum-wages/odisha",
     effective: "2026-04-01 to 2026-09-30"
   },
   bihar: {
     state: "Bihar", zoneSystem: "flat",
     zones: { "Statewide": { unskilled: 11336, semiSkilled: 11752, skilled: 14326, highlySkilled: 17472 } },
     zoneDefinition: "One rate statewide, all scheduled employments",
+    srcUrl: "https://labourlawhelp.com/bihar-minimum-wages/",
     effective: "2026-04-01 to 2026-09-30"
   },
   assam: {
     state: "Assam", zoneSystem: "flat",
     zones: { "Statewide": { unskilled: 10543, semiSkilled: 12257, skilled: 15323, highlySkilled: 19710, clerical: 15323 } },
     zoneDefinition: "Uniform statewide; the skilled tier covers clerical",
+    srcUrl: "https://labourcommissioner.assam.gov.in/document-details/minimum-wage-notifications",
     effective: "2026-01-01 onward (order of Jun 2026, arrears from Jan)"
   },
   gujarat: {
@@ -484,6 +498,7 @@ window.DG_WAGES = {
       "Zone II": { unskilled: 13039, semiSkilled: 13325, skilled: 13585 }
     },
     zoneDefinition: "Zone I: corporation, municipality & UDA areas · Zone II: rest of state",
+    srcUrl: "https://factohr.com/minimum-wages-in-india/gujarat/",
     effective: "2026-04-01 to 2026-09-30",
     note: "Semi-skilled cells interpolated on Gujarat's standard ₹11/day basic step."
   },
@@ -491,6 +506,7 @@ window.DG_WAGES = {
     state: "Madhya Pradesh", zoneSystem: "flat",
     zones: { "Statewide": { unskilled: 12425, semiSkilled: 13421, skilled: 15144, highlySkilled: 16769 } },
     zoneDefinition: "One rate statewide for all 67 scheduled employments",
+    srcUrl: "https://labourlawhelp.com/madhya-pradesh-minimum-wages/",
     effective: "2026-04-01 to 2026-09-30"
   },
   chhattisgarh: {
@@ -501,6 +517,7 @@ window.DG_WAGES = {
       "Zone C": { unskilled: 10882, semiSkilled: 11662, skilled: 12832, highlySkilled: 13612 }
     },
     zoneDefinition: "Zone A: Raipur, Durg-Bhilai belt corporations · Zone B: other corporations · Zone C: rest",
+    srcUrl: "https://labourlawhelp.com/chhattisgarh-minimum-wages/",
     effective: "2026-04-01 to 2026-09-30",
     note: "Unskilled row is exact; higher tiers estimated from CG's standard basic differentials."
   },
@@ -512,6 +529,7 @@ window.DG_WAGES = {
       "Zone III": { unskilled: 12962, semiSkilled: 13768, skilled: 14573 }
     },
     zoneDefinition: "Zone I: all municipal corporation areas + industrial belts within 20 km (so Mumbai, Thane, Navi Mumbai, Pune, Nashik, Nagpur, Sambhajinagar are ALL Zone I) · Zone II: A/B-class municipal councils · Zone III: rest",
+    srcUrl: "https://factohr.com/minimum-wages-in-india/maharashtra/",
     effective: "2026-07-01 to 2026-12-31",
     note: "Zone I unskilled and skilled are notified figures; semi-skilled and Zone II/III skilled cells derived from the uniform skill step."
   }

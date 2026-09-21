@@ -29,6 +29,15 @@ const GATE = { id: "DIGGRPACC", pass: "DGRP1234" };
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;" }[c]));
 const inr = (n) => n == null ? "n/a" : "₹" + Math.round(n).toLocaleString("en-IN");
+/* A cited source that cannot be opened is not really a citation. Every source
+   with a URL renders as a link; every source without one renders as plain text
+   rather than a dead-looking link. */
+const host = (u) => { try { return new URL(u).hostname.replace(/^www\./, ""); } catch { return u; } };
+const cite = (url, label) => url
+  ? `<a href="${esc(url)}" target="_blank" rel="noopener noreferrer">${esc(label || host(url))} ↗</a>`
+  : "";
+const linkify = (txt) => esc(txt).replace(/https?:\/\/[^\s)<"']+/g,
+  u => `<a href="${u}" target="_blank" rel="noopener noreferrer">${host(u)} ↗</a>`);
 const TODAY = new Date();
 const TIER_COLOR = { 1: "#e0603a", 2: "#e0a91f", 3: "#1f8f77" };
 const TIER_NAME  = { 1: "Tier 1", 2: "Tier 2", 3: "Tier 3" };
@@ -186,16 +195,31 @@ function addLayers(){
     paint: { "circle-radius": ["interpolate", ["linear"], ["zoom"],
         4, ["+", 3.4, ["*", .9, ["get","count"]]],
         11, ["+", 6, ["*", 1.6, ["get","count"]]]],
-      "circle-color": ["get","color"], "circle-stroke-color": "#0b0f16", "circle-stroke-width": 1.3 } });
+      "circle-color": ["get","color"], "circle-stroke-color": "#0b0f16", "circle-stroke-width": 1.6,
+      "circle-pitch-alignment": "map" } });
   map.addLayer({ id: "sites-lbl", type: "symbol", source: "sites",
     minzoom: 5.2,
     layout: { "text-field": ["get","name"], "text-size": 10.5, "text-offset": [0,1.15], "text-anchor": "top",
       "text-font": ["DIN Pro Medium","Arial Unicode MS Regular"], "text-allow-overlap": false },
     paint: { "text-color": "rgba(255,255,255,.88)", "text-halo-color": "#0b0f16", "text-halo-width": 1.3 } });
+  /* Selection is drawn as three concentric layers rather than one stroke:
+     a soft halo that lifts the pin off the basemap, a wide translucent collar
+     that gives the ring somewhere to sit, and a crisp hairline on the outside.
+     The gap between pin and ring is what makes it read as deliberate; a ring
+     pressed against the marker just looks like a thick border. */
+  const selR = ["+", 15, ["*", 2.2, ["get","count"]]];
+  map.addLayer({ id: "sites-sel-halo", type: "circle", source: "sites",
+    filter: ["==", ["get","city"], "__none__"],
+    paint: { "circle-radius": ["+", selR, 9], "circle-color": "#ffffff",
+      "circle-opacity": .10, "circle-blur": .85 } });
+  map.addLayer({ id: "sites-sel-collar", type: "circle", source: "sites",
+    filter: ["==", ["get","city"], "__none__"],
+    paint: { "circle-radius": selR, "circle-color": "rgba(0,0,0,0)",
+      "circle-stroke-color": "#ffffff", "circle-stroke-width": 3, "circle-stroke-opacity": .22 } });
   map.addLayer({ id: "sites-sel", type: "circle", source: "sites",
     filter: ["==", ["get","city"], "__none__"],
-    paint: { "circle-radius": ["+", 9, ["*", 1.8, ["get","count"]]], "circle-color": "rgba(0,0,0,0)",
-      "circle-stroke-color": "#ffffff", "circle-stroke-width": 1.5 } });
+    paint: { "circle-radius": ["+", selR, 1.5], "circle-color": "rgba(0,0,0,0)",
+      "circle-stroke-color": "#ffffff", "circle-stroke-width": 1.75, "circle-stroke-opacity": .95 } });
 
   for (const id of ["sites","cand"]){
     map.on("click", id, e => select(e.features[0].properties.city));
@@ -207,7 +231,8 @@ function refreshMap(){
   if (!map || !map.getSource("sites")) return;
   map.getSource("sites").setData(siteGeo());
   map.getSource("links").setData(linkGeo());
-  map.setFilter("sites-sel", ["==", ["get","city"], selected || "__none__"]);
+  for (const id of ["sites-sel-halo","sites-sel-collar","sites-sel"])
+    if (map.getLayer(id)) map.setFilter(id, ["==", ["get","city"], selected || "__none__"]);
 }
 
 /* --------------------------------------------------------------- filters -- */
@@ -468,7 +493,11 @@ function select(city, sr){
   const c = window.DG_CITIES[city]; if (!c) return;
   selected = city; markActive(); refreshMap();
   renderCity(city, c, sr);
-  if (map) map.flyTo({ center: [c.lng, c.lat], zoom: Math.max(map.getZoom(), 9), duration: 900 });
+  /* Camera moves are motion too: honour the system setting rather than
+     assuming everyone can tolerate a 900 ms fly-through. */
+  const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (map) map.flyTo({ center: [c.lng, c.lat], zoom: Math.max(map.getZoom(), 9),
+    duration: reduced ? 0 : 900, essential: true });
 }
 
 function wageTable(c){
@@ -481,7 +510,8 @@ function wageTable(c){
   for (const [name,z] of Object.entries(w.zones))
     t += `<tr class="${name===c.wageZone?"cur":""}"><td>${esc(name)}</td>${used.map(l =>
       `<td>${z[l]!=null?inr(z[l]):"n/a"}</td>`).join("")}</tr>`;
-  t += `</table><div class="note">${esc(w.zoneDefinition||"")}. ${esc(w.state)}, shops and establishments schedule, effective ${esc(w.effective||"n/a")}. Monthly floors including VDA. <span class="flag">VALIDATE VS GAZETTE</span></div>`;
+  t += `</table><div class="note">${esc(w.zoneDefinition||"")}. ${esc(w.state)}, shops and establishments schedule, effective ${esc(w.effective||"n/a")}. Monthly floors including VDA.
+    ${w.srcUrl ? "Source: " + cite(w.srcUrl) + "." : ""} <span class="flag">VALIDATE VS GAZETTE</span></div>`;
   if (w.note) t += `<div class="note">${esc(w.note)}</div>`;
   return t;
 }
@@ -535,7 +565,8 @@ function renderCity(key, c, focusSr){
       <div class="addr">${esc(f.address)}</div>
       <div class="row2">${pill}<span class="pill">${esc(f.centreType)}</span><span class="pill">${esc(f.officeType)}</span>
         <span class="pill">Lessor: ${esc(f.lessor.length>32?f.lessor.slice(0,30)+"…":f.lessor)}</span>
-        ${g ? `<span class="pill">Pin: ${esc(g.precision)}</span>` : `<span class="pill">Pin: city</span>`}</div></div>`;
+        ${g ? `<span class="pill">Pin: ${esc(g.precision)}${g.confidence === "verified" ? " · verified" : ""}</span>` : `<span class="pill">Pin: city</span>`}</div>
+      ${g && g.source ? `<div class="addr" style="margin-top:6px;color:var(--dim)">Pin source: ${linkify(g.source)}</div>` : ""}</div>`;
   }
   h += `</div>`;
 
@@ -546,7 +577,8 @@ function renderCity(key, c, focusSr){
   if (c.rent && c.rent.low != null){
     h += `<div class="kv"><span class="k">${esc(c.market||c.name)}${c.rent.grade?" · Grade "+esc(c.rent.grade):""}</span><span class="v">₹${c.rent.low} to ₹${c.rent.high} /sq ft/mo</span></div>
       <div class="kv"><span class="k">Indicative rent per seat at ${SEAT_SQFT} sq ft</span><span class="v">${inr(perSeatRent(c.rent))} /mo</span></div>
-      <div class="note">${esc(c.rent.note||"")} Quoted range as of ${esc(c.rent.asOf||"n/a")}. <span class="flag">BROKER-CHECK BEFORE COMMIT</span></div>`;
+      <div class="note">${esc(c.rent.note||"")} Quoted range as of ${esc(c.rent.asOf||"n/a")}.
+        ${c.rent.srcUrl ? "Source: " + cite(c.rent.srcUrl) + "." : ""} <span class="flag">BROKER-CHECK BEFORE COMMIT</span></div>`;
   } else {
     h += `<div class="note">No published office market data for this location. To be established by a local broker check before any commitment.</div>`;
   }
@@ -622,7 +654,11 @@ function updateLegend(){
   const n = window.DG_FACILITIES.filter(f => g[f.sr]).length;
   const el = $("#legend-geo");
   if (!el) return;
+  /* Say what is actually true: "pinned" covers four precision classes and
+     lumping them together would overstate the map. */
+  const exact = window.DG_FACILITIES.filter(f => g[f.sr] &&
+    (g[f.sr].precision === "building" || g[f.sr].precision === "street")).length;
   el.textContent = n
-    ? `${n} of ${window.DG_FACILITIES.length} pinned to building or street`
+    ? `${exact} of ${window.DG_FACILITIES.length} located to building or street`
     : `Pin size = facilities at that site`;
 }
