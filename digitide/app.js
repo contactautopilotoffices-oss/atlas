@@ -75,6 +75,16 @@ function fyOf(iso){
   return d.getMonth() >= 3 ? d.getFullYear() + 1 : d.getFullYear();   // Indian FY, Apr to Mar
 }
 const fyLabel = (iso) => { const y = fyOf(iso); return y ? "FY" + String(y).slice(2) : "n/a"; };
+/* Dates are shown dd/mm/yyyy. The ISO form stays in the data files because
+   that is what sorts and compares correctly; only the display changes. */
+const dmy = (iso) => {
+  if (!iso) return "n/a";
+  const [y, m, d] = iso.split("-");
+  return `${d}/${m}/${y}`;
+};
+/* Free-text fields (policy validity, wage effective periods) carry ISO dates
+   inside prose. Rewrite them in place so one date format appears on screen. */
+const dmyIn = (txt) => String(txt ?? "").replace(/(\d{4})-(\d{2})-(\d{2})/g, "$3/$2/$1");
 const expiryClass = (m) => m == null ? "exp-ok" : m <= 12 ? "exp-red" : m <= 24 ? "exp-amber" : "exp-ok";
 
 function wageRow(stateKey, zone){
@@ -116,7 +126,7 @@ function pressureScore(f){
 }
 
 /* ----------------------------------------------------------------- state -- */
-let map, selected = null, regionFilter = "All", soonOnly = false;
+let map, selected = null, selectedSr = null, regionFilter = "All", soonOnly = false;
 
 const visible = () => window.DG_FACILITIES.filter(f =>
   (regionFilter === "All" || f.region === regionFilter) &&
@@ -269,23 +279,33 @@ function renderBoard(){
     .sort((a,b) => b.s - a.s || a.m - b.m);
   $("#board-list").innerHTML = rows.map((x,i) => {
     const c = window.DG_CITIES[x.f.city] || {};
-    return `<div class="b-row" data-city="${esc(x.f.city)}" data-sr="${x.f.sr}">
-      <div class="b-rank">${i+1}</div>
+    return `<div class="b-row" data-city="${esc(x.f.city)}" data-sr="${x.f.sr}"
+        role="button" tabindex="0" aria-label="${esc(c.name || x.f.location)}, ${esc(x.f.facility)}, tracker row ${x.f.sr}">
+      <div class="b-rank" title="Rank ${i+1} by relocation pressure">${i+1}</div>
       <div class="b-main">
         <div class="b-name">${esc(c.name || x.f.location)} · ${esc(x.f.facility)}</div>
-        <div class="b-meta"><span class="dot" style="background:${TIER_COLOR[c.tier]||"#888"}"></span>${TIER_NAME[c.tier]||""} · ${esc(x.f.centreType)} · ${esc(x.f.region)}</div>
+        <div class="b-meta"><span class="dot" style="background:${TIER_COLOR[c.tier]||"#888"}"></span>${TIER_NAME[c.tier]||""} · ${esc(x.f.centreType)} · <span class="b-ref">Row ${x.f.sr}</span></div>
       </div>
       <div class="b-exp ${expiryClass(x.m)}">${fyLabel(x.f.leaseEnd)}<span class="mo">${x.m} mo</span></div>
     </div>`; }).join("");
   $("#board-foot").textContent = `${rows.length} leased facilities closing FY27 to FY30`
     + (regionFilter !== "All" ? ` · ${regionFilter}` : "")
     + `. Owned sites and open-ended leases are excluded rather than scored.`;
-  document.querySelectorAll(".b-row").forEach(el =>
-    el.addEventListener("click", () => select(el.dataset.city, Number(el.dataset.sr))));
+  document.querySelectorAll(".b-row").forEach(el => {
+    const go = () => select(el.dataset.city, Number(el.dataset.sr));
+    el.addEventListener("click", go);
+    el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); go(); } });
+  });
   markActive();
 }
-const markActive = () => document.querySelectorAll(".b-row")
-  .forEach(el => el.classList.toggle("active", el.dataset.city === selected));
+/* The board lists facilities, so the active row is the facility that was
+   picked. Marking by city lit up every row in that city at once, which is what
+   made two facilities in one city indistinguishable. */
+const markActive = () => document.querySelectorAll(".b-row").forEach(el => {
+  const sameCity = el.dataset.city === selected;
+  el.classList.toggle("active", sameCity && (selectedSr == null || Number(el.dataset.sr) === selectedSr));
+  el.classList.toggle("sibling", sameCity && selectedSr != null && Number(el.dataset.sr) !== selectedSr);
+});
 
 /* ------------------------------------------------- portfolio analysis view -- */
 function portfolioStats(){
@@ -336,7 +356,7 @@ function wageSpread(){
 }
 
 function showPortfolio(){
-  selected = null; markActive(); refreshMap();
+  selected = null; selectedSr = null; markActive(); refreshMap();
   $("#p-back").classList.remove("show");
   $("#p-title").textContent = "Portfolio overview";
   const st = portfolioStats();
@@ -412,7 +432,7 @@ function showPortfolio(){
     const cand = (c.candidates||[]).map(k => (window.DG_CITIES[k]||{}).name).filter(Boolean);
     h += `<div class="mv"><div class="i">${i+1}</div><div class="c">
       <div class="h" data-city="${esc(x.f.city)}" data-sr="${x.f.sr}">${esc(c.name||x.f.location)} · ${esc(x.f.facility)}</div>
-      <div class="d">${esc(x.f.centreType)} in a ${TIER_NAME[c.tier]||"tier"} city. Lease ends <b>${esc(x.f.leaseEnd)}</b>, ${x.m} months out.${cand.length ? ` Options on the table: ${cand.map(esc).join(", ")}.` : ""}</div>
+      <div class="d">${esc(x.f.centreType)} in a ${TIER_NAME[c.tier]||"tier"} city. Lease ends <b>${dmy(x.f.leaseEnd)}</b>, ${x.m} months out.${cand.length ? ` Options on the table: ${cand.map(esc).join(", ")}.` : ""}</div>
     </div></div>`;
   });
   h += `</div></div>`;
@@ -524,12 +544,16 @@ function showPortfolio(){
 function select(city, sr){
   if (!city){ showPortfolio(); return; }
   const c = window.DG_CITIES[city]; if (!c) return;
-  selected = city; markActive(); refreshMap();
-  renderCity(city, c, sr);
+  selected = city; selectedSr = sr != null ? Number(sr) : null;
+  markActive(); refreshMap();
+  renderCity(city, c, selectedSr);
   /* Camera moves are motion too: honour the system setting rather than
      assuming everyone can tolerate a 900 ms fly-through. */
   const reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  if (map) map.flyTo({ center: [c.lng, c.lat], zoom: Math.max(map.getZoom(), 9),
+  const f = selectedSr != null && window.DG_FACILITIES.find(x => x.sr === selectedSr);
+  const loc = f ? locOf(f) : null;
+  if (map) map.flyTo({ center: loc ? [loc.lng, loc.lat] : [c.lng, c.lat],
+    zoom: Math.max(map.getZoom(), loc && loc.precision === "building" ? 14 : 11),
     duration: reduced ? 0 : 900, essential: true });
 }
 
@@ -543,7 +567,7 @@ function wageTable(c){
   for (const [name,z] of Object.entries(w.zones))
     t += `<tr class="${name===c.wageZone?"cur":""}"><td>${esc(name)}</td>${used.map(l =>
       `<td>${z[l]!=null?inr(z[l]):"n/a"}</td>`).join("")}</tr>`;
-  t += `</table><div class="note">${esc(w.zoneDefinition||"")}. ${esc(w.state)}, shops and establishments schedule, effective ${esc(w.effective||"n/a")}. Monthly floors including VDA.
+  t += `</table><div class="note">${esc(w.zoneDefinition||"")}. ${esc(w.state)}, shops and establishments schedule, effective ${esc(dmyIn(w.effective||"n/a"))}. Monthly floors including VDA.
     ${w.srcUrl ? "Source: " + cite(w.srcUrl) + "." : ""} <span class="flag">VALIDATE VS GAZETTE</span></div>`;
   if (w.note) t += `<div class="note">${esc(w.note)}</div>`;
   return t;
@@ -598,14 +622,27 @@ function renderCity(key, c, focusSr){
     const g = window.DG_GEO && window.DG_GEO[f.sr];
     const pill = f.leaseEnd == null
       ? `<span class="pill ok">Owned, no end date</span>`
-      : `<span class="pill ${m<=12?"hot":m<=24?"warm":"ok"}">Lease ends ${esc(f.leaseEnd)} · ${m} mo</span>`;
-    h += `<div class="fac${m!=null&&m<=12?" urgent":""}" id="fac-${f.sr}">
-      <div class="fn"><span>${esc(f.facility)}</span><span class="sr">#${f.sr}</span></div>
+      : `<span class="pill ${m<=12?"hot":m<=24?"warm":"ok"}">Lease ends ${dmy(f.leaseEnd)} · ${m} mo</span>`;
+    h += `<div class="fac${m!=null&&m<=12?" urgent":""}${f.sr===focusSr?" focused":""}" id="fac-${f.sr}"
+        data-sr="${f.sr}" role="button" tabindex="0"
+        aria-label="${esc(f.facility)}, tracker row ${f.sr}. Select to locate on the map.">
+      <div class="fn"><span>${esc(f.facility)}</span><span class="sr">Row ${f.sr}</span></div>
       <div class="addr">${esc(f.address)}</div>
       <div class="row2">${pill}<span class="pill">${esc(f.centreType)}</span><span class="pill">${esc(f.officeType)}</span>
         <span class="pill">Lessor: ${esc(f.lessor.length>32?f.lessor.slice(0,30)+"…":f.lessor)}</span>
         ${g ? `<span class="pill">Pin: ${esc(g.precision)}${g.confidence === "verified" ? " · verified" : ""}</span>` : `<span class="pill">Pin: city</span>`}</div>
-      ${g && g.source ? `<div class="addr" style="margin-top:6px;color:var(--dim)">Pin source: ${linkify(g.source)}</div>` : ""}</div>`;
+      ${f.sr === focusSr ? `<div class="facdet">
+        <div class="kv"><span class="k">Tracker row</span><span class="v">${f.sr}</span></div>
+        <div class="kv"><span class="k">Region · state</span><span class="v" style="font-family:var(--font)">${esc(f.region)} · ${esc(f.state)}</span></div>
+        <div class="kv"><span class="k">Lease term</span><span class="v">${f.leaseStart ? dmy(f.leaseStart) + " to " + dmy(f.leaseEnd) : "Owned, no dated term"}</span></div>
+        ${m != null ? `<div class="kv"><span class="k">Runs out in</span><span class="v ${m<=12?"delta-neg":""}">${m} months · ${fyLabel(f.leaseEnd)}</span></div>` : ""}
+        <div class="kv"><span class="k">Lessor</span><span class="v" style="font-family:var(--font);max-width:62%">${esc(f.lessor)}</span></div>
+        <div class="kv"><span class="k">Lessee on record</span><span class="v" style="font-family:var(--font)">${esc(f.lessee)}</span></div>
+        <div class="kv"><span class="k">Tenure</span><span class="v" style="font-family:var(--font)">${esc(f.officeType)}</span></div>
+        ${g ? `<div class="kv"><span class="k">Coordinate</span><span class="v">${g.lat.toFixed(5)}, ${g.lng.toFixed(5)}</span></div>` : ""}
+        ${g && g.source ? `<div class="note">Pin located to ${esc(g.precision)} level. Source: ${linkify(g.source)}</div>` : ""}
+        ${g && g.notes ? `<div class="note">${linkify(g.notes)}</div>` : ""}
+      </div>` : (g && g.source ? `<div class="addr" style="margin-top:6px;color:var(--dim)">Pin: ${esc(g.precision)}</div>` : "")}</div>`;
   }
   h += `</div>`;
 
@@ -659,14 +696,14 @@ function renderCity(key, c, focusSr){
     h += `<div class="sec"><h4>Government incentives</h4>
       <div class="kv"><span class="k">Policy</span><span class="v" style="font-family:var(--font);text-align:right">${esc(inc.policy)}</span></div>
       ${inc.perHead ? `<div class="kv"><span class="k">Per-head cash</span><span class="v">${esc(inc.perHead)}</span></div>` : ""}
-      <div class="kv"><span class="k">Valid</span><span class="v" style="font-family:var(--font)">${esc(inc.validTill||"not stated")}</span></div>
+      <div class="kv"><span class="k">Valid</span><span class="v" style="font-family:var(--font)">${esc(dmyIn(inc.validTill||"not stated"))}</span></div>
       <div class="para" style="margin-top:9px"><b>Tier bias.</b> ${esc(inc.tierBias)}</div>
       <ul style="margin:9px 0 0;padding-left:16px;font-size:10.5px;color:var(--mut);line-height:1.6">
         ${inc.items.map(i => `<li style="margin-bottom:4px">${esc(i)}</li>`).join("")}</ul>
       <div class="row2" style="margin-top:9px">${conf}${inc.srcUrl ? `<span class="pill">Source: ${cite(inc.srcUrl)}</span>` : ""}</div>
       ${inc.risk ? `<div class="note" style="color:#ffb09b;margin-top:9px"><b>Risk.</b> ${esc(inc.risk)}</div>` : ""}
       ${inc.verify ? `<div class="note"><b style="color:var(--mut)">Verify before modelling.</b> ${esc(inc.verify)}</div>` : ""}
-      <div class="note" style="margin-top:9px"><b style="color:var(--mut)">Central, on top.</b> ${esc(cen.perHead)}, ${esc(cen.validTill)}. ${esc(cen.risk)} Source: ${cite(cen.srcUrl)}.</div>
+      <div class="note" style="margin-top:9px"><b style="color:var(--mut)">Central, on top.</b> ${esc(cen.perHead)}, ${esc(dmyIn(cen.validTill))}. ${esc(cen.risk)} Source: ${cite(cen.srcUrl)}.</div>
     </div>`;
   }
 
@@ -696,9 +733,16 @@ function renderCity(key, c, focusSr){
 
   $("#p-body").innerHTML = h;
   $("#p-body").scrollTop = 0;
+  /* Clicking a facility card selects that facility: it becomes the focused one,
+     the map goes to its own coordinate, and the board row for it lights up. */
+  $("#p-body").querySelectorAll(".fac[data-sr]").forEach(el => {
+    const go = () => select(key, Number(el.dataset.sr));
+    el.addEventListener("click", go);
+    el.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " "){ e.preventDefault(); go(); } });
+  });
   if (focusSr){
     const el = document.getElementById("fac-" + focusSr);
-    if (el){ el.style.outline = "1px solid rgba(224,96,58,.65)"; el.scrollIntoView({ block:"center" }); }
+    if (el) el.scrollIntoView({ block: "center", behavior: "auto" });
   }
 }
 
