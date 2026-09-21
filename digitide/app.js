@@ -430,6 +430,28 @@ function showPortfolio(){
     h += `<div class="kv"><span class="k">${precLabel[k]}</span><span class="v">${gp[k]}</span></div>`;
   h += `<div class="note">Every facility card states which of these its own pin carries. A coarse pin is shown as coarse rather than nudged onto a nearby building, because a pin that looks exact and is not is worse than one that admits it.</div></div>`;
 
+  /* Tracker discrepancies found while locating each building. Surfaced, never
+     written back: facilities.js stays the client's data as given. */
+  const dq = window.DG_DATAQUALITY || [];
+  if (dq.length){
+    const sev = { fix:"#e0603a", check:"#e0a91f", note:"#1f8f77" };
+    const sevLabel = { fix:"FIX", check:"CHECK", note:"NOTE" };
+    const nFix = dq.filter(d => d.severity === "fix").length;
+    h += `<div class="sec"><h4>Tracker data quality</h4>
+      <div class="para">Locating each building against public records turned up <b>${dq.length} discrepancies</b> in the tracker itself, ${nFix} of them plain errors. None changes the analysis. All of them would be noticed by anyone who cross-checked a slide.</div>
+      <div style="margin-top:10px">`;
+    for (const d of dq){
+      h += `<div class="fac" style="border-left:2px solid ${sev[d.severity]}">
+        <div class="fn"><span>${esc(d.site)}</span><span class="sr">#${d.sr.join(", #")}</span></div>
+        <div class="row2" style="margin-top:5px">
+          <span class="pill" style="background:${sev[d.severity]}22;color:${sev[d.severity]}">${sevLabel[d.severity]}</span>
+          <span class="pill">${esc(d.field)}</span></div>
+        <div class="addr" style="margin-top:6px">Tracker says <b style="color:var(--mut)">${esc(d.tracker)}</b>. Public records say <b style="color:#fff">${esc(d.found)}</b>.</div>
+        <div class="addr" style="margin-top:4px">${esc(d.why)}</div></div>`;
+    }
+    h += `</div><div class="note">These are reported, not applied. The facility data in this tool is still the tracker exactly as supplied, so nothing here has been quietly rewritten underneath you.</div></div>`;
+  }
+
   h += `<div class="sec"><h4>How to read this</h4>
     <div class="para">Facility rows, addresses, lessors and lease dates come from the Digitide tracker and are reproduced as given. Wage floors are the latest notified state rates. Rents are quoted market ranges. Talent and competitor figures are <span class="flag ind">INDICATIVE</span> planning bands, there to make thirty cities comparable on one yardstick, and are not audited.</div>
     <div class="note">${esc(window.DG_META.disclaimer)}</div></div>`;

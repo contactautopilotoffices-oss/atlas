@@ -583,3 +583,36 @@ window.DG_TALENT = {
   trichy:     { pool:"Moderate",   grads:"70k+",    english:"Moderate-high",attrition:"18-32%", salary:[13000,18000], compCount:"<5" },
   warangal:   { pool:"Moderate",   grads:"50k+",    english:"Moderate",    attrition:"18-32%", salary:[12000,17000], compCount:"<5" }
 };
+
+/* ---------------------------------------------------------------------------
+   DG_DATAQUALITY — discrepancies found in the tracker itself while locating
+   each building against public records. None of these change the analysis;
+   all of them would embarrass someone who cross-checked a slide, so they are
+   surfaced rather than silently corrected. The tracker remains the source of
+   truth in facilities.js: nothing here has been written back into it.
+     sr        tracker row
+     field     what disagrees
+     tracker   what the sheet says
+     found     what public records say
+     severity  "fix" a plain error · "check" two registries disagree · "note"
+--------------------------------------------------------------------------- */
+window.DG_DATAQUALITY = [
+  { sr:[18], site:"Gowra Trinity, Begumpet", field:"Pin code", tracker:"500049", found:"500003",
+    severity:"fix", why:"500049 is Gopanpally on the far western edge of Hyderabad, about 20 km from Begumpet. The street address is correct; only the pin code is wrong." },
+  { sr:[42], site:"ETPL Tower, Kolshet, Thane", field:"Pin code", tracker:"400604", found:"400607",
+    severity:"fix", why:"400604 is Wagle Estate, roughly 3 km south-west of Kolshet. Any report filtered on pin code would put this facility in the wrong micro-market." },
+  { sr:[49], site:"Shrirampur training room", field:"Pin code", tracker:"4130709", found:"413709",
+    severity:"fix", why:"Seven digits instead of six, so it is a keying error rather than a wrong location." },
+  { sr:[51], site:"Siddharth Complex, Vadodara", field:"Pin code", tracker:"390005", found:"390007",
+    severity:"fix", why:"Every public source places R C Dutt Road and Alkapuri in 390007." },
+  { sr:[20,21,22], site:"Manchester Square, Coimbatore", field:"Pin code", tracker:"641038 on one row, 641037 on two", found:"641037",
+    severity:"fix", why:"Three rows in the same complex carry two different pin codes. Company filings at No. 14 Puliakulam Road give 641037." },
+  { sr:[34], site:"Empire Tower, Airoli", field:"Plot reference", tracker:"Plot No. K-10, MIDC, TTC Industrial Area", found:"Cloud City Campus, Gut No. 31, Village Ilthen",
+    severity:"check", why:"Three independent records give the Gut No. 31 campus address and none supports K-10. Same building either way, but the plot reference does not appear to be real." },
+  { sr:[56], site:"Chawla Complex, Raipur", field:"Pin code", tracker:"492001", found:"492009 per India Post",
+    severity:"check", why:"Both are Raipur city pins, so this is a delivery-routing question rather than a location conflict." },
+  { sr:[40], site:"Kalpataru Prime, Thane", field:"Plot number", tracker:"Plot D-3, Road No. 16", found:"A-186, Road No. 16 per CBRE, Awfis and JLL",
+    severity:"check", why:"Both designations carry 'Unit No. 2' and sit on Road No. 16, so these are two registry references to one plot rather than two buildings. Worth knowing which one the lease deed uses." },
+  { sr:[46], site:"Mithapur, Gujarat", field:"District", tracker:"District Jamnagar", found:"Devbhumi Dwarka",
+    severity:"note", why:"Devbhumi Dwarka was carved out of Jamnagar in 2013. Historically correct, currently out of date." }
+];
