@@ -89,7 +89,7 @@ async function loadFeed(force) {
   } catch (e) {
     $("#dot").className = "dot";
     $("#health").textContent = "Feed unavailable: " + e.message;
-    if (!FEED) $("#feed").innerHTML = `<div class="empty">The feed could not be loaded (${esc(e.message)}). The desk still works: it searches the web directly.</div>`;
+    if (!FEED) $("#feed").innerHTML = `<div class="empty">The feed could not be loaded (${esc(e.message)}). The desk still works: it runs its own searches.</div>`;
   }
 }
 
@@ -128,7 +128,7 @@ function renderFeed() {
   if (!list.length) {
     const failed = (FEED && FEED.sources || []).filter((s) => !s.ok);
     $("#feed").innerHTML = FEED && !FEED.items.length
-      ? `<div class="empty">No headlines came back from the sources${failed.length ? ` (${failed.length} of ${FEED.sources.length} failed, see below)` : ""}. The desk still works: it searches the web directly.</div>`
+      ? `<div class="empty">No headlines came back from the sources${failed.length ? ` (${failed.length} of ${FEED.sources.length} failed, see below)` : ""}. The desk still works: it runs its own searches.</div>`
       : `<div class="empty">Nothing matches this filter right now.</div>`;
     return;
   }
@@ -220,7 +220,7 @@ async function ask(question) {
   const out = $("#out");
   out.innerHTML = `<div class="log" id="log"></div><div class="report" id="report"></div><div id="srclist"></div><div class="foot" id="foot"></div>`;
   const log = $("#log"), report = $("#report");
-  let text = "", sources = [], raf = 0, t0 = Date.now();
+  let text = "", roundStart = 0, sources = [], raf = 0, t0 = Date.now();
   const logLine = (t) => { log.querySelectorAll(".now").forEach((n) => n.classList.remove("now")); log.insertAdjacentHTML("beforeend", `<div class="now">${esc(t)}</div>`); log.scrollTop = log.scrollHeight; };
   const paint = () => { raf = 0; report.innerHTML = md(text); };
 
@@ -247,14 +247,16 @@ async function ask(question) {
         if (!ev || !data) continue;
         const d = JSON.parse(data);
         if (ev === "status") logLine(d.text);
+        else if (ev === "round") roundStart = text.length;
+        else if (ev === "discard") { text = text.slice(0, roundStart); if (!raf) raf = requestAnimationFrame(paint); }
         else if (ev === "text") { text += d.t; if (!raf) raf = requestAnimationFrame(paint); }
         else if (ev === "sources") { sources = sources.concat(d.items); $("#srclist").innerHTML = sourcesHtml(sources); }
         else if (ev === "error") out.insertAdjacentHTML("beforeend", `<div class="err">${esc(d.message)}</div>`);
         else if (ev === "done") {
           const u = d.usage || {};
-          const searches = u.server_tool_use ? u.server_tool_use.web_search_requests : null;
-          $("#foot").textContent = `${d.model || ""} · ${Math.round((Date.now() - t0) / 1000)}s` +
-            (searches != null ? ` · ${searches} web searches` : "") +
+          const searches = u.searches;
+          $("#foot").textContent = `${d.provider || ""} · ${d.model || ""} · ${Math.round((Date.now() - t0) / 1000)}s` +
+            (searches != null ? ` · ${searches} search${searches === 1 ? "" : "es"}` : "") +
             (u.output_tokens ? ` · ${u.input_tokens} in / ${u.output_tokens} out tokens` : "");
         }
       }
@@ -308,7 +310,7 @@ function boot() {
   document.querySelectorAll(".tabs .chip").forEach((c) => c.onclick = () => setTab(c.dataset.tab));
 
   if (SERVER.key_configured === false) {
-    $("#banner").innerHTML = `<div class="banner">The desk is waiting for its API key (ANTHROPIC_API_KEY on the server). The live feed works now; questions will run as soon as the key is set.</div>`;
+    $("#banner").innerHTML = `<div class="banner">The desk is waiting for its API key (${esc(SERVER.key_name || "API key")} on the server). The live feed works now; questions will run as soon as the key is set.</div>`;
   }
   renderRecent();
   loadFeed(false);

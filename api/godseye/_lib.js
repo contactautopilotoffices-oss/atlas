@@ -6,11 +6,12 @@
    everything here is server-only: the prompt, the source list, the auth check.
 
    Environment:
-     ANTHROPIC_API_KEY    required for /api/godseye/ask
+     ENGY_API_KEY         powers the desk on Engy (default provider)
+     ANTHROPIC_API_KEY    optional: run the desk on Claude instead
      GODSEYE_ACCESS_KEY   required. The passcode people type into the gate.
                           /ask refuses to run without it, because every call
                           spends API credit.
-     GODSEYE_MODEL        optional, defaults to claude-opus-5
+     GODSEYE_MODEL        optional, per-provider default (see ask.js)
    ============================================================================ */
 "use strict";
 
@@ -281,12 +282,7 @@ Work like an analyst with a deadline, not a news summariser.
 2. Pick the candidates that could plausibly turn into seats for Autopilot. Skip
    consumer news, stock tips, results with no hiring angle, and anything outside India
    unless it names an India centre.
-3. Use web search to verify every candidate you intend to recommend: confirm the event
-   happened, its date, the amount or headcount, and the city. Prefer the company's own
-   announcement, regulator filings, and established business press (Economic Times,
-   Mint, Business Standard, Moneycontrol, Hindustan Times, The Hindu BusinessLine,
-   Reuters, Bloomberg, Entrackr, Inc42, YourStory, VCCircle). Search for what the feed
-   is missing too, not just what it contains.
+{{SEARCH_STEP}}
 4. For each bet, look for the facts that make it actionable: where the company's India
    team sits today, how many people it employs in India (LinkedIn or press numbers),
    who leads India or real estate there, and whether it has announced an office plan.
@@ -367,6 +363,73 @@ truth rules, and use whichever parts of this shape help.
 </format>
 `.trim();
 
+const PRESS = `Prefer the company's own
+   announcement, regulator filings, and established business press (Economic Times,
+   Mint, Business Standard, Moneycontrol, Hindustan Times, The Hindu BusinessLine,
+   Reuters, Bloomberg, Entrackr, Inc42, YourStory, VCCircle).`;
+const SEARCH_STEPS = {
+  /* Claude: Anthropic's server-side web search. */
+  web: `3. Use web search to verify every candidate you intend to recommend: confirm the event
+   happened, its date, the amount or headcount, and the city. ${PRESS} Search for what the feed
+   is missing too, not just what it contains.`,
+  /* Engy and other OpenAI-compatible models: our own two tools. */
+  tools: `3. Verify every candidate you intend to recommend with your tools. search_news
+   searches recent Indian news for any query: use it to find a second, independent report
+   of each event and to look for what the feed is missing. read_page opens a URL and
+   returns its text: use it on the primary source when you need the date, amount,
+   headcount or city. ${PRESS} Call tools before you write anything; do not narrate
+   what you are about to search.`,
+  /* No tools at all: be explicit that nothing was checked. */
+  none: `3. You have no search tool on this run. Work only from the feed and pinned items.
+   After every fact, write "(headline only, not verified)" next to its link, cap the
+   Evidence score at 3/10, and list what needs checking under Gaps.`,
+};
+const systemPrompt = (mode) => SYSTEM_PROMPT.replace("{{SEARCH_STEP}}", SEARCH_STEPS[mode] || SEARCH_STEPS.none);
+
+/* ------------------------------------------------ tools for non-Claude -- */
+
+/* search_news: a Google News RSS search for whatever the model asks, through
+   the same parser and tagger as the feed. */
+async function searchNews(query) {
+  const q = String(query || "").slice(0, 200).trim();
+  if (!q) return { query: q, results: [] };
+  const r = await fetchSource({ id: "search", label: "search", url: gnews(q) });
+  if (!r.ok) return { query: q, error: r.error, results: [] };
+  return { query: q, results: r.items.slice(0, 8).map((it) => { const c = classify(it); return { title: c.title, publisher: c.publisher, published_at: c.published_at, link: c.link, amount: c.amount, cities: c.cities }; }) };
+}
+
+/* read_page: fetch a public web page and return readable text. Refuses
+   anything that is not plain http(s) on a public-looking host, so a model
+   cannot be talked into probing internal addresses. */
+const PRIVATE_HOST = /^(localhost|.*\.local|.*\.internal|0\.0\.0\.0|127\.|10\.|192\.168\.|169\.254\.|172\.(1[6-9]|2\d|3[01])\.|\[?::1\]?|\[?f[cd][0-9a-f]{2}:)/i;
+async function readPage(url) {
+  let u;
+  try { u = new URL(String(url || "")); } catch { return { url, error: "Not a valid URL." }; }
+  if (!/^https?:$/.test(u.protocol) || PRIVATE_HOST.test(u.hostname)) return { url, error: "Only public http(s) pages can be read." };
+  try {
+    /* Redirects are followed by hand so every hop gets the same host check:
+       a public page must not be able to bounce us onto an internal one. */
+    let r;
+    for (let hop = 0; ; hop++) {
+      r = await fetch(u, { headers: { "User-Agent": "Mozilla/5.0 (compatible; AutopilotGodsEye/1.0)" }, redirect: "manual", signal: AbortSignal.timeout(10000) });
+      const loc = r.status >= 300 && r.status < 400 && r.headers.get("location");
+      if (!loc) break;
+      if (hop >= 4) return { url: u.href, error: "Too many redirects." };
+      u = new URL(loc, u);
+      if (!/^https?:$/.test(u.protocol) || PRIVATE_HOST.test(u.hostname)) return { url: u.href, error: "Redirected to a non-public address." };
+    }
+    if (!r.ok) return { url: u.href, error: "HTTP " + r.status };
+    const type = r.headers.get("content-type") || "";
+    if (!/text|html|xml|json/.test(type)) return { url: u.href, error: "Not a text page (" + type + ")." };
+    const html = (await r.text()).slice(0, 600000);
+    const title = decode((html.match(/<title[^>]*>([\s\S]*?)<\/title>/i) || [])[1] || "");
+    const text = decode(html.replace(/<(script|style|noscript|svg|nav|footer|header)[\s\S]*?<\/\1>/gi, " ")).slice(0, 7000);
+    return { url: u.href, title, text };
+  } catch (e) {
+    return { url: u.href, error: String(e && e.message || e) };
+  }
+}
+
 /* The part of the request that changes every time: date, feed snapshot, the
    items the operator pinned, and the question. Kept out of the system prompt
    so the system prompt stays byte-stable. */
@@ -384,7 +447,7 @@ function buildUserMessage({ question, feed, focus }) {
     `Current time: ${ist} IST.`,
     `<live_feed fetched_at="${feed ? feed.fetched_at : "unavailable"}">`,
     `Source health: ${health || "feed unavailable"}`,
-    items.length ? items.map(line).join("\n") : "The live feed returned nothing. Rely on web search.",
+    items.length ? items.map(line).join("\n") : "The live feed returned nothing. Rely on your search tools, or say the feed was empty.",
     `</live_feed>`,
   ];
   if (focus && focus.length) {
@@ -394,4 +457,4 @@ function buildUserMessage({ question, feed, focus }) {
   return parts.join("\n");
 }
 
-module.exports = { SOURCES, parseRss, classify, getFeed, checkAccess, SYSTEM_PROMPT, buildUserMessage };
+module.exports = { SOURCES, parseRss, classify, getFeed, checkAccess, systemPrompt, buildUserMessage, searchNews, readPage };
