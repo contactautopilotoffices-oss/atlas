@@ -27,6 +27,10 @@ It runs on one of two providers:
   that run on our server: `search_news` (Google News for any query) and `read_page`
   (open a public URL and read it). If a model refuses tools, the desk answers from the
   feed alone and marks every fact "headline only, not verified".
+- **Exa** (optional, `EXA_API_KEY`). Before the model runs, the server searches Exa for
+  the question, the pinned headlines and the five strongest feed signals, and hands the
+  model the pages it found with dated, quoted passages. This works even if the model
+  cannot call tools. Tool-capable models also get a `search_web` tool backed by Exa.
 - **Claude** (when only `ANTHROPIC_API_KEY` is set, or `GODSEYE_PROVIDER=claude`). Uses
   Anthropic's built-in web search.
 
@@ -40,6 +44,7 @@ Set in Vercel, Project > Settings > Environment Variables:
 | `GODSEYE_ACCESS_KEY` | yes | The passcode people type at the gate. Checked on the server. |
 | `GODSEYE_MODEL` | no | Defaults to `engy/deepseek-v4-flash-0731`. `engy/qwen3.8-27b` also exists. |
 | `ENGY_BASE_URL` | no | Defaults to `https://api.engy.ai/v1`. |
+| `EXA_API_KEY` | recommended | Checks leads on Exa before the model answers. |
 | `ANTHROPIC_API_KEY` | no | Use Claude instead. |
 | `GODSEYE_PROVIDER` | no | Force `engy` or `claude`. |
 

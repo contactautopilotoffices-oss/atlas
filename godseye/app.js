@@ -256,6 +256,7 @@ async function ask(question) {
           const u = d.usage || {};
           const searches = u.searches;
           $("#foot").textContent = `${d.provider || ""} · ${d.model || ""} · ${Math.round((Date.now() - t0) / 1000)}s` +
+            (u.exa_checks ? ` · ${u.exa_checks} Exa checks` : "") +
             (searches != null ? ` · ${searches} search${searches === 1 ? "" : "es"}` : "") +
             (u.output_tokens ? ` · ${u.input_tokens} in / ${u.output_tokens} out tokens` : "");
         }

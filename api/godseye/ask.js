@@ -15,11 +15,15 @@
    Provider, chosen by GODSEYE_PROVIDER or else by which key is set:
      engy    ENGY_API_KEY       open models on engy.ai, with our own
                                 search_news and read_page tools
-     claude  ANTHROPIC_API_KEY  Claude with Anthropic's built-in web search */
+     claude  ANTHROPIC_API_KEY  Claude with Anthropic's built-in web search
+
+   Optional EXA_API_KEY: before either model runs, the server checks the
+   question and the top signals on Exa and adds the pages as evidence. */
 "use strict";
 const { getFeed, checkAccess, buildUserMessage } = require("./_lib");
 const { runClaude, claudeError } = require("./_claude");
 const { runEngy, engyError } = require("./_engy");
+const exa = require("./_exa");
 
 const PROVIDERS = {
   engy:   { key: "ENGY_API_KEY",      model: "engy/deepseek-v4-flash-0731", run: runEngy,   explain: engyError },
@@ -69,7 +73,7 @@ module.exports = async (req, res) => {
   let body;
   try { body = await readBody(req); } catch { return json(400, { error: "Body is not valid JSON." }); }
   const P = provider();
-  if (body.ping) return json(200, { ok: true, provider: P.name, model: P.model, key_configured: P.ready, key_name: P.key });
+  if (body.ping) return json(200, { ok: true, provider: P.name, model: P.model, key_configured: P.ready, key_name: P.key, exa: exa.enabled() });
 
   if (!P.ready) return json(503, { error: P.key + " is not set on the server yet." });
   const question = clip(body.question, 4000).trim();
@@ -101,8 +105,14 @@ module.exports = async (req, res) => {
     send("status", { text: "Reading the live feed" });
     let feed = null;
     try { feed = await getFeed(); } catch { send("status", { text: "Live feed unavailable, relying on search" }); }
-    const userMessage = buildUserMessage({ question, feed, focus: cleanFocus(body.focus) });
+    const focus = cleanFocus(body.focus);
+    /* Exa evidence pack: checked before the model runs, so verification does
+       not depend on the model being able to call tools. */
+    const evidence = await exa.buildEvidence({ question, feed, focus, send, addSources });
+    if (closed) return;
+    const userMessage = buildUserMessage({ question, feed, focus, evidence: exa.formatEvidence(evidence) });
     const result = await P.run({ model: P.model, userMessage, send, addSources, onClose: (f) => closers.push(f) });
+    if (evidence) result.usage = { ...result.usage, exa_checks: evidence.searches };
     send("done", { ...result, provider: P.name });
   } catch (e) {
     if (!closed) send("error", { message: P.explain(e) || String(e && e.message || e) });

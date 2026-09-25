@@ -373,16 +373,19 @@ const SEARCH_STEPS = {
    happened, its date, the amount or headcount, and the city. ${PRESS} Search for what the feed
    is missing too, not just what it contains.`,
   /* Engy and other OpenAI-compatible models: our own two tools. */
-  tools: `3. Verify every candidate you intend to recommend with your tools. search_news
-   searches recent Indian news for any query: use it to find a second, independent report
-   of each event and to look for what the feed is missing. read_page opens a URL and
-   returns its text: use it on the primary source when you need the date, amount,
-   headcount or city. ${PRESS} Call tools before you write anything; do not narrate
-   what you are about to search.`,
+  tools: `3. Verify every candidate you intend to recommend. Start with the <evidence> block
+   if there is one: those pages were fetched for you just now. Then use your tools for
+   anything still unchecked. search_web (when offered) searches the whole web and
+   returns quoted passages; search_news searches recent Indian news headlines; read_page
+   opens a URL and returns its text, for the date, amount, headcount or city from the
+   primary source. Look for what the feed is missing too. ${PRESS} Call tools before you
+   write anything; do not narrate what you are about to search.`,
   /* No tools at all: be explicit that nothing was checked. */
-  none: `3. You have no search tool on this run. Work only from the feed and pinned items.
-   After every fact, write "(headline only, not verified)" next to its link, cap the
-   Evidence score at 3/10, and list what needs checking under Gaps.`,
+  none: `3. You have no search tool on this run. Work from the feed, the pinned items and
+   the <evidence> block if there is one. A fact confirmed by a page in <evidence> counts as
+   checked: cite that page and its date. A fact you only have from a headline gets
+   "(headline only, not verified)" next to its link and caps that bet's Evidence score at
+   3/10. List what still needs checking under Gaps.`,
 };
 const systemPrompt = (mode) => SYSTEM_PROMPT.replace("{{SEARCH_STEP}}", SEARCH_STEPS[mode] || SEARCH_STEPS.none);
 
@@ -433,7 +436,7 @@ async function readPage(url) {
 /* The part of the request that changes every time: date, feed snapshot, the
    items the operator pinned, and the question. Kept out of the system prompt
    so the system prompt stays byte-stable. */
-function buildUserMessage({ question, feed, focus }) {
+function buildUserMessage({ question, feed, focus, evidence }) {
   const now = new Date();
   const ist = now.toLocaleString("en-IN", { timeZone: "Asia/Kolkata", dateStyle: "full", timeStyle: "short" });
   const line = (it) => {
@@ -453,6 +456,7 @@ function buildUserMessage({ question, feed, focus }) {
   if (focus && focus.length) {
     parts.push(`<pinned_by_operator>`, "The operator pinned these items. Assess each one first.", focus.map(line).join("\n"), `</pinned_by_operator>`);
   }
+  if (evidence) parts.push(evidence);
   parts.push(`<question>`, question, `</question>`);
   return parts.join("\n");
 }

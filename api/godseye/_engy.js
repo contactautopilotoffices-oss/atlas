@@ -11,10 +11,17 @@
    fact as unverified. */
 "use strict";
 const { systemPrompt, searchNews, readPage } = require("./_lib");
+const exa = require("./_exa");
 
 const BASE = (process.env.ENGY_BASE_URL || "https://api.engy.ai/v1").replace(/\/+$/, "");
 const MAX_ROUNDS = 10;
 const MAX_TOOL_CALLS = 20;
+
+const SEARCH_WEB = { type: "function", function: {
+  name: "search_web",
+  description: "Search the whole web (Exa) for news and company pages from the last 90 days. Returns up to 6 pages with title, date, link and quoted passages. Best for verifying a specific event, finding headcount, India leadership or office plans.",
+  parameters: { type: "object", properties: { query: { type: "string", description: "What to find, in plain words, e.g. 'Acme India headcount Bengaluru office 2026'." } }, required: ["query"], additionalProperties: false },
+} };
 
 const TOOLS = [
   { type: "function", function: {
@@ -109,13 +116,13 @@ async function runEngy({ model, userMessage, send, addSources, onClose }) {
     send("status", { text: round ? "Reading what it found" : "Scanning the market" });
     let body;
     try {
-      body = await completion({ model, messages, tools: useTools ? TOOLS : null, signal: ctrl.signal });
+      body = await completion({ model, messages, tools: useTools ? (exa.enabled() ? [SEARCH_WEB, ...TOOLS] : TOOLS) : null, signal: ctrl.signal });
     } catch (e) {
       /* Tools rejected on the very first call: retry once without them. */
       if (useTools && round === 0 && e instanceof EngyError && e.status >= 400 && e.status < 500 && e.status !== 401 && e.status !== 403 && e.status !== 429) {
         useTools = false;
         messages = [{ role: "system", content: systemPrompt("none") }, { role: "user", content: userMessage }];
-        send("status", { text: "This model cannot use search tools; answering from the feed only" });
+        send("status", { text: "This model cannot use search tools; answering from the feed and the checks already run" });
         round--; continue;
       }
       throw e;
@@ -162,6 +169,13 @@ async function runEngy({ model, userMessage, send, addSources, onClose }) {
         usage.searches++;
         const out = await searchNews(args.query);
         addSources(out.results.map((x) => ({ url: x.link, title: x.title + " (" + x.publisher + ")", page_age: x.published_at ? x.published_at.slice(0, 10) : null })));
+        return { id, out };
+      }
+      if (c.name === "search_web" && exa.enabled()) {
+        send("status", { text: "Exa: " + String(args.query || "").slice(0, 120) });
+        usage.searches++;
+        const out = await exa.exaSearch(args.query, { num: 6, days: 90 });
+        addSources(out.results.map((x) => ({ url: x.url, title: x.title, page_age: x.published })));
         return { id, out };
       }
       if (c.name === "read_page") {
