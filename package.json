@@ -6,10 +6,17 @@
   "scripts": {
     "start": "python3 serve.py",
     "dev": "python3 serve.py",
-    "build": "node scripts/build-config.js",
-    "godseye": "node scripts/godseye-dev.js"
+    "build": "node scripts/build-config.js && node scripts/build-godseye.js",
+    "godseye": "node scripts/build-godseye.js && node scripts/godseye-dev.js",
+    "build:godseye": "node scripts/build-godseye.js"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.128.0"
+    "@anthropic-ai/sdk": "^0.128.0",
+    "cube-motion": "^0.1.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
   }
 }
