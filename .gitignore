@@ -33,3 +33,6 @@ osm2.xml
 
 # 4K PNG masters from the upscale pass — working files, served copies live alongside originals
 media/_enhanced/
+
+# God's Eye bundle, built by scripts/build-godseye.js on deploy
+godseye/dist/
