@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<title>God's Eye · Autopilot</title>
+<meta name="robots" content="noindex"/>
+<link rel="icon" href="../autopilot-logo-trimmed.png"/>
+<style>
+:root{
+  --bg:#080b11; --panel:rgba(15,20,30,.72); --panel2:rgba(20,26,38,.86);
+  --line:rgba(255,255,255,.09); --line2:rgba(255,255,255,.055);
+  --txt:#fff; --mut:rgba(255,255,255,.72); --dim:rgba(255,255,255,.46);
+  --acc:#2fbf71; --acc2:#8fc4f0; --warn:#e0a91f; --bad:#ff9d8a;
+  /* lane colours; the lane name is always written too, so colour never
+     carries meaning alone */
+  --funding:#2fbf71; --gcc:#4f9cd9; --hiring:#b58cf0; --expansion:#39c0c8;
+  --leasing:#e0a91f; --competitor:#e0603a; --rto:#d98ab8; --policy:#9aa5b8; --contraction:#ff7b6b;
+  --font:-apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  --num:'SF Mono',ui-monospace,Menlo,Consolas,monospace;
+  --spec:inset 0 1px 0 rgba(255,255,255,.22), inset 0 0 0 .5px rgba(255,255,255,.10);
+  --e2:0 10px 30px rgba(0,0,0,.34), 0 2px 8px rgba(0,0,0,.22);
+  --ease:cubic-bezier(.32,.72,0,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);font-family:var(--font);font-size:14px}
+body{background:radial-gradient(1200px 700px at 70% -10%,#12203a 0%,transparent 60%),radial-gradient(900px 600px at -10% 110%,#0f2a20 0%,transparent 55%),var(--bg)}
+a{color:var(--acc2);text-decoration-color:rgba(143,196,240,.4);text-underline-offset:2px}
+a:hover{text-decoration-color:var(--acc2)}
+:focus-visible{outline:2px solid rgba(120,190,255,.9);outline-offset:2px;border-radius:4px}
+button{font:inherit;color:inherit}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,.13);border-radius:5px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+.pane{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--e2),var(--spec);
+  -webkit-backdrop-filter:blur(30px) saturate(180%);backdrop-filter:blur(30px) saturate(180%)}
+
+/* ---------- gate ---------- */
+#gate{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:16px;
+  background:radial-gradient(1000px 600px at 50% 30%,#111a29,#06080d)}
+#gate .box{width:min(380px,100%);padding:30px 26px}
+#gate h1{margin:0 0 4px;font-size:18px;letter-spacing:.4px}
+#gate h1 span{color:var(--mut);font-weight:400}
+#gate p{margin:0 0 18px;color:var(--mut);font-size:12px;line-height:1.55}
+#gate input{width:100%;padding:11px 13px;border-radius:9px;border:1px solid var(--line);background:rgba(255,255,255,.05);
+  color:#fff;font:inherit;outline:none;margin-bottom:10px}
+#gate input:focus{border-color:rgba(47,191,113,.6)}
+.btn{border:none;border-radius:9px;padding:10px 16px;font-weight:700;cursor:pointer;
+  background:linear-gradient(135deg,#2fbf71,#1d9c5a);color:#04150c}
+.btn:disabled{opacity:.5;cursor:default}
+.btn.ghost{background:rgba(255,255,255,.08);color:var(--mut);font-weight:500;border:1px solid var(--line)}
+.btn.ghost:hover{background:rgba(255,255,255,.14);color:#fff}
+#gate .btn{width:100%}
+#g-err{color:var(--bad);font-size:12px;min-height:16px;margin-top:9px}
+
+/* ---------- shell ---------- */
+#app{display:none;height:100%;flex-direction:column}
+#app.on{display:flex}
+header{display:flex;align-items:center;gap:14px;padding:12px 18px;border-bottom:1px solid var(--line2);flex:none}
+.eye{width:26px;height:26px;flex:none}
+.brand .t{font-weight:700;font-size:15px;letter-spacing:.4px}
+.brand .t span{color:var(--mut);font-weight:400}
+.brand .s{color:var(--dim);font-size:11px;margin-top:1px}
+header .sp{flex:1}
+.health{font-size:11.5px;color:var(--mut);display:flex;align-items:center;gap:8px;text-align:right}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--dim);flex:none}
+.dot.live{background:var(--acc);box-shadow:0 0 0 0 rgba(47,191,113,.6)}
+/* The dot pulses once when new data lands, and only then: motion is bound
+   to a real refresh, never ambient. */
+.dot.ping{animation:ping 1.2s var(--ease) 1}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(47,191,113,.7)}100%{box-shadow:0 0 0 12px rgba(47,191,113,0)}}
+main{flex:1;min-height:0;display:grid;grid-template-columns:minmax(340px,44%) 1fr;gap:14px;padding:14px}
+section{min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.sh{padding:14px 16px 10px;border-bottom:1px solid var(--line2);flex:none}
+.sh h2{margin:0;font-size:13px;letter-spacing:.6px;text-transform:uppercase;color:var(--mut);font-weight:600;display:flex;gap:8px;align-items:center}
+.sh h2 .n{color:var(--dim);font-weight:400;text-transform:none;letter-spacing:0}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--mut);border-radius:999px;
+  padding:5px 10px;font-size:11.5px;cursor:pointer;display:inline-flex;gap:6px;align-items:center;min-height:28px}
+.chip:hover{background:rgba(255,255,255,.11);color:#fff}
+.chip.on{background:rgba(255,255,255,.92);color:#0b0f16;border-color:transparent;font-weight:600}
+.chip i{width:7px;height:7px;border-radius:50%;display:inline-block}
+.chip .c{color:inherit;opacity:.6;font-family:var(--num);font-size:10.5px}
+.frow{display:flex;gap:8px;margin-top:10px}
+.frow input,.frow select{flex:1;min-width:0;padding:8px 10px;border-radius:8px;border:1px solid var(--line);
+  background:rgba(255,255,255,.05);color:#fff;font:inherit;font-size:12.5px;outline:none}
+.frow select{flex:0 0 140px}
+.frow option{background:#111827}
+
+/* ---------- feed ---------- */
+#feed{overflow:auto;flex:1;padding:6px 8px 12px}
+.item{padding:11px 10px;border-radius:11px;border:1px solid transparent;display:grid;grid-template-columns:1fr auto;gap:4px 10px}
+.item:hover{background:rgba(255,255,255,.035);border-color:var(--line2)}
+.item.pinned{background:rgba(47,191,113,.07);border-color:rgba(47,191,113,.3)}
+.meta{font-size:11px;color:var(--dim);display:flex;gap:6px;flex-wrap:wrap;align-items:center;grid-column:1/2}
+.meta b{color:var(--mut);font-weight:500}
+.hl{grid-column:1/2;font-size:13.5px;line-height:1.4;color:#fff;text-decoration:none}
+.hl:hover{text-decoration:underline}
+.tags{grid-column:1/2;display:flex;gap:5px;flex-wrap:wrap;margin-top:3px}
+.tag{font-size:10.5px;padding:2px 7px;border-radius:5px;background:rgba(255,255,255,.06);color:var(--mut);display:inline-flex;gap:5px;align-items:center}
+.tag i{width:6px;height:6px;border-radius:50%}
+.tag.amt{background:rgba(47,191,113,.14);color:#9ff0c3;font-family:var(--num)}
+.tag.city{background:rgba(79,156,217,.14);color:#b9dcff}
+.acts{grid-column:2/3;grid-row:1/5;display:flex;flex-direction:column;gap:6px;align-items:flex-end}
+.mini{border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--mut);border-radius:7px;padding:5px 9px;font-size:11px;cursor:pointer;white-space:nowrap}
+.mini:hover{background:rgba(255,255,255,.12);color:#fff}
+.mini.on{background:rgba(47,191,113,.2);color:#9ff0c3;border-color:rgba(47,191,113,.4)}
+.empty{padding:28px 16px;color:var(--mut);font-size:13px;line-height:1.6}
+.srcs{padding:10px 16px;border-top:1px solid var(--line2);font-size:11px;color:var(--dim);flex:none;line-height:1.7}
+.srcs .bad{color:var(--bad)}
+
+/* ---------- desk ---------- */
+#desk .body{overflow:auto;flex:1;padding:14px 16px 18px}
+.presets{display:flex;flex-wrap:wrap;gap:6px}
+.ask{margin-top:12px;display:flex;flex-direction:column;gap:8px}
+.ask textarea{width:100%;min-height:78px;resize:vertical;padding:11px 13px;border-radius:10px;border:1px solid var(--line);
+  background:rgba(255,255,255,.05);color:#fff;font:inherit;font-size:13.5px;line-height:1.5;outline:none}
+.ask textarea:focus{border-color:rgba(47,191,113,.55)}
+.askrow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.askrow .hint{flex:1;font-size:11px;color:var(--dim);min-width:160px}
+.pins{margin-top:10px;font-size:12px;color:var(--mut);display:none;gap:8px;align-items:center;flex-wrap:wrap}
+.pins.on{display:flex}
+.banner{margin-top:12px;padding:10px 12px;border-radius:10px;font-size:12px;line-height:1.5;
+  background:rgba(224,169,31,.1);border:1px solid rgba(224,169,31,.35);color:#f5d68a}
+.log{margin-top:14px;font-family:var(--num);font-size:11px;color:var(--dim);line-height:1.8;max-height:160px;overflow:auto}
+.log div::before{content:"› ";color:var(--acc)}
+.log .now{color:var(--mut)}
+.report{margin-top:10px;font-size:14px;line-height:1.62;color:rgba(255,255,255,.92)}
+.report h2{font-size:15px;margin:22px 0 8px;padding-top:14px;border-top:1px solid var(--line2);letter-spacing:.2px}
+.report h2:first-child{margin-top:4px;padding-top:0;border-top:none}
+.report h3{font-size:14.5px;margin:18px 0 6px;color:#fff;padding:9px 12px;border-radius:9px;background:rgba(47,191,113,.08);border-left:3px solid var(--acc)}
+.report ul,.report ol{margin:6px 0 10px;padding-left:20px}
+.report li{margin:4px 0}
+.report p{margin:8px 0}
+.report code{font-family:var(--num);font-size:12px;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:4px}
+.report strong{color:#fff}
+.report hr{border:none;border-top:1px solid var(--line);margin:16px 0}
+.err{margin-top:12px;padding:10px 12px;border-radius:10px;background:rgba(255,120,100,.1);border:1px solid rgba(255,120,100,.35);color:var(--bad);font-size:12.5px}
+details.sources{margin-top:18px;border-top:1px solid var(--line2);padding-top:10px;font-size:12px}
+details.sources summary{cursor:pointer;color:var(--mut)}
+details.sources ol{padding-left:20px;color:var(--dim);line-height:1.6}
+.foot{margin-top:12px;font-size:10.5px;color:var(--dim);font-family:var(--num)}
+.recent{margin-top:20px;border-top:1px solid var(--line2);padding-top:12px}
+.recent h4{margin:0 0 6px;font-size:11px;color:var(--dim);letter-spacing:.6px;text-transform:uppercase;font-weight:600}
+.recent button{display:block;width:100%;text-align:left;background:none;border:none;color:var(--mut);padding:6px 0;cursor:pointer;font-size:12.5px;border-bottom:1px solid var(--line2)}
+.recent button:hover{color:#fff}
+.recent small{color:var(--dim);margin-left:6px}
+
+/* ---------- small screens ---------- */
+.tabs{display:none}
+@media (max-width:860px){
+  html,body{font-size:15px}
+  header{padding:10px 16px}
+  .health .long,.brand .s{display:none}
+  .brand .t{font-size:14px;white-space:nowrap}
+  .health{font-size:11px;max-width:92px}
+  header .btn{padding:8px 11px}
+  main{grid-template-columns:1fr;padding:10px 16px 16px;gap:10px}
+  .tabs{display:flex;gap:6px;padding:10px 16px 0}
+  .tabs .chip{flex:1;justify-content:center}
+  main[data-tab="feed"] #desk, main[data-tab="desk"] #feedpane{display:none}
+  .frow select{flex-basis:110px}
+}
+</style>
+</head>
+<body>
+
+<div id="gate">
+  <div class="box pane">
+    <h1>GOD'S EYE <span>by Autopilot</span></h1>
+    <p>Live market signals and a desk that tells Autopilot where to place its next bet. Access is issued per person.</p>
+    <input id="g-key" type="password" placeholder="Access key" autocomplete="current-password" aria-label="Access key"/>
+    <button class="btn" id="g-go">Open</button>
+    <div id="g-err" role="alert"></div>
+  </div>
+</div>
+
+<div id="app">
+  <header>
+    <svg class="eye" viewBox="0 0 32 32" aria-hidden="true">
+      <circle cx="16" cy="16" r="14.5" fill="none" stroke="rgba(255,255,255,.25)"/>
+      <circle cx="16" cy="16" r="9" fill="none" stroke="rgba(47,191,113,.55)"/>
+      <path d="M3 16c3.6-6 8-9 13-9s9.4 3 13 9c-3.6 6-8 9-13 9s-9.4-3-13-9z" fill="none" stroke="#fff" stroke-width="1.4"/>
+      <circle cx="16" cy="16" r="4" fill="#2fbf71"/>
+    </svg>
+    <div class="brand">
+      <div class="t">GOD'S EYE <span>by Autopilot</span></div>
+      <div class="s">Where to place the next bet</div>
+    </div>
+    <div class="sp"></div>
+    <div class="health"><span class="dot" id="dot"></span><span id="health">Loading feed</span></div>
+    <button class="btn ghost" id="refresh" title="Pull the feed again">Refresh</button>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button class="chip on" data-tab="feed" role="tab">Live feed</button>
+    <button class="chip" data-tab="desk" role="tab">Ask the desk</button>
+  </div>
+
+  <main data-tab="feed">
+    <section class="pane" id="feedpane" aria-label="Live feed">
+      <div class="sh">
+        <h2>Live signals <span class="n" id="count"></span></h2>
+        <div class="chips" id="lanes"></div>
+        <div class="frow">
+          <input id="q" type="search" placeholder="Filter headlines" aria-label="Filter headlines"/>
+          <select id="city" aria-label="City"><option value="">All cities</option></select>
+        </div>
+      </div>
+      <div id="feed"><div class="empty">Pulling the feed.</div></div>
+      <div class="srcs" id="srcs"></div>
+    </section>
+
+    <section class="pane" id="desk" aria-label="Ask the desk">
+      <div class="sh"><h2>Ask the desk</h2></div>
+      <div class="body">
+        <div class="presets" id="presets"></div>
+        <div class="pins" id="pins"></div>
+        <div class="ask">
+          <textarea id="question" placeholder="Where should Autopilot place its next bet? Ask anything about companies, micro-markets, competitors or policy."></textarea>
+          <div class="askrow">
+            <div class="hint">Each answer checks the news live and links every fact. Takes one to three minutes.</div>
+            <button class="btn ghost" id="stop" hidden>Stop</button>
+            <button class="btn" id="ask">Ask</button>
+          </div>
+        </div>
+        <div id="banner"></div>
+        <div id="out"></div>
+        <div class="recent" id="recent" hidden></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="./app.js?v=2"></script>
+</body>
+</html>
