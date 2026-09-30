@@ -110,6 +110,30 @@ button{font:inherit;color:inherit}
 #board{position:fixed;top:calc(var(--top-h) + 20px);left:10px;bottom:10px;width:var(--board-w);z-index:20;display:flex;flex-direction:column;overflow:hidden}
 #panel{position:fixed;top:calc(var(--top-h) + 20px);right:10px;bottom:10px;width:var(--panel-w);z-index:20;display:flex;flex-direction:column;overflow:hidden}
 .phead{padding:14px 16px 10px;border-bottom:1px solid var(--line);flex:none}
+/* Resizable and retractable panes (desktop). A wide invisible grip over a
+   thin visible line, as in Digitide; the fold buttons slide a pane off to
+   its edge and a tab brings it back. */
+#board,#panel,#layers{transition:transform .3s var(--ease),left .3s var(--ease),right .3s var(--ease)}
+.grip{position:absolute;top:0;bottom:0;width:14px;z-index:6;cursor:col-resize;background:transparent;border:0;padding:0;touch-action:none}
+.grip-r{right:0} .grip-l{left:0}
+.grip::after{content:"";position:absolute;top:50%;transform:translateY(-50%);left:calc(50% - 1px);width:2px;height:40px;border-radius:2px;background:rgba(60,40,25,.16);transition:background .16s,height .16s}
+.grip:hover::after,.grip:focus-visible::after{background:rgba(163,80,44,.6);height:72px}
+body.resizing{cursor:col-resize;user-select:none}
+body.resizing *{pointer-events:none}
+body.resizing .grip{pointer-events:auto}
+body.resizing #board,body.resizing #panel,body.resizing #layers{transition:none}
+.fold{flex:none;width:28px;height:28px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--mut);cursor:pointer;font-size:17px;line-height:1;display:grid;place-items:center;margin-left:8px}
+.fold:hover{color:var(--ink);border-color:rgba(60,40,25,.3)}
+.fold-panel{position:absolute;top:12px;right:12px;z-index:7;margin:0}
+#panel .phead{padding-right:52px}
+.reopen{position:fixed;top:50%;z-index:21;border:1px solid var(--line);background:var(--panel-solid,#faf6f0);color:var(--ink);box-shadow:var(--e2);font-size:12.5px;padding:12px 8px;cursor:pointer;writing-mode:vertical-rl;opacity:0;pointer-events:none;transition:opacity .2s}
+.reopen-board{left:0;border-radius:0 10px 10px 0;transform:translateY(-50%)}
+.reopen-panel{right:0;border-radius:10px 0 0 10px;transform:translateY(-50%)}
+body.fold-board #board{transform:translateX(calc(-100% - 20px))}
+body.fold-panel #panel{transform:translateX(calc(100% + 20px))}
+body.fold-board #layers{left:44px}
+body.fold-panel #layers{right:44px}
+body.fold-board .reopen-board,body.fold-panel .reopen-panel{opacity:1;pointer-events:auto}
 .pbody{flex:1;overflow:auto;padding:4px 16px 20px}
 .eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
 h2{font-family:var(--serif);font-weight:500;font-size:24px;line-height:1.15;margin:4px 0 2px}
@@ -379,6 +403,42 @@ svg.quad{width:100%;height:auto;display:block;background:#fff;border:1px solid v
   select,.inp{font-size:16px}
   #cmp{padding:0}
   #cmp .sheet{border-radius:0}
+  .grip,.fold,.reopen{display:none!important}
+  body.fold-board #board,body.fold-panel #panel{transform:none}
+  #panel .phead{padding-right:16px}
+  body.sheet-drag #panel,body.sheet-drag #board{transition:none}
+  /* Touch: every control at least 40 px tall, labels at least 11 px. */
+  .tab,.chip,.act,.shot,#layers .chip{min-height:40px}
+  #layers .chip{padding-top:0;padding-bottom:0}
+  #signout{min-width:40px;min-height:40px;justify-content:center}
+  .back{display:inline-flex;align-items:center;min-height:40px;margin-bottom:0;font-size:14px}
+  .intro .ix{min-height:36px;padding:6px 14px;font-size:13px}
+  .intro-min{padding:10px 0;font-size:13px}
+  #sheet-grip{height:30px}
+  #sheet-grip span{top:11px}
+  .kpi .l,.in .l,.eyebrow,.hero .ph,.g,.conf,.intro .ih b,h3,.fact .meta{font-size:11px}
+  #cmp-x{min-height:40px;min-width:64px}
+  #cmp input[type="range"]{height:32px}
+  /* Pinch zooms the map; the +/- buttons only crowd the corner. */
+  .mapboxgl-ctrl-group{display:none}
+  /* With the sheet pulled up the layer bar would show through it. */
+  #layers{transition:opacity .2s}
+  body[data-sheet="full"] #layers{opacity:0;pointer-events:none}
+  /* Clear the iPhone home indicator. */
+  #panel{padding-bottom:env(safe-area-inset-bottom)}
+}
+/* Landscape phone: too short for a bottom sheet, so the panel moves to the
+   right and the map and option strip share the left. */
+@media (max-width:860px) and (orientation:landscape) and (max-height:520px){
+  :root{--top-h:44px}
+  #panel{top:calc(var(--top-h) + 12px);left:auto;right:0;width:56vw;height:auto;border-radius:18px 0 0 0;border-bottom:1px solid rgba(255,255,255,.7)}
+  #sheet-grip{display:none}
+  #layers{right:calc(56vw + 6px)}
+  body[data-sheet="full"] #layers{opacity:1;pointer-events:auto}
+  #board{right:56vw;bottom:6px}
+  body[data-sheet="full"] #board{opacity:1;pointer-events:auto}
+  #list .card{flex:0 0 190px;grid-template-columns:1fr}
+  #list .card picture,#list .card img,#list .card .loc{display:none}
 }
 </style>
 </head>
@@ -417,8 +477,9 @@ svg.quad{width:100%;height:auto;display:block;background:#fff;border:1px solid v
 </header>
 
 <aside id="board" class="pane" aria-label="Shortlisted options">
+  <div class="grip grip-r" data-grip="board" role="separator" aria-orientation="vertical" aria-label="Resize the options list" tabindex="0" data-hint="Drag to resize. Double-click to reset."></div>
   <div class="bhead">
-    <div class="row"><span class="big" id="b-count">10 options</span><span class="note" id="b-area" style="margin-left:auto"></span></div>
+    <div class="row"><span class="big" id="b-count">10 options</span><span class="note" id="b-area" style="margin-left:auto"></span><button class="fold" type="button" data-fold="board" aria-label="Hide the options list" data-hint="Hide the options list to see more map. Shortcut: [">&lsaquo;</button></div>
     <div class="ctrl" id="filters"></div>
     <div class="target">
       <label for="t-area">Target carpet area, sq ft (optional)</label>
@@ -436,7 +497,11 @@ svg.quad{width:100%;height:auto;display:block;background:#fff;border:1px solid v
   <div id="list" role="list"></div>
 </aside>
 
+<button class="reopen reopen-board" type="button" data-fold="board" aria-label="Show the options list">Show options</button>
+<button class="reopen reopen-panel" type="button" data-fold="panel" aria-label="Show the details panel">Show details</button>
 <section id="panel" class="pane" aria-live="polite">
+  <div class="grip grip-l" data-grip="panel" role="separator" aria-orientation="vertical" aria-label="Resize the details panel" tabindex="0" data-hint="Drag to resize. Double-click to reset."></div>
+  <button class="fold fold-panel" type="button" data-fold="panel" aria-label="Hide the details panel" data-hint="Hide the details panel to see more map. Shortcut: ]">&rsaquo;</button>
   <button id="sheet-grip" type="button" aria-label="Resize the panel"><span></span></button>
   <div class="phead" id="p-head"></div>
   <div class="pbody" id="p-body"></div>
