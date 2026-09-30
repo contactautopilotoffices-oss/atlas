@@ -420,11 +420,23 @@ function setLoadStatus(text){
   loadStatus.innerHTML = text + (d?`<span class="dots">${d.textContent}</span>`:"");
 }
 
-function enterExperience(){
+/* A manifest entry may carry `passHash` (SHA-256 of the normalised password)
+   instead of `pass`, so the password itself never ships in the page. */
+async function passMatches(client, pass){
+  if(!client) return false;
+  if(client.passHash){
+    try{
+      const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(normId(pass)));
+      return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("") === client.passHash;
+    }catch(e){ return false; }
+  }
+  return normId(pass) === normId(client.pass);
+}
+async function enterExperience(){
   const id = document.getElementById("gateId").value.trim().toUpperCase();
   const pass = document.getElementById("gatePass").value.trim();
   const client = lookupClient(id);
-  if(client && normId(pass) === normId(client.pass)){
+  if(await passMatches(client, pass)){
     if(client.redirect){
       /* Hand the sign-in over to the target app for this tab, so a separately
          gated app (e.g. /indore/) does not ask for the same credentials twice. */

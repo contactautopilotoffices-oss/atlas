@@ -15,6 +15,7 @@ window.CLIENT_MANIFEST = {
      signing in at the site root sends you there instead of failing with
      "Invalid Demo ID", which is what happened when the root URL was tried. */
   "DIGITIDE-GRP":{ redirect: "/digitide/",  pass: "K2SY-2K5J" },
-  /* Indore office study, a separate app at /indore/ with its own gate. */
-  "INDORE-AP":   { redirect: "/indore/",    pass: "UWT8-PJZ3" }
+  /* Indore office study, a separate app at /indore/ with its own gate. Only
+     a SHA-256 of the normalised password is stored, never the password. */
+  "INDORE-AP":   { redirect: "/indore/",    passHash: "a4b32dba4f102ad7427f1651b09b05151026178ede1e5503f22f477b0ad2f45d" }
 };

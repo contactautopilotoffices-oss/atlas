@@ -19,12 +19,24 @@
    ============================================================================ */
 "use strict";
 
-/* Access gate. Same pattern as /digitide/: the check runs in the browser, so
-   it keeps a casual visitor out of the view but does not make the data
-   private (data.js is fetchable by URL). The ID and password are issued for
-   this study only; the site root login also routes here via
-   clients/manifest.js. */
-const GATE = { id: "INDORE-AP", pass: "UWT8-PJZ3" };
+/* Access gate. Same pattern as /digitide/, with one change: the page holds
+   only a SHA-256 of the normalised "ID:PASSWORD", so the password is not
+   readable in the source. It is still a browser-side check: it keeps a
+   casual visitor out of the view, it does not make data.js private. The site
+   root login routes here via clients/manifest.js. */
+const GATE_HASH = "f9d02aff981245d59ef77ee1074fdadde41a1f2b40c8b122226eea45b8e86331";
+async function sha256(txt) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(txt));
+  return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
+}
+const MEDIA = "../media/indore/";
+const base = (f) => f.replace(/\.jpg$/, "");
+/* Photos ship as WebP with the JPEG as fallback; the option list uses 240 px
+   thumbnails (about 5 KB each) instead of the full photos. */
+const pic = (o, size) => size === "thumb"
+  ? `<picture><source type="image/webp" srcset="${MEDIA}${base(o.photo)}-thumb.webp"><img src="${MEDIA}${base(o.photo)}-thumb.jpg" alt="" width="74" height="62" loading="lazy" decoding="async"></picture>`
+  : `<picture><source type="image/webp" srcset="${MEDIA}${base(o.photo)}.webp"><img src="${MEDIA}${o.photo}" alt="${esc(o.name)}" width="1040" height="627" decoding="async"></picture>`;
+const figPic = (f, alt) => `<picture><source type="image/webp" srcset="${MEDIA}${base(f)}.webp"><img src="${MEDIA}${f}" alt="${esc(alt)}" loading="lazy" decoding="async"></picture>`;
 
 const O = window.IND_OPTIONS, M = window.IND_META, F = window.IND_FACTS;
 const $ = (s, r = document) => r.querySelector(s);
@@ -188,9 +200,37 @@ function score(o) {
   return Math.round(PARTS.reduce((s, x) => s + p[x.key] * W[x.key], 0) / tw * 100);
 }
 
+/* ------------------------------------------------------------- presets --
+   Priority mapping. A client rarely weighs everything equally; each preset
+   is a named set of weights over the same eight parts, so the ranking can be
+   re-read through the client's own priority in one click. */
+const PRESETS = {
+  balanced: { label: "Balanced", note: "The default weights: metro access and readiness lead, everything else counts.",
+    w: { transit: 25, ready: 20, talent: 15, scale: 10, eff: 10, grade: 8, parking: 7, infra: 5 } },
+  commute: { label: "Commute first", note: "Staff arrive by metro and on foot; walking distance to an open station dominates.",
+    w: { transit: 45, ready: 10, talent: 20, scale: 5, eff: 5, grade: 5, parking: 5, infra: 5 } },
+  speed: { label: "Move in fast", note: "Go live in weeks: ready-now space and full listed infrastructure first.",
+    w: { transit: 15, ready: 45, talent: 10, scale: 5, eff: 5, grade: 5, parking: 5, infra: 10 } },
+  scale: { label: "Room to scale", note: "One large floor now and space to grow; area offered dominates.",
+    w: { transit: 15, ready: 10, talent: 10, scale: 35, eff: 10, grade: 10, parking: 5, infra: 5 } },
+  talent: { label: "Hire at volume", note: "Fresher hiring at scale: institutions and residential belts within 30 minutes.",
+    w: { transit: 25, ready: 10, talent: 40, scale: 5, eff: 5, grade: 5, parking: 5, infra: 5 } },
+  premium: { label: "Premium & efficient", note: "Grade A, high carpet efficiency, parking and full infrastructure.",
+    w: { transit: 15, ready: 10, talent: 5, scale: 5, eff: 25, grade: 20, parking: 10, infra: 10 } }
+};
+function setPreset(key) {
+  const p = PRESETS[key]; if (!p) return;
+  S.preset = key; Object.assign(W, p.w);
+}
+function scoreWith(o, w) {
+  const p = scoreParts(o), tw = PARTS.reduce((s, x) => s + w[x.key], 0) || 1;
+  return Math.round(PARTS.reduce((s, x) => s + p[x.key] * w[x.key], 0) / tw * 100);
+}
+const rankBy = (w) => O.slice().sort((a, b) => scoreWith(b, w) - scoreWith(a, w)).map(o => o.id);
+
 /* --------------------------------------------------------------- state -- */
 const S = {
-  tab: "brief", sel: null, sort: "score", target: null,
+  tab: "brief", sel: null, sort: "score", target: null, preset: "balanced", sheet: "half",
   filters: new Set(),
   layers: { zones: true, metro: true, walk: false, bus: true, edu: true, emp: true, res: true, rings: true }
 };
@@ -204,6 +244,7 @@ const FILTERS = [
 ];
 const TABS = [
   { key: "brief", label: "Brief" },
+  { key: "priorities", label: "Priorities" },
   { key: "talent", label: "Talent & catchment" },
   { key: "transit", label: "Transit" },
   { key: "market", label: "Market & incentives" },
@@ -224,18 +265,43 @@ const fits = (o) => S.target == null ? null : o.carpetArea >= S.target * 0.97;
 /* ================================================================ gate == */
 function initGate() {
   const norm = (v) => v.trim().toUpperCase().replace(/[\s-]/g, "");
-  const go = () => {
-    if (norm($("#g-id").value) === norm(GATE.id) && norm($("#g-pw").value) === norm(GATE.pass)) {
-      sessionStorage.setItem("ind-auth", "1"); $("#gate").remove(); boot();
-    } else $("#g-err").textContent = "Not recognised. Access is issued per person.";
+  let busy = false;
+  const go = async () => {
+    if (busy) return; busy = true;
+    let ok = false;
+    try { ok = (await sha256(norm($("#g-id").value) + ":" + norm($("#g-pw").value))) === GATE_HASH; } catch (e) { ok = false; }
+    busy = false;
+    if (ok) { sessionStorage.setItem("ind-auth", "1"); openApp(); }
+    else { $("#g-err").textContent = "Not recognised. Access is issued per person."; $("#g-pw").value = ""; $("#g-pw").focus(); }
   };
+  const openApp = () => { const g = $("#gate"); g.classList.add("out"); setTimeout(() => g.remove(), 450); boot(); };
+  loadBackdrop();
+  const tot = O.reduce((t, o) => t + o.superArea, 0);
+  $("#g-stats").innerHTML = `<span><b>${O.length}</b>options</span><span><b>${(tot / 1e5).toFixed(2)} L</b>sq ft</span>`
+    + `<span><b>${STN.filter(x => x.open).length}</b>metro stations open</span><span><b>${O.filter(o => o.handoverKind === "ready").length}</b>ready now</span>`;
   let handoff = null;
   try { handoff = sessionStorage.getItem("atlas-handoff"); sessionStorage.removeItem("atlas-handoff"); } catch (e) {}
   if (handoff === "/indore/") sessionStorage.setItem("ind-auth", "1");
   if (sessionStorage.getItem("ind-auth") === "1") { $("#gate").remove(); boot(); return; }
-  $("#g-go").addEventListener("click", go);
-  $("#gate").addEventListener("keydown", e => { if (e.key === "Enter") go(); });
+  $("#g-form").addEventListener("submit", e => { e.preventDefault(); go(); });
   $("#g-id").focus();
+}
+/* The sign-in backdrop was generated with Higgsfield. The build copies it
+   into media/indore/ (scripts/fetch-indore-backdrop.js); if that copy is
+   missing, the page falls back to Higgsfield's CDN, and if that fails too the
+   gradient under it simply shows. Phones get the portrait crop. */
+const BACKDROP = {
+  wide: { local: MEDIA + "backdrop-wide.webp", remote: "https://d8j0ntlcm91z4.cloudfront.net/user_3Fo7i4SvZozV6ke0Djuea827rgj/hf_20260930_052823_8e4eed0a-51d0-40fb-945e-8a78aeae19fb_min.webp" },
+  tall: { local: MEDIA + "backdrop-tall.webp", remote: "https://d8j0ntlcm91z4.cloudfront.net/user_3Fo7i4SvZozV6ke0Djuea827rgj/hf_20260930_052821_229f2ecc-8cb5-4c46-89f6-e033184efa7c_min.webp" }
+};
+function loadBackdrop() {
+  const img = $("#g-bg"); if (!img) return;
+  const b = matchMedia("(max-aspect-ratio: 3/4)").matches ? BACKDROP.tall : BACKDROP.wide;
+  const tries = [b.local, b.remote];
+  const next = () => { const u = tries.shift(); if (!u) { img.remove(); return; } img.src = u; };
+  img.addEventListener("load", () => img.classList.add("on"));
+  img.addEventListener("error", next);
+  next();
 }
 
 /* ================================================================ map === */
@@ -263,14 +329,28 @@ function ringLabelFC() {
    layer under it must still draw, so every layer is added on its own. */
 function add(layer, before) { try { map.addLayer(layer, before); } catch (e) { console.warn("layer", layer.id, e.message); } }
 
+/* Mapbox GL (about 1 MB) is fetched only after sign-in, so the sign-in page
+   paints at once on a phone; the preconnect hint in the page head has the
+   connection warm by then. */
+const MAPBOX_CDN = "https://api.mapbox.com/mapbox-gl-js/v3.10.0/";
+function loadMapbox() {
+  if (window.mapboxgl) return Promise.resolve();
+  return new Promise((resolve, reject) => {
+    const css = document.createElement("link"); css.rel = "stylesheet"; css.href = MAPBOX_CDN + "mapbox-gl.css"; document.head.appendChild(css);
+    const js = document.createElement("script"); js.src = MAPBOX_CDN + "mapbox-gl.js"; js.onload = resolve; js.onerror = reject; document.head.appendChild(js);
+  });
+}
+const mapUnavailable = () => { $("#map").innerHTML = `<div class="nomap">Map unavailable right now. Everything else on the page still works.</div>`; };
 function boot() {
   TALENT_MAX = Math.max(...O.map(talentRaw), 1);
+  applyRoute(false);
   renderTabs(); renderFilters(); renderList(); renderPanel(); renderLayers();
-  wireBoard();
-  if (!window.mapboxgl || !window.MAPBOX_TOKEN) {
-    $("#map").innerHTML = `<div style="padding:120px 24px;text-align:center;color:var(--mut)">Map unavailable: the Mapbox token did not load. Everything else on the page still works.</div>`;
-    return;
-  }
+  wireBoard(); wireSheet();
+  addEventListener("popstate", () => applyRoute(true));
+  if (!window.MAPBOX_TOKEN) return mapUnavailable();
+  loadMapbox().then(initMap).catch(mapUnavailable);
+}
+function initMap() {
   mapboxgl.accessToken = window.MAPBOX_TOKEN;
   map = new mapboxgl.Map({
     container: "map", style: window.IND_MAP_STYLE || "mapbox://styles/mapbox/light-v11",
@@ -278,11 +358,41 @@ function boot() {
   });
   map.addControl(new mapboxgl.AttributionControl({ compact: true }), "bottom-right");
   map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "bottom-right");
-  map.on("load", () => { addLayers(); wireMap(); fitAll(false); });
+  map.on("load", () => { addLayers(); wireMap(); if (S.sel) select(S.sel, true, true); else fitAll(false); });
+}
+
+/* ------------------------------------------------------------ deep links --
+   Every view has an address: #/option/metro-tower, #/talent, #/priorities/
+   commute. The BD team can send a client straight to one building, and the
+   browser's back button walks the views. */
+function routeHash() {
+  if (S.sel) return `#/option/${S.sel}`;
+  if (S.tab === "priorities" && S.preset !== "balanced" && S.preset !== "custom") return `#/priorities/${S.preset}`;
+  return S.tab === "brief" ? "#/" : `#/${S.tab}`;
+}
+function pushRoute() { const h = routeHash(); if (location.hash !== h && !(h === "#/" && !location.hash)) history.pushState(null, "", h); }
+function applyRoute(render) {
+  const [kind, val] = location.hash.replace(/^#\/?/, "").split("/");
+  S.sel = null;
+  if (kind === "option" && O.some(o => o.id === val)) S.sel = val;
+  else if (TABS.some(t => t.key === kind && t.key !== "compare")) {
+    S.tab = kind;
+    if (kind === "priorities" && PRESETS[val]) setPreset(val);
+  } else S.tab = "brief";
+  if (render) { renderTabs(); renderList(); renderPanel(); refreshMap(); if (S.sel) select(S.sel, true, true); else fitAll(); }
+}
+async function copyLink(btn) {
+  const url = location.href.split("#")[0] + routeHash();
+  try { await navigator.clipboard.writeText(url); btn.textContent = "Link copied"; }
+  catch (e) { window.prompt("Copy this link", url); }
+  setTimeout(() => { btn.textContent = "Copy link"; }, 1800);
 }
 
 function padding() {
-  if (innerWidth <= 860) return { top: 60, bottom: 50, left: 20, right: 20 };
+  if (innerWidth <= 860) {
+    const sh = document.getElementById("panel").getBoundingClientRect();
+    return { top: 110, bottom: Math.max(60, innerHeight - sh.top + 120), left: 24, right: 24 };
+  }
   const b = document.getElementById("board").getBoundingClientRect(), p = document.getElementById("panel").getBoundingClientRect();
   const l = document.getElementById("layers").getBoundingClientRect();
   return { top: 100, bottom: innerHeight - l.top + 24, left: b.right + 30, right: innerWidth - p.left + 30 };
@@ -342,7 +452,7 @@ function addLayers() {
     "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"], "text-offset": [0, 1.1], "text-anchor": "top", "text-optional": true },
     paint: { "text-color": "#6b5200", "text-halo-color": "#fff", "text-halo-width": 1.3 } });
 
-  const COL = { edu: "#3f6fb5", emp: "#8e44ad", res: "#2e8b6e", hub: "#4a4a4a" };
+  const COL = { edu: "#5b3aa7", emp: "#d0417b", res: "#0a8a3a", hub: "#4a4a4a" };
   const placesData = { type: "FeatureCollection", features: window.IND_PLACES.map(p => ({ type: "Feature",
     geometry: { type: "Point", coordinates: [p.lng, p.lat] }, properties: { id: p.id, kind: p.kind, name: p.name, color: COL[p.kind] } })) };
   map.addSource("places", { type: "geojson", data: placesData });
@@ -360,7 +470,7 @@ function addLayers() {
     "circle-radius": 22, "circle-color": "#a3502c", "circle-opacity": .18, "circle-stroke-color": "#a3502c", "circle-stroke-width": 1.5 } });
   add({ id: "opt", type: "circle", source: "options", paint: {
     "circle-radius": ["case", ["==", ["get", "sel"], 1], 13, 11],
-    "circle-color": ["case", ["==", ["get", "grade"], "A"], "#a3502c", "#7c6a57"],
+    "circle-color": ["case", ["==", ["get", "grade"], "A"], "#a3502c", "#2f6f9f"],
     "circle-stroke-color": "#fff", "circle-stroke-width": 2,
     "circle-opacity": ["case", ["==", ["get", "dim"], 1], .3, ["==", ["get", "fit"], 0], .45, 1],
     "circle-stroke-opacity": ["case", ["==", ["get", "dim"], 1], .3, 1] } });
@@ -381,9 +491,9 @@ const LAYERS = [
   { key: "metro", label: "Metro", sw: `<span class="sw" style="background:linear-gradient(90deg,#f2c200 55%,transparent 55% 65%,#d9a400 65% 80%,transparent 80%)"></span>`, ids: ["metro-open", "metro-casing", "metro-plan", "stations", "stations-label"] },
   { key: "walk", label: "Walk 0.5/1 km", sw: `<span class="dot" style="background:rgba(217,164,0,.18);border:1px dashed #b58900"></span>`, ids: ["walk-fill", "walk-line"] },
   { key: "bus", label: "iBus", sw: `<span class="sw" style="background:repeating-linear-gradient(90deg,#c0392b 0 3px,transparent 3px 6px)"></span>`, ids: ["bus-line"] },
-  { key: "edu", label: "Institutions", sw: `<span class="dot" style="background:#3f6fb5"></span>` },
-  { key: "emp", label: "Employers", sw: `<span class="dot" style="background:#8e44ad"></span>` },
-  { key: "res", label: "Homes", sw: `<span class="dot" style="background:rgba(46,139,110,.3);border:1.5px solid #2e8b6e"></span>` },
+  { key: "edu", label: "Institutions", sw: `<span class="dot" style="background:#5b3aa7"></span>` },
+  { key: "emp", label: "Employers", sw: `<span class="dot" style="background:#d0417b"></span>` },
+  { key: "res", label: "Homes", sw: `<span class="dot" style="background:rgba(10,138,58,.22);border:1.5px solid #0a8a3a"></span>` },
   { key: "rings", label: "Drive rings", sw: `<span class="dot" style="background:transparent;border:1.5px solid #a3502c"></span>`, ids: ["rings-fill", "rings-line", "rings-label"] }
 ];
 function applyLayerVisibility() {
@@ -411,7 +521,7 @@ function wireMap() {
     map.on("mouseleave", layer, () => { map.getCanvas().style.cursor = ""; pop.remove(); });
   };
   hover("opt", p => { const o = O.find(x => x.id === p.id);
-    return `<b>${esc(p.n)} · ${esc(o.name)}</b><br>${esc(o.locality)}<br>Grade ${o.grade} · ${inr(o.superArea)} SF · ${esc(o.handover)}<br>${esc(o.commuteDist)} to ${esc(o.commute)}`; });
+    return `<div class="pop">${pic(o, "thumb")}<div><b>${esc(p.n)} · ${esc(o.name)}</b><br>${esc(o.locality)}<br>Grade ${o.grade} · ${inr(o.superArea)} SF · ${esc(o.handover)}<br>${esc(o.commuteDist)} to metro · fit ${score(o)}</div></div>`; });
   hover("places", p => { const x = window.IND_PLACES.find(y => y.id === p.id);
     const kind = { edu: "Institution", emp: "Employer", res: "Residential catchment", hub: "Transport" }[x.kind];
     return `<b>${esc(x.name)}</b>${x.sub ? `<br>${esc(x.sub)}` : ""}<br><span style="color:#6c5b4d">${kind}</span><br>${esc(x.note)}`; });
@@ -441,7 +551,7 @@ function renderList() {
   $("#list").innerHTML = sorted().map(o => {
     const f = fits(o);
     return `<button class="card ${S.sel === o.id ? "sel" : ""} ${passes(o) ? "" : "dim"}" data-id="${o.id}" role="listitem" type="button">
-      <img src="../media/indore/${o.photo}" alt="" loading="lazy">
+      ${pic(o, "thumb")}
       <div>
         <div class="nm"><span class="no">${String(o.n).padStart(2, "0")}</span>${esc(o.name)}</div>
         <div class="loc">${esc(o.locality)}</div>
@@ -468,7 +578,7 @@ function wireBoard() {
   $("#tabs").addEventListener("click", e => {
     const t = e.target.closest("[data-t]"); if (!t) return;
     if (t.dataset.t === "compare") { openCompare(); return; }
-    const had = S.sel; S.tab = t.dataset.t; S.sel = null; renderTabs(); renderList(); renderPanel(); refreshMap(); if (had) fitAll();
+    goTab(t.dataset.t);
   });
   $("#layers").addEventListener("click", e => {
     const b = e.target.closest("[data-l]"); if (!b) return;
@@ -476,17 +586,27 @@ function wireBoard() {
   });
   $("#p-body").addEventListener("click", e => {
     const a = e.target.closest("[data-go]"); if (a) { e.preventDefault(); select(a.dataset.go, true); return; }
-    const t = e.target.closest("[data-tab]"); if (t) { e.preventDefault(); const had = S.sel; S.tab = t.dataset.tab; S.sel = null; renderTabs(); renderList(); renderPanel(); refreshMap(); if (had) fitAll(); return; }
-    const img = e.target.closest("figure img"); if (img) { const lb = $("#lightbox"); lb.querySelector("img").src = img.src; lb.classList.add("on"); }
+    const t = e.target.closest("[data-tab]"); if (t) { e.preventDefault(); goTab(t.dataset.tab); return; }
+    const pr = e.target.closest("[data-preset]"); if (pr) { setPreset(pr.dataset.preset); renderList(); renderPanel(); pushRoute(); return; }
+    const cp = e.target.closest("[data-copy]"); if (cp) { copyLink(cp); return; }
+    const pt = e.target.closest("[data-print]"); if (pt) { window.print(); return; }
+    const tv = e.target.closest("[data-tableview]"); if (tv) { const t2 = $("#pm-table"); t2.hidden = !t2.hidden; tv.textContent = t2.hidden ? "Show as table" : "Hide table"; return; }
+    const img = e.target.closest("figure img, .hero img"); if (img) { const lb = $("#lightbox"); lb.querySelector("img").src = img.currentSrc || img.src; lb.classList.add("on"); }
   });
-  $("#p-head").addEventListener("click", e => { if (e.target.closest(".back")) { S.sel = null; renderList(); renderPanel(); refreshMap(); fitAll(); } });
+  $("#p-head").addEventListener("click", e => {
+    if (e.target.closest(".back")) { S.sel = null; renderList(); renderPanel(); refreshMap(); fitAll(); pushRoute(); return; }
+    const cp = e.target.closest("[data-copy]"); if (cp) { copyLink(cp); return; }
+    if (e.target.closest("[data-print]")) window.print();
+  });
   $("#lightbox").addEventListener("click", () => $("#lightbox").classList.remove("on"));
   $("#cmp-x").addEventListener("click", () => $("#cmp").classList.remove("on"));
   addEventListener("keydown", e => { if (e.key === "Escape") { $("#cmp").classList.remove("on"); $("#lightbox").classList.remove("on"); } });
 }
 
-function select(id, fly) {
+function select(id, fly, fromRoute) {
   S.sel = id; renderList(); renderPanel(); refreshMap();
+  if (!fromRoute) pushRoute();
+  if (innerWidth <= 860 && !fromRoute) setSheet("half");
   const card = document.querySelector(`.card[data-id="${id}"]`); if (card) card.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
   const o = O.find(x => x.id === id);
   if (fly && map) map.fitBounds(circle([o.lng, o.lat], ringKm(30), 8).reduce((b, p) => b.extend(p), new mapboxgl.LngLatBounds()),
@@ -494,6 +614,11 @@ function select(id, fly) {
   $("#p-body").scrollTop = 0;
 }
 
+function goTab(key) {
+  const had = S.sel; S.tab = key; S.sel = null;
+  renderTabs(); renderList(); renderPanel(); refreshMap(); if (had) fitAll(); pushRoute();
+  if (innerWidth <= 860) setSheet("half");
+}
 function renderTabs() {
   $("#tabs").innerHTML = TABS.map(t => {
     const n = t.count ? t.count() : 0;
@@ -509,7 +634,7 @@ function renderLayers() {
 function renderPanel() {
   renderTabs();
   if (S.sel) return renderOption(O.find(x => x.id === S.sel));
-  ({ brief: renderBrief, talent: renderTalent, transit: renderTransit, market: renderMarket, caveats: renderCaveats, deck: renderDeck }[S.tab] || renderBrief)();
+  ({ brief: renderBrief, priorities: renderPriorities, talent: renderTalent, transit: renderTransit, market: renderMarket, caveats: renderCaveats, deck: renderDeck }[S.tab] || renderBrief)();
 }
 const head = (eyebrow, title, lede) => { $("#p-head").innerHTML = `<div class="eyebrow">${eyebrow}</div><h2>${title}</h2>${lede ? `<div class="lede">${lede}</div>` : ""}`; };
 const factList = (arr) => `<ul class="facts">${arr.map(f => `<li class="fact"><span class="k">${esc(f.k)}.</span> ${esc(f.v)}<span class="conf ${f.conf}">${f.conf}</span>
@@ -539,7 +664,10 @@ function renderBrief() {
     bench: "Infosys, TCS, TaskUs, Teleperformance and more mapped",
     amenities: "Every option's amenity list, with gaps struck through"
   };
+  $("#p-head").insertAdjacentHTML("beforeend", actions());
   $("#p-body").innerHTML = `
+    <h3 style="margin-top:14px">Insights</h3>
+    ${insightsHTML()}
     <div class="kpis">
       <div class="kpi"><div class="l">Options</div><div class="v">${O.length}</div><div class="s">${gradeA.length} Grade A · ${O.length - gradeA.length} Grade B</div></div>
       <div class="kpi"><div class="l">Super built-up</div><div class="v num">${(tot / 100000).toFixed(2)} L</div><div class="s">${inr(carpet)} SF carpet</div></div>
@@ -548,9 +676,9 @@ function renderBrief() {
       <div class="kpi"><div class="l">Efficiency</div><div class="v">${Math.min(...O.map(o => o.efficiency))}-${Math.max(...O.map(o => o.efficiency))}%</div><div class="s">carpet / super</div></div>
       <div class="kpi"><div class="l">Metro open</div><div class="v">16 stn</div><div class="s">since 6 Sep 2026</div></div>
     </div>
-    <h3>Highest fit today</h3>
+    <h3>Highest fit today · ${esc(PRESETS[S.preset] ? PRESETS[S.preset].label : "custom weights")}</h3>
     <ol style="padding-left:18px;margin:0;line-height:1.5;font-size:13px">${top}</ol>
-    <p class="note">Fit score weighs metro access, readiness, talent reach, scale, efficiency, grade, parking and listed infrastructure. Change the weights on <a href="#" onclick="openCompare();return false">Compare all</a>.</p>
+    <p class="note">Fit score weighs metro access, readiness, talent reach, scale, efficiency, grade, parking and listed infrastructure. Re-rank by the client's priority on <a href="#" data-tab="priorities">Priorities</a>.</p>
     <h3>Read this first</h3>
     ${window.IND_CAVEATS.filter(c => c.sev === "high").map(c => `<div class="flag high"><b>${esc(c.title)}</b>${esc(c.text)}</div>`).join("")}
     <p class="note"><a href="#" data-tab="caveats">All ${window.IND_CAVEATS.length} caveats</a></p>
@@ -564,13 +692,135 @@ function renderBrief() {
     <p class="note" style="margin-top:10px">Deck map view: ${cite(M.mapLink, "Google My Maps")}</p>`;
 }
 
+/* ---------- shared: insights, verdict, actions ---------- */
+const actions = () => `<div class="actions"><button type="button" class="act" data-copy>Copy link</button><button type="button" class="act" data-print>Print / PDF</button></div>`;
+/* The few facts a client asks first, each one tap from its option. */
+function insightsHTML() {
+  const top = (f) => O.slice().sort((a, b) => f(b) - f(a))[0];
+  const best = top(score), near = top(o => -o.commuteM), big = top(o => o.superArea), eff = top(o => o.efficiency), tal = top(talentRaw);
+  const readyNow = O.filter(o => o.handoverKind === "ready"), readyBest = readyNow.slice().sort((a, b) => score(b) - score(a))[0];
+  const tc = catchment(tal), cav = window.IND_CAVEATS.filter(c => c.sev === "high");
+  const cards = [
+    { l: "Best overall", v: best.name, s: `Fit ${score(best)}/100 on ${PRESETS[S.preset] ? PRESETS[S.preset].label.toLowerCase() : "custom"} weights`, go: best.id, tone: "lead" },
+    { l: "Closest to metro", v: near.commuteDist, s: `${near.name}, to ${deckStations(near)[0].stn ? deckStations(near)[0].stn.name : near.commute}`, go: near.id },
+    { l: "Move in now", v: readyBest.name, s: `Best of ${readyNow.length} ready-now options`, go: readyBest.id },
+    { l: "Largest space", v: `${inr(big.superArea)} SF`, s: `${big.name}, handover ${big.handover}`, go: big.id },
+    { l: "Most efficient", v: `${eff.efficiency}%`, s: `${eff.name}, carpet to super`, go: eff.id },
+    { l: "Deepest talent reach", v: tal.name, s: `${upTo(tc, 1, "edu")} institutions, ${upTo(tc, 1, "res")} belts in 30 min`, go: tal.id },
+    { l: "Watch out", v: `${cav.length} decision-changing caveats`, s: cav[0].title, tab: "caveats", tone: "warn" }
+  ];
+  return `<div class="ins" role="list">${cards.map(c => `<button type="button" role="listitem" class="in ${c.tone || ""}" ${c.go ? `data-go="${c.go}"` : `data-tab="${c.tab}"`}>
+    <span class="l">${esc(c.l)}</span><span class="v">${esc(c.v)}</span><span class="s">${esc(c.s)}</span></button>`).join("")}</div>`;
+}
+/* Strengths are parts scoring 85% or more, watch-outs 35% or less, plus the
+   option's own caveats. Derived, never hand-written. */
+function verdictHTML(o, p) {
+  const good = PARTS.filter(x => p[x.key] >= .85).map(x => x.label);
+  const weak = PARTS.filter(x => p[x.key] <= .35).map(x => x.label);
+  const cav = window.IND_CAVEATS.filter(x => x.about === o.id).length;
+  if (cav) weak.push(`${cav} caveat${cav > 1 ? "s" : ""}`);
+  return `<div class="verdict">${good.map(g => `<span class="vd up">✓ ${esc(g)}</span>`).join("")}${weak.map(w => `<span class="vd dn">! ${esc(w)}</span>`).join("")}</div>`;
+}
+
+/* ---------- Priorities ---------- */
+function renderPriorities() {
+  head("Priority mapping", "Rank the options by what matters most",
+    "Pick the client's priority. The weights change, the ranking re-sorts, and the list, map pins and brief follow.");
+  $("#p-head").insertAdjacentHTML("beforeend", actions());
+  const base = rankBy(PRESETS.balanced.w);
+  const cur = O.slice().sort((a, b) => score(b) - score(a));
+  const rows = cur.map((o, i) => {
+    const d = base.indexOf(o.id) - i;
+    const dl = d > 0 ? `<span class="dl up" title="Up ${d} against balanced">▲ ${d}</span>` : d < 0 ? `<span class="dl dn" title="Down ${-d} against balanced">▼ ${-d}</span>` : `<span class="dl">–</span>`;
+    return `<div class="rk"><span class="pos">${i + 1}</span><span class="nm">${optLink(o)} <span class="g g${o.grade}">${o.grade}</span></span>
+      <div class="tr" aria-hidden="true"><div class="fl" style="width:${score(o)}%"></div></div><span class="val">${score(o)}</span>${dl}</div>`;
+  }).join("");
+  const wsum = PARTS.reduce((s, x) => s + W[x.key], 0) || 1;
+  $("#p-body").innerHTML = `
+    <div class="presets" role="group" aria-label="Client priority">${Object.entries(PRESETS).map(([k, v]) => `<button type="button" class="chip ${S.preset === k ? "on" : ""}" aria-pressed="${S.preset === k}" data-preset="${k}">${esc(v.label)}</button>`).join("")}</div>
+    <p class="lede" style="margin-top:8px">${esc(PRESETS[S.preset] ? PRESETS[S.preset].note : "Custom weights set on Compare all.")}</p>
+    <div class="wts">${PARTS.map(x => `<span title="${esc(x.of)}">${esc(x.label)} <b>${Math.round(W[x.key] / wsum * 100)}%</b></span>`).join("")}</div>
+    <h3>Ranking ${S.preset !== "balanced" ? "· arrows show the move against Balanced" : ""}</h3>
+    <div class="rks">${rows}</div>
+    <h3>Readiness against metro access</h3>
+    ${quadrantHTML()}
+    <p class="note">x: the deck's distance to the nearest metro station. y: handover against today (${esc(M.asOf.split("-").reverse().join("/"))}). A past handover date is placed below "now" until confirmed.</p>`;
+  wireQuadrant();
+}
+/* Scatter of the two parts a client asks about first. Two series (Grade A,
+   Grade B), validated colours, legend always shown, 2 px surface ring, a
+   hover and keyboard tooltip on every dot, and a table view. */
+function quadrantHTML() {
+  const Wd = 460, Hd = 326, L = 70, Rr = 16, T = 30, B = 40, pw = Wd - L - Rr, ph = Hd - T - B;
+  /* Domains padded so no dot sits on the frame: readiness 0.15-1.08, access 0-1.04. */
+  const X = (v) => L + v / 1.04 * pw, Y = (v) => T + (1.08 - v) / .93 * ph;
+  const xt = [[9300, "9 km"], [3000, "3 km"], [2000, "2 km"], [1000, "1 km"], [300, "300 m"]];
+  const yt = [[1, "Now"], [.85, "90 days"], [.7, "3 mo"], [.4, "6 mo"]];
+  const grid = xt.map(([m, l]) => `<line x1="${X(transitV(m))}" x2="${X(transitV(m))}" y1="${T}" y2="${T + ph}" class="gl"/><text x="${X(transitV(m))}" y="${T + ph + 16}" class="tk" text-anchor="middle">${l}</text>`).join("")
+    + yt.map(([v, l]) => `<line x1="${L}" x2="${L + pw}" y1="${Y(v)}" y2="${Y(v)}" class="gl"/><text x="${L - 6}" y="${Y(v) + 3.5}" class="tk" text-anchor="end">${l}</text>`).join("");
+  const q = `<text x="${L + pw - 4}" y="${T - 12}" class="ql" text-anchor="end">Ready and connected</text>
+    <text x="${L + 6}" y="${T - 12}" class="ql">Ready, cab-dependent</text>
+    <text x="${L + pw - 4}" y="${T + ph - 6}" class="ql" text-anchor="end">Connected, wait for handover</text>
+    <text x="${L + 6}" y="${T + ph - 6}" class="ql">Wait and cab-dependent</text>`;
+  const dots = O.slice().sort((a, b) => score(a) - score(b)).map(o => {
+    const p = scoreParts(o), cx = X(p.transit), cy = Y(p.ready);
+    return `<g class="qd" tabindex="0" role="button" data-q="${o.id}" aria-label="${esc(o.name)}, Grade ${o.grade}, ${esc(o.commuteDist)} to metro, handover ${esc(o.handover)}, fit ${score(o)}">
+      <circle cx="${cx}" cy="${cy}" r="15" class="hit"/><circle cx="${cx}" cy="${cy}" r="9.5" class="g${o.grade}"/>
+      <text x="${cx}" y="${cy + 3.4}" text-anchor="middle" class="dn">${o.n}</text></g>`;
+  }).join("");
+  const table = `<table class="ring-tbl" id="pm-table" hidden><thead><tr><th>Option</th><th>Grade</th><th>Metro (deck)</th><th>Handover</th><th>Fit</th></tr></thead><tbody>${
+    O.slice().sort((a, b) => score(b) - score(a)).map(o => `<tr><td>${optLink(o)}</td><td>${o.grade}</td><td>${esc(o.commuteDist)}</td><td>${esc(handoverText(o))}</td><td class="num">${score(o)}</td></tr>`).join("")}</tbody></table>`;
+  return `<div class="qwrap"><div class="qleg"><span><i class="sA"></i>Grade A</span><span><i class="sB"></i>Grade B</span><button type="button" class="act" data-tableview>Show as table</button></div>
+    <svg viewBox="0 0 ${Wd} ${Hd}" class="quad" role="img" aria-label="Scatter of options by readiness and metro access">${grid}
+      <line x1="${X(.6)}" x2="${X(.6)}" y1="${T}" y2="${T + ph}" class="mid"/><line x1="${L}" x2="${L + pw}" y1="${Y(.6)}" y2="${Y(.6)}" class="mid"/>${q}
+      <text x="${L + pw / 2}" y="${Hd - 4}" class="ax" text-anchor="middle">Closer to an open metro station →</text>
+      <text transform="translate(11 ${T + ph / 2}) rotate(-90)" class="ax" text-anchor="middle">Sooner handover →</text>${dots}</svg>
+    <div class="qtip" hidden></div></div>${table}`;
+}
+function wireQuadrant() {
+  const wrap = $(".qwrap"); if (!wrap) return;
+  const tip = wrap.querySelector(".qtip");
+  const show = (g) => {
+    const o = O.find(x => x.id === g.dataset.q), r = g.querySelector("circle.hit").getBoundingClientRect(), w = wrap.getBoundingClientRect();
+    tip.innerHTML = `<b>${String(o.n).padStart(2, "0")} ${esc(o.name)}</b><br>Grade ${o.grade} · ${esc(o.commuteDist)} to metro<br>Handover ${esc(o.handover)} · fit ${score(o)}`;
+    tip.hidden = false;
+    const left = Math.min(Math.max(r.left - w.left + r.width / 2 - 90, 0), w.width - 180);
+    tip.style.left = left + "px"; tip.style.top = (r.top - w.top - tip.offsetHeight - 6) + "px";
+  };
+  wrap.querySelectorAll(".qd").forEach(g => {
+    g.addEventListener("mouseenter", () => show(g)); g.addEventListener("focus", () => show(g));
+    g.addEventListener("mouseleave", () => { tip.hidden = true; }); g.addEventListener("blur", () => { tip.hidden = true; });
+    g.addEventListener("click", () => select(g.dataset.q, true));
+    g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(g.dataset.q, true); } });
+  });
+}
+
+/* ---------- mobile sheet ----------
+   On a phone the map fills the screen and the panel is a bottom sheet with
+   three stops: peek (option strip only), half, and full. Drag the grip or
+   tap it to cycle. */
+function setSheet(state) { S.sheet = state; document.body.dataset.sheet = state; }
+function wireSheet() {
+  setSheet("half");
+  const g = $("#sheet-grip"); if (!g) return;
+  let y0 = null, moved = false;
+  g.addEventListener("pointerdown", e => { y0 = e.clientY; moved = false; try { g.setPointerCapture(e.pointerId); } catch (x) {} });
+  g.addEventListener("pointermove", e => { if (y0 != null && Math.abs(e.clientY - y0) > 10) moved = true; });
+  g.addEventListener("pointerup", e => {
+    if (y0 == null) return; const dy = e.clientY - y0; y0 = null;
+    if (!moved) return;
+    if (dy < 0) setSheet(S.sheet === "peek" ? "half" : "full"); else setSheet(S.sheet === "full" ? "half" : "peek");
+  });
+  g.addEventListener("click", () => { if (moved) { moved = false; return; } setSheet(S.sheet === "half" ? "full" : "half"); });
+}
+
 /* ---------- Option ---------- */
 function renderOption(o) {
   const p = scoreParts(o), sc = score(o), c = catchment(o), k = amenKeys(o), f = fits(o);
   const zone = window.IND_ZONE_OF[o.micro];
   $("#p-head").innerHTML = `<button class="back" type="button">← Back to ${esc(TABS.find(t => t.key === S.tab).label)}</button>
     <div class="eyebrow">Option ${String(o.n).padStart(2, "0")} · ${esc(o.locality)} · ${esc(zone)}</div>
-    <h2>${esc(o.name)} <span class="g g${o.grade}" style="vertical-align:5px">Grade ${o.grade}</span></h2>`;
+    <h2>${esc(o.name)} <span class="g g${o.grade}" style="vertical-align:5px">Grade ${o.grade}</span></h2>${verdictHTML(o, p)}${actions()}`;
   const allAmen = Object.keys(window.IND_AMENITY_LABELS);
   const missing = allAmen.filter(a => !k.has(a) && a !== "firetank" && a !== "fnb");
   const stations = deckStations(o);
@@ -585,7 +835,7 @@ function renderOption(o) {
   const ringRows = c.map((r, i) => `<tr><td>≤ ${r.min} min <span class="note">(${r.km.toFixed(1)} km)</span></td><td class="num">${upTo(c, i, "edu")}</td><td class="num">${upTo(c, i, "res")}</td><td class="num">${upTo(c, i, "emp")}</td></tr>`).join("");
   const within = (kind, i) => c.slice(0, i + 1).flatMap(r => r[kind]).sort((a, b) => a.d - b.d);
   $("#p-body").innerHTML = `
-    <div class="hero"><img src="../media/indore/${o.photo}" alt="${esc(o.name)}"><span class="ph">Photo from deck page ${o.page}</span></div>
+    <div class="hero">${pic(o, "full")}<span class="ph">Photo from deck page ${o.page}</span></div>
     <div class="kpis">
       <div class="kpi"><div class="l">Super built-up</div><div class="v num">${inr(o.superArea)}</div><div class="s">SF</div></div>
       <div class="kpi"><div class="l">Carpet</div><div class="v num">${inr(o.carpetArea)}</div><div class="s">SF, ±3% ${f == null ? "" : `<span class="fit ${f ? "yes" : "no"}">${f ? "fits target" : "short of target"}</span>`}</div></div>
@@ -696,7 +946,7 @@ function renderTransit() {
     <h3>Buses</h3>
     ${factList(F.bus)}
     <h3>The deck's transit map</h3>
-    <figure><img src="../media/indore/${T.image}" alt="Deck page 4 public transport connectivity map"><figcaption>Deck page 4. "${esc(T.mapCaption)}" Legend: ${T.legend.map(esc).join("; ")}. Its station sequence does not match the real line; see Caveats.</figcaption></figure>`;
+    <figure>${figPic(T.image, "Deck page 4 public transport connectivity map")}<figcaption>Deck page 4. "${esc(T.mapCaption)}" Legend: ${T.legend.map(esc).join("; ")}. Its station sequence does not match the real line; see Caveats.</figcaption></figure>`;
 }
 
 /* ---------- Market ---------- */
@@ -713,7 +963,7 @@ function renderMarket() {
     <h3>What the deck's Super Corridor graphic claims</h3>
     <ul style="padding-left:18px;font-size:12.5px;line-height:1.6;margin:0">${SC.claims.map(x => `<li>${esc(x)}</li>`).join("")}</ul>
     <p class="note">Deck claims, not verified here. InfoBeans lists its office at Crystal IT Park, not on the corridor.</p>
-    <figure><img src="../media/indore/${SC.image}" alt="Deck page 5 Super Corridor map"><figcaption>Deck page 5, Super Corridor Indore.</figcaption></figure>
+    <figure>${figPic(SC.image, "Deck page 5 Super Corridor map")}<figcaption>Deck page 5, Super Corridor Indore.</figcaption></figure>
     <h3>Office market signals</h3>
     ${factList(F.market)}
     <h3>Madhya Pradesh incentives</h3>
@@ -759,8 +1009,8 @@ function renderDeck() {
     <tbody>${rows.map(r => `<tr><td class="num">${r[0]}</td><td>${esc(r[1])}</td><td>${r[2]}</td><td class="tick">✓</td></tr>`).join("")}</tbody></table>
     <p class="note">Every option field is carried over verbatim, typos included. Where two pages disagree, both are kept and the conflict is listed in Caveats.</p>
     <h3>Deck maps</h3>
-    <figure><img src="../media/indore/${window.IND_DECK_MARKET.transport.image}" alt="Deck page 4 map"><figcaption>Page 4, public transport connectivity map (illustrative).</figcaption></figure>
-    <figure><img src="../media/indore/${window.IND_DECK_MARKET.superCorridor.image}" alt="Deck page 5 map"><figcaption>Page 5, Super Corridor Indore.</figcaption></figure>`;
+    <figure>${figPic(window.IND_DECK_MARKET.transport.image, "Deck page 4 map")}<figcaption>Page 4, public transport connectivity map (illustrative).</figcaption></figure>
+    <figure>${figPic(window.IND_DECK_MARKET.superCorridor.image, "Deck page 5 map")}<figcaption>Page 5, Super Corridor Indore.</figcaption></figure>`;
 }
 
 /* ============================================================ compare == */
@@ -803,7 +1053,7 @@ function renderCompare() {
     <div style="overflow:auto"><table class="cmp"><thead><tr><th></th>${list.map(o => `<th data-open="${o.id}">${String(o.n).padStart(2, "0")} ${esc(o.name)}</th>`).join("")}</tr></thead>
     <tbody>${rows.map(([l, fn, b]) => `<tr><th>${esc(l)}</th>${list.map(o => `<td class="${b && b(o) ? "best" : ""}">${fn(o)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
   $("#cmp-body").querySelectorAll("[data-w]").forEach(r => r.addEventListener("input", e => {
-    W[e.target.dataset.w] = +e.target.value; renderCompare(); renderList(); if (S.sel || S.tab === "brief") renderPanel();
+    W[e.target.dataset.w] = +e.target.value; S.preset = "custom"; renderCompare(); renderList(); if (S.sel || S.tab === "brief") renderPanel();
     const again = $(`#cmp-body [data-w="${e.target.dataset.w}"]`); if (again) again.focus();
   }));
   $("#cmp-sort").addEventListener("change", e => { CMP_SORT = e.target.value; renderCompare(); });

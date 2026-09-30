@@ -33,3 +33,6 @@ osm2.xml
 
 # 4K PNG masters from the upscale pass — working files, served copies live alongside originals
 media/_enhanced/
+
+# Indore sign-in backdrop is copied in at build time (scripts/fetch-indore-backdrop.js)
+media/indore/backdrop-*.webp
