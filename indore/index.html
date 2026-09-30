@@ -19,6 +19,17 @@
 <link rel="icon" href="../autopilot-logo-trimmed.png">
 <link rel="preconnect" href="https://d8j0ntlcm91z4.cloudfront.net">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+/* Runs before anything else. The page loads its files by relative path, so
+   it only works at /indore/ (with the slash); at /indore the scripts 404 and
+   nothing runs. Send the visitor to the right address, and never leave an
+   access ID or password sitting in the address bar or history. */
+(function () {
+  var l = location;
+  if (!/\/$/.test(l.pathname)) { l.replace(l.pathname + "/" + l.hash); return; }
+  if (/[?&](username|password)=/i.test(l.search)) history.replaceState(null, "", l.pathname + l.hash);
+})();
+</script>
 <script src="../config.js?v=ind2"></script>
 <script src="./data.js?v=ind2"></script>
 <style>
@@ -455,7 +466,7 @@ svg.quad{width:100%;height:auto;display:block;background:#fff;border:1px solid v
       <p>Ten shortlisted buildings for a BPO / KPO / IT-ITeS floor, placed on the metro that opened this month, with talent catchment and priorities for every one.</p>
       <div class="gstats" id="g-stats"></div>
     </div>
-    <form class="box" id="g-form" autocomplete="on">
+    <form class="box" id="g-form" autocomplete="on" method="post" action="javascript:void(0)">
       <h2>Sign in</h2>
       <div class="sub">Use the access ID and password you were given.</div>
       <label for="g-id">Access ID</label>
