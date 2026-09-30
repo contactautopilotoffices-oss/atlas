@@ -101,6 +101,8 @@ button{font:inherit;color:inherit}
 #brand .t{font-family:var(--serif);font-size:18px;white-space:nowrap}
 #brand .s{font-family:var(--mono);font-size:10.5px;color:var(--mut);letter-spacing:.06em;white-space:nowrap}
 #tabs{display:flex;gap:2px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+#signout{flex:none;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 11px;font-size:12.5px;color:var(--mut);cursor:pointer;min-height:32px}
+#signout:hover{color:var(--ink);border-color:rgba(60,40,25,.3)}
 #tabs::-webkit-scrollbar{display:none}
 .tab{border:0;background:transparent;padding:8px 12px;border-radius:9px;cursor:pointer;color:var(--mut);font-size:13px;white-space:nowrap}
 .tab:hover{background:var(--line2);color:var(--ink)}
@@ -350,6 +352,8 @@ svg.quad{width:100%;height:auto;display:block;background:#fff;border:1px solid v
   #brand .s{display:none}
   #brand{gap:8px}
   #brand .logo{height:11px}
+  #signout{padding:7px 8px}
+  #signout span{display:none}
   #brand .t{font-size:16px}
   .tab{padding:7px 9px;font-size:12px}
   #map{inset:0;height:auto}
@@ -413,6 +417,7 @@ svg.quad{width:100%;height:auto;display:block;background:#fff;border:1px solid v
 <header id="top" class="pane">
   <div id="brand"><img class="logo" src="../autopilot-logo-trimmed.png" alt="Autopilot" width="319" height="44"><span class="t">Indore</span><span class="s">OFFICE STUDY · SEP 2026</span></div>
   <nav id="tabs" aria-label="Sections"></nav>
+  <button id="signout" type="button" aria-label="Sign out" data-hint="Sign out of the study on this device. You will need the ID and password again."><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 17l-5-5 5-5"/><path d="M5 12h11"/></svg><span>Sign out</span></button>
 </header>
 
 <aside id="board" class="pane" aria-label="Shortlisted options">

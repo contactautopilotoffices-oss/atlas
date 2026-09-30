@@ -358,6 +358,13 @@ function boot() {
   applyRoute(false);
   renderTabs(); renderFilters(); renderList(); renderPanel(); renderLayers();
   wireBoard(); wireSheet(); wireHints();
+  /* Sign out ends this tab's session and brings the sign-in screen back.
+     The root login keeps nothing for redirect clients, so there is nothing
+     else to clear. */
+  $("#signout").addEventListener("click", () => {
+    try { sessionStorage.removeItem("ind-auth"); sessionStorage.removeItem("atlas-handoff"); } catch (e) {}
+    location.replace(location.pathname);
+  });
   $("#sort").dataset.hint = "Order the list by fit, metro distance, size, handover, efficiency or deck order.";
   $("#t-area").dataset.hint = "Type the carpet area the client needs. Each option then shows whether it fits or falls short.";
   addEventListener("popstate", () => applyRoute(true));
