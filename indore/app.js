@@ -287,16 +287,19 @@ function initGate() {
 }
 /* The sign-in backdrop was generated with Higgsfield. The build copies it
    into media/indore/ (scripts/fetch-indore-backdrop.js); if that copy is
-   missing, the page falls back to Higgsfield's CDN, and if that fails too the
-   gradient under it simply shows. Phones get the portrait crop. */
+   missing, the page falls back to Higgsfield's CDN, and if that fails too, to
+   a deck photo stored with the site. Phones get the portrait crop. */
 const BACKDROP = {
   wide: { local: MEDIA + "backdrop-wide.webp", remote: "https://d8j0ntlcm91z4.cloudfront.net/user_3Fo7i4SvZozV6ke0Djuea827rgj/hf_20260930_052823_8e4eed0a-51d0-40fb-945e-8a78aeae19fb_min.webp" },
   tall: { local: MEDIA + "backdrop-tall.webp", remote: "https://d8j0ntlcm91z4.cloudfront.net/user_3Fo7i4SvZozV6ke0Djuea827rgj/hf_20260930_052821_229f2ecc-8cb5-4c46-89f6-e033184efa7c_min.webp" }
 };
+/* Last resort: a deck photo that ships with the site, so the sign-in page
+   always has an image even when the build copy and the CDN both fail. */
+const BACKDROP_SAFE = MEDIA + "scape-it-park.webp";
 function loadBackdrop() {
   const img = $("#g-bg"); if (!img) return;
   const b = matchMedia("(max-aspect-ratio: 3/4)").matches ? BACKDROP.tall : BACKDROP.wide;
-  const tries = [b.local, b.remote];
+  const tries = [b.local, b.remote, BACKDROP_SAFE];
   const next = () => { const u = tries.shift(); if (!u) { img.remove(); return; } img.src = u; };
   img.addEventListener("load", () => img.classList.add("on"));
   img.addEventListener("error", next);
