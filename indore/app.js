@@ -194,10 +194,17 @@ function scoreParts(o) {
     infra: INFRA.filter(x => k.has(x)).length / INFRA.length
   };
 }
-function score(o) {
+/* The fit score is shown rounded, but every ranking uses the exact value,
+   so two options that both read "83" still sit in a fixed, explainable
+   order (NRK 83.32 against Fortune Azure 83.30, for example). */
+function exact(o) {
   const p = scoreParts(o), tw = PARTS.reduce((s, x) => s + W[x.key], 0) || 1;
-  return Math.round(PARTS.reduce((s, x) => s + p[x.key] * W[x.key], 0) / tw * 100);
+  return PARTS.reduce((s, x) => s + p[x.key] * W[x.key], 0) / tw * 100;
 }
+const score = (o) => Math.round(exact(o));
+const byFit = (a, b) => exact(b) - exact(a);
+/* Options that show the same rounded score as `o`. */
+const levelWith = (o) => O.filter(x => x.id !== o.id && score(x) === score(o));
 
 /* ------------------------------------------------------------- presets --
    Priority mapping. A client rarely weighs everything equally; each preset
@@ -221,11 +228,12 @@ function setPreset(key) {
   const p = PRESETS[key]; if (!p) return;
   S.preset = key; Object.assign(W, p.w);
 }
-function scoreWith(o, w) {
+function exactWith(o, w) {
   const p = scoreParts(o), tw = PARTS.reduce((s, x) => s + w[x.key], 0) || 1;
-  return Math.round(PARTS.reduce((s, x) => s + p[x.key] * w[x.key], 0) / tw * 100);
+  return PARTS.reduce((s, x) => s + p[x.key] * w[x.key], 0) / tw * 100;
 }
-const rankBy = (w) => O.slice().sort((a, b) => scoreWith(b, w) - scoreWith(a, w)).map(o => o.id);
+const scoreWith = (o, w) => Math.round(exactWith(o, w));
+const rankBy = (w) => O.slice().sort((a, b) => exactWith(b, w) - exactWith(a, w)).map(o => o.id);
 
 /* --------------------------------------------------------------- state -- */
 const S = {
@@ -358,7 +366,7 @@ function boot() {
   booted = true;
   applyRoute(false);
   renderTabs(); renderFilters(); renderList(); renderPanel(); renderLayers();
-  wireBoard(); wireSheet(); wireHints();
+  wireBoard(); wireSheet(); wirePanes(); wireHints();
   /* Sign out ends this tab's session and brings the sign-in screen back.
      The root login keeps nothing for redirect clients, so there is nothing
      else to clear. */
@@ -383,7 +391,7 @@ function initMap() {
   const style = window.IND_MAP_STYLE || MAP_STYLE;
   map = new mapboxgl.Map({
     container: "map", style, center: M.center, zoom: M.zoom, pitch: innerWidth > 860 ? 35 : 0,
-    attributionControl: false, projection: "mercator", cooperativeGestures: false, antialias: true
+    attributionControl: false, projection: "mercator", cooperativeGestures: false, antialias: innerWidth > 860
   });
   if (style === MAP_STYLE) map.on("style.load", () => {
     for (const [k, v] of Object.entries(BASEMAP)) { try { map.setConfigProperty("basemap", k, v); } catch (e) {} }
@@ -431,13 +439,25 @@ async function copyLink(btn) {
 }
 
 function padding() {
-  if (innerWidth <= 860) {
+  const Wd = innerWidth, Hd = innerHeight;
+  let pad;
+  if (Wd <= 860) {
+    /* Phone: the panel is a bottom sheet in portrait and a right-hand panel
+       in landscape; keep the camera clear of whichever it is. */
     const sh = document.getElementById("panel").getBoundingClientRect();
-    return { top: 110, bottom: Math.max(60, innerHeight - sh.top + 120), left: 24, right: 24 };
+    pad = sh.left > Wd * .3
+      ? { top: 70, bottom: 90, left: 20, right: Wd - sh.left + 20 }
+      : { top: 110, bottom: Math.max(60, Hd - sh.top + 110), left: 24, right: 24 };
+  } else {
+    const b = document.getElementById("board").getBoundingClientRect(), p = document.getElementById("panel").getBoundingClientRect();
+    const l = document.getElementById("layers").getBoundingClientRect();
+    pad = { top: 100, bottom: Hd - l.top + 24, left: Math.max(30, b.right + 30), right: Math.max(30, Wd - p.left + 30) };
   }
-  const b = document.getElementById("board").getBoundingClientRect(), p = document.getElementById("panel").getBoundingClientRect();
-  const l = document.getElementById("layers").getBoundingClientRect();
-  return { top: 100, bottom: innerHeight - l.top + 24, left: b.right + 30, right: innerWidth - p.left + 30 };
+  /* Never ask for more margin than the map has room for (with the sheet
+     pulled up, Mapbox would otherwise refuse to fit). */
+  const squeeze = (a, c, room) => { const k = Math.min(1, room / (pad[a] + pad[c])); pad[a] *= k; pad[c] *= k; };
+  squeeze("top", "bottom", Hd - 80); squeeze("left", "right", Wd - 80);
+  return pad;
 }
 function fitAll(animate = true) {
   if (!map) return;
@@ -630,7 +650,7 @@ function renderFilters() {
 }
 function sorted() {
   const by = {
-    score: (a, b) => score(b) - score(a),
+    score: byFit,
     metro: (a, b) => a.commuteM - b.commuteM,
     area: (a, b) => b.superArea - a.superArea,
     handover: (a, b) => handoverRank(a) - handoverRank(b),
@@ -739,6 +759,7 @@ const shotBar = (o) => `<div class="shots" role="group" aria-label="Camera">${Ob
   <span class="prec ${o.precision}" data-hint="How exactly this option is placed on the map">${PRECISION_TEXT[o.precision] || "Position approximate"}</span></div>`;
 
 function select(id, fly, fromRoute) {
+  if (document.body.classList.contains("fold-panel")) setFold("panel", false);
   S.sel = id; S.hov = null; if (fly) S.shot = "close"; renderList(); renderPanel(); refreshMap();
   if (!fromRoute) pushRoute();
   if (innerWidth <= 860 && !fromRoute) setSheet("half");
@@ -748,6 +769,7 @@ function select(id, fly, fromRoute) {
 }
 
 function goTab(key) {
+  if (document.body.classList.contains("fold-panel")) setFold("panel", false);
   const had = S.sel; S.tab = key; S.sel = null;
   renderTabs(); renderList(); renderPanel(); refreshMap(); if (had) fitAll(); pushRoute();
   if (innerWidth <= 860) setSheet("half");
@@ -854,7 +876,7 @@ const optLink = (o) => `<a href="#" data-go="${o.id}">${String(o.n).padStart(2, 
 function renderBrief() {
   const tot = O.reduce((s, o) => s + o.superArea, 0), carpet = O.reduce((s, o) => s + o.carpetArea, 0);
   const ready = O.filter(o => o.handoverKind === "ready"), loi = O.filter(o => o.handoverKind === "loi90"), near = O.filter(o => o.commuteM <= 1000), gradeA = O.filter(o => o.grade === "A");
-  const ranked = O.slice().sort((a, b) => score(b) - score(a));
+  const ranked = O.slice().sort(byFit);
   head("Autopilot · Indore · Sep 2026", "Where to put a BPO / KPO floor in Indore",
     `Ten bare-shell options from the BD deck of 29 Sep 2026, placed on the real metro and checked against public sources. Pick any option to see its catchment.`);
   const top = ranked.slice(0, 3).map(o => {
@@ -903,11 +925,11 @@ const actions = () => `<div class="actions"><button type="button" class="act" da
 /* The few facts a client asks first, each one tap from its option. */
 function insightsHTML() {
   const top = (f) => O.slice().sort((a, b) => f(b) - f(a))[0];
-  const best = top(score), near = top(o => -o.commuteM), big = top(o => o.superArea), eff = top(o => o.efficiency), tal = top(talentRaw);
-  const readyNow = O.filter(o => o.handoverKind === "ready"), readyBest = readyNow.slice().sort((a, b) => score(b) - score(a))[0];
+  const best = top(exact), near = top(o => -o.commuteM), big = top(o => o.superArea), eff = top(o => o.efficiency), tal = top(talentRaw);
+  const readyNow = O.filter(o => o.handoverKind === "ready"), readyBest = readyNow.slice().sort(byFit)[0];
   const tc = catchment(tal);
   const cards = [
-    { l: "Best overall", v: best.name, s: `Fit ${score(best)}/100 on ${PRESETS[S.preset] ? PRESETS[S.preset].label.toLowerCase() : "custom"} weights`, go: best.id, tone: "lead" },
+    { l: "Best overall", v: best.name, s: `Fit ${score(best)}/100 on ${PRESETS[S.preset] ? PRESETS[S.preset].label.toLowerCase() : "custom"} weights${levelWith(best).length ? `, just ahead of ${levelWith(best)[0].name} (${exact(best).toFixed(2)} against ${exact(levelWith(best)[0]).toFixed(2)})` : ""}`, go: best.id, tone: "lead" },
     { l: "Closest to metro", v: near.commuteDist, s: `${near.name}, to ${deckStations(near)[0].stn ? deckStations(near)[0].stn.name : near.commute}`, go: near.id },
     { l: "Move in now", v: readyBest.name, s: `Best of ${readyNow.length} ready-now options`, go: readyBest.id },
     { l: "Largest space", v: `${inr(big.superArea)} SF`, s: `${big.name}, handover ${big.handover}`, go: big.id },
@@ -931,7 +953,7 @@ function renderPriorities() {
     "Pick the client's priority. The weights change, the ranking re-sorts, and the list, map pins and brief follow.");
   $("#p-head").insertAdjacentHTML("beforeend", actions());
   const base = rankBy(PRESETS.balanced.w);
-  const cur = O.slice().sort((a, b) => score(b) - score(a));
+  const cur = O.slice().sort(byFit);
   const rows = cur.map((o, i) => {
     const d = base.indexOf(o.id) - i;
     const dl = d > 0 ? `<span class="dl up" title="Up ${d} against balanced">▲ ${d}</span>` : d < 0 ? `<span class="dl dn" title="Down ${-d} against balanced">▼ ${-d}</span>` : `<span class="dl">–</span>`;
@@ -965,14 +987,14 @@ function quadrantHTML() {
     <text x="${L + 6}" y="${T - 12}" class="ql">Ready, cab-dependent</text>
     <text x="${L + pw - 4}" y="${T + ph - 6}" class="ql" text-anchor="end">Connected, wait for handover</text>
     <text x="${L + 6}" y="${T + ph - 6}" class="ql">Wait and cab-dependent</text>`;
-  const dots = O.slice().sort((a, b) => score(a) - score(b)).map(o => {
+  const dots = O.slice().sort((a, b) => exact(a) - exact(b)).map(o => {
     const p = scoreParts(o), cx = X(p.transit), cy = Y(p.ready);
     return `<g class="qd" tabindex="0" role="button" data-q="${o.id}" aria-label="${esc(o.name)}, Grade ${o.grade}, ${esc(o.commuteDist)} to metro, handover ${esc(o.handover)}, fit ${score(o)}">
       <circle cx="${cx}" cy="${cy}" r="15" class="hit"/><circle cx="${cx}" cy="${cy}" r="9.5" class="g${o.grade}"/>
       <text x="${cx}" y="${cy + 3.4}" text-anchor="middle" class="dn">${o.n}</text></g>`;
   }).join("");
   const table = `<table class="ring-tbl" id="pm-table" hidden><thead><tr><th>Option</th><th>Grade</th><th>Metro (deck)</th><th>Handover</th><th>Fit</th></tr></thead><tbody>${
-    O.slice().sort((a, b) => score(b) - score(a)).map(o => `<tr><td>${optLink(o)}</td><td>${o.grade}</td><td>${esc(o.commuteDist)}</td><td>${esc(handoverText(o))}</td><td class="num">${score(o)}</td></tr>`).join("")}</tbody></table>`;
+    O.slice().sort(byFit).map(o => `<tr><td>${optLink(o)}</td><td>${o.grade}</td><td>${esc(o.commuteDist)}</td><td>${esc(handoverText(o))}</td><td class="num">${score(o)}</td></tr>`).join("")}</tbody></table>`;
   return `<div class="qwrap"><div class="qleg"><span><i class="sA"></i>Grade A</span><span><i class="sB"></i>Grade B</span><button type="button" class="act" data-tableview>Show as table</button></div>
     <svg viewBox="0 0 ${Wd} ${Hd}" class="quad" role="img" aria-label="Scatter of options by readiness and metro access">${grid}
       <line x1="${X(.6)}" x2="${X(.6)}" y1="${T}" y2="${T + ph}" class="mid"/><line x1="${L}" x2="${L + pw}" y1="${Y(.6)}" y2="${Y(.6)}" class="mid"/>${q}
@@ -1003,18 +1025,93 @@ function wireQuadrant() {
    three stops: peek (option strip only), half, and full. Drag the grip or
    tap it to cycle. */
 function setSheet(state) { S.sheet = state; document.body.dataset.sheet = state; }
+/* The sheet follows the finger while dragged, then settles on the nearest
+   stop; a quick flick goes one stop in its direction. A tap toggles half and
+   full. */
+const SHEET_STOPS = () => ({ peek: 118, half: innerHeight * .52, full: innerHeight - 64 });
 function wireSheet() {
   setSheet("half");
   const g = $("#sheet-grip"); if (!g) return;
-  let y0 = null, moved = false;
-  g.addEventListener("pointerdown", e => { y0 = e.clientY; moved = false; try { g.setPointerCapture(e.pointerId); } catch (x) {} });
-  g.addEventListener("pointermove", e => { if (y0 != null && Math.abs(e.clientY - y0) > 10) moved = true; });
-  g.addEventListener("pointerup", e => {
-    if (y0 == null) return; const dy = e.clientY - y0; y0 = null;
+  let y0 = null, h0 = 0, t0 = 0, moved = false;
+  const end = (e) => {
+    if (y0 == null) return;
+    const dy = e.clientY - y0, fast = Math.abs(dy) / Math.max(1, performance.now() - t0) > .6; y0 = null;
+    document.body.classList.remove("sheet-drag"); document.body.style.removeProperty("--sheet-h");
     if (!moved) return;
-    if (dy < 0) setSheet(S.sheet === "peek" ? "half" : "full"); else setSheet(S.sheet === "full" ? "half" : "peek");
+    const stops = SHEET_STOPS(), order = ["peek", "half", "full"], h = h0 - dy;
+    let next = order.reduce((best, k) => Math.abs(stops[k] - h) < Math.abs(stops[best] - h) ? k : best, "half");
+    if (fast && next === S.sheet) next = order[Math.max(0, Math.min(2, order.indexOf(S.sheet) + (dy < 0 ? 1 : -1)))];
+    setSheet(next);
+  };
+  g.addEventListener("pointerdown", e => {
+    y0 = e.clientY; t0 = performance.now(); moved = false; h0 = $("#panel").getBoundingClientRect().height;
+    try { g.setPointerCapture(e.pointerId); } catch (x) {}
   });
+  g.addEventListener("pointermove", e => {
+    if (y0 == null) return;
+    if (!moved && Math.abs(e.clientY - y0) > 6) { moved = true; document.body.classList.add("sheet-drag"); }
+    if (moved) {
+      const st = SHEET_STOPS(), h = Math.max(st.peek - 30, Math.min(st.full, h0 - (e.clientY - y0)));
+      document.body.style.setProperty("--sheet-h", h + "px");
+    }
+  });
+  g.addEventListener("pointerup", end); g.addEventListener("pointercancel", end);
   g.addEventListener("click", () => { if (moved) { moved = false; return; } setSheet(S.sheet === "half" ? "full" : "half"); });
+}
+
+/* ------------------------------------------------ resizable panes (desktop)
+   As in Digitide: drag the inner edge of the options list or the details
+   panel (or focus it and use the arrow keys); double-click resets. Widths
+   are clamped so a width saved on a wide screen cannot swallow a narrow
+   one. The fold buttons (or [ and ]) slide a pane away for more map. */
+const PANE = { board: { v: "--board-w", min: 260, max: 520, def: 340 }, panel: { v: "--panel-w", min: 380, max: 820, def: 500 } };
+const store = { get: (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } }, set: (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} } };
+function setPaneW(k, px, save = true) {
+  const c = PANE[k], w = Math.round(Math.min(c.max, Math.max(c.min, px), innerWidth * .42));
+  document.documentElement.style.setProperty(c.v, w + "px");
+  if (save) store.set("ind-w-" + k, String(w));
+}
+function setFold(k, on) {
+  document.body.classList.toggle("fold-" + k, on);
+  store.set("ind-fold-" + k, on ? "1" : "");
+  const pane = document.getElementById(k);
+  if (on && pane.contains(document.activeElement)) document.querySelector(`.reopen-${k}`).focus();
+  /* Re-frame the map for the room the pane gave up or took back. */
+  clearTimeout(setFold.t);
+  setFold.t = setTimeout(() => { if (!map) return; if (S.sel) flyToOption(O.find(x => x.id === S.sel), S.shot); else fitAll(); }, 320);
+}
+function wirePanes() {
+  for (const k of ["board", "panel"]) {
+    const v = Number(store.get("ind-w-" + k)); if (v) setPaneW(k, v, false);
+    if (store.get("ind-fold-" + k) === "1" && innerWidth > 860) setFold(k, true);
+  }
+  document.querySelectorAll("[data-fold]").forEach(b => b.addEventListener("click", () => {
+    const k = b.dataset.fold; setFold(k, !document.body.classList.contains("fold-" + k));
+  }));
+  addEventListener("keydown", e => {
+    if (innerWidth <= 860 || e.metaKey || e.ctrlKey || e.altKey || /INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)) return;
+    if (e.key === "[") setFold("board", !document.body.classList.contains("fold-board"));
+    if (e.key === "]") setFold("panel", !document.body.classList.contains("fold-panel"));
+  });
+  document.querySelectorAll(".grip").forEach(g => {
+    const k = g.dataset.grip;
+    g.addEventListener("pointerdown", e => {
+      e.preventDefault();
+      const x0 = e.clientX, w0 = document.getElementById(k).getBoundingClientRect().width;
+      document.body.classList.add("resizing");
+      try { g.setPointerCapture(e.pointerId); } catch (x) {}
+      const move = (ev) => setPaneW(k, k === "board" ? w0 + ev.clientX - x0 : w0 - (ev.clientX - x0));
+      const up = () => { document.body.classList.remove("resizing"); g.removeEventListener("pointermove", move); g.removeEventListener("pointerup", up); g.removeEventListener("pointercancel", up); };
+      g.addEventListener("pointermove", move); g.addEventListener("pointerup", up); g.addEventListener("pointercancel", up);
+    });
+    g.addEventListener("dblclick", () => setPaneW(k, PANE[k].def));
+    g.addEventListener("keydown", e => {
+      if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+      e.preventDefault();
+      const w = document.getElementById(k).getBoundingClientRect().width, step = e.shiftKey ? 48 : 16;
+      setPaneW(k, w + (e.key === "ArrowRight" ? step : -step) * (k === "board" ? 1 : -1));
+    });
+  });
 }
 
 /* ---------- Option ---------- */
@@ -1044,7 +1141,7 @@ function renderOption(o) {
       <div class="kpi"><div class="l">Efficiency</div><div class="v">${o.efficiency}%</div><div class="s">as printed</div></div>
       <div class="kpi"><div class="l">Handover</div><div class="v" style="font-size:16px">${esc(o.handover)}</div><div class="s">${esc(handoverNote(o))}</div></div>
       <div class="kpi"><div class="l">Metro</div><div class="v">${esc(o.commuteDist)}</div><div class="s">${stations.map(s => esc(s.stn ? s.stn.name : s.label)).join(" / ")}${stations.every(s => s.stn && s.stn.open) ? " · open" : ""}</div></div>
-      <div class="kpi"><div class="l">Fit score</div><div class="v">${sc}<span style="font-size:13px;color:var(--mut)">/100</span></div><div class="s">rank ${O.slice().sort((a, b) => score(b) - score(a)).findIndex(x => x.id === o.id) + 1} of 10</div></div>
+      <div class="kpi"><div class="l">Fit score</div><div class="v">${sc}<span style="font-size:13px;color:var(--mut)">/100</span></div><div class="s">rank ${O.slice().sort(byFit).findIndex(x => x.id === o.id) + 1} of 10${levelWith(o).length ? `, level on ${sc} with ${esc(levelWith(o).map(x => x.name).join(", "))} (exact ${exact(o).toFixed(2)})` : ""}</div></div>
     </div>
 
     <h3>As the deck states it (page ${o.page})</h3>
@@ -1205,7 +1302,7 @@ function openCompare() {
 window.openCompare = openCompare;
 let CMP_SORT = "score";
 function renderCompare() {
-  const list = O.slice().sort((a, b) => CMP_SORT === "deck" ? a.n - b.n : score(b) - score(a));
+  const list = O.slice().sort((a, b) => CMP_SORT === "deck" ? a.n - b.n : exact(b) - exact(a));
   const best = (fn, hi = true) => { const v = list.map(fn); const t = hi ? Math.max(...v) : Math.min(...v); return (o) => fn(o) === t; };
   const rows = [
     ["Fit score", o => `<b>${score(o)}</b>/100`, best(score)],
