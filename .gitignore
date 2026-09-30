@@ -36,3 +36,6 @@ media/_enhanced/
 
 # God's Eye bundle, built by scripts/build-godseye.js on deploy
 godseye/dist/
+
+# Indore sign-in backdrop is copied in at build time (scripts/fetch-indore-backdrop.js)
+media/indore/backdrop-*.webp

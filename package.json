@@ -6,7 +6,7 @@
   "scripts": {
     "start": "python3 serve.py",
     "dev": "python3 serve.py",
-    "build": "node scripts/build-config.js && node scripts/build-godseye.js",
+    "build": "node scripts/build-config.js && node scripts/build-godseye.js && node scripts/fetch-indore-backdrop.js",
     "godseye": "node scripts/build-godseye.js && node scripts/godseye-dev.js",
     "build:godseye": "node scripts/build-godseye.js"
   },
