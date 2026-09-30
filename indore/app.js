@@ -358,11 +358,30 @@ function boot() {
      the route and the panels that now exist. */
   if (map && map.getSource("options")) { refreshMap(); if (S.sel) select(S.sel, true, true); else fitAll(false); }
 }
+/* Mapbox Standard, the same basemap as the main ATLAS map: real landmarks,
+   metro and transit labels, and 3D buildings once you zoom in. The faded
+   theme keeps it quiet enough for the pins to lead. */
+const MAP_STYLE = "mapbox://styles/mapbox/standard";
+const BASEMAP = { lightPreset: "day", theme: "faded", showPointOfInterestLabels: true, showTransitLabels: true, showPlaceLabels: true, showRoadLabels: true, show3dObjects: true };
 function initMap() {
   mapboxgl.accessToken = window.MAPBOX_TOKEN;
+  const style = window.IND_MAP_STYLE || MAP_STYLE;
   map = new mapboxgl.Map({
-    container: "map", style: window.IND_MAP_STYLE || "mapbox://styles/mapbox/light-v11",
-    center: M.center, zoom: M.zoom, attributionControl: false, projection: "mercator", cooperativeGestures: false
+    container: "map", style, center: M.center, zoom: M.zoom, pitch: innerWidth > 860 ? 35 : 0,
+    attributionControl: false, projection: "mercator", cooperativeGestures: false, antialias: true
+  });
+  if (style === MAP_STYLE) map.on("style.load", () => {
+    for (const [k, v] of Object.entries(BASEMAP)) { try { map.setConfigProperty("basemap", k, v); } catch (e) {} }
+  });
+  /* If Mapbox refuses the key (for example a token locked to the live domain
+     and opened on a preview address), say so on the map instead of leaving a
+     blank background. */
+  let told = false;
+  map.on("error", (e) => {
+    const st = e && e.error && e.error.status;
+    if (told || (st !== 401 && st !== 403)) return;
+    told = true;
+    $("#map").insertAdjacentHTML("beforeend", `<div class="nomap warn">Mapbox did not accept the map key on this address, so the map cannot load here. Everything else on the page still works.</div>`);
   });
   map.addControl(new mapboxgl.AttributionControl({ compact: true }), "bottom-right");
   map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "bottom-right");
