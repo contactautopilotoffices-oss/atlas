@@ -425,7 +425,12 @@ function enterExperience(){
   const pass = document.getElementById("gatePass").value.trim();
   const client = lookupClient(id);
   if(client && normId(pass) === normId(client.pass)){
-    if(client.redirect){ window.location.href = client.redirect; return; }
+    if(client.redirect){
+      /* Hand the sign-in over to the target app for this tab, so a separately
+         gated app (e.g. /indore/) does not ask for the same credentials twice. */
+      try{ sessionStorage.setItem("atlas-handoff", client.redirect); }catch(e){}
+      window.location.href = client.redirect; return;
+    }
     try{ localStorage.setItem(LS_KEY, JSON.stringify({id, slug: client.slug, t:Date.now()})); }catch(e){}
     fadeOut(gate);
     startAppForSlug(client.slug);

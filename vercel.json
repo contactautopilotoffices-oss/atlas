@@ -27,6 +27,19 @@
       ]
     },
     {
+      "source": "/indore/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, must-revalidate"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
+      ]
+    },
+    {
       "source": "/config.js",
       "headers": [
         {

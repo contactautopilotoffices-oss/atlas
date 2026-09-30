@@ -14,5 +14,7 @@ window.CLIENT_MANIFEST = {
      own gate. It is listed here with a `redirect` rather than a `slug` so that
      signing in at the site root sends you there instead of failing with
      "Invalid Demo ID", which is what happened when the root URL was tried. */
-  "DIGITIDE-GRP":{ redirect: "/digitide/",  pass: "K2SY-2K5J" }
+  "DIGITIDE-GRP":{ redirect: "/digitide/",  pass: "K2SY-2K5J" },
+  /* Indore office study, a separate app at /indore/ with its own gate. */
+  "INDORE-AP":   { redirect: "/indore/",    pass: "UWT8-PJZ3" }
 };
