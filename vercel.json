@@ -93,6 +93,21 @@
       ],
       "destination": "https://atlas.autopilotoffices.com/godseye/",
       "permanent": false
+    },
+    {
+      "source": "/indore",
+      "destination": "/indore/",
+      "permanent": true
+    },
+    {
+      "source": "/digitide",
+      "destination": "/digitide/",
+      "permanent": true
+    },
+    {
+      "source": "/godseye",
+      "destination": "/godseye/",
+      "permanent": true
     }
   ]
 }
