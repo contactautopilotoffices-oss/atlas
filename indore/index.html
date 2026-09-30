@@ -81,12 +81,9 @@ button{font:inherit;color:inherit}
 #gate button{width:100%;padding:13px;border:0;border-radius:10px;background:var(--ink);color:var(--paper);font-weight:600;cursor:pointer;font-size:14px}
 #gate button:hover{background:#3d2c20}
 #gate .err{color:var(--bad);font-size:12px;min-height:16px;margin-top:9px}
-#gate .conf{margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:11px;color:var(--dim);line-height:1.5}
-#gate .gfoot{position:absolute;right:16px;bottom:10px;font-family:var(--mono);font-size:10px;color:rgba(247,242,234,.55);letter-spacing:.06em}
 @media (max-width:860px){
   #gate .gwrap{grid-template-columns:1fr;gap:22px;padding:36px 18px 48px;align-content:end}
   #gate .shade{background:linear-gradient(180deg,rgba(24,16,11,.66) 0%,rgba(24,16,11,.74) 45%,rgba(24,16,11,.92) 100%)}
-  #gate .gfoot{position:relative;right:auto;bottom:auto;text-align:center;padding:0 18px 16px;margin-top:-30px}
   #gate .eyebrow{margin-top:14px}
   #gate .gcopy p{font-size:14px}
 }
@@ -167,10 +164,11 @@ table.spec td{padding:7px 0;border-bottom:1px solid var(--line2);vertical-align:
 .am span{font-size:11.5px;border:1px solid var(--line);background:#fff;padding:3px 8px;border-radius:6px}
 .am span.miss{color:var(--dim);background:transparent;border-style:dashed;text-decoration:line-through}
 .bars{display:flex;flex-direction:column;gap:7px}
-.bar{display:grid;grid-template-columns:120px 1fr 52px;gap:8px;align-items:center;font-size:12px}
+.bar{display:grid;grid-template-columns:120px 1fr auto;gap:10px;align-items:center;font-size:12px}
 .bar .tr{height:7px;background:var(--line2);border-radius:4px;overflow:hidden}
 .bar .fl{height:100%;background:var(--acc2);border-radius:4px}
-.bar .val{font-family:var(--mono);font-size:11px;text-align:right;color:var(--mut)}
+/* The score stays on one line: "15.3 / 25", never split across two. */
+.bar .val{font-family:var(--mono);font-size:11px;text-align:right;color:var(--mut);white-space:nowrap;min-width:64px;font-variant-numeric:tabular-nums}
 .note{font-size:12px;color:var(--mut);line-height:1.5}
 .flag{border-left:3px solid var(--warn);background:rgba(183,121,31,.07);padding:9px 11px;border-radius:0 9px 9px 0;margin:8px 0;font-size:12.5px;line-height:1.5}
 .flag.high{border-color:var(--bad);background:rgba(178,59,42,.07)}
@@ -406,10 +404,8 @@ svg.quad{width:100%;height:auto;display:block;background:#fff;border:1px solid v
       <input id="g-pw" name="password" type="password" autocomplete="current-password" required/>
       <button id="g-go" type="submit">Open the study</button>
       <div class="err" id="g-err" role="alert"></div>
-      <div class="conf">Confidential. Prepared from the Autopilot BD deck of 29 Sep 2026, checked against public sources on 30 Sep 2026.</div>
     </form>
   </div>
-  <div class="gfoot">Backdrop generated with Higgsfield</div>
 </div>
 
 <div id="map" aria-label="Map of Indore office options"></div>
