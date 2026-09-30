@@ -12,7 +12,6 @@
                    option as well as for the city
      transit       the real metro, as opened on 6 Sep 2026, beside what the
                    deck says about it
-     caveats       every place the deck contradicts itself or the record
 
    Files: data.js holds every fact and says where each came from. This file
    only reads it; it never invents a number that is not derived on screen.
@@ -248,7 +247,6 @@ const TABS = [
   { key: "talent", label: "Talent & catchment" },
   { key: "transit", label: "Transit" },
   { key: "market", label: "Market & incentives" },
-  { key: "caveats", label: "Caveats", count: () => window.IND_CAVEATS.filter(c => c.sev === "high").length },
   { key: "deck", label: "Deck map" },
   { key: "compare", label: "Compare all" }
 ];
@@ -644,7 +642,7 @@ function renderList() {
   $("#b-area").textContent = `${inr(shown.reduce((s, o) => s + o.superArea, 0))} SF super`;
   $("#list").innerHTML = sorted().map(o => {
     const f = fits(o);
-    return `<button class="card ${S.sel === o.id ? "sel" : ""} ${passes(o) ? "" : "dim"}" data-id="${o.id}" role="listitem" type="button" data-hint="${esc(`Open ${o.name}: the map flies in, the other options fade back, and the full spec, catchment and caveats open in the panel.`)}">
+    return `<button class="card ${S.sel === o.id ? "sel" : ""} ${passes(o) ? "" : "dim"}" data-id="${o.id}" role="listitem" type="button" data-hint="${esc(`Open ${o.name}: the map flies in, the other options fade back, and the full spec and catchment open in the panel.`)}">
       ${pic(o, "thumb")}
       <div>
         <div class="nm"><span class="no">${String(o.n).padStart(2, "0")}</span>${esc(o.name)}</div>
@@ -790,15 +788,12 @@ const GUIDE = {
   market: { hint: "Rents, micro-markets and the MP IT policy incentives.",
     items: ["Super Corridor against the SBD, with the pros and cons of each.",
       "Rent ranges and the state incentives an IT or ITeS tenant can claim, each with source and date."] },
-  caveats: { hint: "Everything to double-check before a client relies on it.",
-    items: ["Sorted by weight: the red-edged items at the top can change a decision, the rest need a call to confirm or are minor.",
-      "Where a caveat is about one option, click the option name to open it."] },
   deck: { hint: "Where each of the 19 deck pages lives in this app.",
     items: ["Every page of the BD deck, and the tab or option where its content now sits, so nothing from the deck is lost."] },
   compare: { hint: "All ten options side by side, with weights you can adjust." },
   option: { items: ["The map flies down to the building. Other options and far-away places fade back so this one stands out.",
       "Use Close-up, Street and Catchment to change the camera. The label beside them says how exactly the building is placed.",
-      "Below: the deck's specs word for word, the fit score broken into parts, who is within 15, 30 and 45 minutes, what is missing and any caveats.",
+      "Below: the deck's specs word for word, the fit score broken into parts, who is within 15, 30 and 45 minutes, and what is missing.",
       "Back returns to the section you came from."] }
 };
 const LAYER_HINT = { zones: "CBD, SBD and Super Corridor outlines.", metro: "The Yellow Line: open stations solid, planned ones dashed.",
@@ -844,7 +839,7 @@ function wireHints() {
 function renderPanel() {
   renderTabs();
   if (S.sel) renderOption(O.find(x => x.id === S.sel));
-  else ({ brief: renderBrief, priorities: renderPriorities, talent: renderTalent, transit: renderTransit, market: renderMarket, caveats: renderCaveats, deck: renderDeck }[S.tab] || renderBrief)();
+  else ({ brief: renderBrief, priorities: renderPriorities, talent: renderTalent, transit: renderTransit, market: renderMarket, deck: renderDeck }[S.tab] || renderBrief)();
   $("#p-body").insertAdjacentHTML("afterbegin", introCard(S.sel ? "option" : S.tab));
 }
 const head = (eyebrow, title, lede) => { $("#p-head").innerHTML = `<div class="eyebrow">${eyebrow}</div><h2>${title}</h2>${lede ? `<div class="lede">${lede}</div>` : ""}`; };
@@ -890,9 +885,6 @@ function renderBrief() {
     <h3>Highest fit today · ${esc(PRESETS[S.preset] ? PRESETS[S.preset].label : "custom weights")}</h3>
     <ol style="padding-left:18px;margin:0;line-height:1.5;font-size:13px">${top}</ol>
     <p class="note">Fit score weighs metro access, readiness, talent reach, scale, efficiency, grade, parking and listed infrastructure. Re-rank by the client's priority on <a href="#" data-tab="priorities">Priorities</a>.</p>
-    <h3>Read this first</h3>
-    ${window.IND_CAVEATS.filter(c => c.sev === "high").map(c => `<div class="flag high"><b>${esc(c.title)}</b>${esc(c.text)}</div>`).join("")}
-    <p class="note"><a href="#" data-tab="caveats">All ${window.IND_CAVEATS.length} caveats</a></p>
     <h3>The nine requirement lenses (deck page 3)</h3>
     <div class="lens">${window.IND_LENSES.map(l => `<div class="l"><b>${esc(l.label)}</b>${esc(lensAns[l.key])}</div>`).join("")}</div>
     <h3>Micro-markets in one line each</h3>
@@ -910,26 +902,23 @@ function insightsHTML() {
   const top = (f) => O.slice().sort((a, b) => f(b) - f(a))[0];
   const best = top(score), near = top(o => -o.commuteM), big = top(o => o.superArea), eff = top(o => o.efficiency), tal = top(talentRaw);
   const readyNow = O.filter(o => o.handoverKind === "ready"), readyBest = readyNow.slice().sort((a, b) => score(b) - score(a))[0];
-  const tc = catchment(tal), cav = window.IND_CAVEATS.filter(c => c.sev === "high");
+  const tc = catchment(tal);
   const cards = [
     { l: "Best overall", v: best.name, s: `Fit ${score(best)}/100 on ${PRESETS[S.preset] ? PRESETS[S.preset].label.toLowerCase() : "custom"} weights`, go: best.id, tone: "lead" },
     { l: "Closest to metro", v: near.commuteDist, s: `${near.name}, to ${deckStations(near)[0].stn ? deckStations(near)[0].stn.name : near.commute}`, go: near.id },
     { l: "Move in now", v: readyBest.name, s: `Best of ${readyNow.length} ready-now options`, go: readyBest.id },
     { l: "Largest space", v: `${inr(big.superArea)} SF`, s: `${big.name}, handover ${big.handover}`, go: big.id },
     { l: "Most efficient", v: `${eff.efficiency}%`, s: `${eff.name}, carpet to super`, go: eff.id },
-    { l: "Deepest talent reach", v: tal.name, s: `${upTo(tc, 1, "edu")} institutions, ${upTo(tc, 1, "res")} belts in 30 min`, go: tal.id },
-    { l: "Watch out", v: `${cav.length} decision-changing caveats`, s: cav[0].title, tab: "caveats", tone: "warn" }
+    { l: "Deepest talent reach", v: tal.name, s: `${upTo(tc, 1, "edu")} institutions, ${upTo(tc, 1, "res")} belts in 30 min`, go: tal.id }
   ];
-  return `<div class="ins" role="list">${cards.map(c => `<button type="button" role="listitem" class="in ${c.tone || ""}" ${c.go ? `data-go="${c.go}"` : `data-tab="${c.tab}"`} data-hint="${c.go ? "Open this option: the map flies in and its details open." : "Open the Caveats section."}">
+  return `<div class="ins" role="list">${cards.map(c => `<button type="button" role="listitem" class="in ${c.tone || ""}" ${c.go ? `data-go="${c.go}"` : `data-tab="${c.tab}"`} data-hint="Open this option: the map flies in and its details open.">
     <span class="l">${esc(c.l)}</span><span class="v">${esc(c.v)}</span><span class="s">${esc(c.s)}</span></button>`).join("")}</div>`;
 }
 /* Strengths are parts scoring 85% or more, watch-outs 35% or less, plus the
-   option's own caveats. Derived, never hand-written. */
+   Derived, never hand-written. */
 function verdictHTML(o, p) {
   const good = PARTS.filter(x => p[x.key] >= .85).map(x => x.label);
   const weak = PARTS.filter(x => p[x.key] <= .35).map(x => x.label);
-  const cav = window.IND_CAVEATS.filter(x => x.about === o.id).length;
-  if (cav) weak.push(`${cav} caveat${cav > 1 ? "s" : ""}`);
   return `<div class="verdict">${good.map(g => `<span class="vd up">✓ ${esc(g)}</span>`).join("")}${weak.map(w => `<span class="vd dn">! ${esc(w)}</span>`).join("")}</div>`;
 }
 
@@ -1041,7 +1030,6 @@ function renderOption(o) {
     { name: "Rajwada (old CBD)", p: { lat: 22.7186, lng: 75.8553 } },
     { name: "Bhawarkua student belt", p: window.IND_PLACES.find(x => x.id === "bhawarkua") }
   ].map(a => ({ ...a, d: km(o, a.p) }));
-  const cav = window.IND_CAVEATS.filter(x => x.about === o.id);
   const headroom = o.buildingTotal - o.superArea;
   const ringRows = c.map((r, i) => `<tr><td>≤ ${r.min} min <span class="note">(${r.km.toFixed(1)} km)</span></td><td class="num">${upTo(c, i, "edu")}</td><td class="num">${upTo(c, i, "res")}</td><td class="num">${upTo(c, i, "emp")}</td></tr>`).join("");
   const within = (kind, i) => c.slice(0, i + 1).flatMap(r => r[kind]).sort((a, b) => a.d - b.d);
@@ -1055,7 +1043,6 @@ function renderOption(o) {
       <div class="kpi"><div class="l">Metro</div><div class="v">${esc(o.commuteDist)}</div><div class="s">${stations.map(s => esc(s.stn ? s.stn.name : s.label)).join(" / ")}${stations.every(s => s.stn && s.stn.open) ? " · open" : ""}</div></div>
       <div class="kpi"><div class="l">Fit score</div><div class="v">${sc}<span style="font-size:13px;color:var(--mut)">/100</span></div><div class="s">rank ${O.slice().sort((a, b) => score(b) - score(a)).findIndex(x => x.id === o.id) + 1} of 10</div></div>
     </div>
-    ${cav.map(x => `<div class="flag ${x.sev}"><b>${esc(x.title)}</b>${esc(x.text)}</div>`).join("")}
 
     <h3>As the deck states it (page ${o.page})</h3>
     <table class="spec">
@@ -1157,7 +1144,7 @@ function renderTransit() {
     <h3>Buses</h3>
     ${factList(F.bus)}
     <h3>The deck's transit map</h3>
-    <figure>${figPic(T.image, "Deck page 4 public transport connectivity map")}<figcaption>Deck page 4. "${esc(T.mapCaption)}" Legend: ${T.legend.map(esc).join("; ")}. Its station sequence does not match the real line; see Caveats.</figcaption></figure>`;
+    <figure>${figPic(T.image, "Deck page 4 public transport connectivity map")}<figcaption>Deck page 4. "${esc(T.mapCaption)}" Legend: ${T.legend.map(esc).join("; ")}. Its station sequence does not match the real line.</figcaption></figure>`;
 }
 
 /* ---------- Market ---------- */
@@ -1183,23 +1170,6 @@ function renderMarket() {
     ${factList(F.living.filter(x => !/night/i.test(x.k)))}`;
 }
 
-/* ---------- Caveats ---------- */
-function renderCaveats() {
-  head("Caveats", "Before anyone signs an LOI", "Every place the deck contradicts itself, has gone out of date, or leaves a gap. High means it changes a decision.");
-  const order = { high: 0, medium: 1, low: 2 };
-  $("#p-body").innerHTML = window.IND_CAVEATS.slice().sort((a, b) => order[a.sev] - order[b.sev]).map(c => {
-    const o = O.find(x => x.id === c.about);
-    return `<div class="flag ${c.sev}"><b>${esc(c.title)}</b>${esc(c.text)}${o ? `<br>${optLink(o)}` : ""}${c.src ? ` · ${cite(c.src)}` : ""}</div>`;
-  }).join("") + `<h3>Open questions for the landlords</h3>
-    <ul style="padding-left:18px;font-size:12.5px;line-height:1.6">
-      <li>Rent, CAM, escalation, lock-in and rent-free fit-out period for every option</li>
-      <li>DG capacity and feeder history (only some options list power backup)</li>
-      <li>Occupancy certificate status for Fortune Azure, Princes’ Midtown Crest and the under-construction buildings</li>
-      <li>Dedicated car and two-wheeler parks in writing, and night-time cab bays</li>
-      <li>Whether "All floors available" means the whole office stack or specific floors</li>
-    </ul>`;
-}
-
 /* ---------- Deck coverage ---------- */
 function renderDeck() {
   head("Deck map", "Every page of the deck, and where it lives here", `${esc(M.deck)}. ${M.deckPages} pages.`);
@@ -1207,7 +1177,7 @@ function renderDeck() {
     [1, "Cover: Market overview + initial inventory options, Indore Commercial Real Estate", "Header and gate"],
     [2, "About our company", "Gate and header"],
     [3, "Here's how we understand your requirements: nine lenses", `<a href="#" data-tab="brief">Brief</a> (each lens answered)`],
-    [4, "Public transport & accessibility: micro-market access, 3-shift note, transport map", `<a href="#" data-tab="transit">Transit</a>, map layers, <a href="#" data-tab="caveats">Caveats</a>`],
+    [4, "Public transport & accessibility: micro-market access, 3-shift note, transport map", `<a href="#" data-tab="transit">Transit</a>, map layers`],
     [5, "Super Corridor · PBD: advantages, challenges, corridor graphic", `<a href="#" data-tab="market">Market</a>, PBD zone on the map`],
     [6, "Shortlisted Office Options (Indore)", "Options list"],
     [7, "Key Points Mapping: nearest commute, distance, super built-up, efficiency", `Every option card and <a href="#" onclick="openCompare();return false">Compare all</a>`],
@@ -1218,7 +1188,7 @@ function renderDeck() {
   $("#p-body").innerHTML = `
     <table class="cov"><thead><tr><th>Page</th><th>What it says</th><th>Where</th><th></th></tr></thead>
     <tbody>${rows.map(r => `<tr><td class="num">${r[0]}</td><td>${esc(r[1])}</td><td>${r[2]}</td><td class="tick">✓</td></tr>`).join("")}</tbody></table>
-    <p class="note">Every option field is carried over verbatim, typos included. Where two pages disagree, both are kept and the conflict is listed in Caveats.</p>
+    <p class="note">Every option field is carried over verbatim, typos included. Where two pages disagree, both are kept.</p>
     <h3>Deck maps</h3>
     <figure>${figPic(window.IND_DECK_MARKET.transport.image, "Deck page 4 map")}<figcaption>Page 4, public transport connectivity map (illustrative).</figcaption></figure>
     <figure>${figPic(window.IND_DECK_MARKET.superCorridor.image, "Deck page 5 map")}<figcaption>Page 5, Super Corridor Indore.</figcaption></figure>`;
