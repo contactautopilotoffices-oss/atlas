@@ -230,7 +230,7 @@ const rankBy = (w) => O.slice().sort((a, b) => scoreWith(b, w) - scoreWith(a, w)
 
 /* --------------------------------------------------------------- state -- */
 const S = {
-  tab: "brief", sel: null, sort: "score", target: null, preset: "balanced", sheet: "half",
+  tab: "brief", sel: null, hov: null, shot: "close", sort: "score", target: null, preset: "balanced", sheet: "half",
   filters: new Set(),
   layers: { zones: true, metro: true, walk: false, bus: true, edu: true, emp: true, res: true, rings: true }
 };
@@ -307,10 +307,15 @@ function loadBackdrop() {
 
 /* ================================================================ map === */
 let map;
+/* Focus levels for the pins: 2 = the option open or hovered, 1 = normal,
+   0.5 = pushed back because another option has the focus, 0 = filtered out.
+   One number drives size, opacity and labels, so the pin being discussed
+   always reads first and the rest recede, as on the main ATLAS map. */
+const focusOf = (o) => (S.sel === o.id || S.hov === o.id) ? 2 : !passes(o) ? 0 : (S.sel || S.hov) ? .5 : 1;
 const optionFC = () => ({ type: "FeatureCollection", features: O.map(o => ({
   type: "Feature", id: o.n, geometry: { type: "Point", coordinates: [o.lng, o.lat] },
   properties: { id: o.id, n: String(o.n).padStart(2, "0"), name: o.name, grade: o.grade,
-    dim: passes(o) ? 0 : 1, sel: S.sel === o.id ? 1 : 0, fit: fits(o) === false ? 0 : 1 } })) });
+    dim: passes(o) ? 0 : 1, sel: S.sel === o.id ? 1 : 0, fit: fits(o) === false ? 0 : 1, foc: focusOf(o) } })) });
 
 function ringFC() {
   const o = O.find(x => x.id === S.sel);
@@ -352,7 +357,9 @@ function boot() {
   booted = true;
   applyRoute(false);
   renderTabs(); renderFilters(); renderList(); renderPanel(); renderLayers();
-  wireBoard(); wireSheet();
+  wireBoard(); wireSheet(); wireHints();
+  $("#sort").dataset.hint = "Order the list by fit, metro distance, size, handover, efficiency or deck order.";
+  $("#t-area").dataset.hint = "Type the carpet area the client needs. Each option then shows whether it fits or falls short.";
   addEventListener("popstate", () => applyRoute(true));
   /* The map may already be up from behind the gate: bring it in line with
      the route and the panels that now exist. */
@@ -429,7 +436,7 @@ function fitAll(animate = true) {
   const b = new mapboxgl.LngLatBounds();
   O.filter(passes).forEach(o => b.extend([o.lng, o.lat]));
   if (b.isEmpty()) return;
-  map.fitBounds(b, { padding: padding(), maxZoom: 13.5, duration: animate ? 700 : 0 });
+  map.fitBounds(b, { padding: padding(), maxZoom: 13.5, pitch: innerWidth > 860 ? 35 : 0, bearing: 0, duration: animate && !REDUCED() ? 1100 : 0 });
 }
 
 function addLayers() {
@@ -493,21 +500,29 @@ function addLayers() {
     paint: { "text-color": ["get", "color"], "text-halo-color": "#fff", "text-halo-width": 1.3 } });
 
   map.addSource("options", { type: "geojson", data: optionFC() });
-  add({ id: "opt-halo", type: "circle", source: "options", filter: ["==", ["get", "sel"], 1], paint: {
-    "circle-radius": 22, "circle-color": "#a3502c", "circle-opacity": .18, "circle-stroke-color": "#a3502c", "circle-stroke-width": 1.5 } });
+  const gradeCol = ["case", ["==", ["get", "grade"], "A"], "#a3502c", "#2f6f9f"];
+  const foc = ["get", "foc"];
+  add({ id: "opt-halo", type: "circle", source: "options", filter: ["==", foc, 2], paint: {
+    "circle-radius": 24, "circle-color": gradeCol, "circle-opacity": .16, "circle-stroke-color": gradeCol, "circle-stroke-width": 2,
+    "circle-stroke-opacity": .75, "circle-pitch-alignment": "map" } });
   add({ id: "opt", type: "circle", source: "options", paint: {
-    "circle-radius": ["case", ["==", ["get", "sel"], 1], 13, 11],
-    "circle-color": ["case", ["==", ["get", "grade"], "A"], "#a3502c", "#2f6f9f"],
-    "circle-stroke-color": "#fff", "circle-stroke-width": 2,
-    "circle-opacity": ["case", ["==", ["get", "dim"], 1], .3, ["==", ["get", "fit"], 0], .45, 1],
-    "circle-stroke-opacity": ["case", ["==", ["get", "dim"], 1], .3, 1] } });
+    "circle-radius": ["case", ["==", foc, 2], 15, ["==", foc, 1], 11, 8],
+    "circle-color": gradeCol,
+    "circle-stroke-color": "#fff", "circle-stroke-width": ["case", ["==", foc, 2], 3, 2],
+    "circle-opacity": ["case", ["==", foc, 2], 1, ["==", foc, 0], .18, ["==", foc, .5], .38, ["==", ["get", "fit"], 0], .45, 1],
+    "circle-stroke-opacity": ["case", ["==", foc, 0], .25, ["==", foc, .5], .5, 1] } });
   map.addSource("options-lbl", { type: "geojson", data: optionFC() });
-  add({ id: "opt-num", type: "symbol", source: "options-lbl", layout: { "text-field": ["get", "n"], "text-size": 10.5, "text-allow-overlap": true,
+  add({ id: "opt-num", type: "symbol", source: "options-lbl", layout: { "text-field": ["get", "n"],
+    "text-size": ["case", ["==", foc, 2], 12.5, ["==", foc, 1], 10.5, 9], "text-allow-overlap": true,
     "text-ignore-placement": true, "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"] },
-    paint: { "text-color": "#fff", "text-opacity": ["case", ["==", ["get", "dim"], 1], .4, 1] } });
-  add({ id: "opt-name", type: "symbol", source: "options-lbl", minzoom: 11, layout: { "text-field": ["get", "name"], "text-size": 12,
+    paint: { "text-color": "#fff", "text-opacity": ["case", ["==", foc, 0], .3, ["==", foc, .5], .6, 1] } });
+  add({ id: "opt-name", type: "symbol", source: "options-lbl", minzoom: 11, filter: ["!=", foc, 2], layout: { "text-field": ["get", "name"], "text-size": 12,
     "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"], "text-offset": [1.2, 0], "text-anchor": "left", "text-optional": true },
-    paint: { "text-color": "#2a1e16", "text-halo-color": "#fff", "text-halo-width": 1.6, "text-opacity": ["case", ["==", ["get", "dim"], 1], .35, 1] } });
+    paint: { "text-color": "#2a1e16", "text-halo-color": "#fff", "text-halo-width": 1.6, "text-opacity": ["case", ["==", foc, 1], 1, .3] } });
+  /* The focused option always carries its name, at any zoom. */
+  add({ id: "opt-name-focus", type: "symbol", source: "options-lbl", filter: ["==", foc, 2], layout: { "text-field": ["get", "name"], "text-size": 14,
+    "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"], "text-offset": [1.6, 0], "text-anchor": "left", "text-allow-overlap": true },
+    paint: { "text-color": "#2a1e16", "text-halo-color": "#fff", "text-halo-width": 2.2 } });
   applyLayerVisibility();
 }
 
@@ -532,12 +547,55 @@ function applyLayerVisibility() {
   for (const id of ["places", "places-label"]) if (map.getLayer(id)) map.setFilter(id, ["in", ["get", "kind"], ["literal", kinds]]);
   const rs = map.getSource("rings"); if (rs) rs.setData(ringFC());
   const rl = map.getSource("ring-labels"); if (rl) rl.setData(ringLabelFC());
+  recede();
 }
-function refreshMap() {
+/* With an option open, only its own context keeps full weight: the metro
+   stations within 1.5 km and the places inside its 30 minute drive ring.
+   Everything else fades back so the eye stays on the building. */
+function recede() {
+  if (!map || !map.getLayer("opt")) return;
+  const o = S.sel && O.find(x => x.id === S.sel);
+  const set = (id, prop, v) => { if (map.getLayer(id)) try { map.setPaintProperty(id, prop, v); } catch (e) {} };
+  if (!o) {
+    set("stations", "circle-opacity", 1); set("stations", "circle-stroke-opacity", 1); set("stations-label", "text-opacity", 1);
+    set("places", "circle-opacity", ["case", ["==", ["get", "kind"], "res"], .28, .9]); set("places", "circle-stroke-opacity", 1); set("places-label", "text-opacity", 1);
+    set("zones-fill", "fill-opacity", .13); set("zones-label", "text-opacity", .75);
+    return;
+  }
+  const nearSt = STN.filter(st => km(o, st) <= 1.5).map(st => st.n);
+  const nearPl = window.IND_PLACES.filter(pl => km(o, pl) <= ringKm(30)).map(pl => pl.id);
+  const inSt = ["in", ["get", "n"], ["literal", nearSt]], inPl = ["in", ["get", "id"], ["literal", nearPl]];
+  set("stations", "circle-opacity", ["case", inSt, 1, .35]); set("stations", "circle-stroke-opacity", ["case", inSt, 1, .35]);
+  set("stations-label", "text-opacity", ["case", inSt, 1, .3]);
+  set("places", "circle-opacity", ["case", inPl, ["case", ["==", ["get", "kind"], "res"], .28, .9], .15]);
+  set("places", "circle-stroke-opacity", ["case", inPl, 1, .25]); set("places-label", "text-opacity", ["case", inPl, 1, .25]);
+  set("zones-fill", "fill-opacity", .06); set("zones-label", "text-opacity", .35);
+}
+/* A slow breathing ring on the open option. Skipped when the viewer has
+   asked for reduced motion. */
+let pulseRaf = null;
+function pulse() {
+  if (pulseRaf || REDUCED()) return;
+  const t0 = performance.now();
+  const step = (t) => {
+    if (!map || !map.getLayer("opt-halo") || (!S.sel && !S.hov)) { pulseRaf = null; return; }
+    const k = (Math.sin((t - t0) / 520) + 1) / 2;
+    try { map.setPaintProperty("opt-halo", "circle-radius", 20 + k * 10); map.setPaintProperty("opt-halo", "circle-opacity", .22 - k * .14); } catch (e) {}
+    pulseRaf = requestAnimationFrame(step);
+  };
+  pulseRaf = requestAnimationFrame(step);
+}
+const REDUCED = () => !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+function refreshPins() {
   if (!map || !map.getSource("options")) return;
   const fc = optionFC();
   map.getSource("options").setData(fc);
   if (map.getSource("options-lbl")) map.getSource("options-lbl").setData(fc);
+  if (S.sel || S.hov) pulse();
+}
+function refreshMap() {
+  if (!map || !map.getSource("options")) return;
+  refreshPins();
   applyLayerVisibility();
 }
 
@@ -554,11 +612,13 @@ function wireMap() {
     return `<b>${esc(x.name)}</b>${x.sub ? `<br>${esc(x.sub)}` : ""}<br><span style="color:#6c5b4d">${kind}</span><br>${esc(x.note)}`; });
   hover("stations", p => `<b>${esc(p.name)}</b><br>Yellow Line station ${p.n} · ${p.open ? "open" : "not yet open"}<br><span style="color:#6c5b4d">Position approximate</span>`);
   map.on("click", "opt", e => select(e.features[0].properties.id, true));
+  map.on("mousemove", "opt", e => { const id = e.features[0].properties.id; if (id !== S.sel && S.hov !== id) { S.hov = id; refreshPins(); } });
+  map.on("mouseleave", "opt", () => { if (S.hov) { S.hov = null; refreshPins(); } });
 }
 
 /* ============================================================ board ===== */
 function renderFilters() {
-  $("#filters").innerHTML = FILTERS.map(f => `<button class="chip ${S.filters.has(f.key) ? "on" : ""}" data-f="${f.key}" type="button" aria-pressed="${S.filters.has(f.key)}">${esc(f.label)}</button>`).join("");
+  $("#filters").innerHTML = FILTERS.map(f => `<button class="chip ${S.filters.has(f.key) ? "on" : ""}" data-f="${f.key}" type="button" aria-pressed="${S.filters.has(f.key)}" data-hint="${esc(`Keep only ${f.label} options. The rest fade on the map and drop down the list.`)}">${esc(f.label)}</button>`).join("");
 }
 function sorted() {
   const by = {
@@ -577,7 +637,7 @@ function renderList() {
   $("#b-area").textContent = `${inr(shown.reduce((s, o) => s + o.superArea, 0))} SF super`;
   $("#list").innerHTML = sorted().map(o => {
     const f = fits(o);
-    return `<button class="card ${S.sel === o.id ? "sel" : ""} ${passes(o) ? "" : "dim"}" data-id="${o.id}" role="listitem" type="button">
+    return `<button class="card ${S.sel === o.id ? "sel" : ""} ${passes(o) ? "" : "dim"}" data-id="${o.id}" role="listitem" type="button" data-hint="${esc(`Open ${o.name}: the map flies in, the other options fade back, and the full spec, catchment and caveats open in the panel.`)}">
       ${pic(o, "thumb")}
       <div>
         <div class="nm"><span class="no">${String(o.n).padStart(2, "0")}</span>${esc(o.name)}</div>
@@ -602,6 +662,12 @@ function wireBoard() {
     renderList(); refreshMap(); if (S.sel) renderPanel();
   });
   $("#list").addEventListener("click", e => { const c = e.target.closest("[data-id]"); if (c) select(c.dataset.id, true); });
+  /* Pointing at a card lifts its pin on the map and pushes the others back. */
+  const hov = (id) => { if (S.hov === id) return; S.hov = id; refreshPins(); };
+  $("#list").addEventListener("mouseover", e => { const c = e.target.closest("[data-id]"); if (c && c.dataset.id !== S.sel) hov(c.dataset.id); });
+  $("#list").addEventListener("mouseleave", () => hov(null));
+  $("#list").addEventListener("focusin", e => { const c = e.target.closest("[data-id]"); if (c && c.dataset.id !== S.sel) hov(c.dataset.id); });
+  $("#list").addEventListener("focusout", () => hov(null));
   $("#tabs").addEventListener("click", e => {
     const t = e.target.closest("[data-t]"); if (!t) return;
     if (t.dataset.t === "compare") { openCompare(); return; }
@@ -612,6 +678,8 @@ function wireBoard() {
     S.layers[b.dataset.l] = !S.layers[b.dataset.l]; renderLayers(); applyLayerVisibility();
   });
   $("#p-body").addEventListener("click", e => {
+    const ix = e.target.closest("[data-intro-x]"); if (ix) { seenIntro.add(ix.dataset.introX); saveIntro(); ix.closest(".intro").outerHTML = introCard(ix.dataset.introX); return; }
+    const io = e.target.closest("[data-intro-open]"); if (io) { seenIntro.delete(io.dataset.introOpen); saveIntro(); io.outerHTML = introCard(io.dataset.introOpen); return; }
     const a = e.target.closest("[data-go]"); if (a) { e.preventDefault(); select(a.dataset.go, true); return; }
     const t = e.target.closest("[data-tab]"); if (t) { e.preventDefault(); goTab(t.dataset.tab); return; }
     const pr = e.target.closest("[data-preset]"); if (pr) { setPreset(pr.dataset.preset); renderList(); renderPanel(); pushRoute(); return; }
@@ -623,6 +691,7 @@ function wireBoard() {
   $("#p-head").addEventListener("click", e => {
     if (e.target.closest(".back")) { S.sel = null; renderList(); renderPanel(); refreshMap(); fitAll(); pushRoute(); return; }
     const cp = e.target.closest("[data-copy]"); if (cp) { copyLink(cp); return; }
+    const sh = e.target.closest("[data-shot]"); if (sh) { flyToOption(O.find(x => x.id === S.sel), sh.dataset.shot); return; }
     if (e.target.closest("[data-print]")) window.print();
   });
   $("#lightbox").addEventListener("click", () => $("#lightbox").classList.remove("on"));
@@ -630,14 +699,43 @@ function wireBoard() {
   addEventListener("keydown", e => { if (e.key === "Escape") { $("#cmp").classList.remove("on"); $("#lightbox").classList.remove("on"); } });
 }
 
+/* ---------------------------------------------------------- camera ------
+   The main ATLAS zoom: opening an option flies the camera down to it in a
+   tilted close-up. How close depends on how well the position is known:
+   right onto a building we have pinned exactly, less far for a street-level
+   position, and only to the neighbourhood for a locality-level one, so the
+   map never pretends to know which building it is. */
+const SHOT_ZOOM = { building: 17.3, street: 16.4, locality: 15.3 };
+const SHOTS = {
+  close: { label: "Close-up", hint: "Tilted view down onto the building and its streets." },
+  street: { label: "Street", hint: "Low angle, as you would approach it by road." },
+  area: { label: "Catchment", hint: "Top-down view of the 15, 30 and 45 minute drive rings." }
+};
+function flyToOption(o, shot) {
+  if (!map || !o) return;
+  S.shot = shot || "close";
+  const phone = innerWidth <= 860, z = SHOT_ZOOM[o.precision] || 15.3, pad = padding();
+  const dur = REDUCED() ? 0 : 1700;
+  if (S.shot === "area") {
+    const b = circle([o.lng, o.lat], ringKm(30), 16).reduce((bb, pt) => bb.extend(pt), new mapboxgl.LngLatBounds());
+    map.fitBounds(b, { padding: pad, pitch: 0, bearing: 0, duration: REDUCED() ? 0 : 1200 });
+  } else {
+    const s = S.shot === "street" ? { zoom: z + .5, pitch: phone ? 60 : 72, bearing: -25 } : { zoom: z, pitch: phone ? 45 : 58, bearing: 30 };
+    map.flyTo({ center: [o.lng, o.lat], ...s, padding: pad, duration: dur, curve: 1.42, essential: true });
+  }
+  document.querySelectorAll("[data-shot]").forEach(b => { b.classList.toggle("on", b.dataset.shot === S.shot); b.setAttribute("aria-pressed", b.dataset.shot === S.shot); });
+}
+const PRECISION_TEXT = { building: "Pinned to the building", street: "Pinned to the street, building approximate", locality: "Neighbourhood only, exact building not confirmed" };
+const shotBar = (o) => `<div class="shots" role="group" aria-label="Camera">${Object.entries(SHOTS).map(([k, v]) =>
+  `<button type="button" class="shot ${S.shot === k ? "on" : ""}" data-shot="${k}" aria-pressed="${S.shot === k}" data-hint="${esc(v.hint)}">${v.label}</button>`).join("")}
+  <span class="prec ${o.precision}" data-hint="How exactly this option is placed on the map">${PRECISION_TEXT[o.precision] || "Position approximate"}</span></div>`;
+
 function select(id, fly, fromRoute) {
-  S.sel = id; renderList(); renderPanel(); refreshMap();
+  S.sel = id; S.hov = null; if (fly) S.shot = "close"; renderList(); renderPanel(); refreshMap();
   if (!fromRoute) pushRoute();
   if (innerWidth <= 860 && !fromRoute) setSheet("half");
   const card = document.querySelector(`.card[data-id="${id}"]`); if (card) card.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
-  const o = O.find(x => x.id === id);
-  if (fly && map) map.fitBounds(circle([o.lng, o.lat], ringKm(30), 8).reduce((b, p) => b.extend(p), new mapboxgl.LngLatBounds()),
-    { padding: padding(), duration: 800 });
+  if (fly) flyToOption(O.find(x => x.id === id), "close");
   $("#p-body").scrollTop = 0;
 }
 
@@ -649,19 +747,98 @@ function goTab(key) {
 function renderTabs() {
   $("#tabs").innerHTML = TABS.map(t => {
     const n = t.count ? t.count() : 0;
-    return `<button class="tab ${S.tab === t.key && !S.sel ? "on" : ""}" data-t="${t.key}" type="button">${esc(t.label)}${n ? `<span class="ct">${n}</span>` : ""}</button>`;
+    return `<button class="tab ${S.tab === t.key && !S.sel ? "on" : ""}" data-t="${t.key}" type="button" data-hint="${esc(GUIDE[t.key] ? GUIDE[t.key].hint : "")}">${esc(t.label)}${n ? `<span class="ct">${n}</span>` : ""}</button>`;
   }).join("");
 }
 function renderLayers() {
   $("#layers").innerHTML = `<span class="key"><span class="pin" style="background:var(--gradeA)">A</span><span class="pin" style="background:var(--gradeB)">B</span>Grade</span>` +
-    LAYERS.map(l => `<button class="chip lay ${S.layers[l.key] ? "on" : ""}" data-l="${l.key}" type="button" aria-pressed="${S.layers[l.key]}">${l.sw}${esc(l.label)}</button>`).join("") +
+    LAYERS.map(l => `<button class="chip lay ${S.layers[l.key] ? "on" : ""}" data-l="${l.key}" type="button" aria-pressed="${S.layers[l.key]}" data-hint="${esc((S.layers[l.key] ? "Hide: " : "Show: ") + LAYER_HINT[l.key])}">${l.sw}${esc(l.label)}</button>`).join("") +
     `<span class="key note" title="Map positions are approximate; zone outlines are indicative">ⓘ approx.</span>`;
 }
+/* ============================================================ guide =====
+   "What to expect" help, in two forms:
+   - an intro card at the top of every section and option, saying what is in
+     it and what clicking does. "Got it" folds it to a one-line link, and the
+     choice is remembered on this device;
+   - a hover card on anything clickable (tabs, option cards, map layers,
+     filters, presets, insights, camera buttons). Phones have no hover, so
+     there the intro cards carry the same information. */
+const GUIDE = {
+  brief: { hint: "The short answer: insights, headline numbers and the top three options.",
+    items: ["Insight cards pick out the best option for each question a client asks first. Click one to open that option.",
+      "Headline numbers for all ten options, then the top three on today's weights with the reason each ranks high.",
+      "The deck's nine requirements answered, and who to call."] },
+  priorities: { hint: "Re-rank the ten options by what the client cares about most.",
+    items: ["Pick a priority such as Commute first or Move in fast. The ranking, the list on the left and the pins re-order.",
+      "Arrows show how far each option moved against the balanced view.",
+      "The chart plots how soon each option is ready against how close it is to an open metro station. Point at a dot for details, click it to open the option."] },
+  talent: { hint: "Where the people are: colleges, homes and rival employers around each option.",
+    items: ["Employability facts for Indore with their sources.",
+      "For every option, how many institutions, residential belts and employers sit within 15, 30 and 45 minutes by car.",
+      "Turn on Institutions, Employers and Homes in the map bar to see them as points."] },
+  transit: { hint: "What the deck says about getting to work, next to what actually runs today.",
+    items: ["The Yellow Line as it runs since 6 Sep 2026: 16 stations open, the rest dashed on the map.",
+      "iBus on AB Road, and why the BRTS spine in the deck no longer exists.",
+      "Turn on Walk 0.5/1 km in the map bar to see walking circles around open stations."] },
+  market: { hint: "Rents, micro-markets and the MP IT policy incentives.",
+    items: ["Super Corridor against the SBD, with the pros and cons of each.",
+      "Rent ranges and the state incentives an IT or ITeS tenant can claim, each with source and date."] },
+  caveats: { hint: "Everything to double-check before a client relies on it.",
+    items: ["Sorted by weight: the red-edged items at the top can change a decision, the rest need a call to confirm or are minor.",
+      "Where a caveat is about one option, click the option name to open it."] },
+  deck: { hint: "Where each of the 19 deck pages lives in this app.",
+    items: ["Every page of the BD deck, and the tab or option where its content now sits, so nothing from the deck is lost."] },
+  compare: { hint: "All ten options side by side, with weights you can adjust." },
+  option: { items: ["The map flies down to the building. Other options and far-away places fade back so this one stands out.",
+      "Use Close-up, Street and Catchment to change the camera. The label beside them says how exactly the building is placed.",
+      "Below: the deck's specs word for word, the fit score broken into parts, who is within 15, 30 and 45 minutes, what is missing and any caveats.",
+      "Back returns to the section you came from."] }
+};
+const LAYER_HINT = { zones: "CBD, SBD and Super Corridor outlines.", metro: "The Yellow Line: open stations solid, planned ones dashed.",
+  walk: "Half and one kilometre walking circles around open stations.", bus: "The AB Road iBus corridor.",
+  edu: "Colleges and institutes: the fresher pipeline.", emp: "Rival employers competing for the same people.",
+  res: "Residential belts where staff are likely to live.", rings: "15, 30 and 45 minute drive rings around the open option." };
+let seenIntro = new Set();
+try { seenIntro = new Set(JSON.parse(localStorage.getItem("ind-intro") || "[]")); } catch (e) {}
+const saveIntro = () => { try { localStorage.setItem("ind-intro", JSON.stringify([...seenIntro])); } catch (e) {} };
+function introCard(key) {
+  const g = GUIDE[key]; if (!g || !g.items) return "";
+  if (seenIntro.has(key)) return `<button type="button" class="intro-min" data-intro-open="${key}">ⓘ What's in this view</button>`;
+  return `<div class="intro" data-intro="${key}"><div class="ih"><b>What to expect</b><button type="button" class="ix" data-intro-x="${key}">Got it</button></div>
+    <ul>${g.items.map(t => `<li>${esc(t)}</li>`).join("")}</ul></div>`;
+}
+function wireHints() {
+  const tip = document.createElement("div"); tip.id = "hint"; tip.setAttribute("role", "tooltip"); tip.hidden = true; document.body.appendChild(tip);
+  let timer = null, cur = null;
+  const hide = () => { clearTimeout(timer); timer = null; cur = null; tip.hidden = true; };
+  const show = (el) => {
+    const r = el.getBoundingClientRect();
+    tip.textContent = el.dataset.hint; tip.hidden = false;
+    const w = tip.offsetWidth, h = tip.offsetHeight;
+    let left = Math.min(Math.max(r.left + r.width / 2 - w / 2, 8), innerWidth - w - 8);
+    let top = r.bottom + 8; if (top + h > innerHeight - 8) top = r.top - h - 8;
+    tip.style.left = left + "px"; tip.style.top = top + "px";
+  };
+  const fine = matchMedia("(hover: hover) and (pointer: fine)");
+  document.addEventListener("pointerover", e => {
+    if (!fine.matches || (e.pointerType && e.pointerType !== "mouse")) return;
+    const el = e.target.closest("[data-hint]");
+    if (el === cur) return;
+    hide(); if (!el) return;
+    cur = el; timer = setTimeout(() => show(el), 380);
+  });
+  document.addEventListener("focusin", e => { const el = e.target.closest("[data-hint]"); if (el && el.matches(":focus-visible")) { cur = el; show(el); } });
+  document.addEventListener("focusout", hide);
+  document.addEventListener("pointerdown", hide);
+  addEventListener("scroll", hide, true);
+}
+
 /* ============================================================ panel ===== */
 function renderPanel() {
   renderTabs();
-  if (S.sel) return renderOption(O.find(x => x.id === S.sel));
-  ({ brief: renderBrief, priorities: renderPriorities, talent: renderTalent, transit: renderTransit, market: renderMarket, caveats: renderCaveats, deck: renderDeck }[S.tab] || renderBrief)();
+  if (S.sel) renderOption(O.find(x => x.id === S.sel));
+  else ({ brief: renderBrief, priorities: renderPriorities, talent: renderTalent, transit: renderTransit, market: renderMarket, caveats: renderCaveats, deck: renderDeck }[S.tab] || renderBrief)();
+  $("#p-body").insertAdjacentHTML("afterbegin", introCard(S.sel ? "option" : S.tab));
 }
 const head = (eyebrow, title, lede) => { $("#p-head").innerHTML = `<div class="eyebrow">${eyebrow}</div><h2>${title}</h2>${lede ? `<div class="lede">${lede}</div>` : ""}`; };
 const factList = (arr) => `<ul class="facts">${arr.map(f => `<li class="fact"><span class="k">${esc(f.k)}.</span> ${esc(f.v)}<span class="conf ${f.conf}">${f.conf}</span>
@@ -720,7 +897,7 @@ function renderBrief() {
 }
 
 /* ---------- shared: insights, verdict, actions ---------- */
-const actions = () => `<div class="actions"><button type="button" class="act" data-copy>Copy link</button><button type="button" class="act" data-print>Print / PDF</button></div>`;
+const actions = () => `<div class="actions"><button type="button" class="act" data-copy data-hint="Copies a link that opens exactly this view, ready to send to a client.">Copy link</button><button type="button" class="act" data-print data-hint="Prints this view, or saves it as a PDF from the print dialog.">Print / PDF</button></div>`;
 /* The few facts a client asks first, each one tap from its option. */
 function insightsHTML() {
   const top = (f) => O.slice().sort((a, b) => f(b) - f(a))[0];
@@ -736,7 +913,7 @@ function insightsHTML() {
     { l: "Deepest talent reach", v: tal.name, s: `${upTo(tc, 1, "edu")} institutions, ${upTo(tc, 1, "res")} belts in 30 min`, go: tal.id },
     { l: "Watch out", v: `${cav.length} decision-changing caveats`, s: cav[0].title, tab: "caveats", tone: "warn" }
   ];
-  return `<div class="ins" role="list">${cards.map(c => `<button type="button" role="listitem" class="in ${c.tone || ""}" ${c.go ? `data-go="${c.go}"` : `data-tab="${c.tab}"`}>
+  return `<div class="ins" role="list">${cards.map(c => `<button type="button" role="listitem" class="in ${c.tone || ""}" ${c.go ? `data-go="${c.go}"` : `data-tab="${c.tab}"`} data-hint="${c.go ? "Open this option: the map flies in and its details open." : "Open the Caveats section."}">
     <span class="l">${esc(c.l)}</span><span class="v">${esc(c.v)}</span><span class="s">${esc(c.s)}</span></button>`).join("")}</div>`;
 }
 /* Strengths are parts scoring 85% or more, watch-outs 35% or less, plus the
@@ -764,7 +941,7 @@ function renderPriorities() {
   }).join("");
   const wsum = PARTS.reduce((s, x) => s + W[x.key], 0) || 1;
   $("#p-body").innerHTML = `
-    <div class="presets" role="group" aria-label="Client priority">${Object.entries(PRESETS).map(([k, v]) => `<button type="button" class="chip ${S.preset === k ? "on" : ""}" aria-pressed="${S.preset === k}" data-preset="${k}">${esc(v.label)}</button>`).join("")}</div>
+    <div class="presets" role="group" aria-label="Client priority">${Object.entries(PRESETS).map(([k, v]) => `<button type="button" class="chip ${S.preset === k ? "on" : ""}" aria-pressed="${S.preset === k}" data-preset="${k}" data-hint="${esc(v.note)}">${esc(v.label)}</button>`).join("")}</div>
     <p class="lede" style="margin-top:8px">${esc(PRESETS[S.preset] ? PRESETS[S.preset].note : "Custom weights set on Compare all.")}</p>
     <div class="wts">${PARTS.map(x => `<span title="${esc(x.of)}">${esc(x.label)} <b>${Math.round(W[x.key] / wsum * 100)}%</b></span>`).join("")}</div>
     <h3>Ranking ${S.preset !== "balanced" ? "· arrows show the move against Balanced" : ""}</h3>
@@ -847,7 +1024,7 @@ function renderOption(o) {
   const zone = window.IND_ZONE_OF[o.micro];
   $("#p-head").innerHTML = `<button class="back" type="button">← Back to ${esc(TABS.find(t => t.key === S.tab).label)}</button>
     <div class="eyebrow">Option ${String(o.n).padStart(2, "0")} · ${esc(o.locality)} · ${esc(zone)}</div>
-    <h2>${esc(o.name)} <span class="g g${o.grade}" style="vertical-align:5px">Grade ${o.grade}</span></h2>${verdictHTML(o, p)}${actions()}`;
+    <h2>${esc(o.name)} <span class="g g${o.grade}" style="vertical-align:5px">Grade ${o.grade}</span></h2>${verdictHTML(o, p)}${shotBar(o)}${actions()}`;
   const allAmen = Object.keys(window.IND_AMENITY_LABELS);
   const missing = allAmen.filter(a => !k.has(a) && a !== "firetank" && a !== "fnb");
   const stations = deckStations(o);
