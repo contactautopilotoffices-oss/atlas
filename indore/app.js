@@ -274,6 +274,7 @@ function initGate() {
     if (ok) { sessionStorage.setItem("ind-auth", "1"); openApp(); }
     else { $("#g-err").textContent = "Not recognised. Access is issued per person."; $("#g-pw").value = ""; $("#g-pw").focus(); }
   };
+  startMap();
   const openApp = () => { const g = $("#gate"); g.classList.add("out"); setTimeout(() => g.remove(), 450); boot(); };
   loadBackdrop();
   const tot = O.reduce((t, o) => t + o.superArea, 0);
@@ -329,26 +330,33 @@ function ringLabelFC() {
    layer under it must still draw, so every layer is added on its own. */
 function add(layer, before) { try { map.addLayer(layer, before); } catch (e) { console.warn("layer", layer.id, e.message); } }
 
-/* Mapbox GL (about 1 MB) is fetched only after sign-in, so the sign-in page
-   paints at once on a phone; the preconnect hint in the page head has the
-   connection warm by then. */
+/* Mapbox GL starts loading the moment the page opens and the map builds
+   behind the sign-in screen, so it is already drawn when the gate lifts.
+   The script is injected rather than put in the head so it never holds up
+   the first paint of the sign-in page; the preload hint starts the fetch. */
 const MAPBOX_CDN = "https://api.mapbox.com/mapbox-gl-js/v3.10.0/";
 function loadMapbox() {
   if (window.mapboxgl) return Promise.resolve();
   return new Promise((resolve, reject) => {
-    const css = document.createElement("link"); css.rel = "stylesheet"; css.href = MAPBOX_CDN + "mapbox-gl.css"; document.head.appendChild(css);
     const js = document.createElement("script"); js.src = MAPBOX_CDN + "mapbox-gl.js"; js.onload = resolve; js.onerror = reject; document.head.appendChild(js);
   });
 }
 const mapUnavailable = () => { $("#map").innerHTML = `<div class="nomap">Map unavailable right now. Everything else on the page still works.</div>`; };
-function boot() {
+let booted = false;
+function startMap() {
   TALENT_MAX = Math.max(...O.map(talentRaw), 1);
+  if (!window.MAPBOX_TOKEN) return mapUnavailable();
+  loadMapbox().then(initMap).catch(mapUnavailable);
+}
+function boot() {
+  booted = true;
   applyRoute(false);
   renderTabs(); renderFilters(); renderList(); renderPanel(); renderLayers();
   wireBoard(); wireSheet();
   addEventListener("popstate", () => applyRoute(true));
-  if (!window.MAPBOX_TOKEN) return mapUnavailable();
-  loadMapbox().then(initMap).catch(mapUnavailable);
+  /* The map may already be up from behind the gate: bring it in line with
+     the route and the panels that now exist. */
+  if (map && map.getSource("options")) { refreshMap(); if (S.sel) select(S.sel, true, true); else fitAll(false); }
 }
 function initMap() {
   mapboxgl.accessToken = window.MAPBOX_TOKEN;
@@ -358,7 +366,7 @@ function initMap() {
   });
   map.addControl(new mapboxgl.AttributionControl({ compact: true }), "bottom-right");
   map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "bottom-right");
-  map.on("load", () => { addLayers(); wireMap(); if (S.sel) select(S.sel, true, true); else fitAll(false); });
+  map.on("load", () => { addLayers(); wireMap(); if (booted && S.sel) select(S.sel, true, true); else fitAll(false); });
 }
 
 /* ------------------------------------------------------------ deep links --

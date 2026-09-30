@@ -14,6 +14,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="preconnect" href="https://api.mapbox.com" crossorigin>
+<link rel="preload" href="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js" as="script">
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css">
+<link rel="icon" href="../autopilot-logo-trimmed.png">
 <link rel="preconnect" href="https://d8j0ntlcm91z4.cloudfront.net">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="../config.js?v=ind2"></script>
@@ -61,7 +64,8 @@ button{font:inherit;color:inherit}
 #g-bg.on{opacity:1;transform:scale(1)}
 #gate .shade{position:absolute;inset:0;background:linear-gradient(100deg,rgba(24,16,11,.88) 0%,rgba(24,16,11,.62) 45%,rgba(24,16,11,.30) 100%),linear-gradient(0deg,rgba(24,16,11,.55),transparent 40%)}
 #gate .gwrap{position:relative;min-height:100%;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,400px);gap:48px;align-items:center;padding:56px clamp(20px,6vw,88px)}
-#gate .word{font-weight:800;letter-spacing:.18em;font-size:14px}
+/* The logo file is dark grey; invert it to cream on the dark gate. */
+#gate .logo{display:block;width:170px;height:auto;filter:invert(1) brightness(1.4)}
 #gate .eyebrow{color:#e9b48f;margin-top:26px}
 #gate h1{font-family:var(--serif);font-weight:500;font-size:clamp(40px,6vw,72px);line-height:1.02;margin:10px 0 14px;letter-spacing:-.01em}
 #gate .gcopy p{max-width:520px;font-size:15px;line-height:1.6;color:rgba(247,242,234,.82);margin:0}
@@ -92,8 +96,8 @@ button{font:inherit;color:inherit}
 .pane{background:var(--panel);-webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%);
   border:1px solid rgba(255,255,255,.7);box-shadow:var(--e2);border-radius:var(--r)}
 #top{position:fixed;top:10px;left:10px;right:10px;height:var(--top-h);z-index:30;display:flex;align-items:center;gap:14px;padding:0 10px 0 16px}
-#brand{display:flex;align-items:baseline;gap:10px;flex:none;min-width:0}
-#brand .word{font-weight:800;letter-spacing:.14em;font-size:13px}
+#brand{display:flex;align-items:center;gap:12px;flex:none;min-width:0}
+#brand .logo{display:block;width:auto;height:15px;filter:brightness(.4)}
 #brand .t{font-family:var(--serif);font-size:18px;white-space:nowrap}
 #brand .s{font-family:var(--mono);font-size:10.5px;color:var(--mut);letter-spacing:.06em;white-space:nowrap}
 #tabs{display:flex;gap:2px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
@@ -324,7 +328,9 @@ svg.quad{width:100%;height:auto;display:block;background:#fff;border:1px solid v
   body[data-sheet="peek"]{--sheet-h:118px}
   body[data-sheet="full"]{--sheet-h:calc(100dvh - 64px)}
   #top{top:6px;left:6px;right:6px;padding:0 6px 0 12px;gap:8px}
-  #brand .s,#brand .word{display:none}
+  #brand .s{display:none}
+  #brand{gap:8px}
+  #brand .logo{height:11px}
   #brand .t{font-size:16px}
   .tab{padding:7px 9px;font-size:12px}
   #map{inset:0;height:auto}
@@ -362,7 +368,7 @@ svg.quad{width:100%;height:auto;display:block;background:#fff;border:1px solid v
   <div class="shade"></div>
   <div class="gwrap">
     <div class="gcopy">
-      <div class="word">AUTOPILOT</div>
+      <img class="logo" src="../autopilot-logo-trimmed.png" alt="Autopilot" width="319" height="44">
       <div class="eyebrow">Market overview · first-cut inventory · Sep 2026</div>
       <h1 id="g-title">Indore<br>Office Study</h1>
       <p>Ten shortlisted buildings for a BPO / KPO / IT-ITeS floor, placed on the metro that opened this month, with talent catchment, priorities and every caveat worth knowing.</p>
@@ -386,7 +392,7 @@ svg.quad{width:100%;height:auto;display:block;background:#fff;border:1px solid v
 <div id="map" aria-label="Map of Indore office options"></div>
 
 <header id="top" class="pane">
-  <div id="brand"><span class="word">AUTOPILOT</span><span class="t">Indore</span><span class="s">OFFICE STUDY · SEP 2026</span></div>
+  <div id="brand"><img class="logo" src="../autopilot-logo-trimmed.png" alt="Autopilot" width="319" height="44"><span class="t">Indore</span><span class="s">OFFICE STUDY · SEP 2026</span></div>
   <nav id="tabs" aria-label="Sections"></nav>
 </header>
 
