@@ -120,7 +120,9 @@ function deckStations(o) {
    the move itself is visible: distance, metro, talent reach and rivals. */
 const EX = window.IND_EXISTING;
 const nearestOpen = (p) => STN.filter(s => s.open).map(s => ({ s, d: km(p, s) })).sort((a, b) => a.d - b.d)[0];
-const fmtKm = (d) => d < 1 ? `${Math.round(d * 100) * 10} m` : `${d.toFixed(1)} km`;
+const fmtKm = (d) => `${d < 1 ? d.toFixed(2) : d.toFixed(1)} km`;
+/* The deck prints metro distances in metres; this adds the same in km. */
+const metroKm = (o) => fmtKm(o.commuteM / 1000);
 const exKm = (o) => km(o, EX);
 function moveRead(d) {
   const m = driveMin(d);
@@ -687,7 +689,7 @@ function wireMap() {
     const kind = { edu: "Institution", emp: "Employer", res: "Residential catchment", hub: "Transport" }[x.kind];
     return `<b>${esc(x.name)}</b>${x.sub ? `<br>${esc(x.sub)}` : ""}<br><span style="color:#6c5b4d">${kind}</span><br>${esc(x.note)}`; });
   hover("ex-pin", () => { const m = nearestOpen(EX), o = S.sel && O.find(x => x.id === S.sel);
-    return `<b>${esc(EX.name)}</b><br>${esc(EX.label)} · ${esc(EX.locality)}<br>Nearest open metro: ${esc(m.s.name)}, ${fmtKm(m.d)}${o ? `<br>${fmtKm(exKm(o))} from ${esc(o.name)}` : ""}<br><span style="color:#6c5b4d">Pinned from Google Maps</span>`; });
+    return `<b>${esc(EX.name)}</b><br>${esc(EX.label)} · ${esc(EX.locality)}${EX.occupant ? `<br>Occupied by ${esc(EX.occupant)}` : ""}<br>Nearest open metro: ${esc(m.s.name)}, ${fmtKm(m.d)}${o ? `<br>${fmtKm(exKm(o))} from ${esc(o.name)}` : ""}<br><span style="color:#6c5b4d">Pinned from Google Maps</span>`; });
   hover("stations", p => `<b>${esc(p.name)}</b><br>Yellow Line station ${p.n} · ${p.open ? "open" : "not yet open"}<br><span style="color:#6c5b4d">Position approximate</span>`);
   map.on("click", "opt", e => select(e.features[0].properties.id, true));
   map.on("mousemove", "opt", e => { const id = e.features[0].properties.id; if (id !== S.sel && S.hov !== id) { S.hov = id; refreshPins(); } });
@@ -720,7 +722,7 @@ function renderList() {
       <div>
         <div class="nm"><span class="no">${String(o.n).padStart(2, "0")}</span>${esc(o.name)}</div>
         <div class="loc">${esc(o.locality)}</div>
-        <div class="facts"><span class="g g${o.grade}">${o.grade}</span><span class="num">${inr(o.superArea)} SF</span><span>${esc(o.handover)}</span><span>${esc(o.commuteDist)} metro</span>
+        <div class="facts"><span class="g g${o.grade}">${o.grade}</span><span class="num">${inr(o.superArea)} SF</span><span>${esc(o.handover)}</span><span>${esc(o.commuteDist)} metro (${metroKm(o)})</span>
           ${f == null ? "" : `<span class="fit ${f ? "yes" : "no"}">${f ? "fits" : "short"}</span>`}</div>
       </div>
       <span class="score" title="Fit score out of 100">${score(o)}</span>
@@ -981,7 +983,7 @@ function insightsHTML() {
   const cards = [
     { l: "Best overall", v: best.name, s: `Fit ${score(best)}/100 on ${PRESETS[S.preset] ? PRESETS[S.preset].label.toLowerCase() : "custom"} weights${levelWith(best).length ? `, just ahead of ${levelWith(best)[0].name} (${exact(best).toFixed(2)} against ${exact(levelWith(best)[0]).toFixed(2)})` : ""}`, go: best.id, tone: "lead" },
     { l: `Closest to ${EX.name}`, v: fmtKm(exKm(home)), s: `${home.name}, about ${driveMin(exKm(home))} min by road from the existing building`, go: home.id },
-    { l: "Closest to metro", v: near.commuteDist, s: `${near.name}, to ${deckStations(near)[0].stn ? deckStations(near)[0].stn.name : near.commute}`, go: near.id },
+    { l: "Closest to metro", v: near.commuteDist, s: `${metroKm(near)} · ${near.name}, to ${deckStations(near)[0].stn ? deckStations(near)[0].stn.name : near.commute}`, go: near.id },
     { l: "Move in now", v: readyBest.name, s: `Best of ${readyNow.length} ready-now options`, go: readyBest.id },
     { l: "Largest space", v: `${inr(big.superArea)} SF`, s: `${big.name}, handover ${big.handover}`, go: big.id },
     { l: "Most efficient", v: `${eff.efficiency}%`, s: `${eff.name}, carpet to super`, go: eff.id },
@@ -1191,7 +1193,7 @@ function renderOption(o) {
       <div class="kpi"><div class="l">Carpet</div><div class="v num">${inr(o.carpetArea)}</div><div class="s">SF, ±3% ${f == null ? "" : `<span class="fit ${f ? "yes" : "no"}">${f ? "fits target" : "short of target"}</span>`}</div></div>
       <div class="kpi"><div class="l">Efficiency</div><div class="v">${o.efficiency}%</div><div class="s">as printed</div></div>
       <div class="kpi"><div class="l">Handover</div><div class="v" style="font-size:16px">${esc(o.handover)}</div><div class="s">${esc(handoverNote(o))}</div></div>
-      <div class="kpi"><div class="l">Metro</div><div class="v">${esc(o.commuteDist)}</div><div class="s">${stations.map(s => esc(s.stn ? s.stn.name : s.label)).join(" / ")}${stations.every(s => s.stn && s.stn.open) ? " · open" : ""}</div></div>
+      <div class="kpi"><div class="l">Metro</div><div class="v">${esc(o.commuteDist)}</div><div class="s">${metroKm(o)} · ${stations.map(s => esc(s.stn ? s.stn.name : s.label)).join(" / ")}${stations.every(s => s.stn && s.stn.open) ? " · open" : ""}</div></div>
       <div class="kpi"><div class="l">Fit score</div><div class="v">${sc}<span style="font-size:13px;color:var(--mut)">/100</span></div><div class="s">rank ${O.slice().sort(byFit).findIndex(x => x.id === o.id) + 1} of 10${levelWith(o).length ? `, level on ${sc} with ${esc(levelWith(o).map(x => x.name).join(", "))} (exact ${exact(o).toFixed(2)})` : ""}</div></div>
     </div>
 
@@ -1241,7 +1243,12 @@ function renderOption(o) {
    both buildings (straight line to the nearest open station) so the two
    figures are like for like; the deck's own figure stays in the spec. */
 function vsExistingHTML(o, c) {
-  const d = exKm(o), xc = catchment(EX), mo = nearestOpen(o), mx = nearestOpen(EX);
+  /* Employers inside NRK Star itself (Altruist) are left out of both
+     sides here, so the rival count compares like with like. */
+  const inEx = (pl) => km(pl, EX) < .05;
+  const strip = (cc) => cc.map(r => ({ ...r, emp: r.emp.filter(pl => !inEx(pl)) }));
+  const d = exKm(o), xc = strip(catchment(EX)), mo = nearestOpen(o), mx = nearestOpen(EX);
+  c = strip(c);
   const delta = (a, b, moreIsGood) => { const v = a - b; if (!v) return `<span class="dl">same</span>`;
     return `<span class="dl ${(v > 0) === moreIsGood ? "up" : "dn"}">${v > 0 ? "+" : "−"}${Math.abs(v)}</span>`; };
   const mDelta = Math.round((mo.d - mx.d) * 1000), mTxt = Math.abs(mDelta) < 100 ? `<span class="dl">about the same</span>`
@@ -1257,7 +1264,7 @@ function vsExistingHTML(o, c) {
     <p class="vsx"><b>${fmtKm(d)} apart</b>, about ${driveMin(d)} min by road. ${esc(moveRead(d))}</p>
     <table class="ring-tbl"><thead><tr><th></th><th>${esc(EX.name)} (existing)</th><th>${esc(o.name)}</th></tr></thead>
     <tbody>${rows.map(r => `<tr><td>${r[0]}</td><td class="num">${r[1]}</td><td class="num">${r[2]}</td></tr>`).join("")}</tbody></table>
-    <p class="note">Green is better for the move, red is worse. Distances are straight line on the map; drive time uses the same assumptions as the rings. ${esc(EX.name)} is pinned to the building; this option's pin is ${esc(o.precision)}-level.</p>`;
+    <p class="note">Green is better for the move, red is worse. Rival counts leave out employers inside ${esc(EX.name)} itself. Distances are straight line on the map; drive time uses the same assumptions as the rings. ${esc(EX.name)} is pinned to the building; this option's pin is ${esc(o.precision)}-level.</p>`;
 }
 function employabilityRead(o, c) {
   const edu = upTo(c, 1, "edu"), res = upTo(c, 1, "res"), emp = upTo(c, 0, "emp");
@@ -1305,7 +1312,7 @@ function renderTransit() {
   head("Transit", "How employees get to work", "The deck's view (page 4) beside the network as it runs on 30 Sep 2026.");
   const rows = O.slice().sort((a, b) => a.commuteM - b.commuteM).map(o => {
     const st = deckStations(o);
-    return `<tr><td>${optLink(o)}</td><td>${st.map(s => esc(s.stn ? s.stn.name : s.label)).join(" / ")}</td><td class="num">${esc(o.commuteDist)}</td><td>${st.every(s => s.stn && s.stn.open) ? '<span class="tick">open</span>' : "check"}</td><td class="num">${o.commuteM <= 1500 ? `${Math.round(o.commuteM / 80)} min walk` : "cab / feeder"}</td></tr>`;
+    return `<tr><td>${optLink(o)}</td><td>${st.map(s => esc(s.stn ? s.stn.name : s.label)).join(" / ")}</td><td class="num">${esc(o.commuteDist)} <span class="note">(${metroKm(o)})</span></td><td>${st.every(s => s.stn && s.stn.open) ? '<span class="tick">open</span>' : "check"}</td><td class="num">${o.commuteM <= 1500 ? `${Math.round(o.commuteM / 80)} min walk` : "cab / feeder"}</td></tr>`;
   }).join("");
   $("#p-body").innerHTML = `
     <h3>Access by micro-market</h3>
@@ -1395,7 +1402,7 @@ function renderCompare() {
     ["Building", o => esc(o.structureText)],
     ["Headroom in building (SF)", o => inr(o.buildingTotal - o.superArea), best(o => o.buildingTotal - o.superArea)],
     ["Nearest commute", o => esc(o.commute)],
-    ["Distance", o => esc(o.commuteDist), best(o => -o.commuteM)],
+    ["Distance", o => `${esc(o.commuteDist)} <span class="note">(${metroKm(o)})</span>`, best(o => -o.commuteM)],
     ["Car parking ratio", o => esc(o.parkingRatio)],
     ["Car parking charges", o => esc(o.parkingCharges)],
     ["Key amenities", o => o.amenities.map(esc).join(", ")],
