@@ -335,8 +335,12 @@ const shownKind = (k) => !!S.layers[k];
 function placesFC() {
   return { type: "FeatureCollection", features: PLACES.filter(p => p.kind !== "metro" && p.kind !== "mm").map(p => ({ type: "Feature",
     geometry: { type: "Point", coordinates: [p.lng, p.lat] },
-    properties: { id: p.id, kind: p.kind, name: p.kind === "comp" ? p.brand : p.name, full: p.name, color: KINDS[p.kind].color, foc: focusOf(p) } })) };
+    properties: { id: p.id, kind: p.kind, name: p.kind === "comp" ? p.brand : p.name, full: p.name, color: p.kind === "env" && p.water ? WATER : KINDS[p.kind].color, foc: focusOf(p) } })) };
 }
+/* Lakes are blue and parks green, at every zoom: there are only a few, and
+   each carries its name, so the Green & blue layer always shows something. */
+const WATER = "#2f7fb3";
+const envFC = () => { const fc = placesFC(); fc.features = fc.features.filter(f => f.properties.kind === "env"); return fc; };
 function linkFC() {
   return { type: "FeatureCollection", features: PLACES.filter(p => p.kind !== "mm").map(p => ({ type: "Feature",
     geometry: { type: "LineString", coordinates: [[SITE.lng, SITE.lat], [p.lng, p.lat]] }, properties: { id: p.id } })) };
@@ -352,13 +356,13 @@ const zoneLeadFC = () => ({ type: "FeatureCollection", features: MM.map(z => ({ 
 const zoneNumFC = () => ({ type: "FeatureCollection", features: MM.map(z => ({ type: "Feature", geometry: { type: "Point", coordinates: z.anchor }, properties: { n: String(z.n), id: `mm-${z.key}` } })) });
 const zoneNameFC = () => ({ type: "FeatureCollection", features: MM.map(z => ({ type: "Feature", geometry: { type: "Point", coordinates: z.label }, properties: { name: z.name, anchor: z.side === "left" ? "right" : "left", id: `mm-${z.key}` } })) });
 /* Zones show when zoomed out and hand over to the places as you zoom in. */
-const ZONE_FADE = (hi) => ["interpolate", ["linear"], ["zoom"], 10, hi, 11.8, hi, 12.8, hi * .2, 13.4, 0];
+const ZONE_FADE = (hi) => ["interpolate", ["linear"], ["zoom"], 10, hi, 11.2, hi, 12.2, hi * .15, 12.8, 0];
 function addLayers() {
   map.addSource("mm", { type: "geojson", data: zonesFC() });
   add({ id: "mm-fill", type: "fill", source: "mm", paint: { "fill-color": ["get", "color"], "fill-opacity": ZONE_FADE(.5) } });
   add({ id: "mm-line", type: "line", source: "mm", paint: { "line-color": ["get", "color"], "line-width": 1.2, "line-opacity": ZONE_FADE(.9) } });
   map.addSource("mm-lead", { type: "geojson", data: zoneLeadFC() });
-  add({ id: "mm-lead", type: "line", source: "mm-lead", maxzoom: 13.4, paint: { "line-color": "#6c5b4d", "line-width": 1.1, "line-opacity": ZONE_FADE(.85) } });
+  add({ id: "mm-lead", type: "line", source: "mm-lead", maxzoom: 12.8, paint: { "line-color": "#6c5b4d", "line-width": 1.1, "line-opacity": ZONE_FADE(.85) } });
 
   /* Catchments next, so everything else sits on top. */
   map.addSource("catch", { type: "geojson", data: catchFC() });
@@ -399,23 +403,32 @@ function addLayers() {
 
   /* Directions out of the site. */
   map.addSource("arrows", { type: "geojson", data: arrowsFC() });
-  add({ id: "arrows", type: "line", source: "arrows", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#2a1e16", "line-width": 1.6, "line-opacity": .8 } });
+  add({ id: "arrows", type: "line", source: "arrows", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": "#2a1e16", "line-width": 1.6, "line-opacity": ["interpolate", ["linear"], ["zoom"], 11.6, 0, 12.4, .8] } });
 
   /* Places. */
   map.addSource("places", { type: "geojson", data: placesFC() });
   const foc = ["get", "foc"];
   add({ id: "places-halo", type: "circle", source: "places", filter: ["==", foc, 2], minzoom: 11.2, paint: { "circle-radius": 18, "circle-color": ["get", "color"], "circle-opacity": .18,
     "circle-stroke-color": ["get", "color"], "circle-stroke-width": 1.6 } });
-  add({ id: "places", type: "circle", source: "places", filter: [">", foc, 0], minzoom: 11.2, paint: {
+  add({ id: "places", type: "circle", source: "places", filter: ["all", [">", foc, 0], ["!=", ["get", "kind"], "env"]], minzoom: 11.2, paint: {
     "circle-radius": ["case", ["==", foc, 2], 9, ["==", ["get", "kind"], "res"], 8, ["==", ["get", "kind"], "env"], 6.5, 6],
     "circle-color": ["get", "color"],
     "circle-opacity": ["case", ["==", ["get", "kind"], "res"], .3, ["==", foc, .5], .45, .95],
     "circle-stroke-color": ["case", ["==", ["get", "kind"], "res"], ["get", "color"], "#fff"], "circle-stroke-width": 1.5,
     "circle-stroke-opacity": ["case", ["==", foc, .5], .5, 1] } });
   map.addSource("places-lbl", { type: "geojson", data: placesFC() });
-  add({ id: "places-label", type: "symbol", source: "places-lbl", filter: [">", foc, 0], minzoom: 12.4, layout: { "text-field": ["get", "name"], "text-size": 10.5,
+  add({ id: "places-label", type: "symbol", source: "places-lbl", filter: ["all", [">", foc, 0], ["!=", ["get", "kind"], "env"]], minzoom: 12.4, layout: { "text-field": ["get", "name"], "text-size": 10.5,
     "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"], "text-offset": [0, .95], "text-anchor": "top", "text-optional": true, "text-max-width": 9 },
     paint: { "text-color": "#2a1e16", "text-halo-color": "#fff", "text-halo-width": 1.4, "text-opacity": ["case", ["==", foc, .5], .5, 1] } });
+
+  map.addSource("env-pts", { type: "geojson", data: envFC() });
+  add({ id: "env-pin", type: "circle", source: "env-pts", filter: [">", foc, 0], paint: {
+    "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 6, 14, ["case", ["==", foc, 2], 11, 9]], "circle-color": ["get", "color"],
+    "circle-stroke-color": "#fff", "circle-stroke-width": 2, "circle-opacity": ["case", ["==", foc, .5], .5, 1] } });
+  map.addSource("env-pts-lbl", { type: "geojson", data: envFC() });
+  add({ id: "env-label", type: "symbol", source: "env-pts-lbl", filter: [">", foc, 0], minzoom: 10.6, layout: { "text-field": ["get", "full"], "text-size": 11.5,
+    "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"], "text-offset": [0, 1.05], "text-anchor": "top", "text-optional": true },
+    paint: { "text-color": ["get", "color"], "text-halo-color": "#fff", "text-halo-width": 1.6, "text-opacity": ["case", ["==", foc, .5], .5, 1] } });
 
   /* The site: a large ringed pin that never reads as one of the places. */
   const siteData = { type: "Feature", geometry: { type: "Point", coordinates: [SITE.lng, SITE.lat] }, properties: {} };
@@ -428,29 +441,30 @@ function addLayers() {
   map.addSource("arrows-lbl", { type: "geojson", data: arrowLabelFC() });
   add({ id: "arrows-label", type: "symbol", source: "arrows-lbl", layout: { "text-field": ["get", "label"], "text-size": 11.5, "text-line-height": 1.25,
     "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"], "text-anchor": ["get", "anchor"], "text-allow-overlap": true, "text-max-width": 16 },
-    paint: { "text-color": "#2a1e16", "text-halo-color": "#fff", "text-halo-width": 2 } });
+    paint: { "text-color": "#2a1e16", "text-halo-color": "#fff", "text-halo-width": 2, "text-opacity": ["interpolate", ["linear"], ["zoom"], 11.6, 0, 12.4, 1] } });
   map.addSource("link-lbl", { type: "geojson", data: linkLabelFC() });
   add({ id: "link-label", type: "symbol", source: "link-lbl", filter: ["==", ["get", "id"], ""], layout: { "text-field": ["get", "label"], "text-size": 11.5,
     "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"], "text-allow-overlap": true, "text-ignore-placement": true },
     paint: { "text-color": "#2a1e16", "text-halo-color": "#fff", "text-halo-width": 2.2 } });
   map.addSource("site-lbl", { type: "geojson", data: siteData });
-  add({ id: "site-label", type: "symbol", source: "site-lbl", layout: { "text-field": `${SITE.name}\n${SITE.byline}`, "text-size": 13, "text-line-height": 1.2,
+  add({ id: "site-label", type: "symbol", source: "site-lbl", layout: { "text-field": ["step", ["zoom"], SITE.name, 12, `${SITE.name}\n${SITE.byline}`], "text-size": 13, "text-line-height": 1.2,
     "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"], "text-offset": [0, 1.7], "text-anchor": "top", "text-allow-overlap": true },
     paint: { "text-color": "#2a1e16", "text-halo-color": "#fff", "text-halo-width": 2.4 } });
   map.addSource("mm-num", { type: "geojson", data: zoneNumFC() });
-  add({ id: "mm-num", type: "symbol", source: "mm-num", maxzoom: 13.4, layout: { "text-field": ["get", "n"], "text-size": 17, "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"], "text-allow-overlap": true },
+  add({ id: "mm-num", type: "symbol", source: "mm-num", maxzoom: 12.8, layout: { "text-field": ["get", "n"], "text-size": 17, "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"], "text-allow-overlap": true },
     paint: { "text-color": "#fff", "text-halo-color": "rgba(42,30,22,.35)", "text-halo-width": 1.2, "text-opacity": ZONE_FADE(1) } });
   map.addSource("mm-name", { type: "geojson", data: zoneNameFC() });
-  add({ id: "mm-name", type: "symbol", source: "mm-name", maxzoom: 13.4, layout: { "text-field": ["get", "name"], "text-size": 15, "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"],
+  add({ id: "mm-name", type: "symbol", source: "mm-name", maxzoom: 12.8, layout: { "text-field": ["get", "name"], "text-size": 15, "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"],
     "text-anchor": ["get", "anchor"], "text-offset": [0, 0], "text-allow-overlap": true, "text-padding": 0 },
     paint: { "text-color": "#2a1e16", "text-halo-color": "#fff", "text-halo-width": 2, "text-opacity": ZONE_FADE(1) } });
   applyLayerVisibility();
 }
 const LAYERS = [
   { key: "mm", label: "Micro-markets", sw: `<span class="dot" style="background:linear-gradient(135deg,#e34948 50%,#eb6834 50%)"></span>`, ids: ["mm-fill", "mm-line", "mm-lead", "mm-num", "mm-name"] },
-  { key: "comp", ids: [] }, { key: "metro", ids: ["metro-casing", "metro-line", "stations", "stations-label"] },
+  { key: "comp", ids: [] },
+  /* env: the swatch is half park green, half lake blue, as drawn. */ { key: "metro", ids: ["metro-casing", "metro-line", "stations", "stations-label"] },
   { key: "social", ids: [] }, { key: "talent", ids: [] }, { key: "res", ids: [] }, { key: "edu", ids: [] },
-  { key: "deal", ids: [] }, { key: "env", ids: ["env-fill", "env-line"] },
+  { key: "deal", ids: [] }, { key: "env", sw: `<span class="dot" style="background:linear-gradient(135deg,#008300 50%,#2f7fb3 50%)"></span>`, ids: ["env-fill", "env-line"] },
   { key: "catch", label: "Drive-time catchment", sw: `<span class="dot" style="background:rgba(163,80,44,.12);border:1.5px solid #a3502c"></span>`, ids: ["catch-fill", "catch-line", "catch-label"] },
   { key: "arrows", label: "Directions", sw: `<span class="sw" style="height:2px;background:#2a1e16"></span>`, ids: ["arrows", "arrows-label"] }
 ];
@@ -476,6 +490,7 @@ function refreshPins() {
   if (!map || !map.getSource("places")) return;
   const fc = placesFC();
   map.getSource("places").setData(fc); map.getSource("places-lbl").setData(fc);
+  const ef = envFC(); for (const sId of ["env-pts", "env-pts-lbl"]) if (map.getSource(sId)) map.getSource(sId).setData(ef);
   const id = S.sel || S.hov || "";
   if (map.getLayer("mm-line")) map.setPaintProperty("mm-line", "line-width", ["case", ["==", ["get", "id"], id], 3, 1.2]);
   for (const l of ["link", "link-label"]) if (map.getLayer(l)) map.setFilter(l, ["==", ["get", "id"], id]);
@@ -497,7 +512,8 @@ function wireMap() {
   hover("places", f => tip(byId(f.id)));
   hover("stations", f => tip(byId(f.id)));
   hover("site-pin", () => `<b>${esc(SITE.name)}</b><br>${esc(SITE.byline)}<br><span style="color:#6c5b4d">${esc(SITE.address || "")}</span>`);
-  for (const l of ["places", "stations"]) {
+  hover("env-pin", f => tip(byId(f.id)));
+  for (const l of ["places", "stations", "env-pin"]) {
     map.on("click", l, e => select(e.features[0].properties.id, true));
     map.on("mousemove", l, e => { const id = e.features[0].properties.id; if (id !== S.sel && S.hov !== id) { S.hov = id; refreshPins(); } });
     map.on("mouseleave", l, () => { if (S.hov) { S.hov = null; refreshPins(); } });
@@ -605,7 +621,7 @@ function renderList() {
   $("#b-count").textContent = `${rows.length} ${rows.length === 1 ? "place" : "places"}`;
   $("#b-area").textContent = S.kindFilter ? KINDS[S.kindFilter].short : tabOf(S.tab).label;
   $("#list").innerHTML = rows.map(p => `<button class="card pl ${S.sel === p.id ? "sel" : ""}" data-id="${p.id}" role="listitem" type="button" data-hint="${esc(`Open ${p.name}: the map frames it with the site and the panel shows the distance and details.`)}">
-      <span class="ico" style="background:${p.kind === "mm" ? p.color : KINDS[p.kind].color}">${esc(ICON(p))}</span>
+      <span class="ico" style="background:${p.kind === "mm" ? p.color : p.kind === "env" && p.water ? WATER : KINDS[p.kind].color}">${esc(ICON(p))}</span>
       <div>
         <div class="nm">${esc(p.kind === "deal" ? (p.tenant || p.name) : p.name)}</div>
         <div class="loc">${esc(p.kind === "deal" ? [p.building, p.locality].filter(Boolean).join(" · ") : p.sub || p.locality || KINDS[p.kind].label)}</div>
@@ -636,6 +652,7 @@ function wireBoard() {
     const t = e.target.closest("[data-tab]"); if (t) { e.preventDefault(); goTab(t.dataset.tab); return; }
     const cp = e.target.closest("[data-copy]"); if (cp) { copyLink(cp); return; }
     if (e.target.closest("[data-print]")) { window.print(); return; }
+    const tv = e.target.closest("[data-tableview]"); if (tv) { const t2 = $("#supply-table"); t2.hidden = !t2.hidden; tv.textContent = t2.hidden ? "Show as table" : "Hide table"; return; }
     const img = e.target.closest(".hero img"); if (img) { const lb = $("#lightbox"); lb.querySelector("img").src = img.currentSrc || img.src; lb.classList.add("on"); }
   });
   $("#p-head").addEventListener("click", e => {
@@ -819,9 +836,10 @@ function insightsHTML() {
     park && { l: "Biggest park ≤ 5 km", v: `${park.msf} msf`, s: `${park.name}, ${fmtKm(park.d)}`, go: park.id },
     deal && { l: "Biggest deal ≤ 5 km", v: `${inr(deal.sqft)} SF`, s: `${deal.tenant}, ${deal.date || ""}`, go: deal.id },
     hosp && { l: "Nearest hospital", v: fmtKm(hosp.d), s: hosp.name, go: hosp.id },
-    env && { l: "Nearest green / blue", v: fmtKm(env.d), s: env.name, go: env.id }
+    env && { l: "Nearest green / blue", v: fmtKm(env.d), s: env.name, go: env.id },
+    D.newSupply && { l: "Flex seats added in 2026", v: inr(D.newSupply.byYear.find(y => y.year === 2026).seats), s: `so far, of ${inr(D.newSupply.total.seats)} counted nearby`, tab: "competition" }
   ].filter(Boolean);
-  return `<div class="ins" role="list">${cards.map(c => `<button type="button" role="listitem" class="in ${c.tone || ""}" data-go="${esc(c.go)}" data-hint="Open this place: the map frames it with the site.">
+  return `<div class="ins" role="list">${cards.map(c => `<button type="button" role="listitem" class="in ${c.tone || ""}" ${c.go ? `data-go="${esc(c.go)}"` : `data-tab="${c.tab}"`} data-hint="${c.go ? "Open this place: the map frames it with the site." : "Open the Competition tab."}">
     <span class="l">${esc(c.l)}</span><span class="v">${esc(c.v)}</span><span class="s">${esc(c.s)}</span></button>`).join("")}</div>`;
 }
 function directionsTable() {
@@ -846,6 +864,7 @@ function renderCompetition() {
       <div class="kpi"><div class="l">2 to 5 km</div><div class="v">${band(2, 5)}</div><div class="s">${band(5, 99)} further out</div></div>
     </div>
     ${(() => { const cw = byId("d-clayworks-rhapsody"); return cw ? `<p class="vsx"><b>Already on the site:</b> ${link(cw, "ClayWorks Rhapsody")} took ${inr(cw.sqft)}+ sq ft (${inr(cw.seats)}+ seats) in the Workcations tower in Sep 2025. ClayWorks is not on the brief's list of fifteen, so it is shown under Recent deals.</p>` : ""; })()}
+    ${supplyHTML()}
     <h3>By brand, nearest first</h3>
     <table class="ring-tbl"><thead><tr><th>Brand</th><th>Centres</th><th>Nearest</th><th>Distance</th><th>≤ 5 km</th></tr></thead>
     <tbody>${present.map(r => `<tr><td><b>${esc(r.b.brand)}</b></td><td class="num">${r.cs.length}</td><td>${link(r.n, r.n.name)}</td><td class="num">${fmtKm(r.n.d)}</td><td class="num">${r.cs.filter(p => p.d <= 5).length}</td></tr>`).join("")}</tbody></table>
@@ -854,6 +873,34 @@ function renderCompetition() {
     <table class="ring-tbl"><thead><tr><th>Centre</th><th>Brand</th><th>Distance</th><th>Seats</th></tr></thead>
     <tbody>${all.slice().sort((a, b) => a.d - b.d).map(p => `<tr><td>${link(p)}${p.status && p.status !== "operating" ? ` <span class="fit no">${p.status === "pipeline" ? "pipeline" : "check"}</span>` : ""}<br><span class="note">${esc(p.locality || "")}</span></td><td>${esc(p.brand)}</td><td class="num">${fmtKm(p.d)}</td><td class="num">${p.seats ? inr(p.seats) : "n/a"}</td></tr>`).join("")}</tbody></table>
     <p class="note">${esc(D.competitionNote || "")}</p>`;
+}
+
+/* New flex supply, from the BD deck. One bar per centre, coloured by the
+   year it opened or was signed (one hue, light to dark), values written at
+   the bar ends, a table view for anyone who prefers rows. */
+const YEAR_COL = { 2024: "#86b6ef", 2025: "#2a78d6", 2026: "#184f95" };
+function supplyHTML() {
+  const N = D.newSupply; if (!N) return "";
+  const max = Math.max(...N.centres.map(c => c.seats));
+  const name = (c) => `${c.operator} · ${c.centre}`;
+  return `<h3>New supply: ${esc(N.title.toLowerCase())}</h3>
+    <div class="kpis">
+      <div class="kpi" style="background:var(--ink);color:var(--paper)"><div class="l" style="color:rgba(247,242,234,.7)">Flex seats counted</div><div class="v">${inr(N.total.seats)}</div><div class="s" style="color:rgba(247,242,234,.7)">across ${N.total.centres} centres in ${esc(N.total.where)}</div></div>
+      ${N.byYear.map(y => `<div class="kpi"><div class="l"><span class="sw-y" style="background:${YEAR_COL[y.year]}"></span>Added in ${y.year}</div><div class="v">${inr(y.seats)}</div><div class="s">seats${y.note ? ", " + esc(y.note) : ""}</div></div>`).join("")}
+    </div>
+    <div class="supply" role="img" aria-label="Flex centres opened or signed in Whitefield and nearby, seats per centre by year">
+      <div class="sleg">${N.byYear.map(y => `<span><i style="background:${YEAR_COL[y.year]}"></i>${y.year}</span>`).join("")}</div>
+      ${N.centres.map(c => `<div class="srow" data-hint="${esc(`${name(c)}: ${inr(c.seats)} seats, ${c.year === 2026 ? "opened or signed" : "added"} in ${c.year}`)}">
+        <span class="sl">${c.go ? link({ id: c.go }, name(c)) : esc(name(c))}</span>
+        <span class="st"><span class="sf" style="width:${(c.seats / max * 100).toFixed(1)}%;background:${YEAR_COL[c.year]}"></span></span>
+        <span class="sv num">${inr(c.seats)}</span></div>`).join("")}
+    </div>
+    <button type="button" class="act" data-tableview style="margin-top:6px">Show as table</button>
+    <table class="ring-tbl" id="supply-table" hidden><thead><tr><th>Operator</th><th>Centre</th><th>Year</th><th>Seats</th></tr></thead>
+      <tbody>${N.centres.map(c => `<tr><td>${esc(c.operator)}</td><td>${esc(c.centre)}</td><td>${c.year}</td><td class="num">${inr(c.seats)}</td></tr>`).join("")}</tbody></table>
+    <h4 style="margin:14px 0 4px">What this means</h4>
+    <ul class="reads">${N.reads.map(r => `<li>${esc(r)}</li>`).join("")}</ul>
+    <p class="note">Source: ${esc(N.source)}. These are the centres the BD team counted, so the list differs from the map, which places every centre found in brand listings.</p>`;
 }
 
 /* ---------- Connectivity ---------- */

@@ -590,6 +590,104 @@ window.WF = {
   }
  ],
  "micromarketNote": "Outlines are indicative and follow the usual broker definitions, which differ at the edges.",
+ "newSupply": {
+  "title": "More operators are opening here every year",
+  "source": "Autopilot deck: Total Environment, Whitefield, part 2 (Competitors, new supply)",
+  "total": {
+   "seats": 45700,
+   "centres": 31,
+   "where": "Whitefield and the areas around it"
+  },
+  "byYear": [
+   {
+    "year": 2024,
+    "seats": 5600
+   },
+   {
+    "year": 2025,
+    "seats": 7450
+   },
+   {
+    "year": 2026,
+    "seats": 9500,
+    "note": "so far"
+   }
+  ],
+  "centres": [
+   {
+    "operator": "Incuspaze",
+    "centre": "Whitefield",
+    "year": 2024,
+    "seats": 1800
+   },
+   {
+    "operator": "Urban Vault",
+    "centre": "Brigade Summit",
+    "year": 2024,
+    "seats": 2000
+   },
+   {
+    "operator": "WeWork",
+    "centre": "IWF Campus",
+    "year": 2024,
+    "seats": 1822
+   },
+   {
+    "operator": "Simpliwork",
+    "centre": "MFAR Wilshire II",
+    "year": 2025,
+    "seats": 700
+   },
+   {
+    "operator": "ClayWorks",
+    "centre": "GR Tech Park",
+    "year": 2025,
+    "seats": 1250
+   },
+   {
+    "operator": "ClayWorks",
+    "centre": "Rhapsody (this tower)",
+    "year": 2025,
+    "seats": 2500,
+    "go": "d-clayworks-rhapsody"
+   },
+   {
+    "operator": "Sumadhura Workship",
+    "centre": "Capitol Towers",
+    "year": 2025,
+    "seats": 3000
+   },
+   {
+    "operator": "TEC",
+    "centre": "The Earth Centre",
+    "year": 2026,
+    "seats": 1100
+   },
+   {
+    "operator": "WeWork",
+    "centre": "Vista Earth Centre",
+    "year": 2026,
+    "seats": 2300
+   },
+   {
+    "operator": "BHIVE",
+    "centre": "Concorde Econex",
+    "year": 2026,
+    "seats": 3000
+   },
+   {
+    "operator": "WeWork",
+    "centre": "Infinix Palladium",
+    "year": 2026,
+    "seats": 3100
+   }
+  ],
+  "reads": [
+   "Supply is growing fast. Deals signed in 2026 alone equal about a sixth of the area's flex stock.",
+   "Operators keep paying to enter. They would not if floors sat empty.",
+   "We must sell on fit and service, not on being the only choice."
+  ]
+ },
  "competition": [
   {
    "brand": "WeWork",
