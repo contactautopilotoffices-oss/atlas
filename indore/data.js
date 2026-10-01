@@ -30,6 +30,19 @@ window.IND_META = {
   zoom: 11.6
 };
 
+/* -------------------------------------------------------------- EXISTING --
+   The building in use today. Every option is read against it: how far the
+   move is, and what changes for metro access, talent reach and rivals.
+   Position taken from the Google Maps place shared by the BD team. */
+window.IND_EXISTING = {
+  id: "nrk-star", name: "NRK Star", label: "Existing building",
+  locality: "Vijay Nagar", micro: "sbd",
+  lat: 22.7460077, lng: 75.8926233, precision: "building",
+  occupant: "Altruist Technologies (BPO), 3rd to 5th floors",
+  geoNote: "Google Maps place pin for NRK Star, shared by the BD team.",
+  geoSrc: "https://www.google.com/maps/place/NRK+Star/@22.7460077,75.8926233,17z"
+};
+
 /* ------------------------------------------------------------------ DECK --
    The ten shortlisted options. `n` is our running number. The deck numbers
    the last two pages "Option 02" and "Option 03" again, so its own label is
@@ -413,6 +426,9 @@ window.IND_PLACES = [
   { id: "yash166", kind: "emp", name: "Yash Technologies", sub: "Scheme 166, Super Corridor", lat: 22.7625, lng: 75.8175, precision: "locality", note: "Also at Crystal IT Park; corporate office on M.G. Road.", src: "https://www.yash.com/contact-us/" },
   { id: "crystal", kind: "emp", name: "Crystal IT Park cluster", sub: "Ring Road, Bhawarkua side", lat: 22.7035, lng: 75.8995, precision: "locality",
     note: "Yash Technologies, InfoBeans, Impetus (STP-II) and ClearTrail list offices here. The deck places InfoBeans on the Super Corridor.", src: "https://infobeans.ai/contact-us/" },
+  { id: "altruist", kind: "emp", name: "Altruist Technologies", sub: "NRK Star, Scheme 54, opposite C21 Mall", lat: 22.746227, lng: 75.892408, precision: "building",
+    note: "BPO / CX. Runs its Indore centre from the 3rd to 5th floors of NRK Star (GST registration and 2026 walk-in drives). Its website also lists Brilliant Titanium and Brilliant Solitaire in Scheme 78.",
+    src: "https://www.altruistindia.com/contact-us/" },
   { id: "taskus", kind: "emp", name: "TaskUs", sub: "C21 Business Park, Vijay Nagar", lat: 22.7455, lng: 75.8938, precision: "locality", note: "BPO; the most direct competitor for voice and back-office talent in the SBD.", src: "https://www.taskus.com/locations/india/" },
   { id: "tp", kind: "emp", name: "Teleperformance", sub: "Brilliant Sapphire, Scheme 78", lat: 22.763322, lng: 75.884012, precision: "building", note: "Recruitment address; occupancy to verify.", src: "https://www.tp.com/en-in/locations/india/" },
   { id: "impetus", kind: "emp", name: "Impetus", sub: "Palasia (Sarda House)", lat: 22.7240, lng: 75.8855, precision: "locality", note: "Also STP-II Crystal IT Park and an SEZ at Badiya Keema.", src: "https://www.impetus.com/about/contact/" },
@@ -482,7 +498,7 @@ window.IND_FACTS = {
   ],
   employers: [
     { k: "IT services", v: "Infosys and TCS campuses on the Super Corridor; Yash, InfoBeans, Impetus, ClearTrail, Diaspark in the city", asOf: "2025-26", conf: "medium", src: "https://www.tcs.com/who-we-are/newsroom/press-release/tcs-software-development-campus-indore-super-corridor" },
-    { k: "BPO / CX", v: "TaskUs (C21 Business Park, Vijay Nagar), Teleperformance (Scheme 78), Infosys BPM", asOf: "2025-26", conf: "medium", src: "https://www.taskus.com/locations/india/" },
+    { k: "BPO / CX", v: "Altruist Technologies (NRK Star, Scheme 54, opposite C21 Mall), TaskUs (C21 Business Park, Vijay Nagar), Teleperformance (Scheme 78), Infosys BPM", asOf: "2025-26", conf: "medium", src: "https://www.taskus.com/locations/india/" },
     { k: "New entrants", v: "Deloitte opened in Indore (address not published)", asOf: "2025-26", conf: "medium", src: "https://www.deloitte.com/in/en/about/press-room/deloitte-india-establishes-presence-in-indore.html" }
   ]
 };
