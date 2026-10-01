@@ -8,9 +8,8 @@
    Environment:
      ENGY_API_KEY         powers the desk on Engy (default provider)
      ANTHROPIC_API_KEY    optional: run the desk on Claude instead
-     GODSEYE_ACCESS_KEY   required. The passcode people type into the gate.
-                          /ask refuses to run without it, because every call
-                          spends API credit.
+     GODSEYE_ACCESS_KEY   optional. Overrides the gate passcode kept in code
+                          (ACCESS_KEY, next to checkAccess below).
      GODSEYE_MODEL        optional, per-provider default (see ask.js)
    ============================================================================ */
 "use strict";
@@ -202,9 +201,15 @@ async function getFeed({ force = false } = {}) {
 
 /* ----------------------------------------------------------------- auth -- */
 
+/* Gate passcode, kept in code like the Digitide gate (chosen by Autopilot)
+   so previews work with no Vercel setup. GODSEYE_ACCESS_KEY in the
+   environment overrides it. The repo is readable, so this keeps a casual
+   visitor out; it does not stop someone who reads the code from spending
+   desk credit. Change it here if it leaks. */
+const ACCESS_KEY = "Autopilot1234%";
+
 function checkAccess(req) {
-  const want = process.env.GODSEYE_ACCESS_KEY || "";
-  if (!want) return { ok: false, status: 503, error: "GODSEYE_ACCESS_KEY is not set on the server." };
+  const want = process.env.GODSEYE_ACCESS_KEY || ACCESS_KEY;
   const norm = (v) => String(v || "").trim().toUpperCase().replace(/[\s-]/g, "");
   const got = norm(req.headers["x-godseye-key"]);
   const a = crypto.createHash("sha256").update(got).digest();

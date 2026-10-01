@@ -41,7 +41,7 @@ Set in Vercel, Project > Settings > Environment Variables:
 | Variable | Required | What it is |
 | --- | --- | --- |
 | `ENGY_API_KEY` | yes, for Engy | Powers the desk. The feed works without it. |
-| `GODSEYE_ACCESS_KEY` | yes | The passcode people type at the gate. Checked on the server. |
+| `GODSEYE_ACCESS_KEY` | no | Overrides the gate passcode kept in code (`ACCESS_KEY` in `api/godseye/_lib.js`). |
 | `GODSEYE_MODEL` | no | Defaults to `engy/deepseek-v4-flash-0731`. `engy/qwen3.8-27b` also exists. |
 | `ENGY_BASE_URL` | no | Defaults to `https://api.engy.ai/v1`. |
 | `EXA_API_KEY` | recommended | Checks leads on Exa before the model answers. |
@@ -53,11 +53,11 @@ project. `vercel.json` already redirects it to `/godseye/`.
 
 ## Run locally
 
-    ENGY_API_KEY=... GODSEYE_ACCESS_KEY=... npm run godseye
+    ENGY_API_KEY=... EXA_API_KEY=... npm run godseye
     open http://localhost:8090/godseye/
 
 ## Cost
 
 On Engy each question is up to 10 model rounds and 20 tool calls, billed per token. On
-Claude it is one request with up to 15 web searches. Expect one to three minutes per answer. Keep `GODSEYE_ACCESS_KEY` private: anyone with it can spend
+Claude it is one request with up to 15 web searches. Expect one to three minutes per answer.
 API credit.
