@@ -30,6 +30,18 @@ window.IND_META = {
   zoom: 11.6
 };
 
+/* -------------------------------------------------------------- EXISTING --
+   The building in use today. Every option is read against it: how far the
+   move is, and what changes for metro access, talent reach and rivals.
+   Position taken from the Google Maps place shared by the BD team. */
+window.IND_EXISTING = {
+  id: "nrk-star", name: "NRK Star", label: "Existing building",
+  locality: "Vijay Nagar", micro: "sbd",
+  lat: 22.7460077, lng: 75.8926233, precision: "building",
+  geoNote: "Google Maps place pin for NRK Star, shared by the BD team.",
+  geoSrc: "https://www.google.com/maps/place/NRK+Star/@22.7460077,75.8926233,17z"
+};
+
 /* ------------------------------------------------------------------ DECK --
    The ten shortlisted options. `n` is our running number. The deck numbers
    the last two pages "Option 02" and "Option 03" again, so its own label is

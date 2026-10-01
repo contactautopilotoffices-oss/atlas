@@ -115,6 +115,32 @@ function deckStations(o) {
   return o.commute.split("/").map(s => s.trim()).map(s => ({ label: s, stn: stationFor(s) }));
 }
 
+/* ------------------------------------------------- existing building ---- */
+/* NRK Star is the building in use today. Each option is read against it so
+   the move itself is visible: distance, metro, talent reach and rivals. */
+const EX = window.IND_EXISTING;
+const nearestOpen = (p) => STN.filter(s => s.open).map(s => ({ s, d: km(p, s) })).sort((a, b) => a.d - b.d)[0];
+const fmtKm = (d) => d < 1 ? `${Math.round(d * 100) * 10} m` : `${d.toFixed(1)} km`;
+const exKm = (o) => km(o, EX);
+function moveRead(d) {
+  const m = driveMin(d);
+  if (d < 1) return "Next door. Existing staff keep their commute; the choice is about the building, not the location.";
+  if (d < 3) return `Same neighbourhood. Commutes for existing staff change by a few minutes at most.`;
+  if (d < 8) return `Across town. Some staff gain and some lose up to about ${m} min each way; worth mapping where the current team lives.`;
+  return `A real relocation. Commutes for existing staff change by up to about ${m} min each way; plan for retention before committing.`;
+}
+/* One link per option, loaded once; the map filters to the open option.
+   The labels read from their own copy of the data, as elsewhere on this
+   map: a glyph failure then costs only the text, never the line. */
+function exLinkFC() {
+  return { type: "FeatureCollection", features: O.flatMap(o => { const d = exKm(o); return [
+    { type: "Feature", geometry: { type: "LineString", coordinates: [[o.lng, o.lat], [EX.lng, EX.lat]] }, properties: { id: o.id, part: "line" } },
+    { type: "Feature", geometry: { type: "Point", coordinates: [(o.lng + EX.lng) / 2, (o.lat + EX.lat) / 2] },
+      properties: { id: o.id, part: "label", label: `${fmtKm(d)} · about ${driveMin(d)} min to ${EX.name}` } }
+  ]; }) };
+}
+const exLinkFilter = (part) => ["all", ["==", ["get", "part"], part], ["==", ["get", "id"], S.sel || ""]];
+
 /* --------------------------------------------------------- handover ------ */
 function monthsTo(iso) {
   if (!iso) return null;
@@ -239,7 +265,7 @@ const rankBy = (w) => O.slice().sort((a, b) => exactWith(b, w) - exactWith(a, w)
 const S = {
   tab: "brief", sel: null, hov: null, shot: "close", sort: "score", target: null, preset: "balanced", sheet: "half",
   filters: new Set(),
-  layers: { zones: true, metro: true, walk: false, bus: true, edu: true, emp: true, res: true, rings: true }
+  layers: { existing: true, zones: true, metro: true, walk: false, bus: true, edu: true, emp: true, res: true, rings: true }
 };
 const FILTERS = [
   { key: "A", label: "Grade A", test: o => o.grade === "A" },
@@ -527,6 +553,17 @@ function addLayers() {
     "text-font": ["DIN Pro Regular", "Arial Unicode MS Regular"], "text-offset": [0, .95], "text-anchor": "top", "text-optional": true, "text-max-width": 9 },
     paint: { "text-color": ["get", "color"], "text-halo-color": "#fff", "text-halo-width": 1.3 } });
 
+  /* The existing building: a dark ringed target so it never reads as an
+     option, plus a dashed link to whichever option is open. */
+  map.addSource("ex-link", { type: "geojson", data: exLinkFC() });
+  add({ id: "ex-link", type: "line", source: "ex-link", filter: exLinkFilter("line"), layout: { "line-cap": "round" },
+    paint: { "line-color": "#2a1e16", "line-width": 2, "line-dasharray": [1.4, 1.4], "line-opacity": .75 } });
+  const exData = { type: "Feature", geometry: { type: "Point", coordinates: [EX.lng, EX.lat] }, properties: { name: EX.name } };
+  map.addSource("existing", { type: "geojson", data: exData });
+  add({ id: "ex-pin", type: "circle", source: "existing", paint: { "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 8, 15, 12],
+    "circle-color": "#2a1e16", "circle-stroke-color": "#fff", "circle-stroke-width": 2.5 } });
+  add({ id: "ex-dot", type: "circle", source: "existing", paint: { "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3, 15, 4.5], "circle-color": "#fff" } });
+
   map.addSource("options", { type: "geojson", data: optionFC() });
   const gradeCol = ["case", ["==", ["get", "grade"], "A"], "#a3502c", "#2f6f9f"];
   const foc = ["get", "foc"];
@@ -551,12 +588,21 @@ function addLayers() {
   add({ id: "opt-name-focus", type: "symbol", source: "options-lbl", filter: ["==", foc, 2], layout: { "text-field": ["get", "name"], "text-size": 14,
     "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"], "text-offset": [1.6, 0], "text-anchor": "left", "text-allow-overlap": true },
     paint: { "text-color": "#2a1e16", "text-halo-color": "#fff", "text-halo-width": 2.2 } });
+  map.addSource("existing-lbl", { type: "geojson", data: exData });
+  map.addSource("ex-link-lbl", { type: "geojson", data: exLinkFC() });
+  add({ id: "ex-label", type: "symbol", source: "existing-lbl", layout: { "text-field": `${EX.name} · existing`, "text-size": 12,
+    "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"], "text-offset": [0, 1.3], "text-anchor": "top", "text-allow-overlap": true },
+    paint: { "text-color": "#2a1e16", "text-halo-color": "#fff", "text-halo-width": 2 } });
+  add({ id: "ex-link-label", type: "symbol", source: "ex-link-lbl", filter: exLinkFilter("label"), layout: { "text-field": ["get", "label"],
+    "text-size": 11.5, "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"], "text-allow-overlap": true, "text-ignore-placement": true },
+    paint: { "text-color": "#2a1e16", "text-halo-color": "#fff", "text-halo-width": 2.2 } });
   applyLayerVisibility();
 }
 
 /* The layer chips double as the legend: each carries the swatch its layer
    draws with, so there is no separate key to cover the map. */
 const LAYERS = [
+  { key: "existing", label: "NRK Star (existing)", sw: `<span class="dot" style="background:#2a1e16;box-shadow:inset 0 0 0 2.5px #2a1e16,inset 0 0 0 5px #fff"></span>`, ids: ["ex-link", "ex-link-label", "ex-pin", "ex-dot", "ex-label"] },
   { key: "zones", label: "Zones", sw: `<span class="sw" style="height:9px;background:rgba(111,179,164,.35);border:1px dashed #6fb3a4"></span>`, ids: ["zones-fill", "zones-line", "zones-label"] },
   { key: "metro", label: "Metro", sw: `<span class="sw" style="background:linear-gradient(90deg,#f2c200 55%,transparent 55% 65%,#d9a400 65% 80%,transparent 80%)"></span>`, ids: ["metro-open", "metro-casing", "metro-plan", "stations", "stations-label"] },
   { key: "walk", label: "Walk 0.5/1 km", sw: `<span class="dot" style="background:rgba(217,164,0,.18);border:1px dashed #b58900"></span>`, ids: ["walk-fill", "walk-line"] },
@@ -575,6 +621,8 @@ function applyLayerVisibility() {
   for (const id of ["places", "places-label"]) if (map.getLayer(id)) map.setFilter(id, ["in", ["get", "kind"], ["literal", kinds]]);
   const rs = map.getSource("rings"); if (rs) rs.setData(ringFC());
   const rl = map.getSource("ring-labels"); if (rl) rl.setData(ringLabelFC());
+  if (map.getLayer("ex-link")) map.setFilter("ex-link", exLinkFilter("line"));
+  if (map.getLayer("ex-link-label")) map.setFilter("ex-link-label", exLinkFilter("label"));
   recede();
 }
 /* With an option open, only its own context keeps full weight: the metro
@@ -638,6 +686,8 @@ function wireMap() {
   hover("places", p => { const x = window.IND_PLACES.find(y => y.id === p.id);
     const kind = { edu: "Institution", emp: "Employer", res: "Residential catchment", hub: "Transport" }[x.kind];
     return `<b>${esc(x.name)}</b>${x.sub ? `<br>${esc(x.sub)}` : ""}<br><span style="color:#6c5b4d">${kind}</span><br>${esc(x.note)}`; });
+  hover("ex-pin", () => { const m = nearestOpen(EX), o = S.sel && O.find(x => x.id === S.sel);
+    return `<b>${esc(EX.name)}</b><br>${esc(EX.label)} · ${esc(EX.locality)}<br>Nearest open metro: ${esc(m.s.name)}, ${fmtKm(m.d)}${o ? `<br>${fmtKm(exKm(o))} from ${esc(o.name)}` : ""}<br><span style="color:#6c5b4d">Pinned from Google Maps</span>`; });
   hover("stations", p => `<b>${esc(p.name)}</b><br>Yellow Line station ${p.n} · ${p.open ? "open" : "not yet open"}<br><span style="color:#6c5b4d">Position approximate</span>`);
   map.on("click", "opt", e => select(e.features[0].properties.id, true));
   map.on("mousemove", "opt", e => { const id = e.features[0].properties.id; if (id !== S.sel && S.hov !== id) { S.hov = id; refreshPins(); } });
@@ -821,7 +871,7 @@ const GUIDE = {
       "Below: the deck's specs word for word, the fit score broken into parts, who is within 15, 30 and 45 minutes, and what is missing.",
       "Back returns to the section you came from."] }
 };
-const LAYER_HINT = { zones: "CBD, SBD and Super Corridor outlines.", metro: "The Yellow Line: open stations solid, planned ones dashed.",
+const LAYER_HINT = { existing: "NRK Star, the building in use today, with a dashed line and the distance to the open option.", zones: "CBD, SBD and Super Corridor outlines.", metro: "The Yellow Line: open stations solid, planned ones dashed.",
   walk: "Half and one kilometre walking circles around open stations.", bus: "The AB Road iBus corridor.",
   edu: "Colleges and institutes: the fresher pipeline.", emp: "Rival employers competing for the same people.",
   res: "Residential belts where staff are likely to live.", rings: "15, 30 and 45 minute drive rings around the open option." };
@@ -927,9 +977,10 @@ function insightsHTML() {
   const top = (f) => O.slice().sort((a, b) => f(b) - f(a))[0];
   const best = top(exact), near = top(o => -o.commuteM), big = top(o => o.superArea), eff = top(o => o.efficiency), tal = top(talentRaw);
   const readyNow = O.filter(o => o.handoverKind === "ready"), readyBest = readyNow.slice().sort(byFit)[0];
-  const tc = catchment(tal);
+  const tc = catchment(tal), home = top(o => -exKm(o));
   const cards = [
     { l: "Best overall", v: best.name, s: `Fit ${score(best)}/100 on ${PRESETS[S.preset] ? PRESETS[S.preset].label.toLowerCase() : "custom"} weights${levelWith(best).length ? `, just ahead of ${levelWith(best)[0].name} (${exact(best).toFixed(2)} against ${exact(levelWith(best)[0]).toFixed(2)})` : ""}`, go: best.id, tone: "lead" },
+    { l: `Closest to ${EX.name}`, v: fmtKm(exKm(home)), s: `${home.name}, about ${driveMin(exKm(home))} min by road from the existing building`, go: home.id },
     { l: "Closest to metro", v: near.commuteDist, s: `${near.name}, to ${deckStations(near)[0].stn ? deckStations(near)[0].stn.name : near.commute}`, go: near.id },
     { l: "Move in now", v: readyBest.name, s: `Best of ${readyNow.length} ready-now options`, go: readyBest.id },
     { l: "Largest space", v: `${inr(big.superArea)} SF`, s: `${big.name}, handover ${big.handover}`, go: big.id },
@@ -1144,6 +1195,8 @@ function renderOption(o) {
       <div class="kpi"><div class="l">Fit score</div><div class="v">${sc}<span style="font-size:13px;color:var(--mut)">/100</span></div><div class="s">rank ${O.slice().sort(byFit).findIndex(x => x.id === o.id) + 1} of 10${levelWith(o).length ? `, level on ${sc} with ${esc(levelWith(o).map(x => x.name).join(", "))} (exact ${exact(o).toFixed(2)})` : ""}</div></div>
     </div>
 
+    ${vsExistingHTML(o, c)}
+
     <h3>As the deck states it (page ${o.page})</h3>
     <table class="spec">
       <tr><th>Grade</th><td>Grade ${esc(o.grade)}</td></tr>
@@ -1183,6 +1236,28 @@ function renderOption(o) {
 
     <h3>Where it sits on the map</h3>
     <p class="note">Precision: <b>${esc(o.precision)}</b>. ${esc(o.geoNote)} ${o.geoSrc ? cite(o.geoSrc, "source") : ""}</p>`;
+}
+/* The move from NRK Star, side by side. Metro is measured on the map for
+   both buildings (straight line to the nearest open station) so the two
+   figures are like for like; the deck's own figure stays in the spec. */
+function vsExistingHTML(o, c) {
+  const d = exKm(o), xc = catchment(EX), mo = nearestOpen(o), mx = nearestOpen(EX);
+  const delta = (a, b, moreIsGood) => { const v = a - b; if (!v) return `<span class="dl">same</span>`;
+    return `<span class="dl ${(v > 0) === moreIsGood ? "up" : "dn"}">${v > 0 ? "+" : "−"}${Math.abs(v)}</span>`; };
+  const mDelta = Math.round((mo.d - mx.d) * 1000), mTxt = Math.abs(mDelta) < 100 ? `<span class="dl">about the same</span>`
+    : `<span class="dl ${mDelta < 0 ? "up" : "dn"}">${mDelta < 0 ? "closer" : "farther"} by ${fmtKm(Math.abs(mDelta) / 1000)}</span>`;
+  const rows = [
+    ["Micro-market", esc(window.IND_ZONE_OF[EX.micro]), `${esc(window.IND_ZONE_OF[o.micro])} ${o.micro === EX.micro ? `<span class="dl">same</span>` : `<span class="dl dn">different</span>`}`],
+    ["Nearest open metro", `${esc(mx.s.name)} · ${fmtKm(mx.d)}`, `${esc(mo.s.name)} · ${fmtKm(mo.d)} ${mTxt}`],
+    ["Institutions ≤30 min", upTo(xc, 1, "edu"), `${upTo(c, 1, "edu")} ${delta(upTo(c, 1, "edu"), upTo(xc, 1, "edu"), true)}`],
+    ["Residential belts ≤30 min", upTo(xc, 1, "res"), `${upTo(c, 1, "res")} ${delta(upTo(c, 1, "res"), upTo(xc, 1, "res"), true)}`],
+    ["Rival employers ≤15 min", upTo(xc, 0, "emp"), `${upTo(c, 0, "emp")} ${delta(upTo(c, 0, "emp"), upTo(xc, 0, "emp"), false)}`]
+  ];
+  return `<h3>Against ${esc(EX.name)}, the existing building</h3>
+    <p class="vsx"><b>${fmtKm(d)} apart</b>, about ${driveMin(d)} min by road. ${esc(moveRead(d))}</p>
+    <table class="ring-tbl"><thead><tr><th></th><th>${esc(EX.name)} (existing)</th><th>${esc(o.name)}</th></tr></thead>
+    <tbody>${rows.map(r => `<tr><td>${r[0]}</td><td class="num">${r[1]}</td><td class="num">${r[2]}</td></tr>`).join("")}</tbody></table>
+    <p class="note">Green is better for the move, red is worse. Distances are straight line on the map; drive time uses the same assumptions as the rings. ${esc(EX.name)} is pinned to the building; this option's pin is ${esc(o.precision)}-level.</p>`;
 }
 function employabilityRead(o, c) {
   const edu = upTo(c, 1, "edu"), res = upTo(c, 1, "res"), emp = upTo(c, 0, "emp");
@@ -1308,6 +1383,7 @@ function renderCompare() {
     ["Fit score", o => `<b>${score(o)}</b>/100`, best(score)],
     ["Micro-market", o => esc(window.IND_ZONE_OF[o.micro])],
     ["Location", o => esc(o.locality)],
+    [`From ${EX.name} (existing)`, o => `${fmtKm(exKm(o))} · about ${driveMin(exKm(o))} min`, best(o => -exKm(o))],
     ["Grade", o => `Grade ${o.grade}`],
     ["Floor(s) available", o => esc(o.floors)],
     ["Super built-up (SF)", o => inr(o.superArea), best(o => o.superArea)],
