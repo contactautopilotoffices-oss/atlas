@@ -507,6 +507,7 @@ function cardFacts(p) {
   if (p.kind === "deal") { if (p.date) f.push(`<span>${esc(p.date)}</span>`); if (p.sqft) f.push(`<span class="num">${inr(p.sqft)} SF</span>`); else if (p.seats) f.push(`<span class="num">${inr(p.seats)} seats</span>`); }
   if (p.kind === "talent" && p.msf) f.push(`<span>${p.msf} msf</span>`);
   if (p.kind === "comp" && p.seats) f.push(`<span class="num">${inr(p.seats)} seats</span>`);
+  if (p.status && p.status !== "operating") f.push(`<span class="fit no">${p.status === "pipeline" ? "pipeline" : "check status"}</span>`);
   return f.join("");
 }
 function renderList() {
@@ -680,7 +681,6 @@ function renderOverview() {
   const kinds = ["comp", "talent", "res", "edu", "deal", "social", "metro"];
   const site = [["Developer", SITE.developer], ["What it is", SITE.type], ["Address", SITE.address], ["Size", SITE.size], ["Status", SITE.status]].filter(r => r[1]);
   $("#p-body").innerHTML = `
-    ${SITE.photo ? `<div class="hero"><img src="${esc(SITE.photo)}" alt="${esc(SITE.name)}"><span class="ph">${esc(SITE.photoCaption || "")}</span></div>` : ""}
     <div class="kpis">
       <div class="kpi"><div class="l">Flex centres ≤ 3 km</div><div class="v">${c3}</div><div class="s">${c5} within 5 km</div></div>
       <div class="kpi"><div class="l">Brands ≤ 10 km</div><div class="v">${brandsNear.size}<span style="font-size:13px;color:var(--mut)">/${D.competition.length}</span></div><div class="s">of the brief's list</div></div>
@@ -697,6 +697,7 @@ function renderOverview() {
     <table class="spec">${site.map(r => `<tr><th>${esc(r[0])}</th><td>${esc(r[1])}</td></tr>`).join("")}
       <tr><th>Position</th><td>${esc(SITE.precisionNote)} ${SITE.src ? cite(SITE.src, "source") : ""}</td></tr></table>
     ${SITE.notes ? `<p class="note">${esc(SITE.notes)}</p>` : ""}
+    ${SITE.photo ? `<div class="hero"><img src="${esc(SITE.photo)}" alt="${esc(SITE.photoCaption || SITE.name)}" loading="lazy"><span class="ph">${esc(SITE.photoCaption || "")}</span></div>` : ""}
 
     <h3>Catchment</h3>
     <table class="ring-tbl"><thead><tr><th>Drive time</th>${kinds.map(k => `<th>${esc(KINDS[k].short)}</th>`).join("")}</tr></thead>
@@ -744,7 +745,7 @@ function renderCompetition() {
   const band = (a, b) => all.filter(p => p.d > a && p.d <= b).length;
   $("#p-body").innerHTML = `
     <div class="kpis">
-      <div class="kpi"><div class="l">Centres mapped</div><div class="v">${all.length}</div><div class="s">${present.length} brands</div></div>
+      <div class="kpi"><div class="l">Centres mapped</div><div class="v">${all.length}</div><div class="s">${present.length} brands · ${all.filter(p => p.status === "pipeline").length} in the pipeline</div></div>
       <div class="kpi"><div class="l">Within 2 km</div><div class="v">${band(0, 2)}</div><div class="s">walk or a short ride</div></div>
       <div class="kpi"><div class="l">2 to 5 km</div><div class="v">${band(2, 5)}</div><div class="s">${band(5, 99)} further out</div></div>
     </div>
@@ -755,7 +756,7 @@ function renderCompetition() {
     ${absent.length ? `<h3>No centre found nearby</h3><ul class="facts">${absent.map(r => `<li class="fact"><span class="k">${esc(r.b.brand)}.</span> ${esc(r.b.note || "No centre found within about 10 km.")}${r.b.src ? `<div class="meta">${cite(r.b.src)}</div>` : ""}</li>`).join("")}</ul>` : ""}
     <h3>Every centre</h3>
     <table class="ring-tbl"><thead><tr><th>Centre</th><th>Brand</th><th>Distance</th><th>Seats</th></tr></thead>
-    <tbody>${all.slice().sort((a, b) => a.d - b.d).map(p => `<tr><td>${link(p)}<br><span class="note">${esc(p.locality || "")}</span></td><td>${esc(p.brand)}</td><td class="num">${fmtKm(p.d)}</td><td class="num">${p.seats ? inr(p.seats) : "n/a"}</td></tr>`).join("")}</tbody></table>
+    <tbody>${all.slice().sort((a, b) => a.d - b.d).map(p => `<tr><td>${link(p)}${p.status && p.status !== "operating" ? ` <span class="fit no">${p.status === "pipeline" ? "pipeline" : "check"}</span>` : ""}<br><span class="note">${esc(p.locality || "")}</span></td><td>${esc(p.brand)}</td><td class="num">${fmtKm(p.d)}</td><td class="num">${p.seats ? inr(p.seats) : "n/a"}</td></tr>`).join("")}</tbody></table>
     <p class="note">${esc(D.competitionNote || "")}</p>`;
 }
 
@@ -853,7 +854,7 @@ function renderPlace(p) {
     <h2>${esc(title)}</h2>${p.sub && p.kind !== "comp" ? `<div class="lede">${esc(p.sub)}</div>` : ""}${actions()}`;
   const st = p.kind === "metro" ? null : nearest("metro", p), cm = catchOf(p);
   const rows = [
-    ["Brand", p.brand], ["Building", p.building], ["Address", p.address], ["Locality", p.locality],
+    ["Brand", p.brand], ["Status", p.status && p.status !== "operating" ? p.statusText : null], ["Building", p.building], ["Address", p.address], ["Locality", p.locality],
     ["Type", p.type], ["Date", p.dateFull || p.date], ["Size", p.sqft ? `${inr(p.sqft)} sq ft` : p.msf ? `about ${p.msf} million sq ft` : null],
     ["Seats", p.seats ? inr(p.seats) : null], ["Beds", p.beds], ["Area", p.acres ? `about ${p.acres} acres` : null],
     ["Occupiers", p.occupiers], ["Opened", p.opened], ["Landlord", p.landlord]
