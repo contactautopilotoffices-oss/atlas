@@ -231,6 +231,365 @@ window.WF = {
    "note": "ITPL main gate first; Kadugodi about 4.5 km and Whitefield railway station about 4.5 km further along ITPL Main Road."
   }
  ],
+ "micromarkets": [
+  {
+   "n": 1,
+   "key": "cbd",
+   "name": "CBD",
+   "full": "Central Business District",
+   "color": "#4a3aa7",
+   "sub": "MG Road · Residency Road · Richmond Road · Lavelle Road",
+   "poly": [
+    [
+     77.586,
+     12.987
+    ],
+    [
+     77.606,
+     12.991
+    ],
+    [
+     77.62,
+     12.98
+    ],
+    [
+     77.621,
+     12.963
+    ],
+    [
+     77.608,
+     12.954
+    ],
+    [
+     77.59,
+     12.955
+    ],
+    [
+     77.581,
+     12.97
+    ]
+   ],
+   "label": [
+    77.548,
+    12.99
+   ],
+   "side": "left",
+   "note": "The old core: smaller, older floor plates and the highest rents in the city; little new supply."
+  },
+  {
+   "n": 2,
+   "key": "sbd",
+   "name": "Off-CBD",
+   "full": "Secondary Business District",
+   "color": "#2a78d6",
+   "sub": "Indiranagar · Domlur · Old Airport Road · Koramangala",
+   "poly": [
+    [
+     77.63,
+     12.993
+    ],
+    [
+     77.653,
+     12.991
+    ],
+    [
+     77.669,
+     12.967
+    ],
+    [
+     77.661,
+     12.944
+    ],
+    [
+     77.641,
+     12.925
+    ],
+    [
+     77.616,
+     12.922
+    ],
+    [
+     77.611,
+     12.942
+    ],
+    [
+     77.625,
+     12.962
+    ]
+   ],
+   "label": [
+    77.548,
+    12.938
+   ],
+   "side": "left",
+   "note": "Residential-led neighbourhoods with mid-size offices and start-up clusters, between the CBD and the ORR."
+  },
+  {
+   "n": 3,
+   "key": "orr-north",
+   "name": "ORR North",
+   "full": "Outer Ring Road, Hebbal to KR Puram",
+   "color": "#1baf7a",
+   "sub": "Hebbal · Manyata Tech Park · Nagawara · Hennur · KR Puram",
+   "path": [
+    [
+     77.592,
+     13.037
+    ],
+    [
+     77.61,
+     13.042
+    ],
+    [
+     77.624,
+     13.044
+    ],
+    [
+     77.636,
+     13.036
+    ],
+    [
+     77.646,
+     13.026
+    ],
+    [
+     77.656,
+     13.016
+    ],
+    [
+     77.665,
+     13.008
+    ],
+    [
+     77.672,
+     12.999
+    ]
+   ],
+   "widthKm": 1.5,
+   "label": [
+    77.56,
+    13.062
+   ],
+   "side": "left",
+   "note": "Anchored by Manyata Tech Park; large campuses on the ring road towards the airport side of the city."
+  },
+  {
+   "n": 4,
+   "key": "orr-east",
+   "name": "ORR East",
+   "full": "Outer Ring Road, KR Puram to Silk Board",
+   "color": "#e34948",
+   "sub": "Mahadevapura · Marathahalli · Bellandur · Embassy TechVillage · Ecoworld",
+   "path": [
+    [
+     77.672,
+     12.999
+    ],
+    [
+     77.686,
+     12.99
+    ],
+    [
+     77.694,
+     12.978
+    ],
+    [
+     77.7,
+     12.965
+    ],
+    [
+     77.702,
+     12.954
+    ],
+    [
+     77.697,
+     12.94
+    ],
+    [
+     77.684,
+     12.93
+    ],
+    [
+     77.665,
+     12.924
+    ],
+    [
+     77.645,
+     12.921
+    ],
+    [
+     77.624,
+     12.917
+    ]
+   ],
+   "widthKm": 1.7,
+   "label": [
+    77.56,
+    12.9
+   ],
+   "side": "left",
+   "note": "Bengaluru's prime tech corridor: Embassy TechVillage, Ecoworld, Prestige Tech Park, Bagmane. The western road out of Rhapsody leads here.",
+   "facts": [
+    {
+     "k": "Rent",
+     "v": "INR 90-135 per sq ft per month (Eastern ORR, 2025)",
+     "src": "https://websitemedia.anarock.com/media/India_Office_Market_Annual_Update_2025_bec8b7647a.pdf"
+    },
+    {
+     "k": "Achieved rents",
+     "v": "ORR comparables at INR 97-113 per sq ft per month in 2025-26 deals",
+     "src": "https://www.hindustantimes.com/real-estate/dhr-holdings-leases-1-8-lakh-sq-ft-office-space-in-bengaluru-s-whitefield-for-total-rent-of-88-crore-101788854115334.html"
+    }
+   ]
+  },
+  {
+   "n": 5,
+   "key": "whitefield",
+   "name": "Whitefield",
+   "full": "Peripheral East (PBD East)",
+   "color": "#eb6834",
+   "sub": "ITPL · EPIP Zone · Hoodi · Brookefield · Kadugodi",
+   "poly": [
+    [
+     77.706,
+     13.004
+    ],
+    [
+     77.735,
+     13.009
+    ],
+    [
+     77.765,
+     13.008
+    ],
+    [
+     77.779,
+     12.992
+    ],
+    [
+     77.773,
+     12.965
+    ],
+    [
+     77.752,
+     12.95
+    ],
+    [
+     77.728,
+     12.947
+    ],
+    [
+     77.711,
+     12.958
+    ],
+    [
+     77.703,
+     12.978
+    ]
+   ],
+   "label": [
+    77.812,
+    12.982
+   ],
+   "side": "right",
+   "note": "Rhapsody's own micro-market: ITPB, Prestige Shantiniketan, EPIP and Brookefield, now on the Purple Line.",
+   "facts": [
+    {
+     "k": "Stock, vacancy, rent",
+     "v": "46.0 msf Grade A; 9.4% vacancy; INR 75 per sq ft per month (Q2 2026)",
+     "src": "https://upgrade-uat-www.cushmanwakefield.com/-/media/cw/marketbeat-pdfs/2026/q2/apac-and-gc/india---bengaluru---office-q2-2026---final.pdf"
+    },
+    {
+     "k": "Rent range",
+     "v": "INR 70-105 per sq ft per month, up 9% in 2025",
+     "src": "https://websitemedia.anarock.com/media/India_Office_Market_Annual_Update_2025_bec8b7647a.pdf"
+    }
+   ]
+  },
+  {
+   "n": 6,
+   "key": "omr",
+   "name": "Old Madras Road",
+   "full": "KR Puram to Hoskote",
+   "color": "#008300",
+   "sub": "KR Puram · Budigere Cross · Hoskote",
+   "path": [
+    [
+     77.676,
+     13.005
+    ],
+    [
+     77.7,
+     13.016
+    ],
+    [
+     77.722,
+     13.028
+    ],
+    [
+     77.745,
+     13.04
+    ],
+    [
+     77.77,
+     13.055
+    ],
+    [
+     77.795,
+     13.07
+    ]
+   ],
+   "widthKm": 1.2,
+   "label": [
+    77.812,
+    13.078
+   ],
+   "side": "right",
+   "note": "Emerging residential and warehousing corridor north of Whitefield, reached via KR Puram."
+  },
+  {
+   "n": 7,
+   "key": "sarjapur",
+   "name": "Sarjapur Road",
+   "full": "Agara to Dommasandra",
+   "color": "#eda100",
+   "sub": "Agara · Kaikondrahalli · Wipro campus · Dommasandra",
+   "path": [
+    [
+     77.652,
+     12.92
+    ],
+    [
+     77.672,
+     12.913
+    ],
+    [
+     77.692,
+     12.906
+    ],
+    [
+     77.712,
+     12.898
+    ],
+    [
+     77.735,
+     12.89
+    ],
+    [
+     77.758,
+     12.88
+    ]
+   ],
+   "widthKm": 1.4,
+   "label": [
+    77.812,
+    12.88
+   ],
+   "side": "right",
+   "note": "Tech campuses and fast-growing residential belt south of Whitefield, linked by Varthur Road."
+  }
+ ],
+ "micromarketNote": "Outlines are indicative and follow the usual broker definitions, which differ at the edges.",
  "competition": [
   {
    "brand": "WeWork",

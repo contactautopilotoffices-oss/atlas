@@ -77,8 +77,46 @@ const KINDS = {
   res:    { label: "Residential catchment", short: "Homes", color: "#eb6834", tab: "talent" },
   edu:    { label: "College", short: "Colleges", color: "#e87ba4", tab: "talent" },
   deal:   { label: "Recent deal", short: "Deals", color: "#eda100", tab: "deals" },
-  env:    { label: "Lake / park", short: "Green & blue", color: "#008300", tab: "social" }
+  env:    { label: "Lake / park", short: "Green & blue", color: "#008300", tab: "social" },
+  mm:     { label: "Office micro-market", short: "Micro-markets", color: "#2a1e16", tab: "markets" }
 };
+
+/* ------------------------------------------------------- micro-markets --
+   Zoomed out, the map reads like a broker's market map: each office
+   micro-market is a soft coloured area with its number on it and a callout
+   line to its name. Corridors (ORR, Old Madras Road, Sarjapur Road) are
+   drawn as bands along the road; areas are smoothed outlines. The zones fade
+   as you zoom in, where the individual places take over. */
+function chaikin(pts, rounds = 3) {
+  let p = pts.slice();
+  for (let r = 0; r < rounds; r++) {
+    const out = [];
+    for (let i = 0; i < p.length; i++) {
+      const a = p[i], b = p[(i + 1) % p.length];
+      out.push([a[0] * .75 + b[0] * .25, a[1] * .75 + b[1] * .25], [a[0] * .25 + b[0] * .75, a[1] * .25 + b[1] * .75]);
+    }
+    p = out;
+  }
+  return p;
+}
+function band(path, wKm) {
+  const h = wKm / 2, L = [], R = [];
+  path.forEach((pt, i) => {
+    const a = path[Math.max(0, i - 1)], b = path[Math.min(path.length - 1, i + 1)];
+    const dx = (b[0] - a[0]) * KM_LNG, dy = (b[1] - a[1]) * KM_LAT, n = Math.hypot(dx, dy) || 1;
+    const nx = -dy / n, ny = dx / n;
+    L.push([pt[0] + nx * h / KM_LNG, pt[1] + ny * h / KM_LAT]); R.push([pt[0] - nx * h / KM_LNG, pt[1] - ny * h / KM_LAT]);
+  });
+  return chaikin([...L, ...R.reverse()], 2);
+}
+const zoneRing = (z) => { const r = z.path ? band(z.path, z.widthKm || 1.4) : chaikin(z.poly); return [...r, r[0]]; };
+const zoneAnchor = (z) => z.path ? z.path[Math.floor(z.path.length / 2)] : [z.poly.reduce((s, p) => s + p[0], 0) / z.poly.length, z.poly.reduce((s, p) => s + p[1], 0) / z.poly.length];
+const MM = (D.micromarkets || []).map(z => ({ ...z, ring: zoneRing(z), anchor: zoneAnchor(z) }));
+/* Distance from the site to a zone: 0 inside it, else to its nearest edge point. */
+function zoneDist(z, from = SITE) {
+  if (inPoly([from.lng, from.lat], z.ring)) return 0;
+  return Math.min(...z.ring.map(c => km(from, { lng: c[0], lat: c[1] })));
+}
 
 /* All places in one list, each with its distance from the site. */
 const STN = D.metro.stations;
@@ -92,13 +130,19 @@ const PLACES = [
   ...D.deals.map(x => ({ ...x, kind: "deal" })),
   ...D.environment.map(x => ({ ...x, kind: "env" }))
 ].filter(p => Number.isFinite(p.lat) && Number.isFinite(p.lng)).map(p => ({ ...p, d: km(SITE, p) }));
+/* Zones join the list after the helpers above exist; their distance is to the edge. */
+function addZones() {
+  for (const z of MM) PLACES.push({ ...z, id: `mm-${z.key}`, kind: "mm", lng: z.anchor[0], lat: z.anchor[1], d: zoneDist(z) });
+}
+addZones();
 function slug(s) { return String(s).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); }
 const byId = (id) => PLACES.find(p => p.id === id);
 const nearest = (kind, from = SITE) => PLACES.filter(p => p.kind === kind && (kind !== "metro" || p.open)).map(p => ({ p, d: km(from, p) })).sort((a, b) => a.d - b.d)[0];
 
 /* ------------------------------------------------------------- state ---- */
 const TABS = [
-  { key: "overview", label: "Overview", kinds: Object.keys(KINDS) },
+  { key: "overview", label: "Overview", kinds: Object.keys(KINDS).filter(k => k !== "mm") },
+  { key: "markets", label: "Micro-markets", kinds: ["mm"] },
   { key: "competition", label: "Competition", kinds: ["comp"] },
   { key: "connectivity", label: "Connectivity", kinds: ["metro"] },
   { key: "talent", label: "Talent & demand", kinds: ["talent", "res", "edu"] },
@@ -107,7 +151,7 @@ const TABS = [
 ];
 const S = {
   tab: "overview", sel: null, hov: null, q: "", sort: "dist", sheet: "half", kindFilter: null,
-  layers: { comp: true, metro: true, social: true, talent: true, res: false, edu: false, deal: true, env: true, catch: true, arrows: true }
+  layers: { mm: true, comp: true, metro: true, social: true, talent: true, res: false, edu: false, deal: true, env: true, catch: true, arrows: true }
 };
 const tabOf = (k) => TABS.find(t => t.key === k) || TABS[0];
 
@@ -257,7 +301,7 @@ function boot() {
   $("#sort").dataset.hint = "Order the list by distance from Rhapsody or by name.";
   $("#t-q").dataset.hint = "Type part of a name, brand or area to narrow the list.";
   addEventListener("popstate", () => applyRoute(true));
-  if (map && map.getSource("places")) { refreshMap(); if (S.sel) select(S.sel, true, true); else fitAll(false); }
+  if (map && map.getSource("places")) { refreshMap(); frame(false); }
 }
 const MAP_STYLE = "mapbox://styles/mapbox/standard";
 const BASEMAP = { lightPreset: "day", theme: "faded", showPointOfInterestLabels: true, showTransitLabels: true, showPlaceLabels: true, showRoadLabels: true, show3dObjects: true };
@@ -281,7 +325,7 @@ function initMap() {
   });
   map.addControl(new mapboxgl.AttributionControl({ compact: true }), "bottom-right");
   map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "bottom-right");
-  map.on("load", () => { addLayers(); wireMap(); if (booted && S.sel) select(S.sel, true, true); else fitAll(false); });
+  map.on("load", () => { addLayers(); wireMap(); if (booted && S.sel) select(S.sel, true, true); else frame(false); });
 }
 /* Every layer is added on its own, and every label reads its own copy of
    the data, so a glyph failure costs only the text, never the points. */
@@ -289,26 +333,41 @@ function add(layer, before) { try { map.addLayer(layer, before); } catch (e) { c
 const focusOf = (p) => (S.sel === p.id || S.hov === p.id) ? 2 : !shownKind(p.kind) ? 0 : (S.sel || S.hov) ? .5 : 1;
 const shownKind = (k) => !!S.layers[k];
 function placesFC() {
-  return { type: "FeatureCollection", features: PLACES.filter(p => p.kind !== "metro").map(p => ({ type: "Feature",
+  return { type: "FeatureCollection", features: PLACES.filter(p => p.kind !== "metro" && p.kind !== "mm").map(p => ({ type: "Feature",
     geometry: { type: "Point", coordinates: [p.lng, p.lat] },
     properties: { id: p.id, kind: p.kind, name: p.kind === "comp" ? p.brand : p.name, full: p.name, color: KINDS[p.kind].color, foc: focusOf(p) } })) };
 }
 function linkFC() {
-  return { type: "FeatureCollection", features: PLACES.map(p => ({ type: "Feature",
+  return { type: "FeatureCollection", features: PLACES.filter(p => p.kind !== "mm").map(p => ({ type: "Feature",
     geometry: { type: "LineString", coordinates: [[SITE.lng, SITE.lat], [p.lng, p.lat]] }, properties: { id: p.id } })) };
 }
 function linkLabelFC() {
-  return { type: "FeatureCollection", features: PLACES.map(p => ({ type: "Feature",
+  return { type: "FeatureCollection", features: PLACES.filter(p => p.kind !== "mm").map(p => ({ type: "Feature",
     geometry: { type: "Point", coordinates: [(SITE.lng + p.lng) / 2, (SITE.lat + p.lat) / 2] }, properties: { id: p.id, label: `${fmtKm(p.d)} · about ${driveMin(p.d)} min` } })) };
 }
+function zonesFC() {
+  return { type: "FeatureCollection", features: MM.map(z => ({ type: "Feature", geometry: { type: "Polygon", coordinates: [z.ring] }, properties: { id: `mm-${z.key}`, color: z.color } })) };
+}
+const zoneLeadFC = () => ({ type: "FeatureCollection", features: MM.map(z => ({ type: "Feature", geometry: { type: "LineString", coordinates: [z.anchor, z.label] }, properties: { id: `mm-${z.key}` } })) });
+const zoneNumFC = () => ({ type: "FeatureCollection", features: MM.map(z => ({ type: "Feature", geometry: { type: "Point", coordinates: z.anchor }, properties: { n: String(z.n), id: `mm-${z.key}` } })) });
+const zoneNameFC = () => ({ type: "FeatureCollection", features: MM.map(z => ({ type: "Feature", geometry: { type: "Point", coordinates: z.label }, properties: { name: z.name, anchor: z.side === "left" ? "right" : "left", id: `mm-${z.key}` } })) });
+/* Zones show when zoomed out and hand over to the places as you zoom in. */
+const ZONE_FADE = (hi) => ["interpolate", ["linear"], ["zoom"], 10, hi, 11.8, hi, 12.8, hi * .2, 13.4, 0];
 function addLayers() {
-  /* Catchments first, so everything else sits on top. */
+  map.addSource("mm", { type: "geojson", data: zonesFC() });
+  add({ id: "mm-fill", type: "fill", source: "mm", paint: { "fill-color": ["get", "color"], "fill-opacity": ZONE_FADE(.5) } });
+  add({ id: "mm-line", type: "line", source: "mm", paint: { "line-color": ["get", "color"], "line-width": 1.2, "line-opacity": ZONE_FADE(.9) } });
+  map.addSource("mm-lead", { type: "geojson", data: zoneLeadFC() });
+  add({ id: "mm-lead", type: "line", source: "mm-lead", maxzoom: 13.4, paint: { "line-color": "#6c5b4d", "line-width": 1.1, "line-opacity": ZONE_FADE(.85) } });
+
+  /* Catchments next, so everything else sits on top. */
   map.addSource("catch", { type: "geojson", data: catchFC() });
   map.addSource("catch-lbl", { type: "geojson", data: catchLabelFC() });
-  add({ id: "catch-fill", type: "fill", source: "catch", paint: { "fill-color": ["get", "color"], "fill-opacity": .07 } });
-  add({ id: "catch-line", type: "line", source: "catch", paint: { "line-color": ["get", "color"], "line-width": 1.5, "line-opacity": .85 } });
+  const IN = (v) => ["interpolate", ["linear"], ["zoom"], 11.6, 0, 12.6, v];
+  add({ id: "catch-fill", type: "fill", source: "catch", paint: { "fill-color": ["get", "color"], "fill-opacity": IN(.07) } });
+  add({ id: "catch-line", type: "line", source: "catch", paint: { "line-color": ["get", "color"], "line-width": 1.5, "line-opacity": IN(.85) } });
   add({ id: "catch-label", type: "symbol", source: "catch-lbl", layout: { "text-field": ["get", "label"], "text-size": 11,
-    "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"], "text-offset": [0, -.6] }, paint: { "text-color": "#8a4424", "text-halo-color": "#fff", "text-halo-width": 1.4 } });
+    "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"], "text-offset": [0, -.6] }, paint: { "text-color": "#8a4424", "text-halo-color": "#fff", "text-halo-width": 1.4, "text-opacity": IN(1) } });
 
   /* Green and blue areas drawn as shapes where we have an outline. */
   const envPolys = D.environment.filter(e => e.polygon && e.polygon.length > 2);
@@ -345,9 +404,9 @@ function addLayers() {
   /* Places. */
   map.addSource("places", { type: "geojson", data: placesFC() });
   const foc = ["get", "foc"];
-  add({ id: "places-halo", type: "circle", source: "places", filter: ["==", foc, 2], paint: { "circle-radius": 18, "circle-color": ["get", "color"], "circle-opacity": .18,
+  add({ id: "places-halo", type: "circle", source: "places", filter: ["==", foc, 2], minzoom: 11.2, paint: { "circle-radius": 18, "circle-color": ["get", "color"], "circle-opacity": .18,
     "circle-stroke-color": ["get", "color"], "circle-stroke-width": 1.6 } });
-  add({ id: "places", type: "circle", source: "places", filter: [">", foc, 0], paint: {
+  add({ id: "places", type: "circle", source: "places", filter: [">", foc, 0], minzoom: 11.2, paint: {
     "circle-radius": ["case", ["==", foc, 2], 9, ["==", ["get", "kind"], "res"], 8, ["==", ["get", "kind"], "env"], 6.5, 6],
     "circle-color": ["get", "color"],
     "circle-opacity": ["case", ["==", ["get", "kind"], "res"], .3, ["==", foc, .5], .45, .95],
@@ -378,9 +437,17 @@ function addLayers() {
   add({ id: "site-label", type: "symbol", source: "site-lbl", layout: { "text-field": `${SITE.name}\n${SITE.byline}`, "text-size": 13, "text-line-height": 1.2,
     "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"], "text-offset": [0, 1.7], "text-anchor": "top", "text-allow-overlap": true },
     paint: { "text-color": "#2a1e16", "text-halo-color": "#fff", "text-halo-width": 2.4 } });
+  map.addSource("mm-num", { type: "geojson", data: zoneNumFC() });
+  add({ id: "mm-num", type: "symbol", source: "mm-num", maxzoom: 13.4, layout: { "text-field": ["get", "n"], "text-size": 17, "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"], "text-allow-overlap": true },
+    paint: { "text-color": "#fff", "text-halo-color": "rgba(42,30,22,.35)", "text-halo-width": 1.2, "text-opacity": ZONE_FADE(1) } });
+  map.addSource("mm-name", { type: "geojson", data: zoneNameFC() });
+  add({ id: "mm-name", type: "symbol", source: "mm-name", maxzoom: 13.4, layout: { "text-field": ["get", "name"], "text-size": 15, "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"],
+    "text-anchor": ["get", "anchor"], "text-offset": [0, 0], "text-allow-overlap": true, "text-padding": 0 },
+    paint: { "text-color": "#2a1e16", "text-halo-color": "#fff", "text-halo-width": 2, "text-opacity": ZONE_FADE(1) } });
   applyLayerVisibility();
 }
 const LAYERS = [
+  { key: "mm", label: "Micro-markets", sw: `<span class="dot" style="background:linear-gradient(135deg,#e34948 50%,#eb6834 50%)"></span>`, ids: ["mm-fill", "mm-line", "mm-lead", "mm-num", "mm-name"] },
   { key: "comp", ids: [] }, { key: "metro", ids: ["metro-casing", "metro-line", "stations", "stations-label"] },
   { key: "social", ids: [] }, { key: "talent", ids: [] }, { key: "res", ids: [] }, { key: "edu", ids: [] },
   { key: "deal", ids: [] }, { key: "env", ids: ["env-fill", "env-line"] },
@@ -388,6 +455,7 @@ const LAYERS = [
   { key: "arrows", label: "Directions", sw: `<span class="sw" style="height:2px;background:#2a1e16"></span>`, ids: ["arrows", "arrows-label"] }
 ];
 const LAYER_HINT = {
+  mm: "Office micro-markets (CBD, ORR, Whitefield and others), shown when you zoom out.",
   comp: "Flex operators already trading around the site: WeWork, Awfis, IndiQube and the rest.",
   metro: "The Purple Line from Whitefield (Kadugodi) to KR Puram.",
   social: "Hospitals: Manipal, Aster, Sri Sathya Sai and Cloudnine.",
@@ -409,6 +477,7 @@ function refreshPins() {
   const fc = placesFC();
   map.getSource("places").setData(fc); map.getSource("places-lbl").setData(fc);
   const id = S.sel || S.hov || "";
+  if (map.getLayer("mm-line")) map.setPaintProperty("mm-line", "line-width", ["case", ["==", ["get", "id"], id], 3, 1.2]);
   for (const l of ["link", "link-label"]) if (map.getLayer(l)) map.setFilter(l, ["==", ["get", "id"], id]);
   if (map.getLayer("stations")) {
     const st = id.startsWith("stn-") ? id : "";
@@ -421,7 +490,7 @@ const refreshMap = () => applyLayerVisibility();
 function wireMap() {
   const pop = new mapboxgl.Popup({ closeButton: false, closeOnClick: false, offset: 12 });
   const hover = (layer, html) => {
-    map.on("mouseenter", layer, e => { map.getCanvas().style.cursor = "pointer"; const f = e.features[0]; pop.setLngLat(f.geometry.coordinates).setHTML(html(f.properties)).addTo(map); });
+    map.on("mousemove", layer, e => { map.getCanvas().style.cursor = "pointer"; const f = e.features[0]; pop.setLngLat(f.geometry.type === "Point" ? f.geometry.coordinates : e.lngLat).setHTML(html(f.properties)).addTo(map); });
     map.on("mouseleave", layer, () => { map.getCanvas().style.cursor = ""; pop.remove(); });
   };
   const tip = (p) => `<b>${esc(p.name)}</b>${p.sub ? `<br>${esc(p.sub)}` : ""}<br><span style="color:#6c5b4d">${esc(KINDS[p.kind].label)} · ${fmtKm(p.d)} from ${esc(SITE.name)}</span>`;
@@ -434,6 +503,8 @@ function wireMap() {
     map.on("mouseleave", l, () => { if (S.hov) { S.hov = null; refreshPins(); } });
   }
   map.on("click", "site-pin", () => { S.sel = null; goTab("overview"); });
+  hover("mm-fill", f => { const z = byId(f.id); return `<b>${z.n} · ${esc(z.name)}</b><br>${esc(z.full)}<br><span style="color:#6c5b4d">${z.d === 0 ? `${esc(SITE.name)} is inside this market` : `${fmtKm(z.d)} from ${esc(SITE.name)} to its edge`}</span>`; });
+  map.on("click", "mm-fill", e => { if (map.getZoom() < 13) select(e.features[0].properties.id, true); });
 }
 function padding() {
   const Wd = innerWidth, Hd = innerHeight;
@@ -460,10 +531,28 @@ function fitAll(animate = true) {
   circle([SITE.lng, SITE.lat], ringKm(20), 24).forEach(pt => b.extend(pt));
   map.fitBounds(b, { padding: padding(), maxZoom: 14, pitch: innerWidth > 860 ? 30 : 0, bearing: 0, duration: animate && !REDUCED() ? 1100 : 0 });
 }
+/* Frame whatever the current view is about. */
+function frame(animate = true) {
+  if (S.sel) select(S.sel, true, true);
+  else if (S.tab === "markets") fitMarkets(animate);
+  else fitAll(animate);
+}
+/* The city view: every micro-market and the site. */
+function fitMarkets(animate = true) {
+  if (!map || !MM.length) return;
+  const b = new mapboxgl.LngLatBounds([SITE.lng, SITE.lat], [SITE.lng, SITE.lat]);
+  /* Leave room beyond each callout for its name, which runs outward. */
+  MM.forEach(z => { z.ring.forEach(c => b.extend(c)); b.extend([z.label[0] + (z.side === "left" ? -.05 : .05), z.label[1]]); });
+  map.fitBounds(b, { padding: padding(), maxZoom: 12, pitch: 0, bearing: 0, duration: animate && !REDUCED() ? 1200 : 0 });
+}
 /* Opening a place frames it together with the site, so the distance
    between them is always in view. */
 function flyToPlace(p) {
   if (!map || !p) return;
+  if (p.kind === "mm") {
+    const b = new mapboxgl.LngLatBounds([SITE.lng, SITE.lat], [SITE.lng, SITE.lat]); p.ring.forEach(c => b.extend(c));
+    map.fitBounds(b, { padding: padding(), maxZoom: 12.4, pitch: 0, duration: REDUCED() ? 0 : 1300 }); return;
+  }
   const b = new mapboxgl.LngLatBounds([SITE.lng, SITE.lat], [SITE.lng, SITE.lat]).extend([p.lng, p.lat]);
   const pad = padding(), close = p.d < .6;
   map.fitBounds(b, { padding: pad, maxZoom: close ? 16.2 : 15.2, pitch: innerWidth > 860 ? 40 : 0, duration: REDUCED() ? 0 : 1500 });
@@ -478,7 +567,7 @@ function applyRoute(render) {
   if (kind === "place" && byId(val)) { S.sel = val; S.tab = KINDS[byId(val).kind].tab; }
   else if (TABS.some(t => t.key === kind)) S.tab = kind;
   else S.tab = "overview";
-  if (render) { renderTabs(); renderFilters(); renderList(); renderPanel(); refreshMap(); if (S.sel) select(S.sel, true, true); else fitAll(); }
+  if (render) { renderTabs(); renderFilters(); renderList(); renderPanel(); refreshMap(); frame(); }
 }
 async function copyLink(btn) {
   const url = location.href.split("#")[0] + routeHash();
@@ -499,9 +588,10 @@ function listed() {
   const rows = PLACES.filter(p => listKinds().includes(p.kind) && (!q || [p.name, p.sub, p.brand, p.locality, p.tenant].some(v => v && String(v).toLowerCase().includes(q))));
   return rows.sort(S.sort === "name" ? (a, b) => a.name.localeCompare(b.name) : (a, b) => a.d - b.d);
 }
-const ICON = (p) => p.kind === "comp" ? (p.brand || "?").replace(/[^A-Za-z0-9 ]/g, "").split(/\s+/).map(w => w[0]).join("").slice(0, 3).toUpperCase()
+const ICON = (p) => p.kind === "mm" ? String(p.n) : p.kind === "comp" ? (p.brand || "?").replace(/[^A-Za-z0-9 ]/g, "").split(/\s+/).map(w => w[0]).join("").slice(0, 3).toUpperCase()
   : { metro: "M", social: "+", talent: "TP", res: "H", edu: "C", deal: "₹", env: "G" }[p.kind];
 function cardFacts(p) {
+  if (p.kind === "mm") return p.d === 0 ? `<span><b>${esc(SITE.name)} is here</b></span>` : `<span class="num">${fmtKm(p.d)} to its edge</span><span>about ${driveMin(p.d)} min drive</span>`;
   const f = [`<span class="num">${fmtKm(p.d)}</span>`, `<span>about ${driveMin(p.d)} min drive</span>`];
   if (p.d <= 2.5) f.push(`<span>${walkMin(p.d)} min walk</span>`);
   if (p.kind === "deal") { if (p.date) f.push(`<span>${esc(p.date)}</span>`); if (p.sqft) f.push(`<span class="num">${inr(p.sqft)} SF</span>`); else if (p.seats) f.push(`<span class="num">${inr(p.seats)} seats</span>`); }
@@ -515,7 +605,7 @@ function renderList() {
   $("#b-count").textContent = `${rows.length} ${rows.length === 1 ? "place" : "places"}`;
   $("#b-area").textContent = S.kindFilter ? KINDS[S.kindFilter].short : tabOf(S.tab).label;
   $("#list").innerHTML = rows.map(p => `<button class="card pl ${S.sel === p.id ? "sel" : ""}" data-id="${p.id}" role="listitem" type="button" data-hint="${esc(`Open ${p.name}: the map frames it with the site and the panel shows the distance and details.`)}">
-      <span class="ico" style="background:${KINDS[p.kind].color}">${esc(ICON(p))}</span>
+      <span class="ico" style="background:${p.kind === "mm" ? p.color : KINDS[p.kind].color}">${esc(ICON(p))}</span>
       <div>
         <div class="nm">${esc(p.kind === "deal" ? (p.tenant || p.name) : p.name)}</div>
         <div class="loc">${esc(p.kind === "deal" ? [p.building, p.locality].filter(Boolean).join(" · ") : p.sub || p.locality || KINDS[p.kind].label)}</div>
@@ -571,7 +661,9 @@ function select(id, fly, fromRoute) {
 function goTab(key) {
   if (document.body.classList.contains("fold-panel")) setFold("panel", false);
   const had = S.sel; S.tab = key; S.sel = null; S.kindFilter = null;
-  renderTabs(); renderFilters(); renderList(); renderPanel(); refreshMap(); if (had) fitAll(); pushRoute();
+  renderTabs(); renderFilters(); renderList(); renderPanel(); refreshMap();
+  if (key === "markets") fitMarkets(); else if (had || S.zoomedOut) fitAll();
+  S.zoomedOut = key === "markets"; pushRoute();
   if (innerWidth <= 860) setSheet("half");
 }
 function renderTabs() {
@@ -592,6 +684,10 @@ const GUIDE = {
       "The catchment table counts what sits inside 10, 20 and 30 minutes by car.",
       "The three road directions out of the site, as drawn by the arrows on the map.",
       "Every place is in the list on the left, nearest first. Click one to see it against the site."] },
+  markets: { hint: "Bangalore's office micro-markets around Whitefield, as a zoomed-out map.",
+    items: ["The map zooms out to show each office micro-market as a numbered area with its name, the way broker market maps do.",
+      "The table gives each market's main areas and how far its edge is from the site.",
+      "Click a market to frame it with the site and see what this atlas maps inside it."] },
   competition: { hint: "Layer 1: the flex operators already trading around the site.",
     items: ["All fifteen brands in the brief, with how many centres each has nearby and how far the closest one is.",
       "Brands with nothing nearby are listed too, so the gaps are visible.",
@@ -654,7 +750,7 @@ function wireHints() {
 function renderPanel() {
   renderTabs();
   if (S.sel) renderPlace(byId(S.sel));
-  else ({ overview: renderOverview, competition: renderCompetition, connectivity: renderConnectivity, talent: renderTalent, deals: renderDeals, social: renderSocial }[S.tab] || renderOverview)();
+  else ({ overview: renderOverview, markets: renderMarkets, competition: renderCompetition, connectivity: renderConnectivity, talent: renderTalent, deals: renderDeals, social: renderSocial }[S.tab] || renderOverview)();
   $("#p-body").insertAdjacentHTML("afterbegin", introCard(S.sel ? "place" : S.tab));
 }
 const head = (eyebrow, title, lede) => { $("#p-head").innerHTML = `<div class="eyebrow">${eyebrow}</div><h2>${title}</h2>${lede ? `<div class="lede">${lede}</div>` : ""}${actions()}`; };
@@ -846,7 +942,35 @@ function renderSocial() {
 }
 
 /* ---------- A place ---------- */
+/* ---------- Micro-markets ---------- */
+function renderMarkets() {
+  head("Office micro-markets", "Where Rhapsody sits in Bangalore's office map", "Zoom out on the map to see every micro-market as a numbered area; zoom in and the individual places take over.");
+  const zs = PLACES.filter(p => p.kind === "mm").sort((a, b) => a.n - b.n);
+  $("#p-body").innerHTML = `
+    <p class="vsx"><b>${esc(SITE.name)} sits in ${esc((zs.find(z => z.d === 0) || {}).name || "none of the mapped markets")}.</b> ${esc((zs.find(z => z.d === 0) || {}).note || "")}</p>
+    <table class="ring-tbl"><thead><tr><th>#</th><th>Market</th><th>From the site</th></tr></thead>
+    <tbody>${zs.map(z => `<tr><td><span class="ico-sm" style="background:${z.color}">${z.n}</span></td><td>${link(z)}<br><span class="note">${esc(z.sub)}</span></td><td class="num">${z.d === 0 ? "inside" : `${fmtKm(z.d)} to edge`}</td></tr>`).join("")}</tbody></table>
+    <h3>What the numbers say</h3>
+    ${factList(zs.flatMap(z => (z.facts || []).map(f => ({ ...f, k: `${z.name}: ${f.k}` }))))}
+    <p class="note">${esc(D.micromarketNote || "")} Distances run from the site to the nearest edge of each market.</p>`;
+}
+function renderZone(p) {
+  $("#p-head").innerHTML = `<button class="back" type="button">← Back to ${esc(tabOf(S.tab).label)}</button>
+    <div class="eyebrow"><span class="ico-sm" style="background:${p.color}">${p.n}</span> Office micro-market</div>
+    <h2>${esc(p.name)}</h2><div class="lede">${esc(p.full)}</div>${actions()}`;
+  const inside = (k) => PLACES.filter(x => x.kind === k && inPoly([x.lng, x.lat], p.ring));
+  $("#p-body").innerHTML = `
+    <p class="vsx">${p.d === 0 ? `<b>${esc(SITE.name)} is inside this market.</b>` : `<b>${fmtKm(p.d)} from ${esc(SITE.name)}</b> to its nearest edge, about ${driveMin(p.d)} min by road.`}</p>
+    <table class="spec"><tr><th>Main areas</th><td>${esc(p.sub)}</td></tr>
+      <tr><th>Flex centres mapped inside</th><td>${inside("comp").length}</td></tr>
+      <tr><th>Tech parks and employers inside</th><td>${inside("talent").length}</td></tr>
+      <tr><th>Recent deals inside</th><td>${inside("deal").length}</td></tr></table>
+    <p>${esc(p.note)}</p>
+    ${p.facts && p.facts.length ? `<h3>Market numbers</h3>${factList(p.facts)}` : ""}
+    <p class="note">${esc(D.micromarketNote || "")} Counts cover only what this atlas maps, which is concentrated around Whitefield.</p>`;
+}
 function renderPlace(p) {
+  if (p.kind === "mm") return renderZone(p);
   const k = KINDS[p.kind], back = tabOf(S.tab).label;
   const title = p.kind === "deal" ? (p.tenant || p.name) : p.name;
   $("#p-head").innerHTML = `<button class="back" type="button">← Back to ${esc(back)}</button>
