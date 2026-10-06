@@ -17,5 +17,8 @@ window.CLIENT_MANIFEST = {
   "DIGITIDE-GRP":{ redirect: "/digitide/",  pass: "K2SY-2K5J" },
   /* Indore office study, a separate app at /indore/ with its own gate. Only
      a SHA-256 of the normalised password is stored, never the password. */
-  "INDORE-AP":   { redirect: "/indore/",    passHash: "a4b32dba4f102ad7427f1651b09b05151026178ede1e5503f22f477b0ad2f45d" }
+  "INDORE-AP":   { redirect: "/indore/",    passHash: "a4b32dba4f102ad7427f1651b09b05151026178ede1e5503f22f477b0ad2f45d" },
+  /* Chennai office study, a separate app at /chennai/ with its own gate,
+     built the same way as Indore: only the password's SHA-256 is stored. */
+  "CHENNAI-AP":  { redirect: "/chennai/",   passHash: "b617cb70f6c6ffda4062e5e585ca3318cf20aceebe2b837cd4bc1919084eef6b" }
 };
