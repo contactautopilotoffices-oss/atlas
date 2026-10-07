@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex">
+<title>ATLAS probe</title>
+<!-- Loaded in a hidden frame by /admin/ and /broker/. It reads one link's
+     own data files (never its app) and hands back what can be edited: the
+     properties and their fields, facts and sources, 3D settings, footprint
+     names and the link's current feature settings. Same origin only. -->
+<script src="/atlas-cms.js?v=cms1"></script>
+</head>
+<body>
+<script>
+"use strict";
+(function () {
+  const q = new URLSearchParams(location.search);
+  const link = q.get("link") || "", kind = q.get("kind") || "";
+  const reply = (data) => parent.postMessage({ type: "atlas-probe", link, data }, location.origin);
+  if (!/^[a-z0-9][a-z0-9-]{0,39}$/.test(link)) return reply({ error: "bad link" });
+  const A = AtlasCMS.adapterFor(link, kind);
+  const load = (src) => new Promise((ok, bad) => { const s = document.createElement("script"); s.src = src + "?v=" + Date.now(); s.onload = ok; s.onerror = () => bad(new Error("Could not read " + src)); document.head.appendChild(s); });
+  const prim = (v) => v == null || ["string", "number", "boolean"].includes(typeof v) || (Array.isArray(v) && v.length < 40 && v.every(x => typeof x === "string"));
+  const strip = (s) => String(s || "").replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim();
+
+  Promise.all(A.scripts.map(load)).then(() => {
+    const out = { link, kind: A.kind, properties: [], facts: null, features: A.features || [], defaults: {}, texts: null, footprints: [], zones: null, models: {} };
+    const arr = A.props ? AtlasCMS.getPath(window, A.props) : null;
+    if (Array.isArray(arr)) {
+      const D = window.BKC, C = window.CLIENT || {};
+      const keyOf = A.client ? AtlasCMS.clientKey(D) : (o) => o[A.id];
+      out.truthFirst = A.client ? arr.some(o => o.coordSrc !== undefined) : null;
+      out.properties = arr.map(o => {
+        const fields = {};
+        for (const [k, v] of Object.entries(o)) if (prim(v) && !(A.locked || []).includes(k)) fields[k] = v;
+        const p = { id: keyOf(o), name: o[A.name] || o.name || o.bldg, fields };
+        const lists = {};
+        for (const [k, v] of Object.entries(o)) if (Array.isArray(v) && (k === "facts" || (v.length && v.every(x => x && typeof x === "object" && "k" in x && "v" in x)))) lists[k] = JSON.parse(JSON.stringify(v));
+        if (Object.keys(lists).length) p.lists = lists;
+        if (A.client) {
+          const b = (D.BUILDINGS || []).find(x => x.id === o.bldg) || {};
+          p.name = b.name || o.bldg;
+          if (!out.truthFirst) p.name += ` · ${o.floor || "unit"} floor`;
+          p.bldg = o.bldg;
+          p.building = { name: b.name, lat: b.lat, lng: b.lng };
+        }
+        return p;
+      });
+      if (A.client) {
+        /* 3D: what the link's config sets today for each building. */
+        const reg = C.registry || null;
+        out.registryFromConfig = !!reg;
+        for (const o of arr) if (!out.models[o.bldg]) out.models[o.bldg] = reg && reg[o.bldg] ? JSON.parse(JSON.stringify(reg[o.bldg])) : null;
+        out.footprints = ((window.BKC_GEOJSON || {}).features || []).map(f => f.properties && f.properties.name).filter(Boolean);
+        out.features = out.features.concat((C.poiLayers || []).map(p => ({ key: "poi:" + p.key, label: strip(p.label) || p.key, group: "Map chips" })));
+        const props = C.props;
+        out.defaults = {
+          "flag:rain": C.rain !== false, "flag:trees": props !== false && !(props && props.trees === false), "flag:lamps": props !== false && !(props && props.lamps === false),
+          "flag:metroLine": !!C.metroLine, "flag:tierColors": !!C.tierColors, "flag:walkthrough": C.walkthrough !== false, "flag:shortlist": C.shortlist !== false
+        };
+        out.texts = {
+          winnerBtnText: { label: "Winner button", value: C.winnerBtnText || "▶ Fly to the winning property" },
+          hint: { label: "Map hint", value: C.hint || "" },
+          "lb.title": { label: "Leaderboard title", value: strip(C.lb && C.lb.title) },
+          "lb.why": { label: "Leaderboard note", value: strip(C.lb && C.lb.why), long: true },
+          "brand.sub": { label: "Header subtitle", value: strip(C.brand && C.brand.sub) },
+          competitorLabel: { label: "Competitor section title", value: C.competitorLabel || "VFX studios nearby" },
+          competitorRadius: { label: "Competitor radius text", value: C.competitorRadius || "1 km radius" }
+        };
+      }
+    }
+    if (A.facts && window[A.facts]) {
+      out.facts = {};
+      for (const [g, label] of Object.entries(A.factGroups || {})) {
+        const list = window[A.facts][g];
+        if (Array.isArray(list)) out.facts[g] = { label, items: JSON.parse(JSON.stringify(list)) };
+      }
+    }
+    if (link === "chennai" && window.CHN_ZONES) out.zones = window.CHN_ZONES.map(z => ({ key: z.key, label: z.label }));
+    reply(out);
+  }).catch((e) => reply({ error: e.message }));
+})();
+</script>
+</body>
+</html>
