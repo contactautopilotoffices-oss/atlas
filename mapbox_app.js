@@ -184,6 +184,16 @@ if (window.CLIENT && window.CLIENT.registry) {
   for (const k of Object.keys(BUILDING_REGISTRY)) delete BUILDING_REGISTRY[k];
   Object.assign(BUILDING_REGISTRY, window.CLIENT.registry);
 }
+/* CMS: 3D settings published from /admin/ (atlas-cms.js puts them in
+   CLIENT.registryPatch) are merged over the effective registry entry by
+   entry, so a patch for one building never wipes the built-in set. */
+if (window.CLIENT && window.CLIENT.registryPatch) {
+  for (const [id, p] of Object.entries(window.CLIENT.registryPatch)) {
+    const cur = BUILDING_REGISTRY[id] || {};
+    BUILDING_REGISTRY[id] = { ...cur, ...p };
+    if (p.transform) BUILDING_REGISTRY[id].transform = { rotationDegrees: 0, ...(cur.transform || {}), ...p.transform };
+  }
+}
 
 /* ---- State ---- */
 let map = null;
@@ -937,7 +947,7 @@ async function addGltfModel(b, reg) {
         const baseScale = { x: sx, y: sy, z: sz };
         
         if (reg.transform) {
-           group.rotation.set(0, reg.transform.rotationDegrees * Math.PI / 180, 0);
+           group.rotation.set(0, (reg.transform.rotationDegrees || 0) * Math.PI / 180, 0);
            group.position.set(reg.transform.offsetX || 0, 0, reg.transform.offsetZ || 0);
         } else if (reg.modelRotation) {
            group.rotation.set(reg.modelRotation[0], reg.modelRotation[1], reg.modelRotation[2]);
@@ -2579,6 +2589,15 @@ function competitorsHTML(pid) {
     </div></div>`;
 }
 
+/* CMS: market updates approved from broker links. atlas-cms.js puts them on
+   the option as cmsExtra, already stripped of markup, with who said it. */
+function cmsExtraHTML(o) {
+  const x = o && o.cmsExtra;
+  if (!x || !x.length) return "";
+  return `<div class="sec"><h4>Latest from the market <span class="muted">broker-stated</span></h4>
+    <div class="unit"><div class="unit-grid">${x.map(e => `<span>${e.label}</span><span>${e.value}${e.asOf ? ` <span class="muted">· ${e.asOf}</span>` : ""}</span>`).join("")}</div></div></div>`;
+}
+
 async function openTruthFirstCard(b) {
   injectDeckCSS();
   const o = D.OPTIONS.find(x => x.bldg === b.id);
@@ -2631,6 +2650,7 @@ async function openTruthFirstCard(b) {
         ${o.pros ? `<div class="conn-row"><span class="ic aqua">+</span><div>${o.pros}</div></div>` : ""}
         ${o.cons ? `<div class="conn-row"><span class="ic yellow">−</span><div>${o.cons}</div></div>` : ""}
       </div>` : ""}
+      ${cmsExtraHTML(o)}
       ${talentHTML(b.id)}
       ${competitorsHTML(b.id)}
       ${poiNearHTML(b.id, "pg", "PG &amp; shared accommodation", 3000)}
@@ -2652,6 +2672,7 @@ async function openTruthFirstCard(b) {
 }
 
 function openCard(b) {
+  if (window.AtlasCMS) AtlasCMS.open(b.id, b.name);   // visit analytics: which building was opened
   if (isTruthFirstSchema()) return openTruthFirstCard(b);
   const units = D.OPTIONS.filter(o => o.bldg === b.id).sort((x, y) => x.rank - y.rank);
   const best = units[0];
@@ -2695,6 +2716,8 @@ function openCard(b) {
         </div>`).join("")}
       </div>
     </div>` : ""}
+
+    ${cmsExtraHTML(best)}
 
     <div class="sec floors-sec"><h4>Floor stack — <span class="muted">highlighted = floor on offer</span></h4>
       <div class="floorstack" id="floorstack">${floorStackSVG(b, units)}</div>

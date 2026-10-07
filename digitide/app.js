@@ -54,7 +54,7 @@ function initGate(){
     const norm = (v) => v.trim().toUpperCase().replace(/[\s-]/g, "");
     const id = norm($("#g-id").value), pw = norm($("#g-pw").value);
     if (id === norm(GATE.id) && pw === norm(GATE.pass)) {
-      sessionStorage.setItem("dg-auth", "1"); $("#gate").remove(); boot();
+      sessionStorage.setItem("dg-auth", "1"); if (window.AtlasCMS) AtlasCMS.signin(id); $("#gate").remove(); boot();
     } else $("#g-err").textContent = "Not recognised. Access is issued per person.";
   };
   if (sessionStorage.getItem("dg-auth") === "1") { $("#gate").remove(); boot(); return; }

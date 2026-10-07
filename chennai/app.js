@@ -32,6 +32,10 @@ async function sha256(txt) {
   return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
 }
 const AUTH_KEY = "chn-auth", HANDOFF = "/chennai/";
+/* CMS (atlas-cms.js): features switched off in /admin/ and visit tracking.
+   Without the CMS script everything is on and nothing is tracked. */
+const CMS = window.AtlasCMS || null;
+const cmsOn = (key) => !CMS || CMS.on(key);
 const MEDIA = "../media/chennai/";
 
 const O = window.CHN_OPTIONS, M = window.CHN_META, F = window.CHN_FACTS, EX = window.CHN_EXISTING;
@@ -156,6 +160,7 @@ const PRESETS = {
   cost:     { label: "Keep cost down",   note: "The cheapest micro-market rent leads; access still counts.",                                         lv: { rail: 2, home: 2, talent: 2, studios: 1, future: 0, rent: 4 } },
   future:   { label: "Built for 2030",   note: "Bet on where the metro is going and where talent is growing.",                                      lv: { rail: 2, home: 1, talent: 3, studios: 2, future: 4, rent: 1 } }
 };
+for (const k of Object.keys(PRESETS)) if (k !== "balanced" && !cmsOn("preset:" + k)) delete PRESETS[k];
 const wOf = (lv) => Object.fromEntries(PARTS.map(p => [p.key, LEVELS[lv[p.key]].v]));
 const clamp = (v) => Math.max(0, Math.min(1, v));
 function railV(d) {
@@ -209,8 +214,9 @@ const S = {
   lv: { ...PRESETS.balanced.lv }, filters: new Set(),
   layers: { existing: true, zones: true, rail: true, future: true, links: true, studio: true, it: false, edu: false, res: false, rings: true }
 };
-const ZONE_FILTERS = Z.map(z => ({ key: z.key, label: z.label, test: o => o.micro === z.key }));
-const OTHER_FILTERS = [{ key: "near", label: "Rail ≤ 1 km", test: o => nearestOpen(o).d <= 1 }];
+const ZONE_FILTERS = Z.map(z => ({ key: z.key, label: z.label, test: o => o.micro === z.key })).filter(f => cmsOn("filter:" + f.key));
+const OTHER_FILTERS = [{ key: "near", label: "Rail ≤ 1 km", test: o => nearestOpen(o).d <= 1 }].filter(f => cmsOn("filter:" + f.key));
+for (const k of Object.keys(S.layers)) if (!cmsOn("layer:" + k)) S.layers[k] = false;
 const passes = (o) => {
   const on = [...S.filters], zs = on.filter(k => ZONE[k]), other = on.filter(k => !ZONE[k]);
   return (zs.length === 0 || zs.includes(o.micro)) && other.every(k => OTHER_FILTERS.find(f => f.key === k).test(o));
@@ -224,7 +230,7 @@ const TABS = [
   { key: "priorities", label: "Your priorities" },
   { key: "conclusion", label: "Conclusion" },
   { key: "compare", label: "Compare all" }
-];
+].filter(t => t.key === "overview" || cmsOn("tab:" + t.key));
 function setLevels(lv, preset) {
   S.lv = { ...lv }; S.preset = preset || matchPreset(S.lv);
 }
@@ -245,7 +251,7 @@ function initGate() {
     let ok = false;
     try { ok = (await sha256(norm($("#g-id").value) + ":" + norm($("#g-pw").value))) === GATE_HASH; } catch (e) { ok = false; }
     busy = false; $("#g-go").disabled = false;
-    if (ok) { try { sessionStorage.setItem(AUTH_KEY, "1"); } catch (e) {} openApp(); }
+    if (ok) { try { sessionStorage.setItem(AUTH_KEY, "1"); } catch (e) {} if (CMS) CMS.signin(norm($("#g-id").value)); openApp(); }
     else { $("#g-err").textContent = "Not recognised. Access is issued per person."; $("#g-pw").value = ""; $("#g-pw").focus(); }
   };
   const openApp = () => { const g = $("#gate"); g.classList.add("out"); setTimeout(() => g.remove(), 450); boot(); };
@@ -258,6 +264,7 @@ function initGate() {
   try { handoff = sessionStorage.getItem("atlas-handoff"); sessionStorage.removeItem("atlas-handoff"); } catch (e) {}
   let authed = false;
   try { if (handoff === HANDOFF) sessionStorage.setItem(AUTH_KEY, "1"); authed = sessionStorage.getItem(AUTH_KEY) === "1"; } catch (e) {}
+  if (handoff === HANDOFF && CMS) { let id = null; try { id = sessionStorage.getItem("atlas-access-id"); } catch (e) {} CMS.signin(id); }
   if (authed) { $("#gate").remove(); boot(); return; }
   try { if (sessionStorage.getItem("chn-out") === "1") { sessionStorage.removeItem("chn-out"); const e = $("#g-err"); e.style.color = "var(--ok)"; e.textContent = "You have signed out on this device."; } } catch (e) {}
   $("#g-form").addEventListener("submit", e => { e.preventDefault(); $("#g-err").removeAttribute("style"); go(); });
@@ -282,6 +289,7 @@ function loadBackdrop() {
    back with a note that it worked. Pane widths and dismissed tips are
    preferences, not access, so they stay. */
 function signOut() {
+  if (CMS) CMS.signout();
   try { sessionStorage.removeItem(AUTH_KEY); sessionStorage.removeItem("atlas-handoff"); sessionStorage.setItem("chn-out", "1"); } catch (e) {}
   location.replace(location.pathname);
 }
@@ -787,11 +795,13 @@ function select(id, fly, fromRoute) {
   if (innerWidth <= 860 && !fromRoute) setSheet("half");
   const card = document.querySelector(`.card[data-id="${id}"]`); if (card) card.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
   if (fly) flyToOption(O.find(x => x.id === id), "close");
+  if (CMS && !fromRoute) CMS.open(id, (O.find(x => x.id === id) || {}).name);
   $("#p-body").scrollTop = 0;
 }
 function goTab(key) {
   if (document.body.classList.contains("fold-panel")) setFold("panel", false);
   const had = S.sel || S.pair; S.tab = key; S.sel = null; S.pair = null;
+  if (CMS) CMS.tab(key);
   renderTabs(); renderList(); renderPanel(); refreshMap(); if (had) fitAll(); pushRoute();
   if (innerWidth <= 860) setSheet("half");
   $("#p-body").scrollTop = 0;
@@ -800,7 +810,7 @@ function renderTabs() {
   $("#tabs").innerHTML = TABS.map(t => `<button class="tab ${S.tab === t.key && !S.sel ? "on" : ""}" data-t="${t.key}" type="button" data-hint="${esc(GUIDE[t.key] ? GUIDE[t.key].hint : "")}">${esc(t.label)}</button>`).join("");
 }
 function renderLayers() {
-  $("#layers").innerHTML = LAYERS.map(l => `<button class="chip lay ${S.layers[l.key] ? "on" : ""}" data-l="${l.key}" type="button" aria-pressed="${S.layers[l.key]}" data-hint="${esc((S.layers[l.key] ? "Hide: " : "Show: ") + LAYER_HINT[l.key])}">${l.sw}${esc(l.label)}</button>`).join("") +
+  $("#layers").innerHTML = LAYERS.filter(l => cmsOn("layer:" + l.key)).map(l => `<button class="chip lay ${S.layers[l.key] ? "on" : ""}" data-l="${l.key}" type="button" aria-pressed="${S.layers[l.key]}" data-hint="${esc((S.layers[l.key] ? "Hide: " : "Show: ") + LAYER_HINT[l.key])}">${l.sw}${esc(l.label)}</button>`).join("") +
     `<span class="key note" title="Rail lines are drawn station to station; zone outlines are indicative">ⓘ schematic</span>`;
 }
 
@@ -890,6 +900,8 @@ const factList = (arr) => (arr || []).length ? `<ul class="facts">${arr.map(f =>
 const optLink = (o) => `<a href="#" data-go="${o.id}">${nn(o)} ${esc(o.name)}</a>`;
 /* "Check first" notes: things to confirm before relying on an option. */
 const flagBox = (o) => o.flag ? `<div class="flag"><b>Check first</b>${esc(o.flag.v)} ${cite(o.flag.src)}</div>` : "";
+/* Updates from broker links, approved and published in /admin/. */
+const marketHTML = (o) => o.cmsExtra && o.cmsExtra.length ? `<h3>Latest from the market</h3><table class="spec">${o.cmsExtra.map(x => `<tr><th>${esc(x.label)}</th><td>${esc(x.value)}${x.by || x.asOf ? ` <span class="src">· broker-stated${x.asOf ? ", " + esc(x.asOf) : ""}</span>` : ""}</td></tr>`).join("")}</table>` : "";
 const flagChip = (o) => o.flag ? `<span class="chk" title="${esc(o.flag.v)}">check first</span>` : "";
 const actions = (extra = "") => `<div class="actions">${extra}<button type="button" class="act" data-copy data-hint="Copies a link that opens exactly this view, ready to send to a client.">Copy link</button><button type="button" class="act" data-print data-hint="Prints this view, or saves it as a PDF from the print dialog.">Print / PDF</button></div>`;
 const zoneTag = (z) => `<span class="zt" style="--z:${z.color}"><i></i>${esc(z.label)}</span>`;
@@ -1296,6 +1308,7 @@ function renderOption(o) {
     </div>
 
     ${flagBox(o)}
+    ${marketHTML(o)}
     <h3>Against today's office</h3>
     <p class="vsx"><b>${fmtKm(exKm(o))} from ${esc(EX.name)}</b>, about ${driveMin(exKm(o))} min by road. ${esc(moveRead(exKm(o)))}</p>
     <table class="ring-tbl"><thead><tr><th></th><th>${esc(EX.name)} (today)</th><th>${esc(o.name)}</th></tr></thead><tbody>

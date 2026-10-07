@@ -233,6 +233,12 @@ details.sources ol{padding-left:20px;color:var(--dim);line-height:1.6}
   </main>
 </div>
 
-<script src="./app.js?v=2"></script>
+<script src="../atlas-cms.js?v=cms1"></script>
+<script>
+/* Start through the CMS (pause switch, notice, visit counts). If the CMS
+   script is missing for any reason, start the app exactly as before. */
+if (window.AtlasCMS) AtlasCMS.boot("godseye", { app: "./app.js?v=3" });
+else { var s = document.createElement("script"); s.src = "./app.js?v=3"; document.body.appendChild(s); }
+</script>
 </body>
 </html>

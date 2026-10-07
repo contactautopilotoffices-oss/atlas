@@ -395,6 +395,12 @@ tr.cur td:first-child::after{content:" ← this site";font-size:8.5px;color:var(
   <span id="legend-geo">Pin size = facilities at that site</span>
 </div>
 
-<script src="./app.js?v=a804b55"></script>
+<script src="../atlas-cms.js?v=cms1"></script>
+<script>
+/* Start through the CMS (pause switch, notice, visit counts). If the CMS
+   script is missing for any reason, start the app exactly as before. */
+if (window.AtlasCMS) AtlasCMS.boot("digitide", { app: "./app.js?v=cms1" });
+else { var s = document.createElement("script"); s.src = "./app.js?v=cms1"; document.body.appendChild(s); }
+</script>
 </body>
 </html>
