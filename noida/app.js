@@ -22,8 +22,9 @@
    Map stability, against the old Noida view: no animation loop, hover is a
    feature-state change (no data reload, so labels never re-place on hover),
    pin data is reloaded only when the selection or a filter changes, the
-   camera never tilts past 58 degrees, and point-of-interest labels and 3D
-   buildings are off while the satellite layer is on.
+   camera never tilts past 58 degrees, and point-of-interest labels are off.
+   Buildings are raised to their height as on the old Noida view (see
+   addLayers), over the satellite.
 
    data.js holds every fact and where it came from. This file only reads it.
    ============================================================================ */
@@ -234,14 +235,12 @@ function boot() {
 }
 /* Mapbox Standard, the same basemap as the Chennai study, faded so the pins
    lead. Shop and restaurant labels are off: they are what flickers in and
-   out while the map moves, and they add nothing to an office search. */
+   out while the map moves, and they add nothing to an office search. Its
+   own 3D objects are off; the buildings are drawn in addLayers instead. */
 const MAP_STYLE = "mapbox://styles/mapbox/standard";
-const basemap = () => ({ lightPreset: "day", theme: "faded", showPointOfInterestLabels: false, showTransitLabels: true, showPlaceLabels: true, showRoadLabels: true, show3dObjects: !S.layers.sat });
-let shown3d = null;
+const basemap = () => ({ lightPreset: "day", theme: "faded", showPointOfInterestLabels: false, showTransitLabels: true, showPlaceLabels: true, showRoadLabels: true, show3dObjects: false });
 function applyBasemap() {
-  const cfg = basemap();
-  for (const [k, v] of Object.entries(cfg)) { try { map.setConfigProperty("basemap", k, v); } catch (e) {} }
-  shown3d = cfg.show3dObjects;
+  for (const [k, v] of Object.entries(basemap())) { try { map.setConfigProperty("basemap", k, v); } catch (e) {} }
 }
 function initMap() {
   mapboxgl.accessToken = window.MAPBOX_TOKEN;
@@ -373,7 +372,12 @@ const stationFC = () => FC(STATIONS.map((s, i) => ({ ...pt(s.lng, s.lat, { name:
 const COL = { edu: "#5b3aa7", res: "#0a8a3a", bpo: "#d0417b", pg: "#b7791f" };
 const placesFC = () => FC(PL.map(p => pt(p.lng, p.lat, { id: p.id, kind: p.kind, name: p.name, color: COL[p.kind] || "#4a4a4a" })));
 
-function add(layer, before) { try { map.addLayer(layer, before); } catch (e) { console.warn("layer", layer.id, e.message); } }
+/* Slots place a layer inside the Standard basemap. A style without slots
+   gets the layer without one, on top. */
+function add(layer, before) {
+  try { map.addLayer(layer, before); } catch (e) { console.warn("layer", layer.id, e.message); }
+  if (!map.getLayer(layer.id) && layer.slot) { const { slot, ...rest } = layer; try { map.addLayer(rest, before); } catch (e) {} }
+}
 function addLayers() {
   /* satellite: a raster under the basemap's roads and labels, so streets
      and names stay readable on top of the photo */
@@ -382,19 +386,36 @@ function addLayers() {
     add({ id: "sat", type: "raster", source: "sat", slot: "bottom", layout: { visibility: S.layers.sat ? "visible" : "none" }, paint: { "raster-fade-duration": 200 } });
   } catch (e) { console.warn("satellite", e.message); }
 
-  /* zones */
+  /* Buildings raised to their height, the same recipe as the old Noida view:
+     real footprints from Mapbox Streets, a quiet height-ramped colour and a
+     vertical gradient. They sit above the basemap's flat footprints, which
+     would otherwise lie white on top of the satellite, and below the place
+     and transit names. They rise as you zoom in from 13 to 14, so they
+     never pop in. */
+  try {
+    map.addSource("streets", { type: "vector", url: "mapbox://mapbox.mapbox-streets-v8" });
+    add({ id: "bldg-3d", type: "fill-extrusion", source: "streets", "source-layer": "building", minzoom: 13, slot: "top",
+      filter: ["all", ["==", ["get", "extrude"], "true"], ["!=", ["get", "underground"], "true"]],
+      paint: {
+        "fill-extrusion-color": ["interpolate", ["linear"], ["get", "height"], 0, "#d5d0c7", 60, "#ccd2d8", 150, "#e2e8ef"],
+        "fill-extrusion-height": ["interpolate", ["linear"], ["zoom"], 13, 0, 14, ["coalesce", ["get", "height"], ["get", "render_height"], 14]],
+        "fill-extrusion-base": ["interpolate", ["linear"], ["zoom"], 13, 0, 14, ["coalesce", ["get", "min_height"], ["get", "render_min_height"], 0]],
+        "fill-extrusion-opacity": 1, "fill-extrusion-vertical-gradient": true } });
+  } catch (e) { console.warn("buildings", e.message); }
+
+  /* zones (on the ground, under the buildings) */
   map.addSource("zones", { type: "geojson", data: FC(Z.map(z => ({ type: "Feature", geometry: { type: "Polygon", coordinates: [zonePolygon(z)] }, properties: { key: z.key, color: z.color } }))) });
   map.addSource("zone-labels", { type: "geojson", data: FC(Z.map(z => pt(...zoneCentre(z), { label: z.label.toUpperCase() }))) });
-  add({ id: "zones-fill", type: "fill", source: "zones", paint: { "fill-color": ["get", "color"], "fill-opacity": .1 } });
-  add({ id: "zones-line", type: "line", source: "zones", paint: { "line-color": ["get", "color"], "line-width": 1.4, "line-dasharray": [2, 2], "line-opacity": .9 } });
+  add({ id: "zones-fill", type: "fill", source: "zones", slot: "middle", paint: { "fill-color": ["get", "color"], "fill-opacity": .1 } });
+  add({ id: "zones-line", type: "line", source: "zones", slot: "middle", paint: { "line-color": ["get", "color"], "line-width": 1.4, "line-dasharray": [2, 2], "line-opacity": .9 } });
   add({ id: "zones-label", type: "symbol", source: "zone-labels", layout: { "text-field": ["get", "label"], "text-size": 11.5, "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"], "text-letter-spacing": .16, "text-max-width": 12, "symbol-sort-key": 100 },
     paint: { "text-color": "#4a3a2e", "text-opacity": .8, "text-halo-color": "#fff", "text-halo-width": 1.4 } });
 
   /* distance rings */
   map.addSource("rings", { type: "geojson", data: ringFC() });
   map.addSource("ring-labels", { type: "geojson", data: ringLabelFC() });
-  add({ id: "rings-fill", type: "fill", source: "rings", paint: { "fill-color": ["get", "color"], "fill-opacity": .05 } });
-  add({ id: "rings-line", type: "line", source: "rings", paint: { "line-color": ["get", "color"], "line-width": 1.5, "line-opacity": .85 } });
+  add({ id: "rings-fill", type: "fill", source: "rings", slot: "middle", paint: { "fill-color": ["get", "color"], "fill-opacity": .05 } });
+  add({ id: "rings-line", type: "line", source: "rings", slot: "middle", paint: { "line-color": ["get", "color"], "line-width": 1.5, "line-opacity": .85 } });
   add({ id: "rings-label", type: "symbol", source: "ring-labels", layout: { "text-field": ["get", "label"], "text-size": 11, "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"], "text-offset": [0, -.6] },
     paint: { "text-color": "#a3502c", "text-halo-color": "#fff", "text-halo-width": 1.6 } });
 
@@ -492,7 +513,7 @@ const LAYERS = [
 ];
 const LAYER_HINT = {
   existing: "Digitide's current office in Sector 58, with a dashed line and the straight-line distance to the open building.",
-  sat: "Mapbox satellite imagery under the streets and names. The capture date varies by area.",
+  sat: "Mapbox satellite imagery under the streets, buildings and names. The capture date varies by area.",
   zones: "The five micro-markets the 20 buildings sit in. Outlines are indicative.",
   rail: "The Blue Line's Noida stations and the Aqua Line at Sector 51, in each line's colour. Drawn station to station.",
   links: "Lines to the three nearest buildings from the open one, or the pair you picked on the distance matrix.",
@@ -506,7 +527,6 @@ let lastDyn = "";
 function applyLayerVisibility() {
   if (!map || !map.getLayer("opt")) return;
   for (const l of LAYERS) for (const id of l.ids || []) if (map.getLayer(id)) map.setLayoutProperty(id, "visibility", S.layers[l.key] ? "visible" : "none");
-  if (shown3d !== null && shown3d !== !S.layers.sat) { try { map.setConfigProperty("basemap", "show3dObjects", !S.layers.sat); } catch (e) {} shown3d = !S.layers.sat; }
   const kinds = KINDS.filter(k => S.layers[k]);
   for (const id of ["places", "places-label"]) if (map.getLayer(id)) map.setFilter(id, ["in", ["get", "kind"], ["literal", kinds]]);
   /* Lines and rings reload only when what they show has changed. */
