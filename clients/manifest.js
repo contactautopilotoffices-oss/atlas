@@ -9,7 +9,10 @@ window.CLIENT_MANIFEST = {
   "CPDEMOACC":   { slug: "cp-delhi",         pass: "CP1234" },
   "INVDEMOACC":  { slug: "invesco-andheri",  pass: "INV1234" },
   "FLYDEMOACC":  { slug: "basilic-fly",      pass: "FLY1234" },  // PLACEHOLDER pass — rotate before deploy (real one supplied out of band)
-  "DIGDEMOACC":  { slug: "digitide-noida",   pass: "DIG1234" },  // PLACEHOLDER pass — rotate before deploy
+  /* Digitide Noida office study, a separate app at /noida/ with its own gate
+     (it replaced the older map view of this client). Only the password's
+     SHA-256 is stored, as for Indore and Chennai. */
+  "DIGDEMOACC":  { redirect: "/noida/",     passHash: "62ffad2586cdaaca43fe963237ace65edc2da7627fe23c231b94e96b724a824d" },
   /* The Digitide GROUP command centre is a separate app at /digitide/ with its
      own gate. It is listed here with a `redirect` rather than a `slug` so that
      signing in at the site root sends you there instead of failing with

@@ -882,26 +882,6 @@
       "is_enhanced": false
     }
   ],
-  "noida-d247": [
-    {
-      "file": "media/digitide-noida/noida-d247-b17a1e16.jpg",
-      "thumb": "media/digitide-noida/noida-d247-b17a1e16-thumb.jpg",
-      "kind": "photo",
-      "hash": "b17a1e16",
-      "bytes": 32288,
-      "width": 561,
-      "height": 332,
-      "orientation": "landscape",
-      "label": "Exterior",
-      "source": "Property options sheet, Sector 57-67, supplied by Autopilot Offices (Oct 2026)",
-      "captured_at": null,
-      "confidence": "unconfirmed",
-      "confirmations": [
-        "supplied-by-client"
-      ],
-      "is_enhanced": false
-    }
-  ],
   "magnus": [
     {
       "file": "media/digitide-noida/magnus-cbd04471.jpg",
@@ -1073,6 +1053,26 @@
       "bytes": 109495,
       "width": 754,
       "height": 583,
+      "orientation": "landscape",
+      "label": "Exterior",
+      "source": "Property options sheet, Sector 57-67, supplied by Autopilot Offices (Oct 2026)",
+      "captured_at": null,
+      "confidence": "unconfirmed",
+      "confirmations": [
+        "supplied-by-client"
+      ],
+      "is_enhanced": false
+    }
+  ],
+  "noida-d245": [
+    {
+      "file": "media/digitide-noida/noida-d245-b17a1e16.jpg",
+      "thumb": "media/digitide-noida/noida-d245-b17a1e16-thumb.jpg",
+      "kind": "photo",
+      "hash": "b17a1e16",
+      "bytes": 32288,
+      "width": 561,
+      "height": 332,
       "orientation": "landscape",
       "label": "Exterior",
       "source": "Property options sheet, Sector 57-67, supplied by Autopilot Offices (Oct 2026)",

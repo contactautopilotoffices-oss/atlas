@@ -1,115 +1,77 @@
 {
-  "noida-a31": {
-    "routed": false,
-    "method": "Estimated, not routed: straight-line distance x 1.30 street detour, walking at 4.7 km/h and driving at 22 km/h. Airport legs are scaled from A-20's figures. The card replaces the metro walk with a live route when it opens.",
+  "techm": {
+    "routed": true,
+    "method": "Walking and driving distances are Google Maps routed figures, read from a live Maps session. Airport drives are estimated from the coordinate.",
     "nearest_station": {
       "id": "noida-sector-59",
       "name": "Noida Sector 59",
       "lat": 28.606493,
       "lng": 77.3727259,
-      "straight_m": 701
+      "straight_m": 414
     },
     "walk": {
-      "m": 910,
-      "min": 12,
+      "m": 1000,
+      "min": 14,
       "kmh": 4.7,
       "practical": true,
-      "google_routed": false
+      "google_routed": true
     },
     "drive": {
-      "m": 910,
-      "min": 2
+      "m": 1000,
+      "min": 3
     },
     "office": {
       "name": "Digitide Sector 58 (existing)",
-      "km": 2.6,
-      "min": 7,
-      "google_routed": false
+      "km": 1.1,
+      "min": 5,
+      "google_routed": true
     },
     "airport": {
       "name": "Indira Gandhi International (IGI)",
-      "km": 36.2,
-      "min": 62
+      "km": 34.9,
+      "min": 60
     },
     "airport_alt": {
       "name": "Noida International (Jewar)",
-      "km": 69.6,
+      "km": 69.4,
       "min": 69
     }
   },
-  "noida-a100": {
-    "routed": false,
-    "method": "Estimated, not routed: straight-line distance x 1.30 street detour, walking at 4.7 km/h and driving at 22 km/h. Airport legs are scaled from A-20's figures. The card replaces the metro walk with a live route when it opens.",
+  "padget": {
+    "routed": true,
+    "method": "Walking and driving distances are Google Maps routed figures, read from a live Maps session. Airport drives are estimated from the coordinate.",
     "nearest_station": {
       "id": "noida-sector-59",
       "name": "Noida Sector 59",
       "lat": 28.606493,
       "lng": 77.3727259,
-      "straight_m": 1058
+      "straight_m": 512
     },
     "walk": {
-      "m": 1380,
-      "min": 18,
+      "m": 1100,
+      "min": 15,
       "kmh": 4.7,
       "practical": true,
-      "google_routed": false
+      "google_routed": true
     },
     "drive": {
-      "m": 1380,
-      "min": 4
+      "m": 1100,
+      "min": 3
     },
     "office": {
       "name": "Digitide Sector 58 (existing)",
-      "km": 0.4,
-      "min": 1,
-      "google_routed": false
+      "km": 1.8,
+      "min": 4,
+      "google_routed": true
     },
     "airport": {
       "name": "Indira Gandhi International (IGI)",
-      "km": 34.1,
-      "min": 59
+      "km": 34.8,
+      "min": 60
     },
     "airport_alt": {
       "name": "Noida International (Jewar)",
-      "km": 69.8,
-      "min": 69
-    }
-  },
-  "noida-a94-9": {
-    "routed": false,
-    "method": "Estimated, not routed: straight-line distance x 1.30 street detour, walking at 4.7 km/h and driving at 22 km/h. Airport legs are scaled from A-20's figures. The card replaces the metro walk with a live route when it opens.",
-    "nearest_station": {
-      "id": "noida-sector-59",
-      "name": "Noida Sector 59",
-      "lat": 28.606493,
-      "lng": 77.3727259,
-      "straight_m": 1225
-    },
-    "walk": {
-      "m": 1590,
-      "min": 21,
-      "kmh": 4.7,
-      "practical": false,
-      "google_routed": false
-    },
-    "drive": {
-      "m": 1590,
-      "min": 4
-    },
-    "office": {
-      "name": "Digitide Sector 58 (existing)",
-      "km": 0.2,
-      "min": 1,
-      "google_routed": false
-    },
-    "airport": {
-      "name": "Indira Gandhi International (IGI)",
-      "km": 33.8,
-      "min": 58
-    },
-    "airport_alt": {
-      "name": "Noida International (Jewar)",
-      "km": 69.9,
+      "km": 69.2,
       "min": 69
     }
   },
@@ -151,272 +113,6 @@
       "min": 70
     }
   },
-  "noida-c49": {
-    "routed": false,
-    "method": "Estimated, not routed: straight-line distance x 1.30 street detour, walking at 4.7 km/h and driving at 22 km/h. Airport legs are scaled from A-20's figures. The card replaces the metro walk with a live route when it opens.",
-    "nearest_station": {
-      "id": "noida-sector-59",
-      "name": "Noida Sector 59",
-      "lat": 28.606493,
-      "lng": 77.3727259,
-      "straight_m": 1660
-    },
-    "walk": {
-      "m": 2160,
-      "min": 28,
-      "kmh": 4.7,
-      "practical": false,
-      "google_routed": false
-    },
-    "drive": {
-      "m": 2160,
-      "min": 6
-    },
-    "office": {
-      "name": "Digitide Sector 58 (existing)",
-      "km": 0.4,
-      "min": 1,
-      "google_routed": false
-    },
-    "airport": {
-      "name": "Indira Gandhi International (IGI)",
-      "km": 33.3,
-      "min": 57
-    },
-    "airport_alt": {
-      "name": "Noida International (Jewar)",
-      "km": 70.2,
-      "min": 70
-    }
-  },
-  "noida-d233": {
-    "routed": false,
-    "method": "Estimated, not routed: straight-line distance x 1.30 street detour, walking at 4.7 km/h and driving at 22 km/h. Airport legs are scaled from A-20's figures. The card replaces the metro walk with a live route when it opens.",
-    "nearest_station": {
-      "id": "noida-electronic-city",
-      "name": "Noida Electronic City",
-      "lat": 28.6279412,
-      "lng": 77.37493,
-      "straight_m": 1002
-    },
-    "walk": {
-      "m": 1300,
-      "min": 17,
-      "kmh": 4.7,
-      "practical": true,
-      "google_routed": false
-    },
-    "drive": {
-      "m": 1300,
-      "min": 4
-    },
-    "office": {
-      "name": "Digitide Sector 58 (existing)",
-      "km": 4.7,
-      "min": 13,
-      "google_routed": false
-    },
-    "airport": {
-      "name": "Indira Gandhi International (IGI)",
-      "km": 37.7,
-      "min": 65
-    },
-    "airport_alt": {
-      "name": "Noida International (Jewar)",
-      "km": 71.5,
-      "min": 71
-    }
-  },
-  "noida-c24": {
-    "routed": false,
-    "method": "Estimated, not routed: straight-line distance x 1.30 street detour, walking at 4.7 km/h and driving at 22 km/h. Airport legs are scaled from A-20's figures. The card replaces the metro walk with a live route when it opens.",
-    "nearest_station": {
-      "id": "noida-sector-59",
-      "name": "Noida Sector 59",
-      "lat": 28.606493,
-      "lng": 77.3727259,
-      "straight_m": 1086
-    },
-    "walk": {
-      "m": 1410,
-      "min": 18,
-      "kmh": 4.7,
-      "practical": true,
-      "google_routed": false
-    },
-    "drive": {
-      "m": 1410,
-      "min": 4
-    },
-    "office": {
-      "name": "Digitide Sector 58 (existing)",
-      "km": 0.7,
-      "min": 2,
-      "google_routed": false
-    },
-    "airport": {
-      "name": "Indira Gandhi International (IGI)",
-      "km": 34.2,
-      "min": 59
-    },
-    "airport_alt": {
-      "name": "Noida International (Jewar)",
-      "km": 70.3,
-      "min": 70
-    }
-  },
-  "noida-b25": {
-    "routed": false,
-    "method": "Estimated, not routed: straight-line distance x 1.30 street detour, walking at 4.7 km/h and driving at 22 km/h. Airport legs are scaled from A-20's figures. The card replaces the metro walk with a live route when it opens.",
-    "nearest_station": {
-      "id": "noida-sector-59",
-      "name": "Noida Sector 59",
-      "lat": 28.606493,
-      "lng": 77.3727259,
-      "straight_m": 526
-    },
-    "walk": {
-      "m": 680,
-      "min": 9,
-      "kmh": 4.7,
-      "practical": true,
-      "google_routed": false
-    },
-    "drive": {
-      "m": 680,
-      "min": 2
-    },
-    "office": {
-      "name": "Digitide Sector 58 (existing)",
-      "km": 1.2,
-      "min": 3,
-      "google_routed": false
-    },
-    "airport": {
-      "name": "Indira Gandhi International (IGI)",
-      "km": 34.8,
-      "min": 60
-    },
-    "airport_alt": {
-      "name": "Noida International (Jewar)",
-      "km": 69.9,
-      "min": 69
-    }
-  },
-  "noida-b13": {
-    "routed": false,
-    "method": "Estimated, not routed: straight-line distance x 1.30 street detour, walking at 4.7 km/h and driving at 22 km/h. Airport legs are scaled from A-20's figures. The card replaces the metro walk with a live route when it opens.",
-    "nearest_station": {
-      "id": "noida-sector-62",
-      "name": "Noida Sector 62",
-      "lat": 28.6169948,
-      "lng": 77.3736097,
-      "straight_m": 693
-    },
-    "walk": {
-      "m": 900,
-      "min": 12,
-      "kmh": 4.7,
-      "practical": true,
-      "google_routed": false
-    },
-    "drive": {
-      "m": 900,
-      "min": 2
-    },
-    "office": {
-      "name": "Digitide Sector 58 (existing)",
-      "km": 3.3,
-      "min": 9,
-      "google_routed": false
-    },
-    "airport": {
-      "name": "Indira Gandhi International (IGI)",
-      "km": 36.7,
-      "min": 63
-    },
-    "airport_alt": {
-      "name": "Noida International (Jewar)",
-      "km": 70.3,
-      "min": 70
-    }
-  },
-  "noida-a38": {
-    "routed": false,
-    "method": "Estimated, not routed: straight-line distance x 1.30 street detour, walking at 4.7 km/h and driving at 22 km/h. Airport legs are scaled from A-20's figures. The card replaces the metro walk with a live route when it opens.",
-    "nearest_station": {
-      "id": "noida-sector-62",
-      "name": "Noida Sector 62",
-      "lat": 28.6169948,
-      "lng": 77.3736097,
-      "straight_m": 453
-    },
-    "walk": {
-      "m": 590,
-      "min": 8,
-      "kmh": 4.7,
-      "practical": true,
-      "google_routed": false
-    },
-    "drive": {
-      "m": 590,
-      "min": 2
-    },
-    "office": {
-      "name": "Digitide Sector 58 (existing)",
-      "km": 2.7,
-      "min": 7,
-      "google_routed": false
-    },
-    "airport": {
-      "name": "Indira Gandhi International (IGI)",
-      "km": 36.2,
-      "min": 62
-    },
-    "airport_alt": {
-      "name": "Noida International (Jewar)",
-      "km": 70.2,
-      "min": 70
-    }
-  },
-  "noida-d247": {
-    "routed": false,
-    "method": "Estimated, not routed: straight-line distance x 1.30 street detour, walking at 4.7 km/h and driving at 22 km/h. Airport legs are scaled from A-20's figures. The card replaces the metro walk with a live route when it opens.",
-    "nearest_station": {
-      "id": "noida-electronic-city",
-      "name": "Noida Electronic City",
-      "lat": 28.6279412,
-      "lng": 77.37493,
-      "straight_m": 1173
-    },
-    "walk": {
-      "m": 1530,
-      "min": 20,
-      "kmh": 4.7,
-      "practical": false,
-      "google_routed": false
-    },
-    "drive": {
-      "m": 1530,
-      "min": 4
-    },
-    "office": {
-      "name": "Digitide Sector 58 (existing)",
-      "km": 4.3,
-      "min": 12,
-      "google_routed": false
-    },
-    "airport": {
-      "name": "Indira Gandhi International (IGI)",
-      "km": 37.5,
-      "min": 65
-    },
-    "airport_alt": {
-      "name": "Noida International (Jewar)",
-      "km": 70.9,
-      "min": 70
-    }
-  },
   "magnus": {
     "routed": false,
     "method": "No Google place record exists for this site, so every distance here is computed from the sector coordinate at a 1.30 street-detour factor, not routed.",
@@ -455,158 +151,6 @@
       "min": 69
     }
   },
-  "noida-vin": {
-    "routed": false,
-    "method": "Estimated, not routed: straight-line distance x 1.30 street detour, walking at 4.7 km/h and driving at 22 km/h. Airport legs are scaled from A-20's figures. The card replaces the metro walk with a live route when it opens.",
-    "nearest_station": {
-      "id": "noida-sector-62",
-      "name": "Noida Sector 62",
-      "lat": 28.6169948,
-      "lng": 77.3736097,
-      "straight_m": 1771
-    },
-    "walk": {
-      "m": 2300,
-      "min": 30,
-      "kmh": 4.7,
-      "practical": false,
-      "google_routed": false
-    },
-    "drive": {
-      "m": 2300,
-      "min": 6
-    },
-    "office": {
-      "name": "Digitide Sector 58 (existing)",
-      "km": 1.4,
-      "min": 4,
-      "google_routed": false
-    },
-    "airport": {
-      "name": "Indira Gandhi International (IGI)",
-      "km": 33.6,
-      "min": 58
-    },
-    "airport_alt": {
-      "name": "Noida International (Jewar)",
-      "km": 71.3,
-      "min": 71
-    }
-  },
-  "noida-c56a3": {
-    "routed": false,
-    "method": "Estimated, not routed: straight-line distance x 1.30 street detour, walking at 4.7 km/h and driving at 22 km/h. Airport legs are scaled from A-20's figures. The card replaces the metro walk with a live route when it opens.",
-    "nearest_station": {
-      "id": "noida-sector-62",
-      "name": "Noida Sector 62",
-      "lat": 28.6169948,
-      "lng": 77.3736097,
-      "straight_m": 1002
-    },
-    "walk": {
-      "m": 1300,
-      "min": 17,
-      "kmh": 4.7,
-      "practical": true,
-      "google_routed": false
-    },
-    "drive": {
-      "m": 1300,
-      "min": 4
-    },
-    "office": {
-      "name": "Digitide Sector 58 (existing)",
-      "km": 1.6,
-      "min": 4,
-      "google_routed": false
-    },
-    "airport": {
-      "name": "Indira Gandhi International (IGI)",
-      "km": 34.6,
-      "min": 59
-    },
-    "airport_alt": {
-      "name": "Noida International (Jewar)",
-      "km": 71.0,
-      "min": 71
-    }
-  },
-  "noida-c20": {
-    "routed": false,
-    "method": "Estimated, not routed: straight-line distance x 1.30 street detour, walking at 4.7 km/h and driving at 22 km/h. Airport legs are scaled from A-20's figures. The card replaces the metro walk with a live route when it opens.",
-    "nearest_station": {
-      "id": "noida-sector-62",
-      "name": "Noida Sector 62",
-      "lat": 28.6169948,
-      "lng": 77.3736097,
-      "straight_m": 1697
-    },
-    "walk": {
-      "m": 2210,
-      "min": 29,
-      "kmh": 4.7,
-      "practical": false,
-      "google_routed": false
-    },
-    "drive": {
-      "m": 2210,
-      "min": 6
-    },
-    "office": {
-      "name": "Digitide Sector 58 (existing)",
-      "km": 1.4,
-      "min": 4,
-      "google_routed": false
-    },
-    "airport": {
-      "name": "Indira Gandhi International (IGI)",
-      "km": 33.7,
-      "min": 58
-    },
-    "airport_alt": {
-      "name": "Noida International (Jewar)",
-      "km": 71.3,
-      "min": 71
-    }
-  },
-  "noida-bhutani": {
-    "routed": false,
-    "method": "Estimated, not routed: straight-line distance x 1.30 street detour, walking at 4.7 km/h and driving at 22 km/h. Airport legs are scaled from A-20's figures. The card replaces the metro walk with a live route when it opens.",
-    "nearest_station": {
-      "id": "noida-sector-62",
-      "name": "Noida Sector 62",
-      "lat": 28.6169948,
-      "lng": 77.3736097,
-      "straight_m": 767
-    },
-    "walk": {
-      "m": 1000,
-      "min": 13,
-      "kmh": 4.7,
-      "practical": true,
-      "google_routed": false
-    },
-    "drive": {
-      "m": 1000,
-      "min": 3
-    },
-    "office": {
-      "name": "Digitide Sector 58 (existing)",
-      "km": 1.6,
-      "min": 4,
-      "google_routed": false
-    },
-    "airport": {
-      "name": "Indira Gandhi International (IGI)",
-      "km": 34.9,
-      "min": 60
-    },
-    "airport_alt": {
-      "name": "Noida International (Jewar)",
-      "km": 70.5,
-      "min": 70
-    }
-  },
   "kboulevard": {
     "routed": true,
     "method": "Walking and driving distances are Google Maps routed figures, read from a live Maps session. Airport drives are estimated from the coordinate.",
@@ -643,120 +187,6 @@
       "name": "Noida International (Jewar)",
       "km": 72.8,
       "min": 73
-    }
-  },
-  "noida-c5646": {
-    "routed": false,
-    "method": "Estimated, not routed: straight-line distance x 1.30 street detour, walking at 4.7 km/h and driving at 22 km/h. Airport legs are scaled from A-20's figures. The card replaces the metro walk with a live route when it opens.",
-    "nearest_station": {
-      "id": "noida-sector-62",
-      "name": "Noida Sector 62",
-      "lat": 28.6169948,
-      "lng": 77.3736097,
-      "straight_m": 1015
-    },
-    "walk": {
-      "m": 1320,
-      "min": 17,
-      "kmh": 4.7,
-      "practical": true,
-      "google_routed": false
-    },
-    "drive": {
-      "m": 1320,
-      "min": 4
-    },
-    "office": {
-      "name": "Digitide Sector 58 (existing)",
-      "km": 2.5,
-      "min": 7,
-      "google_routed": false
-    },
-    "airport": {
-      "name": "Indira Gandhi International (IGI)",
-      "km": 34.9,
-      "min": 60
-    },
-    "airport_alt": {
-      "name": "Noida International (Jewar)",
-      "km": 71.7,
-      "min": 71
-    }
-  },
-  "noida-d212": {
-    "routed": false,
-    "method": "Estimated, not routed: straight-line distance x 1.30 street detour, walking at 4.7 km/h and driving at 22 km/h. Airport legs are scaled from A-20's figures. The card replaces the metro walk with a live route when it opens.",
-    "nearest_station": {
-      "id": "noida-electronic-city",
-      "name": "Noida Electronic City",
-      "lat": 28.6279412,
-      "lng": 77.37493,
-      "straight_m": 713
-    },
-    "walk": {
-      "m": 930,
-      "min": 12,
-      "kmh": 4.7,
-      "practical": true,
-      "google_routed": false
-    },
-    "drive": {
-      "m": 930,
-      "min": 3
-    },
-    "office": {
-      "name": "Digitide Sector 58 (existing)",
-      "km": 4.3,
-      "min": 12,
-      "google_routed": false
-    },
-    "airport": {
-      "name": "Indira Gandhi International (IGI)",
-      "km": 37.3,
-      "min": 64
-    },
-    "airport_alt": {
-      "name": "Noida International (Jewar)",
-      "km": 71.5,
-      "min": 71
-    }
-  },
-  "techm": {
-    "routed": true,
-    "method": "Walking and driving distances are Google Maps routed figures, read from a live Maps session. Airport drives are estimated from the coordinate.",
-    "nearest_station": {
-      "id": "noida-sector-59",
-      "name": "Noida Sector 59",
-      "lat": 28.606493,
-      "lng": 77.3727259,
-      "straight_m": 414
-    },
-    "walk": {
-      "m": 1000,
-      "min": 14,
-      "kmh": 4.7,
-      "practical": true,
-      "google_routed": true
-    },
-    "drive": {
-      "m": 1000,
-      "min": 3
-    },
-    "office": {
-      "name": "Digitide Sector 58 (existing)",
-      "km": 1.1,
-      "min": 5,
-      "google_routed": true
-    },
-    "airport": {
-      "name": "Indira Gandhi International (IGI)",
-      "km": 34.9,
-      "min": 60
-    },
-    "airport_alt": {
-      "name": "Noida International (Jewar)",
-      "km": 69.4,
-      "min": 69
     }
   }
 }

@@ -255,7 +255,6 @@ canvas{display:block}
     <button class="tg" id="t-theme">🌅 Theme: Dawn</button>
     <button class="tg on" id="t-labels">🏷 Labels</button>
     <button class="tg ghost" id="t-dist">📍 Metro distance</button>
-    <button class="tg" id="t-sat" hidden>🛰 Satellite</button>
     <button class="tg" id="t-traffic">🚗 Traffic</button>
     <button class="tg ghost" id="t-filters">⚖ Brief</button>
     <button class="tg" id="t-reset">⟲ Reset view</button>
@@ -466,7 +465,7 @@ function startAppForSlug(slug, accessId, isNewSignin){
     applyClientText();
     setLoadStatus("Streaming Mapbox engine · loading satellite intelligence");
     const script = document.createElement("script");
-    script.src = "./mapbox_app.js?v=14";
+    script.src = "./mapbox_app.js?v=13";
     script.onerror = ()=>{ document.getElementById("err").classList.add("show"); };
     script.onload = ()=>{
       setLoadStatus("Digital world ready · handing over controls");

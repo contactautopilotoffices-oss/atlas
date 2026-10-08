@@ -42,9 +42,13 @@
       F([["filter:A", "Grade A"], ["filter:B", "Grade B"], ["filter:ready", "Ready now"], ["filter:metro", "Metro within 1 km"], ["filter:sbd", "SBD"], ["filter:pbd", "Super Corridor"]], "Filters"),
       F([["layer:existing", "NRK Star (existing)"], ["layer:zones", "Zones"], ["layer:metro", "Metro"], ["layer:walk", "Walk 0.5/1 km"], ["layer:bus", "iBus"], ["layer:edu", "Institutions"], ["layer:emp", "Employers"], ["layer:res", "Homes"], ["layer:rings", "Drive rings"]], "Map layers"),
       F([["preset:commute", "Commute first"], ["preset:speed", "Move in fast"], ["preset:scale", "Room to scale"], ["preset:talent", "Hire at volume"], ["preset:premium", "Premium & efficient"]], "Priority presets")),
+    "digitide-noida": [].concat(
+      F([["tab:markets", "Micro-markets"], ["tab:connect", "Connectivity"], ["tab:distance", "Distances"], ["tab:talent", "Talent"], ["tab:conclusion", "Conclusion"], ["tab:compare", "Compare all"]], "Tabs"),
+      F([["filter:short", "Autopilot's shortlist"], ["filter:s5758", "Sectors 57-58"], ["filter:s5960", "Sectors 59-60"], ["filter:s62", "Sector 62"], ["filter:s6364", "Sectors 63-64"], ["filter:s67", "Sector 67"], ["filter:near", "Metro within 1 km"]], "Filters"),
+      F([["layer:existing", "Current office"], ["layer:sat", "Satellite"], ["layer:zones", "Micro-markets"], ["layer:rail", "Metro"], ["layer:links", "Distances"], ["layer:bpo", "BPO employers"], ["layer:edu", "Institutes"], ["layer:res", "Homes"], ["layer:pg", "PG and co-living"], ["layer:rings", "Distance rings"]], "Map layers")),
     client: [].concat(
       F([["flag:rain", "Rain effect"], ["flag:trees", "Street trees"], ["flag:lamps", "Street lamps"], ["flag:metroLine", "Metro lines drawn on the map"], ["flag:tierColors", "Fit colours on buildings (scored views)"], ["flag:walkthrough", "Walkthrough buttons (scored views)"], ["flag:shortlist", "Shortlist button (scored views)"]], "Map and card"),
-      F([["btn:t-cine", "Cinematic"], ["btn:t-theme", "Theme"], ["btn:t-labels", "Labels"], ["btn:t-dist", "Metro distance"], ["btn:t-sat", "Satellite"], ["btn:t-traffic", "Traffic"], ["btn:t-filters", "Brief filters"], ["btn:t-reset", "Reset view"], ["btn:winnerBtn", "Fly to the winner"]], "Toolbar buttons"))
+      F([["btn:t-cine", "Cinematic"], ["btn:t-theme", "Theme"], ["btn:t-labels", "Labels"], ["btn:t-dist", "Metro distance"], ["btn:t-traffic", "Traffic"], ["btn:t-filters", "Brief filters"], ["btn:t-reset", "Reset view"], ["btn:winnerBtn", "Fly to the winner"]], "Toolbar buttons"))
   };
   /* What a broker can report. A key the link already has (for example
      "condition") updates that field; anything else is shown under
@@ -68,6 +72,9 @@
     indore: { kind: "study", scripts: ["/indore/data.js"], props: "IND_OPTIONS", id: "id", name: "name", facts: "IND_FACTS",
       factGroups: { metro: "Metro", bus: "Buses", talent: "Talent", market: "Office market", incentives: "Incentives", living: "Living", employers: "Employers" },
       locked: ["id", "n", "micro", "precision", "page", "photo", "handoverKind", "handoverISO"], features: FEATURES.indore },
+    "digitide-noida": { kind: "study", scripts: ["/noida/data.js"], props: "NOI_OPTIONS", id: "id", name: "name", facts: "NOI_FACTS",
+      factGroups: { market: "Office market", talent: "Talent", transit: "Transit" },
+      locked: ["id", "n", "pick", "micro", "precision", "photo", "thumb"], features: FEATURES["digitide-noida"] },
     digitide: { kind: "study", scripts: [], props: null, features: [] },
     godseye: { kind: "tool", scripts: [], props: null, features: [] }
   };
