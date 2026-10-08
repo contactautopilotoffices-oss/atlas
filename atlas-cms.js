@@ -44,7 +44,7 @@
       F([["preset:commute", "Commute first"], ["preset:speed", "Move in fast"], ["preset:scale", "Room to scale"], ["preset:talent", "Hire at volume"], ["preset:premium", "Premium & efficient"]], "Priority presets")),
     client: [].concat(
       F([["flag:rain", "Rain effect"], ["flag:trees", "Street trees"], ["flag:lamps", "Street lamps"], ["flag:metroLine", "Metro lines drawn on the map"], ["flag:tierColors", "Fit colours on buildings (scored views)"], ["flag:walkthrough", "Walkthrough buttons (scored views)"], ["flag:shortlist", "Shortlist button (scored views)"]], "Map and card"),
-      F([["btn:t-cine", "Cinematic"], ["btn:t-theme", "Theme"], ["btn:t-labels", "Labels"], ["btn:t-dist", "Metro distance"], ["btn:t-traffic", "Traffic"], ["btn:t-filters", "Brief filters"], ["btn:t-reset", "Reset view"], ["btn:winnerBtn", "Fly to the winner"]], "Toolbar buttons"))
+      F([["btn:t-cine", "Cinematic"], ["btn:t-theme", "Theme"], ["btn:t-labels", "Labels"], ["btn:t-dist", "Metro distance"], ["btn:t-sat", "Satellite"], ["btn:t-traffic", "Traffic"], ["btn:t-filters", "Brief filters"], ["btn:t-reset", "Reset view"], ["btn:winnerBtn", "Fly to the winner"]], "Toolbar buttons"))
   };
   /* What a broker can report. A key the link already has (for example
      "condition") updates that field; anything else is shown under

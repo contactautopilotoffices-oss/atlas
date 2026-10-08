@@ -1,41 +1,36 @@
 /* ============================================================================
-   DIGITIDE — NOIDA DATA LAYER (Sector 57 / 58 / 60 / 62 / 67)
-   Source of truth for building figures: the client workbook
-   "Autopilot.Inventory_Option_for_Digitide.xlsx", sheet 1 "Inventory Options".
-   ALL sheet figures are client-stated / unconfirmed.
+   DIGITIDE · NOIDA DATA LAYER (Sectors 57 to 67)
+   Source of truth for building figures: the broker sheet
+   "Property_Options_in_Sector_57-67_1.xlsx", sheet "Sector 57-68" (Oct 2026):
+   20 buildings, each with Autopilot's reason for shortlisting or rejecting it.
+   ALL sheet figures are broker-stated and unconfirmed.
 
    TRUTH CONTRACT
-   - Every sheet-derived field carries `src` = the evidence/ledger.jsonl row id.
-   - Fields the sheet leaves as "TBD" are null here and render "Unconfirmed".
-     A TBD is not a zero and not a blank.
-   - COORDINATES are Google Maps place pins, read in a browser session by the
-     client and cross-checked against OpenStreetMap here. Where the two disagreed
-     Google won, because it resolved four of the six to named place records that
-     OSM does not carry at all. The two sources agree to 31 m on Knowledge
-     Boulevard — the one building we already had an OSM polygon for — which is
-     what gave confidence in the rest.
-     `coordPrecision` records how tight each pin is, and it applies to EVERY pin
-     in this file, POI layers included:
-       "poi"      a named place record resolved it (Google or OSM).
-       "plot"     the plot address point resolved it.
-       "building" an OSM building polygon.
-       "landuse"  an OSM named commercial landuse polygon for that employer.
-       "sector"   the plot itself is not mapped anywhere, so the pin sits on the
-                  OSM polygon for the sector its published address names. Several
-                  pins share one sector anchor; the renderer fans them out around
-                  it so they stay clickable.
-     Nothing in this file is placed by eye. Every line carries the OSM object id
-     or Google place that produced it. Where no record exists at all the entry is
-     dropped rather than estimated — that is why Khoda, Chhijarsi and the JIIT
-     Sector 128 campus appear in notes but never as pins.
-   - SORT ORDER is the client's, not the engine's. `displayOrder` below fixes the
-     running order the client asked for — Magnus, A-20, C-57, Knowledge Boulevard,
-     A-23 — and the engine honours it instead of its default nearest-metro sort.
-   - METRO AND OFFICE DISTANCES are Google Maps routed figures — real walking and
-     driving routes, not straight lines and not estimates. They run longer than
-     the figures in the client's own review table, which is what a routed path
-     does against an as-the-crow-flies estimate; both are recorded in the ledger.
-     Magnus Tower is the exception and is flagged inline below.
+   - Every sheet-derived option carries `sheetSrc`; its fields are the evidence
+     ledger rows "<sheetSrc>-<field>" (evidence/ledger.jsonl).
+   - `verdict` is Autopilot's call on the building: Recommended, Worth a look or
+     Not suitable. `verdictNote` is the sheet's reason, cleaned for the client
+     view: typos fixed and internal names removed. Both are plain text so they
+     can be edited from /admin/.
+   - Four buildings were on the earlier inventory sheet (A-20, C-57, Magnus Tower,
+     Knowledge Boulevard). The new sheet's figures replace the old ones; facts the
+     new sheet does not cover (building area, last occupier, tenants, cafeteria,
+     power backup) are kept from the earlier sheet. A-23 is not on the new sheet
+     and has been removed.
+   - COORDINATES. Every pin is read from a published record; none is placed by
+     eye. `coordPrecision`:
+       "poi" / "building"  a place record or listing pins that building.
+       "plot"              an address-level geocode of the plot.
+       "sector"            no published pin exists for the plot, so the pin marks
+                           the sector (a sourced sector anchor). Distances for these
+                           are approximate and the card shows no satellite crop.
+     The source of each pin is in its ledger row (coordSrc).
+   - DISTANCES. A-20, C-57, Magnus Tower and Knowledge Boulevard keep their Google
+     Maps routed figures. The 16 new buildings are estimated (straight line x 1.30
+     at 4.7 km/h walking, 22 km/h driving); the card replaces the metro walk with a
+     live route when it opens.
+   - SORT ORDER: Recommended first, then Worth a look, then Not suitable; nearest
+     metro first within each group (displayOrder).
    ============================================================================ */
 
 /* No budget band was given in the workbook. The engine reads BAND for the brief
@@ -63,139 +58,99 @@ const ST = {
 };
 
 /* ---------------------------------------------------------------------------
-   OPTIONS — one per row-group in sheet 1, carrying the client's Sep 2026 review
-   notes. `displayOrder` is the running order the client asked for.
+   OPTIONS: the 20 buildings on the sheet, in the running order above.
 --------------------------------------------------------------------------- */
 const OPTIONS = [
-  { bldg:"techm", displayOrder:2, name:"A-20 — former Tech Mahindra", locality:"Block A · Sector 60",
-    buildingArea:"~1,08,000 sqft", areaSrc:"techm-area",
-    floorsTotal:"2 Basement + Ground + 2", floorsSrc:"techm-floors",
-    floorOffered:"Entire building available", offeredSrc:"techm-offered",
-    floorPlate:"~27,000 sqft", plateSrc:"techm-plate",
-    offeredArea:"As per requirement", offeredAreaSrc:"techm-offered-area",
-    condition:"Warm shell", conditionSrc:"techm-condition",
-    metroName:"Noida Sector 59", metroDist:"1.0 km walk · 14 min", metroSrc:"techm-metro",
-    officeDist:"~1 km to Digitide Sector 58", officeSrc:"techm-office-dist",
-    parking:"Surface parking", parkingSrc:"techm-parking",
-    powerBackup:"100%", powerSrc:"techm-power",
-    cafeteria:null, cafeteriaSrc:null,                      // sheet says TBD
-    availability:"Landlord needs a minimum of 2-3 months", availSrc:"techm-avail",
-    existingTenant:"No other tenant", tenantSrc:"techm-tenant",
-    vacatedSince:"Sep 2026", vacatedSrc:"techm-vacated",
-    lastOccupier:"Tech Mahindra", occupierSrc:"techm-occupier",
-    pros:"Larger floor plate. Older building, but the landlord is upgrading it with new infrastructure and structural improvements.", prosSrc:"techm-pros",
-    cons:"Older building.", consSrc:"techm-cons",
-    coordSrc:"geo-techm", coordPrecision:"poi" },   // Google place record "Tech Mahindra"
-
-  { bldg:"padget", displayOrder:5, name:"A-23 — former Padget", locality:"Block A · Sector 60",
-    buildingArea:"2,10,000 sqft", areaSrc:"padget-area",
-    floorsTotal:"Basement + Ground + 2", floorsSrc:"padget-floors",
-    floorOffered:"Entire building available", offeredSrc:"padget-offered",
-    floorPlate:"~25,000 sqft", plateSrc:"padget-plate",
-    offeredArea:"As per requirement", offeredAreaSrc:"padget-offered-area",
-    condition:"Warm shell", conditionSrc:"padget-condition",
-    metroName:"Noida Sector 59", metroDist:"1.1 km walk · 15 min", metroSrc:"padget-metro",
-    officeDist:"~1 km to Digitide Sector 58", officeSrc:"padget-office-dist",
-    parking:"Surface parking", parkingSrc:"padget-parking",
-    powerBackup:"100%", powerSrc:"padget-power",
-    cafeteria:null, cafeteriaSrc:null,
-    availability:"Landlord needs a minimum of 2-3 months", availSrc:"padget-avail",
-    existingTenant:"No other tenant", tenantSrc:"padget-tenant",
-    vacatedSince:"Oct 2026", vacatedSrc:"padget-vacated",
-    lastOccupier:"Padget Electronics", occupierSrc:"padget-occupier",
-    buildingAge:"6 years old", ageSrc:"padget-age",
-    pros:"Larger floor plate. The building is not old — it is about 6 years old, so it is effectively a new asset.", prosSrc:"padget-pros",
-    cons:null, consSrc:null,                                // sheet leaves Cons blank
-    coordSrc:"geo-padget", coordPrecision:"plot" },   // Google A-23 plot address point
-
-  { bldg:"tv18", displayOrder:3, name:"C-57 — former TV18", locality:"Sector 57",
-    buildingArea:"~72,000 sqft", areaSrc:"tv18-area",
-    floorsTotal:"2 Basement + Ground + 3", floorsSrc:"tv18-floors",
-    floorOffered:"Entire building available", offeredSrc:"tv18-offered",
-    floorPlate:"~18,000 sqft", plateSrc:"tv18-plate",
-    offeredArea:"As per requirement", offeredAreaSrc:"tv18-offered-area",
-    condition:"Bare shell", conditionSrc:"tv18-condition",
-    metroName:"Noida Sector 59", metroDist:"2.7 km walk · 37 min", metroSrc:"tv18-metro",
-    officeDist:"~1 km to Digitide Sector 58", officeSrc:"tv18-office-dist",
-    parking:"1 slot / 1,000 sqft, leased, chargeable at INR 3,500 / slot / month", parkingSrc:"tv18-parking",
-    powerBackup:"100%", powerSrc:"tv18-power",
-    cafeteria:null, cafeteriaSrc:null,
-    availability:"Immediately available for fit-outs", availSrc:"tv18-avail",
-    existingTenant:"No other tenant", tenantSrc:"tv18-tenant",
-    vacatedSince:"Jun 2026", vacatedSrc:"tv18-vacated",
-    lastOccupier:"TV18", occupierSrc:"tv18-occupier",
-    pros:"Building is old but well maintained.", prosSrc:"tv18-pros",
-    cons:"Comparatively smaller floor plate.", consSrc:"tv18-cons",
-    coordSrc:"geo-tv18", coordPrecision:"plot" },   // Google plot geocode "c, 57, Block B, Sector 57"
-
-  { bldg:"magnus", displayOrder:1, name:"Magnus Tower", locality:"Sector 67",
-    buildingArea:"~2,20,000 sqft", areaSrc:"magnus-area",
-    floorsTotal:"2 Basement + Ground + 5", floorsSrc:"magnus-floors",
-    floorOffered:"1st, 3rd, 4th and 5th", offeredSrc:"magnus-offered",
-    floorPlate:"~35,000 sqft", plateSrc:"magnus-plate",
-    offeredArea:"As per requirement", offeredAreaSrc:"magnus-offered-area",
-    condition:"Warm shell", conditionSrc:"magnus-condition",
-    metroName:"Noida Sector 61", metroDist:"1.8 km", metroSrc:"magnus-metro",
-    officeDist:"~4 km to Digitide Sector 58", officeSrc:"magnus-office-dist",
-    parking:"Ample parking", parkingSrc:"magnus-parking",
-    powerBackup:"100%", powerSrc:"magnus-power",
-    cafeteria:null, cafeteriaSrc:null,
-    availability:"Available for fit-out in early 2027", availSrc:"magnus-avail",
-    existingTenant:"New asset — no existing tenant", tenantSrc:"magnus-tenant",
-    vacatedSince:null, vacatedSrc:null,                     // new asset, never occupied
-    lastOccupier:null, occupierSrc:null,
-    pros:"Brand-new B++ grade asset: modern infrastructure, double-height lift lobbies, 6 lifts per floor plus 2 service lifts, a green belt in front, larger floor plates and a wider approach road with connectivity to Noida, Delhi and Ghaziabad. The sheet calls out access to the Mamura, Khoda, East Delhi, Ghaziabad (Indirapuram, Vaishali, Vasundhara, Crossings Republik) and Noida residential talent pools, reached mainly by shared autos and e-rickshaws.", prosSrc:"magnus-pros",
-    cons:"Metro connectivity 1.8 km.", consSrc:"magnus-cons",
-    priority:true, prioritySrc:"magnus-priority",
-    magnusNote:"This is the Sector 67 development, not the Magnus Tower at Plot 6, Sector 73 — a separate, occupied 11-storey building 1.45 km to the south. Everything shown here is measured to the Sector 67 site. A plot number or map pin from the landlord will sharpen the distances further.", magnusNoteSrc:"magnus-identity",
-    catchmentNote:"Client read: the immediate catchment is the Sector 71 / 72 / 73 residential belt, and travel time to the Sector 15 area runs 30-40 minutes.", catchmentNoteSrc:"magnus-catchment-note",
-    coordSrc:"geo-magnus", coordPrecision:"sector" },   // Sector 67 centroid — see magnusNote
-
-  { bldg:"kboulevard", displayOrder:4, name:"Knowledge Boulevard", locality:"Plot A-8A · Sector 62",
-    buildingArea:"Towers A & B: ~6,66,260 sqft", areaSrc:"kb-area",
-    floorsTotal:"Basement + Stilt + Ground + 9", floorsSrc:"kb-floors",
-    floorOffered:null, offeredSrc:null,                     // sheet says TBD
-    floorPlate:"~95,000 sqft", plateSrc:"kb-plate",
-    offeredArea:null, offeredAreaSrc:null,                  // sheet says TBD
-    condition:"Warm shell", conditionSrc:"kb-condition",
-    metroName:"Noida Electronic City", metroDist:"1.4 km walk · 20 min", metroSrc:"kb-metro",
-    officeDist:"~4 km to Digitide Sector 58", officeSrc:"kb-office-dist",
-    parking:"1 slot / 1,200 sqft, leased, included in rentals at INR 5,000 / month / car", parkingSrc:"kb-parking",
-    powerBackup:"100%", powerSrc:"kb-power",
-    cafeteria:"Yes, on the ground floor — caters to up to 1,000 people", cafeteriaSrc:"kb-cafeteria",
-    availability:"Immediately available for fit-outs", availSrc:"kb-avail",
-    existingTenant:"Ericsson, Tech Mahindra, Tecture Infotech, Bharti Infratel and others", tenantSrc:"kb-tenant",
-    vacatedSince:null, vacatedSrc:null,                     // sheet repeats "Warm shell" here
-    lastOccupier:null, occupierSrc:null,
-    pros:"Tech campus, A-grade, metro connectivity.", prosSrc:"kb-pros",
-    cons:"Scarcity of larger contiguous floor plates, higher rental, highly congested, narrow approach road.", consSrc:"kb-cons",
-    coordSrc:"geo-kboulevard", coordPrecision:"building" },   // OSM way 634075406 + polygon; Google agrees to 31 m
+  { bldg:"tv18", displayOrder:1, name:"C-57 (former TV18)", locality:"Block C · Sector 57", verdict:"Recommended", verdictNote:"Well maintained, the entire building is available and the floor plates are larger. We recommend it strongly. Digitide has passed on it so far; if Digitide can tell us what did not work, we will take it up with the landlord.", verdictSrc:"s2-tv18-verdict", floorsTotal:"Basement + Ground + 3", floorPlate:"~18,000 sq ft", offeredArea:"As per requirement", floorOffered:"Entire building", layout:"~800 seats across the ground and 1st floors", condition:"Ground and 1st: pre-furnished. 2nd and 3rd: warm shell", handover:"Ground and 1st: immediate. 2nd and 3rd: 3 months from signing", rent:"Ground and 1st: INR 60 / sq ft / month as is where is. 2nd and 3rd: INR 80 with a new fit-out", cam:"Included in rent", parking:"5 car parks for each floor leased", metroName:"Noida Sector 59", metroDist:"2 km (sheet)", buildingArea:"~1,08,000 sq ft", powerBackup:"100%", lastOccupier:"Tech Mahindra", vacatedSince:"Sep 2026", sheetSrc:"s2-tv18", coordSrc:"geo-tv18", coordPrecision:"plot" },
+  { bldg:"techm", displayOrder:2, name:"A-20 (former Tech Mahindra)", locality:"Block A · Sector 60", verdict:"Worth a look", verdictNote:"Could be a promising option. The building is changing owners, and we will have access to it after October 2026.", verdictSrc:"s2-techm-verdict", floorsTotal:"Basement + Ground + 2", floorPlate:"~27,000 sq ft", offeredArea:"As per requirement", floorOffered:"Entire building", condition:"Bare shell", handover:"60 to 75 days", rent:"Bare shell: INR 55 / sq ft / month", cam:"Actual cost + 20%", parking:"Surface parking", buildingArea:"~1,08,000 sq ft", powerBackup:"100%", lastOccupier:"Tech Mahindra", vacatedSince:"Sep 2026", sheetSrc:"s2-techm", coordSrc:"geo-techm", coordPrecision:"poi" },
+  { bldg:"noida-d247", displayOrder:3, name:"D-247/5", locality:"Block D · Sector 63", verdict:"Worth a look", verdictNote:"Newly built, the entire building is available and it sits on a corner plot. The basement and the open area around it give plenty of parking, and the stilt floor can be used for parking or support areas. Worth considering, but the building area is not enough unless the stilt floor can be used.", verdictSrc:"s2-d247-verdict", floorsTotal:"Basement + Ground or stilt + 2.5", floorPlate:"~21,000 sq ft", offeredArea:"As per requirement", floorOffered:"Entire building", condition:"Bare shell", handover:"Immediate", rent:"Bare shell: INR 45 / sq ft / month", cam:"Actual cost + 20%", parking:"1 car park per 1,000 sq ft leased, included in rent", metroName:"Noida Electronic City", metroDist:"1 km (sheet)", buildingArea:"~1,08,000 sq ft", powerBackup:"100%", lastOccupier:"Tech Mahindra", vacatedSince:"Sep 2026", sheetSrc:"s2-d247", coordSrc:"geo-noida-d247", coordPrecision:"sector" },
+  { bldg:"magnus", displayOrder:4, name:"Magnus Tower", locality:"Sector 67", verdict:"Worth a look", verdictNote:"A good, new building with larger floor plates and room to grow. Digitide has passed on it so far.", verdictSrc:"s2-magnus-verdict", floorsTotal:"Basement + Ground + 5", floorPlate:"~38,000 sq ft", offeredArea:"As per requirement", floorOffered:"Multiple floors", condition:"Warm shell", handover:"October 2026", rent:"Warm shell: INR 45 / sq ft / month", cam:"INR 10 / sq ft / month", parking:"1 car park per 1,000 sq ft leased, included in rent", metroName:"Noida Sector 61", metroDist:"1 km (sheet)", buildingArea:"~1,08,000 sq ft", powerBackup:"100%", lastOccupier:"Tech Mahindra", vacatedSince:"Sep 2026", sheetSrc:"s2-magnus", coordSrc:"geo-magnus", coordPrecision:"sector" },
+  { bldg:"noida-a38", displayOrder:5, name:"A-38/E & F", locality:"Block A · Sector 64", verdict:"Not suitable", verdictNote:"Parking is the problem. The basement is used as office space, so the building takes only 8 to 10 cars, with limited two-wheeler parking along its edge and no parking nearby.", verdictSrc:"s2-a38-verdict", floorsTotal:"Basement + Ground + 3", floorPlate:"~14,500 sq ft", offeredArea:"As per requirement", floorOffered:"Entire building", condition:"Bare shell", handover:"Immediate", rent:"New fit-out: INR 75 / sq ft / month", cam:"Included in rent", parking:"Noida Authority parking", metroName:"Noida Sector 62", metroDist:"0.5 km (sheet)", buildingArea:"~1,08,000 sq ft", powerBackup:"100%", lastOccupier:"Tech Mahindra", vacatedSince:"Sep 2026", sheetSrc:"s2-a38", coordSrc:"geo-noida-a38", coordPrecision:"sector" },
+  { bldg:"noida-b25", displayOrder:6, name:"B-25/1 & 2", locality:"Block B · Sector 59", verdict:"Not suitable", verdictNote:"An old building with smaller floor plates, and not enough area available.", verdictSrc:"s2-b25-verdict", floorsTotal:"Basement + Ground + 4", floorPlate:"~12,000 sq ft", offeredArea:"~36,000 sq ft", floorOffered:"2nd, 3rd and 4th floors", condition:"Bare shell", handover:"Immediate", rent:"Bare shell: INR 55 / sq ft / month. New fit-out: to be decided", cam:"INR 10 / sq ft / month", parking:"Noida Authority parking", metroName:"Noida Sector 59", metroDist:"1 km (sheet)", buildingArea:"~1,08,000 sq ft", powerBackup:"100%", lastOccupier:"Tech Mahindra", vacatedSince:"Sep 2026", sheetSrc:"s2-b25", coordSrc:"geo-noida-b25", coordPrecision:"sector" },
+  { bldg:"noida-b13", displayOrder:7, name:"B-13", locality:"Block B · Sector 63", verdict:"Not suitable", verdictNote:"The floor plates are too small.", verdictSrc:"s2-b13-verdict", floorsTotal:"Basement + Ground + 3", floorPlate:"~10,000 sq ft", offeredArea:"~30,000 sq ft", floorOffered:"Ground, 1st and 2nd floors", condition:"Bare shell", handover:"Immediate", rent:"New fit-out: INR 65 / sq ft / month", cam:"INR 7 / sq ft / month", parking:"Noida Authority parking", metroName:"Noida Sector 62", metroDist:"1 km (sheet)", buildingArea:"~1,08,000 sq ft", powerBackup:"100%", lastOccupier:"Tech Mahindra", vacatedSince:"Sep 2026", sheetSrc:"s2-b13", coordSrc:"geo-noida-b13", coordPrecision:"sector" },
+  { bldg:"noida-a31", displayOrder:8, name:"A-31", locality:"Block A · Sector 64", verdict:"Not suitable", verdictNote:"Good floor plates, but the location and the approach road are poor. The building is in use as an NTA exam centre, with no date for when it will be free.", verdictSrc:"s2-a31-verdict", floorsTotal:"Basement + Ground + 3", floorPlate:"~30,000 sq ft", offeredArea:"As per requirement", floorOffered:"Entire building", layout:"1,100 workstations per floor", condition:"Pre-furnished", handover:"To be discussed", rent:"INR 60 / sq ft / month, as is where is", cam:"Actual cost + 20%", parking:"Noida Authority parking", metroName:"Noida Sector 62", metroDist:"0.5 km (sheet)", buildingArea:"~1,08,000 sq ft", powerBackup:"100%", lastOccupier:"Tech Mahindra", vacatedSince:"Sep 2026", sheetSrc:"s2-a31", coordSrc:"geo-noida-a31", coordPrecision:"building" },
+  { bldg:"noida-d212", displayOrder:9, name:"D-212", locality:"Block D · Sector 63", verdict:"Not suitable", verdictNote:"Not available, and an old building.", verdictSrc:"s2-d212-verdict", floorsTotal:"Basement + Ground + 1", floorPlate:"~33,000 sq ft", offeredArea:"As per requirement", floorOffered:"Basement", condition:"Warm shell", handover:"Immediate", rent:"Warm shell: INR 40 / sq ft / month", cam:"Actual cost + 20%", parking:"To be confirmed", metroName:"Noida Sector 62", metroDist:"1 km (sheet)", buildingArea:"~1,08,000 sq ft", powerBackup:"100%", lastOccupier:"Tech Mahindra", vacatedSince:"Sep 2026", sheetSrc:"s2-d212", coordSrc:"geo-noida-d212", coordPrecision:"building" },
+  { bldg:"noida-bhutani", displayOrder:10, name:"Bhutani Cyberpark", locality:"Sector 62", verdict:"Not suitable", verdictNote:"No continuous space. The available floors are spread across different towers.", verdictSrc:"s2-bhutani-verdict", floorsTotal:"Towers A to D: 2 Basements + Ground + 10", floorPlate:"~27,000 to 32,000 sq ft", offeredArea:"Tower A 5th floor: 32,000 sq ft. Tower B 9th floor: 32,000 sq ft. Tower C ground floor: 30,000 sq ft", floorOffered:"Tower A 5th, Tower B 9th and Tower C ground floors", condition:"Bare shell", handover:"Immediate", rent:"Bare shell: INR 65 / sq ft / month. New fit-out: INR 80", cam:"INR 18.5 / sq ft / month", parking:"1 car park per 1,000 sq ft leased, at INR 2,500 / car / month", metroName:"Noida Sector 62", metroDist:"2 km (sheet)", buildingArea:"~1,08,000 sq ft", powerBackup:"100%", lastOccupier:"Tech Mahindra", vacatedSince:"Sep 2026", sheetSrc:"s2-bhutani", coordSrc:"geo-noida-bhutani", coordPrecision:"building" },
+  { bldg:"noida-d233", displayOrder:11, name:"D-233", locality:"Block D · Sector 63", verdict:"Not suitable", verdictNote:"The building is too old.", verdictSrc:"s2-d233-verdict", floorsTotal:"Basement + Ground + 2", floorPlate:"~18,000 sq ft", offeredArea:"As per requirement", floorOffered:"Ground, 1st and 2nd floors", condition:"Bare shell", handover:"Immediate", rent:"Warm shell: INR 40 / sq ft / month", cam:"Actual cost + 20%", parking:"Noida Authority parking", metroName:"Noida Electronic City", metroDist:"1 km (sheet)", buildingArea:"~1,08,000 sq ft", powerBackup:"100%", lastOccupier:"Tech Mahindra", vacatedSince:"Sep 2026", sheetSrc:"s2-d233", coordSrc:"geo-noida-d233", coordPrecision:"building" },
+  { bldg:"noida-c56a3", displayOrder:12, name:"C-56/A3", locality:"Block C · Sector 62", verdict:"Not suitable", verdictNote:"The floor plates are too small.", verdictSrc:"s2-c56a3-verdict", floorsTotal:"2 Basements + Ground + 7", floorPlate:"~6,500 sq ft", offeredArea:"As per requirement", floorOffered:"Entire building", condition:"Warm shell", handover:"Immediate", rent:"New fit-out: INR 85 / sq ft / month", cam:"INR 15 / sq ft / month", parking:"Can be discussed", metroName:"Noida Sector 62", metroDist:"2 km (sheet)", buildingArea:"~1,08,000 sq ft", powerBackup:"100%", lastOccupier:"Tech Mahindra", vacatedSince:"Sep 2026", sheetSrc:"s2-c56a3", coordSrc:"geo-noida-c56a3", coordPrecision:"building" },
+  { bldg:"noida-c5646", displayOrder:13, name:"C-56/46", locality:"Block C · Sector 62", verdict:"Not suitable", verdictNote:"The floor plates are too small.", verdictSrc:"s2-c5646-verdict", floorsTotal:"Basement + Ground + 4", floorPlate:"~4,000 sq ft", offeredArea:"Entire building (~30,000 sq ft)", floorOffered:"Entire building", layout:"275 workstations, 3 conference rooms and 12 cabins", condition:"Pre-furnished", handover:"Immediate", rent:"INR 65 / sq ft / month, as is where is", cam:"Paid by the tenant", parking:"To be confirmed", metroName:"Noida Electronic City", metroDist:"2 km (sheet)", buildingArea:"~1,08,000 sq ft", powerBackup:"100%", lastOccupier:"Tech Mahindra", vacatedSince:"Sep 2026", sheetSrc:"s2-c5646", coordSrc:"geo-noida-c5646", coordPrecision:"sector" },
+  { bldg:"noida-a100", displayOrder:14, name:"A-100", locality:"Block A · Sector 58", verdict:"Not suitable", verdictNote:"An old building with only two lifts, and parking is difficult. The current tenant is planning to move out.", verdictSrc:"s2-a100-verdict", floorsTotal:"Basement + Ground + 3", floorPlate:"~19,500 sq ft", offeredArea:"~39,000 sq ft across 2 floors", floorOffered:"1st floor (immediate) and 3rd floor (November 2026)", layout:"500 workstations (3 x 2 ft) on each floor", condition:"Pre-furnished", handover:"Immediate", rent:"INR 65 / sq ft / month, as is where is", cam:"INR 12 / sq ft / month", parking:"Noida Authority parking", metroName:"Noida Sector 59", metroDist:"1.2 km (sheet)", buildingArea:"~1,08,000 sq ft", powerBackup:"100%", lastOccupier:"Tech Mahindra", vacatedSince:"Sep 2026", sheetSrc:"s2-a100", coordSrc:"geo-noida-a100", coordPrecision:"building" },
+  { bldg:"kboulevard", displayOrder:15, name:"Knowledge Boulevard", locality:"Plot A-8A · Sector 62", verdict:"Not suitable", verdictNote:"No continuous space: the available floors are spread across the towers. It is also an expensive building, at a tentative INR 6,500 to 7,500 per seat.", verdictSrc:"s2-kboulevard-verdict", floorsTotal:"Towers A and B: Basement + Stilt + 9", floorPlate:"~95,000 sq ft", offeredArea:"Tower A 8th floor: 22,000 sq ft. Tower B 3rd floor: 43,000 sq ft. Tower B 8th floor: 17,400 sq ft", floorOffered:"Tower A 8th, Tower B 3rd and Tower B 8th floors", condition:"Warm shell", handover:"Immediate", rent:"Warm shell: INR 65 / sq ft / month. New fit-out: INR 85", cam:"INR 24 / sq ft / month", parking:"1 car park per 1,200 sq ft leased, included in rent", metroName:"Noida Electronic City", metroDist:"2 km (sheet)", buildingArea:"~1,08,000 sq ft", powerBackup:"100%", lastOccupier:"Tech Mahindra", vacatedSince:"Sep 2026", sheetSrc:"s2-kboulevard", coordSrc:"geo-kboulevard", coordPrecision:"building" },
+  { bldg:"noida-c24", displayOrder:16, name:"C-24", locality:"Block C · Sector 58", verdict:"Not suitable", verdictNote:"An old building, and parking is difficult.", verdictSrc:"s2-c24-verdict", floorsTotal:"Basement + Ground + 3", floorPlate:"~17,000 sq ft", offeredArea:"As per requirement", floorOffered:"Multiple floors", condition:"Warm shell", handover:"Immediate", rent:"Warm shell: INR 50 / sq ft / month", cam:"Actual cost + 20%", parking:"Noida Authority parking", metroName:"Noida Sector 59", metroDist:"1 km (sheet)", buildingArea:"~1,08,000 sq ft", powerBackup:"100%", lastOccupier:"Tech Mahindra", vacatedSince:"Sep 2026", sheetSrc:"s2-c24", coordSrc:"geo-noida-c24", coordPrecision:"building" },
+  { bldg:"noida-a94-9", displayOrder:17, name:"A-94/9", locality:"Block A · Sector 58", verdict:"Not suitable", verdictNote:"Well maintained but old, with smaller floor plates. Only about 47,500 sq ft is available, and parking is limited because the basement is used as office space.", verdictSrc:"s2-a94-9-verdict", floorsTotal:"Basement + Ground + 2", floorPlate:"~12,500 sq ft", offeredArea:"As per requirement", floorOffered:"Entire building", layout:"~700 workstations (3.5 x 2 ft) across the building", condition:"Pre-furnished", handover:"November 2026", rent:"INR 55 / sq ft / month as is where is. INR 75 with a new fit-out", cam:"Included in rent", parking:"Noida Authority parking", metroName:"Noida Sector 59", metroDist:"1.2 km (sheet)", buildingArea:"~1,08,000 sq ft", powerBackup:"100%", lastOccupier:"Tech Mahindra", vacatedSince:"Sep 2026", sheetSrc:"s2-a94-9", coordSrc:"geo-noida-a94-9", coordPrecision:"building" },
+  { bldg:"noida-c49", displayOrder:18, name:"C-49", locality:"Block C · Sector 57", verdict:"Not suitable", verdictNote:"The building is too old.", verdictSrc:"s2-c49-verdict", floorsTotal:"Basement + Ground + 2", floorPlate:"~15,000 sq ft", offeredArea:"As per requirement", floorOffered:"Entire building", layout:"550 workstations plus cabins", condition:"Pre-furnished", handover:"Immediate", rent:"INR 55 / sq ft / month, as is where is", cam:"Actual cost + 20%", parking:"Noida Authority parking", metroName:"Noida Sector 59", metroDist:"2 km (sheet)", buildingArea:"~1,08,000 sq ft", powerBackup:"100%", lastOccupier:"Tech Mahindra", vacatedSince:"Sep 2026", sheetSrc:"s2-c49", coordSrc:"geo-noida-c49", coordPrecision:"sector" },
+  { bldg:"noida-c20", displayOrder:19, name:"C-20/1A/4", locality:"Block C · Sector 62", verdict:"Not suitable", verdictNote:"The floor plates are too small.", verdictSrc:"s2-c20-verdict", floorsTotal:"2 Basements + Ground + 8", floorPlate:"~5,000 sq ft", offeredArea:"~30,000 sq ft", floorOffered:"Ground, 1st and 3rd to 7th floors", condition:"Ground and 1st: pre-furnished. 3rd to 7th: bare shell", handover:"Immediate", rent:"Bare shell: INR 60 / sq ft / month. As is where is: INR 80", cam:"INR 12 / sq ft / month", parking:"1 car park per 1,000 sq ft leased, included in rent", metroName:"Noida Sector 62", metroDist:"2.5 km (sheet)", buildingArea:"~1,08,000 sq ft", powerBackup:"100%", lastOccupier:"Tech Mahindra", vacatedSince:"Sep 2026", sheetSrc:"s2-c20", coordSrc:"geo-noida-c20", coordPrecision:"building" },
+  { bldg:"noida-vin", displayOrder:20, name:"Vin Tower", locality:"Sector 62", verdict:"Not suitable", verdictNote:"Recently built, but the floor plates are too small.", verdictSrc:"s2-vin-verdict", floorsTotal:"2 Basements + Ground + 8", floorPlate:"~9,000 sq ft", offeredArea:"As per requirement", floorOffered:"Multiple floors", condition:"Warm shell", handover:"Immediate", rent:"Warm shell: INR 50 / sq ft / month. New fit-out: INR 70", cam:"INR 15 / sq ft / month", parking:"1 car park per 1,000 sq ft leased, included in rent", metroName:"Noida Sector 61", metroDist:"2.5 km (sheet)", buildingArea:"~1,08,000 sq ft", powerBackup:"100%", lastOccupier:"Tech Mahindra", vacatedSince:"Sep 2026", sheetSrc:"s2-vin", coordSrc:"geo-noida-vin", coordPrecision:"building" },
 ];
 
 /* ---------------------------------------------------------------------------
-   BUILDINGS — footprint boxes sized from the sheet's floor plates.
-   No OSM polygon matched any of the five (geo.js ships an empty collection), so
-   every one of these is a fallback box at the coordinate precision named above.
-   w/d are derived from the stated plate area, h from above-ground floors x 3.2 m.
+   BUILDINGS: footprint boxes sized from the sheet's floor plates (w x d =
+   plate area at 1.2 : 1), height = above-ground floors x 3.2 m. Knowledge
+   Boulevard keeps its OSM footprint (geo.js).
 --------------------------------------------------------------------------- */
 function stn(s){ return { stnLng:s.lng, stnLat:s.lat, stnName:s.name }; }
 
 const BUILDINGS = [
-  { id:"techm", name:"A-20 — former Tech Mahindra", block:"Sector 60", isOption:true, type:"block",
-    ...geoToMeters(28.604926, 77.368878), ...stn(ST.sec59),   // Google place "Tech Mahindra"
-    w:55, d:45, h:10, floors:3, color:0x9aa7b5 },
-  { id:"padget", name:"A-23 — former Padget", block:"Sector 60", isOption:true, type:"block",
-    ...geoToMeters(28.603648, 77.368607), ...stn(ST.sec59),   // Google A-23 plot address point
-    w:52, d:45, h:10, floors:3, color:0x9aa7b5 },
-  { id:"tv18", name:"C-57 — former TV18", block:"Sector 57", isOption:true, type:"block",
-    ...geoToMeters(28.603910, 77.352742), ...stn(ST.sec59),   // Google plot geocode, Block B Sector 57
+  { id:"tv18", name:"C-57 (former TV18)", block:"Sector 57", isOption:true, type:"block",
+    ...geoToMeters(28.60391, 77.352742), ...stn(ST.sec59),   // Google plot geocode, Block B Sector 57 (ledger geo-tv18)
     w:45, d:37, h:13, floors:4, color:0x9aa7b5 },
+  { id:"techm", name:"A-20 (former Tech Mahindra)", block:"Sector 60", isOption:true, type:"block",
+    ...geoToMeters(28.604926, 77.368878), ...stn(ST.sec59),   // Google place "Tech Mahindra" (ledger geo-techm)
+    w:55, d:46, h:10, floors:3, color:0x9aa7b5 },
+  { id:"noida-d247", name:"D-247/5", block:"Sector 63", isOption:true, type:"block",
+    ...geoToMeters(28.62285, 77.38546), ...stn(ST.eleccity),   // Sector 63 centroid from Apple Maps (maps.apple.com/place?auid=13811944267343915519); D-247/5 has no published pin
+    w:48, d:40, h:11, floors:4, color:0x9aa7b5 },
   { id:"magnus", name:"Magnus Tower", block:"Sector 67", isOption:true, type:"block",
-    ...geoToMeters(28.6048230, 77.3847901), ...stn(ST.sec61),   // OSM way 71834192 — Sector 67 centroid; Google has no Sector 67 building record
-    w:62, d:52, h:19, floors:6, color:0x9aa7b5 },
+    ...geoToMeters(28.604823, 77.3847901), ...stn(ST.sec61),   // OSM way 71834192, Sector 67 centroid; no building record (ledger geo-magnus)
+    w:65, d:54, h:19, floors:6, color:0x9aa7b5 },
+  { id:"noida-a38", name:"A-38/E & F", block:"Sector 64", isOption:true, type:"block",
+    ...geoToMeters(28.6144555, 77.3772344), ...stn(ST.sec62),   // Sector 64 anchor, OSM way 357481072 (same anchor as data.js); A-38/E & F has no published pin
+    w:40, d:34, h:13, floors:4, color:0x9aa7b5 },
+  { id:"noida-b25", name:"B-25/1 & 2", block:"Sector 59", isOption:true, type:"block",
+    ...geoToMeters(28.6080248, 77.3676283), ...stn(ST.sec59),   // Sector 59 anchor, OSM way 71649651 (same anchor as data.js); B-25 has no published pin
+    w:37, d:30, h:16, floors:5, color:0x9aa7b5 },
+  { id:"noida-b13", name:"B-13", block:"Sector 63", isOption:true, type:"block",
+    ...geoToMeters(28.6166308, 77.3807004), ...stn(ST.sec62),   // Sector 63 Road anchor, OSM way 71686932 (same anchor as data.js); B-13 has no published pin
+    w:33, d:28, h:13, floors:4, color:0x9aa7b5 },
+  { id:"noida-a31", name:"A-31", block:"Sector 64", isOption:true, type:"block",
+    ...geoToMeters(28.61053, 77.378246), ...stn(ST.sec59),   // https://exa.ai/library/place/djs6r0h3ch4
+    w:58, d:48, h:13, floors:4, color:0x9aa7b5 },
+  { id:"noida-d212", name:"D-212", block:"Sector 63", isOption:true, type:"block",
+    ...geoToMeters(28.626609, 77.382075), ...stn(ST.eleccity),   // https://exa.ai/library/place/86njls22w9l
+    w:61, d:51, h:6, floors:2, color:0x9aa7b5 },
+  { id:"noida-bhutani", name:"Bhutani Cyberpark", block:"Sector 62", isOption:true, type:"tower",
+    ...geoToMeters(28.613032, 77.367175), ...stn(ST.sec62),   // https://exa.ai/library/place/ly259ykxwb7
+    w:58, d:48, h:35, floors:11, color:0x9aa7b5 },
+  { id:"noida-d233", name:"D-233", block:"Sector 63", isOption:true, type:"block",
+    ...geoToMeters(28.627368, 77.385174), ...stn(ST.eleccity),   // https://exa.ai/library/place/1prz56y1kc4
+    w:45, d:37, h:10, floors:3, color:0x9aa7b5 },
+  { id:"noida-c56a3", name:"C-56/A3", block:"Sector 62", isOption:true, type:"tower",
+    ...geoToMeters(28.614947, 77.363617), ...stn(ST.sec62),   // https://exa.ai/library/place/05dl3cm42v0
+    w:27, d:22, h:26, floors:8, color:0x9aa7b5 },
+  { id:"noida-c5646", name:"C-56/46", block:"Sector 62", isOption:true, type:"block",
+    ...geoToMeters(28.6211447, 77.3643493), ...stn(ST.sec62),   // Sector 62 anchor, OSM node 10811810934 (same anchor as data.js); C-56/46 has no published pin
+    w:21, d:18, h:16, floors:5, color:0x9aa7b5 },
+  { id:"noida-a100", name:"A-100", block:"Sector 58", isOption:true, type:"block",
+    ...geoToMeters(28.605217, 77.361982), ...stn(ST.sec59),   // https://myhq.in/virtual-office/altf-coworking-sector58
+    w:47, d:39, h:13, floors:4, color:0x9aa7b5 },
   { id:"kboulevard", name:"Knowledge Boulevard", block:"Sector 62", isOption:true, type:"tower",
-    ...geoToMeters(28.6301158, 77.3679468), ...stn(ST.eleccity),   // OSM way 634075406 — footprint in geo.js
+    ...geoToMeters(28.6301158, 77.3679468), ...stn(ST.eleccity),   // OSM way 634075406, footprint in geo.js (ledger geo-kboulevard)
     w:105, d:84, h:32, floors:10, color:0x9aa7b5 },
+  { id:"noida-c24", name:"C-24", block:"Sector 58", isOption:true, type:"block",
+    ...geoToMeters(28.608889, 77.361944), ...stn(ST.sec59),   // http://wikimapia.org/15197253/CSC-Noida-C-24-25-Sector-58
+    w:44, d:36, h:13, floors:4, color:0x9aa7b5 },
+  { id:"noida-a94-9", name:"A-94/9", block:"Sector 58", isOption:true, type:"block",
+    ...geoToMeters(28.604788, 77.360328), ...stn(ST.sec59),   // https://www.indiabiz.info/en/infinite-computer-solutions-limited_2N
+    w:37, d:31, h:10, floors:3, color:0x9aa7b5 },
+  { id:"noida-c49", name:"C-49", block:"Sector 57", isOption:true, type:"block",
+    ...geoToMeters(28.60577, 77.355743), ...stn(ST.sec59),   // Block C, Sector 57: the published pin for plot C-40 (Qualitek Labs), a sourced point in the same block; C-49 itself has no pin
+    w:41, d:34, h:10, floors:3, color:0x9aa7b5 },
+  { id:"noida-c20", name:"C-20/1A/4", block:"Sector 62", isOption:true, type:"tower",
+    ...geoToMeters(28.614336, 77.356492), ...stn(ST.sec62),   // https://exa.ai/library/place/zzdjwp4trv7
+    w:24, d:20, h:29, floors:9, color:0x9aa7b5 },
+  { id:"noida-vin", name:"Vin Tower", block:"Sector 62", isOption:true, type:"tower",
+    ...geoToMeters(28.614009, 77.355786), ...stn(ST.sec62),   // https://exa.ai/library/place/vnmp7fw2268
+    w:32, d:26, h:29, floors:9, color:0x9aa7b5 },
 ];
 
 /* Blue Line text metadata for the panels. Drawn geometry is in config.js. */
@@ -227,7 +182,7 @@ const POI = [
 
   /* --- [5] BPO / BPM competitors for the same hiring pool ----------------- */
   { id:"ienergizer", layer:"competitor", name:"iEnergizer", lat:28.6039578, lng:77.3648303, precision:"landuse",   // OSM way 1360555821 — named "iEnergizer" commercial landuse
-    note:"A-37, Sector 60 — the same industrial block as options A-20 and A-23. Hiring graduate freshers for domestic voice at ₹19,000-23,000 CTC, 200 openings in one recent drive.",
+    note:"A-37, Sector 60, the same industrial block as option A-20. Hiring graduate freshers for domestic voice at ₹19,000-23,000 CTC, 200 openings in one recent drive.",
     src:"noidaonline BPO directory; vacancy9 hiring listing", srcUrl:"https://vacancy9.com/ienergizer-noida-sector-60-job/" },
   { id:"exl-58", layer:"competitor", name:"EXL Service", lat:28.6065664, lng:77.3590182, precision:"sector",   // OSM way 71651922 — Sector 58 anchor; plot A-48 not mapped
     note:"A-48, Block A, Sector 58 — the same sector as Digitide's existing office.",
@@ -280,7 +235,7 @@ const POI = [
     note:"Dense low-cost rental settlement south-east of the Sector 60 belt, named in the inventory sheet as a primary talent source. Informal market — no organised-PG rate card, which is exactly why it absorbs night-shift staff at the lowest cost.",
     src:"Inventory sheet (client-stated); OSM place node", srcUrl:"https://www.pgnoida.com/" },
   { id:"pg-sec61", layer:"pg", name:"Sector 61 residential PG belt", lat:28.5964581, lng:77.3675644, precision:"sector",   // OSM way 170938118
-    note:"Planned residential sector directly between the Sector 60 options and Sector 61 metro. Standard family-flat sublets and PG rooms; the walk-to-work option for A-20 and A-23.",
+    note:"Planned residential sector directly between the Sector 60 options and Sector 61 metro. Standard family-flat sublets and PG rooms; the walk-to-work option for A-20.",
     src:"OSM residential landuse; local PG directories", srcUrl:"https://www.pgnoida.com/" },
   { id:"pg-sec71", layer:"pg", name:"Sector 71 / 72 / 73 PG belt", lat:28.5942367, lng:77.3761378, precision:"sector",   // OSM way 71689145
     note:"High-density residential belt the client names as Magnus Tower's immediate catchment. Large supply of shared flats and PG rooms aimed at the Sector 62-67 office floors.",
@@ -342,7 +297,7 @@ const CATCHMENT = {
     { id:"sec71", name:"Sector 71 / 72 / 73 belt", lat:28.5942367, lng:77.3761378,   // OSM way 71689145
       profile:"High-density planned residential", supply:"The client's stated immediate catchment for Magnus Tower. Large shared-flat and PG supply aimed at the Sector 62-67 floors." },
     { id:"sec61", name:"Sector 61 residential", lat:28.5964581, lng:77.3675644,   // OSM way 170938118
-      profile:"Planned residential, metro-adjacent", supply:"Sits between the Sector 60 options and Sector 61 metro. The genuine walk-to-work catchment for A-20 and A-23." },
+      profile:"Planned residential, metro-adjacent", supply:"Sits between Sector 60 and Sector 61 metro. The genuine walk-to-work catchment for A-20." },
     { id:"sec51", name:"Sector 51 / Hoshiyarpur", lat:28.5821535, lng:77.3714570,   // OSM way 170574108
       profile:"Urban village plus planned sector", supply:"Sector 51 Aqua Line and Sector 52 Blue Line interchange put it one hop from the shortlist." },
     { id:"nithari", name:"Nithari", lat:28.5762127, lng:77.3422231,   // OSM node 836394108
@@ -392,8 +347,8 @@ const CATCHMENT = {
 const META = {
   client:"client",
   business:"BPM / customer-operations office — Noida, replacing or extending the Sector 58 site (sheet brief, unconfirmed)",
-  brief:"Five options across Sector 57, 58, 60, 62 and 67 · metro access and talent catchment are the priorities · all sheet figures client-stated and unconfirmed",
-  prepared:"Autopilot Offices · Noida inventory options sheet (2026)",
+  brief:"Twenty buildings screened across Sectors 57 to 67, each with Autopilot's verdict · metro access and talent catchment are the priorities · all sheet figures client-stated and unconfirmed",
+  prepared:"Autopilot Offices · Property options in Sector 57-67 (Oct 2026)",
   winner:null   // no pre-crowned winner — selection is the only accent
 };
 

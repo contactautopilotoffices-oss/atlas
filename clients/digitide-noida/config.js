@@ -1,5 +1,5 @@
 /* ============================================================================
-   DIGITIDE — NOIDA (Sector 57 / 58 / 60 / 62 / 67) — client config
+   DIGITIDE · NOIDA (Sectors 57 to 67) · client config
    Gate, framing, registry, Blue Line overrides and the POI/catchment layers
    the Atlas Requirement sheet asks for.
 
@@ -17,16 +17,18 @@ window.CLIENT = {
           sub: "Invitation-only geospatial experience · Noida office options" },
   brand: {
     title: 'ATLAS <span style="color:var(--mut);font-weight:400">by Autopilot · Noida Digital Twin</span>',
-    sub: "Geospatial intelligence view · Sector 57 · 58 · 60 · 62 · 67 · Noida"
+    sub: "20 buildings · Sectors 57 to 67 · Noida"
   },
   lb: {
-    title: "Options for Clients",
-    why: 'Every building figure is <b>client-stated from the inventory sheet (unconfirmed)</b>. Distances, competitor pins and talent bands are re-derived here and carry their own sources. Metro access and talent catchment are the ranking priorities.'
+    title: "Buildings screened",
+    why: 'Twenty buildings across Sectors 57 to 67, each tagged with <b>Autopilot\'s verdict</b>: Recommended, Worth a look or Not suitable, with the reason on the card. Building figures are <b>broker-stated from the property options sheet (unconfirmed)</b>. Distances, competitor pins and talent bands are re-derived here and carry their own sources.'
   },
   tierColors: false,         // no verdict colouring — selection is the only accent
   shortlist: true,
   shortlistText: "Add to shortlist",
-  walkthrough: false,        // no captured media for these properties yet
+  walkthrough: false,        // one exterior photo per building, no walkthrough media
+  photoMinimum: false,
+  satellite: "on",           // Mapbox satellite imagery under the 3D city, on from the start; a crop on each pinned card       // one sheet photo per building is all there is; no "below minimum" note
   props: false,              // street props are BKC geography, not Noida
   rain: false,
   /* Competitor layer wording. The engine's default copy is the Bengaluru VFX
@@ -43,20 +45,36 @@ window.CLIENT = {
     { key:"edu",        label:"Institutes",      icon:"E", color:"#b681d8", on:false },  // [7]
     { key:"catchment",  label:"Talent pool",     icon:"T", color:"#d9b310", on:false },  // [6]
   ],
-  // Map framing: the five options sit in a ~4 km box across Sector 57-67. Centroid
-  // of that box, pitched back so the Blue Line corridor and Digitide's existing
-  // Sector 58 office stay in frame together.
-  map: { center: [77.3735, 28.6135], zoom: 12.7, pitch: 52, bearing: -12 },
-  // Engine registry: heightMeters = above-ground floors × 3.2 m, floor counts from
-  // the inventory sheet. techm 2B+G+2 → 3 · padget B+G+2 → 3 · tv18 2B+G+3 → 4
-  // magnus 2B+G+5 → 6 · kboulevard B+S+G+9 → 10 (stilt counted as a level).
+  // Map framing: the 20 buildings sit in a ~3.5 x 3 km box across Sectors 57 to
+  // 67. Centre of that box, pitched back so the Blue Line corridor and
+  // Digitide's existing Sector 58 office stay in frame together.
+  map: { center: [77.3690, 28.6165], zoom: 12.8, pitch: 52, bearing: -12 },
+  // Engine registry: heightMeters = above-ground floors x 3.2 m from the sheet's
+  // building structure. Recommended and Worth a look read lighter than Not
+  // suitable, so the shortlist stands out without a second accent colour.
   registry: {
-    techm:      { renderMode:"extrusion", heightMeters:10, color:"#9aa7b5" },
-    padget:     { renderMode:"extrusion", heightMeters:10, color:"#9aa7b5" },
-    tv18:       { renderMode:"extrusion", heightMeters:13, color:"#9aa7b5" },
-    magnus:     { renderMode:"extrusion", heightMeters:19, color:"#9aa7b5" },
-    kboulevard: { renderMode:"extrusion", heightMeters:32, color:"#9aa7b5" },
+    "tv18": { renderMode:"extrusion", heightMeters:13, color:"#d3dbe4" },
+    "techm": { renderMode:"extrusion", heightMeters:10, color:"#d3dbe4" },
+    "noida-d247": { renderMode:"extrusion", heightMeters:11, color:"#d3dbe4" },
+    "magnus": { renderMode:"extrusion", heightMeters:19, color:"#d3dbe4" },
+    "noida-a38": { renderMode:"extrusion", heightMeters:13, color:"#8f99a4" },
+    "noida-b25": { renderMode:"extrusion", heightMeters:16, color:"#8f99a4" },
+    "noida-b13": { renderMode:"extrusion", heightMeters:13, color:"#8f99a4" },
+    "noida-a31": { renderMode:"extrusion", heightMeters:13, color:"#8f99a4" },
+    "noida-d212": { renderMode:"extrusion", heightMeters:6, color:"#8f99a4" },
+    "noida-bhutani": { renderMode:"extrusion", heightMeters:35, color:"#8f99a4" },
+    "noida-d233": { renderMode:"extrusion", heightMeters:10, color:"#8f99a4" },
+    "noida-c56a3": { renderMode:"extrusion", heightMeters:26, color:"#8f99a4" },
+    "noida-c5646": { renderMode:"extrusion", heightMeters:16, color:"#8f99a4" },
+    "noida-a100": { renderMode:"extrusion", heightMeters:13, color:"#8f99a4" },
+    "kboulevard": { renderMode:"extrusion", heightMeters:32, color:"#8f99a4" },
+    "noida-c24": { renderMode:"extrusion", heightMeters:13, color:"#8f99a4" },
+    "noida-a94-9": { renderMode:"extrusion", heightMeters:10, color:"#8f99a4" },
+    "noida-c49": { renderMode:"extrusion", heightMeters:10, color:"#8f99a4" },
+    "noida-c20": { renderMode:"extrusion", heightMeters:29, color:"#8f99a4" },
+    "noida-vin": { renderMode:"extrusion", heightMeters:29, color:"#8f99a4" },
   },
+
   hint: "Click any property · two-finger swipe pans · shift-swipe or right-drag orbits · pinch zooms"
 };
 

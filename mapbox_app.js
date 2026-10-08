@@ -338,6 +338,9 @@ window.__initMapboxApp = function() {
     // Wire UI toggles
     wireUI();
 
+    // Satellite imagery under the 3D city, for clients that ship CLIENT.satellite
+    initSatellite();
+
     // Build leaderboard
     buildLeaderboard();
 
@@ -2101,6 +2104,55 @@ function floorLevels(floorStr) {
    an in-frame media gallery (never a new tab, never a raw storage URL).
    ═══════════════════════════════════════════════════════════════════ */
 
+/* ---------------------------------------------------------------------------
+   SATELLITE. CLIENT.satellite: "on" starts with imagery, true offers the
+   toggle with imagery off. Mapbox Satellite is a mosaic of the most recent
+   imagery Mapbox holds for each area (Maxar and others); capture dates vary by
+   tile and are not published per tile, so the view never claims one. The
+   raster sits in Standard's bottom slot: under roads, labels and every 3D
+   building, so the shortlist still reads on top of it.
+--------------------------------------------------------------------------- */
+let satelliteOn = false;
+function setSatellite(on) {
+  satelliteOn = !!on;
+  try {
+    if (satelliteOn && !map.getSource("atlas-sat"))
+      map.addSource("atlas-sat", { type: "raster", url: "mapbox://mapbox.satellite", tileSize: 256 });
+    if (satelliteOn && !map.getLayer("atlas-sat"))
+      map.addLayer({ id: "atlas-sat", type: "raster", source: "atlas-sat", slot: "bottom",
+                     paint: { "raster-fade-duration": 150 } });
+    if (map.getLayer("atlas-sat")) map.setLayoutProperty("atlas-sat", "visibility", satelliteOn ? "visible" : "none");
+  } catch (e) { console.warn("[Atlas] satellite layer", e); }
+  document.getElementById("t-sat")?.classList.toggle("on", satelliteOn);
+}
+function initSatellite() {
+  const want = window.CLIENT && window.CLIENT.satellite;
+  const btn = document.getElementById("t-sat");
+  if (!want) { btn?.remove(); return; }
+  if (btn) btn.hidden = false;
+  if (want === "on") setSatellite(true);
+}
+/* A satellite crop on the card, only where the building itself is pinned: a
+   crop centred on a sector anchor would show somebody else's roof. */
+function satelliteCropHTML(b, o) {
+  if (!(window.CLIENT && window.CLIENT.satellite) || !o || !b) return "";
+  if (!["building", "plot", "poi"].includes(o.coordPrecision)) return "";
+  const pin = `pin-s+2fbf71(${b.lng},${b.lat})`;
+  const url = `https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/${pin}/${b.lng},${b.lat},17.2,0/600x330@2x`
+    + `?access_token=${encodeURIComponent(MAPBOX_TOKEN)}&attribution=false&logo=false`;
+  return `<div class="sec"><h4>Satellite view <span class="muted">© Mapbox © Maxar</span></h4>
+    <div class="sat-crop"><img src="${url}" alt="Satellite view of ${b.name}" loading="lazy"
+      onerror="this.closest('.sec').remove()"></div></div>`;
+}
+
+/* Autopilot's verdict on a screened building: "Recommended", "Worth a look" or
+   "Not suitable", with the reason in o.verdictNote. Only clients that ship
+   o.verdict show it. Both are plain text so they can be edited from /admin/. */
+function verdictClass(tag) {
+  const t = String(tag || "").toLowerCase();
+  return t.startsWith("recommend") ? "v-rec" : t.startsWith("worth") ? "v-look" : "v-no";
+}
+
 function isTruthFirstSchema() {
   return !!(D.OPTIONS && D.OPTIONS.length && D.OPTIONS.some(o => o.coordSrc !== undefined));
 }
@@ -2215,6 +2267,15 @@ function injectDeckCSS() {
     letter-spacing:.06em;text-transform:uppercase;color:var(--mut);margin-top:2px}
   #lb-list .lb-unconf{color:#e0a34d;font-weight:600;font-size:9px}
   #lb-list .lb-proj{color:#8fd6a8;font-weight:600;font-size:9px}
+  /* Autopilot's verdict on a screened building (o.verdict + o.verdictNote), when a client ships one */
+  #lb-list .lb-tag,#card .card-tag{display:inline-block;font-size:9px;font-weight:600;letter-spacing:.04em;
+    text-transform:uppercase;border-radius:999px;padding:1px 7px;margin-left:6px;vertical-align:1px;white-space:nowrap}
+  #card .card-tag{margin:8px 0 0;font-size:10px;padding:2px 9px}
+  #lb-list .lb-meta .lb-tag{margin:0;flex:none;align-self:flex-start;margin-top:1px}
+  .v-rec{color:#0f2a1a;background:#8fd6a8} .v-look{color:#2b1d05;background:#e0b25a}
+  .v-no{color:var(--mut);background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14)}
+  #card .verdict-note{font-size:12px;line-height:1.55}
+  #card .sat-crop img{display:block;width:100%;height:auto;border-radius:10px;background:rgba(255,255,255,.04)}
   #lb-list .lb-row{gap:12px;align-items:center}
   #lb-list .lb-row .lb-meta{max-height:none;opacity:1;margin:2px 0 0}  /* always readable, not hover-only */
 
@@ -2390,7 +2451,7 @@ function galleryHTML(items) {
           ${it.label ? `<figcaption class="gal-label">${it.label}</figcaption>` : ""}
         </figure>`).join("")}
     </div>
-    ${photos > 0 && photos < 3
+    ${photos > 0 && photos < 3 && !(window.CLIENT && window.CLIENT.photoMinimum === false)
       ? `<div class="deck-note">${photos} photograph${photos > 1 ? "s" : ""} on file — below the three-photo minimum. Not padded.</div>`
       : ""}
   </div>`;
@@ -2620,23 +2681,32 @@ async function openTruthFirstCard(b) {
       <div class="card-block">${o ? o.locality : b.block}</div>
       <div class="card-title">${b.name}</div>
       ${o && o.priority ? `<div class="card-ok">Priority option — client-flagged</div>` : ""}
+      ${o && o.verdict ? `<div class="card-tag ${verdictClass(o.verdict)}">${o.verdict}</div>` : ""}
     </div>
 
     <div class="compact-cta"><button class="btn-explore" id="cardExpand">View Details</button></div>
 
     <div class="detail-sections">
       ${galleryHTML(items)}
+      ${satelliteCropHTML(b, o)}
+      ${o && o.verdictNote ? `<div class="sec"><h4>Autopilot's read</h4>
+        <div class="unit"><div class="unit-note verdict-note">${o.verdictNote}</div></div></div>` : ""}
       ${o && o.magnusNote ? `<div class="sec"><h4>Which building this is</h4>
         <div class="deck-note">${o.magnusNote}</div></div>` : ""}
       ${connectivityHTML(b.id, o)}
       ${o ? `<div class="sec"><h4>The space</h4>
         <div class="unit"><div class="unit-grid">
           ${fact("Building area", o.buildingArea)}
+          ${fact("Structure", o.structure)}
           ${fact("Total floors", o.floorsTotal)}
           ${fact("Floor plate", o.floorPlate)}
           ${fact("Floor offered", o.floorOffered)}
           ${fact("Offered area", o.offeredArea)}
+          ${fact("Layout", o.layout)}
           ${fact("Condition", o.condition)}
+          ${fact("Handover", o.handover)}
+          ${fact("Quoted rent", o.rent)}
+          ${fact("Maintenance (CAM)", o.cam)}
           ${fact("Parking", o.parking)}
           ${fact("Power backup", o.powerBackup)}
           ${fact("Common cafeteria", o.cafeteria)}
@@ -2890,11 +2960,13 @@ async function buildLeaderboard() {
       // Was a "· location unconfirmed" / "· project pin" tag. Removed by product decision
       // (see openTruthFirstCard). The row now carries a client-flagged priority badge instead.
       const unconfirmedTag = o.priority ? ` <span class="lb-proj">· priority</span>` : "";
+      // The verdict leads the meta line: on the name line a long name would clip it.
+      const verdictTag = o.verdict ? `<span class="lb-tag ${verdictClass(o.verdict)}">${o.verdict}</span>` : "";
       return `<div class="lb-row${idx > 2 ? " lb-extra" : ""}${shortlisted.has(o.bldg) ? " shortlisted" : ""}" data-bldg="${o.bldg}">
         <div class="lb-rank">${idx + 1}</div>
         <div class="lb-main">
           <div class="lb-name">${o.name}<span class="lb-star" title="Shortlisted">★</span>${unconfirmedTag}</div>
-          <div class="lb-meta">${o.locality} · ${stn}${figDist}</div>
+          <div class="lb-meta">${verdictTag}<span>${o.locality} · ${stn}${figDist}</span></div>
         </div>
         <div class="lb-fig" style="color:${figCol}">${fig}</div>
       </div>`;
@@ -3017,6 +3089,8 @@ function wireUI() {
   // Truth contract: a CTA implying "we have a winner" must not render when there isn't one —
   // e.g. basilic-fly ships winner:null deliberately (selection is the only accent, no verdict crowned).
   if (!D.META.winner) document.getElementById("winnerBtn")?.style.setProperty("display", "none");
+
+  set("t-sat", () => setSatellite(!satelliteOn));
 
   set("t-traffic", e => {
     trafficOn = !trafficOn;
