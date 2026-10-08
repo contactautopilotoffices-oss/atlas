@@ -88,7 +88,7 @@ const SEED_LINKS = [
   ["cp-delhi", "Connaught Place · Delhi", "client", "/", "CPDEMOACC", "Delhi"],
   ["invesco-andheri", "Invesco · Andheri", "client", "/", "INVDEMOACC", "Mumbai"],
   ["basilic-fly", "Whitefield · Bengaluru", "client", "/", "FLYDEMOACC", "Bengaluru"],
-  ["digitide-noida", "Digitide · Noida", "client", "/", "DIGDEMOACC", "Noida"],
+  ["digitide-noida", "Noida office study (Digitide)", "study", "/noida/", "DIGDEMOACC", "Noida"],
   ["digitide", "Digitide group command centre", "study", "/digitide/", "DIGITIDE-GRP", "Multi-city"],
   ["indore", "Indore office study", "study", "/indore/", "INDORE-AP", "Indore"],
   ["chennai", "Chennai office study", "study", "/chennai/", "CHENNAI-AP", "Chennai"],
