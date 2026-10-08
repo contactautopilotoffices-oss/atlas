@@ -16,6 +16,11 @@
      chooser             Your priorities: the client says what matters and
                          the list, pins, brief and conclusion all re-rank
 
+   The revised ranking (Oct 2026) is the client's own sheet: rank, fit
+   group, rent, CAM, area, pricing and ecosystem scores. It leads the list
+   and the overview; the chooser re-ranks the same buildings with the sheet's
+   two scores alongside the map measures.
+
    data.js holds every fact and where it came from. This file only reads it;
    every number on screen is either quoted from data.js with its source or
    derived here from the map positions, and says so.
@@ -47,6 +52,26 @@ const host = (u) => { try { return new URL(u).hostname.replace(/^www\./, ""); } 
 const cite = (u, label) => u ? `<a href="${esc(u)}" target="_blank" rel="noopener noreferrer">${esc(label || host(u))} ↗</a>` : "";
 const nn = (o) => String(o.n).padStart(2, "0");
 const REDUCED = () => !!(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+/* ---------------------------------------------------- revised ranking ----
+   The three fit groups on the client's sheet. Pins and tiles take the group
+   colour; the group is always written beside it too. */
+const FITS = {
+  best:        { label: "Best fit",         color: "#2e7d5b", bg: "rgba(46,125,91,.12)" },
+  value:       { label: "Value-driven fit", color: "#b7791f", bg: "rgba(183,121,31,.13)" },
+  conditional: { label: "Conditional fit",  color: "#7b6a5c", bg: "rgba(123,106,92,.13)" }
+};
+const fitOf = (o) => FITS[o.fit] || null;
+const fitColor = (o) => (fitOf(o) || ZONE[o.micro] || { color: "#a3502c" }).color;
+const fitBadge = (o) => { const f = fitOf(o); return f ? `<span class="fitb" style="--f:${f.color};--fb:${f.bg}">${esc(f.label)}</span>` : ""; };
+const isNum = (v) => typeof v === "number" && isFinite(v);
+const r2 = (v) => Math.round(v * 100) / 100;
+/* All-in is quoted rent plus CAM, so a broker update to either one carries
+   through. Both are INR a sq ft a month. */
+const allIn = (o) => isNum(o.askingRent) ? r2(o.askingRent + (isNum(o.maintenance) ? o.maintenance : 0)) : null;
+const inr = (v) => isNum(v) ? `INR ${v.toLocaleString("en-IN", { maximumFractionDigits: 2 })}` : "-";
+const sqft = (v) => isNum(v) ? `${v.toLocaleString("en-IN")} sq ft` : "-";
+const fmtDate = (iso) => { const d = iso && new Date(iso + "T00:00:00Z"); return d && !isNaN(d) ? d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }) : ""; };
 
 /* ------------------------------------------------------------ geometry -- */
 function km(a, b) {
@@ -111,7 +136,6 @@ const PLAN = STATIONS.filter(s => !s.open && s.mode === "metro");
 const nearest = (p, list) => list.map(s => ({ s, d: km(p, s) })).sort((a, b) => a.d - b.d)[0];
 const nearestOpen = (p) => nearest(p, OPEN);
 const nearestPlan = (p) => nearest(p, PLAN);
-const MODE_WORD = { metro: "metro", mrts: "MRTS", suburban: "train" };
 const stLabel = (s) => `${s.name} · ${s.lineName}`;
 const accessWord = (d) => d <= 1.2 ? `${walkMin(d)} min walk` : d <= 3 ? "short auto or feeder" : "cab or bus";
 const targetYear = (s) => s.eta || null;
@@ -139,26 +163,34 @@ const talentRaw = (o) => reach(o, ["edu", "res"]);
 const studioRaw = (o) => reach(o, ["studio"]);
 const nearestStudio = (p) => nearest(p, PL.filter(x => x.kind === "studio"));
 const exKm = (o) => km(o, EX);
+/* Distance from today's office by road: the sheet's figure where it gives
+   one, otherwise the straight line with the road factor. */
+const homeKm = (o) => isNum(o.roadKm) ? o.roadKm : exKm(o) * ROAD_FACTOR;
+const homeMin = (o) => o.driveText || `~${driveMin(exKm(o))} min`;
+const homeTxt = (o) => isNum(o.roadKm) ? `~${o.roadKm} km by road · ${o.driveText}` : `${fmtKm(exKm(o) * ROAD_FACTOR)} by road (est.) · ~${driveMin(exKm(o))} min`;
 
 /* ------------------------------------------------------------ scoring ----
-   Six measures, each scored 0 to 1 from the data, then weighted by what the
-   client says matters. Nothing is hand-scored. */
+   Seven measures, each scored 0 to 1, then weighted by what the client says
+   matters. Price and ecosystem are the revised sheet's own scores out of
+   10; the other five come from the map. */
 const PARTS = [
+  { key: "price",   noun: "price",                     label: "Price",                 q: "How much does the quoted price matter?",                               of: "the pricing score out of 10 on the revised sheet (quoted rent plus CAM)" },
+  { key: "eco",     noun: "the ecosystem",             label: "Ecosystem",             q: "How much does the business ecosystem around the building matter?",     of: "the ecosystem score out of 10 on the revised sheet" },
   { key: "rail",    noun: "rail access today",         label: "Rail today",            q: "Can people walk to an open metro, MRTS or suburban station?",          of: "distance to the nearest open station" },
-  { key: "home",    noun: "closeness to today's office", label: "Close to today's office", q: "Should today's team keep roughly the same commute?",                 of: "distance from the current office at KRC Commerzone, Porur" },
+  { key: "home",    noun: "closeness to today's office", label: "Close to today's office", q: "Should today's team keep roughly the same commute?",                 of: "road distance from the current office at KRC Commerzone, Porur (the sheet's figure)" },
   { key: "talent",  noun: "the talent pool",           label: "Talent pool",           q: "Do you want colleges and homes within a 30 minute drive?",            of: "institutes and residential belts by drive time (inside 15 min counts 1, 30 min 0.6, 45 min 0.3)" },
   { key: "studios", noun: "studio talent nearby",      label: "Studio talent nearby",  q: "Do you want experienced VFX and post artists already working nearby?", of: "VFX, animation and post studios by drive time (inside 15 min counts 1, 30 min 0.6, 45 min 0.3)" },
-  { key: "future",  noun: "the metro pipeline",        label: "Metro coming",          q: "Does a Phase 2 metro station opening close by matter?",               of: "distance to the nearest Phase 2 station, discounted by its target year" },
-  { key: "rent",    noun: "rent",                      label: "Lower rent",            q: "How much does the micro-market's rent matter?",                       of: "micro-market Grade A rent band (zone level, not the building's quote)" }
+  { key: "future",  noun: "the metro pipeline",        label: "Metro coming",          q: "Does a Phase 2 metro station opening close by matter?",               of: "distance to the nearest Phase 2 station, discounted by its target year" }
 ];
 const LEVELS = [{ v: 0, l: "Skip" }, { v: 1, l: "Low" }, { v: 2, l: "Medium" }, { v: 3, l: "High" }, { v: 5, l: "Critical" }];
 const PRESETS = {
-  balanced: { label: "Balanced",         note: "Rail access leads; the team, talent and studios count equally; metro plans and rent count a little.", lv: { rail: 3, home: 2, talent: 2, studios: 2, future: 1, rent: 1 } },
-  team:     { label: "Keep the team",    note: "Today's people stay: the shortest move from the current office, then rail and nearby studios.",       lv: { rail: 2, home: 4, talent: 1, studios: 2, future: 1, rent: 1 } },
-  rail:     { label: "Commute by rail",  note: "Staff arrive by metro, MRTS or train: an open station on foot first, a Phase 2 station next.",        lv: { rail: 4, home: 1, talent: 2, studios: 1, future: 3, rent: 1 } },
-  hire:     { label: "Hire at scale",    note: "Grow the team fast: colleges, homes and experienced studio artists within 30 minutes.",               lv: { rail: 3, home: 1, talent: 4, studios: 3, future: 1, rent: 1 } },
-  cost:     { label: "Keep cost down",   note: "The cheapest micro-market rent leads; access still counts.",                                         lv: { rail: 2, home: 2, talent: 2, studios: 1, future: 0, rent: 4 } },
-  future:   { label: "Built for 2030",   note: "Bet on where the metro is going and where talent is growing.",                                      lv: { rail: 2, home: 1, talent: 3, studios: 2, future: 4, rent: 1 } }
+  balanced: { label: "Balanced",         note: "The sheet's price and ecosystem scores lead, then rail access; the team, talent, studios and the metro pipeline count a little.", lv: { price: 4, eco: 3, rail: 2, home: 1, talent: 1, studios: 1, future: 1 } },
+  sheet:    { label: "Sheet scores only", note: "Only the revised sheet's pricing and ecosystem scores, nothing from the map.",                                          lv: { price: 3, eco: 3, rail: 0, home: 0, talent: 0, studios: 0, future: 0 } },
+  team:     { label: "Keep the team",    note: "Today's people stay: the shortest move from the current office, then rail, price and nearby studios.",                  lv: { price: 2, eco: 1, rail: 2, home: 4, talent: 1, studios: 2, future: 1 } },
+  rail:     { label: "Commute by rail",  note: "Staff arrive by metro, MRTS or train: an open station on foot first, a Phase 2 station next.",                          lv: { price: 2, eco: 1, rail: 4, home: 1, talent: 2, studios: 1, future: 3 } },
+  hire:     { label: "Hire at scale",    note: "Grow the team fast: colleges, homes and experienced studio artists within 30 minutes.",                                 lv: { price: 1, eco: 2, rail: 2, home: 1, talent: 4, studios: 3, future: 1 } },
+  cost:     { label: "Keep cost down",   note: "The best price on the sheet leads; the ecosystem and access still count.",                                              lv: { price: 4, eco: 2, rail: 1, home: 1, talent: 1, studios: 1, future: 0 } },
+  future:   { label: "Built for 2030",   note: "Bet on where the metro is going and where talent is growing.",                                                        lv: { price: 1, eco: 2, rail: 2, home: 1, talent: 3, studios: 2, future: 4 } }
 };
 for (const k of Object.keys(PRESETS)) if (k !== "balanced" && !cmsOn("preset:" + k)) delete PRESETS[k];
 const wOf = (lv) => Object.fromEntries(PARTS.map(p => [p.key, LEVELS[lv[p.key]].v]));
@@ -176,21 +208,31 @@ function futureV(p) {
   const f = y == null ? .7 : y <= 2026 ? 1 : y === 2027 ? .9 : y === 2028 ? .8 : .7;
   return railV(n.d) * f;
 }
-const homeV = (d) => d <= 2 ? 1 : Math.max(.05, 1 - (d - 2) / 26);
-const rentMid = (z) => z && z.rent && z.rent.lo ? (z.rent.lo + z.rent.hi) / 2 : null;
-const MIDS = Z.map(rentMid).filter(v => v != null);
-const rentV = (z) => { const m = rentMid(z); if (m == null || MIDS.length < 2) return .5; const lo = Math.min(...MIDS), hi = Math.max(...MIDS); return hi === lo ? .6 : .2 + .8 * (hi - m) / (hi - lo); };
+/* Road km from today's office: next door counts 1, 37 km or more counts
+   almost nothing. */
+const homeV = (r) => r <= 3 ? 1 : Math.max(.05, 1 - (r - 3) / 34);
+/* A building added later from a broker link has no sheet scores yet: its
+   price is read from the all-in rent against the sheet's range, and its
+   ecosystem counts as middling until the sheet scores it. */
+const ALLINS = () => O.map(allIn).filter(isNum);
+function priceV(o) {
+  if (isNum(o.pricingScore)) return clamp(o.pricingScore / 10);
+  const v = allIn(o), a = ALLINS(); if (v == null || a.length < 2) return .5;
+  const lo = Math.min(...a), hi = Math.max(...a); return hi === lo ? .6 : .1 + .9 * (hi - v) / (hi - lo);
+}
+const ecoV = (o) => isNum(o.ecoScore) ? clamp(o.ecoScore / 10) : .5;
 let TALENT_MAX = 1, STUDIO_MAX = 1;
 const PCACHE = new Map();
 function scoreParts(o) {
   if (PCACHE.has(o.id)) return PCACHE.get(o.id);
   const p = {
+    price: priceV(o),
+    eco: ecoV(o),
     rail: railV(nearestOpen(o).d),
-    home: homeV(exKm(o)),
+    home: homeV(homeKm(o)),
     talent: clamp(talentRaw(o) / TALENT_MAX),
     studios: clamp(studioRaw(o) / STUDIO_MAX),
-    future: futureV(o),
-    rent: rentV(ZONE[o.micro])
+    future: futureV(o)
   };
   PCACHE.set(o.id, p);
   return p;
@@ -209,18 +251,24 @@ const levelWith = (o) => O.filter(x => x.id !== o.id && score(x) === score(o));
 const topParts = () => PARTS.slice().sort((a, b) => S.lv[b.key] - S.lv[a.key]).filter(x => S.lv[x.key] > 0);
 
 /* --------------------------------------------------------------- state -- */
+/* The map opens light: the shortlist, today's office, the micro-markets and
+   open rail. Talent layers come on with the Talent tab (and go again after);
+   satellite imagery is one click away. */
 const S = {
-  tab: "overview", sel: null, hov: null, pair: null, shot: "close", sort: "score", preset: "balanced", sheet: "half",
-  lv: { ...PRESETS.balanced.lv }, filters: new Set(),
-  layers: { existing: true, zones: true, rail: true, future: true, links: true, studio: true, it: false, edu: false, res: false, rings: true }
+  tab: "overview", sel: null, hov: null, pair: null, shot: "close", sort: "rank", preset: "balanced", sheet: "half",
+  lv: { ...PRESETS.balanced.lv }, filters: new Set(), auto: new Set(),
+  layers: { existing: true, zones: true, rail: true, future: true, links: true, studio: false, it: false, edu: false, res: false, rings: true, sat: false }
 };
-const ZONE_FILTERS = Z.map(z => ({ key: z.key, label: z.label, test: o => o.micro === z.key })).filter(f => cmsOn("filter:" + f.key));
+/* Filters: the sheet's fit groups (any of those ticked) and rail on foot. */
+const FIT_FILTERS = Object.entries(FITS).map(([k, f]) => ({ key: k, label: f.label, test: o => o.fit === k })).filter(f => O.some(f.test) && cmsOn("filter:" + f.key));
 const OTHER_FILTERS = [{ key: "near", label: "Rail ≤ 1 km", test: o => nearestOpen(o).d <= 1 }].filter(f => cmsOn("filter:" + f.key));
 for (const k of Object.keys(S.layers)) if (!cmsOn("layer:" + k)) S.layers[k] = false;
 const passes = (o) => {
-  const on = [...S.filters], zs = on.filter(k => ZONE[k]), other = on.filter(k => !ZONE[k]);
-  return (zs.length === 0 || zs.includes(o.micro)) && other.every(k => OTHER_FILTERS.find(f => f.key === k).test(o));
+  const on = [...S.filters], fits = on.filter(k => FITS[k]), other = on.filter(k => !FITS[k]);
+  return (fits.length === 0 || fits.includes(o.fit)) && other.every(k => OTHER_FILTERS.find(f => f.key === k).test(o));
 };
+const byRank = (a, b) => a.n - b.n;
+const RANKED = () => O.slice().sort(byRank);
 const TABS = [
   { key: "overview", label: "Overview" },
   { key: "markets", label: "Micro-markets" },
@@ -239,7 +287,15 @@ function matchPreset(lv) {
   return k || "custom";
 }
 const lvCode = (lv) => PARTS.map(p => lv[p.key]).join("");
-const lvFrom = (code) => /^[0-4]{6}$/.test(code || "") ? Object.fromEntries(PARTS.map((p, i) => [p.key, +code[i]])) : null;
+/* Seven digits in PARTS order. Links made before the revised ranking carry
+   six (rail, home, talent, studios, future, rent): their rent level becomes
+   the price level and the ecosystem takes the Balanced level. */
+const OLD_PARTS = ["rail", "home", "talent", "studios", "future", "price"];
+function lvFrom(code) {
+  if (/^[0-4]{7}$/.test(code || "")) return Object.fromEntries(PARTS.map((p, i) => [p.key, +code[i]]));
+  if (/^[0-4]{6}$/.test(code || "")) return { eco: PRESETS.balanced.lv.eco, ...Object.fromEntries(OLD_PARTS.map((k, i) => [k, +code[i]])) };
+  return null;
+}
 const presetName = () => PRESETS[S.preset] ? PRESETS[S.preset].label : "your own mix";
 
 /* ================================================================ gate == */
@@ -257,9 +313,9 @@ function initGate() {
   const openApp = () => { const g = $("#gate"); g.classList.add("out"); setTimeout(() => g.remove(), 450); boot(); };
   loadBackdrop();
   startMap();
-  const ready = OPEN.length ? O.filter(o => nearestOpen(o).d <= 1).length : 0;
-  $("#g-stats").innerHTML = `<span><b>${O.length}</b>buildings</span><span><b>${Z.length}</b>micro-markets</span>`
-    + `<span><b>${ready}</b>within 1 km of open rail</span><span><b>${PL.filter(p => p.kind === "studio").length}</b>studios mapped</span>`;
+  const best = O.filter(o => o.fit === "best").length;
+  $("#g-stats").innerHTML = `<span><b>${O.length}</b>buildings ranked</span>${best ? `<span><b>${best}</b>best fit</span>` : ""}<span><b>${Z.length}</b>micro-markets</span>`
+    + `<span><b>${M.imagery ? new Date(M.imagery.checked).getFullYear() : ""}</b>satellite imagery</span>`;
   let handoff = null;
   try { handoff = sessionStorage.getItem("atlas-handoff"); sessionStorage.removeItem("atlas-handoff"); } catch (e) {}
   let authed = false;
@@ -329,10 +385,11 @@ function initMap() {
   const style = window.CHN_MAP_STYLE || MAP_STYLE;
   map = new mapboxgl.Map({
     container: "map", style, center: M.center, zoom: M.zoom, pitch: innerWidth > 860 ? 30 : 0,
-    attributionControl: false, projection: "mercator", cooperativeGestures: false, antialias: innerWidth > 860
+    attributionControl: false, projection: "mercator", cooperativeGestures: false, antialias: false
   });
   if (style === MAP_STYLE) map.on("style.load", () => {
     for (const [k, v] of Object.entries(BASEMAP)) { try { map.setConfigProperty("basemap", k, v); } catch (e) {} }
+    if (S.layers.sat) basemapForSat();
   });
   let told = false;
   map.on("error", (e) => {
@@ -370,6 +427,7 @@ function applyRoute(render) {
       else if (lvFrom(val)) setLevels(lvFrom(val));
     }
   } else S.tab = "overview";
+  tabLayers(S.tab);
   if (render) { renderTabs(); renderList(); renderPanel(); refreshMap(); if (S.sel) select(S.sel, true, true); else fitAll(); }
 }
 async function copyLink(btn) {
@@ -413,7 +471,7 @@ const FC = (features) => ({ type: "FeatureCollection", features });
 const pt = (lng, lat, properties) => ({ type: "Feature", geometry: { type: "Point", coordinates: [lng, lat] }, properties });
 const ln = (coords, properties) => ({ type: "Feature", geometry: { type: "LineString", coordinates: coords }, properties });
 const focusOf = (o) => (S.sel === o.id || S.hov === o.id || (S.pair && S.pair.includes(o.id))) ? 2 : !passes(o) ? 0 : (S.sel || S.hov) ? .5 : 1;
-const optionFC = () => FC(O.map(o => ({ ...pt(o.lng, o.lat, { id: o.id, n: nn(o), name: o.name, color: ZONE[o.micro].color, foc: focusOf(o) }), id: o.n })));
+const optionFC = () => FC(O.map(o => ({ ...pt(o.lng, o.lat, { id: o.id, n: nn(o), name: o.name, color: fitColor(o), foc: focusOf(o) }), id: o.n })));
 function ringFC() {
   const o = O.find(x => x.id === S.sel);
   if (!o || !S.layers.rings) return FC([]);
@@ -445,9 +503,8 @@ function linkFC() {
 function exLinkFC() {
   const o = S.sel && O.find(x => x.id === S.sel);
   if (!o) return FC([]);
-  const d = exKm(o);
   return FC([ln([[o.lng, o.lat], [EX.lng, EX.lat]], { part: "line" }),
-    pt((o.lng + EX.lng) / 2, (o.lat + EX.lat) / 2, { part: "label", label: `${fmtKm(d)} · ~${driveMin(d)} min to the current office` })]);
+    pt((o.lng + EX.lng) / 2, (o.lat + EX.lat) / 2, { part: "label", label: `${homeTxt(o)} to the current office` })]);
 }
 function railFC() {
   const feats = [], runs = (x) => x.open || x.through;
@@ -466,6 +523,13 @@ const placesFC = () => FC(PL.map(p => pt(p.lng, p.lat, { id: p.id, kind: p.kind,
 
 function add(layer, before) { try { map.addLayer(layer, before); } catch (e) { console.warn("layer", layer.id, e.message); } }
 function addLayers() {
+  /* Satellite: the newest Esri World Imagery, drawn under the roads and
+     labels (Mapbox Standard's bottom slot) and under everything of ours.
+     Tiles load only while the layer is on. */
+  map.addSource("sat", { type: "raster", tiles: [`${ESRI}/tile/{z}/{y}/{x}`], tileSize: 256, maxzoom: 19, attribution: esc(IMG.credit || "Esri World Imagery") });
+  const standard = (window.CHN_MAP_STYLE || MAP_STYLE) === MAP_STYLE;
+  add({ id: "sat", type: "raster", source: "sat", ...(standard ? { slot: "bottom" } : {}), layout: { visibility: "none" }, paint: { "raster-fade-duration": 120 } });
+
   /* zones */
   map.addSource("zones", { type: "geojson", data: FC(Z.map(z => ({ type: "Feature", geometry: { type: "Polygon", coordinates: [zonePolygon(z)] }, properties: { key: z.key, color: z.color } }))) });
   map.addSource("zone-labels", { type: "geojson", data: FC(Z.map(z => pt(...zoneCentre(z), { label: z.label.toUpperCase() }))) });
@@ -534,7 +598,7 @@ function addLayers() {
   map.addSource("options", { type: "geojson", data: optionFC() });
   const foc = ["get", "foc"], col = ["get", "color"];
   add({ id: "opt-halo", type: "circle", source: "options", filter: ["==", foc, 2], paint: {
-    "circle-radius": 24, "circle-color": col, "circle-opacity": .16, "circle-stroke-color": col, "circle-stroke-width": 2, "circle-stroke-opacity": .75, "circle-pitch-alignment": "map" } });
+    "circle-radius": 24, "circle-color": col, "circle-opacity": .18, "circle-stroke-color": col, "circle-stroke-width": 2, "circle-stroke-opacity": .75, "circle-pitch-alignment": "map" } });
   add({ id: "opt", type: "circle", source: "options", paint: {
     "circle-radius": ["case", ["==", foc, 2], 15, ["==", foc, 1], 11, 8], "circle-color": col,
     "circle-stroke-color": "#fff", "circle-stroke-width": ["case", ["==", foc, 2], 3, 2],
@@ -574,9 +638,11 @@ const LAYERS = [
   { key: "it", label: "IT parks", sw: `<span class="dot" style="background:${COL.it}"></span>` },
   { key: "edu", label: "Institutes", sw: `<span class="dot" style="background:${COL.edu}"></span>` },
   { key: "res", label: "Homes", sw: `<span class="dot" style="background:rgba(10,138,58,.22);border:1.5px solid #0a8a3a"></span>` },
-  { key: "rings", label: "Drive rings", sw: `<span class="dot" style="background:transparent;border:1.5px solid #a3502c"></span>`, ids: ["rings-fill", "rings-line", "rings-label"] }
+  { key: "rings", label: "Drive rings", sw: `<span class="dot" style="background:transparent;border:1.5px solid #a3502c"></span>`, ids: ["rings-fill", "rings-line", "rings-label"] },
+  { key: "sat", label: "Satellite", sw: `<span class="dot" style="background:linear-gradient(135deg,#5b6b4a,#a39a7a 55%,#3f4f5f)"></span>`, ids: ["sat"] }
 ];
 const LAYER_HINT = {
+  sat: `The newest satellite imagery under the map: ${M.imagery ? `${M.imagery.name}, ${M.imagery.detail}, captured Feb to Mar 2026` : "Esri World Imagery"}. Turns off the 3D buildings so the roofs show.`,
   existing: "The current office at KRC Commerzone, Porur, with a dashed line and the distance to the open option.",
   zones: "The six micro-markets the shortlist sits in. Outlines are indicative.",
   rail: "Metro, MRTS and suburban rail that run today, in each line's own colour.",
@@ -588,9 +654,16 @@ const LAYER_HINT = {
   res: "Residential belts where staff are likely to live.",
   rings: "15, 30 and 45 minute drive rings around the open option."
 };
+/* With satellite on, Standard's 3D buildings and trees would hide the
+   roofs, so they go while it is on. */
+function basemapForSat() {
+  if (!map || (window.CHN_MAP_STYLE || MAP_STYLE) !== MAP_STYLE) return;
+  try { map.setConfigProperty("basemap", "show3dObjects", !S.layers.sat); } catch (e) {}
+}
 function applyLayerVisibility() {
   if (!map || !map.getLayer("opt")) return;
   for (const l of LAYERS) for (const id of l.ids || []) if (map.getLayer(id)) map.setLayoutProperty(id, "visibility", S.layers[l.key] ? "visible" : "none");
+  if (applyLayerVisibility.sat !== S.layers.sat) { applyLayerVisibility.sat = S.layers.sat; basemapForSat(); }
   const kinds = ["hub", ...KINDS.filter(k => S.layers[k])];
   for (const id of ["places", "places-label"]) if (map.getLayer(id)) map.setFilter(id, ["in", ["get", "kind"], ["literal", kinds]]);
   const stShow = [S.layers.rail ? 1 : -1, S.layers.future ? 0 : -1];
@@ -622,24 +695,13 @@ function recede() {
   set("places", "circle-stroke-opacity", ["case", inPl, 1, .25]); set("places-label", "text-opacity", ["case", inPl, 1, .25]);
   set("zones-fill", "fill-opacity", .05); set("zones-label", "text-opacity", .35);
 }
-let pulseRaf = null;
-function pulse() {
-  if (pulseRaf || REDUCED()) return;
-  const t0 = performance.now();
-  const step = (t) => {
-    if (!map || !map.getLayer("opt-halo") || (!S.sel && !S.hov && !S.pair)) { pulseRaf = null; return; }
-    const k = (Math.sin((t - t0) / 520) + 1) / 2;
-    try { map.setPaintProperty("opt-halo", "circle-radius", 20 + k * 10); map.setPaintProperty("opt-halo", "circle-opacity", .22 - k * .14); } catch (e) {}
-    pulseRaf = requestAnimationFrame(step);
-  };
-  pulseRaf = requestAnimationFrame(step);
-}
+/* The halo around the open option is static: a pulsing halo repainted the
+   whole 3D map every frame, which is what made the study feel heavy. */
 function refreshPins() {
   if (!map || !map.getSource("options")) return;
   const fc = optionFC();
   map.getSource("options").setData(fc);
   if (map.getSource("options-lbl")) map.getSource("options-lbl").setData(fc);
-  if (S.sel || S.hov || S.pair) pulse();
 }
 function refreshMap() {
   if (!map || !map.getSource("options")) return;
@@ -651,8 +713,8 @@ function wireMap() {
     map.on("mouseenter", layer, e => { map.getCanvas().style.cursor = "pointer"; const f = e.features[0]; pop.setLngLat(f.geometry.coordinates).setHTML(html(f.properties)).addTo(map); });
     map.on("mouseleave", layer, () => { map.getCanvas().style.cursor = ""; pop.remove(); });
   };
-  hover("opt", p => { const o = O.find(x => x.id === p.id), r = nearestOpen(o);
-    return `<div class="pop">${tile(o, "pop")}<div><b>${nn(o)} · ${esc(o.name)}</b><br>${esc(ZONE[o.micro].label)}<br>${fmtKm(exKm(o))} from the current office<br>${fmtM(r.d)} to ${esc(r.s.name)} (${esc(r.s.lineName)})<br>Fit ${score(o)} on ${esc(presetName().toLowerCase())}</div></div>`; });
+  hover("opt", p => { const o = O.find(x => x.id === p.id), r = nearestOpen(o), f = fitOf(o);
+    return `<div class="pop">${tile(o, "pop")}<div><b>${nn(o)} · ${esc(o.name)}</b><br>${f ? `${esc(f.label)} · ` : ""}${esc(o.sheetMicro)}<br>${allIn(o) != null ? `${inr(allIn(o))} all-in · ` : ""}${isNum(o.availableArea) ? sqft(o.availableArea) : ""}<br>${esc(homeTxt(o))}<br>${fmtM(r.d)} to ${esc(r.s.name)} (${esc(r.s.lineName)})</div></div>`; });
   hover("places", p => { const x = PL.find(y => y.id === p.id);
     const kind = { edu: "Institute", res: "Residential belt", studio: "VFX / post studio", it: "IT park", hub: "Transport" }[x.kind];
     return `<b>${esc(x.name)}</b>${x.sub ? `<br>${esc(x.sub)}` : ""}<br><span style="color:#6c5b4d">${kind}</span><br>${esc(x.note)}`; });
@@ -666,47 +728,93 @@ function wireMap() {
 }
 
 /* ============================================================ board ===== */
-/* A satellite crop only where the building itself is pinned; anything less
-   exact gets its micro-market colour and number, so the picture never shows
-   the wrong building. */
+/* Satellite crops come from Esri World Imagery: Vantor WorldView-3 at 30 cm,
+   captured in Feb and Mar 2026 over every pin on the list, years newer than
+   the Mapbox satellite layer used before. The export endpoint cuts one JPEG
+   at the pin, sized for the screen, and needs no key. A crop is cut only
+   where the building itself is pinned; anything less exact gets its fit
+   colour and number, so the picture never shows the wrong building. */
+const IMG = M.imagery || {};
+const ESRI = "https://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer";
+const DPR = Math.min(2, Math.max(1, Math.round(window.devicePixelRatio || 1)));
+const merc = (lng, lat) => [lng * 20037508.342789244 / 180, Math.log(Math.tan((90 + lat) * Math.PI / 360)) * 6378137];
+/* z is a Mapbox zoom (512 px tiles), so a crop frames the building as the
+   map does at that zoom. */
 function satUrl(o, w, h, z) {
-  if (!window.MAPBOX_TOKEN || o.precision !== "building") return "";
-  return `https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/${o.lng},${o.lat},${z},0/${w}x${h}@2x?access_token=${encodeURIComponent(window.MAPBOX_TOKEN)}&attribution=false&logo=false`;
+  if (o.precision !== "building") return "";
+  const [x, y] = merc(o.lng, o.lat), r = 78271.51696402048 / 2 ** z, hw = w / 2 * r, hh = h / 2 * r;
+  return `${ESRI}/export?bbox=${(x - hw).toFixed(1)},${(y - hh).toFixed(1)},${(x + hw).toFixed(1)},${(y + hh).toFixed(1)}&bboxSR=3857&imageSR=3857&size=${w * DPR},${h * DPR}&format=jpg&f=image`;
+}
+/* The capture date shipped in data.js was read on the date in M.imagery;
+   when an option opens, the live service is asked again, so the label stays
+   true if Esri publishes a newer capture. */
+const IMG_LIVE = new Map();
+const imgDate = (o) => IMG_LIVE.get(o.id) || o.img || "";
+function checkImgDate(o) {
+  if (IMG_LIVE.has(o.id) || !window.fetch || o.precision !== "building") return;
+  IMG_LIVE.set(o.id, null);
+  const d = .002, q = `geometry=${o.lng},${o.lat}&geometryType=esriGeometryPoint&sr=4326&layers=all:0&tolerance=1&mapExtent=${o.lng - d},${o.lat - d},${o.lng + d},${o.lat + d}&imageDisplay=200,200,96&returnGeometry=false&f=json`;
+  fetch(`${ESRI}/identify?${q}`).then(r => r.json()).then(j => {
+    const a = (j && j.results && j.results[0] && j.results[0].attributes) || {};
+    const v = Object.entries(a).map(([k, x]) => /DATE/i.test(k) && String(x).match(/^(20\d\d)(\d\d)(\d\d)$/)).find(Boolean);
+    if (!v) return;
+    IMG_LIVE.set(o.id, `${v[1]}-${v[2]}-${v[3]}`);
+    const el = document.querySelector(`[data-img-date="${o.id}"]`); if (el) el.textContent = fmtDate(imgDate(o));
+  }).catch(() => {});
+}
+/* The list is rebuilt on every click, so each thumbnail is one <img> made
+   once and moved into the new card: it downloads once per visit. */
+const TILE_IMG = new Map();
+function tileImg(o) {
+  if (TILE_IMG.has(o.id)) return TILE_IMG.get(o.id);
+  const u = satUrl(o, 124, 112, 16.2);
+  let im = null;
+  if (u) {
+    im = new Image(); im.alt = ""; im.decoding = "async"; im.loading = "lazy";
+    im.onerror = () => { im.remove(); TILE_IMG.set(o.id, null); };
+    im.src = u;
+  }
+  TILE_IMG.set(o.id, im);
+  return im;
+}
+function mountTiles(root) {
+  root.querySelectorAll("[data-tile]").forEach(t => { const o = O.find(x => x.id === t.dataset.tile), im = o && tileImg(o); if (im) t.prepend(im); });
 }
 function tile(o, kind) {
-  const u = satUrl(o, 124, 112, 16.2);
-  return `<span class="tile" style="--z:${ZONE[o.micro].color}" aria-hidden="true">${u && kind !== "pop" ? `<img src="${u}" alt="" loading="lazy" decoding="async" onerror="this.remove()">` : ""}<span>${nn(o)}</span></span>`;
+  return `<span class="tile" style="--z:${fitColor(o)}" aria-hidden="true"${kind !== "pop" ? ` data-tile="${o.id}"` : ""}><span>${nn(o)}</span></span>`;
 }
 function renderFilters() {
-  const all = [...ZONE_FILTERS, ...OTHER_FILTERS];
-  $("#filters").innerHTML = all.map(f => `<button class="chip ${S.filters.has(f.key) ? "on" : ""}" data-f="${f.key}" type="button" aria-pressed="${S.filters.has(f.key)}" data-hint="${esc(ZONE[f.key] ? `Keep only options in ${ZONE[f.key].name}.` : "Keep only options within 1 km of an open metro, MRTS or suburban station.")}">${ZONE[f.key] ? `<span class="dot" style="background:${ZONE[f.key].color};margin:0"></span>` : ""}${esc(f.label)}</button>`).join("");
+  const all = [...FIT_FILTERS, ...OTHER_FILTERS];
+  $("#filters").innerHTML = all.map(f => `<button class="chip ${S.filters.has(f.key) ? "on" : ""}" data-f="${f.key}" type="button" aria-pressed="${S.filters.has(f.key)}" data-hint="${esc(FITS[f.key] ? `Keep only the ${FITS[f.key].label} group on the revised ranking.` : "Keep only options within 1 km of an open metro, MRTS or suburban station.")}">${FITS[f.key] ? `<span class="dot" style="background:${FITS[f.key].color};margin:0"></span>` : ""}${esc(f.label)}</button>`).join("");
 }
 function sorted() {
   const by = {
+    rank: byRank,
     score: byFit,
-    home: (a, b) => exKm(a) - exKm(b),
+    price: (a, b) => (allIn(a) ?? 1e9) - (allIn(b) ?? 1e9) || a.n - b.n,
+    home: (a, b) => homeKm(a) - homeKm(b) || a.n - b.n,
     rail: (a, b) => nearestOpen(a).d - nearestOpen(b).d,
-    talent: (a, b) => (talentRaw(b) + studioRaw(b)) - (talentRaw(a) + studioRaw(a)) || a.n - b.n,
-    sheet: (a, b) => a.n - b.n
-  }[S.sort];
+    talent: (a, b) => (talentRaw(b) + studioRaw(b)) - (talentRaw(a) + studioRaw(a)) || a.n - b.n
+  }[S.sort] || byRank;
   return O.slice().sort(by);
 }
 function renderList() {
   const shown = O.filter(passes);
   $("#b-count").textContent = `${shown.length} of ${O.length} options`;
-  $("#b-sub").textContent = S.sort === "score" ? presetName() : "";
+  $("#b-sub").textContent = S.sort === "score" ? presetName() : S.sort === "rank" ? "Revised ranking" : "";
   $("#list").innerHTML = sorted().map(o => {
-    const r = nearestOpen(o);
-    return `<button class="card ${S.sel === o.id ? "sel" : ""} ${passes(o) ? "" : "dim"}" data-id="${o.id}" role="listitem" type="button" data-hint="${esc(`Open ${o.name}: the map flies in, the nearest options and the current office are drawn with their distances.`)}">
+    const a = allIn(o);
+    return `<button class="card ${S.sel === o.id ? "sel" : ""} ${passes(o) ? "" : "dim"}" data-id="${o.id}" role="listitem" type="button" data-hint="${esc(o.reason || `Open ${o.name}: the map flies in, the nearest options and the current office are drawn with their distances.`)}">
       ${tile(o)}
       <div>
         <div class="nm"><span class="no">${nn(o)}</span>${esc(o.name)}</div>
-        <div class="loc">${esc(o.sheetMicro)}</div>
-        <div class="facts"><span title="Distance from the current office">${fmtKm(exKm(o))} from office</span><span title="Nearest open rail station">${fmtM(r.d)} to ${esc(MODE_WORD[r.s.mode])}</span><span class="zt" style="--z:${ZONE[o.micro].color}"><i></i>${esc(ZONE[o.micro].label)}</span>${flagChip(o)}</div>
+        <div class="loc">${fitBadge(o)} ${esc(o.sheetMicro)}</div>
+        <div class="facts">${a != null ? `<span title="Quoted rent plus CAM, INR a sq ft a month">${inr(a)} all-in</span>` : ""}${isNum(o.availableArea) ? `<span title="Area on the sheet">${sqft(o.availableArea)}</span>` : ""}<span title="From the current office by road">${isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(homeKm(o))}</span>${flagChip(o)}</div>
       </div>
       <span class="score" title="Fit to your priorities, out of 100">${score(o)}</span>
     </button>`;
   }).join("");
+  mountTiles($("#list"));
 }
 function wireBoard() {
   $("#filters").addEventListener("click", e => {
@@ -728,6 +836,7 @@ function wireBoard() {
   });
   $("#layers").addEventListener("click", e => {
     const b = e.target.closest("[data-l]"); if (!b) return;
+    S.auto.delete(b.dataset.l);
     S.layers[b.dataset.l] = !S.layers[b.dataset.l]; renderLayers(); applyLayerVisibility();
   });
   $("#p-body").addEventListener("click", e => {
@@ -798,10 +907,20 @@ function select(id, fly, fromRoute) {
   if (CMS && !fromRoute) CMS.open(id, (O.find(x => x.id === id) || {}).name);
   $("#p-body").scrollTop = 0;
 }
+/* Layers a tab needs come on with it and go when you leave, unless you
+   switched them yourself; every other view keeps the map light. */
+const TAB_LAYERS = { talent: ["studio", "edu", "res"] };
+function tabLayers(key) {
+  for (const k of S.auto) S.layers[k] = false;
+  S.auto.clear();
+  for (const k of TAB_LAYERS[key] || []) if (!S.layers[k] && cmsOn("layer:" + k)) { S.layers[k] = true; S.auto.add(k); }
+  if (booted) renderLayers();
+}
 function goTab(key) {
   if (document.body.classList.contains("fold-panel")) setFold("panel", false);
   const had = S.sel || S.pair; S.tab = key; S.sel = null; S.pair = null;
   if (CMS) CMS.tab(key);
+  tabLayers(key);
   renderTabs(); renderList(); renderPanel(); refreshMap(); if (had) fitAll(); pushRoute();
   if (innerWidth <= 860) setSheet("half");
   $("#p-body").scrollTop = 0;
@@ -819,11 +938,11 @@ function renderLayers() {
    anything clickable. Dismissed cards fold to a one-line link and the
    choice is remembered on this device. */
 const GUIDE = {
-  overview: { hint: "The short answer: what stands out, and the top three on your priorities.",
-    items: ["Each insight card answers one question a client asks first. Click it to open that option.",
-      "The top three follow your priorities. Change them on Your priorities and this view follows.",
-      "Every option shows its distance from the current office, its nearest rail and its fit."] },
-  markets: { hint: "The six micro-markets: rent, vacancy, who is there, pros and cons.",
+  overview: { hint: "The short answer: the revised ranking in its three fit groups, and what stands out.",
+    items: ["The revised ranking is the client's sheet: rank, fit group, all-in rent, area and the reason for each rank.",
+      "Each insight card answers one question a client asks first. Click it to open that option.",
+      "Your priorities re-ranks the same buildings with the sheet's scores and the map's measures."] },
+  markets: { hint: "The micro-markets: rent, vacancy, who is there, pros and cons.",
     items: ["One card per micro-market, with the options that sit in it.",
       "Rents and vacancy are quoted from the source named under each figure, with its date."] },
   connect: { hint: "How people get to each option, today and once Phase 2 opens.",
@@ -836,19 +955,19 @@ const GUIDE = {
       "The bars below show how far each option moves the team from today's office."] },
   talent: { hint: "Where artists train, where they live and where experienced ones already work.",
     items: ["For each option: institutes and residential belts inside 30 minutes (the talent pool), and VFX studios inside 30 minutes (the existing pool).",
-      "Turn on VFX studios, Institutes, Homes and IT parks in the map bar to see them."] },
+      "Studios, institutes and homes show on the map while this tab is open; IT parks are in the map bar."] },
   priorities: { hint: "Tell us what matters most; the ranking follows.",
-    items: ["Answer six questions from Skip to Critical, or start from a preset.",
+    items: ["Answer seven questions from Skip to Critical, or start from a preset. Price and ecosystem are the revised sheet's scores.",
       "The top three, the list on the left, the pins and the Conclusion all re-rank as you go.",
       "Copy link keeps your answers, so the client can open the same ranking."] },
-  conclusion: { hint: "The answer on your priorities, how robust it is, and what to check next.",
-    items: ["The lead option on your current priorities and why.",
+  conclusion: { hint: "The answer on your priorities, how it compares with the revised ranking, and what to check next.",
+    items: ["The lead option on your current priorities, and whether the revised ranking agrees.",
       "How often each option makes the top three across every preset, so you can see which choices hold up.",
-      "The best option in each micro-market, and the next steps for site visits."] },
-  compare: { hint: "Every option side by side, with the six questions to re-weight." },
-  option: { items: ["The map flies to the building, draws its three nearest options and the current office with distances.",
-      "Close-up, Street and Catchment change the camera. The label beside them says how exactly the building is placed.",
-      "Below: rail today and next, distance from the current office, talent within reach and the fit score part by part.",
+      "The next steps for site visits."] },
+  compare: { hint: "Every option side by side, with the seven questions to re-weight." },
+  option: { items: ["The map flies to the building and draws its three nearest options and the current office.",
+      "The picture is the newest satellite capture, with its date. Turn on Satellite in the map bar to see it on the map.",
+      "Below: the sheet's figures, rail today and next, talent within reach and the fit score part by part.",
       "Back returns to the section you came from."] }
 };
 let seenIntro = new Set();
@@ -905,61 +1024,48 @@ const marketHTML = (o) => o.cmsExtra && o.cmsExtra.length ? `<h3>Latest from the
 const flagChip = (o) => o.flag ? `<span class="chk" title="${esc(o.flag.v)}">check first</span>` : "";
 const actions = (extra = "") => `<div class="actions">${extra}<button type="button" class="act" data-copy data-hint="Copies a link that opens exactly this view, ready to send to a client.">Copy link</button><button type="button" class="act" data-print data-hint="Prints this view, or saves it as a PDF from the print dialog.">Print / PDF</button></div>`;
 const zoneTag = (z) => `<span class="zt" style="--z:${z.color}"><i></i>${esc(z.label)}</span>`;
-const median = (a) => { const s = a.slice().sort((x, y) => x - y), m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
 
 /* ---------- Overview ---------- */
+/* The revised ranking, one table per fit group. */
+function rankingHTML(list) {
+  const groups = Object.entries(FITS).map(([k, f]) => ({ f, os: list.filter(o => o.fit === k) })).filter(g => g.os.length);
+  const rest = list.filter(o => !fitOf(o));
+  if (rest.length) groups.push({ f: { label: "Added since the sheet", color: "#9a8878", bg: "rgba(60,40,25,.07)" }, os: rest });
+  return groups.map(({ f, os }) => `<div class="fg"><div class="fgh"><span class="fitb" style="--f:${f.color};--fb:${f.bg}">${esc(f.label)}</span><span class="note">${os.length} option${os.length === 1 ? "" : "s"}</span></div>
+    <table class="rt"><thead><tr><th>Building</th><th class="num">All-in</th><th class="num">Area</th><th class="num">From office</th><th class="num" title="Pricing and ecosystem scores out of 10">Scores</th></tr></thead>
+    <tbody>${os.map(o => `<tr><td><span class="mono no">${nn(o)}</span> ${optLinkLight(o)} ${flagChip(o)}<br><span class="note">${esc(o.sheetMicro)}</span>${o.reason ? `<div class="why">${esc(o.reason)}</div>` : ""}</td>
+      <td class="num">${allIn(o) != null ? allIn(o) : "-"}</td><td class="num">${isNum(o.availableArea) ? o.availableArea.toLocaleString("en-IN") : "-"}</td>
+      <td class="num">${isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(homeKm(o))}<br><span class="note">${esc(homeMin(o))}</span></td>
+      <td class="num">${isNum(o.pricingScore) ? `${o.pricingScore} · ${o.ecoScore}` : "-"}</td></tr>`).join("")}</tbody></table></div>`).join("");
+}
 function renderOverview() {
-  const ranked = O.slice().sort(byFit);
-  const near = O.filter(o => nearestOpen(o).d <= 1), nextNear = O.filter(o => { const n = nearestPlan(o); return n && n.d <= 1; });
-  const homes = O.map(exKm);
+  const counts = Object.entries(FITS).map(([k, f]) => [f.label, O.filter(o => o.fit === k).length]).filter(x => x[1]);
   head("Autopilot · Chennai · Oct 2026", "Where the next Chennai office should go",
-    `${O.length} shortlisted buildings in ${Z.length} micro-markets, placed on the rail network and read against talent and today's office at ${esc(EX.name)}, ${esc(EX.locality)}.`);
+    `The revised ranking: ${O.length} buildings in ${counts.map(([l, n]) => `${n} ${l.toLowerCase()}`).join(", ")}, read against rail, talent and today's office at ${esc(EX.name)}, ${esc(EX.locality)}.`);
   $("#p-head").insertAdjacentHTML("beforeend", actions(`<button type="button" class="act pri" data-tab="priorities">Set your priorities</button>`));
-  const top = ranked.slice(0, 3).map(o => `<li>${optLink(o)} <span class="mono" style="color:var(--mut)">${score(o)}/100</span> ${flagChip(o)}<br><span class="note">${esc(whyLine(o))}</span></li>`).join("");
   $("#p-body").innerHTML = `
     <h3 style="margin-top:14px">What stands out</h3>
     ${insightsHTML()}
-    <div class="kpis">
-      <div class="kpi"><div class="l">Options</div><div class="v">${O.length}</div><div class="s">in ${Z.length} micro-markets</div></div>
-      <div class="kpi"><div class="l">Rail ≤ 1 km today</div><div class="v">${near.length}</div><div class="s">open metro, MRTS or train</div></div>
-      <div class="kpi"><div class="l">Phase 2 ≤ 1 km</div><div class="v">${nextNear.length}</div><div class="s">metro under construction</div></div>
-      <div class="kpi"><div class="l">From today's office</div><div class="v" style="font-size:16px">${fmtKm(Math.min(...homes))} to ${fmtKm(Math.max(...homes))}</div><div class="s">median ${fmtKm(median(homes))}</div></div>
-      <div class="kpi"><div class="l">Studios mapped</div><div class="v">${PL.filter(p => p.kind === "studio").length}</div><div class="s">VFX, animation, post</div></div>
-      <div class="kpi"><div class="l">Talent points</div><div class="v">${PL.filter(p => p.kind === "edu" || p.kind === "res").length}</div><div class="s">institutes and belts</div></div>
-    </div>
-    <h3>Top three on ${esc(presetName().toLowerCase())}</h3>
-    <ol style="padding-left:18px;margin:0;line-height:1.5;font-size:13px">${top}</ol>
-    <p class="note">Change what matters on <a href="#" data-tab="priorities">Your priorities</a>; the answer and its reasons are on <a href="#" data-tab="conclusion">Conclusion</a>.</p>
-    <h3>The micro-markets in one line each</h3>
-    ${Z.map(z => { const os = O.filter(o => o.micro === z.key);
-      return `<div class="fact">${zoneTag(z)} <span class="k">${esc(z.name)}</span> <span class="note">· ${os.length} option${os.length === 1 ? "" : "s"}</span><br><span class="note">${esc(z.character)}</span><br>${os.map(optLink).join(" · ")}</div>`; }).join("")}
-    <h3>How to read this study</h3>
-    <p class="note">The shortlist (names, micro-markets and addresses) is the client's sheet. Positions, rail, talent and market facts come from the public sources linked beside each one. Distances are straight-line on the map; drive times use one stated speed. ${esc(METHOD)}</p>`;
-}
-function whyLine(o) {
-  const p = scoreParts(o), w = W();
-  const strong = PARTS.filter(x => w[x.key] > 0 && p[x.key] >= .75).sort((a, b) => w[b.key] * p[b.key] - w[a.key] * p[a.key]).slice(0, 3).map(x => x.noun);
-  const r = nearestOpen(o);
-  return `${strong.length ? `Strong on ${strong.join(", ")}. ` : ""}${fmtKm(exKm(o))} from today's office; ${fmtM(r.d)} to ${r.s.name} (${r.s.lineName}).`;
+    <h3>The revised ranking</h3>
+    ${rankingHTML(RANKED())}
+    <p class="note">All-in is quoted rent plus CAM in INR a sq ft a month; area is in sq ft; distance and drive time from today's office are by road, as given on the client's sheet. Scores are the sheet's pricing and ecosystem scores out of 10. <a href="#" data-tab="priorities">Your priorities</a> re-ranks the same buildings with the map's measures as well.</p>`;
 }
 function insightsHTML() {
-  const top = (f) => O.slice().sort((a, b) => f(b) - f(a) || a.n - b.n)[0];
-  const cnt = (o, kinds, i) => kinds.reduce((t, k) => t + upTo(catchOf(o), i, k), 0);
-  const best = top(exact), home = top(o => -exKm(o)), rail = top(o => -nearestOpen(o).d);
-  const tal = top(o => cnt(o, ["edu", "res"], 1) + talentRaw(o) / 1000), stu = top(o => cnt(o, ["studio"], 1) + studioRaw(o) / 1000);
-  const fut = top(o => futureV(o)), fN = nearestPlan(fut);
-  const cheapZ = Z.filter(z => rentMid(z) != null).sort((a, b) => rentMid(a) - rentMid(b))[0];
-  const tc = catchOf(tal), sc = catchOf(stu), rr = nearestOpen(rail);
+  const top = (f, list = O) => list.slice().sort((a, b) => f(b) - f(a) || a.n - b.n)[0];
+  const first = RANKED()[0], best = top(exact), home = top(o => -homeKm(o)), rail = top(o => -nearestOpen(o).d);
+  const priced = O.filter(o => allIn(o) != null), sized = O.filter(o => isNum(o.availableArea));
+  const cheap = priced.length ? top(o => -allIn(o), priced) : null, big = sized.length ? top(o => o.availableArea, sized) : null;
+  const stu = top(o => upTo(catchOf(o), 1, "studio") + studioRaw(o) / 1000), sc = catchOf(stu), rr = nearestOpen(rail);
   const cards = [
-    { l: "Best fit", v: best.name, s: `${score(best)}/100 on ${presetName().toLowerCase()}${levelWith(best).length ? `, level with ${levelWith(best)[0].name}` : ""}`, go: best.id, tone: "lead" },
-    { l: "Closest to today's office", v: fmtKm(exKm(home)), s: `${home.name}, about ${driveMin(exKm(home))} min by road`, go: home.id },
+    { l: "Ranked first", v: first.name, s: `${fitOf(first) ? fitOf(first).label + " · " : ""}${allIn(first) != null ? `${inr(allIn(first))} all-in` : ""}${isNum(first.availableArea) ? ` · ${sqft(first.availableArea)}` : ""}`, go: first.id, tone: "lead" },
+    { l: "Best on your priorities", v: best.name, s: `${score(best)}/100 on ${presetName().toLowerCase()}${levelWith(best).length ? `, level with ${levelWith(best)[0].name}` : ""}`, go: best.id },
+    cheap && { l: "Lowest all-in rent", v: inr(allIn(cheap)), s: `${cheap.name}, rent ${cheap.askingRent} plus CAM ${cheap.maintenance || 0}`, go: cheap.id },
+    big && { l: "Most space", v: sqft(big.availableArea), s: `${big.name}, ${big.sheetMicro}`, go: big.id },
+    { l: "Closest to today's office", v: isNum(home.roadKm) ? `~${home.roadKm} km` : fmtKm(homeKm(home)), s: `${home.name}, ${homeMin(home)} by road`, go: home.id },
     { l: "Closest to open rail", v: fmtM(rr.d), s: `${rail.name}, to ${rr.s.name} (${rr.s.lineName})`, go: rail.id },
-    { l: "Deepest talent pool", v: tal.name, s: `${upTo(tc, 1, "edu")} institutes, ${upTo(tc, 1, "res")} belts in 30 min`, go: tal.id },
-    { l: "Most studios nearby", v: stu.name, s: `${upTo(sc, 1, "studio")} VFX and post studios in 30 min, ${upTo(sc, 2, "studio")} in 45`, go: stu.id },
-    { l: "Best metro pipeline", v: fut.name, s: fN ? `${fmtM(fN.d)} to ${fN.s.name} (${fN.s.lineName})${fN.s.target ? `, ${fN.s.target}` : ""}` : "", go: fut.id }
-  ];
-  if (cheapZ) cards.push({ l: "Lowest rent band", v: cheapZ.label, s: `INR ${cheapZ.rent.lo}-${cheapZ.rent.hi} a sq ft a month quoted (Savills, ${cheapZ.rent.asOf})`, tab: "markets" });
-  return `<div class="ins" role="list">${cards.map(c => `<button type="button" role="listitem" class="in ${c.tone || ""}" ${c.go ? `data-go="${c.go}"` : `data-tab="${c.tab}"`} data-hint="${c.go ? "Open this option: the map flies in and its details open." : "Open the micro-market overview."}">
+    { l: "Most studios nearby", v: stu.name, s: `${upTo(sc, 1, "studio")} VFX and post studios in 30 min, ${upTo(sc, 2, "studio")} in 45`, go: stu.id }
+  ].filter(Boolean);
+  return `<div class="ins" role="list">${cards.map(c => `<button type="button" role="listitem" class="in ${c.tone || ""}" data-go="${c.go}" data-hint="Open this option: the map flies in and its details open.">
     <span class="l">${esc(c.l)}</span><span class="v">${esc(c.v)}</span><span class="s">${esc(c.s)}</span></button>`).join("")}</div>`;
 }
 function verdictHTML(o, p) {
@@ -972,7 +1078,8 @@ function verdictHTML(o, p) {
 const figure = (f) => f && f.v ? `<span>${esc(f.v)}${f.conf === "low" ? `<span class="conf low">low</span>` : ""}<span class="src" style="display:block;margin-top:2px">${esc(f.asOf || "")}${f.src ? " · " + cite(f.src) : ""}</span>${f.alt ? `<span class="note" style="display:block;margin-top:3px">${esc(f.alt.v)} ${cite(f.alt.src)}</span>` : ""}</span>` : `<span class="note">Not published for this micro-market</span>`;
 const zoneSources = (z) => (z.sources || []).length ? `<div class="src" style="margin-top:8px">Sources for the points above: ${z.sources.map(u => cite(u)).join(" · ")}</div>` : "";
 function renderMarkets() {
-  head("Micro-market overview", "Six micro-markets, one shortlist", "What each part of the city is like for an office, what it costs and who is already there. Figures are quoted with their source and date.");
+  const words = ["No", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight"];
+  head("Micro-market overview", `${words[Z.length] || Z.length} micro-markets, one ranking`, "What each part of the city is like for an office, what it costs and who is already there. Figures are quoted with their source and date.");
   $("#p-head").insertAdjacentHTML("beforeend", actions());
   $("#p-body").innerHTML = `
     <h3 style="margin-top:14px">The micro-markets</h3>
@@ -984,9 +1091,9 @@ function renderMarkets() {
         ${z.occupiers && z.occupiers.v ? `<div class="note"><b style="color:var(--ink)">Who is there:</b> ${esc(z.occupiers.v)} ${cite(z.occupiers.src)}</div>` : ""}
         <div class="pc"><div class="pro"><h4>For a studio</h4><ul>${(z.pros || []).map(x => `<li>${esc(x)}</li>`).join("")}</ul></div><div class="con"><h4>Watch</h4><ul>${(z.cons || []).map(x => `<li>${esc(x)}</li>`).join("")}</ul></div></div>
         ${zoneSources(z)}
-        <div class="note" style="margin-top:8px">Options here: ${os.map(optLink).join(" · ")}</div>
+        <div class="note" style="margin-top:8px">Options here: ${os.map(o => `${optLink(o)}${allIn(o) != null ? ` <span class="mono">(${allIn(o)} all-in)</span>` : ""}`).join(" · ") || "none on the ranking"}</div>
       </div>`; }).join("")}
-    <p class="note">All six rent, vacancy and stock figures come from one source (Savills, Dec 2025) so they compare like for like; the line under each is the newest figure from another broker. They are micro-market bands, not the asking rent of any building on the list.</p>
+    <p class="note">Rent, vacancy and stock figures come from one source (Savills, Dec 2025) so they compare like for like; the line under each is the newest figure from another broker. They are micro-market bands; each building's own quote (rent plus CAM, INR a sq ft a month) is shown beside its name.</p>
     <h3>Chennai office market</h3>
     ${factList(F.market)}`;
 }
@@ -1065,8 +1172,8 @@ function renderDistance() {
   const clusters = groups.filter(g => g.length > 1).sort((a, b) => b.length - a.length);
   const lone = groups.filter(g => g.length === 1).map(g => g[0]);
   const spread = (g) => { let m = 0; for (const a of g) for (const b of g) m = Math.max(m, km(a, b)); return m; };
-  const homeMax = Math.max(...O.map(exKm));
-  const homeBars = O.slice().sort((a, b) => exKm(a) - exKm(b)).map(o => `<div class="r"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${optLink(o)}</span><div class="tr"><div class="fl" style="width:${Math.round(exKm(o) / homeMax * 100)}%"></div></div><span class="v">${fmtKm(exKm(o))} · ${driveMin(exKm(o))}′</span></div>`).join("");
+  const homeMax = Math.max(...O.map(homeKm));
+  const homeBars = O.slice().sort((a, b) => homeKm(a) - homeKm(b) || a.n - b.n).map(o => `<div class="r"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${optLink(o)}</span><div class="tr"><div class="fl" style="width:${Math.round(homeKm(o) / homeMax * 100)}%"></div></div><span class="v" title="${esc(homeMin(o))}">${isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(homeKm(o))}</span></div>`).join("");
   $("#p-body").innerHTML = `
     <div class="kpis" style="margin-top:14px">
       <div class="kpi"><div class="l">Closest pair</div><div class="v">${fmtKm(close.d)}</div><div class="s">${esc(close.a.name)} and ${esc(close.b.name)}</div></div>
@@ -1082,7 +1189,7 @@ function renderDistance() {
     ${lone.length ? `<div class="fact"><span class="k">Stand-alone</span> <span class="note">(no other option within 2.5 km)</span><br>${lone.map(optLink).join(" · ")}</div>` : ""}
     <h3>How far each option moves the team from today's office</h3>
     <div class="nb">${homeBars}</div>
-    <p class="note" style="margin-top:8px">${esc(METHOD)}</p>`;
+    <p class="note" style="margin-top:8px">Road distances from today's office are the client's sheet. The matrix above is straight-line. ${esc(METHOD)}</p>`;
 }
 
 /* ---------- Talent ---------- */
@@ -1114,19 +1221,19 @@ function renderTalent() {
 /* ---------- Your priorities (the chooser) ---------- */
 function podiumHTML() {
   const r = O.slice().sort(byFit).slice(0, 3);
-  return `<div class="podium">${r.map((o, i) => `<button type="button" data-go="${o.id}" data-hint="Open ${esc(o.name)}"><span class="p">${["First", "Second", "Third"][i]}</span><span class="n">${esc(o.name)}</span><span class="s">${score(o)}/100 · ${esc(ZONE[o.micro].label)}</span></button>`).join("")}</div>`;
+  return `<div class="podium">${r.map((o, i) => `<button type="button" data-go="${o.id}" data-hint="Open ${esc(o.name)}"><span class="p">${["First", "Second", "Third"][i]}</span><span class="n">${esc(o.name)}</span><span class="s">${score(o)}/100 · sheet #${o.n}</span></button>`).join("")}</div>`;
 }
 function renderPriorities() {
-  head("Your priorities", "What matters most to you?", "Answer six questions. Each one weighs a measure from the map; the ranking, the list, the pins and the conclusion follow straight away.");
+  head("Your priorities", "What matters most to you?", "Answer seven questions. Price and ecosystem are the revised sheet's scores; the rest come from the map. The ranking, the list, the pins and the conclusion follow straight away.");
   $("#p-head").insertAdjacentHTML("beforeend", actions(`<button type="button" class="act pri" data-tab="conclusion">See the conclusion</button>`));
-  const base = rankWith(wOf(PRESETS.balanced.lv)).map(o => o.id);
+  const base = RANKED().map(o => o.id);
   const cur = O.slice().sort(byFit);
   const w = W(), tw = PARTS.reduce((s, x) => s + w[x.key], 0) || 1;
   const rows = cur.map((o, i) => {
     const d = base.indexOf(o.id) - i;
-    const dl = S.preset === "balanced" ? "" : d > 0 ? `<span class="dl up" title="Up ${d} against Balanced">▲ ${d}</span>` : d < 0 ? `<span class="dl dn" title="Down ${-d} against Balanced">▼ ${-d}</span>` : `<span class="dl">-</span>`;
+    const dl = d > 0 ? `<span class="dl up" title="${d} above its place on the revised ranking">▲ ${d}</span>` : d < 0 ? `<span class="dl dn" title="${-d} below its place on the revised ranking">▼ ${-d}</span>` : `<span class="dl" title="Same place as on the revised ranking">=</span>`;
     return `<div class="rk"><span class="pos">${i + 1}</span><span class="nm">${optLink(o)}</span>
-      <div class="tr" aria-hidden="true"><div class="fl" style="width:${score(o)}%;background:${ZONE[o.micro].color}"></div></div><span class="val">${score(o)}</span>${dl}</div>`;
+      <div class="tr" aria-hidden="true"><div class="fl" style="width:${score(o)}%;background:${fitColor(o)}"></div></div><span class="val">${score(o)}</span>${dl}</div>`;
   }).join("");
   const q = PARTS.map(p => `<div class="cq"><div class="qh"><b>${esc(p.label)}</b><span class="pct">${Math.round(w[p.key] / tw * 100)}% of the score</span></div>
     <div class="qs">${esc(p.q)}</div>
@@ -1138,7 +1245,7 @@ function renderPriorities() {
     <p class="lede" style="margin-top:8px">${esc(PRESETS[S.preset] ? PRESETS[S.preset].note : "Your own answers below.")}</p>
     <h3>Or answer each question</h3>
     <div class="chooser">${q}</div>
-    <h3>Full ranking${S.preset !== "balanced" ? " · arrows show the move against Balanced" : ""}</h3>
+    <h3>Full ranking · arrows compare with the revised ranking</h3>
     <div class="rks">${rows}</div>
     <p class="note" style="margin-top:10px">How each measure is scored: ${PARTS.map(p => `<b>${esc(p.label)}</b>, ${esc(p.of)}`).join("; ")}. Talent and studio counts are scaled against the best option on the list.</p>`;
 }
@@ -1155,9 +1262,12 @@ function renderConclusion() {
   const tally = new Map(O.map(o => [o.id, 0]));
   presetRanks.forEach(pr => pr.top.forEach(o => tally.set(o.id, tally.get(o.id) + 1)));
   const robust = O.filter(o => tally.get(o.id) > 0).sort((a, b) => tally.get(b.id) - tally.get(a.id) || exact(b) - exact(a));
-  const zoneBest = Z.map(z => { const os = O.filter(o => o.micro === z.key).sort(byFit); return { z, best: os[0], avg: os.reduce((s, o) => s + exact(o), 0) / os.length, n: os.length }; }).sort((a, b) => exact(b.best) - exact(a.best));
   /* The move: best option that keeps the team close, against the lead. */
-  const stay = O.slice().sort((a, b) => exKm(a) - exKm(b))[0];
+  const stay = O.slice().sort((a, b) => homeKm(a) - homeKm(b) || a.n - b.n)[0];
+  const first = RANKED()[0];
+  const sheetLine = lead.id === first.id
+    ? `This agrees with the revised ranking, where it is first${fitOf(lead) ? ` (${esc(fitOf(lead).label)})` : ""}.`
+    : `On the revised ranking ${optLinkLight(first)} is first${fitOf(first) ? ` (${esc(fitOf(first).label)})` : ""} and ${esc(lead.name)} is ${lead.n ? `#${lead.n}` : "unranked"}.`;
   const gap = exact(lead) - exact(second);
   const firm = gap >= 4 ? "a clear lead" : gap >= 1.5 ? "a modest lead" : "a lead within a point or two, so treat the top two as joint";
   const clean = ranked.find(o => !o.flag);
@@ -1167,8 +1277,9 @@ function renderConclusion() {
     <div class="verd" style="margin-top:14px">
       <div class="l">The answer on your priorities${pri.length ? ` · led by ${esc(pri.join(" and "))}` : ""}</div>
       <div class="h">${esc(lead.name)}, ${esc(lead.sheetMicro)}</div>
-      <p>${score(lead)}/100, ${esc(firm)} over ${optLinkLight(second)} (${score(second)}) and ${optLinkLight(third)} (${score(third)}).</p>
-      <p>${fmtKm(exKm(lead))} from today's office (about ${driveMin(exKm(lead))} min by road), ${fmtM(r.d)} to ${esc(r.s.name)} on ${esc(r.s.lineName)}${f ? `, ${fmtM(f.d)} to ${esc(f.s.name)} on ${esc(f.s.lineName)}${f.s.target ? ` (${esc(f.s.target)})` : ""}` : ""}. Within 30 minutes: ${upTo(c, 1, "edu")} institutes, ${upTo(c, 1, "res")} residential belts and ${upTo(c, 1, "studio")} studios.</p>
+      <p>${score(lead)}/100, ${esc(firm)} over ${optLinkLight(second)} (${score(second)}) and ${optLinkLight(third)} (${score(third)}). ${sheetLine}</p>
+      ${lead.reason ? `<p><i>${esc(lead.reason)}</i></p>` : ""}
+      <p>${allIn(lead) != null ? `${inr(allIn(lead))} a sq ft a month all-in${isNum(lead.availableArea) ? ` for ${sqft(lead.availableArea)}` : ""}. ` : ""}${esc(homeTxt(lead))} from today's office; ${fmtM(r.d)} to ${esc(r.s.name)} on ${esc(r.s.lineName)}${f ? `, ${fmtM(f.d)} to ${esc(f.s.name)} on ${esc(f.s.lineName)}${f.s.target ? ` (${esc(f.s.target)})` : ""}` : ""}. Within 30 minutes: ${plural(upTo(c, 1, "edu"), "institute")}, ${plural(upTo(c, 1, "res"), "residential belt")} and ${plural(upTo(c, 1, "studio"), "studio")}.</p>
       ${leadStrong.length || leadWeak.length ? `<p>${leadStrong.length ? `Strong on ${esc(listJoin(leadStrong))}.` : ""} ${leadWeak.length ? `Weaker on ${esc(listJoin(leadWeak))}, which is the trade-off to accept.` : ""}</p>` : ""}
       ${lead.flag ? `<p class="vchk"><b>Check first.</b> ${esc(lead.flag.v)} ${clean && clean.id !== lead.id ? `If it is not available, the best option without an open question is ${optLinkLight(clean)} (${score(clean)}/100, ${esc(clean.sheetMicro)}).` : ""}</p>` : ""}
     </div>
@@ -1176,18 +1287,16 @@ function renderConclusion() {
     <table class="rob"><thead><tr><th>If the priority is</th><th>First</th><th>Second</th><th>Third</th></tr></thead>
       <tbody>${presetRanks.map(pr => `<tr><td>${esc(pr.v.label)}</td>${pr.top.map(o => `<td>${optLink(o)}${o.flag ? " " + flagChip(o) : ""}</td>`).join("")}</tr>`).join("")}</tbody></table>
     <p class="note">${robust.slice(0, 3).map(o => `<b>${esc(o.name)}</b> makes the top three in ${tally.get(o.id)} of ${presetRanks.length}`).join("; ")}. An option that holds up across most presets is the safer recommendation if priorities are still moving.</p>
-    <h3>Best in each micro-market</h3>
-    <table class="rob"><thead><tr><th>Micro-market</th><th>Best option</th><th class="num">Fit</th><th class="num">Zone average</th></tr></thead>
-      <tbody>${zoneBest.map(x => `<tr><td>${zoneTag(x.z)}</td><td>${optLink(x.best)}</td><td class="num">${score(x.best)}</td><td class="num">${Math.round(x.avg)}${x.n > 1 ? ` <span class="note">(${x.n})</span>` : ""}</td></tr>`).join("")}</tbody></table>
     <h3>The trade-off in one line</h3>
     <p class="vsx">${stay.id === lead.id
       ? `${esc(lead.name)} is also the shortest move from today's office, so on these priorities there is no trade-off between keeping the team and the other measures.`
-      : `${esc(stay.name)} keeps the team closest (${fmtKm(exKm(stay))} from today's office, fit ${score(stay)}). ${esc(lead.name)} moves it ${fmtKm(exKm(lead))} in exchange for ${esc(gainsOver(lead, stay))}.`}</p>
+      : `${esc(stay.name)} keeps the team closest (${esc(homeTxt(stay))}, fit ${score(stay)}). ${esc(lead.name)} moves it ${isNum(lead.roadKm) ? `~${lead.roadKm} km` : fmtKm(homeKm(lead))} in exchange for ${esc(gainsOver(lead, stay))}.`}</p>
     <h3>Before signing: what to check on site</h3>
     <ol class="steps">${(M.nextSteps || []).map(s => `<li>${esc(s)}</li>`).join("")}</ol>
-    <p class="note" style="margin-top:10px">Scores come only from position, rail, talent and micro-market rent on this map. Floor plates, rent quotes, power and fit-out terms are not in the shortlist yet; they decide between options that score close together.</p>`;
+    <p class="note" style="margin-top:10px">Scores combine the revised sheet's pricing and ecosystem scores with position, rail and talent on this map. Floor plates, escalation, power and fit-out terms are not on the sheet yet; they decide between options that score close together.</p>`;
 }
 const optLinkLight = (o) => `<a href="#" data-go="${o.id}">${esc(o.name)}</a>`;
+const plural = (n, w) => `${n} ${w}${n === 1 ? "" : "s"}`;
 const listJoin = (a) => a.length < 2 ? a.join("") : a.slice(0, -1).join(", ") + " and " + a[a.length - 1];
 function gainsOver(a, b) {
   const pa = scoreParts(a), pb = scoreParts(b), out = [];
@@ -1199,7 +1308,9 @@ function gainsOver(a, b) {
   const sa = upTo(ca, 1, "studio"), sb = upTo(cb, 1, "studio");
   if (sa > sb) out.push(`more studios nearby (${sa} against ${sb} within 30 min)`);
   if (pa.future - pb.future > .1) out.push("a closer Phase 2 metro station");
-  if (pa.rent - pb.rent > .1) out.push("a cheaper micro-market");
+  const xa = allIn(a), xb = allIn(b);
+  if (pa.price - pb.price > .1) out.push(xa != null && xb != null ? `a better price (${inr(xa)} against ${inr(xb)} all-in)` : "a better price");
+  if (pa.eco - pb.eco > .1) out.push("a stronger ecosystem score");
   return out.length ? listJoin(out) : "a better balance across your priorities";
 }
 
@@ -1280,48 +1391,59 @@ function wirePanes() {
 
 /* ---------- Option ---------- */
 function renderOption(o) {
-  const p = scoreParts(o), z = ZONE[o.micro], c = catchOf(o), r = nearestOpen(o), f = nearestPlan(o), w = W();
+  const p = scoreParts(o), c = catchOf(o), r = nearestOpen(o), f = nearestPlan(o), w = W(), fit = fitOf(o), a = allIn(o);
   const rank = O.slice().sort(byFit).findIndex(x => x.id === o.id) + 1;
   const backTo = TABS.find(t => t.key === S.tab) || TABS[0];
   $("#p-head").innerHTML = `<button class="back" type="button">← Back to ${esc(backTo.label)}</button>
-    <div class="eyebrow">Option ${nn(o)} · ${esc(o.sheetMicro)}</div>
-    <h2>${esc(o.name)}</h2>${verdictHTML(o, p)}${shotBar(o)}${actions()}`;
+    <div class="eyebrow">${fit ? `Rank ${o.n} · ` : `Option ${nn(o)} · `}${esc(o.sheetMicro)}</div>
+    <h2>${esc(o.name)}</h2>${fitBadge(o)}${o.reason ? `<p class="reason">${esc(o.reason)}</p>` : ""}${verdictHTML(o, p)}${shotBar(o)}${actions()}`;
   const sat = satUrl(o, 640, 250, 16.6);
   const others = O.filter(x => x.id !== o.id).map(x => ({ x, d: km(o, x) })).sort((a, b) => a.d - b.d);
-  const nbMax = others[others.length - 1].d;
-  const anchors = (TR.anchors || []).map(a => ({ ...a, d: km(o, a) }));
+  const nbMax = others.length ? others[Math.min(2, others.length - 1)].d : 1;
   const ringRows = c.map((rr, i) => `<tr><td>≤ ${rr.min} min <span class="note">(${rr.km.toFixed(1)} km)</span></td><td class="num">${upTo(c, i, "edu")}</td><td class="num">${upTo(c, i, "res")}</td><td class="num">${upTo(c, i, "studio")}</td><td class="num">${upTo(c, i, "it")}</td></tr>`).join("");
-  const within = (kind, i) => c.slice(0, i + 1).flatMap(x => x[kind]).sort((a, b) => a.d - b.d);
   const ex = catchOf(EX), mo = nearestOpen(o), mx = nearestOpen(EX);
   const delta = (a, b, moreIsGood) => { const v = a - b; if (!v) return `<span class="dl">same</span>`; return `<span class="dl ${(v > 0) === moreIsGood ? "up" : "dn"}">${v > 0 ? "+" : "−"}${Math.abs(v)}</span>`; };
   const mDelta = Math.round((mo.d - mx.d) * 1000);
   const mTxt = Math.abs(mDelta) < 150 ? `<span class="dl">about the same</span>` : `<span class="dl ${mDelta < 0 ? "up" : "dn"}">${mDelta < 0 ? "closer" : "farther"} by ${fmtM(Math.abs(mDelta) / 1000)}</span>`;
+  const sheetRows = [
+    ["Rank on the revised sheet", fit ? `${o.n} of ${O.filter(x => fitOf(x)).length} · ${esc(fit.label)}` : ""],
+    ["Quoted rent", isNum(o.askingRent) ? `${inr(o.askingRent)} a sq ft a month` : ""],
+    ["CAM", isNum(o.maintenance) ? `${inr(o.maintenance)} a sq ft a month` : ""],
+    ["All-in", a != null ? `<b>${inr(a)}</b> a sq ft a month` : ""],
+    ["Area", isNum(o.availableArea) ? sqft(o.availableArea) : ""],
+    ["Pricing score", isNum(o.pricingScore) ? `${o.pricingScore} / 10` : ""],
+    ["Ecosystem score", isNum(o.ecoScore) ? `${o.ecoScore} / 10` : ""],
+    ["From today's office", isNum(o.roadKm) ? `~${o.roadKm} km by road, ${esc(o.driveText)}` : ""],
+    ["Name on the sheet", esc(o.sheetName)],
+    ["Address", esc(o.address)]
+  ].filter(x => x[1]);
   $("#p-body").innerHTML = `
-    ${sat ? `<div class="hero"><img src="${sat}" alt="Satellite view of ${esc(o.name)}" onerror="this.closest('.hero').remove()"><span class="ph">Satellite · © Mapbox © Maxar</span></div>` : ""}
+    ${sat ? `<div class="hero"><img src="${sat}" alt="Satellite view of ${esc(o.name)}" onerror="this.closest('.hero').remove()"><span class="ph">Satellite${imgDate(o) ? ` · captured <span data-img-date="${o.id}">${fmtDate(imgDate(o))}</span>` : ""} · Esri, Vantor</span></div>` : ""}
     <div class="kpis">
-      <div class="kpi"><div class="l">From today's office</div><div class="v">${fmtKm(exKm(o))}</div><div class="s">about ${driveMin(exKm(o))} min by road</div></div>
+      <div class="kpi"><div class="l">All-in rent</div><div class="v">${a != null ? inr(a) : "-"}</div><div class="s">${isNum(o.askingRent) ? `rent ${o.askingRent} + CAM ${o.maintenance || 0}, a sq ft a month` : "not quoted yet"}</div></div>
+      <div class="kpi"><div class="l">Area</div><div class="v">${isNum(o.availableArea) ? o.availableArea.toLocaleString("en-IN") : "-"}</div><div class="s">sq ft on the sheet</div></div>
+      <div class="kpi"><div class="l">From today's office</div><div class="v">${isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(homeKm(o))}</div><div class="s">${esc(homeMin(o))} by road</div></div>
       <div class="kpi"><div class="l">Rail today</div><div class="v">${fmtM(r.d)}</div><div class="s">${esc(r.s.name)} · ${esc(r.s.lineName)}</div></div>
       <div class="kpi"><div class="l">Metro coming</div><div class="v">${f ? fmtM(f.d) : "-"}</div><div class="s">${f ? `${esc(f.s.name)} · ${esc(f.s.lineName)}${f.s.target ? ` · ${esc(f.s.target)}` : ""}` : ""}</div></div>
-      <div class="kpi"><div class="l">Talent ≤30 min</div><div class="v">${upTo(c, 1, "edu") + upTo(c, 1, "res")}</div><div class="s">${upTo(c, 1, "edu")} institutes · ${upTo(c, 1, "res")} belts</div></div>
-      <div class="kpi"><div class="l">Studios ≤30 min</div><div class="v">${upTo(c, 1, "studio")}</div><div class="s">${upTo(c, 2, "studio")} within 45 min · VFX, animation, post</div></div>
-      <div class="kpi"><div class="l">Fit</div><div class="v">${score(o)}<span style="font-size:13px;color:var(--mut)">/100</span></div><div class="s">rank ${rank} of ${O.length} on ${esc(presetName().toLowerCase())}</div></div>
+      <div class="kpi"><div class="l">Fit</div><div class="v">${score(o)}<span style="font-size:13px;color:var(--mut)">/100</span></div><div class="s">#${rank} of ${O.length} on ${esc(presetName().toLowerCase())}</div></div>
     </div>
 
     ${flagBox(o)}
+    ${o.sheetNote ? `<div class="flag"><b>On the sheet</b>${esc(o.sheetNote)}</div>` : ""}
     ${marketHTML(o)}
+
+    <h3>From the revised sheet</h3>
+    <table class="spec">${sheetRows.map(([k, v]) => `<tr><th>${k}</th><td>${v}</td></tr>`).join("")}
+      ${(o.facts || []).map(x => `<tr><th>${esc(x.k)}</th><td>${esc(x.v)} ${cite(x.src)}</td></tr>`).join("")}</table>
+
     <h3>Against today's office</h3>
-    <p class="vsx"><b>${fmtKm(exKm(o))} from ${esc(EX.name)}</b>, about ${driveMin(exKm(o))} min by road. ${esc(moveRead(exKm(o)))}</p>
+    <p class="vsx"><b>${esc(homeTxt(o))}</b> from ${esc(EX.name)}. ${esc(moveRead(o))}</p>
     <table class="ring-tbl"><thead><tr><th></th><th>${esc(EX.name)} (today)</th><th>${esc(o.name)}</th></tr></thead><tbody>
-      <tr><td>Micro-market</td><td>${esc(ZONE[EX.micro] ? ZONE[EX.micro].label : EX.locality)}</td><td>${esc(z.label)} ${EX.micro === o.micro ? `<span class="dl">same</span>` : `<span class="dl dn">different</span>`}</td></tr>
       <tr><td>Nearest open rail</td><td>${esc(mx.s.name)} · ${fmtM(mx.d)}</td><td>${esc(mo.s.name)} · ${fmtM(mo.d)} ${mTxt}</td></tr>
       <tr><td>Institutes ≤30 min</td><td class="num">${upTo(ex, 1, "edu")}</td><td class="num">${upTo(c, 1, "edu")} ${delta(upTo(c, 1, "edu"), upTo(ex, 1, "edu"), true)}</td></tr>
       <tr><td>Residential belts ≤30 min</td><td class="num">${upTo(ex, 1, "res")}</td><td class="num">${upTo(c, 1, "res")} ${delta(upTo(c, 1, "res"), upTo(ex, 1, "res"), true)}</td></tr>
       <tr><td>Studios ≤30 min</td><td class="num">${upTo(ex, 1, "studio")}</td><td class="num">${upTo(c, 1, "studio")} ${delta(upTo(c, 1, "studio"), upTo(ex, 1, "studio"), true)}</td></tr>
     </tbody></table>
-
-    <h3>Nearest other options</h3>
-    <div class="nb">${others.slice(0, 5).map(({ x, d }) => `<div class="r"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${optLink(x)}</span><div class="tr"><div class="fl" style="width:${Math.max(3, Math.round(d / nbMax * 100))}%"></div></div><span class="v">${fmtKm(d)} · ${driveMin(d)}′</span></div>`).join("")}</div>
-    <p class="note">The three nearest are drawn on the map. Every pair is on <a href="#" data-tab="distance">Distances</a>.</p>
 
     <h3>Fit, part by part</h3>
     <div class="bars">${PARTS.map(x => `<div class="bar" title="${esc(x.of)}"><span>${esc(x.label)}</span><div class="tr"><div class="fl" style="width:${Math.round(p[x.key] * 100)}%"></div></div><span class="val">${w[x.key] ? `${(p[x.key] * 100).toFixed(0)} · ×${w[x.key]}` : "skipped"}</span></div>`).join("")}</div>
@@ -1329,66 +1451,52 @@ function renderOption(o) {
 
     <h3>Talent within reach</h3>
     <table class="ring-tbl"><thead><tr><th>Drive time</th><th class="num">Institutes</th><th class="num">Homes</th><th class="num">Studios</th><th class="num">IT parks</th></tr></thead><tbody>${ringRows}</tbody></table>
-    <div class="two" style="margin-top:8px">
-      <div class="box"><h4>Studios inside 30 min</h4><div class="plc">${within("studio", 1).map(x => `<span title="${esc(x.note)}"><span class="dot" style="background:var(--studio)"></span>${esc(x.name)} · ${x.d.toFixed(1)} km</span>`).join("") || "<span>None mapped</span>"}</div></div>
-      <div class="box"><h4>Institutes and homes inside 30 min</h4><div class="plc">${[...within("edu", 1), ...within("res", 1)].map(x => `<span title="${esc(x.note)}"><span class="dot" style="background:${x.kind === "edu" ? "var(--edu)" : "var(--res)"}"></span>${esc(x.name)} · ${x.d.toFixed(1)} km</span>`).join("") || "<span>None mapped</span>"}</div></div>
-    </div>
-    <p class="note" style="margin-top:6px">${esc(METHOD)}</p>
+    <p class="note" style="margin-top:6px">The names are on <a href="#" data-tab="talent">Talent</a>. ${esc(METHOD)}</p>
 
-    <h3>The micro-market</h3>
-    <div class="zc" style="--z:${z.color}"><div class="zh"><b>${esc(z.name)}</b></div><div class="note">${esc(z.character)}</div>
-      <div class="zk"><div><span class="l">Rent</span>${figure(z.rent)}</div><div><span class="l">Vacancy</span>${figure(z.vacancy)}</div><div><span class="l">Stock / supply</span>${figure(z.stock)}</div></div></div>
-
-    ${anchors.length ? `<h3>How far from the anchors</h3><table class="spec">${anchors.map(a => `<tr><th>${esc(a.name)}</th><td>${fmtKm(a.d)} straight line · about ${driveMin(a.d)} min by road</td></tr>`).join("")}</table>` : ""}
-
-    <h3>From the shortlist</h3>
-    <table class="spec">
-      <tr><th>Name on the sheet</th><td>${esc(o.sheetName)}</td></tr>
-      <tr><th>Micro-market on the sheet</th><td>${esc(o.sheetMicro)}</td></tr>
-      <tr><th>Address</th><td>${esc(o.address)}</td></tr>
-      ${(o.facts || []).map(x => `<tr><th>${esc(x.k)}</th><td>${esc(x.v)} ${cite(x.src)}</td></tr>`).join("")}
-    </table>
-    <h3>Where it sits on the map</h3>
-    <p class="note">Precision: <b>${esc(o.precision)}</b>. ${esc(o.geoNote)} ${o.geoSrc ? cite(o.geoSrc, "source") : ""}</p>`;
+    <h3>Nearest other options</h3>
+    <div class="nb">${others.slice(0, 3).map(({ x, d }) => `<div class="r"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${optLink(x)}</span><div class="tr"><div class="fl" style="width:${Math.max(3, Math.round(d / nbMax * 100))}%"></div></div><span class="v">${fmtKm(d)} · ${driveMin(d)}′</span></div>`).join("")}</div>
+    <p class="note">Drawn on the map. Micro-market rent, vacancy and supply are on <a href="#" data-tab="markets">Micro-markets</a>${o.geoSrc ? `; the pin's source is ${cite(o.geoSrc, host(o.geoSrc))}` : ""}.</p>`;
+  checkImgDate(o);
 }
-function moveRead(d) {
-  const m = driveMin(d);
-  if (d < 2) return "Next door. Today's team keeps its commute; the choice is about the building.";
-  if (d < 6) return `Same side of the city. Commutes change by up to about ${m} min each way for some staff.`;
-  if (d < 12) return `Across town. Some staff gain and some lose up to about ${m} min each way; map where today's team lives before deciding.`;
-  return `A real relocation, about ${m} min each way by road. Expect some of today's team to weigh the move; plan retention and transport before committing.`;
+/* How big a move this is for today's team, by road distance. */
+function moveRead(o) {
+  const d = homeKm(o), m = homeMin(o);
+  if (d < 4) return "Next door. Today's team keeps its commute; the choice is about the building.";
+  if (d < 10) return `Same side of the city, ${m} by road. Commutes change a little for some staff.`;
+  if (d < 20) return `Across town, ${m} by road. Some staff gain and some lose; map where today's team lives before deciding.`;
+  return `A real relocation, ${m} by road each way. Expect some of today's team to weigh the move; plan retention and transport before committing.`;
 }
 
 /* ============================================================ compare == */
 function openCompare() { $("#cmp").classList.add("on"); renderCompare(); }
 window.openCompare = openCompare;
-let CMP_SORT = "score";
+let CMP_SORT = "rank";
 function renderCompare() {
-  const list = O.slice().sort((a, b) => CMP_SORT === "sheet" ? a.n - b.n : byFit(a, b));
-  const best = (fn, hi = true) => { const v = list.map(fn); const t = hi ? Math.max(...v) : Math.min(...v); return (o) => fn(o) === t; };
+  const list = O.slice().sort((a, b) => CMP_SORT === "score" ? byFit(a, b) : byRank(a, b));
+  const best = (fn, hi = true) => { const v = list.map(fn).filter(isNum); const t = hi ? Math.max(...v) : Math.min(...v); return (o) => fn(o) === t; };
   const air = (TR.anchors || []).find(a => a.id === "airport");
   const rows = [
+    ["Revised rank", o => fitOf(o) ? `<b>${o.n}</b> · ${fitBadge(o)}` : "-"],
+    ["Reason", o => o.reason ? `<span class="note">${esc(o.reason)}</span>` : "-"],
     ["Fit (your priorities)", o => `<b>${score(o)}</b>/100`, best(score)],
+    ["All-in (rent + CAM)", o => allIn(o) != null ? `${inr(allIn(o))} <span class="note">(${o.askingRent} + ${o.maintenance || 0})</span>` : "-", best(o => allIn(o) ?? NaN, false)],
+    ["Area", o => isNum(o.availableArea) ? sqft(o.availableArea) : "-", best(o => isNum(o.availableArea) ? o.availableArea : NaN)],
+    ["Pricing / ecosystem score", o => isNum(o.pricingScore) ? `${o.pricingScore} / ${o.ecoScore}` : "-"],
+    ["From today's office", o => esc(homeTxt(o)), best(o => -homeKm(o))],
     ["Micro-market", o => zoneTag(ZONE[o.micro])],
-    ["Address (sheet)", o => esc(o.address)],
-    ["From today's office", o => `${fmtKm(exKm(o))} · ~${driveMin(exKm(o))} min`, best(o => -exKm(o))],
     ["Nearest open rail", o => { const r = nearestOpen(o); return `${esc(r.s.name)} (${esc(r.s.lineName)}) · ${fmtM(r.d)}`; }, best(o => -nearestOpen(o).d)],
     ["Nearest Phase 2 metro", o => { const f = nearestPlan(o); return f ? `${esc(f.s.name)} · ${fmtM(f.d)}${f.s.target ? ` · ${esc(f.s.target)}` : ""}` : "-"; }, best(o => futureV(o))],
     ["Institutes ≤30 min", o => String(upTo(catchOf(o), 1, "edu")), best(o => upTo(catchOf(o), 1, "edu"))],
     ["Residential belts ≤30 min", o => String(upTo(catchOf(o), 1, "res")), best(o => upTo(catchOf(o), 1, "res"))],
     ["Studios ≤30 / ≤45 min", o => `${upTo(catchOf(o), 1, "studio")} / ${upTo(catchOf(o), 2, "studio")}`, best(studioRaw)],
-    ["Nearest studio", o => { const s = nearestStudio(o); return s ? `${esc(s.s.name)} · ${fmtKm(s.d)}` : "-"; }, best(o => -(nearestStudio(o) || { d: 99 }).d)],
-    ["IT parks ≤15 min", o => String(upTo(catchOf(o), 0, "it"))],
-    ["Micro-market rent", o => { const z = ZONE[o.micro]; return z.rent && z.rent.v ? esc(z.rent.v) : "-"; }, best(o => scoreParts(o).rent)],
-    ...(air ? [["Airport", o => `${fmtKm(km(o, air))} · ~${driveMin(km(o, air))} min`, best(o => -km(o, air))]] : []),
-    ["Map precision", o => esc(o.precision)]
+    ...(air ? [["Airport", o => `${fmtKm(km(o, air))} · ~${driveMin(km(o, air))} min`, best(o => -km(o, air))]] : [])
   ];
   $("#cmp-body").innerHTML = `
     <div class="sortrow" style="margin:12px 0 4px;flex-wrap:wrap;gap:10px">
       ${PARTS.map(p => `<label style="display:flex;flex-direction:column;gap:2px;min-width:120px">${esc(p.label)}<select data-cw="${p.key}">${LEVELS.map((l, i) => `<option value="${i}" ${S.lv[p.key] === i ? "selected" : ""}>${l.l}</option>`).join("")}</select></label>`).join("")}
-      <label style="display:flex;flex-direction:column;gap:2px;min-width:120px">Order<select id="cmp-sort"><option value="score" ${CMP_SORT === "score" ? "selected" : ""}>Fit</option><option value="sheet" ${CMP_SORT === "sheet" ? "selected" : ""}>Shortlist order</option></select></label>
+      <label style="display:flex;flex-direction:column;gap:2px;min-width:120px">Order<select id="cmp-sort"><option value="rank" ${CMP_SORT === "rank" ? "selected" : ""}>Revised ranking</option><option value="score" ${CMP_SORT === "score" ? "selected" : ""}>Fit to your priorities</option></select></label>
     </div>
-    <p class="note" style="margin:0 0 8px">The selectors are the same six questions as Your priorities. Shaded cells are the best value in the row. Click a column head to open that option.</p>
+    <p class="note" style="margin:0 0 8px">The selectors are the same seven questions as Your priorities. Shaded cells are the best value in the row. Click a column head to open that option.</p>
     <div style="overflow:auto"><table class="cmp"><thead><tr><th></th>${list.map(o => `<th data-open="${o.id}">${nn(o)} ${esc(o.name)}</th>`).join("")}</tr></thead>
     <tbody>${rows.map(([l, fn, b]) => `<tr><th>${esc(l)}</th>${list.map(o => `<td class="${b && b(o) ? "best" : ""}">${fn(o)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
   $("#cmp-body").querySelectorAll("[data-cw]").forEach(s => s.addEventListener("change", e => {
