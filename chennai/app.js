@@ -17,9 +17,10 @@
                          the list, pins, brief and conclusion all re-rank
 
    The revised ranking (Oct 2026) is the client's own sheet: rank, fit
-   group, rent, CAM, area, pricing and ecosystem scores. It leads the list
-   and the overview; the chooser re-ranks the same buildings with the sheet's
-   two scores alongside the map measures.
+   group, pricing and ecosystem scores and the reason for each rank. It
+   leads the list and the overview; the chooser re-ranks the same buildings
+   with the sheet's two scores alongside the map measures. The sheet's rents
+   and areas are tentative, so the page does not show them.
 
    data.js holds every fact and where it came from. This file only reads it;
    every number on screen is either quoted from data.js with its source or
@@ -65,12 +66,6 @@ const fitOf = (o) => FITS[o.fit] || null;
 const fitColor = (o) => (fitOf(o) || ZONE[o.micro] || { color: "#a3502c" }).color;
 const fitBadge = (o) => { const f = fitOf(o); return f ? `<span class="fitb" style="--f:${f.color};--fb:${f.bg}">${esc(f.label)}</span>` : ""; };
 const isNum = (v) => typeof v === "number" && isFinite(v);
-const r2 = (v) => Math.round(v * 100) / 100;
-/* All-in is quoted rent plus CAM, so a broker update to either one carries
-   through. Both are INR a sq ft a month. */
-const allIn = (o) => isNum(o.askingRent) ? r2(o.askingRent + (isNum(o.maintenance) ? o.maintenance : 0)) : null;
-const inr = (v) => isNum(v) ? `INR ${v.toLocaleString("en-IN", { maximumFractionDigits: 2 })}` : "-";
-const sqft = (v) => isNum(v) ? `${v.toLocaleString("en-IN")} sq ft` : "-";
 const fmtDate = (iso) => { const d = iso && new Date(iso + "T00:00:00Z"); return d && !isNaN(d) ? d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" }) : ""; };
 
 /* ------------------------------------------------------------ geometry -- */
@@ -174,7 +169,7 @@ const homeTxt = (o) => isNum(o.roadKm) ? `~${o.roadKm} km by road · ${o.driveTe
    matters. Price and ecosystem are the revised sheet's own scores out of
    10; the other five come from the map. */
 const PARTS = [
-  { key: "price",   noun: "price",                     label: "Price",                 q: "How much does the quoted price matter?",                               of: "the pricing score out of 10 on the revised sheet (quoted rent plus CAM)" },
+  { key: "price",   noun: "price",                     label: "Price",                 q: "How much does the price matter?",                                      of: "the pricing score out of 10 on the revised sheet" },
   { key: "eco",     noun: "the ecosystem",             label: "Ecosystem",             q: "How much does the business ecosystem around the building matter?",     of: "the ecosystem score out of 10 on the revised sheet" },
   { key: "rail",    noun: "rail access today",         label: "Rail today",            q: "Can people walk to an open metro, MRTS or suburban station?",          of: "distance to the nearest open station" },
   { key: "home",    noun: "closeness to today's office", label: "Close to today's office", q: "Should today's team keep roughly the same commute?",                 of: "road distance from the current office at KRC Commerzone, Porur (the sheet's figure)" },
@@ -211,15 +206,9 @@ function futureV(p) {
 /* Road km from today's office: next door counts 1, 37 km or more counts
    almost nothing. */
 const homeV = (r) => r <= 3 ? 1 : Math.max(.05, 1 - (r - 3) / 34);
-/* A building added later from a broker link has no sheet scores yet: its
-   price is read from the all-in rent against the sheet's range, and its
-   ecosystem counts as middling until the sheet scores it. */
-const ALLINS = () => O.map(allIn).filter(isNum);
-function priceV(o) {
-  if (isNum(o.pricingScore)) return clamp(o.pricingScore / 10);
-  const v = allIn(o), a = ALLINS(); if (v == null || a.length < 2) return .5;
-  const lo = Math.min(...a), hi = Math.max(...a); return hi === lo ? .6 : .1 + .9 * (hi - v) / (hi - lo);
-}
+/* A building added later from a broker link has no sheet scores yet, so
+   its price and ecosystem count as middling until the sheet scores it. */
+const priceV = (o) => isNum(o.pricingScore) ? clamp(o.pricingScore / 10) : .5;
 const ecoV = (o) => isNum(o.ecoScore) ? clamp(o.ecoScore / 10) : .5;
 let TALENT_MAX = 1, STUDIO_MAX = 1;
 const PCACHE = new Map();
@@ -251,13 +240,14 @@ const levelWith = (o) => O.filter(x => x.id !== o.id && score(x) === score(o));
 const topParts = () => PARTS.slice().sort((a, b) => S.lv[b.key] - S.lv[a.key]).filter(x => S.lv[x.key] > 0);
 
 /* --------------------------------------------------------------- state -- */
-/* The map opens light: the shortlist, today's office, the micro-markets and
-   open rail. Talent layers come on with the Talent tab (and go again after);
-   satellite imagery is one click away. */
+/* The map opens light: the ranked buildings, today's office, faint
+   micro-markets, open rail and the upcoming metro. Talent layers come on
+   with the Talent tab (and go again after), drive rings with the Catchment
+   camera; distance lines, rings and satellite are one click away. */
 const S = {
   tab: "overview", sel: null, hov: null, pair: null, shot: "close", sort: "rank", preset: "balanced", sheet: "half",
   lv: { ...PRESETS.balanced.lv }, filters: new Set(), auto: new Set(),
-  layers: { existing: true, zones: true, rail: true, future: true, links: true, studio: false, it: false, edu: false, res: false, rings: true, sat: false }
+  layers: { existing: true, zones: true, rail: true, future: true, links: false, studio: false, it: false, edu: false, res: false, rings: false, sat: false }
 };
 /* Filters: the sheet's fit groups (any of those ticked) and rail on foot. */
 const FIT_FILTERS = Object.entries(FITS).map(([k, f]) => ({ key: k, label: f.label, test: o => o.fit === k })).filter(f => O.some(f.test) && cmsOn("filter:" + f.key));
@@ -377,9 +367,10 @@ function boot() {
   if (map && map.getSource("options")) { refreshMap(); if (S.sel) select(S.sel, true, true); else fitAll(false); }
 }
 /* Mapbox Standard, the same basemap as the main ATLAS map and the Indore
-   study, faded so the pins lead. */
+   study, faded so the pins lead. Shop, POI and transit labels (bus stops
+   among them) are off: the study draws its own rail. */
 const MAP_STYLE = "mapbox://styles/mapbox/standard";
-const BASEMAP = { lightPreset: "day", theme: "faded", showPointOfInterestLabels: true, showTransitLabels: true, showPlaceLabels: true, showRoadLabels: true, show3dObjects: true };
+const BASEMAP = { lightPreset: "day", theme: "faded", showPointOfInterestLabels: false, showTransitLabels: false, showPlaceLabels: true, showRoadLabels: true, show3dObjects: true };
 function initMap() {
   mapboxgl.accessToken = window.MAPBOX_TOKEN;
   const style = window.CHN_MAP_STYLE || MAP_STYLE;
@@ -400,7 +391,8 @@ function initMap() {
   });
   map.addControl(new mapboxgl.AttributionControl({ compact: true }), "bottom-right");
   map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "bottom-right");
-  map.on("load", () => { addLayers(); wireMap(); if (booted && S.sel) select(S.sel, true, true); else fitAll(false); });
+  map.on("load", () => { addLayers(); wireMap(); if (booted && S.sel) select(S.sel, true, true); else fitAll(false); spreadPins(); });
+  map.on("moveend", spreadPins);
 }
 
 /* ------------------------------------------------------------ deep links --
@@ -471,7 +463,38 @@ const FC = (features) => ({ type: "FeatureCollection", features });
 const pt = (lng, lat, properties) => ({ type: "Feature", geometry: { type: "Point", coordinates: [lng, lat] }, properties });
 const ln = (coords, properties) => ({ type: "Feature", geometry: { type: "LineString", coordinates: coords }, properties });
 const focusOf = (o) => (S.sel === o.id || S.hov === o.id || (S.pair && S.pair.includes(o.id))) ? 2 : !passes(o) ? 0 : (S.sel || S.hov) ? .5 : 1;
-const optionFC = () => FC(O.map(o => ({ ...pt(o.lng, o.lat, { id: o.id, n: nn(o), name: o.name, color: fitColor(o), foc: focusOf(o) }), id: o.n })));
+/* Six of the buildings sit within 400 m of each other in Perungudi, so at
+   city zoom their pins would stack into one. After every camera move each
+   pin is drawn where it fits on screen, nudged only as far as it must be,
+   with a thin leader line and a dot at its true position; today's office
+   and the open option never move. Zoom in and the pins settle onto their
+   buildings. 13 pins, so this costs nothing. */
+const PIN_GAP = 25;
+let SPREAD = new Map();
+function spreadPins() {
+  if (!map || !map.getSource("options")) return;
+  const P = (o, fixed) => { const q = map.project([o.lng, o.lat]); return { id: o.id, x0: q.x, y0: q.y, x: q.x, y: q.y, fixed }; };
+  const pts = [...O.map(o => P(o, o.id === S.sel)), ...(S.layers.existing ? [P(EX, true)] : [])];
+  for (let it = 0; it < 80; it++) {
+    let moved = false;
+    for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) {
+      const a = pts[i], b = pts[j];
+      if (a.fixed && b.fixed) continue;
+      let dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy);
+      if (d >= PIN_GAP) continue;
+      if (d < .01) { const t = (i + j) * 2.39996; dx = Math.cos(t); dy = Math.sin(t); d = 1; }
+      const need = PIN_GAP - d + .5, ux = dx / d, uy = dy / d;
+      const ka = a.fixed ? 0 : b.fixed ? 1 : .5, kb = 1 - ka;
+      a.x -= ux * need * ka; a.y -= uy * need * ka; b.x += ux * need * kb; b.y += uy * need * kb; moved = true;
+    }
+    if (!moved) break;
+  }
+  SPREAD = new Map(pts.filter(q => q.id !== EX.id && Math.hypot(q.x - q.x0, q.y - q.y0) > 1.5).map(q => [q.id, map.unproject([q.x, q.y]).toArray()]));
+  refreshPins();
+}
+const shownAt = (o) => SPREAD.get(o.id) || [o.lng, o.lat];
+const optionFC = () => FC(O.map(o => ({ ...pt(...shownAt(o), { id: o.id, n: nn(o), name: o.name, color: fitColor(o), foc: focusOf(o) }), id: o.n })));
+const leaderFC = () => FC(O.filter(o => SPREAD.has(o.id)).flatMap(o => [ln([[o.lng, o.lat], shownAt(o)], { color: fitColor(o) }), pt(o.lng, o.lat, { color: fitColor(o) })]));
 function ringFC() {
   const o = O.find(x => x.id === S.sel);
   if (!o || !S.layers.rings) return FC([]);
@@ -494,7 +517,7 @@ function linkFC() {
   if (S.pair) {
     const [a, b] = S.pair.map(id => id === EX.id ? EX : O.find(o => o.id === id));
     if (a && b) add(a, b, "pair");
-  } else if (S.sel) {
+  } else if (S.sel && S.layers.links) {
     const o = O.find(x => x.id === S.sel);
     O.filter(x => x.id !== o.id).map(x => ({ x, d: km(o, x) })).sort((a, b) => a.d - b.d).slice(0, 3).forEach(({ x }) => add(o, x, "nb"));
   }
@@ -517,6 +540,20 @@ function railFC() {
   }
   return FC(feats);
 }
+/* One line per unbroken run of Phase 2 track, to carry the "indicative"
+   label along it. */
+function railPlanFC() {
+  const out = [], runs = (x) => x.open || x.through;
+  for (const L of LINES) {
+    let cur = null;
+    L.stations.forEach((s, i) => {
+      const b = L.stations[i + 1], plan = b && !(runs(s) && runs(b)) && L.mode === "metro";
+      if (plan) { if (!cur) { cur = [[s.lng, s.lat]]; out.push(ln(cur, { color: L.color })); } cur.push([b.lng, b.lat]); }
+      else cur = null;
+    });
+  }
+  return FC(out);
+}
 const stationFC = () => FC(STATIONS.map((s, i) => ({ ...pt(s.lng, s.lat, { name: s.name, line: s.lineName, color: s.color, open: s.open ? 1 : 0, target: s.target || "", key: `${s.line}:${s.name}` }), id: i + 1 })));
 const COL = { edu: "#5b3aa7", res: "#0a8a3a", studio: "#d0417b", it: "#4a5a6a", hub: "#4a4a4a" };
 const placesFC = () => FC(PL.map(p => pt(p.lng, p.lat, { id: p.id, kind: p.kind, name: p.name, color: COL[p.kind] || "#4a4a4a" })));
@@ -533,10 +570,11 @@ function addLayers() {
   /* zones */
   map.addSource("zones", { type: "geojson", data: FC(Z.map(z => ({ type: "Feature", geometry: { type: "Polygon", coordinates: [zonePolygon(z)] }, properties: { key: z.key, color: z.color } }))) });
   map.addSource("zone-labels", { type: "geojson", data: FC(Z.map(z => pt(...zoneCentre(z), { label: z.label.toUpperCase() }))) });
-  add({ id: "zones-fill", type: "fill", source: "zones", paint: { "fill-color": ["get", "color"], "fill-opacity": .12 } });
-  add({ id: "zones-line", type: "line", source: "zones", paint: { "line-color": ["get", "color"], "line-width": 1.2, "line-dasharray": [2, 2], "line-opacity": .75 } });
-  add({ id: "zones-label", type: "symbol", source: "zone-labels", layout: { "text-field": ["get", "label"], "text-size": 12, "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"], "text-letter-spacing": .18, "text-max-width": 12 },
-    paint: { "text-color": "#6c5b4d", "text-opacity": .75, "text-halo-color": "#fff", "text-halo-width": 1.2 } });
+  /* Kept faint: the micro-markets are context, the pins are the subject. */
+  add({ id: "zones-fill", type: "fill", source: "zones", paint: { "fill-color": ["get", "color"], "fill-opacity": .05 } });
+  add({ id: "zones-line", type: "line", source: "zones", paint: { "line-color": ["get", "color"], "line-width": 1, "line-dasharray": [2, 2], "line-opacity": .4 } });
+  add({ id: "zones-label", type: "symbol", source: "zone-labels", layout: { "text-field": ["get", "label"], "text-size": 11, "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"], "text-letter-spacing": .18, "text-max-width": 12 },
+    paint: { "text-color": "#6c5b4d", "text-opacity": .45, "text-halo-color": "#fff", "text-halo-width": 1.2 } });
 
   /* drive rings */
   map.addSource("rings", { type: "geojson", data: ringFC() });
@@ -546,22 +584,33 @@ function addLayers() {
   add({ id: "rings-label", type: "symbol", source: "ring-labels", layout: { "text-field": ["get", "label"], "text-size": 11, "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"], "text-offset": [0, -.6] },
     paint: { "text-color": "#a3502c", "text-halo-color": "#fff", "text-halo-width": 1.4 } });
 
-  /* rail: open sections solid, Phase 2 dashed, each in its line colour */
+  /* Rail: open sections solid, the upcoming Phase 2 metro dashed, each in
+     its line colour. Upcoming stations carry an M so they read as metro,
+     and the line is labelled indicative: routes and station positions are
+     from CMRL's plans, not surveyed. The basemap's own transit and bus stop
+     labels are off, so these are the only stops on the map. */
   map.addSource("rail", { type: "geojson", data: railFC() });
+  map.addSource("rail-plan-lbl", { type: "geojson", data: railPlanFC() });
   add({ id: "rail-plan", type: "line", source: "rail", filter: ["==", ["get", "open"], 0], layout: { "line-cap": "round" },
-    paint: { "line-color": ["get", "color"], "line-width": 3, "line-dasharray": [1.2, 1.4], "line-opacity": .6 } });
+    paint: { "line-color": ["get", "color"], "line-width": ["interpolate", ["linear"], ["zoom"], 10, 2.2, 14, 3.5], "line-dasharray": [1.2, 1.4], "line-opacity": .8 } });
   add({ id: "rail-casing", type: "line", source: "rail", filter: ["==", ["get", "open"], 1], layout: { "line-cap": "round", "line-join": "round" },
-    paint: { "line-color": "#fff", "line-width": 7, "line-opacity": .85 } });
+    paint: { "line-color": "#fff", "line-width": 5, "line-opacity": .7 } });
   add({ id: "rail-open", type: "line", source: "rail", filter: ["==", ["get", "open"], 1], layout: { "line-cap": "round", "line-join": "round" },
-    paint: { "line-color": ["get", "color"], "line-width": 4 } });
+    paint: { "line-color": ["get", "color"], "line-width": 3, "line-opacity": .8 } });
+  add({ id: "rail-plan-label", type: "symbol", source: "rail-plan-lbl", minzoom: 10.5, layout: { "symbol-placement": "line", "symbol-spacing": 420,
+    "text-field": "Upcoming metro · indicative", "text-size": 10.5, "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"], "text-letter-spacing": .04, "text-offset": [0, -.9] },
+    paint: { "text-color": ["get", "color"], "text-halo-color": "#fff", "text-halo-width": 1.6 } });
   const stData = stationFC();
   map.addSource("stations", { type: "geojson", data: stData });
   add({ id: "st-plan", type: "circle", source: "stations", filter: ["==", ["get", "open"], 0], paint: {
-    "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 2, 14, 4.5], "circle-color": "#fff", "circle-opacity": .8,
-    "circle-stroke-color": ["get", "color"], "circle-stroke-width": 1.2, "circle-stroke-opacity": .7 } });
+    "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 2.5, 12, 5, 15, 8], "circle-color": "#fff",
+    "circle-stroke-color": ["get", "color"], "circle-stroke-width": ["interpolate", ["linear"], ["zoom"], 10, 1.2, 12, 1.8] } });
+  add({ id: "st-plan-m", type: "symbol", source: "stations", minzoom: 11.6, filter: ["==", ["get", "open"], 0], layout: { "text-field": "M",
+    "text-size": ["interpolate", ["linear"], ["zoom"], 11.6, 7, 15, 11], "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"], "text-allow-overlap": true, "text-ignore-placement": true },
+    paint: { "text-color": ["get", "color"] } });
   add({ id: "st-open", type: "circle", source: "stations", filter: ["==", ["get", "open"], 1], paint: {
-    "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 2.8, 14, 6], "circle-color": "#fff",
-    "circle-stroke-color": ["get", "color"], "circle-stroke-width": 2 } });
+    "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 2.2, 14, 5], "circle-color": "#fff",
+    "circle-stroke-color": ["get", "color"], "circle-stroke-width": 1.8, "circle-opacity": .9 } });
   map.addSource("stations-lbl", { type: "geojson", data: stData });
   add({ id: "st-label", type: "symbol", source: "stations-lbl", minzoom: 12.4, layout: { "text-field": ["get", "name"], "text-size": 10.5,
     "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"], "text-offset": [0, 1.1], "text-anchor": "top", "text-optional": true },
@@ -594,23 +643,30 @@ function addLayers() {
     "circle-color": "#2a1e16", "circle-stroke-color": "#fff", "circle-stroke-width": 2.5 } });
   add({ id: "ex-dot", type: "circle", source: "existing", paint: { "circle-radius": ["interpolate", ["linear"], ["zoom"], 10, 3.2, 15, 4.8], "circle-color": "#fff" } });
 
-  /* options */
+  /* leaders from a nudged pin back to its building */
+  map.addSource("pin-leaders", { type: "geojson", data: leaderFC() });
+  add({ id: "pin-leader", type: "line", source: "pin-leaders", filter: ["==", ["geometry-type"], "LineString"],
+    paint: { "line-color": ["get", "color"], "line-width": 1.2, "line-opacity": .7 } });
+  add({ id: "pin-true", type: "circle", source: "pin-leaders", filter: ["==", ["geometry-type"], "Point"],
+    paint: { "circle-radius": 2.6, "circle-color": ["get", "color"], "circle-stroke-color": "#fff", "circle-stroke-width": 1 } });
+
+  /* options: every pin stays readable; the open one is larger with a halo */
   map.addSource("options", { type: "geojson", data: optionFC() });
   const foc = ["get", "foc"], col = ["get", "color"];
   add({ id: "opt-halo", type: "circle", source: "options", filter: ["==", foc, 2], paint: {
     "circle-radius": 24, "circle-color": col, "circle-opacity": .18, "circle-stroke-color": col, "circle-stroke-width": 2, "circle-stroke-opacity": .75, "circle-pitch-alignment": "map" } });
   add({ id: "opt", type: "circle", source: "options", paint: {
-    "circle-radius": ["case", ["==", foc, 2], 15, ["==", foc, 1], 11, 8], "circle-color": col,
+    "circle-radius": ["case", ["==", foc, 2], 14, ["==", foc, 1], 11, ["==", foc, .5], 10, 8], "circle-color": col,
     "circle-stroke-color": "#fff", "circle-stroke-width": ["case", ["==", foc, 2], 3, 2],
-    "circle-opacity": ["case", ["==", foc, 2], 1, ["==", foc, 0], .18, ["==", foc, .5], .4, 1],
-    "circle-stroke-opacity": ["case", ["==", foc, 0], .25, ["==", foc, .5], .5, 1] } });
+    "circle-opacity": ["case", ["==", foc, 0], .25, ["==", foc, .5], .85, 1],
+    "circle-stroke-opacity": ["case", ["==", foc, 0], .3, 1] } });
   map.addSource("options-lbl", { type: "geojson", data: optionFC() });
-  add({ id: "opt-num", type: "symbol", source: "options-lbl", layout: { "text-field": ["get", "n"], "text-size": ["case", ["==", foc, 2], 12.5, ["==", foc, 1], 10.5, 9],
+  add({ id: "opt-num", type: "symbol", source: "options-lbl", layout: { "text-field": ["get", "n"], "text-size": ["case", ["==", foc, 2], 12.5, ["==", foc, 0], 9, 10.5],
     "text-allow-overlap": true, "text-ignore-placement": true, "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"] },
-    paint: { "text-color": "#fff", "text-opacity": ["case", ["==", foc, 0], .3, ["==", foc, .5], .6, 1] } });
+    paint: { "text-color": "#fff", "text-opacity": ["case", ["==", foc, 0], .4, 1] } });
   add({ id: "opt-name", type: "symbol", source: "options-lbl", minzoom: 12, filter: ["!=", foc, 2], layout: { "text-field": ["get", "name"], "text-size": 12,
     "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"], "text-offset": [1.2, 0], "text-anchor": "left", "text-optional": true },
-    paint: { "text-color": "#2a1e16", "text-halo-color": "#fff", "text-halo-width": 1.6, "text-opacity": ["case", ["==", foc, 1], 1, .3] } });
+    paint: { "text-color": "#2a1e16", "text-halo-color": "#fff", "text-halo-width": 1.6, "text-opacity": ["case", ["==", foc, 0], .35, 1] } });
   add({ id: "opt-name-focus", type: "symbol", source: "options-lbl", filter: ["==", foc, 2], layout: { "text-field": ["get", "name"], "text-size": 14,
     "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"], "text-offset": [1.6, 0], "text-anchor": "left", "text-allow-overlap": true },
     paint: { "text-color": "#2a1e16", "text-halo-color": "#fff", "text-halo-width": 2.2 } });
@@ -632,7 +688,7 @@ const LAYERS = [
   { key: "existing", label: "Current office", sw: `<span class="dot" style="background:#2a1e16;box-shadow:inset 0 0 0 2.5px #2a1e16,inset 0 0 0 5px #fff"></span>`, ids: ["ex-pin", "ex-dot", "ex-label", "ex-link", "ex-link-label"] },
   { key: "zones", label: "Micro-markets", sw: `<span class="sw" style="height:9px;background:rgba(163,80,44,.18);border:1px dashed #a3502c"></span>`, ids: ["zones-fill", "zones-line", "zones-label"] },
   { key: "rail", label: "Rail open", sw: `<span class="sw" style="background:linear-gradient(90deg,#3281C4 25%,#53B848 25% 50%,#FF9900 50% 75%,#6E6E6E 75%)"></span>`, ids: ["rail-open", "rail-casing", "st-open"] },
-  { key: "future", label: "Metro Phase 2", sw: `<span class="sw" style="background:repeating-linear-gradient(90deg,#800080 0 3px,transparent 3px 5px,#FF0000 5px 8px,transparent 8px 10px,#e0b800 10px 13px,transparent 13px 15px)"></span>`, ids: ["rail-plan", "st-plan"] },
+  { key: "future", label: "Upcoming metro (indicative)", sw: `<span class="sw" style="background:repeating-linear-gradient(90deg,#800080 0 3px,transparent 3px 5px,#FF0000 5px 8px,transparent 8px 10px,#e0b800 10px 13px,transparent 13px 15px)"></span>`, ids: ["rail-plan", "rail-plan-label", "st-plan", "st-plan-m"] },
   { key: "links", label: "Distances", sw: `<span class="sw" style="background:repeating-linear-gradient(90deg,#6c5b4d 0 3px,transparent 3px 6px)"></span>`, ids: ["links", "links-label"] },
   { key: "studio", label: "VFX studios", sw: `<span class="dot" style="background:${COL.studio}"></span>` },
   { key: "it", label: "IT parks", sw: `<span class="dot" style="background:${COL.it}"></span>` },
@@ -646,13 +702,13 @@ const LAYER_HINT = {
   existing: "The current office at KRC Commerzone, Porur, with a dashed line and the distance to the open option.",
   zones: "The six micro-markets the shortlist sits in. Outlines are indicative.",
   rail: "Metro, MRTS and suburban rail that run today, in each line's own colour.",
-  future: "Chennai Metro Phase 2 corridors under construction, dashed, with their stations.",
-  links: "Lines to the three nearest options from the open one, or the pair you picked on the distance matrix.",
+  future: "Chennai Metro Phase 2, under construction: dashed lines with M stations. Routes and station positions are indicative, from CMRL's plans.",
+  links: "Lines to the three nearest options from the open one. A pair picked on the distance matrix is always drawn.",
   studio: "VFX, animation and post studios: the experienced talent already working in the city.",
   it: "Large IT parks that hire from the same technical pool.",
   edu: "Institutes that train artists and graduates: the fresher pipeline.",
   res: "Residential belts where staff are likely to live.",
-  rings: "15, 30 and 45 minute drive rings around the open option."
+  rings: "15, 30 and 45 minute drive rings around the open option. The Catchment camera turns them on."
 };
 /* With satellite on, Standard's 3D buildings and trees would hide the
    roofs, so they go while it is on. */
@@ -664,6 +720,8 @@ function applyLayerVisibility() {
   if (!map || !map.getLayer("opt")) return;
   for (const l of LAYERS) for (const id of l.ids || []) if (map.getLayer(id)) map.setLayoutProperty(id, "visibility", S.layers[l.key] ? "visible" : "none");
   if (applyLayerVisibility.sat !== S.layers.sat) { applyLayerVisibility.sat = S.layers.sat; basemapForSat(); }
+  /* a pair picked on the distance matrix is always drawn */
+  if (S.pair) for (const id of ["links", "links-label"]) if (map.getLayer(id)) map.setLayoutProperty(id, "visibility", "visible");
   const kinds = ["hub", ...KINDS.filter(k => S.layers[k])];
   for (const id of ["places", "places-label"]) if (map.getLayer(id)) map.setFilter(id, ["in", ["get", "kind"], ["literal", kinds]]);
   const stShow = [S.layers.rail ? 1 : -1, S.layers.future ? 0 : -1];
@@ -683,7 +741,7 @@ function recede() {
   if (!o) {
     set("st-open", "circle-opacity", 1); set("st-open", "circle-stroke-opacity", 1); set("st-label", "text-opacity", 1);
     set("places", "circle-opacity", ["case", ["==", ["get", "kind"], "res"], .25, .9]); set("places", "circle-stroke-opacity", 1); set("places-label", "text-opacity", 1);
-    set("zones-fill", "fill-opacity", .12); set("zones-label", "text-opacity", .75);
+    set("zones-fill", "fill-opacity", .05); set("zones-label", "text-opacity", .45);
     return;
   }
   const nearSt = STATIONS.filter(s => km(o, s) <= 2).map(s => `${s.line}:${s.name}`);
@@ -693,7 +751,7 @@ function recede() {
   set("st-label", "text-opacity", ["case", inSt, 1, .3]);
   set("places", "circle-opacity", ["case", inPl, ["case", ["==", ["get", "kind"], "res"], .25, .9], .15]);
   set("places", "circle-stroke-opacity", ["case", inPl, 1, .25]); set("places-label", "text-opacity", ["case", inPl, 1, .25]);
-  set("zones-fill", "fill-opacity", .05); set("zones-label", "text-opacity", .35);
+  set("zones-fill", "fill-opacity", .03); set("zones-label", "text-opacity", .25);
 }
 /* The halo around the open option is static: a pulsing halo repainted the
    whole 3D map every frame, which is what made the study feel heavy. */
@@ -702,6 +760,7 @@ function refreshPins() {
   const fc = optionFC();
   map.getSource("options").setData(fc);
   if (map.getSource("options-lbl")) map.getSource("options-lbl").setData(fc);
+  if (map.getSource("pin-leaders")) map.getSource("pin-leaders").setData(leaderFC());
 }
 function refreshMap() {
   if (!map || !map.getSource("options")) return;
@@ -714,12 +773,12 @@ function wireMap() {
     map.on("mouseleave", layer, () => { map.getCanvas().style.cursor = ""; pop.remove(); });
   };
   hover("opt", p => { const o = O.find(x => x.id === p.id), r = nearestOpen(o), f = fitOf(o);
-    return `<div class="pop">${tile(o, "pop")}<div><b>${nn(o)} · ${esc(o.name)}</b><br>${f ? `${esc(f.label)} · ` : ""}${esc(o.sheetMicro)}<br>${allIn(o) != null ? `${inr(allIn(o))} all-in · ` : ""}${isNum(o.availableArea) ? sqft(o.availableArea) : ""}<br>${esc(homeTxt(o))}<br>${fmtM(r.d)} to ${esc(r.s.name)} (${esc(r.s.lineName)})</div></div>`; });
+    return `<div class="pop">${tile(o, "pop")}<div><b>${nn(o)} · ${esc(o.name)}</b><br>${f ? `${esc(f.label)} · ` : ""}${esc(o.sheetMicro)}<br>${esc(homeTxt(o))}<br>${fmtM(r.d)} to ${esc(r.s.name)} (${esc(r.s.lineName)})</div></div>`; });
   hover("places", p => { const x = PL.find(y => y.id === p.id);
     const kind = { edu: "Institute", res: "Residential belt", studio: "VFX / post studio", it: "IT park", hub: "Transport" }[x.kind];
     return `<b>${esc(x.name)}</b>${x.sub ? `<br>${esc(x.sub)}` : ""}<br><span style="color:#6c5b4d">${kind}</span><br>${esc(x.note)}`; });
   hover("st-open", p => `<b>${esc(p.name)}</b><br>${esc(p.line)} · open`);
-  hover("st-plan", p => `<b>${esc(p.name)}</b><br>${esc(p.line)} · not open yet${p.target ? `<br>${esc(p.target)}` : ""}`);
+  hover("st-plan", p => `<b>${esc(p.name)}</b> <span style="color:#6c5b4d">upcoming metro</span><br>${esc(p.line)} · not open yet${p.target ? `<br>${esc(p.target)}` : ""}<br><span style="color:#6c5b4d">Position indicative</span>`);
   hover("ex-pin", () => { const r = nearestOpen(EX), o = S.sel && O.find(x => x.id === S.sel);
     return `<b>${esc(EX.name)}</b><br>Current office · ${esc(EX.locality)}<br>Nearest open rail: ${esc(r.s.name)}, ${fmtM(r.d)}${o ? `<br>${fmtKm(exKm(o))} from ${esc(o.name)}` : ""}`; });
   map.on("click", "opt", e => select(e.features[0].properties.id, true));
@@ -791,7 +850,7 @@ function sorted() {
   const by = {
     rank: byRank,
     score: byFit,
-    price: (a, b) => (allIn(a) ?? 1e9) - (allIn(b) ?? 1e9) || a.n - b.n,
+    price: (a, b) => priceV(b) - priceV(a) || a.n - b.n,
     home: (a, b) => homeKm(a) - homeKm(b) || a.n - b.n,
     rail: (a, b) => nearestOpen(a).d - nearestOpen(b).d,
     talent: (a, b) => (talentRaw(b) + studioRaw(b)) - (talentRaw(a) + studioRaw(a)) || a.n - b.n
@@ -803,13 +862,13 @@ function renderList() {
   $("#b-count").textContent = `${shown.length} of ${O.length} options`;
   $("#b-sub").textContent = S.sort === "score" ? presetName() : S.sort === "rank" ? "Revised ranking" : "";
   $("#list").innerHTML = sorted().map(o => {
-    const a = allIn(o);
-    return `<button class="card ${S.sel === o.id ? "sel" : ""} ${passes(o) ? "" : "dim"}" data-id="${o.id}" role="listitem" type="button" data-hint="${esc(o.reason || `Open ${o.name}: the map flies in, the nearest options and the current office are drawn with their distances.`)}">
+    const r = nearestOpen(o);
+    return `<button class="card ${S.sel === o.id ? "sel" : ""} ${passes(o) ? "" : "dim"}" data-id="${o.id}" role="listitem" type="button" data-hint="${esc(o.reason || `Open ${o.name}: the map flies in and draws the line to the current office.`)}">
       ${tile(o)}
       <div>
         <div class="nm"><span class="no">${nn(o)}</span>${esc(o.name)}</div>
         <div class="loc">${fitBadge(o)} ${esc(o.sheetMicro)}</div>
-        <div class="facts">${a != null ? `<span title="Quoted rent plus CAM, INR a sq ft a month">${inr(a)} all-in</span>` : ""}${isNum(o.availableArea) ? `<span title="Area on the sheet">${sqft(o.availableArea)}</span>` : ""}<span title="From the current office by road">${isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(homeKm(o))}</span>${flagChip(o)}</div>
+        <div class="facts"><span title="From the current office by road">${isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(homeKm(o))} · ${esc(homeMin(o))}</span><span title="Nearest open rail station">${fmtM(r.d)} to rail</span>${flagChip(o)}</div>
       </div>
       <span class="score" title="Fit to your priorities, out of 100">${score(o)}</span>
     </button>`;
@@ -884,6 +943,7 @@ function flyToOption(o, shot) {
   S.shot = shot || "close";
   const phone = innerWidth <= 860, z = SHOT_ZOOM[o.precision] || 15.2, pad = padding();
   if (S.shot === "area") {
+    if (!S.layers.rings && cmsOn("layer:rings")) { S.layers.rings = true; renderLayers(); applyLayerVisibility(); }
     const b = circle([o.lng, o.lat], ringKm(30), 16).reduce((bb, p) => bb.extend(p), new mapboxgl.LngLatBounds());
     map.fitBounds(b, { padding: pad, pitch: 0, bearing: 0, duration: REDUCED() ? 0 : 1200 });
   } else {
@@ -939,7 +999,7 @@ function renderLayers() {
    choice is remembered on this device. */
 const GUIDE = {
   overview: { hint: "The short answer: the revised ranking in its three fit groups, and what stands out.",
-    items: ["The revised ranking is the client's sheet: rank, fit group, all-in rent, area and the reason for each rank.",
+    items: ["The revised ranking is the client's sheet: rank, fit group, pricing and ecosystem scores and the reason for each rank.",
       "Each insight card answers one question a client asks first. Click it to open that option.",
       "Your priorities re-ranks the same buildings with the sheet's scores and the map's measures."] },
   markets: { hint: "The micro-markets: rent, vacancy, who is there, pros and cons.",
@@ -948,7 +1008,7 @@ const GUIDE = {
   connect: { hint: "How people get to each option, today and once Phase 2 opens.",
     items: ["The nearest open metro, MRTS or suburban station for every option, and how you get from it.",
       "The nearest Phase 2 metro station under construction, with its reported target.",
-      "Turn on Rail open and Metro Phase 2 in the map bar to see the lines."] },
+      "Rail open and Upcoming metro in the map bar show the lines; upcoming routes and stations are indicative."] },
   distance: { hint: "How far every option is from every other option and from the current office.",
     items: ["The matrix is ordered by micro-market, so clusters show as dark blocks.",
       "Click any cell: the map draws that pair and its distance.",
@@ -965,7 +1025,7 @@ const GUIDE = {
       "How often each option makes the top three across every preset, so you can see which choices hold up.",
       "The next steps for site visits."] },
   compare: { hint: "Every option side by side, with the seven questions to re-weight." },
-  option: { items: ["The map flies to the building and draws its three nearest options and the current office.",
+  option: { items: ["The map flies to the building and draws the line to the current office. Distances in the map bar adds its three nearest options.",
       "The picture is the newest satellite capture, with its date. Turn on Satellite in the map bar to see it on the map.",
       "Below: the sheet's figures, rail today and next, talent within reach and the fit score part by part.",
       "Back returns to the section you came from."] }
@@ -1032,9 +1092,8 @@ function rankingHTML(list) {
   const rest = list.filter(o => !fitOf(o));
   if (rest.length) groups.push({ f: { label: "Added since the sheet", color: "#9a8878", bg: "rgba(60,40,25,.07)" }, os: rest });
   return groups.map(({ f, os }) => `<div class="fg"><div class="fgh"><span class="fitb" style="--f:${f.color};--fb:${f.bg}">${esc(f.label)}</span><span class="note">${os.length} option${os.length === 1 ? "" : "s"}</span></div>
-    <table class="rt"><thead><tr><th>Building</th><th class="num">All-in</th><th class="num">Area</th><th class="num">From office</th><th class="num" title="Pricing and ecosystem scores out of 10">Scores</th></tr></thead>
+    <table class="rt"><thead><tr><th>Building</th><th class="num">From office</th><th class="num" title="Pricing and ecosystem scores out of 10">Price · eco</th></tr></thead>
     <tbody>${os.map(o => `<tr><td><span class="mono no">${nn(o)}</span> ${optLinkLight(o)} ${flagChip(o)}<br><span class="note">${esc(o.sheetMicro)}</span>${o.reason ? `<div class="why">${esc(o.reason)}</div>` : ""}</td>
-      <td class="num">${allIn(o) != null ? allIn(o) : "-"}</td><td class="num">${isNum(o.availableArea) ? o.availableArea.toLocaleString("en-IN") : "-"}</td>
       <td class="num">${isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(homeKm(o))}<br><span class="note">${esc(homeMin(o))}</span></td>
       <td class="num">${isNum(o.pricingScore) ? `${o.pricingScore} · ${o.ecoScore}` : "-"}</td></tr>`).join("")}</tbody></table></div>`).join("");
 }
@@ -1048,21 +1107,19 @@ function renderOverview() {
     ${insightsHTML()}
     <h3>The revised ranking</h3>
     ${rankingHTML(RANKED())}
-    <p class="note">All-in is quoted rent plus CAM in INR a sq ft a month; area is in sq ft; distance and drive time from today's office are by road, as given on the client's sheet. Scores are the sheet's pricing and ecosystem scores out of 10. <a href="#" data-tab="priorities">Your priorities</a> re-ranks the same buildings with the map's measures as well.</p>`;
+    <p class="note">Distance and drive time from today's office are by road, as given on the client's sheet. Price · eco are the sheet's pricing and ecosystem scores out of 10. <a href="#" data-tab="priorities">Your priorities</a> re-ranks the same buildings with the map's measures as well.</p>`;
 }
 function insightsHTML() {
   const top = (f, list = O) => list.slice().sort((a, b) => f(b) - f(a) || a.n - b.n)[0];
   const first = RANKED()[0], best = top(exact), home = top(o => -homeKm(o)), rail = top(o => -nearestOpen(o).d);
-  const priced = O.filter(o => allIn(o) != null), sized = O.filter(o => isNum(o.availableArea));
-  const cheap = priced.length ? top(o => -allIn(o), priced) : null, big = sized.length ? top(o => o.availableArea, sized) : null;
+  const fut = top(o => futureV(o)), fN = nearestPlan(fut);
   const stu = top(o => upTo(catchOf(o), 1, "studio") + studioRaw(o) / 1000), sc = catchOf(stu), rr = nearestOpen(rail);
   const cards = [
-    { l: "Ranked first", v: first.name, s: `${fitOf(first) ? fitOf(first).label + " · " : ""}${allIn(first) != null ? `${inr(allIn(first))} all-in` : ""}${isNum(first.availableArea) ? ` · ${sqft(first.availableArea)}` : ""}`, go: first.id, tone: "lead" },
+    { l: "Ranked first", v: first.name, s: `${fitOf(first) ? fitOf(first).label + " · " : ""}${first.sheetMicro}`, go: first.id, tone: "lead" },
     { l: "Best on your priorities", v: best.name, s: `${score(best)}/100 on ${presetName().toLowerCase()}${levelWith(best).length ? `, level with ${levelWith(best)[0].name}` : ""}`, go: best.id },
-    cheap && { l: "Lowest all-in rent", v: inr(allIn(cheap)), s: `${cheap.name}, rent ${cheap.askingRent} plus CAM ${cheap.maintenance || 0}`, go: cheap.id },
-    big && { l: "Most space", v: sqft(big.availableArea), s: `${big.name}, ${big.sheetMicro}`, go: big.id },
     { l: "Closest to today's office", v: isNum(home.roadKm) ? `~${home.roadKm} km` : fmtKm(homeKm(home)), s: `${home.name}, ${homeMin(home)} by road`, go: home.id },
     { l: "Closest to open rail", v: fmtM(rr.d), s: `${rail.name}, to ${rr.s.name} (${rr.s.lineName})`, go: rail.id },
+    fN && { l: "Closest upcoming metro", v: fmtM(fN.d), s: `${fut.name}, to ${fN.s.name}${fN.s.target ? ` (${fN.s.target})` : ""}`, go: fut.id },
     { l: "Most studios nearby", v: stu.name, s: `${upTo(sc, 1, "studio")} VFX and post studios in 30 min, ${upTo(sc, 2, "studio")} in 45`, go: stu.id }
   ].filter(Boolean);
   return `<div class="ins" role="list">${cards.map(c => `<button type="button" role="listitem" class="in ${c.tone || ""}" data-go="${c.go}" data-hint="Open this option: the map flies in and its details open.">
@@ -1091,9 +1148,9 @@ function renderMarkets() {
         ${z.occupiers && z.occupiers.v ? `<div class="note"><b style="color:var(--ink)">Who is there:</b> ${esc(z.occupiers.v)} ${cite(z.occupiers.src)}</div>` : ""}
         <div class="pc"><div class="pro"><h4>For a studio</h4><ul>${(z.pros || []).map(x => `<li>${esc(x)}</li>`).join("")}</ul></div><div class="con"><h4>Watch</h4><ul>${(z.cons || []).map(x => `<li>${esc(x)}</li>`).join("")}</ul></div></div>
         ${zoneSources(z)}
-        <div class="note" style="margin-top:8px">Options here: ${os.map(o => `${optLink(o)}${allIn(o) != null ? ` <span class="mono">(${allIn(o)} all-in)</span>` : ""}`).join(" · ") || "none on the ranking"}</div>
+        <div class="note" style="margin-top:8px">Options here: ${os.map(optLink).join(" · ") || "none on the ranking"}</div>
       </div>`; }).join("")}
-    <p class="note">Rent, vacancy and stock figures come from one source (Savills, Dec 2025) so they compare like for like; the line under each is the newest figure from another broker. They are micro-market bands; each building's own quote (rent plus CAM, INR a sq ft a month) is shown beside its name.</p>
+    <p class="note">Rent, vacancy and stock figures come from one source (Savills, Dec 2025) so they compare like for like; the line under each is the newest figure from another broker. They are micro-market bands, not the asking rent of any building on the list.</p>
     <h3>Chennai office market</h3>
     ${factList(F.market)}`;
 }
@@ -1279,7 +1336,7 @@ function renderConclusion() {
       <div class="h">${esc(lead.name)}, ${esc(lead.sheetMicro)}</div>
       <p>${score(lead)}/100, ${esc(firm)} over ${optLinkLight(second)} (${score(second)}) and ${optLinkLight(third)} (${score(third)}). ${sheetLine}</p>
       ${lead.reason ? `<p><i>${esc(lead.reason)}</i></p>` : ""}
-      <p>${allIn(lead) != null ? `${inr(allIn(lead))} a sq ft a month all-in${isNum(lead.availableArea) ? ` for ${sqft(lead.availableArea)}` : ""}. ` : ""}${esc(homeTxt(lead))} from today's office; ${fmtM(r.d)} to ${esc(r.s.name)} on ${esc(r.s.lineName)}${f ? `, ${fmtM(f.d)} to ${esc(f.s.name)} on ${esc(f.s.lineName)}${f.s.target ? ` (${esc(f.s.target)})` : ""}` : ""}. Within 30 minutes: ${plural(upTo(c, 1, "edu"), "institute")}, ${plural(upTo(c, 1, "res"), "residential belt")} and ${plural(upTo(c, 1, "studio"), "studio")}.</p>
+      <p>${esc(homeTxt(lead))} from today's office; ${fmtM(r.d)} to ${esc(r.s.name)} on ${esc(r.s.lineName)}${f ? `, ${fmtM(f.d)} to ${esc(f.s.name)} on ${esc(f.s.lineName)}${f.s.target ? ` (${esc(f.s.target)})` : ""}` : ""}. Within 30 minutes: ${plural(upTo(c, 1, "edu"), "institute")}, ${plural(upTo(c, 1, "res"), "residential belt")} and ${plural(upTo(c, 1, "studio"), "studio")}.</p>
       ${leadStrong.length || leadWeak.length ? `<p>${leadStrong.length ? `Strong on ${esc(listJoin(leadStrong))}.` : ""} ${leadWeak.length ? `Weaker on ${esc(listJoin(leadWeak))}, which is the trade-off to accept.` : ""}</p>` : ""}
       ${lead.flag ? `<p class="vchk"><b>Check first.</b> ${esc(lead.flag.v)} ${clean && clean.id !== lead.id ? `If it is not available, the best option without an open question is ${optLinkLight(clean)} (${score(clean)}/100, ${esc(clean.sheetMicro)}).` : ""}</p>` : ""}
     </div>
@@ -1308,8 +1365,7 @@ function gainsOver(a, b) {
   const sa = upTo(ca, 1, "studio"), sb = upTo(cb, 1, "studio");
   if (sa > sb) out.push(`more studios nearby (${sa} against ${sb} within 30 min)`);
   if (pa.future - pb.future > .1) out.push("a closer Phase 2 metro station");
-  const xa = allIn(a), xb = allIn(b);
-  if (pa.price - pb.price > .1) out.push(xa != null && xb != null ? `a better price (${inr(xa)} against ${inr(xb)} all-in)` : "a better price");
+  if (pa.price - pb.price > .1) out.push(isNum(a.pricingScore) && isNum(b.pricingScore) ? `a better pricing score (${a.pricingScore} against ${b.pricingScore} out of 10)` : "a better price");
   if (pa.eco - pb.eco > .1) out.push("a stronger ecosystem score");
   return out.length ? listJoin(out) : "a better balance across your priorities";
 }
@@ -1391,7 +1447,7 @@ function wirePanes() {
 
 /* ---------- Option ---------- */
 function renderOption(o) {
-  const p = scoreParts(o), c = catchOf(o), r = nearestOpen(o), f = nearestPlan(o), w = W(), fit = fitOf(o), a = allIn(o);
+  const p = scoreParts(o), c = catchOf(o), r = nearestOpen(o), f = nearestPlan(o), w = W(), fit = fitOf(o);
   const rank = O.slice().sort(byFit).findIndex(x => x.id === o.id) + 1;
   const backTo = TABS.find(t => t.key === S.tab) || TABS[0];
   $("#p-head").innerHTML = `<button class="back" type="button">← Back to ${esc(backTo.label)}</button>
@@ -1407,10 +1463,6 @@ function renderOption(o) {
   const mTxt = Math.abs(mDelta) < 150 ? `<span class="dl">about the same</span>` : `<span class="dl ${mDelta < 0 ? "up" : "dn"}">${mDelta < 0 ? "closer" : "farther"} by ${fmtM(Math.abs(mDelta) / 1000)}</span>`;
   const sheetRows = [
     ["Rank on the revised sheet", fit ? `${o.n} of ${O.filter(x => fitOf(x)).length} · ${esc(fit.label)}` : ""],
-    ["Quoted rent", isNum(o.askingRent) ? `${inr(o.askingRent)} a sq ft a month` : ""],
-    ["CAM", isNum(o.maintenance) ? `${inr(o.maintenance)} a sq ft a month` : ""],
-    ["All-in", a != null ? `<b>${inr(a)}</b> a sq ft a month` : ""],
-    ["Area", isNum(o.availableArea) ? sqft(o.availableArea) : ""],
     ["Pricing score", isNum(o.pricingScore) ? `${o.pricingScore} / 10` : ""],
     ["Ecosystem score", isNum(o.ecoScore) ? `${o.ecoScore} / 10` : ""],
     ["From today's office", isNum(o.roadKm) ? `~${o.roadKm} km by road, ${esc(o.driveText)}` : ""],
@@ -1420,8 +1472,8 @@ function renderOption(o) {
   $("#p-body").innerHTML = `
     ${sat ? `<div class="hero"><img src="${sat}" alt="Satellite view of ${esc(o.name)}" onerror="this.closest('.hero').remove()"><span class="ph">Satellite${imgDate(o) ? ` · captured <span data-img-date="${o.id}">${fmtDate(imgDate(o))}</span>` : ""} · Esri, Vantor</span></div>` : ""}
     <div class="kpis">
-      <div class="kpi"><div class="l">All-in rent</div><div class="v">${a != null ? inr(a) : "-"}</div><div class="s">${isNum(o.askingRent) ? `rent ${o.askingRent} + CAM ${o.maintenance || 0}, a sq ft a month` : "not quoted yet"}</div></div>
-      <div class="kpi"><div class="l">Area</div><div class="v">${isNum(o.availableArea) ? o.availableArea.toLocaleString("en-IN") : "-"}</div><div class="s">sq ft on the sheet</div></div>
+      <div class="kpi"><div class="l">Pricing score</div><div class="v">${isNum(o.pricingScore) ? `${o.pricingScore}<span style="font-size:13px;color:var(--mut)">/10</span>` : "-"}</div><div class="s">on the revised sheet</div></div>
+      <div class="kpi"><div class="l">Ecosystem score</div><div class="v">${isNum(o.ecoScore) ? `${o.ecoScore}<span style="font-size:13px;color:var(--mut)">/10</span>` : "-"}</div><div class="s">on the revised sheet</div></div>
       <div class="kpi"><div class="l">From today's office</div><div class="v">${isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(homeKm(o))}</div><div class="s">${esc(homeMin(o))} by road</div></div>
       <div class="kpi"><div class="l">Rail today</div><div class="v">${fmtM(r.d)}</div><div class="s">${esc(r.s.name)} · ${esc(r.s.lineName)}</div></div>
       <div class="kpi"><div class="l">Metro coming</div><div class="v">${f ? fmtM(f.d) : "-"}</div><div class="s">${f ? `${esc(f.s.name)} · ${esc(f.s.lineName)}${f.s.target ? ` · ${esc(f.s.target)}` : ""}` : ""}</div></div>
@@ -1429,7 +1481,6 @@ function renderOption(o) {
     </div>
 
     ${flagBox(o)}
-    ${o.sheetNote ? `<div class="flag"><b>On the sheet</b>${esc(o.sheetNote)}</div>` : ""}
     ${marketHTML(o)}
 
     <h3>From the revised sheet</h3>
@@ -1455,7 +1506,7 @@ function renderOption(o) {
 
     <h3>Nearest other options</h3>
     <div class="nb">${others.slice(0, 3).map(({ x, d }) => `<div class="r"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${optLink(x)}</span><div class="tr"><div class="fl" style="width:${Math.max(3, Math.round(d / nbMax * 100))}%"></div></div><span class="v">${fmtKm(d)} · ${driveMin(d)}′</span></div>`).join("")}</div>
-    <p class="note">Drawn on the map. Micro-market rent, vacancy and supply are on <a href="#" data-tab="markets">Micro-markets</a>${o.geoSrc ? `; the pin's source is ${cite(o.geoSrc, host(o.geoSrc))}` : ""}.</p>`;
+    <p class="note">Turn on Distances in the map bar to draw them. Micro-market rent, vacancy and supply are on <a href="#" data-tab="markets">Micro-markets</a>${o.geoSrc ? `; the pin's source is ${cite(o.geoSrc, host(o.geoSrc))}` : ""}.</p>`;
   checkImgDate(o);
 }
 /* How big a move this is for today's team, by road distance. */
@@ -1479,9 +1530,8 @@ function renderCompare() {
     ["Revised rank", o => fitOf(o) ? `<b>${o.n}</b> · ${fitBadge(o)}` : "-"],
     ["Reason", o => o.reason ? `<span class="note">${esc(o.reason)}</span>` : "-"],
     ["Fit (your priorities)", o => `<b>${score(o)}</b>/100`, best(score)],
-    ["All-in (rent + CAM)", o => allIn(o) != null ? `${inr(allIn(o))} <span class="note">(${o.askingRent} + ${o.maintenance || 0})</span>` : "-", best(o => allIn(o) ?? NaN, false)],
-    ["Area", o => isNum(o.availableArea) ? sqft(o.availableArea) : "-", best(o => isNum(o.availableArea) ? o.availableArea : NaN)],
-    ["Pricing / ecosystem score", o => isNum(o.pricingScore) ? `${o.pricingScore} / ${o.ecoScore}` : "-"],
+    ["Pricing score", o => isNum(o.pricingScore) ? `${o.pricingScore} / 10` : "-", best(o => isNum(o.pricingScore) ? o.pricingScore : NaN)],
+    ["Ecosystem score", o => isNum(o.ecoScore) ? `${o.ecoScore} / 10` : "-", best(o => isNum(o.ecoScore) ? o.ecoScore : NaN)],
     ["From today's office", o => esc(homeTxt(o)), best(o => -homeKm(o))],
     ["Micro-market", o => zoneTag(ZONE[o.micro])],
     ["Nearest open rail", o => { const r = nearestOpen(o); return `${esc(r.s.name)} (${esc(r.s.lineName)}) · ${fmtM(r.d)}`; }, best(o => -nearestOpen(o).d)],
