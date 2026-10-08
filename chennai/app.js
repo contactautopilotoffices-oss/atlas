@@ -157,6 +157,16 @@ const reach = (o, kinds) => catchOf(o).reduce((t, r, i) => t + kinds.reduce((u, 
 const talentRaw = (o) => reach(o, ["edu", "res"]);
 const studioRaw = (o) => reach(o, ["studio"]);
 const nearestStudio = (p) => nearest(p, PL.filter(x => x.kind === "studio"));
+/* Studio talent is only mentioned where a building has a studio within 30
+   minutes; where there is none, the page says nothing rather than "0". */
+const hasStudios = (o) => upTo(catchOf(o), 1, "studio") > 0;
+/* MTC bus stops near the list (CHN_BUS in data.js): the nearest one to each
+   building and how many MTC routes call there. */
+const BUSD = window.CHN_BUS || { stops: [] };
+const BUS = (BUSD.stops || []).map(([name, lat, lng, routes], i) => ({ id: "bus" + i, name, lat, lng, routes }));
+const nearestBus = (p) => BUS.length ? nearest(p, BUS) : null;
+const routesTxt = (n) => n ? `about ${n} MTC route${n === 1 ? "" : "s"}` : "MTC stop";
+const busWalk = (b) => b.d <= 1.2 ? `${walkMin(b.d)} min walk` : "a short ride";
 const exKm = (o) => km(o, EX);
 /* Distance from today's office by road: the sheet's figure where it gives
    one, otherwise the straight line with the road factor. */
@@ -246,16 +256,17 @@ const topParts = () => PARTS.slice().sort((a, b) => S.lv[b.key] - S.lv[a.key]).f
    camera; distance lines, rings and satellite are one click away. */
 const S = {
   tab: "overview", sel: null, hov: null, pair: null, shot: "close", sort: "rank", preset: "balanced", sheet: "half",
-  lv: { ...PRESETS.balanced.lv }, filters: new Set(), auto: new Set(),
-  layers: { existing: true, zones: true, rail: true, future: true, links: false, studio: false, it: false, edu: false, res: false, rings: false, sat: false }
+  lv: { ...PRESETS.balanced.lv }, filters: new Set(), auto: new Set(), only: new Set(),
+  layers: { existing: true, zones: true, rail: true, future: true, bus: true, links: false, studio: false, it: false, edu: false, res: false, rings: false, sat: false }
 };
 /* Filters: the sheet's fit groups (any of those ticked) and rail on foot. */
 const FIT_FILTERS = Object.entries(FITS).map(([k, f]) => ({ key: k, label: f.label, test: o => o.fit === k })).filter(f => O.some(f.test) && cmsOn("filter:" + f.key));
 const OTHER_FILTERS = [{ key: "near", label: "Rail ≤ 1 km", test: o => nearestOpen(o).d <= 1 }].filter(f => cmsOn("filter:" + f.key));
 for (const k of Object.keys(S.layers)) if (!cmsOn("layer:" + k)) S.layers[k] = false;
+/* S.only is the map bar's property picker: empty means every property. */
 const passes = (o) => {
   const on = [...S.filters], fits = on.filter(k => FITS[k]), other = on.filter(k => !FITS[k]);
-  return (fits.length === 0 || fits.includes(o.fit)) && other.every(k => OTHER_FILTERS.find(f => f.key === k).test(o));
+  return (S.only.size === 0 || S.only.has(o.id)) && (fits.length === 0 || fits.includes(o.fit)) && other.every(k => OTHER_FILTERS.find(f => f.key === k).test(o));
 };
 const byRank = (a, b) => a.n - b.n;
 const RANKED = () => O.slice().sort(byRank);
@@ -628,6 +639,15 @@ function addLayers() {
     "text-font": ["DIN Pro Regular", "Arial Unicode MS Regular"], "text-offset": [0, .95], "text-anchor": "top", "text-optional": true, "text-max-width": 9 },
     paint: { "text-color": ["get", "color"], "text-halo-color": "#fff", "text-halo-width": 1.3 } });
 
+  /* MTC bus stops: from street-level zoom only, so the city view stays clean */
+  map.addSource("bus", { type: "geojson", data: FC(BUS.map(b => pt(b.lng, b.lat, { id: b.id, name: b.name, routes: b.routes }))) });
+  add({ id: "bus-stop", type: "circle", source: "bus", minzoom: 12, paint: {
+    "circle-radius": ["interpolate", ["linear"], ["zoom"], 12, 2.4, 15, 5.5], "circle-color": "#1d6fa5",
+    "circle-stroke-color": "#fff", "circle-stroke-width": 1.2 } });
+  add({ id: "bus-label", type: "symbol", source: "bus", minzoom: 14.2, layout: { "text-field": ["get", "name"], "text-size": 10,
+    "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"], "text-offset": [0, .9], "text-anchor": "top", "text-optional": true, "text-max-width": 8 },
+    paint: { "text-color": "#1d4f73", "text-halo-color": "#fff", "text-halo-width": 1.3 } });
+
   /* links between options, and to the current office */
   map.addSource("links", { type: "geojson", data: linkFC() });
   map.addSource("links-lbl", { type: "geojson", data: linkFC() });
@@ -689,6 +709,7 @@ const LAYERS = [
   { key: "zones", label: "Micro-markets", sw: `<span class="sw" style="height:9px;background:rgba(163,80,44,.18);border:1px dashed #a3502c"></span>`, ids: ["zones-fill", "zones-line", "zones-label"] },
   { key: "rail", label: "Rail open", sw: `<span class="sw" style="background:linear-gradient(90deg,#3281C4 25%,#53B848 25% 50%,#FF9900 50% 75%,#6E6E6E 75%)"></span>`, ids: ["rail-open", "rail-casing", "st-open"] },
   { key: "future", label: "Upcoming metro (indicative)", sw: `<span class="sw" style="background:repeating-linear-gradient(90deg,#800080 0 3px,transparent 3px 5px,#FF0000 5px 8px,transparent 8px 10px,#e0b800 10px 13px,transparent 13px 15px)"></span>`, ids: ["rail-plan", "rail-plan-label", "st-plan", "st-plan-m"] },
+  { key: "bus", label: "Bus stops", sw: `<span class="dot" style="background:#1d6fa5;box-shadow:inset 0 0 0 1.5px #fff,0 0 0 1px #1d6fa5"></span>`, ids: ["bus-stop", "bus-label"] },
   { key: "links", label: "Distances", sw: `<span class="sw" style="background:repeating-linear-gradient(90deg,#6c5b4d 0 3px,transparent 3px 6px)"></span>`, ids: ["links", "links-label"] },
   { key: "studio", label: "VFX studios", sw: `<span class="dot" style="background:${COL.studio}"></span>` },
   { key: "it", label: "IT parks", sw: `<span class="dot" style="background:${COL.it}"></span>` },
@@ -698,6 +719,7 @@ const LAYERS = [
   { key: "sat", label: "Satellite", sw: `<span class="dot" style="background:linear-gradient(135deg,#5b6b4a,#a39a7a 55%,#3f4f5f)"></span>`, ids: ["sat"] }
 ];
 const LAYER_HINT = {
+  bus: `MTC bus stops near the list, with how many routes call there (${BUSD.credit || "MTC timetable"}). They show once you zoom in to street level.`,
   sat: `The newest satellite imagery under the map: ${M.imagery ? `${M.imagery.name}, ${M.imagery.detail}, captured Feb to Mar 2026` : "Esri World Imagery"}. Turns off the 3D buildings so the roofs show.`,
   existing: "The current office at KRC Commerzone, Porur, with a dashed line and the distance to the open option.",
   zones: "The six micro-markets the shortlist sits in. Outlines are indicative.",
@@ -773,10 +795,11 @@ function wireMap() {
     map.on("mouseleave", layer, () => { map.getCanvas().style.cursor = ""; pop.remove(); });
   };
   hover("opt", p => { const o = O.find(x => x.id === p.id), r = nearestOpen(o), f = fitOf(o);
-    return `<div class="pop">${tile(o, "pop")}<div><b>${nn(o)} · ${esc(o.name)}</b><br>${f ? `${esc(f.label)} · ` : ""}${esc(o.sheetMicro)}<br>${esc(homeTxt(o))}<br>${fmtM(r.d)} to ${esc(r.s.name)} (${esc(r.s.lineName)})</div></div>`; });
+    return `<div class="pop">${tile(o, "pop")}<div><b>${nn(o)} · ${esc(o.name)}</b><br>${f ? `${esc(f.label)} · ` : ""}${esc(o.sheetMicro)}<br>${esc(homeTxt(o))}<br>${fmtM(r.d)} to ${esc(r.s.name)} (${esc(r.s.lineName)})${(b => b ? `<br>${fmtM(b.d)} to ${esc(b.s.name)} bus stop` : "")(nearestBus(o))}</div></div>`; });
   hover("places", p => { const x = PL.find(y => y.id === p.id);
     const kind = { edu: "Institute", res: "Residential belt", studio: "VFX / post studio", it: "IT park", hub: "Transport" }[x.kind];
     return `<b>${esc(x.name)}</b>${x.sub ? `<br>${esc(x.sub)}` : ""}<br><span style="color:#6c5b4d">${kind}</span><br>${esc(x.note)}`; });
+  hover("bus-stop", p => `<b>${esc(p.name)}</b><br>Bus stop · ${esc(routesTxt(+p.routes))}`);
   hover("st-open", p => `<b>${esc(p.name)}</b><br>${esc(p.line)} · open`);
   hover("st-plan", p => `<b>${esc(p.name)}</b> <span style="color:#6c5b4d">upcoming metro</span><br>${esc(p.line)} · not open yet${p.target ? `<br>${esc(p.target)}` : ""}<br><span style="color:#6c5b4d">Position indicative</span>`);
   hover("ex-pin", () => { const r = nearestOpen(EX), o = S.sel && O.find(x => x.id === S.sel);
@@ -868,7 +891,7 @@ function renderList() {
       <div>
         <div class="nm"><span class="no">${nn(o)}</span>${esc(o.name)}</div>
         <div class="loc">${fitBadge(o)} ${esc(o.sheetMicro)}</div>
-        <div class="facts"><span title="From the current office by road">${isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(homeKm(o))} · ${esc(homeMin(o))}</span><span title="Nearest open rail station">${fmtM(r.d)} to rail</span>${flagChip(o)}</div>
+        <div class="facts"><span title="From the current office by road">${isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(homeKm(o))} · ${esc(homeMin(o))}</span><span title="Nearest open rail station">${fmtM(r.d)} to rail</span>${(b => b ? `<span title="Nearest MTC bus stop: ${esc(b.s.name)}">${fmtM(b.d)} to bus</span>` : "")(nearestBus(o))}${flagChip(o)}</div>
       </div>
       <span class="score" title="Fit to your priorities, out of 100">${score(o)}</span>
     </button>`;
@@ -894,6 +917,7 @@ function wireBoard() {
     goTab(t.dataset.t);
   });
   $("#layers").addEventListener("click", e => {
+    const pb = e.target.closest("[data-pop]"); if (pb) { openPop(pb, pb.dataset.pop); renderLayers(); return; }
     const b = e.target.closest("[data-l]"); if (!b) return;
     S.auto.delete(b.dataset.l);
     S.layers[b.dataset.l] = !S.layers[b.dataset.l]; renderLayers(); applyLayerVisibility();
@@ -919,7 +943,8 @@ function wireBoard() {
   });
   $("#lightbox").addEventListener("click", () => $("#lightbox").classList.remove("on"));
   $("#cmp-x").addEventListener("click", () => $("#cmp").classList.remove("on"));
-  addEventListener("keydown", e => { if (e.key === "Escape") { $("#cmp").classList.remove("on"); $("#lightbox").classList.remove("on"); } });
+  addEventListener("keydown", e => { if (e.key === "Escape") { closePop(); $("#cmp").classList.remove("on"); $("#lightbox").classList.remove("on"); } });
+  document.addEventListener("pointerdown", e => { if (POP && !POP.contains(e.target) && !e.target.closest("[data-pop]")) closePop(); });
 }
 /* After the chooser changes: re-rank everything that depends on weights and
    keep the keyboard where it was. */
@@ -988,9 +1013,80 @@ function goTab(key) {
 function renderTabs() {
   $("#tabs").innerHTML = TABS.map(t => `<button class="tab ${S.tab === t.key && !S.sel ? "on" : ""}" data-t="${t.key}" type="button" data-hint="${esc(GUIDE[t.key] ? GUIDE[t.key].hint : "")}">${esc(t.label)}</button>`).join("");
 }
+/* The map bar: a property picker first, then the layers. Place layers
+   carry an i button that lists exactly which places they are. */
+const INFO = { studio: "VFX studios", it: "IT parks", edu: "Institutes", res: "Residential belts" };
 function renderLayers() {
-  $("#layers").innerHTML = LAYERS.filter(l => cmsOn("layer:" + l.key)).map(l => `<button class="chip lay ${S.layers[l.key] ? "on" : ""}" data-l="${l.key}" type="button" aria-pressed="${S.layers[l.key]}" data-hint="${esc((S.layers[l.key] ? "Hide: " : "Show: ") + LAYER_HINT[l.key])}">${l.sw}${esc(l.label)}</button>`).join("") +
-    `<span class="key note" title="Rail lines are drawn station to station; zone outlines are indicative">ⓘ schematic</span>`;
+  const n = S.only.size;
+  const props = `<button class="chip lay props ${n ? "on" : ""}" type="button" data-pop="props" aria-haspopup="dialog" aria-expanded="${POP && POP.dataset.for === "props"}" data-hint="Choose which properties show on the map and in the list.">`
+    + `<span class="dot" style="background:conic-gradient(${FITS.best.color} 0 33%,${FITS.value.color} 0 66%,${FITS.conditional.color} 0)"></span>${n ? `${n} of ${O.length} properties` : "All properties"} ▾</button>`;
+  $("#layers").innerHTML = props + LAYERS.filter(l => cmsOn("layer:" + l.key)).map(l => {
+    const chip = `<button class="chip lay ${S.layers[l.key] ? "on" : ""}" data-l="${l.key}" type="button" aria-pressed="${S.layers[l.key]}" data-hint="${esc((S.layers[l.key] ? "Hide: " : "Show: ") + LAYER_HINT[l.key])}">${l.sw}${esc(l.label)}</button>`;
+    return INFO[l.key] ? `<span class="lg">${chip}<button class="ib" type="button" data-pop="info:${l.key}" aria-haspopup="dialog" aria-label="Which ${esc(INFO[l.key].toLowerCase())} are these?" data-hint="Which ${esc(INFO[l.key].toLowerCase())} are these?">i</button></span>` : chip;
+  }).join("") + `<span class="key note" title="Rail lines are drawn station to station; zone outlines and upcoming metro are indicative">ⓘ schematic</span>`;
+}
+
+/* ---------------------------------------------- map bar pop-overs ------ */
+let POP = null;
+function closePop() { if (POP) { POP.remove(); POP = null; } }
+function openPop(btn, key) {
+  const again = POP && POP.dataset.for === key;
+  closePop(); if (again) return;
+  const el = document.createElement("div");
+  el.className = "lpop"; el.setAttribute("role", "dialog"); el.dataset.for = key;
+  document.body.appendChild(el); POP = el;
+  fillPop();
+  el.addEventListener("click", popClick); el.addEventListener("change", popClick);
+  const r = btn.getBoundingClientRect(), w = Math.min(340, innerWidth - 16);
+  el.style.width = w + "px";
+  el.style.left = Math.max(8, Math.min(r.left, innerWidth - w - 8)) + "px";
+  if (r.top < innerHeight / 2) { el.style.top = (r.bottom + 6) + "px"; el.style.maxHeight = (innerHeight - r.bottom - 18) + "px"; }
+  else { el.style.bottom = (innerHeight - r.top + 6) + "px"; el.style.maxHeight = (r.top - 18) + "px"; }
+  const first = el.querySelector("button,input"); if (first) first.focus({ preventScroll: true });
+}
+function fillPop() {
+  if (!POP) return;
+  const key = POP.dataset.for, all = S.only.size === 0;
+  if (key === "props") {
+    const groups = Object.entries(FITS).map(([k, f]) => ({ k, f, os: RANKED().filter(o => o.fit === k) })).filter(g => g.os.length);
+    const rest = RANKED().filter(o => !fitOf(o));
+    const row = (o) => `<label class="pi"><input type="checkbox" data-only-id="${o.id}" ${all || S.only.has(o.id) ? "checked" : ""}><span class="no">${nn(o)}</span>${esc(o.name)}<span class="note">${esc(o.sheetMicro)}</span></label>`;
+    POP.innerHTML = `<div class="lph"><b>Properties</b><button type="button" class="act ${all ? "pri" : ""}" data-only="all">All properties</button><button type="button" class="x" data-pop-x aria-label="Close">×</button></div>
+      ${groups.map(g => `<div class="pg"><button type="button" class="pgh" data-only-fit="${g.k}" data-hint="Show only the ${esc(g.f.label)} group"><span class="dot" style="background:${g.f.color}"></span>${esc(g.f.label)} <span class="note">only</span></button>${g.os.map(row).join("")}</div>`).join("")}
+      ${rest.length ? `<div class="pg"><div class="pgh">Added since the sheet</div>${rest.map(row).join("")}</div>` : ""}`;
+    return;
+  }
+  const kind = key.split(":")[1], list = PL.filter(p => p.kind === kind);
+  const near = (p) => { const n = nearest(p, O); return n ? `${fmtKm(n.d)} from ${n.s.name}` : ""; };
+  POP.innerHTML = `<div class="lph"><b>${esc(INFO[kind])} on the map <span class="note">(${list.length})</span></b><button type="button" class="act ${S.layers[kind] ? "pri" : ""}" data-show="${kind}">${S.layers[kind] ? "Showing" : "Show on map"}</button><button type="button" class="x" data-pop-x aria-label="Close">×</button></div>
+    <ol class="plist">${list.map(p => `<li><a href="#" class="pl" data-fly="${p.lng},${p.lat}" data-show-kind="${kind}"><b>${esc(p.name)}</b></a>${p.sub ? ` <span class="note">· ${esc(p.sub)}</span>` : ""}
+      <div class="note">${esc(p.note)}${p.size ? ` · ${esc(p.size)}` : ""}</div><div class="src">Nearest on the list: ${esc(near(p))}${p.src ? ` · ${cite(p.src)}` : ""}</div></li>`).join("")}</ol>
+    <p class="note" style="margin:8px 0 0">Positions of some ${esc(INFO[kind].toLowerCase())} are approximate. Click a name to fly there.</p>`;
+}
+function popClick(e) {
+  if (e.type === "click" && e.target.closest("[data-pop-x]")) { closePop(); return; }
+  const id = e.target.closest("[data-only-id]");
+  if (id && e.type === "change") {
+    const cur = S.only.size ? new Set(S.only) : new Set(O.map(o => o.id));
+    id.checked ? cur.add(id.dataset.onlyId) : cur.delete(id.dataset.onlyId);
+    if (!cur.size) { id.checked = true; return; }
+    S.only = cur.size === O.length ? new Set() : cur; afterOnly(); return;
+  }
+  if (e.type !== "click") return;
+  if (e.target.closest("[data-only]")) { S.only = new Set(); afterOnly(); return; }
+  const g = e.target.closest("[data-only-fit]"); if (g) { S.only = new Set(O.filter(o => o.fit === g.dataset.onlyFit).map(o => o.id)); afterOnly(); return; }
+  const sh = e.target.closest("[data-show]"); if (sh) { const k = sh.dataset.show; S.auto.delete(k); S.layers[k] = true; renderLayers(); applyLayerVisibility(); fillPop(); return; }
+  const fl = e.target.closest("[data-fly]");
+  if (fl) {
+    e.preventDefault();
+    const k = fl.dataset.showKind; if (!S.layers[k]) { S.auto.delete(k); S.layers[k] = true; renderLayers(); applyLayerVisibility(); fillPop(); }
+    const [lng, lat] = fl.dataset.fly.split(",").map(Number);
+    if (map) map.flyTo({ center: [lng, lat], zoom: 14.2, pitch: innerWidth > 860 ? 30 : 0, padding: padding(), duration: REDUCED() ? 0 : 1200, essential: true });
+  }
+}
+function afterOnly() {
+  if (S.sel && !passes(O.find(o => o.id === S.sel))) { S.sel = null; renderPanel(); pushRoute(); }
+  renderLayers(); renderList(); refreshMap(); fillPop(); fitAll();
 }
 
 /* ============================================================ guide =====
@@ -1005,7 +1101,7 @@ const GUIDE = {
   markets: { hint: "The micro-markets: rent, vacancy, who is there, pros and cons.",
     items: ["One card per micro-market, with the options that sit in it.",
       "Rents and vacancy are quoted from the source named under each figure, with its date."] },
-  connect: { hint: "How people get to each option, today and once Phase 2 opens.",
+  connect: { hint: "How people get to each option: rail and bus today, and the metro once Phase 2 opens.",
     items: ["The nearest open metro, MRTS or suburban station for every option, and how you get from it.",
       "The nearest Phase 2 metro station under construction, with its reported target.",
       "Rail open and Upcoming metro in the map bar show the lines; upcoming routes and stations are indicative."] },
@@ -1126,8 +1222,9 @@ function insightsHTML() {
     <span class="l">${esc(c.l)}</span><span class="v">${esc(c.v)}</span><span class="s">${esc(c.s)}</span></button>`).join("")}</div>`;
 }
 function verdictHTML(o, p) {
-  const good = PARTS.filter(x => p[x.key] >= .8).map(x => x.label);
-  const weak = PARTS.filter(x => p[x.key] <= .3).map(x => x.label);
+  const parts = PARTS.filter(x => x.key !== "studios" || hasStudios(o));
+  const good = parts.filter(x => p[x.key] >= .8).map(x => x.label);
+  const weak = parts.filter(x => p[x.key] <= .3).map(x => x.label);
   return `<div class="verdict">${good.map(g => `<span class="vd up">✓ ${esc(g)}</span>`).join("")}${weak.map(w => `<span class="vd dn">! ${esc(w)}</span>`).join("")}</div>`;
 }
 
@@ -1161,11 +1258,11 @@ function renderConnect() {
   $("#p-head").insertAdjacentHTML("beforeend", actions());
   const air = (TR.anchors || []).find(a => a.id === "airport"), cen = (TR.anchors || []).find(a => a.id === "central");
   const rows = O.slice().sort((a, b) => nearestOpen(a).d - nearestOpen(b).d).map(o => {
-    const r = nearestOpen(o), f = nearestPlan(o);
+    const r = nearestOpen(o), f = nearestPlan(o), b = nearestBus(o);
     return `<tr><td>${optLink(o)}<br>${zoneTag(ZONE[o.micro])}</td>
       <td><b class="num">${fmtM(r.d)}</b> to ${esc(r.s.name)}<br><span class="note">${esc(r.s.lineName)} · ${esc(accessWord(r.d))}</span></td>
       <td>${f ? `<b class="num">${fmtM(f.d)}</b> to ${esc(f.s.name)}<br><span class="note">${esc(f.s.lineName)}${f.s.target ? ` · ${esc(f.s.target)}` : ""}</span>` : "-"}</td>
-      ${air ? `<td class="num">${fmtKm(km(o, air))}<br><span class="note">~${driveMin(km(o, air))} min</span></td>` : ""}</tr>`;
+      <td>${b ? `<b class="num">${fmtM(b.d)}</b> to ${esc(b.s.name)}<br><span class="note">${esc(busWalk(b))} · ${esc(routesTxt(b.s.routes))}</span>` : "-"}</td></tr>`;
   }).join("");
   const lines = LINES.map(L => {
     const open = L.stations.filter(s => s.open).length;
@@ -1174,8 +1271,8 @@ function renderConnect() {
   }).join("");
   $("#p-body").innerHTML = `
     <h3 style="margin-top:14px">Nearest station for each option</h3>
-    <table class="ring-tbl"><thead><tr><th style="width:26%">Option</th><th>Nearest open station</th><th>Nearest Phase 2 metro</th>${air ? `<th class="num">Airport</th>` : ""}</tr></thead><tbody>${rows}</tbody></table>
-    <p class="note">Straight-line distance from the pin to the station. Walk time at 80 m a minute where it is under 1.2 km. ${esc(METHOD)}</p>
+    <table class="ring-tbl"><thead><tr><th style="width:26%">Option</th><th>Nearest open station</th><th>Nearest upcoming metro</th><th>Nearest bus stop</th></tr></thead><tbody>${rows}</tbody></table>
+    <p class="note">Straight-line distance from the pin to the station or stop. Walk time at 80 m a minute where it is under 1.2 km. Upcoming metro stations are indicative. Bus stops: ${cite(BUSD.src, BUSD.credit || "MTC")}. ${esc(METHOD)}</p>
     <h3>From the current office</h3>
     <p class="vsx">${esc(EX.name)} is ${fmtM(nearestOpen(EX).d)} from ${esc(nearestOpen(EX).s.name)} (${esc(nearestOpen(EX).s.lineName)})${nearestPlan(EX) ? ` and ${fmtM(nearestPlan(EX).d)} from ${esc(nearestPlan(EX).s.name)} on ${esc(nearestPlan(EX).s.lineName)}` : ""}.${cen ? ` Chennai Central is ${fmtKm(km(EX, cen))} away.` : ""}</p>
     <h3>The network</h3>
@@ -1255,7 +1352,7 @@ function renderTalent() {
   $("#p-head").insertAdjacentHTML("beforeend", actions());
   const rows = O.slice().sort((a, b) => (talentRaw(b) + studioRaw(b)) - (talentRaw(a) + studioRaw(a)) || a.n - b.n).map(o => {
     const c = catchOf(o), ns = nearestStudio(o);
-    return `<tr><td>${optLink(o)}</td><td class="num">${upTo(c, 1, "edu")}</td><td class="num">${upTo(c, 1, "res")}</td><td class="num"><b>${upTo(c, 1, "studio")}</b> <span class="note">/ ${upTo(c, 2, "studio")}</span></td><td class="num">${upTo(c, 0, "it")}</td><td>${ns ? `${esc(ns.s.name)}<br><span class="note">${fmtKm(ns.d)}</span>` : "-"}</td></tr>`;
+    return `<tr><td>${optLink(o)}</td><td class="num">${upTo(c, 1, "edu")}</td><td class="num">${upTo(c, 1, "res")}</td><td class="num">${upTo(c, 2, "studio") ? `<b>${upTo(c, 1, "studio")}</b> <span class="note">/ ${upTo(c, 2, "studio")}</span>` : `<span class="note">-</span>`}</td><td class="num">${upTo(c, 0, "it")}</td><td>${ns ? `${esc(ns.s.name)}<br><span class="note">${fmtKm(ns.d)}</span>` : "-"}</td></tr>`;
   }).join("");
   const ex = catchOf(EX);
   const listOf = (kind, dotVar) => PL.filter(p => p.kind === kind).map(p => `<div class="fact"><span class="dot" style="background:var(${dotVar})"></span><span class="k">${esc(p.name)}</span> <span class="note">${esc(p.sub || "")}</span><br><span class="note">${esc(p.note)}${p.size ? ` · ${esc(p.size)}` : ""} ${p.src ? cite(p.src) : ""}</span></div>`).join("") || `<p class="note">None mapped.</p>`;
@@ -1329,14 +1426,15 @@ function renderConclusion() {
   const firm = gap >= 4 ? "a clear lead" : gap >= 1.5 ? "a modest lead" : "a lead within a point or two, so treat the top two as joint";
   const clean = ranked.find(o => !o.flag);
   const leadStrong = PARTS.filter(x => p[x.key] >= .75 && S.lv[x.key] > 0).map(x => x.noun);
-  const leadWeak = PARTS.filter(x => p[x.key] <= .35 && S.lv[x.key] > 0).map(x => x.noun);
+  const leadWeak = PARTS.filter(x => p[x.key] <= .35 && S.lv[x.key] > 0 && (x.key !== "studios" || hasStudios(lead))).map(x => x.noun);
+  const lb = nearestBus(lead);
   $("#p-body").innerHTML = `
     <div class="verd" style="margin-top:14px">
       <div class="l">The answer on your priorities${pri.length ? ` · led by ${esc(pri.join(" and "))}` : ""}</div>
       <div class="h">${esc(lead.name)}, ${esc(lead.sheetMicro)}</div>
       <p>${score(lead)}/100, ${esc(firm)} over ${optLinkLight(second)} (${score(second)}) and ${optLinkLight(third)} (${score(third)}). ${sheetLine}</p>
       ${lead.reason ? `<p><i>${esc(lead.reason)}</i></p>` : ""}
-      <p>${esc(homeTxt(lead))} from today's office; ${fmtM(r.d)} to ${esc(r.s.name)} on ${esc(r.s.lineName)}${f ? `, ${fmtM(f.d)} to ${esc(f.s.name)} on ${esc(f.s.lineName)}${f.s.target ? ` (${esc(f.s.target)})` : ""}` : ""}. Within 30 minutes: ${plural(upTo(c, 1, "edu"), "institute")}, ${plural(upTo(c, 1, "res"), "residential belt")} and ${plural(upTo(c, 1, "studio"), "studio")}.</p>
+      <p>${esc(homeTxt(lead))} from today's office; ${fmtM(r.d)} to ${esc(r.s.name)} on ${esc(r.s.lineName)}${f ? `, ${fmtM(f.d)} to ${esc(f.s.name)} on ${esc(f.s.lineName)}${f.s.target ? ` (${esc(f.s.target)})` : ""}` : ""}. ${lb ? ` The nearest bus stop is ${esc(lb.s.name)}, ${fmtM(lb.d)} away (${esc(routesTxt(lb.s.routes))}).` : ""} Within 30 minutes: ${hasStudios(lead) ? `${plural(upTo(c, 1, "edu"), "institute")}, ${plural(upTo(c, 1, "res"), "residential belt")} and ${plural(upTo(c, 1, "studio"), "studio")}` : `${plural(upTo(c, 1, "edu"), "institute")} and ${plural(upTo(c, 1, "res"), "residential belt")}`}.</p>
       ${leadStrong.length || leadWeak.length ? `<p>${leadStrong.length ? `Strong on ${esc(listJoin(leadStrong))}.` : ""} ${leadWeak.length ? `Weaker on ${esc(listJoin(leadWeak))}, which is the trade-off to accept.` : ""}</p>` : ""}
       ${lead.flag ? `<p class="vchk"><b>Check first.</b> ${esc(lead.flag.v)} ${clean && clean.id !== lead.id ? `If it is not available, the best option without an open question is ${optLinkLight(clean)} (${score(clean)}/100, ${esc(clean.sheetMicro)}).` : ""}</p>` : ""}
     </div>
@@ -1363,7 +1461,7 @@ function gainsOver(a, b) {
   const ta = upTo(ca, 1, "edu") + upTo(ca, 1, "res"), tb = upTo(cb, 1, "edu") + upTo(cb, 1, "res");
   if (ta > tb) out.push(`a larger talent pool (${ta} against ${tb} institutes and belts within 30 min)`);
   const sa = upTo(ca, 1, "studio"), sb = upTo(cb, 1, "studio");
-  if (sa > sb) out.push(`more studios nearby (${sa} against ${sb} within 30 min)`);
+  if (sa > sb) out.push(sb ? `more studios nearby (${sa} against ${sb} within 30 min)` : `studios nearby (${sa} within 30 min)`);
   if (pa.future - pb.future > .1) out.push("a closer Phase 2 metro station");
   if (pa.price - pb.price > .1) out.push(isNum(a.pricingScore) && isNum(b.pricingScore) ? `a better pricing score (${a.pricingScore} against ${b.pricingScore} out of 10)` : "a better price");
   if (pa.eco - pb.eco > .1) out.push("a stronger ecosystem score");
@@ -1456,7 +1554,8 @@ function renderOption(o) {
   const sat = satUrl(o, 640, 250, 16.6);
   const others = O.filter(x => x.id !== o.id).map(x => ({ x, d: km(o, x) })).sort((a, b) => a.d - b.d);
   const nbMax = others.length ? others[Math.min(2, others.length - 1)].d : 1;
-  const ringRows = c.map((rr, i) => `<tr><td>≤ ${rr.min} min <span class="note">(${rr.km.toFixed(1)} km)</span></td><td class="num">${upTo(c, i, "edu")}</td><td class="num">${upTo(c, i, "res")}</td><td class="num">${upTo(c, i, "studio")}</td><td class="num">${upTo(c, i, "it")}</td></tr>`).join("");
+  const studios = upTo(c, 2, "studio") > 0, b = nearestBus(o), bx = nearestBus(EX);
+  const ringRows = c.map((rr, i) => `<tr><td>≤ ${rr.min} min <span class="note">(${rr.km.toFixed(1)} km)</span></td><td class="num">${upTo(c, i, "edu")}</td><td class="num">${upTo(c, i, "res")}</td>${studios ? `<td class="num">${upTo(c, i, "studio")}</td>` : ""}<td class="num">${upTo(c, i, "it")}</td></tr>`).join("");
   const ex = catchOf(EX), mo = nearestOpen(o), mx = nearestOpen(EX);
   const delta = (a, b, moreIsGood) => { const v = a - b; if (!v) return `<span class="dl">same</span>`; return `<span class="dl ${(v > 0) === moreIsGood ? "up" : "dn"}">${v > 0 ? "+" : "−"}${Math.abs(v)}</span>`; };
   const mDelta = Math.round((mo.d - mx.d) * 1000);
@@ -1472,12 +1571,12 @@ function renderOption(o) {
   $("#p-body").innerHTML = `
     ${sat ? `<div class="hero"><img src="${sat}" alt="Satellite view of ${esc(o.name)}" onerror="this.closest('.hero').remove()"><span class="ph">Satellite${imgDate(o) ? ` · captured <span data-img-date="${o.id}">${fmtDate(imgDate(o))}</span>` : ""} · Esri, Vantor</span></div>` : ""}
     <div class="kpis">
-      <div class="kpi"><div class="l">Pricing score</div><div class="v">${isNum(o.pricingScore) ? `${o.pricingScore}<span style="font-size:13px;color:var(--mut)">/10</span>` : "-"}</div><div class="s">on the revised sheet</div></div>
-      <div class="kpi"><div class="l">Ecosystem score</div><div class="v">${isNum(o.ecoScore) ? `${o.ecoScore}<span style="font-size:13px;color:var(--mut)">/10</span>` : "-"}</div><div class="s">on the revised sheet</div></div>
+      <div class="kpi"><div class="l">Sheet scores</div><div class="v">${isNum(o.pricingScore) ? `${o.pricingScore} · ${o.ecoScore}` : "-"}</div><div class="s">pricing · ecosystem, out of 10</div></div>
       <div class="kpi"><div class="l">From today's office</div><div class="v">${isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(homeKm(o))}</div><div class="s">${esc(homeMin(o))} by road</div></div>
-      <div class="kpi"><div class="l">Rail today</div><div class="v">${fmtM(r.d)}</div><div class="s">${esc(r.s.name)} · ${esc(r.s.lineName)}</div></div>
-      <div class="kpi"><div class="l">Metro coming</div><div class="v">${f ? fmtM(f.d) : "-"}</div><div class="s">${f ? `${esc(f.s.name)} · ${esc(f.s.lineName)}${f.s.target ? ` · ${esc(f.s.target)}` : ""}` : ""}</div></div>
       <div class="kpi"><div class="l">Fit</div><div class="v">${score(o)}<span style="font-size:13px;color:var(--mut)">/100</span></div><div class="s">#${rank} of ${O.length} on ${esc(presetName().toLowerCase())}</div></div>
+      <div class="kpi"><div class="l">Rail today</div><div class="v">${fmtM(r.d)}</div><div class="s">${esc(r.s.name)} · ${esc(r.s.lineName)}</div></div>
+      <div class="kpi"><div class="l">Bus stop</div><div class="v">${b ? fmtM(b.d) : "-"}</div><div class="s">${b ? `${esc(b.s.name)} · ${esc(busWalk(b))} · ${esc(routesTxt(b.s.routes))}` : ""}</div></div>
+      <div class="kpi"><div class="l">Upcoming metro</div><div class="v">${f ? fmtM(f.d) : "-"}</div><div class="s">${f ? `${esc(f.s.name)} · ${esc(f.s.lineName)}${f.s.target ? ` · ${esc(f.s.target)}` : ""} · indicative` : ""}</div></div>
     </div>
 
     ${flagBox(o)}
@@ -1491,17 +1590,18 @@ function renderOption(o) {
     <p class="vsx"><b>${esc(homeTxt(o))}</b> from ${esc(EX.name)}. ${esc(moveRead(o))}</p>
     <table class="ring-tbl"><thead><tr><th></th><th>${esc(EX.name)} (today)</th><th>${esc(o.name)}</th></tr></thead><tbody>
       <tr><td>Nearest open rail</td><td>${esc(mx.s.name)} · ${fmtM(mx.d)}</td><td>${esc(mo.s.name)} · ${fmtM(mo.d)} ${mTxt}</td></tr>
+      ${b && bx ? `<tr><td>Nearest bus stop</td><td>${esc(bx.s.name)} · ${fmtM(bx.d)}</td><td>${esc(b.s.name)} · ${fmtM(b.d)}</td></tr>` : ""}
       <tr><td>Institutes ≤30 min</td><td class="num">${upTo(ex, 1, "edu")}</td><td class="num">${upTo(c, 1, "edu")} ${delta(upTo(c, 1, "edu"), upTo(ex, 1, "edu"), true)}</td></tr>
       <tr><td>Residential belts ≤30 min</td><td class="num">${upTo(ex, 1, "res")}</td><td class="num">${upTo(c, 1, "res")} ${delta(upTo(c, 1, "res"), upTo(ex, 1, "res"), true)}</td></tr>
-      <tr><td>Studios ≤30 min</td><td class="num">${upTo(ex, 1, "studio")}</td><td class="num">${upTo(c, 1, "studio")} ${delta(upTo(c, 1, "studio"), upTo(ex, 1, "studio"), true)}</td></tr>
+      ${hasStudios(o) ? `<tr><td>Studios ≤30 min</td><td class="num">${upTo(ex, 1, "studio")}</td><td class="num">${upTo(c, 1, "studio")} ${delta(upTo(c, 1, "studio"), upTo(ex, 1, "studio"), true)}</td></tr>` : ""}
     </tbody></table>
 
     <h3>Fit, part by part</h3>
-    <div class="bars">${PARTS.map(x => `<div class="bar" title="${esc(x.of)}"><span>${esc(x.label)}</span><div class="tr"><div class="fl" style="width:${Math.round(p[x.key] * 100)}%"></div></div><span class="val">${w[x.key] ? `${(p[x.key] * 100).toFixed(0)} · ×${w[x.key]}` : "skipped"}</span></div>`).join("")}</div>
+    <div class="bars">${PARTS.filter(x => x.key !== "studios" || hasStudios(o)).map(x => `<div class="bar" title="${esc(x.of)}"><span>${esc(x.label)}</span><div class="tr"><div class="fl" style="width:${Math.round(p[x.key] * 100)}%"></div></div><span class="val">${w[x.key] ? `${(p[x.key] * 100).toFixed(0)} · ×${w[x.key]}` : "skipped"}</span></div>`).join("")}</div>
     <p class="note">Each bar is the measure out of 100; ×n is the weight from <a href="#" data-tab="priorities">Your priorities</a>.</p>
 
     <h3>Talent within reach</h3>
-    <table class="ring-tbl"><thead><tr><th>Drive time</th><th class="num">Institutes</th><th class="num">Homes</th><th class="num">Studios</th><th class="num">IT parks</th></tr></thead><tbody>${ringRows}</tbody></table>
+    <table class="ring-tbl"><thead><tr><th>Drive time</th><th class="num">Institutes</th><th class="num">Homes</th>${studios ? `<th class="num">Studios</th>` : ""}<th class="num">IT parks</th></tr></thead><tbody>${ringRows}</tbody></table>
     <p class="note" style="margin-top:6px">The names are on <a href="#" data-tab="talent">Talent</a>. ${esc(METHOD)}</p>
 
     <h3>Nearest other options</h3>
@@ -1535,10 +1635,11 @@ function renderCompare() {
     ["From today's office", o => esc(homeTxt(o)), best(o => -homeKm(o))],
     ["Micro-market", o => zoneTag(ZONE[o.micro])],
     ["Nearest open rail", o => { const r = nearestOpen(o); return `${esc(r.s.name)} (${esc(r.s.lineName)}) · ${fmtM(r.d)}`; }, best(o => -nearestOpen(o).d)],
-    ["Nearest Phase 2 metro", o => { const f = nearestPlan(o); return f ? `${esc(f.s.name)} · ${fmtM(f.d)}${f.s.target ? ` · ${esc(f.s.target)}` : ""}` : "-"; }, best(o => futureV(o))],
+    ["Nearest bus stop", o => { const b = nearestBus(o); return b ? `${esc(b.s.name)} · ${fmtM(b.d)} <span class="note">(${esc(routesTxt(b.s.routes))})</span>` : "-"; }, best(o => { const b = nearestBus(o); return b ? -b.d : NaN; })],
+    ["Nearest upcoming metro", o => { const f = nearestPlan(o); return f ? `${esc(f.s.name)} · ${fmtM(f.d)}${f.s.target ? ` · ${esc(f.s.target)}` : ""}` : "-"; }, best(o => futureV(o))],
     ["Institutes ≤30 min", o => String(upTo(catchOf(o), 1, "edu")), best(o => upTo(catchOf(o), 1, "edu"))],
     ["Residential belts ≤30 min", o => String(upTo(catchOf(o), 1, "res")), best(o => upTo(catchOf(o), 1, "res"))],
-    ["Studios ≤30 / ≤45 min", o => `${upTo(catchOf(o), 1, "studio")} / ${upTo(catchOf(o), 2, "studio")}`, best(studioRaw)],
+    ["Studios ≤30 / ≤45 min", o => upTo(catchOf(o), 2, "studio") ? `${upTo(catchOf(o), 1, "studio")} / ${upTo(catchOf(o), 2, "studio")}` : "-", best(studioRaw)],
     ...(air ? [["Airport", o => `${fmtKm(km(o, air))} · ~${driveMin(km(o, air))} min`, best(o => -km(o, air))]] : [])
   ];
   $("#cmp-body").innerHTML = `

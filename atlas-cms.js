@@ -35,7 +35,7 @@
     chennai: [].concat(
       F([["tab:markets", "Micro-markets"], ["tab:connect", "Connectivity"], ["tab:distance", "Distances"], ["tab:talent", "Talent"], ["tab:priorities", "Your priorities"], ["tab:conclusion", "Conclusion"], ["tab:compare", "Compare all"]], "Tabs"),
       F([["filter:best", "Best fit"], ["filter:value", "Value-driven fit"], ["filter:conditional", "Conditional fit"], ["filter:near", "Rail within 1 km"]], "Filters"),
-      F([["layer:existing", "Current office"], ["layer:zones", "Micro-markets"], ["layer:rail", "Rail open"], ["layer:future", "Upcoming metro (indicative)"], ["layer:links", "Distances"], ["layer:studio", "VFX studios"], ["layer:it", "IT parks"], ["layer:edu", "Institutes"], ["layer:res", "Homes"], ["layer:rings", "Drive rings"], ["layer:sat", "Satellite"]], "Map layers"),
+      F([["layer:existing", "Current office"], ["layer:zones", "Micro-markets"], ["layer:rail", "Rail open"], ["layer:future", "Upcoming metro (indicative)"], ["layer:bus", "Bus stops"], ["layer:links", "Distances"], ["layer:studio", "VFX studios"], ["layer:it", "IT parks"], ["layer:edu", "Institutes"], ["layer:res", "Homes"], ["layer:rings", "Drive rings"], ["layer:sat", "Satellite"]], "Map layers"),
       F([["preset:sheet", "Sheet scores only"], ["preset:team", "Keep the team"], ["preset:rail", "Commute by rail"], ["preset:hire", "Hire at scale"], ["preset:cost", "Keep cost down"], ["preset:future", "Built for 2030"]], "Priority presets")),
     indore: [].concat(
       F([["tab:priorities", "Priorities"], ["tab:talent", "Talent & catchment"], ["tab:transit", "Transit"], ["tab:market", "Market & incentives"], ["tab:deck", "Deck map"], ["tab:compare", "Compare all"]], "Tabs"),

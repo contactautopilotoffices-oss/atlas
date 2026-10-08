@@ -31,7 +31,7 @@
 })();
 </script>
 <script src="../config.js?v=chn1"></script>
-<script src="./data.js?v=chn4"></script>
+<script src="./data.js?v=chn5"></script>
 <style>
 /* Palette follows the Autopilot deck, as on the Indore study: espresso,
    cream and terracotta. Colour never carries meaning alone; every score,
@@ -292,6 +292,28 @@ table.mx tr.hl th,table.mx th.hl{color:var(--acc)}
 .chip.lay:not(.on){opacity:.75}
 .chip.lay.on{background:#fff;color:var(--ink);border-color:rgba(60,40,25,.28)}
 .sw{display:inline-block;width:18px;height:4px;border-radius:2px;vertical-align:3px;margin-right:6px}
+/* map bar: property picker, info buttons and their pop-overs */
+.chip.props{font-weight:600;color:var(--ink);opacity:1}
+.lg{display:inline-flex;align-items:stretch}
+.lg .chip{border-top-right-radius:0;border-bottom-right-radius:0;padding-right:8px}
+.ib{border:1px solid var(--line);border-left:0;background:rgba(255,255,255,.55);border-radius:0 999px 999px 0;min-height:28px;width:26px;padding:0;cursor:pointer;font-family:var(--serif);font-style:italic;font-weight:600;font-size:13px;color:var(--acc)}
+.ib:hover{background:#fff;color:var(--ink)}
+.lpop{position:fixed;z-index:70;background:var(--panel-solid);border:1px solid var(--line);border-radius:14px;box-shadow:var(--e2);padding:10px 12px 12px;overflow:auto;font-size:12.5px;color:var(--ink)}
+.lph{display:flex;align-items:center;gap:8px;position:sticky;top:-10px;background:var(--panel-solid);padding:2px 0 8px;margin-bottom:4px;border-bottom:1px solid var(--line2);z-index:1}
+.lph b{flex:1;font-size:13px}
+.lph .x{border:0;background:transparent;font-size:18px;line-height:1;cursor:pointer;color:var(--mut);padding:0 2px}
+.pg{margin:8px 0 2px}
+.pgh{display:flex;align-items:center;gap:6px;border:0;background:transparent;padding:4px 0;font:inherit;font-weight:600;cursor:pointer;color:var(--ink)}
+.pgh .dot{margin:0}
+.pi{display:grid;grid-template-columns:16px 20px minmax(0,1fr) auto;gap:6px;align-items:center;padding:5px 2px;border-radius:7px;cursor:pointer}
+.pi:hover{background:var(--line2)}
+.pi input{margin:0}
+.pi .no{font-family:var(--mono);font-size:10.5px;color:var(--acc)}
+.pi .note{font-size:11px;white-space:nowrap}
+.plist{margin:6px 0 0;padding-left:20px}
+.plist li{padding:6px 0;border-bottom:1px solid var(--line2);line-height:1.45}
+.pl{color:var(--ink);text-decoration:none}
+.pl:hover b{color:var(--acc);text-decoration:underline}
 
 /* compare overlay */
 #cmp{position:fixed;inset:0;z-index:60;background:rgba(31,22,16,.42);display:none;padding:20px}
@@ -402,7 +424,7 @@ table.cmp td.best{background:#f1e6d8;font-weight:600}
 /* ---------------- print ---------------- */
 @media print{
   html,body{overflow:visible;height:auto;background:#fff}
-  #map,#board,#layers,#top,#gate,#sheet-grip,.actions,.shots,.intro,.intro-min,#hint,#cmp,#lightbox,.back,.reopen,.grip,.fold{display:none!important}
+  #map,#board,#layers,#top,#gate,#sheet-grip,.actions,.shots,.intro,.intro-min,#hint,#cmp,#lightbox,.back,.reopen,.grip,.fold,.lpop{display:none!important}
   #panel{position:static;width:auto;height:auto;border:0;box-shadow:none;background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none}
   .pbody{overflow:visible;padding:0}
   .phead{padding:0 0 10px}
@@ -442,7 +464,9 @@ table.cmp td.best{background:#f1e6d8;font-weight:600}
   #map{inset:0;height:auto}
   #layers{left:6px;right:6px;bottom:auto;top:calc(var(--top-h) + 12px);padding:5px;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none}
   #layers::-webkit-scrollbar{display:none}
-  #layers .chip,#layers .key{flex:none}
+  #layers .chip,#layers .key,#layers .lg{flex:none}
+  .ib{min-height:40px;width:34px}
+  .pi{padding:9px 2px}
   #layers .key.note{display:none}
   #board{top:auto;left:0;right:0;bottom:calc(var(--sheet-h) + 6px);width:auto;height:auto;background:transparent;border:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;border-radius:0;transition:bottom .32s var(--ease),opacity .2s}
   body[data-sheet="full"] #board{opacity:0;pointer-events:none}
@@ -578,8 +602,8 @@ table.cmp td.best{background:#f1e6d8;font-weight:600}
 <script>
 /* Start through the CMS (published overrides, visit counts). If the CMS
    script is missing for any reason, start the app exactly as before. */
-if (window.AtlasCMS) AtlasCMS.boot("chennai", { app: "./app.js?v=chn4" });
-else { var s = document.createElement("script"); s.src = "./app.js?v=chn4"; document.body.appendChild(s); }
+if (window.AtlasCMS) AtlasCMS.boot("chennai", { app: "./app.js?v=chn5" });
+else { var s = document.createElement("script"); s.src = "./app.js?v=chn5"; document.body.appendChild(s); }
 </script>
 </body>
 </html>
