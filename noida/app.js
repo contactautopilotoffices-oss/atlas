@@ -23,8 +23,8 @@
    feature-state change (no data reload, so labels never re-place on hover),
    pin data is reloaded only when the selection or a filter changes, the
    camera never tilts past 58 degrees, and point-of-interest labels are off.
-   Buildings are raised to their height as on the old Noida view (see
-   addLayers), over the satellite.
+   The satellite view is Mapbox's own satellite style, with no buildings
+   drawn on top of the photo.
 
    data.js holds every fact and where it came from. This file only reads it.
    ============================================================================ */
@@ -233,24 +233,40 @@ function boot() {
   addEventListener("popstate", () => applyRoute(true));
   if (map && map.getSource("options")) { refreshMap(true); if (S.sel) select(S.sel, true, true); else fitAll(false); }
 }
-/* Mapbox Standard, the same basemap as the Chennai study, faded so the pins
-   lead. Shop and restaurant labels are off: they are what flickers in and
-   out while the map moves, and they add nothing to an office search. Its
-   own 3D objects are off; the buildings are drawn in addLayers instead. */
-const MAP_STYLE = "mapbox://styles/mapbox/standard";
-const basemap = () => ({ lightPreset: "day", theme: "faded", showPointOfInterestLabels: false, showTransitLabels: true, showPlaceLabels: true, showRoadLabels: true, show3dObjects: false });
+/* Two basemaps. Satellite (the default) is Mapbox Standard Satellite: the
+   photo with roads and names on it and no buildings drawn over the roofs.
+   The plain map is Mapbox Standard, as on the Chennai study, faded so the
+   pins lead, with flat building outlines and no 3D. On both, shop and
+   restaurant labels are off: they are what flickers in and out while the
+   map moves, and they add nothing to an office search. Switching between
+   them reloads the basemap, and addLayers puts this study's layers back.
+   NOI_MAP_STYLES ({ std, sat }) lets a test swap in local styles. */
+const STYLES = window.NOI_MAP_STYLES || { std: "mapbox://styles/mapbox/standard", sat: "mapbox://styles/mapbox/standard-satellite" };
+const IS_MAPBOX = !window.NOI_MAP_STYLES;
+const styleUrl = () => S.layers.sat ? STYLES.sat : STYLES.std;
+const basemap = () => S.layers.sat
+  ? { lightPreset: "day", showPointOfInterestLabels: false, showTransitLabels: true, showPlaceLabels: true, showRoadLabels: true }
+  : { lightPreset: "day", theme: "faded", showPointOfInterestLabels: false, showTransitLabels: true, showPlaceLabels: true, showRoadLabels: true, show3dObjects: false };
 function applyBasemap() {
+  if (!IS_MAPBOX) return;
   for (const [k, v] of Object.entries(basemap())) { try { map.setConfigProperty("basemap", k, v); } catch (e) {} }
+}
+let layered = false;
+function setSatellite() {
+  if (!map || !layered) return;
+  S.hov = null;
+  map.setStyle(styleUrl(), { diff: false });
 }
 function initMap() {
   mapboxgl.accessToken = window.MAPBOX_TOKEN;
-  const style = window.NOI_MAP_STYLE || MAP_STYLE;
   map = new mapboxgl.Map({
-    container: "map", style, center: M.center, zoom: M.zoom, pitch: 0, bearing: 0, maxPitch: 60,
+    container: "map", style: styleUrl(), center: M.center, zoom: M.zoom, pitch: 0, bearing: 0, maxPitch: 60,
     attributionControl: false, projection: "mercator", cooperativeGestures: false, antialias: innerWidth > 860,
-    renderWorldCopies: false, config: style === MAP_STYLE ? { basemap: basemap() } : undefined
+    renderWorldCopies: false, config: IS_MAPBOX ? { basemap: basemap() } : undefined
   });
-  if (style === MAP_STYLE) map.on("style.load", applyBasemap);
+  /* After a basemap switch the study's own layers are gone; put them back.
+     Click and hover handlers are tied to layer names, so they carry over. */
+  map.on("style.load", () => { applyBasemap(); if (layered && !map.getSource("options")) addLayers(); });
   let told = false;
   map.on("error", (e) => {
     const st = e && e.error && e.error.status;
@@ -260,7 +276,7 @@ function initMap() {
   });
   map.addControl(new mapboxgl.AttributionControl({ compact: true }), "bottom-right");
   map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "bottom-right");
-  map.on("load", () => { addLayers(); wireMap(); if (booted && S.sel) select(S.sel, true, true); else fitAll(false); });
+  map.on("load", () => { addLayers(); wireMap(); layered = true; if (booted && S.sel) select(S.sel, true, true); else fitAll(false); });
 }
 
 /* ------------------------------------------------------------ deep links --
@@ -379,31 +395,7 @@ function add(layer, before) {
   if (!map.getLayer(layer.id) && layer.slot) { const { slot, ...rest } = layer; try { map.addLayer(rest, before); } catch (e) {} }
 }
 function addLayers() {
-  /* satellite: a raster under the basemap's roads and labels, so streets
-     and names stay readable on top of the photo */
-  try {
-    map.addSource("sat", { type: "raster", url: "mapbox://mapbox.satellite", tileSize: 256 });
-    add({ id: "sat", type: "raster", source: "sat", slot: "bottom", layout: { visibility: S.layers.sat ? "visible" : "none" }, paint: { "raster-fade-duration": 200 } });
-  } catch (e) { console.warn("satellite", e.message); }
-
-  /* Buildings raised to their height, the same recipe as the old Noida view:
-     real footprints from Mapbox Streets, a quiet height-ramped colour and a
-     vertical gradient. They sit above the basemap's flat footprints, which
-     would otherwise lie white on top of the satellite, and below the place
-     and transit names. They rise as you zoom in from 13 to 14, so they
-     never pop in. */
-  try {
-    map.addSource("streets", { type: "vector", url: "mapbox://mapbox.mapbox-streets-v8" });
-    add({ id: "bldg-3d", type: "fill-extrusion", source: "streets", "source-layer": "building", minzoom: 13, slot: "top",
-      filter: ["all", ["==", ["get", "extrude"], "true"], ["!=", ["get", "underground"], "true"]],
-      paint: {
-        "fill-extrusion-color": ["interpolate", ["linear"], ["get", "height"], 0, "#d5d0c7", 60, "#ccd2d8", 150, "#e2e8ef"],
-        "fill-extrusion-height": ["interpolate", ["linear"], ["zoom"], 13, 0, 14, ["coalesce", ["get", "height"], ["get", "render_height"], 14]],
-        "fill-extrusion-base": ["interpolate", ["linear"], ["zoom"], 13, 0, 14, ["coalesce", ["get", "min_height"], ["get", "render_min_height"], 0]],
-        "fill-extrusion-opacity": 1, "fill-extrusion-vertical-gradient": true } });
-  } catch (e) { console.warn("buildings", e.message); }
-
-  /* zones (on the ground, under the buildings) */
+  /* zones, on the ground */
   map.addSource("zones", { type: "geojson", data: FC(Z.map(z => ({ type: "Feature", geometry: { type: "Polygon", coordinates: [zonePolygon(z)] }, properties: { key: z.key, color: z.color } }))) });
   map.addSource("zone-labels", { type: "geojson", data: FC(Z.map(z => pt(...zoneCentre(z), { label: z.label.toUpperCase() }))) });
   add({ id: "zones-fill", type: "fill", source: "zones", slot: "middle", paint: { "fill-color": ["get", "color"], "fill-opacity": .1 } });
@@ -501,7 +493,7 @@ function addLayers() {
 /* The layer chips double as the legend. */
 const LAYERS = [
   { key: "existing", label: "Today's office", sw: `<span class="dot" style="background:#2a1e16;box-shadow:inset 0 0 0 2.5px #2a1e16,inset 0 0 0 5px #fff"></span>`, ids: ["ex-pin", "ex-dot", "ex-label", "ex-link", "ex-link-label"] },
-  { key: "sat", label: "Satellite", sw: `<span class="sw" style="height:9px;background:linear-gradient(135deg,#55603f,#9a9474 45%,#4b5660)"></span>`, ids: ["sat"] },
+  { key: "sat", label: "Satellite", sw: `<span class="sw" style="height:9px;background:linear-gradient(135deg,#55603f,#9a9474 45%,#4b5660)"></span>` },
   { key: "zones", label: "Micro-markets", sw: `<span class="sw" style="height:9px;background:rgba(122,95,168,.18);border:1px dashed #7a5fa8"></span>`, ids: ["zones-fill", "zones-line", "zones-label"] },
   { key: "rail", label: "Metro", sw: `<span class="sw" style="background:linear-gradient(90deg,#2b6cb0 60%,#1aa3b8 60%)"></span>`, ids: ["rail-open", "rail-casing", "st-open", "st-label"] },
   { key: "links", label: "Distances", sw: `<span class="sw" style="background:repeating-linear-gradient(90deg,#4a3a2e 0 3px,transparent 3px 6px)"></span>`, ids: ["links", "links-label"] },
@@ -513,7 +505,7 @@ const LAYERS = [
 ];
 const LAYER_HINT = {
   existing: "Digitide's current office in Sector 58, with a dashed line and the straight-line distance to the open building.",
-  sat: "Mapbox satellite imagery under the streets, buildings and names. The capture date varies by area.",
+  sat: "Mapbox satellite imagery with the streets and names on it, and no buildings drawn over the roofs. Off shows the plain map. The capture date varies by area.",
   zones: "The five micro-markets the 20 buildings sit in. Outlines are indicative.",
   rail: "The Blue Line's Noida stations and the Aqua Line at Sector 51, in each line's colour. Drawn station to station.",
   links: "Lines to the three nearest buildings from the open one, or the pair you picked on the distance matrix.",
@@ -667,7 +659,8 @@ function wireBoard() {
   });
   $("#layers").addEventListener("click", e => {
     const b = e.target.closest("[data-l]"); if (!b) return;
-    S.layers[b.dataset.l] = !S.layers[b.dataset.l]; renderLayers(); applyLayerVisibility();
+    S.layers[b.dataset.l] = !S.layers[b.dataset.l]; renderLayers();
+    if (b.dataset.l === "sat") setSatellite(); else applyLayerVisibility();
   });
   $("#p-body").addEventListener("click", e => {
     const ix = e.target.closest("[data-intro-x]"); if (ix) { seenIntro.add(ix.dataset.introX); saveIntro(); ix.closest(".intro").outerHTML = introCard(ix.dataset.introX); return; }
