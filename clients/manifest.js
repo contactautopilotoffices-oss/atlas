@@ -23,5 +23,8 @@ window.CLIENT_MANIFEST = {
   "INDORE-AP":   { redirect: "/indore/",    passHash: "a4b32dba4f102ad7427f1651b09b05151026178ede1e5503f22f477b0ad2f45d" },
   /* Chennai office study, a separate app at /chennai/ with its own gate,
      built the same way as Indore: only the password's SHA-256 is stored. */
-  "CHENNAI-AP":  { redirect: "/chennai/",   passHash: "b617cb70f6c6ffda4062e5e585ca3318cf20aceebe2b837cd4bc1919084eef6b" }
+  "CHENNAI-AP":  { redirect: "/chennai/",   passHash: "b617cb70f6c6ffda4062e5e585ca3318cf20aceebe2b837cd4bc1919084eef6b" },
+  /* Whitefield atlas for Total Environment, a separate app at /whitefield/
+     with its own gate. Only a SHA-256 of the normalised password is stored. */
+  "TE-WHITEFIELD": { redirect: "/whitefield/", passHash: "c069467f5e0b9eae595ece10bcba43a548ecb2f30f9e1d65deed2bcc86c315a1" }
 };
