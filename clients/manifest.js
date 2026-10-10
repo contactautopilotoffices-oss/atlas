@@ -9,7 +9,10 @@ window.CLIENT_MANIFEST = {
   "CPDEMOACC":   { slug: "cp-delhi",         pass: "CP1234" },
   "INVDEMOACC":  { slug: "invesco-andheri",  pass: "INV1234" },
   "FLYDEMOACC":  { slug: "basilic-fly",      pass: "FLY1234" },  // PLACEHOLDER pass — rotate before deploy (real one supplied out of band)
-  "DIGDEMOACC":  { slug: "digitide-noida",   pass: "DIG1234" },  // PLACEHOLDER pass — rotate before deploy
+  /* Digitide Noida office study, a separate app at /noida/ with its own gate
+     (it replaced the older map view of this client). Only the password's
+     SHA-256 is stored, as for Indore and Chennai. */
+  "DIGDEMOACC":  { redirect: "/noida/",     passHash: "62ffad2586cdaaca43fe963237ace65edc2da7627fe23c231b94e96b724a824d" },
   /* The Digitide GROUP command centre is a separate app at /digitide/ with its
      own gate. It is listed here with a `redirect` rather than a `slug` so that
      signing in at the site root sends you there instead of failing with
@@ -18,7 +21,10 @@ window.CLIENT_MANIFEST = {
   /* Indore office study, a separate app at /indore/ with its own gate. Only
      a SHA-256 of the normalised password is stored, never the password. */
   "INDORE-AP":   { redirect: "/indore/",    passHash: "a4b32dba4f102ad7427f1651b09b05151026178ede1e5503f22f477b0ad2f45d" },
+  /* Chennai office study, a separate app at /chennai/ with its own gate,
+     built the same way as Indore: only the password's SHA-256 is stored. */
+  "CHENNAI-AP":  { redirect: "/chennai/",   passHash: "b617cb70f6c6ffda4062e5e585ca3318cf20aceebe2b837cd4bc1919084eef6b" },
   /* Whitefield atlas for Total Environment, a separate app at /whitefield/
      with its own gate. Only a SHA-256 of the normalised password is stored. */
-  "TE-WHITEFIELD": { redirect: "/whitefield/", passHash: "dc0e15eb6d357d9d34466491b2b7b1156695a81f53b7cc1d22bd819e9f080125" }
+  "TE-WHITEFIELD": { redirect: "/whitefield/", passHash: "c069467f5e0b9eae595ece10bcba43a548ecb2f30f9e1d65deed2bcc86c315a1" }
 };

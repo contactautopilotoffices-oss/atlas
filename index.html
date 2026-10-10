@@ -332,6 +332,7 @@ canvas{display:block}
   if(slug && /^[a-z0-9-]+$/.test(slug)) window.CLIENT_SLUG = slug;
 })();
 </script>
+<script src="atlas-cms.js?v=cms1"></script>
 <script src="roads_bkc.js"></script>
 <script src="assets.js"></script>
 <script src="world_layer.js"></script>
@@ -440,25 +441,31 @@ async function enterExperience(){
     if(client.redirect){
       /* Hand the sign-in over to the target app for this tab, so a separately
          gated app (e.g. /indore/) does not ask for the same credentials twice. */
-      try{ sessionStorage.setItem("atlas-handoff", client.redirect); }catch(e){}
+      try{ sessionStorage.setItem("atlas-handoff", client.redirect); sessionStorage.setItem("atlas-access-id", normId(id)); }catch(e){}
       window.location.href = client.redirect; return;
     }
     try{ localStorage.setItem(LS_KEY, JSON.stringify({id, slug: client.slug, t:Date.now()})); }catch(e){}
     fadeOut(gate);
-    startAppForSlug(client.slug);
+    startAppForSlug(client.slug, normId(id), true);
   }else{
     gateErr.textContent = "Invalid Demo ID or password";
     document.getElementById("gatePass").value="";
   }
 }
 
-function startAppForSlug(slug){
+function startAppForSlug(slug, accessId, isNewSignin){
   setLoadStatus("Loading client data · " + slug);
   loadClientScripts(slug).then(() => {
+    /* CMS: apply this link's published overrides (fields, hidden options,
+       features, 3D models, notice) before the map engine reads its data.
+       A paused link stops here and shows the paused screen. */
+    return window.AtlasCMS ? AtlasCMS.prepareClient(slug, accessId, isNewSignin).catch(() => true) : true;
+  }).then((ok) => {
+    if (ok === false) { fadeOut(loading); return; }
     applyClientText();
     setLoadStatus("Streaming Mapbox engine · loading satellite intelligence");
     const script = document.createElement("script");
-    script.src = "./mapbox_app.js?v=12";
+    script.src = "./mapbox_app.js?v=13";
     script.onerror = ()=>{ document.getElementById("err").classList.add("show"); };
     script.onload = ()=>{
       setLoadStatus("Digital world ready · handing over controls");
@@ -479,6 +486,7 @@ function bindGate(){
 }
 
 document.getElementById("t-logout").addEventListener("click", () => {
+  if (window.AtlasCMS) AtlasCMS.signout();
   localStorage.removeItem(LS_KEY);
   window.location.reload();
 });
@@ -492,7 +500,7 @@ if(cached){
     const client = lookupClient(data.id);
     if(client && !client.redirect && data.slug === client.slug && Date.now()-(data.t||0) < 1000*60*60*24*7){ // 7 days loose session
       gate.remove();
-      startAppForSlug(client.slug);
+      startAppForSlug(client.slug, data.id, false);
     }else{ throw new Error("expired"); }
   }catch(e){ localStorage.removeItem(LS_KEY); bindGate(); }
 }else{

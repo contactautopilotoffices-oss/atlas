@@ -36,3 +36,7 @@ media/_enhanced/
 
 # Indore sign-in backdrop is copied in at build time (scripts/fetch-indore-backdrop.js)
 media/indore/backdrop-*.webp
+
+# CMS local development store and uploads (npm run dev:cms)
+.cms-dev-store.json
+media/_cms-dev/

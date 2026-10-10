@@ -51,7 +51,7 @@ function initGate() {
     $("#g-go").disabled = true; $("#g-err").textContent = "";
     try {
       const r = await ping(key);
-      if (r.status === 200) { try { sessionStorage.setItem("ge-key", key); } catch {} open(key, r); }
+      if (r.status === 200) { try { sessionStorage.setItem("ge-key", key); } catch {} if (window.AtlasCMS) AtlasCMS.signin(null); open(key, r); }
       else $("#g-err").textContent = r.status === 401 ? "Not recognised. Access is issued per person." : (r.error || "Server error " + r.status);
     } catch { const e = $("#g-err"); if (e) e.textContent = "Could not reach the server."; }
     const b = $("#g-go"); if (b) b.disabled = false;

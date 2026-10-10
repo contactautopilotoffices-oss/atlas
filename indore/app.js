@@ -29,6 +29,10 @@ async function sha256(txt) {
   return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
 }
 const MEDIA = "../media/indore/";
+/* CMS (atlas-cms.js): features switched off in /admin/ and visit tracking.
+   Without the CMS script everything is on and nothing is tracked. */
+const CMS = window.AtlasCMS || null;
+const cmsOn = (key) => !CMS || CMS.on(key);
 const base = (f) => f.replace(/\.jpg$/, "");
 /* Photos ship as WebP with the JPEG as fallback; the option list uses 240 px
    thumbnails (about 5 KB each) instead of the full photos. */
@@ -252,6 +256,7 @@ const PRESETS = {
   premium: { label: "Premium & efficient", note: "Grade A, high carpet efficiency, parking and full infrastructure.",
     w: { transit: 15, ready: 10, talent: 5, scale: 5, eff: 25, grade: 20, parking: 10, infra: 10 } }
 };
+for (const k of Object.keys(PRESETS)) if (k !== "balanced" && !cmsOn("preset:" + k)) delete PRESETS[k];
 function setPreset(key) {
   const p = PRESETS[key]; if (!p) return;
   S.preset = key; Object.assign(W, p.w);
@@ -276,7 +281,8 @@ const FILTERS = [
   { key: "metro", label: "Metro ≤ 1 km", test: o => o.commuteM <= 1000 },
   { key: "sbd", label: "SBD", test: o => o.micro === "sbd" },
   { key: "pbd", label: "Super Corridor", test: o => o.micro === "pbd" }
-];
+].filter(f => cmsOn("filter:" + f.key));
+for (const k of Object.keys(S.layers)) if (!cmsOn("layer:" + k)) S.layers[k] = false;
 const TABS = [
   { key: "brief", label: "Brief" },
   { key: "priorities", label: "Priorities" },
@@ -285,13 +291,13 @@ const TABS = [
   { key: "market", label: "Market & incentives" },
   { key: "deck", label: "Deck map" },
   { key: "compare", label: "Compare all" }
-];
+].filter(t => t.key === "brief" || cmsOn("tab:" + t.key));
 const passes = (o) => {
   const groups = { grade: ["A", "B"], micro: ["sbd", "pbd"] };
   const on = [...S.filters];
   const gradeOn = on.filter(k => groups.grade.includes(k)), microOn = on.filter(k => groups.micro.includes(k));
   const other = on.filter(k => !groups.grade.includes(k) && !groups.micro.includes(k));
-  const t = (k) => FILTERS.find(f => f.key === k).test(o);
+  const t = (k) => { const f = FILTERS.find(x => x.key === k); return !f || f.test(o); };
   return (gradeOn.length === 0 || gradeOn.some(t)) && (microOn.length === 0 || microOn.some(t)) && other.every(t);
 };
 const fits = (o) => S.target == null ? null : o.carpetArea >= S.target * 0.97;
@@ -305,7 +311,7 @@ function initGate() {
     let ok = false;
     try { ok = (await sha256(norm($("#g-id").value) + ":" + norm($("#g-pw").value))) === GATE_HASH; } catch (e) { ok = false; }
     busy = false;
-    if (ok) { sessionStorage.setItem("ind-auth", "1"); openApp(); }
+    if (ok) { sessionStorage.setItem("ind-auth", "1"); if (CMS) CMS.signin(norm($("#g-id").value)); openApp(); }
     else { $("#g-err").textContent = "Not recognised. Access is issued per person."; $("#g-pw").value = ""; $("#g-pw").focus(); }
   };
   startMap();
@@ -316,7 +322,10 @@ function initGate() {
     + `<span><b>${STN.filter(x => x.open).length}</b>metro stations open</span><span><b>${O.filter(o => o.handoverKind === "ready").length}</b>ready now</span>`;
   let handoff = null;
   try { handoff = sessionStorage.getItem("atlas-handoff"); sessionStorage.removeItem("atlas-handoff"); } catch (e) {}
-  if (handoff === "/indore/") sessionStorage.setItem("ind-auth", "1");
+  if (handoff === "/indore/") {
+    sessionStorage.setItem("ind-auth", "1");
+    if (CMS) { let id = null; try { id = sessionStorage.getItem("atlas-access-id"); } catch (e) {} CMS.signin(id); }
+  }
   if (sessionStorage.getItem("ind-auth") === "1") { $("#gate").remove(); boot(); return; }
   $("#g-form").addEventListener("submit", e => { e.preventDefault(); go(); });
   $("#g-id").focus();
@@ -399,6 +408,7 @@ function boot() {
      The root login keeps nothing for redirect clients, so there is nothing
      else to clear. */
   $("#signout").addEventListener("click", () => {
+    if (CMS) CMS.signout();
     try { sessionStorage.removeItem("ind-auth"); sessionStorage.removeItem("atlas-handoff"); } catch (e) {}
     location.replace(location.pathname);
   });
@@ -817,12 +827,14 @@ function select(id, fly, fromRoute) {
   if (innerWidth <= 860 && !fromRoute) setSheet("half");
   const card = document.querySelector(`.card[data-id="${id}"]`); if (card) card.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
   if (fly) flyToOption(O.find(x => x.id === id), "close");
+  if (CMS && !fromRoute) CMS.open(id, (O.find(x => x.id === id) || {}).name);
   $("#p-body").scrollTop = 0;
 }
 
 function goTab(key) {
   if (document.body.classList.contains("fold-panel")) setFold("panel", false);
   const had = S.sel; S.tab = key; S.sel = null;
+  if (CMS) CMS.tab(key);
   renderTabs(); renderList(); renderPanel(); refreshMap(); if (had) fitAll(); pushRoute();
   if (innerWidth <= 860) setSheet("half");
 }
@@ -834,7 +846,7 @@ function renderTabs() {
 }
 function renderLayers() {
   $("#layers").innerHTML = `<span class="key"><span class="pin" style="background:var(--gradeA)">A</span><span class="pin" style="background:var(--gradeB)">B</span>Grade</span>` +
-    LAYERS.map(l => `<button class="chip lay ${S.layers[l.key] ? "on" : ""}" data-l="${l.key}" type="button" aria-pressed="${S.layers[l.key]}" data-hint="${esc((S.layers[l.key] ? "Hide: " : "Show: ") + LAYER_HINT[l.key])}">${l.sw}${esc(l.label)}</button>`).join("") +
+    LAYERS.filter(l => cmsOn("layer:" + l.key)).map(l => `<button class="chip lay ${S.layers[l.key] ? "on" : ""}" data-l="${l.key}" type="button" aria-pressed="${S.layers[l.key]}" data-hint="${esc((S.layers[l.key] ? "Hide: " : "Show: ") + LAYER_HINT[l.key])}">${l.sw}${esc(l.label)}</button>`).join("") +
     `<span class="key note" title="Map positions are approximate; zone outlines are indicative">ⓘ approx.</span>`;
 }
 /* ============================================================ guide =====
@@ -1196,6 +1208,8 @@ function renderOption(o) {
       <div class="kpi"><div class="l">Metro</div><div class="v">${esc(o.commuteDist)}</div><div class="s">${metroKm(o)} · ${stations.map(s => esc(s.stn ? s.stn.name : s.label)).join(" / ")}${stations.every(s => s.stn && s.stn.open) ? " · open" : ""}</div></div>
       <div class="kpi"><div class="l">Fit score</div><div class="v">${sc}<span style="font-size:13px;color:var(--mut)">/100</span></div><div class="s">rank ${O.slice().sort(byFit).findIndex(x => x.id === o.id) + 1} of 10${levelWith(o).length ? `, level on ${sc} with ${esc(levelWith(o).map(x => x.name).join(", "))} (exact ${exact(o).toFixed(2)})` : ""}</div></div>
     </div>
+
+    ${o.cmsExtra && o.cmsExtra.length ? `<h3>Latest from the market</h3><table class="spec">${o.cmsExtra.map(x => `<tr><th>${esc(x.label)}</th><td>${esc(x.value)}${x.asOf ? ` <span class="src">· broker-stated, ${esc(x.asOf)}</span>` : ` <span class="src">· broker-stated</span>`}</td></tr>`).join("")}</table>` : ""}
 
     ${vsExistingHTML(o, c)}
 
