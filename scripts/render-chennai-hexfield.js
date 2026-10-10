@@ -2,8 +2,8 @@
 
    The image is the study area itself: Chennai drawn as a field of hexagons
    (one cell for every 750 m), the Bay of Bengal left dark, the rail
-   lines traced in their colours, and the cells lit by the nineteen
-   shortlisted buildings and the current office. Every position comes from
+   lines traced in their colours, and the cells lit by the buildings on the
+   revised ranking and the current office. Every position comes from
    chennai/data.js, so the backdrop matches the map behind the gate.
 
    The output is committed to media/chennai/, so the sign-in page never
@@ -141,11 +141,14 @@ function page(spec) {
   </script></body></html>`;
 }
 
+/* k scales a layout down without changing it: 1920 px wide is enough for a
+   backdrop that sits under a shade, and keeps the sign-in page light. */
+const scaled = (s, k) => ({ ...s, w: Math.round(s.w * k), h: Math.round(s.h * k), pxKm: s.pxKm * k, towerPx: s.towerPx * k, centre: s.centre.map(v => Math.round(v * k)) });
 const SPECS = [
   /* Wide: the shortlist sits right of centre, between the copy and the card. */
-  { name: "hexfield-wide", w: 2400, h: 1350, pxKm: 46, tilt: .62, cellKm: .75, towerPx: 70, centre: [1180, 760], geo: [80.18, 12.955] },
+  scaled({ name: "hexfield-wide", w: 2400, h: 1350, pxKm: 46, tilt: .62, cellKm: .75, towerPx: 70, centre: [1180, 760], geo: [80.18, 12.955] }, .8),
   /* Tall (phones): the map fills the top half, above the stacked copy and card. */
-  { name: "hexfield-tall", w: 1080, h: 2000, pxKm: 44, tilt: .62, cellKm: .75, towerPx: 64, centre: [560, 700], geo: [80.18, 12.955] }
+  scaled({ name: "hexfield-tall", w: 1080, h: 2000, pxKm: 44, tilt: .62, cellKm: .75, towerPx: 64, centre: [560, 700], geo: [80.18, 12.955] }, .8)
 ];
 
 (async () => {
@@ -163,8 +166,8 @@ import sys
 from PIL import Image
 src, base = sys.argv[1], sys.argv[2]
 im = Image.open(src).convert("RGB")
-im.save(base + ".webp", "WEBP", quality=78, method=6)
-im.save(base + ".jpg", "JPEG", quality=80, optimize=True, progressive=True)
+im.save(base + ".webp", "WEBP", quality=72, method=6)
+im.save(base + ".jpg", "JPEG", quality=76, optimize=True, progressive=True)
 `, png, path.join(OUT, spec.name)]);
     fs.unlinkSync(png);
     console.log("rendered", spec.name);

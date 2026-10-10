@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
 <meta name="robots" content="noindex"/>
 <meta name="theme-color" content="#2a1e16"/>
-<meta name="description" content="Autopilot · Chennai office study: eighteen shortlisted buildings, rail connectivity, talent catchment and a priority chooser."/>
+<meta name="description" content="Autopilot · Chennai office study: the revised ranking of thirteen buildings, rail connectivity, talent catchment and a priority chooser."/>
 <meta property="og:title" content="Chennai Office Study · Autopilot"/>
-<meta property="og:description" content="Eighteen shortlisted office buildings across OMR, PTR, GST Road, Mount Poonamallee Road and Velachery, read against connectivity, talent and the current office."/>
+<meta property="og:description" content="Thirteen ranked office buildings across OMR, the Radial Road, GST Road and Mount Poonamallee Road, read against price, connectivity, talent and the current office."/>
 <meta name="twitter:card" content="summary_large_image"/>
 <title>Chennai Office Study · Autopilot ATLAS</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,7 +31,7 @@
 })();
 </script>
 <script src="../config.js?v=chn1"></script>
-<script src="./data.js?v=chn2"></script>
+<script src="./data.js?v=chn5"></script>
 <style>
 /* Palette follows the Autopilot deck, as on the Indore study: espresso,
    cream and terracotta. Colour never carries meaning alone; every score,
@@ -190,6 +190,19 @@ select,.inp{border:1px solid var(--line);background:#fff;border-radius:8px;paddi
 .tile img+span{position:absolute;left:4px;bottom:3px;font-size:10px;background:rgba(0,0,0,.5);padding:0 4px;border-radius:4px}
 .zt{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--mut)}
 .zt i{width:8px;height:8px;border-radius:2px;display:inline-block;background:var(--z)}
+/* fit group on the revised ranking: colour and words together */
+.fitb{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;line-height:16px;padding:1px 7px 1px 6px;border-radius:999px;background:var(--fb);color:var(--f);white-space:nowrap;vertical-align:1px}
+.fitb::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--f)}
+.card .loc .fitb{font-size:10px;line-height:14px;margin-right:2px}
+.reason{font-size:13px;line-height:1.5;color:var(--ink);margin:8px 0 2px;padding-left:10px;border-left:2px solid var(--acc2)}
+.fg{margin:0 0 12px}
+.fgh{display:flex;align-items:center;gap:8px;margin:0 0 4px}
+table.rt{width:100%;border-collapse:collapse;font-size:12.5px}
+table.rt th{font-weight:500;color:var(--mut);font-size:10.5px;text-align:left;padding:5px 4px;border-bottom:1px solid var(--line)}
+table.rt td{padding:8px 4px;border-bottom:1px solid var(--line2);vertical-align:top}
+table.rt .num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+table.rt .no{color:var(--acc);font-size:10.5px}
+table.rt .why{font-size:11.5px;color:var(--mut);line-height:1.45;margin-top:3px}
 
 /* panel content */
 .hero{position:relative;margin:4px -16px 0;height:200px;background:#e5dccf}
@@ -279,6 +292,28 @@ table.mx tr.hl th,table.mx th.hl{color:var(--acc)}
 .chip.lay:not(.on){opacity:.75}
 .chip.lay.on{background:#fff;color:var(--ink);border-color:rgba(60,40,25,.28)}
 .sw{display:inline-block;width:18px;height:4px;border-radius:2px;vertical-align:3px;margin-right:6px}
+/* map bar: property picker, info buttons and their pop-overs */
+.chip.props{font-weight:600;color:var(--ink);opacity:1}
+.lg{display:inline-flex;align-items:stretch}
+.lg .chip{border-top-right-radius:0;border-bottom-right-radius:0;padding-right:8px}
+.ib{border:1px solid var(--line);border-left:0;background:rgba(255,255,255,.55);border-radius:0 999px 999px 0;min-height:28px;width:26px;padding:0;cursor:pointer;font-family:var(--serif);font-style:italic;font-weight:600;font-size:13px;color:var(--acc)}
+.ib:hover{background:#fff;color:var(--ink)}
+.lpop{position:fixed;z-index:70;background:var(--panel-solid);border:1px solid var(--line);border-radius:14px;box-shadow:var(--e2);padding:10px 12px 12px;overflow:auto;font-size:12.5px;color:var(--ink)}
+.lph{display:flex;align-items:center;gap:8px;position:sticky;top:-10px;background:var(--panel-solid);padding:2px 0 8px;margin-bottom:4px;border-bottom:1px solid var(--line2);z-index:1}
+.lph b{flex:1;font-size:13px}
+.lph .x{border:0;background:transparent;font-size:18px;line-height:1;cursor:pointer;color:var(--mut);padding:0 2px}
+.pg{margin:8px 0 2px}
+.pgh{display:flex;align-items:center;gap:6px;border:0;background:transparent;padding:4px 0;font:inherit;font-weight:600;cursor:pointer;color:var(--ink)}
+.pgh .dot{margin:0}
+.pi{display:grid;grid-template-columns:16px 20px minmax(0,1fr) auto;gap:6px;align-items:center;padding:5px 2px;border-radius:7px;cursor:pointer}
+.pi:hover{background:var(--line2)}
+.pi input{margin:0}
+.pi .no{font-family:var(--mono);font-size:10.5px;color:var(--acc)}
+.pi .note{font-size:11px;white-space:nowrap}
+.plist{margin:6px 0 0;padding-left:20px}
+.plist li{padding:6px 0;border-bottom:1px solid var(--line2);line-height:1.45}
+.pl{color:var(--ink);text-decoration:none}
+.pl:hover b{color:var(--acc);text-decoration:underline}
 
 /* compare overlay */
 #cmp{position:fixed;inset:0;z-index:60;background:rgba(31,22,16,.42);display:none;padding:20px}
@@ -389,7 +424,7 @@ table.cmp td.best{background:#f1e6d8;font-weight:600}
 /* ---------------- print ---------------- */
 @media print{
   html,body{overflow:visible;height:auto;background:#fff}
-  #map,#board,#layers,#top,#gate,#sheet-grip,.actions,.shots,.intro,.intro-min,#hint,#cmp,#lightbox,.back,.reopen,.grip,.fold{display:none!important}
+  #map,#board,#layers,#top,#gate,#sheet-grip,.actions,.shots,.intro,.intro-min,#hint,#cmp,#lightbox,.back,.reopen,.grip,.fold,.lpop{display:none!important}
   #panel{position:static;width:auto;height:auto;border:0;box-shadow:none;background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none}
   .pbody{overflow:visible;padding:0}
   .phead{padding:0 0 10px}
@@ -429,7 +464,9 @@ table.cmp td.best{background:#f1e6d8;font-weight:600}
   #map{inset:0;height:auto}
   #layers{left:6px;right:6px;bottom:auto;top:calc(var(--top-h) + 12px);padding:5px;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none}
   #layers::-webkit-scrollbar{display:none}
-  #layers .chip,#layers .key{flex:none}
+  #layers .chip,#layers .key,#layers .lg{flex:none}
+  .ib{min-height:40px;width:34px}
+  .pi{padding:9px 2px}
   #layers .key.note{display:none}
   #board{top:auto;left:0;right:0;bottom:calc(var(--sheet-h) + 6px);width:auto;height:auto;background:transparent;border:0;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;border-radius:0;transition:bottom .32s var(--ease),opacity .2s}
   body[data-sheet="full"] #board{opacity:0;pointer-events:none}
@@ -495,9 +532,9 @@ table.cmp td.best{background:#f1e6d8;font-weight:600}
   <div class="gwrap">
     <div class="gcopy">
       <img class="logo" src="../autopilot-logo-trimmed.png" alt="Autopilot" width="319" height="44">
-      <div class="eyebrow">Location study · shortlist of 18 · Oct 2026</div>
+      <div class="eyebrow">Location study · revised ranking of 13 · Oct 2026</div>
       <h1 id="g-title">Chennai<br>Office Study</h1>
-      <p>Eighteen shortlisted buildings across OMR, the 200 Ft Radial Road, GST Road, Mount Poonamallee Road and Velachery, read for connectivity, distance, talent and the current office. Tell us what matters most and the ranking follows.</p>
+      <p>Thirteen buildings across OMR, the 200 Ft Radial Road, GST Road and Mount Poonamallee Road, ranked on price and ecosystem and read for connectivity, distance, talent and the current office, on the newest satellite imagery. Tell us what matters most and the ranking follows.</p>
       <div class="gstats" id="g-stats"></div>
     </div>
     <form class="box" id="g-form" autocomplete="on" method="post" action="javascript:void(0)">
@@ -511,7 +548,7 @@ table.cmp td.best{background:#f1e6d8;font-weight:600}
       <div class="err" id="g-err" role="alert"></div>
     </form>
   </div>
-  <div class="credit">Hex field: the study area of Chennai, one cell per 750 m; the columns are the shortlist and today's office</div>
+  <div class="credit">Hex field: the study area of Chennai, one cell per 750 m; the columns are the ranked buildings and today's office</div>
 </div>
 
 <div id="map" aria-label="Map of Chennai office options"></div>
@@ -525,15 +562,16 @@ table.cmp td.best{background:#f1e6d8;font-weight:600}
 <aside id="board" class="pane" aria-label="Shortlisted options">
   <div class="grip grip-r" data-grip="board" role="separator" aria-orientation="vertical" aria-label="Resize the options list" tabindex="0" data-hint="Drag to resize. Double-click to reset."></div>
   <div class="bhead">
-    <div class="row"><span class="big" id="b-count">18 options</span><span class="note" id="b-sub" style="margin-left:auto"></span><button class="fold" type="button" data-fold="board" aria-label="Hide the options list" data-hint="Hide the options list to see more map. Shortcut: [">&lsaquo;</button></div>
+    <div class="row"><span class="big" id="b-count">13 options</span><span class="note" id="b-sub" style="margin-left:auto"></span><button class="fold" type="button" data-fold="board" aria-label="Hide the options list" data-hint="Hide the options list to see more map. Shortcut: [">&lsaquo;</button></div>
     <div class="ctrl" id="filters"></div>
     <div class="sortrow"><label for="sort">Order</label>
       <select id="sort" aria-label="Sort options">
+        <option value="rank">Revised ranking</option>
         <option value="score">Fit to your priorities</option>
+        <option value="price">Pricing score</option>
         <option value="home">Distance from current office</option>
         <option value="rail">Nearest rail today</option>
         <option value="talent">Talent reach</option>
-        <option value="sheet">Shortlist order</option>
       </select>
     </div>
   </div>
@@ -560,12 +598,12 @@ table.cmp td.best{background:#f1e6d8;font-weight:600}
 </div>
 <div id="lightbox"><img alt=""/></div>
 
-<script src="../atlas-cms.js?v=cms1"></script>
+<script src="../atlas-cms.js?v=cms2"></script>
 <script>
 /* Start through the CMS (published overrides, visit counts). If the CMS
    script is missing for any reason, start the app exactly as before. */
-if (window.AtlasCMS) AtlasCMS.boot("chennai", { app: "./app.js?v=chn2" });
-else { var s = document.createElement("script"); s.src = "./app.js?v=chn2"; document.body.appendChild(s); }
+if (window.AtlasCMS) AtlasCMS.boot("chennai", { app: "./app.js?v=chn5" });
+else { var s = document.createElement("script"); s.src = "./app.js?v=chn5"; document.body.appendChild(s); }
 </script>
 </body>
 </html>
