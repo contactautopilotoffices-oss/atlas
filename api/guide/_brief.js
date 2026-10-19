@@ -21,6 +21,20 @@ const FILES = {
 
 const cache = new Map();
 
+/* What Autopilot itself offers on a page. Only facts the Autopilot team has
+   confirmed go here; the guide is told to send everything else (seats, area,
+   price, dates) to the team rather than fill it in. Add fields as they are
+   confirmed. */
+const OFFERS = {
+  whitefield: {
+    by: "Autopilot Offices",
+    offer: "Autopilot managed offices, available on the 11th floor at Rhapsody.",
+    confirmed: ["Autopilot runs managed offices at Rhapsody", "Space is available on the 11th floor"],
+    not_confirmed_yet: ["seat count", "area", "price per seat", "move-in date", "fit-out and amenities"],
+    next_step: "Ask the Autopilot team for a visit, a seat plan and pricing for the 11th floor.",
+  },
+};
+
 function load(file) {
   const sandbox = { window: {} };
   vm.runInNewContext(fs.readFileSync(file, "utf8"), sandbox, { filename: file, timeout: 2000 });
@@ -119,6 +133,7 @@ function getBrief(page) {
   const brief = page === "chennai" ? cityStudy(w, "CHN", page) : page === "noida" ? cityStudy(w, "NOI", page) : whitefield(w);
   const urls = new Set();
   JSON.stringify(brief, (k, v) => { if (typeof v === "string" && /^https?:\/\//.test(v)) urls.add(v); return v; });
+  if (OFFERS[page]) brief.autopilot_offer = OFFERS[page];
   const entry = { brief, text: JSON.stringify(brief), ids: brief.showable.map((s) => s.id), urls };
   cache.set(page, entry);
   return entry;

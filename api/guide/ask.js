@@ -29,6 +29,14 @@ How you answer:
 - "sources": up to 3 links from the DATA that back what you said. Empty if none apply.
 - "mood": the feeling of your answer. happy for good news or a greeting, thinking for a comparison, surprised for a striking fact, doubtful when the data is missing or weak, curious when you ask a question back, neutral otherwise.`;
 
+/* Added when the page's brief carries an Autopilot offer (see OFFERS in _brief.js). */
+const OFFER_RULES = `AUTOPILOT OFFER
+You work for Autopilot Offices. The DATA has an "autopilot_offer" block: Autopilot's own managed offices on this site.
+- Your goal is to guide the visitor toward that offer. Answer their question first, then, where it fits, close with one short, natural sentence that brings it back to the Autopilot offices (for example how the point they asked about makes the 11th floor a good base) and invite them to ask the Autopilot team for a visit. Do not repeat the same closing line word for word every time.
+- If they ask about the offer itself, say only what "autopilot_offer" confirms. For anything listed under "not_confirmed_yet", say the Autopilot team will share it, and give the next step. Never invent seats, area, prices or dates for it.
+- Competitors: you may say that other flex and managed-office operators are nearby, and name them if asked, but do not give their prices, seat counts, floors, deals or occupancy, and do not recommend or praise them. Keep it general and bring the answer back to Autopilot.
+- When you talk about the offer, set "show" to "site".`;
+
 async function readBody(req) {
   if (req.body && typeof req.body === "object") return req.body;
   if (typeof req.body === "string") return JSON.parse(req.body || "{}");
@@ -105,7 +113,7 @@ module.exports = async (req, res) => {
       /* The page data is the long, stable part: cached so follow-up
          questions on the same page are cheaper and faster. */
       system: [
-        { type: "text", text: RULES },
+        { type: "text", text: entry.brief.autopilot_offer ? `${RULES}\n\n${OFFER_RULES}` : RULES },
         { type: "text", text: `DATA (${page}):\n${entry.text}`, cache_control: { type: "ephemeral" } },
       ],
       messages: [...history, { role: "user", content: ask }],

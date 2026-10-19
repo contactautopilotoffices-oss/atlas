@@ -30,7 +30,7 @@
       return ["What are Autopilot's top picks?", `Tell me about ${pick.name}.`, "Which buildings have parking problems?"];
     }
     const site = window.WF.site;
-    return [`What is ${site.name}?`, "What is the nearest metro station to the site?", "Which big companies lease nearby?"];
+    return [`Tell me about Autopilot's offices at ${site.name}.`, `What is ${site.name}?`, "What is the nearest metro station to the site?", "Which big companies lease nearby?"];
   }
 
   /* The open option on the page, if any. `S` is the page's top-level state. */
