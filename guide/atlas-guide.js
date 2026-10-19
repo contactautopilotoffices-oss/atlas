@@ -13,7 +13,7 @@
 (function () {
   "use strict";
 
-  const PAGE = window.CHN_OPTIONS ? "chennai" : window.NOI_OPTIONS ? "noida" : window.WF ? "whitefield" : null;
+  const PAGE = window.CHN_OPTIONS ? "chennai" : window.NOI_OPTIONS ? "noida" : window.AND_OPTIONS ? "andheri" : window.WF ? "whitefield" : null;
   if (!PAGE) return;
 
   const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -28,6 +28,10 @@
     if (PAGE === "noida") {
       const O = window.NOI_OPTIONS, pick = O.find((o) => o.pick) || O[0];
       return ["What are Autopilot's top picks?", `Tell me about ${pick.name}.`, "Which buildings have parking problems?"];
+    }
+    if (PAGE === "andheri") {
+      const prime = window.AND_OPTIONS.find((o) => o.prime) || window.AND_OPTIONS[0];
+      return [`How does ${prime.name} compare with the centres around it?`, "Which Autopilot option is cheapest per seat?", "What do coworking centres in Chakala charge?", "Which option is closest to a metro?"];
     }
     const site = window.WF.site;
     return [`Tell me about Autopilot's offices at ${site.name}.`, `What is ${site.name}?`, "What is the nearest metro station to the site?", "Which big companies lease nearby?"];

@@ -26,5 +26,8 @@ window.CLIENT_MANIFEST = {
   "CHENNAI-AP":  { redirect: "/chennai/",   passHash: "b617cb70f6c6ffda4062e5e585ca3318cf20aceebe2b837cd4bc1919084eef6b" },
   /* Whitefield atlas for Total Environment, a separate app at /whitefield/
      with its own gate. Only a SHA-256 of the normalised password is stored. */
-  "TE-WHITEFIELD": { redirect: "/whitefield/", passHash: "c0e595805d3c33ed023df7677a6f0ed154e4c3691f2a7863156787d9b5b97775" }
+  "TE-WHITEFIELD": { redirect: "/whitefield/", passHash: "c0e595805d3c33ed023df7677a6f0ed154e4c3691f2a7863156787d9b5b97775" },
+  /* Andheri competitors atlas, a separate app at /andheri/ with its own gate.
+     Only a SHA-256 of the normalised password is stored. */
+  "AP-ANDHERI":  { redirect: "/andheri/",   passHash: "99bfbf040ae947f9e5fa02a7378cc19adbb296e57e4ea9e1bd725d52a8031fd5" }
 };

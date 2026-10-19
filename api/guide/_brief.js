@@ -17,6 +17,7 @@ const FILES = {
   chennai: path.join(__dirname, "..", "..", "chennai", "data.js"),
   noida: path.join(__dirname, "..", "..", "noida", "data.js"),
   whitefield: path.join(__dirname, "..", "..", "whitefield", "data.js"),
+  andheri: path.join(__dirname, "..", "..", "andheri", "data.js"),
 };
 
 const cache = new Map();
@@ -126,11 +127,38 @@ function whitefield(w) {
   };
 }
 
+/* Andheri: Autopilot's options and the competitor centres around them, with
+   the comparisons the page itself shows (rivals within 1 km, their median). */
+function andheri(w) {
+  const O = w.AND_OPTIONS, C = w.AND_CENTRES, ST = w.AND_STATIONS;
+  const median = (a) => { const s = [...a].sort((x, y) => x - y), m = s.length >> 1; return s.length ? (s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2) : null; };
+  const near = (p) => nearest(p, ST);
+  const drop = ["lat", "lng"];
+  return {
+    page: "andheri",
+    meta: w.AND_META,
+    pricing_note: "Competitor prices are per seat per month plus taxes, managed office and private cabin, surveyed in October 2026. Autopilot per-seat costs come from Autopilot's inventory sheet.",
+    market: { centres: C.length, operators: new Set(C.map((c) => c.operator)).size, median_price: median(C.map((c) => c.price)), min_price: Math.min(...C.map((c) => c.price)), max_price: Math.max(...C.map((c) => c.price)) },
+    autopilot_options: O.map((o) => {
+      const rivals = C.map((c) => ({ c, d: km(o, c) })).filter((x) => x.d <= 1).sort((a, b) => a.d - b.d);
+      return { ...omit(o, drop), computed: {
+        nearest_metro: stationNote(near(o)),
+        rivals_within_1km_straight_line: rivals.map(({ c, d }) => ({ id: c.id, operator: c.operator, building: c.building, km: round(d, 2), price: c.price })),
+        rivals_median_price: median(rivals.map(({ c }) => c.price)),
+      } };
+    }),
+    competitor_centres: C.map((c) => ({ ...omit(c, drop), computed: { nearest_metro: stationNote(near(c)) } })),
+    zones: w.AND_ZONES,
+    method_note: "Distances are straight lines between the map pins, not road routes.",
+    showable: [...O.map((o) => ({ id: o.id, name: o.name })), ...C.map((c) => ({ id: c.id, name: c.operator + (c.building ? ", " + c.building : "") }))],
+  };
+}
+
 function getBrief(page) {
   if (!FILES[page]) return null;
   if (cache.has(page)) return cache.get(page);
   const w = load(FILES[page]);
-  const brief = page === "chennai" ? cityStudy(w, "CHN", page) : page === "noida" ? cityStudy(w, "NOI", page) : whitefield(w);
+  const brief = page === "chennai" ? cityStudy(w, "CHN", page) : page === "noida" ? cityStudy(w, "NOI", page) : page === "andheri" ? andheri(w) : whitefield(w);
   const urls = new Set();
   JSON.stringify(brief, (k, v) => { if (typeof v === "string" && /^https?:\/\//.test(v)) urls.add(v); return v; });
   if (OFFERS[page]) brief.autopilot_offer = OFFERS[page];
