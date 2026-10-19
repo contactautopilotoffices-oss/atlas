@@ -21,7 +21,7 @@
 /* Access gate. The page holds only a SHA-256 of the normalised
    "ID:PASSWORD". It keeps a casual visitor out of the view; it does not make
    data.js private. The site root login routes here via clients/manifest.js. */
-const GATE_HASH = "80244aa1952941b65e1027608b705df1836b0bfdd05fc8438a9d67b4cf7ac3f4";
+const GATE_HASH = "6f52d9e5efb6099d8feb6c21762d60d42e40f9d6b060ec50449a4b1e3c0cf621";
 const AUTH_KEY = "wf-auth", HOME = "/whitefield/";
 async function sha256(txt) {
   const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(txt));
