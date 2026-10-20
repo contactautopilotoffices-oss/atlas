@@ -1,0 +1,112 @@
+/* ATLAS GUIDE · face and chat. Uses the study page's own tokens (--acc, --ink,
+   --panel-solid, --line, --font) so it sits in each page's palette. Placed
+   in the top-right corner of the map, just left of the right-hand panel. */
+
+.ag-root{
+  --ag-acc:var(--acc,#a3502c); --ag-acc2:var(--acc2,#c8693a); --ag-ink:var(--ink,#2a1e16);
+  --ag-paper:var(--panel-solid,#faf6f0); --ag-line:var(--line,rgba(60,40,25,.13)); --ag-mut:var(--mut,#6c5b4d);
+  --ag-right:calc(var(--panel-w,420px) + 22px);
+  position:fixed; right:var(--ag-right); top:calc(var(--top-h,58px) + 22px); z-index:60;
+  display:flex; flex-direction:column; align-items:flex-end;
+  font-family:var(--font,system-ui,sans-serif); color:var(--ag-ink);
+}
+
+/* ------------------------------------------------------------- launcher -- */
+.ag-fab{display:flex;align-items:center;gap:8px;padding:5px 16px 5px 5px;border:1px solid var(--ag-line);border-radius:999px;
+  background:var(--ag-paper);color:var(--ag-ink);font:600 13.5px/1 var(--font,system-ui,sans-serif);cursor:pointer;
+  box-shadow:0 10px 30px rgba(42,30,22,.18);transition:transform .2s ease,box-shadow .2s ease}
+.ag-fab:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(42,30,22,.24)}
+.ag-fab:focus-visible,.ag-icon:focus-visible,.ag-send:focus-visible,.ag-chip:focus-visible{outline:2px solid var(--ag-acc);outline-offset:2px}
+.ag-fab .ag-face{width:46px;height:46px}
+.ag-open .ag-fab{display:none}
+
+/* ---------------------------------------------------------------- panel -- */
+.ag-panel{width:min(380px,calc(100vw - 24px));height:min(560px,calc(100vh - var(--top-h,58px) - 150px));display:flex;flex-direction:column;
+  background:var(--ag-paper);border:1px solid var(--ag-line);border-radius:18px;box-shadow:0 24px 60px rgba(42,30,22,.26);overflow:hidden;
+  animation:ag-rise .28s cubic-bezier(.2,.8,.2,1)}
+.ag-panel[hidden]{display:none}
+@keyframes ag-rise{from{opacity:0;transform:translateY(-10px) scale(.98)}to{opacity:1;transform:none}}
+
+.ag-head-bar{display:flex;align-items:center;gap:10px;padding:10px 10px 10px 12px;border-bottom:1px solid var(--ag-line);
+  background:linear-gradient(180deg,rgba(163,80,44,.07),transparent)}
+.ag-avatar .ag-face{width:66px;height:66px;display:block}
+.ag-title{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.ag-title strong{font-size:15px}
+.ag-title small{font-size:11.5px;color:var(--ag-mut)}
+.ag-icon{width:32px;height:32px;border-radius:10px;border:1px solid transparent;background:transparent;color:var(--ag-ink);font-size:15px;cursor:pointer}
+.ag-icon:hover{background:rgba(42,30,22,.06)}
+.ag-mic.ag-on{background:var(--ag-acc);color:#fff}
+
+.ag-list{flex:1;overflow-y:auto;padding:14px 12px;display:flex;flex-direction:column;gap:10px;scroll-behavior:smooth}
+.ag-hello p{margin:0 0 12px;font-size:13.5px;line-height:1.5;color:var(--ag-mut)}
+.ag-chips{display:flex;flex-direction:column;gap:6px}
+.ag-chip{text-align:left;padding:8px 11px;border:1px solid var(--ag-line);border-radius:12px;background:#fff;color:var(--ag-ink);font:500 13px/1.35 var(--font,system-ui,sans-serif);cursor:pointer}
+.ag-chip:hover{border-color:var(--ag-acc);color:var(--ag-acc)}
+
+.ag-turn{max-width:88%;padding:9px 12px;border-radius:14px;font-size:13.5px;line-height:1.5}
+.ag-turn p{margin:0}
+.ag-user{align-self:flex-end;background:var(--ag-ink);color:#fff;border-bottom-right-radius:5px}
+.ag-bot{align-self:flex-start;background:#fff;border:1px solid var(--ag-line);border-bottom-left-radius:5px}
+.ag-error{align-self:stretch;max-width:none;background:rgba(178,59,42,.08);color:var(--bad,#b23b2a);font-size:13px}
+.ag-meta{display:flex;flex-wrap:wrap;gap:6px 10px;margin-top:8px;font-size:12px}
+.ag-meta a{color:var(--ag-acc);text-decoration:none}
+.ag-meta a:hover{text-decoration:underline}
+.ag-show{padding:3px 9px;border-radius:999px;border:1px solid var(--ag-acc);background:transparent;color:var(--ag-acc);font:600 11.5px/1.4 var(--font,system-ui,sans-serif);cursor:pointer}
+.ag-show:hover{background:var(--ag-acc);color:#fff}
+.ag-dots{display:flex;gap:4px;padding:4px 0}
+.ag-dots i{width:6px;height:6px;border-radius:50%;background:var(--ag-mut);opacity:.4;animation:ag-dot 1s infinite}
+.ag-dots i:nth-child(2){animation-delay:.15s}.ag-dots i:nth-child(3){animation-delay:.3s}
+@keyframes ag-dot{50%{opacity:1;transform:translateY(-2px)}}
+
+.ag-form{display:flex;gap:6px;padding:10px;border-top:1px solid var(--ag-line)}
+.ag-input{flex:1;min-width:0;height:36px;padding:0 12px;border:1px solid var(--ag-line);border-radius:12px;background:#fff;color:var(--ag-ink);font:14px var(--font,system-ui,sans-serif);outline:none}
+.ag-input:focus{border-color:var(--ag-acc)}
+.ag-send{height:36px;padding:0 14px;border:0;border-radius:12px;background:var(--ag-acc);color:#fff;font:600 13.5px var(--font,system-ui,sans-serif);cursor:pointer}
+.ag-send:disabled{opacity:.5;cursor:default}
+
+/* ----------------------------------------------------------------- face -- */
+.ag-face{overflow:visible}
+.ag-shadow{fill:rgba(42,30,22,.16)}
+.ag-skin{fill:color-mix(in srgb,var(--ag-acc2) 78%,#fff)}
+.ag-shine{fill:#fff;opacity:.28}
+.ag-eye rect{fill:#2a1e16}
+.ag-glint{fill:#fff;opacity:.9}
+.ag-m{fill:none;stroke:#2a1e16;stroke-width:3.2;stroke-linecap:round;opacity:0;transition:opacity .18s}
+.ag-m-o,.ag-m-talk{fill:#2a1e16;stroke:none}
+
+.ag-head,.ag-eyes,.ag-gaze,.ag-eye,.ag-lid{transform-box:fill-box;transform-origin:center;transition:transform .38s cubic-bezier(.3,1.4,.5,1)}
+.ag-gaze{transform:translate(var(--ag-gx,0),var(--ag-gy,0));transition:transform .5s ease-out}
+.ag-blink .ag-lid{transform:scaleY(.08);transition-duration:.07s}
+.ag-head{animation:ag-breathe 4.5s ease-in-out infinite}
+@keyframes ag-breathe{50%{transform:translateY(-1.5px)}}
+
+.ag-mood-neutral .ag-m-neutral{opacity:1}
+.ag-mood-happy .ag-m-happy{opacity:1}
+.ag-mood-happy .ag-eye{transform:translateY(-2px) scaleY(.5)}
+.ag-mood-thinking .ag-m-flat{opacity:1}
+.ag-mood-thinking .ag-eyes{transform:translate(5px,-6px)}
+.ag-mood-thinking .ag-head{animation:ag-ponder 2.4s ease-in-out infinite}
+@keyframes ag-ponder{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(-8deg) translateY(-1px)}}
+.ag-mood-surprised .ag-m-o{opacity:1}
+.ag-mood-surprised .ag-eye{transform:scale(1.2,1.25)}
+.ag-mood-doubtful .ag-m-doubt{opacity:1}
+.ag-mood-doubtful .ag-eye-l{transform:scaleY(.5)}
+.ag-mood-doubtful .ag-head{transform:rotate(5deg);animation:none}
+.ag-mood-curious .ag-m-neutral{opacity:1}
+.ag-mood-curious .ag-head{transform:rotate(9deg);animation:none}
+.ag-mood-curious .ag-eyes{transform:translate(-4px,-2px) scale(1.06)}
+
+/* While speaking the mouth moves, whatever the mood. */
+.ag-talking .ag-m{opacity:0}
+.ag-talking .ag-m-talk{opacity:1;transform-box:fill-box;transform-origin:center;animation:ag-talk .26s ease-in-out infinite alternate}
+@keyframes ag-talk{from{transform:scaleY(.35)}to{transform:scaleY(1.15)}}
+
+@media (max-width:1280px) and (min-width:861px){ .ag-root{--ag-right:calc(var(--panel-w,380px) + 22px)} }
+@media (max-width:860px){
+  .ag-root{right:12px;top:auto;bottom:12px}
+  .ag-fab span{display:none}
+  .ag-fab{padding:5px}
+  .ag-panel{height:min(520px,calc(100vh - 90px))}
+}
+@media (prefers-reduced-motion:reduce){ .ag-head,.ag-m-talk{animation:none!important} }
+@media print{ .ag-root{display:none} }
