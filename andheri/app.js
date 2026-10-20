@@ -52,7 +52,6 @@ function circle(c, rKm, n = 72) {
   for (let i = 0; i <= n; i++) { const t = i / n * 2 * Math.PI; out.push([c.lng + Math.cos(t) * rKm / KM_LNG, c.lat + Math.sin(t) * rKm / KM_LAT]); }
   return out;
 }
-const median = (a) => { const s = [...a].sort((x, y) => x - y), m = s.length >> 1; return s.length ? (s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2) : null; };
 const occMid = (c) => (c.occLo + c.occHi) / 2;
 
 /* Several centres share one pin (two towers in Sahar Plaza, area-only rows).
@@ -70,14 +69,9 @@ const DRAWN = new Map();
 
 const NEAR_KM = 1;
 const nearby = (o, r = NEAR_KM) => C.map(c => ({ c, d: km(o, c) })).filter(x => x.d <= r).sort((a, b) => a.d - b.d);
-const COMP_MED = median(C.map(c => c.price));
-const BANDS = [
-  { max: 13000, label: "Up to Rs 13,000", color: "#7d93a8" },
-  { max: 18000, label: "Rs 13,001 to 18,000", color: "#d9a07a" },
-  { max: 25000, label: "Rs 18,001 to 25,000", color: "#c8693a" },
-  { max: Infinity, label: "Above Rs 25,000", color: "#7a2e17" },
-];
-const band = (p) => BANDS.find(b => p <= b.max);
+/* Map colours: Autopilot dark pin, competitor red, metro blue. */
+const COL = { option: "#2a1e16", centre: "#d1495b", metro: "#1f6fd1" };
+const priceRange = (list) => list.length ? (Math.min(...list) === Math.max(...list) ? rs(list[0]) : `${rs(Math.min(...list))} to ${rs(Math.max(...list))}`) : "none";
 const PRECISION_TEXT = { building: "Pinned to the building", street: "Pinned to the complex or street, building approximate", locality: "Area only, no building given in the sheet" };
 const ALL = new Map([...O.map(o => [o.id, { ...o, kind: "option" }]), ...C.map(c => [c.id, { ...c, kind: "centre" }])]);
 /* The sheet says "Expected this month end"; say which month that was. */
@@ -115,7 +109,7 @@ function initGate() {
   startMap();
   const ops = new Set(C.map(c => c.operator)).size;
   $("#g-stats").innerHTML = `<span><b>${O.length}</b>Autopilot options</span><span><b>${C.length}</b>competitor centres</span>`
-    + `<span><b>${ops}</b>operators</span><span><b>${rs(COMP_MED)}</b>median seat price</span>`;
+    + `<span><b>${ops}</b>operators</span><span><b>${ST.length}</b>metro stations nearby</span>`;
   let handoff = null;
   try { handoff = sessionStorage.getItem("atlas-handoff"); sessionStorage.removeItem("atlas-handoff"); } catch (e) {}
   let authed = false;
@@ -147,14 +141,14 @@ function startMap() {
 const STYLES = { std: "mapbox://styles/mapbox/standard", sat: "mapbox://styles/mapbox/standard-satellite" };
 const styleUrl = () => S.layers.sat ? STYLES.sat : STYLES.std;
 const basemap = () => S.layers.sat
-  ? { lightPreset: "day", showPointOfInterestLabels: false, showTransitLabels: true, showPlaceLabels: true, showRoadLabels: true }
-  : { lightPreset: "day", theme: "faded", showPointOfInterestLabels: false, showTransitLabels: true, showPlaceLabels: true, showRoadLabels: true, show3dObjects: false };
+  ? { lightPreset: "day", showPointOfInterestLabels: false, showTransitLabels: false, showPlaceLabels: true, showRoadLabels: true }
+  : { lightPreset: "day", theme: "faded", showPointOfInterestLabels: false, showTransitLabels: false, showPlaceLabels: true, showRoadLabels: true, show3dObjects: false };
 function applyBasemap() { for (const [k, v] of Object.entries(basemap())) { try { map.setConfigProperty("basemap", k, v); } catch (e) {} } }
 function initMap() {
   mapboxgl.accessToken = window.MAPBOX_TOKEN;
   map = new mapboxgl.Map({ container: "map", style: styleUrl(), center: M.center, zoom: M.zoom, pitch: 0, bearing: 0,
     attributionControl: false, projection: "mercator", antialias: innerWidth > 860, renderWorldCopies: false, config: { basemap: basemap() } });
-  map.on("style.load", () => { applyBasemap(); if (layered && !map.getSource("options")) addLayers(); });
+  map.on("style.load", () => { applyBasemap(); if (layered && !map.getSource("ring")) addLayers(); });
   let told = false;
   map.on("error", (e) => {
     const st = e && e.error && e.error.status;
@@ -164,7 +158,7 @@ function initMap() {
   });
   map.addControl(new mapboxgl.AttributionControl({ compact: true }), "bottom-right");
   map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "bottom-right");
-  map.on("load", () => { addLayers(); wireMap(); layered = true; if (booted && S.sel) select(S.sel, true, true); else fitAll(false); });
+  map.on("load", () => { addLayers(); buildMarkers(); layered = true; if (booted && S.sel) select(S.sel, true, true); else fitAll(false); });
 }
 function padding() {
   const Wd = innerWidth, Hd = innerHeight;
@@ -183,11 +177,6 @@ function fitAll(animate = true) {
 }
 
 const FC = (features) => ({ type: "FeatureCollection", features });
-const pt = (lng, lat, props) => ({ type: "Feature", geometry: { type: "Point", coordinates: [lng, lat] }, properties: props });
-const optionsFC = () => FC(O.map(o => pt(o.lng, o.lat, { id: o.id, n: String(o.n), name: o.name, prime: o.prime ? 1 : 0, sel: S.sel === o.id ? 1 : 0 })));
-const centresFC = () => FC(C.filter(passes).map(c => { const [lng, lat] = DRAWN.get(c.id);
-  return pt(lng, lat, { id: c.id, op: c.operator, color: band(c.price).color, sel: S.sel === c.id ? 1 : 0 }); }));
-const stationsFC = () => FC(ST.map(s => pt(s.lng, s.lat, { name: s.name })));
 function ringFC() {
   const o = S.sel && ALL.get(S.sel);
   if (!o || o.kind !== "option") return FC([]);
@@ -198,60 +187,81 @@ function linkFC() {
   if (!o || o.kind !== "option") return FC([]);
   return FC(nearby(o).map(({ c }) => ({ type: "Feature", geometry: { type: "LineString", coordinates: [[o.lng, o.lat], DRAWN.get(c.id)] }, properties: {} })));
 }
+/* Only the 1 km ring and the lines to nearby rivals are map layers; they are
+   re-added after a basemap switch. Every pin is an SVG marker (below), so the
+   pins never depend on the map style and stay sharp on the satellite view. */
 function add(layer) { if (!map.getLayer(layer.id)) map.addLayer(layer); }
 function addLayers() {
-  map.addSource("ring", { type: "geojson", data: ringFC() });
-  add({ id: "ring-fill", type: "fill", source: "ring", slot: "middle", paint: { "fill-color": "#a3502c", "fill-opacity": .06 } });
-  add({ id: "ring-line", type: "line", source: "ring", slot: "middle", paint: { "line-color": "#a3502c", "line-width": 1.5, "line-dasharray": [2, 2] } });
-  map.addSource("links", { type: "geojson", data: linkFC() });
-  add({ id: "links", type: "line", source: "links", paint: { "line-color": "#a3502c", "line-width": 1.2, "line-opacity": .55 } });
-  map.addSource("stations", { type: "geojson", data: stationsFC() });
-  add({ id: "st", type: "circle", source: "stations", paint: { "circle-radius": ["interpolate", ["linear"], ["zoom"], 11, 3, 15, 6.5], "circle-color": "#fff", "circle-stroke-color": "#1d3f66", "circle-stroke-width": 2.2 } });
-  add({ id: "st-label", type: "symbol", source: "stations", minzoom: 12.5, layout: { "text-field": ["get", "name"], "text-size": 10.5, "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"], "text-offset": [0, 1.1], "text-anchor": "top" },
-    paint: { "text-color": "#1d3f66", "text-halo-color": "#fff", "text-halo-width": 1.5 } });
-  map.addSource("centres", { type: "geojson", data: centresFC() });
-  add({ id: "centres", type: "circle", source: "centres", paint: {
-    "circle-radius": ["case", ["==", ["get", "sel"], 1], 10, ["interpolate", ["linear"], ["zoom"], 11, 4.5, 15, 8]],
-    "circle-color": ["get", "color"], "circle-stroke-color": "#fff", "circle-stroke-width": ["case", ["==", ["get", "sel"], 1], 3, 1.6] } });
-  add({ id: "centres-label", type: "symbol", source: "centres", minzoom: 14.6, layout: { "text-field": ["get", "op"], "text-size": 10.5, "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"], "text-offset": [0, 1], "text-anchor": "top", "text-max-width": 9 },
-    paint: { "text-color": "#4a3a2e", "text-halo-color": "#fff", "text-halo-width": 1.5 } });
-  map.addSource("options", { type: "geojson", data: optionsFC() });
-  add({ id: "opt", type: "circle", source: "options", paint: {
-    "circle-radius": ["case", ["==", ["get", "sel"], 1], 15, ["==", ["get", "prime"], 1], 13, 11.5],
-    "circle-color": "#2a1e16", "circle-stroke-color": ["case", ["==", ["get", "prime"], 1], "#c8693a", "#a3502c"], "circle-stroke-width": ["case", ["==", ["get", "sel"], 1], 4, 2.5] } });
-  add({ id: "opt-n", type: "symbol", source: "options", layout: { "text-field": ["get", "n"], "text-size": 12, "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"], "text-allow-overlap": true, "text-ignore-placement": true },
-    paint: { "text-color": "#fff" } });
-  add({ id: "opt-label", type: "symbol", source: "options", minzoom: 13.2, layout: { "text-field": ["get", "name"], "text-size": 11.5, "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"], "text-offset": [0, 1.5], "text-anchor": "top", "text-max-width": 10 },
-    paint: { "text-color": "#2a1e16", "text-halo-color": "#fff", "text-halo-width": 1.8 } });
+  if (!map.getSource("ring")) map.addSource("ring", { type: "geojson", data: ringFC() });
+  add({ id: "ring-fill", type: "fill", source: "ring", slot: "middle", paint: { "fill-color": "#a3502c", "fill-opacity": .08 } });
+  add({ id: "ring-line", type: "line", source: "ring", slot: "middle", paint: { "line-color": "#a3502c", "line-width": 1.8, "line-dasharray": [2, 2] } });
+  if (!map.getSource("links")) map.addSource("links", { type: "geojson", data: linkFC() });
+  add({ id: "links", type: "line", source: "links", paint: { "line-color": "#ffffff", "line-width": 1.6, "line-opacity": .9, "line-dasharray": [1, 1.5] } });
   applyLayerVisibility();
 }
+
+/* ------------------------------------------------------------ markers ---- */
+const MK = { option: new Map(), centre: new Map(), station: [] };
+function pinSVG(o) {
+  return `<svg class="pin" width="38" height="48" viewBox="0 0 38 48" aria-hidden="true">
+    <path d="M19 2C9.6 2 2 9.4 2 18.6 2 30.6 19 46 19 46s17-15.4 17-27.4C36 9.4 28.4 2 19 2z" fill="#2a1e16" stroke="${o.prime ? "#e8a33d" : "#c8693a"}" stroke-width="3"/>
+    <text x="19" y="23.5" text-anchor="middle" font-family="IBM Plex Mono, ui-monospace, monospace" font-size="13" font-weight="600" fill="#fff">${optNo(o)}</text></svg>`;
+}
+function marker(el, lngLat, anchor) { return new mapboxgl.Marker({ element: el, anchor }).setLngLat(lngLat).addTo(map); }
+function buildMarkers() {
+  for (const o of O) {
+    const el = document.createElement("button");
+    el.type = "button";
+    el.className = "mk-opt" + (o.prime ? " prime" : "");
+    el.setAttribute("aria-label", `Autopilot option ${o.n}, ${o.name}`);
+    el.innerHTML = `<span class="blip" aria-hidden="true"></span>${pinSVG(o)}<span class="mk-label">${esc(o.name)}${o.precision === "building" ? "" : ` <i>approx.</i>`}</span>`;
+    el.addEventListener("click", e => { e.stopPropagation(); select(o.id, true); });
+    MK.option.set(o.id, marker(el, [o.lng, o.lat], "bottom"));
+  }
+  for (const c of C) {
+    const el = document.createElement("button");
+    el.type = "button";
+    el.className = "mk-ctr";
+    el.setAttribute("aria-label", `${c.operator}${c.building ? ", " + c.building : ""}, ${rs(c.price)} per seat`);
+    el.innerHTML = `<span class="dot" aria-hidden="true"></span><span class="mk-label">${esc(c.operator)} · ${rs(c.price)}</span>`;
+    el.addEventListener("click", e => { e.stopPropagation(); select(c.id, true); });
+    MK.centre.set(c.id, marker(el, DRAWN.get(c.id), "center"));
+  }
+  for (const s of ST) {
+    const el = document.createElement("div");
+    el.className = "mk-st";
+    el.title = `${s.name}, metro station`;
+    el.innerHTML = `<span class="m" aria-hidden="true">M</span><span class="mk-label">${esc(s.name)}</span>`;
+    MK.station.push(marker(el, [s.lng, s.lat], "center"));
+  }
+  const zoomClass = () => { const z = map.getZoom(); document.body.classList.toggle("z-near", z >= 15.2); document.body.classList.toggle("z-mid", z >= 13.4); };
+  map.on("zoom", zoomClass); zoomClass();
+  refreshMarkers();
+}
+function refreshMarkers() {
+  if (!MK.option.size) return;
+  const x = S.sel && ALL.get(S.sel);
+  const near = x && x.kind === "option" ? new Set(nearby(x).map(({ c }) => c.id)) : null;
+  for (const [id, m] of MK.option) m.getElement().classList.toggle("sel", S.sel === id);
+  for (const [id, m] of MK.centre) {
+    const el = m.getElement();
+    el.classList.toggle("sel", S.sel === id);
+    el.classList.toggle("near", !!near && near.has(id));
+    el.classList.toggle("off", !passes(ALL.get(id)));
+  }
+}
 function refreshMap() {
-  if (!map || !map.getSource("options")) return;
-  map.getSource("options").setData(optionsFC());
-  map.getSource("centres").setData(centresFC());
+  refreshMarkers();
+  if (!map || !map.getSource("ring")) return;
   map.getSource("ring").setData(ringFC());
   map.getSource("links").setData(linkFC());
 }
 function applyLayerVisibility() {
-  if (!map || !map.getLayer("opt")) return;
-  const vis = (ids, on) => ids.forEach(id => map.getLayer(id) && map.setLayoutProperty(id, "visibility", on ? "visible" : "none"));
-  vis(["opt", "opt-n", "opt-label", "ring-fill", "ring-line", "links"], S.layers.options);
-  vis(["centres", "centres-label"], S.layers.centres);
-  vis(["st", "st-label"], S.layers.metro);
-}
-function wireMap() {
-  const pop = new mapboxgl.Popup({ closeButton: false, closeOnClick: false, offset: 12 });
-  const hover = (layer, html) => {
-    map.on("mouseenter", layer, e => { map.getCanvas().style.cursor = "pointer"; const f = e.features[0]; pop.setLngLat(f.geometry.coordinates).setHTML(html(f.properties)).addTo(map); });
-    map.on("mouseleave", layer, () => { map.getCanvas().style.cursor = ""; pop.remove(); });
-  };
-  hover("opt", p => { const o = ALL.get(p.id), r = nearestSt(o);
-    return `<b>${optNo(o)} · ${esc(o.name)}</b>${o.prime ? " · prime option" : ""}<br>${rs(o.perSeat)} per seat · Grade ${esc(o.grade)}<br>${nearby(o).length} competitors within 1 km<br>${dist(r.d, o)} to ${esc(r.s.name)}`; });
-  hover("centres", p => { const c = ALL.get(p.id);
-    return `<b>${esc(c.operator)}</b>${c.building ? `<br>${esc(c.building)}` : ""}<br>${rs(c.price)} per seat · ${c.occLo} to ${c.occHi}% full · Grade ${esc(c.grade)}`; });
-  hover("st", p => `<b>${esc(p.name)}</b><br>Metro station`);
-  map.on("click", "opt", e => select(e.features[0].properties.id, true));
-  map.on("click", "centres", e => select(e.features[0].properties.id, true));
+  document.body.classList.toggle("hide-options", !S.layers.options);
+  document.body.classList.toggle("hide-centres", !S.layers.centres);
+  document.body.classList.toggle("hide-metro", !S.layers.metro);
+  if (!map || !map.getLayer("ring-fill")) return;
+  ["ring-fill", "ring-line", "links"].forEach(id => map.setLayoutProperty(id, "visibility", S.layers.options ? "visible" : "none"));
 }
 
 /* ============================================================== board ==== */
@@ -308,7 +318,7 @@ function renderList() {
     $("#b-count").textContent = `${list.length} of ${C.length} centres`;
     $("#b-sub").textContent = M.asOfText;
     $("#list").innerHTML = list.map(c => `<button class="card${S.sel === c.id ? " sel" : ""}" role="listitem" data-id="${c.id}">
-        <span class="mk" style="background:${band(c.price).color}">${Math.round(c.price / 1000)}k</span>
+        <span class="mk" style="background:${COL.centre}">${Math.round(c.price / 1000)}k</span>
         <div><div class="nm">${esc(c.operator)}</div>
         <div class="loc">${esc(c.building || "Building not given")} · ${esc(ZONE[c.micro].label)}</div>
         <div class="facts"><span class="px">${rs(c.price)}/seat</span><span>${c.occLo} to ${c.occHi}% full</span><span>Grade ${esc(c.grade)}</span></div></div></button>`).join("")
@@ -339,7 +349,7 @@ function select(id, fly, fromRoute) {
   const card = document.querySelector(`.card[data-id="${CSS.escape(id)}"]`); if (card) card.scrollIntoView({ block: "nearest" });
   if (!fromRoute) pushRoute();
   if (fly && map) {
-    if (x.kind === "option") fitPoints([[x.lng, x.lat], ...nearby(x).map(({ c }) => DRAWN.get(c.id))], { maxZoom: 15.6 });
+    if (x.kind === "option") map.flyTo({ center: [x.lng, x.lat], zoom: 15.6, padding: padding(), duration: REDUCED() ? 0 : 1200, essential: true });
     else map.flyTo({ center: DRAWN.get(x.id), zoom: Math.max(map.getZoom(), 15.4), padding: padding(), duration: REDUCED() ? 0 : 1200, essential: true });
   }
   if (innerWidth <= 860) setSheet("half");
@@ -365,28 +375,25 @@ function head(eyebrow, title, extra = "") {
 function overviewPanel() {
   const prices = C.map(c => c.price), lo = C.reduce((a, b) => b.price < a.price ? b : a), hi = C.reduce((a, b) => b.price > a.price ? b : a);
   const oLo = Math.min(...O.map(o => o.perSeat)), oHi = Math.max(...O.map(o => o.perSeat));
-  const occ = median(C.map(occMid));
   head(`AUTOPILOT · ANDHERI EAST · ${M.asOfText.toUpperCase()}`, "Autopilot's options against the market",
     `<p class="lede">${O.length} Autopilot options and ${C.length} coworking and managed-office centres run by ${new Set(C.map(c => c.operator)).size} operators, across Chandivali, Marol, J B Nagar, Chakala and the Western Express Highway.</p>`);
   const rows = sortedOptions().map(o => {
-    const n = nearby(o), med = median(n.map(({ c }) => c.price));
-    const diff = med == null ? "" : o.perSeat <= med ? `<span class="dn">${rs(med - o.perSeat)} below</span>` : `<span class="up">${rs(o.perSeat - med)} above</span>`;
-    return `<tr data-id="${o.id}"><td><b>${optNo(o)} ${esc(o.name)}</b>${o.prime ? `<span class="prime">Prime</span>` : ""}</td><td class="num">${rs(o.perSeat)}</td><td class="num">${n.length}</td><td class="num">${med == null ? "none" : rs(med)}</td><td>${diff}</td></tr>`;
+    const n = nearby(o);
+    return `<tr data-id="${o.id}"><td><b>${optNo(o)} ${esc(o.name)}</b>${o.prime ? `<span class="prime">Prime</span>` : ""}</td><td class="num">${rs(o.perSeat)}</td><td class="num">${n.length}</td><td class="num">${priceRange(n.map(({ c }) => c.price))}</td></tr>`;
   }).join("");
   $("#p-body").innerHTML = `
     <div class="kpis">
-      ${kpi("Market median", rs(COMP_MED), `per seat a month plus taxes, ${C.length} centres`)}
-      ${kpi("Market range", `${rs(Math.min(...prices))} to ${rs(Math.max(...prices))}`, `${esc(lo.operator)} to ${esc(hi.operator)}`)}
+      ${kpi("Competitor prices", `${rs(Math.min(...prices))} to ${rs(Math.max(...prices))}`, `per seat a month plus taxes, ${esc(lo.operator)} to ${esc(hi.operator)}`)}
       ${kpi("Autopilot options", `${rs(oLo)} to ${rs(oHi)}`, "per seat, from the inventory sheet")}
-      ${kpi("Typical occupancy", `${Math.round(occ)}%`, "median of the sheet's ranges")}
+      ${kpi("Occupancy", `${Math.min(...C.map(c => c.occLo))}% to ${Math.max(...C.map(c => c.occHi))}%`, "lowest to highest in the sheet")}
       ${kpi("Within 1 km of a metro", `${O.filter(o => nearestSt(o).d <= 1).length} of ${O.length}`, "Autopilot options, straight line")}
       ${kpi("Prime option", esc(O.find(o => o.prime)?.name || "none"), "marked in the inventory sheet")}
     </div>
     <h3 style="margin-top:18px">Each option against the centres within 1 km</h3>
-    <table class="near"><thead><tr><th>Option</th><th class="num">Per seat</th><th class="num">Rivals</th><th class="num">Their median</th><th>Option is</th></tr></thead><tbody>${rows}</tbody></table>
+    <table class="near"><thead><tr><th>Option</th><th class="num">Per seat</th><th class="num">Rivals</th><th class="num">Rival prices</th></tr></thead><tbody>${rows}</tbody></table>
     <p class="note">Rivals are the competitor centres within 1 km in a straight line of the option's pin. Prices are per seat a month plus taxes, as surveyed in ${esc(M.asOfText)}.</p>
     <h3 style="margin-top:18px">Map key</h3>
-    <div class="legend"><span><i style="background:#2a1e16;box-shadow:0 0 0 2px #a3502c"></i>Autopilot option</span>${BANDS.map(b => `<span><i style="background:${b.color}"></i>${esc(b.label)}</span>`).join("")}<span><i style="background:#fff;box-shadow:0 0 0 2px #1d3f66"></i>Metro station</span></div>
+    <div class="legend"><span><i style="background:${COL.option};box-shadow:0 0 0 2px #c8693a"></i>Autopilot option (numbered pin)</span><span><i style="background:${COL.centre}"></i>Competitor centre</span><span><i style="background:${COL.metro}"></i>Metro station (M)</span></div>
     <h3 style="margin-top:18px">Where this comes from</h3>
     <p class="note">${esc(M.sheet)}. ${esc(M.geo)} Left out because the sheet says the operator has no property there: ${esc(M.excluded.join("; "))}.</p>`;
   wireNearRows();
@@ -397,16 +404,16 @@ function areasPanel() {
     const cs = C.filter(c => c.micro === z.key), os = O.filter(o => o.micro === z.key);
     if (!cs.length && !os.length) return "";
     const p = cs.map(c => c.price);
-    return `<tr data-micro="${z.key}"><td><b>${esc(z.label)}</b><br><span class="note">${esc(z.name)}</span></td><td class="num">${cs.length}</td><td class="num">${p.length ? rs(median(p)) : "none"}</td><td class="num">${p.length ? `${rs(Math.min(...p))} to ${rs(Math.max(...p))}` : ""}</td><td>${os.map(o => `<span class="badge" title="${esc(o.name)}">${o.n}</span>`).join(" ") || "none"}</td></tr>`;
+    return `<tr data-micro="${z.key}"><td><b>${esc(z.label)}</b><br><span class="note">${esc(z.name)}</span></td><td class="num">${cs.length}</td><td class="num">${p.length ? priceRange(p) : "none"}</td><td>${os.map(o => `<span class="badge" title="${esc(o.name)}">${o.n}</span>`).join(" ") || "none"}</td></tr>`;
   }).join("");
-  $("#p-body").innerHTML = `<table class="near"><thead><tr><th>Area</th><th class="num">Centres</th><th class="num">Median</th><th class="num">Range</th><th>Autopilot</th></tr></thead><tbody>${rows}</tbody></table>
+  $("#p-body").innerHTML = `<table class="near"><thead><tr><th>Area</th><th class="num">Centres</th><th class="num">Price range</th><th>Autopilot</th></tr></thead><tbody>${rows}</tbody></table>
     <p class="note">Click an area to list its centres. Prices per seat a month plus taxes, ${esc(M.asOfText)}.</p>`;
   document.querySelectorAll("#p-body tr[data-micro]").forEach(tr => tr.addEventListener("click", () => {
     S.mode = "centres"; S.micro = tr.dataset.micro; renderFilters(); renderSort(); renderList(); refreshMap(); fitAll();
   }));
 }
 function optionPanel(o) {
-  const r = nearestSt(o), n = nearby(o), med = median(n.map(({ c }) => c.price));
+  const r = nearestSt(o), n = nearby(o);
   head(`AUTOPILOT OPTION ${optNo(o)} · ${esc(ZONE[o.micro].label.toUpperCase())}`, esc(o.name) + (o.prime ? ` <span class="prime">Prime option</span>` : ""));
   const spec = [["Grade", o.grade], ["Total floors", o.floors], ["Floors offered", o.floorsOffered], ["Typical floor plate", o.plate], ["Carpet area", o.carpet],
     ["Built-up area", o.builtup], ["OC status", ocText(o)], ["Condition", o.condition], ["Car parking", o.parking], ["Nearest commute (sheet)", o.commute]]
@@ -416,7 +423,7 @@ function optionPanel(o) {
     <div class="kpis">
       ${kpi("Per seat", rs(o.perSeat), "a month, inventory sheet")}
       ${kpi("Rivals within 1 km", String(n.length), "straight line")}
-      ${kpi("Their median", med == null ? "none" : rs(med), med == null ? "" : o.perSeat <= med ? `<span class="dn">This option is ${rs(med - o.perSeat)} below</span>` : `<span class="up">This option is ${rs(o.perSeat - med)} above</span>`)}
+      ${kpi("Rival prices", priceRange(n.map(({ c }) => c.price)), "per seat, centres within 1 km")}
       ${kpi("Nearest metro", dist(r.d, o), exact(o) ? `${esc(r.s.name)}, about ${walkMin(r.d)} min walk on a straight line` : `${esc(r.s.name)}; this pin is approximate`)}
     </div>
     <h3 style="margin-top:16px">From the inventory sheet</h3>
@@ -428,7 +435,6 @@ function optionPanel(o) {
 }
 function centrePanel(c) {
   const r = nearestSt(c), opts = O.map(o => ({ o, d: km(c, o) })).sort((a, b) => a.d - b.d);
-  const same = C.filter(x => x.micro === c.micro).map(x => x.price);
   head(`${esc(ZONE[c.micro].label.toUpperCase())} · COMPETITOR · ${M.asOfText.toUpperCase()}`, esc(c.operator), `<p class="lede">${esc(c.building || "Building not given in the sheet")}</p>`);
   const spec = [["Price", c.priceText], ["Occupancy", `${c.occLo}% to ${c.occHi}%`], ["Grade", c.grade], ["Workstation size", c.desk], ["Total seats", c.seats ? c.seats + (c.seatsNote ? ` (${c.seatsNote})` : "") : null],
     ["Sheet name", c.sheetBuilding && c.sheetBuilding !== c.building ? `${c.sheetOperator}, ${c.sheetBuilding}` : null], ["Area note", c.microNote]]
@@ -436,7 +442,7 @@ function centrePanel(c) {
   $("#p-body").innerHTML = `
     <div class="kpis">
       ${kpi("Per seat", rs(c.price), "a month plus taxes")}
-      ${kpi("Area median", rs(median(same)), `${same.length} centres in ${esc(ZONE[c.micro].label)}`)}
+      ${kpi("Occupancy", `${c.occLo}% to ${c.occHi}%`, "as the sheet gives it")}
       ${kpi("Nearest metro", dist(r.d, c), `${esc(r.s.name)}, straight line`)}
     </div>
     <h3 style="margin-top:16px">From the survey</h3>
@@ -455,7 +461,7 @@ function openCompare() {
   const rowsDef = [["Per seat", o => rs(o.perSeat)], ["Grade", o => o.grade], ["Area", o => ZONE[o.micro].label], ["Total floors", o => o.floors], ["Floors offered", o => o.floorsOffered],
     ["Floor plate", o => o.plate], ["Carpet area", o => o.carpet], ["Built-up area", o => o.builtup], ["OC status", ocText], ["Condition", o => o.condition], ["Car parking", o => o.parking],
     ["Nearest metro (straight line)", o => { const r = nearestSt(o); return `${r.s.name}, ${dist(r.d, o)}`; }], ["Rivals within 1 km", o => String(nearby(o).length)],
-    ["Their median per seat", o => { const m = median(nearby(o).map(({ c }) => c.price)); return m == null ? "none" : rs(m); }]];
+    ["Rival prices within 1 km", o => priceRange(nearby(o).map(({ c }) => c.price))]];
   const best = Math.min(...os.map(o => o.perSeat));
   $("#cmp-body").innerHTML = `<div style="overflow:auto"><table class="cmp"><thead><tr><th></th>${os.map(o => `<th>${optNo(o)} ${esc(o.name)}${o.prime ? `<span class="prime">Prime</span>` : ""}</th>`).join("")}</tr></thead><tbody>
     ${rowsDef.map(([k, f], i) => `<tr><th>${k}</th>${os.map(o => `<td${i === 0 && o.perSeat === best ? ` class="best"` : ""}>${esc(f(o) || "")}</td>`).join("")}</tr>`).join("")}</tbody></table></div>
@@ -471,9 +477,14 @@ function goTab(key) {
   if (key === "compare") return openCompare();
   S.tab = key; S.sel = null; pushRoute(); renderTabs(); renderList(); renderPanel(); refreshMap(); fitAll();
 }
-const LAYERS = [{ key: "options", label: "Autopilot options" }, { key: "centres", label: "Competitors" }, { key: "metro", label: "Metro" }, { key: "sat", label: "Satellite" }];
+const LAYERS = [
+  { key: "options", label: "Autopilot options", sw: `<svg width="12" height="15" viewBox="0 0 38 48" aria-hidden="true"><path d="M19 2C9.6 2 2 9.4 2 18.6 2 30.6 19 46 19 46s17-15.4 17-27.4C36 9.4 28.4 2 19 2z" fill="${COL.option}" stroke="#c8693a" stroke-width="4"/></svg>` },
+  { key: "centres", label: "Competitors", sw: `<span class="sw-dot" style="background:${COL.centre}"></span>` },
+  { key: "metro", label: "Metro", sw: `<span class="sw-dot sw-m" style="background:${COL.metro}">M</span>` },
+  { key: "sat", label: "Satellite", sw: "" },
+];
 function renderLayers() {
-  $("#layers").innerHTML = LAYERS.map(l => `<button class="chip lay${S.layers[l.key] ? " on" : ""}" type="button" data-layer="${l.key}">${l.label}</button>`).join("")
+  $("#layers").innerHTML = LAYERS.map(l => `<button class="chip lay${S.layers[l.key] ? " on" : ""}" type="button" data-layer="${l.key}" aria-pressed="${S.layers[l.key]}">${l.sw}${l.label}</button>`).join("")
     + `<span class="note lnote" style="margin-left:6px">Distances are straight lines between pins.</span>`;
 }
 function wireLayers() {
@@ -535,6 +546,6 @@ function boot() {
   $("#cmp").addEventListener("click", e => { if (e.target.id === "cmp") $("#cmp").classList.remove("on"); });
   addEventListener("keydown", e => { if (e.key === "Escape") $("#cmp").classList.remove("on"); });
   addEventListener("popstate", () => applyRoute(true));
-  if (map && map.getSource("options")) { refreshMap(); if (S.sel) select(S.sel, true, true); else fitAll(false); }
+  if (map && layered) { refreshMap(); if (S.sel) select(S.sel, true, true); else fitAll(false); }
 }
 initGate();
