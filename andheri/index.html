@@ -526,14 +526,18 @@ table.near tbody tr:hover td{background:rgba(163,80,44,.05)}
 .up{color:var(--bad)} .dn{color:var(--ok)}
 #cmp.on ~ .ag-root{display:none}
 
+/* Marker elements must not set `position`: Mapbox positions each one with
+   .mapboxgl-marker{position:absolute} and a transform. Overriding it stacks
+   the pins down the page instead of on their buildings. */
 /* ---- SVG pins. Autopilot: numbered dark pin with a pulsing blip at its
    point and the building name under it. Competitor: red dot, name and price
    on hover, when zoomed in, or when within 1 km of the selected option.
    Metro: blue M. */
-.mk-opt{position:relative;display:block;width:38px;height:48px;padding:0;border:0;background:none;cursor:pointer;filter:drop-shadow(0 3px 4px rgba(0,0,0,.45))}
+.mk-opt{display:block;width:38px;height:48px;padding:0;border:0;background:none;cursor:pointer;filter:drop-shadow(0 3px 4px rgba(0,0,0,.45))}
 .mk-opt .pin{display:block;transition:transform .2s;transform-origin:50% 100%}
 .mk-opt:hover .pin{transform:scale(1.08)}
-.mk-opt.sel{z-index:5}
+.mk-opt{z-index:3}
+.mk-opt.sel{z-index:8}
 .mk-opt.sel .pin{transform:scale(1.25)}
 .mk-opt .blip{position:absolute;left:50%;bottom:-7px;width:26px;height:12px;margin-left:-13px;border-radius:50%;background:rgba(200,105,58,.7);animation:mk-blip 1.9s ease-out infinite;pointer-events:none}
 .mk-opt.prime .blip{background:rgba(232,163,61,.8)}
@@ -543,10 +547,10 @@ table.near tbody tr:hover td{background:rgba(163,80,44,.05)}
 .mk-label i{font-style:normal;font-weight:500;color:var(--mut);font-size:10.5px}
 .mk-opt .mk-label{top:calc(100% + 8px);display:none;text-transform:none;letter-spacing:0}
 .mk-opt:hover .mk-label,.mk-opt.sel .mk-label,body.z-near .mk-opt .mk-label{display:block}
-.mk-opt:hover{z-index:6}
+.mk-opt:hover{z-index:9}
 .mk-opt.sel .mk-label{background:var(--ink);color:#fff}
 .mk-opt.sel .mk-label i{color:#e9d6c6}
-.mk-ctr{position:relative;display:block;width:18px;height:18px;padding:0;border:0;background:none;cursor:pointer}
+.mk-ctr{display:block;width:18px;height:18px;padding:0;border:0;background:none;cursor:pointer}
 .mk-ctr .dot{display:block;width:14px;height:14px;margin:2px;border-radius:50%;background:#d1495b;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.45);transition:transform .15s}
 .mk-ctr:hover .dot{transform:scale(1.3)}
 .mk-ctr.near .dot{box-shadow:0 0 0 4px rgba(209,73,91,.35),0 1px 4px rgba(0,0,0,.45)}
@@ -554,9 +558,10 @@ table.near tbody tr:hover td{background:rgba(163,80,44,.05)}
 .mk-ctr.sel .dot{transform:scale(1.5);box-shadow:0 0 0 5px rgba(209,73,91,.4),0 1px 4px rgba(0,0,0,.45)}
 .mk-ctr .mk-label{top:21px;display:none;font-weight:500;font-size:11px}
 .mk-ctr:hover .mk-label,.mk-ctr.near .mk-label,.mk-ctr.sel .mk-label,body.z-near .mk-ctr .mk-label{display:block}
-.mk-ctr:hover,.mk-ctr.sel{z-index:6}
+.mk-ctr{z-index:2}
+.mk-ctr:hover,.mk-ctr.sel{z-index:7}
 .mk-ctr.off{display:none}
-.mk-st{position:relative;width:20px;height:20px}
+.mk-st{width:20px;height:20px;z-index:1}
 .mk-st .m{display:block;width:20px;height:20px;border-radius:50%;background:#1f6fd1;border:2px solid #fff;color:#fff;font:700 10px/16px var(--font);text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.4)}
 .mk-st .mk-label{top:23px;display:none;color:#174a96;font-size:10.5px}
 body.z-mid .mk-st .mk-label{display:block}
