@@ -26,6 +26,8 @@ const { chromium } = require("playwright");
 const mapboxStub = require("./lib/mapbox-stub");
 const studies = require("./lib/study-bundle");
 const { validate, format } = require("./lib/validate-bundle");
+const { readWorkbook } = require("./lib/workbook");
+const { fillSampleWorkbook } = require("./lib/sample-workbook");
 
 const ROOT = path.join(__dirname, "..");
 const TYPES = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".json": "application/json", ".png": "image/png", ".webp": "image/webp", ".jpg": "image/jpeg", ".svg": "image/svg+xml" };
@@ -49,7 +51,7 @@ function serve() {
 
 /* The bundles the engine must survive. Chennai is the real one; the others
    are the shapes a workbook will actually produce on day one. */
-function cases() {
+async function cases() {
   const chennai = studies.bundleFor("chennai");
   const minimal = {
     meta: { title: "Pune Office Study", asOf: "2026-10", center: [73.8567, 18.5204], zoom: 11.5, sheet: "Pune.xlsx" },
@@ -78,7 +80,12 @@ function cases() {
     measures: [{ key: "care", kind: "nearestPlace", placeKind: "hospital", rings: [15, 30, 45], label: "Hospitals", question: "Q?", of: "distance" }],
     presets: [{ key: "b", label: "Balanced", default: true, levels: { care: 2 } }]
   };
-  return { chennai, minimal, noChooser, noExisting, noTransit, oneOption, ownKinds };
+  /* The one that proves the loop: a spreadsheet, filled the way a person
+     fills one, read into a bundle, and rendered. If this passes, the team
+     can make an Atlas without a developer. */
+  const { bundle: fromWorkbook } = await readWorkbook(await fillSampleWorkbook());
+
+  return { chennai, minimal, noChooser, noExisting, noTransit, oneOption, ownKinds, fromWorkbook };
 }
 
 async function run(name, bundle, base, browser) {
@@ -156,7 +163,7 @@ async function run(name, bundle, base, browser) {
 
 (async () => {
   const only = process.argv[2];
-  const all = cases();
+  const all = await cases();
   const names = only ? [only] : Object.keys(all);
   const server = await serve();
   const base = "http://127.0.0.1:" + server.address().port;

@@ -144,8 +144,18 @@ function band(a, b, w) {
   pts.push(pts[0]);
   return pts;
 }
+/* A micro-market may carry a drawn shape, and a workbook cannot easily give
+   one. Without a shape the zone is still a filter, a label and a card; it
+   simply has no outline on the map, and its label sits on the options it
+   holds, which is where a reader looks for it anyway. */
+const hasShape = (z) => !!(z && z.shape && (z.shape.type === "band" ? z.shape.from && z.shape.to : z.shape.c));
 const zonePolygon = (z) => z.shape.type === "band" ? band(z.shape.from, z.shape.to, z.shape.w) : ellipse(z.shape.c, z.shape.rx, z.shape.ry);
-const zoneCentre = (z) => z.shape.type === "band" ? [(z.shape.from[0] + z.shape.to[0]) / 2, (z.shape.from[1] + z.shape.to[1]) / 2] : z.shape.c;
+function zoneCentre(z) {
+  if (hasShape(z)) return z.shape.type === "band" ? [(z.shape.from[0] + z.shape.to[0]) / 2, (z.shape.from[1] + z.shape.to[1]) / 2] : z.shape.c;
+  const mine = O.filter(o => o.micro === z.key);
+  if (mine.length) return [mine.reduce((t, o) => t + o.lng, 0) / mine.length, mine.reduce((t, o) => t + o.lat, 0) / mine.length];
+  return Array.isArray(M.center) ? M.center : [0, 0];
+}
 
 /* ------------------------------------------------------- drive time ------
    Drive time is a straight-line distance turned into minutes with a road
@@ -814,8 +824,8 @@ function addLayers() {
   add({ id: "sat", type: "raster", source: "sat", ...(standard ? { slot: "bottom" } : {}), layout: { visibility: "none" }, paint: { "raster-fade-duration": 120 } });
 
   /* zones */
-  map.addSource("zones", { type: "geojson", data: FC(Z.map(z => ({ type: "Feature", geometry: { type: "Polygon", coordinates: [zonePolygon(z)] }, properties: { key: z.key, color: z.color } }))) });
-  map.addSource("zone-labels", { type: "geojson", data: FC(Z.map(z => pt(...zoneCentre(z), { label: z.label.toUpperCase() }))) });
+  map.addSource("zones", { type: "geojson", data: FC(Z.filter(hasShape).map(z => ({ type: "Feature", geometry: { type: "Polygon", coordinates: [zonePolygon(z)] }, properties: { key: z.key, color: z.color || "#a3502c" } }))) });
+  map.addSource("zone-labels", { type: "geojson", data: FC(Z.map(z => pt(...zoneCentre(z), { label: String(z.label || z.name || z.key).toUpperCase() }))) });
   /* Kept faint: the micro-markets are context, the pins are the subject. */
   add({ id: "zones-fill", type: "fill", source: "zones", paint: { "fill-color": ["get", "color"], "fill-opacity": .05 } });
   add({ id: "zones-line", type: "line", source: "zones", paint: { "line-color": ["get", "color"], "line-width": 1, "line-dasharray": [2, 2], "line-opacity": .4 } });
