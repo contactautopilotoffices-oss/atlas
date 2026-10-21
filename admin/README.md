@@ -132,6 +132,17 @@ This is how the team makes a new Atlas without a developer.
    `/engine/?atlas=<link id>` form still opens it.) A link id that names a
    page the site already has, such as `chennai` or `admin`, is refused.
 
+**From a PDF instead.** Step 1 also takes a PDF (an inventory table, a
+list of centres, a market note). The server reads its text (pages with no
+text layer, such as scans, are read as images by Claude, which is the OCR),
+a model puts what it says into the workbook's own sheets without inventing
+a figure or a coordinate, and Mapbox places each address on the map; every
+pin placed that way says so on the page. You get the filled-in workbook
+back to check the pins and figures, and upload it again once it is right.
+Needs `ENGY_API_KEY` or `ANTHROPIC_API_KEY` (the same keys God's Eye uses;
+`CMS_PDF_PROVIDER` picks when both are set, `CMS_PDF_MODEL` overrides the
+model) and `MAPBOX_TOKEN` for the pins.
+
 Publish is the source of truth. Every publish is kept as a numbered version
 (v1, v2, v3) on the same page, with who published it, when, and a note; an
 admin can make any earlier version live again, which goes out as a new

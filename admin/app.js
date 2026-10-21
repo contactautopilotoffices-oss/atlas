@@ -422,7 +422,7 @@ function linkModal(l, M) {
    name it, give it a credential, publish. The same page reopens an atlas
    made this way: upload a revised workbook to change it, issue or revoke
    access, publish again. */
-const CR = { bundle: null, report: null, notes: [], slug: null, status: null, access: [], lastIssued: null, history: [], fileName: "" };
+const CR = { bundle: null, report: null, notes: [], slug: null, status: null, access: [], lastIssued: null, history: [], fileName: "", workbook: null };
 const slugify = (t) => String(t || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40);
 const readAsBase64 = (file) => new Promise((ok, bad) => { const r = new FileReader(); r.onload = () => ok(String(r.result).replace(/^data:[^,]*,/, "")); r.onerror = bad; r.readAsDataURL(file); });
 function reportHTML(rep, notes) {
@@ -438,7 +438,7 @@ function reportHTML(rep, notes) {
     ${notes && notes.length ? `<div class="small mut" style="margin-top:4px">${notes.map(esc).join("<br>")}</div>` : ""}`;
 }
 async function pageCreate(M, slug) {
-  if (slug && CR.slug !== slug) { CR.bundle = null; CR.report = null; CR.notes = []; CR.lastIssued = null; CR.fileName = ""; }
+  if (slug && CR.slug !== slug) { CR.bundle = null; CR.report = null; CR.notes = []; CR.lastIssued = null; CR.fileName = ""; CR.workbook = null; }
   CR.slug = slug || null;
   CR.status = null; CR.access = []; CR.history = [];
   if (slug) {
@@ -455,14 +455,15 @@ async function pageCreate(M, slug) {
 
   M.innerHTML = header("Create", esc(title), esc(sub), st ? `<a class="btn" href="#/create">Start another</a>` : "") + `
     ${step(1, st ? "Upload a revised workbook" : "Upload the workbook",
-      `<p class="mut small">Only the <b>Atlas</b> and <b>Options</b> sheets are needed. Every other sheet adds a section, and anything left empty is left out.</p>
+      `<p class="mut small">Only the <b>Atlas</b> and <b>Options</b> sheets are needed. Every other sheet adds a section, and anything left empty is left out. Or upload the PDF you were sent: it is read into the same sheets, the addresses are placed on the map, and you get the workbook back to check.</p>
        <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:8px">
          <button class="btn" id="cr-template" type="button">Download the empty workbook</button>
          <label class="btn pri" style="cursor:pointer">Upload a filled workbook <input id="cr-file" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display:none"></label>
+         <label class="btn pri" style="cursor:pointer" title="An inventory table, a list of centres, a market note: the text is read, or the pages are read as images if it is a scan">Upload a PDF <input id="cr-pdf" type="file" accept=".pdf,application/pdf" style="display:none"></label>
          ${st ? "" : `<button class="btn" id="cr-example" type="button" title="A filled-in workbook kept on the site: four Andheri buildings, 22 flex centres, two metro lines">Use the Andheri Flex example</button>`}
          <span class="small mut" id="cr-filename">${esc(CR.fileName)}</span>
        </div>
-       <div id="cr-report">${reportHTML(CR.report, CR.notes)}</div>`, true)}
+       <div id="cr-report">${reportHTML(CR.report, CR.notes)}${CR.workbook ? `<div class="card" style="margin-top:10px"><b>Read from the PDF.</b> Every pin placed from an address says so on the page. <button class="btn sm" type="button" id="cr-dl-wb">Download the workbook it filled in</button> <span class="small mut">to check the pins and figures; upload it again when it is right, or save as it is.</span></div>` : ""}</div>`, true)}
     ${step(2, "Name it and give it a credential",
       `<div class="formgrid">
          <div><label class="f">Name</label><input class="in" id="cr-name" value="${esc(st ? st.name : (CR.bundle && CR.bundle.meta && CR.bundle.meta.title) || "")}" placeholder="Pune office study"></div>
@@ -502,10 +503,26 @@ async function pageCreate(M, slug) {
     $("#cr-filename").textContent = `Reading ${f.name}…`;
     try {
       const j = await api("bundle/import", { method: "POST", body: { file: await readAsBase64(f) } });
-      CR.bundle = j.bundle; CR.report = j.report; CR.notes = j.notes || []; CR.fileName = f.name;
+      CR.bundle = j.bundle; CR.report = j.report; CR.notes = j.notes || []; CR.fileName = f.name; CR.workbook = null;
       pageCreate(M, slug);
       setTimeout(() => { const r = $("#cr-report"); if (r) r.scrollIntoView({ behavior: "smooth", block: "start" }); }, 50);
     } catch (err) { $("#cr-filename").textContent = ""; fail(err); }
+  };
+  $("#cr-pdf").onchange = async (e) => {
+    const f = e.target.files && e.target.files[0]; if (!f) return;
+    $("#cr-filename").textContent = `Reading ${f.name}: this takes up to a minute…`;
+    try {
+      const j = await api("bundle/import-pdf", { method: "POST", body: { file: await readAsBase64(f), name: f.name } });
+      CR.bundle = j.bundle; CR.report = j.report; CR.fileName = `${f.name} (read by ${j.provider || "the model"})`; CR.workbook = j.workbook;
+      CR.notes = [`${j.read.pages} page${j.read.pages === 1 ? "" : "s"} read${j.read.scanned.length ? `, ${j.read.scanned.length} as images` : ""}. ${j.placed} pin${j.placed === 1 ? "" : "s"} placed from addresses.`, ...(j.notes || [])];
+      pageCreate(M, slug);
+      setTimeout(() => { const r = $("#cr-report"); if (r) r.scrollIntoView({ behavior: "smooth", block: "start" }); }, 50);
+    } catch (err) { $("#cr-filename").textContent = ""; fail(err); }
+  };
+  if ($("#cr-dl-wb")) $("#cr-dl-wb").onclick = () => {
+    const bin = atob(CR.workbook), arr = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+    const blob = new Blob([arr], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }), a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = (CR.fileName.split(" ")[0] || "atlas").replace(/\.pdf$/i, "") + ".xlsx"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
   };
   /* The example lives at /examples/andheri-flex.xlsx, so a demo needs no
      file on anyone's disk, and nothing that cannot drive a file dialog
@@ -516,7 +533,7 @@ async function pageCreate(M, slug) {
       const res = await fetch("/examples/andheri-flex.xlsx", { cache: "no-store" });
       if (!res.ok) throw new Error("The example workbook is not on this site.");
       const j = await api("bundle/import", { method: "POST", body: { file: await readAsBase64(await res.blob()) } });
-      CR.bundle = j.bundle; CR.report = j.report; CR.notes = j.notes || []; CR.fileName = "andheri-flex.xlsx (the example)";
+      CR.bundle = j.bundle; CR.report = j.report; CR.notes = j.notes || []; CR.fileName = "andheri-flex.xlsx (the example)"; CR.workbook = null;
       pageCreate(M, slug);
       setTimeout(() => { const r = $("#cr-report"); if (r) r.scrollIntoView({ behavior: "smooth", block: "start" }); }, 50);
     } catch (err) { $("#cr-filename").textContent = ""; fail(err); }

@@ -354,7 +354,7 @@
       "maxDuration": 30
     },
     "api/cms/index.js": {
-      "maxDuration": 30
+      "maxDuration": 120
     },
     "api/cms/config.js": {
       "maxDuration": 10

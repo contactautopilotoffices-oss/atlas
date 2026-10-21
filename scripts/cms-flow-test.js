@@ -38,7 +38,7 @@ const wait = (ms) => new Promise(ok => setTimeout(ok, ms));
 async function startSite() {
   const port = await freePort();
   if (fs.existsSync(STORE)) fs.unlinkSync(STORE);
-  const child = spawn(process.execPath, [path.join(ROOT, "scripts", "atlas-dev.js")], { env: { ...process.env, PORT: String(port), CMS_DEV_STORE: STORE }, stdio: ["ignore", "pipe", "pipe"] });
+  const child = spawn(process.execPath, [path.join(ROOT, "scripts", "atlas-dev.js")], { env: { ...process.env, PORT: String(port), CMS_DEV_STORE: STORE, ENGY_API_KEY: "", ANTHROPIC_API_KEY: "", CMS_PDF_PROVIDER: "" }, stdio: ["ignore", "pipe", "pipe"] });
   let log = "";
   child.stdout.on("data", d => { log += d; });
   child.stderr.on("data", d => { log += d; });
@@ -103,6 +103,12 @@ async function expect(name, fn) { try { const v = await fn(); if (v === false) b
     await expect("the report lists the contents", async () => /4 options/.test(reportText) && /22 places/.test(reportText));
     await expect("the warnings name the sheet and the row", async () => /Facts, market row/.test(reportText));
     await expect("the name is prefilled from the workbook", async () => (await page.inputValue("#cr-name")) === "Andheri Flex Atlas");
+    await expect("a PDF can be uploaded from the same step", async () => !!(await page.$("#cr-pdf")));
+    await expect("without a model key the PDF route says what is missing", async () => {
+      const r = await page.evaluate(async () => (await fetch("/api/cms?r=bundle/import-pdf", { method: "POST", credentials: "same-origin", headers: { "content-type": "application/json", "x-cms": "1" }, body: JSON.stringify({ file: btoa("%PDF-1.4 x"), name: "x.pdf" }) })).json());
+      if (!/ENGY_API_KEY or ANTHROPIC_API_KEY/.test(r.error || "")) throw new Error(JSON.stringify(r));
+      return true;
+    });
     await expect("the link id is derived from the title", async () => (await page.inputValue("#cr-slug")) === "andheri-flex-atlas");
 
     console.log("\n3. Named, credentialled, saved as a draft");
