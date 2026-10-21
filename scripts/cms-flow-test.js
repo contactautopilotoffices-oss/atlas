@@ -270,7 +270,14 @@ async function expect(name, fn) { try { const v = await fn(); if (v === false) b
     await page.fill("#pb-note", "First case study"); await page.click("#pb-go");
     await page.waitForFunction(() => /Live/.test((document.querySelector(".hd .sub") || {}).textContent || ""), { timeout: 15000 });
     await expect("the case study is live at version 1 with its note in the history", async () => /version 1/.test(await page.$eval(".hd .sub", e => e.textContent)) && /First case study/.test(await page.$eval("#main", e => e.textContent)));
-    await expect("the link keeps the atlas's name in Atlas links", async () => { await page.click('#nav a[href="#/links"]'); await page.waitForSelector("#l-add", { timeout: 10000 }); return /Andheri Flex Atlas/.test(await page.$eval("table.t", e => e.textContent)) && !/Andheri Business Case Study 2026/.test(await page.$eval("table.t", e => e.textContent)); });
+    await expect("the link keeps the atlas's name in Atlas links", async () => {
+      await page.click('#nav a[href="#/links"]');
+      /* The links page draws its header first and the table once the list
+         has loaded; wait for the table with the seeded links in it. */
+      await page.waitForFunction(() => location.hash === "#/links" && /Flipkart/.test((document.querySelector("#main table.t") || {}).textContent || ""), { timeout: 15000 });
+      const t = await page.$eval("#main table.t", e => e.textContent);
+      return /Andheri Flex Atlas/.test(t) && !/Andheri Business Case Study 2026/.test(t);
+    });
     const reader = await browser.newContext({ userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36" });
     const rp = await reader.newPage(); await stubRoutes(rp);
     const rpErr = []; rp.on("pageerror", e => rpErr.push(e.message));
