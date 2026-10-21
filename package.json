@@ -10,7 +10,8 @@
     "godseye": "node scripts/godseye-dev.js",
     "dev:cms": "node scripts/atlas-dev.js",
     "validate": "node scripts/validate-bundle.js --all",
-    "test": "node scripts/validate-bundle.test.js"
+    "test": "node scripts/validate-bundle.test.js && node scripts/engine-test.js",
+    "test:engine": "node scripts/engine-test.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.128.0"
