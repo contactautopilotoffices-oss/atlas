@@ -126,13 +126,19 @@ This is how the team makes a new Atlas without a developer.
    client. Save as draft.
 5. **Preview draft** opens it exactly as a client will see it. **Publish**
    (admin) makes it live within about half a minute.
-6. Send the client `atlas.autopilotoffices.com` with the access ID and
-   password. They sign in at the site root as every client does, and are sent
-   to the atlas. The atlas also opens directly at `/engine/?atlas=<link id>`
-   and asks for the same credential there.
+6. Send the client `atlas.autopilotoffices.com/<link id>` with the access ID
+   and password. The atlas asks for the credential there; signing in at the
+   site root with the same ID sends them to the same address. (The older
+   `/engine/?atlas=<link id>` form still opens it.) A link id that names a
+   page the site already has, such as `chennai` or `admin`, is refused.
+
+Publish is the source of truth. Every publish is kept as a numbered version
+(v1, v2, v3) on the same page, with who published it, when, and a note; an
+admin can make any earlier version live again, which goes out as a new
+number. The client never sees a version number: the link shows what is live.
 
 To change it, open it from Atlas links and upload a revised workbook; the
-previous version stays live until you publish again. Access IDs can be
+live version stays as it is until you publish again. Access IDs can be
 revoked and re-enabled from the same page, and several can be issued for one
 atlas, one per person, which is what makes the dashboard's per-ID figures
 mean one person each.

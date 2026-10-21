@@ -162,9 +162,13 @@ cut over. Worth ten minutes of inventory before the switch.
 4. ~~Importer and validation report~~ **done**
 5. ~~Create-an-atlas flow in `/admin/`, bundles stored and served, server-checked credentials~~ **done**
 
-There is no step for routing or DNS. A visitor signs in at
-`atlas.autopilotoffices.com` as before; an ID the manifest does not know is
-checked by the server, which sends them to `/engine/?atlas=<id>`.
+There is no step for routing or DNS. Each atlas is served at
+`atlas.autopilotoffices.com/<id>` (a rewrite in vercel.json hands any
+single-segment path that is not a file to the engine page). A visitor signs
+in at the site root as before; an ID the manifest does not know is checked
+by the server, which sends them to `/<id>`. Every publish is kept as a
+numbered version in `atlas_bundle_history`, visible and reversible in
+/admin/, never shown to the visitor.
 
 `npm run test:flow` runs the whole sequence headlessly: owner created,
 workbook uploaded, report read, credential issued, draft previewed,

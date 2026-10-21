@@ -205,17 +205,18 @@ async function workbookPreview(browser) {
     /* ---------------- preview ---------------- */
     section("Preview and publish");
     const prev = await ctx.newPage(); await stub(prev);
-    await prev.goto(site.base + "/engine/?atlas=andheri-flex&draft=1", { waitUntil: "domcontentloaded" });
+    await prev.goto(site.base + "/andheri-flex?draft=1", { waitUntil: "domcontentloaded" });
     await prev.waitForFunction(() => document.querySelector("#tabs") && document.querySelector("#tabs").children.length > 0, { timeout: 20000 });
     await wait(800); await schematic(prev);
     await shot(prev, "preview", "Preview draft: exactly what the client will see",
       "Opened from the Preview button, in a new tab, as the signed-in admin. The list on the left is the four buildings, the panel on the right is the Overview, the chips at the bottom switch map layers on and off, including the 22 flex centres.", { map: true });
     await prev.close();
 
-    await page.click("#cr-publish"); await page.waitForSelector("#cf-ok"); await wait(200);
-    await shot(page, "confirm", "Publish asks once",
-      "Only an admin can publish. It goes live within about half a minute.");
-    await page.click("#cf-ok");
+    await page.click("#cr-publish"); await page.waitForSelector("#pb-go"); await wait(200);
+    await page.fill("#pb-note", "First publish from the CMS");
+    await shot(page, "confirm", "Publish asks once, and keeps a note",
+      "Only an admin can publish. It goes live within about half a minute, as version 1. Every publish is kept, with who did it, when, and this note; any earlier version can be made live again from the same page. The client never sees a version number.");
+    await page.click("#pb-go");
     await page.waitForFunction(() => /Live/.test((document.querySelector(".hd .sub") || {}).textContent || ""), { timeout: 15000 }); await wait(400);
     await page.evaluate(() => { const c = [...document.querySelectorAll(".card")].find(e => /^Live\./.test(e.textContent.trim())); if (c) c.scrollIntoView({ block: "center" }); }); await wait(200);
     await shot(page, "live", "Live, version 1",
@@ -239,7 +240,7 @@ async function workbookPreview(browser) {
     await shot(v, "root", "atlas.autopilotoffices.com, as every client sees it",
       "The same sign-in page as today. The ID is not in the site's script of client credentials, so the page asks the server, which checks the password against the hash the CMS stored and replies with where to go.");
     await v.press("#gatePass", "Enter");
-    await v.waitForURL(/\/engine\/\?atlas=andheri-flex/, { timeout: 15000 });
+    await v.waitForURL(/\/andheri-flex$/, { timeout: 15000 });
     await v.waitForFunction(() => document.querySelector("#tabs") && document.querySelector("#tabs").children.length > 0, { timeout: 20000 });
     await wait(900); await schematic(v);
     await shot(v, "atlas-overview", "Signed in: the published atlas",
@@ -266,7 +267,7 @@ async function workbookPreview(browser) {
 
     const stranger = await browser.newContext({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1.5 });
     const s = await stranger.newPage(); await stub(s);
-    await s.goto(site.base + "/engine/?atlas=andheri-flex", { waitUntil: "domcontentloaded" });
+    await s.goto(site.base + "/andheri-flex", { waitUntil: "domcontentloaded" });
     await s.waitForFunction(() => (document.querySelector("#g-title") || {}).textContent === "Sign in", { timeout: 10000 }); await wait(400);
     await shot(s, "stranger", "Anyone else who has the link is asked to sign in",
       "The atlas URL on its own opens nothing. The server refuses the data without a valid credential, so the page shows its own sign-in form and the same ID and password work here too.");
@@ -338,7 +339,7 @@ async function workbookPreview(browser) {
       <tr><td>Placing every building on the map</td><td>Neither PDF carries a coordinate. The validator names every row without one, but each must be looked up. For this atlas the 26 positions came from the committed Andheri study, which had already placed the same buildings with a source per pin.</td></tr>
       <tr><td>Photographs</td><td>Files, not rows; the workbook does not carry them.</td></tr></table>
     <h3>Before it works on the live site</h3>
-    <div class="box">Run <b>supabase/migrations/015_register_andheri_whitefield.sql</b> and <b>016_bundles.sql</b> in the Supabase SQL editor, and merge PR 21. Until then the Create an atlas page is not on the live site. Everything shown here was captured from that code running locally.</div>
+    <div class="box">Run <b>supabase/migrations/015_register_andheri_whitefield.sql</b>, <b>016_bundles.sql</b> and <b>017_bundle_history.sql</b> in the Supabase SQL editor. Until then the Create an atlas page is not on the live site. Everything shown here was captured from that code running locally.</div>
   </section>
   ${body}
   <h2 class="sec">What is behind each screen</h2>
@@ -346,8 +347,8 @@ async function workbookPreview(browser) {
     <tr><th>What you did</th><th>What happened</th></tr>
     <tr><td>Uploaded the workbook</td><td>The browser sends the file to <b>/api/cms?r=bundle/import</b>. The server reads every sheet by its column headings into one bundle and runs the same checks the engine relies on. Nothing is saved at this point.</td></tr>
     <tr><td>Saved as draft</td><td><b>bundle/draft</b> stores the bundle in the <b>atlas_bundles</b> table and adds a row of kind "bundle" to <b>atlas_links</b>. <b>access/issue</b> stores the access ID in <b>atlas_access</b> with an scrypt hash of the password.</td></tr>
-    <tr><td>Previewed</td><td>/engine/?atlas=andheri-flex&amp;draft=1 asks <b>bundle</b> for the draft, which only a signed-in admin may read, and the engine draws it.</td></tr>
-    <tr><td>Published</td><td><b>bundle/publish</b> copies the draft to the live slot and raises the version.</td></tr>
+    <tr><td>Previewed</td><td>/andheri-flex?draft=1 asks <b>bundle</b> for the draft, which only a signed-in admin may read, and the engine draws it.</td></tr>
+    <tr><td>Published</td><td><b>bundle/publish</b> copies the draft to the live slot, raises the version and keeps a copy in <b>atlas_bundle_history</b>. <b>bundle/rollback</b> makes any earlier copy live again.</td></tr>
     <tr><td>The client signed in at the root</td><td>The ID is not in clients/manifest.js, so the page posts it to <b>/api/cms?r=access</b>. The server checks the hash, locks the ID for 15 minutes after five wrong passwords, sets a cookie that names this one atlas, and replies with its address.</td></tr>
     <tr><td>The atlas opened</td><td>engine/load.js asks for the live bundle; the server returns it only with that cookie. The engine renders it and the CMS tracking script records the visit under the access ID.</td></tr>
   </table>

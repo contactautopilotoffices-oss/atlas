@@ -23,7 +23,9 @@
      GET  bundle/template (editor)     the empty workbook, as a download
      POST bundle/import (editor)       a filled workbook -> bundle + report; saves nothing
      POST bundle/draft (editor)        save a bundle as a link's draft
-     POST bundle/publish (admin)       draft -> live
+     POST bundle/publish (admin)       draft -> live, kept as a numbered version
+     GET  bundle/history&link= (viewer) every publish so far
+     POST bundle/rollback (admin)      make an earlier version live again
      GET  bundle&link=[&draft=1]       the bundle itself: live needs the visitor's
                                        access cookie for that link, draft an admin
      GET  access/list&link= (editor)   POST access/issue | access/revoke (admin)
@@ -470,12 +472,21 @@ R["POST broker/submit"] = async (req, res, b) => {
 /* ================================================== workbook atlases ==
    An Atlas made in /admin/ from a workbook. The bundle lives in
    atlas_bundles with a draft and a live version; its link row in atlas_links
-   has kind "bundle" and path "/", because a visitor reaches it the way they
-   reach every client view: sign in at the site root with an access ID, and
-   be sent on. */
+   has kind "bundle" and path "/<slug>": that is where the atlas is served
+   (a rewrite in vercel.json hands /<slug> to the engine page). A visitor
+   reaches it by signing in at the site root with an access ID, or at the
+   atlas's own address. Each publish is kept in atlas_bundle_history with a
+   number the team sees in /admin/; the visitor only ever sees what is live. */
 const MAX_BUNDLE = 4 * 1024 * 1024;
 const ACCESS_ID = /^[A-Z0-9][A-Z0-9-]{2,39}$/;
 const normAccess = (v) => clip(v, 60).trim().toUpperCase().replace(/[\s_]+/g, "-");
+/* A workbook atlas is served at /<link id>, after the site's own files, so
+   an id that names a folder or page that already exists could never be
+   reached: /chennai would open the Chennai study, never the atlas. */
+const RESERVED = new Set(["2d-to-3d", "admin", "andheri", "api", "assets", "atlas", "broker", "chennai", "clients", "config", "data",
+  "digitide", "docs", "engine", "evidence", "examples", "glb-3d", "godseye", "guide", "index", "indore", "media", "noida",
+  "node-modules", "recon", "references", "scripts", "supabase", "whitefield", "login", "logout", "static", "public", "favicon"]);
+const atlasUrl = (slug) => `/${slug}`;
 
 async function bundleRow(slug) {
   let row = await store.one("atlas_bundles", { eq: { link_slug: slug } });
@@ -522,6 +533,7 @@ R["POST bundle/draft"] = async (req, res, b) => {
   const u = await needUser(req, "editor");
   const slug = clip(b.slug, 40).trim().toLowerCase();
   if (!SLUG.test(slug)) fail(400, "Use lower-case letters, numbers and hyphens for the link id.");
+  if (RESERVED.has(slug)) fail(400, `"${slug}" is already a page on this site, so the atlas could never be opened at /${slug}. Pick another link id.`);
   const existing = await store.one("atlas_links", { eq: { slug } });
   if (existing && existing.kind !== "bundle") fail(400, `"${slug}" is already a ${existing.kind} link. Pick another id.`);
   if (existing) needLink(u, slug);
@@ -530,7 +542,7 @@ R["POST bundle/draft"] = async (req, res, b) => {
   if (!rep.ok) fail(400, `The atlas has ${rep.errors.length} problem${rep.errors.length === 1 ? "" : "s"} that stop it being drawn. Fix them in the workbook and upload it again.`);
   const name = clip(b.name, 120).trim() || (bundle.meta && bundle.meta.title) || slug;
   const city = clip(b.city, 60).trim() || (bundle.meta && bundle.meta.city) || null;
-  const row = { slug, name, kind: "bundle", path: "/", city, notes: clip(b.notes, 1000) || (existing ? existing.notes : null), updated_at: store.now() };
+  const row = { slug, name, kind: "bundle", path: atlasUrl(slug), city, notes: clip(b.notes, 1000) || (existing ? existing.notes : null), updated_at: store.now() };
   if (!existing) row.access_id = null;
   await store.upsert("atlas_links", row, "slug");
   await overridesRow(slug);
@@ -552,7 +564,36 @@ R["POST bundle/publish"] = async (req, res, b) => {
   if (!rep.ok) fail(400, "The draft no longer passes its checks. Upload the workbook again.");
   const version = (row.version || 0) + 1;
   await store.update("atlas_bundles", { eq: { link_slug: slug } }, { published: row.draft, published_at: store.now(), published_by: u.email, version });
-  await audit(u, "bundle.publish", slug, { version });
+  await store.insert("atlas_bundle_history", { link_slug: slug, version, bundle: row.draft, action: "publish", by_email: u.email, note: clip(b.note, 300) || null, at: store.now() });
+  await audit(u, "bundle.publish", slug, { version, note: clip(b.note, 300) });
+  return { slug, version };
+};
+
+/* Every publish of a workbook atlas, newest first. The bundles themselves
+   stay in the database; the page gets the list. */
+R["GET bundle/history"] = async (req, res, b, q) => {
+  const u = await needUser(req, "viewer");
+  const slug = clip(q.get("link"), 40);
+  needLink(u, slug);
+  const row = await store.one("atlas_bundles", { eq: { link_slug: slug } });
+  const history = await store.select("atlas_bundle_history", { eq: { link_slug: slug }, order: "at.desc", limit: 50, select: "id,version,action,by_email,note,at" });
+  return { live: row ? row.version : 0, history };
+};
+
+/* Make an earlier publish live again. It goes out as a new version, so the
+   history stays a straight line, and the draft is reset to it so the next
+   workbook upload starts from what the client is seeing. */
+R["POST bundle/rollback"] = async (req, res, b) => {
+  const u = await needUser(req, "admin");
+  const slug = clip(b.slug, 40);
+  needLink(u, slug);
+  const h = await store.one("atlas_bundle_history", { eq: { id: clip(b.historyId, 60), link_slug: slug } });
+  if (!h) fail(404, "That version was not found.");
+  const row = await bundleRow(slug);
+  const version = (row.version || 0) + 1;
+  await store.update("atlas_bundles", { eq: { link_slug: slug } }, { published: h.bundle, draft: h.bundle, published_at: store.now(), published_by: u.email, version, draft_updated_at: store.now(), draft_updated_by: u.email });
+  await store.insert("atlas_bundle_history", { link_slug: slug, version, bundle: h.bundle, action: "rollback", by_email: u.email, note: `Back to version ${h.version}`, at: store.now() });
+  await audit(u, "bundle.rollback", slug, { to: h.version, version });
   return { slug, version };
 };
 
@@ -647,7 +688,7 @@ R["POST access"] = async (req, res, b) => {
   if (!link) bad();
   await store.update("atlas_access", { eq: { access_id: id } }, { failed_logins: 0, locked_until: null, last_used_at: store.now() });
   auth.setAccess(res, { slug: row.link_slug, aid: id });
-  return { slug: row.link_slug, name: link.name, paused: link.status === "paused", open: `/engine/?atlas=${encodeURIComponent(row.link_slug)}` };
+  return { slug: row.link_slug, name: link.name, paused: link.status === "paused", open: atlasUrl(row.link_slug) };
 };
 
 R["POST access/signout"] = async (req, res) => { auth.clearAccess(res); return { ok: true }; };

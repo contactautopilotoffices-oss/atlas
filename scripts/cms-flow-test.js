@@ -126,7 +126,7 @@ async function expect(name, fn) { try { const v = await fn(); if (v === false) b
     await stubRoutes(prev);
     const prevErrors = [];
     prev.on("pageerror", e => prevErrors.push(e.message));
-    await prev.goto(site.base + "/engine/?atlas=andheri-flex&draft=1", { waitUntil: "domcontentloaded" });
+    await prev.goto(site.base + "/andheri-flex?draft=1", { waitUntil: "domcontentloaded" });
     await prev.waitForFunction(() => document.querySelector("#tabs") && document.querySelector("#tabs").children.length > 0, { timeout: 20000 }).catch(() => {});
     await expect("the draft preview renders for the signed-in admin", async () => (await prev.$$("#tabs [data-t]")).length >= 5 && (await prev.$$("#list .card")).length === 4);
     await expect("the preview has no page errors", async () => { if (prevErrors.length) throw new Error(prevErrors[0]); });
@@ -134,10 +134,23 @@ async function expect(name, fn) { try { const v = await fn(); if (v === false) b
     await prev.close();
 
     await page.click("#cr-publish");
-    await page.waitForSelector("#cf-ok", { timeout: 5000 });
-    await page.click("#cf-ok");
+    await page.waitForSelector("#pb-go", { timeout: 5000 });
+    await page.fill("#pb-note", "First publish from the CMS");
+    await page.click("#pb-go");
     await page.waitForFunction(() => /Live/.test((document.querySelector(".hd .sub") || {}).textContent || ""), { timeout: 15000 });
     await expect("it is live at version 1", async () => /version 1/.test(await page.$eval(".hd .sub", e => e.textContent)));
+    await expect("version 1 is listed in the history with its note", async () => {
+      const h = (await page.evaluate(async () => (await (await fetch("/api/cms?r=bundle/history&link=andheri-flex", { credentials: "same-origin" })).json())));
+      return h.live === 1 && h.history.length === 1 && h.history[0].version === 1 && h.history[0].note === "First publish from the CMS" && /v1/.test(await page.$eval("#main", e => e.textContent));
+    });
+    await expect("the link's path is the atlas's own address", async () => {
+      const r = await page.evaluate(async () => (await (await fetch("/api/cms?r=links", { credentials: "same-origin" })).json()).links.find(l => l.slug === "andheri-flex"));
+      return r && r.path === "/andheri-flex";
+    });
+    await expect("a link id that names an existing page is refused", async () => {
+      const r = await page.evaluate(async () => (await fetch("/api/cms?r=bundle/draft", { method: "POST", credentials: "same-origin", headers: { "content-type": "application/json", "x-cms": "1" }, body: JSON.stringify({ slug: "chennai", bundle: { meta: { title: "x" }, options: [] } }) })).json());
+      return r && /already a page on this site/.test(r.error || "");
+    });
     await expect("the sign-in details are shown once", async () => { const t = await page.$eval("#main", e => e.textContent); return t.includes(ACCESS) && t.includes(PASS); });
 
     console.log("\n5. A visitor signs in at the site root");
@@ -162,8 +175,8 @@ async function expect(name, fn) { try { const v = await fn(); if (v === false) b
     await visitor.fill("#gateId", ACCESS);
     await visitor.fill("#gatePass", PASS);
     await visitor.press("#gatePass", "Enter");
-    await visitor.waitForURL(/\/engine\/\?atlas=andheri-flex/, { timeout: 15000 });
-    await expect("the root sends the visitor to the published atlas", async () => /\/engine\/\?atlas=andheri-flex$/.test(visitor.url()));
+    await visitor.waitForURL(/\/andheri-flex$/, { timeout: 15000 });
+    await expect("the root sends the visitor to /andheri-flex, the atlas's own address", async () => /\/andheri-flex$/.test(visitor.url()));
     await visitor.waitForFunction(() => document.querySelector("#tabs") && document.querySelector("#tabs").children.length > 0, { timeout: 20000 }).catch(() => {});
     /* The map loads after the panels render, as it does with real Mapbox, so
        wait for its layers rather than reading them the moment the tabs show. */
@@ -190,7 +203,7 @@ async function expect(name, fn) { try { const v = await fn(); if (v === false) b
     const stranger = await browser.newContext();
     const sp = await stranger.newPage();
     await stubRoutes(sp);
-    await sp.goto(site.base + "/engine/?atlas=andheri-flex", { waitUntil: "domcontentloaded" });
+    await sp.goto(site.base + "/andheri-flex", { waitUntil: "domcontentloaded" });
     await sp.waitForFunction(() => (document.querySelector("#g-title") || {}).textContent === "Sign in", { timeout: 10000 }).catch(() => {});
     await expect("the engine page shows its own sign-in form to a stranger", async () => (await sp.$eval("#g-title", e => e.textContent)) === "Sign in" && (await sp.$$("#tabs [data-t]")).length === 0);
     await expect("the bundle is not served without a credential", async () => {
@@ -200,6 +213,11 @@ async function expect(name, fn) { try { const v = await fn(); if (v === false) b
     await sp.fill("#g-id", ACCESS); await sp.fill("#g-pw", PASS); await sp.click("#g-go");
     await sp.waitForFunction(() => document.querySelector("#tabs") && document.querySelector("#tabs").children.length > 0, { timeout: 20000 }).catch(() => {});
     await expect("signing in on the engine page itself works too", async () => (await sp.$$("#list .card")).length === 4);
+    await expect("the visitor's page shows no version number", async () => !/version\s*\d|\bv\d\b/i.test(await sp.$eval("body", e => e.textContent)));
+    const old = await stranger.newPage(); await stubRoutes(old);
+    await old.goto(site.base + "/engine/?atlas=andheri-flex", { waitUntil: "domcontentloaded" });
+    await old.waitForFunction(() => document.querySelector("#tabs") && document.querySelector("#tabs").children.length > 0, { timeout: 20000 }).catch(() => {});
+    await expect("the older /engine/?atlas= address still opens the same atlas", async () => (await old.$$("#list .card")).length === 4);
     await stranger.close();
 
     await expect("no page errors in /admin/ throughout", async () => { if (errors.length) throw new Error(errors[0]); });

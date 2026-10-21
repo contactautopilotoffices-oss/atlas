@@ -70,7 +70,7 @@ const AUTH_KEY = SLUG + "-auth", HANDOFF = A.path || ("/" + SLUG + "/");
    Without the CMS script everything is on and nothing is tracked. */
 const CMS = window.AtlasCMS || null;
 const cmsOn = (key) => !CMS || CMS.on(key);
-const MEDIA = A.media || ("../media/" + SLUG + "/");
+const MEDIA = A.media || ("/media/" + SLUG + "/");
 
 const $ = (s, r = document) => r.querySelector(s);
 const esc = (s) => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
