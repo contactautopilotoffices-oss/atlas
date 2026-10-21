@@ -8,7 +8,9 @@
     "dev": "python3 serve.py",
     "build": "node scripts/build-config.js && node scripts/fetch-indore-backdrop.js",
     "godseye": "node scripts/godseye-dev.js",
-    "dev:cms": "node scripts/atlas-dev.js"
+    "dev:cms": "node scripts/atlas-dev.js",
+    "validate": "node scripts/validate-bundle.js --all",
+    "test": "node scripts/validate-bundle.test.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.128.0"
