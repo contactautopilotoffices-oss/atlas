@@ -338,9 +338,14 @@ async function build() {
   src("ladder", "Andheri competitor survey, all 31 centres (Competitors sheet). Middle price = median. Autopilot prices: the costing section, every seat sold, before brokerage and ads.");
   src("decision", "All figures from the sections above. 'Edge' marks the better building on each line; it is a reading aid, not a weighted score.");
 
-  /* ---- Images: prompts only; the CMS generates them ---- */
+  /* ---- Images: the prompts, and the pictures Higgsfield made from them
+     (generated once through the Higgsfield MCP, in the house style
+     api/cms/_images.js adds; the CMS does the same and copies the file
+     into our own storage) ---- */
   const Im = S("Images");
-  const im = (slot, prompt) => addRow(Im, { "Slot": slot, "Prompt": prompt });
+  const HF = "https://d8j0ntlcm91z4.cloudfront.net/user_3Fo7i4SvZozV6ke0Djuea827rgj/hf_20261021_";
+  const URLS = {"cover": "224738_f96800db-c373-43a1-a4c0-86d8f52425e4", "options": "224708_79f674bd-40a9-415e-8d52-7d163c3a9c73", "assets": "224709_a33c27ba-bf66-4ad9-8c9f-8ae60d64dd8c", "market": "224709_74e781c3-32bb-4c56-ba29-2ab581eb25a3", "infrastructure": "224737_72e23284-41af-44f6-bdbe-2c9848c8c719", "why": "224708_cf24c231-cc12-4b8c-b9cf-7113f26ed66b", "plan": "224737_62e955e1-1914-4ff2-9cab-320ba490c692", "rivals": "224753_06320c03-f620-4731-9cd8-c743827c8b5d", "back": "224737_55db2f1f-9306-438b-996f-a7585c1fdb2e"};
+  const im = (slot, prompt) => addRow(Im, { "Slot": slot, "Prompt": prompt, "Image address": URLS[slot] ? HF + URLS[slot] + ".png" : "", "Caption": "AI-generated illustration (Higgsfield)" });
   im("cover", "Two modern office buildings in a Mumbai suburb at dusk, one finished glass tower and one under construction with cranes, an elevated metro line in the foreground, monsoon sky clearing");
   im("options", "An empty bare-shell office floor with floor-to-ceiling windows looking out over Andheri East, late afternoon light, measuring tape and floor plans on the concrete floor");
   im("assets", "A new office tower beside an elevated metro station at street level, people walking from the station entrance, Mumbai, early morning");
