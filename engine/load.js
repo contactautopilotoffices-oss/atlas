@@ -3,14 +3,20 @@
 
    Decides where this page's bundle comes from, before the engine starts.
 
-     /engine/                    ./bundle.js, a static file: the demo
-     /engine/?atlas=<slug>       the published bundle, from the CMS, which
+     /engine/                    /engine/bundle.js, a static file: the demo
+     /<slug>                     the published bundle, from the CMS, which
                                  needs the visitor's access cookie. Without
                                  one the sign-in form on this page asks for
                                  the access ID and password and the server
                                  checks them; nothing is checked in the
                                  browser and no credential ships in a script.
-     /engine/?atlas=<slug>&draft=1   the draft, for an admin's preview
+     /<slug>?draft=1             the draft, for an admin's preview
+     /engine/?atlas=<slug>       the same atlas by its older address, kept
+                                 so links already sent do not break
+
+   A visitor never sees a version number: what is live is simply the atlas.
+   Versions exist only in /admin/, where each publish is kept and any
+   earlier one can be made live again.
 
    window.AtlasLoad resolves once window.ATLAS is set. The boot at the foot
    of the page waits on it, so an unsigned-in visitor sees the sign-in form
@@ -19,7 +25,10 @@
 (function () {
   "use strict";
   var q = new URLSearchParams(location.search);
-  var slug = (q.get("atlas") || "").trim().toLowerCase();
+  /* /andheri-flex is served this page by a rewrite (vercel.json), so the
+     atlas id is the first part of the path; ?atlas= is the older form. */
+  var first = (location.pathname.split("/")[1] || "").toLowerCase();
+  var slug = (q.get("atlas") || (first && first !== "engine" ? first : "")).trim().toLowerCase();
   var draft = q.get("draft") === "1";
   var $ = function (s) { return document.querySelector(s); };
   var API = "/api/cms";
@@ -77,7 +86,7 @@
 
   function settle(r, resolve) {
     if (r.status === 200 && r.j.bundle) {
-      window.ATLAS = Object.assign({ slug: slug, path: "/engine/", draft: !!r.j.draft }, r.j.bundle);
+      window.ATLAS = Object.assign({ slug: slug, path: "/" + slug, draft: !!r.j.draft }, r.j.bundle);
       if (r.j.accessId) { try { sessionStorage.setItem("atlas-access-id", r.j.accessId); } catch (x) {} }
       hideGate();
       resolve();
@@ -102,7 +111,7 @@
     if (!slug) {
       /* No atlas named: the static demo bundle. A missing file is a blank
          page with a reason, not a broken one. */
-      script("./bundle.js?v=eng1").then(resolve, function () { message("No atlas was named. Open this page as /engine/?atlas=<id>, or sign in at the site root."); });
+      script("/engine/bundle.js?v=eng1").then(resolve, function () { message("No atlas was named. Open it at /<atlas id>, or sign in at the site root."); });
       return;
     }
     fetchBundle().then(function (r) { settle(r, resolve); }).catch(function () { message("Could not reach the server."); });

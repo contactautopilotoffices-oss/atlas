@@ -13,23 +13,21 @@
 <link rel="preconnect" href="https://api.mapbox.com" crossorigin>
 <link rel="preload" href="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js" as="script">
 <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css">
-<link rel="icon" href="../autopilot-logo-trimmed.png">
+<link rel="icon" href="/autopilot-logo-trimmed.png">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script>
-/* Runs before anything else. The page loads its files by relative path, so
-   it only works with a trailing slash; without one the scripts 404
-   and nothing runs. Send the visitor to the right address, and never leave an
-   access ID or password sitting in the address bar or history. */
+/* Runs before anything else. This page is served at /engine/ and, through a
+   rewrite, at /<atlas id> itself, so every file it loads is addressed from
+   the site root. Never leave an access ID or password in the address bar. */
 (function () {
   var l = location;
-  if (!/\/$/.test(l.pathname)) { l.replace(l.pathname + "/" + l.hash); return; }
   if (/[?&](username|password)=/i.test(l.search)) history.replaceState(null, "", l.pathname + l.hash);
 })();
 </script>
-<script src="../config.js?v=eng1"></script>
+<script src="/config.js?v=eng1"></script>
 <!-- Where the bundle comes from: ./bundle.js for the demo, or the CMS when
      the page is opened as /engine/?atlas=<id>. See load.js. -->
-<script src="./load.js?v=eng1"></script>
+<script src="/engine/load.js?v=eng2"></script>
 <style>
 /* Palette follows the Autopilot deck, as on the Indore study: espresso,
    cream and terracotta. Colour never carries meaning alone; every score,
@@ -529,7 +527,7 @@ table.cmp td.best{background:#f1e6d8;font-weight:600}
   <div class="shade"></div>
   <div class="gwrap">
     <div class="gcopy">
-      <img class="logo" src="../autopilot-logo-trimmed.png" alt="Autopilot" width="319" height="44">
+      <img class="logo" src="/autopilot-logo-trimmed.png" alt="Autopilot" width="319" height="44">
       <div class="eyebrow" id="g-eyebrow"></div>
       <h1 id="g-title"></h1>
       <p id="g-lede"></p>
@@ -552,7 +550,7 @@ table.cmp td.best{background:#f1e6d8;font-weight:600}
 <div id="map" aria-label="Map"></div>
 
 <header id="top" class="pane">
-  <div id="brand"><img class="logo" src="../autopilot-logo-trimmed.png" alt="Autopilot" width="319" height="44"><span class="t" id="brand-t"></span><span class="s" id="brand-s"></span></div>
+  <div id="brand"><img class="logo" src="/autopilot-logo-trimmed.png" alt="Autopilot" width="319" height="44"><span class="t" id="brand-t"></span><span class="s" id="brand-s"></span></div>
   <nav id="tabs" aria-label="Sections"></nav>
   <button id="signout" type="button" aria-label="Sign out" data-hint="Sign out of the study on this device. You will need the ID and password again."><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 17l-5-5 5-5"/><path d="M5 12h11"/></svg><span>Sign out</span></button>
 </header>
@@ -589,19 +587,19 @@ table.cmp td.best{background:#f1e6d8;font-weight:600}
 </div>
 <div id="lightbox"><img alt=""/></div>
 
-<script src="../atlas-cms.js?v=cms2"></script>
+<script src="/atlas-cms.js?v=cms2"></script>
 <script>
 /* Start through the CMS (published overrides, visit counts) under this
    Atlas's own slug. Without the CMS script the engine starts anyway, so the
    worst case is an Atlas with no tracking rather than no Atlas. */
 (window.AtlasLoad || Promise.resolve()).then(function () {
   var slug = (window.ATLAS && window.ATLAS.slug) || "atlas";
-  var app = "./app.js?v=eng1";
+  var app = "/engine/app.js?v=eng2";
   if (window.AtlasCMS) AtlasCMS.boot(slug, { app: app });
   else { var s = document.createElement("script"); s.src = app; document.body.appendChild(s); }
 });
 </script>
-<link rel="stylesheet" href="../guide/atlas-guide.css?v=ag1">
-<script src="../guide/atlas-guide.js?v=ag1"></script>
+<link rel="stylesheet" href="/guide/atlas-guide.css?v=ag1">
+<script src="/guide/atlas-guide.js?v=ag1"></script>
 </body>
 </html>

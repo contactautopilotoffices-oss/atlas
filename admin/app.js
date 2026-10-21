@@ -363,7 +363,7 @@ const breakdown = (title, rows, note) => `<div class="card"><h3>${esc(title)}</h
 
 /* ============================================================= links == */
 const KIND = { client: "Client view", study: "Study", tool: "Tool", bundle: "From a workbook" };
-const openUrl = (l) => l.kind === "client" ? "/" : l.kind === "bundle" ? `/engine/?atlas=${encodeURIComponent(l.slug)}` : l.path;
+const openUrl = (l) => l.kind === "client" ? "/" : l.kind === "bundle" ? `/${encodeURIComponent(l.slug)}` : l.path;
 /* A workbook atlas is edited by uploading a new workbook, not in the content editor. */
 const editUrl = (l) => l.kind === "bundle" ? `#/create/${encodeURIComponent(l.slug)}` : `#/content/${encodeURIComponent(l.slug)}`;
 const previewUrl = (l) => (l.kind === "client" ? "/" : l.path) + "?cms-preview=1";
@@ -422,7 +422,7 @@ function linkModal(l, M) {
    name it, give it a credential, publish. The same page reopens an atlas
    made this way: upload a revised workbook to change it, issue or revoke
    access, publish again. */
-const CR = { bundle: null, report: null, notes: [], slug: null, status: null, access: [], lastIssued: null };
+const CR = { bundle: null, report: null, notes: [], slug: null, status: null, access: [], lastIssued: null, history: [], fileName: "" };
 const slugify = (t) => String(t || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40);
 const readAsBase64 = (file) => new Promise((ok, bad) => { const r = new FileReader(); r.onload = () => ok(String(r.result).replace(/^data:[^,]*,/, "")); r.onerror = bad; r.readAsDataURL(file); });
 function reportHTML(rep, notes) {
@@ -438,11 +438,11 @@ function reportHTML(rep, notes) {
     ${notes && notes.length ? `<div class="small mut" style="margin-top:4px">${notes.map(esc).join("<br>")}</div>` : ""}`;
 }
 async function pageCreate(M, slug) {
-  if (slug && CR.slug !== slug) { CR.bundle = null; CR.report = null; CR.notes = []; CR.lastIssued = null; }
+  if (slug && CR.slug !== slug) { CR.bundle = null; CR.report = null; CR.notes = []; CR.lastIssued = null; CR.fileName = ""; }
   CR.slug = slug || null;
-  CR.status = null; CR.access = [];
+  CR.status = null; CR.access = []; CR.history = [];
   if (slug) {
-    try { [CR.status, CR.access] = await Promise.all([api("bundle/status", { query: { link: slug } }), api("access/list", { query: { link: slug } }).then(r => r.access)]); }
+    try { [CR.status, CR.access, CR.history] = await Promise.all([api("bundle/status", { query: { link: slug } }), api("access/list", { query: { link: slug } }).then(r => r.access), api("bundle/history", { query: { link: slug } }).then(r => r.history)]); }
     catch (e) { M.innerHTML = header("Create", "Create an atlas", "") + `<div class="card empty">${esc(e.message)}</div>`; return; }
   }
   const st = CR.status;
@@ -459,13 +459,14 @@ async function pageCreate(M, slug) {
        <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:8px">
          <button class="btn" id="cr-template" type="button">Download the empty workbook</button>
          <label class="btn pri" style="cursor:pointer">Upload a filled workbook <input id="cr-file" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display:none"></label>
-         <span class="small mut" id="cr-filename"></span>
+         ${st ? "" : `<button class="btn" id="cr-example" type="button" title="A filled-in workbook kept on the site: four Andheri buildings, 22 flex centres, two metro lines">Use the Andheri Flex example</button>`}
+         <span class="small mut" id="cr-filename">${esc(CR.fileName)}</span>
        </div>
        <div id="cr-report">${reportHTML(CR.report, CR.notes)}</div>`, true)}
     ${step(2, "Name it and give it a credential",
       `<div class="formgrid">
          <div><label class="f">Name</label><input class="in" id="cr-name" value="${esc(st ? st.name : (CR.bundle && CR.bundle.meta && CR.bundle.meta.title) || "")}" placeholder="Pune office study"></div>
-         <div><label class="f">Link id</label><input class="in mono" id="cr-slug" value="${esc(slug || slugify(CR.bundle && CR.bundle.meta && CR.bundle.meta.title))}" ${slug ? "disabled" : ""} placeholder="pune-office-study"><div class="small mut">Lower-case, hyphens only. Cannot change once saved.</div></div>
+         <div><label class="f">Link id</label><input class="in mono" id="cr-slug" value="${esc(slug || slugify(CR.bundle && CR.bundle.meta && CR.bundle.meta.title))}" ${slug ? "disabled" : ""} placeholder="pune-office-study"><div class="small mut">Lower-case, hyphens only. The atlas will live at atlas.autopilotoffices.com/<i>this</i>. Cannot change once saved.</div></div>
          <div><label class="f">City</label><input class="in" id="cr-city" value="${esc(st ? st.city || "" : (CR.bundle && CR.bundle.meta && CR.bundle.meta.city) || "")}"></div>
          <div><label class="f">Access ID</label><input class="in mono" id="cr-access" value="${esc(liveId || (CR.bundle && CR.bundle.meta ? slugify(CR.bundle.meta.title).toUpperCase().replace(/-/g, "-") : ""))}" placeholder="ACME-PUNE"><div class="small mut">What the client types at atlas.autopilotoffices.com.</div></div>
          <div><label class="f">Password</label><div style="display:flex;gap:6px"><input class="in mono" id="cr-pass" value="${esc(CR.lastPass || "")}" placeholder="At least 10 characters"><button class="btn" type="button" id="cr-gen">Generate</button></div><div class="small mut">${liveId ? "Leave empty to keep the current password." : "Shown once here; copy it to the client."}</div></div>
@@ -476,13 +477,17 @@ async function pageCreate(M, slug) {
          ${CR.access.map(a => `<tr><td class="mono">${esc(a.access_id)}</td><td>${esc(a.name || "-")}</td><td class="mut">${ago(a.last_used_at)}</td><td><span class="chip ${a.active ? "ok" : "warn"}">${a.active ? "active" : "revoked"}</span></td><td>${can("admin") ? `<button class="btn sm ghost" type="button" data-revoke="${esc(a.access_id)}" data-active="${a.active ? "0" : "1"}">${a.active ? "Revoke" : "Re-enable"}</button>` : ""}</td></tr>`).join("")}
        </tbody></table></div>` : ""}`, can2 || !!st)}
     ${step(3, "Check it, then publish",
-      `<p class="mut small">Preview opens the draft exactly as a client would see it. Publishing makes it live within about half a minute.</p>
+      `<p class="mut small">Preview opens the draft exactly as a client would see it. Publishing makes it live within about half a minute, and keeps a numbered version here. The client never sees a version number: the link always shows whatever is live.</p>
        <div class="acts" style="justify-content:flex-start">
-         <a class="btn" id="cr-preview" href="${slug ? `/engine/?atlas=${encodeURIComponent(slug)}&draft=1` : "#"}" target="_blank" rel="noopener" ${can3 ? "" : 'aria-disabled="true" style="pointer-events:none;opacity:.5"'}>Preview draft ↗</a>
+         <a class="btn" id="cr-preview" href="${slug ? `/${encodeURIComponent(slug)}?draft=1` : "#"}" target="_blank" rel="noopener" ${can3 ? "" : 'aria-disabled="true" style="pointer-events:none;opacity:.5"'}>Preview draft ↗</a>
          ${can("admin") ? `<button class="btn pri" id="cr-publish" type="button" ${can3 ? "" : "disabled"}>${st && st.published ? "Publish the draft" : "Publish"}</button>` : `<span class="small mut">An admin publishes.</span>`}
        </div>
-       ${st && st.published ? `<div class="card" style="margin-top:12px;border-color:var(--ok)"><b>Live.</b> Send the client <span class="mono">atlas.autopilotoffices.com</span>${liveId ? ` with access ID <span class="mono">${esc(liveId)}</span>` : ""}${CR.lastPass ? ` and password <span class="mono">${esc(CR.lastPass)}</span>` : ""}.
-         <div class="row" style="margin-top:8px;display:flex;gap:6px"><a class="btn sm" href="/engine/?atlas=${encodeURIComponent(slug)}" target="_blank" rel="noopener">Open the live atlas ↗</a>${liveId && CR.lastPass ? `<button class="btn sm" type="button" id="cr-copy">Copy the sign-in details</button>` : ""}</div></div>` : ""}`, can3)}`;
+       ${st && st.published ? `<div class="card" style="margin-top:12px;border-color:var(--ok)"><b>Live.</b> Send the client <span class="mono">atlas.autopilotoffices.com/${esc(slug)}</span>${liveId ? ` with access ID <span class="mono">${esc(liveId)}</span>` : ""}${CR.lastPass ? ` and password <span class="mono">${esc(CR.lastPass)}</span>` : ""}.
+         <div class="row" style="margin-top:8px;display:flex;gap:6px"><a class="btn sm" href="/${encodeURIComponent(slug)}" target="_blank" rel="noopener">Open the live atlas ↗</a>${liveId && CR.lastPass ? `<button class="btn sm" type="button" id="cr-copy">Copy the sign-in details</button>` : ""}</div></div>` : ""}
+       ${CR.history.length ? `<h3 style="margin:14px 0 6px">Published versions</h3><div class="tw"><table class="t"><thead><tr><th>Version</th><th>What</th><th>By</th><th>When</th><th>Note</th><th></th></tr></thead><tbody>
+         ${CR.history.map(h => `<tr><td><span class="chip ${h.version === st.version ? "dark" : ""}">v${h.version}</span>${h.version === st.version ? ` <span class="small mut">live</span>` : ""}</td><td>${h.action === "rollback" ? "Went back" : "Published"}</td><td>${esc(h.by_email || "")}</td><td class="mut">${esc(when(h.at))}</td><td class="small">${esc(h.note || "")}</td>
+           <td>${can("admin") && h.version !== st.version ? `<button class="btn sm" type="button" data-rb="${esc(h.id)}" data-v="${h.version}">Make this live again</button>` : ""}</td></tr>`).join("")}
+       </tbody></table></div><div class="small mut" style="margin-top:6px">Going back publishes that version again as a new number, and resets the draft to it.</div>` : ""}`, can3)}`;
 
   $("#cr-template").onclick = async () => {
     try {
@@ -497,8 +502,21 @@ async function pageCreate(M, slug) {
     $("#cr-filename").textContent = `Reading ${f.name}…`;
     try {
       const j = await api("bundle/import", { method: "POST", body: { file: await readAsBase64(f) } });
-      CR.bundle = j.bundle; CR.report = j.report; CR.notes = j.notes || [];
-      $("#cr-filename").textContent = f.name;
+      CR.bundle = j.bundle; CR.report = j.report; CR.notes = j.notes || []; CR.fileName = f.name;
+      pageCreate(M, slug);
+      setTimeout(() => { const r = $("#cr-report"); if (r) r.scrollIntoView({ behavior: "smooth", block: "start" }); }, 50);
+    } catch (err) { $("#cr-filename").textContent = ""; fail(err); }
+  };
+  /* The example lives at /examples/andheri-flex.xlsx, so a demo needs no
+     file on anyone's disk, and nothing that cannot drive a file dialog
+     (a browser agent, a walkthrough) is stuck at this step. */
+  if ($("#cr-example")) $("#cr-example").onclick = async () => {
+    $("#cr-filename").textContent = "Reading the example…";
+    try {
+      const res = await fetch("/examples/andheri-flex.xlsx", { cache: "no-store" });
+      if (!res.ok) throw new Error("The example workbook is not on this site.");
+      const j = await api("bundle/import", { method: "POST", body: { file: await readAsBase64(await res.blob()) } });
+      CR.bundle = j.bundle; CR.report = j.report; CR.notes = j.notes || []; CR.fileName = "andheri-flex.xlsx (the example)";
       pageCreate(M, slug);
       setTimeout(() => { const r = $("#cr-report"); if (r) r.scrollIntoView({ behavior: "smooth", block: "start" }); }, 50);
     } catch (err) { $("#cr-filename").textContent = ""; fail(err); }
@@ -518,17 +536,28 @@ async function pageCreate(M, slug) {
         else { await api("access/issue", { method: "POST", body: { slug: id, access_id: access, password: pass, name: who } }); CR.lastIssued = access; CR.lastPass = pass; }
       } else if (access && !pass && !liveId) toast("Saved. Set a password to issue the access ID.", true);
       toast("Saved.");
-      CR.bundle = null; CR.report = null; CR.notes = [];
+      CR.bundle = null; CR.report = null; CR.notes = []; CR.fileName = "";
       ST.links = (await api("links")).links;
       location.hash = `#/create/${encodeURIComponent(id)}`;
       if (slug === id) pageCreate(M, id);
     } catch (err) { note.textContent = ""; fail(err); }
   };
   if ($("#cr-publish")) $("#cr-publish").onclick = async () => {
-    if (!(await confirmBox("Publish this atlas?", `<b>${esc(title)}</b> goes live for anyone with its access ID, within about half a minute.`, "Publish"))) return;
-    try { const j = await api("bundle/publish", { method: "POST", body: { slug } }); toast(`Published version ${j.version}.`); ST.links = (await api("links")).links; pageCreate(M, slug); } catch (err) { fail(err); }
+    modal(`<h2>Publish ${esc(title)}</h2><p class="mut">It goes live for anyone with its access ID within about half a minute, as version ${(st && st.version || 0) + 1}. You can go back to any earlier version from this page.</p>
+      <label class="f" for="pb-note">Note for the history (optional)</label><input class="in" id="pb-note" maxlength="300" placeholder="e.g. Added the two Marol options">
+      <div class="acts"><button class="btn" data-close type="button">Cancel</button><button class="btn pri" id="pb-go" type="button">Publish now</button></div>`, (m) => {
+      $("#pb-go", m).onclick = async (e) => {
+        e.target.disabled = true;
+        try { const j = await api("bundle/publish", { method: "POST", body: { slug, note: $("#pb-note", m).value } }); closeModal(); toast(`Published version ${j.version}.`); ST.links = (await api("links")).links; pageCreate(M, slug); }
+        catch (err) { fail(err); e.target.disabled = false; }
+      };
+    });
   };
-  if ($("#cr-copy")) $("#cr-copy").onclick = (e) => copy(`atlas.autopilotoffices.com\nAccess ID: ${liveId}\nPassword: ${CR.lastPass}`, e.target);
+  $$("[data-rb]", M).forEach(b => b.onclick = async () => {
+    if (!(await confirmBox(`Make version ${b.dataset.v} live again?`, "It goes live straight away, as a new version number, and replaces the current draft.", "Make it live", true))) return;
+    try { const r = await api("bundle/rollback", { method: "POST", body: { slug, historyId: b.dataset.rb } }); toast(`Version ${b.dataset.v} is live again (now version ${r.version}).`); ST.links = (await api("links")).links; pageCreate(M, slug); } catch (err) { fail(err); }
+  });
+  if ($("#cr-copy")) $("#cr-copy").onclick = (e) => copy(`atlas.autopilotoffices.com/${slug}\nAccess ID: ${liveId}\nPassword: ${CR.lastPass}`, e.target);
   $$("[data-revoke]", M).forEach(b => b.onclick = async () => {
     const on = b.dataset.active === "1";
     if (!on && !(await confirmBox("Revoke this access ID?", `<span class="mono">${esc(b.dataset.revoke)}</span> will stop opening the atlas at once.`, "Revoke", true))) return;
@@ -1383,7 +1412,7 @@ function userModal(u, M) {
 /* ============================================================== audit == */
 const AUDIT_TEXT = {
   setup: "Set up the admin panel", login: "Signed in", password: "Changed their password", "link.save": "Saved link details", "link.status": "Changed link status",
-  publish: "Published", "draft.discard": "Discarded a draft", rollback: "Went back to an earlier version", "user.create": "Added a person", "user.update": "Changed a person",
+  publish: "Published", "draft.discard": "Discarded a draft", rollback: "Went back to an earlier version", "bundle.publish": "Published an atlas", "bundle.rollback": "Went back to an earlier version of an atlas", "bundle.draft": "Saved an atlas draft", "user.create": "Added a person", "user.update": "Changed a person",
   "user.signout": "Signed a person out everywhere", "user.delete": "Removed a person", "broker.create": "Created a broker link", "broker.update": "Changed a broker link",
   "broker.rotate": "Made a new broker link", "submission.approve": "Approved a broker update", "submission.reject": "Rejected a broker update", upload: "Uploaded a file"
 };

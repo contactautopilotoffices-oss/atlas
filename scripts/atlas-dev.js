@@ -33,6 +33,9 @@ http.createServer((req, res) => {
   if (url.pathname.startsWith("/api/")) { res.statusCode = 404; return res.end(); }
   let file = path.normalize(path.join(ROOT, decodeURIComponent(url.pathname)));
   if (!file.startsWith(ROOT) || /[\\/]\.cms-dev-store\.json$/.test(file)) { res.statusCode = 403; return res.end(); }
+  /* /<atlas id> is the engine page, as the rewrite in vercel.json makes it
+     in production: only when nothing on disk answers to that path. */
+  if (/^\/[a-z0-9][a-z0-9-]{0,39}$/.test(url.pathname) && !fs.existsSync(file)) file = path.join(ROOT, "engine", "index.html");
   if (fs.existsSync(file) && fs.statSync(file).isDirectory()) {
     if (!url.pathname.endsWith("/")) { res.statusCode = 308; res.setHeader("Location", url.pathname + "/" + url.search); return res.end(); }
     file = path.join(file, "index.html");

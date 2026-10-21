@@ -82,6 +82,7 @@ const DEFAULTS = {
   cms_audit: () => ({ at: now() }),
   atlas_bundles: () => ({ draft: null, published: null, draft_updated_at: null, draft_updated_by: null, published_at: null, published_by: null, version: 0 }),
   atlas_access: () => ({ name: null, active: true, failed_logins: 0, locked_until: null, last_used_at: null, created_at: now() }),
+  atlas_bundle_history: () => ({ id: crypto.randomUUID(), at: now() }),
 };
 const PK = { atlas_links: "slug", atlas_overrides: "link_slug", atlas_bundles: "link_slug", atlas_access: "access_id" };
 const SEED_LINKS = [
