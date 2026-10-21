@@ -25,7 +25,8 @@ const CONFIDENCE = ["high", "medium", "low"];
 /* "mrts" and "suburban" are Chennai's own two rail systems. */
 const MODES = ["metro", "mrts", "suburban", "rail", "monorail", "bus"];
 const STATUSES = ["open", "planned"];
-const BLOCKS = ["meta", "existing", "options", "zones", "transit", "bus", "places", "facts", "mapStyle"];
+const BLOCKS = ["meta", "existing", "options", "zones", "transit", "bus", "places", "facts", "mapStyle", "copy", "measures", "presets"];
+const MEASURE_KINDS = ["column", "nearestStation", "nearestPlace", "fromExisting"];
 const SLUG = /^[a-z0-9][a-z0-9-]*$/;
 const AS_OF = /^\d{4}-\d{2}(-\d{2})?$/;
 
@@ -51,6 +52,28 @@ const isStr = v => typeof v === "string" && v.trim() !== "";
 /* How a row names itself in a message: "row 7 (kar-towers)". */
 const at = (block, i, row, key) =>
   `${block} row ${i + 1}${row && row[key || "id"] ? ` (${row[key || "id"]})` : ""}`;
+
+/* Is a station running? This is how the studies write it, so it is written
+   down once here rather than guessed at per caller:
+
+     open: true        running
+     open: false       not running
+     opens: <ISO date> running once that date has passed
+     nothing said      not running, which is how Chennai leaves its Phase 2
+                       corridors, and a line's status is the only fallback
+
+   A station that is not running may carry `target` (words about when) and
+   `eta` (the target year). */
+function stationIsOpen(st, line) {
+  if (st.open === true) return true;
+  if (st.open === false) return false;
+  if (isStr(st.opens)) {
+    const d = Date.parse(st.opens.length === 7 ? `${st.opens}-01` : st.opens);
+    if (isFinite(d)) return d <= Date.now();
+  }
+  if (line && isStr(line.status)) return line.status === "open";
+  return false;
+}
 
 /* --------------------------------------------------------- coordinates ----
    Checked in one place, because a wrong coordinate is the single most common
@@ -341,6 +364,128 @@ function checkFacts(rep, facts) {
   rep.stats.factGroups = Object.keys(facts);
 }
 
+/* =========================================================== measures ==== */
+/* The priority chooser is a scoring model, so its wiring is checked against
+   the rest of the bundle: a measure that reads a column no option has, or a
+   place kind nothing is tagged with, scores every option identically and the
+   chooser quietly stops working. That is worth refusing. */
+function checkMeasures(rep, measures, bundle) {
+  const keys = new Set();
+  if (measures === undefined) return keys;
+  const W = "Priorities";
+  if (!Array.isArray(measures)) { rep.err(W, "this block must be a list of measures."); return keys; }
+  if (!measures.length) { rep.warn(W, "there are no measures, so the priority chooser is hidden."); return keys; }
+
+  const optionKeys = new Set();
+  for (const o of bundle.options || []) if (o && typeof o === "object") Object.keys(o).forEach(k => optionKeys.add(k));
+  const placeKinds = new Set((bundle.places || []).map(p => p && p.kind).filter(Boolean));
+
+  measures.forEach((m, i) => {
+    const where = at(W, i, m, "key");
+    if (!m || typeof m !== "object") { rep.err(`${W} row ${i + 1}`, "this measure is not filled in."); return; }
+    if (!isStr(m.key)) rep.err(where, "key is empty. Give the measure a short code such as price.");
+    else if (keys.has(m.key)) rep.err(where, `key "${m.key}" is used twice.`);
+    else keys.add(m.key);
+    if (!isStr(m.label)) rep.err(where, "label is empty. This is the name on the slider.");
+    if (!isStr(m.question)) rep.warn(where, "question is empty, so the slider has nothing to ask the reader.");
+    if (!isStr(m.of)) rep.warn(where, "of is empty, so the Atlas cannot say what this measure is calculated from.");
+
+    if (!isStr(m.kind)) { rep.err(where, `kind is empty. Use one of: ${MEASURE_KINDS.join(", ")}.`); return; }
+    if (!MEASURE_KINDS.includes(m.kind)) { rep.err(where, `kind is "${m.kind}". Use one of: ${MEASURE_KINDS.join(", ")}.`); return; }
+
+    if (m.kind === "column") {
+      if (!isStr(m.column)) rep.err(where, "a column measure needs a column, naming which number on the option it reads.");
+      else if (!optionKeys.has(m.column))
+        rep.err(where, `column is "${m.column}", which no option has. It would score every option the same.`);
+      else {
+        const have = (bundle.options || []).filter(o => isNum(o[m.column])).length;
+        const all = (bundle.options || []).length;
+        if (!have) rep.err(where, `no option has a number in "${m.column}", so this measure cannot rank anything.`);
+        else if (have < all) rep.warn(where, `only ${have} of ${all} options have a number in "${m.column}". The rest score lowest on it.`);
+      }
+      if (m.higherIsBetter === undefined)
+        rep.warn(where, "higherIsBetter is not set, so the engine assumes a higher number is better.");
+    }
+    if (m.kind === "nearestPlace") {
+      /* One kind, or several: Chennai's talent measure counts institutes and
+         residential belts together, so a list has to be allowed. */
+      const want = m.placeKind === undefined ? [] : [].concat(m.placeKind);
+      if (!want.length || !want.every(isStr))
+        rep.err(where, "a nearestPlace measure needs a placeKind, naming which kind of place it measures to. Several kinds may be given as a list.");
+      else {
+        const absent = want.filter(k => !placeKinds.has(k));
+        if (absent.length === want.length)
+          rep.err(where, `placeKind is ${want.map(k => `"${k}"`).join(" and ")}, but no place has ${want.length === 1 ? "that kind" : "any of those kinds"}${placeKinds.size ? ` (there are: ${[...placeKinds].sort().join(", ")})` : " and there are no places at all"}.`);
+        else if (absent.length)
+          rep.warn(where, `no place has the kind ${absent.map(k => `"${k}"`).join(" or ")}, so ${absent.length === 1 ? "it counts" : "they count"} for nothing here.`);
+      }
+      if (m.rings !== undefined && (!Array.isArray(m.rings) || !m.rings.every(isNum)))
+        rep.err(where, "rings must be a list of minutes, such as [15, 30, 45].");
+    }
+    if (m.kind === "nearestStation") {
+      enumWarn(rep, where, m.status, STATUSES, "status");
+      const lines = (bundle.transit && bundle.transit.lines) || [];
+      if (!lines.length) rep.err(where, "this measures distance to a station, but there is no transit block with any lines.");
+      else if (isStr(m.status)) {
+        /* A station's own `open` flag decides, because that is where Chennai
+           keeps it: one line can be part open and part under construction.
+           The line's status is only the fallback for stations that are silent. */
+        /* A mode may narrow it further: Chennai's "metro coming" counts only
+           metro stations, so a new suburban halt does not become a pipeline. */
+        const wantModes = m.mode === undefined ? null : [].concat(m.mode).map(String);
+        let n = 0, modeMatched = 0;
+        for (const l of lines) {
+          const modeOk = !wantModes || wantModes.includes(String(l.mode));
+          if (modeOk) modeMatched++;
+          for (const st of l.stations || []) {
+            if (!st || typeof st !== "object") continue;
+            if (modeOk && stationIsOpen(st, l) === (m.status === "open")) n++;
+          }
+        }
+        if (wantModes && !modeMatched)
+          rep.err(where, `mode is ${wantModes.map(x => `"${x}"`).join(" or ")}, but no transit line has ${wantModes.length === 1 ? "that mode" : "any of those modes"}.`);
+        else if (!n)
+          rep.err(where, `this measures distance to a station that is ${m.status}${wantModes ? ` on a ${wantModes.join(" or ")} line` : ""}, but no station matches. A station counts as open only if it says open: true, or has an opens date that has passed.`);
+      }
+    }
+    if (m.kind === "fromExisting" && bundle.existing === undefined)
+      rep.err(where, "this measures distance from the current office, but there is no current office in the bundle.");
+  });
+  rep.stats.measures = measures.length;
+  return keys;
+}
+
+/* ============================================================ presets ==== */
+function checkPresets(rep, presets, measureKeys) {
+  if (presets === undefined) {
+    if (measureKeys.size) rep.warn("Priorities", "there are measures but no presets, so the reader starts with every slider at zero.");
+    return;
+  }
+  const W = "Priority presets";
+  if (!Array.isArray(presets)) { rep.err(W, "this block must be a list of presets."); return; }
+  if (!measureKeys.size) { rep.err(W, "there are presets but no measures for them to set."); return; }
+  const keys = new Set();
+  let defaults = 0;
+  presets.forEach((p, i) => {
+    const where = at(W, i, p, "key");
+    if (!p || typeof p !== "object") { rep.err(`${W} row ${i + 1}`, "this preset is not filled in."); return; }
+    if (!isStr(p.key)) rep.err(where, "key is empty.");
+    else if (keys.has(p.key)) rep.err(where, `key "${p.key}" is used twice.`);
+    else keys.add(p.key);
+    if (!isStr(p.label)) rep.err(where, "label is empty. This is the name on the preset button.");
+    if (p.default) defaults++;
+    if (!p.levels || typeof p.levels !== "object") { rep.err(where, "levels is empty. A preset sets a level from 0 to 4 for each measure."); return; }
+    for (const [k, v] of Object.entries(p.levels)) {
+      if (!measureKeys.has(k)) rep.err(where, `levels sets "${k}", which is not one of the measures (${[...measureKeys].join(", ")}).`);
+      else if (!isNum(v) || v < 0 || v > 4 || v % 1 !== 0) rep.err(where, `the level for "${k}" is ${JSON.stringify(v)}. Use a whole number from 0 (skip) to 4 (critical).`);
+    }
+    const missing = [...measureKeys].filter(k => !(k in p.levels));
+    if (missing.length) rep.warn(where, `this preset does not set ${missing.join(", ")}, so ${missing.length === 1 ? "it is" : "they are"} treated as skip.`);
+  });
+  if (defaults > 1) rep.err(W, `${defaults} presets are marked default. Only one can be.`);
+  rep.stats.presets = presets.length;
+}
+
 /* ============================================================ existing ==== */
 function checkExisting(rep, ex, center) {
   if (ex === undefined) return;
@@ -371,6 +516,8 @@ function validate(bundle) {
   checkBus(rep, bundle.bus, center);
   checkPlaces(rep, bundle.places, center);
   checkFacts(rep, bundle.facts);
+  const measureKeys = checkMeasures(rep, bundle.measures, bundle);
+  checkPresets(rep, bundle.presets, measureKeys);
   return rep;
 }
 
@@ -420,8 +567,9 @@ function format(rep, title) {
   if (s.busStops) bits.push(`${s.busStops} bus stops`);
   if (s.busPathPoints) bits.push(`${s.busPathPoints} bus path points`);
   if (s.facts) bits.push(`${s.facts} facts in ${s.factGroups.length} groups`);
+  if (s.measures) bits.push(`${s.measures} priority measures${s.presets ? ` in ${s.presets} presets` : ""}`);
   if (bits.length) L.push(`Contents: ${bits.join(" \u00b7 ")}`);
   return L.join("\n");
 }
 
-module.exports = { validate, format, collapse, Report, PRECISION, CONFIDENCE, MODES, STATUSES, BLOCKS };
+module.exports = { validate, format, collapse, stationIsOpen, MEASURE_KINDS, Report, PRECISION, CONFIDENCE, MODES, STATUSES, BLOCKS };

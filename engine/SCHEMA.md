@@ -103,9 +103,14 @@ With no `shape` the zone is a filter and a label, with no polygon drawn.
   anchors: [{ id, name, lat, lng }] }
 ```
 
-`mode` is `metro`, `mrts`, `suburban`, `rail`, `monorail` or `bus`. `status`
-is `open` or `planned`; planned lines draw dashed, which is how Chennai Phase 2
-and the Noida aqua extension are shown honestly as indicative.
+`mode` is `metro`, `mrts`, `suburban`, `rail`, `monorail` or `bus`.
+
+Whether a station is running is **`open` on the station**, not on the line.
+That is where Chennai keeps it, and it has to be: one corridor can be part
+open and part under construction. A line's `status` (`open` or `planned`) is
+only the fallback for stations that do not say. Anything not open draws dashed,
+which is how Chennai Phase 2 and the Noida aqua extension are shown honestly
+as indicative. A planned station may carry an `eta` year.
 
 `anchors` are the named points distances are measured to, such as a central
 station or an airport.
@@ -155,6 +160,112 @@ Whitefield already writes it that way.
 ## 9. `mapStyle` (optional)
 
 A Mapbox style URL or a style object. Defaults to the engine's own style.
+
+## 10. `copy` (optional)
+
+The study's own words. The engine ships a default for every line, so `copy`
+is only ever an override, but without it an Atlas cannot say anything specific
+about its own subject.
+
+```json
+"copy": {
+  "overview":   { "eyebrow": "Autopilot \u00b7 Chennai \u00b7 Oct 2026",
+                  "title": "Where the next Chennai office should go",
+                  "intro": "The revised ranking: {optionCount} buildings in {fitCounts}, read against rail, talent and today's office at {existingName}." },
+  "connect":    { "title": "How people get to each option", "intro": "..." },
+  "layerHints": { "rail": "Metro, MRTS and suburban rail that run today.",
+                  "studio": "VFX, animation and post studios." },
+  "factGroups": { "market": "Chennai office market", "talent": "Talent" }
+}
+```
+
+`{optionCount}`, `{fitCounts}`, `{existingName}`, `{asOf}` and `{zoneCount}`
+are filled in by the engine. Anything else in braces is left alone.
+
+This block exists because of what the Chennai app turned out to be. Its reader
+facing prose is not a list of strings to swap: 142 of its template literals
+weave sentences into markup, and twelve of them describe map layers that only
+exist in that study. Section headings, layer hints and fact group titles are
+the three that have to be data for an Atlas to be about something else. The
+rest are defaults good enough to ship with.
+
+## 11. `measures` (optional)
+
+The priority chooser: the measures a reader can weight to re-rank the options.
+Omit the block and the chooser is hidden, which is the honest default for an
+Atlas that has not decided what it is arguing.
+
+This is the part that is a model rather than a layout. Chennai weights seven
+measures, and all seven reduce to four kinds, which is what makes this
+declarative rather than code:
+
+| `kind` | Reads | Example |
+| --- | --- | --- |
+| `column` | a numeric column on the option | the sheet's pricing score out of 10 |
+| `nearestStation` | distance to the nearest station, by `status` and optionally `mode` | walk to an open station; or to a planned **metro** only |
+| `nearestPlace` | distance to the nearest `places` row of a `kind`, or of several | VFX studios; or institutes and homes together |
+| `fromExisting` | distance from `existing` | keeping today's team's commute |
+
+```json
+"measures": [
+  { "key": "price", "kind": "column", "column": "pricingScore",
+    "label": "Price", "higherIsBetter": true,
+    "question": "How much does the price matter?",
+    "of": "the pricing score out of 10 on the revised sheet" },
+  { "key": "rail", "kind": "nearestStation", "status": "open",
+    "label": "Rail today",
+    "question": "Can people walk to an open station?",
+    "of": "distance to the nearest open station" },
+  { "key": "studios", "kind": "nearestPlace", "placeKind": "studio",
+    "label": "Studio talent nearby", "rings": [15, 30, 45],
+    "question": "Do you want experienced artists already working nearby?",
+    "of": "studios by drive time" }
+],
+"presets": [
+  { "key": "balanced", "label": "Balanced", "note": "...",
+    "levels": { "price": 4, "rail": 2, "studios": 1 } }
+]
+```
+
+`nearestStation` takes `mode` as well as `status`, because Chennai's "metro
+coming" counts only metro stations: a new suburban halt is not a metro
+pipeline. Whether a station is open follows the rule in block 5, so a measure
+on planned stations finds nothing until some station is actually marked as not
+yet open.
+
+`placeKind` takes one kind or a list of them, because Chennai's talent measure
+counts institutes and residential belts together. A `nearestPlace` measure with
+`rings` scores 1 inside the first ring, 0.6 inside the second and 0.3 inside
+the third, which is what Chennai does today.
+A level is 0 to 4, meaning skip, low, medium, high, critical.
+
+`presets` are named sets of levels. One may be marked `default`; two is an
+error, and with none the first is used.
+
+Chennai's seven measures and seven presets are written out as data in
+`scripts/lib/study-bundle.js` and validate clean against Chennai's own bundle,
+which is the test that this block can carry a real chooser. One gap remains
+between those seven lines and the app's scoring: the app discounts a planned
+station by how far off its target year is, and no kind expresses that yet. The
+engine needs an `etaDiscount` option to match it exactly.
+
+## What the engine needs, in tiers
+
+Not every block has to exist for an Atlas to be worth sending to a client, and
+the team should not have to fill in all of it to get something live.
+
+**Tier 1, from `meta` and `options` alone.** The map, the pins with their
+precision labels, the option cards and their facts, and the compare-all table.
+Add `zones` for micro-market filters and their cards, `transit` for
+connectivity, `places` for context layers, `facts` for the narrative sections.
+This is most of the interface and all of it is a spreadsheet.
+
+**Tier 2, needs `measures` and `presets`.** The priority chooser, and the
+insight cards that depend on it ("best on your priorities"). Omitted, the tab
+is hidden.
+
+**Tier 3, needs assets.** The gate backdrop, option photographs and any 3D
+model. These are files, not rows, so they are uploaded rather than typed.
 
 ## What a minimum bundle looks like
 

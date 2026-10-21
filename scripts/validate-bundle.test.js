@@ -161,6 +161,107 @@ console.log("\nOne mistake in many rows reads as one mistake");
   }
 })();
 
+console.log("\nThe priority chooser, which is a model rather than a layout");
+/* A chooser bundle: options with a score, places to measure to, and transit. */
+function withChooser() {
+  const b = good();
+  b.options[0].pricingScore = 8;
+  b.places = [
+    { id: "coep", kind: "edu", name: "COEP", lat: 18.53, lng: 73.86, precision: "building" },
+    { id: "viman", kind: "res", name: "Viman Nagar", lat: 18.56, lng: 73.91, precision: "locality" }
+  ];
+  b.transit = { lines: [{ key: "purple", name: "Purple", mode: "metro", stations: [
+    { name: "Ramwadi", lat: 18.55, lng: 73.91, open: true },
+    { name: "Wagholi", lat: 18.58, lng: 73.98, target: "2028" }
+  ] }] };
+  b.measures = [
+    { key: "price", kind: "column", column: "pricingScore", higherIsBetter: true, label: "Price", question: "Q?", of: "the score" },
+    { key: "rail", kind: "nearestStation", status: "open", label: "Rail", question: "Q?", of: "distance" },
+    { key: "talent", kind: "nearestPlace", placeKind: ["edu", "res"], rings: [15, 30, 45], label: "Talent", question: "Q?", of: "distance" }
+  ];
+  b.presets = [{ key: "balanced", label: "Balanced", default: true, levels: { price: 4, rail: 2, talent: 1 } }];
+  return b;
+}
+expectClean("a chooser with all three kinds wired up passes", withChooser());
+
+expectError("a column no option has is refused", (() => {
+  const b = withChooser(); b.measures[0].column = "capRate"; return b;
+})(), "which no option has");
+expectError("a column with no numbers in it is refused", (() => {
+  const b = withChooser(); b.options[0].pricingScore = "eight"; return b;
+})(), "cannot rank anything");
+expectWarning("a column only some options have is flagged", (() => {
+  const b = withChooser();
+  b.options.push({ id: "b", name: "B", lat: 18.51, lng: 73.9, micro: "kharadi", precision: "building", geoSrc: "https://x.org" });
+  return b;
+})(), "of 2 options have a number");
+expectError("a place kind nothing is tagged with is refused", (() => {
+  const b = withChooser(); b.measures[2].placeKind = "studio"; return b;
+})(), "no place has that kind");
+expectWarning("one missing kind out of several is only flagged", (() => {
+  const b = withChooser(); b.measures[2].placeKind = ["edu", "studio"]; return b;
+})(), 'no place has the kind "studio"');
+expectError("a station measure with no transit is refused", (() => {
+  const b = withChooser(); delete b.transit; return b;
+})(), "no transit block");
+expectError("a planned-station measure with nothing planned is refused", (() => {
+  const b = withChooser();
+  b.transit.lines[0].stations = [{ name: "Ramwadi", lat: 18.55, lng: 73.91, open: true }];
+  b.measures.push({ key: "future", kind: "nearestStation", status: "planned", label: "Coming", question: "Q?", of: "d" });
+  b.presets[0].levels.future = 1;
+  return b;
+})(), "no station matches");
+expectError("a mode no line has is refused", (() => {
+  const b = withChooser(); b.measures[1].mode = "monorail"; return b;
+})(), "no transit line has that mode");
+expectError("measuring from a current office there isn't is refused", (() => {
+  const b = withChooser();
+  b.measures.push({ key: "home", kind: "fromExisting", label: "Close", question: "Q?", of: "d" });
+  b.presets[0].levels.home = 2;
+  return b;
+})(), "no current office in the bundle");
+expectError("an unknown measure kind is refused", (() => {
+  const b = withChooser(); b.measures[0].kind = "vibes"; return b;
+})(), 'kind is "vibes"');
+
+console.log("\nPresets");
+expectError("a preset setting a measure that does not exist is refused", (() => {
+  const b = withChooser(); b.presets[0].levels.parking = 2; return b;
+})(), "which is not one of the measures");
+expectError("a level above 4 is refused", (() => {
+  const b = withChooser(); b.presets[0].levels.price = 9; return b;
+})(), "from 0 (skip) to 4 (critical)");
+expectError("two defaults is refused", (() => {
+  const b = withChooser();
+  b.presets.push({ key: "cost", label: "Cost", default: true, levels: { price: 4, rail: 1, talent: 0 } });
+  return b;
+})(), "presets are marked default");
+expectError("presets with no measures is refused", (() => {
+  const b = good(); b.presets = [{ key: "a", label: "A", levels: {} }]; return b;
+})(), "no measures for them to set");
+expectWarning("measures with no presets is flagged", (() => {
+  const b = withChooser(); delete b.presets; return b;
+})(), "every slider at zero");
+expectWarning("a preset that skips a measure is flagged", (() => {
+  const b = withChooser(); delete b.presets[0].levels.talent; return b;
+})(), "treated as skip");
+
+console.log("\nWhen a station counts as open");
+const { stationIsOpen } = require("./lib/validate-bundle");
+[["open: true is open", { open: true }, null, true],
+ ["open: false is not", { open: false }, null, false],
+ ["nothing said is not open", { name: "Wagholi" }, null, false],
+ ["an opens date in the past is open", { opens: "2020-01-01" }, null, true],
+ ["an opens date in the future is not", { opens: "2099-01-01" }, null, false],
+ ["an opens month in the past is open", { opens: "2020-01" }, null, true],
+ ["a planned line makes a silent station planned", { name: "X" }, { status: "planned" }, false],
+ ["an open line makes a silent station open", { name: "X" }, { status: "open" }, true],
+ ["the station wins over the line", { open: false }, { status: "open" }, false]
+].forEach(([name, st, line, want]) => {
+  if (stationIsOpen(st, line) === want) { pass++; console.log(`  ok    ${name}`); }
+  else { fail++; console.log(`  FAIL  ${name}: wanted ${want}`); }
+});
+
 console.log("\nThe committed studies still fit the schema");
 for (const n of studies.names()) {
   const rep = validate(studies.bundleFor(n));

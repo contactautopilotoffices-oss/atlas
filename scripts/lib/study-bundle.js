@@ -38,6 +38,67 @@ function pick(out, key, value) {
   return out;
 }
 
+/* Chennai's priority chooser, written as data.
+
+   The app hard-codes seven measures (PARTS) and seven presets (PRESETS), with
+   a scoring function behind each. This is the same seven expressed through the
+   four measure kinds in engine/SCHEMA.md, and it is the test of whether that
+   block can carry a real chooser rather than a toy one. The labels, questions
+   and notes are copied from the app so nothing is lost in the move.
+
+   Two things came out of writing it down. "Metro coming" counts only metro
+   stations, so nearestStation needed a `mode`; that is now in the schema. And
+   the app discounts a planned station by how far off its target year is, which
+   no kind expresses: this declares a plain nearestStation, and the engine
+   needs an `etaDiscount` option to match the app exactly. That is the one gap
+   between these seven lines and the app's own scoring. */
+const CHENNAI_MEASURES = [
+  { key: "price", kind: "column", column: "pricingScore", higherIsBetter: true,
+    label: "Price", question: "How much does the price matter?",
+    of: "the pricing score out of 10 on the revised sheet" },
+  { key: "eco", kind: "column", column: "ecoScore", higherIsBetter: true,
+    label: "Ecosystem", question: "How much does the business ecosystem around the building matter?",
+    of: "the ecosystem score out of 10 on the revised sheet" },
+  { key: "rail", kind: "nearestStation", status: "open",
+    label: "Rail today", question: "Can people walk to an open metro, MRTS or suburban station?",
+    of: "distance to the nearest open station" },
+  { key: "home", kind: "fromExisting",
+    label: "Close to today's office", question: "Should today's team keep roughly the same commute?",
+    of: "road distance from the current office (the sheet's figure)" },
+  { key: "talent", kind: "nearestPlace", placeKind: ["edu", "res"], rings: [15, 30, 45],
+    label: "Talent pool", question: "Do you want colleges and homes within a 30 minute drive?",
+    of: "institutes and residential belts by drive time" },
+  { key: "studios", kind: "nearestPlace", placeKind: "studio", rings: [15, 30, 45],
+    label: "Studio talent nearby", question: "Do you want experienced VFX and post artists already working nearby?",
+    of: "VFX, animation and post studios by drive time" },
+  { key: "future", kind: "nearestStation", status: "planned", mode: "metro",
+    label: "Metro coming", question: "Does a Phase 2 metro station opening close by matter?",
+    of: "distance to the nearest Phase 2 station" }
+];
+const CHENNAI_PRESETS = [
+  { key: "balanced", label: "Balanced", default: true,
+    note: "The sheet's price and ecosystem scores lead, then rail access; the team, talent, studios and the metro pipeline count a little.",
+    levels: { price: 4, eco: 3, rail: 2, home: 1, talent: 1, studios: 1, future: 1 } },
+  { key: "sheet", label: "Sheet scores only",
+    note: "Only the revised sheet's pricing and ecosystem scores, nothing from the map.",
+    levels: { price: 3, eco: 3, rail: 0, home: 0, talent: 0, studios: 0, future: 0 } },
+  { key: "team", label: "Keep the team",
+    note: "Today's people stay: the shortest move from the current office, then rail, price and nearby studios.",
+    levels: { price: 2, eco: 1, rail: 2, home: 4, talent: 1, studios: 2, future: 1 } },
+  { key: "rail", label: "Commute by rail",
+    note: "Staff arrive by metro, MRTS or train: an open station on foot first, a Phase 2 station next.",
+    levels: { price: 2, eco: 1, rail: 4, home: 1, talent: 2, studios: 1, future: 3 } },
+  { key: "hire", label: "Hire at scale",
+    note: "Grow the team fast: colleges, homes and experienced studio artists within 30 minutes.",
+    levels: { price: 1, eco: 2, rail: 2, home: 1, talent: 4, studios: 3, future: 1 } },
+  { key: "cost", label: "Keep cost down",
+    note: "The best price on the sheet leads; the ecosystem and access still count.",
+    levels: { price: 4, eco: 2, rail: 1, home: 1, talent: 1, studios: 1, future: 0 } },
+  { key: "future", label: "Built for 2030",
+    note: "Bet on where the metro is going and where talent is growing.",
+    levels: { price: 1, eco: 2, rail: 2, home: 1, talent: 3, studios: 2, future: 4 } }
+];
+
 const STUDIES = {
   chennai: {
     file: "chennai/data.js",
@@ -51,6 +112,8 @@ const STUDIES = {
       pick(out, "bus", w.CHN_BUS);
       pick(out, "places", w.CHN_PLACES);
       pick(out, "facts", w.CHN_FACTS);
+      out.measures = CHENNAI_MEASURES;
+      out.presets = CHENNAI_PRESETS;
       return out;
     }
   },
