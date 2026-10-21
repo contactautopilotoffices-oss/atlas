@@ -143,6 +143,34 @@ Needs `ENGY_API_KEY` or `ANTHROPIC_API_KEY` (the same keys God's Eye uses;
 `CMS_PDF_PROVIDER` picks when both are set, `CMS_PDF_MODEL` overrides the
 model) and `MAPBOX_TOKEN` for the pins.
 
+## Creating a case study from a workbook (no code)
+
+The second product. **Create a case study** in the left navigation:
+
+1. **Download the empty workbook**, or press **Use the Andheri example** to
+   see a finished one (the Andheri Business Case Study 2026, typed into the
+   sheets). Only the **Case** and **Options** sheets are needed; every other
+   sheet adds a section. Never type a price, a break-even or a lever: they
+   are worked out from the Options sheet (carpet, rent, fit-out) by
+   `casestudy/costing.js`, so one input changes every page that quotes it.
+2. **Upload** it and read the report.
+3. **Name it, give it a link id and a credential.** Use the atlas's id to put
+   the case study beside it at `/<id>/case`; one access ID then opens both.
+4. **The pictures.** One per section opener, made by Higgsfield from the
+   prompt on the Images sheet in the house style and kept in our storage
+   (`HIGGSFIELD_API_KEY_ID`, `HIGGSFIELD_API_KEY_SECRET`). Paste an address
+   on the sheet instead to skip generation.
+5. **The helper.** Buttons that ask a model (`ENGY_API_KEY` or
+   `ANTHROPIC_API_KEY`) to draft from the numbers: the "what it means for
+   us" lines, the decision's "our read", the top three risks, picture
+   prompts, a check for gaps, and web research with sources (`EXA_API_KEY`).
+   Each answer is shown; **Add to the draft** is yours to press.
+6. **Preview** (with a Save as PDF button), then **Publish** with a note.
+   Versions are kept exactly as for an atlas.
+
+Run `supabase/migrations/018_case_studies.sql` once before the first case
+study on the live site.
+
 Publish is the source of truth. Every publish is kept as a numbered version
 (v1, v2, v3) on the same page, with who published it, when, and a note; an
 admin can make any earlier version live again, which goes out as a new
