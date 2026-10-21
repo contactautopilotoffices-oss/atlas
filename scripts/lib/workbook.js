@@ -4,7 +4,13 @@
    Two jobs, from one description of the sheets (workbook-schema.js):
 
      buildTemplate()   the empty boxes the team fills in
-     readWorkbook()    a filled one, turned into a bundle
+     readWorkbook()    a filled one, turned into an atlas bundle
+     readSheets()      a filled one, sheet by sheet, for any set of sheets
+                       (the case study workbook reads through this)
+
+   Both take a sheet description; the atlas sheets are the default, and a
+   case study passes its own (case-schema.js), so one template builder and
+   one reader serve both products.
 
    The template carries one example row per sheet. Every example is marked in
    its first required column, so the importer can drop them and say that it
@@ -18,7 +24,7 @@
    ============================================================================ */
 "use strict";
 const ExcelJS = require("exceljs");
-const { SHEETS, LEVEL_WORDS } = require("./workbook-schema");
+const { SHEETS: ATLAS_SHEETS, LEVEL_WORDS } = require("./workbook-schema");
 
 const BRAND = "FF2A1E16", HEAD_BG = "FFF3EDE6", REQ_BG = "FFFBE8D8", EG_FG = "FF9A8B7E";
 const EXAMPLE = "example";
@@ -38,7 +44,15 @@ const isExampleRow = (sheet, row) => {
 };
 
 /* ------------------------------------------------------------ template -- */
-function buildTemplate() {
+function buildTemplate(opts = {}) {
+  const SHEETS = opts.sheets || ATLAS_SHEETS;
+  const intro = Object.assign({ title: "Building an Atlas", lead: "Fill in the sheets, upload this file, and the atlas is built from it. You never need to write code.",
+    needed: "Only two sheets are needed: Atlas and Options. Everything else adds a section, and anything you leave empty is simply left out. A thinner atlas is a smaller atlas, never a broken one.",
+    tips: [
+      "Latitude is the north-south number and longitude is the east-west one. In Google Maps, right-click a building and the two numbers appear in that order: latitude first, longitude second. Getting them the wrong way round is the most common mistake, and it puts the property in the sea. The importer checks for it and tells you.",
+      "Every row that starts with the word \"example\" is skipped when you upload. They are there to show you the shape. Delete them or leave them; either way they never reach the atlas.",
+      "Columns are matched by their heading, not their position. You can reorder them, delete the ones you do not need, and add your own. A column the atlas does not recognise is still kept and shown on the property card.",
+    ] }, opts.intro || {});
   const wb = new ExcelJS.Workbook();
   wb.creator = "Autopilot ATLAS";
   wb.created = new Date();
@@ -53,11 +67,11 @@ function buildTemplate() {
     if (opts.height) r.height = opts.height;
     return r;
   };
-  say("Building an Atlas", { size: 18, bold: true, height: 26 });
+  say(intro.title, { size: 18, bold: true, height: 26 });
   say("");
-  say("Fill in the sheets, upload this file, and the atlas is built from it. You never need to write code.");
+  say(intro.lead);
   say("");
-  say("Only two sheets are needed: Atlas and Options. Everything else adds a section, and anything you leave empty is simply left out. A thinner atlas is a smaller atlas, never a broken one.", { height: 32 });
+  say(intro.needed, { height: 32 });
   say("");
   say("The sheets, in the order to fill them in", { bold: true, size: 13, height: 22 });
   for (const s of SHEETS) {
@@ -66,10 +80,8 @@ function buildTemplate() {
     say(`    ${s.blurb}`, { height: 30 });
   }
   say("");
-  say("Three things worth knowing", { bold: true, size: 13, height: 22 });
-  say("1.  Latitude is the north-south number and longitude is the east-west one. In Google Maps, right-click a building and the two numbers appear in that order: latitude first, longitude second. Getting them the wrong way round is the most common mistake, and it puts the property in the sea. The importer checks for it and tells you.", { height: 46 });
-  say("2.  Every row that starts with the word \"example\" is skipped when you upload. They are there to show you the shape. Delete them or leave them; either way they never reach the atlas.", { height: 32 });
-  say("3.  Columns are matched by their heading, not their position. You can reorder them, delete the ones you do not need, and add your own. A column the atlas does not recognise is still kept and shown on the property card.", { height: 46 });
+  say(`${["One", "Two", "Three", "Four", "Five"][intro.tips.length - 1] || intro.tips.length} thing${intro.tips.length === 1 ? "" : "s"} worth knowing`, { bold: true, size: 13, height: 22 });
+  intro.tips.forEach((t, i) => say(`${i + 1}.  ${t}`, { height: 46 }));
   say("");
   say("When you upload it you get a plain-English report of anything missing or wrong, naming the sheet, the row and the column. Nothing is published until you say so.", { height: 32 });
 
@@ -224,18 +236,25 @@ function withExtras(obj, sheet) {
   return { out, known };
 }
 
-async function readWorkbook(input) {
+/* Every sheet in `sheets`, read by heading: a form as one object, a table
+   as a list of rows, extras kept. */
+async function readSheets(input, sheets = ATLAS_SHEETS) {
   const wb = new ExcelJS.Workbook();
   if (Buffer.isBuffer(input)) await wb.xlsx.load(input);
   else await wb.xlsx.readFile(input);
-
   const notes = [];
   const bySheet = {};
-  for (const s of SHEETS) {
+  for (const s of sheets) {
     const ws = wb.getWorksheet(s.name);
     if (!ws) { if (s.required) notes.push(`The sheet "${s.name}" is missing from the workbook.`); bySheet[s.name] = s.shape === "form" ? {} : []; continue; }
     bySheet[s.name] = s.shape === "form" ? readForm(ws, s, notes) : readTable(ws, s, notes);
   }
+  return { bySheet, notes, wb };
+}
+
+async function readWorkbook(input) {
+  const SHEETS = ATLAS_SHEETS;
+  const { bySheet, notes, wb } = await readSheets(input, SHEETS);
 
   const bundle = {};
   const S = (n) => SHEETS.find(x => x.name === n);
@@ -375,4 +394,4 @@ async function readWorkbook(input) {
   return { bundle, notes };
 }
 
-module.exports = { buildTemplate, readWorkbook, SHEETS };
+module.exports = { buildTemplate, readWorkbook, readSheets, SHEETS: ATLAS_SHEETS };
