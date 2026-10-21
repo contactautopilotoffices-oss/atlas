@@ -15,7 +15,8 @@
     "test:workbook": "node scripts/workbook.test.js",
     "workbook": "node scripts/workbook.js --template",
     "test:flow": "node scripts/cms-flow-test.js",
-    "example:andheri": "node scripts/examples/andheri-flex.js"
+    "example:andheri": "node scripts/examples/andheri-flex.js",
+    "docs:walkthrough": "node scripts/docs/walkthrough.js docs-out && cp docs-out/atlas-walkthrough.pdf docs/"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.128.0",

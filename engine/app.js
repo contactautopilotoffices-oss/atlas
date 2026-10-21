@@ -264,7 +264,9 @@ const exKm = (o) => EX ? km(o, EX) : NaN;
    one, otherwise the straight line with the road factor. */
 const homeKm = (o) => isNum(o.roadKm) ? o.roadKm : exKm(o) * ROAD_FACTOR;
 const homeMin = (o) => o.driveText || `~${driveMin(exKm(o))} min`;
-const homeTxt = (o) => isNum(o.roadKm) ? `~${o.roadKm} km by road · ${o.driveText}` : `${fmtKm(exKm(o) * ROAD_FACTOR)} by road (est.) · ~${driveMin(exKm(o))} min`;
+const homeTxt = (o) => isNum(o.roadKm)
+  ? `~${o.roadKm} km by road · ${o.driveText || `~${driveMin(o.roadKm / ROAD_FACTOR)} min`}`
+  : `${fmtKm(exKm(o) * ROAD_FACTOR)} by road (est.) · ~${driveMin(exKm(o))} min`;
 
 /* ------------------------------------------------------------ scoring ----
    The priority chooser. Each measure is scored 0 to 1 and then weighted by
@@ -1446,15 +1448,22 @@ const zoneTag = (z) => z ? `<span class="zt" style="--z:${z.color || "#a3502c"}"
 
 /* ---------- Overview ---------- */
 /* The revised ranking, one table per fit group. */
+/* The ranking table. Its columns are what this Atlas has: distance from the
+   current office only when there is one, then the first two numbers the
+   bundle declares as measures. The study this was ported from hard-coded
+   its sheet's two scores here, which printed NaN for any other Atlas. */
 function rankingHTML(list) {
   const groups = Object.entries(FITS).map(([k, f]) => ({ f, os: list.filter(o => o.fit === k) })).filter(g => g.os.length);
   const rest = list.filter(o => !fitOf(o));
-  if (rest.length) groups.push({ f: { label: "Added since the sheet", color: "#9a8878", bg: "rgba(60,40,25,.07)" }, os: rest });
+  if (rest.length) groups.push({ f: { label: say("ranking.ungrouped", groups.length ? "Not grouped" : "Options"), color: "#9a8878", bg: "rgba(60,40,25,.07)" }, os: rest });
+  const cols = PARTS.filter(m => m.kind === "column" && O.some(o => isNum(o[m.column]))).slice(0, 2);
+  const unitOf = (m) => m.unit ? ` ${m.unit}` : isFinite(m.max) ? ` / ${m.max}` : "";
+  const where = (o) => o.sheetMicro || (ZONE[o.micro] && ZONE[o.micro].label) || o.locality || "";
   return groups.map(({ f, os }) => `<div class="fg"><div class="fgh"><span class="fitb" style="--f:${f.color};--fb:${f.bg}">${esc(f.label)}</span><span class="note">${os.length} option${os.length === 1 ? "" : "s"}</span></div>
-    <table class="rt"><thead><tr><th>Building</th><th class="num">From office</th><th class="num" title="Pricing and ecosystem scores out of 10">Price · eco</th></tr></thead>
-    <tbody>${os.map(o => `<tr><td><span class="mono no">${nn(o)}</span> ${optLinkLight(o)} ${flagChip(o)}<br><span class="note">${esc(o.sheetMicro)}</span>${o.reason ? `<div class="why">${esc(o.reason)}</div>` : ""}</td>
-      <td class="num">${isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(homeKm(o))}<br><span class="note">${esc(homeMin(o))}</span></td>
-      <td class="num">${isNum(o.pricingScore) ? `${o.pricingScore} · ${o.ecoScore}` : "-"}</td></tr>`).join("")}</tbody></table></div>`).join("");
+    <table class="rt"><thead><tr><th>${esc(say("ranking.option", "Option"))}</th>${EX ? `<th class="num">${esc(say("ranking.fromExisting", "From office"))}</th>` : ""}${cols.map(m => `<th class="num" title="${esc(m.of || "")}">${esc(m.label || titleCase(m.key))}</th>`).join("")}</tr></thead>
+    <tbody>${os.map(o => `<tr><td><span class="mono no">${nn(o)}</span> ${optLinkLight(o)} ${flagChip(o)}${where(o) ? `<br><span class="note">${esc(where(o))}</span>` : ""}${o.reason ? `<div class="why">${esc(o.reason)}</div>` : ""}</td>
+      ${EX ? `<td class="num">${isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(homeKm(o))}<br><span class="note">${esc(homeMin(o))}</span></td>` : ""}
+      ${cols.map(m => `<td class="num">${isNum(o[m.column]) ? esc(o[m.column].toLocaleString("en-IN") + unitOf(m)) : "-"}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`).join("");
 }
 function renderOverview() {
   const counts = Object.entries(FITS).map(([k, f]) => [f.label, O.filter(o => o.fit === k).length]).filter(x => x[1]);
@@ -1717,7 +1726,7 @@ function renderPlaces() {
 /* ---------- Your priorities (the chooser) ---------- */
 function podiumHTML() {
   const r = O.slice().sort(byFit).slice(0, 3);
-  return `<div class="podium">${r.map((o, i) => `<button type="button" data-go="${o.id}" data-hint="Open ${esc(o.name)}"><span class="p">${["First", "Second", "Third"][i]}</span><span class="n">${esc(o.name)}</span><span class="s">${score(o)}/100 · sheet #${o.n}</span></button>`).join("")}</div>`;
+  return `<div class="podium">${r.map((o, i) => `<button type="button" data-go="${o.id}" data-hint="Open ${esc(o.name)}"><span class="p">${["First", "Second", "Third"][i]}</span><span class="n">${esc(o.name)}</span><span class="s">${score(o)}/100${o.n ? ` · ranked #${o.n}` : ""}</span></button>`).join("")}</div>`;
 }
 function renderPriorities() {
   head("Your priorities", "What matters most to you?", "Answer seven questions. Price and ecosystem are the revised sheet's scores; the rest come from the map. The ranking, the list, the pins and the conclusion follow straight away.");

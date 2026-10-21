@@ -144,7 +144,11 @@ async function expect(name, fn) { try { const v = await fn(); if (v === false) b
     await page.click("#nav-out");
     await page.waitForSelector("#l-email", { timeout: 10000 });
     await page.context().clearCookies();
-    const visitor = await ctx.newPage();
+    /* The client is a different person in a different browser. Two reasons
+       it matters: the CMS does not count visits from a browser signed in to
+       /admin/, and it drops any user agent that calls itself headless. */
+    const clientCtx = await browser.newContext({ viewport: { width: 1400, height: 900 }, userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36" });
+    const visitor = await clientCtx.newPage();
     const vErrors = [];
     visitor.on("pageerror", e => vErrors.push(e.message));
     await stubRoutes(visitor);
@@ -172,6 +176,12 @@ async function expect(name, fn) { try { const v = await fn(); if (v === false) b
     await expect("the visitor has a sign-out button", async () => seen.signout);
     await expect(`the map got its ${seen.mapLayers} layers`, async () => seen.mapLayers > 20);
     await expect("no page errors for the visitor", async () => { if (vErrors.length) throw new Error(vErrors[0]); });
+    await visitor.close(); await clientCtx.close(); await wait(600);
+    await expect("the visit and the sign-in are recorded under the access ID", async () => {
+      const ev = (JSON.parse(fs.readFileSync(STORE, "utf8")).tables.atlas_events || []).filter(e => e.link_slug === "andheri-flex");
+      if (!ev.some(e => e.event === "view")) throw new Error(`no view event (have: ${ev.map(e => e.event).join(", ") || "none"})`);
+      if (!ev.some(e => e.event === "signin" && e.access_id === "ANDHERIFLEX")) throw new Error(`no sign-in under the access ID (have: ${ev.map(e => e.event + ":" + e.access_id).join(", ")})`);
+    });
 
     console.log("\n6. A visitor who goes straight to the atlas URL is asked to sign in");
     const stranger = await browser.newContext();

@@ -126,19 +126,28 @@ async function run(name, bundle, base, browser) {
 
   /* Walk every tab this Atlas decided to show. */
   const tabs = await page.$$eval("#tabs [data-t]", els => els.map(e => e.dataset.t));
+  /* A tab that renders without throwing can still print NaN or undefined,
+     which no error event reports. Read the text of every view for them. */
+  const leak = async (where) => {
+    const txt = await page.evaluate(() => [document.querySelector("#p-body"), document.querySelector("#p-head"), document.querySelector("#list"), document.querySelector("#cmp-body")].map(e => e ? e.innerText : "").join("\n"));
+    const m = txt.match(/.{0,40}\b(NaN|undefined|\[object Object\])\b.{0,30}/);
+    if (m) errors.push(`${where} prints "${m[1]}": ...${m[0].replace(/\s+/g, " ").trim()}...`);
+  };
   for (const t of tabs) {
     await page.click(`#tabs [data-t="${t}"]`, { timeout: 5000 }).catch(e => errors.push(`clicking tab ${t}: ${e.message.split("\n")[0]}`));
     await page.waitForTimeout(90);
+    await leak(`tab ${t}`);
     /* The Compare tab opens a sheet over the page; close it so the next tab
        is clickable. */
     await page.evaluate(() => { const c = document.querySelector("#cmp"); if (c) c.classList.remove("on"); });
   }
   /* Open the first option, then the compare sheet. */
   const firstCard = await page.$("#list .card");
-  if (firstCard) { await firstCard.click(); await page.waitForTimeout(150); }
+  if (firstCard) { await firstCard.click(); await page.waitForTimeout(150); await leak("the option panel"); }
   else if (bundle.options.length) errors.push("no option cards rendered");
   await page.evaluate(() => window.openCompare && window.openCompare()).catch(e => errors.push("openCompare: " + e.message.split("\n")[0]));
   await page.waitForTimeout(150);
+  await leak("the compare sheet");
   await page.evaluate(() => { const c = document.querySelector("#cmp"); if (c) c.classList.remove("on"); });
 
   const inner = await page.evaluate(() => window.__atlasErrors || []);
