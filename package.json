@@ -8,9 +8,21 @@
     "dev": "python3 serve.py",
     "build": "node scripts/build-config.js && node scripts/fetch-indore-backdrop.js",
     "godseye": "node scripts/godseye-dev.js",
-    "dev:cms": "node scripts/atlas-dev.js"
+    "dev:cms": "node scripts/atlas-dev.js",
+    "validate": "node scripts/validate-bundle.js --all",
+    "test": "node scripts/validate-bundle.test.js && node scripts/workbook.test.js && node scripts/engine-test.js && node scripts/cms-flow-test.js",
+    "test:engine": "node scripts/engine-test.js",
+    "test:workbook": "node scripts/workbook.test.js",
+    "workbook": "node scripts/workbook.js --template",
+    "test:flow": "node scripts/cms-flow-test.js",
+    "example:andheri": "node scripts/examples/andheri-flex.js",
+    "docs:walkthrough": "node scripts/docs/walkthrough.js docs-out && cp docs-out/atlas-walkthrough.pdf docs/"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.128.0"
+    "@anthropic-ai/sdk": "^0.128.0",
+    "exceljs": "^4.4.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.56.1"
   }
 }

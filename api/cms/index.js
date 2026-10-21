@@ -18,11 +18,24 @@
      GET  submissions&status= (editor) POST submissions/review (editor)
      POST upload/sign (editor)         GET audit (admin)
      GET  broker/me                    POST broker/submit         (broker token)
+
+   Atlases built from a workbook (no code, no deploy):
+     GET  bundle/template (editor)     the empty workbook, as a download
+     POST bundle/import (editor)       a filled workbook -> bundle + report; saves nothing
+     POST bundle/draft (editor)        save a bundle as a link's draft
+     POST bundle/publish (admin)       draft -> live
+     GET  bundle&link=[&draft=1]       the bundle itself: live needs the visitor's
+                                       access cookie for that link, draft an admin
+     GET  access/list&link= (editor)   POST access/issue | access/revoke (admin)
+     POST access                       a VISITOR signs in with an access ID and
+                                       password; sets the access cookie
    ============================================================================ */
 "use strict";
 const store = require("./_store");
 const auth = require("./_auth");
 const { summarise } = require("./_analytics");
+const { buildTemplate, readWorkbook } = require("../../scripts/lib/workbook");
+const { validate } = require("../../scripts/lib/validate-bundle");
 
 const SLUG = /^[a-z0-9][a-z0-9-]{0,39}$/;
 const clip = (v, n) => (v == null ? "" : String(v)).slice(0, n);
@@ -454,6 +467,210 @@ R["POST broker/submit"] = async (req, res, b) => {
   return { submission: { id: row.id, status: row.status } };
 };
 
+/* ================================================== workbook atlases ==
+   An Atlas made in /admin/ from a workbook. The bundle lives in
+   atlas_bundles with a draft and a live version; its link row in atlas_links
+   has kind "bundle" and path "/", because a visitor reaches it the way they
+   reach every client view: sign in at the site root with an access ID, and
+   be sent on. */
+const MAX_BUNDLE = 4 * 1024 * 1024;
+const ACCESS_ID = /^[A-Z0-9][A-Z0-9-]{2,39}$/;
+const normAccess = (v) => clip(v, 60).trim().toUpperCase().replace(/[\s_]+/g, "-");
+
+async function bundleRow(slug) {
+  let row = await store.one("atlas_bundles", { eq: { link_slug: slug } });
+  if (!row) [row] = await store.upsert("atlas_bundles", { link_slug: slug, draft: null, published: null, version: 0 }, "link_slug");
+  return row;
+}
+function cleanBundle(b) {
+  if (!b || typeof b !== "object" || Array.isArray(b)) fail(400, "The bundle must be an object.");
+  const s = JSON.stringify(b);
+  if (s.length > MAX_BUNDLE) fail(413, "The atlas is too large (over 4 MB).");
+  return JSON.parse(s);
+}
+/* The validator's report, shaped for the page: the plain-words lines the
+   person who filled in the workbook will read. */
+const reportOf = (rep) => ({ ok: rep.ok, errors: rep.errors, warnings: rep.warnings, stats: rep.stats });
+
+R["GET bundle/template"] = async (req, res) => {
+  await needUser(req, "editor");
+  const wb = buildTemplate();
+  const buf = Buffer.from(await wb.xlsx.writeBuffer());
+  res.statusCode = 200;
+  res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+  res.setHeader("Content-Disposition", 'attachment; filename="atlas-workbook.xlsx"');
+  res.setHeader("Cache-Control", "no-store");
+  res.end(buf);
+  return { __sent: true };
+};
+
+R["POST bundle/import"] = async (req, res, b) => {
+  await needUser(req, "editor");
+  if (!b.file || typeof b.file !== "string") fail(400, "Send the workbook as a base64 string in `file`.");
+  let buf;
+  try { buf = Buffer.from(b.file.replace(/^data:[^,]*,/, ""), "base64"); } catch (e) { fail(400, "The file could not be read."); }
+  if (!buf.length) fail(400, "The file is empty.");
+  if (buf.length > MAX_BUNDLE) fail(413, "The workbook is too large (over 4 MB).");
+  let out;
+  try { out = await readWorkbook(buf); }
+  catch (e) { fail(400, `That does not look like an Atlas workbook: ${clip(e.message, 200)}. Download the template from this page and fill that in.`); }
+  const rep = validate(out.bundle);
+  return { bundle: out.bundle, notes: out.notes, report: reportOf(rep) };
+};
+
+R["POST bundle/draft"] = async (req, res, b) => {
+  const u = await needUser(req, "editor");
+  const slug = clip(b.slug, 40).trim().toLowerCase();
+  if (!SLUG.test(slug)) fail(400, "Use lower-case letters, numbers and hyphens for the link id.");
+  const existing = await store.one("atlas_links", { eq: { slug } });
+  if (existing && existing.kind !== "bundle") fail(400, `"${slug}" is already a ${existing.kind} link. Pick another id.`);
+  if (existing) needLink(u, slug);
+  const bundle = cleanBundle(b.bundle);
+  const rep = validate(bundle);
+  if (!rep.ok) fail(400, `The atlas has ${rep.errors.length} problem${rep.errors.length === 1 ? "" : "s"} that stop it being drawn. Fix them in the workbook and upload it again.`);
+  const name = clip(b.name, 120).trim() || (bundle.meta && bundle.meta.title) || slug;
+  const city = clip(b.city, 60).trim() || (bundle.meta && bundle.meta.city) || null;
+  const row = { slug, name, kind: "bundle", path: "/", city, notes: clip(b.notes, 1000) || (existing ? existing.notes : null), updated_at: store.now() };
+  if (!existing) row.access_id = null;
+  await store.upsert("atlas_links", row, "slug");
+  await overridesRow(slug);
+  await bundleRow(slug);
+  const [saved] = await store.update("atlas_bundles", { eq: { link_slug: slug } }, { draft: bundle, draft_updated_at: store.now(), draft_updated_by: u.email });
+  await audit(u, "bundle.draft", slug, { options: (bundle.options || []).length, warnings: rep.warnings.length });
+  return { slug, name, version: saved ? saved.version : 0, report: reportOf(rep), created: !existing };
+};
+
+R["POST bundle/publish"] = async (req, res, b) => {
+  const u = await needUser(req, "admin");
+  const slug = clip(b.slug, 40);
+  needLink(u, slug);
+  const link = await store.one("atlas_links", { eq: { slug } });
+  if (!link || link.kind !== "bundle") fail(404, "That is not an atlas built from a workbook.");
+  const row = await bundleRow(slug);
+  if (!row.draft) fail(400, "There is no draft to publish. Upload a workbook first.");
+  const rep = validate(row.draft);
+  if (!rep.ok) fail(400, "The draft no longer passes its checks. Upload the workbook again.");
+  const version = (row.version || 0) + 1;
+  await store.update("atlas_bundles", { eq: { link_slug: slug } }, { published: row.draft, published_at: store.now(), published_by: u.email, version });
+  await audit(u, "bundle.publish", slug, { version });
+  return { slug, version };
+};
+
+/* The bundle a page renders. Live needs the visitor's access cookie for this
+   link; the draft needs an admin, which is what "Preview draft" uses. */
+R["GET bundle"] = async (req, res, b, q) => {
+  const slug = clip(q.get("link"), 40);
+  if (!SLUG.test(slug)) fail(400, "Unknown atlas.");
+  const wantDraft = q.get("draft") === "1";
+  const link = await store.one("atlas_links", { eq: { slug } });
+  if (!link || link.kind !== "bundle") fail(404, "Unknown atlas.");
+  const row = await store.one("atlas_bundles", { eq: { link_slug: slug } });
+  if (wantDraft) {
+    const u = await auth.currentUser(req);
+    if (!u || !auth.canLink(u, slug)) fail(401, "Sign in to /admin/ to preview a draft.");
+    if (!row || !row.draft) fail(404, "There is no draft yet.");
+    return { slug, name: link.name, draft: true, version: row.version, bundle: row.draft };
+  }
+  const a = auth.accessOf(req);
+  const u = a && a.slug === slug ? null : await auth.currentUser(req);
+  if (!(a && a.slug === slug) && !(u && auth.canLink(u, slug))) fail(401, "Sign in with your access ID.");
+  if (link.status === "paused") return { slug, name: link.name, paused: true };
+  if (!row || !row.published) fail(404, "This atlas has not been published yet.");
+  return { slug, name: link.name, version: row.version, bundle: row.published, accessId: a ? a.aid : null };
+};
+
+/* ---- credentials ---- */
+const publicAccess = (a) => ({ access_id: a.access_id, link_slug: a.link_slug, name: a.name, active: a.active, last_used_at: a.last_used_at, created_at: a.created_at });
+
+R["GET access/list"] = async (req, res, b, q) => {
+  const u = await needUser(req, "editor");
+  const slug = clip(q.get("link"), 40);
+  needLink(u, slug);
+  const rows = await store.select("atlas_access", { eq: { link_slug: slug }, order: "created_at.asc" });
+  return { access: rows.map(publicAccess) };
+};
+
+R["POST access/issue"] = async (req, res, b) => {
+  const u = await needUser(req, "admin");
+  const slug = clip(b.slug, 40);
+  needLink(u, slug);
+  const link = await store.one("atlas_links", { eq: { slug } });
+  if (!link || link.kind !== "bundle") fail(404, "That is not an atlas built from a workbook.");
+  const id = normAccess(b.access_id);
+  if (!ACCESS_ID.test(id)) fail(400, "An access ID is 3 to 40 letters, numbers and hyphens, such as ACME-PUNE.");
+  const pw = String(b.password || "");
+  const problem = auth.passwordProblem(pw);
+  if (problem) fail(400, problem);
+  /* An ID that already opens a committed study cannot be reused here, or the
+     site root would not know where to send it. */
+  const clash = await store.one("atlas_links", { eq: { access_id: id } });
+  if (clash && clash.slug !== slug) fail(400, `"${id}" already opens ${clash.name}. Pick another.`);
+  const prior = await store.one("atlas_access", { eq: { access_id: id } });
+  if (prior && prior.link_slug !== slug) fail(400, `"${id}" already opens another atlas. Pick another.`);
+  const row = { access_id: id, link_slug: slug, password_hash: auth.hashPassword(pw), name: clip(b.name, 120) || null, active: true, failed_logins: 0, locked_until: null };
+  await store.upsert("atlas_access", row, "access_id");
+  /* The link's own access_id column is what the links table and the
+     dashboard show; keep the first one issued there. */
+  if (!link.access_id) await store.update("atlas_links", { eq: { slug } }, { access_id: id, updated_at: store.now() });
+  await audit(u, "access.issue", slug, { access_id: id, replaced: !!prior });
+  return { access: publicAccess({ ...row, created_at: prior ? prior.created_at : store.now(), last_used_at: prior ? prior.last_used_at : null }) };
+};
+
+R["POST access/revoke"] = async (req, res, b) => {
+  const u = await needUser(req, "admin");
+  const id = normAccess(b.access_id);
+  const row = await store.one("atlas_access", { eq: { access_id: id } });
+  if (!row) fail(404, "No such access ID.");
+  needLink(u, row.link_slug);
+  await store.update("atlas_access", { eq: { access_id: id } }, { active: !!b.active === true ? true : false });
+  await audit(u, b.active ? "access.enable" : "access.revoke", row.link_slug, { access_id: id });
+  return { ok: true };
+};
+
+/* A visitor at the site root. The same lockout as /admin/: five wrong
+   passwords lock the ID for fifteen minutes. The answer to a wrong ID and a
+   wrong password is the same, so an ID cannot be confirmed by guessing. */
+R["POST access"] = async (req, res, b) => {
+  const id = normAccess(b.id);
+  const pw = String(b.password || "");
+  const bad = () => fail(401, "Invalid Demo ID or password");
+  if (!ACCESS_ID.test(id) || !pw) bad();
+  const row = await store.one("atlas_access", { eq: { access_id: id } });
+  if (!row || !row.active) bad();
+  if (row.locked_until && Date.parse(row.locked_until) > Date.now()) fail(429, "Too many attempts. Try again in a few minutes.");
+  if (!auth.checkPassword(pw, row.password_hash)) {
+    const n = (row.failed_logins || 0) + 1;
+    await store.update("atlas_access", { eq: { access_id: id } }, { failed_logins: n, locked_until: n >= 5 ? new Date(Date.now() + 15 * 60000).toISOString() : null });
+    bad();
+  }
+  const link = await store.one("atlas_links", { eq: { slug: row.link_slug } });
+  if (!link) bad();
+  await store.update("atlas_access", { eq: { access_id: id } }, { failed_logins: 0, locked_until: null, last_used_at: store.now() });
+  auth.setAccess(res, { slug: row.link_slug, aid: id });
+  return { slug: row.link_slug, name: link.name, paused: link.status === "paused", open: `/engine/?atlas=${encodeURIComponent(row.link_slug)}` };
+};
+
+R["POST access/signout"] = async (req, res) => { auth.clearAccess(res); return { ok: true }; };
+
+/* Where a workbook atlas stands: is there a draft, is anything live. */
+R["GET bundle/status"] = async (req, res, b, q) => {
+  const u = await needUser(req, "viewer");
+  const slug = clip(q.get("link"), 40);
+  needLink(u, slug);
+  const link = await store.one("atlas_links", { eq: { slug } });
+  if (!link || link.kind !== "bundle") fail(404, "That is not an atlas built from a workbook.");
+  const row = await store.one("atlas_bundles", { eq: { link_slug: slug } });
+  const d = row && row.draft, pub = row && row.published;
+  return {
+    slug, name: link.name, city: link.city, status: link.status, access_id: link.access_id,
+    draft: !!d, draft_updated_at: row ? row.draft_updated_at : null, draft_updated_by: row ? row.draft_updated_by : null,
+    draftReport: d ? reportOf(validate(d)) : null,
+    draftTitle: d && d.meta ? d.meta.title : null, draftOptions: d ? (d.options || []).length : 0,
+    published: !!pub, version: row ? row.version : 0, published_at: row ? row.published_at : null, published_by: row ? row.published_by : null,
+    unpublished: !!(d && (!pub || JSON.stringify(d) !== JSON.stringify(pub)))
+  };
+};
+
 /* ------------------------------------------------------------ handler --- */
 module.exports = async (req, res) => {
   try {
@@ -464,8 +681,11 @@ module.exports = async (req, res) => {
     /* Broker writes are already proven by their token header; every other
        write must carry x-cms, which a cross-site form cannot send. */
     if (req.method !== "GET" && !route.startsWith("POST broker/")) needWrite(req);
-    const body = req.method === "POST" ? await readBody(req) : {};
+    /* A workbook arrives base64-encoded inside the JSON body. */
+    const limit = /^POST bundle\/(import|draft)$/.test(route) ? 6 * 1024 * 1024 : undefined;
+    const body = req.method === "POST" ? await readBody(req, limit) : {};
     const out = await fn(req, res, body, url.searchParams);
+    if (out && out.__sent) return;            // the route wrote its own (binary) response
     send(res, 200, out);
   } catch (e) {
     const status = e.status || 500;

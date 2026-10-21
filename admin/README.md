@@ -12,6 +12,7 @@ show, and collect updates from brokers.
 | --- | --- |
 | Dashboard | Visitors, sessions, sign-ins, average time, who is on a link right now, which access IDs signed in, which properties and sections people opened, country, city, device, where they came from. Last 7, 30 or 90 days, per link or all. |
 | Atlas links | Every link shipped so far, live or paused, with its published version and 30-day visitors. Pause a link and it shows a "paused" screen instead of its data. |
+| Create an atlas | Upload a filled workbook and publish it as a new link, with its own access ID and password. No code, no deploy. |
 | Content editor | Per link: change any data field on a property, hide a property, edit the facts and source links on a property card, add "Latest from the market" values (asking rent, availability and so on), switch tabs, filters, map layers, presets and toolbar buttons on or off, set the 3D model for a building, edit the study's facts and sources, add a notice banner, change map texts, add new properties (Chennai). Everything is saved as a draft, can be previewed, and goes live only when you publish. Every publish is kept and you can go back to any version. |
 | Broker links | A private link per broker, limited to the links (and optionally the properties) you choose. Send it on WhatsApp or email. Switch it off or replace it at any time. |
 | Inbox | What brokers sent. Correct a value if needed, then approve it into the draft or reject it. |
@@ -107,6 +108,49 @@ to act on.
 `/admin/` in the same browser. A ribbon at the bottom says it is a draft. The
 main map (client views at `/`) needs the client's access ID and password, as
 usual.
+
+## Creating an Atlas from a workbook (no code)
+
+This is how the team makes a new Atlas without a developer.
+
+1. **Create an atlas** in the left nav, then **Download the empty workbook**.
+   Nine sheets; only **Atlas** and **Options** are needed. The "Read me first"
+   sheet inside it explains the rest.
+2. Fill it in. Every row that starts with the word "example" is skipped on
+   upload, so leave them or delete them.
+3. **Upload a filled workbook.** You get a report in plain words naming the
+   sheet, the row and the column of anything missing or wrong. Problems stop
+   the atlas being drawn and must be fixed; warnings do not.
+4. Name it, set the **link id** (it cannot change afterwards), and give it an
+   **access ID and password**. The password is shown once; copy it to the
+   client. Save as draft.
+5. **Preview draft** opens it exactly as a client will see it. **Publish**
+   (admin) makes it live within about half a minute.
+6. Send the client `atlas.autopilotoffices.com` with the access ID and
+   password. They sign in at the site root as every client does, and are sent
+   to the atlas. The atlas also opens directly at `/engine/?atlas=<link id>`
+   and asks for the same credential there.
+
+To change it, open it from Atlas links and upload a revised workbook; the
+previous version stays live until you publish again. Access IDs can be
+revoked and re-enabled from the same page, and several can be issued for one
+atlas, one per person, which is what makes the dashboard's per-ID figures
+mean one person each.
+
+Credentials issued here are checked by the server and never ship in a
+script. The IDs in `clients/manifest.js` for the committed studies are
+unchanged by this.
+
+`examples/andheri-flex.xlsx` is a filled workbook to try it with: the Andheri
+flex atlas, built from two PDFs (`node scripts/examples/andheri-flex.js`
+rebuilds it). `npm run test:flow` runs the whole sequence above headlessly
+against a local copy of the site.
+
+### Setting it up (once)
+
+Run `supabase/migrations/016_bundles.sql` in the Supabase SQL editor. It adds
+the two tables (`atlas_bundles`, `atlas_access`) and lets a link be of kind
+`bundle`. Nothing else changes.
 
 ## Adding a new Atlas link
 

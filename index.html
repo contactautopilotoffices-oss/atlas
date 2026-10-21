@@ -433,10 +433,32 @@ async function passMatches(client, pass){
   }
   return normId(pass) === normId(client.pass);
 }
+/* An ID that is not in the manifest may open an atlas built from a workbook
+   in /admin/. Those credentials live on the server and are checked there, so
+   nothing about them ships in this page. */
+async function serverAccess(id, pass){
+  try{
+    const r = await fetch("/api/cms?r=access", { method:"POST", credentials:"same-origin",
+      headers:{ "Content-Type":"application/json", "x-cms":"1" }, body: JSON.stringify({ id, password: pass }) });
+    const j = await r.json().catch(() => ({}));
+    return r.ok && j.open ? j : null;
+  }catch(e){ return null; }
+}
 async function enterExperience(){
   const id = document.getElementById("gateId").value.trim().toUpperCase();
   const pass = document.getElementById("gatePass").value.trim();
   const client = lookupClient(id);
+  if(!client){
+    gateErr.textContent = "";
+    const srv = await serverAccess(id, pass);
+    if(srv){
+      try{ sessionStorage.setItem("atlas-access-id", normId(id)); }catch(e){}
+      window.location.href = srv.open; return;
+    }
+    gateErr.textContent = "Invalid Demo ID or password";
+    document.getElementById("gatePass").value="";
+    return;
+  }
   if(await passMatches(client, pass)){
     if(client.redirect){
       /* Hand the sign-in over to the target app for this tab, so a separately

@@ -1,0 +1,37 @@
+# Every change is tested before it can reach main, because main is what
+# Vercel deploys to atlas.autopilotoffices.com.
+#
+# New atlases do not come through here. An atlas made in /admin/ is data in
+# Supabase and goes live when it is published, with no build and no deploy.
+# This pipeline guards the code those atlases run on.
+#
+#   validate-bundle.test.js  the schema, and the four committed studies against it
+#   workbook.test.js         the workbook template and importer, round trip
+#   engine-test.js           the engine renders eight bundles in headless Chromium
+#   cms-flow-test.js         the whole create-an-atlas flow, end to end, against
+#                            a local copy of the site with a throwaway store
+name: Test
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Chromium for the headless tests
+        run: npx playwright install --with-deps chromium
+      - run: npm test

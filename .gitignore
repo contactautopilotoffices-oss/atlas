@@ -40,3 +40,4 @@ media/indore/backdrop-*.webp
 # CMS local development store and uploads (npm run dev:cms)
 .cms-dev-store.json
 media/_cms-dev/
+/docs-out/
