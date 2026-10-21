@@ -27,9 +27,9 @@
 })();
 </script>
 <script src="../config.js?v=eng1"></script>
-<!-- The bundle. A page serving a saved Atlas replaces this line with its own
-     source: a file, or a fetch from the CMS. -->
-<script src="./bundle.js?v=eng1"></script>
+<!-- Where the bundle comes from: ./bundle.js for the demo, or the CMS when
+     the page is opened as /engine/?atlas=<id>. See load.js. -->
+<script src="./load.js?v=eng1"></script>
 <style>
 /* Palette follows the Autopilot deck, as on the Indore study: espresso,
    cream and terracotta. Colour never carries meaning alone; every score,
@@ -594,12 +594,12 @@ table.cmp td.best{background:#f1e6d8;font-weight:600}
 /* Start through the CMS (published overrides, visit counts) under this
    Atlas's own slug. Without the CMS script the engine starts anyway, so the
    worst case is an Atlas with no tracking rather than no Atlas. */
-(function () {
+(window.AtlasLoad || Promise.resolve()).then(function () {
   var slug = (window.ATLAS && window.ATLAS.slug) || "atlas";
   var app = "./app.js?v=eng1";
   if (window.AtlasCMS) AtlasCMS.boot(slug, { app: app });
   else { var s = document.createElement("script"); s.src = app; document.body.appendChild(s); }
-})();
+});
 </script>
 <link rel="stylesheet" href="../guide/atlas-guide.css?v=ag1">
 <script src="../guide/atlas-guide.js?v=ag1"></script>

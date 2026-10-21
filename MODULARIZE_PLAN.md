@@ -157,11 +157,35 @@ cut over. Worth ten minutes of inventory before the switch.
 ## Order of work
 
 1. ~~Schema written down, tested against the committed studies~~ **done**
-2. Engine extracted: data binding, the copy layer, the declarative chooser,
-   latitude derived from the bundle. Five shims so nothing live changes
-3. Workbook generator, downloadable from `/admin/`
-4. Importer and validation report
-5. Dynamic route, then the DNS move and subdomains
+2. ~~Engine, as a new renderer at `/engine/` beside the five studies~~ **done**
+3. ~~Workbook generator, downloadable from `/admin/`~~ **done**
+4. ~~Importer and validation report~~ **done**
+5. ~~Create-an-atlas flow in `/admin/`, bundles stored and served, server-checked credentials~~ **done**
+
+There is no step for routing or DNS. A visitor signs in at
+`atlas.autopilotoffices.com` as before; an ID the manifest does not know is
+checked by the server, which sends them to `/engine/?atlas=<id>`.
+
+`npm run test:flow` runs the whole sequence headlessly: owner created,
+workbook uploaded, report read, credential issued, draft previewed,
+published, visitor signs in at the root and lands on the atlas, a stranger
+at the atlas URL is asked to sign in.
+
+### What is still true
+
+- The five committed studies are untouched and still carry their
+  credentials in `clients/manifest.js` and their `GATE_HASH`. Moving them to
+  server-checked credentials is a separate change, with their rotation.
+- Nothing reads a PDF. The Andheri flex atlas in `examples/` was typed from
+  two PDFs into the workbook by hand, which is the step a person still does.
+  What stopped it being automatic was not the typing: it was that neither
+  PDF carried a coordinate, and every one of the 28 buildings had to be
+  placed. The positions came from the committed Andheri study, which had
+  already geocoded the same operator list with a source per pin. A place
+  library in the CMS, remembering every building ever placed, would make the
+  second atlas in a city free of that work.
+- Photographs and the sign-in backdrop are files, not rows. The workbook
+  does not carry them.
 
 Step 2 is now the large one, and larger than it first looked: it is three
 separate changes inside a 1,661 line file that is in front of clients, and they

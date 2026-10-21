@@ -90,6 +90,27 @@ const canLink = (user, slug) => !user.links || user.links.length === 0 || user.l
 const atLeast = (user, role) => user && rank(user.role) >= rank(role);
 const publicUser = (u) => u && ({ id: u.id, email: u.email, name: u.name, role: u.role, links: u.links, active: u.active, last_login_at: u.last_login_at, created_at: u.created_at });
 
+/* ------------------------------------------------------- visitors ------
+   A visitor who signs in to an Atlas built from a workbook gets a second,
+   separate cookie: which atlas their credential unlocks, nothing more. It
+   is signed with the same secret, lasts a working day, and is never the
+   admin session, so a client can hold one without the other. */
+const ACCESS_COOKIE = "atlas_access";
+function setAccess(res, { slug, aid }) {
+  const token = sign({ slug, aid, exp: Math.floor(Date.now() / 1000) + TTL_S });
+  res.setHeader("Set-Cookie", `${ACCESS_COOKIE}=${encodeURIComponent(token)}; Path=/; HttpOnly;${secureFlag()} SameSite=Lax; Max-Age=${TTL_S}`);
+}
+function clearAccess(res) {
+  res.setHeader("Set-Cookie", `${ACCESS_COOKIE}=; Path=/; HttpOnly;${secureFlag()} SameSite=Lax; Max-Age=0`);
+}
+/* { slug, aid } for the atlas this visitor may open, or null. */
+function accessOf(req) {
+  const raw = req.headers.cookie || "";
+  const m = raw.split(/;\s*/).find(c => c.startsWith(ACCESS_COOKIE + "="));
+  const p = verify(m ? decodeURIComponent(m.slice(ACCESS_COOKIE.length + 1)) : "");
+  return p && p.slug ? { slug: p.slug, aid: p.aid || null } : null;
+}
+
 /* ------------------------------------------------------------ brokers -- */
 const newToken = () => crypto.randomBytes(24).toString("base64url");
 const hashToken = (t) => crypto.createHash("sha256").update(String(t)).digest("hex");
@@ -98,5 +119,6 @@ module.exports = {
   ROLES, rank, atLeast, canLink, publicUser,
   hashPassword, checkPassword, passwordProblem,
   setSession, clearSession, currentUser,
+  setAccess, clearAccess, accessOf,
   newToken, hashToken,
 };

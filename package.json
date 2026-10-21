@@ -10,10 +10,12 @@
     "godseye": "node scripts/godseye-dev.js",
     "dev:cms": "node scripts/atlas-dev.js",
     "validate": "node scripts/validate-bundle.js --all",
-    "test": "node scripts/validate-bundle.test.js && node scripts/workbook.test.js && node scripts/engine-test.js",
+    "test": "node scripts/validate-bundle.test.js && node scripts/workbook.test.js && node scripts/engine-test.js && node scripts/cms-flow-test.js",
     "test:engine": "node scripts/engine-test.js",
     "test:workbook": "node scripts/workbook.test.js",
-    "workbook": "node scripts/workbook.js --template"
+    "workbook": "node scripts/workbook.js --template",
+    "test:flow": "node scripts/cms-flow-test.js",
+    "example:andheri": "node scripts/examples/andheri-flex.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.128.0",

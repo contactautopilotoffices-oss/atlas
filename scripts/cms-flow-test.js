@@ -1,0 +1,201 @@
+#!/usr/bin/env node
+/* ============================================================================
+   ATLAS · the whole loop, through the CMS
+
+     node scripts/cms-flow-test.js
+
+   Starts the local site (scripts/atlas-dev.js, with a throwaway JSON store),
+   then does in headless Chromium exactly what a team member does:
+
+     1. opens /admin/, creates the first owner
+     2. goes to Create an atlas, uploads examples/andheri-flex.xlsx
+     3. reads the report, names the atlas, sets an access ID and password
+     4. saves the draft, previews it, publishes it
+     5. signs out of /admin/, goes to the site root as a VISITOR, types the
+        access ID and password, and lands on the published atlas with its
+        tabs rendered
+
+   No code is written and nothing is deployed in that sequence. If this
+   passes, the claim "the team can make an atlas without a developer" has
+   been exercised rather than asserted. The map itself is a stand-in, as in
+   engine-test.js, so a person still has to look at a real one once.
+   ============================================================================ */
+"use strict";
+const { spawn } = require("child_process");
+const fs = require("fs");
+const path = require("path");
+const net = require("net");
+const { chromium } = require("playwright");
+const mapboxStub = require("./lib/mapbox-stub");
+
+const ROOT = path.join(__dirname, "..");
+const SCRATCH = process.env.ATLAS_SCRATCH || fs.mkdtempSync(path.join(require("os").tmpdir(), "atlas-cms-"));
+const STORE = path.join(SCRATCH, "cms-store.json");
+const WORKBOOK = path.join(ROOT, "examples", "andheri-flex.xlsx");
+
+const freePort = () => new Promise(ok => { const s = net.createServer(); s.listen(0, "127.0.0.1", () => { const p = s.address().port; s.close(() => ok(p)); }); });
+const wait = (ms) => new Promise(ok => setTimeout(ok, ms));
+async function startSite() {
+  const port = await freePort();
+  if (fs.existsSync(STORE)) fs.unlinkSync(STORE);
+  const child = spawn(process.execPath, [path.join(ROOT, "scripts", "atlas-dev.js")], { env: { ...process.env, PORT: String(port), CMS_DEV_STORE: STORE }, stdio: ["ignore", "pipe", "pipe"] });
+  let log = "";
+  child.stdout.on("data", d => { log += d; });
+  child.stderr.on("data", d => { log += d; });
+  for (let i = 0; i < 50; i++) { if (/ATLAS at/.test(log)) break; await wait(100); }
+  if (!/ATLAS at/.test(log)) { child.kill(); throw new Error("the local site did not start:\n" + log); }
+  return { base: `http://127.0.0.1:${port}`, child, logs: () => log };
+}
+
+const GIF = Buffer.from("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7", "base64");
+/* What every page gets instead of the network: a stand-in map, no fonts,
+   blank tiles, and a config.js with a token (the real one is gitignored). */
+async function stubRoutes(page) {
+  await page.route("**/*", async route => {
+    const url = route.request().url();
+    if (/\/config\.js/.test(url)) return route.fulfill({ contentType: "text/javascript", body: 'window.MAPBOX_TOKEN = "pk.test";' });
+    if (/mapbox-gl\.js/.test(url)) return route.fulfill({ contentType: "text/javascript", body: mapboxStub() });
+    if (/mapbox-gl\.css|fonts\.googleapis|fonts\.gstatic/.test(url)) return route.fulfill({ contentType: "text/css", body: "" });
+    if (/buildings_geo|bkc_buildings|mapbox_app/.test(url)) return route.fulfill({ contentType: "text/javascript", body: "" });
+    if (/arcgisonline|api\.mapbox\.com|\/media\//.test(url)) return route.fulfill({ status: 200, contentType: "image/gif", body: GIF });
+    return route.continue();
+  });
+}
+let pass = 0, fail = 0;
+const ok = (m) => { pass++; console.log("  ok    " + m); };
+const bad = (m, d) => { fail++; console.log("  FAIL  " + m + (d ? "\n        " + String(d).replace(/\n/g, "\n        ") : "")); };
+async function expect(name, fn) { try { const v = await fn(); if (v === false) bad(name); else ok(name); } catch (e) { bad(name, e.message.split("\n")[0]); } }
+
+(async () => {
+  if (!fs.existsSync(WORKBOOK)) { console.error(`Missing ${WORKBOOK}. Run: node scripts/examples/andheri-flex.js`); process.exit(2); }
+  const site = await startSite();
+  const browser = await chromium.launch();
+  const ctx = await browser.newContext({ viewport: { width: 1400, height: 900 } });
+  const page = await ctx.newPage();
+  const errors = [];
+  page.on("pageerror", e => errors.push("pageerror: " + e.message));
+  page.on("console", m => { if (m.type() === "error" && !/favicon|Failed to load resource/.test(m.text())) errors.push("console: " + m.text()); });
+  await stubRoutes(page);
+  await page.addInitScript(() => { window.__atlasErrors = []; });
+  const ACCESS = "ANDHERI-FLEX", PASS = "Flex-Andheri-2026";
+
+  try {
+    console.log("\n1. The first owner is created in /admin/");
+    await page.goto(site.base + "/admin/", { waitUntil: "domcontentloaded" });
+    await page.waitForSelector("#s-key, #l-email", { timeout: 15000 });
+    await expect("the setup screen appears when there are no users", async () => !!(await page.$("#s-key")));
+    await page.fill("#s-key", "dev-setup");
+    await page.fill("#s-name", "Shubham");
+    await page.fill("#s-email", "shubham@autopilotoffices.com");
+    await page.fill("#s-pw", "owner-password-1");
+    await page.click("#f-setup button[type=submit]");
+    await page.waitForSelector("#nav a.it", { timeout: 15000 });
+    await expect("the owner is signed in and sees the nav", async () => (await page.$$("#nav a.it")).length >= 5);
+    await expect("Create an atlas is in the nav", async () => !!(await page.$('#nav a[href="#/create"]')));
+
+    console.log("\n2. The workbook is uploaded");
+    await page.click('#nav a[href="#/create"]');
+    await page.waitForSelector("#cr-file", { state: "attached", timeout: 10000 });
+    await page.setInputFiles("#cr-file", WORKBOOK);
+    await page.waitForSelector("#cr-report .card", { timeout: 20000 });
+    const reportText = await page.$eval("#cr-report", e => e.textContent);
+    await expect("the report says nothing stops the atlas being drawn", async () => !/stop(s)? this atlas/.test(reportText));
+    await expect("the report lists the contents", async () => /4 options/.test(reportText) && /22 places/.test(reportText));
+    await expect("the warnings name the sheet and the row", async () => /Facts, market row/.test(reportText));
+    await expect("the name is prefilled from the workbook", async () => (await page.inputValue("#cr-name")) === "Andheri Flex Atlas");
+    await expect("the link id is derived from the title", async () => (await page.inputValue("#cr-slug")) === "andheri-flex-atlas");
+
+    console.log("\n3. Named, credentialled, saved as a draft");
+    await page.fill("#cr-slug", "andheri-flex");
+    await page.fill("#cr-access", ACCESS);
+    await page.fill("#cr-pass", PASS);
+    await page.fill("#cr-who", "Shubham, for the Andheri pitch");
+    await page.click("#cr-save");
+    await page.waitForFunction(() => location.hash === "#/create/andheri-flex", { timeout: 15000 });
+    await page.waitForSelector("#cr-publish:not([disabled])", { timeout: 15000 });
+    await expect("the page reopens on the saved atlas", async () => /Andheri Flex Atlas/.test(await page.$eval(".hd h1", e => e.textContent)));
+    await expect("it says the atlas is not yet published", async () => /Not published yet/.test(await page.$eval(".hd .sub", e => e.textContent)));
+    await expect("the access ID is listed as active", async () => /ANDHERI-FLEX/.test(await page.$eval("table.t", e => e.textContent)));
+    await expect("the atlas is now in Atlas links as a workbook atlas", async () => {
+      const r = await page.evaluate(async () => (await (await fetch("/api/cms?r=links", { credentials: "same-origin" })).json()).links.find(l => l.slug === "andheri-flex"));
+      return r && r.kind === "bundle" && r.access_id === "ANDHERI-FLEX";
+    });
+
+    console.log("\n4. Preview, then publish");
+    const prev = await ctx.newPage();
+    await stubRoutes(prev);
+    const prevErrors = [];
+    prev.on("pageerror", e => prevErrors.push(e.message));
+    await prev.goto(site.base + "/engine/?atlas=andheri-flex&draft=1", { waitUntil: "domcontentloaded" });
+    await prev.waitForFunction(() => document.querySelector("#tabs") && document.querySelector("#tabs").children.length > 0, { timeout: 20000 }).catch(() => {});
+    await expect("the draft preview renders for the signed-in admin", async () => (await prev.$$("#tabs [data-t]")).length >= 5 && (await prev.$$("#list .card")).length === 4);
+    await expect("the preview has no page errors", async () => { if (prevErrors.length) throw new Error(prevErrors[0]); });
+    await expect("the preview carries the flex layer", async () => /Flex/.test(await prev.$eval("#layers", e => e.textContent)));
+    await prev.close();
+
+    await page.click("#cr-publish");
+    await page.waitForSelector("#cf-ok", { timeout: 5000 });
+    await page.click("#cf-ok");
+    await page.waitForFunction(() => /Live/.test((document.querySelector(".hd .sub") || {}).textContent || ""), { timeout: 15000 });
+    await expect("it is live at version 1", async () => /version 1/.test(await page.$eval(".hd .sub", e => e.textContent)));
+    await expect("the sign-in details are shown once", async () => { const t = await page.$eval("#main", e => e.textContent); return t.includes(ACCESS) && t.includes(PASS); });
+
+    console.log("\n5. A visitor signs in at the site root");
+    await page.click("#nav-out");
+    await page.waitForSelector("#l-email", { timeout: 10000 });
+    await page.context().clearCookies();
+    const visitor = await ctx.newPage();
+    const vErrors = [];
+    visitor.on("pageerror", e => vErrors.push(e.message));
+    await stubRoutes(visitor);
+    await visitor.goto(site.base + "/", { waitUntil: "domcontentloaded" });
+    await visitor.waitForSelector("#gateId", { timeout: 15000 });
+    await visitor.fill("#gateId", "NOT-A-REAL-ID");
+    await visitor.fill("#gatePass", "wrong");
+    await visitor.press("#gatePass", "Enter");
+    await visitor.waitForFunction(() => /Invalid/.test((document.querySelector("#gateErr") || {}).textContent || ""), { timeout: 10000 }).catch(() => {});
+    await expect("a wrong ID is refused at the root", async () => /Invalid/.test(await visitor.$eval("#gateErr", e => e.textContent)));
+    await visitor.fill("#gateId", ACCESS);
+    await visitor.fill("#gatePass", PASS);
+    await visitor.press("#gatePass", "Enter");
+    await visitor.waitForURL(/\/engine\/\?atlas=andheri-flex/, { timeout: 15000 });
+    await expect("the root sends the visitor to the published atlas", async () => /\/engine\/\?atlas=andheri-flex$/.test(visitor.url()));
+    await visitor.waitForFunction(() => document.querySelector("#tabs") && document.querySelector("#tabs").children.length > 0, { timeout: 20000 }).catch(() => {});
+    const seen = await visitor.evaluate(() => ({
+      tabs: [...document.querySelectorAll("#tabs [data-t]")].map(e => e.dataset.t), cards: document.querySelectorAll("#list .card").length,
+      title: document.title, gate: !!document.querySelector("#gate"), signout: !!document.querySelector("#signout"),
+      mapLayers: Object.keys((window.__atlasMap || { _layers: {} })._layers || {}).length
+    }));
+    await expect("the published atlas renders with no sign-in form", async () => !seen.gate && seen.cards === 4 && seen.tabs.length >= 5);
+    await expect(`the tabs are ${seen.tabs.join(", ")}`, async () => seen.tabs.includes("priorities") && seen.tabs.includes("places"));
+    await expect("the page title is the atlas's own", async () => /Andheri Flex Atlas/.test(seen.title));
+    await expect("the visitor has a sign-out button", async () => seen.signout);
+    await expect(`the map got its ${seen.mapLayers} layers`, async () => seen.mapLayers > 20);
+    await expect("no page errors for the visitor", async () => { if (vErrors.length) throw new Error(vErrors[0]); });
+
+    console.log("\n6. A visitor who goes straight to the atlas URL is asked to sign in");
+    const stranger = await browser.newContext();
+    const sp = await stranger.newPage();
+    await stubRoutes(sp);
+    await sp.goto(site.base + "/engine/?atlas=andheri-flex", { waitUntil: "domcontentloaded" });
+    await sp.waitForFunction(() => (document.querySelector("#g-title") || {}).textContent === "Sign in", { timeout: 10000 }).catch(() => {});
+    await expect("the engine page shows its own sign-in form to a stranger", async () => (await sp.$eval("#g-title", e => e.textContent)) === "Sign in" && (await sp.$$("#tabs [data-t]")).length === 0);
+    await expect("the bundle is not served without a credential", async () => {
+      const r = await sp.evaluate(async () => (await fetch("/api/cms?r=bundle&link=andheri-flex")).status);
+      return r === 401;
+    });
+    await sp.fill("#g-id", ACCESS); await sp.fill("#g-pw", PASS); await sp.click("#g-go");
+    await sp.waitForFunction(() => document.querySelector("#tabs") && document.querySelector("#tabs").children.length > 0, { timeout: 20000 }).catch(() => {});
+    await expect("signing in on the engine page itself works too", async () => (await sp.$$("#list .card")).length === 4);
+    await stranger.close();
+
+    await expect("no page errors in /admin/ throughout", async () => { if (errors.length) throw new Error(errors[0]); });
+  } catch (e) {
+    bad("the flow threw", e.stack.split("\n").slice(0, 3).join("\n"));
+  } finally {
+    await browser.close();
+    site.child.kill();
+  }
+  console.log(`\n${pass} passed, ${fail} failed\n`);
+  process.exit(fail ? 1 : 0);
+})();

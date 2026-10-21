@@ -618,7 +618,9 @@ function boot() {
   renderTabs(); renderFilters(); renderList(); renderPanel(); renderLayers();
   wireBoard(); wireSheet(); wirePanes(); wireHints();
   const so = $("#signout");
-  if (GATE_HASH) so.addEventListener("click", signOut); else so.remove();
+  if (GATE_HASH) so.addEventListener("click", signOut);
+  else if (window.AtlasAccess && window.AtlasAccess.slug) so.addEventListener("click", () => { if (CMS) CMS.signout(); window.AtlasAccess.signOut(); });
+  else so.remove();
   $("#sort").dataset.hint = say("sort.hint", "Change the order of the list.");
   addEventListener("popstate", () => applyRoute(true));
   if (map && map.getSource("options")) { refreshMap(); if (S.sel) select(S.sel, true, true); else fitAll(false); }
