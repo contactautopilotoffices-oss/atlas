@@ -165,6 +165,9 @@ async function expect(name, fn) { try { const v = await fn(); if (v === false) b
     await visitor.waitForURL(/\/engine\/\?atlas=andheri-flex/, { timeout: 15000 });
     await expect("the root sends the visitor to the published atlas", async () => /\/engine\/\?atlas=andheri-flex$/.test(visitor.url()));
     await visitor.waitForFunction(() => document.querySelector("#tabs") && document.querySelector("#tabs").children.length > 0, { timeout: 20000 }).catch(() => {});
+    /* The map loads after the panels render, as it does with real Mapbox, so
+       wait for its layers rather than reading them the moment the tabs show. */
+    await visitor.waitForFunction(() => Object.keys((window.__atlasMap || { _layers: {} })._layers || {}).length > 20, { timeout: 20000 }).catch(() => {});
     const seen = await visitor.evaluate(() => ({
       tabs: [...document.querySelectorAll("#tabs [data-t]")].map(e => e.dataset.t), cards: document.querySelectorAll("#list .card").length,
       title: document.title, gate: !!document.querySelector("#gate"), signout: !!document.querySelector("#signout"),
