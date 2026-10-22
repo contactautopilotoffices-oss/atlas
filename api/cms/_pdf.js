@@ -37,6 +37,12 @@ const MAX_CHARS = 180000;
 
 /* ------------------------------------------------------------- reading -- */
 async function pdfText(buf) {
+  /* pdfjs loads its worker by a path it builds at run time, which Vercel's
+     bundler cannot see, so the worker was left out of the deployed function
+     ("Setting up fake worker failed"). Importing it here by name puts it in
+     the bundle, and pdfjs uses a worker already on globalThis instead of
+     importing its own. */
+  if (!globalThis.pdfjsWorker) globalThis.pdfjsWorker = await import("pdfjs-dist/legacy/build/pdf.worker.mjs");
   const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs");
   const doc = await pdfjs.getDocument({ data: new Uint8Array(buf), useWorkerFetch: false, isEvalSupported: false, disableFontFace: true, verbosity: 0 }).promise;
   const pages = [];
