@@ -12,7 +12,7 @@ show, and collect updates from brokers.
 | --- | --- |
 | Dashboard | Visitors, sessions, sign-ins, average time, who is on a link right now, which access IDs signed in, which properties and sections people opened, country, city, device, where they came from. Last 7, 30 or 90 days, per link or all. |
 | Atlas links | Every link shipped so far, live or paused, with its published version and 30-day visitors. Pause a link and it shows a "paused" screen instead of its data. |
-| Create an atlas | Upload a filled workbook and publish it as a new link, with its own access ID and password. No code, no deploy. |
+| Create an atlas | Describe the requirement, bring up to six files (Excel, PDF, Word), edit the plan, build, and publish it as a new link with its own access ID and password. No code, no deploy. |
 | Content editor | Per link: change any data field on a property, hide a property, edit the facts and source links on a property card, add "Latest from the market" values (asking rent, availability and so on), switch tabs, filters, map layers, presets and toolbar buttons on or off, set the 3D model for a building, edit the study's facts and sources, add a notice banner, change map texts, add new properties (Chennai). Everything is saved as a draft, can be previewed, and goes live only when you publish. Every publish is kept and you can go back to any version. |
 | Broker links | A private link per broker, limited to the links (and optionally the properties) you choose. Send it on WhatsApp or email. Switch it off or replace it at any time. |
 | Inbox | What brokers sent. Correct a value if needed, then approve it into the draft or reject it. |
@@ -113,35 +113,54 @@ usual.
 
 This is how the team makes a new Atlas without a developer.
 
-1. **Create an atlas** in the left nav, then **Download the empty workbook**.
-   Nine sheets; only **Atlas** and **Options** are needed. The "Read me first"
-   sheet inside it explains the rest.
-2. Fill it in. Every row that starts with the word "example" is skipped on
-   upload, so leave them or delete them.
-3. **Upload a filled workbook.** You get a report in plain words naming the
-   sheet, the row and the column of anything missing or wrong. Problems stop
-   the atlas being drawn and must be fixed; warnings do not.
-4. Name it, set the **link id** (it cannot change afterwards), and give it an
+1. **Create an atlas** in the left nav. Step 1 is the **Describe it** card:
+   write the requirement in your own words, and drop in up to six files
+   (Excel `.xlsx`/`.csv`, PDF, Word `.docx`, about 3 MB together). A filled
+   Atlas workbook is one of them if you have it; **download the empty
+   workbook** from the same card to start one. Nine sheets; only **Atlas**
+   and **Options** are needed.
+2. **Enhance** (optional) turns the requirement, with the files' text, into
+   a brief: seats, budget, where, move-in, must haves, what to rank on,
+   what the documents say, what it assumed and what to ask the client.
+   Every field is editable, and Enhance again keeps your edits. It is the
+   one step allowed to infer and suggest (temperature 0.8 on Engy; Claude
+   takes no temperature, so there it is the instructions that loosen it).
+3. **Plan the atlas** reads every file (and the brief) into one draft: a
+   tab per sheet, every cell editable, rows and columns added or removed,
+   or the whole thing as JSON. The same building in two files becomes one
+   row. Reading stays strict: only what the files say, no invented figure
+   or coordinate. A filled Atlas workbook on its own, with no requirement,
+   is read exactly as it is, with no model.
+4. **Build** turns the plan into the atlas: an empty latitude and
+   longitude is placed from the address by Mapbox (and says so on the
+   page), and you get a report in plain words naming the sheet, the row
+   and the column of anything missing or wrong. Problems stop the atlas
+   being drawn and must be fixed in the plan; warnings do not. Build with
+   no plan yet plans and builds in one go. Nothing is saved until step 5.
+5. Name it, set the **link id** (it cannot change afterwards), and give it an
    **access ID and password**. The password is shown once; copy it to the
    client. Save as draft.
-5. **Preview draft** opens it exactly as a client will see it. **Publish**
+6. **Preview draft** opens it exactly as a client will see it. **Publish**
    (admin) makes it live within about half a minute.
-6. Send the client `atlas.autopilotoffices.com/<link id>` with the access ID
+7. Send the client `atlas.autopilotoffices.com/<link id>` with the access ID
    and password. The atlas asks for the credential there; signing in at the
    site root with the same ID sends them to the same address. (The older
    `/engine/?atlas=<link id>` form still opens it.) A link id that names a
    page the site already has, such as `chennai` or `admin`, is refused.
 
-**From a PDF instead.** Step 1 also takes a PDF (an inventory table, a
-list of centres, a market note). The server reads its text (pages with no
-text layer, such as scans, are read as images by Claude, which is the OCR),
-a model puts what it says into the workbook's own sheets without inventing
-a figure or a coordinate, and Mapbox places each address on the map; every
-pin placed that way says so on the page. You get the filled-in workbook
-back to check the pins and figures, and upload it again once it is right.
-Needs `ENGY_API_KEY` or `ANTHROPIC_API_KEY` (the same keys God's Eye uses;
-`CMS_PDF_PROVIDER` picks when both are set, `CMS_PDF_MODEL` overrides the
-model) and `MAPBOX_TOKEN` for the pins.
+**How the files are read.** PDFs by their text layer; a page with no text
+but a picture on it is a scan and is read as an image by Claude (the OCR);
+a blank page is skipped. Word documents paragraph by paragraph, tables row
+by row. Spreadsheets sheet by sheet, either way round (a record per row or
+per column). A filled Atlas workbook among other files keeps its rows and
+its pins exactly. Plan and Enhance need `ENGY_API_KEY` or
+`ANTHROPIC_API_KEY` (the same keys God's Eye uses; `CMS_PDF_PROVIDER` picks
+when both are set, `CMS_PDF_MODEL` overrides the model); scans need
+`ANTHROPIC_API_KEY`, and with Engy alone they are left out and named in the
+notes. Build needs `MAPBOX_TOKEN` for pins from addresses. Routes:
+`bundle/enhance`, `bundle/plan`, `bundle/build` (and `bundle/sheets` for the
+editor's tabs); `bundle/import` and `bundle/import-pdf` still take a single
+workbook or PDF.
 
 ## Creating a case study from a workbook (no code)
 
