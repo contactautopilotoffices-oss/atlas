@@ -292,6 +292,13 @@ async function expect(name, fn) { try { const v = await fn(); if (v === false) b
     await expect("no page errors for the reader", async () => { if (rpErr.length) throw new Error(rpErr[0]); });
     await reader.close();
 
+    console.log("\n8. The system check");
+    await page.goto(site.base + "/admin/#/system", { waitUntil: "domcontentloaded" });
+    await page.waitForSelector("tr[data-check]", { timeout: 30000 });
+    await expect("the System check is in the nav and lists every check", async () => /System check/.test(await page.$eval("#nav", e => e.textContent)) && (await page.$$("tr[data-check]")).length >= 10);
+    await expect("the PDF reader passes on the server", async () => (await page.$eval('tr[data-check="pdf"]', e => e.dataset.status)) === "ok");
+    await expect("a missing key is named with its fix", async () => /ANTHROPIC_API_KEY/.test(await page.$eval('tr[data-check="ai"]', e => e.textContent)));
+
     await expect("no page errors in /admin/ throughout", async () => { if (errors.length) throw new Error(errors[0]); });
   } catch (e) {
     bad("the flow threw", e.stack.split("\n").slice(0, 3).join("\n"));

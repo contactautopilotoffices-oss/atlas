@@ -17,6 +17,8 @@
      GET  brokers (editor)             POST brokers/create | brokers/update | brokers/rotate (editor)
      GET  submissions&status= (editor) POST submissions/review (editor)
      POST upload/sign (editor)         GET audit (admin)
+     GET  preflight (admin)            the system check: database, migrations,
+                                       storage, keys, PDF reader, Mapbox
      GET  broker/me                    POST broker/submit         (broker token)
 
    Atlases built from a workbook (no code, no deploy):
@@ -45,6 +47,7 @@ const { buildTemplate, readWorkbook } = require("../../scripts/lib/workbook");
 const { validate } = require("../../scripts/lib/validate-bundle");
 const pdf = require("./_pdf");
 const caseRoutes = require("./_case");
+const preflight = require("./_preflight");
 
 const SLUG = /^[a-z0-9][a-z0-9-]{0,39}$/;
 const clip = (v, n) => (v == null ? "" : String(v)).slice(0, n);
@@ -740,6 +743,9 @@ R["GET bundle/status"] = async (req, res, b, q) => {
 };
 
 caseRoutes.register(R, { needUser, needLink, fail, clip, audit, SLUG, RESERVED, overridesRow });
+
+/* Is everything an atlas or a case study needs in place? (_preflight.js) */
+R["GET preflight"] = async (req) => { await needUser(req, "admin"); return preflight.run(); };
 
 /* ------------------------------------------------------------ handler --- */
 module.exports = async (req, res) => {
