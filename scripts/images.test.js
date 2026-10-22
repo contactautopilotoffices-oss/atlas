@@ -10,6 +10,7 @@
    ============================================================================ */
 "use strict";
 process.env.CMS_DEV_STORE = require("path").join(require("os").tmpdir(), `atlas-img-${Date.now()}.json`);
+delete process.env.HIGGSFIELD_API_KEY;
 process.env.HIGGSFIELD_API_KEY_ID = "kid"; process.env.HIGGSFIELD_API_KEY_SECRET = "ksec";
 const images = require("../api/cms/_images");
 
@@ -53,9 +54,15 @@ const res = (status, body, headers = {}) => ({ ok: status < 400, status, json: a
   let t = 0;
   try { await images.generate("x", { fetchFn: async (url) => /standard$/.test(url) ? res(200, { status: "queued", request_id: "r3", status_url: "s3" }) : res(200, { status: "in_progress" }), sleepFn: async () => { t += 60000; }, timeoutMs: 100000 }); } catch (e) { err = e; }
   ok("a slow job stops waiting at the limit and keeps the request id", err && err.status === 504 && err.requestId === "r3", err && err.message);
-  delete process.env.HIGGSFIELD_API_KEY_ID;
+  /* One key, as the console shows it: on its own, or as ID:SECRET, with or without "Key ". */
+  delete process.env.HIGGSFIELD_API_KEY_ID; delete process.env.HIGGSFIELD_API_KEY_SECRET;
+  const authWith = async (v) => { process.env.HIGGSFIELD_API_KEY = v; const seen = []; await images.generate("x", { fetchFn: async (url, o = {}) => { seen.push(o.headers && o.headers.Authorization); return /standard$/.test(url) ? res(200, { status: "queued", request_id: "r", status_url: "s" }) : res(200, { status: "completed", images: [{ url: "u" }] }); }, sleepFn: async () => {} }); return seen[0]; };
+  ok("a single key is sent as Key <key>", (await authWith("hf_single_key_123")) === "Key hf_single_key_123");
+  ok("an ID:SECRET pair in the one variable is sent as it is", (await authWith("abc:def")) === "Key abc:def");
+  ok("a pasted 'Key ...' prefix is not doubled", (await authWith("Key abc:def ")) === "Key abc:def");
+  delete process.env.HIGGSFIELD_API_KEY;
   err = null; try { await images.generate("x"); } catch (e) { err = e; }
-  ok("no key: a plain message naming the two variables", err && err.status === 503 && /HIGGSFIELD_API_KEY_ID/.test(err.message));
+  ok("no key: a plain message naming the variable", err && err.status === 503 && /HIGGSFIELD_API_KEY set/.test(err.message));
   ok("ready() says so", images.ready() === false);
 
   try { require("fs").unlinkSync(process.env.CMS_DEV_STORE); } catch (e) {}
