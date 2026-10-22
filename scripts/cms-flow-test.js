@@ -38,7 +38,7 @@ const wait = (ms) => new Promise(ok => setTimeout(ok, ms));
 async function startSite() {
   const port = await freePort();
   if (fs.existsSync(STORE)) fs.unlinkSync(STORE);
-  const child = spawn(process.execPath, [path.join(ROOT, "scripts", "atlas-dev.js")], { env: { ...process.env, PORT: String(port), CMS_DEV_STORE: STORE }, stdio: ["ignore", "pipe", "pipe"] });
+  const child = spawn(process.execPath, [path.join(ROOT, "scripts", "atlas-dev.js")], { env: { ...process.env, PORT: String(port), CMS_DEV_STORE: STORE, ENGY_API_KEY: "", ANTHROPIC_API_KEY: "", CMS_PDF_PROVIDER: "" }, stdio: ["ignore", "pipe", "pipe"] });
   let log = "";
   child.stdout.on("data", d => { log += d; });
   child.stderr.on("data", d => { log += d; });
@@ -103,6 +103,12 @@ async function expect(name, fn) { try { const v = await fn(); if (v === false) b
     await expect("the report lists the contents", async () => /4 options/.test(reportText) && /22 places/.test(reportText));
     await expect("the warnings name the sheet and the row", async () => /Facts, market row/.test(reportText));
     await expect("the name is prefilled from the workbook", async () => (await page.inputValue("#cr-name")) === "Andheri Flex Atlas");
+    await expect("a PDF can be uploaded from the same step", async () => !!(await page.$("#cr-pdf")));
+    await expect("without a model key the PDF route says what is missing", async () => {
+      const r = await page.evaluate(async () => (await fetch("/api/cms?r=bundle/import-pdf", { method: "POST", credentials: "same-origin", headers: { "content-type": "application/json", "x-cms": "1" }, body: JSON.stringify({ file: btoa("%PDF-1.4 x"), name: "x.pdf" }) })).json());
+      if (!/ENGY_API_KEY or ANTHROPIC_API_KEY/.test(r.error || "")) throw new Error(JSON.stringify(r));
+      return true;
+    });
     await expect("the link id is derived from the title", async () => (await page.inputValue("#cr-slug")) === "andheri-flex-atlas");
 
     console.log("\n3. Named, credentialled, saved as a draft");
@@ -219,6 +225,72 @@ async function expect(name, fn) { try { const v = await fn(); if (v === false) b
     await old.waitForFunction(() => document.querySelector("#tabs") && document.querySelector("#tabs").children.length > 0, { timeout: 20000 }).catch(() => {});
     await expect("the older /engine/?atlas= address still opens the same atlas", async () => (await old.$$("#list .card")).length === 4);
     await stranger.close();
+
+    console.log("\n7. A case study on the same link, with the same credential");
+    await page.goto(site.base + "/admin/", { waitUntil: "domcontentloaded" });
+    await page.waitForSelector("#l-email", { timeout: 10000 });
+    await page.fill("#l-email", "shubham@autopilotoffices.com"); await page.fill("#l-pw", "owner-password-1"); await page.click("#f-login button[type=submit]");
+    await page.waitForSelector("#nav", { timeout: 10000 });
+    await page.goto(site.base + "/admin/#/case", { waitUntil: "domcontentloaded" });
+    await page.waitForSelector("#cs-example", { timeout: 10000 });
+    await expect("the nav has Create a case study", async () => /Create a case study/.test(await page.$eval("#nav", e => e.textContent)));
+    await page.click("#cs-example");
+    await page.waitForSelector("#cs-report .card", { timeout: 30000 });
+    const csReport = await page.$eval("#cs-report", e => e.textContent);
+    await expect("the Andheri case workbook is read: nothing stops it being drawn", async () => !/stop(s)? this/.test(csReport), csReport.slice(0, 200));
+    await expect("the name is prefilled from the Case sheet", async () => (await page.inputValue("#cs-name")) === "Andheri Business Case Study 2026");
+    await page.fill("#cs-slug", "andheri-flex");
+    await page.click("#cs-save");
+    await page.waitForFunction(() => location.hash === "#/case/andheri-flex", { timeout: 15000 });
+    await page.waitForSelector("#cs-publish:not([disabled])", { timeout: 15000 });
+    await expect("the case study joins the atlas's link, which keeps its kind", async () => {
+      const r = await page.evaluate(async () => (await (await fetch("/api/cms?r=links", { credentials: "same-origin" })).json()).links.find(l => l.slug === "andheri-flex"));
+      return r && r.kind === "bundle" && r.access_id === "ANDHERI-FLEX";
+    });
+    await expect("the pictures step lists the nine slots with their prompts", async () => (await page.$$("[data-prompt]")).length === 9 && /dusk/.test(await page.$eval('[data-prompt="cover"]', e => e.value)));
+    await expect("without keys the picture and helper buttons are off and say why", async () => (await page.$$("[data-make]:disabled")).length === 9 && (await page.$$("[data-task]:disabled")).length === 6 && /HIGGSFIELD_API_KEY_ID/.test(await page.$eval("#main", e => e.textContent)) && /ENGY_API_KEY or ANTHROPIC_API_KEY/.test(await page.$eval("#main", e => e.textContent)));
+    await expect("the image and helper routes say what is missing", async () => {
+      const post = (r, body) => page.evaluate(async ([r, body]) => (await (await fetch("/api/cms?r=" + r, { method: "POST", credentials: "same-origin", headers: { "content-type": "application/json", "x-cms": "1" }, body: JSON.stringify(body) })).json()).error, [r, body]);
+      return /HIGGSFIELD/.test(await post("case/image", { slug: "andheri-flex", slot: "cover" })) && /ENGY_API_KEY or ANTHROPIC_API_KEY/.test(await post("case/assist", { slug: "andheri-flex", task: "means" })) && /not a picture slot/.test(await post("case/image", { slug: "andheri-flex", slot: "nope" }));
+    });
+    await expect("apply() folds a suggestion into the draft through the API", async () => {
+      const r = await page.evaluate(async () => (await (await fetch("/api/cms?r=case/apply", { method: "POST", credentials: "same-origin", headers: { "content-type": "application/json", "x-cms": "1" }, body: JSON.stringify({ slug: "andheri-flex", suggestions: { copy: { deals: ["Deals line from the helper."] } } }) })).json()));
+      const st = await page.evaluate(async () => (await (await fetch("/api/cms?r=case/status&link=andheri-flex", { credentials: "same-origin" })).json()));
+      return r.ok && st.copyKeys.includes("deals");
+    });
+    const cprev = await ctx.newPage(); await stubRoutes(cprev);
+    const cpErr = []; cprev.on("pageerror", e => cpErr.push(e.message));
+    await cprev.goto(site.base + "/andheri-flex/case?draft=1", { waitUntil: "domcontentloaded" });
+    await cprev.waitForSelector(".page", { timeout: 20000 });
+    await expect("the draft preview draws the 39 pages for the signed-in admin, marked DRAFT", async () => (await cprev.$$(".page")).length === 39 && (await cprev.$eval("#bar-draft", e => getComputedStyle(e).display)) !== "none" && /Deals line from the helper/.test(await cprev.$eval("#deck", e => e.textContent)));
+    await expect("the preview has no page errors", async () => { if (cpErr.length) throw new Error(cpErr[0]); });
+    await cprev.close();
+    await page.click("#cs-publish");
+    await page.waitForSelector("#pb-go", { timeout: 5000 });
+    await page.fill("#pb-note", "First case study"); await page.click("#pb-go");
+    await page.waitForFunction(() => /Live/.test((document.querySelector(".hd .sub") || {}).textContent || ""), { timeout: 15000 });
+    await expect("the case study is live at version 1 with its note in the history", async () => /version 1/.test(await page.$eval(".hd .sub", e => e.textContent)) && /First case study/.test(await page.$eval("#main", e => e.textContent)));
+    await expect("the link keeps the atlas's name in Atlas links", async () => {
+      await page.click('#nav a[href="#/links"]');
+      /* The links page draws its header first and the table once the list
+         has loaded; wait for the table with the seeded links in it. */
+      await page.waitForFunction(() => location.hash === "#/links" && /Flipkart/.test((document.querySelector("#main table.t") || {}).textContent || ""), { timeout: 15000 });
+      const t = await page.$eval("#main table.t", e => e.textContent);
+      return /Andheri Flex Atlas/.test(t) && !/Andheri Business Case Study 2026/.test(t);
+    });
+    const reader = await browser.newContext({ userAgent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36" });
+    const rp = await reader.newPage(); await stubRoutes(rp);
+    const rpErr = []; rp.on("pageerror", e => rpErr.push(e.message));
+    await rp.goto(site.base + "/andheri-flex/case", { waitUntil: "domcontentloaded" });
+    await rp.waitForFunction(() => (document.querySelector("#g-title") || {}).textContent === "Sign in", { timeout: 10000 }).catch(() => {});
+    await expect("a stranger at the case study's address is asked to sign in", async () => (await rp.$eval("#g-title", e => e.textContent)) === "Sign in" && (await rp.$$(".page")).length === 0);
+    await rp.fill("#g-id", ACCESS); await rp.fill("#g-pw", PASS); await rp.click("#g-go");
+    await rp.waitForSelector(".page", { timeout: 20000 });
+    const rtext = await rp.$eval("#deck", e => e.textContent);
+    await expect("the atlas's credential opens the case study: 39 pages with the costing's figures", async () => (await rp.$$(".page")).length === 39 && /₹21,560/.test(rtext) && /₹18,410/.test(rtext) && /83%/.test(rtext));
+    await expect("the reader sees no version number and a Save as PDF button", async () => !/version\s*\d|\bv\d\b/i.test(rtext) && (await rp.$eval("#bar-draft", e => getComputedStyle(e).display)) === "none" && (await rp.$eval("#bar-pdf", e => e.textContent)) === "Save as PDF");
+    await expect("no page errors for the reader", async () => { if (rpErr.length) throw new Error(rpErr[0]); });
+    await reader.close();
 
     await expect("no page errors in /admin/ throughout", async () => { if (errors.length) throw new Error(errors[0]); });
   } catch (e) {

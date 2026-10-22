@@ -200,6 +200,7 @@ async function refreshPending() {
 /* --------------------------------------------------------------- nav ---- */
 const ICON = {
   create: '<path d="M12 5v14M5 12h14"/><rect x="3" y="3" width="18" height="18" rx="3"/>',
+  case: '<path d="M4 4h12l4 4v12H4z"/><path d="M8 12h8M8 16h8M16 4v4h4"/>',
   dashboard: '<path d="M3 13h8V3H3zM13 21h8V11h-8zM3 21h8v-6H3zM13 3v6h8V3z"/>',
   links: '<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',
   brokers: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
@@ -212,7 +213,7 @@ function renderNav() {
   if (!ST.me) return;
   const cur = (location.hash.replace(/^#\/?/, "").split("/")[0]) || "dashboard";
   const items = [
-    ["dashboard", "Dashboard", "viewer"], ["links", "Atlas links", "viewer"], ["create", "Create an atlas", "editor"], ["brokers", "Broker links", "editor"],
+    ["dashboard", "Dashboard", "viewer"], ["links", "Atlas links", "viewer"], ["create", "Create an atlas", "editor"], ["case", "Create a case study", "editor"], ["brokers", "Broker links", "editor"],
     ["inbox", "Inbox", "editor"], ["team", "Team", "admin"], ["audit", "Audit log", "admin"], ["account", "Account", "viewer"]
   ].filter(i => can(i[2]));
   $("#nav").innerHTML = `<div class="brand"><img src="/autopilot-logo-trimmed.png" alt="Autopilot"><span>Admin</span></div>
@@ -236,7 +237,7 @@ async function route() {
   lastHash = location.hash;
   renderNav();
   const M = $("#main");
-  const go = { dashboard: pageDashboard, links: pageLinks, content: pageContent, create: pageCreate, brokers: pageBrokers, inbox: pageInbox, team: pageTeam, audit: pageAudit, account: pageAccount }[page || "dashboard"] || pageDashboard;
+  const go = { dashboard: pageDashboard, links: pageLinks, content: pageContent, create: pageCreate, case: pageCase, brokers: pageBrokers, inbox: pageInbox, team: pageTeam, audit: pageAudit, account: pageAccount }[page || "dashboard"] || pageDashboard;
   try { await go(M, a, b); } catch (e) { M.innerHTML = `<div class="card empty">${esc(e.message)}</div>`; }
   window.scrollTo(0, 0);
 }
@@ -362,10 +363,10 @@ const tabLabel = (link, tab) => ((CMS.FEATURES[link] || []).find(f => f.key === 
 const breakdown = (title, rows, note) => `<div class="card"><h3>${esc(title)}</h3>${rows.length ? `<div class="list">${rows.map(r => `<div class="kv"><span>${esc(r.k)}</span><b class="num">${n0(r.n)}</b></div>`).join("")}</div>` : `<div class="empty" style="padding:14px">No data yet.</div>`}${note ? `<div class="note" style="margin-top:6px">${esc(note)}</div>` : ""}</div>`;
 
 /* ============================================================= links == */
-const KIND = { client: "Client view", study: "Study", tool: "Tool", bundle: "From a workbook" };
-const openUrl = (l) => l.kind === "client" ? "/" : l.kind === "bundle" ? `/${encodeURIComponent(l.slug)}` : l.path;
+const KIND = { client: "Client view", study: "Study", tool: "Tool", bundle: "From a workbook", case: "Case study" };
+const openUrl = (l) => l.kind === "client" ? "/" : l.kind === "bundle" ? `/${encodeURIComponent(l.slug)}` : l.kind === "case" ? `/${encodeURIComponent(l.slug)}/case` : l.path;
 /* A workbook atlas is edited by uploading a new workbook, not in the content editor. */
-const editUrl = (l) => l.kind === "bundle" ? `#/create/${encodeURIComponent(l.slug)}` : `#/content/${encodeURIComponent(l.slug)}`;
+const editUrl = (l) => l.kind === "bundle" ? `#/create/${encodeURIComponent(l.slug)}` : l.kind === "case" ? `#/case/${encodeURIComponent(l.slug)}` : `#/content/${encodeURIComponent(l.slug)}`;
 const previewUrl = (l) => (l.kind === "client" ? "/" : l.path) + "?cms-preview=1";
 async function pageLinks(M) {
   M.innerHTML = header("Content", "Atlas links", "Every link shipped so far. Open one to edit what it shows.", can("admin") ? `<button class="btn pri" id="l-add" type="button">Add a link</button>` : "") + `<div class="card empty">Loading…</div>`;
@@ -381,7 +382,7 @@ async function pageLinks(M) {
       <td>${can("admin") ? `<label class="toggle" title="Live or paused"><input type="checkbox" data-status="${esc(x.slug)}" ${x.status === "live" ? "checked" : ""}><span class="sw"></span><span>${x.status === "live" ? "Live" : "Paused"}</span></label>` : `<span class="chip ${x.status === "live" ? "ok" : "warn"}">${x.status}</span>`}</td>
       <td>${x.version ? `<span class="chip">v${x.version}</span> <span class="small mut">${esc(ago(x.published_at))}</span>` : `<span class="small mut">built-in only</span>`}${x.unpublished ? ` <span class="chip acc">unpublished changes</span>` : ""}</td>
       <td class="n">${s.activeNow ? `<span class="live"></span>` : ""}${n0(s.visitors || 0)}</td><td class="mut">${ago(s.lastSeen)}</td>
-      <td style="white-space:nowrap"><a class="btn sm" href="${editUrl(x)}">${x.kind === "bundle" ? "Open" : can("editor") ? "Edit content" : "View content"}</a>${can("admin") ? ` <button class="btn sm ghost" type="button" data-edit="${esc(x.slug)}">Details</button>` : ""}</td></tr>`; }).join("")}
+      <td style="white-space:nowrap"><a class="btn sm" href="${editUrl(x)}">${x.kind === "bundle" || x.kind === "case" ? "Open" : can("editor") ? "Edit content" : "View content"}</a>${can("admin") ? ` <button class="btn sm ghost" type="button" data-edit="${esc(x.slug)}">Details</button>` : ""}</td></tr>`; }).join("")}
     </tbody></table></div>
     <div class="note" style="margin-top:8px">A paused link shows "This study is paused" instead of its data, within about 30 seconds. Client views on the main map open at "/" and need the client's access ID.</div></div>`;
   $$("[data-status]", M).forEach(c => c.onchange = async () => {
@@ -422,7 +423,7 @@ function linkModal(l, M) {
    name it, give it a credential, publish. The same page reopens an atlas
    made this way: upload a revised workbook to change it, issue or revoke
    access, publish again. */
-const CR = { bundle: null, report: null, notes: [], slug: null, status: null, access: [], lastIssued: null, history: [], fileName: "" };
+const CR = { bundle: null, report: null, notes: [], slug: null, status: null, access: [], lastIssued: null, history: [], fileName: "", workbook: null };
 const slugify = (t) => String(t || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40);
 const readAsBase64 = (file) => new Promise((ok, bad) => { const r = new FileReader(); r.onload = () => ok(String(r.result).replace(/^data:[^,]*,/, "")); r.onerror = bad; r.readAsDataURL(file); });
 function reportHTML(rep, notes) {
@@ -438,7 +439,7 @@ function reportHTML(rep, notes) {
     ${notes && notes.length ? `<div class="small mut" style="margin-top:4px">${notes.map(esc).join("<br>")}</div>` : ""}`;
 }
 async function pageCreate(M, slug) {
-  if (slug && CR.slug !== slug) { CR.bundle = null; CR.report = null; CR.notes = []; CR.lastIssued = null; CR.fileName = ""; }
+  if (slug && CR.slug !== slug) { CR.bundle = null; CR.report = null; CR.notes = []; CR.lastIssued = null; CR.fileName = ""; CR.workbook = null; }
   CR.slug = slug || null;
   CR.status = null; CR.access = []; CR.history = [];
   if (slug) {
@@ -455,14 +456,15 @@ async function pageCreate(M, slug) {
 
   M.innerHTML = header("Create", esc(title), esc(sub), st ? `<a class="btn" href="#/create">Start another</a>` : "") + `
     ${step(1, st ? "Upload a revised workbook" : "Upload the workbook",
-      `<p class="mut small">Only the <b>Atlas</b> and <b>Options</b> sheets are needed. Every other sheet adds a section, and anything left empty is left out.</p>
+      `<p class="mut small">Only the <b>Atlas</b> and <b>Options</b> sheets are needed. Every other sheet adds a section, and anything left empty is left out. Or upload the PDF you were sent: it is read into the same sheets, the addresses are placed on the map, and you get the workbook back to check.</p>
        <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:8px">
          <button class="btn" id="cr-template" type="button">Download the empty workbook</button>
          <label class="btn pri" style="cursor:pointer">Upload a filled workbook <input id="cr-file" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display:none"></label>
+         <label class="btn pri" style="cursor:pointer" title="An inventory table, a list of centres, a market note: the text is read, or the pages are read as images if it is a scan">Upload a PDF <input id="cr-pdf" type="file" accept=".pdf,application/pdf" style="display:none"></label>
          ${st ? "" : `<button class="btn" id="cr-example" type="button" title="A filled-in workbook kept on the site: four Andheri buildings, 22 flex centres, two metro lines">Use the Andheri Flex example</button>`}
          <span class="small mut" id="cr-filename">${esc(CR.fileName)}</span>
        </div>
-       <div id="cr-report">${reportHTML(CR.report, CR.notes)}</div>`, true)}
+       <div id="cr-report">${reportHTML(CR.report, CR.notes)}${CR.workbook ? `<div class="card" style="margin-top:10px"><b>Read from the PDF.</b> Every pin placed from an address says so on the page. <button class="btn sm" type="button" id="cr-dl-wb">Download the workbook it filled in</button> <span class="small mut">to check the pins and figures; upload it again when it is right, or save as it is.</span></div>` : ""}</div>`, true)}
     ${step(2, "Name it and give it a credential",
       `<div class="formgrid">
          <div><label class="f">Name</label><input class="in" id="cr-name" value="${esc(st ? st.name : (CR.bundle && CR.bundle.meta && CR.bundle.meta.title) || "")}" placeholder="Pune office study"></div>
@@ -502,10 +504,26 @@ async function pageCreate(M, slug) {
     $("#cr-filename").textContent = `Reading ${f.name}…`;
     try {
       const j = await api("bundle/import", { method: "POST", body: { file: await readAsBase64(f) } });
-      CR.bundle = j.bundle; CR.report = j.report; CR.notes = j.notes || []; CR.fileName = f.name;
+      CR.bundle = j.bundle; CR.report = j.report; CR.notes = j.notes || []; CR.fileName = f.name; CR.workbook = null;
       pageCreate(M, slug);
       setTimeout(() => { const r = $("#cr-report"); if (r) r.scrollIntoView({ behavior: "smooth", block: "start" }); }, 50);
     } catch (err) { $("#cr-filename").textContent = ""; fail(err); }
+  };
+  $("#cr-pdf").onchange = async (e) => {
+    const f = e.target.files && e.target.files[0]; if (!f) return;
+    $("#cr-filename").textContent = `Reading ${f.name}: this takes up to a minute…`;
+    try {
+      const j = await api("bundle/import-pdf", { method: "POST", body: { file: await readAsBase64(f), name: f.name } });
+      CR.bundle = j.bundle; CR.report = j.report; CR.fileName = `${f.name} (read by ${j.provider || "the model"})`; CR.workbook = j.workbook;
+      CR.notes = [`${j.read.pages} page${j.read.pages === 1 ? "" : "s"} read${j.read.scanned.length ? `, ${j.read.scanned.length} as images` : ""}. ${j.placed} pin${j.placed === 1 ? "" : "s"} placed from addresses.`, ...(j.notes || [])];
+      pageCreate(M, slug);
+      setTimeout(() => { const r = $("#cr-report"); if (r) r.scrollIntoView({ behavior: "smooth", block: "start" }); }, 50);
+    } catch (err) { $("#cr-filename").textContent = ""; fail(err); }
+  };
+  if ($("#cr-dl-wb")) $("#cr-dl-wb").onclick = () => {
+    const bin = atob(CR.workbook), arr = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+    const blob = new Blob([arr], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }), a = document.createElement("a");
+    a.href = URL.createObjectURL(blob); a.download = (CR.fileName.split(" ")[0] || "atlas").replace(/\.pdf$/i, "") + ".xlsx"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
   };
   /* The example lives at /examples/andheri-flex.xlsx, so a demo needs no
      file on anyone's disk, and nothing that cannot drive a file dialog
@@ -516,7 +534,7 @@ async function pageCreate(M, slug) {
       const res = await fetch("/examples/andheri-flex.xlsx", { cache: "no-store" });
       if (!res.ok) throw new Error("The example workbook is not on this site.");
       const j = await api("bundle/import", { method: "POST", body: { file: await readAsBase64(await res.blob()) } });
-      CR.bundle = j.bundle; CR.report = j.report; CR.notes = j.notes || []; CR.fileName = "andheri-flex.xlsx (the example)";
+      CR.bundle = j.bundle; CR.report = j.report; CR.notes = j.notes || []; CR.fileName = "andheri-flex.xlsx (the example)"; CR.workbook = null;
       pageCreate(M, slug);
       setTimeout(() => { const r = $("#cr-report"); if (r) r.scrollIntoView({ behavior: "smooth", block: "start" }); }, 50);
     } catch (err) { $("#cr-filename").textContent = ""; fail(err); }
@@ -1412,7 +1430,8 @@ function userModal(u, M) {
 /* ============================================================== audit == */
 const AUDIT_TEXT = {
   setup: "Set up the admin panel", login: "Signed in", password: "Changed their password", "link.save": "Saved link details", "link.status": "Changed link status",
-  publish: "Published", "draft.discard": "Discarded a draft", rollback: "Went back to an earlier version", "bundle.publish": "Published an atlas", "bundle.rollback": "Went back to an earlier version of an atlas", "bundle.draft": "Saved an atlas draft", "user.create": "Added a person", "user.update": "Changed a person",
+  publish: "Published", "draft.discard": "Discarded a draft", rollback: "Went back to an earlier version", "bundle.publish": "Published an atlas", "bundle.rollback": "Went back to an earlier version of an atlas", "bundle.draft": "Saved an atlas draft",
+  "case.draft": "Saved a case study draft", "case.publish": "Published a case study", "case.rollback": "Went back to an earlier version of a case study", "case.image": "Made a picture for a case study", "case.assist": "Asked the helper", "case.apply": "Added the helper's suggestions to a draft", "user.create": "Added a person", "user.update": "Changed a person",
   "user.signout": "Signed a person out everywhere", "user.delete": "Removed a person", "broker.create": "Created a broker link", "broker.update": "Changed a broker link",
   "broker.rotate": "Made a new broker link", "submission.approve": "Approved a broker update", "submission.reject": "Rejected a broker update", upload: "Uploaded a file"
 };
@@ -1471,3 +1490,177 @@ function pageAccount(M) {
 setInterval(() => { if (ST.me && !document.hidden && /^(#\/?(dashboard)?)?$/.test(location.hash) && !$("#modal").classList.contains("on")) pageDashboard($("#main")).catch(() => {}); }, 60000);
 setInterval(() => { if (ST.me && !document.hidden) refreshPending(); }, 120000);
 init();
+
+/* ===================================================== create a case study ==
+   The second product of the CMS. Same shape as Create an atlas: upload the
+   workbook, read the report, name it, give it a credential, then two steps
+   an atlas does not have: the pictures (Higgsfield, one per slot) and the
+   helper (a model that drafts the prose and checks the gaps from the
+   numbers; nothing it writes lands until the person adds it). Preview,
+   publish with a note, versions kept. */
+const CS = { bundle: null, report: null, notes: [], slug: null, status: null, access: [], history: [], fileName: "", lastIssued: null, lastPass: "", suggestion: null, busy: {} };
+const SLOT_WORDS = { cover: "Cover", options: "The options", assets: "The assets", market: "Market", infrastructure: "Infrastructure", why: "Why here", plan: "The plan", rivals: "Rivals", back: "Back page" };
+const TASK_WORDS = {
+  means: ["Write the 'what it means for us' lines", "For every page that has none: two or three consequences for us, from the numbers."],
+  read: ["Draft the decision's 'our read'", "Two paragraphs for the decision page and the three 'read this first' lines."],
+  risks: ["Name the top three risks", "With a figure each and how we reduce it. Replaces the risks on the Points sheet."],
+  prompts: ["Suggest picture prompts", "One scene per slot, specific to the place. Replaces the prompts; pictures are made in the next step."],
+  check: ["Check it for gaps", "Mistyped figures, missing sources, claims nothing backs, pages with no lines."],
+  research: ["Research the market", "Searches the web (Exa) for the place's vacancy, rents, deals and flex figures, with a source for each, as rows to add."],
+};
+async function pageCase(M, slug) {
+  if (slug && CS.slug !== slug) { CS.bundle = null; CS.report = null; CS.notes = []; CS.fileName = ""; CS.lastIssued = null; CS.suggestion = null; }
+  CS.slug = slug || null; CS.status = null; CS.access = []; CS.history = [];
+  if (slug) {
+    try { [CS.status, CS.access, CS.history] = await Promise.all([api("case/status", { query: { link: slug } }), api("access/list", { query: { link: slug } }).then(r => r.access), api("case/history", { query: { link: slug } }).then(r => r.history)]); }
+    catch (e) { M.innerHTML = header("Create", "Create a case study", "") + `<div class="card empty">${esc(e.message)}</div>`; return; }
+  }
+  const st = CS.status;
+  const title = st ? st.name : "Create a case study";
+  const sub = st ? `${st.published ? `Live, version ${st.version}, published ${ago(st.published_at)}.` : "Not published yet."}${st.unpublished && st.draft ? " There is a draft newer than what is live." : ""}` : "Fill in the workbook, upload it, add the pictures, let the helper draft the prose, publish. The pages, the charts and the PDF are built from it.";
+  const step = (n, t, body, open) => `<section class="card" style="margin-top:14px;${open ? "" : "opacity:.55"}"><div class="eyebrow">Step ${n}</div><h2 style="margin:4px 0 10px">${t}</h2>${body}</section>`;
+  const can2 = !!(CS.report && CS.report.ok), has = !!(st && st.draft);
+  const liveId = CS.lastIssued || (CS.access.find(a => a.active) || {}).access_id || (st && st.access_id) || "";
+  const imgs = st ? st.images : {};
+  const slots = Object.keys(SLOT_WORDS);
+  const sugg = CS.suggestion;
+  const suggHTML = !sugg ? "" : `<div class="card" style="margin-top:10px;border-color:var(--acc)"><b>${esc(TASK_WORDS[sugg.task][0])}</b> <span class="small mut">${sugg.model ? `by ${esc(sugg.model)}` : ""}</span>
+    ${sugg.note ? `<p class="small">${esc(sugg.note)}</p>` : ""}
+    ${sugg.copy ? Object.entries(sugg.copy).map(([k, lines]) => `<div class="small" style="margin-top:6px"><b>${esc(k)}</b><ul style="margin:4px 0 0 18px">${lines.map(l => `<li>${esc(l)}</li>`).join("")}</ul></div>`).join("") : ""}
+    ${sugg.read ? `<div class="small" style="margin-top:6px"><b>Our read</b>${sugg.read.map(t => `<p>${esc(t)}</p>`).join("")}<b>Read this first</b><ul style="margin:4px 0 0 18px">${(sugg.readFirst || []).map(l => `<li>${esc(l)}</li>`).join("")}</ul></div>` : ""}
+    ${sugg.risks ? `<div class="small" style="margin-top:6px">${sugg.risks.map((r, i) => `<p><b>${i + 1}. ${esc(r.title)}</b> <span class="mono">${esc(r.kpi || "")}</span> ${esc(r.kpiLabel || "")}<br>${esc(r.text)}<br><i>How we reduce it:</i> ${esc(r.mitigate || "")}</p>`).join("")}</div>` : ""}
+    ${sugg.prompts ? `<div class="small" style="margin-top:6px">${Object.entries(sugg.prompts).map(([k, p]) => `<p><b>${esc(SLOT_WORDS[k] || k)}</b> ${esc(p)}</p>`).join("")}</div>` : ""}
+    ${sugg.findings ? `<table class="t" style="margin-top:6px"><thead><tr><th>Where</th><th>What</th><th></th></tr></thead><tbody>${sugg.findings.map(f => `<tr><td class="small">${esc(f.where)}</td><td class="small">${esc(f.note)}</td><td><span class="chip ${f.severity === "fix" ? "warn" : ""}">${esc(f.severity)}</span></td></tr>`).join("")}</tbody></table>` : ""}
+    ${sugg.deals || sugg.points || sugg.series ? `<div class="small" style="margin-top:6px">${(sugg.deals || []).map(d => `<p><b>Deal</b> ${esc(d.who)} · ${esc(d.area || "")} · ${esc(d.rent || "")} · ${esc(d.when || "")} <a href="${esc(d.src || "#")}" target="_blank" rel="noopener">source</a></p>`).join("")}${(sugg.points || []).map(p => `<p><b>${esc(p.section)}</b> ${esc(p.title)}: ${esc(p.text)} <a href="${esc(p.src || "#")}" target="_blank" rel="noopener">source</a></p>`).join("")}${(sugg.series || []).map(x => `<p><b>${esc(x.chart)}</b> ${esc(x.label)} = ${esc(x.value)} <a href="${esc(x.src || "#")}" target="_blank" rel="noopener">source</a></p>`).join("")}${!(sugg.deals || []).length && !(sugg.points || []).length && !(sugg.series || []).length ? "<p>Nothing firm enough to add was found.</p>" : ""}</div>` : ""}
+    <div class="acts">${sugg.findings || sugg.note ? "" : `<button class="btn pri" id="cs-apply" type="button">Add to the draft</button>`}<button class="btn" id="cs-dismiss" type="button">Dismiss</button></div></div>`;
+
+  M.innerHTML = header("Create", esc(title), esc(sub), st ? `<a class="btn" href="#/case">Start another</a>` : "") + `
+    ${step(1, st ? "Upload a revised workbook" : "Upload the workbook",
+      `<p class="mut small">Only the <b>Case</b> and <b>Options</b> sheets are needed. Every other sheet adds a section. Prices, break-even and levers are worked out from the Options sheet; never type a result.</p>
+       <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:8px">
+         <button class="btn" id="cs-template" type="button">Download the empty workbook</button>
+         <label class="btn pri" style="cursor:pointer">Upload a filled workbook <input id="cs-file" type="file" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display:none"></label>
+         ${st ? "" : `<button class="btn" id="cs-example" type="button" title="The Andheri Business Case Study 2026, typed into the sheets">Use the Andheri example</button>`}
+         <span class="small mut" id="cs-filename">${esc(CS.fileName)}</span>
+       </div>
+       <div id="cs-report">${reportHTML(CS.report, CS.notes)}</div>`, true)}
+    ${step(2, "Name it and give it a credential",
+      `<div class="formgrid">
+         <div><label class="f">Name</label><input class="in" id="cs-name" value="${esc(st ? st.name : (CS.bundle && CS.bundle.meta && CS.bundle.meta.title) || "")}" placeholder="Pune Business Case Study 2026"></div>
+         <div><label class="f">Link id</label><input class="in mono" id="cs-slug" value="${esc(slug || slugify(CS.bundle && CS.bundle.meta && CS.bundle.meta.title))}" ${slug ? "disabled" : ""} placeholder="pune-case"><div class="small mut">The case study lives at atlas.autopilotoffices.com/<i>this</i>/case. Use the same id as its atlas, if there is one, and one credential opens both. Cannot change once saved.</div></div>
+         <div><label class="f">City</label><input class="in" id="cs-city" value="${esc(st ? st.city || "" : (CS.bundle && CS.bundle.meta && CS.bundle.meta.city) || "")}"></div>
+         <div><label class="f">Access ID</label><input class="in mono" id="cs-access" value="${esc(liveId)}" placeholder="ACME-PUNE"><div class="small mut">${liveId ? "Already issued; leave as it is." : "What the client types to open it."}</div></div>
+         <div><label class="f">Password</label><div style="display:flex;gap:6px"><input class="in mono" id="cs-pass" value="${esc(CS.lastPass || "")}" placeholder="At least 10 characters"><button class="btn" type="button" id="cs-gen">Generate</button></div><div class="small mut">${liveId ? "Leave empty to keep the current password." : "Shown once here; copy it to the client."}</div></div>
+         <div><label class="f">Issued to</label><input class="in" id="cs-who" placeholder="Name of the person or firm"></div>
+       </div>
+       <div class="acts"><button class="btn pri" id="cs-save" type="button" ${can2 || st ? "" : "disabled"}>${st ? "Save changes" : "Save as draft"}</button><span class="small mut" id="cs-save-note"></span></div>`, can2 || !!st)}
+    ${step(3, "The pictures",
+      `<p class="mut small">One picture per section opener, made by Higgsfield from the prompt on the Images sheet in the house style, and kept in our own storage. Change a prompt and make it again; paste an address of your own on the sheet to skip generation.${st && !st.can.images ? ` <b>Not set up yet:</b> HIGGSFIELD_API_KEY_ID and HIGGSFIELD_API_KEY_SECRET are not in Vercel, so only pasted addresses show.` : ""}</p>
+       <div class="tw"><table class="t"><thead><tr><th>Slot</th><th>Prompt</th><th>Picture</th><th></th></tr></thead><tbody>
+         ${slots.map(s => { const im = imgs[s] || {}; return `<tr><td><b>${esc(SLOT_WORDS[s])}</b></td><td><input class="in" data-prompt="${s}" value="${esc(im.prompt || "")}" placeholder="What the picture should show, in a sentence" ${has ? "" : "disabled"}></td><td>${im.url ? `<a href="${esc(im.url)}" target="_blank" rel="noopener"><img src="${esc(im.url)}" alt="" style="width:96px;height:54px;object-fit:cover;border-radius:4px;display:block"></a>` : `<span class="small mut">none yet</span>`}</td><td><button class="btn sm" type="button" data-make="${s}" ${has && st.can.images ? "" : "disabled"}>${CS.busy[s] ? "Making…" : im.url ? "Make again" : "Make"}</button></td></tr>`; }).join("")}
+       </tbody></table></div>
+       <div class="acts"><button class="btn" id="cs-make-all" type="button" ${has && st && st.can.images ? "" : "disabled"}>Make every slot without a picture</button><span class="small mut" id="cs-make-note"></span></div>`, has)}
+    ${step(4, "The helper",
+      `<p class="mut small">A model that works from the numbers on the pages: it drafts, you decide. Nothing lands until you add it.${st && !st.can.helper ? ` <b>Not set up yet:</b> ENGY_API_KEY or ANTHROPIC_API_KEY is not in Vercel.` : ""}${st && st.can.helper && !st.can.research ? ` Research also needs EXA_API_KEY.` : ""}</p>
+       <div class="row" style="display:flex;gap:8px;flex-wrap:wrap">${Object.entries(TASK_WORDS).map(([k, [label, hint]]) => `<button class="btn" type="button" data-task="${k}" title="${esc(hint)}" ${has && st.can.helper && (k !== "research" || st.can.research) ? "" : "disabled"}>${CS.busy[k] ? "Working…" : esc(label)}</button>`).join("")}</div>
+       <div id="cs-sugg">${suggHTML}</div>`, has)}
+    ${step(5, "Check it, then publish",
+      `<p class="mut small">Preview opens the draft as the client will see it, with a Save as PDF button. Publishing makes it live within about half a minute and keeps a numbered version here; the client never sees a version number.</p>
+       <div class="acts" style="justify-content:flex-start">
+         <a class="btn" id="cs-preview" href="${slug ? `/${encodeURIComponent(slug)}/case?draft=1` : "#"}" target="_blank" rel="noopener" ${has ? "" : 'aria-disabled="true" style="pointer-events:none;opacity:.5"'}>Preview draft ↗</a>
+         ${can("admin") ? `<button class="btn pri" id="cs-publish" type="button" ${has ? "" : "disabled"}>${st && st.published ? "Publish the draft" : "Publish"}</button>` : `<span class="small mut">An admin publishes.</span>`}
+       </div>
+       ${st && st.published ? `<div class="card" style="margin-top:12px;border-color:var(--ok)"><b>Live.</b> Send the client <span class="mono">atlas.autopilotoffices.com/${esc(slug)}/case</span>${liveId ? ` with access ID <span class="mono">${esc(liveId)}</span>` : ""}${CS.lastPass ? ` and password <span class="mono">${esc(CS.lastPass)}</span>` : ""}.
+         <div class="row" style="margin-top:8px;display:flex;gap:6px"><a class="btn sm" href="/${encodeURIComponent(slug)}/case" target="_blank" rel="noopener">Open the live case study ↗</a>${liveId && CS.lastPass ? `<button class="btn sm" type="button" id="cs-copy">Copy the sign-in details</button>` : ""}</div></div>` : ""}
+       ${CS.history.length ? `<h3 style="margin:14px 0 6px">Published versions</h3><div class="tw"><table class="t"><thead><tr><th>Version</th><th>What</th><th>By</th><th>When</th><th>Note</th><th></th></tr></thead><tbody>
+         ${CS.history.map(h => `<tr><td><span class="chip ${h.version === st.version ? "dark" : ""}">v${h.version}</span>${h.version === st.version ? ` <span class="small mut">live</span>` : ""}</td><td>${h.action === "rollback" ? "Went back" : "Published"}</td><td>${esc(h.by_email || "")}</td><td class="mut">${esc(when(h.at))}</td><td class="small">${esc(h.note || "")}</td>
+           <td>${can("admin") && h.version !== st.version ? `<button class="btn sm" type="button" data-rb="${esc(h.id)}" data-v="${h.version}">Make this live again</button>` : ""}</td></tr>`).join("")}
+       </tbody></table></div>` : ""}`, has)}`;
+
+  $("#cs-template").onclick = async () => {
+    try {
+      const res = await fetch("/api/cms?r=case/template", { credentials: "same-origin" });
+      if (!res.ok) throw new Error("Could not download the template.");
+      const blob = await res.blob(), a = document.createElement("a");
+      a.href = URL.createObjectURL(blob); a.download = "case-study-workbook.xlsx"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    } catch (e) { fail(e); }
+  };
+  const importFile = async (b64, name) => {
+    $("#cs-filename").textContent = `Reading ${name}…`;
+    const j = await api("case/import", { method: "POST", body: { file: b64 } });
+    CS.bundle = j.bundle; CS.report = j.report; CS.notes = j.notes || []; CS.fileName = name;
+    pageCase(M, slug);
+    setTimeout(() => { const r = $("#cs-report"); if (r) r.scrollIntoView({ behavior: "smooth", block: "start" }); }, 50);
+  };
+  $("#cs-file").onchange = async (e) => { const f = e.target.files && e.target.files[0]; if (!f) return; try { await importFile(await readAsBase64(f), f.name); } catch (err) { $("#cs-filename").textContent = ""; fail(err); } };
+  if ($("#cs-example")) $("#cs-example").onclick = async () => {
+    try { const res = await fetch("/examples/andheri-case.xlsx", { cache: "no-store" }); if (!res.ok) throw new Error("The example workbook is not on this site."); await importFile(await readAsBase64(await res.blob()), "andheri-case.xlsx (the example)"); }
+    catch (err) { $("#cs-filename").textContent = ""; fail(err); }
+  };
+  $("#cs-gen").onclick = () => { $("#cs-pass").value = randomPassword(); };
+  $("#cs-save").onclick = async () => {
+    const id = slug || slugify($("#cs-slug").value);
+    const name = $("#cs-name").value.trim(), city = $("#cs-city").value.trim();
+    const access = $("#cs-access").value.trim().toUpperCase(), pass = $("#cs-pass").value, who = $("#cs-who").value.trim();
+    if (!id) return fail(new Error("Give the case study a link id."));
+    const note = $("#cs-save-note"); note.textContent = "Saving…";
+    try {
+      if (CS.bundle) await api("case/draft", { method: "POST", body: { slug: id, name, city, bundle: CS.bundle } });
+      else if (!st) return fail(new Error("Upload a workbook first."));
+      if (access && pass) {
+        if (!can("admin")) toast("Saved the draft. An admin has to issue the access ID.", true);
+        else { await api("access/issue", { method: "POST", body: { slug: id, access_id: access, password: pass, name: who } }); CS.lastIssued = access; CS.lastPass = pass; }
+      } else if (access && !pass && !liveId) toast("Saved. Set a password to issue the access ID.", true);
+      toast("Saved.");
+      CS.bundle = null; CS.report = null; CS.notes = []; CS.fileName = "";
+      ST.links = (await api("links")).links;
+      location.hash = `#/case/${encodeURIComponent(id)}`;
+      if (slug === id) pageCase(M, id);
+    } catch (err) { note.textContent = ""; fail(err); }
+  };
+  const make = async (s) => {
+    const prompt = ($(`[data-prompt="${s}"]`) || {}).value || "";
+    CS.busy[s] = true; const b = $(`[data-make="${s}"]`); if (b) { b.disabled = true; b.textContent = "Making…"; }
+    try { await api("case/image", { method: "POST", body: { slug, slot: s, prompt } }); toast(`${SLOT_WORDS[s]}: picture made.`); }
+    catch (err) { fail(err); }
+    CS.busy[s] = false;
+  };
+  $$("[data-make]", M).forEach(b => b.onclick = async () => { await make(b.dataset.make); pageCase(M, slug); });
+  if ($("#cs-make-all")) $("#cs-make-all").onclick = async () => {
+    const todo = slots.filter(s => !(imgs[s] || {}).url);
+    if (!todo.length) return toast("Every slot has a picture.");
+    const n = $("#cs-make-note");
+    for (let i = 0; i < todo.length; i++) { n.textContent = `${i + 1} of ${todo.length}: ${SLOT_WORDS[todo[i]]}…`; await make(todo[i]); }
+    pageCase(M, slug);
+  };
+  $$("[data-task]", M).forEach(b => b.onclick = async () => {
+    const task = b.dataset.task;
+    CS.busy[task] = true; b.disabled = true; b.textContent = "Working…";
+    try { CS.suggestion = await api("case/assist", { method: "POST", body: { slug, task } }); }
+    catch (err) { fail(err); }
+    CS.busy[task] = false; pageCase(M, slug);
+    setTimeout(() => { const r = $("#cs-sugg"); if (r) r.scrollIntoView({ behavior: "smooth", block: "start" }); }, 50);
+  });
+  if ($("#cs-apply")) $("#cs-apply").onclick = async () => {
+    const s = CS.suggestion; if (!s) return;
+    const picked = {}; for (const k of ["copy", "read", "readFirst", "risks", "prompts", "deals", "points", "series"]) if (s[k]) picked[k] = s[k];
+    try { await api("case/apply", { method: "POST", body: { slug, suggestions: picked } }); toast("Added to the draft."); CS.suggestion = null; pageCase(M, slug); } catch (err) { fail(err); }
+  };
+  if ($("#cs-dismiss")) $("#cs-dismiss").onclick = () => { CS.suggestion = null; pageCase(M, slug); };
+  if ($("#cs-publish")) $("#cs-publish").onclick = async () => {
+    modal(`<h2>Publish ${esc(title)}</h2><p class="mut">It goes live for anyone with its access ID within about half a minute, as version ${(st && st.version || 0) + 1}. You can go back to any earlier version from this page.</p>
+      <label class="f" for="pb-note">Note for the history (optional)</label><input class="in" id="pb-note" maxlength="300" placeholder="e.g. Rents updated from the landlord's quote">
+      <div class="acts"><button class="btn" data-close type="button">Cancel</button><button class="btn pri" id="pb-go" type="button">Publish now</button></div>`, (m) => {
+      $("#pb-go", m).onclick = async (e) => {
+        e.target.disabled = true;
+        try { const j = await api("case/publish", { method: "POST", body: { slug, note: $("#pb-note", m).value } }); closeModal(); toast(`Published version ${j.version}.`); ST.links = (await api("links")).links; pageCase(M, slug); }
+        catch (err) { fail(err); e.target.disabled = false; }
+      };
+    });
+  };
+  if ($("#cs-copy")) $("#cs-copy").onclick = (e) => copy(`atlas.autopilotoffices.com/${slug}/case\nAccess ID: ${liveId}\nPassword: ${CS.lastPass}`, e.target);
+  $$("[data-rb]", M).forEach(b => b.onclick = async () => {
+    if (!(await confirmBox(`Make version ${b.dataset.v} live again?`, "It goes live straight away, as a new version number, and replaces the current draft.", "Make it live", true))) return;
+    try { const r = await api("case/rollback", { method: "POST", body: { slug, historyId: b.dataset.rb } }); toast(`Version ${b.dataset.v} is live again (now version ${r.version}).`); pageCase(M, slug); } catch (err) { fail(err); }
+  });
+}

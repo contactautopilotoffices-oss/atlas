@@ -22,6 +22,8 @@
    Atlases built from a workbook (no code, no deploy):
      GET  bundle/template (editor)     the empty workbook, as a download
      POST bundle/import (editor)       a filled workbook -> bundle + report; saves nothing
+     POST bundle/import-pdf (editor)   a PDF -> rows via a model, pins via Mapbox,
+                                       the filled workbook and the bundle (_pdf.js)
      POST bundle/draft (editor)        save a bundle as a link's draft
      POST bundle/publish (admin)       draft -> live, kept as a numbered version
      GET  bundle/history&link= (viewer) every publish so far
@@ -31,6 +33,9 @@
      GET  access/list&link= (editor)   POST access/issue | access/revoke (admin)
      POST access                       a VISITOR signs in with an access ID and
                                        password; sets the access cookie
+
+   Case studies built from a workbook: see _case.js (case/template, import,
+   draft, image, assist, apply, publish, history, rollback, status; GET case).
    ============================================================================ */
 "use strict";
 const store = require("./_store");
@@ -38,6 +43,8 @@ const auth = require("./_auth");
 const { summarise } = require("./_analytics");
 const { buildTemplate, readWorkbook } = require("../../scripts/lib/workbook");
 const { validate } = require("../../scripts/lib/validate-bundle");
+const pdf = require("./_pdf");
+const caseRoutes = require("./_case");
 
 const SLUG = /^[a-z0-9][a-z0-9-]{0,39}$/;
 const clip = (v, n) => (v == null ? "" : String(v)).slice(0, n);
@@ -529,13 +536,33 @@ R["POST bundle/import"] = async (req, res, b) => {
   return { bundle: out.bundle, notes: out.notes, report: reportOf(rep) };
 };
 
+/* A PDF instead of a workbook. The model fills the sheets, Mapbox places the
+   pins, and the person gets the workbook back to check. Nothing is saved. */
+R["POST bundle/import-pdf"] = async (req, res, b) => {
+  await needUser(req, "editor");
+  if (!b.file || typeof b.file !== "string") fail(400, "Send the PDF as a base64 string in `file`.");
+  let buf;
+  try { buf = Buffer.from(b.file.replace(/^data:[^,]*,/, ""), "base64"); } catch (e) { fail(400, "The file could not be read."); }
+  if (!buf.length) fail(400, "The file is empty.");
+  if (buf.length > MAX_BUNDLE) fail(413, "The PDF is too large (over 4 MB). Split it, or save it at a lower quality.");
+  if (buf.slice(0, 5).toString() !== "%PDF-") fail(400, "That is not a PDF.");
+  if (!pdf.providerName()) fail(503, "Reading a PDF needs ENGY_API_KEY or ANTHROPIC_API_KEY set in Vercel. Until then, fill in the workbook instead.");
+  try {
+    const out = await pdf.importPdf(buf, { fileName: clip(b.name, 120) || "document.pdf" });
+    return { bundle: out.bundle, notes: out.notes, report: out.report, workbook: out.workbook, read: out.read, model: out.model, provider: out.provider, placed: out.placed.length, unplaced: out.unplaced };
+  } catch (e) {
+    if (e.status) fail(e.status, e.message);
+    fail(502, `The PDF could not be read into an atlas: ${clip(e.message, 300)}`);
+  }
+};
+
 R["POST bundle/draft"] = async (req, res, b) => {
   const u = await needUser(req, "editor");
   const slug = clip(b.slug, 40).trim().toLowerCase();
   if (!SLUG.test(slug)) fail(400, "Use lower-case letters, numbers and hyphens for the link id.");
   if (RESERVED.has(slug)) fail(400, `"${slug}" is already a page on this site, so the atlas could never be opened at /${slug}. Pick another link id.`);
   const existing = await store.one("atlas_links", { eq: { slug } });
-  if (existing && existing.kind !== "bundle") fail(400, `"${slug}" is already a ${existing.kind} link. Pick another id.`);
+  if (existing && existing.kind !== "bundle" && existing.kind !== "case") fail(400, `"${slug}" is already a ${existing.kind} link. Pick another id.`);
   if (existing) needLink(u, slug);
   const bundle = cleanBundle(b.bundle);
   const rep = validate(bundle);
@@ -636,7 +663,7 @@ R["POST access/issue"] = async (req, res, b) => {
   const slug = clip(b.slug, 40);
   needLink(u, slug);
   const link = await store.one("atlas_links", { eq: { slug } });
-  if (!link || link.kind !== "bundle") fail(404, "That is not an atlas built from a workbook.");
+  if (!link || (link.kind !== "bundle" && link.kind !== "case")) fail(404, "That is not an atlas or case study built from a workbook.");
   const id = normAccess(b.access_id);
   if (!ACCESS_ID.test(id)) fail(400, "An access ID is 3 to 40 letters, numbers and hyphens, such as ACME-PUNE.");
   const pw = String(b.password || "");
@@ -712,6 +739,8 @@ R["GET bundle/status"] = async (req, res, b, q) => {
   };
 };
 
+caseRoutes.register(R, { needUser, needLink, fail, clip, audit, SLUG, RESERVED, overridesRow });
+
 /* ------------------------------------------------------------ handler --- */
 module.exports = async (req, res) => {
   try {
@@ -723,7 +752,7 @@ module.exports = async (req, res) => {
        write must carry x-cms, which a cross-site form cannot send. */
     if (req.method !== "GET" && !route.startsWith("POST broker/")) needWrite(req);
     /* A workbook arrives base64-encoded inside the JSON body. */
-    const limit = /^POST bundle\/(import|draft)$/.test(route) ? 6 * 1024 * 1024 : undefined;
+    const limit = /^POST (bundle\/(import|import-pdf|draft)|case\/(import|draft|apply))$/.test(route) ? 6 * 1024 * 1024 : undefined;
     const body = req.method === "POST" ? await readBody(req, limit) : {};
     const out = await fn(req, res, body, url.searchParams);
     if (out && out.__sent) return;            // the route wrote its own (binary) response
@@ -731,6 +760,8 @@ module.exports = async (req, res) => {
   } catch (e) {
     const status = e.status || 500;
     if (status >= 500) console.error("[cms]", e);
-    send(res, status, { error: status >= 500 && !(e instanceof store.StoreError) ? "Something went wrong on the server." : e.message });
+    /* A route's own fail() is written for the person reading it, whatever
+       its status; anything else at 5xx is a bug and stays inside. */
+    send(res, status, { error: status >= 500 && !(e instanceof store.StoreError) && !(e instanceof HttpError) ? "Something went wrong on the server." : e.message });
   }
 };

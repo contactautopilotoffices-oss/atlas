@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Case study</title>
+<link rel="icon" href="/autopilot-logo-trimmed.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script>
+/* Runs first: never leave a credential in the address bar. */
+(function () { var l = location; if (/[?&](username|password)=/i.test(l.search)) history.replaceState(null, "", l.pathname + l.hash); })();
+</script>
+<script src="/casestudy/load.js?v=cs1"></script>
+<style>
+/* ============================================================================
+   The case study, as pages. 16:9 (338.67 x 190.5 mm), the same on screen
+   and on paper: what you see is what Save as PDF prints.
+   ============================================================================ */
+:root{
+  --paper:#f7f2ea; --paper2:#efe7dc; --ink:#2a1e16; --mut:#6c5b4d; --dim:#9a8878;
+  --line:rgba(60,40,25,.14); --line2:rgba(60,40,25,.07);
+  --acc:#a3502c; --acc2:#c8693a; --accbg:rgba(163,80,44,.09);
+  --ok:#2e7d5b; --warn:#b7791f; --bad:#b23b2a; --blue:#3b5a7a; --purple:#5b3aa7;
+  --a:#a3502c; --b:#3b5a7a; --c:#2e7d5b; --d:#b7791f; --e:#5b3aa7;
+  --serif:'Playfair Display',Georgia,'Times New Roman',serif;
+  --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,Roboto,Helvetica,Arial,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+  /* 16:9, the PowerPoint widescreen page (13.333 x 7.5 in), as the source decks are. */
+  --pw:338.67mm; --ph:190.5mm; --pad:11mm;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#d9d0c4;color:var(--ink);font-family:var(--font);font-size:10.5pt;line-height:1.38;-webkit-font-smoothing:antialiased;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+#deck{display:flex;flex-direction:column;align-items:center;gap:14px;padding:70px 10px 40px}
+.page{position:relative;width:var(--pw);height:var(--ph);background:var(--paper);overflow:hidden;box-shadow:0 8px 30px rgba(42,30,22,.22);padding:var(--pad);display:flex;flex-direction:column;page-break-after:always;break-after:page}
+.page:last-child{page-break-after:auto;break-after:auto}
+.page.dark{background:#2a1e16;color:#f7f2ea}
+.page.dark .mut,.page.dark .dim{color:rgba(247,242,234,.72)}
+.hdr{display:flex;justify-content:space-between;align-items:baseline;font-size:7.5pt;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);border-bottom:1px solid var(--line);padding-bottom:5px;margin-bottom:7mm}
+.hdr b{font-weight:600;color:var(--ink)}
+.ftr{position:absolute;left:var(--pad);right:var(--pad);bottom:7mm;display:flex;justify-content:space-between;align-items:flex-end;gap:14px;font-size:7.3pt;color:var(--mut);line-height:1.3}
+.ftr .src{flex:1}
+.ftr .num{font-family:var(--mono);color:var(--dim);flex:0 0 auto}
+.page.dark .ftr{color:rgba(247,242,234,.7)}
+h1,h2,h3{font-family:var(--serif);font-weight:600;margin:0;line-height:1.12}
+h1{font-size:30pt}
+h2{font-size:19pt;margin-bottom:4mm}
+h3{font-size:12.5pt;margin-bottom:2mm}
+.eyebrow{font-size:8pt;letter-spacing:.16em;text-transform:uppercase;color:var(--acc);font-weight:600;margin-bottom:2mm}
+.mut{color:var(--mut)} .dim{color:var(--dim)} .mono{font-family:var(--mono)} .small{font-size:8.6pt} .tiny{font-size:7.6pt}
+.body{flex:1;min-height:0;display:flex;flex-direction:column}
+.cols{display:grid;gap:8mm;flex:1;min-height:0;align-items:start}
+.cols.c2{grid-template-columns:1fr 1fr} .cols.c3{grid-template-columns:1fr 1fr 1fr} .cols.c21{grid-template-columns:2fr 1fr} .cols.c12{grid-template-columns:1fr 2fr} .cols.c32{grid-template-columns:3fr 2fr}
+p{margin:0 0 2.2mm}
+ul{margin:0;padding-left:4mm} li{margin-bottom:1.2mm}
+.kpis{display:flex;gap:10mm;margin-top:auto}
+.kpi{flex:1}
+.kpi .v{font-family:var(--serif);font-size:26pt;font-weight:600;line-height:1;color:var(--acc)}
+.kpi .l{font-size:8.6pt;color:var(--mut);margin-top:1.5mm;line-height:1.3}
+.kpi .s{font-size:7.6pt;color:var(--dim)}
+.page.dark .kpi .v{color:#e8a87c}
+.means{background:var(--accbg);border-left:3px solid var(--acc);padding:3mm 4mm;border-radius:0 6px 6px 0;font-size:9.2pt}
+.means b{display:block;font-size:7.5pt;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);margin-bottom:1.5mm}
+.means p:last-child{margin:0}
+.box{border:1px solid var(--line);border-radius:6px;padding:3mm 4mm;font-size:9pt}
+.box b.t{display:block;font-size:7.5pt;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin-bottom:1.5mm}
+table{border-collapse:collapse;width:100%;font-size:8.8pt}
+th{font-size:7.2pt;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);text-align:left;font-weight:600;padding:1.5mm 2mm;border-bottom:1px solid var(--ink)}
+td{padding:1.6mm 2mm;border-bottom:1px solid var(--line2);vertical-align:top}
+td.n,th.n{text-align:right;font-family:var(--mono);white-space:nowrap}
+td.big{font-family:var(--serif);font-size:12pt;font-weight:600;white-space:nowrap}
+tr.sum td{border-top:1px solid var(--ink);font-weight:600}
+table.tight{font-size:8.2pt} table.tight td{padding:1mm 2mm} table.tight tr.hd td{padding-top:2mm}
+tr.hd td{font-size:7.2pt;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);font-weight:600;padding-top:3mm;border-bottom:0}
+.edge{display:inline-block;font-size:7pt;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:.5mm 1.6mm;border-radius:3px;background:var(--accbg);color:var(--acc)}
+.edge.level{background:rgba(60,40,25,.08);color:var(--mut)}
+.pts{display:grid;grid-template-columns:1fr 1fr;gap:5mm 8mm}
+.pt .n{font-family:var(--mono);color:var(--acc);font-size:8pt;margin-right:1.5mm}
+.pt h3{font-size:11.5pt;margin-bottom:1mm}
+.pt p{font-size:9pt}
+.pt .mit{font-size:8.6pt;margin-top:1.5mm}
+.pt .mit b{display:block;font-size:7pt;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.chain{display:flex;flex-wrap:wrap;gap:1mm 1.5mm;font-size:8.3pt;margin:2mm 0}
+.chain span::after{content:"\2192";margin-left:1.5mm;color:var(--acc)}
+.chain span:last-child::after{content:""}
+.img{position:absolute;inset:0;background:linear-gradient(135deg,#3a2a20,#6b4a36 55%,#a3502c);background-size:cover;background-position:center}
+.img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,12,8,.1),rgba(20,12,8,.62))}
+.img.band{position:relative;inset:auto;height:100%;min-height:40mm;border-radius:6px;overflow:hidden}
+.img .cap{position:absolute;right:3mm;bottom:2mm;font-size:6.8pt;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);z-index:1}
+.over{position:relative;z-index:1;color:#f7f2ea;display:flex;flex-direction:column;height:100%}
+.over .mut,.over .dim{color:rgba(247,242,234,.75)}
+.over .kpi .v{color:#f7f2ea}
+.over h1,.over h2{color:#fff}
+.secnum{font-family:var(--serif);font-size:44pt;line-height:1;color:var(--acc);opacity:.9}
+.toc{display:grid;grid-template-columns:1fr 1fr;gap:3mm 12mm}
+.toc .row{display:flex;gap:4mm;align-items:baseline;border-bottom:1px solid var(--line2);padding:2mm 0}
+.toc .row .n{font-family:var(--mono);color:var(--acc);font-size:9pt;width:8mm}
+.toc .row .t{flex:1} .toc .row .t b{display:block;font-family:var(--serif);font-size:12.5pt}
+.toc .row .t span{font-size:8.6pt;color:var(--mut)}
+.toc .row .p{font-family:var(--mono);color:var(--dim);font-size:9pt}
+svg{display:block;overflow:visible;max-height:64mm;margin:0 auto}
+svg text{font-family:var(--font);fill:var(--ink)}
+svg .ax{font-size:7pt;fill:var(--mut)} svg .lbl{font-size:7.4pt;fill:var(--ink)} svg .val{font-size:7.6pt;font-weight:600} svg .t{font-size:7.2pt;letter-spacing:.1em;text-transform:uppercase;fill:var(--mut)}
+svg .grid{stroke:var(--line);stroke-width:.5}
+.leg{display:flex;flex-wrap:wrap;gap:1.5mm 4mm;font-size:7.6pt;color:var(--mut);margin-top:1.5mm}
+.leg i{display:inline-block;width:3mm;height:3mm;border-radius:1px;vertical-align:-.4mm;margin-right:1.2mm}
+.grp{break-inside:avoid}
+.ladder td{padding:1mm 2mm}
+#bar{position:fixed;top:0;left:0;right:0;height:56px;background:rgba(42,30,22,.94);color:#f7f2ea;display:flex;align-items:center;gap:14px;padding:0 18px;z-index:5;font-size:13px;backdrop-filter:blur(8px)}
+#bar b{font-family:var(--serif);font-weight:600;font-size:15px;margin-right:auto}
+#bar button,#bar a{appearance:none;border:1px solid rgba(255,255,255,.3);background:transparent;color:#f7f2ea;padding:7px 12px;border-radius:8px;font:inherit;cursor:pointer;text-decoration:none}
+#bar button.pri{background:#c8693a;border-color:#c8693a}
+#bar .draft{background:#b7791f;color:#2a1e16;padding:3px 8px;border-radius:5px;font-size:11px;font-weight:700;letter-spacing:.06em}
+#gate{position:fixed;inset:0;background:var(--paper2);display:flex;align-items:center;justify-content:center;z-index:10}
+#gate .card{width:min(420px,90vw);background:var(--paper);border-radius:14px;padding:28px;box-shadow:0 12px 32px rgba(42,30,22,.16)}
+#gate h2{font-size:24px}
+#gate .in{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;font:inherit;font-size:14px;margin:6px 0 12px;background:#fff}
+#gate button{width:100%;padding:11px;border:0;border-radius:8px;background:var(--acc);color:#fff;font:inherit;font-weight:600;cursor:pointer}
+#gate .err{color:var(--bad);font-size:13px;min-height:18px}
+@media print{
+  @page{size:338.67mm 190.5mm;margin:0}
+  html,body{background:#fff}
+  #bar,#gate{display:none!important}
+  #deck{display:block;padding:0;gap:0}
+  .page{box-shadow:none;margin:0}
+}
+@media (max-width:1200px){ #deck{transform-origin:top center;transform:scale(.8)} }
+@media (max-width:900px){ #deck{transform:scale(.55)} }
+</style>
+</head>
+<body>
+<div id="gate" style="display:none"><div class="card">
+  <div class="eyebrow">Autopilot</div>
+  <h2 id="g-title">Loading</h2>
+  <p id="g-lede" class="mut"></p>
+  <form id="g-form">
+    <label class="small mut" for="g-id">Access ID</label><input class="in mono" id="g-id" autocomplete="username" autocapitalize="characters" required>
+    <label class="small mut" for="g-pw">Password</label><input class="in" id="g-pw" type="password" autocomplete="current-password" required>
+    <div class="err" id="g-err"></div>
+    <button id="g-go" type="submit">Open the case study</button>
+  </form>
+</div></div>
+<div id="bar"><b id="bar-title">Case study</b><span id="bar-draft" class="draft" style="display:none">DRAFT</span><span id="bar-pages" class="mut"></span><button class="pri" id="bar-pdf" type="button">Save as PDF</button></div>
+<main id="deck"></main>
+<script src="/casestudy/costing.js?v=cs1"></script>
+<script src="/casestudy/render.js?v=cs1"></script>
+<script>
+(window.CaseLoad || Promise.resolve()).then(function () {
+  if (!window.CASE) return;
+  var out = CaseRender.render(window.CASE, document.getElementById("deck"));
+  document.title = (window.CASE.meta && window.CASE.meta.title) || "Case study";
+  document.getElementById("bar-title").textContent = document.title;
+  document.getElementById("bar-pages").textContent = out.pages + " pages";
+  if (window.CASE.draft) document.getElementById("bar-draft").style.display = "";
+  document.getElementById("bar-pdf").onclick = function () { window.print(); };
+});
+</script>
+</body>
+</html>
