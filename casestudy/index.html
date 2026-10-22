@@ -107,6 +107,14 @@ svg .grid{stroke:var(--line);stroke-width:.5}
 .leg{display:flex;flex-wrap:wrap;gap:1.5mm 4mm;font-size:7.6pt;color:var(--mut);margin-top:1.5mm}
 .leg i{display:inline-block;width:3mm;height:3mm;border-radius:1px;vertical-align:-.4mm;margin-right:1.2mm}
 .grp{break-inside:avoid}
+.chart-big svg{max-height:104mm}
+.statement{flex:1;min-height:0;display:grid;grid-template-columns:2fr 3fr;gap:14mm;align-items:center;padding:0 8mm 14mm}
+.statement .kpi .v{font-size:56pt}
+.statement .kpi .l{font-size:11pt;margin-top:3mm;max-width:95mm}
+.statement .means{font-size:11.5pt;line-height:1.5;padding:6mm 7mm}
+.statement .means b{font-size:8pt;margin-bottom:3mm}
+.statement.solo{grid-template-columns:1fr;justify-items:center}
+.statement.solo .means{max-width:230mm}
 .ladder td{padding:1mm 2mm}
 #bar{position:fixed;top:0;left:0;right:0;height:56px;background:rgba(42,30,22,.94);color:#f7f2ea;display:flex;align-items:center;gap:14px;padding:0 18px;z-index:5;font-size:13px;backdrop-filter:blur(8px)}
 #bar b{font-family:var(--serif);font-weight:600;font-size:15px;margin-right:auto}
