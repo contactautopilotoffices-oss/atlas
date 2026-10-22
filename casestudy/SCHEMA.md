@@ -1,7 +1,7 @@
 # The case study bundle
 
 A business case is one JSON document, the **case bundle**, drawn by
-`casestudy/render.js` into A4 landscape pages and printed to PDF by the
+`casestudy/render.js` into 16:9 pages and printed to PDF by the
 browser. It is built from the case study workbook (`scripts/lib/case-schema.js`
 describes the sheets; `case-workbook.js` reads them) or by the CMS, and checked
 by `scripts/lib/validate-case.js`.

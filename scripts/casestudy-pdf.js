@@ -40,7 +40,7 @@ async function renderPdf(bundle, outBase, { pngs = true } = {}) {
   const { srv, base } = await serve();
   const browser = await chromium.launch();
   try {
-    const page = await browser.newPage({ viewport: { width: 1123, height: 794 } });
+    const page = await browser.newPage({ viewport: { width: 1280, height: 720 } });
     await page.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
     const errors = [];
     page.on("pageerror", e => errors.push(e.message));
@@ -52,10 +52,12 @@ async function renderPdf(bundle, outBase, { pngs = true } = {}) {
     const n = await page.$$eval(".page", els => els.length);
     const text = await page.$eval("#deck", e => e.textContent);
     await page.emulateMedia({ media: "print" });
-    await page.pdf({ path: outBase + ".pdf", format: "A4", landscape: true, printBackground: true, margin: { top: 0, right: 0, bottom: 0, left: 0 }, preferCSSPageSize: true });
+    await page.pdf({ path: outBase + ".pdf", width: "338.67mm", height: "190.5mm", printBackground: true, margin: { top: 0, right: 0, bottom: 0, left: 0 }, preferCSSPageSize: true });
     const overflow = await page.$$eval(".page", els => els.map((el, i) => ({ page: i + 1, over: el.scrollHeight - el.clientHeight })).filter(x => x.over > 2));
     if (pngs) {
       await page.emulateMedia({ media: "screen" });
+      /* The page's own toolbar floats over the first page; it is not part of the document. */
+      await page.addStyleTag({ content: "#bar{display:none!important}#deck{padding-top:10px!important}" });
       const pages = await page.$$(".page");
       for (let i = 0; i < pages.length; i++) await pages[i].screenshot({ path: `${outBase}-p${String(i + 1).padStart(2, "0")}.png` });
     }

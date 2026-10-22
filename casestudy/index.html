@@ -16,7 +16,7 @@
 <script src="/casestudy/load.js?v=cs1"></script>
 <style>
 /* ============================================================================
-   The case study, as pages. A4 landscape, 297 x 210 mm, the same on screen
+   The case study, as pages. 16:9 (338.67 x 190.5 mm), the same on screen
    and on paper: what you see is what Save as PDF prints.
    ============================================================================ */
 :root{
@@ -28,7 +28,8 @@
   --serif:'Playfair Display',Georgia,'Times New Roman',serif;
   --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,Roboto,Helvetica,Arial,sans-serif;
   --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
-  --pw:297mm; --ph:210mm; --pad:12mm;
+  /* 16:9, the PowerPoint widescreen page (13.333 x 7.5 in), as the source decks are. */
+  --pw:338.67mm; --ph:190.5mm; --pad:11mm;
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:#d9d0c4;color:var(--ink);font-family:var(--font);font-size:10.5pt;line-height:1.38;-webkit-font-smoothing:antialiased;-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -119,7 +120,7 @@ svg .grid{stroke:var(--line);stroke-width:.5}
 #gate button{width:100%;padding:11px;border:0;border-radius:8px;background:var(--acc);color:#fff;font:inherit;font-weight:600;cursor:pointer}
 #gate .err{color:var(--bad);font-size:13px;min-height:18px}
 @media print{
-  @page{size:A4 landscape;margin:0}
+  @page{size:338.67mm 190.5mm;margin:0}
   html,body{background:#fff}
   #bar,#gate{display:none!important}
   #deck{display:block;padding:0;gap:0}
