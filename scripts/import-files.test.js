@@ -21,6 +21,8 @@ const JSZip = require("jszip");
 const { importSources, plan, workbookRows, readSource, docxText, kindOf, MAX_FILES } = require("../api/cms/_sources");
 const { MAX_CHARS, build, askFor } = require("../api/cms/_pdf");
 const brief = require("../api/cms/_brief");
+const model = require("../api/cms/_llm");
+const { askModel } = require("../api/cms/_pdf");
 const { tinyPdf } = require("../api/cms/_preflight");
 const { readWorkbook } = require("./lib/workbook");
 
@@ -165,6 +167,44 @@ const geocoder = async (q) => { const k = Object.keys(GEO).find(k => q.toLowerCa
   ok("nothing to enhance is a plain message", e && e.status === 400 && /Describe the requirement/.test(e.message));
   e = await threw(() => brief.enhance({ requirement: "x" }, { complete: async () => ({ json: {} }) }));
   ok("an empty answer asks to press Enhance again", e && e.status === 502 && /Enhance again/.test(e.message));
+
+  /* ---- the Claude call itself ----
+     Current models think before they answer, and the thinking counts
+     against max_tokens: a tight limit leaves the answer no room ("did not
+     return JSON"). This stands in for the SDK client to check what is sent
+     and how each way of stopping reads. */
+  const fakeClient = (answers) => {
+    const calls = [];
+    return { calls, messages: { stream: (params) => { calls.push(params); const a = answers.shift(); return { finalMessage: async () => { if (a instanceof Error) throw a; return a; } }; } } };
+  };
+  const msg = (text, stop = "end_turn") => ({ model: "m", stop_reason: stop, content: [{ type: "thinking", thinking: "" }, ...(text == null ? [] : [{ type: "text", text }])] });
+  let fc = fakeClient([msg('{"Client": "A fintech"}')]);
+  const viaComplete = await model.complete({ system: "s", user: "u", maxTokens: 4000, effort: "medium", client: fc }, "claude");
+  ok("Claude is streamed with room to think and an explicit effort", fc.calls[0].max_tokens >= 16000 && fc.calls[0].output_config.effort === "medium" && !("temperature" in fc.calls[0]), JSON.stringify(fc.calls[0]).slice(0, 200));
+  ok("the answer is read after the thinking block", viaComplete.json.Client === "A fintech");
+  fc = fakeClient([Object.assign(new Error("400 output_config.effort: not supported on this model"), { status: 400 }), msg('{"a":1}')]);
+  const older = await model.claude({ model: "older", content: "x", effort: "low", client: fc });
+  ok("a model that does not take an effort is asked again without one", fc.calls.length === 2 && fc.calls[0].output_config && !fc.calls[1].output_config && older.text === '{"a":1}');
+  fc = fakeClient([msg(null, "max_tokens")]);
+  e = await threw(() => model.complete({ system: "s", user: "u", client: fc }, "claude"));
+  ok("an answer that ran out of room says so, not just 'no JSON'", e && e.status === 502 && /ran out of room/.test(e.message), e && e.message);
+  fc = fakeClient([msg('{"Options": [{"ID": "a"', "max_tokens")]);
+  e = await threw(() => model.complete({ system: "s", user: "u", client: fc }, "claude"));
+  ok("JSON cut off half way says to use fewer or shorter files", e && /cut off before its JSON was finished/.test(e.message), e && e.message);
+  fc = fakeClient([msg("I can't help with that.", "refusal")]);
+  e = await threw(() => model.complete({ system: "s", user: "u", client: fc }, "claude"));
+  ok("a refusal is named as one", e && e.status === 422 && /declined/.test(e.message), e && e.message);
+  e = await threw(() => model.parseJSON("Here is the brief you asked for."));
+  ok("prose instead of JSON quotes what came back", e && /it wrote: "Here is the brief/.test(e.message), e && e.message);
+  fc = fakeClient([msg('{"Options": []}')]);
+  await askModel({ text: "Corporate Avenue", scanned: [], fileName: "a.pdf", documents: [] }, "claude", { client: fc });
+  ok("reading files asks for low effort and leaves 32,000 tokens of room", fc.calls[0].output_config.effort === "low" && fc.calls[0].max_tokens === 32000 && fc.calls[0].system.length > 100);
+  fc = fakeClient([msg('{"Options": []}')]);
+  await askModel({ text: "x", scanned: [2], fileName: "scan.pdf", documents: [{ name: "scan.pdf", base64: "JVBERi0=" }] }, "claude", { client: fc });
+  ok("a scanned page still goes to Claude as the document itself", fc.calls[0].messages[0].content[0].type === "document" && fc.calls[0].messages[0].content[0].source.data === "JVBERi0=");
+  let enhanceCall = null;
+  await brief.enhance({ requirement: "120 seats" }, { complete: async (a) => { enhanceCall = a; return { json: { "Seats": 120 } }; } });
+  ok("Enhance asks for more room and a higher effort than reading", enhanceCall.maxTokens >= 16000 && enhanceCall.effort === "medium");
 
   /* ---- limits ---- */
   const seven = Array.from({ length: MAX_FILES + 1 }, (_, i) => ({ name: `f${i}.csv`, buf: Buffer.from("a,b\n1,2") }));

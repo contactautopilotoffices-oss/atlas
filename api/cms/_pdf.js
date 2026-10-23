@@ -31,6 +31,7 @@
 const { SHEETS } = require("../../scripts/lib/workbook-schema");
 const { buildTemplate, readWorkbook } = require("../../scripts/lib/workbook");
 const { validate } = require("../../scripts/lib/validate-bundle");
+const llm = require("./_llm");
 
 const MAX_PAGES = 60;
 const MAX_CHARS = 180000;
@@ -113,14 +114,7 @@ const askFor = (requirement, brief) => {
   return `${r ? `THE REQUIREMENT, IN THE PERSON'S WORDS\n${r}\n\n` : ""}${b ? `THE BRIEF (structured, and possibly edited by the person; it wins over the requirement)\n${b}\n\n` : ""}`;
 };
 
-function parseJSON(text) {
-  let s = String(text || "").replace(/<think>[\s\S]*?<\/think>/g, "").trim();
-  const fence = s.match(/```(?:json)?\s*([\s\S]*?)```/);
-  if (fence) s = fence[1].trim();
-  const a = s.indexOf("{"), b = s.lastIndexOf("}");
-  if (a < 0 || b < a) throw new Error("The model did not return JSON.");
-  return JSON.parse(s.slice(a, b + 1));
-}
+const parseJSON = llm.parseJSON;
 
 function providerName() {
   const want = (process.env.CMS_PDF_PROVIDER || "").toLowerCase();
@@ -132,26 +126,20 @@ function providerName() {
 /* Ask the model. `text` is what was read from the files; scanned PDFs are
    sent as documents too (`pdfBase64` for one, `documents` for several), so
    a provider that can look at a page reads what has no text layer. */
-async function askModel({ text, pdfBase64, documents, scanned, fileName, fileNames, requirement, brief }, provider = providerName()) {
+async function askModel({ text, pdfBase64, documents, scanned, fileName, fileNames, requirement, brief }, provider = providerName(), opts = {}) {
   if (!provider) throw Object.assign(new Error("Reading PDFs, Word documents and other spreadsheets needs ENGY_API_KEY or ANTHROPIC_API_KEY set in Vercel. Until then, fill in the workbook instead."), { status: 503 });
   const guide = sheetGuide();
   const docs = documents || (pdfBase64 ? [{ name: fileName, base64: pdfBase64 }] : []);
   const names = fileNames && fileNames.length > 1 ? `There are ${fileNames.length} documents: ${fileNames.map(n => `"${n}"`).join(", ")}.` : `The document is "${fileName || (fileNames && fileNames[0]) || "document.pdf"}".`;
   const intro = `${names}${scanned.length && provider === "claude" ? ` These pages have no text layer: ${scanned.join(", ")}. Read them from the attached document${docs.length === 1 ? "" : "s"}.` : ""}\n\nTHE SHEETS AND THEIR COLUMNS\n${guide}\n\n${askFor(requirement, brief)}THE DOCUMENTS' TEXT\n${text}`;
   if (provider === "claude") {
-    const Anthropic = require("@anthropic-ai/sdk");
-    const client = new Anthropic();
     const content = [];
     if (scanned.length) for (const d of docs) content.push({ type: "document", source: { type: "base64", media_type: "application/pdf", data: d.base64 }, ...(d.name ? { title: String(d.name).slice(0, 200) } : {}) });
     content.push({ type: "text", text: intro });
-    const r = await client.messages.create({
-      model: process.env.CMS_PDF_MODEL || "claude-sonnet-5-5",
-      max_tokens: 16000,
-      system: RULES,
-      messages: [{ role: "user", content }],
-    });
-    const t = r.content.find((b) => b.type === "text");
-    return { rows: parseJSON(t && t.text), model: r.model, provider };
+    /* Reading is copying, not reasoning: low effort keeps it well inside
+       the function's time limit, and the room left is for the answer. */
+    const r = await llm.claude({ model: process.env.CMS_PDF_MODEL || "claude-sonnet-5-5", system: RULES, content, maxTokens: 32000, effort: "low", client: opts.client });
+    return { rows: parseJSON(r.text, r.stop), model: r.model, provider };
   }
   /* Engy reads text only. With text to go on, read that and say which
      pages were left; with nothing but scans, stop and say what is needed. */
@@ -170,8 +158,8 @@ async function askModel({ text, pdfBase64, documents, scanned, fileName, fileNam
   });
   if (!res.ok) throw Object.assign(new Error(`The model endpoint answered ${res.status}: ${(await res.text().catch(() => "")).slice(0, 200)}`), { status: 502 });
   const j = await res.json();
-  const msg = j.choices && j.choices[0] && j.choices[0].message;
-  return { rows: parseJSON(msg && msg.content), model: j.model || model, provider, unread };
+  const ch = (j.choices && j.choices[0]) || {};
+  return { rows: parseJSON(ch.message && ch.message.content, ch.finish_reason), model: j.model || model, provider, unread };
 }
 
 /* What became of the scanned pages, for the notes under the report. */

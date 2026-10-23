@@ -10,8 +10,9 @@
 
    It runs looser than reading: temperature 0.8 on the OpenAI-compatible
    endpoint. Claude no longer takes a temperature, so there the looseness
-   comes from these instructions, and pressing Enhance again still gives a
-   different take.
+   comes from these instructions and a medium effort (reading runs at low),
+   and pressing Enhance again still gives a different take. The token limit
+   leaves room for the model's thinking as well as the brief.
    ============================================================================ */
 "use strict";
 const llm = require("./_llm");
@@ -70,7 +71,7 @@ async function enhance({ requirement, text, brief }, { complete = llm.complete }
     brief && Object.keys(brief).length ? `THE CURRENT BRIEF\n${JSON.stringify(brief, null, 1).slice(0, 8000)}` : "",
     docs ? `THE DOCUMENTS' TEXT${String(text).length > MAX_TEXT ? " (the start of it)" : ""}\n${docs}` : "THE DOCUMENTS' TEXT\n(no documents yet)",
   ].filter(Boolean).join("\n\n");
-  const r = await complete({ system: RULES, user, maxTokens: 4000, temperature: TEMPERATURE });
+  const r = await complete({ system: RULES, user, maxTokens: 16000, temperature: TEMPERATURE, effort: "medium" });
   const out = tidy(r.json);
   if (!Object.keys(out).length) throw Object.assign(new Error("The model returned an empty brief. Press Enhance again."), { status: 502 });
   return { brief: out, model: r.model, provider: r.provider };
