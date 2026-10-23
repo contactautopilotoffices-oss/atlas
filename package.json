@@ -20,6 +20,7 @@
     "workbook": "node scripts/workbook.js --template",
     "test:flow": "node scripts/cms-flow-test.js",
     "example:andheri": "node scripts/examples/andheri-flex.js",
+    "example:andheri-coworking": "node scripts/examples/andheri-coworking.js",
     "docs:walkthrough": "node scripts/docs/walkthrough.js docs-out && cp docs-out/atlas-walkthrough.pdf docs/"
   },
   "dependencies": {
