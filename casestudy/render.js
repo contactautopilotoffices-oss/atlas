@@ -79,7 +79,8 @@
     var lo = opts.min != null ? opts.min : Math.min.apply(null, vals), hi = opts.max != null ? opts.max : Math.max.apply(null, vals);
     if (hi === lo) hi = lo + 1;
     var pad = (hi - lo) * 0.15; lo = opts.min != null ? lo : lo - pad; hi += pad;
-    var X = function (i) { return pl + (pts.length === 1 ? (w - pl - pr) / 2 : i * (w - pl - pr) / (pts.length - 1)); };
+    /* the end points sit inset, so their value labels clear the y-axis labels */
+    var inset = 16, X = function (i) { return pl + (pts.length === 1 ? (w - pl - pr) / 2 : inset + i * (w - pl - pr - 2 * inset) / (pts.length - 1)); };
     var Y = function (v) { return pt + (h - pt - pb) * (1 - (v - lo) / (hi - lo)); };
     var out = "", g = 4;
     for (var i = 0; i <= g; i++) { var yv = lo + (hi - lo) * i / g; out += '<line class="grid" x1="' + pl + '" x2="' + (w - pr) + '" y1="' + Y(yv) + '" y2="' + Y(yv) + '"/><text class="ax" x="' + (pl - 4) + '" y="' + (Y(yv) + 2.5) + '" text-anchor="end">' + (opts.fmt || String)(yv) + "</text>"; }
@@ -133,7 +134,11 @@
       out += '<rect x="' + pl + '" y="' + (y + 2) + '" width="' + Math.max(0, bw) + '" height="' + (rowH - 5) + '" fill="' + (r.color || COLORS[0]) + '" rx="1.5"/>';
       out += '<text class="val" x="' + (pl + bw + 4) + '" y="' + (y + rowH * 0.68) + '">' + esc(r.note || (opts.fmt || String)(r.value)) + "</text>";
     });
-    if (opts.refLine != null) { var x = pl + (w - pl - pr) * (opts.refLine / hi); out += '<line x1="' + x + '" x2="' + x + '" y1="0" y2="' + h + '" stroke="' + COLORS[0] + '" stroke-dasharray="3 3"/><text class="ax" x="' + (x + 3) + '" y="' + (h + 8) + '" fill="' + COLORS[0] + '">' + esc(opts.refLabel || "") + "</text>"; }
+    if (opts.refLine != null) {
+      /* the label runs left of the line when running right would leave the chart */
+      var x = pl + (w - pl - pr) * (opts.refLine / hi), left = x + 3 + (opts.refLabel || "").length * 5.1 > w;
+      out += '<line x1="' + x + '" x2="' + x + '" y1="0" y2="' + h + '" stroke="' + COLORS[0] + '" stroke-dasharray="3 3"/><text class="ax" x="' + (left ? x - 3 : x + 3) + '" y="' + (h + 8) + '"' + (left ? ' text-anchor="end"' : "") + ' fill="' + COLORS[0] + '">' + esc(opts.refLabel || "") + "</text>";
+    }
     return svg(w, h + (opts.refLine != null ? 12 : 0), out);
   }
   /* Stacked horizontal bars: one row per option, segments in order. */
@@ -231,7 +236,7 @@
     if (!rivals.length) return "";
     var band = 2000, lo = Math.floor(Math.min.apply(null, rivals.map(function (r) { return r.price; })) / band) * band;
     var hi = Math.ceil(Math.max(Math.max.apply(null, rivals.map(function (r) { return r.price; })), c.priceHigh) / band) * band + band;
-    var w = 820, h = 170, pl = 16, pr = 16, pb = 26, pt = 30, X = function (p) { return pl + (w - pl - pr) * ((p - lo) / (hi - lo)); };
+    var nO = c.options.length, w = 820, pl = 16, pr = 16, pb = 26, pt = 20 + (nO + 1) * 13, h = pt + 140, X = function (p) { return pl + (w - pl - pr) * ((p - lo) / (hi - lo)); };
     var cols = {}; rivals.forEach(function (r) { var k = Math.floor(r.price / band) * band; (cols[k] = cols[k] || []).push(r); });
     var out = "", maxN = Math.max.apply(null, Object.keys(cols).map(function (k) { return cols[k].length; }));
     var dy = Math.min(13, (h - pt - pb) / maxN);
@@ -244,10 +249,22 @@
     });
     for (var p = lo; p <= hi; p += 5000) out += '<text class="ax" x="' + X(p) + '" y="' + (h - 8) + '" text-anchor="middle">' + inr(p, { plain: true }).replace(/,000$/, "K") + "</text>";
     var med = median(rivals.map(function (r) { return r.price; }));
-    out += '<line x1="' + X(med) + '" x2="' + X(med) + '" y1="' + pt + '" y2="' + (h - pb) + '" stroke="#2a1e16" stroke-dasharray="3 3"/><text class="ax" x="' + X(med) + '" y="' + (pt - 4) + '" text-anchor="middle">Middle ' + esc(R(med)) + "</text>";
+    /* Rows from the top: one per option, then "Middle". A line runs down from
+       its own row, so a label avoids the lines of the rows above it. */
+    var ourX = c.options.map(function (o) { return X(o.price); }), cw = 5.6;
+    var side = function (x, wd, avoid) {
+      var clear = function (l) { return avoid.every(function (ax) { return ax < l - 4 || ax > l + wd + 4; }); };
+      if (x + 4 + wd <= w && clear(x + 4)) return x + 4;
+      if (x - 4 - wd >= 0 && clear(x - 4 - wd)) return x - 4 - wd;
+      return Math.min(x + 4, w - wd);
+    };
     c.options.forEach(function (o, i) {
-      out += '<line x1="' + X(o.price) + '" x2="' + X(o.price) + '" y1="' + (pt + 8 + i * 12) + '" y2="' + (h - pb) + '" stroke="' + COLORS[0] + '" stroke-width="1.5"/><text class="val" x="' + (X(o.price) + 4) + '" y="' + (pt + 12 + i * 12) + '" fill="' + COLORS[0] + '">' + esc(o.name + " " + R(o.price)) + "</text>";
+      var y = 12 + i * 13, t = o.name + " " + R(o.price);
+      out += '<line x1="' + ourX[i] + '" x2="' + ourX[i] + '" y1="' + (y + 3) + '" y2="' + (h - pb) + '" stroke="' + COLORS[0] + '" stroke-width="1.5"/><text class="val" x="' + side(ourX[i], t.length * cw, ourX.slice(0, i)) + '" y="' + y + '" fill="' + COLORS[0] + '">' + esc(t) + "</text>";
     });
+    var mt = "Middle " + R(med), mw = mt.length * 5.1, mx = X(med) - mw / 2;
+    if (!ourX.every(function (ax) { return ax < mx - 4 || ax > mx + mw + 4; })) mx = side(X(med), mw, ourX);
+    out += '<line x1="' + X(med) + '" x2="' + X(med) + '" y1="' + (15 + nO * 13) + '" y2="' + (h - pb) + '" stroke="#2a1e16" stroke-dasharray="3 3"/><text class="ax" x="' + mx + '" y="' + (12 + nO * 13) + '">' + esc(mt) + "</text>";
     return svg(w, h, out);
   }
 

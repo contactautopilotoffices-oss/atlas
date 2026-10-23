@@ -69,12 +69,6 @@ what it fixes, and fixes the worst one to three first.
 - Several pages end in the top half (costing, levers, infrastructure, why
   here, the pipeline pages, risks, rivals next door): the content does not
   use the height.
-- Line charts (market point 01): the first point's value label sits on the
-  y-axis tick labels.
-- Flex market point: the "our break-even" reference label on the bar chart
-  runs past the right edge of the frame.
-- Price ladder: the two "our price" labels collide with each other and the
-  "Middle" label crosses a band count.
 - "How full rival centres run": the operator names under the bars are dense
   and set at 6.6 pt, below the 7.5 pt floor.
 - The wider corridor tables wrap occupancy onto two lines.
@@ -83,3 +77,5 @@ what it fixes, and fixes the worst one to three first.
 - Decision table: the edge pill wraps a two-word building name onto two
   lines.
 - The terms table sets the small notes under big figures in the serif face.
+- Price ladder: the dashed "Middle" line runs through the count label of the
+  band it falls in, and the chart leaves a wide empty strip above the dots.
