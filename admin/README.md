@@ -118,7 +118,10 @@ This is how the team makes a new Atlas without a developer.
    (Excel `.xlsx`/`.csv`, PDF, Word `.docx`, about 3 MB together). A filled
    Atlas workbook is one of them if you have it; **download the empty
    workbook** from the same card to start one. Nine sheets; only **Atlas**
-   and **Options** are needed.
+   and **Options** are needed. Two filled examples are in `examples/`:
+   `andheri-flex.xlsx` (four proposed buildings against the flex market) and
+   `andheri-coworking.xlsx` (the Andheri East coworking competitors, with
+   the bundle it becomes beside it as `andheri-coworking.bundle.json`).
 2. **Enhance** (optional) turns the requirement, with the files' text, into
    a brief: seats, budget, where, move-in, must haves, what to rank on,
    what the documents say, what it assumed and what to ask the client.

@@ -84,8 +84,11 @@ async function cases() {
      fills one, read into a bundle, and rendered. If this passes, the team
      can make an Atlas without a developer. */
   const { bundle: fromWorkbook } = await readWorkbook(await fillSampleWorkbook());
+  /* A committed, real workbook: the Andheri East coworking competitors
+     (scripts/examples/andheri-coworking.js). Keeps the example honest. */
+  const { bundle: andheriCoworking } = await readWorkbook(path.join(ROOT, "examples", "andheri-coworking.xlsx"));
 
-  return { chennai, minimal, noChooser, noExisting, noTransit, oneOption, ownKinds, fromWorkbook };
+  return { chennai, minimal, noChooser, noExisting, noTransit, oneOption, ownKinds, fromWorkbook, andheriCoworking };
 }
 
 async function run(name, bundle, base, browser) {
