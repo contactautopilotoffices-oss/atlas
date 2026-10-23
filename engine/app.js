@@ -1048,8 +1048,14 @@ const DPR = Math.min(2, Math.max(1, Math.round(window.devicePixelRatio || 1)));
 const merc = (lng, lat) => [lng * 20037508.342789244 / 180, Math.log(Math.tan((90 + lat) * Math.PI / 360)) * 6378137];
 /* z is a Mapbox zoom (512 px tiles), so a crop frames the building as the
    map does at that zoom. */
+/* A pin close to but not on the building (a complex, a point of interest,
+   a street or an address pin) gets a wider AREA crop instead, labelled as
+   one, so the card still shows where it is without claiming which roof. */
+const AREA_PREC = new Set(["complex", "poi", "landuse", "street", "approx"]);
+const isAreaShot = (o) => o.precision !== "building" && AREA_PREC.has(o.precision);
 function satUrl(o, w, h, z) {
-  if (o.precision !== "building") return "";
+  if (o.precision !== "building" && !AREA_PREC.has(o.precision)) return "";
+  if (o.precision !== "building") z -= 1.4;
   const [x, y] = merc(o.lng, o.lat), r = 78271.51696402048 / 2 ** z, hw = w / 2 * r, hh = h / 2 * r;
   return `${ESRI}/export?bbox=${(x - hw).toFixed(1)},${(y - hh).toFixed(1)},${(x + hw).toFixed(1)},${(y + hh).toFixed(1)}&bboxSR=3857&imageSR=3857&size=${w * DPR},${h * DPR}&format=jpg&f=image`;
 }
@@ -1141,7 +1147,7 @@ function renderList() {
         <div class="loc">${fitBadge(o)} ${esc(o.sheetMicro)}</div>
         <div class="facts">${EX ? `<span title="From the current office by road">${isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(homeKm(o))}${homeMin(o) ? ` · ${esc(homeMin(o))}` : ""}</span>` : ""}${r.none ? "" : `<span title="Nearest station open: ${esc(r.s.name)}">${fmtM(r.d)} to rail</span>`}${(b => b ? `<span title="Nearest bus stop: ${esc(b.s.name)}">${fmtM(b.d)} to bus</span>` : "")(nearestBus(o))}${flagChip(o)}</div>
       </div>
-      <span class="score" title="Fit to your priorities, out of 100">${score(o)}</span>
+      ${HAS_CHOOSER ? `<span class="score" title="Fit to your priorities, out of 100">${score(o)}</span>` : ""}
     </button>`;
   }).join("");
   mountTiles($("#list"));
@@ -1962,7 +1968,7 @@ function renderOption(o) {
       .map(k => [titleCase(k.replace(/([a-z])([A-Z])/g, "$1 $2")), esc(o[k])])
   ].filter(x => x[1]);
   $("#p-body").innerHTML = `
-    ${sat ? `<div class="hero"><img src="${sat}" alt="Satellite view of ${esc(o.name)}" onerror="this.closest('.hero').remove()"><span class="ph">Satellite${imgDate(o) ? ` · captured <span data-img-date="${o.id}">${fmtDate(imgDate(o))}</span>` : ""} · Esri, Vantor</span></div>` : ""}
+    ${sat ? `<div class="hero"><img src="${sat}" alt="Satellite view of ${esc(o.name)}" onerror="this.closest('.hero').remove()"><span class="ph">${isAreaShot(o) ? "Area view, building not exactly pinned · " : ""}Satellite${imgDate(o) ? ` · captured <span data-img-date="${o.id}">${fmtDate(imgDate(o))}</span>` : ""} · Esri, Vantor</span></div>` : ""}
     <div class="kpis">
       ${colMeasures.slice(0, 2).map(m => `<div class="kpi"><div class="l">${esc(m.label || titleCase(m.key))}</div><div class="v">${esc(String(o[m.column]))}</div><div class="s">${esc(m.unit || (isFinite(m.max) ? `out of ${m.max}` : ""))}</div></div>`).join("")}
       ${EX ? `<div class="kpi"><div class="l">${esc(say("option.fromExisting", "From today's office"))}</div><div class="v">${isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(homeKm(o))}</div><div class="s">${esc(homeMin(o))} by road</div></div>` : ""}
