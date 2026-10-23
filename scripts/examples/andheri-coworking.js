@@ -229,7 +229,7 @@ async function main() {
     overview: { ranking: "The list" },
     ranking: { ungrouped: "Options", option: "Centre" },
     insights: { first: "First on the list" },
-    option: { rank: "Listed", rankWord: "No." },
+    option: { rank: false },
     filters: { groupHint: "Keep only this group." },
     guide: { overview: { hint: "The competitors in the market, then the proposed inventory, in presentation order." } },
     markets: { title: "Five micro-markets", none: "none on the list" }

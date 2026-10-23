@@ -51,6 +51,9 @@ function fill(s) {
   return String(s).replace(/\{(\w+)\}/g, (m, k) => (k in t ? t[k] : m));
 }
 /* say("connect.title", "How people get to each option") */
+/* A bundle that is a list, not a ranking, sets copy.option.rank to false:
+   the panel then shows no "N of M" row and no rank in its eyebrow. */
+const NO_RANK = !!(CP && CP.option && CP.option.rank === false);
 function say(path, fallback) {
   const v = path.split(".").reduce((o, k) => (o == null ? o : o[k]), CP);
   return fill(v == null || v === "" ? fallback : v);
@@ -1940,7 +1943,7 @@ function renderOption(o) {
   const rank = O.slice().sort(byFit).findIndex(x => x.id === o.id) + 1;
   const backTo = TABS.find(t => t.key === S.tab) || TABS[0];
   $("#p-head").innerHTML = `<button class="back" type="button">← Back to ${esc(backTo.label)}</button>
-    <div class="eyebrow">${fit ? `${say("option.rankWord", "Rank")} ${o.n} · ` : `Option ${nn(o)} · `}${esc(o.sheetMicro)}</div>
+    <div class="eyebrow">${NO_RANK ? [fit && fit.label, o.sheetMicro].filter(Boolean).map(esc).join(" · ") : `${fit ? `${say("option.rankWord", "Rank")} ${o.n} · ` : `Option ${nn(o)} · `}${esc(o.sheetMicro)}`}</div>
     <h2>${esc(o.name)}</h2>${fitBadge(o)}${o.reason ? `<p class="reason">${esc(o.reason)}</p>` : ""}${verdictHTML(o, p)}${shotBar(o)}${actions()}`;
   const sat = satUrl(o, 640, 250, 16.6);
   const others = O.filter(x => x.id !== o.id).map(x => ({ x, d: km(o, x) })).sort((a, b) => a.d - b.d);
@@ -1959,7 +1962,7 @@ function renderOption(o) {
   const colMeasures = PARTS.filter(m => m.kind === "column" && isNum(o[m.column]));
   colMeasures.forEach(m => SHOWN.add(m.column));
   const sheetRows = [
-    [say("option.rank", "Rank"), fit && o.n ? `${o.n} of ${O.filter(x => fitOf(x)).length} · ${esc(fit.label)}` : ""],
+    [say("option.rank", "Rank"), fit && o.n && !NO_RANK ? `${o.n} of ${O.filter(x => fitOf(x)).length} · ${esc(fit.label)}` : ""],
     ...colMeasures.map(m => [m.label || titleCase(m.key), `${o[m.column]}${m.unit ? ` ${esc(m.unit)}` : isFinite(m.max) ? ` / ${m.max}` : ""}`]),
     [say("option.fromExisting", "From today's office"), EX ? (isNum(o.roadKm) ? `~${o.roadKm} km by road${o.driveText ? `, ${esc(o.driveText)}` : ""}` : fmtKm(homeKm(o))) : ""],
     [say("option.sheetName", "Name on the sheet"), o.sheetName && o.sheetName !== o.name ? esc(o.sheetName) : ""],

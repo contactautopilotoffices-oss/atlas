@@ -594,7 +594,7 @@ table.cmp td.best{background:#f1e6d8;font-weight:600}
    worst case is an Atlas with no tracking rather than no Atlas. */
 (window.AtlasLoad || Promise.resolve()).then(function () {
   var slug = (window.ATLAS && window.ATLAS.slug) || "atlas";
-  var app = "/engine/app.js?v=eng6";
+  var app = "/engine/app.js?v=eng7";
   if (window.AtlasCMS) AtlasCMS.boot(slug, { app: app });
   else { var s = document.createElement("script"); s.src = app; document.body.appendChild(s); }
 });

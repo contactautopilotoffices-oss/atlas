@@ -938,8 +938,7 @@
    "first": "First on the list"
   },
   "option": {
-   "rank": "Listed",
-   "rankWord": "No."
+   "rank": false
   },
   "filters": {
    "groupHint": "Keep only this group."
