@@ -86,7 +86,7 @@ function modal(html, onReady) {
   $("#modal-body").innerHTML = html;
   $("#modal").classList.add("on");
   const first = $("#modal-body").querySelector("input,select,textarea,button");
-  if (first) setTimeout(() => first.focus(), 30);
+  if (first) setTimeout(() => { const a = document.activeElement; if (!a || a === document.body || !$("#modal-body").contains(a)) first.focus(); }, 30);
   if (onReady) onReady($("#modal-body"));
 }
 const closeModal = () => $("#modal").classList.remove("on");
@@ -178,7 +178,10 @@ function showLogin(msg, opt = {}) {
     catch (err) { $("#l-err").textContent = err.message; $("#l-pw").value = ""; }
     b.disabled = false;
   };
-  setTimeout(() => $("#l-email") && $("#l-email").focus(), 30);
+  /* Put the cursor in the email box, unless the person (or a password
+     manager) is already typing somewhere: a late focus would send the rest
+     of a password into the email box. */
+  setTimeout(() => { const el = $("#l-email"); if (el && (!document.activeElement || document.activeElement === document.body)) el.focus(); }, 30);
 }
 async function enter(user) {
   ST.me = user;
