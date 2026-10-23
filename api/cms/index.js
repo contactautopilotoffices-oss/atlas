@@ -26,6 +26,12 @@
      POST bundle/import (editor)       a filled workbook -> bundle + report; saves nothing
      POST bundle/import-pdf (editor)   a PDF -> rows via a model, pins via Mapbox,
                                        the filled workbook and the bundle (_pdf.js)
+     GET  bundle/sheets   (editor)     the sheets and headings, for the plan editor
+     POST bundle/enhance  (editor)     a rough requirement (+ files' text) -> a brief (_brief.js)
+     POST bundle/plan     (editor)     up to 6 files (Excel, PDF, Word) + the brief ->
+                                       editable rows (_sources.js); a lone filled
+                                       Atlas workbook is read directly
+     POST bundle/build    (editor)     rows -> pins, workbook, bundle, report
      POST bundle/draft (editor)        save a bundle as a link's draft
      POST bundle/publish (admin)       draft -> live, kept as a numbered version
      GET  bundle/history&link= (viewer) every publish so far
@@ -43,9 +49,11 @@
 const store = require("./_store");
 const auth = require("./_auth");
 const { summarise } = require("./_analytics");
-const { buildTemplate, readWorkbook } = require("../../scripts/lib/workbook");
+const { buildTemplate, readWorkbook, SHEETS: WB_SHEETS } = require("../../scripts/lib/workbook");
 const { validate } = require("../../scripts/lib/validate-bundle");
 const pdf = require("./_pdf");
+const sources = require("./_sources");
+const brief = require("./_brief");
 const caseRoutes = require("./_case");
 const preflight = require("./_preflight");
 
@@ -559,6 +567,72 @@ R["POST bundle/import-pdf"] = async (req, res, b) => {
   }
 };
 
+/* Create an atlas, the Describe it card: files and a requirement in, an
+   editable plan (rows keyed by the workbook's headings) out, then built.
+   Nothing here saves; Save as draft does. */
+const filesFrom = (list) => {
+  if (!Array.isArray(list)) return [];
+  if (list.length > sources.MAX_FILES) fail(400, `Up to ${sources.MAX_FILES} files at a time; you chose ${list.length}.`);
+  const files = list.map((f, i) => {
+    const name = clip(f && f.name, 120) || `file-${i + 1}`;
+    let buf;
+    try { buf = Buffer.from(String((f && f.file) || "").replace(/^data:[^,]*,/, ""), "base64"); } catch (e) { fail(400, `"${name}" could not be read.`); }
+    if (!buf.length) fail(400, `"${name}" is empty.`);
+    return { name, buf };
+  });
+  const total = files.reduce((a, f) => a + f.buf.length, 0);
+  if (total > MAX_BUNDLE) fail(413, `The files come to ${(total / 1048576).toFixed(1)} MB; the limit is about 3 MB together. Use fewer at a time.`);
+  return files;
+};
+const needModel = (what) => { if (!pdf.providerName()) fail(503, `${what} needs ENGY_API_KEY or ANTHROPIC_API_KEY set in Vercel. A filled Atlas workbook on its own works without it.`); };
+const briefFrom = (v) => (v && typeof v === "object" && !Array.isArray(v)) ? brief.tidy(v) : null;
+const modelFail = (e, what) => { if (e.status) fail(e.status, e.message); fail(502, `${what}: ${clip(e.message, 300)}`); };
+
+/* The sheets and their headings, for the editor's tabs and columns. */
+R["GET bundle/sheets"] = async (req) => {
+  await needUser(req, "editor");
+  return { sheets: WB_SHEETS.map(s => ({ name: s.name, shape: s.shape, blurb: s.blurb || "", extras: s.name === "Options" || s.name === "Places",
+    columns: (s.columns || s.fields || []).map(c => ({ label: c.label, required: !!c.required, number: c.type === "number", hint: c.hint || "", list: Array.isArray(c.list) ? c.list.map(String) : null })) })) };
+};
+
+/* Enhance: the rough requirement, with the files' text, into a brief. */
+R["POST bundle/enhance"] = async (req, res, b) => {
+  await needUser(req, "editor");
+  needModel("Enhance");
+  let text = clip(b.text, 200000) || "";
+  if (Array.isArray(b.files) && b.files.length) {
+    try { text = sources.sourceText((await sources.readAll(filesFrom(b.files))).sources); }
+    catch (e) { if (e.status) fail(e.status, e.message); throw e; }
+  }
+  try { return await brief.enhance({ requirement: clip(b.requirement, 4000), text, brief: briefFrom(b.brief) }); }
+  catch (e) { modelFail(e, "Enhance did not work"); }
+};
+
+/* Plan: the files into editable rows. Nothing is geocoded or built yet. */
+R["POST bundle/plan"] = async (req, res, b) => {
+  await needUser(req, "editor");
+  const files = filesFrom(b.files);
+  if (!files.length) fail(400, "Add at least one file to plan from.");
+  const requirement = clip(b.requirement, 4000) || "", br = briefFrom(b.brief);
+  const lone = files.length === 1 && /\.xlsx$/i.test(files[0].name) && !requirement && !(br && Object.keys(br).length);
+  if (!lone) needModel("Reading PDFs, Word documents and other spreadsheets");
+  try {
+    const p = await sources.plan(files, { requirement, brief: br });
+    return { direct: !!p.direct, rows: p.rows, notes: p.notes, files: p.files, label: p.label, text: p.text, model: p.model || null, provider: p.provider || null };
+  } catch (e) { modelFail(e, "The files could not be read into a plan"); }
+};
+
+/* Build: rows (planned, edited, or typed from scratch) into the atlas. */
+R["POST bundle/build"] = async (req, res, b) => {
+  await needUser(req, "editor");
+  if (!b.rows || typeof b.rows !== "object" || Array.isArray(b.rows)) fail(400, "Send the plan as an object in `rows`, one key per sheet.");
+  if (JSON.stringify(b.rows).length > MAX_BUNDLE) fail(413, "The plan is too large (over 4 MB).");
+  const rows = pdf.shapeRows(JSON.parse(JSON.stringify(b.rows)));
+  if (!(rows["Options"] || []).length) fail(400, "The plan has no properties yet. Add at least one row on the Options tab.");
+  const out = await pdf.build(rows, { fileName: clip(b.label, 200) || "Atlas" });
+  return { bundle: out.bundle, notes: out.notes, report: out.report, workbook: out.workbook, rows: out.rows, placed: out.placed.length, unplaced: out.unplaced };
+};
+
 R["POST bundle/draft"] = async (req, res, b) => {
   const u = await needUser(req, "editor");
   const slug = clip(b.slug, 40).trim().toLowerCase();
@@ -758,7 +832,7 @@ module.exports = async (req, res) => {
        write must carry x-cms, which a cross-site form cannot send. */
     if (req.method !== "GET" && !route.startsWith("POST broker/")) needWrite(req);
     /* A workbook arrives base64-encoded inside the JSON body. */
-    const limit = /^POST (bundle\/(import|import-pdf|draft)|case\/(import|draft|apply))$/.test(route) ? 6 * 1024 * 1024 : undefined;
+    const limit = /^POST (bundle\/(import|import-pdf|plan|enhance|build|draft)|case\/(import|draft|apply))$/.test(route) ? 6 * 1024 * 1024 : undefined;
     const body = req.method === "POST" ? await readBody(req, limit) : {};
     const out = await fn(req, res, body, url.searchParams);
     if (out && out.__sent) return;            // the route wrote its own (binary) response

@@ -26,8 +26,11 @@ function parseJSON(text) {
   return JSON.parse(s.slice(a, b + 1));
 }
 
-/* { system, user, maxTokens } -> { json, text, model, provider } */
-async function complete({ system, user, maxTokens = 8000, fetchFn = fetch }, provider = providerName()) {
+/* { system, user, maxTokens, temperature } -> { json, text, model, provider }
+   Claude no longer takes a temperature (any value is refused), so it only
+   reaches the OpenAI-compatible endpoint; with Claude, how loose an answer
+   is comes from the instructions. */
+async function complete({ system, user, maxTokens = 8000, temperature = 0.2, fetchFn = fetch }, provider = providerName()) {
   if (!provider) throw Object.assign(new Error("This needs ENGY_API_KEY or ANTHROPIC_API_KEY set in Vercel."), { status: 503 });
   if (provider === "claude") {
     const Anthropic = require("@anthropic-ai/sdk");
@@ -41,7 +44,7 @@ async function complete({ system, user, maxTokens = 8000, fetchFn = fetch }, pro
   const res = await fetchFn(base + "/chat/completions", {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: "Bearer " + process.env.ENGY_API_KEY },
-    body: JSON.stringify({ model, max_tokens: maxTokens, temperature: 0.2, messages: [{ role: "system", content: system }, { role: "user", content: user }] }),
+    body: JSON.stringify({ model, max_tokens: maxTokens, temperature, messages: [{ role: "system", content: system }, { role: "user", content: user }] }),
   });
   if (!res.ok) throw Object.assign(new Error(`The model endpoint answered ${res.status}: ${(await res.text().catch(() => "")).slice(0, 200)}`), { status: 502 });
   const j = await res.json();

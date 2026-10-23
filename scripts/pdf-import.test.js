@@ -15,7 +15,7 @@ const path = require("path");
 const os = require("os");
 const fs = require("fs");
 const { chromium } = require("playwright");
-const { pdfText, importPdf, fillWorkbook, parseJSON, sheetGuide } = require("../api/cms/_pdf");
+const { pdfText, importPdf, fillWorkbook, parseJSON, sheetGuide, askModel, scanNote } = require("../api/cms/_pdf");
 const { readWorkbook } = require("./lib/workbook");
 
 let pass = 0, fail = 0;
@@ -62,6 +62,13 @@ const fakeGeocoder = async (q) => { const k = Object.keys(GEO).find(k => q.toLow
   const page = await browser.newPage();
   await page.setContent(HTML);
   await page.pdf({ path: pdfPath, format: "A4" });
+  /* Three pages the way they turn up: text, a blank last page (Google Docs
+     leaves these), and a page that is only a picture (a scan). */
+  await page.setContent(`<body style="margin:0"><div style="font:14px Arial;padding:40px">Flex operators in Andheri, with prices and grades for every centre on the list.</div>
+    <div style="page-break-before:always;height:10px"></div><div style="page-break-before:always"><img id="scan" width="500" height="300"></div></body>`);
+  await page.evaluate(() => { const c = document.createElement("canvas"); c.width = 500; c.height = 300; const g = c.getContext("2d"); g.fillStyle = "#ddd"; g.fillRect(0, 0, 500, 300); g.fillStyle = "#333"; g.font = "28px Arial"; g.fillText("A scanned page", 40, 150); document.getElementById("scan").src = c.toDataURL(); });
+  await page.waitForFunction(() => document.getElementById("scan").complete);
+  const mixedBuf = await page.pdf({ format: "A4" });
   await browser.close();
   const buf = fs.readFileSync(pdfPath);
 
@@ -69,6 +76,23 @@ const fakeGeocoder = async (q) => { const k = Object.keys(GEO).find(k => q.toLow
   ok("the PDF's text layer is read", read.numPages === 1 && /Corporate Avenue/.test(read.pages[0]) && /12414/.test(read.pages[0]), read.pages[0].slice(0, 200));
   ok("table cells on one line stay on one line", /Carpet Area sq\.ft\s+12414\s+12952/.test(read.pages[0]), read.pages[0]);
   ok("no page is taken for a scan", read.scanned.length === 0);
+  const mixed = await pdfText(mixedBuf);
+  ok("a blank page is blank, not a scan, so it needs no model that can see", mixed.numPages === 3 && mixed.blank.includes(2) && !mixed.scanned.includes(2), JSON.stringify({ blank: mixed.blank, scanned: mixed.scanned }));
+  ok("a page that is only a picture is a scan", mixed.scanned.join() === "3", JSON.stringify(mixed.scanned));
+
+  /* Engy reads text only: with text to go on it reads that and names the
+     scans it left; with only scans it stops and says what is needed. */
+  const realFetch = global.fetch;
+  let sent = null;
+  global.fetch = async (url, o) => { sent = JSON.parse(o.body); return { ok: true, json: async () => ({ model: "m", choices: [{ message: { content: '{"Options":[]}' } }] }) }; };
+  try {
+    const long = "Corporate Avenue, Chakala. Carpet 12414 sq ft. Rent Rs 300 on carpet. ".repeat(6);
+    const r = await askModel({ text: long, scanned: [3], fileName: "x.pdf" }, "engy");
+    ok("Engy reads the text and names the scanned page it could not", r.unread.join() === "3" && !/no text layer/.test(sent.messages[1].content), JSON.stringify(r.unread));
+    ok("the note says which pages and which key reads them", /page 3\. Set ANTHROPIC_API_KEY/.test(scanNote([3], r.unread)) && /Read as images/.test(scanNote([3], [])));
+    let e = null; try { await askModel({ text: "", scanned: [1, 2], fileName: "scan.pdf" }, "engy"); } catch (x) { e = x; }
+    ok("only scans, and only Engy: a plain message naming the key", e && e.status === 422 && /Only scanned pages here \(page 1; page 2\)/.test(e.message) && /ANTHROPIC_API_KEY/.test(e.message), e && e.message);
+  } finally { global.fetch = realFetch; }
 
   ok("the sheet guide names every required heading", /"Property name" \(required\)/.test(sheetGuide()) && /"Latitude" \(required\)/.test(sheetGuide()) && !/Presets/.test(sheetGuide()));
   ok("JSON is found inside fences and chatter", parseJSON('Sure.\n```json\n{"a":1}\n```').a === 1 && parseJSON('<think>hmm</think>{"b":2}').b === 2);
