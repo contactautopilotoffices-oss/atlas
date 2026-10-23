@@ -180,7 +180,7 @@ async function build() {
   const P = wb.getWorksheet("Places");
   for (const p of PROPOSED) {
     const g = GEO[p.geo];
-    addRow(P, { "ID": p.id, "Kind": "proposed", "Name": p.name, "Latitude": g.lat, "Longitude": g.lng, "Second line": p.sub, "How exact is the pin": g.precision, "Note": `${p.note} Position: ${g.note}`, "Source": g.src });
+    addRow(P, { "ID": p.id, "Kind": "proposed-inventory", "Name": p.name, "Latitude": g.lat, "Longitude": g.lng, "Second line": p.sub, "How exact is the pin": g.precision, "Note": `${p.note} Position: ${g.note}`, "Source": g.src });
   }
 
   /* ---- Transit ---- */
@@ -197,7 +197,7 @@ async function build() {
   addRow(PR, { "Key": "vacancy", "Slider name": "Seats available", "What it measures": "column", "Which column": "Vacant seats (count)", "Higher is better?": "yes", "The question to ask": "Do you need a large block of seats now?", "What it is calculated from": "the vacant seats counted on the visit, cabins and open desks together" });
   addRow(PR, { "Key": "size", "Slider name": "Centre size", "What it measures": "column", "Which column": "Total seats", "Higher is better?": "yes", "The question to ask": "Does a bigger centre matter?", "What it is calculated from": "total seats stated on the visit" });
   addRow(PR, { "Key": "metro", "Slider name": "Metro on foot", "What it measures": "nearestStation", "Open or planned": "open", "Which mode": "metro", "The question to ask": "Should staff be able to walk from the metro?", "What it is calculated from": "distance to the nearest open metro station" });
-  addRow(PR, { "Key": "proposed", "Slider name": "Near our proposed sites", "What it measures": "nearestPlace", "Which kind of place": "proposed", "The question to ask": "How directly does this centre compete with Autopilot's proposed buildings?", "What it is calculated from": "distance to the nearest of the three proposed buildings" });
+  addRow(PR, { "Key": "proposed", "Slider name": "Near our proposed sites", "What it measures": "nearestPlace", "Which kind of place": "proposed-inventory", "The question to ask": "How directly does this centre compete with Autopilot's proposed buildings?", "What it is calculated from": "distance to the nearest of the three proposed buildings" });
 
   const PS = wb.getWorksheet("Presets");
   const preset = (key, label, note, dflt, levels) => Object.entries(levels).forEach(([m, lv], i) => addRow(PS, { "Preset key": key, "Preset name": label, "What it means": note, "Start here?": i === 0 && dflt ? "yes" : "", "Slider": m, "How much it counts": lv }));

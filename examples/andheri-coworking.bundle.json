@@ -473,7 +473,7 @@
  "places": [
   {
    "id": "proposed-corporate-avenue",
-   "kind": "proposed",
+   "kind": "proposed-inventory",
    "name": "Corporate Avenue (Atul Projects)",
    "lat": 19.110625,
    "lng": 72.859637,
@@ -484,7 +484,7 @@
   },
   {
    "id": "proposed-723-avenue",
-   "kind": "proposed",
+   "kind": "proposed-inventory",
    "name": "723 Avenue (Wadhwa)",
    "lat": 19.109713,
    "lng": 72.884422,
@@ -495,7 +495,7 @@
   },
   {
    "id": "proposed-privilon",
-   "kind": "proposed",
+   "kind": "proposed-inventory",
    "name": "Privilon (Bsafal)",
    "lat": 19.108207,
    "lng": 72.879563,
@@ -1074,7 +1074,7 @@
    "kind": "nearestPlace",
    "question": "How directly does this centre compete with Autopilot's proposed buildings?",
    "of": "distance to the nearest of the three proposed buildings",
-   "placeKind": "proposed",
+   "placeKind": "proposed-inventory",
    "rings": [
     15,
     30,

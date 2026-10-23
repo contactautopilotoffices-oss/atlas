@@ -1104,6 +1104,12 @@ const SORTS = (() => {
   if (EX) out.push({ key: "home", label: say("sort.home", "Distance from the current office"), fn: (a, b) => homeKm(a) - homeKm(b) || byRank(a, b) });
   if (OPEN.length) out.push({ key: "rail", label: say("sort.rail", "Nearest station today"), fn: (a, b) => nearestOpen(a).d - nearestOpen(b).d });
   if (KINDS.length) out.push({ key: "places", label: say("sort.places", "Places within reach"), fn: (a, b) => reach(b, KINDS) - reach(a, KINDS) || byRank(a, b) });
+  /* One sort per place layer: nearest first. For an atlas whose places are
+     the client's own proposed sites, this is "which competitor is closest". */
+  for (const k of KINDS) {
+    const dist = (o) => { const n = nearestOfKind(o, k); return n && isFinite(n.d) ? n.d : Infinity; };
+    out.push({ key: "near:" + k, label: say("sort.near." + k, `Nearest ${kindLabel(k).toLowerCase()}`), fn: (a, b) => dist(a) - dist(b) || byRank(a, b) });
+  }
   for (const m of PARTS) {
     if (m.kind !== "column") continue;
     out.push({ key: "col:" + m.key, label: m.label || titleCase(m.key),
