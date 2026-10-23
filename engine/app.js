@@ -1099,7 +1099,7 @@ function tile(o, kind) {
 }
 function renderFilters() {
   const all = [...FIT_FILTERS, ...OTHER_FILTERS];
-  $("#filters").innerHTML = all.map(f => `<button class="chip ${S.filters.has(f.key) ? "on" : ""}" data-f="${f.key}" type="button" aria-pressed="${S.filters.has(f.key)}" data-hint="${esc(FITS[f.key] ? `Keep only the ${FITS[f.key].label} group on the revised ranking.` : "Keep only options within 1 km of an open metro, MRTS or suburban station.")}">${FITS[f.key] ? `<span class="dot" style="background:${FITS[f.key].color};margin:0"></span>` : ""}${esc(f.label)}</button>`).join("");
+  $("#filters").innerHTML = all.map(f => `<button class="chip ${S.filters.has(f.key) ? "on" : ""}" data-f="${f.key}" type="button" aria-pressed="${S.filters.has(f.key)}" data-hint="${esc(FITS[f.key] ? say("filters.groupHint", `Keep only the ${FITS[f.key].label} group on the revised ranking.`) : "Keep only options within 1 km of an open metro, MRTS or suburban station.")}">${FITS[f.key] ? `<span class="dot" style="background:${FITS[f.key].color};margin:0"></span>` : ""}${esc(f.label)}</button>`).join("");
 }
 /* What this Atlas can be sorted by. Only what it actually has: no chooser
    means no "fit to your priorities", no current office means no "distance
@@ -1940,7 +1940,7 @@ function renderOption(o) {
   const rank = O.slice().sort(byFit).findIndex(x => x.id === o.id) + 1;
   const backTo = TABS.find(t => t.key === S.tab) || TABS[0];
   $("#p-head").innerHTML = `<button class="back" type="button">← Back to ${esc(backTo.label)}</button>
-    <div class="eyebrow">${fit ? `Rank ${o.n} · ` : `Option ${nn(o)} · `}${esc(o.sheetMicro)}</div>
+    <div class="eyebrow">${fit ? `${say("option.rankWord", "Rank")} ${o.n} · ` : `Option ${nn(o)} · `}${esc(o.sheetMicro)}</div>
     <h2>${esc(o.name)}</h2>${fitBadge(o)}${o.reason ? `<p class="reason">${esc(o.reason)}</p>` : ""}${verdictHTML(o, p)}${shotBar(o)}${actions()}`;
   const sat = satUrl(o, 640, 250, 16.6);
   const others = O.filter(x => x.id !== o.id).map(x => ({ x, d: km(o, x) })).sort((a, b) => a.d - b.d);

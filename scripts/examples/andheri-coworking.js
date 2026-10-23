@@ -223,6 +223,19 @@ async function main() {
   const wb = await build();
   await wb.xlsx.writeFile(xlsx);
   const { bundle, notes } = await readWorkbook(xlsx);
+  /* This is a list in presentation order, not a ranking: the competitors
+     first, then the proposed inventory. The engine's words are overridden
+     so nothing on the page calls it one. */
+  bundle.copy = {
+    sort: { rank: "Listed order" },
+    overview: { ranking: "The list" },
+    ranking: { ungrouped: "Options", option: "Centre" },
+    insights: { first: "First on the list" },
+    option: { rank: "Listed", rankWord: "No." },
+    filters: { groupHint: "Keep only this group." },
+    guide: { overview: { hint: "The competitors in the market, then the proposed inventory, in presentation order." } },
+    markets: { title: "Five micro-markets", none: "none on the list" }
+  };
   fs.writeFileSync(json, JSON.stringify(bundle, null, 1) + "\n");
   /* The engine's static demo: /engine/ with no atlas named loads
      /engine/bundle.js (see engine/load.js). Until this atlas is published

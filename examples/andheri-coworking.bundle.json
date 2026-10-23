@@ -1100,5 +1100,36 @@
     "note": "Proposed_Inventory.pdf; the Rustomjee Central Park floor in the same PDF is not shown, as asked. At the 35 sq ft a seat and 20% margin the Andheri case study uses, Rs 300 on carpet before fit-out is about Rs 13,000 a seat in rent alone; the visited cabins sell at Rs 14,000 to 28,000."
    }
   ]
+ },
+ "copy": {
+  "sort": {
+   "rank": "Listed order"
+  },
+  "overview": {
+   "ranking": "The list"
+  },
+  "ranking": {
+   "ungrouped": "Options",
+   "option": "Centre"
+  },
+  "insights": {
+   "first": "First on the list"
+  },
+  "option": {
+   "rank": "Listed",
+   "rankWord": "No."
+  },
+  "filters": {
+   "groupHint": "Keep only this group."
+  },
+  "guide": {
+   "overview": {
+    "hint": "The competitors in the market, then the proposed inventory, in presentation order."
+   }
+  },
+  "markets": {
+   "title": "Five micro-markets",
+   "none": "none on the list"
+  }
  }
 }
