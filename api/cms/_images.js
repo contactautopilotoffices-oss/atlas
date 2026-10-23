@@ -9,8 +9,10 @@
 
    Higgsfield's API (docs.higgsfield.ai): submit to a model endpoint, poll
    the status URL until completed. Credentials are a key ID and secret from
-   console.higgsfield.ai, set in Vercel as HIGGSFIELD_API_KEY_ID and
-   HIGGSFIELD_API_KEY_SECRET; the model endpoint can be changed with
+   console.higgsfield.ai. Set it in Vercel as HIGGSFIELD_API_KEY, exactly as
+   the console shows it: either one key, or the key ID and secret joined as
+   ID:SECRET. (HIGGSFIELD_API_KEY_ID and HIGGSFIELD_API_KEY_SECRET, set as a
+   pair, also work.) The model endpoint can be changed with
    HIGGSFIELD_MODEL_PATH (default: Soul, standard).
 
    The house style is fixed here, not in the workbook, so every picture in
@@ -36,8 +38,16 @@ const SLOT_HINTS = {
   back: "A calm aerial or dusk view, room for a closing line at the bottom.",
 };
 
-const ready = () => !!(process.env.HIGGSFIELD_API_KEY_ID && process.env.HIGGSFIELD_API_KEY_SECRET);
-const authHeader = () => "Key " + process.env.HIGGSFIELD_API_KEY_ID + ":" + process.env.HIGGSFIELD_API_KEY_SECRET;
+/* The credential as Higgsfield's Authorization header wants it: "Key <id>:<secret>",
+   or "Key <key>" when the console gave a single key. */
+function credential() {
+  const one = String(process.env.HIGGSFIELD_API_KEY || "").trim().replace(/^Key\s+/i, "");
+  if (one) return one;
+  const id = String(process.env.HIGGSFIELD_API_KEY_ID || "").trim(), secret = String(process.env.HIGGSFIELD_API_KEY_SECRET || "").trim();
+  return id && secret ? `${id}:${secret}` : "";
+}
+const ready = () => !!credential();
+const authHeader = () => "Key " + credential();
 
 /* The prompt Higgsfield gets: the slot's words, the slot's hint, the style. */
 function promptFor(slot, words, meta) {
@@ -50,7 +60,7 @@ const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 /* Submit, poll, return the first image URL. `fetchFn` and `sleepFn` are
    injectable for the test. */
 async function generate(prompt, { fetchFn = fetch, sleepFn = sleep, aspect = "16:9", timeoutMs = 110000, idempotencyKey } = {}) {
-  if (!ready()) throw Object.assign(new Error("Generating pictures needs HIGGSFIELD_API_KEY_ID and HIGGSFIELD_API_KEY_SECRET set in Vercel. Until then, paste an image address into the Images sheet."), { status: 503 });
+  if (!ready()) throw Object.assign(new Error("Generating pictures needs HIGGSFIELD_API_KEY set in Vercel. Until then, paste an image address into the Images sheet."), { status: 503 });
   const r = await fetchFn(BASE + MODEL_PATH, {
     method: "POST",
     headers: { "Content-Type": "application/json", Authorization: authHeader(), ...(idempotencyKey ? { "Idempotency-Key": idempotencyKey } : {}) },

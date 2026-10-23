@@ -248,7 +248,7 @@ async function expect(name, fn) { try { const v = await fn(); if (v === false) b
       return r && r.kind === "bundle" && r.access_id === "ANDHERI-FLEX";
     });
     await expect("the pictures step lists the nine slots with their prompts", async () => (await page.$$("[data-prompt]")).length === 9 && /dusk/.test(await page.$eval('[data-prompt="cover"]', e => e.value)));
-    await expect("without keys the picture and helper buttons are off and say why", async () => (await page.$$("[data-make]:disabled")).length === 9 && (await page.$$("[data-task]:disabled")).length === 6 && /HIGGSFIELD_API_KEY_ID/.test(await page.$eval("#main", e => e.textContent)) && /ENGY_API_KEY or ANTHROPIC_API_KEY/.test(await page.$eval("#main", e => e.textContent)));
+    await expect("without keys the picture and helper buttons are off and say why", async () => (await page.$$("[data-make]:disabled")).length === 9 && (await page.$$("[data-task]:disabled")).length === 6 && /HIGGSFIELD_API_KEY/.test(await page.$eval("#main", e => e.textContent)) && /ENGY_API_KEY or ANTHROPIC_API_KEY/.test(await page.$eval("#main", e => e.textContent)));
     await expect("the image and helper routes say what is missing", async () => {
       const post = (r, body) => page.evaluate(async ([r, body]) => (await (await fetch("/api/cms?r=" + r, { method: "POST", credentials: "same-origin", headers: { "content-type": "application/json", "x-cms": "1" }, body: JSON.stringify(body) })).json()).error, [r, body]);
       return /HIGGSFIELD/.test(await post("case/image", { slug: "andheri-flex", slot: "cover" })) && /ENGY_API_KEY or ANTHROPIC_API_KEY/.test(await post("case/assist", { slug: "andheri-flex", task: "means" })) && /not a picture slot/.test(await post("case/image", { slug: "andheri-flex", slot: "nope" }));
@@ -291,6 +291,13 @@ async function expect(name, fn) { try { const v = await fn(); if (v === false) b
     await expect("the reader sees no version number and a Save as PDF button", async () => !/version\s*\d|\bv\d\b/i.test(rtext) && (await rp.$eval("#bar-draft", e => getComputedStyle(e).display)) === "none" && (await rp.$eval("#bar-pdf", e => e.textContent)) === "Save as PDF");
     await expect("no page errors for the reader", async () => { if (rpErr.length) throw new Error(rpErr[0]); });
     await reader.close();
+
+    console.log("\n8. The system check");
+    await page.goto(site.base + "/admin/#/system", { waitUntil: "domcontentloaded" });
+    await page.waitForSelector("tr[data-check]", { timeout: 30000 });
+    await expect("the System check is in the nav and lists every check", async () => /System check/.test(await page.$eval("#nav", e => e.textContent)) && (await page.$$("tr[data-check]")).length >= 10);
+    await expect("the PDF reader passes on the server", async () => (await page.$eval('tr[data-check="pdf"]', e => e.dataset.status)) === "ok");
+    await expect("a missing key is named with its fix", async () => /ANTHROPIC_API_KEY/.test(await page.$eval('tr[data-check="ai"]', e => e.textContent)));
 
     await expect("no page errors in /admin/ throughout", async () => { if (errors.length) throw new Error(errors[0]); });
   } catch (e) {

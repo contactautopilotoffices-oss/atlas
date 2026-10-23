@@ -158,7 +158,8 @@ The second product. **Create a case study** in the left navigation:
    the case study beside it at `/<id>/case`; one access ID then opens both.
 4. **The pictures.** One per section opener, made by Higgsfield from the
    prompt on the Images sheet in the house style and kept in our storage
-   (`HIGGSFIELD_API_KEY_ID`, `HIGGSFIELD_API_KEY_SECRET`). Paste an address
+   (`HIGGSFIELD_API_KEY`, the key exactly as console.higgsfield.ai shows it).
+   Paste an address
    on the sheet instead to skip generation.
 5. **The helper.** Buttons that ask a model (`ENGY_API_KEY` or
    `ANTHROPIC_API_KEY`) to draft from the numbers: the "what it means for

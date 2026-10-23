@@ -125,7 +125,7 @@ function register(R, h) {
     draft.images = draft.images || {};
     const words = clip(b.prompt, 600).trim() || (draft.images[slot] && draft.images[slot].prompt) || "";
     if (!words) fail(400, "Give this slot a prompt: a sentence saying what the picture should show.");
-    if (!images.ready()) fail(503, "Generating pictures needs HIGGSFIELD_API_KEY_ID and HIGGSFIELD_API_KEY_SECRET set in Vercel. Until then, paste an image address on the Images sheet.");
+    if (!images.ready()) fail(503, "Generating pictures needs HIGGSFIELD_API_KEY set in Vercel. Until then, paste an image address on the Images sheet.");
     const prompt = images.promptFor(slot, words, draft.meta);
     const g = await images.generate(prompt, { idempotencyKey: `${slug}-${slot}-${Date.now().toString(36)}` });
     const kept = await images.keep(g.url, slug, slot);

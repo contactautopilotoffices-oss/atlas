@@ -201,6 +201,7 @@ async function refreshPending() {
 const ICON = {
   create: '<path d="M12 5v14M5 12h14"/><rect x="3" y="3" width="18" height="18" rx="3"/>',
   case: '<path d="M4 4h12l4 4v12H4z"/><path d="M8 12h8M8 16h8M16 4v4h4"/>',
+  system: '<path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/>',
   dashboard: '<path d="M3 13h8V3H3zM13 21h8V11h-8zM3 21h8v-6H3zM13 3v6h8V3z"/>',
   links: '<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>',
   brokers: '<path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/>',
@@ -214,7 +215,7 @@ function renderNav() {
   const cur = (location.hash.replace(/^#\/?/, "").split("/")[0]) || "dashboard";
   const items = [
     ["dashboard", "Dashboard", "viewer"], ["links", "Atlas links", "viewer"], ["create", "Create an atlas", "editor"], ["case", "Create a case study", "editor"], ["brokers", "Broker links", "editor"],
-    ["inbox", "Inbox", "editor"], ["team", "Team", "admin"], ["audit", "Audit log", "admin"], ["account", "Account", "viewer"]
+    ["inbox", "Inbox", "editor"], ["team", "Team", "admin"], ["audit", "Audit log", "admin"], ["system", "System check", "admin"], ["account", "Account", "viewer"]
   ].filter(i => can(i[2]));
   $("#nav").innerHTML = `<div class="brand"><img src="/autopilot-logo-trimmed.png" alt="Autopilot"><span>Admin</span></div>
     ${items.map(([k, label]) => `<a class="it ${cur === k || (k === "links" && cur === "content") ? "on" : ""}" href="#/${k}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>${label}${k === "inbox" && ST.pending ? `<span class="badge">${ST.pending}</span>` : ""}</a>`).join("")}
@@ -237,7 +238,7 @@ async function route() {
   lastHash = location.hash;
   renderNav();
   const M = $("#main");
-  const go = { dashboard: pageDashboard, links: pageLinks, content: pageContent, create: pageCreate, case: pageCase, brokers: pageBrokers, inbox: pageInbox, team: pageTeam, audit: pageAudit, account: pageAccount }[page || "dashboard"] || pageDashboard;
+  const go = { dashboard: pageDashboard, links: pageLinks, content: pageContent, create: pageCreate, case: pageCase, system: pageSystem, brokers: pageBrokers, inbox: pageInbox, team: pageTeam, audit: pageAudit, account: pageAccount }[page || "dashboard"] || pageDashboard;
   try { await go(M, a, b); } catch (e) { M.innerHTML = `<div class="card empty">${esc(e.message)}</div>`; }
   window.scrollTo(0, 0);
 }
@@ -1555,7 +1556,7 @@ async function pageCase(M, slug) {
        </div>
        <div class="acts"><button class="btn pri" id="cs-save" type="button" ${can2 || st ? "" : "disabled"}>${st ? "Save changes" : "Save as draft"}</button><span class="small mut" id="cs-save-note"></span></div>`, can2 || !!st)}
     ${step(3, "The pictures",
-      `<p class="mut small">One picture per section opener, made by Higgsfield from the prompt on the Images sheet in the house style, and kept in our own storage. Change a prompt and make it again; paste an address of your own on the sheet to skip generation.${st && !st.can.images ? ` <b>Not set up yet:</b> HIGGSFIELD_API_KEY_ID and HIGGSFIELD_API_KEY_SECRET are not in Vercel, so only pasted addresses show.` : ""}</p>
+      `<p class="mut small">One picture per section opener, made by Higgsfield from the prompt on the Images sheet in the house style, and kept in our own storage. Change a prompt and make it again; paste an address of your own on the sheet to skip generation.${st && !st.can.images ? ` <b>Not set up yet:</b> HIGGSFIELD_API_KEY is not in Vercel, so only pasted addresses show.` : ""}</p>
        <div class="tw"><table class="t"><thead><tr><th>Slot</th><th>Prompt</th><th>Picture</th><th></th></tr></thead><tbody>
          ${slots.map(s => { const im = imgs[s] || {}; return `<tr><td><b>${esc(SLOT_WORDS[s])}</b></td><td><input class="in" data-prompt="${s}" value="${esc(im.prompt || "")}" placeholder="What the picture should show, in a sentence" ${has ? "" : "disabled"}></td><td>${im.url ? `<a href="${esc(im.url)}" target="_blank" rel="noopener"><img src="${esc(im.url)}" alt="" style="width:96px;height:54px;object-fit:cover;border-radius:4px;display:block"></a>` : `<span class="small mut">none yet</span>`}</td><td><button class="btn sm" type="button" data-make="${s}" ${has && st.can.images ? "" : "disabled"}>${CS.busy[s] ? "Making…" : im.url ? "Make again" : "Make"}</button></td></tr>`; }).join("")}
        </tbody></table></div>
@@ -1663,4 +1664,24 @@ async function pageCase(M, slug) {
     if (!(await confirmBox(`Make version ${b.dataset.v} live again?`, "It goes live straight away, as a new version number, and replaces the current draft.", "Make it live", true))) return;
     try { const r = await api("case/rollback", { method: "POST", body: { slug, historyId: b.dataset.rb } }); toast(`Version ${b.dataset.v} is live again (now version ${r.version}).`); pageCase(M, slug); } catch (err) { fail(err); }
   });
+}
+
+/* ======================================================== system check ==
+   Everything the first atlas needs, tested live on the server: database
+   and migrations, storage, the session secret, the PDF reader, the AI key,
+   Mapbox, and the optional keys. Each line says what to fix. */
+const SYS_TONE = { ok: ["ok", "Ready"], warn: ["warn", "Works, with a note"], fail: ["bad", "Fix this"], off: ["", "Not set up (optional)"] };
+const SYS_NEED = { atlas: "Atlas", case: "Case study", optional: "Optional" };
+async function pageSystem(M) {
+  M.innerHTML = header("Admin", "System check", "Testing everything an atlas and a case study need, live on the server…") + `<div class="card empty">Running the checks. The AI, Mapbox and PDF checks take a few seconds.</div>`;
+  let r;
+  try { r = await api("preflight"); } catch (e) { M.innerHTML = header("Admin", "System check", "") + `<div class="card empty">${esc(e.message)}</div>`; return; }
+  const n = (s) => r.checks.filter(c => c.status === s).length;
+  const banner = (ok, what) => `<div class="tile ${ok ? "" : "lead"}" style="border-color:${ok ? "var(--ok)" : "var(--bad)"}"><div class="l">${what}</div><div class="v" style="color:${ok ? "var(--ok)" : "var(--bad)"}">${ok ? "Ready" : "Not ready"}</div></div>`;
+  M.innerHTML = header("Admin", "System check", `Ran ${esc(when(r.at))}. ${n("ok")} ready, ${n("warn")} with a note, ${n("fail")} to fix, ${n("off")} optional and off.`, `<button class="btn pri" id="sys-run" type="button">Run again</button>`) + `
+    <div class="tiles" style="grid-template-columns:repeat(2,minmax(0,1fr))">${banner(r.ready.atlas, "Create an atlas")}${banner(r.ready.case, "Create a case study")}</div>
+    <div class="card" style="margin-top:14px"><div class="tw"><table class="t"><thead><tr><th>Check</th><th>Status</th><th>What it found</th><th>Needed for</th></tr></thead><tbody>
+      ${r.checks.map(c => `<tr data-check="${esc(c.key)}" data-status="${esc(c.status)}"><td><b>${esc(c.label)}</b></td><td><span class="chip ${SYS_TONE[c.status][0]}">${SYS_TONE[c.status][1]}</span></td><td class="small">${esc(c.detail || "")}${c.fix && c.status !== "ok" ? `<div style="margin-top:4px"><b>Fix:</b> ${esc(c.fix)}</div>` : ""}</td><td class="small mut">${SYS_NEED[c.needed] || ""}</td></tr>`).join("")}
+    </tbody></table></div><div class="note" style="margin-top:8px">After changing a key in Vercel, redeploy, then run this again: a running site only sees keys it was deployed with.</div></div>`;
+  $("#sys-run").onclick = () => pageSystem(M);
 }
