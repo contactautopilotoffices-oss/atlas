@@ -67,7 +67,11 @@ async function api(route, { method = "GET", body, query = {} } = {}) {
   let j = {};
   try { j = await res.json(); } catch (e) {}
   if (res.status === 401 && ST.me && !route.startsWith("auth/")) { ST.me = null; showLogin("Your session ended. Please sign in again."); }
-  if (!res.ok) throw new Error(j.error || `Request failed (${res.status}).`);
+  if (!res.ok) throw new Error(j.error || ({
+    504: "The server ran out of time before it finished (it has 5 minutes). Try fewer or shorter files at once.",
+    413: "That is too much to send at once (the limit is about 4 MB). Use fewer files.",
+    502: "The server stopped while working on this. Press it again; if it happens again, send a screenshot.",
+  })[res.status] || `Request failed (${res.status}).`);
   return j;
 }
 function toast(msg, bad) {
@@ -520,7 +524,9 @@ async function pageCreate(M, slug) {
   /* ---- Describe it: files, requirement, brief, plan, build ----
      Files picked in several goes add up, so a PDF from one folder and a
      spreadsheet from another can be read together. */
-  const status = (t) => { $("#cr-filename").textContent = t || ""; };
+  const status = (t) => { const el = $("#cr-filename"); el.textContent = t || ""; el.style.color = ""; };
+  /* An error stays next to the buttons, not only in a toast that fades. */
+  const failed = (err) => { const el = $("#cr-filename"); el.textContent = `Not done: ${err.message || err}`; el.style.color = "var(--bad)"; busy(false); showPicked(); fail(err); };
   const busy = (on) => { ["#cr-build", "#cr-enhance", "#cr-plan"].forEach(s => { $(s).disabled = !!on; }); };
   const pickedKey = () => CR.picked.map(f => `${f.name}:${f.size}`).join("|");
   const filesBody = () => Promise.all(CR.picked.map(async f => ({ name: f.name, file: await readAsBase64(f) })));
@@ -661,7 +667,7 @@ async function pageCreate(M, slug) {
       CR.fileName = CR.label || "";
       CR.notes = [...(CR.planNotes || []), ...(j.notes || [])];
       pageCreate(M, slug); afterRender("#cr-report");
-    } catch (err) { status(""); busy(false); showPicked(); fail(err); }
+    } catch (err) { failed(err); }
   };
   const doPlan = async ({ thenBuild = false, files = null, plain = false } = {}) => {
     const list = files || CR.picked;
@@ -678,7 +684,7 @@ async function pageCreate(M, slug) {
       CR.bundle = null; CR.report = null; CR.workbook = null; CR.notes = [];
       if (thenBuild || j.direct) { busy(false); return doBuild(); }
       pageCreate(M, slug); afterRender("#cr-planbox");
-    } catch (err) { status(""); busy(false); showPicked(); fail(err); }
+    } catch (err) { failed(err); }
   };
   $("#cr-plan").onclick = () => doPlan();
   $("#cr-build").onclick = () => doBuild();
@@ -692,8 +698,8 @@ async function pageCreate(M, slug) {
       const j = await api("bundle/enhance", { method: "POST", body });
       CR.brief = j.brief; CR.briefBy = j.provider || "";
       drawBrief(); status("The brief is below. Edit it, then Plan or Build."); afterRender("#cr-brief");
-    } catch (err) { status(""); fail(err); }
-    busy(false); showPicked();
+      busy(false); showPicked();
+    } catch (err) { failed(err); }
   };
   $("#cr-blank").onclick = async (e) => {
     e.preventDefault();
@@ -719,7 +725,7 @@ async function pageCreate(M, slug) {
       if (!res.ok) throw new Error("The example workbook is not on this site.");
       const file = new File([await res.blob()], "andheri-flex.xlsx", { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
       await doPlan({ files: [file], plain: true });
-    } catch (err) { status(""); fail(err); }
+    } catch (err) { failed(err); }
   };
   $("#cr-gen").onclick = () => { $("#cr-pass").value = randomPassword(); };
   $("#cr-save").onclick = async () => {

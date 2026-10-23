@@ -324,6 +324,15 @@ async function expect(name, fn) { try { const v = await fn(); if (v === false) b
     await expect("no page errors in /admin/ throughout", async () => { if (errors.length) throw new Error(errors[0]); });
   } catch (e) {
     bad("the flow threw", e.stack.split("\n").slice(0, 3).join("\n"));
+    /* What the page showed and what the server said, so a failure that
+       only happens now and then can be read rather than guessed at. */
+    try {
+      const shot = path.join(SCRATCH, "flow-failure.png");
+      await page.screenshot({ path: shot, fullPage: true });
+      const seen = await page.evaluate(() => ({ url: location.href, toast: (document.querySelector("#toast") || {}).textContent || "", login: !!document.querySelector("#l-email"), nav: !!document.querySelector("#nav"), main: ((document.querySelector("#main") || document.body).textContent || "").replace(/\s+/g, " ").slice(0, 300) }));
+      console.log(`        page: ${JSON.stringify(seen)}\n        screenshot: ${shot}\n        page errors: ${JSON.stringify(errors.slice(0, 3))}`);
+      console.log(`        server log (end):\n${site.logs().split("\n").slice(-15).map(l => "          " + l).join("\n")}`);
+    } catch (x) { console.log(`        (could not read the page: ${x.message})`); }
   } finally {
     await browser.close();
     site.child.kill();
