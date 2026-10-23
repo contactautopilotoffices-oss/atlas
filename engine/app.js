@@ -458,7 +458,7 @@ const LAYER_HINT_DEFAULT = {
   bus: `Bus stops near the list${BUSD.credit ? ` (${BUSD.credit})` : ""}. They show once you zoom in to street level.`,
   links: "Lines to the three nearest options from the open one. A pair picked on the distance matrix is always drawn.",
   rings: `${RING_WORDS} minute drive rings around the open option. The Catchment camera turns them on.`,
-  sat: `The newest satellite imagery under the map${M.imagery ? `: ${M.imagery.name}, ${M.imagery.detail}` : ""}. Turns off the 3D buildings so the roofs show.`
+  sat: `The newest satellite imagery under the map${M.imagery ? `: ${M.imagery.name}, ${M.imagery.detail}` : ""}. Turns off the buildings and road fills so the roofs show.`
 };
 const LAYER_HINT = new Proxy({}, { get: (_, k) => say("layerHints." + String(k), LAYER_HINT_DEFAULT[k] || `${kindLabel(String(k))} on the map.`) });
 
@@ -956,10 +956,13 @@ function addLayers() {
 
 /* The layer chips double as the legend. */
 /* With satellite on, Standard's 3D buildings and trees would hide the
-   roofs, so they go while it is on. */
+   roofs, so they go while it is on; and the imagery moves up to the middle
+   slot, above the basemap's flat building footprints and road fills, which
+   otherwise sit as white shapes on top of the photo. Labels stay above. */
 function basemapForSat() {
   if (!map || (A.mapStyle || MAP_STYLE) !== MAP_STYLE) return;
   try { map.setConfigProperty("basemap", "show3dObjects", !S.layers.sat); } catch (e) {}
+  try { if (map.getLayer("sat") && map.setSlot) map.setSlot("sat", S.layers.sat ? "middle" : "bottom"); } catch (e) {}
 }
 function applyLayerVisibility() {
   if (!map || !map.getLayer("opt")) return;
@@ -1934,7 +1937,6 @@ function renderOption(o) {
   /* Only the kinds this option actually reaches, so the table has no column
      of zeroes for something the Atlas plots on the far side of the city. */
   const myKinds = KINDS.filter(k => upTo(c, RINGS.length - 1, k) > 0);
-  const ringRows = c.map((rr, i) => `<tr><td>≤ ${rr.min} min <span class="note">(${rr.km.toFixed(1)} km)</span></td>${myKinds.map(k => `<td class="num">${upTo(c, i, k)}</td>`).join("")}</tr>`).join("");
   const ex = EX ? catchOf(EX) : null, mo = nearestOpen(o), mx = nearestOpen(EX);
   const delta = (a, b, moreIsGood) => { const v = a - b; if (!v) return `<span class="dl">same</span>`; return `<span class="dl ${(v > 0) === moreIsGood ? "up" : "dn"}">${v > 0 ? "+" : "−"}${Math.abs(v)}</span>`; };
   const mDelta = Math.round((mo.d - mx.d) * 1000);
@@ -1982,10 +1984,6 @@ function renderOption(o) {
     ${HAS_CHOOSER ? `<h3>${esc(say("option.fitByPart", "Fit, part by part"))}</h3>
     <div class="bars">${PARTS.filter(x => measureApplies(x, o)).map(x => `<div class="bar" title="${esc(x.of || "")}"><span>${esc(x.label)}</span><div class="tr"><div class="fl" style="width:${Math.round(p[x.key] * 100)}%"></div></div><span class="val">${w[x.key] ? `${(p[x.key] * 100).toFixed(0)} · ×${w[x.key]}` : "skipped"}</span></div>`).join("")}</div>
     <p class="note">${esc(say("option.barNote", "Each bar is the measure out of 100; ×n is the weight from Your priorities."))}</p>` : ""}
-
-    ${myKinds.length ? `<h3>${esc(say("option.withinReach", "Within reach"))}</h3>` : ""}
-    ${myKinds.length ? `<table class="ring-tbl"><thead><tr><th>${esc(say("option.driveTime", "Drive time"))}</th>${myKinds.map(k => `<th class="num">${esc(kindLabel(k))}</th>`).join("")}</tr></thead><tbody>${ringRows}</tbody></table>` : ""}
-    <p class="note" style="margin-top:6px">The names are on <a href="#" data-tab="places">${esc(say("tabs.places", "Places nearby"))}</a>. ${esc(METHOD)}</p>
 
     <h3>Nearest other options</h3>
     <div class="nb">${others.slice(0, 3).map(({ x, d }) => `<div class="r"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${optLink(x)}</span><div class="tr"><div class="fl" style="width:${Math.max(3, Math.round(d / nbMax * 100))}%"></div></div><span class="v">${fmtKm(d)} · ${driveMin(d)}′</span></div>`).join("")}</div>
