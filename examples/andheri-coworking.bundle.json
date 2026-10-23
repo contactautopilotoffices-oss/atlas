@@ -1,7 +1,7 @@
 {
  "meta": {
   "title": "Andheri East Coworking Atlas",
-  "sub": "Competitive analysis: 12 coworking centres visited, read against Autopilot's three proposed buildings",
+  "sub": "Internal study: the coworking competitors in the market, then Autopilot's proposed inventory",
   "asOf": "2026-10",
   "city": "Mumbai",
   "center": [
@@ -33,7 +33,7 @@
    "precision": "building",
    "geoSrc": "https://www.openstreetmap.org/way/353202822",
    "micro": "weh",
-   "fit": "value",
+   "fit": "coworking-competitors",
    "reason": "The smallest centre visited, at a mid price for a B building beside WEH metro. Only two small cabins free.",
    "address": "Boston House, Andheri East, Mumbai",
    "locality": "Andheri East",
@@ -56,7 +56,8 @@
    "publishedCapacity": "14,000 sq ft, about 100 seats (myHQ)",
    "publicListing": "https://myhq.in/dedicated/coworking-space/inspire-cospace-andheri",
    "visitSheetRow": 1,
-   "positionNote": "OSM building way 353202822 (centroid). Just off the Western Express Highway, about two minutes' walk from WEH metro (Line 1)."
+   "positionNote": "OSM building way 353202822 (centroid). Just off the Western Express Highway, about two minutes' walk from WEH metro (Line 1).",
+   "positioning": "value"
   },
   {
    "id": "innov8-boston-house",
@@ -67,7 +68,7 @@
    "precision": "building",
    "geoSrc": "https://www.openstreetmap.org/way/353202822",
    "micro": "weh",
-   "fit": "premium",
+   "fit": "coworking-competitors",
    "reason": "Second Innov8 site on this list, in the same building as Rush. Rs 2,000 a seat dearer than Rush for the same desk size; 12 seats free.",
    "address": "Boston House, Andheri East, Mumbai",
    "locality": "Andheri East",
@@ -90,7 +91,8 @@
    "publishedCapacity": "160+ seats (operator); 11,800 sq ft, about 164 seats (myHQ)",
    "publicListing": "https://www.innov8.work/coworking-space/mumbai/boston-house-andheri-east-6447d29b27e6c20001281193/",
    "visitSheetRow": 2,
-   "positionNote": "OSM building way 353202822 (centroid). Just off the Western Express Highway, about two minutes' walk from WEH metro (Line 1)."
+   "positionNote": "OSM building way 353202822 (centroid). Just off the Western Express Highway, about two minutes' walk from WEH metro (Line 1).",
+   "positioning": "premium"
   },
   {
    "id": "executive-spaces-rustomjee-central-park",
@@ -101,7 +103,7 @@
    "precision": "building",
    "geoSrc": "https://exa.ai/library/place/83qqct91nth",
    "micro": "weh",
-   "fit": "value",
+   "fit": "coworking-competitors",
    "reason": "The cheapest seat visited, Rs 14,000, in the best-graded building of the WEH cluster. Sold as a managed office, so vacancy, hours and parking were not shared on the visit. Rustomjee Central Park itself is not in Autopilot's proposed inventory; only this competitor is shown.",
    "address": "Rustomjee Central Park, Andheri East, Mumbai",
    "locality": "Andheri East",
@@ -124,7 +126,8 @@
    "publishedCapacity": "7,500 sq ft, about 150 seats, 4th and 6th floor B wing (myHQ); 250 seats (Houssed)",
    "publicListing": "https://www.executivespaces.in/coworking-shared-office-space-in-rustomjee-central-park-andheri-east",
    "visitSheetRow": 3,
-   "positionNote": "Map place page, as used in the earlier Andheri study; not the OSM 'Rustomjee' pin at 19.11642, 72.85428. Andheri-Kurla Road at the Chakala signal, opposite Kanakia Wall Street; the operator says 2 minutes' walk from WEH metro."
+   "positionNote": "Map place page, as used in the earlier Andheri study; not the OSM 'Rustomjee' pin at 19.11642, 72.85428. Andheri-Kurla Road at the Chakala signal, opposite Kanakia Wall Street; the operator says 2 minutes' walk from WEH metro.",
+   "positioning": "value"
   },
   {
    "id": "executive-spaces-chandak-chambers",
@@ -135,7 +138,7 @@
    "precision": "building",
    "geoSrc": "https://exa.ai/library/place/dwzfqrcs71d",
    "micro": "weh",
-   "fit": "value",
+   "fit": "coworking-competitors",
    "reason": "The cheapest of the WEH cluster, at the foot of the metro station. Three cabins of 5 to 10 seats free; the smallest desk size on the list.",
    "address": "Chandak Chambers, Andheri East, Mumbai",
    "locality": "Andheri East",
@@ -158,7 +161,8 @@
    "publishedCapacity": "Not published",
    "publicListing": "https://executivespaces.in/coworking-spaces-in-andheri-east-Chandak-Chambers",
    "visitSheetRow": 4,
-   "positionNote": "Map place page; not in OpenStreetMap. The developer's own page puts WEH metro at 50 m and Andheri railway station at 1.1 km (chandakgroup.com/chambers)."
+   "positionNote": "Map place page; not in OpenStreetMap. The developer's own page puts WEH metro at 50 m and Andheri railway station at 1.1 km (chandakgroup.com/chambers).",
+   "positioning": "value"
   },
   {
    "id": "quest-coworks-technopolis",
@@ -169,7 +173,7 @@
    "precision": "complex",
    "geoSrc": "https://www.openstreetmap.org/way/102525674",
    "micro": "chakala",
-   "fit": "scale",
+   "fit": "coworking-competitors",
    "reason": "The biggest block of vacancy visited: a 150-seat cabin plus smaller ones, in a campus with a gym and pool. Mid price, but the furthest of the WEH group from a station.",
    "address": "Technopolis Knowledge Park, Andheri East, Mumbai",
    "locality": "Andheri East",
@@ -192,7 +196,8 @@
    "publishedCapacity": "87,000 sq ft, about 1,750 seats on two floors (myHQ); 700 to 1,050 on other sites",
    "publicListing": "https://myhq.in/dedicated/coworking-space/quest-coworks-technopolis-knowledge-park",
    "visitSheetRow": 5,
-   "positionNote": "OSM landuse polygon 'Technopolis Knowledge Park', centroid. Mahakali Caves Road, between WEH and MIDC Andheri (Line 3) stations."
+   "positionNote": "OSM landuse polygon 'Technopolis Knowledge Park', centroid. Mahakali Caves Road, between WEH and MIDC Andheri (Line 3) stations.",
+   "positioning": "scale"
   },
   {
    "id": "community-coworks-akruti-trade-centre",
@@ -203,7 +208,7 @@
    "precision": "building",
    "geoSrc": "https://exa.ai/library/place/108dhc19w0v",
    "micro": "chakala",
-   "fit": "value",
+   "fit": "coworking-competitors",
    "reason": "The largest desk on the list (4 x 2 ft) at one of the lower prices. Four cabins of 5 to 16 seats free. The visit sheet wrote 'Akruti Trade Star'; every public source puts this centre at Ackruti Trade Centre on MIDC Road 7, which also fits the sheet's 'MIDC and Chakala' metro note. The sheet's note of a 16,000 sq ft Cognizant managed office here is unverified.",
    "address": "Akruti Trade Centre (MIDC Road 7), Andheri East, Mumbai",
    "locality": "Andheri East",
@@ -226,7 +231,8 @@
    "publishedCapacity": "21,450 sq ft, about 800 seats (myHQ); 16,000 sq ft, 350 seats (Flexo)",
    "publicListing": "https://myhq.in/dedicated/coworking-space/community-coworks-andherieast",
    "visitSheetRow": 6,
-   "positionNote": "Map place page for A Wing, Ackruti Trade Centre, Road No. 7, Kondivita (MIDC); a second site gives 19.1179, 72.8714, 30 m away. Not in OpenStreetMap. myHQ gives Chakala (J B Nagar) metro 700 m and Airport Road 850 m; MIDC Andheri on Line 3 is about 250 m east."
+   "positionNote": "Map place page for A Wing, Ackruti Trade Centre, Road No. 7, Kondivita (MIDC); a second site gives 19.1179, 72.8714, 30 m away. Not in OpenStreetMap. myHQ gives Chakala (J B Nagar) metro 700 m and Airport Road 850 m; MIDC Andheri on Line 3 is about 250 m east.",
+   "positioning": "value"
   },
   {
    "id": "wework-raheja-platinum",
@@ -237,7 +243,7 @@
    "precision": "building",
    "geoSrc": "https://digitalnomadindex.com/spaces/india/maharashtra/mumbai/wework-raheja-platinum-mumbai",
    "micro": "marol",
-   "fit": "premium",
+   "fit": "coworking-competitors",
    "reason": "The price ceiling and the only Grade A building visited: Rs 28,000 a seat, 300 seats free, the dearest parking, and a five-day week. Sets what the top of the Marol market pays.",
    "address": "K Raheja Platinum, Andheri East, Mumbai",
    "locality": "Andheri East",
@@ -260,7 +266,8 @@
    "publishedCapacity": "154,000 sq ft, about 3,026 seats, 10 floors (myHQ)",
    "publicListing": "https://myhq.in/dedicated/coworking-space/wework-raheja-platinum",
    "visitSheetRow": 7,
-   "positionNote": "Listing page coordinate; a cafe on the building's ground floor is pinned within 2 m of it. Not in OpenStreetMap. Sag Baug Road, off Andheri-Kurla Road; myHQ gives Marol Naka 650 to 800 m and Saki Naka 750 m."
+   "positionNote": "Listing page coordinate; a cafe on the building's ground floor is pinned within 2 m of it. Not in OpenStreetMap. Sag Baug Road, off Andheri-Kurla Road; myHQ gives Marol Naka 650 to 800 m and Saki Naka 750 m.",
+   "positioning": "premium"
   },
   {
    "id": "innov8-zion-house",
@@ -271,7 +278,7 @@
    "precision": "building",
    "geoSrc": "https://exa.ai/library/place/jdcpx8jszb7",
    "micro": "vile-parle",
-   "fit": "premium",
+   "fit": "coworking-competitors",
    "reason": "Innov8's flagship on the highway in Vile Parle East: 1,500 seats, the second-highest price, and nothing larger than a 20-seat cabin free. Outside Andheri East proper but competing for the same WEH tenants.",
    "address": "Zion House, Vile Parle East, Mumbai",
    "locality": "Vile Parle East",
@@ -294,7 +301,8 @@
    "publishedCapacity": "Over 1,900 seats (operator); 1,500 at launch, Dec 2024; about 1 lakh sq ft",
    "publicListing": "https://www.innov8.work/coworking-space/mumbai/house-andheri-east-6798d4b2b8e08e00015e1bf6/",
    "visitSheetRow": 8,
-   "positionNote": "Map place page for Innov8 Zion House; not in OpenStreetMap. On the Western Express Highway in Vile Parle East; Innov8 says 850 m from Andheri station, myHQ gives Gundavali 900 m and WEH 1 km."
+   "positionNote": "Map place page for Innov8 Zion House; not in OpenStreetMap. On the Western Express Highway in Vile Parle East; Innov8 says 850 m from Andheri station, myHQ gives Gundavali 900 m and WEH 1 km.",
+   "positioning": "premium"
   },
   {
    "id": "smartworks-fleet-house",
@@ -305,7 +313,7 @@
    "precision": "building",
    "geoSrc": "https://exa.ai/library/place/x65yvwhmfnx",
    "micro": "marol",
-   "fit": "scale",
+   "fit": "coworking-competitors",
    "reason": "2,500 seats at the Marol Naka interchange with 100 seats free in blocks of 6 to 50. The nearest large centre to the Privilon and 723 Avenue sites.",
    "address": "Fleet House, Andheri East, Mumbai",
    "locality": "Andheri East",
@@ -328,7 +336,8 @@
    "publishedCapacity": "30,000 sq ft floor, about 1,000 seats (myHQ)",
    "publicListing": "https://myhq.in/managed-office/smartworks-andheri",
    "visitSheetRow": 9,
-   "positionNote": "Map place page; not in OpenStreetMap. Marol Maroshi Road at Marol Naka: JLL's listing calls it adjacent to Marol Naka metro, and both Line 1 and Line 3 stations are at the door."
+   "positionNote": "Map place page; not in OpenStreetMap. Marol Maroshi Road at Marol Naka: JLL's listing calls it adjacent to Marol Naka metro, and both Line 1 and Line 3 stations are at the door.",
+   "positioning": "scale"
   },
   {
    "id": "innov8-trade-star",
@@ -339,7 +348,7 @@
    "precision": "poi",
    "geoSrc": "https://www.openstreetmap.org/node/2188869089",
    "micro": "jbnagar",
-   "fit": "premium",
+   "fit": "coworking-competitors",
    "reason": "Innov8's third site on the list, opened in 2026 beside Chakala metro: Rs 20,000 for a 3 x 2 ft desk, 26 seats free. Executive Spaces announced a 650-seat centre in the same building in March 2026. The visit sheet names Marol as the metro; the building stands at Chakala (J B Nagar).",
    "address": "Akruti Trade Star, Andheri East, Mumbai",
    "locality": "Andheri East",
@@ -362,7 +371,8 @@
    "publishedCapacity": "Over 688 seats (operator); 12,500 sq ft, about 265 seats on the 3rd floor (myHQ)",
    "publicListing": "https://www.innov8.work/coworking-space/mumbai/trade-star-andheri-east-69d769aba3824000017d7e6e/",
    "visitSheetRow": 10,
-   "positionNote": "OSM node 2188869089 'Trade Star', Andheri-Kurla Road, between Chakala (J B Nagar) and Airport Road stations on Line 1."
+   "positionNote": "OSM node 2188869089 'Trade Star', Andheri-Kurla Road, between Chakala (J B Nagar) and Airport Road stations on Line 1.",
+   "positioning": "premium"
   },
   {
    "id": "315work-avenue-silver-utopia",
@@ -373,7 +383,7 @@
    "precision": "building",
    "geoSrc": "https://exa.ai/library/place/n2hx8mv5chs",
    "micro": "chakala",
-   "fit": "value",
+   "fit": "coworking-competitors",
    "reason": "Small and nearly full: 10 seats free of 240, with two large-corporate clients. Mid price, but the second-dearest parking visited.",
    "address": "Silver Utopia, Andheri East, Mumbai",
    "locality": "Andheri East",
@@ -396,7 +406,8 @@
    "publishedCapacity": "6,530 sq ft, about 200 seats (myHQ)",
    "publicListing": "https://myhq.in/managed-office/315-work-avenue-andheri",
    "visitSheetRow": 11,
-   "positionNote": "Map place page; another centre in the same building is pinned within 5 m. Cardinal Gracias Road, Chakala; myHQ gives WEH and Gundavali metro 500 m, Chakala (J B Nagar) 900 m."
+   "positionNote": "Map place page; another centre in the same building is pinned within 5 m. Cardinal Gracias Road, Chakala; myHQ gives WEH and Gundavali metro 500 m, Chakala (J B Nagar) 900 m.",
+   "positioning": "value"
   },
   {
    "id": "awfis-skyline-icon",
@@ -407,7 +418,7 @@
    "precision": "building",
    "geoSrc": "https://myhq.in/virtual-office/awfis-skyline-icon",
    "micro": "marol",
-   "fit": "value",
+   "fit": "coworking-competitors",
    "reason": "The listed operator's Marol centre at the median price, 350 m from the interchange, with fintech tenants and 36 seats free.",
    "address": "Skyline Icon, Andheri East, Mumbai",
    "locality": "Andheri East",
@@ -430,7 +441,101 @@
    "publishedCapacity": "60,000 sq ft, about 1,200 seats (7th floor unit) plus 16,000 sq ft, about 535 seats (4th floor unit), myHQ",
    "publicListing": "https://myhq.in/dedicated/coworking-space/awfis-skyline-icon",
    "visitSheetRow": 12,
-   "positionNote": "Coordinate printed on the myHQ listing, matched by a map place page within 1 m. Andheri-Kurla Road, Marol; myHQ gives Marol Naka 350 m."
+   "positionNote": "Coordinate printed on the myHQ listing, matched by a map place page within 1 m. Andheri-Kurla Road, Marol; myHQ gives Marol Naka 350 m.",
+   "positioning": "value"
+  },
+  {
+   "id": "proposed-corporate-avenue",
+   "n": 13,
+   "name": "Corporate Avenue (Atul Projects)",
+   "lat": 19.110625,
+   "lng": 72.859637,
+   "precision": "complex",
+   "geoSrc": "https://exa.ai/library/place/3kk3s3wpqbl",
+   "micro": "chakala",
+   "fit": "proposed-inventory",
+   "reason": "The only floor ready now: furnished, approvals in hand, Rs 300 on carpet with CAM included. Competes with the WEH and Chakala cluster: Executive Spaces at Rustomjee Central Park (Rs 14,000) and 315Work at Silver Utopia (Rs 18,000) are each about 400 to 500 m away. Efficiency 60% assumed because the landlord quoted on carpet.",
+   "address": "Corporate Avenue, Sonawala Road, off Andheri-Kurla Road, Chakala, Andheri East, Mumbai",
+   "locality": "Andheri East",
+   "building": "Corporate Avenue (Atul Projects)",
+   "grade": "A",
+   "parking": "5 car parks a floor",
+   "nearestMetro": "Chakala (J B Nagar)",
+   "metroDistanceM": 800,
+   "positionNote": "Map place page; Wikimapia's outline for 'Corporate Avenue (Atul Projects)' is 55 m away (https://wikimapia.org/9438559/CORPORATE-AVENUE-Atul-Projects). The PDF says Chakala metro 800 m; myHQ gives WEH and Gundavali 650 m.",
+   "floorUnit": "3rd and 4th",
+   "totalFloors": "G + 8",
+   "furnishing": "Furnished",
+   "carpetAreaSqFt": 12414,
+   "builtUpAreaSqFt": 20690,
+   "ceilingHeight": "11 ft",
+   "rentOnCarpetRsPerSqFtAMonth": 300,
+   "camRsPerSqFtAMonth": "Included in rent",
+   "fireNoc": "Available",
+   "ocAndCc": "Available",
+   "availableFrom": "Immediately"
+  },
+  {
+   "id": "proposed-723-avenue",
+   "n": 14,
+   "name": "723 Avenue (Wadhwa)",
+   "lat": 19.109713,
+   "lng": 72.884422,
+   "precision": "building",
+   "geoSrc": "https://dhcrealty.in/property/wadhwa-723-avenue/",
+   "micro": "marol",
+   "fit": "proposed-inventory",
+   "reason": "Bare shell on the top floors, next door to WeWork's 3,000-seat Raheja Platinum at Rs 28,000, the price ceiling of the market. Fire NOC and OC due November 2026. MahaRERA P51800050698.",
+   "address": "Wadhwa 723 Avenue, Marol Co-operative Industrial Estate Road, Sag Baug, Marol, Andheri East, Mumbai 400059",
+   "locality": "Andheri East",
+   "building": "723 Avenue (Wadhwa)",
+   "grade": "A",
+   "parking": "1 per 1,000 sq ft built-up",
+   "nearestMetro": "Marol Naka (Lines 1 and 3)",
+   "metroDistanceM": 700,
+   "positionNote": "Plus code 4V5M+VQM printed on the listing, decoded. Marol Co-operative Industrial Estate Road, off Andheri-Kurla Road; the brochure says 1 km from Marol Naka, the PDF 700 m.",
+   "floorUnit": "13th and 14th",
+   "totalFloors": "G + 15",
+   "furnishing": "Bare shell",
+   "carpetAreaSqFt": 12952,
+   "builtUpAreaSqFt": 21586,
+   "ceilingHeight": "11.7 ft",
+   "rentOnCarpetRsPerSqFtAMonth": 316,
+   "camRsPerSqFtAMonth": 16,
+   "fireNoc": "November 2026",
+   "ocAndCc": "November 2026",
+   "availableFrom": "November 2026"
+  },
+  {
+   "id": "proposed-privilon",
+   "n": 15,
+   "name": "Privilon (Bsafal)",
+   "lat": 19.108207,
+   "lng": 72.879563,
+   "precision": "approx",
+   "geoSrc": "https://exa.ai/library/place/s8x6jf6zts0",
+   "micro": "marol",
+   "fit": "proposed-inventory",
+   "reason": "The largest floor and the dearest rent, at the door of the Marol Naka interchange, opposite Smartworks Fleet House (2,500 seats, Rs 23,000). The PDF says January 2027; the only public completion date found is January 2030, so confirm with the landlord. MahaRERA P51800079264.",
+   "address": "Privilon, Marol Naka metro station, Gamdevi, Marol, Andheri East, Mumbai 400059",
+   "locality": "Andheri East",
+   "building": "Privilon (Bsafal)",
+   "grade": "A",
+   "parking": "To be confirmed",
+   "nearestMetro": "Marol Naka (Lines 1 and 3)",
+   "metroDistanceM": 93,
+   "positionNote": "The place page pin sits within 10 m of the Marol Naka station coordinate, so it marks the address, not a footprint. The developer says 'right next to Marol Metro Station'; the PDF says 93 m.",
+   "floorUnit": "Multiple",
+   "totalFloors": "G + 15",
+   "furnishing": "Bare shell",
+   "carpetAreaSqFt": 15343,
+   "builtUpAreaSqFt": "Not given",
+   "ceilingHeight": "11.7 ft",
+   "rentOnCarpetRsPerSqFtAMonth": 375,
+   "camRsPerSqFtAMonth": 30,
+   "fireNoc": "January 2027",
+   "ocAndCc": "January 2027",
+   "availableFrom": "January 2027"
   }
  ],
  "zones": [
@@ -468,41 +573,6 @@
    "name": "Vile Parle East, on the Western Express Highway",
    "color": "#4a5a6a",
    "character": "South of Andheri East on the same highway; one large Innov8 centre competing for WEH tenants."
-  }
- ],
- "places": [
-  {
-   "id": "proposed-corporate-avenue",
-   "kind": "proposed-inventory",
-   "name": "Corporate Avenue (Atul Projects)",
-   "lat": 19.110625,
-   "lng": 72.859637,
-   "sub": "Proposed: 3rd and 4th floors, 12,414 sq ft carpet, furnished",
-   "precision": "complex",
-   "note": "Grade A, G+8. Rs 300 per sq ft on carpet, CAM included. Fire NOC and OC available; ready immediately. 5 car parks a floor. Chakala metro 800 m. Efficiency 60% assumed because the landlord quoted on carpet. Position: Map place page; Wikimapia's outline for 'Corporate Avenue (Atul Projects)' is 55 m away (https://wikimapia.org/9438559/CORPORATE-AVENUE-Atul-Projects). The PDF says Chakala metro 800 m; myHQ gives WEH and Gundavali 650 m.",
-   "src": "https://exa.ai/library/place/3kk3s3wpqbl"
-  },
-  {
-   "id": "proposed-723-avenue",
-   "kind": "proposed-inventory",
-   "name": "723 Avenue (Wadhwa)",
-   "lat": 19.109713,
-   "lng": 72.884422,
-   "sub": "Proposed: 13th and 14th floors, 12,952 sq ft carpet, bare shell",
-   "precision": "building",
-   "note": "Grade A, G+15, 11.7 ft ceilings. Rs 316 per sq ft on carpet plus Rs 16 CAM. Fire NOC, OC and CC due November 2026; available November 2026. Parking 1 per 1,000 sq ft built-up. Marol metro 700 m. Position: Plus code 4V5M+VQM printed on the listing, decoded. Marol Co-operative Industrial Estate Road, off Andheri-Kurla Road; the brochure says 1 km from Marol Naka, the PDF 700 m.",
-   "src": "https://dhcrealty.in/property/wadhwa-723-avenue/"
-  },
-  {
-   "id": "proposed-privilon",
-   "kind": "proposed-inventory",
-   "name": "Privilon (Bsafal)",
-   "lat": 19.108207,
-   "lng": 72.879563,
-   "sub": "Proposed: multiple floors, 15,343 sq ft carpet, bare shell",
-   "precision": "approx",
-   "note": "Grade A, G+15, 11.7 ft ceilings. Rs 375 per sq ft on carpet plus Rs 30 CAM. Fire NOC, OC and CC due January 2027; available January 2027. Parking to be confirmed. Marol metro 93 m. Position: The place page pin sits within 10 m of the Marol Naka station coordinate, so it marks the address, not a footprint. The developer says 'right next to Marol Metro Station'; the PDF says 93 m.",
-   "src": "https://exa.ai/library/place/s8x6jf6zts0"
   }
  ],
  "transit": {
@@ -1030,107 +1100,5 @@
     "note": "Proposed_Inventory.pdf; the Rustomjee Central Park floor in the same PDF is not shown, as asked. At the 35 sq ft a seat and 20% margin the Andheri case study uses, Rs 300 on carpet before fit-out is about Rs 13,000 a seat in rent alone; the visited cabins sell at Rs 14,000 to 28,000."
    }
   ]
- },
- "measures": [
-  {
-   "key": "price",
-   "label": "Price per seat",
-   "kind": "column",
-   "question": "How much does the seat price matter?",
-   "of": "the per-seat price quoted on the visit, plus GST",
-   "column": "pricePerSeatRsAMonthPlusGst",
-   "higherIsBetter": false
-  },
-  {
-   "key": "vacancy",
-   "label": "Seats available",
-   "kind": "column",
-   "question": "Do you need a large block of seats now?",
-   "of": "the vacant seats counted on the visit, cabins and open desks together",
-   "column": "vacantSeatsCount",
-   "higherIsBetter": true
-  },
-  {
-   "key": "size",
-   "label": "Centre size",
-   "kind": "column",
-   "question": "Does a bigger centre matter?",
-   "of": "total seats stated on the visit",
-   "column": "totalSeats",
-   "higherIsBetter": true
-  },
-  {
-   "key": "metro",
-   "label": "Metro on foot",
-   "kind": "nearestStation",
-   "question": "Should staff be able to walk from the metro?",
-   "of": "distance to the nearest open metro station",
-   "status": "open",
-   "mode": "metro"
-  },
-  {
-   "key": "proposed",
-   "label": "Near our proposed sites",
-   "kind": "nearestPlace",
-   "question": "How directly does this centre compete with Autopilot's proposed buildings?",
-   "of": "distance to the nearest of the three proposed buildings",
-   "placeKind": "proposed-inventory",
-   "rings": [
-    15,
-    30,
-    45
-   ]
-  }
- ],
- "presets": [
-  {
-   "key": "balanced",
-   "label": "Balanced",
-   "note": "Price and availability lead; size, metro and nearness to our sites count a little.",
-   "levels": {
-    "price": 3,
-    "vacancy": 3,
-    "size": 1,
-    "metro": 2,
-    "proposed": 2
-   },
-   "default": true
-  },
-  {
-   "key": "cheapest",
-   "label": "Cheapest seats",
-   "note": "Who undercuts whom.",
-   "levels": {
-    "price": 4,
-    "vacancy": 1,
-    "size": 0,
-    "metro": 1,
-    "proposed": 1
-   }
-  },
-  {
-   "key": "big-block",
-   "label": "A 100-seat enquiry",
-   "note": "Who can take a large team today.",
-   "levels": {
-    "price": 2,
-    "vacancy": 4,
-    "size": 2,
-    "metro": 1,
-    "proposed": 0
-   }
-  },
-  {
-   "key": "rivals",
-   "label": "Rivals to our sites",
-   "note": "The centres a tenant would see before ours.",
-   "levels": {
-    "price": 2,
-    "vacancy": 1,
-    "size": 1,
-    "metro": 2,
-    "proposed": 4
-   }
-  }
- ]
+ }
 }

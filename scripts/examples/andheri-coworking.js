@@ -98,9 +98,12 @@ const CENTRES = [
 
 /* The three proposed buildings, from Proposed_Inventory.pdf. */
 const PROPOSED = [
-  { id: "proposed-corporate-avenue", name: "Corporate Avenue (Atul Projects)", geo: "corporate-avenue", sub: "Proposed: 3rd and 4th floors, 12,414 sq ft carpet, furnished", note: "Grade A, G+8. Rs 300 per sq ft on carpet, CAM included. Fire NOC and OC available; ready immediately. 5 car parks a floor. Chakala metro 800 m. Efficiency 60% assumed because the landlord quoted on carpet." },
-  { id: "proposed-723-avenue", name: "723 Avenue (Wadhwa)", geo: "723-avenue", sub: "Proposed: 13th and 14th floors, 12,952 sq ft carpet, bare shell", note: "Grade A, G+15, 11.7 ft ceilings. Rs 316 per sq ft on carpet plus Rs 16 CAM. Fire NOC, OC and CC due November 2026; available November 2026. Parking 1 per 1,000 sq ft built-up. Marol metro 700 m." },
-  { id: "proposed-privilon", name: "Privilon (Bsafal)", geo: "privilon", sub: "Proposed: multiple floors, 15,343 sq ft carpet, bare shell", note: "Grade A, G+15, 11.7 ft ceilings. Rs 375 per sq ft on carpet plus Rs 30 CAM. Fire NOC, OC and CC due January 2027; available January 2027. Parking to be confirmed. Marol metro 93 m." }
+  { id: "proposed-corporate-avenue", name: "Corporate Avenue (Atul Projects)", geo: "corporate-avenue", micro: "chakala", address: "Corporate Avenue, Sonawala Road, off Andheri-Kurla Road, Chakala, Andheri East, Mumbai", grade: "A", floor: "3rd and 4th", floors: "G + 8", furnishing: "Furnished", carpet: 12414, builtup: 20690, ceiling: "11 ft", rent: 300, cam: "Included in rent", parking: "5 car parks a floor", noc: "Available", oc: "Available", available: "Immediately", metro: "Chakala (J B Nagar)", metroM: 800,
+    reason: "The only floor ready now: furnished, approvals in hand, Rs 300 on carpet with CAM included. Competes with the WEH and Chakala cluster: Executive Spaces at Rustomjee Central Park (Rs 14,000) and 315Work at Silver Utopia (Rs 18,000) are each about 400 to 500 m away. Efficiency 60% assumed because the landlord quoted on carpet." },
+  { id: "proposed-723-avenue", name: "723 Avenue (Wadhwa)", geo: "723-avenue", micro: "marol", address: "Wadhwa 723 Avenue, Marol Co-operative Industrial Estate Road, Sag Baug, Marol, Andheri East, Mumbai 400059", grade: "A", floor: "13th and 14th", floors: "G + 15", furnishing: "Bare shell", carpet: 12952, builtup: 21586, ceiling: "11.7 ft", rent: 316, cam: 16, parking: "1 per 1,000 sq ft built-up", noc: "November 2026", oc: "November 2026", available: "November 2026", metro: "Marol Naka (Lines 1 and 3)", metroM: 700,
+    reason: "Bare shell on the top floors, next door to WeWork's 3,000-seat Raheja Platinum at Rs 28,000, the price ceiling of the market. Fire NOC and OC due November 2026. MahaRERA P51800050698." },
+  { id: "proposed-privilon", name: "Privilon (Bsafal)", geo: "privilon", micro: "marol", address: "Privilon, Marol Naka metro station, Gamdevi, Marol, Andheri East, Mumbai 400059", grade: "A", floor: "Multiple", floors: "G + 15", furnishing: "Bare shell", carpet: 15343, builtup: "Not given", ceiling: "11.7 ft", rent: 375, cam: 30, parking: "To be confirmed", noc: "January 2027", oc: "January 2027", available: "January 2027", metro: "Marol Naka (Lines 1 and 3)", metroM: 93,
+    reason: "The largest floor and the dearest rent, at the door of the Marol Naka interchange, opposite Smartworks Fleet House (2,500 seats, Rs 23,000). The PDF says January 2027; the only public completion date found is January 2030, so confirm with the landlord. MahaRERA P51800079264." }
 ];
 
 const ZONES = [
@@ -135,7 +138,7 @@ async function build() {
 
   const A = wb.getWorksheet("Atlas");
   setField(A, "Title", "Andheri East Coworking Atlas");
-  setField(A, "Subtitle", "Competitive analysis: 12 coworking centres visited, read against Autopilot's three proposed buildings");
+  setField(A, "Subtitle", "Internal study: the coworking competitors in the market, then Autopilot's proposed inventory");
   setField(A, "Data current to", AS_OF);
   setField(A, "City", "Mumbai");
   setField(A, "Centre longitude", 72.869);
@@ -155,13 +158,14 @@ async function build() {
 
   /* ---- Options: the 11 centres ---- */
   const O = wb.getWorksheet("Options");
-  for (const c of ["Operator", "Building", "Grade", "Total seats", "Price per seat (Rs a month, plus GST)", "Desk size", "Vacant seats on the visit", "Vacant seats (count)", "Clients seen", "Amenities", "Hours", "Parking", "Nearest metro", "Metro distance (m)", "Published price (dedicated desk)", "Published price (private cabin, a seat)", "Published capacity", "Public listing", "Visit sheet row", "Position note"]) addCol(O, c);
+  for (const c of ["Operator", "Building", "Grade", "Total seats", "Price per seat (Rs a month, plus GST)", "Desk size", "Vacant seats on the visit", "Vacant seats (count)", "Clients seen", "Amenities", "Hours", "Parking", "Nearest metro", "Metro distance (m)", "Published price (dedicated desk)", "Published price (private cabin, a seat)", "Published capacity", "Public listing", "Visit sheet row", "Position note", "Positioning",
+    "Floor / unit", "Total floors", "Furnishing", "Carpet area (sq ft)", "Built-up area (sq ft)", "Ceiling height", "Rent on carpet (Rs per sq ft a month)", "CAM (Rs per sq ft a month)", "Fire NOC", "OC and CC", "Available from"]) addCol(O, c);
   for (const c of CENTRES) {
     const g = GEO[c.geo];
     addRow(O, {
       "ID": c.id, "Rank": c.n, "Property name": `${c.operator} · ${c.building}`,
       "Latitude": g.lat, "Longitude": g.lng, "How exact is the pin": g.precision, "Source for the position": g.src,
-      "Micro-market": c.micro, "Fit group": c.fit, "Why it scores as it does": c.reason,
+      "Micro-market": c.micro, "Fit group": "coworking-competitors", "Positioning": c.fit, "Why it scores as it does": c.reason,
       "Address": `${c.building}, ${c.micro === "vile-parle" ? "Vile Parle East" : "Andheri East"}, Mumbai`, "Locality": c.micro === "vile-parle" ? "Vile Parle East" : "Andheri East",
       "Operator": c.operator, "Building": c.building, "Grade": c.grade, "Total seats": c.seats,
       "Price per seat (Rs a month, plus GST)": c.price, "Desk size": c.desk, "Vacant seats on the visit": c.vacant, "Vacant seats (count)": vacantCount(c.vacant),
@@ -172,16 +176,25 @@ async function build() {
     });
   }
 
+  /* ---- Options, second group: the proposed inventory, after the
+     competitors, in the order the team presents them. ---- */
+  PROPOSED.forEach((p, i) => {
+    const g = GEO[p.geo];
+    addRow(O, {
+      "ID": p.id, "Rank": CENTRES.length + 1 + i, "Property name": p.name,
+      "Latitude": g.lat, "Longitude": g.lng, "How exact is the pin": g.precision, "Source for the position": g.src,
+      "Micro-market": p.micro, "Fit group": "proposed-inventory", "Why it scores as it does": p.reason,
+      "Address": p.address, "Locality": "Andheri East", "Building": p.name, "Grade": p.grade,
+      "Floor / unit": p.floor, "Total floors": p.floors, "Furnishing": p.furnishing, "Carpet area (sq ft)": p.carpet, "Built-up area (sq ft)": p.builtup,
+      "Ceiling height": p.ceiling, "Rent on carpet (Rs per sq ft a month)": p.rent, "CAM (Rs per sq ft a month)": p.cam, "Parking": p.parking,
+      "Fire NOC": p.noc, "OC and CC": p.oc, "Available from": p.available, "Nearest metro": p.metro, "Metro distance (m)": p.metroM,
+      "Position note": g.note
+    });
+  });
+
   /* ---- Micro-markets ---- */
   const Z = wb.getWorksheet("Micro-markets");
   for (const z of ZONES) addRow(Z, { "Key": z.key, "Short name": z.label, "Full name": z.name, "Colour": z.color, "What it is like": z.character });
-
-  /* ---- Places: the proposed buildings, one layer ---- */
-  const P = wb.getWorksheet("Places");
-  for (const p of PROPOSED) {
-    const g = GEO[p.geo];
-    addRow(P, { "ID": p.id, "Kind": "proposed-inventory", "Name": p.name, "Latitude": g.lat, "Longitude": g.lng, "Second line": p.sub, "How exact is the pin": g.precision, "Note": `${p.note} Position: ${g.note}`, "Source": g.src });
-  }
 
   /* ---- Transit ---- */
   const T = wb.getWorksheet("Transit");
@@ -190,21 +203,6 @@ async function build() {
   /* ---- Facts ---- */
   const F = wb.getWorksheet("Facts");
   for (const f of FACTS) addRow(F, { "Group": f.group, "Label": f.k, "Value": f.v, "As of": f.asOf, "How firm": f.conf, "Source": f.src, "Note": f.note });
-
-  /* ---- Priorities and presets ---- */
-  const PR = wb.getWorksheet("Priorities");
-  addRow(PR, { "Key": "price", "Slider name": "Price per seat", "What it measures": "column", "Which column": "Price per seat (Rs a month, plus GST)", "Higher is better?": "no", "The question to ask": "How much does the seat price matter?", "What it is calculated from": "the per-seat price quoted on the visit, plus GST" });
-  addRow(PR, { "Key": "vacancy", "Slider name": "Seats available", "What it measures": "column", "Which column": "Vacant seats (count)", "Higher is better?": "yes", "The question to ask": "Do you need a large block of seats now?", "What it is calculated from": "the vacant seats counted on the visit, cabins and open desks together" });
-  addRow(PR, { "Key": "size", "Slider name": "Centre size", "What it measures": "column", "Which column": "Total seats", "Higher is better?": "yes", "The question to ask": "Does a bigger centre matter?", "What it is calculated from": "total seats stated on the visit" });
-  addRow(PR, { "Key": "metro", "Slider name": "Metro on foot", "What it measures": "nearestStation", "Open or planned": "open", "Which mode": "metro", "The question to ask": "Should staff be able to walk from the metro?", "What it is calculated from": "distance to the nearest open metro station" });
-  addRow(PR, { "Key": "proposed", "Slider name": "Near our proposed sites", "What it measures": "nearestPlace", "Which kind of place": "proposed-inventory", "The question to ask": "How directly does this centre compete with Autopilot's proposed buildings?", "What it is calculated from": "distance to the nearest of the three proposed buildings" });
-
-  const PS = wb.getWorksheet("Presets");
-  const preset = (key, label, note, dflt, levels) => Object.entries(levels).forEach(([m, lv], i) => addRow(PS, { "Preset key": key, "Preset name": label, "What it means": note, "Start here?": i === 0 && dflt ? "yes" : "", "Slider": m, "How much it counts": lv }));
-  preset("balanced", "Balanced", "Price and availability lead; size, metro and nearness to our sites count a little.", true, { price: "3 High", vacancy: "3 High", size: "1 Low", metro: "2 Medium", proposed: "2 Medium" });
-  preset("cheapest", "Cheapest seats", "Who undercuts whom.", false, { price: "4 Critical", vacancy: "1 Low", size: "0 Skip", metro: "1 Low", proposed: "1 Low" });
-  preset("big-block", "A 100-seat enquiry", "Who can take a large team today.", false, { price: "2 Medium", vacancy: "4 Critical", size: "2 Medium", metro: "1 Low", proposed: "0 Skip" });
-  preset("rivals", "Rivals to our sites", "The centres a tenant would see before ours.", false, { price: "2 Medium", vacancy: "1 Low", size: "1 Low", metro: "2 Medium", proposed: "4 Critical" });
 
   return wb;
 }
