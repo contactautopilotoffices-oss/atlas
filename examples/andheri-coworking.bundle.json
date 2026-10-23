@@ -1,7 +1,7 @@
 {
  "meta": {
   "title": "Andheri East Coworking Atlas",
-  "sub": "Competitive analysis: 11 coworking centres visited, read against Autopilot's three proposed buildings",
+  "sub": "Competitive analysis: 12 coworking centres visited, read against Autopilot's three proposed buildings",
   "asOf": "2026-10",
   "city": "Mumbai",
   "center": [
@@ -9,14 +9,14 @@
    19.1115
   ],
   "zoom": 13.9,
-  "sheet": "Visited_Co-working_Space.xlsx, Autopilot site visits, October 2026; Proposed_Inventory.pdf (October 2026). Rustomjee Central Park left out of both. Positions and public facts researched 23 Oct 2026, sources on each row.",
+  "sheet": "Visited_Co-working_Space.xlsx, Autopilot site visits, October 2026; Proposed_Inventory.pdf (October 2026). Rustomjee Central Park is left out of the proposed inventory, not of the competitor set. Positions and public facts researched 23 Oct 2026, sources on each row.",
   "speed": {
    "kmh": 16,
    "factor": 1.3,
    "note": "TomTom Traffic Index 2025, Mumbai rush hour"
   },
   "nextSteps": [
-   "Price Autopilot's seats against the building each proposed site actually competes with: Smartworks at Fleet House (Rs 23,000) and WeWork at Raheja Platinum (Rs 28,000) for Privilon and 723 Avenue; Quest, 315Work and Executive Spaces (Rs 16,000 to 18,000) for Corporate Avenue.",
+   "Price Autopilot's seats against the building each proposed site actually competes with: Smartworks at Fleet House (Rs 23,000) and WeWork at Raheja Platinum (Rs 28,000) for Privilon and 723 Avenue; Quest, 315Work and the two Executive Spaces centres (Rs 14,000 to 18,000) for Corporate Avenue.",
    "Re-visit Quest Coworks and WeWork: together they hold about 500 of the roughly 800 vacant seats counted, so their pricing on the big cabins is the real competition for a 100-plus seat enquiry.",
    "Ask Innov8 and Community Coworks for their list price at Akruti Trade Star in writing: the same building was quoted at Rs 16,500 and Rs 20,000 on the same week.",
    "Confirm parking at Innov8 Trade Star and Awfis Skyline Icon, which the visit sheet left as TBD, before quoting parking in any comparison.",
@@ -93,8 +93,42 @@
    "positionNote": "OSM building way 353202822 (centroid). Just off the Western Express Highway, about two minutes' walk from WEH metro (Line 1)."
   },
   {
-   "id": "executive-spaces-chandak-chambers",
+   "id": "executive-spaces-rustomjee-central-park",
    "n": 3,
+   "name": "Executive Spaces · Rustomjee Central Park",
+   "lat": 19.114042,
+   "lng": 72.860671,
+   "precision": "building",
+   "geoSrc": "https://exa.ai/library/place/83qqct91nth",
+   "micro": "weh",
+   "fit": "value",
+   "reason": "The cheapest seat visited, Rs 14,000, in the best-graded building of the WEH cluster. Sold as a managed office, so vacancy, hours and parking were not shared on the visit. Rustomjee Central Park itself is not in Autopilot's proposed inventory; only this competitor is shown.",
+   "address": "Rustomjee Central Park, Andheri East, Mumbai",
+   "locality": "Andheri East",
+   "operator": "Executive Spaces",
+   "building": "Rustomjee Central Park",
+   "grade": "A-",
+   "totalSeats": 125,
+   "pricePerSeatRsAMonthPlusGst": 14000,
+   "deskSize": "3 x 2 ft",
+   "vacantSeatsOnTheVisit": "Not shared (managed office)",
+   "vacantSeatsCount": 0,
+   "clientsSeen": "Big 92.7 FM",
+   "amenities": "Not shared (managed office)",
+   "hours": "Not shared; myHQ lists 10 am to 8 pm, Monday to Saturday",
+   "parking": "Not shared; myHQ lists car and two-wheeler parking",
+   "nearestMetro": "WEH (Line 1) and Gundavali (Line 7)",
+   "metroDistanceM": 160,
+   "publishedPriceDedicatedDesk": "Rs 14,000 (operator centre page; Rs 13,000 on the home page); Rs 11,999 (myHQ)",
+   "publishedPricePrivateCabinASeat": "Rs 16,000 (operator centre page; Rs 15,000 on the home page and Houssed)",
+   "publishedCapacity": "7,500 sq ft, about 150 seats, 4th and 6th floor B wing (myHQ); 250 seats (Houssed)",
+   "publicListing": "https://www.executivespaces.in/coworking-shared-office-space-in-rustomjee-central-park-andheri-east",
+   "visitSheetRow": 3,
+   "positionNote": "Map place page, as used in the earlier Andheri study; not the OSM 'Rustomjee' pin at 19.11642, 72.85428. Andheri-Kurla Road at the Chakala signal, opposite Kanakia Wall Street; the operator says 2 minutes' walk from WEH metro."
+  },
+  {
+   "id": "executive-spaces-chandak-chambers",
+   "n": 4,
    "name": "Executive Spaces · Chandak Chambers",
    "lat": 19.115847,
    "lng": 72.855922,
@@ -128,7 +162,7 @@
   },
   {
    "id": "quest-coworks-technopolis",
-   "n": 4,
+   "n": 5,
    "name": "Quest Coworks · Technopolis Knowledge Park",
    "lat": 19.116337,
    "lng": 72.863254,
@@ -162,7 +196,7 @@
   },
   {
    "id": "community-coworks-akruti-trade-centre",
-   "n": 5,
+   "n": 6,
    "name": "Community Coworks · Akruti Trade Centre (MIDC Road 7)",
    "lat": 19.117623,
    "lng": 72.871394,
@@ -196,7 +230,7 @@
   },
   {
    "id": "wework-raheja-platinum",
-   "n": 6,
+   "n": 7,
    "name": "WeWork · K Raheja Platinum",
    "lat": 19.109416,
    "lng": 72.885635,
@@ -230,7 +264,7 @@
   },
   {
    "id": "innov8-zion-house",
-   "n": 7,
+   "n": 8,
    "name": "Innov8 · Zion House",
    "lat": 19.107648,
    "lng": 72.852979,
@@ -264,7 +298,7 @@
   },
   {
    "id": "smartworks-fleet-house",
-   "n": 8,
+   "n": 9,
    "name": "Smartworks · Fleet House",
    "lat": 19.108687,
    "lng": 72.879151,
@@ -298,7 +332,7 @@
   },
   {
    "id": "innov8-trade-star",
-   "n": 9,
+   "n": 10,
    "name": "Innov8 · Akruti Trade Star",
    "lat": 19.111638,
    "lng": 72.870408,
@@ -332,7 +366,7 @@
   },
   {
    "id": "315work-avenue-silver-utopia",
-   "n": 10,
+   "n": 11,
    "name": "315Work Avenue · Silver Utopia",
    "lat": 19.112617,
    "lng": 72.859672,
@@ -366,7 +400,7 @@
   },
   {
    "id": "awfis-skyline-icon",
-   "n": 11,
+   "n": 12,
    "name": "Awfis · Skyline Icon",
    "lat": 19.10569,
    "lng": 72.881125,
@@ -592,49 +626,49 @@
   "visit": [
    {
     "k": "Centres visited",
-    "v": "11 centres by 9 operators across 10 buildings, 10 in Andheri East and 1 in Vile Parle East on the Western Express Highway",
+    "v": "12 centres by 9 operators across 11 buildings, 11 in Andheri East and 1 in Vile Parle East on the Western Express Highway",
     "asOf": "2026-10",
     "conf": "high",
-    "note": "Rustomjee Central Park (Executive Spaces) left out as asked. Visited_Co-working_Space.xlsx (site visits, October 2026)."
+    "note": "Includes Executive Spaces at Rustomjee Central Park as a competitor; the building itself is not in the proposed inventory. Visited_Co-working_Space.xlsx (site visits, October 2026)."
    },
    {
     "k": "Price per seat, quoted on the visit",
-    "v": "Rs 16,000 to 28,000 a month plus GST; median Rs 18,000",
+    "v": "Rs 14,000 to 28,000 a month plus GST; median Rs 18,000",
     "asOf": "2026-10",
     "conf": "high",
-    "note": "Seven of the 11 sit between Rs 16,000 and 18,000. The three above Rs 20,000 are WeWork (28,000), Innov8 Zion House (26,000) and Smartworks Fleet House (23,000)."
+    "note": "Eight of the 12 sit between Rs 14,000 and 18,000; Executive Spaces at Rustomjee Central Park is the floor at Rs 14,000. The three above Rs 20,000 are WeWork (28,000), Innov8 Zion House (26,000) and Smartworks Fleet House (23,000)."
    },
    {
     "k": "Seats in the 11 centres",
-    "v": "About 11,030 seats in total; three centres hold 7,300 of them (WeWork 3,000, Smartworks 2,500, Quest 1,800)",
+    "v": "About 11,155 seats in total; three centres hold 7,300 of them (WeWork 3,000, Smartworks 2,500, Quest 1,800)",
     "asOf": "2026-10",
     "conf": "medium",
     "note": "Seat totals as told to the team on the visit; the operators' own published figures differ for several centres (see Published prices and capacity)."
    },
    {
     "k": "Vacant seats counted",
-    "v": "About 800 seats free across the 11 centres; WeWork (300), Quest (about 200) and Smartworks (100) hold three quarters of it",
+    "v": "About 800 seats free across the 11 centres that shared it (Rustomjee did not); WeWork (300), Quest (about 200) and Smartworks (100) hold three quarters of it",
     "asOf": "2026-10",
     "conf": "medium",
     "note": "Counted from the cabins and desks named on the visit. 'Some small cabins' at Quest and the mix at WeWork are not counted beyond the stated numbers."
    },
    {
     "k": "Desk sizes",
-    "v": "3 x 2 ft at Rush, Innov8 Boston House, Executive Spaces and Innov8 Trade Star; 3.5 x 2 ft at Quest, 315Work and Awfis; 4 x 2 ft at Community Coworks, WeWork, Innov8 Zion and Smartworks",
+    "v": "3 x 2 ft at Rush, Innov8 Boston House, both Executive Spaces centres and Innov8 Trade Star; 3.5 x 2 ft at Quest, 315Work and Awfis; 4 x 2 ft at Community Coworks, WeWork, Innov8 Zion and Smartworks",
     "asOf": "2026-10",
     "conf": "high",
     "note": "The 4 x 2 ft desk at Community Coworks (Rs 16,500) is the cheapest large desk visited."
    },
    {
     "k": "Grade",
-    "v": "Only WeWork at K Raheja Platinum is in a building the team graded A; the other ten are B",
+    "v": "Only WeWork at K Raheja Platinum is in a building the team graded A; Rustomjee Central Park is A-; the other ten are B",
     "asOf": "2026-10",
     "conf": "high",
     "note": "Grades as the team recorded them on the visit."
    },
    {
     "k": "Hours",
-    "v": "9 am to 9 pm Monday to Saturday at nine centres; Quest 8 am to 8 pm; WeWork Monday to Friday only",
+    "v": "9 am to 9 pm Monday to Saturday at nine centres; Quest 8 am to 8 pm; WeWork Monday to Friday only; not shared at Rustomjee Central Park",
     "asOf": "2026-10",
     "conf": "high"
    },
@@ -698,6 +732,14 @@
     "conf": "high",
     "src": "https://www.innov8.work/coworking-space/mumbai/trade-star-andheri-east-69d769aba3824000017d7e6e/",
     "note": "Visit quote Rs 20,000 and 330 seats. Reviews on myHQ date from May 2026, so this is a recent opening."
+   },
+   {
+    "k": "Executive Spaces, Rustomjee Central Park",
+    "v": "Operator centre page: dedicated desk Rs 14,000, private cabin Rs 16,000 a seat (the home page says Rs 13,000 and 15,000); conference room Rs 1,500 an hour. myHQ: desk Rs 11,999, 7,500 sq ft, about 150 seats on the 4th and 6th floors of B wing, 10 am to 8 pm Monday to Saturday. Houssed: cabin Rs 15,000, 250 seats",
+    "asOf": "2026-10-23",
+    "conf": "high",
+    "src": "https://www.executivespaces.in/coworking-shared-office-space-in-rustomjee-central-park-andheri-east",
+    "note": "The visit quote of Rs 14,000 matches the operator's desk price. Opposite Kanakia Wall Street, 2 minutes' walk from WEH metro by the operator's account."
    },
    {
     "k": "Executive Spaces, Chandak Chambers",
@@ -815,7 +857,7 @@
    },
    {
     "k": "Executive Spaces",
-    "v": "Mumbai-only operator, first centre July 2019 (Goregaon East). Its site lists five centres; on 31 Mar 2026 it announced a ninth, 650-plus seats at Trade Star, Andheri East, next to Chakala metro",
+    "v": "Mumbai-only operator, first centre July 2019 (Goregaon East). Its site lists five centres, two of them on this atlas (Rustomjee Central Park and Chandak Chambers); on 31 Mar 2026 it announced a ninth, 650-plus seats at Trade Star, Andheri East, next to Chakala metro",
     "asOf": "2026-03-31",
     "conf": "medium",
     "src": "https://www.linkedin.com/posts/executive-space_executivespaces-officeforrent-officespaceavailable-activity-7444598351532040192-FkF-",
@@ -962,7 +1004,7 @@
     "asOf": "2026-10-23",
     "conf": "medium",
     "src": "https://properties.cityinfoservices.com/atul-corporate-avenue-andheri-east-mumbai/wsg2clx/pjd",
-    "note": "The PDF offers the 3rd and 4th floors, 12,414 sq ft carpet, furnished, Rs 300 on carpet with CAM included, ready now. The nearest visited competitors are 315Work (Rs 18,000, 500 m), Quest (Rs 18,000) and the WEH cluster at Rs 16,000 to 20,000."
+    "note": "The PDF offers the 3rd and 4th floors, 12,414 sq ft carpet, furnished, Rs 300 on carpet with CAM included, ready now. The nearest visited competitors are 315Work (Rs 18,000, 500 m), Executive Spaces at Rustomjee Central Park (Rs 14,000, 400 m), Quest (Rs 18,000) and the WEH cluster at Rs 16,000 to 20,000."
    },
    {
     "k": "723 Avenue (Wadhwa)",
@@ -985,7 +1027,7 @@
     "v": "Rs 300 to 375 per sq ft a month on carpet, CAM included to Rs 30 on top, for 12,414 to 15,343 sq ft carpet each",
     "asOf": "2026-10",
     "conf": "high",
-    "note": "Proposed_Inventory.pdf. At the 35 sq ft a seat and 20% margin the Andheri case study uses, Rs 300 on carpet before fit-out is about Rs 13,000 a seat in rent alone; the visited cabins sell at Rs 16,000 to 28,000."
+    "note": "Proposed_Inventory.pdf; the Rustomjee Central Park floor in the same PDF is not shown, as asked. At the 35 sq ft a seat and 20% margin the Andheri case study uses, Rs 300 on carpet before fit-out is about Rs 13,000 a seat in rent alone; the visited cabins sell at Rs 14,000 to 28,000."
    }
   ]
  },
