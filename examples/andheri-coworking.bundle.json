@@ -34,7 +34,7 @@
    "geoSrc": "https://www.openstreetmap.org/way/353202822",
    "micro": "weh",
    "fit": "coworking-competitors",
-   "reason": "The smallest centre visited, at a mid price for a B building beside WEH metro. Only two small cabins free.",
+   "reason": "125 seats, Rs 18,000 a seat for a 3 x 2 ft desk, Grade B. Free on the visit: a 6-seater and a 2-seater cabin.",
    "address": "Boston House, Andheri East, Mumbai",
    "locality": "Andheri East",
    "operator": "Rush Co-works",
@@ -51,13 +51,7 @@
    "parking": "Car Rs 4,000; two-wheeler Rs 1,500 a month",
    "nearestMetro": "WEH (Line 1)",
    "metroDistanceM": 160,
-   "publishedPriceDedicatedDesk": "Rs 13,000 (myHQ, quoted, negotiable)",
-   "publishedPricePrivateCabinASeat": "Rs 12,500 for a 1-person office (Office Hub)",
-   "publishedCapacity": "14,000 sq ft, about 100 seats (myHQ)",
-   "publicListing": "https://myhq.in/dedicated/coworking-space/inspire-cospace-andheri",
-   "visitSheetRow": 1,
-   "positionNote": "OSM building way 353202822 (centroid). Just off the Western Express Highway, about two minutes' walk from WEH metro (Line 1).",
-   "positioning": "value"
+   "positionNote": "OSM building way 353202822 (centroid). Just off the Western Express Highway, about two minutes' walk from WEH metro (Line 1)."
   },
   {
    "id": "innov8-boston-house",
@@ -69,7 +63,7 @@
    "geoSrc": "https://www.openstreetmap.org/way/353202822",
    "micro": "weh",
    "fit": "coworking-competitors",
-   "reason": "Second Innov8 site on this list, in the same building as Rush. Rs 2,000 a seat dearer than Rush for the same desk size; 12 seats free.",
+   "reason": "180 seats, Rs 20,000 a seat for a 3 x 2 ft desk, Grade B, in the same building as Rush. Free on the visit: 12 seats.",
    "address": "Boston House, Andheri East, Mumbai",
    "locality": "Andheri East",
    "operator": "Innov8",
@@ -86,13 +80,7 @@
    "parking": "Car Rs 4,000; two-wheeler Rs 1,500 a month",
    "nearestMetro": "WEH (Line 1)",
    "metroDistanceM": 160,
-   "publishedPriceDedicatedDesk": "Rs 15,999 to 16,999 (operator); Rs 13,000 (myHQ)",
-   "publishedPricePrivateCabinASeat": "Rs 17,999 to 19,999 (operator); Rs 12,499 (myHQ)",
-   "publishedCapacity": "160+ seats (operator); 11,800 sq ft, about 164 seats (myHQ)",
-   "publicListing": "https://www.innov8.work/coworking-space/mumbai/boston-house-andheri-east-6447d29b27e6c20001281193/",
-   "visitSheetRow": 2,
-   "positionNote": "OSM building way 353202822 (centroid). Just off the Western Express Highway, about two minutes' walk from WEH metro (Line 1).",
-   "positioning": "premium"
+   "positionNote": "OSM building way 353202822 (centroid). Just off the Western Express Highway, about two minutes' walk from WEH metro (Line 1)."
   },
   {
    "id": "executive-spaces-rustomjee-central-park",
@@ -104,7 +92,7 @@
    "geoSrc": "https://exa.ai/library/place/83qqct91nth",
    "micro": "weh",
    "fit": "coworking-competitors",
-   "reason": "The cheapest seat visited, Rs 14,000, in the best-graded building of the WEH cluster. Sold as a managed office, so vacancy, hours and parking were not shared on the visit. Rustomjee Central Park itself is not in Autopilot's proposed inventory; only this competitor is shown.",
+   "reason": "125 seats, Rs 14,000 a seat for a 3 x 2 ft desk, Grade A-: the lowest price on the visit sheet. Run as a managed office, so vacancy, hours, amenities and parking were not shared.",
    "address": "Rustomjee Central Park, Andheri East, Mumbai",
    "locality": "Andheri East",
    "operator": "Executive Spaces",
@@ -119,15 +107,9 @@
    "amenities": "Not shared (managed office)",
    "hours": "Not shared; myHQ lists 10 am to 8 pm, Monday to Saturday",
    "parking": "Not shared; myHQ lists car and two-wheeler parking",
-   "nearestMetro": "WEH (Line 1) about 480 m from the pin; the operator says 2 minutes' walk",
+   "nearestMetro": "WEH",
    "metroDistanceM": 480,
-   "publishedPriceDedicatedDesk": "Rs 14,000 (operator centre page; Rs 13,000 on the home page); Rs 11,999 (myHQ)",
-   "publishedPricePrivateCabinASeat": "Rs 16,000 (operator centre page; Rs 15,000 on the home page and Houssed)",
-   "publishedCapacity": "7,500 sq ft, about 150 seats, 4th and 6th floor B wing (myHQ); 250 seats (Houssed)",
-   "publicListing": "https://www.executivespaces.in/coworking-shared-office-space-in-rustomjee-central-park-andheri-east",
-   "visitSheetRow": 3,
-   "positionNote": "Map place page, as used in the earlier Andheri study; not the OSM 'Rustomjee' pin at 19.11642, 72.85428. Andheri-Kurla Road at the Chakala signal, opposite Kanakia Wall Street; the operator says 2 minutes' walk from WEH metro.",
-   "positioning": "value"
+   "positionNote": "Map place page, as used in the earlier Andheri study; not the OSM 'Rustomjee' pin at 19.11642, 72.85428. Andheri-Kurla Road at the Chakala signal, opposite Kanakia Wall Street; the operator says 2 minutes' walk from WEH metro."
   },
   {
    "id": "executive-spaces-chandak-chambers",
@@ -139,7 +121,7 @@
    "geoSrc": "https://exa.ai/library/place/dwzfqrcs71d",
    "micro": "weh",
    "fit": "coworking-competitors",
-   "reason": "The cheapest of the WEH cluster, at the foot of the metro station. Three cabins of 5 to 10 seats free; the smallest desk size on the list.",
+   "reason": "150 seats, Rs 16,000 a seat for a 3 x 2 ft desk, Grade B, at the WEH metro station. Free on the visit: 5-, 5- and 10-seater cabins.",
    "address": "Chandak Chambers, Andheri East, Mumbai",
    "locality": "Andheri East",
    "operator": "Executive Spaces",
@@ -156,13 +138,7 @@
    "parking": "Car Rs 4,500 a month",
    "nearestMetro": "WEH (Line 1)",
    "metroDistanceM": 50,
-   "publishedPriceDedicatedDesk": "Rs 16,000 (operator); Rs 15,999 (myHQ)",
-   "publishedPricePrivateCabinASeat": "Rs 18,000 (operator); Rs 13,999 (myHQ)",
-   "publishedCapacity": "Not published",
-   "publicListing": "https://executivespaces.in/coworking-spaces-in-andheri-east-Chandak-Chambers",
-   "visitSheetRow": 4,
-   "positionNote": "Map place page; not in OpenStreetMap. The developer's own page puts WEH metro at 50 m and Andheri railway station at 1.1 km (chandakgroup.com/chambers).",
-   "positioning": "value"
+   "positionNote": "Map place page; not in OpenStreetMap. The developer's own page puts WEH metro at 50 m and Andheri railway station at 1.1 km (chandakgroup.com/chambers)."
   },
   {
    "id": "quest-coworks-technopolis",
@@ -174,7 +150,7 @@
    "geoSrc": "https://www.openstreetmap.org/way/102525674",
    "micro": "chakala",
    "fit": "coworking-competitors",
-   "reason": "The biggest block of vacancy visited: a 150-seat cabin plus smaller ones, in a campus with a gym and pool. Mid price, but the furthest of the WEH group from a station.",
+   "reason": "1,800 seats, Rs 18,000 a seat for a 3.5 x 2 ft desk, Grade B, with gym, play zone and pool access. Free on the visit: a 150-seater cabin, a 15-seater cabin, a 22-seater, 15 open desks and some small cabins.",
    "address": "Technopolis Knowledge Park, Andheri East, Mumbai",
    "locality": "Andheri East",
    "operator": "Quest Coworks",
@@ -191,13 +167,7 @@
    "parking": "Car Rs 4,000; two-wheeler Rs 2,000 a month",
    "nearestMetro": "WEH (Line 1)",
    "metroDistanceM": 800,
-   "publishedPriceDedicatedDesk": "Rs 12,000 (myHQ); from Rs 14,500 (Qdesq)",
-   "publishedPricePrivateCabinASeat": "Rs 17,999 (myHQ); from Rs 18,000 (Qdesq)",
-   "publishedCapacity": "87,000 sq ft, about 1,750 seats on two floors (myHQ); 700 to 1,050 on other sites",
-   "publicListing": "https://myhq.in/dedicated/coworking-space/quest-coworks-technopolis-knowledge-park",
-   "visitSheetRow": 5,
-   "positionNote": "OSM landuse polygon 'Technopolis Knowledge Park', centroid. Mahakali Caves Road, between WEH and MIDC Andheri (Line 3) stations.",
-   "positioning": "scale"
+   "positionNote": "OSM landuse polygon 'Technopolis Knowledge Park', centroid. Mahakali Caves Road, between WEH and MIDC Andheri (Line 3) stations."
   },
   {
    "id": "community-coworks-akruti-trade-centre",
@@ -209,7 +179,7 @@
    "geoSrc": "https://exa.ai/library/place/108dhc19w0v",
    "micro": "chakala",
    "fit": "coworking-competitors",
-   "reason": "The largest desk on the list (4 x 2 ft) at one of the lower prices. Four cabins of 5 to 16 seats free. The visit sheet wrote 'Akruti Trade Star'; every public source puts this centre at Ackruti Trade Centre on MIDC Road 7, which also fits the sheet's 'MIDC and Chakala' metro note. The sheet's note of a 16,000 sq ft Cognizant managed office here is unverified.",
+   "reason": "380 seats, Rs 16,500 a seat for a 4 x 2 ft desk, Grade B. Free on the visit: 15-, 16-, 5- and 10-seater cabins. The sheet also notes a 16,000 sq ft carpet managed office for CTS India run by this operator.",
    "address": "Akruti Trade Centre (MIDC Road 7), Andheri East, Mumbai",
    "locality": "Andheri East",
    "operator": "Community Coworks",
@@ -224,15 +194,9 @@
    "amenities": "Standard, printing, breakout zone",
    "hours": "9 am to 9 pm, Monday to Saturday",
    "parking": "Car Rs 5,000; two-wheeler Rs 1,500 a month",
-   "nearestMetro": "MIDC Andheri (Line 3) about 250 m; Chakala J B Nagar (Line 1) 700 m",
+   "nearestMetro": "MIDC and Chakala",
    "metroDistanceM": 700,
-   "publishedPriceDedicatedDesk": "Rs 15,000 (myHQ); from Rs 11,000 (Instant Offices)",
-   "publishedPricePrivateCabinASeat": "From Rs 16,000 (Qdesq, may be the Solitaire centre)",
-   "publishedCapacity": "21,450 sq ft, about 800 seats (myHQ); 16,000 sq ft, 350 seats (Flexo)",
-   "publicListing": "https://myhq.in/dedicated/coworking-space/community-coworks-andherieast",
-   "visitSheetRow": 6,
-   "positionNote": "Map place page for A Wing, Ackruti Trade Centre, Road No. 7, Kondivita (MIDC); a second site gives 19.1179, 72.8714, 30 m away. Not in OpenStreetMap. myHQ gives Chakala (J B Nagar) metro 700 m and Airport Road 850 m; MIDC Andheri on Line 3 is about 250 m east.",
-   "positioning": "value"
+   "positionNote": "Map place page for A Wing, Ackruti Trade Centre, Road No. 7, Kondivita (MIDC); a second site gives 19.1179, 72.8714, 30 m away. Not in OpenStreetMap. myHQ gives Chakala (J B Nagar) metro 700 m and Airport Road 850 m; MIDC Andheri on Line 3 is about 250 m east."
   },
   {
    "id": "wework-raheja-platinum",
@@ -244,7 +208,7 @@
    "geoSrc": "https://digitalnomadindex.com/spaces/india/maharashtra/mumbai/wework-raheja-platinum-mumbai",
    "micro": "marol",
    "fit": "coworking-competitors",
-   "reason": "The price ceiling and the only Grade A building visited: Rs 28,000 a seat, 300 seats free, the dearest parking, and a five-day week. Sets what the top of the Marol market pays.",
+   "reason": "3,000 seats, Rs 28,000 a seat for a 4 x 2 ft desk, Grade A: the highest price and the only Grade A building visited. Free on the visit: 300 seats, a mix of open desks and cabins. Monday to Friday only.",
    "address": "K Raheja Platinum, Andheri East, Mumbai",
    "locality": "Andheri East",
    "operator": "WeWork",
@@ -261,13 +225,7 @@
    "parking": "Car Rs 8,000; two-wheeler Rs 3,000 a month",
    "nearestMetro": "Marol Naka (Lines 1 and 3)",
    "metroDistanceM": 700,
-   "publishedPriceDedicatedDesk": "Rs 24,500 (myHQ, quoted, negotiable)",
-   "publishedPricePrivateCabinASeat": "Rs 26,500 (myHQ); 8-person office Rs 2,33,800 a month (Office Hub)",
-   "publishedCapacity": "154,000 sq ft, about 3,026 seats, 10 floors (myHQ)",
-   "publicListing": "https://myhq.in/dedicated/coworking-space/wework-raheja-platinum",
-   "visitSheetRow": 7,
-   "positionNote": "Listing page coordinate; a cafe on the building's ground floor is pinned within 2 m of it. Not in OpenStreetMap. Sag Baug Road, off Andheri-Kurla Road; myHQ gives Marol Naka 650 to 800 m and Saki Naka 750 m.",
-   "positioning": "premium"
+   "positionNote": "Listing page coordinate; a cafe on the building's ground floor is pinned within 2 m of it. Not in OpenStreetMap. Sag Baug Road, off Andheri-Kurla Road; myHQ gives Marol Naka 650 to 800 m and Saki Naka 750 m."
   },
   {
    "id": "innov8-zion-house",
@@ -279,7 +237,7 @@
    "geoSrc": "https://exa.ai/library/place/jdcpx8jszb7",
    "micro": "vile-parle",
    "fit": "coworking-competitors",
-   "reason": "Innov8's flagship on the highway in Vile Parle East: 1,500 seats, the second-highest price, and nothing larger than a 20-seat cabin free. Outside Andheri East proper but competing for the same WEH tenants.",
+   "reason": "1,500 seats, Rs 26,000 a seat for a 4 x 2 ft desk, Grade B, in Vile Parle on the Western Express Highway. Free on the visit: a 20-seater cabin, 5-, 13- and 4-seaters.",
    "address": "Zion House, Vile Parle East, Mumbai",
    "locality": "Vile Parle East",
    "operator": "Innov8",
@@ -296,13 +254,7 @@
    "parking": "Car Rs 3,500 a month; no two-wheeler parking",
    "nearestMetro": "WEH (Line 1) and Gundavali (Line 7)",
    "metroDistanceM": 900,
-   "publishedPriceDedicatedDesk": "From Rs 21,999 (operator); Rs 20,000 (myHQ)",
-   "publishedPricePrivateCabinASeat": "From Rs 24,999 (operator)",
-   "publishedCapacity": "Over 1,900 seats (operator); 1,500 at launch, Dec 2024; about 1 lakh sq ft",
-   "publicListing": "https://www.innov8.work/coworking-space/mumbai/house-andheri-east-6798d4b2b8e08e00015e1bf6/",
-   "visitSheetRow": 8,
-   "positionNote": "Map place page for Innov8 Zion House; not in OpenStreetMap. On the Western Express Highway in Vile Parle East; Innov8 says 850 m from Andheri station, myHQ gives Gundavali 900 m and WEH 1 km.",
-   "positioning": "premium"
+   "positionNote": "Map place page for Innov8 Zion House; not in OpenStreetMap. On the Western Express Highway in Vile Parle East; Innov8 says 850 m from Andheri station, myHQ gives Gundavali 900 m and WEH 1 km."
   },
   {
    "id": "smartworks-fleet-house",
@@ -314,7 +266,7 @@
    "geoSrc": "https://exa.ai/library/place/x65yvwhmfnx",
    "micro": "marol",
    "fit": "coworking-competitors",
-   "reason": "2,500 seats at the Marol Naka interchange with 100 seats free in blocks of 6 to 50. The nearest large centre to the Privilon and 723 Avenue sites.",
+   "reason": "2,500 seats, Rs 23,000 a seat for a 4 x 2 ft desk, Grade B, at Marol Naka. Free on the visit: 30-, 6-, 6-, 8- and 50-seaters.",
    "address": "Fleet House, Andheri East, Mumbai",
    "locality": "Andheri East",
    "operator": "Smartworks",
@@ -331,13 +283,7 @@
    "parking": "Car Rs 4,000; two-wheeler Rs 1,500 a month",
    "nearestMetro": "Marol Naka (Lines 1 and 3)",
    "metroDistanceM": 100,
-   "publishedPriceDedicatedDesk": "Not published (managed campuses only)",
-   "publishedPricePrivateCabinASeat": "Rs 10,000 a seat managed office, 24-month lock-in (myHQ)",
-   "publishedCapacity": "30,000 sq ft floor, about 1,000 seats (myHQ)",
-   "publicListing": "https://myhq.in/managed-office/smartworks-andheri",
-   "visitSheetRow": 9,
-   "positionNote": "Map place page; not in OpenStreetMap. Marol Maroshi Road at Marol Naka: JLL's listing calls it adjacent to Marol Naka metro, and both Line 1 and Line 3 stations are at the door.",
-   "positioning": "scale"
+   "positionNote": "Map place page; not in OpenStreetMap. Marol Maroshi Road at Marol Naka: JLL's listing calls it adjacent to Marol Naka metro, and both Line 1 and Line 3 stations are at the door."
   },
   {
    "id": "innov8-trade-star",
@@ -349,7 +295,7 @@
    "geoSrc": "https://www.openstreetmap.org/node/2188869089",
    "micro": "jbnagar",
    "fit": "coworking-competitors",
-   "reason": "Innov8's third site on the list, opened in 2026 beside Chakala metro: Rs 20,000 for a 3 x 2 ft desk, 26 seats free. Executive Spaces announced a 650-seat centre in the same building in March 2026. The visit sheet names Marol as the metro; the building stands at Chakala (J B Nagar).",
+   "reason": "330 seats, Rs 20,000 a seat for a 3 x 2 ft desk, Grade B. Free on the visit: a 20-seater and a 6-seater. Parking to be confirmed.",
    "address": "Akruti Trade Star, Andheri East, Mumbai",
    "locality": "Andheri East",
    "operator": "Innov8",
@@ -364,15 +310,9 @@
    "amenities": "Standard, breakout, printing",
    "hours": "9 am to 9 pm, Monday to Saturday",
    "parking": "To be confirmed",
-   "nearestMetro": "Chakala J B Nagar (Line 1) about 300 m",
+   "nearestMetro": "Marol (sheet); the building stands at Chakala J B Nagar metro",
    "metroDistanceM": 300,
-   "publishedPriceDedicatedDesk": "From Rs 16,000 (operator); Rs 17,000 (myHQ)",
-   "publishedPricePrivateCabinASeat": "From Rs 18,000 (operator)",
-   "publishedCapacity": "Over 688 seats (operator); 12,500 sq ft, about 265 seats on the 3rd floor (myHQ)",
-   "publicListing": "https://www.innov8.work/coworking-space/mumbai/trade-star-andheri-east-69d769aba3824000017d7e6e/",
-   "visitSheetRow": 10,
-   "positionNote": "OSM node 2188869089 'Trade Star', Andheri-Kurla Road, between Chakala (J B Nagar) and Airport Road stations on Line 1.",
-   "positioning": "premium"
+   "positionNote": "OSM node 2188869089 'Trade Star', Andheri-Kurla Road, between Chakala (J B Nagar) and Airport Road stations on Line 1."
   },
   {
    "id": "315work-avenue-silver-utopia",
@@ -384,7 +324,7 @@
    "geoSrc": "https://exa.ai/library/place/n2hx8mv5chs",
    "micro": "chakala",
    "fit": "coworking-competitors",
-   "reason": "Small and nearly full: 10 seats free of 240, with two large-corporate clients. Mid price, but the second-dearest parking visited.",
+   "reason": "240 seats, Rs 18,000 a seat for a 3.5 x 2 ft desk, Grade B. Free on the visit: 10 seats.",
    "address": "Silver Utopia, Andheri East, Mumbai",
    "locality": "Andheri East",
    "operator": "315Work Avenue",
@@ -401,13 +341,7 @@
    "parking": "Car Rs 6,000; two-wheeler Rs 3,000 a month",
    "nearestMetro": "WEH (Line 1) and Gundavali (Line 7)",
    "metroDistanceM": 500,
-   "publishedPriceDedicatedDesk": "On request; brand-level from Rs 10,999 for 25+ seats",
-   "publishedPricePrivateCabinASeat": "On request",
-   "publishedCapacity": "6,530 sq ft, about 200 seats (myHQ)",
-   "publicListing": "https://myhq.in/managed-office/315-work-avenue-andheri",
-   "visitSheetRow": 11,
-   "positionNote": "Map place page; another centre in the same building is pinned within 5 m. Cardinal Gracias Road, Chakala; myHQ gives WEH and Gundavali metro 500 m, Chakala (J B Nagar) 900 m.",
-   "positioning": "value"
+   "positionNote": "Map place page; another centre in the same building is pinned within 5 m. Cardinal Gracias Road, Chakala; myHQ gives WEH and Gundavali metro 500 m, Chakala (J B Nagar) 900 m."
   },
   {
    "id": "awfis-skyline-icon",
@@ -419,7 +353,7 @@
    "geoSrc": "https://myhq.in/virtual-office/awfis-skyline-icon",
    "micro": "marol",
    "fit": "coworking-competitors",
-   "reason": "The listed operator's Marol centre at the median price, 350 m from the interchange, with fintech tenants and 36 seats free.",
+   "reason": "825 seats, Rs 18,000 a seat for a 3.5 x 2 ft desk, Grade B, at Marol. Free on the visit: a 20-seater, a 6-seater and a 10-seater cabin. Parking to be confirmed.",
    "address": "Skyline Icon, Andheri East, Mumbai",
    "locality": "Andheri East",
    "operator": "Awfis",
@@ -436,13 +370,7 @@
    "parking": "To be confirmed",
    "nearestMetro": "Marol Naka (Lines 1 and 3)",
    "metroDistanceM": 350,
-   "publishedPriceDedicatedDesk": "Rs 12,999 (myHQ); hot desk Rs 9,099 (BookMyCoworking)",
-   "publishedPricePrivateCabinASeat": "Rs 12,999 (myHQ)",
-   "publishedCapacity": "60,000 sq ft, about 1,200 seats (7th floor unit) plus 16,000 sq ft, about 535 seats (4th floor unit), myHQ",
-   "publicListing": "https://myhq.in/dedicated/coworking-space/awfis-skyline-icon",
-   "visitSheetRow": 12,
-   "positionNote": "Coordinate printed on the myHQ listing, matched by a map place page within 1 m. Andheri-Kurla Road, Marol; myHQ gives Marol Naka 350 m.",
-   "positioning": "value"
+   "positionNote": "Coordinate printed on the myHQ listing, matched by a map place page within 1 m. Andheri-Kurla Road, Marol; myHQ gives Marol Naka 350 m."
   },
   {
    "id": "proposed-corporate-avenue",
@@ -454,7 +382,7 @@
    "geoSrc": "https://exa.ai/library/place/3kk3s3wpqbl",
    "micro": "chakala",
    "fit": "proposed-inventory",
-   "reason": "The only floor ready now: furnished, approvals in hand, Rs 300 on carpet with CAM included. Competes with the WEH and Chakala cluster: Executive Spaces at Rustomjee Central Park (Rs 14,000) and 315Work at Silver Utopia (Rs 18,000) are each about 400 to 500 m away. Efficiency 60% assumed because the landlord quoted on carpet.",
+   "reason": "Grade A, G+8, furnished. 3rd and 4th floors, 12,414 sq ft carpet, 20,690 sq ft built-up. Rs 300 per sq ft on carpet, CAM included. Fire NOC and OC available; ready immediately. 5 car parks a floor. Chakala metro 800 m. Efficiency 60% assumed because the landlord quoted on carpet.",
    "address": "Corporate Avenue, Sonawala Road, off Andheri-Kurla Road, Chakala, Andheri East, Mumbai",
    "locality": "Andheri East",
    "building": "Corporate Avenue (Atul Projects)",
@@ -485,7 +413,7 @@
    "geoSrc": "https://dhcrealty.in/property/wadhwa-723-avenue/",
    "micro": "marol",
    "fit": "proposed-inventory",
-   "reason": "Bare shell on the top floors, next door to WeWork's 3,000-seat Raheja Platinum at Rs 28,000, the price ceiling of the market. Fire NOC and OC due November 2026. MahaRERA P51800050698.",
+   "reason": "Grade A, G+15, bare shell, 11.7 ft ceilings. 13th and 14th floors, 12,952 sq ft carpet, 21,586 sq ft built-up. Rs 316 per sq ft on carpet plus Rs 16 CAM. Fire NOC, OC and CC due November 2026; available November 2026. Parking 1 per 1,000 sq ft built-up. Marol metro 700 m.",
    "address": "Wadhwa 723 Avenue, Marol Co-operative Industrial Estate Road, Sag Baug, Marol, Andheri East, Mumbai 400059",
    "locality": "Andheri East",
    "building": "723 Avenue (Wadhwa)",
@@ -516,13 +444,13 @@
    "geoSrc": "https://exa.ai/library/place/s8x6jf6zts0",
    "micro": "marol",
    "fit": "proposed-inventory",
-   "reason": "The largest floor and the dearest rent, at the door of the Marol Naka interchange, opposite Smartworks Fleet House (2,500 seats, Rs 23,000). The PDF says January 2027; the only public completion date found is January 2030, so confirm with the landlord. MahaRERA P51800079264.",
+   "reason": "Grade A, G+15, bare shell, 11.7 ft ceilings. Multiple floors, 15,343 sq ft carpet. Rs 375 per sq ft on carpet plus Rs 30 CAM. Fire NOC, OC and CC due January 2027; available January 2027. Parking to be confirmed. Marol metro 93 m. Efficiency 60% assumed because the landlord quoted on carpet.",
    "address": "Privilon, Marol Naka metro station, Gamdevi, Marol, Andheri East, Mumbai 400059",
    "locality": "Andheri East",
    "building": "Privilon (Bsafal)",
    "grade": "A",
    "parking": "To be confirmed",
-   "nearestMetro": "Marol Naka (Lines 1 and 3), 93 m per the PDF. The map pin is the station address, so the map's own distance reads 0 m; use 93 m",
+   "nearestMetro": "Marol Metro (93 m per the PDF; the map pin is the station address)",
    "metroDistanceM": 93,
    "positionNote": "The place page pin sits within 10 m of the Marol Naka station coordinate, so it marks the address, not a footprint. The developer says 'right next to Marol Metro Station'; the PDF says 93 m.",
    "floorUnit": "Multiple",
@@ -768,112 +696,6 @@
     "asOf": "2026-10",
     "conf": "low",
     "note": "Not found in any public source on 23 Oct 2026; the only public 16,000 sq ft figure is the size listing sites give for the Community Coworks centre itself. Treat as the team's note until confirmed."
-   }
-  ],
-  "prices": [
-   {
-    "k": "Rush Co-works, Boston House",
-    "v": "Dedicated desk Rs 13,000 a month on myHQ (quoted, negotiable); 1-person office Rs 12,500 on Office Hub. 14,000 sq ft, about 100 seats, one floor (myHQ)",
-    "asOf": "2026-10-23",
-    "conf": "medium",
-    "src": "https://myhq.in/dedicated/coworking-space/inspire-cospace-andheri",
-    "note": "The visit quote was Rs 18,000 for a cabin seat. Listed under its old name Inspire Cospace on some sites."
-   },
-   {
-    "k": "Innov8, Boston House",
-    "v": "Operator: fixed desk Rs 15,999 to 16,999, private cabin Rs 17,999 to 19,999 a seat, flexi pass Rs 399 to 499 a day; '160+ seats'. myHQ: cabin Rs 12,499, desk Rs 13,000",
-    "asOf": "2026-10-23",
-    "conf": "high",
-    "src": "https://www.innov8.work/coworking-space/mumbai/boston-house-andheri-east-6447d29b27e6c20001281193/",
-    "note": "Innov8's own site prints two price sets for this centre (listing card and centre page). The visit quote of Rs 20,000 sits at the top of the operator's cabin range."
-   },
-   {
-    "k": "Innov8, Zion House",
-    "v": "Operator: dedicated desk from Rs 21,999, private cabin from Rs 24,999 a seat, flexi pass Rs 599 to 699 a day; 'over 1,900 seats'. myHQ: desk Rs 20,000, about 1 lakh sq ft",
-    "asOf": "2026-10-23",
-    "conf": "high",
-    "src": "https://www.innov8.work/coworking-space/mumbai/house-andheri-east-6798d4b2b8e08e00015e1bf6/",
-    "note": "Seat counts conflict: 1,500 at launch (Dec 2024), 1,900+ on the operator page now, 1,200 on myHQ, 1,500 on the visit. Visit quote Rs 26,000."
-   },
-   {
-    "k": "Innov8, Trade Star",
-    "v": "Operator: fixed desk from Rs 16,000, private cabin from Rs 18,000 a seat, flexi pass Rs 499 a day; 'over 688 seats'. myHQ: desk Rs 17,000, 12,500 sq ft, about 265 seats on the 3rd floor",
-    "asOf": "2026-10-23",
-    "conf": "high",
-    "src": "https://www.innov8.work/coworking-space/mumbai/trade-star-andheri-east-69d769aba3824000017d7e6e/",
-    "note": "Visit quote Rs 20,000 and 330 seats. Reviews on myHQ date from May 2026, so this is a recent opening."
-   },
-   {
-    "k": "Executive Spaces, Rustomjee Central Park",
-    "v": "Operator centre page: dedicated desk Rs 14,000, private cabin Rs 16,000 a seat (the home page says Rs 13,000 and 15,000); conference room Rs 1,500 an hour. myHQ: desk Rs 11,999, 7,500 sq ft, about 150 seats on the 4th and 6th floors of B wing, 10 am to 8 pm Monday to Saturday. Houssed: cabin Rs 15,000, 250 seats",
-    "asOf": "2026-10-23",
-    "conf": "high",
-    "src": "https://www.executivespaces.in/coworking-shared-office-space-in-rustomjee-central-park-andheri-east",
-    "note": "The visit quote of Rs 14,000 matches the operator's desk price. Opposite Kanakia Wall Street, 2 minutes' walk from WEH metro by the operator's account."
-   },
-   {
-    "k": "Executive Spaces, Chandak Chambers",
-    "v": "Operator: dedicated desk Rs 16,000, private cabin Rs 18,000 a seat; conference room Rs 1,500 an hour. myHQ: cabin Rs 13,999, desk Rs 15,999",
-    "asOf": "2026-10-23",
-    "conf": "high",
-    "src": "https://executivespaces.in/coworking-spaces-in-andheri-east-Chandak-Chambers",
-    "note": "The visit quote of Rs 16,000 matches the operator's own desk price. No seat count is published; the visit counted 150. Operator hours 8 am to 9 pm, Monday to Friday."
-   },
-   {
-    "k": "Quest Coworks, Technopolis",
-    "v": "myHQ: desk Rs 12,000, cabin Rs 17,999 a seat, 87,000 sq ft, about 1,750 seats on two floors. Qdesq: desk from Rs 14,500, cabin from Rs 18,000. CoFynd: desk Rs 16,999, cabin Rs 17,999",
-    "asOf": "2026-10-23",
-    "conf": "medium",
-    "src": "https://myhq.in/dedicated/coworking-space/quest-coworks-technopolis-knowledge-park",
-    "note": "Capacity figures range from 700 to 1,750 seats across listing sites; the visit was told 1,800. Visit quote Rs 18,000 matches the cabin ask. The operator's own site prints no prices."
-   },
-   {
-    "k": "Community Coworks, Akruti Trade Centre",
-    "v": "myHQ: dedicated desk Rs 15,000, 21,450 sq ft, about 800 seats; day pass Rs 450. Dexwork: managed seats from Rs 13,000. Instant Offices: desks from Rs 11,000",
-    "asOf": "2026-10-23",
-    "conf": "medium",
-    "src": "https://myhq.in/dedicated/coworking-space/community-coworks-andherieast",
-    "note": "Every public source puts this centre at Ackruti Trade Centre, Road No. 7, MIDC, not 'Akruti Trade Star' as the visit sheet wrote. Other sites give 16,000 sq ft and 350 seats, or 243 workstations on one wing. Visit quote Rs 16,500 and 380 seats."
-   },
-   {
-    "k": "WeWork, Raheja Platinum",
-    "v": "myHQ: dedicated desk Rs 24,500, private cabin Rs 26,500 a seat (quoted, negotiable); 154,000 sq ft, about 3,026 seats over 10 floors. Office Hub: 8-person office Rs 2,33,800 a month",
-    "asOf": "2026-10-23",
-    "conf": "medium",
-    "src": "https://myhq.in/dedicated/coworking-space/wework-raheja-platinum",
-    "note": "WeWork publishes no per-centre price. The visit quote of Rs 28,000 is Rs 1,500 above the listing ask. Raheja Platinum is WeWork's only Andheri East centre."
-   },
-   {
-    "k": "Smartworks, Fleet House",
-    "v": "myHQ managed office: Rs 10,000 a seat a month (quoted, negotiable), 24-month lock-in, 30,000 sq ft floor, about 1,000 seats",
-    "asOf": "2026-10-23",
-    "conf": "low",
-    "src": "https://myhq.in/managed-office/smartworks-andheri",
-    "note": "Smartworks sells managed campuses, usually 300 seats and up, and publishes no retail price. The visit quote of Rs 23,000 for a cabin seat and the Rs 10,000 listing ask are different products; ask which was quoted."
-   },
-   {
-    "k": "315Work Avenue, Silver Utopia",
-    "v": "No centre price published: 'prices on request' on myHQ and Dexwork. 6,530 sq ft, about 200 seats, one floor; managed units from 30 seats on a 24-month lock-in. Brand-level 'from Rs 10,999 a seat' for teams of 25 and above",
-    "asOf": "2026-10-23",
-    "conf": "medium",
-    "src": "https://myhq.in/managed-office/315-work-avenue-andheri",
-    "note": "Visit quote Rs 18,000 and 240 seats."
-   },
-   {
-    "k": "Awfis, Skyline Icon",
-    "v": "myHQ: dedicated desk and private cabin Rs 12,999 a seat (quoted, negotiable); 60,000 sq ft, about 1,200 seats on two floors (7th-floor page); a second 4th-floor unit of 16,000 sq ft, about 535 seats, managed office at Rs 12,999 on a 12-month lock-in",
-    "asOf": "2026-10-23",
-    "conf": "medium",
-    "src": "https://myhq.in/dedicated/coworking-space/awfis-skyline-icon",
-    "note": "Awfis runs at least two units in the building, which explains the 825 seats told to the team against 1,200 plus 535 on the listings. Hot desk Rs 9,099 a month on BookMyCoworking. Visit quote Rs 18,000."
-   },
-   {
-    "k": "Andheri East asking prices, listing average",
-    "v": "myHQ states an average of Rs 11,200 a seat a month for Andheri East and a range of Rs 9,999 to 25,000 for a fixed desk",
-    "asOf": "2026-10-23",
-    "conf": "medium",
-    "src": "https://myhq.in/mumbai/dedicated/coworking-space-in-andheri-east",
-    "note": "Listing asks, marked indicative by the platform. Every visit quote on this atlas is above that average, which is what a cabin seat with a 12-month term costs against a listing's entry price."
    }
   ],
   "operators": [
