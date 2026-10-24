@@ -69,13 +69,11 @@ what it fixes, and fixes the worst one to three first.
 - Several pages end in the top half (costing, levers, infrastructure, why
   here, the pipeline pages, risks, rivals next door): the content does not
   use the height.
-- "How full rival centres run": the operator names under the bars are dense
-  and set at 6.6 pt, below the 7.5 pt floor.
-- The wider corridor tables wrap occupancy onto two lines.
 - Recent deals: with no "what it means" copy the right third of the page is
   empty and the table has no pairing box.
-- Decision table: the edge pill wraps a two-word building name onto two
-  lines.
 - The terms table sets the small notes under big figures in the serif face.
 - Price ladder: the dashed "Middle" line runs through the count label of the
   band it falls in, and the chart leaves a wide empty strip above the dots.
+- "How full rival centres run": the band columns are narrow, so long
+  "operator · building" lines wrap, and the page ends at about two thirds of
+  its height. The bars could take the full width with the box below.
