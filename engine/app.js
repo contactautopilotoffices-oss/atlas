@@ -51,6 +51,9 @@ function fill(s) {
   return String(s).replace(/\{(\w+)\}/g, (m, k) => (k in t ? t[k] : m));
 }
 /* say("connect.title", "How people get to each option") */
+/* A bundle that is a list, not a ranking, sets copy.option.rank to false:
+   the panel then shows no "N of M" row and no rank in its eyebrow. */
+const NO_RANK = !!(CP && CP.option && CP.option.rank === false);
 function say(path, fallback) {
   const v = path.split(".").reduce((o, k) => (o == null ? o : o[k]), CP);
   return fill(v == null || v === "" ? fallback : v);
@@ -458,7 +461,7 @@ const LAYER_HINT_DEFAULT = {
   bus: `Bus stops near the list${BUSD.credit ? ` (${BUSD.credit})` : ""}. They show once you zoom in to street level.`,
   links: "Lines to the three nearest options from the open one. A pair picked on the distance matrix is always drawn.",
   rings: `${RING_WORDS} minute drive rings around the open option. The Catchment camera turns them on.`,
-  sat: `The newest satellite imagery under the map${M.imagery ? `: ${M.imagery.name}, ${M.imagery.detail}` : ""}. Turns off the 3D buildings so the roofs show.`
+  sat: `The newest satellite imagery under the map${M.imagery ? `: ${M.imagery.name}, ${M.imagery.detail}` : ""}. Turns off the buildings and road fills so the roofs show.`
 };
 const LAYER_HINT = new Proxy({}, { get: (_, k) => say("layerHints." + String(k), LAYER_HINT_DEFAULT[k] || `${kindLabel(String(k))} on the map.`) });
 
@@ -956,10 +959,13 @@ function addLayers() {
 
 /* The layer chips double as the legend. */
 /* With satellite on, Standard's 3D buildings and trees would hide the
-   roofs, so they go while it is on. */
+   roofs, so they go while it is on; and the imagery moves up to the middle
+   slot, above the basemap's flat building footprints and road fills, which
+   otherwise sit as white shapes on top of the photo. Labels stay above. */
 function basemapForSat() {
   if (!map || (A.mapStyle || MAP_STYLE) !== MAP_STYLE) return;
   try { map.setConfigProperty("basemap", "show3dObjects", !S.layers.sat); } catch (e) {}
+  try { if (map.getLayer("sat") && map.setSlot) map.setSlot("sat", S.layers.sat ? "middle" : "bottom"); } catch (e) {}
 }
 function applyLayerVisibility() {
   if (!map || !map.getLayer("opt")) return;
@@ -1045,8 +1051,14 @@ const DPR = Math.min(2, Math.max(1, Math.round(window.devicePixelRatio || 1)));
 const merc = (lng, lat) => [lng * 20037508.342789244 / 180, Math.log(Math.tan((90 + lat) * Math.PI / 360)) * 6378137];
 /* z is a Mapbox zoom (512 px tiles), so a crop frames the building as the
    map does at that zoom. */
+/* A pin close to but not on the building (a complex, a point of interest,
+   a street or an address pin) gets a wider AREA crop instead, labelled as
+   one, so the card still shows where it is without claiming which roof. */
+const AREA_PREC = new Set(["complex", "poi", "landuse", "street", "approx"]);
+const isAreaShot = (o) => o.precision !== "building" && AREA_PREC.has(o.precision);
 function satUrl(o, w, h, z) {
-  if (o.precision !== "building") return "";
+  if (o.precision !== "building" && !AREA_PREC.has(o.precision)) return "";
+  if (o.precision !== "building") z -= 1.4;
   const [x, y] = merc(o.lng, o.lat), r = 78271.51696402048 / 2 ** z, hw = w / 2 * r, hh = h / 2 * r;
   return `${ESRI}/export?bbox=${(x - hw).toFixed(1)},${(y - hh).toFixed(1)},${(x + hw).toFixed(1)},${(y + hh).toFixed(1)}&bboxSR=3857&imageSR=3857&size=${w * DPR},${h * DPR}&format=jpg&f=image`;
 }
@@ -1090,7 +1102,7 @@ function tile(o, kind) {
 }
 function renderFilters() {
   const all = [...FIT_FILTERS, ...OTHER_FILTERS];
-  $("#filters").innerHTML = all.map(f => `<button class="chip ${S.filters.has(f.key) ? "on" : ""}" data-f="${f.key}" type="button" aria-pressed="${S.filters.has(f.key)}" data-hint="${esc(FITS[f.key] ? `Keep only the ${FITS[f.key].label} group on the revised ranking.` : "Keep only options within 1 km of an open metro, MRTS or suburban station.")}">${FITS[f.key] ? `<span class="dot" style="background:${FITS[f.key].color};margin:0"></span>` : ""}${esc(f.label)}</button>`).join("");
+  $("#filters").innerHTML = all.map(f => `<button class="chip ${S.filters.has(f.key) ? "on" : ""}" data-f="${f.key}" type="button" aria-pressed="${S.filters.has(f.key)}" data-hint="${esc(FITS[f.key] ? say("filters.groupHint", `Keep only the ${FITS[f.key].label} group on the revised ranking.`) : "Keep only options within 1 km of an open metro, MRTS or suburban station.")}">${FITS[f.key] ? `<span class="dot" style="background:${FITS[f.key].color};margin:0"></span>` : ""}${esc(f.label)}</button>`).join("");
 }
 /* What this Atlas can be sorted by. Only what it actually has: no chooser
    means no "fit to your priorities", no current office means no "distance
@@ -1101,6 +1113,12 @@ const SORTS = (() => {
   if (EX) out.push({ key: "home", label: say("sort.home", "Distance from the current office"), fn: (a, b) => homeKm(a) - homeKm(b) || byRank(a, b) });
   if (OPEN.length) out.push({ key: "rail", label: say("sort.rail", "Nearest station today"), fn: (a, b) => nearestOpen(a).d - nearestOpen(b).d });
   if (KINDS.length) out.push({ key: "places", label: say("sort.places", "Places within reach"), fn: (a, b) => reach(b, KINDS) - reach(a, KINDS) || byRank(a, b) });
+  /* One sort per place layer: nearest first. For an atlas whose places are
+     the client's own proposed sites, this is "which competitor is closest". */
+  for (const k of KINDS) {
+    const dist = (o) => { const n = nearestOfKind(o, k); return n && isFinite(n.d) ? n.d : Infinity; };
+    out.push({ key: "near:" + k, label: say("sort.near." + k, `Nearest ${kindLabel(k).toLowerCase()}`), fn: (a, b) => dist(a) - dist(b) || byRank(a, b) });
+  }
   for (const m of PARTS) {
     if (m.kind !== "column") continue;
     out.push({ key: "col:" + m.key, label: m.label || titleCase(m.key),
@@ -1132,7 +1150,7 @@ function renderList() {
         <div class="loc">${fitBadge(o)} ${esc(o.sheetMicro)}</div>
         <div class="facts">${EX ? `<span title="From the current office by road">${isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(homeKm(o))}${homeMin(o) ? ` · ${esc(homeMin(o))}` : ""}</span>` : ""}${r.none ? "" : `<span title="Nearest station open: ${esc(r.s.name)}">${fmtM(r.d)} to rail</span>`}${(b => b ? `<span title="Nearest bus stop: ${esc(b.s.name)}">${fmtM(b.d)} to bus</span>` : "")(nearestBus(o))}${flagChip(o)}</div>
       </div>
-      <span class="score" title="Fit to your priorities, out of 100">${score(o)}</span>
+      ${HAS_CHOOSER ? `<span class="score" title="Fit to your priorities, out of 100">${score(o)}</span>` : ""}
     </button>`;
   }).join("");
   mountTiles($("#list"));
@@ -1925,7 +1943,7 @@ function renderOption(o) {
   const rank = O.slice().sort(byFit).findIndex(x => x.id === o.id) + 1;
   const backTo = TABS.find(t => t.key === S.tab) || TABS[0];
   $("#p-head").innerHTML = `<button class="back" type="button">← Back to ${esc(backTo.label)}</button>
-    <div class="eyebrow">${fit ? `Rank ${o.n} · ` : `Option ${nn(o)} · `}${esc(o.sheetMicro)}</div>
+    <div class="eyebrow">${NO_RANK ? [fit && fit.label, o.sheetMicro].filter(Boolean).map(esc).join(" · ") : `${fit ? `${say("option.rankWord", "Rank")} ${o.n} · ` : `Option ${nn(o)} · `}${esc(o.sheetMicro)}`}</div>
     <h2>${esc(o.name)}</h2>${fitBadge(o)}${o.reason ? `<p class="reason">${esc(o.reason)}</p>` : ""}${verdictHTML(o, p)}${shotBar(o)}${actions()}`;
   const sat = satUrl(o, 640, 250, 16.6);
   const others = O.filter(x => x.id !== o.id).map(x => ({ x, d: km(o, x) })).sort((a, b) => a.d - b.d);
@@ -1934,7 +1952,6 @@ function renderOption(o) {
   /* Only the kinds this option actually reaches, so the table has no column
      of zeroes for something the Atlas plots on the far side of the city. */
   const myKinds = KINDS.filter(k => upTo(c, RINGS.length - 1, k) > 0);
-  const ringRows = c.map((rr, i) => `<tr><td>≤ ${rr.min} min <span class="note">(${rr.km.toFixed(1)} km)</span></td>${myKinds.map(k => `<td class="num">${upTo(c, i, k)}</td>`).join("")}</tr>`).join("");
   const ex = EX ? catchOf(EX) : null, mo = nearestOpen(o), mx = nearestOpen(EX);
   const delta = (a, b, moreIsGood) => { const v = a - b; if (!v) return `<span class="dl">same</span>`; return `<span class="dl ${(v > 0) === moreIsGood ? "up" : "dn"}">${v > 0 ? "+" : "−"}${Math.abs(v)}</span>`; };
   const mDelta = Math.round((mo.d - mx.d) * 1000);
@@ -1945,7 +1962,7 @@ function renderOption(o) {
   const colMeasures = PARTS.filter(m => m.kind === "column" && isNum(o[m.column]));
   colMeasures.forEach(m => SHOWN.add(m.column));
   const sheetRows = [
-    [say("option.rank", "Rank"), fit && o.n ? `${o.n} of ${O.filter(x => fitOf(x)).length} · ${esc(fit.label)}` : ""],
+    [say("option.rank", "Rank"), fit && o.n && !NO_RANK ? `${o.n} of ${O.filter(x => fitOf(x)).length} · ${esc(fit.label)}` : ""],
     ...colMeasures.map(m => [m.label || titleCase(m.key), `${o[m.column]}${m.unit ? ` ${esc(m.unit)}` : isFinite(m.max) ? ` / ${m.max}` : ""}`]),
     [say("option.fromExisting", "From today's office"), EX ? (isNum(o.roadKm) ? `~${o.roadKm} km by road${o.driveText ? `, ${esc(o.driveText)}` : ""}` : fmtKm(homeKm(o))) : ""],
     [say("option.sheetName", "Name on the sheet"), o.sheetName && o.sheetName !== o.name ? esc(o.sheetName) : ""],
@@ -1954,7 +1971,7 @@ function renderOption(o) {
       .map(k => [titleCase(k.replace(/([a-z])([A-Z])/g, "$1 $2")), esc(o[k])])
   ].filter(x => x[1]);
   $("#p-body").innerHTML = `
-    ${sat ? `<div class="hero"><img src="${sat}" alt="Satellite view of ${esc(o.name)}" onerror="this.closest('.hero').remove()"><span class="ph">Satellite${imgDate(o) ? ` · captured <span data-img-date="${o.id}">${fmtDate(imgDate(o))}</span>` : ""} · Esri, Vantor</span></div>` : ""}
+    ${sat ? `<div class="hero"><img src="${sat}" alt="Satellite view of ${esc(o.name)}" onerror="this.closest('.hero').remove()"><span class="ph">${isAreaShot(o) ? "Area view, building not exactly pinned · " : ""}Satellite${imgDate(o) ? ` · captured <span data-img-date="${o.id}">${fmtDate(imgDate(o))}</span>` : ""} · Esri, Vantor</span></div>` : ""}
     <div class="kpis">
       ${colMeasures.slice(0, 2).map(m => `<div class="kpi"><div class="l">${esc(m.label || titleCase(m.key))}</div><div class="v">${esc(String(o[m.column]))}</div><div class="s">${esc(m.unit || (isFinite(m.max) ? `out of ${m.max}` : ""))}</div></div>`).join("")}
       ${EX ? `<div class="kpi"><div class="l">${esc(say("option.fromExisting", "From today's office"))}</div><div class="v">${isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(homeKm(o))}</div><div class="s">${esc(homeMin(o))} by road</div></div>` : ""}
@@ -1982,10 +1999,6 @@ function renderOption(o) {
     ${HAS_CHOOSER ? `<h3>${esc(say("option.fitByPart", "Fit, part by part"))}</h3>
     <div class="bars">${PARTS.filter(x => measureApplies(x, o)).map(x => `<div class="bar" title="${esc(x.of || "")}"><span>${esc(x.label)}</span><div class="tr"><div class="fl" style="width:${Math.round(p[x.key] * 100)}%"></div></div><span class="val">${w[x.key] ? `${(p[x.key] * 100).toFixed(0)} · ×${w[x.key]}` : "skipped"}</span></div>`).join("")}</div>
     <p class="note">${esc(say("option.barNote", "Each bar is the measure out of 100; ×n is the weight from Your priorities."))}</p>` : ""}
-
-    ${myKinds.length ? `<h3>${esc(say("option.withinReach", "Within reach"))}</h3>` : ""}
-    ${myKinds.length ? `<table class="ring-tbl"><thead><tr><th>${esc(say("option.driveTime", "Drive time"))}</th>${myKinds.map(k => `<th class="num">${esc(kindLabel(k))}</th>`).join("")}</tr></thead><tbody>${ringRows}</tbody></table>` : ""}
-    <p class="note" style="margin-top:6px">The names are on <a href="#" data-tab="places">${esc(say("tabs.places", "Places nearby"))}</a>. ${esc(METHOD)}</p>
 
     <h3>Nearest other options</h3>
     <div class="nb">${others.slice(0, 3).map(({ x, d }) => `<div class="r"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${optLink(x)}</span><div class="tr"><div class="fl" style="width:${Math.max(3, Math.round(d / nbMax * 100))}%"></div></div><span class="v">${fmtKm(d)} · ${driveMin(d)}′</span></div>`).join("")}</div>

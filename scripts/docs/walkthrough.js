@@ -184,10 +184,11 @@ async function workbookPreview(browser) {
 
     /* ---------------- create ---------------- */
     section("Creating the atlas");
-    await page.click('#nav a[href="#/create"]'); await page.waitForSelector("#cr-file", { state: "attached" }); await wait(300);
+    await page.click('#nav a[href="#/create"]'); await page.waitForSelector("#cr-files", { state: "attached" }); await wait(300);
     await shot(page, "create-empty", "Create an atlas: three steps on one page",
-      "Step 1 offers the empty workbook as a download and takes a filled one back. Steps 2 and 3 open up once a workbook has passed its checks.");
-    await page.setInputFiles("#cr-file", WORKBOOK);
+      "Step 1 is the Describe it card: the requirement in your own words, up to six files (Excel, PDF, Word), and Build, Enhance and Plan. Steps 2 and 3 open up once the atlas has passed its checks.");
+    await page.setInputFiles("#cr-files", WORKBOOK);
+    await page.click("#cr-build");
     await page.waitForSelector("#cr-report .card", { timeout: 20000 }); await wait(300);
     await page.evaluate(() => document.querySelector("#cr-report").scrollIntoView({ block: "start" })); await page.evaluate(() => window.scrollBy(0, -140)); await wait(200);
     await shot(page, "report", "The upload is read and checked, in plain words",

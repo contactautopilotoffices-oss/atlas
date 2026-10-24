@@ -93,22 +93,44 @@ async function expect(name, fn) { try { const v = await fn(); if (v === false) b
     await expect("the owner is signed in and sees the nav", async () => (await page.$$("#nav a.it")).length >= 5);
     await expect("Create an atlas is in the nav", async () => !!(await page.$('#nav a[href="#/create"]')));
 
-    console.log("\n2. The workbook is uploaded");
+    console.log("\n2. The workbook goes in the Describe it card and is built");
     await page.click('#nav a[href="#/create"]');
-    await page.waitForSelector("#cr-file", { state: "attached", timeout: 10000 });
-    await page.setInputFiles("#cr-file", WORKBOOK);
+    await page.waitForSelector("#cr-files", { state: "attached", timeout: 10000 });
+    await expect("the import box takes several files at once", async () => await page.$eval("#cr-files", e => e.multiple && /\.pdf/.test(e.accept) && /\.docx/.test(e.accept)));
+    await expect("Build, Enhance and Plan sit under the requirement", async () => !!(await page.$("#cr-req")) && !!(await page.$("#cr-build")) && !!(await page.$("#cr-enhance")) && !!(await page.$("#cr-plan")));
+    await page.setInputFiles("#cr-files", WORKBOOK);
+    await expect("the picked file is listed", async () => /andheri-flex\.xlsx/.test(await page.$eval("#cr-picked", e => e.textContent)));
+    await page.click("#cr-build");
     await page.waitForSelector("#cr-report .card", { timeout: 20000 });
     const reportText = await page.$eval("#cr-report", e => e.textContent);
     await expect("the report says nothing stops the atlas being drawn", async () => !/stop(s)? this atlas/.test(reportText));
     await expect("the report lists the contents", async () => /4 options/.test(reportText) && /22 places/.test(reportText));
     await expect("the warnings name the sheet and the row", async () => /Facts, market row/.test(reportText));
     await expect("the name is prefilled from the workbook", async () => (await page.inputValue("#cr-name")) === "Andheri Flex Atlas");
-    await expect("a PDF can be uploaded from the same step", async () => !!(await page.$("#cr-pdf")));
-    await expect("without a model key the PDF route says what is missing", async () => {
-      const r = await page.evaluate(async () => (await fetch("/api/cms?r=bundle/import-pdf", { method: "POST", credentials: "same-origin", headers: { "content-type": "application/json", "x-cms": "1" }, body: JSON.stringify({ file: btoa("%PDF-1.4 x"), name: "x.pdf" }) })).json());
+    await expect("the plan opens with every sheet as a tab, Options first", async () => {
+      const tabs = await page.$$eval("#cr-planbox [data-tab]", b => b.map(x => x.dataset.tab));
+      return tabs[0] === "Atlas" && tabs.includes("Options") && tabs.includes("Places") && tabs.includes("json") && !!(await page.$('#cr-planbox [data-tab="Options"].pri'));
+    });
+    await expect("the four properties are editable rows", async () => (await page.$$('#cr-planbox input[data-c="Property name"]')).length === 4);
+    /* Edit a cell and build again: what is typed is what the atlas holds. */
+    await page.fill('#cr-planbox input[data-r="3"][data-c="Why it scores as it does"]', "Edited in the plan: newest stock, metro at the door.");
+    await page.click("#cr-build");
+    await page.waitForSelector("#cr-build:not([disabled])", { timeout: 20000 });
+    await page.waitForSelector("#cr-report .card", { timeout: 20000 });
+    await expect("an edit in the plan reaches the atlas", async () => /Edited in the plan/.test(await page.$eval('#cr-planbox input[data-r="3"][data-c="Why it scores as it does"]', e => e.value)));
+    await page.click('#cr-planbox [data-tab="Places"]');
+    await expect("each sheet is a tab of its own rows", async () => (await page.$$('#cr-planbox input[data-c="Name"]')).length === 22);
+    await page.click('#cr-planbox [data-tab="json"]');
+    await expect("the whole plan is there as JSON too", async () => { const j = JSON.parse(await page.inputValue("#cr-json")); return j["Options"].length === 4 && j["Places"].length === 22; });
+    const post = (route, body) => page.evaluate(async ([route, body]) => (await fetch(`/api/cms?r=${route}`, { method: "POST", credentials: "same-origin", headers: { "content-type": "application/json", "x-cms": "1" }, body: JSON.stringify(body) })).json(), [route, body]);
+    await expect("without a model key, planning from a PDF says what is missing", async () => {
+      const r = await post("bundle/plan", { files: [{ name: "x.pdf", file: btoa("%PDF-1.4 x") }] });
       if (!/ENGY_API_KEY or ANTHROPIC_API_KEY/.test(r.error || "")) throw new Error(JSON.stringify(r));
       return true;
     });
+    await expect("and so does Enhance", async () => { const r = await post("bundle/enhance", { requirement: "120 seats" }); if (!/Enhance needs ENGY_API_KEY/.test(r.error || "")) throw new Error(JSON.stringify(r)); return true; });
+    await expect("seven files are refused before anything is read", async () => /Up to 6 files/.test((await post("bundle/plan", { files: Array.from({ length: 7 }, (_, i) => ({ name: `f${i}.csv`, file: btoa("a,b") })) })).error || ""));
+    await expect("a plan with no properties is refused with what to add", async () => /Options tab/.test((await post("bundle/build", { rows: { "Atlas": { "Title": "x" } } })).error || ""));
     await expect("the link id is derived from the title", async () => (await page.inputValue("#cr-slug")) === "andheri-flex-atlas");
 
     console.log("\n3. Named, credentialled, saved as a draft");
@@ -302,6 +324,15 @@ async function expect(name, fn) { try { const v = await fn(); if (v === false) b
     await expect("no page errors in /admin/ throughout", async () => { if (errors.length) throw new Error(errors[0]); });
   } catch (e) {
     bad("the flow threw", e.stack.split("\n").slice(0, 3).join("\n"));
+    /* What the page showed and what the server said, so a failure that
+       only happens now and then can be read rather than guessed at. */
+    try {
+      const shot = path.join(SCRATCH, "flow-failure.png");
+      await page.screenshot({ path: shot, fullPage: true });
+      const seen = await page.evaluate(() => ({ url: location.href, toast: (document.querySelector("#toast") || {}).textContent || "", login: !!document.querySelector("#l-email"), nav: !!document.querySelector("#nav"), main: ((document.querySelector("#main") || document.body).textContent || "").replace(/\s+/g, " ").slice(0, 300) }));
+      console.log(`        page: ${JSON.stringify(seen)}\n        screenshot: ${shot}\n        page errors: ${JSON.stringify(errors.slice(0, 3))}`);
+      console.log(`        server log (end):\n${site.logs().split("\n").slice(-15).map(l => "          " + l).join("\n")}`);
+    } catch (x) { console.log(`        (could not read the page: ${x.message})`); }
   } finally {
     await browser.close();
     site.child.kill();
