@@ -66,12 +66,14 @@ For each page, from its PNG:
 The daily review keeps this list current: it adds what it finds, removes
 what it fixes, and fixes the worst one to three first.
 
-- Occupancy page: the threshold labels (running costs covered, every cost
-  covered, with ads) and the "most rivals" box collide above the bar.
-- Several pages end in the top half (levers, risks, infrastructure, the
-  pipeline pages, the price ladder): the content does not use the height.
-- Market point pages with a single chart leave the chart small and the
-  right column sparse.
-- "How full rival centres run": the operator names under the bars are dense
-  and hard to read.
-- The wider corridor tables wrap occupancy onto two lines.
+- Several pages end in the top half (costing, levers, infrastructure, why
+  here, the pipeline pages, risks, rivals next door): the content does not
+  use the height.
+- Recent deals: with no "what it means" copy the right third of the page is
+  empty and the table has no pairing box.
+- The terms table sets the small notes under big figures in the serif face.
+- Price ladder: the dashed "Middle" line runs through the count label of the
+  band it falls in, and the chart leaves a wide empty strip above the dots.
+- "How full rival centres run": the band columns are narrow, so long
+  "operator · building" lines wrap, and the page ends at about two thirds of
+  its height. The bars could take the full width with the box below.
