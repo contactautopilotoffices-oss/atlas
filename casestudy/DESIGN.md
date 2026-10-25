@@ -66,11 +66,15 @@ For each page, from its PNG:
 The daily review keeps this list current: it adds what it finds, removes
 what it fixes, and fixes the worst one to three first.
 
-- Several pages end in the top half (costing, levers, infrastructure, why
-  here, the pipeline pages, risks, rivals next door): the content does not
-  use the height.
-- Recent deals: with no "what it means" copy the right third of the page is
-  empty and the table has no pairing box.
+- Several table pages still end near the middle (costing, levers, deals,
+  rivals next door, the wider corridor, openings, the decision): the table
+  does not use the height. The numbered-point pages now set their takeaway
+  at the foot; the table pages need their own answer (larger rows, or the
+  paired box at the foot).
+- Numbered-point pages with few, short points (why here, pipeline 1) keep a
+  gap between the points and the takeaway at the foot.
+- Recent deals: with no "what it means" copy the table now takes the full
+  width, but the page still has no pairing box.
 - The terms table sets the small notes under big figures in the serif face.
 - Price ladder: the dashed "Middle" line runs through the count label of the
   band it falls in, and the chart leaves a wide empty strip above the dots.
