@@ -195,6 +195,8 @@ async function plan(files, { llm = pdf.askModel, requirement = "", brief = null 
   const sn = pdf.scanNote(scanned, asked.unread);
   if (sn) notes.push(sn);
   const rows = pdf.shapeRows(asked.rows);
+  const moved = pdf.promotePlaces(rows);
+  if (moved) notes.push(`The files list ${moved} centre${moved === 1 ? "" : "s"} or building${moved === 1 ? "" : "s"} and nothing proposed, so ${moved === 1 ? "it is" : "they are"} the options the atlas compares. Move any that are only context to the Places tab.`);
   /* The model is told to keep a workbook's rows; say so if it dropped any. */
   for (const s of sources.filter(s => s.kind === "atlas")) {
     const back = new Set((rows["Options"] || []).map(r => String(r["ID"] || "").trim().toLowerCase()));

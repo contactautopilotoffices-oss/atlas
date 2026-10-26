@@ -29,6 +29,7 @@ const by = (r) => Object.fromEntries(r.checks.map(c => [c.key, c]));
   ok("no AI key fails and says which key", bare.ai.status === "fail" && /ANTHROPIC_API_KEY/.test(bare.ai.fix));
   ok("no Mapbox token fails and says what it breaks", bare.mapbox.status === "fail" && /no pins/.test(bare.mapbox.detail));
   ok("Higgsfield and Exa are optional: off, not failed", bare.higgsfield.status === "off" && bare.exa.status === "off");
+  ok("OpenStreetMap not answering is a note, not a block", bare.metro.status === "warn" && /build without the metro/.test(bare.metro.detail));
 
   /* Everything set, services answering. */
   Object.assign(process.env, { CMS_SESSION_SECRET: "s", ANTHROPIC_API_KEY: "a", MAPBOX_TOKEN: "pk.x", HIGGSFIELD_API_KEY: "h", EXA_API_KEY: "e" });
@@ -37,6 +38,9 @@ const by = (r) => Object.fromEntries(r.checks.map(c => [c.key, c]));
     seen.push(url);
     if (/api\.anthropic\.com\/v1\/models/.test(url)) return res(o.headers["x-api-key"] === "a" ? 200 : 401, { data: [] });
     if (/api\.mapbox\.com/.test(url)) return res(200, { features: [{ geometry: { coordinates: [72.87, 19.11] }, properties: { feature_type: "locality", full_address: "Andheri East" } }] });
+    if (/overpass/.test(url)) return res(200, { elements: [
+      { type: "relation", id: 1, tags: { type: "route", route: "subway", name: "Line 1", ref: "1" }, members: [{ type: "node", ref: 1, role: "stop" }, { type: "node", ref: 2, role: "stop" }] },
+      { type: "node", id: 1, lat: 19.12, lon: 72.84, tags: { name: "Andheri" } }, { type: "node", id: 2, lat: 19.13, lon: 72.82, tags: { name: "Versova" } }] });
     return res(404, {});
   } });
   const g = by(good);
@@ -44,6 +48,7 @@ const by = (r) => Object.fromEntries(r.checks.map(c => [c.key, c]));
   ok("Mapbox is ok when a test address geocodes", g.mapbox.status === "ok" && /19\.110, 72\.870/.test(g.mapbox.detail), g.mapbox.detail);
   ok("the session secret, Higgsfield and Exa are ok when set", g.secret.status === "ok" && g.higgsfield.status === "ok" && g.exa.status === "ok");
   ok("ready to create an atlas and a case study", good.ready.atlas && good.ready.case, JSON.stringify(good.ready));
+  ok("the metro check finds a line near a test point", g.metro.status === "ok" && /Found 1 line/.test(g.metro.detail), g.metro.detail);
 
   /* A rejected key. */
   process.env.ANTHROPIC_API_KEY = "wrong";

@@ -32,6 +32,8 @@ const { SHEETS } = require("../../scripts/lib/workbook-schema");
 const { buildTemplate, readWorkbook } = require("../../scripts/lib/workbook");
 const { validate } = require("../../scripts/lib/validate-bundle");
 const llm = require("./_llm");
+const { mend } = require("../../scripts/lib/mend-bundle");
+const { metroRows } = require("./_metro");
 
 const MAX_PAGES = 60;
 const MAX_CHARS = 180000;
@@ -97,7 +99,9 @@ Rules:
 - When a filled Atlas workbook is among the documents, keep every row it has exactly as it is (same ID, same figures, same coordinates) and add what the other documents contain, as new rows or new columns.
 - NEVER invent a coordinate. Leave "Latitude" and "Longitude" out unless the document prints them. Always fill "Address" and "Locality" (and the city) as fully as the document allows; they are what the pins are placed from.
 - The properties being offered, proposed or compared go on "Options", one row each, with "ID" a short lower-case slug of the name. Put every figure the document gives for them (grade, floor, carpet area, built-up area, rent, CAM, parking, approvals, availability, nearest metro and so on) in extra columns with short plain headings, numbers as numbers (no currency signs or units in the cell; put the unit in the heading, such as "Rent on carpet (Rs per sq ft)").
-- Other buildings and businesses the document lists around them (competitors, coworking centres, employers, hospitals, colleges) go on "Places", with "Kind" naming the group (flex, employer, edu, hospital, retail, hotel). Put their figures (price per seat, grade, operator) in "Second line" and "Note".
+- "Options" is never empty: the atlas compares its rows. When the documents name buildings on offer or proposed, those are the Options. When they do not (a market survey, a list of coworking centres, a list of buildings), the buildings or centres the documents are about ARE the Options, one row each with all their figures in extra columns (operator, price per seat, occupancy, grade, nearest station and so on).
+- Other buildings and businesses the document lists around the Options (competitors, coworking centres, employers, hospitals, colleges) go on "Places", with "Kind" naming the group (flex, employer, edu, hospital, retail, hotel). Put their figures (price per seat, grade, operator) in "Second line" and "Note".
+- A table's headings may not match its columns (a sheet where the "Operator" column holds building names, say). Read what the cells say, not only the heading above them.
 - Stations the document mentions go on "Transit" only if it names the line.
 - Figures about the market as a whole (rents, vacancy, absorption, deals) go on "Facts" with a "Group". Put the document's name in "Source" when there is no link.
 - "Atlas": "Title" from the document's own title or subject, "Data current to" as YYYY-MM from the document (or the newest date in it), "City". Leave the centre and zoom out; they are worked out from the pins.
@@ -200,7 +204,7 @@ async function geocodeRows(rows, geocoder, city) {
     if (has(row, "Latitude") && has(row, "Longitude")) return;
     const bits = [row[nameKey], row["Address"], row["Locality"], row["Second line"], city].filter(Boolean).map(String);
     const seen = new Set();
-    const queries = [bits.filter((b, i) => i === 0 || (!seen.has(b) && seen.add(b))).join(", "), [row["Address"], row["Locality"], city].filter(Boolean).join(", "), [row[nameKey], city].filter(Boolean).join(", ")]
+    const queries = [bits.filter((b, i) => i === 0 || (!seen.has(b) && seen.add(b))).join(", "), [row["Address"], row["Locality"], city].filter(Boolean).join(", "), [row[nameKey], city].filter(Boolean).join(", "), [row["Locality"], city].filter(Boolean).length === 2 ? [row["Locality"], city].join(", ") : ""]
       .map(q => q.replace(/\s+/g, " ").trim()).filter((q, i, a) => q && a.indexOf(q) === i);
     for (const q of queries) {
       let g = null;
@@ -306,6 +310,24 @@ function shapeRows(input) {
   return rows;
 }
 
+/* The atlas compares the rows on Options. Files that only list centres or
+   buildings (a market survey, a list of coworking operators) can come back
+   with everything on Places and nothing to compare; then those places are
+   the options. Returns how many were moved. */
+const AS_OPTION = { "Name": "Property name", "Second line": "Details", "Source": "Source" };
+function promotePlaces(rows) {
+  const opts = rows["Options"], places = rows["Places"];
+  if ((Array.isArray(opts) && opts.length) || !Array.isArray(places) || !places.length) return 0;
+  rows["Options"] = places.map((p) => {
+    const o = {};
+    for (const [k, v] of Object.entries(p)) { if (k === "Kind") continue; o[AS_OPTION[k] || k] = v; }
+    if (!o["Property name"]) o["Property name"] = p["Name"] || p["ID"];
+    return o;
+  });
+  rows["Places"] = [];
+  return rows["Options"].length;
+}
+
 /* A pin that came from a workbook is never replaced by the model or by a
    geocode: put it back by ID before anything is placed. */
 function restorePins(rows, keepPins = {}) {
@@ -332,7 +354,7 @@ async function finish(asked, { fileName, notes, geocoder = mapboxGeocode, keepPi
 /* Rows, as the model gave them or as a person edited them, into an atlas:
    pins from addresses where there are none, the workbook filled in, read
    back exactly as an uploaded workbook would be, and checked. */
-async function build(input, { fileName, notes = [], geocoder = mapboxGeocode } = {}) {
+async function build(input, { fileName, notes = [], geocoder = mapboxGeocode, metro = true, metroFn = metroRows } = {}) {
   const rows = shapeRows(input);
   const atlas = rows["Atlas"] = (rows["Atlas"] && typeof rows["Atlas"] === "object" && !Array.isArray(rows["Atlas"])) ? rows["Atlas"] : {};
   if (!atlas["Source workbook"]) atlas["Source workbook"] = fileName || "PDF";
@@ -340,6 +362,20 @@ async function build(input, { fileName, notes = [], geocoder = mapboxGeocode } =
   if (!atlas["Data current to"]) atlas["Data current to"] = new Date().toISOString().slice(0, 7);
 
   const geo = await geocodeRows(rows, geocoder, atlas["City"]);
+
+  /* The metro is a fundamental: every line through the area, from
+     OpenStreetMap, unless it is already there or switched off. */
+  if (metro !== false) {
+    const have = [...new Set((rows["Transit"] || []).map(r => r["Line name"]).filter(Boolean))];
+    const pts = (rows["Options"] || []).filter(r => has(r, "Latitude") && has(r, "Longitude")).map(r => ({ lat: num(r["Latitude"]), lng: num(r["Longitude"]) }));
+    try {
+      const m = await metroFn(pts, { have });
+      if (m.rows.length) {
+        rows["Transit"] = [...(rows["Transit"] || []), ...m.rows];
+        notes.push(`Added ${m.lines.length} metro line${m.lines.length === 1 ? "" : "s"} from OpenStreetMap: ${m.lines.map(l => `${l.name} (${l.stations} stations)`).join(", ")}.`);
+      }
+    } catch (e) { notes.push("The metro could not be fetched from OpenStreetMap just now. Press Build again to add it."); }
+  }
   const opts = (rows["Options"] || []).filter(r => has(r, "Latitude") && has(r, "Longitude"));
   if (opts.length && !(has(atlas, "Centre latitude") && has(atlas, "Centre longitude"))) {
     atlas["Centre latitude"] = +(opts.reduce((a, r) => a + num(r["Latitude"]), 0) / opts.length).toFixed(5);
@@ -355,13 +391,16 @@ async function build(input, { fileName, notes = [], geocoder = mapboxGeocode } =
 
   const xlsx = await fillWorkbook(rows);
   const out = await readWorkbook(xlsx);
-  const rep = validate(out.bundle);
+  /* Repair, don't refuse: what can be fixed is fixed and said; only what
+     cannot be shown at all is left out, and named. */
+  const fixed = mend(out.bundle);
+  const rep = validate(fixed.bundle);
   return {
-    bundle: out.bundle, notes: [...notes, ...out.notes], report: { ok: rep.ok, errors: rep.errors, warnings: rep.warnings, stats: rep.stats },
+    bundle: fixed.bundle, notes: [...notes, ...fixed.fixes, ...fixed.left, ...out.notes], report: { ok: rep.ok, errors: rep.errors, warnings: rep.warnings, stats: rep.stats },
     workbook: xlsx.toString("base64"), rows,
     placed: geo.placed, unplaced: geo.failed,
   };
 }
 const slug = (t) => String(t || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40);
 
-module.exports = { pdfText, askModel, askFor, scanNote, importPdf, finish, build, shapeRows, restorePins, MAX_CHARS, fillWorkbook, geocodeRows, mapboxGeocode, sheetGuide, parseJSON, providerName };
+module.exports = { pdfText, askModel, askFor, scanNote, importPdf, finish, build, shapeRows, restorePins, promotePlaces, MAX_CHARS, fillWorkbook, geocodeRows, mapboxGeocode, sheetGuide, parseJSON, providerName };

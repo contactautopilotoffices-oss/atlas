@@ -17,6 +17,7 @@
    it says so. The live atlas draws the same pins on Mapbox satellite.
    ============================================================================ */
 "use strict";
+process.env.ATLAS_METRO = "off";   // no public services in tests; scripts/metro.test.js covers the metro
 const { spawn, execFileSync } = require("child_process");
 const fs = require("fs");
 const os = require("os");

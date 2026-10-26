@@ -118,6 +118,15 @@ async function run({ fetchFn = fetch } = {}) {
     add({ key: "mapbox", label: "Map pins from addresses (Mapbox)", status: "fail", detail: "MAPBOX_TOKEN is not set on the server: PDF imports come back with no pins.", fix: "Set MAPBOX_TOKEN in Vercel, then redeploy.", needed: "atlas" });
   }
 
+  /* ---- metro from OpenStreetMap: a fundamental, but an atlas builds without it ---- */
+  try {
+    const { metroRows } = require("./_metro");
+    const m = await timed(metroRows([{ lat: 19.1136, lng: 72.8697 }], { fetchFn }), 40000, "OpenStreetMap");
+    add(m.skipped ? { key: "metro", label: "Metro lines (OpenStreetMap)", status: "off", detail: "Switched off with ATLAS_METRO=off.", needed: "optional" }
+      : m.lines.length ? { key: "metro", label: "Metro lines (OpenStreetMap)", status: "ok", detail: `Found ${m.lines.length} line${m.lines.length === 1 ? "" : "s"} near a test point in Andheri: atlases get their metro automatically.`, needed: "optional" }
+      : { key: "metro", label: "Metro lines (OpenStreetMap)", status: "warn", detail: "OpenStreetMap answered but found no metro near a test point in Andheri.", needed: "optional" });
+  } catch (e) { add({ key: "metro", label: "Metro lines (OpenStreetMap)", status: "warn", detail: `OpenStreetMap did not answer (${String(e.message || e).slice(0, 80)}). Atlases build without the metro until it does.`, needed: "optional" }); }
+
   /* ---- optional ---- */
   const images = require("./_images");
   add(images.ready()

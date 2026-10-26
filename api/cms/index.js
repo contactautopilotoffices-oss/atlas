@@ -628,8 +628,10 @@ R["POST bundle/build"] = async (req, res, b) => {
   if (!b.rows || typeof b.rows !== "object" || Array.isArray(b.rows)) fail(400, "Send the plan as an object in `rows`, one key per sheet.");
   if (JSON.stringify(b.rows).length > MAX_BUNDLE) fail(413, "The plan is too large (over 4 MB).");
   const rows = pdf.shapeRows(JSON.parse(JSON.stringify(b.rows)));
-  if (!(rows["Options"] || []).length) fail(400, "The plan has no properties yet. Add at least one row on the Options tab.");
-  const out = await pdf.build(rows, { fileName: clip(b.label, 200) || "Atlas" });
+  /* Nothing to compare but places to show: the places are the options. */
+  const moved = pdf.promotePlaces(rows);
+  if (!(rows["Options"] || []).length) fail(400, "The plan has nothing to compare yet: the atlas needs at least one row on the Options tab (a building or centre). Add one there, or plan from files that name some.");
+  const out = await pdf.build(rows, { fileName: clip(b.label, 200) || "Atlas", notes: moved ? [`There was nothing on Options, so the ${moved} place${moved === 1 ? "" : "s"} became the options the atlas compares.`] : [] });
   return { bundle: out.bundle, notes: out.notes, report: out.report, workbook: out.workbook, rows: out.rows, placed: out.placed.length, unplaced: out.unplaced };
 };
 

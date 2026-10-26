@@ -21,6 +21,7 @@
    engine-test.js, so a person still has to look at a real one once.
    ============================================================================ */
 "use strict";
+process.env.ATLAS_METRO = "off";   // no public services in tests; scripts/metro.test.js covers the metro
 const { spawn } = require("child_process");
 const fs = require("fs");
 const path = require("path");
@@ -130,7 +131,12 @@ async function expect(name, fn) { try { const v = await fn(); if (v === false) b
     });
     await expect("and so does Enhance", async () => { const r = await post("bundle/enhance", { requirement: "120 seats" }); if (!/Enhance needs ENGY_API_KEY/.test(r.error || "")) throw new Error(JSON.stringify(r)); return true; });
     await expect("seven files are refused before anything is read", async () => /Up to 6 files/.test((await post("bundle/plan", { files: Array.from({ length: 7 }, (_, i) => ({ name: `f${i}.csv`, file: btoa("a,b") })) })).error || ""));
-    await expect("a plan with no properties is refused with what to add", async () => /Options tab/.test((await post("bundle/build", { rows: { "Atlas": { "Title": "x" } } })).error || ""));
+    await expect("a plan with nothing at all is refused with what to add", async () => /Options tab/.test((await post("bundle/build", { rows: { "Atlas": { "Title": "x" } } })).error || ""));
+    await expect("a plan with only places builds, the places becoming the options", async () => {
+      const r = await post("bundle/build", { rows: { "Atlas": { "Title": "Survey" }, "Places": [{ "ID": "awfis", "Kind": "flex", "Name": "Awfis, Skyline Icon", "Latitude": 19.119, "Longitude": 72.882 }] } });
+      if (!(r.bundle && r.bundle.options.length === 1 && (r.notes || []).some(n => /became the options/.test(n)))) throw new Error(JSON.stringify(r).slice(0, 300));
+      return true;
+    });
     await expect("the link id is derived from the title", async () => (await page.inputValue("#cr-slug")) === "andheri-flex-atlas");
 
     console.log("\n3. Named, credentialled, saved as a draft");
