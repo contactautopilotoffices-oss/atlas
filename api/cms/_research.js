@@ -152,4 +152,42 @@ async function webContext(requirement, { search = searchAll, fetchFn } = {}) {
   return res.map(r => `- ${r.title} (${r.published || "undated"}) ${r.url}\n  ${r.highlights.join(" ")}`).join("\n").slice(0, 20000);
 }
 
-module.exports = { research, webContext, exaSearch, queriesFor, enabled, RULES };
+/* No files, only a requirement in words: find candidate buildings and
+   centres on the web, with their sources, as the starting plan. */
+const DISCOVER = `You start an Atlas plan from web search results, for a person who described what they need but sent no files. Reply with ONE JSON object and nothing else:
+{
+  "Atlas": { "Title": "...", "City": "...", "Subtitle": "who it is for and what they need" },
+  "Options": [ { "ID": "short-lower-case-slug", "Property name": "...", "Address": "...", "Locality": "...", "Kind": "office building | coworking centre | business park", "Source": "<url>", ...any figure the result gives, in its own column with the unit in the heading } ],
+  "Facts": [ { "Group": "market", "Label": "...", "Value": "...", "As of": "YYYY-MM", "Source": "<url>" } ]
+}
+Rules:
+- Options are real buildings or centres the results name, in or near the place asked for, that could suit the requirement. Between 5 and 25 of them. Every one carries the URL of the result that names it, and its address as the result gives it.
+- Use only what the results state. Never invent a building, a figure or an address; never write a latitude or longitude.
+- Facts: the market figures the results give for the area (rents, vacancy, coworking prices), each with its URL.
+- Plain words, no em dashes.`;
+
+async function discover({ requirement, brief = null }, { search = searchAll, complete = llm.complete, fetchFn } = {}) {
+  const req = String(requirement || "").replace(/\s+/g, " ").trim();
+  if (!req) throw Object.assign(new Error("Describe what you need, or add a file."), { status: 400 });
+  if (!enabled() && search === searchAll) throw Object.assign(new Error("Starting from words alone needs web research: set EXA_API_KEY in Vercel. Or add a file (a list of buildings, an inventory, a survey)."), { status: 503 });
+  const where = brief && brief["Where"] ? [].concat(brief["Where"]).join(" ") : "";
+  const q = `${req} ${where}`.slice(0, 220);
+  const found = await search([
+    { query: `${q} office space for lease building`, num: 8, days: 0 },
+    { query: `${q} coworking centres seats price`, num: 8, days: 0 },
+    { query: `${q} Grade A office buildings list address`, num: 6, days: 0 },
+    { query: `${q} office rent per sq ft 2026`, num: 4 },
+  ], fetchFn ? { fetchFn } : {});
+  const results = found.flatMap(f => (f.results || []).map(r => ({ query: f.query, ...r })));
+  if (!results.length) throw Object.assign(new Error(`The web search found nothing for "${req.slice(0, 80)}". Add a file, or say the area and city.`), { status: 422 });
+  const r = await complete({ system: DISCOVER, maxTokens: 16000, effort: "low", user: `THE REQUIREMENT\n${req}${brief ? `\n\nTHE BRIEF\n${JSON.stringify(brief).slice(0, 4000)}` : ""}\n\nSEARCH RESULTS\n${JSON.stringify(results).slice(0, 90000)}` });
+  const urls = new Set(results.map(x => x.url));
+  const rows = r.json && typeof r.json === "object" ? r.json : {};
+  rows["Options"] = (Array.isArray(rows["Options"]) ? rows["Options"] : []).filter(o => o && has(o["Property name"]) && has(o["Source"]) && urls.has(String(o["Source"]).trim()));
+  rows["Facts"] = (Array.isArray(rows["Facts"]) ? rows["Facts"] : []).filter(f => f && has(f["Source"]) && urls.has(String(f["Source"]).trim()));
+  for (const o of rows["Options"]) { delete o["Latitude"]; delete o["Longitude"]; }
+  if (!rows["Options"].length) throw Object.assign(new Error("The web search found no buildings or centres to start from. Add a file, or name the area and city."), { status: 422 });
+  return { rows, notes: [`Started from your words: web research found ${rows["Options"].length} building${rows["Options"].length === 1 ? "" : "s"} or centre${rows["Options"].length === 1 ? "" : "s"}, each with the page that names it. Check them before you share the atlas.`], sources: [...new Map(results.map(x => [x.url, { title: x.title, url: x.url, published: x.published }])).values()], model: r.model, provider: r.provider };
+}
+
+module.exports = { research, discover, webContext, exaSearch, queriesFor, enabled, RULES };

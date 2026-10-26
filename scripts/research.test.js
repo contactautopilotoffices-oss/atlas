@@ -66,6 +66,19 @@ const RESULTS = {
   ok("the sources come back for the page to list", out.sources.length === 2);
   ok("the plan passed in is not changed in place", !PLAN["Options"][0]["Address"]);
 
+  /* Words only: candidates found on the web, each with the page that names it. */
+  const { discover } = require("../api/cms/_research");
+  const dsearch = async (jobs) => jobs.map(j => ({ query: j.query, results: [RESULTS.address, RESULTS.rent] }));
+  const dcomplete = async () => ({ model: "fake", json: { "Atlas": { "Title": "Andheri options", "City": "Mumbai" }, "Options": [
+    { "ID": "awfis-skyline", "Property name": "Awfis, Skyline Icon", "Address": "Andheri Kurla Road, Marol", "Source": "https://example.com/awfis-skyline", "Latitude": 19.1 },
+    { "ID": "invented", "Property name": "A building no result names", "Source": "https://nowhere.example.com" } ],
+    "Facts": [{ "Group": "market", "Label": "Grade A rent", "Value": "Rs 145", "Source": "https://example.com/rents" }] } });
+  const d = await discover({ requirement: "120 seats in Andheri East near the metro" }, { search: dsearch, complete: dcomplete });
+  ok("words alone start a plan from buildings the web names, with their sources", d.rows["Options"].length === 1 && d.rows["Options"][0]["Source"] === "https://example.com/awfis-skyline" && d.rows["Facts"].length === 1 && /web research found 1 building/.test(d.notes[0]), JSON.stringify(d.rows["Options"]));
+  ok("a candidate no search result names is dropped, and no coordinate is kept", !d.rows["Options"].some(o => /no result names/.test(o["Property name"])) && d.rows["Options"][0]["Latitude"] === undefined);
+  let derr = null; try { await discover({ requirement: "x" }, { search: async (jobs) => jobs.map(j => ({ query: j.query, results: [] })), complete: dcomplete }); } catch (e) { derr = e; }
+  ok("nothing found says what to add instead", derr && derr.status === 422 && /Add a file/.test(derr.message));
+
   /* Research never stands in the way. */
   delete process.env.EXA_API_KEY;
   const off = await research({ rows: PLAN });

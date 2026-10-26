@@ -25,7 +25,9 @@ const CONFIDENCE = ["high", "medium", "low"];
 /* "mrts" and "suburban" are Chennai's own two rail systems. */
 const MODES = ["metro", "mrts", "suburban", "rail", "monorail", "bus"];
 const STATUSES = ["open", "planned"];
-const BLOCKS = ["meta", "existing", "options", "zones", "transit", "bus", "places", "facts", "mapStyle", "copy", "measures", "presets"];
+/* "plan" is the editable source the admin keeps with a draft; it is never
+   drawn and never served to a reader. */
+const BLOCKS = ["meta", "existing", "options", "zones", "transit", "bus", "places", "facts", "mapStyle", "copy", "measures", "presets", "plan"];
 const MEASURE_KINDS = ["column", "nearestStation", "nearestPlace", "fromExisting"];
 const SLUG = /^[a-z0-9][a-z0-9-]*$/;
 const AS_OF = /^\d{4}-\d{2}(-\d{2})?$/;

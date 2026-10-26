@@ -583,7 +583,8 @@ function loadBackdrop() {
   const img = $("#g-bg"); if (!img) return;
   const base = (M.backdrop || "hexfield");
   const b = /^(https?:|\/)/.test(base) ? base : MEDIA + base + (matchMedia("(max-aspect-ratio: 3/4)").matches ? "-tall" : "-wide");
-  const tries = [b + ".webp", b + ".jpg"];
+  /* A full address with its own extension (a generated cover) is used as it is. */
+  const tries = /\.(webp|jpe?g|png|avif)(\?|$)/i.test(b) ? [b] : [b + ".webp", b + ".jpg"];
   const next = () => { const u = tries.shift(); if (!u) { img.remove(); return; } img.src = u; };
   img.addEventListener("load", () => img.classList.add("on"));
   img.addEventListener("error", next);
