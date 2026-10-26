@@ -66,11 +66,11 @@ For each page, from its PNG:
 The daily review keeps this list current: it adds what it finds, removes
 what it fixes, and fixes the worst one to three first.
 
-- Several table pages still end near the middle (costing, levers, deals,
-  rivals next door, the wider corridor, openings, the decision): the table
-  does not use the height. The numbered-point pages now set their takeaway
-  at the foot; the table pages need their own answer (larger rows, or the
-  paired box at the foot).
+- Table pages now open their rows to use spare height (casestudy/index.html,
+  fitTables), but stop at 4 mm of extra padding a row: levers and openings
+  still end at about three quarters, and levers reads airy rather than full.
+- Chart pages "what each floor must earn" and "what one seat costs" end at
+  about four fifths: the charts could draw taller.
 - Numbered-point pages with few, short points (why here, pipeline 1) keep a
   gap between the points and the takeaway at the foot.
 - Recent deals: with no "what it means" copy the table now takes the full

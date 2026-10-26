@@ -165,9 +165,44 @@ svg .grid{stroke:var(--line);stroke-width:.5}
 <script src="/casestudy/costing.js?v=cs1"></script>
 <script src="/casestudy/render.js?v=cs1"></script>
 <script>
+/* A table page whose content stops well short of the foot gets roomier rows
+   and slightly larger type, step by step, until it uses the height. It never
+   comes within 4 mm of the source line and never overflows the page. */
+function fitTables(deck) {
+  /* type grows by at most 0.6 pt, so narrow columns do not start to wrap */
+  var MM = 96 / 25.4, STEP = 0.4, CAP = 4, FONT_CAP = 10.2, FONT_UP = 0.6;
+  Array.prototype.forEach.call(deck.querySelectorAll(".page"), function (page) {
+    var body = page.querySelector(".body"), ftr = page.querySelector(".ftr");
+    var tables = body ? Array.prototype.filter.call(body.querySelectorAll("table"), function (tb) { return !tb.closest(".means"); }) : [];
+    if (!tables.length) return;
+    var limit = function () { return (ftr ? ftr.getBoundingClientRect().top : body.getBoundingClientRect().bottom) - 4 * MM; };
+    var bottom = function () {
+      var m = 0;
+      Array.prototype.forEach.call(body.querySelectorAll(":scope > :not(.cols), .cols > *"), function (el) { m = Math.max(m, el.getBoundingClientRect().bottom); });
+      return m;
+    };
+    var cells = [], fonts = [];
+    tables.forEach(function (tb) {
+      fonts.push(parseFloat(getComputedStyle(tb).fontSize) * 0.75);
+      Array.prototype.forEach.call(tb.querySelectorAll("td"), function (td) { var cs = getComputedStyle(td); cells.push({ td: td, top: parseFloat(cs.paddingTop), bot: parseFloat(cs.paddingBottom) }); });
+    });
+    var apply = function (k) {
+      cells.forEach(function (c) { c.td.style.paddingTop = (c.top + k * STEP * MM / 2) + "px"; c.td.style.paddingBottom = (c.bot + k * STEP * MM / 2) + "px"; });
+      tables.forEach(function (tb, i) { tb.style.fontSize = Math.min(FONT_CAP, fonts[i] + FONT_UP, fonts[i] + k * 0.12) + "pt"; });
+    };
+    var fits = function () { return bottom() <= limit() && page.scrollHeight <= page.clientHeight + 1; };
+    if (limit() - bottom() < page.clientHeight * 0.18) return;
+    for (var k = 1; k * STEP <= CAP; k++) {
+      apply(k);
+      if (!fits()) { apply(k - 1); break; }
+      if (limit() - bottom() < page.clientHeight * 0.06) break;
+    }
+  });
+}
 (window.CaseLoad || Promise.resolve()).then(function () {
   if (!window.CASE) return;
   var out = CaseRender.render(window.CASE, document.getElementById("deck"));
+  fitTables(document.getElementById("deck"));
   document.title = (window.CASE.meta && window.CASE.meta.title) || "Case study";
   document.getElementById("bar-title").textContent = document.title;
   document.getElementById("bar-pages").textContent = out.pages + " pages";
