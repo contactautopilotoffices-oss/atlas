@@ -31,7 +31,8 @@
      POST bundle/plan     (editor)     up to 6 files (Excel, PDF, Word) + the brief ->
                                        editable rows (_sources.js); a lone filled
                                        Atlas workbook is read directly
-     POST bundle/build    (editor)     rows -> pins, workbook, bundle, report
+     POST bundle/research (editor)     rows -> rows + addresses and market facts found by Exa
+     POST bundle/build    (editor)     rows -> pins, metro, repairs, workbook, bundle, report
      POST bundle/draft (editor)        save a bundle as a link's draft
      POST bundle/publish (admin)       draft -> live, kept as a numbered version
      GET  bundle/history&link= (viewer) every publish so far
@@ -54,6 +55,7 @@ const { validate } = require("../../scripts/lib/validate-bundle");
 const pdf = require("./_pdf");
 const sources = require("./_sources");
 const brief = require("./_brief");
+const research = require("./_research");
 const caseRoutes = require("./_case");
 const preflight = require("./_preflight");
 
@@ -604,7 +606,10 @@ R["POST bundle/enhance"] = async (req, res, b) => {
     try { text = sources.sourceText((await sources.readAll(filesFrom(b.files))).sources); }
     catch (e) { if (e.status) fail(e.status, e.message); throw e; }
   }
-  try { return await brief.enhance({ requirement: clip(b.requirement, 4000), text, brief: briefFrom(b.brief) }); }
+  /* What the web says about the place in the requirement, when Exa is set up. */
+  const web = await research.webContext(clip(b.requirement, 4000)).catch(() => "");
+  if (web) text = `${text}\n\n===== WEB RESULTS (Exa search, with links) =====\n${web}`;
+  try { return { ...(await brief.enhance({ requirement: clip(b.requirement, 4000), text, brief: briefFrom(b.brief) })), web: !!web }; }
   catch (e) { modelFail(e, "Enhance did not work"); }
 };
 
@@ -620,6 +625,16 @@ R["POST bundle/plan"] = async (req, res, b) => {
     const p = await sources.plan(files, { requirement, brief: br });
     return { direct: !!p.direct, rows: p.rows, notes: p.notes, files: p.files, label: p.label, text: p.text, model: p.model || null, provider: p.provider || null };
   } catch (e) { modelFail(e, "The files could not be read into a plan"); }
+};
+
+/* Research: the web (Exa) fills what the files left out: addresses for
+   properties with none, and market facts with their sources. */
+R["POST bundle/research"] = async (req, res, b) => {
+  await needUser(req, "editor");
+  if (!b.rows || typeof b.rows !== "object" || Array.isArray(b.rows)) fail(400, "Send the plan as an object in `rows`, one key per sheet.");
+  if (research.enabled()) needModel("Web research");
+  try { return await research.research({ rows: pdf.shapeRows(JSON.parse(JSON.stringify(b.rows))), requirement: clip(b.requirement, 4000) || "", brief: briefFrom(b.brief) }); }
+  catch (e) { modelFail(e, "Web research did not work"); }
 };
 
 /* Build: rows (planned, edited, or typed from scratch) into the atlas. */
@@ -834,7 +849,7 @@ module.exports = async (req, res) => {
        write must carry x-cms, which a cross-site form cannot send. */
     if (req.method !== "GET" && !route.startsWith("POST broker/")) needWrite(req);
     /* A workbook arrives base64-encoded inside the JSON body. */
-    const limit = /^POST (bundle\/(import|import-pdf|plan|enhance|build|draft)|case\/(import|draft|apply))$/.test(route) ? 6 * 1024 * 1024 : undefined;
+    const limit = /^POST (bundle\/(import|import-pdf|plan|enhance|research|build|draft)|case\/(import|draft|apply))$/.test(route) ? 6 * 1024 * 1024 : undefined;
     const body = req.method === "POST" ? await readBody(req, limit) : {};
     const out = await fn(req, res, body, url.searchParams);
     if (out && out.__sent) return;            // the route wrote its own (binary) response
