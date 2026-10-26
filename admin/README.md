@@ -132,7 +132,11 @@ names at the top go back to any finished step.
      city within 40 km; Build fills it from the geocoder where it can).
 2. **Your data.** Drop in up to six files (Excel `.xlsx`/`.csv`, PDF, Word
    `.docx`, about 3 MB together) in any layout, or just describe what you
-   need. **Enhance** (optional) turns the words, the files and the web into
+   need. A filled Atlas workbook can be one of them; **download the empty
+   workbook** to start one. Two filled examples are in `examples/`:
+   `andheri-flex.xlsx` (four proposed buildings against the flex market) and
+   `andheri-coworking.xlsx` (the Andheri East coworking competitors, with
+   the bundle it becomes beside it as `andheri-coworking.bundle.json`). **Enhance** (optional) turns the words, the files and the web into
    a brief you can edit. Leave **Look up on the web** ticked to have Exa
    fill missing addresses and add market facts with sources (for a place,
    also the competing centres and deals around the site).

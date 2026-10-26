@@ -84,6 +84,9 @@ async function cases() {
      fills one, read into a bundle, and rendered. If this passes, the team
      can make an Atlas without a developer. */
   const { bundle: fromWorkbook } = await readWorkbook(await fillSampleWorkbook());
+  /* A committed, real workbook: the Andheri East coworking competitors
+     (scripts/examples/andheri-coworking.js). Keeps the example honest. */
+  const { bundle: andheriCoworking } = await readWorkbook(path.join(ROOT, "examples", "andheri-coworking.xlsx"));
 
   /* The two other layouts. A place: one site, competitors with operators,
      an employer, a deal, the market's facts and a metro line. */
@@ -116,7 +119,7 @@ async function cases() {
     facts: { Mumbai: [{ k: "Rent", v: "Rs 150 a sq ft", src: src + "m" }], network: [{ k: "Seats", v: "4,000", src: src + "t" }] }
   };
 
-  return { chennai, minimal, noChooser, noExisting, noTransit, oneOption, ownKinds, fromWorkbook, place, network };
+  return { chennai, minimal, noChooser, noExisting, noTransit, oneOption, ownKinds, fromWorkbook, andheriCoworking, place, network };
 }
 
 /* What each layout must show as it opens, before anything is clicked. */
