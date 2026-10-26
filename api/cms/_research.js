@@ -53,15 +53,33 @@ const has = (v) => v !== undefined && v !== null && String(v).trim() !== "";
 const pinned = (r) => has(r["Latitude"]) && has(r["Longitude"]);
 const most = (list) => { const c = new Map(); for (const x of list.filter(Boolean)) c.set(x, (c.get(x) || 0) + 1); return [...c.entries()].sort((a, b) => b[1] - a[1]).map(e => e[0]); };
 
-/* What to search for, from the plan as it stands. */
-function queriesFor(rows, { requirement = "", brief = null } = {}) {
+/* What to search for, from the plan as it stands. The atlas type changes
+   it: a place is researched around its site (who competes there, what was
+   leased, what is coming), a network city by city. */
+function queriesFor(rows, { requirement = "", brief = null, type = "decide" } = {}) {
   const atlas = rows["Atlas"] || {};
   const opts = rows["Options"] || [];
-  const city = atlas["City"] || (brief && brief["Where"] && [].concat(brief["Where"])[0]) || "";
+  const cities = most(opts.map(o => o["City"]));
+  const city = atlas["City"] || cities[0] || (brief && brief["Where"] && [].concat(brief["Where"])[0]) || "";
   const areas = most(opts.map(o => o["Locality"] || o["Micro-market"])).slice(0, 3);
   const place = [areas[0], city].filter(Boolean).join(", ") || city || String(requirement).slice(0, 60);
   const gaps = opts.filter(o => !pinned(o) && !has(o["Address"])).slice(0, MAX_GAPS)
-    .map(o => ({ id: o["ID"], query: `${o["Property name"] || o["ID"]} ${o["Locality"] || areas[0] || ""} ${city} address`.replace(/\s+/g, " ").trim(), num: 3, days: 0 }));
+    .map(o => ({ id: o["ID"], query: `${o["Property name"] || o["ID"]} ${o["Locality"] || areas[0] || ""} ${o["City"] || city} address`.replace(/\s+/g, " ").trim(), num: 3, days: 0 }));
+  if (type === "network") {
+    const top = (cities.length ? cities : [city]).filter(Boolean).slice(0, 4);
+    return { gaps, market: top.flatMap(c => [{ query: `${c} office rent per sq ft vacancy 2026`, num: 3 }, { query: `${c} office leasing absorption 2026`, num: 3 }]), place: top.join(", ") || place, city };
+  }
+  if (type === "place" && opts[0]) {
+    const site = opts[0], near = [site["Locality"] || areas[0], site["City"] || city].filter(Boolean).join(", ") || place;
+    return { gaps, place: near, city, market: [
+      { query: `coworking centres near ${site["Property name"] || ""} ${near}`.replace(/\s+/g, " "), num: 8, days: 0 },
+      { query: `${near} coworking flex operators centres list`, num: 8, days: 0 },
+      { query: `${near} office leasing deals 2026 sq ft tenant` },
+      { query: `${near} new office supply Grade A 2026` },
+      { query: `${near} office rent per sq ft vacancy 2026` },
+      { query: `${near} metro station infrastructure 2026` },
+    ] };
+  }
   const market = place ? [
     { query: `${place} office rent per sq ft vacancy 2026` },
     { query: `${place} coworking flex price per seat 2026` },
@@ -78,6 +96,7 @@ const RULES = `You add what web search results say to an Atlas plan: the rows a 
 Reply with ONE JSON object and nothing else:
 {
   "Options": [ { "ID": "<an ID from the plan>", "Address": "...", "Locality": "...", "Source": "<url of the result that says it>" } ],
+  "Places": [ { "Kind": "flex | office | deal | employer | ...", "Name": "...", "Operator": "...", "Address": "...", "Locality": "...", "Second line": "...", "Source": "<url>" } ],
   "Facts": [ { "Group": "market | transit | supply | deals | flex", "Label": "...", "Value": "...", "As of": "YYYY-MM", "Source": "<url>", "How firm": "high | medium | low" } ]
 }
 
@@ -85,20 +104,26 @@ Rules:
 - Use only what the results state. Never invent a figure, a name or a date. Every row you add carries the URL of the result it came from.
 - "Options": only for an ID in the plan whose address is missing, and only when a result gives that building's address. Never change an ID, never write a latitude or longitude, never touch a value the plan already has.
 - "Facts": figures about the area a person deciding on an office would want: rents and how they moved, vacancy, coworking prices per seat, notable recent deals (who, how much space, where), new supply, metro and infrastructure with dates. Short labels, values in the source's words with their units, "As of" from the result's date. Prefer the newest figure; leave out anything older than two years unless nothing newer exists.
+- "Places": only when THE ATLAS SHOWS ONE SITE (said below the plan). Then add the coworking and office centres, and recent deals, that the results name in the site's area and that the plan does not already have: Kind "flex" for coworking and managed offices, "office" for office buildings, "deal" for a leasing deal; "Operator" the brand that runs it; "Address" as the result gives it; seats, prices or area in "Second line". Otherwise return an empty list.
 - If a result is about another city or area, leave it out. If nothing useful was found, return empty lists.
 - Plain words, no em dashes, no commentary.`;
 
 /* The plan, compactly, for the model: what it needs to match IDs. */
 const planBrief = (rows) => JSON.stringify({
   Atlas: { Title: (rows["Atlas"] || {})["Title"], City: (rows["Atlas"] || {})["City"] },
-  Options: (rows["Options"] || []).slice(0, 80).map(o => ({ ID: o["ID"], "Property name": o["Property name"], Locality: o["Locality"], Address: o["Address"] || undefined })),
+  Options: (rows["Options"] || []).slice(0, 80).map(o => ({ ID: o["ID"], "Property name": o["Property name"], Locality: o["Locality"], City: o["City"] || undefined, Address: o["Address"] || undefined })),
+  ...((rows["Places"] || []).length ? { Places: rows["Places"].slice(0, 120).map(p => ({ Name: p["Name"], Kind: p["Kind"], Operator: p["Operator"] || undefined })) } : {}),
 });
+const SHOWS = {
+  place: "THE ATLAS SHOWS ONE SITE: the first row on Options, and everything around it. Add the centres and deals around it on Places.",
+  network: "THE ATLAS SHOWS A NETWORK of locations across cities. Facts about a city take the city's name as their Group. Return an empty Places list.",
+};
 
 /* Research the plan. Returns the plan with additions, and notes. */
-async function research({ rows, requirement = "", brief = null }, { search = searchAll, complete = llm.complete, fetchFn } = {}) {
+async function research({ rows, requirement = "", brief = null, type = "decide" }, { search = searchAll, complete = llm.complete, fetchFn } = {}) {
   const out = JSON.parse(JSON.stringify(rows || {}));
   if (!enabled() && search === searchAll) return { rows: out, notes: ["Web research is off: set EXA_API_KEY in Vercel to fill missing addresses and add market facts with sources."], added: { addresses: 0, facts: 0 }, sources: [] };
-  const { gaps, market, place } = queriesFor(out, { requirement, brief });
+  const { gaps, market, place } = queriesFor(out, { requirement, brief, type });
   if (!gaps.length && !market.length) return { rows: out, notes: ["Nothing to research yet: the plan names no place."], added: { addresses: 0, facts: 0 }, sources: [] };
 
   const found = await search([...gaps, ...market], fetchFn ? { fetchFn } : {});
@@ -111,7 +136,7 @@ async function research({ rows, requirement = "", brief = null }, { search = sea
 
   const r = await complete({
     system: RULES, maxTokens: 16000, effort: "low",
-    user: `THE PLAN\n${planBrief(out)}\n\n${requirement ? `THE REQUIREMENT\n${String(requirement).slice(0, 2000)}\n\n` : ""}SEARCH RESULTS\n${JSON.stringify(results).slice(0, 90000)}`,
+    user: `THE PLAN\n${planBrief(out)}\n\n${SHOWS[type] ? `${SHOWS[type]}\n\n` : "THE ATLAS COMPARES the rows on Options. Return an empty Places list.\n\n"}${requirement ? `THE REQUIREMENT\n${String(requirement).slice(0, 2000)}\n\n` : ""}SEARCH RESULTS\n${JSON.stringify(results).slice(0, 90000)}`,
   });
   const add = r.json && typeof r.json === "object" ? r.json : {};
   const urls = new Set(results.map(x => x.url));
@@ -135,9 +160,24 @@ async function research({ rows, requirement = "", brief = null }, { search = sea
     .filter(f => { const k = `${f["Group"]}|${f["Label"]}`.toLowerCase(); if (seen.has(k)) return false; seen.add(k); return true; });
   if (facts.length) out["Facts"] = [...(out["Facts"] || []), ...facts];
 
-  notes.push(`Web research (Exa) ran ${found.length} search${found.length === 1 ? "" : "es"} about ${place}: ${addresses} address${addresses === 1 ? "" : "es"} found for properties that had none, ${facts.length} market fact${facts.length === 1 ? "" : "s"} added, each with its source.`);
+  /* Around one site: the centres and deals the results name nearby, by
+     name, never twice, never with a coordinate (Build places them). */
+  let places = 0;
+  if (type === "place") {
+    const known = new Set([...(out["Options"] || []).map(o => o["Property name"]), ...(out["Places"] || []).map(p => p["Name"])].filter(Boolean).map(n => String(n).trim().toLowerCase()));
+    const add2 = (Array.isArray(add["Places"]) ? add["Places"] : []).filter(p => sourced(p) && has(p["Name"]) && !known.has(String(p["Name"]).trim().toLowerCase()) && known.add(String(p["Name"]).trim().toLowerCase()))
+      .slice(0, 60).map(p => {
+        const r = { "Kind": has(p["Kind"]) ? String(p["Kind"]).trim().toLowerCase() : "flex", "Name": String(p["Name"]).trim() };
+        for (const k of ["Operator", "Address", "Locality", "Second line"]) if (has(p[k])) r[k] = String(p[k]).trim();
+        r["Source"] = String(p["Source"]).trim(); r["Note"] = "Found by web research; check before quoting.";
+        return r;
+      });
+    if (add2.length) { out["Places"] = [...(out["Places"] || []), ...add2]; places = add2.length; }
+  }
+
+  notes.push(`Web research (Exa) ran ${found.length} search${found.length === 1 ? "" : "es"} about ${place}: ${addresses} address${addresses === 1 ? "" : "es"} found for properties that had none, ${facts.length} market fact${facts.length === 1 ? "" : "s"} added${type === "place" ? `, ${places} centre${places === 1 ? "" : "s"} or deal${places === 1 ? "" : "s"} found around the site` : ""}, each with its source.`);
   if (failed.length) notes.push(`${failed.length} search${failed.length === 1 ? "" : "es"} did not work (${failed[0].error}).`);
-  return { rows: out, notes, added: { addresses, facts: facts.length }, sources, model: r.model, provider: r.provider };
+  return { rows: out, notes, added: { addresses, facts: facts.length, places }, sources, model: r.model, provider: r.provider };
 }
 
 /* A few searches for Enhance: what the web says about the place in the
@@ -166,13 +206,32 @@ Rules:
 - Facts: the market figures the results give for the area (rents, vacancy, coworking prices), each with its URL.
 - Plain words, no em dashes.`;
 
-async function discover({ requirement, brief = null }, { search = searchAll, complete = llm.complete, fetchFn } = {}) {
+const DISCOVER_TYPE = {
+  place: `THIS ATLAS SHOWS ONE SITE and everything around it. "Options" is that site alone (one row; the building, campus or address the person named), with its address and the URL of a result that names it. Also return "Places": the coworking and office centres, and recent leasing deals, the results name around it, each { "Kind": "flex | office | deal", "Name": "...", "Operator": "<brand>", "Address": "...", "Locality": "...", "Second line": "seats, price or area", "Source": "<url>" }.`,
+  network: `THIS ATLAS SHOWS A NETWORK: every location (office, centre, branch, facility) of the organisation or portfolio the person named, across cities. "Options" is one row per location the results name, each with "City", "Locality", its address as given and its URL. As many as the results name.`,
+};
+const DISCOVER_QUERIES = {
+  place: (q) => [
+    { query: `${q} address location`, num: 5, days: 0 },
+    { query: `coworking centres near ${q}`, num: 8, days: 0 },
+    { query: `office buildings near ${q} Grade A`, num: 6, days: 0 },
+    { query: `${q} office leasing deals 2026`, num: 4 },
+    { query: `${q} office rent per sq ft 2026`, num: 4 },
+  ],
+  network: (q) => [
+    { query: `${q} offices locations cities India`, num: 8, days: 0 },
+    { query: `${q} centres list address`, num: 8, days: 0 },
+    { query: `${q} new office opening city 2026`, num: 6 },
+  ],
+};
+
+async function discover({ requirement, brief = null, type = "decide" }, { search = searchAll, complete = llm.complete, fetchFn } = {}) {
   const req = String(requirement || "").replace(/\s+/g, " ").trim();
   if (!req) throw Object.assign(new Error("Describe what you need, or add a file."), { status: 400 });
   if (!enabled() && search === searchAll) throw Object.assign(new Error("Starting from words alone needs web research: set EXA_API_KEY in Vercel. Or add a file (a list of buildings, an inventory, a survey)."), { status: 503 });
   const where = brief && brief["Where"] ? [].concat(brief["Where"]).join(" ") : "";
   const q = `${req} ${where}`.slice(0, 220);
-  const found = await search([
+  const found = await search(DISCOVER_QUERIES[type] ? DISCOVER_QUERIES[type](q) : [
     { query: `${q} office space for lease building`, num: 8, days: 0 },
     { query: `${q} coworking centres seats price`, num: 8, days: 0 },
     { query: `${q} Grade A office buildings list address`, num: 6, days: 0 },
@@ -180,14 +239,18 @@ async function discover({ requirement, brief = null }, { search = searchAll, com
   ], fetchFn ? { fetchFn } : {});
   const results = found.flatMap(f => (f.results || []).map(r => ({ query: f.query, ...r })));
   if (!results.length) throw Object.assign(new Error(`The web search found nothing for "${req.slice(0, 80)}". Add a file, or say the area and city.`), { status: 422 });
-  const r = await complete({ system: DISCOVER, maxTokens: 16000, effort: "low", user: `THE REQUIREMENT\n${req}${brief ? `\n\nTHE BRIEF\n${JSON.stringify(brief).slice(0, 4000)}` : ""}\n\nSEARCH RESULTS\n${JSON.stringify(results).slice(0, 90000)}` });
+  const r = await complete({ system: DISCOVER, maxTokens: 16000, effort: "low", user: `${DISCOVER_TYPE[type] ? `${DISCOVER_TYPE[type]} These lines win over the rules.\n\n` : ""}THE REQUIREMENT\n${req}${brief ? `\n\nTHE BRIEF\n${JSON.stringify(brief).slice(0, 4000)}` : ""}\n\nSEARCH RESULTS\n${JSON.stringify(results).slice(0, 90000)}` });
   const urls = new Set(results.map(x => x.url));
   const rows = r.json && typeof r.json === "object" ? r.json : {};
   rows["Options"] = (Array.isArray(rows["Options"]) ? rows["Options"] : []).filter(o => o && has(o["Property name"]) && has(o["Source"]) && urls.has(String(o["Source"]).trim()));
   rows["Facts"] = (Array.isArray(rows["Facts"]) ? rows["Facts"] : []).filter(f => f && has(f["Source"]) && urls.has(String(f["Source"]).trim()));
-  for (const o of rows["Options"]) { delete o["Latitude"]; delete o["Longitude"]; }
+  rows["Places"] = type === "place" ? (Array.isArray(rows["Places"]) ? rows["Places"] : []).filter(p => p && has(p["Name"]) && has(p["Source"]) && urls.has(String(p["Source"]).trim())) : [];
+  if (!rows["Places"].length) delete rows["Places"];
+  for (const o of [...rows["Options"], ...(rows["Places"] || [])]) { delete o["Latitude"]; delete o["Longitude"]; }
   if (!rows["Options"].length) throw Object.assign(new Error("The web search found no buildings or centres to start from. Add a file, or name the area and city."), { status: 422 });
-  return { rows, notes: [`Started from your words: web research found ${rows["Options"].length} building${rows["Options"].length === 1 ? "" : "s"} or centre${rows["Options"].length === 1 ? "" : "s"}, each with the page that names it. Check them before you share the atlas.`], sources: [...new Map(results.map(x => [x.url, { title: x.title, url: x.url, published: x.published }])).values()], model: r.model, provider: r.provider };
+  const n = rows["Options"].length, np = (rows["Places"] || []).length;
+  const said = type === "place" ? `the site${np ? ` and ${np} centre${np === 1 ? "" : "s"} or deal${np === 1 ? "" : "s"} around it` : ""}` : type === "network" ? `${n} location${n === 1 ? "" : "s"}` : `${n} building${n === 1 ? "" : "s"} or centre${n === 1 ? "" : "s"}`;
+  return { rows, notes: [`Started from your words: web research found ${said}, each with the page that names it. Check them before you share the atlas.`], sources: [...new Map(results.map(x => [x.url, { title: x.title, url: x.url, published: x.published }])).values()], model: r.model, provider: r.provider };
 }
 
 module.exports = { research, discover, webContext, exaSearch, queriesFor, enabled, RULES };

@@ -624,18 +624,18 @@ R["POST bundle/enhance"] = async (req, res, b) => {
 R["POST bundle/plan"] = async (req, res, b) => {
   await needUser(req, "editor");
   const files = filesFrom(b.files);
-  const requirement = clip(b.requirement, 4000) || "", br = briefFrom(b.brief);
+  const requirement = clip(b.requirement, 4000) || "", br = briefFrom(b.brief), type = pdf.typeOf(b.type);
   /* No files, only words: start from what the web says. */
   if (!files.length) {
     if (!requirement.trim()) fail(400, "Add a file, or describe what you need in a line or two.");
     needModel("Starting from your words");
-    try { const d = await research.discover({ requirement, brief: br }); return { discovered: true, rows: pdf.shapeRows(d.rows), notes: d.notes, files: [], label: "Web research", text: "", sources: d.sources, model: d.model, provider: d.provider }; }
+    try { const d = await research.discover({ requirement, brief: br, type }); return { discovered: true, rows: pdf.shapeRows(d.rows), notes: d.notes, files: [], label: "Web research", text: "", sources: d.sources, model: d.model, provider: d.provider }; }
     catch (e) { modelFail(e, "Could not start from your words"); }
   }
   const lone = files.length === 1 && /\.xlsx$/i.test(files[0].name) && !requirement && !(br && Object.keys(br).length);
   if (!lone) needModel("Reading PDFs, Word documents and other spreadsheets");
   try {
-    const p = await sources.plan(files, { requirement, brief: br });
+    const p = await sources.plan(files, { requirement, brief: br, type });
     return { direct: !!p.direct, rows: p.rows, notes: p.notes, files: p.files, label: p.label, text: p.text, model: p.model || null, provider: p.provider || null };
   } catch (e) { modelFail(e, "The files could not be read into a plan"); }
 };
@@ -646,7 +646,7 @@ R["POST bundle/research"] = async (req, res, b) => {
   await needUser(req, "editor");
   if (!b.rows || typeof b.rows !== "object" || Array.isArray(b.rows)) fail(400, "Send the plan as an object in `rows`, one key per sheet.");
   if (research.enabled()) needModel("Web research");
-  try { return await research.research({ rows: pdf.shapeRows(JSON.parse(JSON.stringify(b.rows))), requirement: clip(b.requirement, 4000) || "", brief: briefFrom(b.brief) }); }
+  try { return await research.research({ rows: pdf.shapeRows(JSON.parse(JSON.stringify(b.rows))), requirement: clip(b.requirement, 4000) || "", brief: briefFrom(b.brief), type: pdf.typeOf(b.type) }); }
   catch (e) { modelFail(e, "Web research did not work"); }
 };
 

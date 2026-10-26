@@ -85,8 +85,78 @@ async function cases() {
      can make an Atlas without a developer. */
   const { bundle: fromWorkbook } = await readWorkbook(await fillSampleWorkbook());
 
-  return { chennai, minimal, noChooser, noExisting, noTransit, oneOption, ownKinds, fromWorkbook };
+  /* The two other layouts. A place: one site, competitors with operators,
+     an employer, a deal, the market's facts and a metro line. */
+  const src = "https://example.org/";
+  const place = {
+    meta: { title: "Hoodi site", asOf: "2026-10", center: [77.721, 12.9887], zoom: 13, layout: "place" },
+    options: [{ id: "site", n: 1, name: "Lakeside Campus", lat: 12.988675, lng: 77.721021, precision: "building", geoSrc: src + "s", locality: "Hoodi", city: "Bengaluru" }],
+    places: [
+      { id: "c1", kind: "flex", name: "WeWork Prestige", operator: "WeWork", lat: 12.99, lng: 77.725, precision: "building", src: src + "1", sub: "1,200 seats" },
+      { id: "c2", kind: "flex", name: "Awfis ITPL", operator: "Awfis", lat: 12.985, lng: 77.73, precision: "building", src: src + "2" },
+      { id: "c3", kind: "flex", name: "WeWork Far Away", operator: "wework", lat: 13.2, lng: 77.95, precision: "approx", src: src + "3" },
+      { id: "e1", kind: "employer", name: "ITPL", lat: 12.986, lng: 77.735, precision: "building" },
+      { id: "d1", kind: "deal", name: "ClayWorks, 1.2 lakh sq ft", lat: 12.9887, lng: 77.7211, precision: "building", sub: "Sep 2025" }
+    ],
+    facts: { market: [{ k: "Grade A rent", v: "Rs 90 a sq ft", asOf: "2026-09", src: src + "r" }], supply: [{ k: "New supply", v: "2 msf by 2027", src: src + "n" }] },
+    transit: { lines: [{ key: "purple", name: "Purple Line", color: "#800080", mode: "metro", stations: [{ name: "Hoodi", lat: 12.99, lng: 77.716, open: true }, { name: "Whitefield", lat: 12.996, lng: 77.758, open: true }] }] }
+  };
+  /* A network: locations in four cities, one with no City that joins the
+     nearest, one with no City and nothing near that groups by locality. */
+  const network = {
+    meta: { title: "Our offices", asOf: "2026-10", center: [78.9, 20.6], zoom: 4.4, layout: "network" },
+    options: [
+      { id: "mum-1", name: "Andheri office", lat: 19.12, lng: 72.86, precision: "building", geoSrc: src + "a", city: "Mumbai", fit: "office" },
+      { id: "mum-2", name: "BKC office", lat: 19.065, lng: 72.865, precision: "building", geoSrc: src + "b", city: "mumbai", fit: "office" },
+      { id: "blr-1", name: "Whitefield centre", lat: 12.97, lng: 77.75, precision: "building", geoSrc: src + "c", city: "Bengaluru", fit: "centre" },
+      { id: "noi-1", name: "Noida plant", lat: 28.58, lng: 77.32, precision: "street", geoSrc: src + "d", city: "Noida", fit: "plant" },
+      { id: "gur-1", name: "Gurugram hub", lat: 28.46, lng: 77.03, precision: "locality", geoSrc: src + "e" },
+      { id: "pun-1", name: "Hinjewadi office", lat: 18.59, lng: 73.74, precision: "locality", geoSrc: src + "f", locality: "Hinjewadi" }
+    ],
+    facts: { Mumbai: [{ k: "Rent", v: "Rs 150 a sq ft", src: src + "m" }], network: [{ k: "Seats", v: "4,000", src: src + "t" }] }
+  };
+
+  return { chennai, minimal, noChooser, noExisting, noTransit, oneOption, ownKinds, fromWorkbook, place, network };
 }
+
+/* What each layout must show as it opens, before anything is clicked. */
+const EXPECT = {
+  place: async (page) => {
+    await page.waitForFunction(() => /Routed/.test((document.querySelector("#b-sub") || {}).textContent || ""), { timeout: 5000 }).catch(() => {});
+    const r = await page.evaluate(() => ({
+      head: document.querySelector("#p-head").innerText, body: document.querySelector("#p-body").innerText, sub: document.querySelector("#b-sub").textContent,
+      places: [...document.querySelectorAll("#list .card.pc")].map(c => c.innerText.replace(/\s+/g, " ")), tabs: [...document.querySelectorAll("#tabs [data-t]")].map(t => t.innerText),
+      rings: (window.__atlasMap && window.__atlasMap._layers["rings-line"]) ? 1 : 0,
+    }));
+    const out = [];
+    if (!/Lakeside Campus/.test(r.head)) out.push("the site is not what the panel opens on: " + r.head.slice(0, 80));
+    if (r.sub !== "Routed drive time") out.push("the routed drive-time areas were not used: list says " + JSON.stringify(r.sub));
+    if (r.places.length !== 5 || !/≤ 10 min/.test(r.places[0]) || !/beyond 30 min/.test(r.places[4])) out.push("the places around the site are not listed nearest first with their area: " + JSON.stringify(r.places));
+    if (!/Within 10 min\s*4\b/i.test(r.body)) out.push("the counts inside the first area are wrong: " + r.body.slice(0, 200));
+    if (!/Who competes here[\s\S]*WeWork[\s\S]*Awfis/i.test(r.body)) out.push("competition by operator is missing");
+    if (!r.tabs.includes("Competition") || !r.tabs.includes("The site") || r.tabs.includes("Distances")) out.push("the tabs are not a place atlas's: " + r.tabs.join(", "));
+    if (!/routed by Mapbox/.test(r.body)) out.push("the method line does not say the areas are routed");
+    return out;
+  },
+  network: async (page) => {
+    await page.waitForFunction(() => window.__atlasMap && window.__atlasMap._layers["opt"], { timeout: 5000 }).catch(() => {});
+    const r = await page.evaluate(() => ({
+      head: document.querySelector("#p-head").innerText, body: document.querySelector("#p-body").innerText, heads: [...document.querySelectorAll("#list .cityh")].map(h => h.innerText.replace(/\s+/g, " ")),
+      chips: [...document.querySelectorAll("#filters [data-city]")].length, city: !!(window.__atlasMap && window.__atlasMap._layers["city-dot"]), count: document.querySelector("#b-count").textContent,
+    }));
+    const out = [];
+    if (!r.city) out.push("no city bubbles on the map");
+    if (r.heads.length !== 4 || !/MUMBAI 2 LOCATIONS/i.test(r.heads[0]) || !r.heads.some(h => /NOIDA 2/i.test(h)) || !r.heads.some(h => /HINJEWADI 1/i.test(h))) out.push("the list is not grouped by city (a missing City joins the nearest within 40 km): " + JSON.stringify(r.heads));
+    if (r.count !== "6 locations") out.push("the count does not say locations: " + r.count);
+    if (!/6 locations in 4 cities/i.test(r.head + r.body) || !/City by city/i.test(r.body)) out.push("the presence view is missing: " + r.body.slice(0, 160));
+    await page.click('#filters [data-city]');
+    await page.waitForTimeout(80);
+    const after = await page.evaluate(() => ({ cards: document.querySelectorAll("#list .card").length, hash: location.hash }));
+    if (after.cards !== 2 || !/#\/city\//.test(after.hash)) out.push("picking a city does not narrow the list and the link: " + JSON.stringify(after));
+    await page.click('#filters [data-city]');
+    return out;
+  },
+};
 
 async function run(name, bundle, base, browser) {
   const errors = [];
@@ -115,6 +185,12 @@ async function run(name, bundle, base, browser) {
     if (/fonts\.googleapis|fonts\.gstatic/.test(url)) return route.fulfill({ contentType: "text/css", body: "" });
     /* Satellite tiles are fulfilled rather than aborted: an abort surfaces as
        a console error and would drown the errors that matter. */
+    /* Routed drive-time areas: squares round the site, 10, 20 and 30 min. */
+    const iso = url.match(/isochrone\/v1\/mapbox\/[^/]+\/([-\d.]+),([-\d.]+)/);
+    if (iso) {
+      const [x, y] = [+iso[1], +iso[2]], sq = (h) => [[[x - h, y - h], [x + h, y - h], [x + h, y + h], [x - h, y + h], [x - h, y - h]]];
+      return route.fulfill({ contentType: "application/json", body: JSON.stringify({ type: "FeatureCollection", features: [[30, .1], [20, .05], [10, .02]].map(([m, h]) => ({ type: "Feature", properties: { contour: m }, geometry: { type: "Polygon", coordinates: sq(h) } })) }) });
+    }
     if (/arcgisonline|api\.mapbox\.com\/styles|\/media\//.test(url)) return route.fulfill({ status: 200, contentType: "image/gif", body: Buffer.from("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7", "base64") });
     return route.continue();
   });
@@ -123,6 +199,7 @@ async function run(name, bundle, base, browser) {
   await page.goto(base + "/engine/", { waitUntil: "domcontentloaded" });
   await page.waitForFunction(() => document.querySelector("#tabs") && document.querySelector("#tabs").children.length > 0, { timeout: 15000 })
     .catch(() => errors.push("the tab bar never rendered"));
+  if (EXPECT[name]) (await EXPECT[name](page).catch(e => ["checking the layout threw: " + e.message.split("\n")[0]])).forEach(e => errors.push(e));
 
   /* Walk every tab this Atlas decided to show. */
   const tabs = await page.$$eval("#tabs [data-t]", els => els.map(e => e.dataset.t));

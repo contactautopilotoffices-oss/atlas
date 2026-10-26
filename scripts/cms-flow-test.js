@@ -98,7 +98,7 @@ async function expect(name, fn) { try { const v = await fn(); if (v === false) b
     await page.click('#nav a[href="#/create"]');
     await page.waitForSelector(".tcard", { timeout: 10000 });
     await expect("six steps across the top", async () => (await page.$$(".wiz li")).length === 6);
-    await expect("step 1 offers three atlas types, Compare and decide ready", async () => (await page.$$(".tcard")).length === 3 && !(await page.$eval('.tcard[data-type="decide"]', e => e.disabled)));
+    await expect("step 1 offers three atlas types, every one ready", async () => (await page.$$(".tcard")).length === 3 && (await page.$$(".tcard:disabled")).length === 0 && (await page.$$('.tcard[data-type="place"], .tcard[data-type="network"]')).length === 2);
     await page.click('.tcard[data-type="decide"]');
     await page.waitForSelector("#cr-files", { state: "attached", timeout: 10000 });
     await expect("the import box takes several files at once", async () => await page.$eval("#cr-files", e => e.multiple && /\.pdf/.test(e.accept) && /\.docx/.test(e.accept)));

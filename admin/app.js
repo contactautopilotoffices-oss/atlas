@@ -461,9 +461,9 @@ function reportHTML(rep, notes) {
 const TYPES = [
   { key: "decide", title: "Compare and decide", line: "Several properties, scored and ranked against a brief, with the metro, the market and a recommendation.", ready: true,
     art: `<svg viewBox="0 0 160 96" aria-hidden="true"><rect width="160" height="96" rx="10" fill="var(--paper)"/><path d="M8 70 C40 60 60 74 90 58 S140 40 152 46" stroke="var(--acc2)" stroke-width="3" fill="none" stroke-dasharray="1 6" stroke-linecap="round"/>${[[40, 34, 1], [78, 50, 2], [112, 30, 3], [126, 64, 4]].map(([x, y, n]) => `<circle cx="${x}" cy="${y}" r="9" fill="var(--acc)"/><text x="${x}" y="${y + 3.5}" font-size="10" text-anchor="middle" fill="#fff" font-family="sans-serif">${n}</text>`).join("")}<rect x="10" y="10" width="44" height="5" rx="2.5" fill="var(--ink)" opacity=".7"/><rect x="10" y="19" width="30" height="4" rx="2" fill="var(--dim)"/></svg>` },
-  { key: "place", title: "Show a place", line: "One site or area and everything around it: drive-time catchments, competition, supply, deals.", ready: false,
+  { key: "place", title: "Show a place", line: "One site or area and everything around it: drive-time catchments, competition, supply, deals.", ready: true,
     art: `<svg viewBox="0 0 160 96" aria-hidden="true"><rect width="160" height="96" rx="10" fill="var(--paper)"/>${[38, 26, 14].map((r, i) => `<circle cx="80" cy="50" r="${r}" fill="var(--acc)" opacity="${0.08 + i * 0.07}"/>`).join("")}<circle cx="80" cy="50" r="6" fill="var(--acc)"/>${[[44, 30], [118, 36], [56, 76], [110, 74], [30, 58], [132, 58]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="3.5" fill="var(--ok)"/>`).join("")}</svg>` },
-  { key: "network", title: "Show a network", line: "Many locations across cities: where you are, what each site holds, city by city.", ready: false,
+  { key: "network", title: "Show a network", line: "Many locations across cities: where you are, what each site holds, city by city.", ready: true,
     art: `<svg viewBox="0 0 160 96" aria-hidden="true"><rect width="160" height="96" rx="10" fill="#2a1e16"/><path d="M62 12 L92 10 L104 26 L100 44 L112 52 L96 74 L82 88 L74 74 L60 60 L50 40 Z" fill="none" stroke="#c8693a" stroke-width="1.2" opacity=".6"/>${[[70, 30, 4], [88, 22, 3], [94, 48, 5], [72, 58, 4], [84, 76, 3], [62, 44, 2.5]].map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="#f4d9b8"/><circle cx="${x}" cy="${y}" r="${r * 2.2}" fill="#f4d9b8" opacity=".18"/>`).join("")}</svg>` },
 ];
 const STEP_NAMES = ["Type", "Your data", "We build it", "Review", "Look", "Share"];
@@ -519,16 +519,23 @@ function stepType(M, W) {
 }
 
 /* ---- 2 · your data ---- */
+/* What to bring, and an example requirement, for each type. */
+const BRING = {
+  decide: { lede: "Drop in whatever you have: an inventory PDF, a spreadsheet of centres, a market note, a filled Atlas workbook.", ask: "What do you need?", eg: "120 seats in Andheri East near the metro, under Rs 18,000 a seat, move in by February 2027. For a fintech moving out of BKC." },
+  place: { lede: "Name the site, and drop in what you have about the area: a list of competing centres, a market note, recent deals. With the web search on, the centres and deals around the site are looked up for you.", ask: "Which site?", eg: "An office campus on ITPL Main Road, Whitefield, Bengaluru. Show the coworking competition and what is within 30 minutes' drive." },
+  network: { lede: "Drop in your list of locations (a spreadsheet, a PDF, a deck exported as PDF), in any layout. Each becomes a pin, grouped by city, with the metro in every city.", ask: "Whose network?", eg: "Every office and centre of our company across India, with seats and status for each." },
+};
 function stepData(M, W) {
-  W.innerHTML = `<h2>Bring your data</h2><p class="mut small">Drop in whatever you have: an inventory PDF, a spreadsheet of centres, a market note, a filled Atlas workbook. Any layout is fine; it is read for you. Up to ${IMPORT_MAX} files. Or just describe what you need and the web is searched for you.</p>
+  const B = BRING[CR.type] || BRING.decide;
+  W.innerHTML = `<h2>Bring your data</h2><p class="mut small">${esc(B.lede)} Any layout is fine; it is read for you. Up to ${IMPORT_MAX} files. Or just describe it and the web is searched for you.</p>
     <label id="cr-drop" class="card drop"><input id="cr-files" type="file" multiple accept=".xlsx,.xlsm,.csv,.pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/csv" style="display:none">
       <b>Choose files</b> or drop them here<div class="small mut">Excel (.xlsx, .csv), PDF, Word (.docx). Up to ${IMPORT_MAX} files, about 3 MB together.</div></label>
     <div id="cr-picked"></div>
-    <label class="f" for="cr-req" style="margin-top:14px">What do you need? <span class="mut">(optional with files, enough on its own)</span></label>
-    <textarea class="in" id="cr-req" rows="3" placeholder="120 seats in Andheri East near the metro, under Rs 18,000 a seat, move in by February 2027. For a fintech moving out of BKC.">${esc(CR.req)}</textarea>
+    <label class="f" for="cr-req" style="margin-top:14px">${esc(B.ask)} <span class="mut">(optional with files, enough on its own)</span></label>
+    <textarea class="in" id="cr-req" rows="3" placeholder="${esc(B.eg)}">${esc(CR.req)}</textarea>
     <div class="row-gap"><button class="btn sm" type="button" id="cr-enhance" title="Turns the requirement into a brief you can edit, using your files and the web">✦ Enhance it into a brief</button><span class="small mut" id="cr-enh-note"></span></div>
     <div id="cr-brief"></div>
-    <label class="check"><input type="checkbox" id="cr-research" ${CR.research ? "checked" : ""}> Look up what is missing on the web (addresses, rents, coworking prices, deals), with sources</label>
+    <label class="check"><input type="checkbox" id="cr-research" ${CR.research ? "checked" : ""}> ${CR.type === "place" ? "Look up the area on the web (competing centres and their operators, deals, rents, new supply), with sources" : "Look up what is missing on the web (addresses, rents, coworking prices, deals), with sources"}</label>
     <div class="small mut" style="margin-top:10px">Or: <a href="#" id="cr-example">use the Andheri Flex example</a> · <a href="#" id="cr-blank">start from a blank plan</a> · <a href="#" id="cr-template">download the empty workbook</a></div>
     <div class="small" id="cr-filename" style="margin-top:8px"></div>
     ${nav(1, 3, "Build my atlas")}`;
@@ -620,7 +627,7 @@ async function runWork(M) {
     w.s = "doing"; w.detail = ""; redraw();
     try {
       if (w.k === "read" || w.k === "discover") {
-        const body = { files: w.k === "read" ? await Promise.all(CR.picked.map(async f => ({ name: f.name, file: await readAsBase64(f) }))) : [], requirement: CR.req || "", brief: CR.brief };
+        const body = { files: w.k === "read" ? await Promise.all(CR.picked.map(async f => ({ name: f.name, file: await readAsBase64(f) }))) : [], requirement: CR.req || "", brief: CR.brief, type: CR.type };
         const j = await api("bundle/plan", { method: "POST", body });
         CR.rows = j.rows; CR.label = j.label; CR.srcText = j.text || ""; CR.tab = "Options"; CR.extraCols = {}; CR.sources = j.sources || [];
         CR.planBy = j.direct ? "Read from the workbook as it is" : j.discovered ? "Found on the web" : `Read by ${j.provider || "the model"}`;
@@ -629,10 +636,10 @@ async function runWork(M) {
         w.detail = `${n} propert${n === 1 ? "y" : "ies"} found${(CR.rows["Places"] || []).length ? `, ${(CR.rows["Places"] || []).length} places around them` : ""}.`;
         if (j.direct) { const r = CR.work.find(x => x.k === "research"); if (r && r.s === "todo") { r.s = "skip"; r.detail = "A filled Atlas workbook is used as it is."; } }
       } else if (w.k === "research") {
-        const j = await api("bundle/research", { method: "POST", body: { rows: CR.rows, requirement: CR.req || "", brief: CR.brief } });
+        const j = await api("bundle/research", { method: "POST", body: { rows: CR.rows, requirement: CR.req || "", brief: CR.brief, type: CR.type } });
         CR.rows = j.rows; CR.planNotes = [...CR.planNotes, ...(j.notes || [])]; CR.sources = [...CR.sources, ...(j.sources || [])];
         w.detail = (j.notes || [])[0] || "Done.";
-        if (/off|did not work|nothing/i.test(w.detail) && !(j.added && (j.added.facts || j.added.addresses))) w.s = "skip";
+        if (/off|did not work|nothing/i.test(w.detail) && !(j.added && (j.added.facts || j.added.addresses || j.added.places))) w.s = "skip";
       } else if (w.k === "build") {
         const j = await api("bundle/build", { method: "POST", body: { rows: CR.rows, label: CR.label } });
         CR.bundle = j.bundle; CR.report = j.report; CR.workbook = j.workbook; CR.rows = j.rows; CR.dirty = false;

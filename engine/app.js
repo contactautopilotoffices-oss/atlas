@@ -35,6 +35,39 @@ const CP = A.copy || {};
 const BUSD = A.bus || {};
 const ZONE = Object.fromEntries(Z.map(z => [z.key, z]));
 
+/* What this atlas leads with (meta.layout, picked in /admin/):
+     decide   several properties compared and ranked (the default)
+     place    one site and everything around it, by routed drive time
+     network  many locations across cities, grouped by city
+   Every layout keeps the basics: pins that say how exact they are, the
+   metro, sources on every fact, the phone layout. */
+const LAYOUT = ["place", "network"].includes(M.layout) ? M.layout : "decide";
+const IS_PLACE = LAYOUT === "place", IS_NET = LAYOUT === "network";
+const NOUN = IS_PLACE ? ["site", "sites"] : IS_NET ? ["location", "locations"] : ["option", "options"];
+const nOf = (n) => `${n} ${NOUN[n === 1 ? 0 : 1]}`;
+/* The site a place atlas is about: the one ranked first. */
+const SITE = IS_PLACE ? (O.find(o => o.n === 1) || O[0] || null) : null;
+/* A network atlas groups its locations by city: the City column, and a
+   location with none joins the nearest city within 40 km (or is grouped
+   under its locality), so nothing is left out of a group. */
+const CITIES = (() => {
+  if (!IS_NET) return [];
+  const norm = (c) => String(c == null ? "" : c).trim().replace(/\s+/g, " ").replace(/^./, x => x.toUpperCase());
+  const by = new Map(), put = (name, o) => { const k = name.toLowerCase(); if (!by.has(k)) by.set(k, { name, os: [] }); by.get(k).os.push(o); };
+  for (const o of O) if (norm(o.city)) put(norm(o.city), o);
+  for (const o of O.filter(o => !norm(o.city))) {
+    let best = null;
+    for (const g of by.values()) for (const x of g.os) { const d = km(o, x); if (d <= 40 && (!best || d < best.d)) best = { g, d }; }
+    if (best) best.g.os.push(o); else put(norm(o.locality) || "Other", o);
+  }
+  return [...by.values()].map((g, i) => ({ ...g, key: "c" + i + "-" + g.name.toLowerCase().replace(/[^a-z0-9]+/g, "-"),
+    lng: g.os.reduce((t, o) => t + o.lng, 0) / g.os.length, lat: g.os.reduce((t, o) => t + o.lat, 0) / g.os.length }))
+    .sort((a, b) => b.os.length - a.os.length || a.name.localeCompare(b.name));
+})();
+const CITY_OF = new Map(CITIES.flatMap(c => c.os.map(o => [o.id, c])));
+/* Below this zoom a network shows one bubble per city instead of pins. */
+const CITY_ZOOM = 7.6;
+
 /* Copy: the study's own words. Every line has a default, so an Atlas with no
    copy block still reads properly; it just reads generically. {tokens} are
    filled from the bundle. */
@@ -165,11 +198,13 @@ const SPEED = M.speed || {};
 const SPEED_KMH = isFinite(SPEED.kmh) ? SPEED.kmh : 20;
 const ROAD_FACTOR = isFinite(SPEED.factor) ? SPEED.factor : 1.3;
 const RING_COLORS = ["#a3502c", "#c8693a", "#d9a07a", "#e6c2aa"];
-const RINGS = (Array.isArray(M.rings) && M.rings.length ? M.rings : [15, 30, 45])
+const RINGS = (Array.isArray(M.rings) && M.rings.length ? M.rings : IS_PLACE ? [10, 20, 30] : [15, 30, 45])
   .filter(n => isFinite(n)).map((min, i) => ({ min, color: RING_COLORS[Math.min(i, RING_COLORS.length - 1)] }));
 const ringKm = (min) => min / 60 * SPEED_KMH / ROAD_FACTOR;
 const driveMin = (k) => Math.max(1, Math.round(k * ROAD_FACTOR / SPEED_KMH * 60));
 const METHOD = `Drive times are straight-line distances at ${SPEED_KMH} km/h with a ${ROAD_FACTOR}x road factor${SPEED.note ? ` (${SPEED.note})` : ""}. Indicative, not routed.`;
+/* The method line for counts around one pin: routed where it can be. */
+const methodFor = (o) => { const iso = isoOf(o); return iso ? `Drive-time areas are routed by Mapbox for ${RINGS.map(r => r.min).join(", ").replace(/, (\d+)$/, " and $1")} minutes${iso.profile === "driving-traffic" ? ", with typical traffic" : ""}. A place counts in the first area it falls inside.` : METHOD; };
 const fmtKm = (d) => `${d < 1 ? d.toFixed(2) : d < 10 ? d.toFixed(1) : Math.round(d)} km`;
 const fmtM = (d) => d < 1 ? `${Math.round(d * 1000 / 10) * 10} m` : fmtKm(d);
 const walkMin = (d) => Math.round(d * 1000 / 80);
@@ -215,6 +250,9 @@ const targetYear = (s) => s.eta || null;
    workbook that invents its own ("hospital", "port") gets layers and
    catchment counts without a code change. */
 const KINDS = (() => { const out = []; for (const x of PL) if (x.kind && !out.includes(x.kind)) out.push(x.kind); return out; })();
+/* Places run by someone (a coworking brand, a developer): a place atlas
+   counts them by operator. */
+const OPERATED = PL.filter(p => p.operator && String(p.operator).trim());
 function catchment(p, mins) {
   const out = (mins || RINGS.map(r => r.min)).map(min => {
     const r = { min, km: ringKm(min) };
@@ -222,12 +260,55 @@ function catchment(p, mins) {
     return r;
   });
   if (!p) return out;
+  /* A routed area where one has arrived for this pin; the ring otherwise. */
+  const iso = !mins && isoOf(p);
+  const geom = iso ? RINGS.map(r => (iso.fc.features.find(f => f.properties && f.properties.contour === r.min) || {}).geometry) : null;
   for (const x of PL) {
     if (!KINDS.includes(x.kind)) continue;
-    const d = km(p, x), i = out.findIndex(r => d <= r.km);
+    const d = km(p, x), i = geom ? geom.findIndex(g => g && inGeom([x.lng, x.lat], g)) : out.findIndex(r => d <= r.km);
     if (i >= 0) out[i][x.kind].push({ ...x, d });
   }
   return out;
+}
+/* ------------------------------------------------- routed catchments ----
+   For a place atlas, the drive-time areas Mapbox works out from the site
+   with typical traffic, the way the Whitefield study draws them. Asked for
+   when a site is shown; until they arrive, or if they cannot be had, the
+   rings stand in, and every count says which it used. */
+const ISO = new Map();
+const ISO_MINS = RINGS.map(r => r.min).filter(m => m > 0 && m <= 60).slice(0, 4);
+function inPoly(p, ring) {
+  let ins = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i], [xj, yj] = ring[j];
+    if (((yi > p[1]) !== (yj > p[1])) && p[0] < (xj - xi) * (p[1] - yi) / (yj - yi) + xi) ins = !ins;
+  }
+  return ins;
+}
+function inGeom(p, g) {
+  const polys = g.type === "Polygon" ? [g.coordinates] : g.type === "MultiPolygon" ? g.coordinates : [];
+  return polys.some(poly => poly[0] && inPoly(p, poly[0]) && !poly.slice(1).some(h => inPoly(p, h)));
+}
+const isoOf = (o) => (IS_PLACE && o && ISO.get(o.id)) || null;
+let mapTouched = false;
+async function loadIso(o) {
+  if (!IS_PLACE || !o || ISO.has(o.id) || !window.MAPBOX_TOKEN || !window.fetch || ISO_MINS.length !== RINGS.length) return;
+  ISO.set(o.id, null);
+  for (const profile of ["driving-traffic", "driving"]) {
+    try {
+      const r = await fetch(`https://api.mapbox.com/isochrone/v1/mapbox/${profile}/${o.lng},${o.lat}?contours_minutes=${ISO_MINS.join(",")}&polygons=true&denoise=1&generalize=40&access_token=${encodeURIComponent(window.MAPBOX_TOKEN)}`);
+      if (!r.ok) continue;
+      const fc = await r.json();
+      if (!fc || !Array.isArray(fc.features) || !fc.features.length) continue;
+      ISO.set(o.id, { fc, profile });
+      for (const k of [...CATCH.keys()]) if (k.startsWith(o.id + "|")) CATCH.delete(k);
+      PCACHE.clear(); MAX.clear();
+      if (booted) { const y = $("#p-body").scrollTop; renderList(); renderPanel(); $("#p-body").scrollTop = y; }
+      applyLayerVisibility();
+      if (!mapTouched && ringTarget() === o) fitAll();
+      return;
+    } catch (e) { /* the rings stand in */ }
+  }
 }
 const upTo = (c, i, kind) => c.slice(0, i + 1).reduce((s, r) => s + ((r[kind] || []).length), 0);
 /* Cached per option, and per ring set, because a measure may use its own. */
@@ -440,7 +521,7 @@ const LAYERS = [
   OPEN.length && { key: "rail", label: say("layerLabels.rail", "Rail open"), sw: `<span class="sw" style="background:linear-gradient(90deg,#3281C4 25%,#53B848 25% 50%,#FF9900 50% 75%,#6E6E6E 75%)"></span>`, ids: ["rail-open", "rail-casing", "st-open"] },
   PLAN.length && { key: "future", label: say("layerLabels.future", "Upcoming, indicative"), sw: `<span class="sw" style="background:repeating-linear-gradient(90deg,#800080 0 3px,transparent 3px 5px,#FF0000 5px 8px,transparent 8px 10px,#e0b800 10px 13px,transparent 13px 15px)"></span>`, ids: ["rail-plan", "rail-plan-label", "st-plan", "st-plan-m"] },
   BUS.length && { key: "bus", label: say("layerLabels.bus", "Bus stops"), sw: `<span class="dot" style="background:#1d6fa5;box-shadow:inset 0 0 0 1.5px #fff,0 0 0 1px #1d6fa5"></span>`, ids: ["bus-stop", "bus-label"] },
-  O.length > 1 && { key: "links", label: say("layerLabels.links", "Distances"), sw: `<span class="sw" style="background:repeating-linear-gradient(90deg,#6c5b4d 0 3px,transparent 3px 6px)"></span>`, ids: ["links", "links-label"] }
+  O.length > 1 && LAYOUT === "decide" && { key: "links", label: say("layerLabels.links", "Distances"), sw: `<span class="sw" style="background:repeating-linear-gradient(90deg,#6c5b4d 0 3px,transparent 3px 6px)"></span>`, ids: ["links", "links-label"] }
 ].filter(Boolean).concat(
   KINDS.map(k => ({ key: k, label: kindLabel(k), sw: `<span class="dot" style="background:${COL[k]}"></span>` }))
 ).concat([
@@ -470,10 +551,10 @@ const LAYER_HINT = new Proxy({}, { get: (_, k) => say("layerHints." + String(k),
    and whatever rail runs today. Places and drive rings come on with the tab
    or the camera that needs them. Anything the bundle has no data for is not
    in LAYERS at all, so it cannot be switched on. */
-const LAYERS_ON_AT_START = ["existing", "zones", "rail", "future", "bus"];
+const LAYERS_ON_AT_START = ["existing", "zones", "rail", "future", "bus", ...(IS_PLACE ? ["rings", ...KINDS] : [])];
 const S = {
   tab: "overview", sel: null, hov: null, pair: null, shot: "close", sort: "rank", preset: DEFAULT_PRESET, sheet: "half",
-  lv: DEFAULT_PRESET ? { ...PRESETS[DEFAULT_PRESET].lv } : {}, filters: new Set(), auto: new Set(), only: new Set(),
+  lv: DEFAULT_PRESET ? { ...PRESETS[DEFAULT_PRESET].lv } : {}, filters: new Set(), auto: new Set(), only: new Set(), city: null, kinds: new Set(),
   layers: Object.fromEntries(LAYERS.map(l => [l.key, LAYERS_ON_AT_START.includes(l.key)]))
 };
 /* Filters: the fit groups (any of those ticked), and walking distance to a
@@ -483,8 +564,9 @@ const OTHER_FILTERS = (OPEN.length ? [{ key: "near", label: say("filters.near", 
 for (const k of Object.keys(S.layers)) if (!cmsOn("layer:" + k)) S.layers[k] = false;
 /* S.only is the map bar's property picker: empty means every property. */
 const passes = (o) => {
-  const on = [...S.filters], fits = on.filter(k => FITS[k]), other = on.filter(k => !FITS[k]);
-  return (S.only.size === 0 || S.only.has(o.id)) && (fits.length === 0 || fits.includes(o.fit)) && other.every(k => OTHER_FILTERS.find(f => f.key === k).test(o));
+  const on = [...S.filters], fits = on.filter(k => FITS[k]), other = on.filter(k => !FITS[k] && OTHER_FILTERS.some(f => f.key === k));
+  return (S.only.size === 0 || S.only.has(o.id)) && (fits.length === 0 || fits.includes(o.fit)) && other.every(k => OTHER_FILTERS.find(f => f.key === k).test(o))
+    && (!S.city || (CITY_OF.get(o.id) || {}).key === S.city);
 };
 const byRank = (a, b) => a.n - b.n;
 const RANKED = () => O.slice().sort(byRank);
@@ -492,13 +574,14 @@ const RANKED = () => O.slice().sort(byRank);
    Atlas, never a page with empty sections. Overview and Compare always have
    the options themselves to show. */
 const TABS = [
-  { key: "overview", label: say("tabs.overview", "Overview"), when: true },
+  { key: "overview", label: say("tabs.overview", IS_PLACE ? "The site" : IS_NET ? "Presence" : "Overview"), when: true },
+  { key: "competition", label: say("tabs.competition", "Competition"), when: IS_PLACE && OPERATED.length > 0 },
   { key: "markets", label: say("tabs.markets", "Micro-markets"), when: Z.length > 0 },
   { key: "connect", label: say("tabs.connect", "Connectivity"), when: OPEN.length > 0 || PLAN.length > 0 || BUS.length > 0 },
-  { key: "distance", label: say("tabs.distance", "Distances"), when: O.length > 1 },
-  { key: "places", label: say("tabs.places", "Places nearby"), when: KINDS.length > 0 },
-  { key: "priorities", label: say("tabs.priorities", "Your priorities"), when: HAS_CHOOSER },
-  { key: "conclusion", label: say("tabs.conclusion", "Conclusion"), when: HAS_CHOOSER && O.length > 1 },
+  { key: "distance", label: say("tabs.distance", "Distances"), when: O.length > 1 && LAYOUT === "decide" },
+  { key: "places", label: say("tabs.places", IS_PLACE ? "Around the site" : "Places nearby"), when: KINDS.length > 0 },
+  { key: "priorities", label: say("tabs.priorities", "Your priorities"), when: HAS_CHOOSER && !IS_PLACE },
+  { key: "conclusion", label: say("tabs.conclusion", "Conclusion"), when: HAS_CHOOSER && O.length > 1 && !IS_PLACE },
   { key: "compare", label: say("tabs.compare", "Compare all"), when: O.length > 1 }
 ].filter(t => t.when && (t.key === "overview" || cmsOn("tab:" + t.key)));
 function setLevels(lv, preset) {
@@ -536,7 +619,7 @@ function dressShell() {
   set("#brand-s", (brand.sub || [sub, asOf].filter(Boolean).join(" · ")).toUpperCase());
   set("#g-eyebrow", say("gate.eyebrow", [sub, asOf].filter(Boolean).join(" · ")));
   const gt = $("#g-title"); if (gt) gt.textContent = say("gate.title", t);
-  set("#g-lede", say("gate.lede", sub || `${O.length} ${O.length === 1 ? "option" : "options"}, read against what matters to you.`));
+  set("#g-lede", say("gate.lede", sub || (IS_PLACE && SITE ? `${SITE.name} and everything around it, by drive time.` : IS_NET ? `${nOf(O.length)} across ${CITIES.length} ${CITIES.length === 1 ? "city" : "cities"}.` : `${O.length} ${O.length === 1 ? "option" : "options"}, read against what matters to you.`)));
   set("#g-credit", say("gate.credit", ""));
   const map = $("#map"); if (map) map.setAttribute("aria-label", say("brand.mapLabel", `Map of ${t}`));
 }
@@ -556,7 +639,11 @@ function initGate() {
   startMap();
   const firstFit = Object.keys(FITS)[0];
   const nFirst = firstFit ? O.filter(o => o.fit === firstFit).length : 0;
-  const stats = [
+  const lastMin = RINGS.length ? RINGS[RINGS.length - 1].min : 30;
+  const stats = IS_NET ? [[O.length, say("gate.statOptions", NOUN[O.length === 1 ? 0 : 1])], [CITIES.length, say("gate.statCities", CITIES.length === 1 ? "city" : "cities")],
+    LINES.length && [LINES.length, say("gate.statLines", LINES.length === 1 ? "metro line" : "metro lines")]].filter(Boolean)
+    : IS_PLACE ? [[PL.length, say("gate.statPlaces", "places mapped")], OPERATED.length && [new Set(OPERATED.map(p => String(p.operator).trim().toLowerCase())).size, say("gate.statOperators", "operators around it")],
+    [`${lastMin} min`, say("gate.statCatchment", "drive-time catchment")]].filter(Boolean) : [
     [O.length, say("gate.statOptions", O.length === 1 ? "option" : "options")],
     nFirst && [nFirst, FITS[firstFit].label.toLowerCase()],
     Z.length && [Z.length, say("gate.statZones", "micro-markets")],
@@ -616,6 +703,7 @@ function startMap() {
 }
 function boot() {
   booted = true;
+  if (IS_PLACE) loadIso(SITE);
   applyRoute(false);
   renderSort();
   renderTabs(); renderFilters(); renderList(); renderPanel(); renderLayers();
@@ -655,6 +743,8 @@ function initMap() {
   map.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "bottom-right");
   map.on("load", () => { addLayers(); wireMap(); if (booted && S.sel) select(S.sel, true, true); else fitAll(false); spreadPins(); });
   map.on("moveend", spreadPins);
+  map.on("dragstart", () => { mapTouched = true; });
+  map.on("wheel", () => { mapTouched = true; });
 }
 
 /* ------------------------------------------------------------ deep links --
@@ -667,13 +757,16 @@ function routeHash() {
     if (S.preset === "balanced") return `#/${S.tab}`;
     return `#/${S.tab}/${PRESETS[S.preset] ? S.preset : lvCode(S.lv)}`;
   }
+  if (S.city && S.tab === "overview") return `#/city/${S.city}`;
   return S.tab === "overview" ? "#/" : `#/${S.tab}`;
 }
 function pushRoute() { const h = routeHash(); if (location.hash !== h && !(h === "#/" && !location.hash)) history.pushState(null, "", h); }
 function applyRoute(render) {
   const [kind, val] = location.hash.replace(/^#\/?/, "").split("/");
   S.sel = null;
+  if (kind !== "city" && kind !== "option") S.city = null;
   if (kind === "option" && O.some(o => o.id === val)) S.sel = val;
+  else if (kind === "city" && CITIES.some(c => c.key === val)) { S.tab = "overview"; S.city = val; }
   else if (TABS.some(t => t.key === kind && t.key !== "compare")) {
     S.tab = kind;
     if (kind === "priorities" || kind === "conclusion") {
@@ -715,6 +808,13 @@ function fitPoints(pts, opts = {}) {
   map.fitBounds(b, { padding: padding(), maxZoom: opts.maxZoom || 13.5, pitch: innerWidth > 860 ? 30 : 0, bearing: 0, duration: opts.animate === false || REDUCED() ? 0 : 1100 });
 }
 function fitAll(animate = true) {
+  /* A place atlas opens on its site's catchment: the largest drive-time
+     area, routed where it has arrived. */
+  if (IS_PLACE && SITE && !S.sel && !S.pair) {
+    const o = ringTarget(), big = RINGS[RINGS.length - 1], f = big && isoFeature(isoOf(o), big.min);
+    const pts = f ? (f.geometry.type === "Polygon" ? f.geometry.coordinates[0] : f.geometry.coordinates.flatMap(p => p[0])) : circle([o.lng, o.lat], ringKm(big ? big.min : 30), 24);
+    return fitPoints(pts, { animate, maxZoom: 15 });
+  }
   const pts = O.filter(passes).map(o => [o.lng, o.lat]);
   if (S.layers.existing) pts.push([EX.lng, EX.lat]);
   fitPoints(pts, { animate });
@@ -724,7 +824,9 @@ function fitAll(animate = true) {
 const FC = (features) => ({ type: "FeatureCollection", features });
 const pt = (lng, lat, properties) => ({ type: "Feature", geometry: { type: "Point", coordinates: [lng, lat] }, properties });
 const ln = (coords, properties) => ({ type: "Feature", geometry: { type: "LineString", coordinates: coords }, properties });
-const focusOf = (o) => (S.sel === o.id || S.hov === o.id || (S.pair && S.pair.includes(o.id))) ? 2 : !passes(o) ? 0 : (S.sel || S.hov) ? .5 : 1;
+const focusOf = (o) => (S.sel === o.id || S.hov === o.id || (S.pair && S.pair.includes(o.id)) || (IS_PLACE && !S.sel && !S.hov && o === SITE)) ? 2 : !passes(o) ? 0 : (S.sel || S.hov) ? .5 : 1;
+/* Whose drive-time areas are drawn: the open option, or a place atlas's site. */
+const ringTarget = () => O.find(x => x.id === S.sel) || SITE;
 /* Six of the buildings sit within 400 m of each other in Perungudi, so at
    city zoom their pins would stack into one. After every camera move each
    pin is drawn where it fits on screen, nudged only as far as it must be,
@@ -735,6 +837,8 @@ const PIN_GAP = 25;
 let SPREAD = new Map();
 function spreadPins() {
   if (!map || !map.getSource("options")) return;
+  /* A network at country zoom shows city bubbles; its pins wait. */
+  if (IS_NET && map.getZoom() < CITY_ZOOM) { if (SPREAD.size) { SPREAD = new Map(); refreshPins(); } return; }
   const P = (o, fixed) => { const q = map.project([o.lng, o.lat]); return { id: o.id, x0: q.x, y0: q.y, x: q.x, y: q.y, fixed }; };
   const pts = [...O.map(o => P(o, o.id === S.sel)), ...(S.layers.existing ? [P(EX, true)] : [])];
   for (let it = 0; it < 80; it++) {
@@ -757,15 +861,27 @@ function spreadPins() {
 const shownAt = (o) => SPREAD.get(o.id) || [o.lng, o.lat];
 const optionFC = () => FC(O.map(o => ({ ...pt(...shownAt(o), { id: o.id, n: nn(o), name: o.name, color: fitColor(o), foc: focusOf(o) }), id: o.n })));
 const leaderFC = () => FC(O.filter(o => SPREAD.has(o.id)).flatMap(o => [ln([[o.lng, o.lat], shownAt(o)], { color: fitColor(o) }), pt(o.lng, o.lat, { color: fitColor(o) })]));
+const isoFeature = (iso, min) => iso && iso.fc.features.find(f => f.properties && f.properties.contour === min);
 function ringFC() {
-  const o = O.find(x => x.id === S.sel);
+  const o = ringTarget();
   if (!o || !S.layers.rings) return FC([]);
+  const iso = isoOf(o);
+  if (iso) return FC(RINGS.slice().reverse().map(r => { const f = isoFeature(iso, r.min); return f && { type: "Feature", geometry: f.geometry, properties: { min: r.min, color: r.color } }; }).filter(Boolean));
   return FC(RINGS.slice().reverse().map(r => ({ type: "Feature", geometry: { type: "Polygon", coordinates: [circle([o.lng, o.lat], ringKm(r.min))] }, properties: { min: r.min, color: r.color } })));
 }
+/* A routed area's label sits on its northernmost point, where a ring's
+   would be. */
 function ringLabelFC() {
-  const o = O.find(x => x.id === S.sel);
+  const o = ringTarget();
   if (!o || !S.layers.rings) return FC([]);
-  return FC(RINGS.map(r => pt(o.lng, o.lat + ringKm(r.min) / KM_LAT, { label: `${r.min} min` })));
+  const iso = isoOf(o);
+  return FC(RINGS.map(r => {
+    let at = [o.lng, o.lat + ringKm(r.min) / KM_LAT];
+    const f = isoFeature(iso, r.min), g = f && f.geometry;
+    const outer = g && (g.type === "Polygon" ? g.coordinates[0] : g.type === "MultiPolygon" ? g.coordinates.map(p => p[0]).flat() : null);
+    if (outer && outer.length) at = outer.reduce((b, c) => c[1] > b[1] ? c : b, outer[0]);
+    return pt(at[0], at[1], { label: `${r.min} min` });
+  }));
 }
 /* Links: the open option to its three nearest options, or the pair picked
    on the distance matrix. Each carries its distance at the midpoint. */
@@ -952,6 +1068,19 @@ function addLayers() {
   add({ id: "ex-link-label", type: "symbol", source: "ex-link-lbl", filter: ["==", ["get", "part"], "label"], layout: { "text-field": ["get", "label"],
     "text-size": 11.5, "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"], "text-allow-overlap": true, "text-ignore-placement": true },
     paint: { "text-color": "#2a1e16", "text-halo-color": "#fff", "text-halo-width": 2.2 } });
+  /* A network at country zoom: one bubble per city with its count; the
+     pins take over as you zoom in. */
+  if (IS_NET && CITIES.length) {
+    map.addSource("cities", { type: "geojson", data: FC(CITIES.map(c => pt(c.lng, c.lat, { key: c.key, name: c.name, n: c.os.length }))) });
+    add({ id: "city-dot", type: "circle", source: "cities", maxzoom: CITY_ZOOM, paint: { "circle-radius": ["interpolate", ["linear"], ["get", "n"], 1, 9, 10, 15, 40, 24],
+      "circle-color": "#a3502c", "circle-opacity": .9, "circle-stroke-color": "#fff", "circle-stroke-width": 2 } });
+    add({ id: "city-n", type: "symbol", source: "cities", maxzoom: CITY_ZOOM, layout: { "text-field": ["to-string", ["get", "n"]], "text-size": 11.5,
+      "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"], "text-allow-overlap": true, "text-ignore-placement": true }, paint: { "text-color": "#fff" } });
+    add({ id: "city-name", type: "symbol", source: "cities", maxzoom: CITY_ZOOM, layout: { "text-field": ["get", "name"], "text-size": 12,
+      "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"], "text-offset": [0, 1.7], "text-anchor": "top", "text-optional": true },
+      paint: { "text-color": "#2a1e16", "text-halo-color": "#fff", "text-halo-width": 1.6 } });
+    for (const id of ["opt-halo", "opt", "opt-num", "opt-name", "opt-name-focus", "pin-leader", "pin-true"]) if (map.getLayer(id)) map.setLayerZoomRange(id, CITY_ZOOM, 24);
+  }
   applyLayerVisibility();
 }
 
@@ -982,7 +1111,7 @@ function applyLayerVisibility() {
    within 2 km and places inside its 30 minute ring. */
 function recede() {
   if (!map || !map.getLayer("opt")) return;
-  const o = S.sel && O.find(x => x.id === S.sel);
+  const o = ringTarget();
   const set = (id, prop, v) => { if (map.getLayer(id)) try { map.setPaintProperty(id, prop, v); } catch (e) {} };
   if (!o) {
     set("st-open", "circle-opacity", 1); set("st-open", "circle-stroke-opacity", 1); set("st-label", "text-opacity", 1);
@@ -991,7 +1120,7 @@ function recede() {
     return;
   }
   const nearSt = STATIONS.filter(s => km(o, s) <= 2).map(s => `${s.line}:${s.name}`);
-  const nearPl = PL.filter(p => km(o, p) <= ringKm(30)).map(p => p.id);
+  const nearPl = IS_PLACE ? catchOf(o).flatMap(r => KINDS.flatMap(k => (r[k] || []).map(x => x.id))) : PL.filter(p => km(o, p) <= ringKm(30)).map(p => p.id);
   const inSt = ["in", ["get", "key"], ["literal", nearSt]], inPl = ["in", ["get", "id"], ["literal", nearPl]];
   set("st-open", "circle-opacity", ["case", inSt, 1, .4]); set("st-open", "circle-stroke-opacity", ["case", inSt, 1, .4]);
   set("st-label", "text-opacity", ["case", inSt, 1, .3]);
@@ -1020,9 +1149,11 @@ function wireMap() {
   };
   hover("opt", p => { const o = O.find(x => x.id === p.id), r = nearestOpen(o), f = fitOf(o);
     return `<div class="pop">${tile(o, "pop")}<div><b>${nn(o)} · ${esc(o.name)}</b><br>${f ? `${esc(f.label)} · ` : ""}${esc(o.sheetMicro)}<br>${esc(homeTxt(o))}<br>${fmtM(r.d)} to ${esc(r.s.name)} (${esc(r.s.lineName)})${(b => b ? `<br>${fmtM(b.d)} to ${esc(b.s.name)} bus stop` : "")(nearestBus(o))}</div></div>`; });
-  hover("places", p => { const x = PL.find(y => y.id === p.id);
-    const kind = x.kind === "hub" ? say("layerLabels.hub", "Transport") : kindLabel(x.kind);
-    return `<b>${esc(x.name)}</b>${x.sub ? `<br>${esc(x.sub)}` : ""}<br><span style="color:#6c5b4d">${kind}</span><br>${esc(x.note)}`; });
+  hover("places", p => placeHTML(PL.find(y => y.id === p.id)));
+  if (IS_NET && map.getLayer("city-dot")) {
+    hover("city-dot", p => `<b>${esc(p.name)}</b><br>${esc(nOf(+p.n))} · click to zoom in`);
+    map.on("click", "city-dot", e => setCity(e.features[0].properties.key, true));
+  }
   hover("bus-stop", p => `<b>${esc(p.name)}</b><br>Bus stop · ${esc(routesTxt(+p.routes))}`);
   hover("st-open", p => `<b>${esc(p.name)}</b><br>${esc(p.line)} · open`);
   hover("st-plan", p => `<b>${esc(p.name)}</b> <span style="color:#6c5b4d">upcoming metro</span><br>${esc(p.line)} · not open yet${p.target ? `<br>${esc(p.target)}` : ""}<br><span style="color:#6c5b4d">Position indicative</span>`);
@@ -1090,7 +1221,14 @@ function tile(o, kind) {
   return `<span class="tile" style="--z:${fitColor(o)}" aria-hidden="true"${kind !== "pop" ? ` data-tile="${o.id}"` : ""}><span>${nn(o)}</span></span>`;
 }
 function renderFilters() {
+  /* A place atlas filters its list by kind of place; a network by city. */
+  if (IS_PLACE && KINDS.length) {
+    $("#filters").innerHTML = KINDS.map(k => `<button class="chip ${S.kinds.has(k) ? "on" : ""}" data-kind="${esc(k)}" type="button" aria-pressed="${S.kinds.has(k)}" data-hint="${esc(`Keep only ${kindLabel(k).toLowerCase()} in the list.`)}"><span class="dot" style="background:${COL[k]};margin:0"></span>${esc(kindLabel(k))}</button>`).join("");
+    return;
+  }
+  const cityChips = IS_NET && CITIES.length > 1 ? CITIES.slice(0, 12).map(c => `<button class="chip ${S.city === c.key ? "on" : ""}" data-city="${esc(c.key)}" type="button" aria-pressed="${S.city === c.key}" data-hint="${esc(`Zoom to ${c.name} and keep only its ${NOUN[1]}.`)}">${esc(c.name)} <span class="note">${c.os.length}</span></button>`).join("") : "";
   const all = [...FIT_FILTERS, ...OTHER_FILTERS];
+  if (cityChips) { $("#filters").innerHTML = cityChips + all.map(f => `<button class="chip ${S.filters.has(f.key) ? "on" : ""}" data-f="${f.key}" type="button" aria-pressed="${S.filters.has(f.key)}">${FITS[f.key] ? `<span class="dot" style="background:${FITS[f.key].color};margin:0"></span>` : ""}${esc(f.label)}</button>`).join(""); return; }
   $("#filters").innerHTML = all.map(f => `<button class="chip ${S.filters.has(f.key) ? "on" : ""}" data-f="${f.key}" type="button" aria-pressed="${S.filters.has(f.key)}" data-hint="${esc(FITS[f.key] ? `Keep only the ${FITS[f.key].label} group on the revised ranking.` : "Keep only options within 1 km of an open metro, MRTS or suburban station.")}">${FITS[f.key] ? `<span class="dot" style="background:${FITS[f.key].color};margin:0"></span>` : ""}${esc(f.label)}</button>`).join("");
 }
 /* What this Atlas can be sorted by. Only what it actually has: no chooser
@@ -1113,7 +1251,7 @@ function renderSort() {
   const el = $("#sort"); if (!el) return;
   el.innerHTML = SORTS.map(x => `<option value="${esc(x.key)}">${esc(x.label)}</option>`).join("");
   el.value = S.sort;
-  el.parentElement && el.parentElement.classList.toggle("off", SORTS.length < 2);
+  el.parentElement && el.parentElement.classList.toggle("off", SORTS.length < 2 || IS_PLACE);
 }
 function sorted() {
   const x = SORTS.find(x => x.key === S.sort);
@@ -1121,31 +1259,71 @@ function sorted() {
 }
 function renderList() {
   const shown = O.filter(passes);
-  $("#b-count").textContent = shown.length === O.length ? `${O.length} ${O.length === 1 ? "option" : "options"}` : `${shown.length} of ${O.length} options`;
+  $("#b-count").textContent = shown.length === O.length ? nOf(O.length) : `${shown.length} of ${nOf(O.length)}`;
   const sx = SORTS.find(x => x.key === S.sort);
   $("#b-sub").textContent = S.sort === "score" ? presetName() : sx ? sx.label : "";
-  $("#list").innerHTML = sorted().map(o => {
+  if (IS_PLACE) return renderPlaceList();
+  if (IS_NET && CITIES.length > 1) {
+    const list = sorted();
+    $("#list").innerHTML = CITIES.filter(c => !S.city || c.key === S.city).map(c => {
+      const os = list.filter(o => CITY_OF.get(o.id) === c);
+      return os.length ? `<div class="cityh"><button type="button" data-city="${esc(c.key)}" data-hint="${esc(`Zoom to ${c.name}`)}">${esc(c.name)}</button><span class="note">${nOf(os.length)}</span></div>${os.map(optCard).join("")}` : "";
+    }).join("");
+  } else $("#list").innerHTML = sorted().map(optCard).join("");
+  mountTiles($("#list"));
+}
+/* A place atlas lists its site first, then everything around it, nearest
+   first, with the drive-time area each falls in. */
+const atKm = (d) => d < 0.05 ? say("list.atSite", "at the site") : fmtKm(d);
+const bandTxt = (i) => i == null || i < 0 ? `beyond ${RINGS[RINGS.length - 1].min} min` : `≤ ${RINGS[i].min} min`;
+function bandMap(o) {
+  const m = new Map();
+  if (o) catchOf(o).forEach((r, i) => KINDS.forEach(k => (r[k] || []).forEach(x => m.set(x.id, i))));
+  return m;
+}
+function placeCard(p, d, i) {
+  const ini = String(p.operator || p.name || "?").replace(/[^A-Za-z0-9 ]/g, "").split(/\s+/).filter(Boolean).map(w => w[0]).join("").slice(0, 3).toUpperCase();
+  return `<button class="card pc" data-place="${esc(p.id)}" role="listitem" type="button" data-hint="${esc(`Fly to ${p.name}`)}"><span class="kd" style="--z:${COL[p.kind] || "#4a4a4a"}" aria-hidden="true">${esc(ini || "·")}</span>
+    <div><div class="nm">${esc(p.name)}</div><div class="loc">${esc(kindLabel(p.kind))}${p.operator ? ` · ${esc(p.operator)}` : ""}${p.sub ? ` · ${esc(p.sub)}` : ""}</div>
+    <div class="facts"><span>${atKm(d)}</span><span class="band${i == null ? " out" : ""}">${esc(bandTxt(i))}</span></div></div></button>`;
+}
+function renderPlaceList() {
+  const o = ringTarget(), bm = bandMap(o);
+  const list = PL.filter(p => !S.kinds.size || S.kinds.has(p.kind)).map(p => ({ p, d: o ? km(o, p) : 0 })).sort((a, b) => a.d - b.d);
+  $("#b-count").textContent = O.length === 1 ? `${PL.length} place${PL.length === 1 ? "" : "s"} around the site` : `${nOf(O.length)} · ${PL.length} places`;
+  $("#b-sub").textContent = isoOf(o) ? say("list.routed", "Routed drive time") : say("list.rings", "Drive rings");
+  $("#list").innerHTML = sorted().map(optCard).join("")
+    + (list.length ? `<div class="cityh"><b>${esc(say("list.around", `Around ${o ? o.name : "the site"}`))}</b><span class="note">${list.length}${S.kinds.size ? ` of ${PL.length}` : ""}</span></div>` : "")
+    + list.map(({ p, d }) => placeCard(p, d, bm.get(p.id))).join("");
+  mountTiles($("#list"));
+}
+function optCard(o) {
     const r = nearestOpen(o);
     return `<button class="card ${S.sel === o.id ? "sel" : ""} ${passes(o) ? "" : "dim"}" data-id="${o.id}" role="listitem" type="button" data-hint="${esc(o.reason || `Open ${o.name}: the map flies in and draws the line to the current office.`)}">
       ${tile(o)}
       <div>
         <div class="nm"><span class="no">${nn(o)}</span>${esc(o.name)}</div>
-        <div class="loc">${fitBadge(o)} ${esc(o.sheetMicro)}</div>
+        <div class="loc">${fitBadge(o)} ${esc(o.sheetMicro || o.locality || "")}</div>
         <div class="facts">${EX ? `<span title="From the current office by road">${isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(homeKm(o))}${homeMin(o) ? ` · ${esc(homeMin(o))}` : ""}</span>` : ""}${r.none ? "" : `<span title="Nearest station open: ${esc(r.s.name)}">${fmtM(r.d)} to rail</span>`}${(b => b ? `<span title="Nearest bus stop: ${esc(b.s.name)}">${fmtM(b.d)} to bus</span>` : "")(nearestBus(o))}${flagChip(o)}</div>
       </div>
-      <span class="score" title="Fit to your priorities, out of 100">${score(o)}</span>
+      ${HAS_CHOOSER ? `<span class="score" title="Fit to your priorities, out of 100">${score(o)}</span>` : ""}
     </button>`;
-  }).join("");
-  mountTiles($("#list"));
 }
 function wireBoard() {
   $("#filters").addEventListener("click", e => {
+    const kd = e.target.closest("[data-kind]");
+    if (kd) { const k = kd.dataset.kind; S.kinds.has(k) ? S.kinds.delete(k) : S.kinds.add(k); renderFilters(); renderList(); return; }
+    const ct = e.target.closest("[data-city]"); if (ct) { setCity(ct.dataset.city); return; }
     const b = e.target.closest("[data-f]"); if (!b) return;
     const k = b.dataset.f; S.filters.has(k) ? S.filters.delete(k) : S.filters.add(k);
     renderFilters(); renderList(); refreshMap(); fitAll();
   });
   $("#sort").addEventListener("change", e => { S.sort = e.target.value; renderList(); });
-  $("#list").addEventListener("click", e => { const c = e.target.closest("[data-id]"); if (c) select(c.dataset.id, true); });
+  $("#list").addEventListener("click", e => {
+    const pc = e.target.closest("[data-place]"); if (pc) { flyToPlace(pc.dataset.place); return; }
+    const ct = e.target.closest("[data-city]"); if (ct) { setCity(ct.dataset.city, true); return; }
+    const c = e.target.closest("[data-id]"); if (c) select(c.dataset.id, true);
+  });
   const hov = (id) => { if (S.hov === id) return; S.hov = id; refreshPins(); };
   $("#list").addEventListener("mouseover", e => { const c = e.target.closest("[data-id]"); if (c && c.dataset.id !== S.sel) hov(c.dataset.id); });
   $("#list").addEventListener("mouseleave", () => hov(null));
@@ -1167,6 +1345,8 @@ function wireBoard() {
     const io = e.target.closest("[data-intro-open]"); if (io) { seenIntro.delete(io.dataset.introOpen); saveIntro(); io.outerHTML = introCard(io.dataset.introOpen); return; }
     const a = e.target.closest("[data-go]"); if (a) { e.preventDefault(); select(a.dataset.go, true); return; }
     const t = e.target.closest("[data-tab]"); if (t) { e.preventDefault(); goTab(t.dataset.tab); return; }
+    const pf = e.target.closest("[data-place]"); if (pf) { e.preventDefault(); flyToPlace(pf.dataset.place); return; }
+    const cf = e.target.closest("[data-city]"); if (cf) { e.preventDefault(); setCity(cf.dataset.city, true); return; }
     const pr = e.target.closest("[data-preset]"); if (pr) { setLevels(PRESETS[pr.dataset.preset].lv, pr.dataset.preset); afterWeights(); return; }
     const lv = e.target.closest("[data-lv]"); if (lv) { const [k, v] = lv.dataset.lv.split(":"); setLevels({ ...S.lv, [k]: +v }); afterWeights(lv.dataset.lv); return; }
     const mx = e.target.closest("[data-mx]"); if (mx) { pickPair(mx.dataset.mx.split("|")); mx.classList.add("on"); return; }
@@ -1179,6 +1359,8 @@ function wireBoard() {
     if (e.target.closest(".back")) { S.sel = null; renderList(); renderPanel(); refreshMap(); fitAll(); pushRoute(); return; }
     const cp = e.target.closest("[data-copy]"); if (cp) { copyLink(cp); return; }
     const sh = e.target.closest("[data-shot]"); if (sh) { flyToOption(O.find(x => x.id === S.sel), sh.dataset.shot); return; }
+    const go = e.target.closest("[data-go]"); if (go) { select(go.dataset.go, true); return; }
+    const ct = e.target.closest("[data-city]"); if (ct) { setCity(ct.dataset.city); return; }
     if (e.target.closest("[data-print]")) window.print();
   });
   $("#lightbox").addEventListener("click", () => $("#lightbox").classList.remove("on"));
@@ -1201,7 +1383,7 @@ const SHOT_ZOOM = { building: 17.2, street: 16.3, locality: 15.2 };
 const SHOTS = {
   close: { label: "Close-up", hint: "Tilted view down onto the building and its streets." },
   street: { label: "Street", hint: "Low angle, as you would approach it by road." },
-  area: { label: "Catchment", hint: "Top-down view of the 15, 30 and 45 minute drive rings." }
+  area: { label: "Catchment", hint: `Top-down view of the ${RINGS.map(r => r.min).join(", ").replace(/, (\d+)$/, " and $1")} minute drive-time areas.` }
 };
 function flyToOption(o, shot) {
   if (!map || !o) return;
@@ -1209,7 +1391,8 @@ function flyToOption(o, shot) {
   const phone = innerWidth <= 860, z = SHOT_ZOOM[o.precision] || 15.2, pad = padding();
   if (S.shot === "area") {
     if (!S.layers.rings && cmsOn("layer:rings")) { S.layers.rings = true; renderLayers(); applyLayerVisibility(); }
-    const b = circle([o.lng, o.lat], ringKm(30), 16).reduce((bb, p) => bb.extend(p), new mapboxgl.LngLatBounds());
+    const f = isoFeature(isoOf(o), RINGS[RINGS.length - 1].min);
+    const b = (f ? (f.geometry.type === "Polygon" ? f.geometry.coordinates[0] : f.geometry.coordinates.flatMap(p => p[0])) : circle([o.lng, o.lat], ringKm(IS_PLACE ? RINGS[RINGS.length - 1].min : 30), 16)).reduce((bb, p) => bb.extend(p), new mapboxgl.LngLatBounds());
     map.fitBounds(b, { padding: pad, pitch: 0, bearing: 0, duration: REDUCED() ? 0 : 1200 });
   } else {
     const s = S.shot === "street" ? { zoom: z + .5, pitch: phone ? 60 : 72, bearing: -25 } : { zoom: z, pitch: phone ? 45 : 58, bearing: 30 };
@@ -1222,6 +1405,29 @@ const shotBar = (o) => `<div class="shots" role="group" aria-label="Camera">${Ob
   `<button type="button" class="shot ${S.shot === k ? "on" : ""}" data-shot="${k}" aria-pressed="${S.shot === k}" data-hint="${esc(v.hint)}">${v.label}</button>`).join("")}
   <span class="prec ${o.precision}" data-hint="How exactly this option is placed on the map">${PRECISION_TEXT[o.precision] || "Position approximate"}</span></div>`;
 
+/* A network's city: the list and the pins narrow to it and the map flies
+   there. Again on the same city (from its chip) shows every city. */
+function setCity(key, on) {
+  S.city = (S.city === key && !on) ? null : key;
+  if (S.sel && !passes(O.find(o => o.id === S.sel))) S.sel = null;
+  renderFilters(); renderList(); renderPanel(); refreshMap(); fitAll(); pushRoute();
+  if (innerWidth <= 860) setSheet("half");
+}
+/* A place on the list: fly there and say what it is. */
+let PIN_POP = null;
+const placeHTML = (x) => {
+  const kind = x.kind === "hub" ? say("layerLabels.hub", "Transport") : kindLabel(x.kind), o = IS_PLACE ? ringTarget() : null;
+  return `<b>${esc(x.name)}</b>${x.sub ? `<br>${esc(x.sub)}` : ""}<br><span style="color:#6c5b4d">${esc(kind)}${x.operator ? ` · ${esc(x.operator)}` : ""}</span>${x.note ? `<br>${esc(x.note)}` : ""}${o ? `<br>${fmtKm(km(o, x))} from ${esc(o.name)} · ${esc(bandTxt(bandMap(o).get(x.id)))}` : ""}`;
+};
+function flyToPlace(id) {
+  const p = PL.find(x => x.id === id); if (!p) return;
+  if (!S.layers[p.kind] && cmsOn("layer:" + p.kind)) { S.auto.delete(p.kind); S.layers[p.kind] = true; renderLayers(); applyLayerVisibility(); }
+  if (!map) return;
+  map.flyTo({ center: [p.lng, p.lat], zoom: Math.max(map.getZoom(), 14.6), pitch: innerWidth > 860 ? 30 : 0, padding: padding(), duration: REDUCED() ? 0 : 1200, essential: true });
+  if (!PIN_POP) PIN_POP = new mapboxgl.Popup({ closeButton: true, closeOnClick: true, offset: 12 });
+  PIN_POP.setLngLat([p.lng, p.lat]).setHTML(`${placeHTML(p)}${p.src ? `<br>${cite(p.src)}` : ""}`).addTo(map);
+  if (innerWidth <= 860) setSheet("peek");
+}
 function select(id, fly, fromRoute) {
   if (document.body.classList.contains("fold-panel")) setFold("panel", false);
   S.sel = id; S.hov = null; S.pair = null; if (fly) S.shot = "close"; renderList(); renderPanel(); refreshMap();
@@ -1229,6 +1435,7 @@ function select(id, fly, fromRoute) {
   if (innerWidth <= 860 && !fromRoute) setSheet("half");
   const card = document.querySelector(`.card[data-id="${id}"]`); if (card) card.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
   if (fly) flyToOption(O.find(x => x.id === id), "close");
+  if (IS_PLACE) loadIso(O.find(x => x.id === id));
   if (CMS && !fromRoute) CMS.open(id, (O.find(x => x.id === id) || {}).name);
   $("#p-body").scrollTop = 0;
 }
@@ -1349,9 +1556,19 @@ const GUIDE = (() => {
   const r2 = (RINGS[1] || RINGS[0]).min;
   const kindWords = KINDS.map(k => kindLabel(k).toLowerCase());
   const g = {
-    overview: { hint: say("guide.overview.hint", "The ranking, and what stands out across the options."),
+    overview: IS_PLACE ? { hint: say("guide.overview.hint", "The site, and what is within each drive time of it."),
+      items: [say("guide.overview.1", "The coloured areas on the map are how far you can drive from the site in each time, routed with typical traffic where Mapbox can route it."),
+        say("guide.overview.2", "Every count is what falls inside those areas. The list on the left is everything around the site, nearest first."),
+        OPERATED.length && say("guide.overview.3", "Competition counts the centres around the site by operator.")].filter(Boolean) }
+      : IS_NET ? { hint: say("guide.overview.hint", "Where the network is, city by city."),
+      items: [say("guide.overview.1", "Zoomed out, each city is one bubble with its count. Click a bubble or a city name to zoom in."),
+        say("guide.overview.2", "Zoomed in, every location is its own pin; click one for its details, its metro and what is near it.")] }
+      : { hint: say("guide.overview.hint", "The ranking, and what stands out across the options."),
       items: [say("guide.overview.1", "Each card at the top answers one question a client asks first. Click it to open that option."),
         HAS_CHOOSER && say("guide.overview.2", "Your priorities re-ranks the same options against the measures on the map.")].filter(Boolean) },
+    competition: { hint: say("guide.competition.hint", "Who operates around the site, by drive time."),
+      items: [say("guide.competition.1", "Every centre with an operator, grouped by brand and counted inside each drive-time area."),
+        say("guide.competition.2", "Click a centre to fly to it.")] },
     markets: { hint: say("guide.markets.hint", "The micro-markets: what each is like, what it costs and who is there."),
       items: [say("guide.markets.1", "One card per micro-market, with the options that sit in it."),
         say("guide.markets.2", "Every figure is quoted from the source named under it, with its date.")] },
@@ -1417,7 +1634,8 @@ function wireHints() {
 function renderPanel() {
   renderTabs();
   if (S.sel) renderOption(O.find(x => x.id === S.sel));
-  else ({ overview: renderOverview, markets: renderMarkets, connect: renderConnect, distance: renderDistance, places: renderPlaces, priorities: renderPriorities, conclusion: renderConclusion }[S.tab] || renderOverview)();
+  else ({ overview: IS_PLACE ? renderSite : IS_NET ? renderNetwork : renderOverview, competition: renderCompetition, markets: renderMarkets, connect: renderConnect, distance: renderDistance,
+    places: IS_PLACE ? renderAround : renderPlaces, priorities: renderPriorities, conclusion: renderConclusion }[S.tab] || renderOverview)();
   $("#p-body").insertAdjacentHTML("afterbegin", introCard(S.sel ? "option" : S.tab));
 }
 const head = (eyebrow, title, lede) => { $("#p-head").innerHTML = `<div class="eyebrow">${eyebrow}</div><h2>${title}</h2>${lede ? `<div class="lede">${lede}</div>` : ""}`; };
@@ -1535,6 +1753,115 @@ function verdictHTML(o, p) {
   const good = parts.filter(x => p[x.key] >= .8).map(x => x.label);
   const weak = parts.filter(x => p[x.key] <= .3).map(x => x.label);
   return `<div class="verdict">${good.map(g => `<span class="vd up">✓ ${esc(g)}</span>`).join("")}${weak.map(w => `<span class="vd dn">! ${esc(w)}</span>`).join("")}</div>`;
+}
+
+/* ---------- A place: the site and its catchment ---------- */
+/* Operators, case-blind, each with its centres and the drive-time area
+   each centre falls in, from the pin the rings are drawn around. */
+function operators(o) {
+  const bm = bandMap(o), by = new Map();
+  for (const p of OPERATED) {
+    const k = String(p.operator).trim().toLowerCase();
+    if (!by.has(k)) by.set(k, { name: String(p.operator).trim(), ps: [] });
+    by.get(k).ps.push({ p, d: o ? km(o, p) : 0, i: bm.get(p.id) });
+  }
+  const within = (g, i) => g.ps.filter(x => x.i != null && x.i <= i).length, last = RINGS.length - 1;
+  return [...by.values()].map(g => ({ ...g, ps: g.ps.sort((a, b) => a.d - b.d), within: (i) => within(g, i) }))
+    .sort((a, b) => within(b, last) - within(a, last) || a.ps[0].d - b.ps[0].d || a.name.localeCompare(b.name));
+}
+const ringHeads = () => RINGS.map(r => `<th class="num">≤${r.min}′</th>`).join("");
+function renderSite() {
+  const o = SITE;
+  if (!o) return renderOverview();
+  const c = catchOf(o), iso = isoOf(o), r = nearestOpen(o), f = nearestPlan(o), last = RINGS.length - 1;
+  const where = [o.locality || o.sheetMicro, o.city || M.city].filter(Boolean).join(", ");
+  head(esc(say("site.eyebrow", `${M.title || "Atlas"}${M.asOfText || M.asOf ? ` · ${M.asOfText || M.asOf}` : ""}`)), esc(o.name),
+    esc(say("site.intro", M.sub || `${where ? `${where}. ` : ""}Everything within ${RINGS[last].min} minutes' drive, ${iso ? "routed with typical traffic" : "on drive rings (the routed areas load with the map)"}.`)));
+  $("#p-head").insertAdjacentHTML("beforeend", actions(`<button type="button" class="act" data-go="${o.id}">${esc(say("site.detail", "The site in detail"))}</button>`));
+  const myKinds = KINDS.filter(k => upTo(c, last, k) > 0);
+  const total = (i) => KINDS.reduce((t, k) => t + upTo(c, i, k), 0);
+  const top = (i) => myKinds.map(k => [k, upTo(c, i, k)]).filter(x => x[1]).sort((a, b) => b[1] - a[1]).slice(0, 2).map(([k, n]) => `${n} ${kindLabel(k).toLowerCase()}`).join(" · ");
+  const ops = OPERATED.length ? operators(o) : [];
+  const opsNear = ops.filter(g => g.within(last) > 0);
+  const sat = satUrl(o, 640, 250, 15.4);
+  const nearestOf = myKinds.map(k => { const n = nearestOfKind(o, k); return n ? `<tr><td><span class="dot" style="background:${COL[k]}"></span>${esc(kindLabel(k))}</td><td><a href="#" data-place="${esc(n.s.id)}">${esc(n.s.name)}</a>${n.s.operator ? ` <span class="note">${esc(n.s.operator)}</span>` : ""}</td><td class="num">${fmtKm(n.d)}</td></tr>` : ""; }).join("");
+  $("#p-body").innerHTML = `
+    ${sat ? `<div class="hero"><img src="${sat}" alt="Satellite view of ${esc(o.name)}" onerror="this.closest('.hero').remove()"><span class="ph">Satellite · Esri, Vantor</span></div>` : ""}
+    <div class="kpis">
+      ${RINGS.map((rg, i) => `<div class="kpi"><div class="l">${esc(say("site.within", "Within"))} ${rg.min} min</div><div class="v">${total(i)}</div><div class="s">${esc(top(i) || "places mapped")}</div></div>`).join("")}
+      ${!r.none ? `<div class="kpi"><div class="l">${esc(say("option.railToday", "Station today"))}</div><div class="v">${fmtM(r.d)}</div><div class="s">${esc(r.s.name)}${r.s.lineName ? ` · ${esc(r.s.lineName)}` : ""}</div></div>` : ""}
+      ${f ? `<div class="kpi"><div class="l">${esc(say("option.future", "Being built"))}</div><div class="v">${fmtM(f.d)}</div><div class="s">${esc(f.s.name)}${f.s.target ? ` · ${esc(f.s.target)}` : ""} · indicative</div></div>` : ""}
+      ${ops.length ? `<div class="kpi"><div class="l">${esc(say("site.operators", "Operators nearby"))}</div><div class="v">${opsNear.length}</div><div class="s">within ${RINGS[last].min} min, of ${ops.length} on this atlas</div></div>` : ""}
+    </div>
+    ${flagBox(o)}
+    ${myKinds.length ? `<h3>${esc(say("site.reach", "Within reach of the site"))}</h3>
+    <table class="ring-tbl"><thead><tr><th>${esc(say("option.driveTime", "Drive time"))}</th>${myKinds.map(k => `<th class="num">${esc(kindLabel(k))}</th>`).join("")}<th class="num">${esc(say("site.total", "All"))}</th></tr></thead>
+      <tbody>${c.map((rr, i) => `<tr><td>≤ ${rr.min} min${iso ? "" : ` <span class="note">(${rr.km.toFixed(1)} km)</span>`}</td>${myKinds.map(k => `<td class="num">${upTo(c, i, k)}</td>`).join("")}<td class="num"><b>${total(i)}</b></td></tr>`).join("")}</tbody></table>` : `<p class="note" style="margin-top:14px">${esc(say("site.noPlaces", "Nothing else is mapped around the site yet. Add competitors, employers or deals on the Places tab of the plan."))}</p>`}
+    ${opsNear.length ? `<h3>${esc(say("site.competition", "Who competes here"))}</h3>
+    <table class="ring-tbl"><thead><tr><th>${esc(say("competition.operator", "Operator"))}</th>${ringHeads()}<th>${esc(say("competition.nearest", "Nearest centre"))}</th></tr></thead>
+      <tbody>${opsNear.slice(0, 8).map(g => `<tr><td><b>${esc(g.name)}</b></td>${RINGS.map((_, i) => `<td class="num">${g.within(i) || `<span class="note">-</span>`}</td>`).join("")}<td><a href="#" data-place="${esc(g.ps[0].p.id)}">${esc(g.ps[0].p.name)}</a> <span class="note">${fmtKm(g.ps[0].d)}</span></td></tr>`).join("")}</tbody></table>
+    ${TABS.some(t => t.key === "competition") ? `<p class="note"><a href="#" data-tab="competition">${esc(say("site.allCompetition", `All ${ops.length} operators and their centres`))} →</a></p>` : ""}` : ""}
+    ${nearestOf ? `<h3>${esc(say("site.nearest", "Nearest of each kind"))}</h3><table class="ring-tbl"><tbody>${nearestOf}</tbody></table>` : ""}
+    ${factsSection("market", "The market")}${factsSection("supply", "New supply")}${factsSection("deals", "Recent deals")}${factsRest(["market", "supply", "deals"])}
+    ${O.length > 1 ? `<h3>${esc(say("site.others", "Other sites on this atlas"))}</h3><p>${O.filter(x => x !== o).map(optLink).join(" · ")}</p>` : ""}
+    <p class="note" style="margin-top:10px">${esc(methodFor(o))}</p>`;
+}
+function renderCompetition() {
+  const o = ringTarget(), ops = operators(o), last = RINGS.length - 1;
+  head(esc(say("competition.eyebrow", "Competition")), esc(say("competition.title", `Who operates around ${o ? o.name : "the site"}`)),
+    esc(say("competition.intro", `${ops.length} operator${ops.length === 1 ? "" : "s"} with ${OPERATED.length} centre${OPERATED.length === 1 ? "" : "s"} on this atlas, counted inside each drive-time area of the site.`)));
+  $("#p-head").insertAdjacentHTML("beforeend", actions());
+  $("#p-body").innerHTML = `
+    <table class="ring-tbl" style="margin-top:14px"><thead><tr><th>${esc(say("competition.operator", "Operator"))}</th>${ringHeads()}<th class="num">${esc(say("competition.all", "On the atlas"))}</th></tr></thead>
+      <tbody>${ops.map(g => `<tr><td><b>${esc(g.name)}</b></td>${RINGS.map((_, i) => `<td class="num">${g.within(i) || `<span class="note">-</span>`}</td>`).join("")}<td class="num">${g.ps.length}</td></tr>`).join("")}</tbody></table>
+    <p class="note">${esc(methodFor(o))}</p>
+    ${ops.map(g => `<h3>${esc(g.name)} <span class="note">${g.within(last)} within ${RINGS[last].min} min</span></h3>
+      ${g.ps.map(({ p, d, i }) => `<div class="fact"><span class="dot" style="background:${COL[p.kind] || "#4a4a4a"}"></span><a href="#" data-place="${esc(p.id)}" class="k">${esc(p.name)}</a> <span class="band${i == null ? " out" : ""}">${esc(bandTxt(i))}</span> <span class="note">${atKm(d)}</span>
+        ${p.sub || p.note || p.src ? `<br><span class="note">${esc([p.sub, p.note].filter(Boolean).join(" · "))} ${p.src ? cite(p.src) : ""}</span>` : ""}</div>`).join("")}`).join("")}
+    ${factsSection("flex", "Flex market")}`;
+}
+function renderAround() {
+  const o = ringTarget(), bm = bandMap(o), last = RINGS.length - 1;
+  const kinds = KINDS.slice().sort((a, b) => placesOfKind(b).length - placesOfKind(a).length);
+  head(esc(say("places.eyebrow", "Around the site")), esc(say("places.title", `What is around ${o ? o.name : "the site"}`)),
+    esc(say("places.intro", `${PL.length} place${PL.length === 1 ? "" : "s"} on this atlas, nearest first, each with the drive-time area it falls in.`)));
+  $("#p-head").insertAdjacentHTML("beforeend", actions());
+  $("#p-body").innerHTML = kinds.map(k => {
+    const list = placesOfKind(k).map(p => ({ p, d: o ? km(o, p) : 0, i: bm.get(p.id) })).sort((a, b) => a.d - b.d);
+    const inside = list.filter(x => x.i != null).length;
+    return `<h3><span class="dot" style="background:${COL[k]}"></span>${esc(kindLabel(k))} <span class="note">${inside} of ${list.length} within ${RINGS[last].min} min</span></h3>
+      ${list.map(({ p, d, i }) => `<div class="fact"><a href="#" data-place="${esc(p.id)}" class="k">${esc(p.name)}</a>${p.operator ? ` <span class="note">${esc(p.operator)}</span>` : ""} <span class="band${i == null ? " out" : ""}">${esc(bandTxt(i))}</span> <span class="note">${atKm(d)}</span>
+        ${p.sub || p.note || p.size || p.src ? `<br><span class="note">${esc([p.sub, p.note, p.size].filter(Boolean).join(" · "))} ${p.src ? cite(p.src) : ""}</span>` : ""}</div>`).join("")}`;
+  }).join("") + `<p class="note" style="margin-top:10px">${esc(methodFor(o))} ${esc(say("places.precisionNote", "Some positions are approximate; each pin says how exact it is."))}</p>`;
+}
+
+/* ---------- A network: city by city ---------- */
+function renderNetwork() {
+  const n = O.length, nc = CITIES.length;
+  const nearMetro = OPEN.length ? O.filter(o => nearestOpen(o).d <= 1) : [];
+  const pick = S.city && CITIES.find(c => c.key === S.city);
+  head(esc(say("network.eyebrow", `${M.title || "Atlas"}${M.asOfText || M.asOf ? ` · ${M.asOfText || M.asOf}` : ""}`)),
+    esc(say("network.title", M.sub || `${nOf(n)} in ${nc} ${nc === 1 ? "city" : "cities"}`)),
+    esc(say("network.intro", `Where ${M.title || "the network"} is, city by city. Click a city to zoom in; click a pin for its details.`)));
+  $("#p-head").insertAdjacentHTML("beforeend", actions(pick ? `<button type="button" class="act" data-city="${esc(pick.key)}">${esc(say("network.all", "Show every city"))}</button>` : ""));
+  const fitCols = Object.entries(FITS).filter(([k]) => O.some(o => o.fit === k));
+  const cityRow = (c) => `<tr class="${pick && pick.key === c.key ? "hl" : ""}"><td><a href="#" data-city="${esc(c.key)}"><b>${esc(c.name)}</b></a></td><td class="num">${c.os.length}</td>
+    ${fitCols.map(([k]) => `<td class="num">${c.os.filter(o => o.fit === k).length || `<span class="note">-</span>`}</td>`).join("")}
+    ${OPEN.length ? `<td class="num">${c.os.filter(o => nearestOpen(o).d <= 1).length || `<span class="note">-</span>`}</td>` : ""}</tr>`;
+  const shown = pick ? [pick] : CITIES;
+  $("#p-body").innerHTML = `
+    <div class="kpis">
+      <div class="kpi"><div class="l">${esc(titleCase(NOUN[1]))}</div><div class="v">${n}</div><div class="s">${esc(say("network.onMap", "on the map"))}</div></div>
+      <div class="kpi"><div class="l">${esc(say("network.cities", "Cities"))}</div><div class="v">${nc}</div><div class="s">${CITIES[0] ? `${esc(CITIES[0].name)} has the most (${CITIES[0].os.length})` : ""}</div></div>
+      ${OPEN.length ? `<div class="kpi"><div class="l">${esc(say("network.metro", "Near the metro"))}</div><div class="v">${nearMetro.length}</div><div class="s">within 1 km of a station open today</div></div>` : ""}
+    </div>
+    <h3>${esc(say("network.byCity", "City by city"))}</h3>
+    <table class="ring-tbl"><thead><tr><th>${esc(say("network.city", "City"))}</th><th class="num">${esc(titleCase(NOUN[1]))}</th>${fitCols.map(([, f]) => `<th class="num">${esc(f.label)}</th>`).join("")}${OPEN.length ? `<th class="num">${esc(say("network.metroCol", "≤1 km to metro"))}</th>` : ""}</tr></thead>
+      <tbody>${CITIES.map(cityRow).join("")}</tbody></table>
+    ${shown.map(c => `<h3>${esc(c.name)} <span class="note">${nOf(c.os.length)}</span></h3>
+      <div class="fact">${c.os.slice().sort(byRank).map(optLink).join(" · ")}</div>${factsSection(c.name)}`).join("")}
+    ${factsSection("network", "The network")}${factsRest(["network", ...CITIES.map(c => c.name)])}
+    <p class="note" style="margin-top:10px">${esc(say("network.note", "Cities come from each location's City column; one with none joins the nearest city within 40 km."))}</p>`;
 }
 
 /* ---------- Micro-markets ---------- */
@@ -1926,7 +2253,7 @@ function renderOption(o) {
   const rank = O.slice().sort(byFit).findIndex(x => x.id === o.id) + 1;
   const backTo = TABS.find(t => t.key === S.tab) || TABS[0];
   $("#p-head").innerHTML = `<button class="back" type="button">← Back to ${esc(backTo.label)}</button>
-    <div class="eyebrow">${fit ? `Rank ${o.n} · ` : `Option ${nn(o)} · `}${esc(o.sheetMicro)}</div>
+    <div class="eyebrow">${fit && LAYOUT === "decide" ? `Rank ${o.n} · ` : `${titleCase(NOUN[0])} ${nn(o)} · `}${esc(o.sheetMicro || (CITY_OF.get(o.id) || {}).name || o.locality || "")}</div>
     <h2>${esc(o.name)}</h2>${fitBadge(o)}${o.reason ? `<p class="reason">${esc(o.reason)}</p>` : ""}${verdictHTML(o, p)}${shotBar(o)}${actions()}`;
   const sat = satUrl(o, 640, 250, 16.6);
   const others = O.filter(x => x.id !== o.id).map(x => ({ x, d: km(o, x) })).sort((a, b) => a.d - b.d);
@@ -1935,7 +2262,7 @@ function renderOption(o) {
   /* Only the kinds this option actually reaches, so the table has no column
      of zeroes for something the Atlas plots on the far side of the city. */
   const myKinds = KINDS.filter(k => upTo(c, RINGS.length - 1, k) > 0);
-  const ringRows = c.map((rr, i) => `<tr><td>≤ ${rr.min} min <span class="note">(${rr.km.toFixed(1)} km)</span></td>${myKinds.map(k => `<td class="num">${upTo(c, i, k)}</td>`).join("")}</tr>`).join("");
+  const ringRows = c.map((rr, i) => `<tr><td>≤ ${rr.min} min <span class="note">(${isoOf(o) ? "routed" : `${rr.km.toFixed(1)} km`})</span></td>${myKinds.map(k => `<td class="num">${upTo(c, i, k)}</td>`).join("")}</tr>`).join("");
   const ex = EX ? catchOf(EX) : null, mo = nearestOpen(o), mx = nearestOpen(EX);
   const delta = (a, b, moreIsGood) => { const v = a - b; if (!v) return `<span class="dl">same</span>`; return `<span class="dl ${(v > 0) === moreIsGood ? "up" : "dn"}">${v > 0 ? "+" : "−"}${Math.abs(v)}</span>`; };
   const mDelta = Math.round((mo.d - mx.d) * 1000);
@@ -1986,9 +2313,9 @@ function renderOption(o) {
 
     ${myKinds.length ? `<h3>${esc(say("option.withinReach", "Within reach"))}</h3>` : ""}
     ${myKinds.length ? `<table class="ring-tbl"><thead><tr><th>${esc(say("option.driveTime", "Drive time"))}</th>${myKinds.map(k => `<th class="num">${esc(kindLabel(k))}</th>`).join("")}</tr></thead><tbody>${ringRows}</tbody></table>` : ""}
-    <p class="note" style="margin-top:6px">The names are on <a href="#" data-tab="places">${esc(say("tabs.places", "Places nearby"))}</a>. ${esc(METHOD)}</p>
+    <p class="note" style="margin-top:6px">The names are on <a href="#" data-tab="places">${esc(say("tabs.places", IS_PLACE ? "Around the site" : "Places nearby"))}</a>. ${esc(methodFor(o))}</p>
 
-    <h3>Nearest other options</h3>
+    ${others.length ? `<h3>Nearest other ${NOUN[1]}</h3>` : ""}
     <div class="nb">${others.slice(0, 3).map(({ x, d }) => `<div class="r"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${optLink(x)}</span><div class="tr"><div class="fl" style="width:${Math.max(3, Math.round(d / nbMax * 100))}%"></div></div><span class="v">${fmtKm(d)} · ${driveMin(d)}′</span></div>`).join("")}</div>
     <p class="note">Turn on Distances in the map bar to draw them. Micro-market rent, vacancy and supply are on <a href="#" data-tab="markets">Micro-markets</a>${o.geoSrc ? `; the pin's source is ${cite(o.geoSrc, host(o.geoSrc))}` : ""}.</p>`;
   checkImgDate(o);

@@ -168,7 +168,7 @@ function sourceText(sources, notes = []) {
 /* Plan: the files (and the requirement and brief, when given) into rows a
    person can edit before anything is built. A filled Atlas workbook on its
    own, with no requirement to apply, is read exactly, no model. */
-async function plan(files, { llm = pdf.askModel, requirement = "", brief = null } = {}) {
+async function plan(files, { llm = pdf.askModel, requirement = "", brief = null, type = "decide" } = {}) {
   const { sources, summary } = await readAll(files);
   const notes = [];
   const label = (sources.length === 1 ? sources[0].name : `${sources.length} files: ${sources.map(s => s.name).join(", ")}`).slice(0, 200);
@@ -189,7 +189,7 @@ async function plan(files, { llm = pdf.askModel, requirement = "", brief = null 
   for (const s of sources) if (s.truncated) notes.push(`"${s.name}" is long; only its first pages were read.`);
 
   const asked = await llm({
-    text, scanned, requirement, brief, fileNames: sources.map(s => s.name), fileName: sources[0].name,
+    text, scanned, requirement, brief, type: pdf.typeOf(type), fileNames: sources.map(s => s.name), fileName: sources[0].name,
     documents: sources.filter(s => s.base64).map(s => ({ name: s.name, base64: s.base64 })),
   });
   const sn = pdf.scanNote(scanned, asked.unread);
@@ -209,8 +209,8 @@ async function plan(files, { llm = pdf.askModel, requirement = "", brief = null 
 }
 
 /* Plan and build in one go (what Build does when there is no plan yet). */
-async function importSources(files, { llm, geocoder, requirement, brief } = {}) {
-  const p = await plan(files, { llm, requirement, brief });
+async function importSources(files, { llm, geocoder, requirement, brief, type } = {}) {
+  const p = await plan(files, { llm, requirement, brief, type });
   const out = await pdf.build(p.rows, { fileName: p.label, notes: p.notes.slice(), geocoder });
   return { ...out, direct: !!p.direct, files: p.files, model: p.model, provider: p.provider };
 }
