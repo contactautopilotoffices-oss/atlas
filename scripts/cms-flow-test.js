@@ -94,30 +94,49 @@ async function expect(name, fn) { try { const v = await fn(); if (v === false) b
     await expect("the owner is signed in and sees the nav", async () => (await page.$$("#nav a.it")).length >= 5);
     await expect("Create an atlas is in the nav", async () => !!(await page.$('#nav a[href="#/create"]')));
 
-    console.log("\n2. The workbook goes in the Describe it card and is built");
+    console.log("\n2. Create an atlas, one step at a time");
     await page.click('#nav a[href="#/create"]');
+    await page.waitForSelector(".tcard", { timeout: 10000 });
+    await expect("six steps across the top", async () => (await page.$$(".wiz li")).length === 6);
+    await expect("step 1 offers three atlas types, Compare and decide ready", async () => (await page.$$(".tcard")).length === 3 && !(await page.$eval('.tcard[data-type="decide"]', e => e.disabled)));
+    await page.click('.tcard[data-type="decide"]');
     await page.waitForSelector("#cr-files", { state: "attached", timeout: 10000 });
     await expect("the import box takes several files at once", async () => await page.$eval("#cr-files", e => e.multiple && /\.pdf/.test(e.accept) && /\.docx/.test(e.accept)));
-    await expect("Build, Enhance and Plan sit under the requirement", async () => !!(await page.$("#cr-req")) && !!(await page.$("#cr-build")) && !!(await page.$("#cr-enhance")) && !!(await page.$("#cr-plan")));
+    await expect("Build waits for a file or a few words", async () => await page.$eval("#w-next", e => e.disabled && /Build my atlas/.test(e.textContent)));
     await page.setInputFiles("#cr-files", WORKBOOK);
-    await expect("the picked file is listed", async () => /andheri-flex\.xlsx/.test(await page.$eval("#cr-picked", e => e.textContent)));
-    await page.click("#cr-build");
-    await page.waitForSelector("#cr-report .card", { timeout: 20000 });
+    await expect("the picked file is listed, and Build is ready", async () => /andheri-flex\.xlsx/.test(await page.$eval("#cr-picked", e => e.textContent)) && !(await page.$eval("#w-next", e => e.disabled)));
+    await page.click("#w-next");
+    await page.waitForSelector(".worklist", { timeout: 10000 });
+    const builtOnce = () => page.waitForFunction(() => /Next: review it/.test((document.querySelector("#w-next") || {}).textContent || ""), { timeout: 30000 });
+    await builtOnce();
+    const work = await page.$eval(".worklist", e => e.textContent);
+    await expect("the build shows each step and what it found", async () => /Reading your files/.test(work) && /4 propert/.test(work) && /4 on the map/.test(work) && /22 places/.test(work), work);
+    await expect("a filled Atlas workbook is used as it is, not researched", async () => /used as it is/.test(work));
+    await page.click("#w-next");
+    await page.waitForSelector("#cr-report", { timeout: 10000 });
+    await expect("the review shows the four properties on the map", async () => /On the map: 4 properties/.test(await page.$eval("#wiz", e => e.textContent)));
     const reportText = await page.$eval("#cr-report", e => e.textContent);
-    await expect("the report says nothing stops the atlas being drawn", async () => !/stop(s)? this atlas/.test(reportText));
-    await expect("the report lists the contents", async () => /4 options/.test(reportText) && /22 places/.test(reportText));
-    await expect("the warnings name the sheet and the row", async () => /Facts, market row/.test(reportText));
-    await expect("the name is prefilled from the workbook", async () => (await page.inputValue("#cr-name")) === "Andheri Flex Atlas");
-    await expect("the plan opens with every sheet as a tab, Options first", async () => {
+    await expect("nothing stops the atlas being drawn", async () => !/stop(s)? this atlas/.test(reportText));
+    await expect("the things worth checking name the sheet and the row", async () => /Facts, market row/.test(reportText));
+    await expect("the unsaved atlas is shown in a live preview", async () => {
+      const f = page.frames().find(fr => /preview=1/.test(fr.url()));
+      if (!f) throw new Error("no preview frame");
+      await f.waitForFunction(() => document.querySelectorAll("#list .card").length === 4, null, { timeout: 20000 });
+      return true;
+    });
+    await page.click('[data-edit="Options"]');
+    await page.waitForSelector('#cr-planbox [data-tab="Options"].pri', { timeout: 10000 });
+    await expect("Edit opens every sheet as a tab, on Options", async () => {
       const tabs = await page.$$eval("#cr-planbox [data-tab]", b => b.map(x => x.dataset.tab));
-      return tabs[0] === "Atlas" && tabs.includes("Options") && tabs.includes("Places") && tabs.includes("json") && !!(await page.$('#cr-planbox [data-tab="Options"].pri'));
+      return tabs[0] === "Atlas" && tabs.includes("Options") && tabs.includes("Places") && tabs.includes("json");
     });
     await expect("the four properties are editable rows", async () => (await page.$$('#cr-planbox input[data-c="Property name"]')).length === 4);
     /* Edit a cell and build again: what is typed is what the atlas holds. */
     await page.fill('#cr-planbox input[data-r="3"][data-c="Why it scores as it does"]', "Edited in the plan: newest stock, metro at the door.");
-    await page.click("#cr-build");
-    await page.waitForSelector("#cr-build:not([disabled])", { timeout: 20000 });
-    await page.waitForSelector("#cr-report .card", { timeout: 20000 });
+    await page.click("#cr-rebuild");
+    await builtOnce();
+    await page.click("#w-next");
+    await page.waitForSelector('#cr-planbox input[data-c="Property name"]', { timeout: 10000 });
     await expect("an edit in the plan reaches the atlas", async () => /Edited in the plan/.test(await page.$eval('#cr-planbox input[data-r="3"][data-c="Why it scores as it does"]', e => e.value)));
     await page.click('#cr-planbox [data-tab="Places"]');
     await expect("each sheet is a tab of its own rows", async () => (await page.$$('#cr-planbox input[data-c="Name"]')).length === 22);
@@ -137,6 +156,15 @@ async function expect(name, fn) { try { const v = await fn(); if (v === false) b
       if (!(r.bundle && r.bundle.options.length === 1 && (r.notes || []).some(n => /became the options/.test(n)))) throw new Error(JSON.stringify(r).slice(0, 300));
       return true;
     });
+    await expect("research without an Exa key leaves the plan as it is, with a note", async () => { const r = await post("bundle/research", { rows: { "Options": [{ "ID": "a", "Property name": "A" }] } }); return r.rows && r.rows["Options"].length === 1 && /EXA_API_KEY/.test((r.notes || [])[0]); });
+    await page.click("#w-next");
+    await page.waitForSelector("#lk-title", { timeout: 10000 });
+    await expect("the look step takes the title from the data", async () => (await page.inputValue("#lk-title")) === "Andheri Flex Atlas");
+    await expect("the house pattern is the cover until one is made", async () => !!(await page.$('.cover.on[data-cover=""]')));
+    await page.click("#w-next");
+    await page.waitForSelector("#cr-name", { timeout: 10000 });
+    await expect("the name is prefilled from the workbook", async () => (await page.inputValue("#cr-name")) === "Andheri Flex Atlas");
+    await expect("a password is made for you", async () => (await page.inputValue("#cr-pass")).length >= 10);
     await expect("the link id is derived from the title", async () => (await page.inputValue("#cr-slug")) === "andheri-flex-atlas");
 
     console.log("\n3. Named, credentialled, saved as a draft");
@@ -150,6 +178,15 @@ async function expect(name, fn) { try { const v = await fn(); if (v === false) b
     await expect("the page reopens on the saved atlas", async () => /Andheri Flex Atlas/.test(await page.$eval(".hd h1", e => e.textContent)));
     await expect("it says the atlas is not yet published", async () => /Not published yet/.test(await page.$eval(".hd .sub", e => e.textContent)));
     await expect("the access ID is listed as active", async () => /ANDHERI-FLEX/.test(await page.$eval("table.t", e => e.textContent)));
+    await expect("the saved draft keeps the plan it was built from, for Edit data", async () => {
+      const p = await page.evaluate(async () => (await (await fetch("/api/cms?r=bundle/plan&link=andheri-flex", { credentials: "same-origin" })).json()));
+      return p.from === "saved" && p.rows["Options"].length === 4 && p.type === "decide" && /Edited in the plan/.test(JSON.stringify(p.rows));
+    });
+    await expect("a reader never gets the plan", async () => {
+      const r = await page.evaluate(async () => (await (await fetch("/api/cms?r=bundle&link=andheri-flex&draft=1", { credentials: "same-origin" })).json()));
+      return r.bundle && r.bundle.options.length === 4 && r.bundle.plan === undefined && r.bundle.meta.layout === "decide";
+    });
+    await expect("the saved atlas offers Edit data", async () => !!(await page.$("#sh-edit")));
     await expect("the atlas is now in Atlas links as a workbook atlas", async () => {
       const r = await page.evaluate(async () => (await (await fetch("/api/cms?r=links", { credentials: "same-origin" })).json()).links.find(l => l.slug === "andheri-flex"));
       return r && r.kind === "bundle" && r.access_id === "ANDHERI-FLEX";
