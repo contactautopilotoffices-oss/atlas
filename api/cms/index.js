@@ -31,7 +31,10 @@
      POST bundle/plan     (editor)     up to 6 files (Excel, PDF, Word) + the brief ->
                                        editable rows (_sources.js); a lone filled
                                        Atlas workbook is read directly
-     POST bundle/build    (editor)     rows -> pins, workbook, bundle, report
+     POST bundle/research (editor)     rows -> rows + addresses and market facts found by Exa
+     POST bundle/build    (editor)     rows -> pins, metro, repairs, workbook, bundle, report
+     GET  bundle/plan     (editor)     the plan an atlas was built from (or rebuilt from it)
+     POST bundle/cover    (editor)     two cover images for the sign-in page (Higgsfield)
      POST bundle/draft (editor)        save a bundle as a link's draft
      POST bundle/publish (admin)       draft -> live, kept as a numbered version
      GET  bundle/history&link= (viewer) every publish so far
@@ -54,6 +57,12 @@ const { validate } = require("../../scripts/lib/validate-bundle");
 const pdf = require("./_pdf");
 const sources = require("./_sources");
 const brief = require("./_brief");
+const research = require("./_research");
+const images = require("./_images");
+const { rowsFromBundle } = require("../../scripts/lib/bundle-rows");
+/* The plan (rows, brief, type) travels with a draft for the admin; a reader
+   never gets it. */
+const forReader = (bundle) => { if (!bundle || typeof bundle !== "object") return bundle; const { plan, ...rest } = bundle; return rest; };
 const caseRoutes = require("./_case");
 const preflight = require("./_preflight");
 
@@ -604,7 +613,10 @@ R["POST bundle/enhance"] = async (req, res, b) => {
     try { text = sources.sourceText((await sources.readAll(filesFrom(b.files))).sources); }
     catch (e) { if (e.status) fail(e.status, e.message); throw e; }
   }
-  try { return await brief.enhance({ requirement: clip(b.requirement, 4000), text, brief: briefFrom(b.brief) }); }
+  /* What the web says about the place in the requirement, when Exa is set up. */
+  const web = await research.webContext(clip(b.requirement, 4000)).catch(() => "");
+  if (web) text = `${text}\n\n===== WEB RESULTS (Exa search, with links) =====\n${web}`;
+  try { return { ...(await brief.enhance({ requirement: clip(b.requirement, 4000), text, brief: briefFrom(b.brief) })), web: !!web }; }
   catch (e) { modelFail(e, "Enhance did not work"); }
 };
 
@@ -612,14 +624,66 @@ R["POST bundle/enhance"] = async (req, res, b) => {
 R["POST bundle/plan"] = async (req, res, b) => {
   await needUser(req, "editor");
   const files = filesFrom(b.files);
-  if (!files.length) fail(400, "Add at least one file to plan from.");
-  const requirement = clip(b.requirement, 4000) || "", br = briefFrom(b.brief);
+  const requirement = clip(b.requirement, 4000) || "", br = briefFrom(b.brief), type = pdf.typeOf(b.type);
+  /* No files, only words: start from what the web says. */
+  if (!files.length) {
+    if (!requirement.trim()) fail(400, "Add a file, or describe what you need in a line or two.");
+    needModel("Starting from your words");
+    try { const d = await research.discover({ requirement, brief: br, type }); return { discovered: true, rows: pdf.shapeRows(d.rows), notes: d.notes, files: [], label: "Web research", text: "", sources: d.sources, model: d.model, provider: d.provider }; }
+    catch (e) { modelFail(e, "Could not start from your words"); }
+  }
   const lone = files.length === 1 && /\.xlsx$/i.test(files[0].name) && !requirement && !(br && Object.keys(br).length);
   if (!lone) needModel("Reading PDFs, Word documents and other spreadsheets");
   try {
-    const p = await sources.plan(files, { requirement, brief: br });
+    const p = await sources.plan(files, { requirement, brief: br, type });
     return { direct: !!p.direct, rows: p.rows, notes: p.notes, files: p.files, label: p.label, text: p.text, model: p.model || null, provider: p.provider || null };
   } catch (e) { modelFail(e, "The files could not be read into a plan"); }
+};
+
+/* Research: the web (Exa) fills what the files left out: addresses for
+   properties with none, and market facts with their sources. */
+R["POST bundle/research"] = async (req, res, b) => {
+  await needUser(req, "editor");
+  if (!b.rows || typeof b.rows !== "object" || Array.isArray(b.rows)) fail(400, "Send the plan as an object in `rows`, one key per sheet.");
+  if (research.enabled()) needModel("Web research");
+  try { return await research.research({ rows: pdf.shapeRows(JSON.parse(JSON.stringify(b.rows))), requirement: clip(b.requirement, 4000) || "", brief: briefFrom(b.brief), type: pdf.typeOf(b.type) }); }
+  catch (e) { modelFail(e, "Web research did not work"); }
+};
+
+/* Edit data: the plan an atlas was built from, to revise it. An atlas saved
+   before plans were kept with it is turned back into rows. */
+R["GET bundle/plan"] = async (req, res, b, q) => {
+  const u = await needUser(req, "editor");
+  const slug = clip(q.get("link"), 40);
+  needLink(u, slug);
+  const row = await store.one("atlas_bundles", { eq: { link_slug: slug } });
+  const bundle = row && (row.draft || row.published);
+  if (!bundle) fail(404, "This atlas has nothing saved yet.");
+  if (bundle.plan && bundle.plan.rows) return { from: "saved", ...bundle.plan };
+  const back = rowsFromBundle(bundle);
+  return { from: "rebuilt", rows: back.rows, look: back.look, type: (back.look && back.look.layout) || "decide" };
+};
+
+/* A cover for the sign-in page, made by Higgsfield: two to choose from. */
+const COVER_KIND = {
+  decide: "a wide aerial view of the office district, towers and streets at golden hour",
+  place: "a wide aerial view centred on one landmark office building and the neighbourhood around it, early evening light",
+  network: "a calm stylised night view of India from high above, city lights glowing like a network of points, no borders or text",
+};
+R["POST bundle/cover"] = async (req, res, b) => {
+  await needUser(req, "editor");
+  if (!images.ready()) fail(503, "Making a cover needs HIGGSFIELD_API_KEY set in Vercel. The atlas works without one: its sign-in page uses a pattern instead.");
+  const type = COVER_KIND[b.type] ? b.type : "decide";
+  const where = [clip(b.place, 80), clip(b.city, 60)].filter(Boolean).join(", ");
+  const words = clip(b.words, 400).trim() || COVER_KIND[type];
+  const prompt = `${words}${where && type !== "network" ? `, ${where}, India` : ""}. Wide cinematic establishing shot for the cover of a property intelligence atlas, calm negative space on the left third for a title. ${images.STYLE}`.replace(/\s+/g, " ");
+  const folder = SLUG.test(clip(b.slug, 40)) ? clip(b.slug, 40) : "drafts";
+  const n = Math.min(Math.max(parseInt(b.count, 10) || 2, 1), 3);
+  const made = await Promise.allSettled(Array.from({ length: n }, (_, i) => images.generate(prompt, { aspect: "16:9", idempotencyKey: `${folder}-cover-${i}-${Date.now().toString(36)}` })
+    .then(g => images.keep(g.url, folder, `cover${i + 1}`))));
+  const covers = made.filter(x => x.status === "fulfilled").map(x => x.value.url);
+  if (!covers.length) { const why = made.find(x => x.status === "rejected"); fail((why && why.reason && why.reason.status) || 502, `No cover could be made: ${clip(why && why.reason && why.reason.message, 200)}`); }
+  return { covers, prompt };
 };
 
 /* Build: rows (planned, edited, or typed from scratch) into the atlas. */
@@ -628,8 +692,10 @@ R["POST bundle/build"] = async (req, res, b) => {
   if (!b.rows || typeof b.rows !== "object" || Array.isArray(b.rows)) fail(400, "Send the plan as an object in `rows`, one key per sheet.");
   if (JSON.stringify(b.rows).length > MAX_BUNDLE) fail(413, "The plan is too large (over 4 MB).");
   const rows = pdf.shapeRows(JSON.parse(JSON.stringify(b.rows)));
-  if (!(rows["Options"] || []).length) fail(400, "The plan has no properties yet. Add at least one row on the Options tab.");
-  const out = await pdf.build(rows, { fileName: clip(b.label, 200) || "Atlas" });
+  /* Nothing to compare but places to show: the places are the options. */
+  const moved = pdf.promotePlaces(rows);
+  if (!(rows["Options"] || []).length) fail(400, "The plan has nothing to compare yet: the atlas needs at least one row on the Options tab (a building or centre). Add one there, or plan from files that name some.");
+  const out = await pdf.build(rows, { fileName: clip(b.label, 200) || "Atlas", metro: b.metro !== false, notes: moved ? [`There was nothing on Options, so the ${moved} place${moved === 1 ? "" : "s"} became the options the atlas compares.`] : [] });
   return { bundle: out.bundle, notes: out.notes, report: out.report, workbook: out.workbook, rows: out.rows, placed: out.placed.length, unplaced: out.unplaced };
 };
 
@@ -714,14 +780,14 @@ R["GET bundle"] = async (req, res, b, q) => {
     const u = await auth.currentUser(req);
     if (!u || !auth.canLink(u, slug)) fail(401, "Sign in to /admin/ to preview a draft.");
     if (!row || !row.draft) fail(404, "There is no draft yet.");
-    return { slug, name: link.name, draft: true, version: row.version, bundle: row.draft };
+    return { slug, name: link.name, draft: true, version: row.version, bundle: forReader(row.draft) };
   }
   const a = auth.accessOf(req);
   const u = a && a.slug === slug ? null : await auth.currentUser(req);
   if (!(a && a.slug === slug) && !(u && auth.canLink(u, slug))) fail(401, "Sign in with your access ID.");
   if (link.status === "paused") return { slug, name: link.name, paused: true };
   if (!row || !row.published) fail(404, "This atlas has not been published yet.");
-  return { slug, name: link.name, version: row.version, bundle: row.published, accessId: a ? a.aid : null };
+  return { slug, name: link.name, version: row.version, bundle: forReader(row.published), accessId: a ? a.aid : null };
 };
 
 /* ---- credentials ---- */
@@ -832,7 +898,7 @@ module.exports = async (req, res) => {
        write must carry x-cms, which a cross-site form cannot send. */
     if (req.method !== "GET" && !route.startsWith("POST broker/")) needWrite(req);
     /* A workbook arrives base64-encoded inside the JSON body. */
-    const limit = /^POST (bundle\/(import|import-pdf|plan|enhance|build|draft)|case\/(import|draft|apply))$/.test(route) ? 6 * 1024 * 1024 : undefined;
+    const limit = /^POST (bundle\/(import|import-pdf|plan|enhance|research|build|draft)|case\/(import|draft|apply))$/.test(route) ? 6 * 1024 * 1024 : undefined;
     const body = req.method === "POST" ? await readBody(req, limit) : {};
     const out = await fn(req, res, body, url.searchParams);
     if (out && out.__sent) return;            // the route wrote its own (binary) response

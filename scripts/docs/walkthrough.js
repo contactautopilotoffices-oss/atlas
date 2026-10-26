@@ -17,6 +17,7 @@
    it says so. The live atlas draws the same pins on Mapbox satellite.
    ============================================================================ */
 "use strict";
+process.env.ATLAS_METRO = "off";   // no public services in tests; scripts/metro.test.js covers the metro
 const { spawn, execFileSync } = require("child_process");
 const fs = require("fs");
 const os = require("os");
@@ -184,15 +185,19 @@ async function workbookPreview(browser) {
 
     /* ---------------- create ---------------- */
     section("Creating the atlas");
-    await page.click('#nav a[href="#/create"]'); await page.waitForSelector("#cr-files", { state: "attached" }); await wait(300);
-    await shot(page, "create-empty", "Create an atlas: three steps on one page",
-      "Step 1 is the Describe it card: the requirement in your own words, up to six files (Excel, PDF, Word), and Build, Enhance and Plan. Steps 2 and 3 open up once the atlas has passed its checks.");
+    await page.click('#nav a[href="#/create"]'); await page.waitForSelector(".tcard"); await wait(300);
+    await shot(page, "create-empty", "Create an atlas: one step per screen",
+      "Six steps: the type of atlas, your data, the build, a review with a live preview, the look, and sharing. Every type has the basics: the sign-in page, branding, honest pins, the metro and sources.");
+    await page.click('.tcard[data-type="decide"]'); await page.waitForSelector("#cr-files", { state: "attached" });
     await page.setInputFiles("#cr-files", WORKBOOK);
-    await page.click("#cr-build");
-    await page.waitForSelector("#cr-report .card", { timeout: 20000 }); await wait(300);
+    await page.click("#w-next");
+    await page.waitForFunction(() => /Next: review it/.test((document.querySelector("#w-next") || {}).textContent || ""), { timeout: 30000 });
+    await page.click("#w-next");
+    await page.waitForSelector("#cr-report", { timeout: 20000 }); await wait(300);
     await page.evaluate(() => document.querySelector("#cr-report").scrollIntoView({ block: "start" })); await page.evaluate(() => window.scrollBy(0, -140)); await wait(200);
     await shot(page, "report", "The upload is read and checked, in plain words",
       "Nothing stops this atlas being drawn. Seven things are worth fixing and are named by sheet and row: three micro-markets hold no proposed building, and four facts carry no source link. The contents line confirms 4 options, 6 micro-markets, 2 metro lines, 22 flex centres and 5 sliders. The seven template example rows were skipped and reported, so none of them can reach a client.");
+    await page.click("#w-next"); await page.waitForSelector("#lk-title"); await page.click("#w-next"); await page.waitForSelector("#cr-name");
     await page.fill("#cr-slug", "andheri-flex"); await page.fill("#cr-access", ACCESS); await page.fill("#cr-pass", PASS); await page.fill("#cr-who", "Shubham, for the Andheri pitch");
     await page.evaluate(() => document.querySelector("#cr-name").scrollIntoView({ block: "center" })); await wait(200);
     await shot(page, "details", "Name, link id and a credential",

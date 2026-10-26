@@ -32,6 +32,8 @@ const { SHEETS } = require("../../scripts/lib/workbook-schema");
 const { buildTemplate, readWorkbook } = require("../../scripts/lib/workbook");
 const { validate } = require("../../scripts/lib/validate-bundle");
 const llm = require("./_llm");
+const { mend } = require("../../scripts/lib/mend-bundle");
+const { metroRows } = require("./_metro");
 
 const MAX_PAGES = 60;
 const MAX_CHARS = 180000;
@@ -97,7 +99,9 @@ Rules:
 - When a filled Atlas workbook is among the documents, keep every row it has exactly as it is (same ID, same figures, same coordinates) and add what the other documents contain, as new rows or new columns.
 - NEVER invent a coordinate. Leave "Latitude" and "Longitude" out unless the document prints them. Always fill "Address" and "Locality" (and the city) as fully as the document allows; they are what the pins are placed from.
 - The properties being offered, proposed or compared go on "Options", one row each, with "ID" a short lower-case slug of the name. Put every figure the document gives for them (grade, floor, carpet area, built-up area, rent, CAM, parking, approvals, availability, nearest metro and so on) in extra columns with short plain headings, numbers as numbers (no currency signs or units in the cell; put the unit in the heading, such as "Rent on carpet (Rs per sq ft)").
-- Other buildings and businesses the document lists around them (competitors, coworking centres, employers, hospitals, colleges) go on "Places", with "Kind" naming the group (flex, employer, edu, hospital, retail, hotel). Put their figures (price per seat, grade, operator) in "Second line" and "Note".
+- "Options" is never empty: the atlas compares its rows. When the documents name buildings on offer or proposed, those are the Options. When they do not (a market survey, a list of coworking centres, a list of buildings), the buildings or centres the documents are about ARE the Options, one row each with all their figures in extra columns (operator, price per seat, occupancy, grade, nearest station and so on).
+- Other buildings and businesses the document lists around the Options (competitors, coworking centres, employers, hospitals, colleges) go on "Places", with "Kind" naming the group (flex, employer, edu, hospital, retail, hotel). Put their figures (price per seat, grade, operator) in "Second line" and "Note".
+- A table's headings may not match its columns (a sheet where the "Operator" column holds building names, say). Read what the cells say, not only the heading above them.
 - Stations the document mentions go on "Transit" only if it names the line.
 - Figures about the market as a whole (rents, vacancy, absorption, deals) go on "Facts" with a "Group". Put the document's name in "Source" when there is no link.
 - "Atlas": "Title" from the document's own title or subject, "Data current to" as YYYY-MM from the document (or the newest date in it), "City". Leave the centre and zoom out; they are worked out from the pins.
@@ -107,11 +111,31 @@ Rules:
 - A link a document gives for a row (photos, a listing, a drive folder) goes in that row's source column.
 - Keep text in the document's words, trimmed. No commentary, no markdown fences.`;
 
-/* The requirement and the brief, when the person gave them. */
-const askFor = (requirement, brief) => {
+/* What the atlas is for decides where the rows go. "decide" (compare
+   several properties) is what the rules above describe; the other two
+   change what goes on Options. These lines win over the rules above. */
+const TYPES = ["decide", "place", "network"];
+const typeOf = (t) => TYPES.includes(t) ? t : "decide";
+const TYPE_RULES = {
+  place: `This atlas shows ONE site (or a very few) and everything around it, read by drive time.
+- "Options" is the site the documents or the requirement are about: usually one row, with its address as fully as given. A second or third row only when the documents clearly name more than one site to show.
+- Everything else the documents list goes on "Places", one row each: competing coworking or office centres (Kind "flex" for coworking and managed offices, "office" for office buildings), employers, colleges, housing, hospitals, hotels, malls, recent deals (Kind "deal"). Put the brand or company that runs it in "Operator" (WeWork, Awfis, Smartworks and so on), and its figures (seats, price per seat, area, grade, tenant) in "Second line" and "Note".
+- When no site is named anywhere, the buildings the documents are about go on "Options" as usual.
+- Facts about the area (rents, vacancy, new supply, deals, infrastructure) go on "Facts" with Group "market", "supply", "deals" or "transit".`,
+  network: `This atlas shows where an organisation or a portfolio is present across cities.
+- Every location (office, centre, branch, warehouse, facility, site) goes on "Options", one row each, however many there are. Always fill "City" and "Locality", and "Address" as fully as the documents give it.
+- "Fit group" is the kind of location (office, centre, warehouse, plant, upcoming) when the documents say so; leave it empty otherwise.
+- Put each location's figures (seats, area, headcount, opened, lease end, status) in extra columns.
+- Facts about a city go on "Facts" with Group the city's name; facts about the whole network with Group "network".`,
+};
+
+/* The requirement and the brief, when the person gave them, and what kind
+   of atlas it is. */
+const askFor = (requirement, brief, type) => {
   const r = String(requirement || "").trim().slice(0, 4000);
   const b = brief && typeof brief === "object" && Object.keys(brief).length ? JSON.stringify(brief, null, 1).slice(0, 8000) : "";
-  return `${r ? `THE REQUIREMENT, IN THE PERSON'S WORDS\n${r}\n\n` : ""}${b ? `THE BRIEF (structured, and possibly edited by the person; it wins over the requirement)\n${b}\n\n` : ""}`;
+  const t = TYPE_RULES[typeOf(type)];
+  return `${t ? `WHAT THIS ATLAS SHOWS (these lines win over the rules above)\n${t}\n\n` : ""}${r ? `THE REQUIREMENT, IN THE PERSON'S WORDS\n${r}\n\n` : ""}${b ? `THE BRIEF (structured, and possibly edited by the person; it wins over the requirement)\n${b}\n\n` : ""}`;
 };
 
 const parseJSON = llm.parseJSON;
@@ -126,12 +150,12 @@ function providerName() {
 /* Ask the model. `text` is what was read from the files; scanned PDFs are
    sent as documents too (`pdfBase64` for one, `documents` for several), so
    a provider that can look at a page reads what has no text layer. */
-async function askModel({ text, pdfBase64, documents, scanned, fileName, fileNames, requirement, brief }, provider = providerName(), opts = {}) {
+async function askModel({ text, pdfBase64, documents, scanned, fileName, fileNames, requirement, brief, type }, provider = providerName(), opts = {}) {
   if (!provider) throw Object.assign(new Error("Reading PDFs, Word documents and other spreadsheets needs ENGY_API_KEY or ANTHROPIC_API_KEY set in Vercel. Until then, fill in the workbook instead."), { status: 503 });
   const guide = sheetGuide();
   const docs = documents || (pdfBase64 ? [{ name: fileName, base64: pdfBase64 }] : []);
   const names = fileNames && fileNames.length > 1 ? `There are ${fileNames.length} documents: ${fileNames.map(n => `"${n}"`).join(", ")}.` : `The document is "${fileName || (fileNames && fileNames[0]) || "document.pdf"}".`;
-  const intro = `${names}${scanned.length && provider === "claude" ? ` These pages have no text layer: ${scanned.join(", ")}. Read them from the attached document${docs.length === 1 ? "" : "s"}.` : ""}\n\nTHE SHEETS AND THEIR COLUMNS\n${guide}\n\n${askFor(requirement, brief)}THE DOCUMENTS' TEXT\n${text}`;
+  const intro = `${names}${scanned.length && provider === "claude" ? ` These pages have no text layer: ${scanned.join(", ")}. Read them from the attached document${docs.length === 1 ? "" : "s"}.` : ""}\n\nTHE SHEETS AND THEIR COLUMNS\n${guide}\n\n${askFor(requirement, brief, type)}THE DOCUMENTS' TEXT\n${text}`;
   if (provider === "claude") {
     const content = [];
     if (scanned.length) for (const d of docs) content.push({ type: "document", source: { type: "base64", media_type: "application/pdf", data: d.base64 }, ...(d.name ? { title: String(d.name).slice(0, 200) } : {}) });
@@ -184,8 +208,9 @@ async function mapboxGeocode(query, fetchFn = fetch) {
   const f = j.features && j.features[0];
   if (!f || !f.geometry) return null;
   const [lng, lat] = f.geometry.coordinates;
-  const type = f.properties && f.properties.feature_type;
-  return { lng, lat, precision: PRECISION_OF[type] || "approx", label: (f.properties && f.properties.full_address) || query };
+  const props = f.properties || {}, type = props.feature_type, ctx = props.context || {};
+  const city = (ctx.place && ctx.place.name) || (type === "place" ? props.name : "") || (ctx.district && ctx.district.name) || "";
+  return { lng, lat, precision: PRECISION_OF[type] || "approx", label: props.full_address || query, ...(city ? { city } : {}) };
 }
 
 const num = (v) => { const n = typeof v === "number" ? v : parseFloat(String(v == null ? "" : v).replace(/[, ]/g, "")); return isFinite(n) ? n : undefined; };
@@ -200,7 +225,7 @@ async function geocodeRows(rows, geocoder, city) {
     if (has(row, "Latitude") && has(row, "Longitude")) return;
     const bits = [row[nameKey], row["Address"], row["Locality"], row["Second line"], city].filter(Boolean).map(String);
     const seen = new Set();
-    const queries = [bits.filter((b, i) => i === 0 || (!seen.has(b) && seen.add(b))).join(", "), [row["Address"], row["Locality"], city].filter(Boolean).join(", "), [row[nameKey], city].filter(Boolean).join(", ")]
+    const queries = [bits.filter((b, i) => i === 0 || (!seen.has(b) && seen.add(b))).join(", "), [row["Address"], row["Locality"], city].filter(Boolean).join(", "), [row[nameKey], city].filter(Boolean).join(", "), [row["Locality"], city].filter(Boolean).length === 2 ? [row["Locality"], city].join(", ") : ""]
       .map(q => q.replace(/\s+/g, " ").trim()).filter((q, i, a) => q && a.indexOf(q) === i);
     for (const q of queries) {
       let g = null;
@@ -209,6 +234,7 @@ async function geocodeRows(rows, geocoder, city) {
       row["Latitude"] = g.lat; row["Longitude"] = g.lng;
       row["How exact is the pin"] = g.precision;
       row["Source for the position"] = `Geocoded by Mapbox from "${q}" (${g.label}); check the pin`;
+      if (sheet === "Options" && g.city && !row["City"]) row["City"] = g.city;
       placed.push(`${sheet}: ${row[nameKey]}`);
       return;
     }
@@ -306,6 +332,24 @@ function shapeRows(input) {
   return rows;
 }
 
+/* The atlas compares the rows on Options. Files that only list centres or
+   buildings (a market survey, a list of coworking operators) can come back
+   with everything on Places and nothing to compare; then those places are
+   the options. Returns how many were moved. */
+const AS_OPTION = { "Name": "Property name", "Second line": "Details", "Source": "Source" };
+function promotePlaces(rows) {
+  const opts = rows["Options"], places = rows["Places"];
+  if ((Array.isArray(opts) && opts.length) || !Array.isArray(places) || !places.length) return 0;
+  rows["Options"] = places.map((p) => {
+    const o = {};
+    for (const [k, v] of Object.entries(p)) { if (k === "Kind") continue; o[AS_OPTION[k] || k] = v; }
+    if (!o["Property name"]) o["Property name"] = p["Name"] || p["ID"];
+    return o;
+  });
+  rows["Places"] = [];
+  return rows["Options"].length;
+}
+
 /* A pin that came from a workbook is never replaced by the model or by a
    geocode: put it back by ID before anything is placed. */
 function restorePins(rows, keepPins = {}) {
@@ -332,7 +376,7 @@ async function finish(asked, { fileName, notes, geocoder = mapboxGeocode, keepPi
 /* Rows, as the model gave them or as a person edited them, into an atlas:
    pins from addresses where there are none, the workbook filled in, read
    back exactly as an uploaded workbook would be, and checked. */
-async function build(input, { fileName, notes = [], geocoder = mapboxGeocode } = {}) {
+async function build(input, { fileName, notes = [], geocoder = mapboxGeocode, metro = true, metroFn = metroRows } = {}) {
   const rows = shapeRows(input);
   const atlas = rows["Atlas"] = (rows["Atlas"] && typeof rows["Atlas"] === "object" && !Array.isArray(rows["Atlas"])) ? rows["Atlas"] : {};
   if (!atlas["Source workbook"]) atlas["Source workbook"] = fileName || "PDF";
@@ -340,12 +384,31 @@ async function build(input, { fileName, notes = [], geocoder = mapboxGeocode } =
   if (!atlas["Data current to"]) atlas["Data current to"] = new Date().toISOString().slice(0, 7);
 
   const geo = await geocodeRows(rows, geocoder, atlas["City"]);
+
+  /* The metro is a fundamental: every line through the area, from
+     OpenStreetMap, unless it is already there or switched off. */
+  if (metro !== false) {
+    const have = [...new Set((rows["Transit"] || []).map(r => r["Line name"]).filter(Boolean))];
+    const pts = (rows["Options"] || []).filter(r => has(r, "Latitude") && has(r, "Longitude")).map(r => ({ lat: num(r["Latitude"]), lng: num(r["Longitude"]) }));
+    try {
+      const m = await metroFn(pts, { have });
+      if (m.rows.length) {
+        rows["Transit"] = [...(rows["Transit"] || []), ...m.rows];
+        notes.push(`Added ${m.lines.length} metro line${m.lines.length === 1 ? "" : "s"} from OpenStreetMap: ${m.lines.map(l => `${l.name} (${l.stations} stations)`).join(", ")}.`);
+      }
+    } catch (e) { notes.push("The metro could not be fetched from OpenStreetMap just now. Press Build again to add it."); }
+  }
   const opts = (rows["Options"] || []).filter(r => has(r, "Latitude") && has(r, "Longitude"));
   if (opts.length && !(has(atlas, "Centre latitude") && has(atlas, "Centre longitude"))) {
     atlas["Centre latitude"] = +(opts.reduce((a, r) => a + num(r["Latitude"]), 0) / opts.length).toFixed(5);
     atlas["Centre longitude"] = +(opts.reduce((a, r) => a + num(r["Longitude"]), 0) / opts.length).toFixed(5);
   }
-  if (!has(atlas, "Opening zoom")) atlas["Opening zoom"] = 13;
+  /* A network across cities opens on the country, not on one street. */
+  if (!has(atlas, "Opening zoom")) {
+    let far = 0;
+    for (const a of opts) for (const b of opts) far = Math.max(far, Math.abs(num(a["Latitude"]) - num(b["Latitude"])) * 111, Math.abs(num(a["Longitude"]) - num(b["Longitude"])) * 105);
+    atlas["Opening zoom"] = far > 300 ? 4.4 : far > 60 ? 8.5 : 13;
+  }
   (rows["Options"] || []).forEach((r, i) => { if (!r["Rank"]) r["Rank"] = i + 1; if (!r["ID"] && r["Property name"]) r["ID"] = slug(r["Property name"]); });
   (rows["Places"] || []).forEach((r, i) => { if (!r["ID"]) r["ID"] = slug(r["Name"] || `place-${i + 1}`); });
 
@@ -355,13 +418,16 @@ async function build(input, { fileName, notes = [], geocoder = mapboxGeocode } =
 
   const xlsx = await fillWorkbook(rows);
   const out = await readWorkbook(xlsx);
-  const rep = validate(out.bundle);
+  /* Repair, don't refuse: what can be fixed is fixed and said; only what
+     cannot be shown at all is left out, and named. */
+  const fixed = mend(out.bundle);
+  const rep = validate(fixed.bundle);
   return {
-    bundle: out.bundle, notes: [...notes, ...out.notes], report: { ok: rep.ok, errors: rep.errors, warnings: rep.warnings, stats: rep.stats },
+    bundle: fixed.bundle, notes: [...notes, ...fixed.fixes, ...fixed.left, ...out.notes], report: { ok: rep.ok, errors: rep.errors, warnings: rep.warnings, stats: rep.stats },
     workbook: xlsx.toString("base64"), rows,
     placed: geo.placed, unplaced: geo.failed,
   };
 }
 const slug = (t) => String(t || "").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40);
 
-module.exports = { pdfText, askModel, askFor, scanNote, importPdf, finish, build, shapeRows, restorePins, MAX_CHARS, fillWorkbook, geocodeRows, mapboxGeocode, sheetGuide, parseJSON, providerName };
+module.exports = { TYPES, typeOf, TYPE_RULES, pdfText, askModel, askFor, scanNote, importPdf, finish, build, shapeRows, restorePins, promotePlaces, MAX_CHARS, fillWorkbook, geocodeRows, mapboxGeocode, sheetGuide, parseJSON, providerName };

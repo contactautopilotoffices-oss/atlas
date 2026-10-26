@@ -11,6 +11,7 @@
    out is a workbook a person could open and a bundle the engine can draw.
    ============================================================================ */
 "use strict";
+process.env.ATLAS_METRO = "off";   // no public services in tests; scripts/metro.test.js covers the metro
 const path = require("path");
 const os = require("os");
 const fs = require("fs");
@@ -108,7 +109,7 @@ const fakeGeocoder = async (q) => { const k = Object.keys(GEO).find(k => q.toLow
   ok("the map centre is the middle of the options", Math.abs(out.bundle.meta.center[1] - 19.1096) < 0.001 && Math.abs(out.bundle.meta.center[0] - 72.87115) < 0.001 && out.bundle.meta.zoom === 13, JSON.stringify(out.bundle.meta));
   ok("places that could be placed are placed; the one without an address is named", out.placed.length === 4 && out.unplaced.length === 1 && /no address/.test(out.unplaced[0]), JSON.stringify([out.placed, out.unplaced]));
   ok("the notes say what was geocoded and what needs a pin", out.notes.some(n => /4 pins were placed by geocoding/.test(n)) && out.notes.some(n => /1 could not be placed/.test(n)), out.notes.join(" | "));
-  ok("the unplaced place is dropped by the validator as an error, not silently", !out.report.ok && out.report.errors.some(e => /nowhere|no address/i.test(e.where + e.message)), JSON.stringify(out.report.errors));
+  ok("the unplaced place is left off the map and named, and the atlas still builds", out.report.ok && !out.bundle.places.some(p => /no address/i.test(p.name)) && out.notes.some(n => /left off the map/.test(n) && /no address/i.test(n)), JSON.stringify([out.report.errors, out.notes]));
   ok("micro-markets and facts came through", out.bundle.zones.length === 2 && out.bundle.facts.market.length === 1 && out.bundle.facts.market[0].src === "Proposed Inventory PDF", JSON.stringify([out.bundle.zones, out.bundle.facts]));
   ok("the title and the source name the PDF", out.bundle.meta.title === "Proposed Inventory, Andheri East" && out.bundle.meta.sheet === "inventory.pdf");
 

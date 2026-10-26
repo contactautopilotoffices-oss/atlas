@@ -13,6 +13,11 @@
      /<slug>?draft=1             the draft, for an admin's preview
      /engine/?atlas=<slug>       the same atlas by its older address, kept
                                  so links already sent do not break
+     /engine/?preview=1          an unsaved atlas from Create an atlas: the
+                                 admin page puts it in this browser's
+                                 storage and this page draws it. Nothing
+                                 comes from the server, so it only ever
+                                 shows the person their own work
 
    A visitor never sees a version number: what is live is simply the atlas.
    Versions exist only in /admin/, where each publish is kept and any
@@ -108,6 +113,16 @@
   };
 
   window.AtlasLoad = new Promise(function (resolve) {
+    if (!slug && q.get("preview") === "1") {
+      var b = null;
+      try { b = JSON.parse(localStorage.getItem("atlas-preview") || "null"); } catch (x) {}
+      if (!b || !b.options) { message("Nothing to preview yet. Build the atlas in /admin/ first."); return; }
+      delete b.plan;
+      window.ATLAS = Object.assign({ slug: "preview", path: "/engine/?preview=1", draft: true }, b);
+      hideGate();
+      resolve();
+      return;
+    }
     if (!slug) {
       /* No atlas named: the static demo bundle. A missing file is a blank
          page with a reason, not a broken one. */

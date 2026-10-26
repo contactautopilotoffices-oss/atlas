@@ -10,7 +10,7 @@
     "godseye": "node scripts/godseye-dev.js",
     "dev:cms": "node scripts/atlas-dev.js",
     "validate": "node scripts/validate-bundle.js --all",
-    "test": "node scripts/validate-bundle.test.js && node scripts/workbook.test.js && node scripts/pdf-import.test.js && node scripts/import-files.test.js && node scripts/costing.test.js && node scripts/case.test.js && node scripts/images.test.js && node scripts/assist.test.js && node scripts/preflight.test.js && node scripts/engine-test.js && node scripts/cms-flow-test.js",
+    "test": "node scripts/validate-bundle.test.js && node scripts/mend.test.js && node scripts/metro.test.js && node scripts/research.test.js && node scripts/types.test.js && node scripts/workbook.test.js && node scripts/pdf-import.test.js && node scripts/import-files.test.js && node scripts/costing.test.js && node scripts/case.test.js && node scripts/images.test.js && node scripts/assist.test.js && node scripts/preflight.test.js && node scripts/engine-test.js && node scripts/cms-flow-test.js",
     "test:case": "node scripts/costing.test.js && node scripts/case.test.js",
     "case:andheri": "node scripts/examples/andheri-case.js && node scripts/casestudy-pdf.js --demo",
     "case:pdf": "node scripts/casestudy-pdf.js",

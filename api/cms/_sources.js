@@ -168,7 +168,7 @@ function sourceText(sources, notes = []) {
 /* Plan: the files (and the requirement and brief, when given) into rows a
    person can edit before anything is built. A filled Atlas workbook on its
    own, with no requirement to apply, is read exactly, no model. */
-async function plan(files, { llm = pdf.askModel, requirement = "", brief = null } = {}) {
+async function plan(files, { llm = pdf.askModel, requirement = "", brief = null, type = "decide" } = {}) {
   const { sources, summary } = await readAll(files);
   const notes = [];
   const label = (sources.length === 1 ? sources[0].name : `${sources.length} files: ${sources.map(s => s.name).join(", ")}`).slice(0, 200);
@@ -189,12 +189,14 @@ async function plan(files, { llm = pdf.askModel, requirement = "", brief = null 
   for (const s of sources) if (s.truncated) notes.push(`"${s.name}" is long; only its first pages were read.`);
 
   const asked = await llm({
-    text, scanned, requirement, brief, fileNames: sources.map(s => s.name), fileName: sources[0].name,
+    text, scanned, requirement, brief, type: pdf.typeOf(type), fileNames: sources.map(s => s.name), fileName: sources[0].name,
     documents: sources.filter(s => s.base64).map(s => ({ name: s.name, base64: s.base64 })),
   });
   const sn = pdf.scanNote(scanned, asked.unread);
   if (sn) notes.push(sn);
   const rows = pdf.shapeRows(asked.rows);
+  const moved = pdf.promotePlaces(rows);
+  if (moved) notes.push(`The files list ${moved} centre${moved === 1 ? "" : "s"} or building${moved === 1 ? "" : "s"} and nothing proposed, so ${moved === 1 ? "it is" : "they are"} the options the atlas compares. Move any that are only context to the Places tab.`);
   /* The model is told to keep a workbook's rows; say so if it dropped any. */
   for (const s of sources.filter(s => s.kind === "atlas")) {
     const back = new Set((rows["Options"] || []).map(r => String(r["ID"] || "").trim().toLowerCase()));
@@ -207,8 +209,8 @@ async function plan(files, { llm = pdf.askModel, requirement = "", brief = null 
 }
 
 /* Plan and build in one go (what Build does when there is no plan yet). */
-async function importSources(files, { llm, geocoder, requirement, brief } = {}) {
-  const p = await plan(files, { llm, requirement, brief });
+async function importSources(files, { llm, geocoder, requirement, brief, type } = {}) {
+  const p = await plan(files, { llm, requirement, brief, type });
   const out = await pdf.build(p.rows, { fileName: p.label, notes: p.notes.slice(), geocoder });
   return { ...out, direct: !!p.direct, files: p.files, model: p.model, provider: p.provider };
 }

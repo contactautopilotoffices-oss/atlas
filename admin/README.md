@@ -12,7 +12,7 @@ show, and collect updates from brokers.
 | --- | --- |
 | Dashboard | Visitors, sessions, sign-ins, average time, who is on a link right now, which access IDs signed in, which properties and sections people opened, country, city, device, where they came from. Last 7, 30 or 90 days, per link or all. |
 | Atlas links | Every link shipped so far, live or paused, with its published version and 30-day visitors. Pause a link and it shows a "paused" screen instead of its data. |
-| Create an atlas | Describe the requirement, bring up to six files (Excel, PDF, Word), edit the plan, build, and publish it as a new link with its own access ID and password. No code, no deploy. |
+| Create an atlas | Six steps: pick a type (compare and decide, show a place, show a network), bring up to six files or a few words, review a live preview and the editable plan, choose a cover, and publish it as a new link with its own access ID and password. No code, no deploy. |
 | Content editor | Per link: change any data field on a property, hide a property, edit the facts and source links on a property card, add "Latest from the market" values (asking rent, availability and so on), switch tabs, filters, map layers, presets and toolbar buttons on or off, set the 3D model for a building, edit the study's facts and sources, add a notice banner, change map texts, add new properties (Chennai). Everything is saved as a draft, can be previewed, and goes live only when you publish. Every publish is kept and you can go back to any version. |
 | Broker links | A private link per broker, limited to the links (and optionally the properties) you choose. Send it on WhatsApp or email. Switch it off or replace it at any time. |
 | Inbox | What brokers sent. Correct a value if needed, then approve it into the draft or reject it. |
@@ -109,47 +109,56 @@ to act on.
 main map (client views at `/`) needs the client's access ID and password, as
 usual.
 
-## Creating an Atlas from a workbook (no code)
+## Creating an Atlas (no code)
 
-This is how the team makes a new Atlas without a developer.
+This is how the team makes a new Atlas without a developer. **Create an
+atlas** in the left nav is six steps, one per screen; Back and the step
+names at the top go back to any finished step.
 
-1. **Create an atlas** in the left nav. Step 1 is the **Describe it** card:
-   write the requirement in your own words, and drop in up to six files
-   (Excel `.xlsx`/`.csv`, PDF, Word `.docx`, about 3 MB together). A filled
-   Atlas workbook is one of them if you have it; **download the empty
-   workbook** from the same card to start one. Nine sheets; only **Atlas**
-   and **Options** are needed. Two filled examples are in `examples/`:
+1. **Type.** What the atlas leads with. Every type has the basics: the
+   sign-in page, branding, pins that say how exact they are, the metro
+   (added from OpenStreetMap), sources on every fact, the phone layout and
+   numbered versions.
+   - **Compare and decide**: several properties scored and ranked against a
+     brief, with distances, the market and a recommendation.
+   - **Show a place**: one site and everything around it. The map opens on
+     its drive-time areas, routed by Mapbox with typical traffic, and counts
+     every place inside each one; competing centres are grouped by operator.
+     Put the site on Options and everything around it on Places (with
+     **Operator** for coworking brands).
+   - **Show a network**: many locations across cities. Zoomed out, one
+     bubble per city with its count; the list and the overview go city by
+     city. Fill **City** on Options (a location with none joins the nearest
+     city within 40 km; Build fills it from the geocoder where it can).
+2. **Your data.** Drop in up to six files (Excel `.xlsx`/`.csv`, PDF, Word
+   `.docx`, about 3 MB together) in any layout, or just describe what you
+   need. A filled Atlas workbook can be one of them; **download the empty
+   workbook** to start one. Two filled examples are in `examples/`:
    `andheri-flex.xlsx` (four proposed buildings against the flex market) and
    `andheri-coworking.xlsx` (the Andheri East coworking competitors, with
-   the bundle it becomes beside it as `andheri-coworking.bundle.json`).
-2. **Enhance** (optional) turns the requirement, with the files' text, into
-   a brief: seats, budget, where, move-in, must haves, what to rank on,
-   what the documents say, what it assumed and what to ask the client.
-   Every field is editable, and Enhance again keeps your edits. It is the
-   one step allowed to infer and suggest (temperature 0.8 on Engy; Claude
-   takes no temperature, so there it is the instructions that loosen it).
-3. **Plan the atlas** reads every file (and the brief) into one draft: a
-   tab per sheet, every cell editable, rows and columns added or removed,
-   or the whole thing as JSON. The same building in two files becomes one
-   row. Reading stays strict: only what the files say, no invented figure
-   or coordinate. A filled Atlas workbook on its own, with no requirement,
-   is read exactly as it is, with no model.
-4. **Build** turns the plan into the atlas: an empty latitude and
-   longitude is placed from the address by Mapbox (and says so on the
-   page), and you get a report in plain words naming the sheet, the row
-   and the column of anything missing or wrong. Problems stop the atlas
-   being drawn and must be fixed in the plan; warnings do not. Build with
-   no plan yet plans and builds in one go. Nothing is saved until step 5.
-5. Name it, set the **link id** (it cannot change afterwards), and give it an
-   **access ID and password**. The password is shown once; copy it to the
-   client. Save as draft.
-6. **Preview draft** opens it exactly as a client will see it. **Publish**
-   (admin) makes it live within about half a minute.
-7. Send the client `atlas.autopilotoffices.com/<link id>` with the access ID
-   and password. The atlas asks for the credential there; signing in at the
-   site root with the same ID sends them to the same address. (The older
-   `/engine/?atlas=<link id>` form still opens it.) A link id that names a
-   page the site already has, such as `chennai` or `admin`, is refused.
+   the bundle it becomes beside it as `andheri-coworking.bundle.json`). **Enhance** (optional) turns the words, the files and the web into
+   a brief you can edit. Leave **Look up on the web** ticked to have Exa
+   fill missing addresses and add market facts with sources (for a place,
+   also the competing centres and deals around the site).
+3. **We build it.** The files are read into a plan (the model puts each row
+   where the type says), the web is searched, pins are placed from
+   addresses, the metro is added and everything is checked. Anything that
+   can be repaired is repaired and said; nothing is refused.
+4. **Review.** A live preview of the atlas, the report in plain words, and
+   the plan: a tab per sheet, every cell editable. Change anything and
+   build again.
+5. **Look.** Title, subtitle and a cover for the sign-in page (Higgsfield
+   makes two to choose from).
+6. **Share.** Name it, set the **link id** (it cannot change afterwards) and
+   an **access ID and password** (shown once). Save, then **Publish**
+   (admin); it is live within about half a minute. **Edit data** brings the
+   saved plan back into the steps for a revision; each publish is a
+   numbered version.
+
+Send the client `atlas.autopilotoffices.com/<link id>` with the access ID
+and password. (The older `/engine/?atlas=<link id>` form still opens it.) A
+link id that names a page the site already has, such as `chennai` or
+`admin`, is refused.
 
 **How the files are read.** PDFs by their text layer; a page with no text
 but a picture on it is a scan and is read as an image by Claude (the OCR);

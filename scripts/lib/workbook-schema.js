@@ -62,6 +62,7 @@ const SHEETS = [
       { key: "reason", label: "Why it scores as it does", hint: "One or two sentences. Shown on the card and in the ranking.", example: "Best overall balance of rent, floor plate and metro access." },
       { key: "address", label: "Address", example: "Hadapsar, Pune 411028" },
       { key: "locality", label: "Locality", example: "Hadapsar" },
+      { key: "city", label: "City", hint: "The city the property is in. An atlas that shows a network groups its pins by city.", example: "Pune" },
       { key: "roadKm", label: "Km from current office", type: "number", hint: "By road, if you have the figure. Leave empty and the atlas estimates it.", example: 12 },
       { key: "driveText", label: "Drive time from current office", hint: "In words, such as \"20-25 min\".", example: "25-30 min" }
     ],
@@ -100,6 +101,7 @@ const SHEETS = [
       { key: "lat", label: "Latitude", required: true, type: "number", example: 18.5308 },
       { key: "lng", label: "Longitude", required: true, type: "number", example: 73.8567 },
       { key: "sub", label: "Second line", hint: "Shown under the name.", example: "Government, since 1854" },
+      { key: "operator", label: "Operator", hint: "Who runs it: the brand or company. Places with an operator are counted by operator, such as competing coworking brands.", example: "" },
       { key: "precision", label: "How exact is the pin", list: PRECISION, example: "building" },
       { key: "note", label: "Note", example: "About 1,200 engineering graduates a year." },
       { key: "src", label: "Source", example: "https://www.coep.org.in/" }
