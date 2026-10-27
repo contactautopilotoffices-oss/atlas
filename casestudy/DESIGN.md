@@ -69,15 +69,12 @@ what it fixes, and fixes the worst one to three first.
 - Table pages now open their rows to use spare height (casestudy/index.html,
   fitTables), but stop at 4 mm of extra padding a row: levers and openings
   still end at about three quarters, and levers reads airy rather than full.
-- Chart pages "what each floor must earn" and "what one seat costs" end at
-  about four fifths: the charts could draw taller.
+- "What each floor must earn" ends at about four fifths: the stacked chart
+  is wide and short and could draw taller.
 - Numbered-point pages with few, short points (why here, pipeline 1) keep a
   gap between the points and the takeaway at the foot.
 - Recent deals: with no "what it means" copy the table now takes the full
   width, but the page still has no pairing box.
 - The terms table sets the small notes under big figures in the serif face.
-- Price ladder: the dashed "Middle" line runs through the count label of the
+- Price ladder: the dashed "Middle" line still runs through the dots of the
   band it falls in, and the chart leaves a wide empty strip above the dots.
-- "How full rival centres run": the band columns are narrow, so long
-  "operator · building" lines wrap, and the page ends at about two thirds of
-  its height. The bars could take the full width with the box below.
