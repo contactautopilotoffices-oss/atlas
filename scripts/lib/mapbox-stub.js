@@ -58,6 +58,7 @@ module.exports = function mapboxStubSource() {
   Map.prototype.setLayoutProperty = function (id) { if (!this._layers[id]) throw new Error("setLayoutProperty on missing layer " + id); return this; };
   Map.prototype.setPaintProperty = function (id) { if (!this._layers[id]) throw new Error("setPaintProperty on missing layer " + id); return this; };
   Map.prototype.setFilter = function () { return this; };
+  Map.prototype.setLayerZoomRange = function (id) { if (!this._layers[id]) throw new Error("setLayerZoomRange on missing layer " + id); return this; };
   Map.prototype.setConfigProperty = function () { return this; };
   Map.prototype.setFog = function () { return this; };
   Map.prototype.setTerrain = function () { return this; };

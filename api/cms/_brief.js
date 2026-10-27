@@ -18,8 +18,8 @@
 const llm = require("./_llm");
 
 const KEYS = ["Client", "In one line", "Seats", "Area (sq ft)", "Budget", "Where", "Move-in", "Term", "Office type",
-  "Must have", "Nice to have", "Avoid", "Rank on", "From the documents", "Assumptions", "Questions to ask"];
-const LISTS = new Set(["Where", "Must have", "Nice to have", "Avoid", "Rank on", "From the documents", "Assumptions", "Questions to ask"]);
+  "Must have", "Nice to have", "Avoid", "Rank on", "From the documents", "From the web", "Assumptions", "Questions to ask"];
+const LISTS = new Set(["Where", "Must have", "Nice to have", "Avoid", "Rank on", "From the documents", "From the web", "Assumptions", "Questions to ask"]);
 const NUMBERS = new Set(["Seats", "Area (sq ft)"]);
 const TEMPERATURE = 0.8;
 const MAX_TEXT = 60000;
@@ -37,6 +37,7 @@ Reply with ONE JSON object and nothing else, using only these keys (leave a key 
 - "Must have", "Nice to have", "Avoid": lists.
 - "Rank on": what matters most, most important first (rent, metro distance, floor plate, grade, date available and so on).
 - "From the documents": a list of what the documents say that bears on this brief, with their figures (for example "4 buildings offered, rents Rs 300 to 375 a sq ft on carpet").
+- "From the web": when web results are given, a list of what they say that bears on this brief, each line ending with its link in brackets.
 - "Assumptions": a list of everything you inferred rather than read.
 - "Questions to ask": a list of what is missing and worth asking the client.
 

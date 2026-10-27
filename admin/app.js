@@ -86,7 +86,7 @@ function modal(html, onReady) {
   $("#modal-body").innerHTML = html;
   $("#modal").classList.add("on");
   const first = $("#modal-body").querySelector("input,select,textarea,button");
-  if (first) setTimeout(() => first.focus(), 30);
+  if (first) setTimeout(() => { const a = document.activeElement; if (!a || a === document.body || !$("#modal-body").contains(a)) first.focus(); }, 30);
   if (onReady) onReady($("#modal-body"));
 }
 const closeModal = () => $("#modal").classList.remove("on");
@@ -178,7 +178,10 @@ function showLogin(msg, opt = {}) {
     catch (err) { $("#l-err").textContent = err.message; $("#l-pw").value = ""; }
     b.disabled = false;
   };
-  setTimeout(() => $("#l-email") && $("#l-email").focus(), 30);
+  /* Put the cursor in the email box, unless the person (or a password
+     manager) is already typing somewhere: a late focus would send the rest
+     of a password into the email box. */
+  setTimeout(() => { const el = $("#l-email"); if (el && (!document.activeElement || document.activeElement === document.body)) el.focus(); }, 30);
 }
 async function enter(user) {
   ST.me = user;
@@ -424,12 +427,22 @@ function linkModal(l, M) {
 
 
 /* ===================================================== create an atlas ==
-   An Atlas with no code behind it. Upload the workbook, read the report,
-   name it, give it a credential, publish. The same page reopens an atlas
-   made this way: upload a revised workbook to change it, issue or revoke
-   access, publish again. */
-const CR = { bundle: null, report: null, notes: [], slug: null, status: null, access: [], lastIssued: null, history: [], fileName: "", workbook: null, wbName: "", picked: [],
-  req: "", brief: null, briefBy: "", rows: null, label: "", srcText: "", srcKey: "", tab: "Options", extraCols: {}, dirty: false, planBy: "", planNotes: [], sheets: null };
+   One step per screen, so anyone can click through it:
+     1 Type          what kind of atlas
+     2 Your data     files of any kind, and/or the need in words (Enhance)
+     3 We build it   read, look up what is missing (Exa), place pins, add the
+                     metro, repair; each step shown as it runs
+     4 Review        what is on the map, the context, the facts, a live
+                     preview; every cell editable
+     5 Look          title, cover (Higgsfield)
+     6 Share         link, access ID, password; save, preview, publish
+   An atlas made here reopens at Share. Edit data takes it back to Review
+   with the plan it was built from; a new version is published from there.
+   Nothing is saved until Save. */
+const CR_FRESH = () => ({ step: 1, maxStep: 1, type: "decide", bundle: null, report: null, notes: [], fileName: "", workbook: null, wbName: "", picked: [],
+  req: "", brief: null, briefBy: "", rows: null, label: "", srcText: "", srcKey: "", tab: "Options", extraCols: {}, dirty: false, planBy: "", planNotes: [],
+  work: [], working: false, research: true, look: {}, covers: [], editing: false, sources: [] });
+const CR = Object.assign({ slug: null, status: null, access: [], lastIssued: null, history: [], sheets: null }, CR_FRESH());
 /* The import box: up to six files of any mix, about 3 MB together (the
    request limit is 4.5 MB and base64 adds a third). */
 const IMPORT_MAX = 6, IMPORT_BYTES = 3 * 1024 * 1024;
@@ -440,203 +453,335 @@ const readAsBase64 = (file) => new Promise((ok, bad) => { const r = new FileRead
 function reportHTML(rep, notes) {
   if (!rep) return "";
   const line = (x) => `<li><b>${esc(x.where)}:</b> ${esc(x.message)}</li>`;
-  const s = rep.stats || {};
-  const bits = [s.options && `${s.options} options`, s.zones && `${s.zones} micro-markets`, s.transitLines && `${s.transitLines} transit line${s.transitLines === 1 ? "" : "s"}, ${s.transitStations} stations`,
-    s.places && `${s.places} places in ${(s.placeKinds || []).length} layer${(s.placeKinds || []).length === 1 ? "" : "s"}`, s.facts && `${s.facts} facts`, s.measures && `${s.measures} priority sliders`].filter(Boolean);
   return `${rep.errors.length ? `<div class="card" style="border-color:var(--bad);margin-top:10px"><b style="color:var(--bad)">${rep.errors.length} problem${rep.errors.length === 1 ? "" : "s"} stop${rep.errors.length === 1 ? "s" : ""} this atlas from being drawn.</b> Fix them in the plan and build again.<ul class="small" style="margin:8px 0 0 18px">${rep.errors.map(line).join("")}</ul></div>` : ""}
-    ${rep.warnings.length ? `<div class="card" style="border-color:var(--warn);margin-top:10px"><b>${rep.warnings.length} thing${rep.warnings.length === 1 ? " is" : "s are"} worth fixing</b>, but the atlas will still work.<ul class="small" style="margin:8px 0 0 18px">${rep.warnings.map(line).join("")}</ul></div>` : ""}
-    ${!rep.errors.length && !rep.warnings.length ? `<div class="card" style="border-color:var(--ok);margin-top:10px"><b style="color:var(--ok)">Nothing to fix.</b></div>` : ""}
-    ${bits.length ? `<div class="small mut" style="margin-top:8px">Contents: ${esc(bits.join(" · "))}</div>` : ""}
-    ${notes && notes.length ? `<div class="small mut" style="margin-top:4px">${notes.map(esc).join("<br>")}</div>` : ""}`;
+    ${rep.warnings.length ? `<details class="card" style="margin-top:10px"><summary><b>${rep.warnings.length} thing${rep.warnings.length === 1 ? "" : "s"} worth checking</b> <span class="small mut">(the atlas works as it is)</span></summary><ul class="small" style="margin:8px 0 0 18px">${rep.warnings.map(line).join("")}</ul></details>` : ""}
+    ${notes && notes.length ? `<details class="card" style="margin-top:10px" open><summary><b>What we did</b></summary><ul class="small" style="margin:8px 0 0 18px">${notes.map(n => `<li>${esc(n)}</li>`).join("")}</ul></details>` : ""}`;
 }
+
+const TYPES = [
+  { key: "decide", title: "Compare and decide", line: "Several properties, scored and ranked against a brief, with the metro, the market and a recommendation.", ready: true,
+    art: `<svg viewBox="0 0 160 96" aria-hidden="true"><rect width="160" height="96" rx="10" fill="var(--paper)"/><path d="M8 70 C40 60 60 74 90 58 S140 40 152 46" stroke="var(--acc2)" stroke-width="3" fill="none" stroke-dasharray="1 6" stroke-linecap="round"/>${[[40, 34, 1], [78, 50, 2], [112, 30, 3], [126, 64, 4]].map(([x, y, n]) => `<circle cx="${x}" cy="${y}" r="9" fill="var(--acc)"/><text x="${x}" y="${y + 3.5}" font-size="10" text-anchor="middle" fill="#fff" font-family="sans-serif">${n}</text>`).join("")}<rect x="10" y="10" width="44" height="5" rx="2.5" fill="var(--ink)" opacity=".7"/><rect x="10" y="19" width="30" height="4" rx="2" fill="var(--dim)"/></svg>` },
+  { key: "place", title: "Show a place", line: "One site or area and everything around it: drive-time catchments, competition, supply, deals.", ready: true,
+    art: `<svg viewBox="0 0 160 96" aria-hidden="true"><rect width="160" height="96" rx="10" fill="var(--paper)"/>${[38, 26, 14].map((r, i) => `<circle cx="80" cy="50" r="${r}" fill="var(--acc)" opacity="${0.08 + i * 0.07}"/>`).join("")}<circle cx="80" cy="50" r="6" fill="var(--acc)"/>${[[44, 30], [118, 36], [56, 76], [110, 74], [30, 58], [132, 58]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="3.5" fill="var(--ok)"/>`).join("")}</svg>` },
+  { key: "network", title: "Show a network", line: "Many locations across cities: where you are, what each site holds, city by city.", ready: true,
+    art: `<svg viewBox="0 0 160 96" aria-hidden="true"><rect width="160" height="96" rx="10" fill="#2a1e16"/><path d="M62 12 L92 10 L104 26 L100 44 L112 52 L96 74 L82 88 L74 74 L60 60 L50 40 Z" fill="none" stroke="#c8693a" stroke-width="1.2" opacity=".6"/>${[[70, 30, 4], [88, 22, 3], [94, 48, 5], [72, 58, 4], [84, 76, 3], [62, 44, 2.5]].map(([x, y, r]) => `<circle cx="${x}" cy="${y}" r="${r}" fill="#f4d9b8"/><circle cx="${x}" cy="${y}" r="${r * 2.2}" fill="#f4d9b8" opacity=".18"/>`).join("")}</svg>` },
+];
+const STEP_NAMES = ["Type", "Your data", "We build it", "Review", "Look", "Share"];
+
+/* The bundle as it will be saved: the look applied, the plan kept with it. */
+function withLook(bundle) {
+  if (!bundle) return null;
+  const b = JSON.parse(JSON.stringify(bundle));
+  b.meta = b.meta || {};
+  const L = CR.look || {};
+  if (L.title) b.meta.title = L.title;
+  if (L.sub !== undefined) { if (L.sub) b.meta.sub = L.sub; else delete b.meta.sub; }
+  if (L.cover) b.meta.backdrop = L.cover; else if (L.cover === "") delete b.meta.backdrop;
+  b.meta.layout = CR.type || "decide";
+  b.plan = { rows: CR.rows, brief: CR.brief, requirement: CR.req, type: CR.type, look: CR.look, savedAt: new Date().toISOString() };
+  return b;
+}
+function putPreview() {
+  try { const b = withLook(CR.bundle); if (b) { delete b.plan; localStorage.setItem("atlas-preview", JSON.stringify(b)); } return true; } catch (e) { return false; }
+}
+
 async function pageCreate(M, slug) {
-  if (slug && CR.slug !== slug) Object.assign(CR, { bundle: null, report: null, notes: [], lastIssued: null, fileName: "", workbook: null, wbName: "", picked: [], req: "", brief: null, briefBy: "", rows: null, label: "", srcText: "", srcKey: "", tab: "Options", extraCols: {}, dirty: false, planBy: "", planNotes: [] });
+  if ((slug || null) !== CR.slug) { Object.assign(CR, CR_FRESH(), { lastIssued: null, lastPass: "" }); if (slug) { CR.step = 6; CR.maxStep = 6; } }
   CR.slug = slug || null;
-  CR.status = null; CR.access = []; CR.history = [];
   if (slug) {
     try { [CR.status, CR.access, CR.history] = await Promise.all([api("bundle/status", { query: { link: slug } }), api("access/list", { query: { link: slug } }).then(r => r.access), api("bundle/history", { query: { link: slug } }).then(r => r.history)]); }
     catch (e) { M.innerHTML = header("Create", "Create an atlas", "") + `<div class="card empty">${esc(e.message)}</div>`; return; }
-  }
-  const st = CR.status;
+  } else { CR.status = null; CR.access = []; CR.history = []; }
+  drawWizard(M);
+}
+
+function drawWizard(M) {
+  const st = CR.status, slug = CR.slug;
   const title = st ? st.name : "Create an atlas";
-  const sub = st ? `${st.published ? `Live, version ${st.version}, published ${ago(st.published_at)}.` : "Not published yet."}${st.unpublished && st.draft ? " There is a draft newer than what is live." : ""}` : "Describe it, bring your files, check the plan, build, publish. No code, no deploy.";
-  const step = (n, t, body, open) => `<section class="card" style="margin-top:14px;${open ? "" : "opacity:.55"}"><div class="eyebrow">Step ${n}</div><h2 style="margin:4px 0 10px">${t}</h2>${body}</section>`;
-  const can2 = !!(CR.report && CR.report.ok);
-  const can3 = !!(st && st.draft);
-  const liveId = CR.lastIssued || (CR.access.find(a => a.active) || {}).access_id || (st && st.access_id) || "";
+  const sub = st ? `${st.published ? `Live, version ${st.version}, published ${ago(st.published_at)}.` : "Not published yet."}${st.unpublished && st.draft ? " There is a draft newer than what is live." : ""}` : "Pick a type, bring your data, check it, publish. No code.";
+  const stepper = `<ol class="wiz">${STEP_NAMES.map((n, i) => { const k = i + 1; const cls = k === CR.step ? "on" : k <= CR.maxStep ? "done" : ""; return `<li class="${cls}"><button type="button" data-go="${k}" ${k <= CR.maxStep && !CR.working ? "" : "disabled"}><span class="n">${k < CR.step && k <= CR.maxStep ? "✓" : k}</span>${esc(n)}</button></li>`; }).join("")}</ol>`;
+  M.innerHTML = header("Create", esc(title), esc(sub), st ? `<a class="btn" href="#/create">Start another</a>` : "") + stepper + `<section class="card wiz-body" id="wiz"></section>`;
+  M.querySelectorAll("[data-go]").forEach(b => b.onclick = () => go(M, +b.dataset.go));
+  const W = $("#wiz");
+  ({ 1: stepType, 2: stepData, 3: stepWork, 4: stepReview, 5: stepLook, 6: stepShare })[CR.step](M, W);
+}
+function go(M, step) { CR.step = step; CR.maxStep = Math.max(CR.maxStep, step); drawWizard(M); window.scrollTo({ top: 0, behavior: "smooth" }); }
+const nav = (back, next, nextLabel, nextAttrs = "") => `<div class="acts wiz-nav">${back ? `<button class="btn" type="button" data-go="${back}">Back</button>` : "<span></span>"}${next ? `<button class="btn pri" type="button" id="w-next" ${nextAttrs}>${esc(nextLabel)}</button>` : ""}</div>`;
+const bindNav = (M, W, onNext) => { W.querySelectorAll("[data-go]").forEach(b => b.onclick = () => go(M, +b.dataset.go)); const n = $("#w-next", W); if (n && onNext) n.onclick = onNext; };
 
-  M.innerHTML = header("Create", esc(title), esc(sub), st ? `<a class="btn" href="#/create">Start another</a>` : "") + `
-    ${step(1, st ? "Describe the revision" : "Describe it",
-      `<p class="mut small">Say what the client needs, and bring what you have: the inventory PDF you were sent, a spreadsheet of centres you visited, a Word note, a filled Atlas workbook. Up to ${IMPORT_MAX} files, read together. <b>Plan</b> turns it all into a draft you can edit cell by cell; <b>Build</b> turns the draft into the atlas. Nothing is saved until you press Save.</p>
-       <textarea class="in" id="cr-req" rows="3" placeholder="120 seats in Andheri East near the metro, under Rs 18,000 a seat, move in by February 2027. For a fintech moving out of BKC.">${esc(CR.req)}</textarea>
-       <label id="cr-drop" class="card" style="display:block;border:1.5px dashed var(--line);text-align:center;padding:14px;cursor:pointer;box-shadow:none">
-         <input id="cr-files" type="file" multiple accept=".xlsx,.xlsm,.csv,.pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/csv" style="display:none">
-         <b>Choose files</b> or drop them here
-         <div class="small mut">Excel (.xlsx, .csv), PDF, Word (.docx). Up to ${IMPORT_MAX} files, about 3 MB together.</div>
-       </label>
-       <div id="cr-picked"></div>
-       <div class="acts" style="justify-content:flex-start;flex-wrap:wrap;align-items:center;margin-top:12px">
-         <button class="btn pri" id="cr-build" type="button">Build</button>
-         <button class="btn" id="cr-enhance" type="button" title="Turns the requirement into a brief you can edit, using the files too">✦ Enhance</button>
-         <button class="btn" id="cr-plan" type="button" title="Reads the files (and the brief) into a draft you can edit before building">Plan the atlas</button>
-         <span class="small mut" id="cr-filename">${esc(CR.fileName)}</span>
-       </div>
-       <div class="small mut" style="margin-top:6px">Enhance may suggest and fill gaps, and lists what it assumed. Plan only writes down what the files say.
-         <span>Or: <a href="#" id="cr-blank">start from a blank plan</a> · <a href="#" id="cr-template">download the empty workbook</a>${st ? "" : ` · <a href="#" id="cr-example" title="A filled-in workbook kept on the site: four Andheri buildings, 22 flex centres, two metro lines">use the Andheri Flex example</a>`}</span></div>
-       <div id="cr-brief"></div>
-       <div id="cr-planbox"></div>
-       <div id="cr-report">${reportHTML(CR.report, CR.notes)}${CR.workbook ? `<div class="card" style="margin-top:10px"><b>Built.</b> Every pin placed from an address says so on the page. <button class="btn sm" type="button" id="cr-dl-wb">Download it as a workbook</button> <span class="small mut">to keep, or to share with someone who works in Excel.</span></div>` : ""}</div>`, true)}
-    ${step(2, "Name it and give it a credential",
-      `<div class="formgrid">
-         <div><label class="f">Name</label><input class="in" id="cr-name" value="${esc(st ? st.name : (CR.bundle && CR.bundle.meta && CR.bundle.meta.title) || "")}" placeholder="Pune office study"></div>
-         <div><label class="f">Link id</label><input class="in mono" id="cr-slug" value="${esc(slug || slugify(CR.bundle && CR.bundle.meta && CR.bundle.meta.title))}" ${slug ? "disabled" : ""} placeholder="pune-office-study"><div class="small mut">Lower-case, hyphens only. The atlas will live at atlas.autopilotoffices.com/<i>this</i>. Cannot change once saved.</div></div>
-         <div><label class="f">City</label><input class="in" id="cr-city" value="${esc(st ? st.city || "" : (CR.bundle && CR.bundle.meta && CR.bundle.meta.city) || "")}"></div>
-         <div><label class="f">Access ID</label><input class="in mono" id="cr-access" value="${esc(liveId || (CR.bundle && CR.bundle.meta ? slugify(CR.bundle.meta.title).toUpperCase().replace(/-/g, "-") : ""))}" placeholder="ACME-PUNE"><div class="small mut">What the client types at atlas.autopilotoffices.com.</div></div>
-         <div><label class="f">Password</label><div style="display:flex;gap:6px"><input class="in mono" id="cr-pass" value="${esc(CR.lastPass || "")}" placeholder="At least 10 characters"><button class="btn" type="button" id="cr-gen">Generate</button></div><div class="small mut">${liveId ? "Leave empty to keep the current password." : "Shown once here; copy it to the client."}</div></div>
-         <div><label class="f">Issued to</label><input class="in" id="cr-who" placeholder="Name of the person or firm"></div>
-       </div>
-       <div class="acts"><button class="btn pri" id="cr-save" type="button" ${can2 || st ? "" : "disabled"}>${st ? "Save changes" : "Save as draft"}</button><span class="small mut" id="cr-save-note"></span></div>
-       ${CR.access.length ? `<h3 style="margin:14px 0 6px">Access IDs for this atlas</h3><div class="tw"><table class="t"><thead><tr><th>Access ID</th><th>Issued to</th><th>Last used</th><th>Status</th><th></th></tr></thead><tbody>
-         ${CR.access.map(a => `<tr><td class="mono">${esc(a.access_id)}</td><td>${esc(a.name || "-")}</td><td class="mut">${ago(a.last_used_at)}</td><td><span class="chip ${a.active ? "ok" : "warn"}">${a.active ? "active" : "revoked"}</span></td><td>${can("admin") ? `<button class="btn sm ghost" type="button" data-revoke="${esc(a.access_id)}" data-active="${a.active ? "0" : "1"}">${a.active ? "Revoke" : "Re-enable"}</button>` : ""}</td></tr>`).join("")}
-       </tbody></table></div>` : ""}`, can2 || !!st)}
-    ${step(3, "Check it, then publish",
-      `<p class="mut small">Preview opens the draft exactly as a client would see it. Publishing makes it live within about half a minute, and keeps a numbered version here. The client never sees a version number: the link always shows whatever is live.</p>
-       <div class="acts" style="justify-content:flex-start">
-         <a class="btn" id="cr-preview" href="${slug ? `/${encodeURIComponent(slug)}?draft=1` : "#"}" target="_blank" rel="noopener" ${can3 ? "" : 'aria-disabled="true" style="pointer-events:none;opacity:.5"'}>Preview draft ↗</a>
-         ${can("admin") ? `<button class="btn pri" id="cr-publish" type="button" ${can3 ? "" : "disabled"}>${st && st.published ? "Publish the draft" : "Publish"}</button>` : `<span class="small mut">An admin publishes.</span>`}
-       </div>
-       ${st && st.published ? `<div class="card" style="margin-top:12px;border-color:var(--ok)"><b>Live.</b> Send the client <span class="mono">atlas.autopilotoffices.com/${esc(slug)}</span>${liveId ? ` with access ID <span class="mono">${esc(liveId)}</span>` : ""}${CR.lastPass ? ` and password <span class="mono">${esc(CR.lastPass)}</span>` : ""}.
-         <div class="row" style="margin-top:8px;display:flex;gap:6px"><a class="btn sm" href="/${encodeURIComponent(slug)}" target="_blank" rel="noopener">Open the live atlas ↗</a>${liveId && CR.lastPass ? `<button class="btn sm" type="button" id="cr-copy">Copy the sign-in details</button>` : ""}</div></div>` : ""}
-       ${CR.history.length ? `<h3 style="margin:14px 0 6px">Published versions</h3><div class="tw"><table class="t"><thead><tr><th>Version</th><th>What</th><th>By</th><th>When</th><th>Note</th><th></th></tr></thead><tbody>
-         ${CR.history.map(h => `<tr><td><span class="chip ${h.version === st.version ? "dark" : ""}">v${h.version}</span>${h.version === st.version ? ` <span class="small mut">live</span>` : ""}</td><td>${h.action === "rollback" ? "Went back" : "Published"}</td><td>${esc(h.by_email || "")}</td><td class="mut">${esc(when(h.at))}</td><td class="small">${esc(h.note || "")}</td>
-           <td>${can("admin") && h.version !== st.version ? `<button class="btn sm" type="button" data-rb="${esc(h.id)}" data-v="${h.version}">Make this live again</button>` : ""}</td></tr>`).join("")}
-       </tbody></table></div><div class="small mut" style="margin-top:6px">Going back publishes that version again as a new number, and resets the draft to it.</div>` : ""}`, can3)}`;
+/* ---- 1 · type ---- */
+function stepType(M, W) {
+  W.innerHTML = `<h2>What should this atlas show?</h2><p class="mut small">Every type has the basics: the sign-in page, your branding, pins that say how exact they are, the metro, sources on every fact, a phone layout and numbered versions. The type decides what it leads with.</p>
+    <div class="tcards">${TYPES.map(t => `<button type="button" class="tcard ${CR.type === t.key ? "on" : ""}" data-type="${t.key}" ${t.ready ? "" : "disabled"}>${t.art}<b>${esc(t.title)}</b><span class="small mut">${esc(t.line)}</span>${t.ready ? "" : `<span class="chip">Coming next</span>`}</button>`).join("")}</div>
+    ${nav(0, 2, "Next: your data")}`;
+  W.querySelectorAll("[data-type]").forEach(b => b.onclick = () => { CR.type = b.dataset.type; go(M, 2); });
+  bindNav(M, W, () => go(M, 2));
+}
 
-  $("#cr-template").onclick = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch("/api/cms?r=bundle/template", { credentials: "same-origin" });
-      if (!res.ok) throw new Error("Could not download the template.");
-      const blob = await res.blob(), a = document.createElement("a");
-      a.href = URL.createObjectURL(blob); a.download = "atlas-workbook.xlsx"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-    } catch (e) { fail(e); }
-  };
-  /* ---- Describe it: files, requirement, brief, plan, build ----
-     Files picked in several goes add up, so a PDF from one folder and a
-     spreadsheet from another can be read together. */
-  const status = (t) => { const el = $("#cr-filename"); el.textContent = t || ""; el.style.color = ""; };
-  /* An error stays next to the buttons, not only in a toast that fades. */
-  const failed = (err) => { const el = $("#cr-filename"); el.textContent = `Not done: ${err.message || err}`; el.style.color = "var(--bad)"; busy(false); showPicked(); fail(err); };
-  const busy = (on) => { ["#cr-build", "#cr-enhance", "#cr-plan"].forEach(s => { $(s).disabled = !!on; }); };
-  const pickedKey = () => CR.picked.map(f => `${f.name}:${f.size}`).join("|");
-  const filesBody = () => Promise.all(CR.picked.map(async f => ({ name: f.name, file: await readAsBase64(f) })));
-  const showPicked = () => {
-    const total = CR.picked.reduce((a, f) => a + f.size, 0);
-    const over = CR.picked.length > IMPORT_MAX || total > IMPORT_BYTES;
-    $("#cr-picked").innerHTML = CR.picked.length ? `<div class="tw" style="margin-top:8px"><table class="t"><tbody>
-      ${CR.picked.map((f, i) => `<tr><td>${esc(f.name)}</td><td class="mut small">${mb(f.size)}</td><td style="text-align:right"><button class="btn sm ghost" type="button" data-unpick="${i}">Remove</button></td></tr>`).join("")}
-      </tbody></table></div><div class="small ${over ? "" : "mut"}" style="margin-top:4px;${over ? "color:var(--bad)" : ""}">${CR.picked.length} of ${IMPORT_MAX} files, ${mb(total)} together.${CR.picked.length > IMPORT_MAX ? ` Remove ${CR.picked.length - IMPORT_MAX}.` : ""}${total > IMPORT_BYTES ? " Over the 3 MB limit: remove a file, or plan in two goes." : ""}</div>` : "";
-    $("#cr-plan").disabled = !CR.picked.length || over;
-    $("#cr-build").disabled = (!CR.picked.length && !CR.rows) || (!CR.rows && over);
-    $("#cr-picked").querySelectorAll("[data-unpick]").forEach(b => b.onclick = () => { CR.picked.splice(+b.dataset.unpick, 1); showPicked(); });
-  };
+/* ---- 2 · your data ---- */
+/* What to bring, and an example requirement, for each type. */
+const BRING = {
+  decide: { lede: "Drop in whatever you have: an inventory PDF, a spreadsheet of centres, a market note, a filled Atlas workbook.", ask: "What do you need?", eg: "120 seats in Andheri East near the metro, under Rs 18,000 a seat, move in by February 2027. For a fintech moving out of BKC." },
+  place: { lede: "Name the site, and drop in what you have about the area: a list of competing centres, a market note, recent deals. With the web search on, the centres and deals around the site are looked up for you.", ask: "Which site?", eg: "An office campus on ITPL Main Road, Whitefield, Bengaluru. Show the coworking competition and what is within 30 minutes' drive." },
+  network: { lede: "Drop in your list of locations (a spreadsheet, a PDF, a deck exported as PDF), in any layout. Each becomes a pin, grouped by city, with the metro in every city.", ask: "Whose network?", eg: "Every office and centre of our company across India, with seats and status for each." },
+};
+function stepData(M, W) {
+  const B = BRING[CR.type] || BRING.decide;
+  W.innerHTML = `<h2>Bring your data</h2><p class="mut small">${esc(B.lede)} Any layout is fine; it is read for you. Up to ${IMPORT_MAX} files. Or just describe it and the web is searched for you.</p>
+    <label id="cr-drop" class="card drop"><input id="cr-files" type="file" multiple accept=".xlsx,.xlsm,.csv,.pdf,.docx,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/csv" style="display:none">
+      <b>Choose files</b> or drop them here<div class="small mut">Excel (.xlsx, .csv), PDF, Word (.docx). Up to ${IMPORT_MAX} files, about 3 MB together.</div></label>
+    <div id="cr-picked"></div>
+    <label class="f" for="cr-req" style="margin-top:14px">${esc(B.ask)} <span class="mut">(optional with files, enough on its own)</span></label>
+    <textarea class="in" id="cr-req" rows="3" placeholder="${esc(B.eg)}">${esc(CR.req)}</textarea>
+    <div class="row-gap"><button class="btn sm" type="button" id="cr-enhance" title="Turns the requirement into a brief you can edit, using your files and the web">✦ Enhance it into a brief</button><span class="small mut" id="cr-enh-note"></span></div>
+    <div id="cr-brief"></div>
+    <label class="check"><input type="checkbox" id="cr-research" ${CR.research ? "checked" : ""}> ${CR.type === "place" ? "Look up the area on the web (competing centres and their operators, deals, rents, new supply), with sources" : "Look up what is missing on the web (addresses, rents, coworking prices, deals), with sources"}</label>
+    <div class="small mut" style="margin-top:10px">Or: <a href="#" id="cr-example">use the Andheri Flex example</a> · <a href="#" id="cr-blank">start from a blank plan</a> · <a href="#" id="cr-template">download the empty workbook</a></div>
+    <div class="small" id="cr-filename" style="margin-top:8px"></div>
+    ${nav(1, 3, "Build my atlas")}`;
+  bindNav(M, W, () => startWork(M, { from: "files" }));
+  $("#cr-req").oninput = (e) => { CR.req = e.target.value; showPicked(); };
+  $("#cr-research").onchange = (e) => { CR.research = e.target.checked; };
   const pick = (list) => {
     const bad = [];
-    for (const f of Array.from(list || [])) {
-      if (!IMPORT_EXT.test(f.name)) { bad.push(f.name); continue; }
-      if (!CR.picked.some(p => p.name === f.name && p.size === f.size)) CR.picked.push(f);
-    }
+    for (const f of Array.from(list || [])) { if (!IMPORT_EXT.test(f.name)) { bad.push(f.name); continue; } if (!CR.picked.some(p => p.name === f.name && p.size === f.size)) CR.picked.push(f); }
     showPicked();
     if (bad.length) toast(`Not read: ${esc(bad.join(", "))}. Use Excel (.xlsx, .csv), PDF or Word (.docx); save older .doc and .xls files in the new format first.`, true);
   };
+  function showPicked() {
+    const total = CR.picked.reduce((a, f) => a + f.size, 0), over = CR.picked.length > IMPORT_MAX || total > IMPORT_BYTES;
+    $("#cr-picked").innerHTML = CR.picked.length ? `<div class="tw" style="margin-top:8px"><table class="t"><tbody>${CR.picked.map((f, i) => `<tr><td>${esc(f.name)}</td><td class="mut small">${mb(f.size)}</td><td style="text-align:right"><button class="btn sm ghost" type="button" data-unpick="${i}">Remove</button></td></tr>`).join("")}</tbody></table></div>
+      <div class="small ${over ? "" : "mut"}" style="margin-top:4px;${over ? "color:var(--bad)" : ""}">${CR.picked.length} of ${IMPORT_MAX} files, ${mb(total)} together.${over ? " Too much at once: remove a file." : ""}</div>` : "";
+    $("#cr-picked").querySelectorAll("[data-unpick]").forEach(b => b.onclick = () => { CR.picked.splice(+b.dataset.unpick, 1); showPicked(); });
+    $("#w-next").disabled = over || (!CR.picked.length && !CR.req.trim());
+  }
   $("#cr-files").onchange = (e) => { pick(e.target.files); e.target.value = ""; };
   const drop = $("#cr-drop");
-  drop.ondragover = (e) => { e.preventDefault(); drop.style.borderColor = "var(--acc)"; };
-  drop.ondragleave = () => { drop.style.borderColor = ""; };
-  drop.ondrop = (e) => { e.preventDefault(); drop.style.borderColor = ""; pick(e.dataTransfer && e.dataTransfer.files); };
-  $("#cr-req").oninput = (e) => { CR.req = e.target.value; };
-
-  /* The brief Enhance returns: every field editable, lists one per line. */
-  const drawBrief = () => {
-    const b = CR.brief;
-    $("#cr-brief").innerHTML = b ? `<div class="card" style="margin-top:12px">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap"><b>The brief</b><span class="small mut">${esc(CR.briefBy ? `Enhanced by ${CR.briefBy}. ` : "")}Edit anything. Plan and Build use it; Enhance again keeps your edits and improves the rest. <a href="#" id="cr-brief-clear">Clear</a></span></div>
-      <table class="ed" style="margin-top:8px"><tbody>${Object.entries(b).map(([k, v]) => `<tr><td class="k">${esc(k)}</td><td>${Array.isArray(v)
-        ? `<textarea class="in" data-bk="${esc(k)}" data-list="1" rows="${Math.min(6, v.length + 1)}">${esc(v.join("\n"))}</textarea>`
-        : `<input class="in" data-bk="${esc(k)}" value="${esc(v)}">`}</td></tr>`).join("")}</tbody></table></div>` : "";
-    if (!b) return;
-    $("#cr-brief").oninput = (e) => {
-      const k = e.target.dataset.bk; if (!k) return;
-      const v = e.target.value;
-      if (e.target.dataset.list) CR.brief[k] = v.split("\n").map(x => x.trim()).filter(Boolean);
-      else CR.brief[k] = /^\d+$/.test(v.trim()) ? +v.trim() : v;
-    };
-    $("#cr-brief-clear").onclick = (e) => { e.preventDefault(); CR.brief = null; CR.briefBy = ""; drawBrief(); };
+  drop.ondragover = (e) => { e.preventDefault(); drop.classList.add("over"); };
+  drop.ondragleave = () => drop.classList.remove("over");
+  drop.ondrop = (e) => { e.preventDefault(); drop.classList.remove("over"); pick(e.dataTransfer && e.dataTransfer.files); };
+  showPicked(); drawBrief();
+  $("#cr-enhance").onclick = async () => {
+    const req = $("#cr-req").value.trim();
+    if (!req && !CR.brief) return fail(new Error("Describe what you need first: a line or two in your own words is enough."));
+    const b = $("#cr-enhance"), note = $("#cr-enh-note"); b.disabled = true; note.textContent = "Enhancing: reading your files and the web…";
+    try {
+      const body = { requirement: req, brief: CR.brief };
+      if (CR.picked.length) body.files = await Promise.all(CR.picked.map(async f => ({ name: f.name, file: await readAsBase64(f) })));
+      const j = await api("bundle/enhance", { method: "POST", body });
+      CR.brief = j.brief; CR.briefBy = j.provider || ""; note.textContent = j.web ? "Done, using your files and the web." : "Done.";
+      drawBrief();
+    } catch (err) { note.textContent = ""; fail(err); }
+    b.disabled = false;
   };
+  $("#cr-template").onclick = async (e) => {
+    e.preventDefault();
+    try { const res = await fetch("/api/cms?r=bundle/template", { credentials: "same-origin" }); if (!res.ok) throw new Error("Could not download the template."); const blob = await res.blob(), a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "atlas-workbook.xlsx"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000); } catch (err) { fail(err); }
+  };
+  /* The example lives at /examples/andheri-flex.xlsx, so a demo needs no
+     file on anyone's disk, and nothing that cannot drive a file dialog
+     (a browser agent, a walkthrough) is stuck at this step. */
+  $("#cr-example").onclick = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch("/examples/andheri-flex.xlsx", { cache: "no-store" });
+      if (!res.ok) throw new Error("The example workbook is not on this site.");
+      CR.picked = [new File([await res.blob()], "andheri-flex.xlsx", { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" })];
+      CR.req = ""; CR.brief = null; CR.research = false;
+      startWork(M, { from: "files" });
+    } catch (err) { fail(err); }
+  };
+  $("#cr-blank").onclick = (e) => {
+    e.preventDefault();
+    CR.rows = { "Atlas": { "Title": "", "City": "" }, "Options": [{}] }; CR.label = "Typed in"; CR.planBy = "A blank plan"; CR.planNotes = []; CR.tab = "Options"; CR.extraCols = {};
+    CR.bundle = null; CR.report = null; CR.notes = [];
+    go(M, 4);
+  };
+}
+/* The brief Enhance returns: every field editable, lists one per line. */
+function drawBrief() {
+  const box = $("#cr-brief"); if (!box) return;
+  const b = CR.brief;
+  box.innerHTML = b ? `<div class="card" style="margin-top:10px"><div class="row-between"><b>The brief</b><span class="small mut">${esc(CR.briefBy ? `By ${CR.briefBy}. ` : "")}Edit anything; Enhance again keeps your edits. <a href="#" id="cr-brief-clear">Clear</a></span></div>
+    <table class="ed" style="margin-top:8px"><tbody>${Object.entries(b).map(([k, v]) => `<tr><td class="k">${esc(k)}</td><td>${Array.isArray(v) ? `<textarea class="in" data-bk="${esc(k)}" data-list="1" rows="${Math.min(6, v.length + 1)}">${esc(v.join("\n"))}</textarea>` : `<input class="in" data-bk="${esc(k)}" value="${esc(v)}">`}</td></tr>`).join("")}</tbody></table></div>` : "";
+  if (!b) return;
+  box.oninput = (e) => { const k = e.target.dataset.bk; if (!k) return; const v = e.target.value; CR.brief[k] = e.target.dataset.list ? v.split("\n").map(x => x.trim()).filter(Boolean) : (/^\d+$/.test(v.trim()) ? +v.trim() : v); };
+  $("#cr-brief-clear").onclick = (e) => { e.preventDefault(); CR.brief = null; CR.briefBy = ""; drawBrief(); };
+}
 
-  /* The plan: the rows the atlas is built from, one tab per sheet, every
-     cell editable, rows and columns added or removed, or the raw JSON. */
-  const ensureSheets = async () => { if (!CR.sheets) CR.sheets = (await api("bundle/sheets")).sheets; return CR.sheets; };
-  const cellVal = (v, number) => { const t = String(v); return (number || /^-?\d+(\.\d+)?$/.test(t.trim())) && t.trim() !== "" && isFinite(+t.trim()) ? +t.trim() : t; };
-  const drawPlan = async () => {
-    const box = $("#cr-planbox");
-    if (!CR.rows) { box.innerHTML = ""; return; }
-    try { await ensureSheets(); } catch (e) { box.innerHTML = `<div class="card empty">${esc(e.message)}</div>`; return; }
-    const S = CR.sheets, rows = CR.rows;
-    if (!S.some(s => s.name === CR.tab) && CR.tab !== "json") CR.tab = "Options";
-    const n = (s) => { const d = rows[s.name]; return Array.isArray(d) ? d.length : d && Object.keys(d).length ? "✓" : ""; };
-    const tabs = S.map(s => `<button type="button" class="btn sm ${CR.tab === s.name ? "pri" : "ghost"}" data-tab="${esc(s.name)}">${esc(s.name)}${n(s) !== "" ? ` <span class="small" style="opacity:.75">${n(s)}</span>` : ""}</button>`).join("")
-      + `<button type="button" class="btn sm ${CR.tab === "json" ? "pri" : "ghost"}" data-tab="json">JSON</button>`;
-    let body = "";
-    if (CR.tab === "json") {
-      body = `<textarea class="in mono" id="cr-json" rows="18" spellcheck="false" style="font-size:12px">${esc(JSON.stringify(rows, null, 2))}</textarea>
-        <div class="acts" style="justify-content:flex-start"><button class="btn sm pri" type="button" id="cr-json-apply">Apply the JSON</button><span class="small mut">One key per sheet: the Atlas as an object, every other sheet as a list of rows keyed by its headings.</span></div>`;
-    } else {
-      const s = S.find(x => x.name === CR.tab);
-      if (s.shape === "form") {
-        const o = rows[s.name] && typeof rows[s.name] === "object" && !Array.isArray(rows[s.name]) ? rows[s.name] : {};
-        body = `<table class="ed"><tbody>${s.columns.map(c => `<tr><td class="k" title="${esc(c.hint)}">${esc(c.label)}${c.required ? " *" : ""}</td><td>${c.list
-          ? `<select class="in" data-f="${esc(c.label)}"><option value=""></option>${c.list.map(x => `<option ${String(o[c.label]) === x ? "selected" : ""}>${esc(x)}</option>`).join("")}</select>`
-          : `<input class="in" data-f="${esc(c.label)}" ${c.number ? 'data-num="1" inputmode="decimal"' : ""} value="${esc(o[c.label] ?? "")}" placeholder="${esc(c.hint.slice(0, 80))}">`}</td></tr>`).join("")}</tbody></table>`;
-      } else {
-        const list = Array.isArray(rows[s.name]) ? rows[s.name] : [];
-        const known = s.columns.map(c => c.label);
-        const present = new Set(list.flatMap(r => Object.keys(r)));
-        (CR.extraCols[s.name] || []).forEach(l => present.add(l));
-        const cols = [...s.columns.filter(c => c.required || present.has(c.label)), ...[...present].filter(l => !known.includes(l)).map(l => ({ label: l, extra: true, hint: "Your own column" }))];
-        const unused = s.columns.filter(c => !cols.some(x => x.label === c.label));
-        body = `<div class="tw"><table class="ed"><thead><tr><th></th>${cols.map(c => `<th title="${esc(c.hint || "")}">${esc(c.label)}${c.required ? " *" : ""}</th>`).join("")}<th></th></tr></thead><tbody>
-          ${list.map((r, i) => `<tr><td class="small mut">${i + 1}</td>${cols.map(c => `<td><input class="in" data-r="${i}" data-c="${esc(c.label)}" ${c.number ? 'data-num="1" inputmode="decimal"' : ""} value="${esc(r[c.label] ?? "")}" style="min-width:${c.number ? 90 : /name|address|why|note|line|what/i.test(c.label) ? 200 : 120}px"></td>`).join("")}<td><button class="btn sm ghost" type="button" data-del="${i}" title="Remove this row">×</button></td></tr>`).join("")}
-          </tbody></table></div>
-          ${list.length ? "" : `<div class="small mut" style="margin:8px 0">Nothing on ${esc(s.name)} yet.</div>`}
-          <div class="acts" style="justify-content:flex-start;flex-wrap:wrap;align-items:center">
-            <button class="btn sm" type="button" id="cr-addrow">Add a row</button>
-            <input class="in" id="cr-newcol" list="cr-collist" placeholder="${s.extras ? "Add a column (any name)" : "Add a column"}" style="width:230px;margin:0;font-size:13px;padding:6px 10px">
-            <datalist id="cr-collist">${unused.map(c => `<option value="${esc(c.label)}"></option>`).join("")}</datalist>
-            <button class="btn sm" type="button" id="cr-addcol">Add</button>
-          </div>`;
+/* ---- 3 · we build it ---- */
+const WORK = { read: "Reading your files", discover: "Finding buildings on the web", research: "Looking up what is missing on the web", build: "Placing pins, adding the metro, checking everything" };
+async function startWork(M, { from }) {
+  CR.work = [];
+  if (from === "files") CR.work.push({ k: CR.picked.length ? "read" : "discover", s: "todo" });
+  if (from !== "rebuild" && CR.research) CR.work.push({ k: "research", s: "todo" });
+  CR.work.push({ k: "build", s: "todo" });
+  CR.maxStep = 3; go(M, 3);
+  await runWork(M);
+}
+async function runWork(M) {
+  CR.working = true;
+  const redraw = () => { if (CR.step === 3) { const W = $("#wiz"); if (W) stepWork(M, W); } };
+  for (const w of CR.work) {
+    if (w.s === "done" || w.s === "skip") continue;
+    w.s = "doing"; w.detail = ""; redraw();
+    try {
+      if (w.k === "read" || w.k === "discover") {
+        const body = { files: w.k === "read" ? await Promise.all(CR.picked.map(async f => ({ name: f.name, file: await readAsBase64(f) }))) : [], requirement: CR.req || "", brief: CR.brief, type: CR.type };
+        const j = await api("bundle/plan", { method: "POST", body });
+        CR.rows = j.rows; CR.label = j.label; CR.srcText = j.text || ""; CR.tab = "Options"; CR.extraCols = {}; CR.sources = j.sources || [];
+        CR.planBy = j.direct ? "Read from the workbook as it is" : j.discovered ? "Found on the web" : `Read by ${j.provider || "the model"}`;
+        CR.planNotes = [...(j.files && j.files.length && !j.direct ? [`Read ${j.files.map(f => `${f.name} (${f.kind}${f.pages ? `, ${f.pages} page${f.pages === 1 ? "" : "s"}` : ""})`).join("; ")}.`] : []), ...(j.notes || [])];
+        const n = (CR.rows["Options"] || []).length;
+        w.detail = `${n} propert${n === 1 ? "y" : "ies"} found${(CR.rows["Places"] || []).length ? `, ${(CR.rows["Places"] || []).length} places around them` : ""}.`;
+        if (j.direct) { const r = CR.work.find(x => x.k === "research"); if (r && r.s === "todo") { r.s = "skip"; r.detail = "A filled Atlas workbook is used as it is."; } }
+      } else if (w.k === "research") {
+        const j = await api("bundle/research", { method: "POST", body: { rows: CR.rows, requirement: CR.req || "", brief: CR.brief, type: CR.type } });
+        CR.rows = j.rows; CR.planNotes = [...CR.planNotes, ...(j.notes || [])]; CR.sources = [...CR.sources, ...(j.sources || [])];
+        w.detail = (j.notes || [])[0] || "Done.";
+        if (/off|did not work|nothing/i.test(w.detail) && !(j.added && (j.added.facts || j.added.addresses || j.added.places))) w.s = "skip";
+      } else if (w.k === "build") {
+        const j = await api("bundle/build", { method: "POST", body: { rows: CR.rows, label: CR.label } });
+        CR.bundle = j.bundle; CR.report = j.report; CR.workbook = j.workbook; CR.rows = j.rows; CR.dirty = false;
+        CR.wbName = slugify(j.bundle && j.bundle.meta && j.bundle.meta.title) || "atlas";
+        CR.notes = [...(CR.planNotes || []), ...(j.notes || [])];
+        CR.look = CR.look || {};
+        if (!CR.look.title) CR.look.title = (j.bundle.meta || {}).title || "";
+        if (CR.look.sub === undefined) CR.look.sub = (j.bundle.meta || {}).sub || "";
+        const s = (j.report && j.report.stats) || {};
+        w.detail = [`${s.options || 0} on the map`, s.transitLines ? `${s.transitLines} metro line${s.transitLines === 1 ? "" : "s"}` : "", s.places ? `${s.places} places` : "", s.facts ? `${s.facts} facts` : ""].filter(Boolean).join(", ") + ".";
+        putPreview();
       }
-      body += `<div class="small mut" style="margin-top:6px">${esc(s.blurb)}</div>`;
+      if (w.s === "doing") w.s = "done";
+    } catch (err) {
+      w.s = "fail"; w.detail = err.message;
+      /* Research helps, it is never needed: carry on without it. */
+      if (w.k === "research") { w.s = "skip"; w.detail = `Skipped: ${err.message}`; continue; }
+      CR.working = false; redraw(); return;
     }
-    box.innerHTML = `<div class="card" style="margin-top:12px">
-      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap"><b>The plan</b><span class="small mut">${esc(CR.planBy || "")}${CR.planBy ? ". " : ""}Every cell is editable; an empty Latitude and Longitude is placed from the address when you build. Press Build when it looks right.${CR.dirty && CR.report ? " <b>Edited since the last build.</b>" : ""}</span></div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin:10px 0">${tabs}</div>${body}</div>`;
+    redraw();
+  }
+  CR.working = false;
+  CR.maxStep = Math.max(CR.maxStep, 4);
+  if (CR.step === 3) drawWizard(M);
+}
+function stepWork(M, W) {
+  const icon = { todo: "○", doing: `<span class="spin"></span>`, done: "✓", skip: "–", fail: "✕" };
+  const failed = CR.work.find(w => w.s === "fail");
+  const done = !CR.working && !failed && CR.work.length && CR.work.every(w => w.s === "done" || w.s === "skip");
+  W.innerHTML = `<h2>${done ? "Your atlas is built" : failed ? "That step did not finish" : "Building your atlas"}</h2>
+    <p class="mut small">${done ? "Next, check what is on it. Everything can still be changed." : failed ? "Nothing is lost. Try the step again, or go back and change what you gave it." : "This takes a minute or two. Each step shows what it found."}</p>
+    <ul class="worklist">${CR.work.map(w => `<li class="${w.s}"><span class="i">${icon[w.s]}</span><div><b>${esc(WORK[w.k])}</b>${w.detail ? `<div class="small ${w.s === "fail" ? "" : "mut"}" ${w.s === "fail" ? 'style="color:var(--bad)"' : ""}>${esc(w.detail)}</div>` : ""}</div></li>`).join("")}</ul>
+    ${failed ? `<div class="acts wiz-nav"><button class="btn" type="button" data-go="2">Back to your data</button><button class="btn pri" type="button" id="w-retry">Try again</button></div>`
+      : done ? nav(2, 4, "Next: review it") : ""}`;
+  bindNav(M, W, () => go(M, 4));
+  if ($("#w-retry", W)) $("#w-retry", W).onclick = () => { for (const w of CR.work) if (w.s === "fail") w.s = "todo"; runWork(M); };
+}
+
+/* ---- 4 · review ---- */
+function stepReview(M, W) {
+  const b = CR.bundle, rep = CR.report, rows = CR.rows || {};
+  const s = (rep && rep.stats) || {};
+  const opts = (b && b.options) || [];
+  const kinds = {}; for (const p of (b && b.places) || []) kinds[p.kind] = (kinds[p.kind] || 0) + 1;
+  const lines = (b && b.transit && b.transit.lines) || [];
+  const facts = b && b.facts ? Object.values(b.facts).flat() : [];
+  const exact = (p) => ({ building: "exact", poi: "exact", complex: "exact", street: "street", landuse: "area", locality: "area", sector: "area", approx: "rough" })[p] || "placed";
+  const card = (t, body, tab) => `<div class="card rv"><div class="row-between"><b>${t}</b>${tab ? `<button class="btn sm ghost" type="button" data-edit="${esc(tab)}">Edit</button>` : ""}</div>${body}</div>`;
+  W.innerHTML = `<h2>Check what is on it</h2><p class="mut small">The preview on the right is the atlas as a client will see it. Change anything with Edit, then rebuild.</p>
+    <div class="review">
+      <div class="rv-cards">
+        ${!b ? `<div class="card empty">Nothing built yet. Fill in the plan below and press Rebuild.</div>` : ""}
+        ${b ? card(`On the map: ${opts.length} propert${opts.length === 1 ? "y" : "ies"}`, `<ul class="plain">${opts.slice(0, 10).map(o => `<li>${esc(o.name)} <span class="chip ${exact(o.precision) === "rough" ? "warn" : ""}">${exact(o.precision)}</span>${o.locality ? ` <span class="small mut">${esc(o.locality)}</span>` : ""}</li>`).join("")}${opts.length > 10 ? `<li class="small mut">and ${opts.length - 10} more</li>` : ""}</ul>`, "Options") : ""}
+        ${b ? card(`Metro: ${lines.length} line${lines.length === 1 ? "" : "s"}`, lines.length ? `<div class="small">${lines.map(l => `<span class="swatch" style="background:${esc(l.color || "#999")}"></span>${esc(l.name)} <span class="mut">(${(l.stations || []).length})</span>`).join("<br>")}</div>` : `<div class="small mut">None found near these pins.</div>`, "Transit") : ""}
+        ${b && Object.keys(kinds).length ? card(`Around them: ${(b.places || []).length} places`, `<div class="small">${Object.entries(kinds).map(([k, n]) => `${esc(k)} <span class="mut">${n}</span>`).join(" · ")}</div>`, "Places") : ""}
+        ${b && facts.length ? card(`Facts: ${facts.length}`, `<ul class="plain small">${facts.slice(0, 5).map(f => `<li>${esc(f.k)}: <b>${esc(f.v)}</b>${f.src ? (/^https?:/.test(f.src) ? ` <a href="${esc(f.src)}" target="_blank" rel="noopener" class="mut">source</a>` : ` <span class="mut">(${esc(String(f.src).slice(0, 40))})</span>`) : ""}</li>`).join("")}${facts.length > 5 ? `<li class="mut">and ${facts.length - 5} more</li>` : ""}</ul>`, "Facts") : ""}
+        <div id="cr-report">${reportHTML(rep, CR.notes)}</div>
+      </div>
+      <div class="rv-preview">${b ? `<div class="pv"><iframe id="cr-frame" title="Preview" src="/engine/?preview=1&t=${Date.now()}"></iframe></div><div class="small mut" style="margin-top:4px"><a href="/engine/?preview=1" target="_blank" rel="noopener">Open the preview in a new tab ↗</a>${CR.workbook ? ` · <a href="#" id="cr-dl-wb">Download as a workbook</a>` : ""}</div>` : ""}</div>
+    </div>
+    <details class="card" id="cr-sheets" ${!b || CR.openSheets ? "open" : ""} style="margin-top:12px"><summary><b>Edit everything</b> <span class="small mut">(every sheet, every cell, or the raw JSON)</span></summary><div id="cr-planbox"></div>
+      <div class="acts" style="justify-content:flex-start"><button class="btn pri" type="button" id="cr-rebuild">Rebuild with my changes</button><label class="check" style="margin:0"><input type="checkbox" id="cr-research2"> and look up what is missing on the web</label></div></details>
+    ${nav(CR.slug && !CR.picked.length ? 6 : 2, b ? 5 : 0, "Next: the look", rep && !rep.ok ? "disabled" : "")}`;
+  bindNav(M, W, () => go(M, 5));
+  W.querySelectorAll("[data-edit]").forEach(x => x.onclick = () => { CR.tab = x.dataset.edit; CR.openSheets = true; const d = $("#cr-sheets"); d.open = true; drawPlan(); d.scrollIntoView({ behavior: "smooth", block: "start" }); });
+  $("#cr-sheets").ontoggle = (e) => { CR.openSheets = e.target.open; };
+  $("#cr-rebuild").onclick = () => { if ($("#cr-research2").checked) { CR.work = [{ k: "research", s: "todo" }, { k: "build", s: "todo" }]; CR.maxStep = Math.max(CR.maxStep, 3); go(M, 3); runWork(M); } else startWork(M, { from: "rebuild" }); };
+  if ($("#cr-dl-wb")) $("#cr-dl-wb").onclick = (e) => { e.preventDefault(); const bin = atob(CR.workbook), arr = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i); const blob = new Blob([arr], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }), a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `${CR.wbName || "atlas"}.xlsx`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000); };
+  fitPreview();
+  bindPlan();
+  drawPlan();
+}
+/* The preview shows the desktop atlas scaled to fit the column; on a
+   phone-sized column it shows the phone layout at its own size. */
+function fitPreview() {
+  const box = $(".pv"), f = $("#cr-frame"); if (!box || !f) return;
+  const fit = () => {
+    const w = box.clientWidth;
+    if (w < 560) { box.style.height = "520px"; Object.assign(f.style, { width: "100%", height: "520px", transform: "none" }); return; }
+    const s = w / 1280;
+    box.style.height = Math.round(820 * s) + "px";
+    Object.assign(f.style, { width: "1280px", height: "820px", transform: `scale(${s})` });
   };
-  const planBox = $("#cr-planbox");
-  planBox.oninput = (e) => {
+  fit();
+  if (window.ResizeObserver) { if (CR._ro) CR._ro.disconnect(); CR._ro = new ResizeObserver(fit); CR._ro.observe(box); }
+}
+
+/* The plan editor: one tab per sheet, every cell editable, rows and
+   columns added or removed, or the raw JSON. */
+const ensureSheets = async () => { if (!CR.sheets) CR.sheets = (await api("bundle/sheets")).sheets; return CR.sheets; };
+const cellVal = (v, number) => { const t = String(v); return (number || /^-?\d+(\.\d+)?$/.test(t.trim())) && t.trim() !== "" && isFinite(+t.trim()) ? +t.trim() : t; };
+async function drawPlan() {
+  const box = $("#cr-planbox"); if (!box) return;
+  if (!CR.rows) CR.rows = { "Atlas": {}, "Options": [{}] };
+  try { await ensureSheets(); } catch (e) { box.innerHTML = `<div class="card empty">${esc(e.message)}</div>`; return; }
+  const S = CR.sheets, rows = CR.rows;
+  if (!S.some(s => s.name === CR.tab) && CR.tab !== "json") CR.tab = "Options";
+  const n = (s) => { const d = rows[s.name]; return Array.isArray(d) ? d.length : d && Object.keys(d).length ? "✓" : ""; };
+  const tabs = S.map(s => `<button type="button" class="btn sm ${CR.tab === s.name ? "pri" : "ghost"}" data-tab="${esc(s.name)}">${esc(s.name)}${n(s) !== "" ? ` <span class="small" style="opacity:.75">${n(s)}</span>` : ""}</button>`).join("") + `<button type="button" class="btn sm ${CR.tab === "json" ? "pri" : "ghost"}" data-tab="json">JSON</button>`;
+  let body = "";
+  if (CR.tab === "json") {
+    body = `<textarea class="in mono" id="cr-json" rows="18" spellcheck="false" style="font-size:12px">${esc(JSON.stringify(rows, null, 2))}</textarea>
+      <div class="acts" style="justify-content:flex-start"><button class="btn sm pri" type="button" id="cr-json-apply">Apply the JSON</button><span class="small mut">One key per sheet: the Atlas as an object, every other sheet as a list of rows keyed by its headings.</span></div>`;
+  } else {
+    const s = S.find(x => x.name === CR.tab);
+    if (s.shape === "form") {
+      const o = rows[s.name] && typeof rows[s.name] === "object" && !Array.isArray(rows[s.name]) ? rows[s.name] : {};
+      body = `<table class="ed"><tbody>${s.columns.map(c => `<tr><td class="k" title="${esc(c.hint)}">${esc(c.label)}${c.required ? " *" : ""}</td><td>${c.list
+        ? `<select class="in" data-f="${esc(c.label)}"><option value=""></option>${c.list.map(x => `<option ${String(o[c.label]) === x ? "selected" : ""}>${esc(x)}</option>`).join("")}</select>`
+        : `<input class="in" data-f="${esc(c.label)}" ${c.number ? 'data-num="1" inputmode="decimal"' : ""} value="${esc(o[c.label] ?? "")}" placeholder="${esc(c.hint.slice(0, 80))}">`}</td></tr>`).join("")}</tbody></table>`;
+    } else {
+      const list = Array.isArray(rows[s.name]) ? rows[s.name] : [];
+      const known = s.columns.map(c => c.label);
+      const present = new Set(list.flatMap(r => Object.keys(r)));
+      (CR.extraCols[s.name] || []).forEach(l => present.add(l));
+      const cols = [...s.columns.filter(c => c.required || present.has(c.label)), ...[...present].filter(l => !known.includes(l)).map(l => ({ label: l, extra: true, hint: "Your own column" }))];
+      const unused = s.columns.filter(c => !cols.some(x => x.label === c.label));
+      body = `<div class="tw"><table class="ed"><thead><tr><th></th>${cols.map(c => `<th title="${esc(c.hint || "")}">${esc(c.label)}${c.required ? " *" : ""}</th>`).join("")}<th></th></tr></thead><tbody>
+        ${list.map((r, i) => `<tr><td class="small mut">${i + 1}</td>${cols.map(c => `<td><input class="in" data-r="${i}" data-c="${esc(c.label)}" ${c.number ? 'data-num="1" inputmode="decimal"' : ""} value="${esc(r[c.label] ?? "")}" style="min-width:${c.number ? 90 : /name|address|why|note|line|what/i.test(c.label) ? 200 : 120}px"></td>`).join("")}<td><button class="btn sm ghost" type="button" data-del="${i}" title="Remove this row">×</button></td></tr>`).join("")}
+        </tbody></table></div>
+        ${list.length ? "" : `<div class="small mut" style="margin:8px 0">Nothing on ${esc(s.name)} yet.</div>`}
+        <div class="acts" style="justify-content:flex-start;flex-wrap:wrap;align-items:center">
+          <button class="btn sm" type="button" id="cr-addrow">Add a row</button>
+          <input class="in" id="cr-newcol" list="cr-collist" placeholder="${s.extras ? "Add a column (any name)" : "Add a column"}" style="width:230px;margin:0;font-size:13px;padding:6px 10px">
+          <datalist id="cr-collist">${unused.map(c => `<option value="${esc(c.label)}"></option>`).join("")}</datalist>
+          <button class="btn sm" type="button" id="cr-addcol">Add</button>
+        </div>`;
+    }
+    body += `<div class="small mut" style="margin-top:6px">${esc(s.blurb)}</div>`;
+  }
+  box.innerHTML = `<div class="small mut" style="margin:8px 0">${esc(CR.planBy || "")}${CR.planBy ? ". " : ""}An empty latitude and longitude is placed from the address when you rebuild.${CR.dirty ? " <b>Edited since the last build.</b>" : ""}</div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px">${tabs}</div>${body}`;
+}
+function bindPlan() {
+  const box = $("#cr-planbox"); if (!box) return;
+  box.oninput = (e) => {
     const t = e.target, s = CR.tab;
-    if (t.dataset.f != null) {
-      const o = CR.rows[s] = (CR.rows[s] && typeof CR.rows[s] === "object" && !Array.isArray(CR.rows[s])) ? CR.rows[s] : {};
-      if (t.value.trim() === "") delete o[t.dataset.f]; else o[t.dataset.f] = cellVal(t.value, t.dataset.num);
-      CR.dirty = true;
-    } else if (t.dataset.r != null) {
-      const r = CR.rows[s][+t.dataset.r];
-      if (t.value.trim() === "") delete r[t.dataset.c]; else r[t.dataset.c] = cellVal(t.value, t.dataset.num);
-      CR.dirty = true;
-    }
+    if (t.dataset.f != null) { const o = CR.rows[s] = (CR.rows[s] && typeof CR.rows[s] === "object" && !Array.isArray(CR.rows[s])) ? CR.rows[s] : {}; if (t.value.trim() === "") delete o[t.dataset.f]; else o[t.dataset.f] = cellVal(t.value, t.dataset.num); CR.dirty = true; }
+    else if (t.dataset.r != null) { const r = CR.rows[s][+t.dataset.r]; if (t.value.trim() === "") delete r[t.dataset.c]; else r[t.dataset.c] = cellVal(t.value, t.dataset.num); CR.dirty = true; }
   };
-  planBox.onchange = planBox.oninput;
-  planBox.onclick = (e) => {
+  box.onchange = box.oninput;
+  box.onclick = (e) => {
     const b = e.target.closest("button"); if (!b) return;
     const s = CR.tab;
     if (b.dataset.tab) { CR.tab = b.dataset.tab; drawPlan(); return; }
@@ -644,112 +789,106 @@ async function pageCreate(M, slug) {
     if (b.id === "cr-addrow") { if (!Array.isArray(CR.rows[s])) CR.rows[s] = []; CR.rows[s].push({}); CR.dirty = true; drawPlan().then(() => { const ins = $$(`#cr-planbox input[data-r="${CR.rows[s].length - 1}"]`); if (ins[0]) ins[0].focus(); }); return; }
     if (b.id === "cr-addcol") {
       const l = $("#cr-newcol").value.replace(/\*/g, "").trim(); if (!l) return;
-      const sh = CR.sheets.find(x => x.name === s);
-      const known = sh.columns.find(c => c.label.toLowerCase() === l.toLowerCase());
+      const sh = CR.sheets.find(x => x.name === s), known = sh.columns.find(c => c.label.toLowerCase() === l.toLowerCase());
       if (!known && !sh.extras) return toast(`${esc(s)} only takes its own columns: pick one from the list.`, true);
-      (CR.extraCols[s] = CR.extraCols[s] || []).push(known ? known.label : l);
-      drawPlan(); return;
+      (CR.extraCols[s] = CR.extraCols[s] || []).push(known ? known.label : l); drawPlan(); return;
     }
     if (b.id === "cr-json-apply") {
       try { const v = JSON.parse($("#cr-json").value); if (!v || typeof v !== "object" || Array.isArray(v)) throw new Error("The JSON must be one object, with a key per sheet."); CR.rows = v; CR.dirty = true; toast("Plan updated from the JSON."); drawPlan(); }
       catch (err) { fail(new Error(`That JSON did not parse: ${err.message}`)); }
     }
   };
+}
 
-  const afterRender = (sel) => setTimeout(() => { const r = $(sel); if (r) r.scrollIntoView({ behavior: "smooth", block: "start" }); }, 80);
-  const doBuild = async () => {
-    if (!CR.rows) { if (CR.picked.length) return doPlan({ thenBuild: true }); return fail(new Error("Add your files first, or start from a blank plan.")); }
-    busy(true); status("Building the atlas: placing pins from addresses…");
+/* ---- 5 · look ---- */
+function stepLook(M, W) {
+  const L = CR.look = CR.look || {};
+  const meta = (CR.bundle && CR.bundle.meta) || {};
+  if (L.title === undefined) L.title = meta.title || "";
+  const cover = L.cover !== undefined ? L.cover : (meta.backdrop && /^(https?:|\/)/.test(meta.backdrop) ? meta.backdrop : "");
+  W.innerHTML = `<h2>How it looks</h2><p class="mut small">The title and cover are what a client sees first, on the sign-in page. Everything else follows the house style.</p>
+    <div class="formgrid">
+      <div><label class="f" for="lk-title">Title</label><input class="in" id="lk-title" value="${esc(L.title || "")}" placeholder="Andheri East options for a 120-seat team"></div>
+      <div><label class="f" for="lk-sub">Line under the title <span class="mut">(optional)</span></label><input class="in" id="lk-sub" value="${esc(L.sub ?? meta.sub ?? "")}" placeholder="Prepared for Acme, October 2026"></div>
+    </div>
+    <label class="f" style="margin-top:6px">Cover</label>
+    <div class="covers">
+      <button type="button" class="cover ${!cover ? "on" : ""}" data-cover=""><div class="pattern"></div><span class="small">House pattern</span></button>
+      ${[...new Set([cover, ...(CR.covers || [])].filter(Boolean))].map(u => `<button type="button" class="cover ${u === cover ? "on" : ""}" data-cover="${esc(u)}"><img src="${esc(u)}" alt=""><span class="small">${u === cover ? "Chosen" : "Use this"}</span></button>`).join("")}
+    </div>
+    <div class="row-gap" style="margin-top:10px"><input class="in" id="lk-words" placeholder="What the cover should show (optional), e.g. the Andheri skyline at dusk" style="margin:0;max-width:460px"><button class="btn" type="button" id="lk-make">Make covers with Higgsfield</button><span class="small mut" id="lk-note"></span></div>
+    ${nav(4, 6, "Next: share it")}`;
+  bindNav(M, W, () => { L.title = $("#lk-title").value.trim() || L.title; L.sub = $("#lk-sub").value.trim(); putPreview(); go(M, 6); });
+  $("#lk-title").oninput = (e) => { L.title = e.target.value; };
+  $("#lk-sub").oninput = (e) => { L.sub = e.target.value; };
+  W.querySelectorAll("[data-cover]").forEach(b => b.onclick = () => { L.cover = b.dataset.cover; putPreview(); stepLook(M, W); });
+  $("#lk-make").onclick = async () => {
+    const b = $("#lk-make"), note = $("#lk-note"); b.disabled = true; note.textContent = "Making two covers: about a minute…";
     try {
-      const j = await api("bundle/build", { method: "POST", body: { rows: CR.rows, label: CR.label } });
-      CR.bundle = j.bundle; CR.report = j.report; CR.workbook = j.workbook; CR.rows = j.rows; CR.dirty = false;
-      CR.wbName = slugify(j.bundle && j.bundle.meta && j.bundle.meta.title) || "atlas";
-      CR.fileName = CR.label || "";
-      CR.notes = [...(CR.planNotes || []), ...(j.notes || [])];
-      pageCreate(M, slug); afterRender("#cr-report");
-    } catch (err) { failed(err); }
+      const j = await api("bundle/cover", { method: "POST", body: { type: CR.type, city: meta.city || "", place: ((CR.bundle && CR.bundle.options) || []).map(o => o.locality).filter(Boolean)[0] || "", words: $("#lk-words").value, slug: CR.slug || "" } });
+      CR.covers = [...(j.covers || []), ...(CR.covers || [])].slice(0, 6); if (!L.cover && j.covers && j.covers[0]) L.cover = j.covers[0];
+      putPreview(); stepLook(M, W);
+    } catch (err) { note.textContent = ""; b.disabled = false; fail(err); }
   };
-  const doPlan = async ({ thenBuild = false, files = null, plain = false } = {}) => {
-    const list = files || CR.picked;
-    if (!list.length) return fail(new Error("Add at least one file to plan from."));
-    const names = list.map(f => f.name).join(", ");
-    busy(true); status(`Reading ${names}${list.length > 1 || !/\.xlsx$/i.test(list[0].name) ? ": this takes up to a minute…" : "…"}`);
-    try {
-      const body = { files: await Promise.all(list.map(async f => ({ name: f.name, file: await readAsBase64(f) }))), requirement: plain ? "" : (CR.req || ""), brief: plain ? null : CR.brief };
-      const j = await api("bundle/plan", { method: "POST", body });
-      const read = (j.files || []).map(f => `${f.name} (${f.kind}${f.pages ? `, ${f.pages} page${f.pages === 1 ? "" : "s"}` : ""}${f.scanned && f.scanned.length ? `, ${f.scanned.length} read as images` : ""})`).join("; ");
-      CR.rows = j.rows; CR.label = j.label; CR.srcText = j.text; CR.srcKey = files ? "" : pickedKey(); CR.tab = "Options"; CR.extraCols = {}; CR.dirty = false;
-      CR.planBy = j.direct ? "Read from the workbook exactly as it is" : `Read by ${j.provider || "the model"} from ${list.length} file${list.length === 1 ? "" : "s"}`;
-      CR.planNotes = [...(j.direct ? [] : [`Read ${read}.`]), ...(j.notes || [])];
-      CR.bundle = null; CR.report = null; CR.workbook = null; CR.notes = [];
-      if (thenBuild || j.direct) { busy(false); return doBuild(); }
-      pageCreate(M, slug); afterRender("#cr-planbox");
-    } catch (err) { failed(err); }
-  };
-  $("#cr-plan").onclick = () => doPlan();
-  $("#cr-build").onclick = () => doBuild();
-  $("#cr-enhance").onclick = async () => {
-    const req = $("#cr-req").value.trim();
-    if (!req && !CR.brief) return fail(new Error("Describe the requirement first: a line or two in your own words is enough."));
-    busy(true); status("Enhancing the requirement…");
-    try {
-      const body = { requirement: req, brief: CR.brief };
-      if (CR.picked.length && CR.srcKey !== pickedKey()) body.files = await filesBody(); else body.text = CR.srcText || "";
-      const j = await api("bundle/enhance", { method: "POST", body });
-      CR.brief = j.brief; CR.briefBy = j.provider || "";
-      drawBrief(); status("The brief is below. Edit it, then Plan or Build."); afterRender("#cr-brief");
-      busy(false); showPicked();
-    } catch (err) { failed(err); }
-  };
-  $("#cr-blank").onclick = async (e) => {
-    e.preventDefault();
-    if (CR.rows && !(await confirmBox("Start a blank plan?", "This replaces the plan you have now.", "Start blank"))) return;
-    CR.rows = { "Atlas": { "Title": "", "City": "" }, "Options": [{}] }; CR.label = "Typed in"; CR.planBy = "Blank"; CR.planNotes = []; CR.tab = "Options"; CR.extraCols = {}; CR.dirty = false;
-    showPicked(); await drawPlan(); afterRender("#cr-planbox");
-  };
-  drawBrief(); drawPlan(); showPicked();
-  if ($("#cr-dl-wb")) $("#cr-dl-wb").onclick = () => {
-    const bin = atob(CR.workbook), arr = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
-    const blob = new Blob([arr], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" }), a = document.createElement("a");
-    a.href = URL.createObjectURL(blob); a.download = `${CR.wbName || "atlas"}.xlsx`; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-  };
-  /* The example lives at /examples/andheri-flex.xlsx, so a demo needs no
-     file on anyone's disk, and nothing that cannot drive a file dialog
-     (a browser agent, a walkthrough) is stuck at this step. It is planned
-     as it is (no requirement applied), so it needs no model. */
-  if ($("#cr-example")) $("#cr-example").onclick = async (e) => {
-    e.preventDefault();
-    status("Reading the example…");
-    try {
-      const res = await fetch("/examples/andheri-flex.xlsx", { cache: "no-store" });
-      if (!res.ok) throw new Error("The example workbook is not on this site.");
-      const file = new File([await res.blob()], "andheri-flex.xlsx", { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
-      await doPlan({ files: [file], plain: true });
-    } catch (err) { failed(err); }
-  };
-  $("#cr-gen").onclick = () => { $("#cr-pass").value = randomPassword(); };
+}
+
+/* ---- 6 · share ---- */
+function stepShare(M, W) {
+  const st = CR.status, slug = CR.slug;
+  const liveId = CR.lastIssued || (CR.access.find(a => a.active) || {}).access_id || (st && st.access_id) || "";
+  const meta = (CR.bundle && CR.bundle.meta) || {};
+  const title = (CR.look && CR.look.title) || meta.title || (st && st.name) || "";
+  const canPublish = !!(st && st.draft);
+  W.innerHTML = `${st && !CR.bundle ? `<div class="card" style="margin-bottom:14px;border-color:var(--acc2)"><b>Change this atlas</b><div class="small mut" style="margin:4px 0 8px">Edit data opens the plan it was built from: change anything, add files, rebuild, then save and publish a new version.</div><div class="row-gap"><button class="btn pri" type="button" id="sh-edit">Edit data</button><button class="btn" type="button" id="sh-look">Change the look</button></div></div>` : ""}
+    <h2>${st ? "Share it" : "Name it and share it"}</h2>
+    <div class="formgrid">
+      <div><label class="f">Name</label><input class="in" id="cr-name" value="${esc(st ? st.name : title)}" placeholder="Pune office study"></div>
+      <div><label class="f">Link</label><input class="in mono" id="cr-slug" value="${esc(slug || slugify(title))}" ${slug ? "disabled" : ""} placeholder="pune-office-study"><div class="small mut">atlas.autopilotoffices.com/<i>this</i>. Cannot change once saved.</div></div>
+      <div><label class="f">City</label><input class="in" id="cr-city" value="${esc(st ? st.city || "" : meta.city || "")}"></div>
+      <div><label class="f">Access ID</label><input class="in mono" id="cr-access" value="${esc(liveId || slugify(title).toUpperCase())}" placeholder="ACME-PUNE"><div class="small mut">What the client types to get in.</div></div>
+      <div><label class="f">Password</label><div style="display:flex;gap:6px"><input class="in mono" id="cr-pass" value="${esc(CR.lastPass || (liveId ? "" : (CR.genPass = CR.genPass || randomPassword())))}" placeholder="At least 10 characters"><button class="btn" type="button" id="cr-gen">New</button></div><div class="small mut">${CR.lastPass ? "The password you just set. It is not shown again once you leave this page." : liveId ? "Leave empty to keep the current password, or type a new one." : "Made for you. Shown once; copy it to the client."}</div>${liveId && CR.lastPass ? `<button class="btn sm" type="button" id="cr-copy2" style="margin-top:6px">Copy the sign-in details</button>` : ""}</div>
+      <div><label class="f">Issued to</label><input class="in" id="cr-who" placeholder="Name of the person or firm"></div>
+    </div>
+    <div class="acts" style="justify-content:flex-start"><button class="btn pri" id="cr-save" type="button" ${CR.bundle || st ? "" : "disabled"}>${st ? (CR.bundle ? "Save as the new draft" : "Save changes") : "Save"}</button><span class="small mut" id="cr-save-note">${CR.bundle ? "Saving does not publish: the client sees nothing until you press Publish." : ""}</span></div>
+    ${slug ? `<div class="card" style="margin-top:14px"><b>Preview and publish</b><p class="mut small" style="margin:4px 0 8px">Preview opens the saved draft exactly as a client would see it. Publishing makes it live within about half a minute and keeps a numbered version here. The client never sees a version number.</p>
+      <div class="row-gap"><a class="btn" id="cr-preview" href="/${encodeURIComponent(slug)}?draft=1" target="_blank" rel="noopener" ${canPublish ? "" : 'aria-disabled="true" style="pointer-events:none;opacity:.5"'}>Preview the draft ↗</a>
+      ${can("admin") ? `<button class="btn pri" id="cr-publish" type="button" ${canPublish ? "" : "disabled"}>${st && st.published ? "Publish the draft" : "Publish"}</button>` : `<span class="small mut">An admin publishes.</span>`}</div>
+      ${st && st.published ? `<div class="card" style="margin-top:12px;border-color:var(--ok)"><b>Live.</b> Send the client <span class="mono">atlas.autopilotoffices.com/${esc(slug)}</span>${liveId ? ` with access ID <span class="mono">${esc(liveId)}</span>` : ""}${CR.lastPass ? ` and password <span class="mono">${esc(CR.lastPass)}</span>` : ""}.
+        <div class="row-gap" style="margin-top:8px"><a class="btn sm" href="/${encodeURIComponent(slug)}" target="_blank" rel="noopener">Open the live atlas ↗</a>${liveId && CR.lastPass ? `<button class="btn sm" type="button" id="cr-copy">Copy the sign-in details</button>` : ""}</div></div>` : ""}</div>` : ""}
+    ${CR.access.length ? `<h3 style="margin:14px 0 6px">Access IDs</h3><div class="tw"><table class="t"><thead><tr><th>Access ID</th><th>Issued to</th><th>Last used</th><th>Status</th><th></th></tr></thead><tbody>
+      ${CR.access.map(a => `<tr><td class="mono">${esc(a.access_id)}</td><td>${esc(a.name || "-")}</td><td class="mut">${ago(a.last_used_at)}</td><td><span class="chip ${a.active ? "ok" : "warn"}">${a.active ? "active" : "revoked"}</span></td><td>${can("admin") ? `<button class="btn sm ghost" type="button" data-revoke="${esc(a.access_id)}" data-active="${a.active ? "0" : "1"}">${a.active ? "Revoke" : "Re-enable"}</button>` : ""}</td></tr>`).join("")}
+    </tbody></table></div>` : ""}
+    ${CR.history.length ? `<h3 style="margin:14px 0 6px">Versions</h3><div class="tw"><table class="t"><thead><tr><th>Version</th><th>What</th><th>By</th><th>When</th><th>Note</th><th></th></tr></thead><tbody>
+      ${CR.history.map(h => `<tr><td><span class="chip ${h.version === st.version ? "dark" : ""}">v${h.version}</span>${h.version === st.version ? ` <span class="small mut">live</span>` : ""}</td><td>${h.action === "rollback" ? "Went back" : "Published"}</td><td>${esc(h.by_email || "")}</td><td class="mut">${esc(when(h.at))}</td><td class="small">${esc(h.note || "")}</td>
+        <td>${can("admin") && h.version !== st.version ? `<button class="btn sm" type="button" data-rb="${esc(h.id)}" data-v="${h.version}">Make this live again</button>` : ""}</td></tr>`).join("")}
+    </tbody></table></div><div class="small mut" style="margin-top:6px">Going back publishes that version again as a new number, and resets the draft to it.</div>` : ""}
+    ${CR.bundle ? nav(5, 0, "") : ""}`;
+  bindNav(M, W);
+  if ($("#sh-edit")) $("#sh-edit").onclick = () => editData(M, 4);
+  if ($("#sh-look")) $("#sh-look").onclick = () => editData(M, 5);
+  $("#cr-gen").onclick = () => { $("#cr-pass").value = CR.genPass = randomPassword(); };
   $("#cr-save").onclick = async () => {
     const id = slug || slugify($("#cr-slug").value);
     const name = $("#cr-name").value.trim(), city = $("#cr-city").value.trim();
     const access = $("#cr-access").value.trim().toUpperCase(), pass = $("#cr-pass").value, who = $("#cr-who").value.trim();
-    if (!id) return fail(new Error("Give the atlas a link id."));
+    if (!id) return fail(new Error("Give the atlas a link."));
     const note = $("#cr-save-note"); note.textContent = "Saving…";
     try {
-      if (CR.bundle) await api("bundle/draft", { method: "POST", body: { slug: id, name, city, bundle: CR.bundle } });
-      else if (!st) return fail(new Error("Upload a workbook first."));
+      if (CR.bundle) await api("bundle/draft", { method: "POST", body: { slug: id, name, city, bundle: withLook(CR.bundle) } });
       if (access && pass) {
-        if (!can("admin")) toast("Saved the draft. An admin has to issue the access ID.", true);
+        if (!can("admin")) toast("Saved. An admin has to issue the access ID.", true);
         else { await api("access/issue", { method: "POST", body: { slug: id, access_id: access, password: pass, name: who } }); CR.lastIssued = access; CR.lastPass = pass; }
-      } else if (access && !pass && !liveId) toast("Saved. Set a password to issue the access ID.", true);
+      }
       toast("Saved.");
-      CR.bundle = null; CR.report = null; CR.notes = []; CR.fileName = "";
+      const keep = { lastIssued: CR.lastIssued, lastPass: CR.lastPass };
       ST.links = (await api("links")).links;
+      Object.assign(CR, CR_FRESH(), keep, { slug: id, step: 6, maxStep: 6 });
       location.hash = `#/create/${encodeURIComponent(id)}`;
       if (slug === id) pageCreate(M, id);
     } catch (err) { note.textContent = ""; fail(err); }
   };
   if ($("#cr-publish")) $("#cr-publish").onclick = async () => {
-    modal(`<h2>Publish ${esc(title)}</h2><p class="mut">It goes live for anyone with its access ID within about half a minute, as version ${(st && st.version || 0) + 1}. You can go back to any earlier version from this page.</p>
+    modal(`<h2>Publish ${esc(st.name)}</h2><p class="mut">It goes live for anyone with its access ID within about half a minute, as version ${(st && st.version || 0) + 1}. You can go back to any earlier version from this page.</p>
       <label class="f" for="pb-note">Note for the history (optional)</label><input class="in" id="pb-note" maxlength="300" placeholder="e.g. Added the two Marol options">
       <div class="acts"><button class="btn" data-close type="button">Cancel</button><button class="btn pri" id="pb-go" type="button">Publish now</button></div>`, (m) => {
       $("#pb-go", m).onclick = async (e) => {
@@ -759,16 +898,31 @@ async function pageCreate(M, slug) {
       };
     });
   };
-  $$("[data-rb]", M).forEach(b => b.onclick = async () => {
+  $$("[data-rb]", W).forEach(b => b.onclick = async () => {
     if (!(await confirmBox(`Make version ${b.dataset.v} live again?`, "It goes live straight away, as a new version number, and replaces the current draft.", "Make it live", true))) return;
     try { const r = await api("bundle/rollback", { method: "POST", body: { slug, historyId: b.dataset.rb } }); toast(`Version ${b.dataset.v} is live again (now version ${r.version}).`); ST.links = (await api("links")).links; pageCreate(M, slug); } catch (err) { fail(err); }
   });
-  if ($("#cr-copy")) $("#cr-copy").onclick = (e) => copy(`atlas.autopilotoffices.com/${slug}\nAccess ID: ${liveId}\nPassword: ${CR.lastPass}`, e.target);
-  $$("[data-revoke]", M).forEach(b => b.onclick = async () => {
+  for (const id of ["#cr-copy", "#cr-copy2"]) if ($(id)) $(id).onclick = (e) => copy(`atlas.autopilotoffices.com/${slug}\nAccess ID: ${liveId}\nPassword: ${CR.lastPass}`, e.target);
+  $$("[data-revoke]", W).forEach(b => b.onclick = async () => {
     const on = b.dataset.active === "1";
     if (!on && !(await confirmBox("Revoke this access ID?", `<span class="mono">${esc(b.dataset.revoke)}</span> will stop opening the atlas at once.`, "Revoke", true))) return;
     try { await api("access/revoke", { method: "POST", body: { access_id: b.dataset.revoke, active: on } }); toast(on ? "Re-enabled." : "Revoked."); pageCreate(M, slug); } catch (err) { fail(err); }
   });
+}
+
+/* Edit data: the plan this atlas was built from, rebuilt, back at Review. */
+async function editData(M, step) {
+  try {
+    const p = await api("bundle/plan", { query: { link: CR.slug } });
+    const look = Object.assign({}, p.look || {});
+    if (look.cover === undefined && look.backdrop && /^(https?:|\/)/.test(look.backdrop)) look.cover = look.backdrop;
+    Object.assign(CR, { rows: p.rows, type: p.type || (look.layout) || "decide", look, brief: p.brief || null, req: p.requirement || "", editing: true,
+      planBy: p.from === "saved" ? "The plan this atlas was built from" : "Rebuilt from the published atlas", planNotes: [], label: CR.status && CR.status.name });
+    CR.work = [{ k: "build", s: "todo" }];
+    CR.maxStep = Math.max(CR.maxStep, 3); CR.step = 3; drawWizard(M);
+    await runWork(M);
+    if (step === 5 && CR.bundle) go(M, 5);
+  } catch (err) { fail(err); }
 }
 
 /* ==================================================== content editor ==

@@ -41,6 +41,31 @@ passes in `/admin/` is exactly what the engine can draw.
 | `imagery` | object | no | `{name, detail, checked, credit, src}` for the satellite credit. |
 | `columns` | object | no | Display rules for the extra option columns. See block 3. |
 | `brand` | object | no | `{title, sub}` to override the header. Defaults to `title` and `sub`. |
+| `layout` | string | no | What the atlas leads with: `decide` (the default: options compared and ranked), `place` (one site and everything around it) or `network` (locations across cities). See "Layouts" below. |
+| `rings` | number[] | no | Drive-time minutes. Defaults to `[15, 30, 45]`, or `[10, 20, 30]` for a place. |
+
+### Layouts
+
+Every layout keeps the basics: the sign-in page, pins that say how exact they
+are, the metro, sources on every fact and the phone layout. What changes is
+what the page opens on.
+
+- **`decide`** compares the options: the ranking, the chooser, distances,
+  the conclusion. Everything the rest of this document describes.
+- **`place`** is about the option ranked first, the site. The map opens on
+  its drive-time areas, routed by the Mapbox Isochrone API with typical
+  traffic (circles from `speed` stand in until they load, or if they
+  cannot). The site view counts every place inside each area by `kind`,
+  and `places[].operator` adds a Competition tab: every operator, its
+  centres, how many fall in each area. The list is the site, then
+  everything around it, nearest first. Distances, the chooser and the
+  conclusion are not shown.
+- **`network`** groups the options by `options[].city` (a row with none
+  joins the nearest city within 40 km, or is grouped by its locality).
+  Zoomed out the map shows one bubble per city with its count; the pins
+  take over from zoom 7.6. The opening view lists the cities, the list is
+  grouped by city, and a city can be picked from a chip, a bubble or a
+  link (`#/city/<key>`). Facts in a group named after a city show under it.
 
 ## 2. `existing` (optional)
 
@@ -59,7 +84,7 @@ The properties being compared. One row per option.
 **Core, required:** `id` (slug, unique), `name`, `lat`, `lng`.
 
 **Core, optional:** `n` (rank or display order), `micro` (a `zones[].key`),
-`address`, `locality`, `precision`, `geoSrc`, `geoNote`, `fit` (a fit group
+`address`, `locality`, `city` (groups a network), `precision`, `geoSrc`, `geoNote`, `fit` (a fit group
 key), `reason` (why it scores as it does), `facts` (see below), `img`,
 `photo`, `thumb`, `flag`.
 
@@ -136,7 +161,8 @@ Context pins: employers, institutes, homes, hospitals, studios, tech parks.
 
 Required when present: `id`, `kind`, `name`, `lat`, `lng`.
 Optional: `sub`, `precision`, `note`, `src`, `size`, `group`, `locality`,
-`occupiers`, `confidence`.
+`occupiers`, `confidence`, `operator` (the brand that runs it; a place atlas
+counts competition by it).
 
 `kind` groups pins into a toggleable map layer. The engine builds one layer
 per distinct `kind` and labels it from `meta.columns[kind].label` when given.

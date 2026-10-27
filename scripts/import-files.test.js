@@ -14,12 +14,13 @@
    and keeps.
    ============================================================================ */
 "use strict";
+process.env.ATLAS_METRO = "off";   // no public services in tests; scripts/metro.test.js covers the metro
 const path = require("path");
 const fs = require("fs");
 const ExcelJS = require("exceljs");
 const JSZip = require("jszip");
 const { importSources, plan, workbookRows, readSource, docxText, kindOf, MAX_FILES } = require("../api/cms/_sources");
-const { MAX_CHARS, build, askFor } = require("../api/cms/_pdf");
+const { MAX_CHARS, build, askFor, promotePlaces } = require("../api/cms/_pdf");
 const brief = require("../api/cms/_brief");
 const model = require("../api/cms/_llm");
 const { askModel } = require("../api/cms/_pdf");
@@ -167,6 +168,23 @@ const geocoder = async (q) => { const k = Object.keys(GEO).find(k => q.toLowerCa
   ok("nothing to enhance is a plain message", e && e.status === 400 && /Describe the requirement/.test(e.message));
   e = await threw(() => brief.enhance({ requirement: "x" }, { complete: async () => ({ json: {} }) }));
   ok("an empty answer asks to press Enhance again", e && e.status === 502 && /Enhance again/.test(e.message));
+
+  /* ---- a list of centres and nothing proposed ----
+     A coworking market survey names no building on offer. Filed under
+     Places, it would leave the atlas nothing to compare; the centres are
+     the options. */
+  const surveyBuf = Buffer.from("Operator,Building,Location,Pricing,Occupancy,Grade\nAWFIS,Skyline Icon,Marol,Rs. 13000 per seat + taxes,80% - 85%,Grade A\nWe Work,Light Bridge,Chandivali,Rs. 25000 per seat + taxes,75% - 80%,Grade A\n");
+  const onlyPlaces = async () => ({ rows: { "Atlas": { "Title": "Coworking operators" }, "Places": [
+    { "ID": "awfis-skyline-icon", "Kind": "flex", "Name": "AWFIS, Skyline Icon", "Second line": "Rs 13,000 a seat + taxes", "Address": "Skyline Icon, Marol, Mumbai", "Occupancy": "80% - 85%" },
+    { "ID": "wework-light-bridge", "Kind": "flex", "Name": "WeWork, Light Bridge", "Second line": "Rs 25,000 a seat + taxes", "Address": "Light Bridge, Chandivali, Mumbai" },
+  ] } });
+  const sp = await plan([{ name: "Coworking_Operators.csv", buf: surveyBuf }], { llm: onlyPlaces });
+  ok("a survey filed only as places comes back with the centres as the options", sp.rows["Options"].length === 2 && sp.rows["Places"].length === 0 && sp.notes.some(n => /nothing proposed/.test(n)), JSON.stringify(sp.rows["Options"]).slice(0, 200));
+  ok("each centre keeps its name, figures and address as an option", sp.rows["Options"][0]["Property name"] === "AWFIS, Skyline Icon" && sp.rows["Options"][0]["Details"] === "Rs 13,000 a seat + taxes" && sp.rows["Options"][0]["Occupancy"] === "80% - 85%" && !("Kind" in sp.rows["Options"][0]));
+  const sb = await build(sp.rows, { geocoder: async (q) => /skyline/i.test(q) ? { lat: 19.119, lng: 72.882, precision: "building", label: q } : { lat: 19.114, lng: 72.9, precision: "building", label: q } });
+  ok("and it builds into an atlas of two options", sb.report.ok && sb.bundle.options.length === 2, JSON.stringify(sb.report.errors));
+  const mixed = { "Options": [{ "ID": "a", "Property name": "A" }], "Places": [{ "ID": "p", "Kind": "flex", "Name": "P" }] };
+  ok("places stay places when there are options to compare", promotePlaces(mixed) === 0 && mixed["Places"].length === 1);
 
   /* ---- the Claude call itself ----
      Current models think before they answer, and the thinking counts

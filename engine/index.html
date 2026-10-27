@@ -27,7 +27,7 @@
 <script src="/config.js?v=eng1"></script>
 <!-- Where the bundle comes from: ./bundle.js for the demo, or the CMS when
      the page is opened as /engine/?atlas=<id>. See load.js. -->
-<script src="/engine/load.js?v=eng2"></script>
+<script src="/engine/load.js?v=eng3"></script>
 <style>
 /* Palette follows the Autopilot deck, as on the Indore study: espresso,
    cream and terracotta. Colour never carries meaning alone; every score,
@@ -164,6 +164,7 @@ p{line-height:1.55;margin:6px 0}
 .chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 select,.inp{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 8px;font:inherit;font-size:12.5px;color:var(--ink)}
 .sortrow{margin-top:10px;display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--mut)}
+.sortrow.off{display:none}
 .sortrow select{flex:1}
 #list{flex:1;overflow:auto;padding:8px}
 .card{display:grid;grid-template-columns:62px 1fr;gap:10px;padding:8px;border-radius:12px;cursor:pointer;border:1px solid transparent;position:relative;text-align:left;width:100%;background:transparent}
@@ -177,6 +178,15 @@ select,.inp{border:1px solid var(--line);background:#fff;border-radius:8px;paddi
 .card .facts span{white-space:nowrap}
 .card > div{padding-right:26px;min-width:0}
 .card .score{position:absolute;top:8px;right:8px;font-family:var(--mono);font-size:11px;color:var(--mut)}
+/* a place atlas lists what is around the site; a network groups by city */
+.card.pc{grid-template-columns:36px 1fr;align-items:start}
+.card .kd{width:36px;height:36px;border-radius:9px;background:var(--z);color:#fff;display:grid;place-items:center;font-family:var(--mono);font-size:10.5px;letter-spacing:.02em}
+.band{display:inline-block;font-family:var(--mono);font-size:10.5px;line-height:16px;padding:0 6px;border-radius:999px;background:var(--accbg);color:var(--acc);white-space:nowrap}
+.band.out{background:rgba(60,40,25,.06);color:var(--mut)}
+.cityh{display:flex;align-items:baseline;gap:8px;margin:14px 8px 4px;font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.cityh button,.cityh b{border:0;background:none;padding:0;font:inherit;color:var(--ink);font-weight:600;cursor:pointer;letter-spacing:.1em}
+.cityh button:hover{color:var(--acc)}
+.ring-tbl tr.hl td{background:var(--accbg)}
 /* Option tile: a satellite crop where the building is pinned exactly,
    otherwise the micro-market colour with the option number. */
 .tile{position:relative;width:62px;height:56px;border-radius:9px;overflow:hidden;display:grid;place-items:center;background:var(--z,#a3502c);color:#fff;font-family:var(--mono);font-weight:500;font-size:15px}
@@ -468,6 +478,8 @@ table.cmp td.best{background:#f1e6d8;font-weight:600}
   body[data-sheet="full"] #board{opacity:0;pointer-events:none}
   #board .bhead{display:none}
   #list{display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;padding:4px 8px;scroll-snap-type:x mandatory;scrollbar-width:none}
+  #list .card.pc{grid-template-columns:36px 1fr}
+  #list .cityh{flex:0 0 auto;flex-direction:column;justify-content:center;gap:2px;margin:0 2px;max-width:96px;white-space:normal}
   #list::-webkit-scrollbar{display:none}
   #list .card{flex:0 0 236px;scroll-snap-align:start;background:var(--panel-solid);box-shadow:var(--e1);border:1px solid var(--line);grid-template-columns:54px 1fr;padding:7px}
   #list .card .tile{width:54px;height:50px}
@@ -594,7 +606,7 @@ table.cmp td.best{background:#f1e6d8;font-weight:600}
    worst case is an Atlas with no tracking rather than no Atlas. */
 (window.AtlasLoad || Promise.resolve()).then(function () {
   var slug = (window.ATLAS && window.ATLAS.slug) || "atlas";
-  var app = "/engine/app.js?v=eng7";
+  var app = "/engine/app.js?v=eng8";
   if (window.AtlasCMS) AtlasCMS.boot(slug, { app: app });
   else { var s = document.createElement("script"); s.src = app; document.body.appendChild(s); }
 });
