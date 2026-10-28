@@ -144,23 +144,25 @@
   /* Stacked horizontal bars: one row per option, segments in order. */
   function stacked(rows, segs, opts) {
     opts = opts || {};
-    var w = opts.w || 420, rowH = 34, pl = 70, pr = 70, h = rows.length * rowH + 22;
+    var w = opts.w || 420, rowH = 44, barH = 26, pl = 70, pr = 70, h = rows.length * rowH + 22;
     var hi = Math.max.apply(null, rows.map(function (r) { return r.total; })) * 1.02;
     var X = function (v) { return pl + (w - pl - pr) * (v / hi); };
     var out = "";
     rows.forEach(function (r, i) {
       var y = i * rowH + 4, x = pl;
-      out += '<text class="lbl" x="' + (pl - 6) + '" y="' + (y + 14) + '" text-anchor="end" font-weight="600">' + esc(r.label) + "</text>";
+      out += '<text class="lbl" x="' + (pl - 6) + '" y="' + (y + 13) + '" text-anchor="end" font-weight="600">' + esc(r.label) + "</text>";
       out += '<text class="ax" x="' + (pl - 6) + '" y="' + (y + 24) + '" text-anchor="end">' + esc(r.sub || "") + "</text>";
       segs.forEach(function (s, k) {
         var v = r.values[k], bw = X(v) - pl;
-        out += '<rect x="' + x + '" y="' + y + '" width="' + bw + '" height="20" fill="' + s.color + '"/>';
-        if (bw > 26) out += '<text class="val" x="' + (x + bw / 2) + '" y="' + (y + 13.5) + '" text-anchor="middle" fill="#fff">' + esc((opts.fmt || String)(v)) + "</text>";
+        out += '<rect x="' + x + '" y="' + y + '" width="' + bw + '" height="' + barH + '" fill="' + s.color + '"/>';
+        if (bw > 26) out += '<text class="val" x="' + (x + bw / 2) + '" y="' + (y + barH / 2 + 3.5) + '" text-anchor="middle" fill="#fff">' + esc((opts.fmt || String)(v)) + "</text>";
         x += bw;
       });
-      out += '<text class="val" x="' + (x + 5) + '" y="' + (y + 13.5) + '">' + esc(r.note || (opts.fmt || String)(r.total)) + "</text>";
+      out += '<text class="val" x="' + (x + 5) + '" y="' + (y + barH / 2 + 3.5) + '">' + esc(r.note || (opts.fmt || String)(r.total)) + "</text>";
     });
-    var g = 5; for (var i = 0; i <= g; i++) { var v = hi * i / g; out += '<text class="ax" x="' + X(v) + '" y="' + (h - 4) + '" text-anchor="middle">' + esc((opts.axisFmt || opts.fmt || String)(v)) + "</text>"; }
+    /* axis ticks on a round step (1, 2, 2.5 or 5 times a power of ten), about five of them */
+    var raw = hi / 5, mag = Math.pow(10, Math.floor(Math.log10(raw))), step = [1, 2, 2.5, 5, 10].map(function (m) { return m * mag; }).filter(function (t) { return t >= raw; })[0];
+    for (var v = 0; v <= hi + 1e-9; v += step) out += '<text class="ax" x="' + X(v) + '" y="' + (h - 4) + '" text-anchor="middle">' + esc((opts.axisFmt || opts.fmt || String)(v)) + "</text>";
     return svg(w, h, out) + '<div class="leg">' + segs.map(function (s) { return "<span><i style=\"background:" + s.color + '"></i>' + esc(s.label) + "</span>"; }).join("") + "</div>";
   }
   /* The occupancy scale: 60% to 100%, with the thresholds marked. Labels
@@ -267,7 +269,10 @@
     });
     var mt = "Middle " + R(med), mw = mt.length * 5.1, mx = X(med) - mw / 2;
     if (!ourX.every(function (ax) { return ax < mx - 4 || ax > mx + mw + 4; })) mx = side(X(med), mw, ourX);
-    out += '<line x1="' + X(med) + '" x2="' + X(med) + '" y1="' + (15 + nO * 13) + '" y2="' + (h - pb) + '" stroke="#2a1e16" stroke-dasharray="3 3"/><text class="ax" x="' + mx + '" y="' + (12 + nO * 13) + '">' + esc(mt) + "</text>";
+    /* the median line stops above the stack of dots it would cross, so it never runs through them */
+    var mk = Math.floor(med / band) * band, under = cols[mk] && Math.abs(X(mk + band / 2) - X(med)) < 8;
+    var my2 = under ? h - pb - 6 - (cols[mk].length - 1) * dy - 9 : h - pb;
+    out += '<line x1="' + X(med) + '" x2="' + X(med) + '" y1="' + (15 + nO * 13) + '" y2="' + my2 + '" stroke="#2a1e16" stroke-dasharray="3 3"/><text class="ax" x="' + mx + '" y="' + (12 + nO * 13) + '">' + esc(mt) + "</text>";
     return svg(w, h, out);
   }
 
