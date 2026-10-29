@@ -2,7 +2,7 @@
 
 Internal study: the coworking competitors in the market, then Autopilot's proposed inventory. Data current to October 2026.
 
-Reading copy of `examples/andheri-coworking.xlsx`, built from `examples/andheri-coworking-detailed-data.xlsx` (the team's detailed sheet) and Proposed_Inventory.pdf. Every value on a centre is a cell from the sheet; only the map position is added.
+Reading copy of the atlas (`examples/andheri-coworking.bundle.json`), built from `examples/andheri-coworking-detailed-data.xlsx` (the team's detailed sheet) and Proposed_Inventory.pdf. Every value on a centre is a cell from the sheet; only the map position is added.
 
 ## Coworking competitors
 
