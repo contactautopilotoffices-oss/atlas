@@ -77,5 +77,8 @@ what it fixes, and fixes the worst one to three first.
 - Recent deals: with no "what it means" copy the table now takes the full
   width, but the page still has no pairing box.
 - The terms table sets the small notes under big figures in the serif face.
-- Price ladder: the chart leaves a wide empty strip above the dots, and the
-  page ends at about two thirds.
+- Market points with one chart (page 15): the chart now sits under the
+  headline, but the "what it means" box beside it is short, so the right
+  column is empty below it.
+- Market points with three charts (page 14): a gap between the charts and the
+  figure below them.

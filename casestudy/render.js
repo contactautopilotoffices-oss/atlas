@@ -238,7 +238,7 @@
     if (!rivals.length) return "";
     var band = 2000, lo = Math.floor(Math.min.apply(null, rivals.map(function (r) { return r.price; })) / band) * band;
     var hi = Math.ceil(Math.max(Math.max.apply(null, rivals.map(function (r) { return r.price; })), c.priceHigh) / band) * band + band;
-    var nO = c.options.length, w = 820, pl = 16, pr = 16, pb = 26, pt = 20 + (nO + 1) * 13, h = pt + 140, X = function (p) { return pl + (w - pl - pr) * ((p - lo) / (hi - lo)); };
+    var nO = c.options.length, w = 820, pl = 16, pr = 16, pb = 26, pt = 20 + (nO + 1) * 13, h = pt + 200, X = function (p) { return pl + (w - pl - pr) * ((p - lo) / (hi - lo)); };
     var cols = {}; rivals.forEach(function (r) { var k = Math.floor(r.price / band) * band; (cols[k] = cols[k] || []).push(r); });
     var out = "", maxN = Math.max.apply(null, Object.keys(cols).map(function (k) { return cols[k].length; }));
     var dy = Math.min(13, (h - pt - pb) / maxN);
@@ -402,7 +402,7 @@
       var h3 = d.section("market", "Market research and analysis", copy(b, "market", "intro")[0] || SECTION_SUBS.market, secK("market"), "market");
       /* big: the page's only chart, drawn wider and taller to fill its column. */
       var chartFor = function (key, big) {
-        var sz = big ? { w: 460, h: 210 } : {};
+        var sz = big ? { w: 460, h: 250 } : {};
         var pts = series(key); if (!pts.length) return "";
         var title = { vacancy: "Vacancy", rent: "Average rent · " + sym + " a sq ft a month", topBand: "Office rent, top Grade-A buildings · " + sym + " a sq ft a month · dashed = projection", flexSeats: "Flex seats leased, first half of each year", operatorOccupancy: "Settled centres are this full", absorptionShare: "Share of net absorption" }[key] || key;
         var body;
@@ -426,7 +426,7 @@
         var layout;
         if (charts.length >= 2) layout = "<div class='cols c2'><div class='cols c" + Math.min(charts.length, 3) + "' style='grid-column:1 / -1;flex:0 0 auto'>" + chartHtml + "</div><div style='grid-column:1 / -1'>" + kpiHtml + meansHtml + "</div></div>";
         /* one chart: the chart takes the wide column, the figure and its meaning sit beside it */
-        else if (charts.length === 1) layout = "<div class='cols c32' style='align-items:center'>" + chartHtml + "<div>" + kpiHtml + meansHtml + "</div></div>";
+        else if (charts.length === 1) layout = "<div class='cols c32' style='align-items:start'>" + chartHtml + "<div>" + kpiHtml + meansHtml + "</div></div>";
         /* no chart: a statement page, the figure large beside what it means, centred in the page */
         else layout = "<div class='statement" + (p.kpi ? "" : " solo") + "'>" + (p.kpi ? "<div class='kpi'><div class='v'>" + esc(code(b, c, p.kpi)) + "</div><div class='l'>" + esc(p.kpiLabel || "") + "</div></div>" : "") + meansHtml + "</div>";
         d.add({ hdr: h3, src: src(b, "market") + (p.chart === "flexSeats" ? " " + src(b, "flex") : ""), body: "<h2><span class='pt'><span class='n'>" + String(p.n || "").padStart(2, "0") + "</span></span>" + esc(p.title) + "</h2>" + layout });
@@ -507,7 +507,7 @@
         var above = withOcc.filter(function (r) { return (r.occLow / 100) >= c.breakEven; }).length;
         d.add({ hdr: h8, src: src(b, "occupancyRivals"), body: "<h2>How full rival centres run, and who runs fullest</h2><div class='cols' style='grid-template-columns:repeat(" + bk.length + ",1fr);gap:8mm;flex:0 0 auto;align-items:end'>" + bk.map(function (k) { return "<div><div class='val' style='font-family:var(--serif);font-size:16pt;text-align:center'>" + bands[k].length + "</div><div style='background:" + (parseInt(k, 10) / 100 >= c.breakEven ? COLORS[2] : COLORS[1]) + ";height:" + Math.min(42, 4 + bands[k].length * 2.8) + "mm;border-radius:3px;opacity:.85'></div><div class='tiny mut' style='text-align:center;margin-top:1mm'><b>" + esc(k) + " full</b></div><div class='who'>" + bands[k].map(function (r) { return esc(r.operator + (r.building ? " · " + r.building : "")); }).join("<br>") + "</div></div>"; }).join("") + "</div><div class='foot cols c12' style='flex:0 0 auto;align-items:center'><div><div class='kpis' style='margin:0'>" + kpi(above + " of " + withOcc.length, "above our break-even of " + pc(c.breakEven), "none reports more than " + Math.max.apply(null, withOcc.map(function (r) { return r.occHigh || r.occLow; })) + "%") + "</div></div><div>" + means(b, "occupancyRivals") + "</div></div>" });
       }
-      d.add({ hdr: h8, src: src(b, "ladder"), body: "<h2>Where we sit on the price ladder</h2><div class='t tiny mut' style='letter-spacing:.1em;text-transform:uppercase'>Each dot is one rival centre (" + rivals.length + "), stacked in " + sym + "2,000 bands · price a seat a month, plus taxes · ringed = inside one of our buildings</div>" + ladder(b, c) + "<div class='cols c2' style='margin-top:3mm;flex:0 0 auto'><div class='box'><b class='t'>Why this matters</b><span class='small'>" + esc(rivals.filter(function (r) { return r.price <= median(rivals.map(function (x) { return x.price; })); }).length + " of " + rivals.length + " centres sell at " + R(median(rivals.map(function (x) { return x.price; }))) + " or less.") + " " + c.options.map(function (x) { return x.name + " is dearer than " + rivals.filter(function (r) { return r.price < x.price; }).length + " of them"; }).join("; ") + ".</span></div>" + means(b, "ladder") + "</div>" });
+      d.add({ hdr: h8, src: src(b, "ladder"), body: "<h2>Where we sit on the price ladder</h2><div class='t tiny mut' style='letter-spacing:.1em;text-transform:uppercase'>Each dot is one rival centre (" + rivals.length + "), stacked in " + sym + "2,000 bands · price a seat a month, plus taxes · ringed = inside one of our buildings</div><div class='chart-big'>" + ladder(b, c) + "</div><div class='cols c2' style='margin-top:3mm;flex:0 0 auto'><div class='box'><b class='t'>Why this matters</b><span class='small'>" + esc(rivals.filter(function (r) { return r.price <= median(rivals.map(function (x) { return x.price; })); }).length + " of " + rivals.length + " centres sell at " + R(median(rivals.map(function (x) { return x.price; }))) + " or less.") + " " + c.options.map(function (x) { return x.name + " is dearer than " + rivals.filter(function (r) { return r.price < x.price; }).length + " of them"; }).join("; ") + ".</span></div>" + means(b, "ladder") + "</div>" });
     }
 
     /* ---- decision ---- */
