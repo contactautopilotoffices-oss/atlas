@@ -44,7 +44,7 @@ function setField(ws, label, v) { for (let r = 4; r <= ws.rowCount; r++) { const
 
 /* ---------------------------------------------------------------- data -- */
 const AS_OF = "2026-10";
-const VISIT = "Visited_Co-working_Space.xlsx, Autopilot site visits, October 2026";
+const VISIT = "Detailed Data - Coworking Spaces, Andheri East (Autopilot site visits, October 2026)";
 
 /* Building positions, researched 23 Oct 2026. `exact` is what the pin can
    claim; `geoNote` says where the figure came from and what sits next to it. */
@@ -54,6 +54,12 @@ const GEO = {
   "chandak-chambers": { lat: 19.115847, lng: 72.855922, precision: "building", src: "https://exa.ai/library/place/dwzfqrcs71d", note: "Map place page; not in OpenStreetMap. The developer's own page puts WEH metro at 50 m and Andheri railway station at 1.1 km (chandakgroup.com/chambers)." },
   "technopolis":   { lat: 19.116337, lng: 72.863254, precision: "complex", src: "https://www.openstreetmap.org/way/102525674", note: "OSM landuse polygon 'Technopolis Knowledge Park', centroid. Mahakali Caves Road, between WEH and MIDC Andheri (Line 3) stations." },
   "akruti-trade-centre": { lat: 19.117623, lng: 72.871394, precision: "building", src: "https://exa.ai/library/place/108dhc19w0v", note: "Map place page for A Wing, Ackruti Trade Centre, Road No. 7, Kondivita (MIDC); a second site gives 19.1179, 72.8714, 30 m away. Not in OpenStreetMap. myHQ gives Chakala (J B Nagar) metro 700 m and Airport Road 850 m; MIDC Andheri on Line 3 is about 250 m east." },
+  "solitaire":     { lat: 19.111739, lng: 72.860714, precision: "building", src: "https://exa.ai/library/place/f4cys4hn5nm", note: "Map place page, Guru Hargovindji Road, Chakala; a DigiPin lookup for the park's address sits 45 m away. About 300 m from the Corporate Avenue pin." },
+  "technopark-74": { lat: 19.122896, lng: 72.872855, precision: "building", src: "https://myhq.in/virtual-office/91springboard-andherieast-2", note: "Coordinate printed on the myHQ listing for 91Springboard Technopark (74/II, C Cross Road, opp. Gate No 2, MIDC); a map place page is 100 m south. Near SEEPZ." },
+  "vkg":           { lat: 19.110926, lng: 72.870906, precision: "building", src: "https://exa.ai/library/place/shf1t6tvjgg", note: "Map place page for VKG Corporate Centre, as used in the earlier Andheri study. Andheri-Kurla Road between Chakala and Airport Road stations." },
+  "dynasty":       { lat: 19.112709, lng: 72.865906, precision: "building", src: "https://exa.ai/library/place/dlth3l6n2fw", note: "Map place page, as used in the earlier Andheri study; three sources agree. Andheri-Kurla Road near Chakala (J B Nagar) station." },
+  "aj-house":      { lat: 19.112195, lng: 72.87929, precision: "building", src: "https://exa.ai/library/place/j6vcm4h6ng9", note: "Map place page, plus code 4V6H+VPF, Marol Maroshi Road, Gamdevi, Marol. Teloz's own page puts Marol Naka metro about 450 m away." },
+  "lotus-star":    { lat: 19.119976, lng: 72.874911, precision: "building", src: "https://myhq.in/virtual-office/91springboard-andherieast", note: "Coordinate printed on the myHQ listing for 91Springboard Lotus Star, Plot D, Road No. 20 (5th Road), Marol MIDC. The sheet names DN Nagar metro; every source puts this centre in Marol MIDC, near MIDC Andheri (Line 3)." },
   "trade-star":    { lat: 19.111638, lng: 72.870408, precision: "poi", src: "https://www.openstreetmap.org/node/2188869089", note: "OSM node 2188869089 'Trade Star', Andheri-Kurla Road, between Chakala (J B Nagar) and Airport Road stations on Line 1." },
   "raheja-platinum": { lat: 19.109416, lng: 72.885635, precision: "building", src: "https://digitalnomadindex.com/spaces/india/maharashtra/mumbai/wework-raheja-platinum-mumbai", note: "Listing page coordinate; a cafe on the building's ground floor is pinned within 2 m of it. Not in OpenStreetMap. Sag Baug Road, off Andheri-Kurla Road; myHQ gives Marol Naka 650 to 800 m and Saki Naka 750 m." },
   "zion-house":    { lat: 19.107648, lng: 72.852979, precision: "building", src: "https://exa.ai/library/place/jdcpx8jszb7", note: "Map place page for Innov8 Zion House; not in OpenStreetMap. On the Western Express Highway in Vile Parle East; Innov8 says 850 m from Andheri station, myHQ gives Gundavali 900 m and WEH 1 km." },
@@ -69,32 +75,52 @@ const GEO = {
    centre at Rustomjee Central Park is a competitor and stays in; the
    building is only left out of the proposed inventory layer. Prices are per seat per month plus GST, as quoted on the
    visit. */
-const CENTRES = [
-  { id: "rush-coworks-boston-house", pubDesk: "Rs 13,000 (myHQ, quoted, negotiable)", pubCabin: "Rs 12,500 for a 1-person office (Office Hub)", pubCap: "14,000 sq ft, about 100 seats (myHQ)", pubSrc: "https://myhq.in/dedicated/coworking-space/inspire-cospace-andheri", n: 1, sheetNo: 1, operator: "Rush Co-works", building: "Boston House", geo: "boston-house", micro: "weh", grade: "B", seats: 125, price: 18000, desk: "3 x 2 ft", vacant: "6-seater and 2-seater cabins", clients: "Ocean One Ship Management, SIAS Group, Pacific Group", amenities: "Standard, breakout, printing", hours: "9 am to 9 pm, Monday to Saturday", parking: "Car Rs 4,000; two-wheeler Rs 1,500 a month", metro: "WEH (Line 1)", metroM: 160,
-    fit: "value", reason: "125 seats, Rs 18,000 a seat for a 3 x 2 ft desk, Grade B. Free on the visit: a 6-seater and a 2-seater cabin." },
-  { id: "innov8-boston-house", pubDesk: "Rs 15,999 to 16,999 (operator); Rs 13,000 (myHQ)", pubCabin: "Rs 17,999 to 19,999 (operator); Rs 12,499 (myHQ)", pubCap: "160+ seats (operator); 11,800 sq ft, about 164 seats (myHQ)", pubSrc: "https://www.innov8.work/coworking-space/mumbai/boston-house-andheri-east-6447d29b27e6c20001281193/", n: 2, sheetNo: 2, operator: "Innov8", building: "Boston House", geo: "boston-house", micro: "weh", grade: "B", seats: 180, price: 20000, desk: "3 x 2 ft", vacant: "12 seats", clients: "OYO, Bluestar Enviro Services, Goal Mine", amenities: "Standard, breakout area, printing", hours: "9 am to 9 pm, Monday to Saturday", parking: "Car Rs 4,000; two-wheeler Rs 1,500 a month", metro: "WEH (Line 1)", metroM: 160,
-    fit: "premium", reason: "180 seats, Rs 20,000 a seat for a 3 x 2 ft desk, Grade B, in the same building as Rush. Free on the visit: 12 seats." },
-  { id: "executive-spaces-rustomjee-central-park", pubDesk: "Rs 14,000 (operator centre page; Rs 13,000 on the home page); Rs 11,999 (myHQ)", pubCabin: "Rs 16,000 (operator centre page; Rs 15,000 on the home page and Houssed)", pubCap: "7,500 sq ft, about 150 seats, 4th and 6th floor B wing (myHQ); 250 seats (Houssed)", pubSrc: "https://www.executivespaces.in/coworking-shared-office-space-in-rustomjee-central-park-andheri-east", n: 3, sheetNo: 3, operator: "Executive Spaces", building: "Rustomjee Central Park", geo: "rustomjee-central-park", micro: "weh", grade: "A-", seats: 125, price: 14000, desk: "3 x 2 ft", vacant: "Not shared (managed office)", clients: "Big 92.7 FM", amenities: "Not shared (managed office)", hours: "Not shared; myHQ lists 10 am to 8 pm, Monday to Saturday", parking: "Not shared; myHQ lists car and two-wheeler parking", metro: "WEH", metroM: 480,
-    fit: "value", reason: "125 seats, Rs 14,000 a seat for a 3 x 2 ft desk, Grade A-: the lowest price on the visit sheet. Run as a managed office, so vacancy, hours, amenities and parking were not shared." },
-  { id: "executive-spaces-chandak-chambers", pubDesk: "Rs 16,000 (operator); Rs 15,999 (myHQ)", pubCabin: "Rs 18,000 (operator); Rs 13,999 (myHQ)", pubCap: "Not published", pubSrc: "https://executivespaces.in/coworking-spaces-in-andheri-east-Chandak-Chambers", n: 4, sheetNo: 4, operator: "Executive Spaces", building: "Chandak Chambers", geo: "chandak-chambers", micro: "weh", grade: "B", seats: 150, price: 16000, desk: "3 x 2 ft", vacant: "5-, 5- and 10-seater cabins", clients: "Pixel Mint, Leeway Softech, MedNeo, Right Horizon", amenities: "Standard, small breakout, printing", hours: "9 am to 9 pm, Monday to Saturday", parking: "Car Rs 4,500 a month", metro: "WEH (Line 1)", metroM: 50,
-    fit: "value", reason: "150 seats, Rs 16,000 a seat for a 3 x 2 ft desk, Grade B, at the WEH metro station. Free on the visit: 5-, 5- and 10-seater cabins." },
-  { id: "quest-coworks-technopolis", pubDesk: "Rs 12,000 (myHQ); from Rs 14,500 (Qdesq)", pubCabin: "Rs 17,999 (myHQ); from Rs 18,000 (Qdesq)", pubCap: "87,000 sq ft, about 1,750 seats on two floors (myHQ); 700 to 1,050 on other sites", pubSrc: "https://myhq.in/dedicated/coworking-space/quest-coworks-technopolis-knowledge-park", n: 5, sheetNo: 5, operator: "Quest Coworks", building: "Technopolis Knowledge Park", geo: "technopolis", micro: "chakala", grade: "B", seats: 1800, price: 18000, desk: "3.5 x 2 ft", vacant: "150-seater cabin, 15-seater cabin, 22-seater, 15 open dedicated desks and some small cabins", clients: "MK Tech Innovation, Sheffield Energy, Easebuzz, Escalent, Satco Wealth, Knauf, Idam, Esri India, Brickwork", amenities: "Standard, printing, gym, play zone, swimming pool access", hours: "8 am to 8 pm, Monday to Saturday", parking: "Car Rs 4,000; two-wheeler Rs 2,000 a month", metro: "WEH (Line 1)", metroM: 800,
-    fit: "scale", reason: "1,800 seats, Rs 18,000 a seat for a 3.5 x 2 ft desk, Grade B, with gym, play zone and pool access. Free on the visit: a 150-seater cabin, a 15-seater cabin, a 22-seater, 15 open desks and some small cabins." },
-  { id: "community-coworks-akruti-trade-centre", pubDesk: "Rs 15,000 (myHQ); from Rs 11,000 (Instant Offices)", pubCabin: "From Rs 16,000 (Qdesq, may be the Solitaire centre)", pubCap: "21,450 sq ft, about 800 seats (myHQ); 16,000 sq ft, 350 seats (Flexo)", pubSrc: "https://myhq.in/dedicated/coworking-space/community-coworks-andherieast", n: 6, sheetNo: 6, operator: "Community Coworks", building: "Akruti Trade Centre (MIDC Road 7)", geo: "akruti-trade-centre", micro: "chakala", grade: "B", seats: 380, price: 16500, desk: "4 x 2 ft", vacant: "15-, 16-, 5- and 10-seater cabins", clients: "Emerging Media, Erutech, FM Logistics", amenities: "Standard, printing, breakout zone", hours: "9 am to 9 pm, Monday to Saturday", parking: "Car Rs 5,000; two-wheeler Rs 1,500 a month", metro: "MIDC and Chakala", metroM: 700,
-    fit: "value", reason: "380 seats, Rs 16,500 a seat for a 4 x 2 ft desk, Grade B. Free on the visit: 15-, 16-, 5- and 10-seater cabins. The sheet also notes a 16,000 sq ft carpet managed office for CTS India run by this operator." },
-  { id: "wework-raheja-platinum", pubDesk: "Rs 24,500 (myHQ, quoted, negotiable)", pubCabin: "Rs 26,500 (myHQ); 8-person office Rs 2,33,800 a month (Office Hub)", pubCap: "154,000 sq ft, about 3,026 seats, 10 floors (myHQ)", pubSrc: "https://myhq.in/dedicated/coworking-space/wework-raheja-platinum", n: 7, sheetNo: 7, operator: "WeWork", building: "K Raheja Platinum", geo: "raheja-platinum", micro: "marol", grade: "A", seats: 3000, price: 28000, desk: "4 x 2 ft", vacant: "300 seats, a mix of open desks and cabins", clients: "Not shared", amenities: "Standard, printing, gym, play zone, swimming pool", hours: "9 am to 9 pm, Monday to Friday", parking: "Car Rs 8,000; two-wheeler Rs 3,000 a month", metro: "Marol Naka (Lines 1 and 3)", metroM: 700,
-    fit: "premium", reason: "3,000 seats, Rs 28,000 a seat for a 4 x 2 ft desk, Grade A: the highest price and the only Grade A building visited. Free on the visit: 300 seats, a mix of open desks and cabins. Monday to Friday only." },
-  { id: "innov8-zion-house", pubDesk: "From Rs 21,999 (operator); Rs 20,000 (myHQ)", pubCabin: "From Rs 24,999 (operator)", pubCap: "Over 1,900 seats (operator); 1,500 at launch, Dec 2024; about 1 lakh sq ft", pubSrc: "https://www.innov8.work/coworking-space/mumbai/house-andheri-east-6798d4b2b8e08e00015e1bf6/", n: 8, sheetNo: 8, operator: "Innov8", building: "Zion House", geo: "zion-house", micro: "vile-parle", grade: "B", seats: 1500, price: 26000, desk: "4 x 2 ft", vacant: "20-seater cabin, 5-, 13- and 4-seaters", clients: "OLX, Tata Digital", amenities: "Standard, breakout, printing", hours: "9 am to 9 pm, Monday to Saturday", parking: "Car Rs 3,500 a month; no two-wheeler parking", metro: "WEH (Line 1) and Gundavali (Line 7)", metroM: 900,
-    fit: "premium", reason: "1,500 seats, Rs 26,000 a seat for a 4 x 2 ft desk, Grade B, in Vile Parle on the Western Express Highway. Free on the visit: a 20-seater cabin, 5-, 13- and 4-seaters." },
-  { id: "smartworks-fleet-house", pubDesk: "Not published (managed campuses only)", pubCabin: "Rs 10,000 a seat managed office, 24-month lock-in (myHQ)", pubCap: "30,000 sq ft floor, about 1,000 seats (myHQ)", pubSrc: "https://myhq.in/managed-office/smartworks-andheri", n: 9, sheetNo: 9, operator: "Smartworks", building: "Fleet House", geo: "fleet-house", micro: "marol", grade: "B", seats: 2500, price: 23000, desk: "4 x 2 ft", vacant: "30-, 6-, 6-, 8- and 50-seater", clients: "upGrad, Bacardi, ShareChat", amenities: "Standard, breakout, printing", hours: "9 am to 9 pm, Monday to Saturday", parking: "Car Rs 4,000; two-wheeler Rs 1,500 a month", metro: "Marol Naka (Lines 1 and 3)", metroM: 100,
-    fit: "scale", reason: "2,500 seats, Rs 23,000 a seat for a 4 x 2 ft desk, Grade B, at Marol Naka. Free on the visit: 30-, 6-, 6-, 8- and 50-seaters." },
-  { id: "innov8-trade-star", pubDesk: "From Rs 16,000 (operator); Rs 17,000 (myHQ)", pubCabin: "From Rs 18,000 (operator)", pubCap: "Over 688 seats (operator); 12,500 sq ft, about 265 seats on the 3rd floor (myHQ)", pubSrc: "https://www.innov8.work/coworking-space/mumbai/trade-star-andheri-east-69d769aba3824000017d7e6e/", n: 10, sheetNo: 10, operator: "Innov8", building: "Akruti Trade Star", geo: "trade-star", micro: "jbnagar", grade: "B", seats: 330, price: 20000, desk: "3 x 2 ft", vacant: "20-seater and 6-seater", clients: "Marsh Communication, Delta", amenities: "Standard, breakout, printing", hours: "9 am to 9 pm, Monday to Saturday", parking: "To be confirmed", metro: "Marol (sheet); the building stands at Chakala J B Nagar metro", metroM: 300,
-    fit: "premium", reason: "330 seats, Rs 20,000 a seat for a 3 x 2 ft desk, Grade B. Free on the visit: a 20-seater and a 6-seater. Parking to be confirmed." },
-  { id: "315work-avenue-silver-utopia", pubDesk: "On request; brand-level from Rs 10,999 for 25+ seats", pubCabin: "On request", pubCap: "6,530 sq ft, about 200 seats (myHQ)", pubSrc: "https://myhq.in/managed-office/315-work-avenue-andheri", n: 11, sheetNo: 11, operator: "315Work Avenue", building: "Silver Utopia", geo: "silver-utopia", micro: "chakala", grade: "B", seats: 240, price: 18000, desk: "3.5 x 2 ft", vacant: "10 seats", clients: "BNY Mellon, Tata Technologies", amenities: "Standard, breakout, printing", hours: "9 am to 9 pm, Monday to Saturday", parking: "Car Rs 6,000; two-wheeler Rs 3,000 a month", metro: "WEH (Line 1) and Gundavali (Line 7)", metroM: 500,
-    fit: "value", reason: "240 seats, Rs 18,000 a seat for a 3.5 x 2 ft desk, Grade B. Free on the visit: 10 seats." },
-  { id: "awfis-skyline-icon", pubDesk: "Rs 12,999 (myHQ); hot desk Rs 9,099 (BookMyCoworking)", pubCabin: "Rs 12,999 (myHQ)", pubCap: "60,000 sq ft, about 1,200 seats (7th floor unit) plus 16,000 sq ft, about 535 seats (4th floor unit), myHQ", pubSrc: "https://myhq.in/dedicated/coworking-space/awfis-skyline-icon", n: 12, sheetNo: 12, operator: "Awfis", building: "Skyline Icon", geo: "skyline-icon", micro: "marol", grade: "B", seats: 825, price: 18000, desk: "3.5 x 2 ft", vacant: "20-seater, 6-seater and a 10-seater cabin", clients: "MobiKwik, PhonePe, Rentomojo", amenities: "Standard, breakout, printing", hours: "9 am to 9 pm, Monday to Saturday", parking: "To be confirmed", metro: "Marol Naka (Lines 1 and 3)", metroM: 350,
-    fit: "value", reason: "825 seats, Rs 18,000 a seat for a 3.5 x 2 ft desk, Grade B, at Marol. Free on the visit: a 20-seater, a 6-seater and a 10-seater cabin. Parking to be confirmed." }
-];
+/* The competitors, read from the team's detailed sheet exactly as written
+   (examples/andheri-coworking-detailed-data.xlsx, one column per centre).
+   Only the position (building -> pin) and the micro-market are added
+   here; every other value on a card is a cell from that sheet. */
+const DETAIL = path.join(__dirname, "..", "..", "examples", "andheri-coworking-detailed-data.xlsx");
+const PLACE = {
+  "boston house": ["boston-house", "weh"], "rustomje central park": ["rustomjee-central-park", "weh"], "chandak chambers": ["chandak-chambers", "weh"],
+  "technopolis": ["technopolis", "chakala"], "akruti trade star": ["akruti-trade-centre", "chakala"], "k raheja platinum": ["raheja-platinum", "marol"],
+  "zion house": ["zion-house", "vile-parle"], "trade star": ["trade-star", "jbnagar"], "solitaire corporate park": ["solitaire", "chakala"],
+  "74 technopark": ["technopark-74", "midc"], "vkg": ["vkg", "jbnagar"], "dynasty business park": ["dynasty", "jbnagar"],
+  "aj house": ["aj-house", "marol"], "lotus": ["lotus-star", "midc"], "silver utopia": ["silver-utopia", "chakala"]
+};
+/* Where the sheet's building name needs a word to find the right pin. */
+const PLACE_NOTE = {
+  "akruti trade star": "The sheet says Akruti Trade Star; every public source puts Community Coworks at Ackruti Trade Centre, MIDC Road 7, which also fits the sheet's 'MIDC & Chakala' metro.",
+  "lotus": "The sheet says Lotus with DN Nagar metro; 91Springboard's Lotus centre is Lotus Star, Marol MIDC.",
+  "vkg": "VKG Corporate Centre, Andheri-Kurla Road."
+};
+const ROWS = { "Operator": "operator", "Type": "type", "Building Name": "building", "Grade": "grade", "Location": "location", "Total Seats": "seats",
+  "Per Seat Cost": "price", "Workstation Size": "desk", "Vacant Seats": "vacant", "Client Present": "clients", "Amenities": "amenities",
+  "Operational Hours": "hours", "Parking": "parking", "Metro": "metro", "Note": "note", "Image Link": "photos", "Meeting Room Charges": "meeting",
+  "Post Operational hour charges": "afterHours", "Printing Charges": "printing", "Open and Dedicated Desk": "desks", "Sunday Charges": "sunday",
+  "Land and Cabels": "lan", "Distance from Privilon": "toPrivilon", "Distance from Corporate Avenue": "toCorporateAvenue" };
+async function readCentres() {
+  const ExcelJS = require("exceljs");
+  const wb = new ExcelJS.Workbook();
+  await wb.xlsx.readFile(DETAIL);
+  const ws = wb.worksheets[0];
+  const txt = (v) => { if (v == null) return ""; if (typeof v === "object") v = v.text || v.result || (v.richText ? v.richText.map(r => r.text).join("") : ""); return String(v).replace(/\s+/g, " ").trim(); };
+  const byField = {};
+  ws.eachRow((row) => { const k = ROWS[txt(row.getCell(1).value)]; if (k) byField[k] = row; });
+  const out = [];
+  for (let col = 2; col <= ws.columnCount; col++) {
+    const c = {};
+    for (const [k, row] of Object.entries(byField)) c[k] = txt(row.getCell(col).value);
+    if (!c.operator) continue;
+    c.operator = c.operator.replace(/^\d+\.\s*/, "").replace(/\s*-\s*$/, "").replace(/^Wework$/i, "WeWork");
+    const key = c.building.toLowerCase();
+    const pl = PLACE[key];
+    if (!pl) throw new Error(`no position for building "${c.building}" (column ${col}); add it to PLACE`);
+    const slug = (x) => x.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    out.push({ ...c, n: out.length + 1, id: `${slug(c.operator)}-${slug(c.building)}`, geo: pl[0], micro: pl[1], placeNote: PLACE_NOTE[key] || "" });
+  }
+  return out;
+}
+
 
 /* The three proposed buildings, from Proposed_Inventory.pdf. */
 const PROPOSED = [
@@ -111,6 +137,7 @@ const ZONES = [
   { key: "chakala", label: "Chakala and MIDC", name: "Chakala and MIDC (Mahakali Caves Road, Cardinal Gracias Road, MIDC Road 7)", color: "#2e7d5b", character: "Campus-style B buildings a short walk from WEH, Chakala or MIDC Andheri stations. Where Corporate Avenue, the only ready proposed floor, sits." },
   { key: "jbnagar", label: "J B Nagar", name: "J B Nagar (Andheri-Kurla Road at Chakala metro)", color: "#8a3d6b", character: "Mid-corridor on Andheri-Kurla Road, at the Chakala (J B Nagar) station. Trade Star here now has Innov8 and, from 2026, Executive Spaces; Table Space's R Square and HDFC Bank are neighbours." },
   { key: "marol", label: "Marol", name: "Marol (Marol Naka interchange, Sag Baug Road, Andheri-Kurla Road)", color: "#b7791f", character: "The interchange of Lines 1 and 3 and the big national operators: WeWork, Smartworks and Awfis. The dearest seats and the two bare-shell proposed buildings." },
+  { key: "midc", label: "MIDC and SEEPZ", name: "MIDC Andheri and SEEPZ (Line 3)", color: "#6b4f8a", character: "The MIDC industrial estate and SEEPZ, on Metro Line 3. 91Springboard runs two centres here." },
   { key: "vile-parle", label: "Vile Parle E", name: "Vile Parle East, on the Western Express Highway", color: "#4a5a6a", character: "South of Andheri East on the same highway; one large Innov8 centre competing for WEH tenants." }
 ];
 
@@ -149,29 +176,33 @@ async function build() {
   setField(A, "Road factor", 1.3);
   setField(A, "Speed source", "TomTom Traffic Index 2025, Mumbai rush hour");
   setField(A, "Next steps", [
-    "Price Autopilot's seats against the building each proposed site actually competes with: Smartworks at Fleet House (Rs 23,000) and WeWork at Raheja Platinum (Rs 28,000) for Privilon and 723 Avenue; Quest, 315Work and the two Executive Spaces centres (Rs 14,000 to 18,000) for Corporate Avenue.",
-    "Re-visit Quest Coworks and WeWork: together they hold about 500 of the roughly 800 vacant seats counted, so their pricing on the big cabins is the real competition for a 100-plus seat enquiry.",
-    "Ask Innov8 and Community Coworks for their list price at Akruti Trade Star in writing: the same building was quoted at Rs 16,500 and Rs 20,000 on the same week.",
-    "Confirm parking at Innov8 Trade Star and Awfis Skyline Icon, which the visit sheet left as TBD, before quoting parking in any comparison.",
-    "Time the walk from the station each centre names at 6 to 7 pm; the metro distances here are the sources' figures, not measured."
+    "Compare each proposed site with the centres the sheet measures it against: the distance-from-Privilon and distance-from-Corporate-Avenue rows on every card.",
+    "Confirm parking at Innov8 Trade Star, which the sheet leaves as TBD.",
+    "Confirm the 91Springboard Lotus centre: the sheet names DN Nagar metro, but the operator's Lotus centre is Lotus Star in Marol MIDC."
   ].join("\n"));
 
-  /* ---- Options: the 11 centres ---- */
+  /* ---- Options: the competitors, from the detailed sheet ---- */
+  const CENTRES = await readCentres();
   const O = wb.getWorksheet("Options");
-  for (const c of ["Operator", "Building", "Grade", "Total seats", "Price per seat (Rs a month, plus GST)", "Desk size", "Vacant seats on the visit", "Vacant seats (count)", "Clients seen", "Amenities", "Hours", "Parking", "Nearest metro", "Metro distance (m)", "Position note",
-    "Floor / unit", "Total floors", "Furnishing", "Carpet area (sq ft)", "Built-up area (sq ft)", "Ceiling height", "Rent on carpet (Rs per sq ft a month)", "CAM (Rs per sq ft a month)", "Fire NOC", "OC and CC", "Available from"]) addCol(O, c);
+  const COLS = [["Operator", "operator"], ["Type", "type"], ["Building", "building"], ["Grade", "grade"], ["Location", "location"], ["Total seats", "seats"],
+    ["Per seat cost", "price"], ["Workstation size", "desk"], ["Open and dedicated desk", "desks"], ["Vacant seats", "vacant"], ["Clients present", "clients"],
+    ["Amenities", "amenities"], ["Operational hours", "hours"], ["Post operational hour charges", "afterHours"], ["Sunday charges", "sunday"],
+    ["Meeting room charges", "meeting"], ["Printing charges", "printing"], ["LAN and cables", "lan"], ["Parking", "parking"], ["Metro", "metro"],
+    ["Distance from Privilon", "toPrivilon"], ["Distance from Corporate Avenue", "toCorporateAvenue"], ["Note", "note"], ["Photos", "photos"]];
+  for (const [label] of COLS) addCol(O, label);
+  for (const c of ["Position note", "Floor / unit", "Total floors", "Furnishing", "Carpet area (sq ft)", "Built-up area (sq ft)", "Ceiling height", "Rent on carpet (Rs per sq ft a month)", "CAM (Rs per sq ft a month)", "Fire NOC", "OC and CC", "Available from", "Nearest metro", "Metro distance (m)"]) addCol(O, c);
   for (const c of CENTRES) {
     const g = GEO[c.geo];
-    addRow(O, {
+    const row = {
       "ID": c.id, "Rank": c.n, "Property name": `${c.operator} · ${c.building}`,
       "Latitude": g.lat, "Longitude": g.lng, "How exact is the pin": g.precision, "Source for the position": g.src,
-      "Micro-market": c.micro, "Fit group": "coworking-competitors", "Why it scores as it does": c.reason,
-      "Address": `${c.building}, ${c.micro === "vile-parle" ? "Vile Parle East" : "Andheri East"}, Mumbai`, "Locality": c.micro === "vile-parle" ? "Vile Parle East" : "Andheri East",
-      "Operator": c.operator, "Building": c.building, "Grade": c.grade, "Total seats": c.seats,
-      "Price per seat (Rs a month, plus GST)": c.price, "Desk size": c.desk, "Vacant seats on the visit": c.vacant, "Vacant seats (count)": vacantCount(c.vacant),
-      "Clients seen": c.clients, "Amenities": c.amenities, "Hours": c.hours, "Parking": c.parking,
-      "Nearest metro": c.metro, "Metro distance (m)": c.metroM, "Position note": g.note
-    });
+      "Micro-market": c.micro, "Fit group": "coworking-competitors",
+      "Why it scores as it does": [c.type, c.seats && `${c.seats} seats`, c.price, c.grade && `Grade ${c.grade}`, c.vacant && `Vacant: ${c.vacant}`].filter(Boolean).join(" · "),
+      "Address": `${c.building}, ${c.location}, Mumbai`, "Locality": c.location,
+      "Position note": [c.placeNote, g.note].filter(Boolean).join(" ")
+    };
+    for (const [label, k] of COLS) row[label] = c[k];
+    addRow(O, row);
   }
 
   /* ---- Options, second group: the proposed inventory, after the
@@ -246,4 +277,4 @@ async function main() {
 }
 
 if (require.main === module) main().catch(e => { console.error(e.message); process.exit(1); });
-module.exports = { build, CENTRES, PROPOSED, GEO, vacantCount };
+module.exports = { build, readCentres, PROPOSED, GEO, vacantCount };
