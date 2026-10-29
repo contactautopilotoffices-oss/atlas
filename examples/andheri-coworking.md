@@ -2,7 +2,7 @@
 
 Internal study: the coworking competitors in the market, then Autopilot's proposed inventory. Data current to October 2026.
 
-Reading copy of the atlas (`examples/andheri-coworking.bundle.json`), built from `examples/andheri-coworking-detailed-data.xlsx` (the team's detailed sheet) and Proposed_Inventory.pdf. Every value on a centre is a cell from the sheet; only the map position is added.
+Reading copy of the atlas (`examples/andheri-coworking.bundle.json`), built from `examples/andheri-coworking-detailed-data.xlsx` (the team's detailed sheet, with the team's corrections of 29 Oct 2026) and Proposed_Inventory.pdf. Every value on a centre is a cell from the sheet; only the map position is added.
 
 ## Coworking competitors
 
@@ -20,7 +20,7 @@ Reading copy of the atlas (`examples/andheri-coworking.bundle.json`), built from
 | 10 | Innov8 · Solitaire Corporate Park | Coworking | A | 200 + | Rs. 15000 + GST | Flexible Seats - Rs. 12000 + GST Dedicated Seats - Rs. 13000 + GST | 20 Seats | Chakala, WEH, Gundavli | 2.2km | 1.1km |
 | 11 | 91 Springboard · 74 Technopark | Coworking | A | 350 | Rs. 21000 + GST | Dedicated Seats - 18000 + GST | 10 seats | Seepz | 1.5 km | 850m |
 | 12 | Let's Work · VKG | Coworking | B | 220 | 15,000 / month | Dedicated Seats - 12000 + GST | 40 seats available | Chakala and Airport Road | 1.2km | 900m |
-| 13 | DevX · Dynasty Business Park | Coworking | A | 400 | 13,999 / month | Dedicated Seats - 18000 + GST | 80+ seats available | Chakala | 1.6km | 900m |
+| 13 | DevX · Dynasty Business Park | Coworking | A | 400 | Rs. 18,000 + GST | Dedicated Seats - Rs. 14,000 + GST | 80+ seats available | Chakala | 1.6km | 900m |
 | 14 | Teloz Space · AJ House | Coworking | B | 120 | Rs. 12,000 + GST | Dedicated Seats - 10000 + GST | 15-20 seats available | Marol and Airport Road | 500m | 1.3km |
 | 15 | 91 Springboard · Lotus | Coworking | B | 300 | Rs 17,000 | Dedicated Seats - 15000 + GST | 50 seats available | DN Nagar | 1.6km | 900m |
 | 16 | 315work Avenue · Silver Utopia | Coworking | B | 240 | Rs. 18000 + GST | Dedicated Seats - 17000 + GST | 10 Seats | WEH | 600m | 1.1km |
@@ -39,7 +39,7 @@ Reading copy of the atlas (`examples/andheri-coworking.bundle.json`), built from
 | Innov8 · Zion House | 4 Seater - Rs. 600 + GST 6 seater - Rs 800 + GST 10 seater - Rs.1200 + gst +15 - Rs 1700 + GST | No additional working hours allowed | Sunday not provided | Rs. 3 + GST | Only Wifi | 4 Wheeler: 3.5 and 2 Wheeler: not available |
 | Innov8 · Trade Star | 4 Seater - Rs. 600 + GST 6 seater - Rs 800 + GST 10 seater - Rs.1200 + gst +15 - Rs 1700 + GST | No additional working hours allowed | Sunday not provided | Not Available | Only Wifi | TBD |
 | Innov8 · Solitaire Corporate Park | 4 Seater - Rs.600 + GST. 6 seater - Rs. 800 + GST 10 seater - Rs.1200 + GST 15 Seater - Rs. 1700 + GST | No additional working hours allowed | Sunday not provided | Rs. 3 + GST | Only Wifi | 4 Wheeler: 7k and 2 Wheeler 2k |
-| 91 Springboard · 74 Technopark | 3-5 seater= Rs. 2800 + GST 7 seater = Rs.1000 + GST | Rs. 2000 per hour + GST | Rs. 3000 per hour+ GST | Rs. 3 + GST | Only Wifi | 4 wheeler: 5.5k Bike Parking: 1st come 1st serve |
+| 91 Springboard · 74 Technopark | 3 to 5 seater - Rs. 800 + GST, 7 seater - Rs. 1000 + GST | Rs. 2000 per hour + GST | Rs. 3000 per hour+ GST | Rs. 3 + GST | Only Wifi | 4 wheeler: 5.5k Bike Parking: 1st come 1st serve |
 | Let's Work · VKG | 6 seater = Rs. 600 + GST 8 Seater - Rs. 800 + GST 10 Seater - Rs.1200 + GST | No additional working hours allowed | Rs. 1000 per hour + GST | Rs. 5 + GST | Available | 4 Wheeler: 5k Bike Parking: 1st come 1st serve. |
 | DevX · Dynasty Business Park | 6 Seater - Rs.2000 + GST, 10 Seater - Rs.3000 + GST | No additional working hours allowed | Rs. 1200 per hour + GST | Rs. 3 + GST | Not Available | Car parking: 6k and Bike: 1500 |
 | Teloz Space · AJ House | 10 Seater - Rs. 2000 + GST 4 Seater - Rs. 500 + GST | Rs. 1000 per hour + GST | Rs. 1200 per hour + GST | Not Available | Available | 4 wheeler: 5k and 2 wheeler: 1200 |
@@ -55,7 +55,7 @@ Reading copy of the atlas (`examples/andheri-coworking.bundle.json`), built from
 ## What the sheet shows
 
 - **Centres visited.** 16 centres by 11 operators across 15 buildings: 15 in Andheri East and 1 in Vile Parle on the Western Express Highway. Boston House holds two (Rush Co-works and Innov8). Innov8 runs four of the 16. Visited_Co-working_Space.xlsx (site visits, October 2026).
-- **Per seat cost.** Rs 12,000 (Teloz Space, AJ House) to Rs 28,000 (WeWork, K Raheja Platinum) a month; median Rs 17,500. As quoted on the sheet, most plus GST. Eleven of the 16 sit between Rs 14,000 and 20,000.
+- **Per seat cost.** Rs 12,000 (Teloz Space, AJ House) to Rs 28,000 (WeWork, K Raheja Platinum) a month; median Rs 18,000. As quoted on the sheet, most plus GST, with DevX corrected to Rs 18,000. Twelve of the 16 sit between Rs 14,000 and 20,000.
 - **Seats.** About 9,400 seats across the 16 centres; WeWork (3,000), Quest (1,800) and Innov8 Zion House (1,500) hold 6,300 of them. Innov8 Solitaire is given as 200+.
 - **Dedicated and flex desks.** Dedicated desks Rs 10,000 (Teloz) to Rs 22,000 (Innov8 Zion House); flex seats Rs 10,000 to 21,000 where offered. From the sheet's open and dedicated desk row. Rush Co-works and Executive Spaces Chandak Chambers offer no flex seats.
 - **Hours and extra time.** Most run 9 am to 9 pm, Monday to Saturday. Seven centres allow no work after hours; the rest charge Rs 200 per seat to Rs 6,500 an hour. Sunday use: not offered at three Innov8 centres; Rs 1,000 to Rs 6,500 an hour elsewhere.

@@ -93,6 +93,12 @@ const PLACE_NOTE = {
   "lotus": "The sheet says Lotus with DN Nagar metro; 91Springboard's Lotus centre is Lotus Star, Marol MIDC.",
   "vkg": "VKG Corporate Centre, Andheri-Kurla Road."
 };
+/* Corrections the team gave after the sheet was shared (29 Oct 2026). They
+   replace the sheet's cell for that centre; the sheet file is unchanged. */
+const CORRECTIONS = [
+  { operator: "91 Springboard", building: "74 Technopark", set: { meeting: "3 to 5 seater - Rs. 800 + GST, 7 seater - Rs. 1000 + GST" } },
+  { operator: "DevX", building: "Dynasty Business Park", set: { price: "Rs. 18,000 + GST", desks: "Dedicated Seats - Rs. 14,000 + GST" } }
+];
 const ROWS = { "Operator": "operator", "Type": "type", "Building Name": "building", "Grade": "grade", "Location": "location", "Total Seats": "seats",
   "Per Seat Cost": "price", "Workstation Size": "desk", "Vacant Seats": "vacant", "Client Present": "clients", "Amenities": "amenities",
   "Operational Hours": "hours", "Parking": "parking", "Metro": "metro", "Note": "note", "Image Link": "photos", "Meeting Room Charges": "meeting",
@@ -115,6 +121,7 @@ async function readCentres() {
     const key = c.building.toLowerCase();
     const pl = PLACE[key];
     if (!pl) throw new Error(`no position for building "${c.building}" (column ${col}); add it to PLACE`);
+    Object.assign(c, (CORRECTIONS.find(x => x.operator === c.operator && x.building === c.building) || {}).set || {});
     const slug = (x) => x.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
     out.push({ ...c, n: out.length + 1, id: `${slug(c.operator)}-${slug(c.building)}`, geo: pl[0], micro: pl[1], placeNote: PLACE_NOTE[key] || "" });
   }
@@ -198,8 +205,7 @@ async function build() {
       "Latitude": g.lat, "Longitude": g.lng, "How exact is the pin": g.precision, "Source for the position": g.src,
       "Micro-market": c.micro, "Fit group": "coworking-competitors",
       "Why it scores as it does": [c.type, c.seats && `${c.seats} seats`, c.price, c.grade && `Grade ${c.grade}`, c.vacant && `Vacant: ${c.vacant}`].filter(Boolean).join(" · "),
-      "Address": `${c.building}, ${c.location}, Mumbai`, "Locality": c.location,
-      "Position note": [c.placeNote, g.note].filter(Boolean).join(" ")
+      "Address": `${c.building}, ${c.location}, Mumbai`, "Locality": c.location
     };
     for (const [label, k] of COLS) row[label] = c[k];
     addRow(O, row);
