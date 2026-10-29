@@ -1371,7 +1371,7 @@ function wireBoard() {
     const cp = e.target.closest("[data-copy]"); if (cp) { copyLink(cp); return; }
     if (e.target.closest("[data-print]")) { window.print(); return; }
     if (e.target.closest("[data-compare]")) { openCompare(); return; }
-    const img = e.target.closest(".hero img"); if (img) { const lb = $("#lightbox"); lb.querySelector("img").src = img.currentSrc || img.src; lb.classList.add("on"); }
+    const img = e.target.closest(".hero img, .gal img"); if (img) { const lb = $("#lightbox"); lb.querySelector("img").src = img.currentSrc || img.src; lb.classList.add("on"); }
   });
   $("#p-head").addEventListener("click", e => {
     if (e.target.closest(".back")) { S.sel = null; renderList(); renderPanel(); refreshMap(); fitAll(); pushRoute(); return; }
@@ -2299,6 +2299,7 @@ function renderOption(o) {
       .map(k => [titleCase(k.replace(/([a-z])([A-Z])/g, "$1 $2")), esc(o[k])])
   ].filter(x => x[1]);
   $("#p-body").innerHTML = `
+    ${galleryHTML(o)}
     ${sat ? `<div class="hero"><img src="${sat}" alt="Satellite view of ${esc(o.name)}" onerror="this.closest('.hero').remove()"><span class="ph">${isAreaShot(o) ? "Area view, building not exactly pinned · " : ""}Satellite${imgDate(o) ? ` · captured <span data-img-date="${o.id}">${fmtDate(imgDate(o))}</span>` : ""} · Esri, Vantor</span></div>` : ""}
     <div class="kpis">
       ${colMeasures.slice(0, 2).map(m => `<div class="kpi"><div class="l">${esc(m.label || titleCase(m.key))}</div><div class="v">${esc(String(o[m.column]))}</div><div class="s">${esc(m.unit || (isFinite(m.max) ? `out of ${m.max}` : ""))}</div></div>`).join("")}
@@ -2332,6 +2333,15 @@ function renderOption(o) {
     <div class="nb">${others.slice(0, 3).map(({ x, d }) => `<div class="r"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${optLink(x)}</span><div class="tr"><div class="fl" style="width:${Math.max(3, Math.round(d / nbMax * 100))}%"></div></div><span class="v">${fmtKm(d)} · ${driveMin(d)}′</span></div>`).join("")}</div>
     <p class="note">Turn on Distances in the map bar to draw them. Micro-market rent, vacancy and supply are on <a href="#" data-tab="markets">Micro-markets</a>${o.geoSrc ? `; the pin's source is ${cite(o.geoSrc, host(o.geoSrc))}` : ""}.</p>`;
   checkImgDate(o);
+}
+/* Photographs of the option itself, from the bundle: gallery is a list of
+   image addresses, or {src, caption}. Shown as a strip above the satellite
+   view; a click opens the full-screen viewer. */
+function galleryHTML(o) {
+  const g = (Array.isArray(o.gallery) ? o.gallery : []).map(x => typeof x === "string" ? { src: x } : x).filter(x => x && x.src);
+  if (!g.length) return "";
+  return `<h3>${esc(say("option.photos", "Photos"))} <span class="note">${g.length}</span></h3>
+    <div class="gal">${g.map(x => `<img src="${esc(x.src)}" alt="${esc(x.caption || o.name)}" loading="lazy" onerror="this.remove()">`).join("")}</div>`;
 }
 /* How big a move this is for today's team, by road distance. */
 function moveRead(o) {

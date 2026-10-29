@@ -256,6 +256,16 @@ async function main() {
   const json = path.join(dir, "andheri-coworking.bundle.json");
   const wb = await build();
   const { bundle, notes } = await readWorkbook(Buffer.from(await wb.xlsx.writeBuffer()));
+  /* Photographs: every image in media/andheri-coworking/<option id>/ is
+     that option's gallery, in file-name order. The team's Drive folders
+     are the source; this folder is where they are copied. */
+  const MEDIA_DIR = path.join(__dirname, "..", "..", "media", "andheri-coworking");
+  for (const o of bundle.options) {
+    const d = path.join(MEDIA_DIR, o.id);
+    if (!fs.existsSync(d)) continue;
+    const files = fs.readdirSync(d).filter(f => /\.(jpe?g|png|webp)$/i.test(f)).sort();
+    if (files.length) o.gallery = files.map(f => `/media/andheri-coworking/${o.id}/${encodeURIComponent(f)}`);
+  }
   /* This is a list in presentation order, not a ranking: the competitors
      first, then the proposed inventory. The engine's words are overridden
      so nothing on the page calls it one. */
