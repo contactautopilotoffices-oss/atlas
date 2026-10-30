@@ -619,14 +619,10 @@
    "geoSrc": "https://exa.ai/library/place/rsdrfwzt1h2",
    "micro": "marol",
    "fit": "coworking-competitors",
-   "reason": "Operating centre · marked by the team on 30 Oct 2026 · not visited",
    "address": "Times Square, Andheri East, Mumbai",
    "locality": "Andheri East",
    "operator": "Innov8",
-   "building": "Times Square",
-   "location": "Andheri East",
-   "note": "Marked by the team on 30 Oct 2026. Not on the visit sheet, so seats, prices and the other visit details are not recorded yet.",
-   "status": "Operating"
+   "building": "Times Square"
   },
   {
    "id": "redbricks-times-square",
@@ -638,14 +634,10 @@
    "geoSrc": "https://exa.ai/library/place/rsdrfwzt1h2",
    "micro": "marol",
    "fit": "coworking-competitors",
-   "reason": "Operating centre · marked by the team on 30 Oct 2026 · not visited",
    "address": "Times Square, Andheri East, Mumbai",
    "locality": "Andheri East",
    "operator": "RedBricks",
-   "building": "Times Square",
-   "location": "Andheri East",
-   "note": "Marked by the team on 30 Oct 2026. Not on the visit sheet, so seats, prices and the other visit details are not recorded yet.",
-   "status": "Operating"
+   "building": "Times Square"
   },
   {
    "id": "smartworks-times-square",
@@ -657,14 +649,10 @@
    "geoSrc": "https://exa.ai/library/place/rsdrfwzt1h2",
    "micro": "marol",
    "fit": "coworking-competitors",
-   "reason": "Operating centre · marked by the team on 30 Oct 2026 · not visited",
    "address": "Times Square, Andheri East, Mumbai",
    "locality": "Andheri East",
    "operator": "Smartworks",
-   "building": "Times Square",
-   "location": "Andheri East",
-   "note": "Marked by the team on 30 Oct 2026. Not on the visit sheet, so seats, prices and the other visit details are not recorded yet.",
-   "status": "Operating"
+   "building": "Times Square"
   },
   {
    "id": "urban-vault-times-square",
@@ -676,14 +664,10 @@
    "geoSrc": "https://exa.ai/library/place/rsdrfwzt1h2",
    "micro": "marol",
    "fit": "coworking-competitors",
-   "reason": "Upcoming centre · marked by the team on 30 Oct 2026 · not visited",
    "address": "Times Square, Andheri East, Mumbai",
    "locality": "Andheri East",
    "operator": "Urban Vault",
-   "building": "Times Square",
-   "location": "Andheri East",
-   "note": "Marked by the team on 30 Oct 2026. Not on the visit sheet, so seats, prices and the other visit details are not recorded yet.",
-   "status": "Upcoming"
+   "building": "Times Square"
   },
   {
    "id": "akt-spaces-satellite-gazebo",
@@ -695,14 +679,10 @@
    "geoSrc": "https://exa.ai/library/place/s7h1034ysxv",
    "micro": "chakala",
    "fit": "coworking-competitors",
-   "reason": "Operating centre · marked by the team on 30 Oct 2026 · not visited",
    "address": "Satellite Gazebo, Andheri East, Mumbai",
    "locality": "Andheri East",
    "operator": "AKT Spaces",
-   "building": "Satellite Gazebo",
-   "location": "Andheri East",
-   "note": "Marked by the team on 30 Oct 2026. Not on the visit sheet, so seats, prices and the other visit details are not recorded yet.",
-   "status": "Operating"
+   "building": "Satellite Gazebo"
   },
   {
    "id": "91-springboard-corporate-avenue",
@@ -714,14 +694,10 @@
    "geoSrc": "https://exa.ai/library/place/3kk3s3wpqbl",
    "micro": "chakala",
    "fit": "coworking-competitors",
-   "reason": "Operating centre · marked by the team on 30 Oct 2026 · not visited",
    "address": "Corporate Avenue, Andheri East, Mumbai",
    "locality": "Andheri East",
    "operator": "91 Springboard",
-   "building": "Corporate Avenue",
-   "location": "Andheri East",
-   "note": "In Corporate Avenue, the building where Autopilot proposes the 3rd and 4th floors. Marked by the team on 30 Oct 2026. Not on the visit sheet, so seats, prices and the other visit details are not recorded yet.",
-   "status": "Operating"
+   "building": "Corporate Avenue"
   },
   {
    "id": "proposed-corporate-avenue",
@@ -752,8 +728,7 @@
    "ocAndCc": "Available",
    "availableFrom": "Immediately",
    "nearestMetro": "Chakala (J B Nagar)",
-   "metroDistanceM": 800,
-   "coworkingOperatorsInTheBuilding": "91 Springboard"
+   "metroDistanceM": 800
   },
   {
    "id": "proposed-723-avenue",
@@ -987,13 +962,6 @@
     "asOf": "2026-10",
     "conf": "high",
     "note": "Boston House holds two (Rush Co-works and Innov8). Innov8 runs four of the 16. Visited_Co-working_Space.xlsx (site visits, October 2026)."
-   },
-   {
-    "k": "Also in the market, not visited",
-    "v": "Six more centres in three buildings, marked by the team: Times Square, Marol (Innov8, RedBricks, Smartworks, and Urban Vault upcoming); Satellite Gazebo, Chakala (AKT Spaces); Corporate Avenue, Chakala (91 Springboard), the building Autopilot proposes",
-    "asOf": "2026-10-30",
-    "conf": "high",
-    "note": "From the team, 30 Oct 2026. Not on the visit sheet, so they carry no seats or prices and are not counted in the figures below."
    },
    {
     "k": "Per seat cost",

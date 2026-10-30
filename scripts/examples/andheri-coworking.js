@@ -101,18 +101,14 @@ const CORRECTIONS = [
   { operator: "91 Springboard", building: "74 Technopark", set: { meeting: "3 to 5 seater - Rs. 800 + GST, 7 seater - Rs. 1000 + GST" } },
   { operator: "DevX", building: "Dynasty Business Park", set: { price: "Rs. 18,000 + GST", desks: "Dedicated Seats - Rs. 14,000 + GST" } }
 ];
-/* Operators the team marked by building (30 Oct 2026). They are not on the
-   visit sheet, so their cards carry only the operator, the building and
-   whether the centre is open; nothing else is filled in for them. */
-const MARKED_ON = "30 Oct 2026";
+/* Operators the team marked by building (30 Oct 2026). */
 const MARKED = [
-  { operator: "Innov8", building: "Times Square", geo: "times-square", micro: "marol", status: "Operating" },
-  { operator: "RedBricks", building: "Times Square", geo: "times-square", micro: "marol", status: "Operating" },
-  { operator: "Smartworks", building: "Times Square", geo: "times-square", micro: "marol", status: "Operating" },
-  { operator: "Urban Vault", building: "Times Square", geo: "times-square", micro: "marol", status: "Upcoming" },
-  { operator: "AKT Spaces", building: "Satellite Gazebo", geo: "satellite-gazebo", micro: "chakala", status: "Operating" },
-  { operator: "91 Springboard", building: "Corporate Avenue", geo: "corporate-avenue", micro: "chakala", status: "Operating",
-    note: "In Corporate Avenue, the building where Autopilot proposes the 3rd and 4th floors." }
+  { operator: "Innov8", building: "Times Square", geo: "times-square", micro: "marol" },
+  { operator: "RedBricks", building: "Times Square", geo: "times-square", micro: "marol" },
+  { operator: "Smartworks", building: "Times Square", geo: "times-square", micro: "marol" },
+  { operator: "Urban Vault", building: "Times Square", geo: "times-square", micro: "marol", upcoming: true },
+  { operator: "AKT Spaces", building: "Satellite Gazebo", geo: "satellite-gazebo", micro: "chakala" },
+  { operator: "91 Springboard", building: "Corporate Avenue", geo: "corporate-avenue", micro: "chakala" }
 ];
 const ROWS = { "Operator": "operator", "Type": "type", "Building Name": "building", "Grade": "grade", "Location": "location", "Total Seats": "seats",
   "Per Seat Cost": "price", "Workstation Size": "desk", "Vacant Seats": "vacant", "Client Present": "clients", "Amenities": "amenities",
@@ -212,7 +208,7 @@ async function build() {
     ["Meeting room charges", "meeting"], ["Printing charges", "printing"], ["LAN and cables", "lan"], ["Parking", "parking"], ["Metro", "metro"],
     ["Distance from Privilon", "toPrivilon"], ["Distance from Corporate Avenue", "toCorporateAvenue"], ["Note", "note"], ["Photos", "photos"]];
   for (const [label] of COLS) addCol(O, label);
-  for (const c of ["Position note", "Floor / unit", "Total floors", "Furnishing", "Carpet area (sq ft)", "Built-up area (sq ft)", "Ceiling height", "Rent on carpet (Rs per sq ft a month)", "CAM (Rs per sq ft a month)", "Fire NOC", "OC and CC", "Available from", "Nearest metro", "Metro distance (m)", "Status", "Coworking operators in the building"]) addCol(O, c);
+  for (const c of ["Position note", "Floor / unit", "Total floors", "Furnishing", "Carpet area (sq ft)", "Built-up area (sq ft)", "Ceiling height", "Rent on carpet (Rs per sq ft a month)", "CAM (Rs per sq ft a month)", "Fire NOC", "OC and CC", "Available from", "Nearest metro", "Metro distance (m)"]) addCol(O, c);
   for (const c of CENTRES) {
     const g = GEO[c.geo];
     const row = {
@@ -231,16 +227,13 @@ async function build() {
   MARKED.forEach((m, i) => {
     const g = GEO[m.geo];
     const slug = (x) => x.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-    const upcoming = m.status === "Upcoming";
     addRow(O, {
       "ID": `${slug(m.operator)}-${slug(m.building)}`, "Rank": CENTRES.length + 1 + i,
-      "Property name": `${m.operator} · ${m.building}${upcoming ? " (upcoming)" : ""}`,
+      "Property name": `${m.operator} · ${m.building}${m.upcoming ? " (upcoming)" : ""}`,
       "Latitude": g.lat, "Longitude": g.lng, "How exact is the pin": g.precision, "Source for the position": g.src,
       "Micro-market": m.micro, "Fit group": "coworking-competitors",
-      "Why it scores as it does": [upcoming ? "Upcoming centre" : "Operating centre", `marked by the team on ${MARKED_ON}`, "not visited"].join(" · "),
       "Address": `${m.building}, Andheri East, Mumbai`, "Locality": "Andheri East",
-      "Operator": m.operator, "Building": m.building, "Location": "Andheri East", "Status": m.status,
-      "Note": [m.note, `Marked by the team on ${MARKED_ON}. Not on the visit sheet, so seats, prices and the other visit details are not recorded yet.`].filter(Boolean).join(" ")
+      "Operator": m.operator, "Building": m.building
     });
   });
 
@@ -256,8 +249,7 @@ async function build() {
       "Floor / unit": p.floor, "Total floors": p.floors, "Furnishing": p.furnishing, "Carpet area (sq ft)": p.carpet, "Built-up area (sq ft)": p.builtup,
       "Ceiling height": p.ceiling, "Rent on carpet (Rs per sq ft a month)": p.rent, "CAM (Rs per sq ft a month)": p.cam, "Parking": p.parking,
       "Fire NOC": p.noc, "OC and CC": p.oc, "Available from": p.available, "Nearest metro": p.metro, "Metro distance (m)": p.metroM,
-      "Position note": g.note,
-      "Coworking operators in the building": MARKED.filter(m => m.geo === p.geo).map(m => m.operator + (m.status === "Upcoming" ? " (upcoming)" : "")).join(", ") || undefined
+      "Position note": g.note
     });
   });
 
