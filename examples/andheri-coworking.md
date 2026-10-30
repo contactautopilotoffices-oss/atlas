@@ -25,19 +25,6 @@ Reading copy of the atlas (`examples/andheri-coworking.bundle.json`), built from
 | 15 | 91 Springboard · Lotus | Coworking | B | 300 | Rs 17,000 | Dedicated Seats - 15000 + GST | 50 seats available | DN Nagar | 1.6km | 900m |
 | 16 | 315work Avenue · Silver Utopia | Coworking | B | 240 | Rs. 18000 + GST | Dedicated Seats - 17000 + GST | 10 Seats | WEH | 600m | 1.1km |
 
-### Operators marked by building, not visited
-
-Marked by the team on 30 Oct 2026. They are not on the visit sheet, so their cards carry only the operator, the building and the status.
-
-| # | Centre | Building | Micro-market | Status |
-|---|---|---|---|---|
-| 17 | Innov8 · Times Square | Times Square, Marol | Marol | Operating |
-| 18 | RedBricks · Times Square | Times Square, Marol | Marol | Operating |
-| 19 | Smartworks · Times Square | Times Square, Marol | Marol | Operating |
-| 20 | Urban Vault · Times Square | Times Square, Marol | Marol | Upcoming |
-| 21 | AKT Spaces · Satellite Gazebo | Satellite Gazebo, Chakala | Chakala and MIDC | Operating |
-| 22 | 91 Springboard · Corporate Avenue | Corporate Avenue, Chakala | Chakala and MIDC | Operating |
-
 ### Charges
 
 | Centre | Meeting rooms | After hours | Sunday | Printing | LAN | Parking |
@@ -61,14 +48,13 @@ Marked by the team on 30 Oct 2026. They are not on the visit sheet, so their car
 
 ## Proposed inventory
 
-- **Corporate Avenue (Atul Projects).** Grade A, G+8, furnished. 3rd and 4th floors, 12,414 sq ft carpet, 20,690 sq ft built-up. Rs 300 per sq ft on carpet, CAM included. Fire NOC and OC available; ready immediately. 5 car parks a floor. Chakala metro 800 m. Efficiency 60% assumed because the landlord quoted on carpet. Coworking operators in the building: 91 Springboard.
+- **Corporate Avenue (Atul Projects).** Grade A, G+8, furnished. 3rd and 4th floors, 12,414 sq ft carpet, 20,690 sq ft built-up. Rs 300 per sq ft on carpet, CAM included. Fire NOC and OC available; ready immediately. 5 car parks a floor. Chakala metro 800 m. Efficiency 60% assumed because the landlord quoted on carpet.
 - **723 Avenue (Wadhwa).** Grade A, G+15, bare shell, 11.7 ft ceilings. 13th and 14th floors, 12,952 sq ft carpet, 21,586 sq ft built-up. Rs 316 per sq ft on carpet plus Rs 16 CAM. Fire NOC, OC and CC due November 2026; available November 2026. Parking 1 per 1,000 sq ft built-up. Marol metro 700 m.
 - **Privilon (Bsafal).** Grade A, G+15, bare shell, 11.7 ft ceilings. Multiple floors, 15,343 sq ft carpet. Rs 375 per sq ft on carpet plus Rs 30 CAM. Fire NOC, OC and CC due January 2027; available January 2027. Parking to be confirmed. Marol metro 93 m. Efficiency 60% assumed because the landlord quoted on carpet.
 
 ## What the sheet shows
 
 - **Centres visited.** 16 centres by 11 operators across 15 buildings: 15 in Andheri East and 1 in Vile Parle on the Western Express Highway. Boston House holds two (Rush Co-works and Innov8). Innov8 runs four of the 16. Visited_Co-working_Space.xlsx (site visits, October 2026).
-- **Also in the market, not visited.** Six more centres in three buildings, marked by the team: Times Square, Marol (Innov8, RedBricks, Smartworks, and Urban Vault upcoming); Satellite Gazebo, Chakala (AKT Spaces); Corporate Avenue, Chakala (91 Springboard), the building Autopilot proposes. From the team, 30 Oct 2026. Not on the visit sheet, so they carry no seats or prices and are not counted in the figures below.
 - **Per seat cost.** Rs 12,000 (Teloz Space, AJ House) to Rs 28,000 (WeWork, K Raheja Platinum) a month; median Rs 18,000. As quoted on the sheet, most plus GST, with DevX corrected to Rs 18,000. Twelve of the 16 sit between Rs 14,000 and 20,000.
 - **Seats.** About 9,400 seats across the 16 centres; WeWork (3,000), Quest (1,800) and Innov8 Zion House (1,500) hold 6,300 of them. Innov8 Solitaire is given as 200+.
 - **Dedicated and flex desks.** Dedicated desks Rs 10,000 (Teloz) to Rs 22,000 (Innov8 Zion House); flex seats Rs 10,000 to 21,000 where offered. From the sheet's open and dedicated desk row. Rush Co-works and Executive Spaces Chandak Chambers offer no flex seats.
