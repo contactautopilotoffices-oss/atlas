@@ -107,7 +107,25 @@ svg .grid{stroke:var(--line);stroke-width:.5}
 .leg{display:flex;flex-wrap:wrap;gap:1.5mm 4mm;font-size:7.6pt;color:var(--mut);margin-top:1.5mm}
 .leg i{display:inline-block;width:3mm;height:3mm;border-radius:1px;vertical-align:-.4mm;margin-right:1.2mm}
 .grp{break-inside:avoid}
+.chart-big svg{max-height:104mm}
+/* pages of numbered points: the points read at deck size, the takeaway sits at the foot */
+.lg .pt h3{font-size:13.5pt;margin-bottom:1.8mm}
+.lg .pt p{font-size:10pt;line-height:1.45}
+.lg .pt .mit{font-size:9.4pt}
+.pts.lg{gap:9mm 10mm}
+.foot{margin-top:auto;padding:5mm 0 7mm}
+.statement{flex:1;min-height:0;display:grid;grid-template-columns:2fr 3fr;gap:14mm;align-items:center;padding:0 8mm 14mm}
+.statement .kpi .v{font-size:56pt}
+.statement .kpi .l{font-size:11pt;margin-top:3mm;max-width:95mm}
+.statement .means{font-size:11.5pt;line-height:1.5;padding:6mm 7mm}
+.statement .means b{font-size:8pt;margin-bottom:3mm}
+.statement.solo{grid-template-columns:1fr;justify-items:center}
+.statement.solo .means{max-width:230mm}
 .ladder td{padding:1mm 2mm}
+.ladder td:last-child{white-space:nowrap}
+.edge{white-space:nowrap}
+/* who sits in each occupancy band: at the 7.5 pt floor */
+.who{margin-top:1.5mm;font-size:7.5pt;line-height:1.3;color:var(--mut)}
 #bar{position:fixed;top:0;left:0;right:0;height:56px;background:rgba(42,30,22,.94);color:#f7f2ea;display:flex;align-items:center;gap:14px;padding:0 18px;z-index:5;font-size:13px;backdrop-filter:blur(8px)}
 #bar b{font-family:var(--serif);font-weight:600;font-size:15px;margin-right:auto}
 #bar button,#bar a{appearance:none;border:1px solid rgba(255,255,255,.3);background:transparent;color:#f7f2ea;padding:7px 12px;border-radius:8px;font:inherit;cursor:pointer;text-decoration:none}
@@ -147,9 +165,44 @@ svg .grid{stroke:var(--line);stroke-width:.5}
 <script src="/casestudy/costing.js?v=cs1"></script>
 <script src="/casestudy/render.js?v=cs1"></script>
 <script>
+/* A table page whose content stops well short of the foot gets roomier rows
+   and slightly larger type, step by step, until it uses the height. It never
+   comes within 4 mm of the source line and never overflows the page. */
+function fitTables(deck) {
+  /* type grows by at most 0.6 pt, so narrow columns do not start to wrap */
+  var MM = 96 / 25.4, STEP = 0.4, CAP = 4, FONT_CAP = 10.2, FONT_UP = 0.6;
+  Array.prototype.forEach.call(deck.querySelectorAll(".page"), function (page) {
+    var body = page.querySelector(".body"), ftr = page.querySelector(".ftr");
+    var tables = body ? Array.prototype.filter.call(body.querySelectorAll("table"), function (tb) { return !tb.closest(".means"); }) : [];
+    if (!tables.length) return;
+    var limit = function () { return (ftr ? ftr.getBoundingClientRect().top : body.getBoundingClientRect().bottom) - 4 * MM; };
+    var bottom = function () {
+      var m = 0;
+      Array.prototype.forEach.call(body.querySelectorAll(":scope > :not(.cols), .cols > *"), function (el) { m = Math.max(m, el.getBoundingClientRect().bottom); });
+      return m;
+    };
+    var cells = [], fonts = [];
+    tables.forEach(function (tb) {
+      fonts.push(parseFloat(getComputedStyle(tb).fontSize) * 0.75);
+      Array.prototype.forEach.call(tb.querySelectorAll("td"), function (td) { var cs = getComputedStyle(td); cells.push({ td: td, top: parseFloat(cs.paddingTop), bot: parseFloat(cs.paddingBottom) }); });
+    });
+    var apply = function (k) {
+      cells.forEach(function (c) { c.td.style.paddingTop = (c.top + k * STEP * MM / 2) + "px"; c.td.style.paddingBottom = (c.bot + k * STEP * MM / 2) + "px"; });
+      tables.forEach(function (tb, i) { tb.style.fontSize = Math.min(FONT_CAP, fonts[i] + FONT_UP, fonts[i] + k * 0.12) + "pt"; });
+    };
+    var fits = function () { return bottom() <= limit() && page.scrollHeight <= page.clientHeight + 1; };
+    if (limit() - bottom() < page.clientHeight * 0.18) return;
+    for (var k = 1; k * STEP <= CAP; k++) {
+      apply(k);
+      if (!fits()) { apply(k - 1); break; }
+      if (limit() - bottom() < page.clientHeight * 0.06) break;
+    }
+  });
+}
 (window.CaseLoad || Promise.resolve()).then(function () {
   if (!window.CASE) return;
   var out = CaseRender.render(window.CASE, document.getElementById("deck"));
+  fitTables(document.getElementById("deck"));
   document.title = (window.CASE.meta && window.CASE.meta.title) || "Case study";
   document.getElementById("bar-title").textContent = document.title;
   document.getElementById("bar-pages").textContent = out.pages + " pages";

@@ -79,7 +79,8 @@
     var lo = opts.min != null ? opts.min : Math.min.apply(null, vals), hi = opts.max != null ? opts.max : Math.max.apply(null, vals);
     if (hi === lo) hi = lo + 1;
     var pad = (hi - lo) * 0.15; lo = opts.min != null ? lo : lo - pad; hi += pad;
-    var X = function (i) { return pl + (pts.length === 1 ? (w - pl - pr) / 2 : i * (w - pl - pr) / (pts.length - 1)); };
+    /* the end points sit inset, so their value labels clear the y-axis labels */
+    var inset = 16, X = function (i) { return pl + (pts.length === 1 ? (w - pl - pr) / 2 : inset + i * (w - pl - pr - 2 * inset) / (pts.length - 1)); };
     var Y = function (v) { return pt + (h - pt - pb) * (1 - (v - lo) / (hi - lo)); };
     var out = "", g = 4;
     for (var i = 0; i <= g; i++) { var yv = lo + (hi - lo) * i / g; out += '<line class="grid" x1="' + pl + '" x2="' + (w - pr) + '" y1="' + Y(yv) + '" y2="' + Y(yv) + '"/><text class="ax" x="' + (pl - 4) + '" y="' + (Y(yv) + 2.5) + '" text-anchor="end">' + (opts.fmt || String)(yv) + "</text>"; }
@@ -95,8 +96,15 @@
     opts = opts || {};
     var w = opts.w || 300, h = opts.h || 130, pl = 8, pr = 8, pt = 18, pb = 22;
     var vals = pts.map(function (p) { return Math.max(p.value, p.value2 || 0); });
+    var ranged = pts.some(function (p) { return p.value2 != null; });
     var hi = opts.max || Math.max.apply(null, vals) * 1.15, lo = opts.min || 0;
-    var n = pts.length, bw = (w - pl - pr) / n, barW = Math.min(bw * 0.62, 44);
+    /* Ranges float: start the scale just under the lowest range, or every bar is a sliver at the top. */
+    if (ranged && opts.min == null) {
+      var lowest = Math.min.apply(null, pts.map(function (p) { return p.value; })), top = Math.max.apply(null, vals), spread = Math.max(1e-9, top - lowest), step = Math.pow(10, Math.floor(Math.log10(spread)));
+      lo = Math.max(0, Math.floor((lowest - spread * 0.15) / step) * step);
+      if (!opts.max) hi = top + spread * 0.12;
+    }
+    var n = pts.length, bw = (w - pl - pr) / n, barW = Math.min(bw * 0.62, 44), pt = ranged ? 30 : pt;
     var Y = function (v) { return pt + (h - pt - pb) * (1 - (v - lo) / (hi - lo)); };
     var out = "";
     pts.forEach(function (p, i) {
@@ -105,7 +113,10 @@
       if (p.value2 != null) out += '<rect x="' + x + '" y="' + Y(p.value2) + '" width="' + barW + '" height="' + (Y(p.value) - Y(p.value2)) + '"' + dash + ' rx="1.5"/>';
       else out += '<rect x="' + x + '" y="' + Y(p.value) + '" width="' + barW + '" height="' + (Y(lo) - Y(p.value)) + '"' + dash + ' rx="1.5"/>';
       var label = p.value2 != null ? (opts.fmt || String)(p.value) + " to " + (opts.fmt || String)(p.value2) : (opts.fmt || String)(p.value);
-      out += '<text class="val" x="' + (x + barW / 2) + '" y="' + (Y(p.value2 != null ? p.value2 : p.value) - 4) + '" text-anchor="middle">' + esc(label) + "</text>";
+      var ty = Y(p.value2 != null ? p.value2 : p.value) - 4;
+      /* A range label wider than its slot goes on two lines. */
+      if (p.value2 != null && label.length * 5.6 > bw - 4) out += '<text class="val" x="' + (x + barW / 2) + '" y="' + (ty - 10) + '" text-anchor="middle">' + esc((opts.fmt || String)(p.value) + " to") + '</text><text class="val" x="' + (x + barW / 2) + '" y="' + ty + '" text-anchor="middle">' + esc((opts.fmt || String)(p.value2)) + "</text>";
+      else out += '<text class="val" x="' + (x + barW / 2) + '" y="' + ty + '" text-anchor="middle">' + esc(label) + "</text>";
       out += '<text class="ax" x="' + (x + barW / 2) + '" y="' + (h - 6) + '" text-anchor="middle">' + esc(p.label) + "</text>";
     });
     if (opts.refLine != null) { var y = Y(opts.refLine); out += '<line x1="' + pl + '" x2="' + (w - pr) + '" y1="' + y + '" y2="' + y + '" stroke="' + COLORS[0] + '" stroke-dasharray="3 3" stroke-width="1"/><text class="ax" x="' + (w - pr) + '" y="' + (y - 3) + '" text-anchor="end" fill="' + COLORS[0] + '">' + esc(opts.refLabel || "") + "</text>"; }
@@ -123,50 +134,102 @@
       out += '<rect x="' + pl + '" y="' + (y + 2) + '" width="' + Math.max(0, bw) + '" height="' + (rowH - 5) + '" fill="' + (r.color || COLORS[0]) + '" rx="1.5"/>';
       out += '<text class="val" x="' + (pl + bw + 4) + '" y="' + (y + rowH * 0.68) + '">' + esc(r.note || (opts.fmt || String)(r.value)) + "</text>";
     });
-    if (opts.refLine != null) { var x = pl + (w - pl - pr) * (opts.refLine / hi); out += '<line x1="' + x + '" x2="' + x + '" y1="0" y2="' + h + '" stroke="' + COLORS[0] + '" stroke-dasharray="3 3"/><text class="ax" x="' + (x + 3) + '" y="' + (h + 8) + '" fill="' + COLORS[0] + '">' + esc(opts.refLabel || "") + "</text>"; }
+    if (opts.refLine != null) {
+      /* the label runs left of the line when running right would leave the chart */
+      var x = pl + (w - pl - pr) * (opts.refLine / hi), left = x + 3 + (opts.refLabel || "").length * 5.1 > w;
+      out += '<line x1="' + x + '" x2="' + x + '" y1="0" y2="' + h + '" stroke="' + COLORS[0] + '" stroke-dasharray="3 3"/><text class="ax" x="' + (left ? x - 3 : x + 3) + '" y="' + (h + 8) + '"' + (left ? ' text-anchor="end"' : "") + ' fill="' + COLORS[0] + '">' + esc(opts.refLabel || "") + "</text>";
+    }
     return svg(w, h + (opts.refLine != null ? 12 : 0), out);
   }
   /* Stacked horizontal bars: one row per option, segments in order. */
   function stacked(rows, segs, opts) {
     opts = opts || {};
-    var w = opts.w || 420, rowH = 34, pl = 70, pr = 70, h = rows.length * rowH + 22;
+    var w = opts.w || 420, rowH = 56, barH = 32, pl = 70, pr = 70, h = rows.length * rowH + 22;
     var hi = Math.max.apply(null, rows.map(function (r) { return r.total; })) * 1.02;
     var X = function (v) { return pl + (w - pl - pr) * (v / hi); };
     var out = "";
     rows.forEach(function (r, i) {
       var y = i * rowH + 4, x = pl;
-      out += '<text class="lbl" x="' + (pl - 6) + '" y="' + (y + 14) + '" text-anchor="end" font-weight="600">' + esc(r.label) + "</text>";
+      out += '<text class="lbl" x="' + (pl - 6) + '" y="' + (y + 13) + '" text-anchor="end" font-weight="600">' + esc(r.label) + "</text>";
       out += '<text class="ax" x="' + (pl - 6) + '" y="' + (y + 24) + '" text-anchor="end">' + esc(r.sub || "") + "</text>";
       segs.forEach(function (s, k) {
         var v = r.values[k], bw = X(v) - pl;
-        out += '<rect x="' + x + '" y="' + y + '" width="' + bw + '" height="20" fill="' + s.color + '"/>';
-        if (bw > 26) out += '<text class="val" x="' + (x + bw / 2) + '" y="' + (y + 13.5) + '" text-anchor="middle" fill="#fff">' + esc((opts.fmt || String)(v)) + "</text>";
+        out += '<rect x="' + x + '" y="' + y + '" width="' + bw + '" height="' + barH + '" fill="' + s.color + '"/>';
+        if (bw > 26) out += '<text class="val" x="' + (x + bw / 2) + '" y="' + (y + barH / 2 + 3.5) + '" text-anchor="middle" fill="#fff">' + esc((opts.fmt || String)(v)) + "</text>";
         x += bw;
       });
-      out += '<text class="val" x="' + (x + 5) + '" y="' + (y + 13.5) + '">' + esc(r.note || (opts.fmt || String)(r.total)) + "</text>";
+      out += '<text class="val" x="' + (x + 5) + '" y="' + (y + barH / 2 + 3.5) + '">' + esc(r.note || (opts.fmt || String)(r.total)) + "</text>";
     });
-    var g = 5; for (var i = 0; i <= g; i++) { var v = hi * i / g; out += '<text class="ax" x="' + X(v) + '" y="' + (h - 4) + '" text-anchor="middle">' + esc((opts.axisFmt || opts.fmt || String)(v)) + "</text>"; }
+    /* axis ticks on a round step (1, 2, 2.5 or 5 times a power of ten), about five of them */
+    var raw = hi / 5, mag = Math.pow(10, Math.floor(Math.log10(raw))), step = [1, 2, 2.5, 5, 10].map(function (m) { return m * mag; }).filter(function (t) { return t >= raw; })[0];
+    for (var v = 0; v <= hi + 1e-9; v += step) out += '<text class="ax" x="' + X(v) + '" y="' + (h - 4) + '" text-anchor="middle">' + esc((opts.axisFmt || opts.fmt || String)(v)) + "</text>";
     return svg(w, h, out) + '<div class="leg">' + segs.map(function (s) { return "<span><i style=\"background:" + s.color + '"></i>' + esc(s.label) + "</span>"; }).join("") + "</div>";
   }
-  /* The occupancy scale: 60% to 100%, with the thresholds marked. */
+  /* The occupancy scale: 60% to 100%, with the thresholds marked. Labels
+     above the bar stack in as many rows as they need, so none touches
+     another label or crosses another threshold's leader line. */
   function occScale(c, a, opts) {
-    var w = 820, h = 92, pl = 30, pr = 30, lo = 0.6, hi = 1.0;
-    var X = function (v) { return pl + (w - pl - pr) * ((v - lo) / (hi - lo)); };
+    var w = 820, pl = 30, pr = 30, lo = 0.6, hi = 1.0, rowH = 14, gap = 6;
+    var X = function (v) { return pl + (w - pl - pr) * ((Math.min(hi, Math.max(lo, v)) - lo) / (hi - lo)); };
     var be = c.breakEven, rc = c.options[0] ? c.options[0].runningCovered : 0, ads = c.options[0] ? c.options[0].breakEvenWithAds : 0;
     var rl = Costing.num(a.rivalsLow, 75) / 100, rh = Costing.num(a.rivalsHigh, 80) / 100;
+    var lines = [
+      { x: X(rc), text: pc(rc) + " running costs covered", col: COLORS[3] },
+      { x: X(be), text: pc(be) + " every cost covered", col: COLORS[2] }
+    ];
+    if (ads) lines.push({ x: X(ads), text: pc(ads) + " with ads", col: COLORS[4] });
+    /* side: 0 centred on x, 1 running right of it, -1 running left of it */
+    var span = function (l, cw, side) { var wd = l.text.length * cw, at = side > 0 ? l.x + 4 : side < 0 ? l.x - 4 - wd : l.x - wd / 2; l.left = Math.max(0, Math.min(w - wd, at)); l.right = l.left + wd; };
+    var hits = function (x, l) { return x >= l.left - gap && x <= l.right + gap; };
+    /* The rivals label sits on the row next to the bar, slid sideways off any leader line. */
+    var box = { x: (X(rl) + X(rh)) / 2, text: "most rivals · " + Math.round(rl * 100) + " to " + Math.round(rh * 100) + "%" };
+    span(box, 5.1);
+    var bw0 = box.right - box.left, cx = box.x;
+    for (var k = 0; k <= 40 && lines.some(function (l) { return hits(l.x, box); }); k++) {
+      var dx = Math.ceil(k / 2) * 8 * (k % 2 ? -1 : 1);
+      box.left = Math.max(0, Math.min(w - bw0, cx - bw0 / 2 + dx)); box.right = box.left + bw0;
+    }
+    /* Threshold labels stack upwards from row 1; none overlaps another or
+       another's leader line. There are at most three, so every row and side
+       is tried and the lowest, most centred layout wins. */
+    lines.sort(function (p, q) { return p.x - q.x; });
+    var fits = function (l, p) {
+      if (p.row === l.row) return l.left > p.right + gap || l.right < p.left - gap;
+      return p.row > l.row ? !hits(p.x, l) : !hits(l.x, p);
+    };
+    var best = null, bestScore = Infinity;
+    (function tryAt(i, done) {
+      if (i === lines.length) {
+        var score = done.reduce(function (m, l) { return Math.max(m, l.row); }, 0) * 10 + done.filter(function (l) { return l.side; }).length;
+        if (score < bestScore) { bestScore = score; best = done.map(function (l) { return { x: l.x, text: l.text, col: l.col, row: l.row, side: l.side, left: l.left, right: l.right }; }); }
+        return;
+      }
+      var l = lines[i];
+      for (var r = 1; r <= lines.length; r++) [0, 1, -1].forEach(function (side) {
+        l.row = r; l.side = side; span(l, 5.6, side);
+        if (done.every(function (p) { return fits(l, p); })) tryAt(i + 1, done.concat([{ x: l.x, text: l.text, col: l.col, row: r, side: side, left: l.left, right: l.right }]));
+      });
+    })(0, []);
+    /* no clean layout: one row each, centred */
+    var placed = best || lines.map(function (l, i) { span(l, 5.6, 0); l.row = i + 1; return l; });
+    var top = Math.max.apply(null, placed.map(function (l) { return l.row; }));
+    var by = 23 + top * rowH, h = by + 56;
     var out = "";
-    out += '<rect x="' + X(lo) + '" y="38" width="' + (X(rc) - X(lo)) + '" height="16" fill="' + COLORS[0] + '" fill-opacity=".85"/>';
-    out += '<rect x="' + X(rc) + '" y="38" width="' + (X(be) - X(rc)) + '" height="16" fill="' + COLORS[3] + '" fill-opacity=".85"/>';
-    out += '<rect x="' + X(be) + '" y="38" width="' + (X(hi) - X(be)) + '" height="16" fill="' + COLORS[2] + '" fill-opacity=".85"/>';
-    out += '<text class="t" x="' + ((X(lo) + X(rc)) / 2) + '" y="66" text-anchor="middle">Losing money</text><text class="ax" x="' + ((X(lo) + X(rc)) / 2) + '" y="75" text-anchor="middle">rent and running costs not covered</text>';
-    out += '<text class="t" x="' + ((X(rc) + X(be)) / 2) + '" y="66" text-anchor="middle">Paying back</text><text class="ax" x="' + ((X(rc) + X(be)) / 2) + '" y="75" text-anchor="middle">the fit-out</text>';
-    out += '<text class="t" x="' + ((X(be) + X(hi)) / 2) + '" y="66" text-anchor="middle">Earning</text><text class="ax" x="' + ((X(be) + X(hi)) / 2) + '" y="75" text-anchor="middle">every cost covered</text>';
-    for (var v = 0.6; v <= 1.001; v += 0.05) out += '<text class="ax" x="' + X(v) + '" y="90" text-anchor="middle">' + Math.round(v * 100) + "%</text>";
-    var mark = function (v, label, y, col) { out += '<line x1="' + X(v) + '" x2="' + X(v) + '" y1="' + (y + 4) + '" y2="54" stroke="' + col + '" stroke-width="1.2"/><text class="val" x="' + X(v) + '" y="' + y + '" text-anchor="middle" fill="' + col + '">' + esc(label) + "</text>"; };
-    mark(rc, pc(rc) + " running costs covered", 12, COLORS[3]);
-    mark(be, pc(be) + " every cost covered", 24, COLORS[2]);
-    if (ads) mark(ads, pc(ads) + " with ads", 36, COLORS[4]);
-    out += '<rect x="' + X(rl) + '" y="30" width="' + (X(rh) - X(rl)) + '" height="30" fill="none" stroke="#2a1e16" stroke-dasharray="3 2"/><text class="ax" x="' + ((X(rl) + X(rh)) / 2) + '" y="27" text-anchor="middle">most rivals · ' + Math.round(rl * 100) + " to " + Math.round(rh * 100) + "%</text>";
+    out += '<rect x="' + X(lo) + '" y="' + by + '" width="' + (X(rc) - X(lo)) + '" height="16" fill="' + COLORS[0] + '" fill-opacity=".85"/>';
+    out += '<rect x="' + X(rc) + '" y="' + by + '" width="' + (X(be) - X(rc)) + '" height="16" fill="' + COLORS[3] + '" fill-opacity=".85"/>';
+    out += '<rect x="' + X(be) + '" y="' + by + '" width="' + (X(hi) - X(be)) + '" height="16" fill="' + COLORS[2] + '" fill-opacity=".85"/>';
+    out += '<rect x="' + X(rl) + '" y="' + (by - 4) + '" width="' + (X(rh) - X(rl)) + '" height="24" fill="none" stroke="#2a1e16" stroke-dasharray="3 2"/>';
+    var zone = function (x0, x1, t, s) { out += '<text class="t" x="' + ((x0 + x1) / 2) + '" y="' + (by + 30) + '" text-anchor="middle">' + t + '</text><text class="ax" x="' + ((x0 + x1) / 2) + '" y="' + (by + 39) + '" text-anchor="middle">' + s + "</text>"; };
+    zone(X(lo), X(rc), "Losing money", "rent and running costs not covered");
+    zone(X(rc), X(be), "Paying back", "the fit-out");
+    zone(X(be), X(hi), "Earning", "every cost covered");
+    for (var v = 0.6; v <= 1.001; v += 0.05) out += '<text class="ax" x="' + X(v) + '" y="' + (by + 54) + '" text-anchor="middle">' + Math.round(v * 100) + "%</text>";
+    out += '<text class="ax" x="' + box.left + '" y="' + (by - 9) + '">' + esc(box.text) + "</text>";
+    placed.forEach(function (l) {
+      var y = by - 9 - l.row * rowH;
+      out += '<line x1="' + l.x + '" x2="' + l.x + '" y1="' + (y + 3) + '" y2="' + (by + 16) + '" stroke="' + l.col + '" stroke-width="1.2"/>';
+      out += '<text class="val" x="' + l.left + '" y="' + y + '" fill="' + l.col + '">' + esc(l.text) + "</text>";
+    });
     return svg(w, h, out);
   }
   /* The price ladder: one dot per rival in bands, our prices as lines. */
@@ -175,23 +238,41 @@
     if (!rivals.length) return "";
     var band = 2000, lo = Math.floor(Math.min.apply(null, rivals.map(function (r) { return r.price; })) / band) * band;
     var hi = Math.ceil(Math.max(Math.max.apply(null, rivals.map(function (r) { return r.price; })), c.priceHigh) / band) * band + band;
-    var w = 820, h = 170, pl = 16, pr = 16, pb = 26, pt = 30, X = function (p) { return pl + (w - pl - pr) * ((p - lo) / (hi - lo)); };
+    var nO = c.options.length, w = 820, pl = 16, pr = 16, pb = 26, pt = 20 + (nO + 1) * 13, h = pt + 200, X = function (p) { return pl + (w - pl - pr) * ((p - lo) / (hi - lo)); };
     var cols = {}; rivals.forEach(function (r) { var k = Math.floor(r.price / band) * band; (cols[k] = cols[k] || []).push(r); });
     var out = "", maxN = Math.max.apply(null, Object.keys(cols).map(function (k) { return cols[k].length; }));
     var dy = Math.min(13, (h - pt - pb) / maxN);
+    /* the median and our price lines; a band count that one would cross steps beside it */
+    var vlines = [X(median(rivals.map(function (r) { return r.price; })))].concat(c.options.map(function (o) { return X(o.price); }));
     Object.keys(cols).forEach(function (k) {
       cols[k].forEach(function (r, i) {
         var cx = X(+k + band / 2), cy = h - pb - 6 - i * dy;
         out += '<circle cx="' + cx + '" cy="' + cy + '" r="4.5" fill="' + (r.sameBuilding ? COLORS[3] : COLORS[1]) + '"' + (r.sameBuilding ? ' stroke="#2a1e16" stroke-width="1.5"' : "") + "><title>" + esc(r.operator + (r.building ? ", " + r.building : "") + ": " + R(r.price)) + "</title></circle>";
       });
-      out += '<text class="val" x="' + X(+k + band / 2) + '" y="' + (h - pb - 10 - cols[k].length * dy) + '" text-anchor="middle">' + cols[k].length + "</text>";
+      var nx = X(+k + band / 2), nw = String(cols[k].length).length * 5.6, crossed = vlines.some(function (lx) { return Math.abs(lx - nx) < nw / 2 + 3; });
+      out += '<text class="val" x="' + (crossed ? nx + 7 : nx) + '" y="' + (h - pb - 10 - cols[k].length * dy) + '" text-anchor="' + (crossed ? "start" : "middle") + '">' + cols[k].length + "</text>";
     });
     for (var p = lo; p <= hi; p += 5000) out += '<text class="ax" x="' + X(p) + '" y="' + (h - 8) + '" text-anchor="middle">' + inr(p, { plain: true }).replace(/,000$/, "K") + "</text>";
     var med = median(rivals.map(function (r) { return r.price; }));
-    out += '<line x1="' + X(med) + '" x2="' + X(med) + '" y1="' + pt + '" y2="' + (h - pb) + '" stroke="#2a1e16" stroke-dasharray="3 3"/><text class="ax" x="' + X(med) + '" y="' + (pt - 4) + '" text-anchor="middle">Middle ' + esc(R(med)) + "</text>";
+    /* Rows from the top: one per option, then "Middle". A line runs down from
+       its own row, so a label avoids the lines of the rows above it. */
+    var ourX = c.options.map(function (o) { return X(o.price); }), cw = 5.6;
+    var side = function (x, wd, avoid) {
+      var clear = function (l) { return avoid.every(function (ax) { return ax < l - 4 || ax > l + wd + 4; }); };
+      if (x + 4 + wd <= w && clear(x + 4)) return x + 4;
+      if (x - 4 - wd >= 0 && clear(x - 4 - wd)) return x - 4 - wd;
+      return Math.min(x + 4, w - wd);
+    };
     c.options.forEach(function (o, i) {
-      out += '<line x1="' + X(o.price) + '" x2="' + X(o.price) + '" y1="' + (pt + 8 + i * 12) + '" y2="' + (h - pb) + '" stroke="' + COLORS[0] + '" stroke-width="1.5"/><text class="val" x="' + (X(o.price) + 4) + '" y="' + (pt + 12 + i * 12) + '" fill="' + COLORS[0] + '">' + esc(o.name + " " + R(o.price)) + "</text>";
+      var y = 12 + i * 13, t = o.name + " " + R(o.price);
+      out += '<line x1="' + ourX[i] + '" x2="' + ourX[i] + '" y1="' + (y + 3) + '" y2="' + (h - pb) + '" stroke="' + COLORS[0] + '" stroke-width="1.5"/><text class="val" x="' + side(ourX[i], t.length * cw, ourX.slice(0, i)) + '" y="' + y + '" fill="' + COLORS[0] + '">' + esc(t) + "</text>";
     });
+    var mt = "Middle " + R(med), mw = mt.length * 5.1, mx = X(med) - mw / 2;
+    if (!ourX.every(function (ax) { return ax < mx - 4 || ax > mx + mw + 4; })) mx = side(X(med), mw, ourX);
+    /* the median line stops above the stack of dots it would cross, so it never runs through them */
+    var mk = Math.floor(med / band) * band, under = cols[mk] && Math.abs(X(mk + band / 2) - X(med)) < 8;
+    var my2 = under ? h - pb - 6 - (cols[mk].length - 1) * dy - 9 : h - pb;
+    out += '<line x1="' + X(med) + '" x2="' + X(med) + '" y1="' + (15 + nO * 13) + '" y2="' + my2 + '" stroke="#2a1e16" stroke-dasharray="3 3"/><text class="ax" x="' + mx + '" y="' + (12 + nO * 13) + '">' + esc(mt) + "</text>";
     return svg(w, h, out);
   }
 
@@ -285,7 +366,7 @@
       var rivalsAll = (b.rivals || []).filter(function (r) { return isFinite(r.price); });
       if (rivalsAll.length) { seatRows.push({ label: "Rival middle", value: median(rivalsAll.map(function (r) { return r.price; })), color: "#8a7a6c", note: R(median(rivalsAll.map(function (r) { return r.price; }))) }); rivalsAll.filter(function (r) { return r.sameBuilding || r.near; }).slice(0, 3).forEach(function (r) { seatRows.push({ label: r.operator + (r.sameBuilding ? ", inside " + byOpt(c, r.sameBuilding).name : r.building ? ", " + r.building : ""), value: r.price, color: "#8a7a6c", note: R(r.price) }); }); }
       var seatAuto = []; if (rivalsAll.length) c.options.forEach(function (x) { var above = rivalsAll.filter(function (r) { return r.price < x.price; }).length; seatAuto.push("At " + R(x.price) + ", " + x.name + " prices above " + above + " of the " + rivalsAll.length + " rival centres."); });
-      d.add({ hdr: h, src: src(b, "seat"), body: "<h2>What one seat costs us, and what we must charge</h2><div class='cols c32'><div><div class='t tiny mut' style='letter-spacing:.1em;text-transform:uppercase'>One seat, one month · " + sym + "</div>" + hbars(seatRows, { pl: 150, w: 420, rowH: 15, fmt: R }) + "</div><div><div class='kpis' style='margin:0 0 4mm'>" + c.options.map(function (x) { return kpi(pc(x.rentShareOfPrice), "of every " + x.name + " seat goes straight to the landlord", "rent " + R(x.perSeat.rent) + " of " + R(x.price)); }).join("") + "</div>" + means(b, "seat", copy(b, "seat").length ? [] : seatAuto) + "</div></div>" });
+      d.add({ hdr: h, src: src(b, "seat"), body: "<h2>What one seat costs us, and what we must charge</h2><div class='cols c32'><div class='chart-big'><div class='t tiny mut' style='letter-spacing:.1em;text-transform:uppercase'>One seat, one month · " + sym + "</div>" + hbars(seatRows, { pl: 150, w: 420, rowH: 19, fmt: R }) + "</div><div><div class='kpis' style='margin:0 0 4mm'>" + c.options.map(function (x) { return kpi(pc(x.rentShareOfPrice), "of every " + x.name + " seat goes straight to the landlord", "rent " + R(x.perSeat.rent) + " of " + R(x.price)); }).join("") + "</div>" + means(b, "seat", copy(b, "seat").length ? [] : seatAuto) + "</div></div>" });
       /* occupancy */
       var occPts = [0.75, 0.8, 0.85, 0.9, 1].map(function (occ) { return { occ: occ }; });
       var occTable = "<table><thead><tr><th>How full</th>" + names.map(function (n) { return '<th class="n">' + esc(n) + "</th>"; }).join("") + "</tr></thead><tbody>" + occPts.map(function (p) { return "<tr><td>" + pc(p.occ) + (Math.abs(p.occ - c.breakEven) < 0.03 ? " <span class='tiny mut'>break-even " + pc(c.breakEven) + "</span>" : "") + "</td>" + c.options.map(function (x) { var v = Costing.atOccupancy(x, p.occ); return '<td class="n" style="color:' + (v < 0 ? "var(--bad)" : "var(--ok)") + '">' + inr(v, { unit: "L", sign: true }) + "</td>"; }).join("") + "</tr>"; }).join("") + "</tbody></table>";
@@ -319,15 +400,19 @@
     var series = function (chart) { return (b.series || []).filter(function (s) { return s.chart === chart; }); };
     if (mpts.length || (b.series || []).length || (b.deals || []).length || (b.occupiers || []).length || (b.pools || []).length) {
       var h3 = d.section("market", "Market research and analysis", copy(b, "market", "intro")[0] || SECTION_SUBS.market, secK("market"), "market");
-      var chartFor = function (key) {
+      /* big: the page's only chart, drawn wider and taller to fill its column. */
+      var chartFor = function (key, big) {
+        /* big: true for the page's only chart; a number for a row of that many charts, sized so
+           every chart's type lands at about the same printed size */
+        var sz = big === true ? { w: 460, h: 250 } : big === 2 ? { w: 440, h: 230 } : big ? { w: 300, h: 175 } : {};
         var pts = series(key); if (!pts.length) return "";
         var title = { vacancy: "Vacancy", rent: "Average rent · " + sym + " a sq ft a month", topBand: "Office rent, top Grade-A buildings · " + sym + " a sq ft a month · dashed = projection", flexSeats: "Flex seats leased, first half of each year", operatorOccupancy: "Settled centres are this full", absorptionShare: "Share of net absorption" }[key] || key;
         var body;
-        if (key === "vacancy" || key === "rent") body = lineChart(pts, { fmt: key === "vacancy" ? function (v) { return (+v).toFixed(1) + "%"; } : function (v) { return sym + Math.round(v); }, color: key === "vacancy" ? COLORS[1] : COLORS[0] });
-        else if (key === "operatorOccupancy") body = hbars(pts.map(function (p) { return { label: p.label, value: p.value, note: p.value + "%" }; }), { max: 100, refLine: c.breakEven * 100, refLabel: "our break-even " + pc(c.breakEven), pl: 80, rowH: 15 });
-        else body = barChart(pts, { fmt: function (v) { return key === "flexSeats" ? fmt(v) : key === "topBand" ? sym + Math.round(v) : (+v).toFixed(+v % 1 ? 1 : 0) + (key === "absorptionShare" ? "%" : ""); }, color: key === "flexSeats" ? COLORS[2] : COLORS[0] });
+        if (key === "vacancy" || key === "rent") body = lineChart(pts, { w: sz.w, h: sz.h, fmt: key === "vacancy" ? function (v) { return (+v).toFixed(1) + "%"; } : function (v) { return sym + Math.round(v); }, color: key === "vacancy" ? COLORS[1] : COLORS[0] });
+        else if (key === "operatorOccupancy") body = hbars(pts.map(function (p) { return { label: p.label, value: p.value, note: p.value + "%" }; }), { max: 100, refLine: c.breakEven * 100, refLabel: "our break-even " + pc(c.breakEven), pl: 80, rowH: big ? 26 : 15, w: sz.w });
+        else body = barChart(pts, { w: sz.w, h: sz.h, fmt: function (v) { return key === "flexSeats" ? fmt(v) : key === "topBand" ? sym + Math.round(v) : (+v).toFixed(+v % 1 ? 1 : 0) + (key === "absorptionShare" ? "%" : ""); }, color: key === "flexSeats" ? COLORS[2] : COLORS[0] });
         var note = pts.filter(function (p) { return p.note; }).map(function (p) { return p.label + ": " + p.note; }).join(" · ");
-        return "<div><div class='t tiny mut' style='letter-spacing:.1em;text-transform:uppercase;margin-bottom:1mm'>" + esc(title) + "</div>" + body + (note ? "<div class='tiny mut' style='margin-top:1mm'>" + esc(note) + "</div>" : "") + "</div>";
+        return "<div" + (big ? " class='chart-big'" : "") + "><div class='t tiny mut' style='letter-spacing:.1em;text-transform:uppercase;margin-bottom:1mm'>" + esc(title) + "</div>" + body + (note ? "<div class='tiny mut' style='margin-top:1mm'>" + esc(note) + "</div>" : "") + "</div>";
       };
       var usedCharts = [];
       mpts.forEach(function (p) {
@@ -337,13 +422,20 @@
         if (p.chart === "vacancy" && series("absorptionShare").length) charts.push("absorptionShare");
         if (p.chart === "flexSeats" && series("operatorOccupancy").length) charts.push("operatorOccupancy");
         usedCharts = usedCharts.concat(charts);
-        var chartHtml = charts.map(chartFor).join("");
-        var side = (p.kpi ? "<div class='kpi' style='margin-bottom:3mm'><div class='v' style='font-size:22pt'>" + esc(code(b, c, p.kpi)) + "</div><div class='l'>" + esc(p.kpiLabel || "") + "</div></div>" : "") + "<div class='means'><b>What it means for us</b><p>" + esc(p.text) + "</p></div>";
-        d.add({ hdr: h3, src: src(b, "market") + (p.chart === "flexSeats" ? " " + src(b, "flex") : ""), body: "<h2><span class='pt'><span class='n'>" + String(p.n || "").padStart(2, "0") + "</span></span>" + esc(p.title) + "</h2><div class='cols " + (charts.length >= 2 ? "c2" : "c12") + "'>" + (charts.length >= 2 ? "<div class='cols c" + Math.min(charts.length, 3) + "' style='grid-column:1 / -1;flex:0 0 auto'>" + chartHtml + "</div><div style='grid-column:1 / -1'>" + side + "</div>" : (chartHtml ? chartHtml + "<div>" + side + "</div>" : "<div style='grid-column:1 / -1'>" + side + "</div>")) + "</div>" });
+        var chartHtml = charts.map(function (k) { return chartFor(k, charts.length === 1 ? true : charts.length); }).join("");
+        var kpiHtml = p.kpi ? "<div class='kpi' style='margin-bottom:3mm'><div class='v' style='font-size:22pt'>" + esc(code(b, c, p.kpi)) + "</div><div class='l'>" + esc(p.kpiLabel || "") + "</div></div>" : "";
+        var meansHtml = "<div class='means'><b>What it means for us</b><p>" + esc(p.text) + "</p></div>";
+        var layout;
+        if (charts.length >= 2) layout = "<div class='cols c2'><div class='cols c" + Math.min(charts.length, 3) + "' style='grid-column:1 / -1;flex:0 0 auto'>" + chartHtml + "</div></div><div class='foot'>" + kpiHtml + meansHtml + "</div>";
+        /* one chart: the chart takes the wide column, the figure and its meaning sit beside it */
+        else if (charts.length === 1) layout = "<div class='cols c32' style='align-items:start'>" + chartHtml + "<div>" + kpiHtml + meansHtml + "</div></div>";
+        /* no chart: a statement page, the figure large beside what it means, centred in the page */
+        else layout = "<div class='statement" + (p.kpi ? "" : " solo") + "'>" + (p.kpi ? "<div class='kpi'><div class='v'>" + esc(code(b, c, p.kpi)) + "</div><div class='l'>" + esc(p.kpiLabel || "") + "</div></div>" : "") + meansHtml + "</div>";
+        d.add({ hdr: h3, src: src(b, "market") + (p.chart === "flexSeats" ? " " + src(b, "flex") : ""), body: "<h2><span class='pt'><span class='n'>" + String(p.n || "").padStart(2, "0") + "</span></span>" + esc(p.title) + "</h2>" + layout });
       });
       /* deals */
       if ((b.deals || []).length) {
-        d.add({ hdr: h3, src: src(b, "deals"), body: "<h2>Recent deals in and around " + esc(b.meta.place || "the area") + "</h2><div class='cols c21'><table><thead><tr><th>Who</th><th>Building</th><th class='n'>Area</th><th class='n'>Rent</th><th>When</th><th>Kind</th></tr></thead><tbody>" + b.deals.map(function (x) { return "<tr><td><b>" + esc(x.who) + "</b>" + (x.note ? "<br><span class='tiny mut'>" + esc(x.note) + "</span>" : "") + "</td><td class='small'>" + esc(x.building || "") + "</td><td class='n'>" + esc(x.area) + "</td><td class='n'>" + esc(x.rent || "") + "</td><td class='small'>" + esc(x.when || "") + "</td><td class='small'>" + esc(x.kind || "") + "</td></tr>"; }).join("") + "</tbody></table><div>" + means(b, "deals") + "</div></div>" });
+        d.add({ hdr: h3, src: src(b, "deals"), body: "<h2>Recent deals in and around " + esc(b.meta.place || "the area") + "</h2><div class='cols " + (means(b, "deals") ? "c21" : "") + "'><table><thead><tr><th>Who</th><th>Building</th><th class='n'>Area</th><th class='n'>Rent</th><th>When</th><th>Kind</th></tr></thead><tbody>" + b.deals.map(function (x) { return "<tr><td><b>" + esc(x.who) + "</b>" + (x.note ? "<br><span class='tiny mut'>" + esc(x.note) + "</span>" : "") + "</td><td class='small'>" + esc(x.building || "") + "</td><td class='n'>" + esc(x.area) + "</td><td class='n'>" + esc(x.rent || "") + "</td><td class='small'>" + esc(x.when || "") + "</td><td class='small'>" + esc(x.kind || "") + "</td></tr>"; }).join("") + "</tbody></table><div>" + means(b, "deals") + "</div></div>" });
       }
       /* catchment */
       if ((b.occupiers || []).length) {
@@ -361,7 +453,7 @@
       if (!pts.length) return;
       var h = d.section(sec, title, copy(b, sec, "intro")[0] || SECTION_SUBS[sec], secK(sec), slot);
       var kp = secK(sec);
-      d.add({ hdr: h, src: src(b, srcKey || sec), body: "<h2>" + esc(copy(b, sec, "intro")[0] || title) + "</h2><div class='pts' style='grid-template-columns:repeat(" + (pts.length > 4 ? 3 : 2) + ",1fr);flex:0 0 auto'>" + pts.map(function (p) { return "<div class='pt'><h3><span class='n'>" + String(p.n || "").padStart(2, "0") + "</span>" + esc(p.title) + "</h3><p>" + esc(p.text) + "</p>" + (p.kpi ? "<div class='kpi'><div class='v' style='font-size:18pt'>" + esc(code(b, c, p.kpi)) + "</div><div class='l'>" + esc(p.kpiLabel || "") + "</div></div>" : "") + "</div>"; }).join("") + "</div><div style='margin-top:4mm'>" + means(b, sec) + (extraHtml || "") + "</div>" });
+      d.add({ hdr: h, src: src(b, srcKey || sec), body: "<h2>" + esc(copy(b, sec, "intro")[0] || title) + "</h2><div class='pts lg' style='grid-template-columns:repeat(" + (pts.length > 4 ? 3 : 2) + ",1fr);flex:0 0 auto'>" + pts.map(function (p) { return "<div class='pt'><h3><span class='n'>" + String(p.n || "").padStart(2, "0") + "</span>" + esc(p.title) + "</h3><p>" + esc(p.text) + "</p>" + (p.kpi ? "<div class='kpi'><div class='v' style='font-size:18pt'>" + esc(code(b, c, p.kpi)) + "</div><div class='l'>" + esc(p.kpiLabel || "") + "</div></div>" : "") + "</div>"; }).join("") + "</div><div class='foot'>" + means(b, sec) + (extraHtml || "") + "</div>" });
     };
     pointPage("infrastructure", "Key infrastructure around " + (b.meta.place || "the site"), "infrastructure");
     pointPage("why", "Why " + (b.meta.place || "here") + " works", "why");
@@ -374,10 +466,10 @@
       var pack = ((b.lists || {}).pack || []).map(function (x) { return esc(x.item || x); }).join(" · ");
       var steps = first.text.split(/(?=\b(?:Curate|Activate|Incentivise|Step \d)\b:?)/).filter(Boolean);
       var brokerKpis = c.options.length ? "<div class='kpis' style='margin:0'>" + kpi(pc(c.options[0].inputs.brokeragePct), "brokerage in the sheet", "of the monthly bill, for as long as we bill") + kpi(c.options.map(function (x) { return R(x.perSeat.brokerage); }).join(" · "), "what it adds to a seat", names.join(" · ")) + kpi(c.options.map(function (x) { return R(x.withBrokerage.price); }).join(" · "), "price with brokerage", names.join(" · ")) + "</div>" : "";
-      d.add({ hdr: h6, src: src(b, "plan"), body: "<h2>Pipeline 1: " + esc(first.title) + "</h2><div class='cols c" + Math.min(3, steps.length) + "' style='flex:0 0 auto'>" + steps.map(function (s, i) { var m = s.match(/^([A-Za-z ]+?):\s*(.*)$/s); return "<div class='pt'><h3><span class='n'>" + (i + 1) + "</span>" + esc(m ? m[1] : "Step " + (i + 1)) + "</h3><p class='small'>" + esc(m ? m[2] : s) + "</p></div>"; }).join("") + "</div>" + brokerKpis + "<div style='margin-top:4mm'>" + means(b, "plan") + (pack ? "<div class='box' style='margin-top:3mm'><b class='t'>The broker pack</b><span class='small'>" + pack + "</span></div>" : "") + "</div>" });
+      d.add({ hdr: h6, src: src(b, "plan"), body: "<h2>Pipeline 1: " + esc(first.title) + "</h2><div class='cols lg c" + Math.min(3, steps.length) + "' style='flex:0 0 auto'>" + steps.map(function (s, i) { var m = s.match(/^([A-Za-z ]+?):\s*(.*)$/s); return "<div class='pt'><h3><span class='n'>" + (i + 1) + "</span>" + esc(m ? m[1] : "Step " + (i + 1)) + "</h3><p class='small'>" + esc(m ? m[2] : s) + "</p></div>"; }).join("") + "</div>" + brokerKpis + "<div class='foot'>" + means(b, "plan") + (pack ? "<div class='box' style='margin-top:3mm'><b class='t'>The broker pack</b><span class='small'>" + pack + "</span></div>" : "") + "</div>" });
       if (rest.length) {
         var adsLine = a.adsPerMonth ? "<div class='kpis' style='margin:0'>" + kpi(L(a.adsFloorPerMonth || a.adsPerMonth), "a month, minimum: one ad, one location", a.adsNote || "") + kpi(c.options.map(function (x) { return R(x.perSeat.ads); }).join(" to "), "what ads add to a seat", "") + "</div>" : "";
-        d.add({ hdr: h6, src: src(b, "pipelines"), body: "<h2>Pipelines " + (first.n ? first.n + 1 : 2) + " to " + (plan[plan.length - 1].n || plan.length) + "</h2><div class='pts' style='flex:0 0 auto'>" + rest.map(function (p) { return "<div class='pt'><h3>Pipeline " + esc(p.n) + ": " + esc(p.title) + "</h3><p class='small'>" + esc(p.text) + "</p></div>"; }).join("") + "</div>" + adsLine + "<div style='margin-top:3mm'>" + means(b, "pipelines") + "</div>" });
+        d.add({ hdr: h6, src: src(b, "pipelines"), body: "<h2>Pipelines " + (first.n ? first.n + 1 : 2) + " to " + (plan[plan.length - 1].n || plan.length) + "</h2><div class='pts lg' style='flex:0 0 auto'>" + rest.map(function (p) { return "<div class='pt'><h3>Pipeline " + esc(p.n) + ": " + esc(p.title) + "</h3><p class='small'>" + esc(p.text) + "</p></div>"; }).join("") + "</div>" + adsLine + "<div class='foot'>" + means(b, "pipelines") + "</div>" });
       }
     }
 
@@ -386,7 +478,7 @@
     if (risks.length) {
       var h7 = d.section("risks", "Top " + (risks.length === 3 ? "three " : "") + "risks", copy(b, "risks", "intro")[0] || SECTION_SUBS.risks, secK("risks"), "risks");
       var watch = ((b.lists || {}).watchlist || []).map(function (x) { return "<li>" + esc(x.item || x) + "</li>"; }).join("");
-      d.add({ hdr: h7, src: src(b, "risks"), body: "<h2>Top risks: " + esc(b.meta.place || "") + "</h2><div class='cols c" + Math.min(3, risks.length) + "' style='flex:0 0 auto'>" + risks.map(function (p) { return "<div class='pt'><h3><span class='n'>" + String(p.n || "").padStart(2, "0") + "</span>" + esc(p.title) + "</h3>" + (p.kpi ? "<div class='kpi' style='margin-bottom:2mm'><div class='v' style='font-size:22pt'>" + esc(code(b, c, p.kpi)) + "</div><div class='l'>" + esc(p.kpiLabel || "") + "</div></div>" : "") + "<p class='small'>" + esc(p.text) + "</p>" + (p.mitigate ? "<div class='mit'><b>How we reduce it</b>" + esc(p.mitigate) + "</div>" : "") + "</div>"; }).join("") + "</div>" + (watch ? "<div class='box' style='margin-top:4mm'><b class='t'>Also on the watch list</b><ul class='small'>" + watch + "</ul></div>" : "") });
+      d.add({ hdr: h7, src: src(b, "risks"), body: "<h2>Top risks: " + esc(b.meta.place || "") + "</h2><div class='cols lg c" + Math.min(3, risks.length) + "' style='flex:0 0 auto'>" + risks.map(function (p) { return "<div class='pt'><h3><span class='n'>" + String(p.n || "").padStart(2, "0") + "</span>" + esc(p.title) + "</h3>" + (p.kpi ? "<div class='kpi' style='margin-bottom:2mm'><div class='v' style='font-size:22pt'>" + esc(code(b, c, p.kpi)) + "</div><div class='l'>" + esc(p.kpiLabel || "") + "</div></div>" : "") + "<p class='small'>" + esc(p.text) + "</p>" + (p.mitigate ? "<div class='mit'><b>How we reduce it</b>" + esc(p.mitigate) + "</div>" : "") + "</div>"; }).join("") + "</div>" + (watch ? "<div class='foot'><div class='box'><b class='t'>Also on the watch list</b><ul class='small'>" + watch + "</ul></div></div>" : "") });
     }
 
     /* ---- rivals ---- */
@@ -415,9 +507,9 @@
         var bands = {}; withOcc.forEach(function (r) { var k = r.occLow + " to " + (r.occHigh || r.occLow) + "%"; (bands[k] = bands[k] || []).push(r); });
         var bk = Object.keys(bands).sort(function (p, q) { return parseInt(p, 10) - parseInt(q, 10); });
         var above = withOcc.filter(function (r) { return (r.occLow / 100) >= c.breakEven; }).length;
-        d.add({ hdr: h8, src: src(b, "occupancyRivals"), body: "<h2>How full rival centres run, and who runs fullest</h2><div class='cols c32'><div><div class='cols' style='grid-template-columns:repeat(" + bk.length + ",1fr);gap:3mm;flex:0;align-items:end'>" + bk.map(function (k) { return "<div><div class='val' style='font-family:var(--serif);font-size:16pt;text-align:center'>" + bands[k].length + "</div><div style='background:" + (parseInt(k, 10) / 100 >= c.breakEven ? COLORS[2] : COLORS[1]) + ";height:" + Math.min(42, 4 + bands[k].length * 2.8) + "mm;border-radius:3px;opacity:.85'></div><div class='tiny mut' style='text-align:center;margin-top:1mm'><b>" + esc(k) + " full</b></div><div class='tiny mut' style='margin-top:1mm;font-size:6.6pt;line-height:1.25'>" + bands[k].map(function (r) { return esc(r.operator + (r.building ? " · " + r.building : "")); }).join("<br>") + "</div></div>"; }).join("") + "</div></div><div><div class='kpis' style='margin:0 0 3mm'>" + kpi(above + " of " + withOcc.length, "above our break-even of " + pc(c.breakEven), "none reports more than " + Math.max.apply(null, withOcc.map(function (r) { return r.occHigh || r.occLow; })) + "%") + "</div>" + means(b, "occupancyRivals") + "</div></div>" });
+        d.add({ hdr: h8, src: src(b, "occupancyRivals"), body: "<h2>How full rival centres run, and who runs fullest</h2><div class='cols' style='grid-template-columns:repeat(" + bk.length + ",1fr);gap:8mm;flex:0 0 auto;align-items:end'>" + bk.map(function (k) { return "<div><div class='val' style='font-family:var(--serif);font-size:16pt;text-align:center'>" + bands[k].length + "</div><div style='background:" + (parseInt(k, 10) / 100 >= c.breakEven ? COLORS[2] : COLORS[1]) + ";height:" + Math.min(42, 4 + bands[k].length * 2.8) + "mm;border-radius:3px;opacity:.85'></div><div class='tiny mut' style='text-align:center;margin-top:1mm'><b>" + esc(k) + " full</b></div><div class='who'>" + bands[k].map(function (r) { return esc(r.operator + (r.building ? " · " + r.building : "")); }).join("<br>") + "</div></div>"; }).join("") + "</div><div class='foot cols c12' style='flex:0 0 auto;align-items:center'><div><div class='kpis' style='margin:0'>" + kpi(above + " of " + withOcc.length, "above our break-even of " + pc(c.breakEven), "none reports more than " + Math.max.apply(null, withOcc.map(function (r) { return r.occHigh || r.occLow; })) + "%") + "</div></div><div>" + means(b, "occupancyRivals") + "</div></div>" });
       }
-      d.add({ hdr: h8, src: src(b, "ladder"), body: "<h2>Where we sit on the price ladder</h2><div class='t tiny mut' style='letter-spacing:.1em;text-transform:uppercase'>Each dot is one rival centre (" + rivals.length + "), stacked in " + sym + "2,000 bands · price a seat a month, plus taxes · ringed = inside one of our buildings</div>" + ladder(b, c) + "<div class='cols c2' style='margin-top:3mm;flex:0 0 auto'><div class='box'><b class='t'>Why this matters</b><span class='small'>" + esc(rivals.filter(function (r) { return r.price <= median(rivals.map(function (x) { return x.price; })); }).length + " of " + rivals.length + " centres sell at " + R(median(rivals.map(function (x) { return x.price; }))) + " or less.") + " " + c.options.map(function (x) { return x.name + " is dearer than " + rivals.filter(function (r) { return r.price < x.price; }).length + " of them"; }).join("; ") + ".</span></div>" + means(b, "ladder") + "</div>" });
+      d.add({ hdr: h8, src: src(b, "ladder"), body: "<h2>Where we sit on the price ladder</h2><div class='t tiny mut' style='letter-spacing:.1em;text-transform:uppercase'>Each dot is one rival centre (" + rivals.length + "), stacked in " + sym + "2,000 bands · price a seat a month, plus taxes · ringed = inside one of our buildings</div><div class='chart-big'>" + ladder(b, c) + "</div><div class='cols c2' style='margin-top:3mm;flex:0 0 auto'><div class='box'><b class='t'>Why this matters</b><span class='small'>" + esc(rivals.filter(function (r) { return r.price <= median(rivals.map(function (x) { return x.price; })); }).length + " of " + rivals.length + " centres sell at " + R(median(rivals.map(function (x) { return x.price; }))) + " or less.") + " " + c.options.map(function (x) { return x.name + " is dearer than " + rivals.filter(function (r) { return r.price < x.price; }).length + " of them"; }).join("; ") + ".</span></div>" + means(b, "ladder") + "</div>" });
     }
 
     /* ---- decision ---- */

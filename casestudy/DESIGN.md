@@ -66,12 +66,18 @@ For each page, from its PNG:
 The daily review keeps this list current: it adds what it finds, removes
 what it fixes, and fixes the worst one to three first.
 
-- Occupancy page: the threshold labels (running costs covered, every cost
-  covered, with ads) and the "most rivals" box collide above the bar.
-- Several pages end in the top half (levers, risks, infrastructure, the
-  pipeline pages, the price ladder): the content does not use the height.
-- Market point pages with a single chart leave the chart small and the
-  right column sparse.
-- "How full rival centres run": the operator names under the bars are dense
-  and hard to read.
-- The wider corridor tables wrap occupancy onto two lines.
+- Table pages now open their rows to use spare height (casestudy/index.html,
+  fitTables), but stop at 4 mm of extra padding a row: levers and openings
+  still end at about three quarters, and levers reads airy rather than full.
+- "What each floor must earn" ends at about four fifths: the chart column
+  could still take the full width with the two price cards below it.
+- Numbered-point pages with few, short points (why here, pipeline 1) keep a
+  gap between the points and the takeaway at the foot.
+- Recent deals: with no "what it means" copy the table now takes the full
+  width, but the page still has no pairing box.
+- The terms table sets the small notes under big figures in the serif face.
+- Market points with one chart (page 15): the chart now sits under the
+  headline, but the "what it means" box beside it is short, so the right
+  column is empty below it.
+- Market points with several charts (pages 14 and 18): the charts are larger
+  and the figure sits at the foot, but a band of space stays between them.
