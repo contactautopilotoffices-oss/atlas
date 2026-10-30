@@ -66,6 +66,8 @@ const GEO = {
   "fleet-house":   { lat: 19.108687, lng: 72.879151, precision: "building", src: "https://exa.ai/library/place/x65yvwhmfnx", note: "Map place page; not in OpenStreetMap. Marol Maroshi Road at Marol Naka: JLL's listing calls it adjacent to Marol Naka metro, and both Line 1 and Line 3 stations are at the door." },
   "silver-utopia": { lat: 19.112617, lng: 72.859672, precision: "building", src: "https://exa.ai/library/place/n2hx8mv5chs", note: "Map place page; another centre in the same building is pinned within 5 m. Cardinal Gracias Road, Chakala; myHQ gives WEH and Gundavali metro 500 m, Chakala (J B Nagar) 900 m." },
   "skyline-icon":  { lat: 19.105690, lng: 72.881125, precision: "building", src: "https://myhq.in/virtual-office/awfis-skyline-icon", note: "Coordinate printed on the myHQ listing, matched by a map place page within 1 m. Andheri-Kurla Road, Marol; myHQ gives Marol Naka 350 m." },
+  "times-square":  { lat: 19.107878, lng: 72.883646, precision: "building", src: "https://exa.ai/library/place/rsdrfwzt1h2", note: "Map place page, as used in the earlier Andheri study (Smartworks Times Square). Times Square, Andheri-Kurla Road, Gamdevi, Marol; Innov8 lists it about two minutes' walk from Marol Naka metro." },
+  "satellite-gazebo": { lat: 19.111915, lng: 72.859924, precision: "building", src: "https://exa.ai/library/place/s7h1034ysxv", note: "Map place page, as used in the earlier Andheri study. Satellite Gazebo, 167 Guru Hargovindji Marg, Chakala, about 150 m from the Corporate Avenue pin." },
   "corporate-avenue": { lat: 19.110625, lng: 72.859637, precision: "complex", src: "https://exa.ai/library/place/3kk3s3wpqbl", note: "Map place page; Wikimapia's outline for 'Corporate Avenue (Atul Projects)' is 55 m away (https://wikimapia.org/9438559/CORPORATE-AVENUE-Atul-Projects). The PDF says Chakala metro 800 m; myHQ gives WEH and Gundavali 650 m." },
   "723-avenue":    { lat: 19.109713, lng: 72.884422, precision: "building", src: "https://dhcrealty.in/property/wadhwa-723-avenue/", note: "Plus code 4V5M+VQM printed on the listing, decoded. Marol Co-operative Industrial Estate Road, off Andheri-Kurla Road; the brochure says 1 km from Marol Naka, the PDF 700 m." },
   "privilon":      { lat: 19.108207, lng: 72.879563, precision: "approx", src: "https://exa.ai/library/place/s8x6jf6zts0", note: "The place page pin sits within 10 m of the Marol Naka station coordinate, so it marks the address, not a footprint. The developer says 'right next to Marol Metro Station'; the PDF says 93 m." }
@@ -98,6 +100,15 @@ const PLACE_NOTE = {
 const CORRECTIONS = [
   { operator: "91 Springboard", building: "74 Technopark", set: { meeting: "3 to 5 seater - Rs. 800 + GST, 7 seater - Rs. 1000 + GST" } },
   { operator: "DevX", building: "Dynasty Business Park", set: { price: "Rs. 18,000 + GST", desks: "Dedicated Seats - Rs. 14,000 + GST" } }
+];
+/* Operators the team marked by building (30 Oct 2026). */
+const MARKED = [
+  { operator: "Innov8", building: "Times Square", geo: "times-square", micro: "marol" },
+  { operator: "RedBricks", building: "Times Square", geo: "times-square", micro: "marol" },
+  { operator: "Smartworks", building: "Times Square", geo: "times-square", micro: "marol" },
+  { operator: "Urban Vault", building: "Times Square", geo: "times-square", micro: "marol", upcoming: true },
+  { operator: "AKT Spaces", building: "Satellite Gazebo", geo: "satellite-gazebo", micro: "chakala" },
+  { operator: "91 Springboard", building: "Corporate Avenue", geo: "corporate-avenue", micro: "chakala" }
 ];
 const ROWS = { "Operator": "operator", "Type": "type", "Building Name": "building", "Grade": "grade", "Location": "location", "Total Seats": "seats",
   "Per Seat Cost": "price", "Workstation Size": "desk", "Vacant Seats": "vacant", "Client Present": "clients", "Amenities": "amenities",
@@ -211,12 +222,27 @@ async function build() {
     addRow(O, row);
   }
 
+  /* ---- Options: operators the team marked, still in the competitor
+     group, after the centres visited. ---- */
+  MARKED.forEach((m, i) => {
+    const g = GEO[m.geo];
+    const slug = (x) => x.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    addRow(O, {
+      "ID": `${slug(m.operator)}-${slug(m.building)}`, "Rank": CENTRES.length + 1 + i,
+      "Property name": `${m.operator} · ${m.building}${m.upcoming ? " (upcoming)" : ""}`,
+      "Latitude": g.lat, "Longitude": g.lng, "How exact is the pin": g.precision, "Source for the position": g.src,
+      "Micro-market": m.micro, "Fit group": "coworking-competitors",
+      "Address": `${m.building}, Andheri East, Mumbai`, "Locality": "Andheri East",
+      "Operator": m.operator, "Building": m.building
+    });
+  });
+
   /* ---- Options, second group: the proposed inventory, after the
      competitors, in the order the team presents them. ---- */
   PROPOSED.forEach((p, i) => {
     const g = GEO[p.geo];
     addRow(O, {
-      "ID": p.id, "Rank": CENTRES.length + 1 + i, "Property name": p.name,
+      "ID": p.id, "Rank": CENTRES.length + MARKED.length + 1 + i, "Property name": p.name,
       "Latitude": g.lat, "Longitude": g.lng, "How exact is the pin": g.precision, "Source for the position": g.src,
       "Micro-market": p.micro, "Fit group": "proposed-inventory", "Why it scores as it does": p.reason,
       "Address": p.address, "Locality": "Andheri East", "Building": p.name, "Grade": p.grade,
