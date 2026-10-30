@@ -144,7 +144,7 @@
   /* Stacked horizontal bars: one row per option, segments in order. */
   function stacked(rows, segs, opts) {
     opts = opts || {};
-    var w = opts.w || 420, rowH = 44, barH = 26, pl = 70, pr = 70, h = rows.length * rowH + 22;
+    var w = opts.w || 420, rowH = 56, barH = 32, pl = 70, pr = 70, h = rows.length * rowH + 22;
     var hi = Math.max.apply(null, rows.map(function (r) { return r.total; })) * 1.02;
     var X = function (v) { return pl + (w - pl - pr) * (v / hi); };
     var out = "";
@@ -402,7 +402,9 @@
       var h3 = d.section("market", "Market research and analysis", copy(b, "market", "intro")[0] || SECTION_SUBS.market, secK("market"), "market");
       /* big: the page's only chart, drawn wider and taller to fill its column. */
       var chartFor = function (key, big) {
-        var sz = big ? { w: 460, h: 250 } : {};
+        /* big: true for the page's only chart; a number for a row of that many charts, sized so
+           every chart's type lands at about the same printed size */
+        var sz = big === true ? { w: 460, h: 250 } : big === 2 ? { w: 440, h: 230 } : big ? { w: 300, h: 175 } : {};
         var pts = series(key); if (!pts.length) return "";
         var title = { vacancy: "Vacancy", rent: "Average rent · " + sym + " a sq ft a month", topBand: "Office rent, top Grade-A buildings · " + sym + " a sq ft a month · dashed = projection", flexSeats: "Flex seats leased, first half of each year", operatorOccupancy: "Settled centres are this full", absorptionShare: "Share of net absorption" }[key] || key;
         var body;
@@ -420,11 +422,11 @@
         if (p.chart === "vacancy" && series("absorptionShare").length) charts.push("absorptionShare");
         if (p.chart === "flexSeats" && series("operatorOccupancy").length) charts.push("operatorOccupancy");
         usedCharts = usedCharts.concat(charts);
-        var chartHtml = charts.map(function (k) { return chartFor(k, charts.length === 1); }).join("");
+        var chartHtml = charts.map(function (k) { return chartFor(k, charts.length === 1 ? true : charts.length); }).join("");
         var kpiHtml = p.kpi ? "<div class='kpi' style='margin-bottom:3mm'><div class='v' style='font-size:22pt'>" + esc(code(b, c, p.kpi)) + "</div><div class='l'>" + esc(p.kpiLabel || "") + "</div></div>" : "";
         var meansHtml = "<div class='means'><b>What it means for us</b><p>" + esc(p.text) + "</p></div>";
         var layout;
-        if (charts.length >= 2) layout = "<div class='cols c2'><div class='cols c" + Math.min(charts.length, 3) + "' style='grid-column:1 / -1;flex:0 0 auto'>" + chartHtml + "</div><div style='grid-column:1 / -1'>" + kpiHtml + meansHtml + "</div></div>";
+        if (charts.length >= 2) layout = "<div class='cols c2'><div class='cols c" + Math.min(charts.length, 3) + "' style='grid-column:1 / -1;flex:0 0 auto'>" + chartHtml + "</div></div><div class='foot'>" + kpiHtml + meansHtml + "</div>";
         /* one chart: the chart takes the wide column, the figure and its meaning sit beside it */
         else if (charts.length === 1) layout = "<div class='cols c32' style='align-items:start'>" + chartHtml + "<div>" + kpiHtml + meansHtml + "</div></div>";
         /* no chart: a statement page, the figure large beside what it means, centred in the page */

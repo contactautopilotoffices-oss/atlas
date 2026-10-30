@@ -69,9 +69,8 @@ what it fixes, and fixes the worst one to three first.
 - Table pages now open their rows to use spare height (casestudy/index.html,
   fitTables), but stop at 4 mm of extra padding a row: levers and openings
   still end at about three quarters, and levers reads airy rather than full.
-- "What each floor must earn" ends at about two thirds: the bars are taller
-  and the axis steps round now, but the chart column still leaves the lower
-  third empty.
+- "What each floor must earn" ends at about four fifths: the chart column
+  could still take the full width with the two price cards below it.
 - Numbered-point pages with few, short points (why here, pipeline 1) keep a
   gap between the points and the takeaway at the foot.
 - Recent deals: with no "what it means" copy the table now takes the full
@@ -80,5 +79,5 @@ what it fixes, and fixes the worst one to three first.
 - Market points with one chart (page 15): the chart now sits under the
   headline, but the "what it means" box beside it is short, so the right
   column is empty below it.
-- Market points with three charts (page 14): a gap between the charts and the
-  figure below them.
+- Market points with several charts (pages 14 and 18): the charts are larger
+  and the figure sits at the foot, but a band of space stays between them.
