@@ -2711,6 +2711,7 @@ function openCard(b) {
             <span>Furnishing</span><span>${u.furn}</span>
             <span>Parking</span><span>${u.parking}</span>
             <span>Possession</span><span>${u.poss}</span>
+            ${(u.extra || []).map(([k, v]) => `<span>${k}</span><span>${v}</span>`).join("")}
           </div>
           <div class="unit-note">${u.note}</div>
         </div>`).join("")}
