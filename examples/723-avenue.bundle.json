@@ -1,0 +1,446 @@
+{
+ "meta": {
+  "title": "723 Avenue, Marol",
+  "sub": "Wadhwa 723 Avenue: the building, its floors and everything around it",
+  "asOf": "2026-10",
+  "city": "Mumbai",
+  "center": [
+   72.884422,
+   19.109713
+  ],
+  "zoom": 14.6,
+  "sheet": "Proposed_Inventory.pdf (October 2026) for the floors offered; the Andheri coworking atlas for the centres around it; the Andheri case study for IA Spaces. Positions and public facts carry their own sources.",
+  "speed": {
+   "kmh": 16,
+   "factor": 1.3,
+   "note": "TomTom Traffic Index 2025, Mumbai rush hour"
+  },
+  "layout": "place"
+ },
+ "options": [
+  {
+   "id": "723-avenue",
+   "n": 1,
+   "name": "723 Avenue (Wadhwa)",
+   "lat": 19.109713,
+   "lng": 72.884422,
+   "precision": "building",
+   "geoSrc": "https://dhcrealty.in/property/wadhwa-723-avenue/",
+   "reason": "Grade A, G+15, bare shell, 11.7 ft ceilings. 13th and 14th floors, 12,952 sq ft carpet, 21,586 sq ft built-up. Rs 316 per sq ft on carpet plus Rs 16 CAM. Fire NOC, OC and CC due November 2026; available November 2026. Parking 1 per 1,000 sq ft built-up. Marol metro 700 m.",
+   "address": "Wadhwa 723 Avenue, Marol Co-operative Industrial Estate Road, Sag Baug, Marol, Andheri East, Mumbai 400059",
+   "locality": "Marol",
+   "city": "Mumbai",
+   "floorUnit": "13th and 14th",
+   "totalFloors": "G + 15",
+   "furnishing": "Bare shell",
+   "carpetAreaSqFt": 12952,
+   "builtUpAreaSqFt": 21586,
+   "ceilingHeight": "11.7 ft",
+   "rentOnCarpetRsPerSqFtAMonth": 316,
+   "camRsPerSqFtAMonth": 16,
+   "parking": "1 per 1,000 sq ft built-up",
+   "fireNoc": "November 2026",
+   "ocAndCc": "November 2026",
+   "availableFrom": "November 2026",
+   "nearestMetro": "Marol Naka (Lines 1 and 3)",
+   "metroDistanceM": 700
+  }
+ ],
+ "places": [
+  {
+   "id": "rush-co-works-boston-house",
+   "kind": "coworking",
+   "name": "Rush Co-works · Boston House",
+   "lat": 19.117079,
+   "lng": 72.856675,
+   "sub": "Rs. 18000 + GST",
+   "operator": "Rush Co-works",
+   "precision": "building",
+   "src": "https://www.openstreetmap.org/way/353202822"
+  },
+  {
+   "id": "innov8-boston-house",
+   "kind": "coworking",
+   "name": "Innov8 · Boston House",
+   "lat": 19.117079,
+   "lng": 72.856675,
+   "sub": "20000 + GST",
+   "operator": "Innov8",
+   "precision": "building",
+   "src": "https://www.openstreetmap.org/way/353202822"
+  },
+  {
+   "id": "executive-spaces-rustomje-central-park",
+   "kind": "coworking",
+   "name": "Executive Spaces · Rustomje Central Park",
+   "lat": 19.114042,
+   "lng": 72.860671,
+   "sub": "14000 + GST",
+   "operator": "Executive Spaces",
+   "precision": "building",
+   "src": "https://exa.ai/library/place/83qqct91nth"
+  },
+  {
+   "id": "executive-spaces-chandak-chambers",
+   "kind": "coworking",
+   "name": "Executive Spaces · Chandak Chambers",
+   "lat": 19.115847,
+   "lng": 72.855922,
+   "sub": "16000 + GST",
+   "operator": "Executive Spaces",
+   "precision": "building",
+   "src": "https://exa.ai/library/place/dwzfqrcs71d"
+  },
+  {
+   "id": "quest-coworks-technopolis",
+   "kind": "coworking",
+   "name": "Quest Coworks · Technopolis",
+   "lat": 19.116337,
+   "lng": 72.863254,
+   "sub": "18000 + GST",
+   "operator": "Quest Coworks",
+   "precision": "complex",
+   "src": "https://www.openstreetmap.org/way/102525674"
+  },
+  {
+   "id": "community-coworks-akruti-trade-star",
+   "kind": "coworking",
+   "name": "Community Coworks · Akruti Trade Star",
+   "lat": 19.117623,
+   "lng": 72.871394,
+   "sub": "16500 + GST",
+   "operator": "Community Coworks",
+   "precision": "building",
+   "src": "https://exa.ai/library/place/108dhc19w0v"
+  },
+  {
+   "id": "wework-k-raheja-platinum",
+   "kind": "coworking",
+   "name": "WeWork · K Raheja Platinum",
+   "lat": 19.109416,
+   "lng": 72.885635,
+   "sub": "Rs. 28000 + GST",
+   "operator": "WeWork",
+   "precision": "building",
+   "src": "https://digitalnomadindex.com/spaces/india/maharashtra/mumbai/wework-raheja-platinum-mumbai"
+  },
+  {
+   "id": "innov8-zion-house",
+   "kind": "coworking",
+   "name": "Innov8 · Zion House",
+   "lat": 19.107648,
+   "lng": 72.852979,
+   "sub": "Rs. 26000 + GST",
+   "operator": "Innov8",
+   "precision": "building",
+   "src": "https://exa.ai/library/place/jdcpx8jszb7"
+  },
+  {
+   "id": "innov8-trade-star",
+   "kind": "coworking",
+   "name": "Innov8 · Trade Star",
+   "lat": 19.111638,
+   "lng": 72.870408,
+   "sub": "Rs. 20000 + GST",
+   "operator": "Innov8",
+   "precision": "poi",
+   "src": "https://www.openstreetmap.org/node/2188869089"
+  },
+  {
+   "id": "innov8-solitaire-corporate-park",
+   "kind": "coworking",
+   "name": "Innov8 · Solitaire Corporate Park",
+   "lat": 19.111739,
+   "lng": 72.860714,
+   "sub": "Rs. 15000 + GST",
+   "operator": "Innov8",
+   "precision": "building",
+   "src": "https://exa.ai/library/place/f4cys4hn5nm"
+  },
+  {
+   "id": "91-springboard-74-technopark",
+   "kind": "coworking",
+   "name": "91 Springboard · 74 Technopark",
+   "lat": 19.122896,
+   "lng": 72.872855,
+   "sub": "Rs. 21000 + GST",
+   "operator": "91 Springboard",
+   "precision": "building",
+   "src": "https://myhq.in/virtual-office/91springboard-andherieast-2"
+  },
+  {
+   "id": "let-s-work-vkg",
+   "kind": "coworking",
+   "name": "Let's Work · VKG",
+   "lat": 19.110926,
+   "lng": 72.870906,
+   "sub": "15,000 / month",
+   "operator": "Let's Work",
+   "precision": "building",
+   "src": "https://exa.ai/library/place/shf1t6tvjgg"
+  },
+  {
+   "id": "devx-dynasty-business-park",
+   "kind": "coworking",
+   "name": "DevX · Dynasty Business Park",
+   "lat": 19.112709,
+   "lng": 72.865906,
+   "sub": "Rs. 18,000 + GST",
+   "operator": "DevX",
+   "precision": "building",
+   "src": "https://exa.ai/library/place/dlth3l6n2fw"
+  },
+  {
+   "id": "teloz-space-aj-house",
+   "kind": "coworking",
+   "name": "Teloz Space · AJ House",
+   "lat": 19.112195,
+   "lng": 72.87929,
+   "sub": "Rs. 12,000 + GST",
+   "operator": "Teloz Space",
+   "precision": "building",
+   "src": "https://exa.ai/library/place/j6vcm4h6ng9"
+  },
+  {
+   "id": "91-springboard-lotus",
+   "kind": "coworking",
+   "name": "91 Springboard · Lotus",
+   "lat": 19.119976,
+   "lng": 72.874911,
+   "sub": "Rs 17,000",
+   "operator": "91 Springboard",
+   "precision": "building",
+   "src": "https://myhq.in/virtual-office/91springboard-andherieast"
+  },
+  {
+   "id": "315work-avenue-silver-utopia",
+   "kind": "coworking",
+   "name": "315work Avenue · Silver Utopia",
+   "lat": 19.112617,
+   "lng": 72.859672,
+   "sub": "Rs. 18000 + GST",
+   "operator": "315work Avenue",
+   "precision": "building",
+   "src": "https://exa.ai/library/place/n2hx8mv5chs"
+  },
+  {
+   "id": "innov8-times-square",
+   "kind": "coworking",
+   "name": "Innov8 · Times Square",
+   "lat": 19.107878,
+   "lng": 72.883646,
+   "operator": "Innov8",
+   "precision": "building",
+   "src": "https://exa.ai/library/place/rsdrfwzt1h2"
+  },
+  {
+   "id": "redbricks-times-square",
+   "kind": "coworking",
+   "name": "RedBricks · Times Square",
+   "lat": 19.107878,
+   "lng": 72.883646,
+   "operator": "RedBricks",
+   "precision": "building",
+   "src": "https://exa.ai/library/place/rsdrfwzt1h2"
+  },
+  {
+   "id": "smartworks-times-square",
+   "kind": "coworking",
+   "name": "Smartworks · Times Square",
+   "lat": 19.107878,
+   "lng": 72.883646,
+   "operator": "Smartworks",
+   "precision": "building",
+   "src": "https://exa.ai/library/place/rsdrfwzt1h2"
+  },
+  {
+   "id": "urban-vault-times-square",
+   "kind": "coworking",
+   "name": "Urban Vault · Times Square (upcoming)",
+   "lat": 19.107878,
+   "lng": 72.883646,
+   "operator": "Urban Vault",
+   "precision": "building",
+   "src": "https://exa.ai/library/place/rsdrfwzt1h2"
+  },
+  {
+   "id": "akt-spaces-satellite-gazebo",
+   "kind": "coworking",
+   "name": "AKT Spaces · Satellite Gazebo",
+   "lat": 19.111915,
+   "lng": 72.859924,
+   "operator": "AKT Spaces",
+   "precision": "building",
+   "src": "https://exa.ai/library/place/s7h1034ysxv"
+  },
+  {
+   "id": "91-springboard-corporate-avenue",
+   "kind": "coworking",
+   "name": "91 Springboard · Corporate Avenue",
+   "lat": 19.110625,
+   "lng": 72.859637,
+   "operator": "91 Springboard",
+   "precision": "complex",
+   "src": "https://exa.ai/library/place/3kk3s3wpqbl"
+  },
+  {
+   "id": "ia-spaces-723-avenue",
+   "kind": "coworking",
+   "name": "IA Spaces · 723 Avenue",
+   "lat": 19.109713,
+   "lng": 72.884422,
+   "sub": "Rs 18,000 a seat",
+   "operator": "IA Spaces",
+   "precision": "building",
+   "note": "Inside 723 Avenue. From the Andheri case study, which cites IA Spaces' myHQ listing.",
+   "src": "https://dhcrealty.in/property/wadhwa-723-avenue/"
+  }
+ ],
+ "transit": {
+  "asOf": "2026-10",
+  "lines": [
+   {
+    "key": "metroLine1Blue",
+    "name": "Metro Line 1 (Blue)",
+    "short": "L1",
+    "mode": "metro",
+    "color": "#1d6fa5",
+    "src": "https://en.wikipedia.org/wiki/Western_Express_Highway_metro_station",
+    "stations": [
+     {
+      "name": "Western Express Highway",
+      "lat": 19.11556,
+      "lng": 72.85639,
+      "open": true
+     },
+     {
+      "name": "Chakala (J B Nagar)",
+      "lat": 19.112045,
+      "lng": 72.867696,
+      "open": true
+     },
+     {
+      "name": "Airport Road",
+      "lat": 19.11027,
+      "lng": 72.87475,
+      "open": true
+     },
+     {
+      "name": "Marol Naka",
+      "lat": 19.108195,
+      "lng": 72.879536,
+      "open": true
+     },
+     {
+      "name": "Saki Naka",
+      "lat": 19.103528,
+      "lng": 72.887962,
+      "open": true
+     }
+    ]
+   },
+   {
+    "key": "metroLine3Aqua",
+    "name": "Metro Line 3 (Aqua)",
+    "short": "L3",
+    "mode": "metro",
+    "color": "#1d8a8a",
+    "src": "https://www.indiametroroute.com/mumbai-metro-station/seepz",
+    "stations": [
+     {
+      "name": "SEEPZ",
+      "lat": 19.125999,
+      "lng": 72.873727,
+      "open": true
+     },
+     {
+      "name": "MIDC Andheri",
+      "lat": 19.117352,
+      "lng": 72.873603,
+      "open": true
+     },
+     {
+      "name": "Marol Naka",
+      "lat": 19.108195,
+      "lng": 72.879536,
+      "open": true
+     },
+     {
+      "name": "CSMIA T2",
+      "lat": 19.102334,
+      "lng": 72.874469,
+      "open": true
+     },
+     {
+      "name": "Sahar Road",
+      "lat": 19.102196,
+      "lng": 72.865236,
+      "open": true
+     }
+    ]
+   },
+   {
+    "key": "metroLine7Red",
+    "name": "Metro Line 7 (Red)",
+    "short": "L7",
+    "mode": "metro",
+    "color": "#c0392b",
+    "src": "https://en.wikipedia.org/wiki/Gundavali_metro_station",
+    "stations": [
+     {
+      "name": "Gundavali",
+      "lat": 19.11502,
+      "lng": 72.85517,
+      "open": true
+     }
+    ]
+   },
+   {
+    "key": "westernRailwaySuburban",
+    "name": "Western Railway (suburban)",
+    "short": "WR",
+    "mode": "suburban",
+    "color": "#6b4f3a",
+    "src": "https://en.wikipedia.org/wiki/Andheri_railway_station",
+    "stations": [
+     {
+      "name": "Andheri",
+      "lat": 19.119167,
+      "lng": 72.846944,
+      "open": true
+     }
+    ]
+   }
+  ]
+ },
+ "facts": {
+  "building": [
+   {
+    "k": "723 Avenue (Wadhwa)",
+    "v": "MahaRERA P51800050698, registered 28 Apr 2023, proposed completion 31 May 2026 on the filing; 3 basements plus ground plus 14 floors, typical floor about 8,000 sq ft, warm shell; bounded by Raheja Platinum to the east and south",
+    "asOf": "2026-10-23",
+    "conf": "medium",
+    "src": "https://cityair.in/wadhwa_723_avenue_project_in_mumbai_ppc.html",
+    "note": "RERA fields read from a mirror; the MahaRERA page itself could not be opened. The PDF puts fire NOC and OC in November 2026. Sale registrations on floors 3, 4 and 7 between Oct 2025 and Mar 2026 (Square Yards). WeWork's 3,000-seat Raheja Platinum is the next building."
+   }
+  ],
+  "transit": [
+   {
+    "k": "Metro Line 3 (Aqua), fully open",
+    "v": "Opened end to end on 9 Oct 2025: 33.5 km, 27 stations, Cuffe Parade to Aarey. Weekday average 1.48 lakh riders in Dec 2025; peak day 1.82 lakh",
+    "asOf": "2025-12",
+    "conf": "high",
+    "src": "https://www.freepressjournal.in/mumbai/mumbai-metro-3-ridership-more-than-doubles-after-aqua-line-opens-till-cuffe-parade-daily-footfall-hits-new-highs",
+    "note": "Marol Naka had the line's highest footfall, 16.45 lakh entries and exits in Oct to Dec 2025, as the interchange with Line 1. Four of the 11 centres and two of the three proposed buildings are within 700 m of it."
+   },
+   {
+    "k": "Metro Line 1 (Blue)",
+    "v": "Versova to Ghatkopar through Andheri since 8 Jun 2014; about 5 lakh weekday riders, peak 5.47 lakh; 1.11 billion journeys in 11 years",
+    "asOf": "2025-06",
+    "conf": "high",
+    "src": "https://www.business-standard.com/india-news/mumbai-s-first-metro-line-completes-11-years-served-1-11-bn-commuters-125060800465_1.html",
+    "note": "Every centre on this atlas is within a kilometre of a Line 1 station: WEH, Chakala, Airport Road, Marol Naka or Saki Naka."
+   }
+  ]
+ }
+}
