@@ -55,7 +55,7 @@ function page(spec) {
     return Math.min(1.3, h);
   };
   const railNear = (lng, lat) => { let m = 9; for (const L of D.lines) for (const s of L.stations) if (s.open) m = Math.min(m, km([lng, lat], [s.lng, s.lat])); return Math.exp(-((m / .3) ** 2)); };
-  const city = (lng, lat) => Math.exp(-((km([lng, lat], [72.870, 19.108]) / 3) ** 2));
+  const city = (lng, lat) => Math.exp(-((km([lng, lat], [72.8675, 19.1095]) / 3.4) ** 2));
   const nearestOpt = (lng, lat) => { let best = null, bd = 1e9; for (const o of D.options) { const d = km([lng, lat], [o.lng, o.lat]); if (d < bd) { bd = d; best = o; } } return best; };
   const mix = (a, b, k) => a.map((v, i) => Math.round(v + (b[i] - v) * Math.max(0, Math.min(1, k))));
   const rgb = (h) => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
@@ -78,7 +78,7 @@ function page(spec) {
   /* 2. land floor: every cell drawn, lit by city density and a little noise */
   for (const k of cells) {
     if (k.sea) continue;
-    const base = .08 + k.cty * .12 + k.n * .06 + k.r * .12;
+    const base = .1 + k.cty * .16 + k.n * .06 + k.r * .2;
     poly(corners(k.lng, k.lat, .9));
     g.fillStyle = css(mix([60, 44, 33], [140, 90, 60], k.cty + k.r), base); g.fill();
     g.strokeStyle = css([233, 180, 143], .12 + k.cty * .12 + k.r * .16); g.lineWidth = 1; g.stroke();
@@ -89,8 +89,15 @@ function page(spec) {
     const a = L.stations[i], b = L.stations[i + 1], open = a.open && b.open;
     const [x1, y1] = toXY(a.lng, a.lat), [x2, y2] = toXY(b.lng, b.lat);
     g.save(); g.setLineDash(open ? [] : [10, 9]); g.strokeStyle = L.color; g.globalAlpha = open ? .75 : .45;
-    g.lineWidth = open ? 3.2 : 2.2; g.shadowColor = L.color; g.shadowBlur = open ? 14 : 0;
+    g.lineWidth = open ? 5 : 3; g.shadowColor = L.color; g.shadowBlur = open ? 18 : 0;
     g.beginPath(); g.moveTo(x1, y1); g.lineTo(x2, y2); g.stroke(); g.restore();
+  }
+  /* stations: a glowing node on each, in its line's colour */
+  for (const L of D.lines) for (const st of L.stations) {
+    const [x, y] = toXY(st.lng, st.lat);
+    g.save(); g.shadowColor = L.color; g.shadowBlur = 18; g.fillStyle = L.color;
+    g.beginPath(); g.arc(x, y, SPEC.fontPx * .32, 0, 2 * Math.PI); g.fill(); g.restore();
+    g.fillStyle = "rgba(255,248,240,.95)"; g.beginPath(); g.arc(x, y, SPEC.fontPx * .14, 0, 2 * Math.PI); g.fill();
   }
   /* 4. columns: cells near the shortlist rise; back to front */
   const H = SPEC.towerPx;
@@ -120,22 +127,22 @@ function page(spec) {
     poly(pts, dh); g.fillStyle = css(mix(col, [255, 240, 225], o.me ? .3 : .18), 1); g.fill();
     g.strokeStyle = "rgba(255,244,232,.9)"; g.lineWidth = 1.6; g.stroke();
     /* a light beam above each, fading up */
-    const [bx, by] = toXY(o.lng, o.lat), grd = g.createLinearGradient(bx, by - dh, bx, by - dh - H * 1.3);
+    const BEAM = SPEC.beam != null ? SPEC.beam : 1.3, [bx, by] = toXY(o.lng, o.lat), grd = g.createLinearGradient(bx, by - dh, bx, by - dh - H * BEAM);
     grd.addColorStop(0, css(mix(col, [255, 255, 255], .4), .35)); grd.addColorStop(1, css(col, 0));
-    g.fillStyle = grd; g.fillRect(bx - 1.5, by - dh - H * 1.3, 3, H * 1.3);
+    g.fillStyle = grd; g.fillRect(bx - 1.5, by - dh - H * BEAM, 3, H * BEAM);
     /* the client's two priorities carry their names, at the top of the beam */
     if (o.priority) {
-      const ty = by - dh - H * 1.3 - 14;
+      const ty = by - dh - H * (SPEC.beam != null ? SPEC.beam : 1.3) - 14;
       g.save(); g.textAlign = "center"; g.shadowColor = "rgba(10,7,5,.9)"; g.shadowBlur = 10;
-      g.fillStyle = "#f7f2ea"; g.font = "600 " + SPEC.fontPx + "px Georgia, 'Times New Roman', serif"; g.fillText(o.name, bx, ty);
-      g.fillStyle = "#e9b48f"; g.font = "500 " + Math.round(SPEC.fontPx * .5) + "px 'Courier New', monospace"; g.letterSpacing = "2px";
+      g.fillStyle = "#fffaf3"; g.shadowBlur = 16; g.font = "600 " + SPEC.fontPx + "px Georgia, 'Times New Roman', serif"; g.fillText(o.name, bx, ty);
+      g.fillStyle = "#f2b98f"; g.font = "600 " + Math.round(SPEC.fontPx * .55) + "px 'Courier New', monospace"; g.letterSpacing = "2px";
       g.fillText(o.priority, bx, ty + SPEC.fontPx * .8);
       g.restore();
     }
   }
   /* vignette and grain */
   const v = g.createRadialGradient(cx, cy, Math.min(Wd, Hd) * .3, cx, cy, Math.max(Wd, Hd) * .8);
-  v.addColorStop(0, "rgba(10,7,5,0)"); v.addColorStop(1, "rgba(10,7,5,.72)");
+  v.addColorStop(0, "rgba(10,7,5,0)"); v.addColorStop(1, "rgba(10,7,5,.4)");
   g.fillStyle = v; g.fillRect(0, 0, Wd, Hd);
   const img = g.getImageData(0, 0, Wd, Hd), px = img.data;
   for (let i = 0; i < px.length; i += 4) { const n = (rnd() - .5) * 9; px[i] += n; px[i + 1] += n; px[i + 2] += n; }
@@ -146,9 +153,9 @@ function page(spec) {
 
 const SPECS = [
   /* Wide: the shortlist sits right of centre, between the copy and the card. */
-  { name: "hexfield-wide", w: 2400, h: 1350, pxKm: 165, tilt: .62, cellKm: .25, towerPx: 52, fontPx: 24, centre: [1480, 345], geo: [72.870, 19.1085] },
+  { name: "hexfield-wide", w: 2400, h: 1350, pxKm: 270, tilt: .42, cellKm: .2, towerPx: 75, fontPx: 34, beam: .5, centre: [1500, 300], geo: [72.8675, 19.1095] },
   /* Tall (phones): the map fills the top half, above the stacked copy and card. */
-  { name: "hexfield-tall", w: 1080, h: 2000, pxKm: 235, tilt: .62, cellKm: .25, towerPx: 56, fontPx: 28, centre: [540, 640], geo: [72.870, 19.1085] }
+  { name: "hexfield-tall", w: 1080, h: 2000, pxKm: 215, tilt: .62, cellKm: .22, towerPx: 70, fontPx: 26, centre: [540, 560], geo: [72.8675, 19.1095] }
 ];
 
 (async () => {
