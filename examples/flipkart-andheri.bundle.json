@@ -40,7 +40,7 @@
      ],
      "lat": 19.108195,
      "lng": 72.879536,
-     "m": 811,
+     "m": 810,
      "min": 11,
      "mode": "walk",
      "path": [
@@ -81,7 +81,8 @@
        19.108195
       ]
      ],
-     "src": "https://routing.openstreetmap.de/routed-foot/route/v1/driving/72.884422,19.109713;72.879536,19.108195?overview=simplified&geometries=polyline"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     },
     {
      "kind": "metro",
@@ -91,7 +92,7 @@
      ],
      "lat": 19.103528,
      "lng": 72.887962,
-     "m": 937,
+     "m": 940,
      "min": 13,
      "mode": "walk",
      "path": [
@@ -156,7 +157,8 @@
        19.103528
       ]
      ],
-     "src": "https://routing.openstreetmap.de/routed-foot/route/v1/driving/72.884422,19.109713;72.887962,19.103528?overview=simplified&geometries=polyline"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     },
     {
      "kind": "rail",
@@ -166,7 +168,7 @@
      ],
      "lat": 19.119167,
      "lng": 72.846944,
-     "m": 5453,
+     "m": 5500,
      "mode": "road",
      "path": [
       [
@@ -266,7 +268,8 @@
        19.119167
       ]
      ],
-     "src": "https://routing.openstreetmap.de/routed-car/route/v1/driving/72.884422,19.109713;72.846944,19.119167?overview=simplified&geometries=polyline"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     }
    ],
    "facts": [
@@ -433,7 +436,8 @@
        19.11556
       ]
      ],
-     "src": "https://routing.openstreetmap.de/routed-foot/route/v1/driving/72.859838,19.111538;72.85639,19.11556?overview=simplified&geometries=polyline"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     },
     {
      "kind": "metro",
@@ -443,7 +447,7 @@
      ],
      "lat": 19.112045,
      "lng": 72.867696,
-     "m": 994,
+     "m": 990,
      "min": 13,
      "mode": "walk",
      "path": [
@@ -500,7 +504,8 @@
        19.112045
       ]
      ],
-     "src": "https://routing.openstreetmap.de/routed-foot/route/v1/driving/72.859838,19.111538;72.867696,19.112045?overview=simplified&geometries=polyline"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     },
     {
      "kind": "rail",
@@ -510,7 +515,7 @@
      ],
      "lat": 19.119167,
      "lng": 72.846944,
-     "m": 2550,
+     "m": 2500,
      "mode": "road",
      "path": [
       [
@@ -594,7 +599,8 @@
        19.119167
       ]
      ],
-     "src": "https://routing.openstreetmap.de/routed-car/route/v1/driving/72.859838,19.111538;72.846944,19.119167?overview=simplified&geometries=polyline"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     }
    ],
    "facts": [
@@ -709,7 +715,7 @@
      ],
      "lat": 19.108195,
      "lng": 72.879536,
-     "m": 601,
+     "m": 600,
      "min": 8,
      "mode": "walk",
      "path": [
@@ -738,7 +744,8 @@
        19.108195
       ]
      ],
-     "src": "https://routing.openstreetmap.de/routed-foot/route/v1/driving/72.882235,19.111483;72.879536,19.108195?overview=simplified&geometries=polyline"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     },
     {
      "kind": "metro",
@@ -748,7 +755,7 @@
      ],
      "lat": 19.11027,
      "lng": 72.87475,
-     "m": 1185,
+     "m": 1200,
      "min": 16,
      "mode": "walk",
      "path": [
@@ -797,7 +804,8 @@
        19.11027
       ]
      ],
-     "src": "https://routing.openstreetmap.de/routed-foot/route/v1/driving/72.882235,19.111483;72.87475,19.11027?overview=simplified&geometries=polyline"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     },
     {
      "kind": "rail",
@@ -807,7 +815,7 @@
      ],
      "lat": 19.119167,
      "lng": 72.846944,
-     "m": 5249,
+     "m": 5200,
      "mode": "road",
      "path": [
       [
@@ -899,7 +907,8 @@
        19.119167
       ]
      ],
-     "src": "https://routing.openstreetmap.de/routed-car/route/v1/driving/72.882235,19.111483;72.846944,19.119167?overview=simplified&geometries=polyline"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     }
    ],
    "facts": [
@@ -1019,7 +1028,7 @@
      ],
      "lat": 19.108195,
      "lng": 72.879536,
-     "m": 138,
+     "m": 140,
      "min": 2,
      "mode": "walk",
      "path": [
@@ -1048,7 +1057,8 @@
        19.108195
       ]
      ],
-     "src": "https://routing.openstreetmap.de/routed-foot/route/v1/driving/72.879563,19.108207;72.879536,19.108195?overview=simplified&geometries=polyline"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     },
     {
      "kind": "metro",
@@ -1058,7 +1068,7 @@
      ],
      "lat": 19.11027,
      "lng": 72.87475,
-     "m": 584,
+     "m": 580,
      "min": 8,
      "mode": "walk",
      "path": [
@@ -1087,7 +1097,8 @@
        19.11027
       ]
      ],
-     "src": "https://routing.openstreetmap.de/routed-foot/route/v1/driving/72.879563,19.108207;72.87475,19.11027?overview=simplified&geometries=polyline"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     },
     {
      "kind": "rail",
@@ -1097,7 +1108,7 @@
      ],
      "lat": 19.119167,
      "lng": 72.846944,
-     "m": 4914,
+     "m": 4900,
      "mode": "road",
      "path": [
       [
@@ -1189,7 +1200,8 @@
        19.119167
       ]
      ],
-     "src": "https://routing.openstreetmap.de/routed-car/route/v1/driving/72.879563,19.108207;72.846944,19.119167?overview=simplified&geometries=polyline"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     }
    ],
    "facts": [
@@ -1308,7 +1320,7 @@
      ],
      "lat": 19.11556,
      "lng": 72.85639,
-     "m": 315,
+     "m": 320,
      "min": 4,
      "mode": "walk",
      "path": [
@@ -1341,7 +1353,8 @@
        19.11556
       ]
      ],
-     "src": "https://routing.openstreetmap.de/routed-foot/route/v1/driving/72.855679,19.116739;72.85639,19.11556?overview=simplified&geometries=polyline"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     },
     {
      "kind": "metro",
@@ -1351,7 +1364,7 @@
      ],
      "lat": 19.112045,
      "lng": 72.867696,
-     "m": 1424,
+     "m": 1400,
      "min": 19,
      "mode": "walk",
      "path": [
@@ -1400,7 +1413,8 @@
        19.112045
       ]
      ],
-     "src": "https://routing.openstreetmap.de/routed-foot/route/v1/driving/72.855679,19.116739;72.867696,19.112045?overview=simplified&geometries=polyline"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     },
     {
      "kind": "rail",
@@ -1410,7 +1424,7 @@
      ],
      "lat": 19.119167,
      "lng": 72.846944,
-     "m": 3159,
+     "m": 3200,
      "mode": "road",
      "path": [
       [
@@ -1522,7 +1536,8 @@
        19.119167
       ]
      ],
-     "src": "https://routing.openstreetmap.de/routed-car/route/v1/driving/72.855679,19.116739;72.846944,19.119167?overview=simplified&geometries=polyline"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     }
    ],
    "facts": [
@@ -1636,7 +1651,7 @@
      ],
      "lat": 19.11556,
      "lng": 72.85639,
-     "m": 567,
+     "m": 570,
      "min": 8,
      "mode": "walk",
      "path": [
@@ -1673,7 +1688,8 @@
        19.11556
       ]
      ],
-     "src": "https://routing.openstreetmap.de/routed-foot/route/v1/driving/72.860671,19.114042;72.85639,19.11556?overview=simplified&geometries=polyline"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     },
     {
      "kind": "metro",
@@ -1683,7 +1699,7 @@
      ],
      "lat": 19.112045,
      "lng": 72.867696,
-     "m": 868,
+     "m": 870,
      "min": 12,
      "mode": "walk",
      "path": [
@@ -1724,7 +1740,8 @@
        19.112045
       ]
      ],
-     "src": "https://routing.openstreetmap.de/routed-foot/route/v1/driving/72.860671,19.114042;72.867696,19.112045?overview=simplified&geometries=polyline"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     },
     {
      "kind": "rail",
@@ -1734,7 +1751,7 @@
      ],
      "lat": 19.119167,
      "lng": 72.846944,
-     "m": 2897,
+     "m": 2900,
      "mode": "road",
      "path": [
       [
@@ -1834,7 +1851,8 @@
        19.119167
       ]
      ],
-     "src": "https://routing.openstreetmap.de/routed-car/route/v1/driving/72.860671,19.114042;72.846944,19.119167?overview=simplified&geometries=polyline"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     }
    ],
    "facts": [
@@ -1948,7 +1966,7 @@
      ],
      "lat": 19.11027,
      "lng": 72.87475,
-     "m": 1289,
+     "m": 1300,
      "min": 17,
      "mode": "walk",
      "path": [
@@ -2065,7 +2083,8 @@
        19.11027
       ]
      ],
-     "src": "https://routing.openstreetmap.de/routed-foot/route/v1/driving/72.872132,19.104032;72.87475,19.11027?overview=simplified&geometries=polyline"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     },
     {
      "kind": "metro",
@@ -2075,7 +2094,7 @@
      ],
      "lat": 19.102196,
      "lng": 72.865236,
-     "m": 1338,
+     "m": 1300,
      "min": 18,
      "mode": "walk",
      "path": [
@@ -2172,7 +2191,8 @@
        19.102196
       ]
      ],
-     "src": "https://routing.openstreetmap.de/routed-foot/route/v1/driving/72.872132,19.104032;72.865236,19.102196?overview=simplified&geometries=polyline"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     },
     {
      "kind": "rail",
@@ -2302,7 +2322,8 @@
        19.119167
       ]
      ],
-     "src": "https://routing.openstreetmap.de/routed-car/route/v1/driving/72.872132,19.104032;72.846944,19.119167?overview=simplified&geometries=polyline"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     }
    ],
    "facts": [
@@ -2529,7 +2550,7 @@
  },
  "copy": {
   "connect": {
-   "note": "Walking distance along the streets from each building to its nearest metro station (OpenStreetMap routing). Andheri railway station is by road."
+   "note": "Walking distance and time from each building to its two metro stations, and Andheri railway station by road, as measured in Google Maps."
   },
   "overview": {
    "eyebrow": "Autopilot · Andheri East · Nov 2026",

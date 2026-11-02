@@ -1517,8 +1517,13 @@ async function loadRouteFeed() {
     const lead = km(o, { lng: path[0][0], lat: path[0][1] }) * 1000, tail = km({ lng: path[path.length - 1][0], lat: path[path.length - 1][1] }, to) * 1000;
     const m = Math.round(f.m + lead + tail);
     r.path = [[o.lng, o.lat], ...path, [to.lng, to.lat]];
-    if (r.mode === "walk" && isFinite(f.sec) && f.m > 0) r.min = Math.max(1, Math.round(f.sec * m / f.m / 60));
-    r.m = m; r.via = j.source || "route feed"; used++;
+    /* A route whose figures were measured elsewhere (route.dist) keeps them;
+       only its path is replaced. */
+    if (!r.dist) {
+      if (r.mode === "walk" && isFinite(f.sec) && f.m > 0) r.min = Math.max(1, Math.round(f.sec * m / f.m / 60));
+      r.m = m;
+    }
+    r.via = j.source || "route feed"; used++;
   }
   if (!used) return;
   FEED_SOURCE = { name: j.source || "route feed", used, total };
@@ -2128,7 +2133,7 @@ function renderConnect() {
   const rows = O.slice().sort((a, b) => nearestOpen(a).d - nearestOpen(b).d).map(o => {
     const r = nearestOpen(o), f = nearestPlan(o), b = nearestBus(o);
     const cell = {
-      open: r.none ? "-" : `<b class="num">${fmtM(r.d)}</b> to ${esc(r.s.name)}<br><span class="note">${esc(r.s.lineName || "")} · ${esc(accessWord(r.d))}</span>`,
+      open: r.none ? "-" : `<b class="num">${fmtM(r.d)}</b> to ${esc(r.s.name)}<br><span class="note">${esc(r.s.lineName || "")} · ${esc(r.min ? `${r.min} min walk` : accessWord(r.d))}</span>`,
       plan: f ? `<b class="num">${fmtM(f.d)}</b> to ${esc(f.s.name)}<br><span class="note">${esc(f.s.lineName || "")}${f.s.target ? ` · ${esc(f.s.target)}` : ""}</span>` : "-",
       bus: b ? `<b class="num">${fmtM(b.d)}</b> to ${esc(b.s.name)}<br><span class="note">${esc(busWalk(b))} · ${esc(routesTxt(b.s.routes))}</span>` : "-"
     };
@@ -2466,6 +2471,10 @@ function wirePanes() {
 
 /* How you get there: metro, railway and bus, nearest first. Each row opens
    that connection on the map. */
+/* Where every route's figures come from one measured source (route.dist). */
+const DIST_ROUTES = O.flatMap(o => o.routes || []);
+const DIST_SRC = DIST_ROUTES.length && DIST_ROUTES.every(r => r.dist && r.dist === DIST_ROUTES[0].dist) ? DIST_ROUTES[0].dist : "";
+const DIST_URL = DIST_SRC ? DIST_ROUTES[0].src : "";
 function connHTML(o) {
   const c = connOf(o), sc = selConn(o), rt = STN_ROUTE.get(o.id), by = (o.facts || []).find(x => x.k === "Railway by metro");
   const routed = Array.isArray(o.routes) && o.routes.length > 0;
@@ -2480,7 +2489,8 @@ function connHTML(o) {
     ${metro.length ? `<div class="ch">Metro</div>${metro.join("")}` : ""}
     ${rail.length ? `<div class="ch">Railway station</div>${rail.join("")}${by ? `<p class="note">${esc(by.v)} ${cite(by.src)}</p>` : ""}` : ""}
     ${bus.length ? `<div class="ch">Bus stops</div>${bus.join("")}<p class="note">${esc(BUSD.name || "Bus stops")}${BUSD.src ? ` ${cite(BUSD.src, "source")}` : ""}. ${esc(BUSD.note || "")}</p>` : ""}
-    <p class="note">${routed && FEED_SOURCE ? `Distances and paths follow the streets, from ${esc(FEED_SOURCE.name)}${FEED_SOURCE.used < FEED_SOURCE.total ? ` (${FEED_SOURCE.used} of ${FEED_SOURCE.total} routes; the rest from OpenStreetMap)` : ""}.`
+    <p class="note">${routed && DIST_SRC ? `Distances and walk times from ${esc(DIST_SRC)} ${cite(DIST_URL, "source")}. The line on the map follows the streets (${FEED_SOURCE ? esc(FEED_SOURCE.name) : "OpenStreetMap routing"}).`
+      : routed && FEED_SOURCE ? `Distances and paths follow the streets, from ${esc(FEED_SOURCE.name)}${FEED_SOURCE.used < FEED_SOURCE.total ? ` (${FEED_SOURCE.used} of ${FEED_SOURCE.total} routes; the rest from OpenStreetMap)` : ""}.`
       : routed ? `Distances and paths follow the streets: walking to ${bus.length ? "metro stations and bus stops" : "metro stations"}${rail.length ? `, by road to ${rail.length === 1 ? "the railway station" : "railway stations"}` : ""} (OpenStreetMap routing ${cite(M.routing || "https://routing.openstreetmap.de", "source")}).` : "Distances are straight-line from the pin; the metro walk is a route where one loads."} The map shows the row you pick.</p>
   </div>`;
 }

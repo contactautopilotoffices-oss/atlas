@@ -16,10 +16,11 @@
                 parking, parking charges, Fire NOC, OC & CC and DG are copied
                 from it word for word. The deck marks 723 Avenue as PRIORITY 1
                 and Corporate Avenue as PRIORITY 2.
-     Research   The deck carries no connectivity and no coordinates. Metro
-                stations and walking distances, and every pin, were researched
-                in Nov 2026 from developer, broker and operator pages, MMRCL
-                and Wikipedia; each says where it came from.
+     Report     "Commercial Property Distance & Transit Report" (Nov 2026):
+                each building's two metro stations, walking distance and time,
+                and Andheri railway station by road, from Google Maps.
+     Research   The pins, and the street paths drawn on the map, were
+                researched in Nov 2026; each says where it came from.
 
    Nothing else goes on screen. No seat counts, tiers, scores, chooser, flags
    or commentary: if it is not in the deck, or the research above, it is not
@@ -66,44 +67,32 @@ const R = {
     l1: "Marol Naka",
     lat: 19.109713, lng: 72.884422, precision: "building", geoSrc: "https://dhcrealty.in/property/wadhwa-723-avenue/",
     geoNote: "Plus code 4V5M+VQM printed on the listing, decoded. Marol Co-operative Industrial Estate Road, off Andheri-Kurla Road.",
-    address: "Wadhwa 723 Avenue, Marol Co-operative Industrial Estate Road, Sag Baug, Marol, Andheri East, Mumbai 400059",
-    metro: "Marol Naka (Line 1 and Line 3)", walk: "about 1 km on the developer's figure (540 m in a straight line from the pin)",
-    metroSrc: "https://houseofwadhwa.com/wp-content/uploads/2023/08/Wadhwa-723-Avenue-Project-Brochure-3.pdf", metroNote: "The developer's brochure: '1 km away from Marol Naka Metro Station'." },
+    address: "Wadhwa 723 Avenue, Marol Co-operative Industrial Estate Road, Sag Baug, Marol, Andheri East, Mumbai 400059" },
   "corporate-avenue": {
     l1: "Western Express Highway",
     lat: 19.110625, lng: 72.859637, precision: "complex", geoSrc: "https://exa.ai/library/place/3kk3s3wpqbl",
     geoNote: "Map place page; Wikimapia outlines 'Corporate Avenue (Atul Projects)' 55 m away. Sonawala Road, off Andheri-Kurla Road.",
-    address: "Corporate Avenue, Sonawala Road, off Andheri-Kurla Road, Chakala, Andheri East, Mumbai",
-    metro: "Western Express Highway and Gundavali", walk: "650 m, 9 min walk; Chakala (J B Nagar) 850 m",
-    metroSrc: "https://myhq.in/dedicated/coworking-space/atul-corporate-avenue-chakala", metroNote: "myHQ lists Gundavali and WEH at 650 m (9 min) and Chakala J B Nagar at 850 m (11 min)." },
+    address: "Corporate Avenue, Sonawala Road, off Andheri-Kurla Road, Chakala, Andheri East, Mumbai" },
   "vaman-techno-centre": {
     l1: "Marol Naka",
     lat: 19.111483, lng: 72.882235, precision: "building", geoSrc: "https://exa.ai/library/place/3vrh78m08q4",
     geoNote: "Map place page. Makwana Road, Marol. About 460 m from Marol Naka station in a straight line.",
-    address: "Vaman Techno Centre, Makwana Road, Gamdevi, Marol, Andheri East, Mumbai 400059",
-    metro: "Marol Naka (Line 1 and Line 3)", walk: "about 7 min walk",
-    metroSrc: "https://www.office-hub.com/in/properties/makwana-rd-marol-circle-near-web-techneeq-gamdevi-marol-andheri-east-mumbai-maharashtra-a0vQg000004wOE9IAM", metroNote: "Office Hub, for the Awfis centre in this building: Marol Naka metro, 7 minute walk. Awfis's own page says 0.30 km." },
+    address: "Vaman Techno Centre, Makwana Road, Gamdevi, Marol, Andheri East, Mumbai 400059" },
   "privilon": {
     l1: "Marol Naka",
     lat: 19.108207, lng: 72.879563, precision: "approx", geoSrc: "https://exa.ai/library/place/s8x6jf6zts0",
     geoNote: "The place page pin sits within 10 m of the Marol Naka station coordinate, so it marks the address, not a footprint. The developer says 'right next to Marol Metro Station'.",
-    address: "Privilon, Metro Station Marol Naka, Gamdevi, Marol, Andheri East, Mumbai 400059",
-    metro: "Marol Naka (Line 1 and Line 3)", walk: "right next to the station",
-    metroSrc: "https://bsafal.com/mumbai/", metroNote: "The developer: 'right next to Marol Metro Station'. OpenStreetMap puts Line 1 at about 0 m and Line 3 at about 100 m (mumbaipropertyexchange.com)." },
+    address: "Privilon, Metro Station Marol Naka, Gamdevi, Marol, Andheri East, Mumbai 400059" },
   "landmark": {
     l1: "Western Express Highway",
     lat: 19.116739, lng: 72.855679, precision: "building", geoSrc: "https://exa.ai/library/place/g4bgsvhmz93",
     geoNote: "Map place page for Landmark, Suren Road, Gundavali, at the junction of the Western Express Highway and Andheri-Kurla Road.",
-    address: "Landmark, Suren Road, Gundavali, Andheri East, Mumbai 400093",
-    metro: "Western Express Highway (Line 1 and Line 7)", walk: "about 200 m",
-    metroSrc: "https://property.jll.co.in/listings/landmark-wing-a-suren-road-gundavali", metroNote: "JLL: 'just 200 metres from the Western Express Highway metro station'." },
+    address: "Landmark, Suren Road, Gundavali, Andheri East, Mumbai 400093" },
   "rustomjee-central-park": {
     l1: "Western Express Highway",
     lat: 19.114042, lng: 72.860671, precision: "building", geoSrc: "https://exa.ai/library/place/83qqct91nth",
     geoNote: "Map place page; not the OSM 'Rustomjee' pin at 19.11642, 72.85428. Andheri-Kurla Road at the Chakala signal.",
-    address: "Rustomjee Central Park, Andheri-Kurla Road, Chakala, Andheri East, Mumbai 400093",
-    metro: "Western Express Highway (Line 1 and Line 7)", walk: "3 min walk; Chakala (J B Nagar) 0.7 km",
-    metroSrc: "https://rustomjeeltd.net/central-park-business-spaces/", metroNote: "The developer: 'The nearest metro stop, Western Express Highway, is a 3 min walk away'; Chakala Metro Station 0.7 km." },
+    address: "Rustomjee Central Park, Andheri-Kurla Road, Chakala, Andheri East, Mumbai 400093" },
   "fulcrum": {
     l1: "Airport Road",
     lat: 19.104032, lng: 72.872132, precision: "building", geoSrc: "https://exa.ai/library/place/55wlsy8vkny",
@@ -163,11 +152,42 @@ function routesFor(id, linesOf) {
     return { ...r, m, sec, path: [[pin.lng, pin.lat], ...r.path, [to.lng, to.lat]] };
   }).sort((a, b) => a.m - b.m);
   const pick = (kind, n, keyOf = (r) => r.name) => { const seen = new Set(); return mine.filter(r => r.kind === kind && !seen.has(keyOf(r)) && seen.add(keyOf(r))).slice(0, n); };
-  /* The railway is Andheri station only, and bus stops are not shown. */
-  return [...pick("metro", 2), ...mine.filter(r => r.kind === "rail" && r.name === "Andheri").slice(0, 1)].map(r => ({
+  /* Every metro route the router measured, and Andheri railway station; bus
+     stops are not shown. gmapsRoutes() then keeps the two stations the report
+     names. */
+  return [...pick("metro", 9), ...mine.filter(r => r.kind === "rail" && r.name === "Andheri").slice(0, 1)].map(r => ({
     kind: r.kind, name: r.name, lines: linesOf(r), lat: r.to[1], lng: r.to[0], m: r.m,
     ...(r.profile === "foot" ? { min: Math.max(1, Math.round(r.sec / 60)), mode: "walk" } : { mode: "road" }), path: r.path, src: r.src,
   }));
+}
+
+/* ---- connectivity as measured in Google Maps ---------------------------
+   The client's "Commercial Property Distance & Transit Report (Andheri /
+   Marol Region)", Nov 2026: for each building, its two metro stations with
+   walking distance and time, and Andheri railway station by road, all from
+   Google Maps. These are the figures on screen. The line drawn on the map
+   follows the streets (the routes above); its length is not shown. */
+const GMAPS_SRC = "https://www.google.com/maps";
+const GMAPS = {
+  "723-avenue":             { metro: [["Marol Naka", 810, 11], ["Saki Naka", 940, 13]], rail: 5500 },
+  "corporate-avenue":       { metro: [["Western Express Highway", 920, 12], ["Chakala (J B Nagar)", 990, 13]], rail: 2500 },
+  "vaman-techno-centre":    { metro: [["Marol Naka", 600, 8], ["Airport Road", 1200, 16]], rail: 5200 },
+  "privilon":               { metro: [["Marol Naka", 140, 2], ["Airport Road", 580, 8]], rail: 4900 },
+  "landmark":               { metro: [["Western Express Highway", 320, 4], ["Chakala (J B Nagar)", 1400, 19]], rail: 3200 },
+  "rustomjee-central-park": { metro: [["Western Express Highway", 570, 8], ["Chakala (J B Nagar)", 870, 12]], rail: 2900 },
+  "fulcrum":                { metro: [["Airport Road", 1300, 17], ["Sahar Road", 1300, 18]], rail: 4700 },
+};
+function gmapsRoutes(id, routes) {
+  const g = GMAPS[id], out = [];
+  for (const [name, m, min] of g.metro) {
+    const r = routes.find(x => x.kind === "metro" && x.name === name);
+    if (!r) throw new Error(`${id}: no street route to ${name}`);
+    out.push({ ...r, m, min, src: GMAPS_SRC, dist: "Google Maps" });
+  }
+  const rail = routes.find(x => x.kind === "rail" && x.name === "Andheri");
+  if (!rail) throw new Error(`${id}: no street route to Andheri`);
+  out.push({ ...rail, m: g.rail, src: GMAPS_SRC, dist: "Google Maps" });
+  return out;
 }
 
 /* ---- the card's one line: the deck's own words ------------------------- */
@@ -183,7 +203,7 @@ const options = D.map((o, i) => {
     ["Ceiling height", o.ceiling], ["Per seat", o.perSeat], ["Parking", o.parking], ["Parking charges", o.parkingCharges],
     ["Fire NOC", o.noc], ["OC & CC", o.occ], ["DG", o.dg], ["Possession", o.possession],
   ].filter(([, v]) => v);
-  const routes = routesFor(o.id, (x) => x.kind === "metro" ? metroLines(x.name) : x.kind === "rail" ? ["Western and Harbour lines"] : []);
+  const routes = gmapsRoutes(o.id, routesFor(o.id, (x) => x.kind === "metro" ? metroLines(x.name) : x.kind === "rail" ? ["Western and Harbour lines"] : []));
   return {
     id: o.id, n: i + 1, name: o.name, lat: r.lat, lng: r.lng, precision: r.precision, geoSrc: r.geoSrc, geoNote: r.geoNote,
     micro: o.micro, reason: reason(o), address: r.address, locality: "Andheri East",
@@ -241,12 +261,12 @@ const bundle = {
     stationShot: true,
     hideNearbyOptions: true,   /* no "Nearest other options" on a building's panel */
     routing: ROUTES.source,
-    routeFeed: "/api/routes/mappls?atlas=flipkart-andheri",   /* Mappls routes, loaded in the browser where the site's key answers */   /* where the road routes on each option came from */   /* selecting a building zooms to it and its nearest station and draws the walk */
+    routeFeed: "/api/routes/mappls?atlas=flipkart-andheri",   /* Mappls street paths, loaded in the browser where the site's key answers; the figures stay Google Maps' */
     sheet: `${DECK}. Positions and connectivity researched Nov 2026; each carries its source.`,
   },
   options, zones, transit,
   copy: {
-    connect: { note: "Walking distance along the streets from each building to its nearest metro station (OpenStreetMap routing). Andheri railway station is by road." },
+    connect: { note: "Walking distance and time from each building to its two metro stations, and Andheri railway station by road, as measured in Google Maps." },
     overview: { eyebrow: "Autopilot · Andheri East · Nov 2026", title: "Flipkart office inventory, Andheri East",
       intro: "{optionCount} buildings from Autopilot's inventory deck, with the metro around them.", ranking: "The list" },
     /* No ranking is made, so the page says "list", not "ranked". */
