@@ -141,6 +141,12 @@ const EXPECT = {
     if (conn.heads.join("|") !== "Metro|Railway station") out.push("the connectivity section is not Metro, Railway station: " + conn.heads.join("|"));
     if (conn.rows < 3) out.push("too few connections listed: " + conn.rows);
     if (conn.layers !== 3) out.push("the connection layers are missing on the map: " + conn.layers + " of 3");
+    /* the feed's route replaced the bundle's for 723 Avenue to Marol Naka, and the panel says where it came from */
+    await page.click('#list .card[data-id="723-avenue"]');
+    await page.waitForTimeout(150);
+    const fed = await page.evaluate(() => ({ note: (document.querySelector(".conn") || {}).innerText || "", first: ((document.querySelector('.cn.metro .cd') || {}).textContent || "") }));
+    if (!/Test feed \(1 of/.test(fed.note)) out.push("the route feed is not named under How you get there: " + fed.note.slice(-200));
+    if (!/^7\d0 m$/.test(fed.first)) out.push("the feed's distance was not used for Marol Naka: " + fed.first);
     return out;
   },
   place: async (page) => {
@@ -213,6 +219,9 @@ async function run(name, bundle, base, browser) {
       const [x, y] = [+iso[1], +iso[2]], sq = (h) => [[[x - h, y - h], [x + h, y - h], [x + h, y + h], [x - h, y + h], [x - h, y - h]]];
       return route.fulfill({ contentType: "application/json", body: JSON.stringify({ type: "FeatureCollection", features: [[30, .1], [20, .05], [10, .02]].map(([m, h]) => ({ type: "Feature", properties: { contour: m }, geometry: { type: "Polygon", coordinates: sq(h) } })) }) });
     }
+    /* A routing feed (meta.routeFeed): one route, for 723 Avenue to Marol Naka. */
+    if (/\/api\/routes\//.test(url)) return route.fulfill({ contentType: "application/json", body: JSON.stringify({ source: "Test feed", routes: [
+      { option: "723-avenue", kind: "metro", name: "Marol Naka", m: 700, sec: 560, geometry: "cjssBwdz{LsCp@l@nCz@jCcA`FzMxBoAjF" }] }) });
     /* Walking route to the nearest station (the Metro view): a short dog-leg. */
     const walk = url.match(/directions\/v5\/mapbox\/walking\/([-\d.]+),([-\d.]+);([-\d.]+),([-\d.]+)/);
     if (walk) {

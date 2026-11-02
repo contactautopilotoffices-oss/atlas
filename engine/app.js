@@ -719,6 +719,7 @@ function startMap() {
 function boot() {
   booted = true;
   if (IS_PLACE) loadIso(SITE);
+  loadRouteFeed();
   applyRoute(false);
   renderSort();
   renderTabs(); renderFilters(); renderList(); renderPanel(); renderLayers();
@@ -1481,6 +1482,47 @@ function connOf(o) {
     return [...by.values()].sort((x, y) => x.d - y.d).slice(0, n);
   };
   return { metro: group(METRO_ST, 2), rail: group(RAIL_ST, 3, (s) => s.line), bus: group(BUS, 3) };
+}
+/* meta.routeFeed: an address (on this site) that returns road routes from a
+   routing service measured server-side, e.g. /api/routes/mappls. Where it
+   answers, its routes replace the bundle's for the same building and station;
+   anything it does not answer keeps the bundle's route. Each route then runs
+   from the building pin, along the service's path, to the station, and the
+   stretches at either end are added to the distance, as the bundle's are. */
+let FEED_SOURCE = null;
+function decodePolyline(str, prec) {
+  const f = Math.pow(10, prec), out = []; let i = 0, lat = 0, lng = 0;
+  while (i < str.length) {
+    for (const k of [0, 1]) { let r = 0, sh = 0, b; do { b = str.charCodeAt(i++) - 63; r |= (b & 31) << sh; sh += 5; } while (b >= 32 && i <= str.length);
+      const d = (r & 1) ? ~(r >> 1) : (r >> 1); if (k === 0) lat += d; else lng += d; }
+    out.push([lng / f, lat / f]);
+  }
+  return out;
+}
+async function loadRouteFeed() {
+  if (!STN_SHOT || !M.routeFeed || !window.fetch) return;
+  let j = null;
+  try { const res = await fetch(M.routeFeed, { cache: "default" }); if (!res.ok) return; j = await res.json(); } catch (e) { return; }
+  if (!j || !Array.isArray(j.routes)) return;
+  let used = 0, total = 0;
+  for (const o of O) for (const r of (o.routes || [])) {
+    total++;
+    const f = j.routes.find(x => x.option === o.id && x.kind === r.kind && x.name === r.name && isFinite(x.m) && typeof x.geometry === "string");
+    if (!f) continue;
+    const to = { lng: r.lng, lat: r.lat };
+    /* polyline precision is 5 for OSRM-style services; accept 6 if 5 lands far from the building */
+    let path = decodePolyline(f.geometry, 5);
+    if (!path.length || km(o, { lng: path[0][0], lat: path[0][1] }) > .4) path = decodePolyline(f.geometry, 6);
+    if (!path.length || km(o, { lng: path[0][0], lat: path[0][1] }) > .4 || km(to, { lng: path[path.length - 1][0], lat: path[path.length - 1][1] }) > .4) continue;
+    const lead = km(o, { lng: path[0][0], lat: path[0][1] }) * 1000, tail = km({ lng: path[path.length - 1][0], lat: path[path.length - 1][1] }, to) * 1000;
+    const m = Math.round(f.m + lead + tail);
+    r.path = [[o.lng, o.lat], ...path, [to.lng, to.lat]];
+    if (r.mode === "walk" && isFinite(f.sec) && f.m > 0) r.min = Math.max(1, Math.round(f.sec * m / f.m / 60));
+    r.m = m; r.via = j.source || "route feed"; used++;
+  }
+  if (!used) return;
+  FEED_SOURCE = { name: j.source || "route feed", used, total };
+  renderList(); if (S.sel) renderPanel(); refreshRoute(); if (map && map.getSource("options")) refreshMap();
 }
 /* The connection on show: the row that was clicked, else the nearest metro. */
 function selConn(o) {
@@ -2438,7 +2480,8 @@ function connHTML(o) {
     ${metro.length ? `<div class="ch">Metro</div>${metro.join("")}` : ""}
     ${rail.length ? `<div class="ch">Railway station</div>${rail.join("")}${by ? `<p class="note">${esc(by.v)} ${cite(by.src)}</p>` : ""}` : ""}
     ${bus.length ? `<div class="ch">Bus stops</div>${bus.join("")}<p class="note">${esc(BUSD.name || "Bus stops")}${BUSD.src ? ` ${cite(BUSD.src, "source")}` : ""}. ${esc(BUSD.note || "")}</p>` : ""}
-    <p class="note">${routed ? `Distances and paths follow the streets: walking to ${bus.length ? "metro stations and bus stops" : "metro stations"}${rail.length ? `, by road to ${rail.length === 1 ? "the railway station" : "railway stations"}` : ""} (OpenStreetMap routing ${cite(M.routing || "https://routing.openstreetmap.de", "source")}).` : "Distances are straight-line from the pin; the metro walk is a route where one loads."} The map shows the row you pick.</p>
+    <p class="note">${routed && FEED_SOURCE ? `Distances and paths follow the streets, from ${esc(FEED_SOURCE.name)}${FEED_SOURCE.used < FEED_SOURCE.total ? ` (${FEED_SOURCE.used} of ${FEED_SOURCE.total} routes; the rest from OpenStreetMap)` : ""}.`
+      : routed ? `Distances and paths follow the streets: walking to ${bus.length ? "metro stations and bus stops" : "metro stations"}${rail.length ? `, by road to ${rail.length === 1 ? "the railway station" : "railway stations"}` : ""} (OpenStreetMap routing ${cite(M.routing || "https://routing.openstreetmap.de", "source")}).` : "Distances are straight-line from the pin; the metro walk is a route where one loads."} The map shows the row you pick.</p>
   </div>`;
 }
 

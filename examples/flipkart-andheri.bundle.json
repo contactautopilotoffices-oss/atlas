@@ -13,6 +13,7 @@
   "stationShot": true,
   "hideNearbyOptions": true,
   "routing": "https://routing.openstreetmap.de",
+  "routeFeed": "/api/routes/mappls?atlas=flipkart-andheri",
   "sheet": "Flipkart Property Inventory, Andheri East (Autopilot deck, Nov 2026). Positions and connectivity researched Nov 2026; each carries its source."
  },
  "options": [
@@ -350,13 +351,6 @@
      "conf": "high"
     },
     {
-     "k": "Nearest metro",
-     "v": "Marol Naka (L1, L3), 810 m walk by road, about 11 min",
-     "src": "https://routing.openstreetmap.de/routed-foot/route/v1/driving/72.884422,19.109713;72.879536,19.108195?overview=simplified&geometries=polyline",
-     "conf": "high",
-     "note": "Walking route along OpenStreetMap streets (FOSSGIS OSRM)."
-    },
-    {
      "k": "Railway by metro",
      "v": "By metro: from Marol Naka, Line 1 runs to Andheri (Western and Harbour lines) in 4 stops, 3.6 km of track. Andheri is the metro and railway interchange.",
      "src": "https://en.wikipedia.org/wiki/Line_1_(Mumbai_Metro)",
@@ -685,13 +679,6 @@
      "conf": "high"
     },
     {
-     "k": "Nearest metro",
-     "v": "Western Express Highway (L1), 920 m walk by road, about 12 min",
-     "src": "https://routing.openstreetmap.de/routed-foot/route/v1/driving/72.859838,19.111538;72.85639,19.11556?overview=simplified&geometries=polyline",
-     "conf": "high",
-     "note": "Walking route along OpenStreetMap streets (FOSSGIS OSRM)."
-    },
-    {
      "k": "Railway by metro",
      "v": "By metro: from Western Express Highway, Line 1 runs to Andheri (Western and Harbour lines) in 1 stop, 1.0 km of track. Andheri is the metro and railway interchange.",
      "src": "https://en.wikipedia.org/wiki/Line_1_(Mumbai_Metro)",
@@ -1002,13 +989,6 @@
      "conf": "high"
     },
     {
-     "k": "Nearest metro",
-     "v": "Marol Naka (L1, L3), 600 m walk by road, about 8 min",
-     "src": "https://routing.openstreetmap.de/routed-foot/route/v1/driving/72.882235,19.111483;72.879536,19.108195?overview=simplified&geometries=polyline",
-     "conf": "high",
-     "note": "Walking route along OpenStreetMap streets (FOSSGIS OSRM)."
-    },
-    {
      "k": "Railway by metro",
      "v": "By metro: from Marol Naka, Line 1 runs to Andheri (Western and Harbour lines) in 4 stops, 3.6 km of track. Andheri is the metro and railway interchange.",
      "src": "https://en.wikipedia.org/wiki/Line_1_(Mumbai_Metro)",
@@ -1297,13 +1277,6 @@
      "k": "Possession",
      "v": "Jan 2027",
      "conf": "high"
-    },
-    {
-     "k": "Nearest metro",
-     "v": "Marol Naka (L1, L3), 140 m walk by road, about 2 min",
-     "src": "https://routing.openstreetmap.de/routed-foot/route/v1/driving/72.879563,19.108207;72.879536,19.108195?overview=simplified&geometries=polyline",
-     "conf": "high",
-     "note": "Walking route along OpenStreetMap streets (FOSSGIS OSRM)."
     },
     {
      "k": "Railway by metro",
@@ -1634,13 +1607,6 @@
      "conf": "high"
     },
     {
-     "k": "Nearest metro",
-     "v": "Western Express Highway (L1), 320 m walk by road, about 4 min",
-     "src": "https://routing.openstreetmap.de/routed-foot/route/v1/driving/72.855679,19.116739;72.85639,19.11556?overview=simplified&geometries=polyline",
-     "conf": "high",
-     "note": "Walking route along OpenStreetMap streets (FOSSGIS OSRM)."
-    },
-    {
      "k": "Railway by metro",
      "v": "By metro: from Western Express Highway, Line 1 runs to Andheri (Western and Harbour lines) in 1 stop, 1.0 km of track. Andheri is the metro and railway interchange.",
      "src": "https://en.wikipedia.org/wiki/Line_1_(Mumbai_Metro)",
@@ -1951,13 +1917,6 @@
      "k": "Possession",
      "v": "Feb 2027 - Can be discussed for early vacancy",
      "conf": "high"
-    },
-    {
-     "k": "Nearest metro",
-     "v": "Western Express Highway (L1), 570 m walk by road, about 8 min",
-     "src": "https://routing.openstreetmap.de/routed-foot/route/v1/driving/72.860671,19.114042;72.85639,19.11556?overview=simplified&geometries=polyline",
-     "conf": "high",
-     "note": "Walking route along OpenStreetMap streets (FOSSGIS OSRM)."
     },
     {
      "k": "Railway by metro",
@@ -2426,13 +2385,6 @@
      "k": "Possession",
      "v": "Immediately",
      "conf": "high"
-    },
-    {
-     "k": "Nearest metro",
-     "v": "Airport Road (L1), 1.3 km walk by road, about 17 min",
-     "src": "https://routing.openstreetmap.de/routed-foot/route/v1/driving/72.872132,19.104032;72.87475,19.11027?overview=simplified&geometries=polyline",
-     "conf": "high",
-     "note": "Walking route along OpenStreetMap streets (FOSSGIS OSRM)."
     },
     {
      "k": "Railway by metro",

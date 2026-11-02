@@ -184,14 +184,12 @@ const options = D.map((o, i) => {
     ["Fire NOC", o.noc], ["OC & CC", o.occ], ["DG", o.dg], ["Possession", o.possession],
   ].filter(([, v]) => v);
   const routes = routesFor(o.id, (x) => x.kind === "metro" ? metroLines(x.name) : x.kind === "rail" ? ["Western and Harbour lines"] : []);
-  const m1 = routes.find(x => x.kind === "metro");
   return {
     id: o.id, n: i + 1, name: o.name, lat: r.lat, lng: r.lng, precision: r.precision, geoSrc: r.geoSrc, geoNote: r.geoNote,
     micro: o.micro, reason: reason(o), address: r.address, locality: "Andheri East",
     routes,
     facts: [
       ...spec.map(([k, v]) => ({ k, v, conf: "high" })),
-      { k: "Nearest metro", v: `${m1.name} (${m1.lines.join(", ")}), ${fmtRoad(m1.m)} walk by road, about ${m1.min} min`, src: m1.src, conf: "high", note: "Walking route along OpenStreetMap streets (FOSSGIS OSRM)." },
       { k: "Railway by metro", v: railByMetro(o.id).v, src: railByMetro(o.id).src, conf: "medium" },
     ],
   };
@@ -242,7 +240,8 @@ const bundle = {
     asOf: "2026-11", asOfText: "November 2026", city: "Mumbai", center: [72.87, 19.1085], zoom: 13.5,
     stationShot: true,
     hideNearbyOptions: true,   /* no "Nearest other options" on a building's panel */
-    routing: ROUTES.source,   /* where the road routes on each option came from */   /* selecting a building zooms to it and its nearest station and draws the walk */
+    routing: ROUTES.source,
+    routeFeed: "/api/routes/mappls?atlas=flipkart-andheri",   /* Mappls routes, loaded in the browser where the site's key answers */   /* where the road routes on each option came from */   /* selecting a building zooms to it and its nearest station and draws the walk */
     sheet: `${DECK}. Positions and connectivity researched Nov 2026; each carries its source.`,
   },
   options, zones, transit,
