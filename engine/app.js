@@ -242,7 +242,14 @@ const nearest = (p, list) => (list && list.length) ? list.map(s => ({ s, d: km(p
    dropped altogether. nearestPlan answers null, which every caller already
    checks, because an upcoming station is optional by nature. */
 const NO_NEAR = { s: { name: "", lineName: "", mode: "", target: null }, d: Infinity, none: true };
-const nearestOpen = (p) => (p ? nearest(p, OPEN) : null) || NO_NEAR;
+/* Where the bundle carries road routes for an option (options[].routes,
+   measured along the streets), its nearest station and bus stop are the
+   nearest routed ones and every view quotes the same road figure. */
+function routedFirst(p, kind) {
+  const r = p && Array.isArray(p.routes) ? p.routes.filter(x => x.kind === kind).sort((a, b) => a.m - b.m)[0] : null;
+  return r ? { s: { name: r.name, lat: r.lat, lng: r.lng, lineName: (r.lines || []).join(" · "), mode: kind, line: "" }, d: r.m / 1000, road: true, min: r.min } : null;
+}
+const nearestOpen = (p) => (p ? (routedFirst(p, "metro") || nearest(p, OPEN)) : null) || NO_NEAR;
 const nearestPlan = (p) => (p ? nearest(p, PLAN) : null);
 const stLabel = (s) => `${s.name} · ${s.lineName}`;
 const accessWord = (d) => d <= 1.2 ? `${walkMin(d)} min walk` : d <= 3 ? "short auto or feeder" : "cab or bus";
@@ -339,7 +346,7 @@ const hasKind = (o, k) => upTo(catchOf(o), 1, k) > 0;
 const BUS = (BUSD.stops || []).map((s, i) => Array.isArray(s)
   ? { id: "bus" + i, name: s[0], lat: s[1], lng: s[2], routes: s[3] }
   : { id: s.id || ("bus" + i), name: s.name, lat: s.lat, lng: s.lng, routes: s.routes });
-const nearestBus = (p) => (BUS.length && p) ? nearest(p, BUS) : null;
+const nearestBus = (p) => p ? (routedFirst(p, "bus") || (BUS.length ? nearest(p, BUS) : null)) : null;
 const BUS_OP = BUSD.name || BUSD.credit || "bus";
 const routesTxt = (n) => n ? `about ${n} route${n === 1 ? "" : "s"}` : `${BUS_OP} stop`;
 const busWalk = (b) => b.d <= 1.2 ? `${walkMin(b.d)} min walk` : "a short ride";
@@ -554,7 +561,12 @@ const LAYER_HINT = new Proxy({}, { get: (_, k) => say("layerHints." + String(k),
    and whatever rail runs today. Places and drive rings come on with the tab
    or the camera that needs them. Anything the bundle has no data for is not
    in LAYERS at all, so it cannot be switched on. */
-const LAYERS_ON_AT_START = ["existing", "zones", "rail", "future", "bus", ...(IS_PLACE ? ["rings", ...KINDS] : [])];
+/* meta.layersOff names layers that start switched off (they stay in the map
+   bar). The Metro view starts with the bus stops off: it draws the one stop
+   the reader picks, not every stop on the map. */
+const LAYERS_OFF = new Set([...(Array.isArray(M.layersOff) ? M.layersOff : []), ...(STN_SHOT_META() ? ["bus"] : [])]);
+function STN_SHOT_META() { return !!(M && M.stationShot); }
+const LAYERS_ON_AT_START = ["existing", "zones", "rail", "future", "bus", ...(IS_PLACE ? ["rings", ...KINDS] : [])].filter(k => !LAYERS_OFF.has(k));
 const S = {
   tab: "overview", sel: null, hov: null, pair: null, conn: null, shot: "close", sort: "rank", preset: DEFAULT_PRESET, sheet: "half",
   lv: DEFAULT_PRESET ? { ...PRESETS[DEFAULT_PRESET].lv } : {}, filters: new Set(), auto: new Set(), only: new Set(), city: null, kinds: new Set(),
@@ -1031,7 +1043,8 @@ function addLayers() {
   map.addSource("stn-route-lbl", { type: "geojson", data: stnRouteFC() });
   const rline = { "line-cap": "round", "line-join": "round" };
   add({ id: "stn-route-casing", type: "line", source: "stn-route", filter: ["==", ["get", "part"], "line"], layout: rline, paint: { "line-color": "#fff", "line-width": 8, "line-opacity": .9 } });
-  add({ id: "stn-route-walk", type: "line", source: "stn-route", filter: ["all", ["==", ["get", "part"], "line"], ["==", ["get", "kind"], "route"]], layout: rline, paint: { "line-color": "#a3502c", "line-width": 4.5 } });
+  add({ id: "stn-route-walk", type: "line", source: "stn-route", filter: ["all", ["==", ["get", "part"], "line"], ["==", ["get", "kind"], "route"]], layout: rline,
+    paint: { "line-color": ["match", ["get", "mode"], "bus", "#1d6fa5", "rail", "#7a4aa3", "#a3502c"], "line-width": 4.5 } });
   add({ id: "stn-route-straight", type: "line", source: "stn-route", filter: ["all", ["==", ["get", "part"], "line"], ["==", ["get", "kind"], "straight"]], layout: { "line-cap": "butt" }, paint: { "line-color": "#a3502c", "line-width": 3.5, "line-dasharray": [1.4, 1.2] } });
   add({ id: "stn-route-label", type: "symbol", source: "stn-route-lbl", filter: ["==", ["get", "part"], "label"], layout: { "text-field": ["get", "label"], "text-size": 13,
     "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"], "text-allow-overlap": true, "text-ignore-placement": true, "text-offset": [0, -1.1] },
@@ -1356,7 +1369,7 @@ function optCard(o) {
       <div>
         <div class="nm"><span class="no">${nn(o)}</span>${esc(o.name)}</div>
         <div class="loc">${fitBadge(o)} ${esc(o.sheetMicro || o.locality || "")}</div>
-        <div class="facts">${EX ? `<span title="From the current office by road">${isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(homeKm(o))}${homeMin(o) ? ` · ${esc(homeMin(o))}` : ""}</span>` : ""}${r.none ? "" : `<span title="Nearest station open: ${esc(r.s.name)}">${fmtM(r.d)} to rail</span>`}${(b => b ? `<span title="Nearest bus stop: ${esc(b.s.name)}">${fmtM(b.d)} to bus</span>` : "")(nearestBus(o))}${flagChip(o)}</div>
+        <div class="facts">${EX ? `<span title="From the current office by road">${isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(homeKm(o))}${homeMin(o) ? ` · ${esc(homeMin(o))}` : ""}</span>` : ""}${r.none ? "" : `<span title="Nearest station open: ${esc(r.s.name)}">${fmtM(r.d)} to ${STN_SHOT ? "metro" : "rail"}</span>`}${(b => b ? `<span title="Nearest bus stop: ${esc(b.s.name)}">${fmtM(b.d)} to bus</span>` : "")(nearestBus(o))}${flagChip(o)}</div>
       </div>
       ${HAS_CHOOSER ? `<span class="score" title="Fit to your priorities, out of 100">${score(o)}</span>` : ""}
     </button>`;
@@ -1399,7 +1412,7 @@ function wireBoard() {
     if (cn && S.sel) {
       const i = cn.dataset.conn.indexOf("|");
       S.conn = { kind: cn.dataset.conn.slice(0, i), name: cn.dataset.conn.slice(i + 1) };
-      S.shot = "station"; flyToOption(O.find(x => x.id === S.sel), "station");
+      S.shot = "station"; refreshRoute(); flyToOption(O.find(x => x.id === S.sel), "station");
       document.querySelectorAll(".cn").forEach(b => b.classList.toggle("on", b === cn));
       return;
     }
@@ -1441,18 +1454,23 @@ function afterWeights(focusKey) {
 /* ---------------------------------------------------------- camera ------ */
 const SHOT_ZOOM = { building: 17.2, street: 16.3, locality: 15.2 };
 /* An atlas can turn on a Metro view (meta.stationShot): selecting an option
-   zooms to it and its nearest open station and draws the walk between them,
-   routed by Mapbox where it loads and a straight line, labelled as one, where
-   it does not. Off by default so the other atlases look as they did. */
+   zooms to it and draws one connection at a time, the nearest metro station
+   by default or the row of "How you get there" that was clicked, never all of
+   them at once. Where the bundle carries road routes (options[].routes) those
+   are drawn along the streets and quoted; without them the walk to the metro
+   is fetched from Mapbox, and failing that a straight line is drawn and
+   labelled as one. Off by default so the other atlases look as they did. */
 const STN_SHOT = !!(M && M.stationShot) && OPEN.length > 0;
-/* What is around a building, nearest first: metro, suburban railway and bus
-   stops. A station served by two lines (Marol Naka) is one row with both. */
 const METRO_ST = OPEN.filter(s => s.mode === "metro");
 const RAIL_ST = OPEN.filter(s => s.mode === "suburban" || s.mode === "rail");
-const nearStn = (p) => STN_SHOT ? ((p && nearest(p, METRO_ST.length ? METRO_ST : OPEN)) || NO_NEAR) : nearestOpen(p);
+const routedRows = (o, kind) => (o && Array.isArray(o.routes) ? o.routes : []).filter(r => r.kind === kind)
+  .map(r => ({ s: { name: r.name, lat: r.lat, lng: r.lng, lineName: (r.lines || []).join(" · ") }, d: r.m / 1000, lines: r.lines || [], route: r }))
+  .sort((x, y) => x.d - y.d);
+const nearStn = (p) => STN_SHOT ? (routedFirst(p, "metro") || (p && nearest(p, METRO_ST.length ? METRO_ST : OPEN)) || NO_NEAR) : nearestOpen(p);
 function connOf(o) {
-  /* One row per name (a station on two lines, a bus stop on both sides of the
-     road), or per line for the railway, nearest first. */
+  if (Array.isArray(o.routes) && o.routes.length) return { metro: routedRows(o, "metro"), rail: routedRows(o, "rail"), bus: routedRows(o, "bus") };
+  /* No routes: one row per name (a station on two lines, a bus stop on both
+     sides of the road), or per line for the railway, nearest first. */
   const group = (list, n, keyOf = (s) => s.name) => {
     const by = new Map();
     for (const s of list) {
@@ -1460,20 +1478,21 @@ function connOf(o) {
       if (!g) by.set(k, { s, d, lines: [s.lineName].filter(Boolean) });
       else { if (d < g.d) { g.d = d; g.s = s; } if (s.lineName && !g.lines.includes(s.lineName)) g.lines.push(s.lineName); }
     }
-    return [...by.values()].sort((a, b) => a.d - b.d).slice(0, n);
+    return [...by.values()].sort((x, y) => x.d - y.d).slice(0, n);
   };
   return { metro: group(METRO_ST, 2), rail: group(RAIL_ST, 3, (s) => s.line), bus: group(BUS, 3) };
 }
-/* The points the Metro view fits: the building, then what the clicked row
-   (or by default the nearest metro and the nearest bus stops) is. */
-function stationView(o) {
-  const m = nearStn(o);
-  if (m.none) return null;
+/* The connection on show: the row that was clicked, else the nearest metro. */
+function selConn(o) {
   const c = connOf(o), f = S.conn;
-  let pts = [m.s, ...c.bus.map(b => b.s)];
-  const hit = f && (f.kind === "rail" ? c.rail : f.kind === "bus" ? c.bus : c.metro).find(x => x.s.name === f.name);
-  if (hit) pts = [hit.s];
-  return [o, ...pts];
+  const hit = f && (c[f.kind] || []).find(x => x.s.name === f.name);
+  return hit ? { kind: f.kind, x: hit } : c.metro[0] ? { kind: "metro", x: c.metro[0] } : null;
+}
+/* The Metro view fits the building and the whole of the route on show. */
+function stationView(o) {
+  const sc = selConn(o);
+  if (!sc) return null;
+  return [o, ...(sc.x.route ? sc.x.route.path.map(([lng, lat]) => ({ lng, lat })) : [sc.x.s])];
 }
 const SHOTS = {
   ...(STN_SHOT ? { station: { label: "Metro", hint: "Zoomed to the building and its nearest metro station, with the walk between them." } } : {}),
@@ -1481,31 +1500,37 @@ const SHOTS = {
   street: { label: "Street", hint: "Low angle, as you would approach it by road." },
   area: { label: "Catchment", hint: `Top-down view of the ${RINGS.map(r => r.min).join(", ").replace(/, (\d+)$/, " and $1")} minute drive-time areas.` }
 };
-/* The walk from the open option to its nearest open station. */
+/* The route on show: along the streets where the bundle has it. */
 const STN_ROUTE = new Map();
 function stnRouteFC() {
   const o = STN_SHOT && S.sel && O.find(x => x.id === S.sel);
   if (!o) return FC([]);
-  const r = nearStn(o);
-  if (r.none) return FC([]);
-  const rt = STN_ROUTE.get(o.id);
+  const sc = selConn(o);
+  if (!sc) return FC([]);
+  if (sc.x.route) {
+    const r = sc.x.route, p = r.path, mid = p[Math.floor(p.length / 2)];
+    const label = r.mode === "walk" ? `${fmtM(r.m / 1000)} walk · ${r.min} min` : `${fmtM(r.m / 1000)} by road`;
+    return FC([ln(p, { part: "line", kind: "route", mode: sc.kind }), pt(mid[0], mid[1], { part: "label", label })]);
+  }
+  if (sc.kind !== "metro" || sc.x !== connOf(o).metro[0]) return FC([]);
+  const r = sc.x, rt = STN_ROUTE.get(o.id);
   if (rt && rt.coords) {
     const mid = rt.coords[Math.floor(rt.coords.length / 2)];
-    return FC([ln(rt.coords, { part: "line", kind: "route" }), pt(mid[0], mid[1], { part: "label", label: `${fmtM(rt.m / 1000)} walk · ${Math.max(1, Math.round(rt.s / 60))} min` })]);
+    return FC([ln(rt.coords, { part: "line", kind: "route", mode: "metro" }), pt(mid[0], mid[1], { part: "label", label: `${fmtM(rt.m / 1000)} walk · ${Math.max(1, Math.round(rt.s / 60))} min` })]);
   }
   /* A pin that sits on the station (it marks the address) has no distance to draw. */
   return FC([ln([[o.lng, o.lat], [r.s.lng, r.s.lat]], { part: "line", kind: "straight" }),
     pt((o.lng + r.s.lng) / 2, (o.lat + r.s.lat) / 2, { part: "label", label: r.d < .03 ? `At ${r.s.name}` : `${fmtM(r.d)} straight line` })]);
 }
-/* Dotted lines to the nearest bus stops and the nearest railway stations,
-   each named with its straight-line distance. */
+/* The far end of the connection on show, named. Without a route, a bus stop
+   or railway station gets a dotted straight line, labelled by the panel. */
 function connFC() {
   const o = STN_SHOT && S.sel && O.find(x => x.id === S.sel);
   if (!o) return FC([]);
-  const c = connOf(o), out = [];
-  const add = (x, kind, label) => { out.push(ln([[o.lng, o.lat], [x.s.lng, x.s.lat]], { part: "line", kind })); out.push(pt(x.s.lng, x.s.lat, { part: "pt", kind, label })); };
-  c.bus.forEach(x => add(x, "bus", `${x.s.name} · ${fmtM(x.d)}`));
-  c.rail.forEach(x => add(x, "rail", `${x.s.name} railway · ${fmtM(x.d)}`));
+  const sc = selConn(o);
+  if (!sc) return FC([]);
+  const out = [pt(sc.x.s.lng, sc.x.s.lat, { part: "pt", kind: sc.kind, label: sc.kind === "rail" ? `${sc.x.s.name} railway station` : sc.x.s.name })];
+  if (!sc.x.route && sc.kind !== "metro") out.unshift(ln([[o.lng, o.lat], [sc.x.s.lng, sc.x.s.lat]], { part: "line", kind: sc.kind }));
   return FC(out);
 }
 function refreshRoute() {
@@ -1515,7 +1540,7 @@ function refreshRoute() {
   const cs = map.getSource("conn"); if (cs) cs.setData(cn);
 }
 async function loadRoute(o) {
-  if (!STN_SHOT || !o || STN_ROUTE.has(o.id) || !window.MAPBOX_TOKEN || !window.fetch) return;
+  if (!STN_SHOT || !o || (Array.isArray(o.routes) && o.routes.length) || STN_ROUTE.has(o.id) || !window.MAPBOX_TOKEN || !window.fetch) return;
   const r = nearStn(o);
   if (r.none) return;
   STN_ROUTE.set(o.id, null);
@@ -1939,7 +1964,7 @@ function renderSite() {
     ${sat ? `<div class="hero"><img src="${sat}" alt="Satellite view of ${esc(o.name)}" onerror="this.closest('.hero').remove()"><span class="ph">Satellite · Esri, Vantor</span></div>` : ""}
     <div class="kpis">
       ${RINGS.map((rg, i) => `<div class="kpi"><div class="l">${esc(say("site.within", "Within"))} ${rg.min} min</div><div class="v">${total(i)}</div><div class="s">${esc(top(i) || "places mapped")}</div></div>`).join("")}
-      ${!r.none ? `<div class="kpi"><div class="l">${esc(say("option.railToday", STN_SHOT ? "Nearest metro station" : "Station today"))}</div><div class="v">${fmtM(r.d)}</div><div class="s">${esc(r.s.name)}${r.s.lineName ? ` · ${esc(r.s.lineName)}` : ""}${STN_SHOT ? " · straight line" : ""}</div></div>` : ""}
+      ${!r.none ? `<div class="kpi"><div class="l">${esc(say("option.railToday", STN_SHOT ? "Nearest metro station" : "Station today"))}</div><div class="v">${fmtM(r.d)}</div><div class="s">${esc(r.s.name)}${r.s.lineName ? ` · ${esc(r.s.lineName)}` : ""}${r.road ? ` · ${r.min ? `${r.min} min walk by road` : "by road"}` : STN_SHOT ? " · straight line" : ""}</div></div>` : ""}
       ${f ? `<div class="kpi"><div class="l">${esc(say("option.future", "Being built"))}</div><div class="v">${fmtM(f.d)}</div><div class="s">${esc(f.s.name)}${f.s.target ? ` · ${esc(f.s.target)}` : ""} · indicative</div></div>` : ""}
       ${ops.length ? `<div class="kpi"><div class="l">${esc(say("site.operators", "Operators nearby"))}</div><div class="v">${opsNear.length}</div><div class="s">within ${RINGS[last].min} min, of ${ops.length} on this atlas</div></div>` : ""}
     </div>
@@ -2400,17 +2425,20 @@ function wirePanes() {
 /* How you get there: metro, railway and bus, nearest first. Each row opens
    that connection on the map. */
 function connHTML(o) {
-  const c = connOf(o), rt = STN_ROUTE.get(o.id), by = (o.facts || []).find(x => x.k === "Railway by metro");
-  const row = (kind, x, extra) => `<button type="button" class="cn ${kind}${S.conn && S.conn.kind === kind && S.conn.name === x.s.name ? " on" : ""}" data-conn="${kind}|${esc(x.s.name)}"><span class="ck"></span><span class="cl"><b>${esc(x.s.name)}</b><i>${esc(extra)}</i></span><span class="cd">${fmtM(x.d)}</span></button>`;
-  const metro = c.metro.map((x, i) => row("metro", x, `${x.lines.join(" · ")} · ${i === 0 && rt && rt.m ? `walk ${fmtM(rt.m / 1000)}, ${Math.max(1, Math.round(rt.s / 60))} min, routed` : x.d < .03 ? "the pin marks the station address" : `about ${walkMin(x.d)} min walk, straight line`}`));
-  const rail = c.rail.map(x => row("rail", x, `${x.lines.join(" · ")} · straight line`));
-  const bus = c.bus.map(x => row("bus", x, `${walkMin(x.d)} min walk, straight line`));
-  const note = (t) => `<p class="note">${t}</p>`;
+  const c = connOf(o), sc = selConn(o), rt = STN_ROUTE.get(o.id), by = (o.facts || []).find(x => x.k === "Railway by metro");
+  const routed = Array.isArray(o.routes) && o.routes.length > 0;
+  const row = (kind, x, extra) => `<button type="button" class="cn ${kind}${sc && sc.kind === kind && sc.x.s.name === x.s.name ? " on" : ""}" data-conn="${kind}|${esc(x.s.name)}"><span class="ck"></span><span class="cl"><b>${esc(x.s.name)}</b><i>${esc(extra)}</i></span><span class="cd">${fmtM(x.d)}</span></button>`;
+  const lines = (x) => x.lines.length ? `${x.lines.join(" · ")} · ` : "";
+  const walk = (x, i) => x.route ? `${lines(x)}${x.route.min} min walk by road`
+    : `${lines(x)}${i === 0 && rt && rt.m ? `walk ${fmtM(rt.m / 1000)}, ${Math.max(1, Math.round(rt.s / 60))} min, routed` : x.d < .03 ? "the pin marks the station address" : `about ${walkMin(x.d)} min walk, straight line`}`;
+  const metro = c.metro.map((x, i) => row("metro", x, walk(x, i)));
+  const rail = c.rail.map(x => row("rail", x, `${lines(x)}${x.route ? "by road" : "straight line"}`));
+  const bus = c.bus.map(x => row("bus", x, walk(x, 1)));
   return `<h3>How you get there</h3><div class="conn">
     ${metro.length ? `<div class="ch">Metro</div>${metro.join("")}` : ""}
-    ${rail.length ? `<div class="ch">Railway</div>${rail.join("")}${by ? `<p class="note">${esc(by.v)} ${cite(by.src)}</p>` : ""}` : ""}
+    ${rail.length ? `<div class="ch">Railway station</div>${rail.join("")}${by ? `<p class="note">${esc(by.v)} ${cite(by.src)}</p>` : ""}` : ""}
     ${bus.length ? `<div class="ch">Bus stops</div>${bus.join("")}<p class="note">${esc(BUSD.name || "Bus stops")}${BUSD.src ? ` ${cite(BUSD.src, "source")}` : ""}. ${esc(BUSD.note || "")}</p>` : ""}
-    <p class="note">Click a row to show it on the map. Distances are straight-line from the pin; the metro walk is a route where one loads.</p>
+    <p class="note">${routed ? `Distances and paths follow the streets: walking to metro stations and bus stops, by road to railway stations (OpenStreetMap routing ${cite(M.routing || "https://routing.openstreetmap.de", "source")}).` : "Distances are straight-line from the pin; the metro walk is a route where one loads."} The map shows the row you pick.</p>
   </div>`;
 }
 
@@ -2454,7 +2482,7 @@ function renderOption(o) {
       ${colMeasures.slice(0, 2).map(m => `<div class="kpi"><div class="l">${esc(m.label || titleCase(m.key))}</div><div class="v">${esc(String(o[m.column]))}</div><div class="s">${esc(m.unit || (isFinite(m.max) ? `out of ${m.max}` : ""))}</div></div>`).join("")}
       ${EX ? `<div class="kpi"><div class="l">${esc(say("option.fromExisting", "From today's office"))}</div><div class="v">${isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(homeKm(o))}</div><div class="s">${esc(homeMin(o))} by road</div></div>` : ""}
       ${HAS_CHOOSER ? `<div class="kpi"><div class="l">${esc(say("option.fit", "Fit"))}</div><div class="v">${score(o)}<span style="font-size:13px;color:var(--mut)">/100</span></div><div class="s">#${rank} of ${O.length} on ${esc(presetName().toLowerCase())}</div></div>` : ""}
-      ${!r.none ? `<div class="kpi"><div class="l">${esc(say("option.railToday", STN_SHOT ? "Nearest metro station" : "Station today"))}</div><div class="v">${fmtM(r.d)}</div><div class="s">${esc(r.s.name)}${r.s.lineName ? ` · ${esc(r.s.lineName)}` : ""}${STN_SHOT ? " · straight line" : ""}</div></div>` : ""}
+      ${!r.none ? `<div class="kpi"><div class="l">${esc(say("option.railToday", STN_SHOT ? "Nearest metro station" : "Station today"))}</div><div class="v">${fmtM(r.d)}</div><div class="s">${esc(r.s.name)}${r.s.lineName ? ` · ${esc(r.s.lineName)}` : ""}${r.road ? ` · ${r.min ? `${r.min} min walk by road` : "by road"}` : STN_SHOT ? " · straight line" : ""}</div></div>` : ""}
       ${b ? `<div class="kpi"><div class="l">${esc(say("option.bus", "Bus stop"))}</div><div class="v">${fmtM(b.d)}</div><div class="s">${esc(b.s.name)} · ${esc(busWalk(b))} · ${esc(routesTxt(b.s.routes))}</div></div>` : ""}
       ${f ? `<div class="kpi"><div class="l">${esc(say("option.future", "Being built"))}</div><div class="v">${fmtM(f.d)}</div><div class="s">${esc(f.s.name)}${f.s.lineName ? ` · ${esc(f.s.lineName)}` : ""}${f.s.target ? ` · ${esc(f.s.target)}` : ""} · indicative</div></div>` : ""}
     </div>

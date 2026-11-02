@@ -138,7 +138,7 @@ const EXPECT = {
     if (shots[0] !== "Metro*") out.push("an opened building does not open on the Metro view: " + shots.join(", "));
     const conn = await page.evaluate(() => ({ heads: [...document.querySelectorAll(".conn .ch")].map(e => e.textContent), rows: document.querySelectorAll(".conn .cn").length,
       layers: ["conn-line", "conn-pt", "conn-label"].filter(id => window.__atlasMap && window.__atlasMap._layers[id]).length }));
-    if (conn.heads.join("|") !== "Metro|Railway|Bus stops") out.push("the connectivity section is not Metro, Railway, Bus stops: " + conn.heads.join("|"));
+    if (conn.heads.join("|") !== "Metro|Railway station|Bus stops") out.push("the connectivity section is not Metro, Railway station, Bus stops: " + conn.heads.join("|"));
     if (conn.rows < 6) out.push("too few connections listed: " + conn.rows);
     if (conn.layers !== 3) out.push("the connection layers are missing on the map: " + conn.layers + " of 3");
     return out;

@@ -140,11 +140,32 @@ const plural = (n, w) => `${n} ${w}${n === 1 ? "" : "s"}`;
 function railByMetro(id) {
   const st = R[id].l1;
   if (st) {
-    const a = `Andheri (Western and Harbour lines): ${l1Km(st, "Andheri").toFixed(1)} km, ${plural(l1Stops(st, "Andheri"), "stop")}`;
-    const g = `Ghatkopar (Central line): ${l1Km(st, "Ghatkopar").toFixed(1)} km, ${plural(l1Stops(st, "Ghatkopar"), "stop")}`;
-    return { v: `From ${st} on Line 1: ${a}; ${g}. Both are metro and railway interchanges.`, src: L1_SRC };
+    const a = `to Andheri (Western and Harbour lines) in ${plural(l1Stops(st, "Andheri"), "stop")}, ${l1Km(st, "Andheri").toFixed(1)} km of track`;
+    const g = `to Ghatkopar (Central line) in ${plural(l1Stops(st, "Ghatkopar"), "stop")}, ${l1Km(st, "Ghatkopar").toFixed(1)} km of track`;
+    return { v: `By metro: from ${st}, Line 1 runs ${a}, and ${g}. Both are metro and railway interchanges.`, src: L1_SRC };
   }
-  return { v: "From Sahar Road on Line 3, change to Line 1 at Marol Naka (2 stops). From there Andheri (Western and Harbour lines) is 4 stops and Ghatkopar (Central line) 4 stops on Line 1.", src: L1_SRC };
+  return { v: "By metro: from Sahar Road, Line 3 reaches Marol Naka in 2 stops; change to Line 1 there for Andheri (Western and Harbour lines, 4 stops) or Ghatkopar (Central line, 4 stops).", src: L1_SRC };
+}
+
+/* ---- road routes ---------------------------------------------------------
+   Every connection is measured along the streets, not as the crow flies:
+   walks to metro stations and bus stops on the OSRM foot profile, the trip to
+   a railway station on the car profile, from routing.openstreetmap.de
+   (OpenStreetMap data), fetched 2 Nov 2026. scripts/examples/data/
+   flipkart-routes.json keeps every route with the request it came from. The
+   car router's time is free-flow, so only its distance is shown. */
+const ROUTES = JSON.parse(fs.readFileSync(path.join(__dirname, "data", "flipkart-routes.json"), "utf8"));
+const METRO_LINES = { "Marol Naka": ["L1", "L3"] };
+const metroLines = (name) => METRO_LINES[name] || [name === "Sahar Road" || name === "MIDC Andheri" || name === "SEEPZ" ? "L3" : "L1"];
+const RAIL_LINE = { "Jogeshwari": "western", "Andheri": "western", "Vile Parle": "western", "Kurla": "central", "Vidyavihar": "central", "Ghatkopar": "central" };
+const fmtRoad = (m) => m < 1000 ? `${Math.round(m / 10) * 10} m` : `${(m / 1000).toFixed(1)} km`;
+function routesFor(id, linesOf) {
+  const mine = ROUTES.routes.filter(r => r.option === id).sort((a, b) => a.m - b.m);
+  const pick = (kind, n, keyOf = (r) => r.name) => { const seen = new Set(); return mine.filter(r => r.kind === kind && !seen.has(keyOf(r)) && seen.add(keyOf(r))).slice(0, n); };
+  return [...pick("metro", 2), ...pick("rail", 2, r => RAIL_LINE[r.name]), ...pick("bus", 3)].map(r => ({
+    kind: r.kind, name: r.name, lines: linesOf(r), lat: r.to[1], lng: r.to[0], m: r.m,
+    ...(r.profile === "foot" ? { min: Math.max(1, Math.round(r.sec / 60)), mode: "walk" } : { mode: "road" }), path: r.path, src: r.src,
+  }));
 }
 
 /* ---- the card's one line: the deck's own words ------------------------- */
@@ -160,12 +181,15 @@ const options = D.map((o, i) => {
     ["Ceiling height", o.ceiling], ["Per seat", o.perSeat], ["Parking", o.parking], ["Parking charges", o.parkingCharges],
     ["Fire NOC", o.noc], ["OC & CC", o.occ], ["DG", o.dg], ["Possession", o.possession],
   ].filter(([, v]) => v);
+  const routes = routesFor(o.id, (x) => x.kind === "metro" ? metroLines(x.name) : x.kind === "rail" ? [RAIL_LINE[x.name] === "western" ? "Western line" : "Central line"] : []);
+  const m1 = routes.find(x => x.kind === "metro");
   return {
     id: o.id, n: i + 1, name: o.name, lat: r.lat, lng: r.lng, precision: r.precision, geoSrc: r.geoSrc, geoNote: r.geoNote,
     micro: o.micro, reason: reason(o), address: r.address, locality: "Andheri East",
+    routes,
     facts: [
       ...spec.map(([k, v]) => ({ k, v, conf: "high" })),
-      { k: "Nearest metro", v: `${r.metro}, ${r.walk}`, src: r.metroSrc, conf: "medium", note: r.metroNote },
+      { k: "Nearest metro", v: `${m1.name} (${m1.lines.join(", ")}), ${fmtRoad(m1.m)} walk by road, about ${m1.min} min`, src: m1.src, conf: "high", note: "Walking route along OpenStreetMap streets (FOSSGIS OSRM)." },
       { k: "Railway by metro", v: railByMetro(o.id).v, src: railByMetro(o.id).src, conf: "medium" },
     ],
   };
@@ -223,7 +247,8 @@ const bundle = {
     title: "Flipkart Andheri East Atlas",
     sub: "Office inventory options for Flipkart",
     asOf: "2026-11", asOfText: "November 2026", city: "Mumbai", center: [72.87, 19.1085], zoom: 13.5,
-    stationShot: true,   /* selecting a building zooms to it and its nearest station and draws the walk */
+    stationShot: true,
+    routing: ROUTES.source,   /* where the road routes on each option came from */   /* selecting a building zooms to it and its nearest station and draws the walk */
     sheet: `${DECK}. Positions and connectivity researched Nov 2026; each carries its source.`,
   },
   options, zones, transit,
@@ -233,6 +258,7 @@ const bundle = {
     stops: busStops,
   },
   copy: {
+    connect: { note: "Walking distance along the streets to each building's nearest metro station and bus stop (OpenStreetMap routing). Railway stations are by road." },
     overview: { eyebrow: "Autopilot · Andheri East · Nov 2026", title: "Flipkart office inventory, Andheri East",
       intro: "{optionCount} buildings from Autopilot's inventory deck, with the metro around them.", ranking: "The list" },
     /* No ranking is made, so the page says "list", not "ranked". */
