@@ -117,13 +117,6 @@ const kmBetween = (a, b) => {
   const x = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * t) * Math.cos(b.lat * t) * Math.sin(dLng / 2) ** 2;
   return 2 * 6371 * Math.asin(Math.sqrt(x));
 };
-const titleCase = (n) => n.toLowerCase().replace(/(^|[\s./(-])([a-z])/g, (m, a, b) => a + b.toUpperCase()).replace(/\b(Stn|Rly)\./g, (m, w) => w + ".");
-const BEST = JSON.parse(fs.readFileSync(path.join(__dirname, "data", "best-bus-stops-andheri-east.json"), "utf8"));
-const NEAR_BUS_KM = 0.9;
-const busStops = BEST.stops
-  .filter(b => D.some(o => kmBetween(R[o.id], b) <= NEAR_BUS_KM))
-  .map(b => ({ id: "best-" + b.id, name: titleCase(b.name), lat: b.lat, lng: b.lng }));
-
 /* Metro Line 1 chainage (km from Versova) and station order, from the line's
    Wikipedia page. Andheri and Ghatkopar are the interchanges with the suburban
    railway: Andheri with the Western and Harbour lines, Ghatkopar with the
@@ -140,10 +133,9 @@ function railByMetro(id) {
   const st = R[id].l1;
   if (st) {
     const a = `to Andheri (Western and Harbour lines) in ${plural(l1Stops(st, "Andheri"), "stop")}, ${l1Km(st, "Andheri").toFixed(1)} km of track`;
-    const g = `to Ghatkopar (Central line) in ${plural(l1Stops(st, "Ghatkopar"), "stop")}, ${l1Km(st, "Ghatkopar").toFixed(1)} km of track`;
-    return { v: `By metro: from ${st}, Line 1 runs ${a}, and ${g}. Both are metro and railway interchanges.`, src: L1_SRC };
+    return { v: `By metro: from ${st}, Line 1 runs ${a}. Andheri is the metro and railway interchange.`, src: L1_SRC };
   }
-  return { v: "By metro: from Sahar Road, Line 3 reaches Marol Naka in 2 stops; change to Line 1 there for Andheri (Western and Harbour lines, 4 stops) or Ghatkopar (Central line, 4 stops).", src: L1_SRC };
+  return { v: "By metro: from Sahar Road, Line 3 reaches Marol Naka in 2 stops; change to Line 1 there for Andheri (Western and Harbour lines, 4 stops).", src: L1_SRC };
 }
 
 /* ---- road routes ---------------------------------------------------------
@@ -171,7 +163,8 @@ function routesFor(id, linesOf) {
     return { ...r, m, sec, path: [[pin.lng, pin.lat], ...r.path, [to.lng, to.lat]] };
   }).sort((a, b) => a.m - b.m);
   const pick = (kind, n, keyOf = (r) => r.name) => { const seen = new Set(); return mine.filter(r => r.kind === kind && !seen.has(keyOf(r)) && seen.add(keyOf(r))).slice(0, n); };
-  return [...pick("metro", 2), ...pick("rail", 2, r => RAIL_LINE[r.name]), ...pick("bus", 3)].map(r => ({
+  /* The railway is Andheri station only, and bus stops are not shown. */
+  return [...pick("metro", 2), ...mine.filter(r => r.kind === "rail" && r.name === "Andheri").slice(0, 1)].map(r => ({
     kind: r.kind, name: r.name, lines: linesOf(r), lat: r.to[1], lng: r.to[0], m: r.m,
     ...(r.profile === "foot" ? { min: Math.max(1, Math.round(r.sec / 60)), mode: "walk" } : { mode: "road" }), path: r.path, src: r.src,
   }));
@@ -190,7 +183,7 @@ const options = D.map((o, i) => {
     ["Ceiling height", o.ceiling], ["Per seat", o.perSeat], ["Parking", o.parking], ["Parking charges", o.parkingCharges],
     ["Fire NOC", o.noc], ["OC & CC", o.occ], ["DG", o.dg], ["Possession", o.possession],
   ].filter(([, v]) => v);
-  const routes = routesFor(o.id, (x) => x.kind === "metro" ? metroLines(x.name) : x.kind === "rail" ? [RAIL_LINE[x.name] === "western" ? "Western line" : "Central line"] : []);
+  const routes = routesFor(o.id, (x) => x.kind === "metro" ? metroLines(x.name) : x.kind === "rail" ? ["Western and Harbour lines"] : []);
   const m1 = routes.find(x => x.kind === "metro");
   return {
     id: o.id, n: i + 1, name: o.name, lat: r.lat, lng: r.lng, precision: r.precision, geoSrc: r.geoSrc, geoNote: r.geoNote,
@@ -225,19 +218,10 @@ const transit = {
         { name: "Marol Naka", lat: 19.108195, lng: 72.879536, open: true },
         { name: "Sahar Road", lat: 19.102196, lng: 72.865236, open: true },
       ] },
-    { key: "western", name: "Western and Harbour lines (suburban railway)", short: "Western line", mode: "suburban", color: "#b3402f", status: "open", src: WIKI("Andheri_railway_station"),
-      note: "Andheri is the interchange with Metro Line 1. Harbour line trains also stop at these stations.",
+    /* The railway is shown at Andheri only: the interchange with Metro Line 1. */
+    { key: "western", name: "Andheri railway station (Western and Harbour lines)", short: "Western and Harbour lines", mode: "suburban", color: "#b3402f", status: "open", src: WIKI("Andheri_railway_station"),
       stations: [
-        { name: "Jogeshwari", lat: 19.1365, lng: 72.849, open: true },
         { name: "Andheri", lat: 19.119167, lng: 72.846944, open: true },
-        { name: "Vile Parle", lat: 19.099532, lng: 72.843964, open: true },
-      ] },
-    { key: "central", name: "Central line (suburban railway)", short: "Central line", mode: "suburban", color: "#7a4aa3", status: "open", src: WIKI("Kurla_railway_station"),
-      note: "Ghatkopar is the interchange with Metro Line 1. Kurla is also on the Harbour line.",
-      stations: [
-        { name: "Kurla", lat: 19.0656, lng: 72.8791, open: true },
-        { name: "Vidyavihar", lat: 19.07944, lng: 72.89722, open: true },
-        { name: "Ghatkopar", lat: 19.0857, lng: 72.9081, open: true },
       ] },
   ],
 };
@@ -262,13 +246,8 @@ const bundle = {
     sheet: `${DECK}. Positions and connectivity researched Nov 2026; each carries its source.`,
   },
   options, zones, transit,
-  bus: {
-    name: "BEST", credit: "BEST, from the ChaloBEST GTFS feed", src: BEST.source,
-    note: "Stop positions only, within 900 m of a building. The feed predates today's route numbers, so no routes are shown; confirm a stop's name on site.",
-    stops: busStops,
-  },
   copy: {
-    connect: { note: "Walking distance along the streets to each building's nearest metro station and bus stop (OpenStreetMap routing). Railway stations are by road." },
+    connect: { note: "Walking distance along the streets from each building to its nearest metro station (OpenStreetMap routing). Andheri railway station is by road." },
     overview: { eyebrow: "Autopilot · Andheri East · Nov 2026", title: "Flipkart office inventory, Andheri East",
       intro: "{optionCount} buildings from Autopilot's inventory deck, with the metro around them.", ranking: "The list" },
     /* No ranking is made, so the page says "list", not "ranked". */

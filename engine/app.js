@@ -2438,7 +2438,7 @@ function connHTML(o) {
     ${metro.length ? `<div class="ch">Metro</div>${metro.join("")}` : ""}
     ${rail.length ? `<div class="ch">Railway station</div>${rail.join("")}${by ? `<p class="note">${esc(by.v)} ${cite(by.src)}</p>` : ""}` : ""}
     ${bus.length ? `<div class="ch">Bus stops</div>${bus.join("")}<p class="note">${esc(BUSD.name || "Bus stops")}${BUSD.src ? ` ${cite(BUSD.src, "source")}` : ""}. ${esc(BUSD.note || "")}</p>` : ""}
-    <p class="note">${routed ? `Distances and paths follow the streets: walking to metro stations and bus stops, by road to railway stations (OpenStreetMap routing ${cite(M.routing || "https://routing.openstreetmap.de", "source")}).` : "Distances are straight-line from the pin; the metro walk is a route where one loads."} The map shows the row you pick.</p>
+    <p class="note">${routed ? `Distances and paths follow the streets: walking to ${bus.length ? "metro stations and bus stops" : "metro stations"}${rail.length ? `, by road to ${rail.length === 1 ? "the railway station" : "railway stations"}` : ""} (OpenStreetMap routing ${cite(M.routing || "https://routing.openstreetmap.de", "source")}).` : "Distances are straight-line from the pin; the metro walk is a route where one loads."} The map shows the row you pick.</p>
   </div>`;
 }
 
