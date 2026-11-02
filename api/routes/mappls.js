@@ -10,8 +10,9 @@
 
    Only the fixed pairs in _pairs-<atlas>.json are measured, so this cannot be
    used to route anything else on our key. Results are cached at the edge for
-   a day. scripts/examples/flipkart-andheri.js bakes them into the atlas; the
-   page itself never calls this. */
+   a day. The atlas page loads this once at start (meta.routeFeed) and swaps
+   these routes in for the baked OpenStreetMap ones; if it fails, the baked
+   routes stay. */
 "use strict";
 const fs = require("fs");
 const path = require("path");
