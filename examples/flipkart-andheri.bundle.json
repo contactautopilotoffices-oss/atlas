@@ -11,9 +11,25 @@
   ],
   "zoom": 13.5,
   "stationShot": true,
+  "backdrop": "blender",
   "hideNearbyOptions": true,
   "routing": "https://routing.openstreetmap.de",
   "routeFeed": "/api/routes/mappls?atlas=flipkart-andheri",
+  "world": {
+   "href": "/flipkart-andheri/world",
+   "data": "/media/flipkart-andheri/world/",
+   "glb": "andheri-east.glb",
+   "poster": "hero.jpg",
+   "renders": {
+    "723-avenue": "opt-723-avenue.jpg",
+    "corporate-avenue": "opt-corporate-avenue.jpg",
+    "vaman-techno-centre": "opt-vaman-techno-centre.jpg",
+    "privilon": "opt-privilon.jpg",
+    "landmark": "opt-landmark.jpg",
+    "rustomjee-central-park": "opt-rustomjee-central-park.jpg",
+    "fulcrum": "opt-fulcrum.jpg"
+   }
+  },
   "sheet": "Flipkart Property Inventory, Andheri East (Autopilot deck, Nov 2026). Positions and connectivity researched Nov 2026; each carries its source."
  },
  "options": [
