@@ -71,8 +71,9 @@ what it fixes, and fixes the worst one to three first.
   still end at about three quarters, and levers reads airy rather than full.
 - "What each floor must earn" ends at about four fifths: the chart column
   could still take the full width with the two price cards below it.
-- Numbered-point pages with few, short points (why here, pipeline 1) keep a
-  gap between the points and the takeaway at the foot.
+- Numbered-point pages with one row of points (pipeline 1, risks) keep a gap
+  between the row and the takeaway at the foot; pages with two rows now share
+  the height between them.
 - Recent deals: with no "what it means" copy the table now takes the full
   width, but the page still has no pairing box.
 - The terms table sets the small notes under big figures in the serif face.

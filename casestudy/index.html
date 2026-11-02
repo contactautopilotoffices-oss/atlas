@@ -113,6 +113,10 @@ svg .grid{stroke:var(--line);stroke-width:.5}
 .lg .pt p{font-size:10pt;line-height:1.45}
 .lg .pt .mit{font-size:9.4pt}
 .pts.lg{gap:9mm 10mm}
+/* the points take the height left above the takeaway in equal rows, each
+   point at the top of its cell: one row stays under the headline, two or
+   more rows share the page instead of leaving an empty band at the foot */
+.pts.lg{flex:1 1 auto!important;grid-auto-rows:1fr;align-items:start}
 .foot{margin-top:auto;padding:5mm 0 7mm}
 .statement{flex:1;min-height:0;display:grid;grid-template-columns:2fr 3fr;gap:14mm;align-items:center;padding:0 8mm 14mm}
 .statement .kpi .v{font-size:56pt}
