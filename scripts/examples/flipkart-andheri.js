@@ -105,11 +105,10 @@ const R = {
     metro: "Western Express Highway (Line 1 and Line 7)", walk: "3 min walk; Chakala (J B Nagar) 0.7 km",
     metroSrc: "https://rustomjeeltd.net/central-park-business-spaces/", metroNote: "The developer: 'The nearest metro stop, Western Express Highway, is a 3 min walk away'; Chakala Metro Station 0.7 km." },
   "fulcrum": {
-    lat: 19.101, lng: 72.8716, precision: "approx", geoSrc: "https://property.jll.co.in/listings/fulcrum-ia-project-road-ashok-nagar",
-    geoNote: "An estimate. No map pin was found for the building; it adjoins the Hyatt Regency on IA Project Road, Sahar, so the pin is placed beside the hotel.",
-    address: "Fulcrum, IA Project Road, Sahar Road, next to Hyatt Regency, Ashok Nagar, Andheri East, Mumbai 400099",
-    metro: "Sahar Road (Line 3)", walk: "about 690 m, measured from the Hyatt Regency next door",
-    metroSrc: "https://moovitapp.com/index/en/public_transit-Hyatt_Regency_Mumbai-Mumbai-site_36354746-3732", metroNote: "Moovit: Sahar Road station is 687 m and a 9 min walk from the Hyatt Regency. Line 3 only, so a 3rd hop for Central Line riders." },
+    l1: "Airport Road",
+    lat: 19.104032, lng: 72.872132, precision: "building", geoSrc: "https://exa.ai/library/place/55wlsy8vkny",
+    geoNote: "Map place page for The Empire Business Centre, A Wing, 5th Floor, Fulcrum, IA Project Road, beside the Hyatt Regency (OpenStreetMap puts the hotel at 19.1037, 72.8713).",
+    address: "Fulcrum, IA Project Road, Sahar Road, next to Hyatt Regency, Ashok Nagar, Andheri East, Mumbai 400099" },
 };
 
 /* ---- distances, bus stops and the railway ------------------------------ */
