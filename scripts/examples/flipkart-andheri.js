@@ -167,6 +167,7 @@ const bundle = {
     title: "Flipkart Andheri East Atlas",
     sub: "Office inventory options for Flipkart",
     asOf: "2026-11", asOfText: "November 2026", city: "Mumbai", center: [72.87, 19.1085], zoom: 13.5,
+    stationShot: true,   /* selecting a building zooms to it and its nearest station and draws the walk */
     sheet: `${DECK}. Positions and connectivity researched Nov 2026; each carries its source.`,
   },
   options, zones, transit,

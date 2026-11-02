@@ -127,6 +127,17 @@ async function cases() {
 
 /* What each layout must show as it opens, before anything is clicked. */
 const EXPECT = {
+  /* The Metro view: selecting a building draws the walk to its station. */
+  flipkartAndheri: async (page) => {
+    const r = await page.evaluate(() => ({ layers: ["stn-route-walk", "stn-route-straight", "stn-route-label"].filter(id => window.__atlasMap && window.__atlasMap._layers[id]).length }));
+    const out = [];
+    if (r.layers !== 3) out.push("the walk-to-station layers are missing: " + r.layers + " of 3");
+    await page.click("#list .card");
+    await page.waitForTimeout(120);
+    const shots = await page.evaluate(() => [...document.querySelectorAll(".shot")].map(b => b.textContent + (b.classList.contains("on") ? "*" : "")));
+    if (shots[0] !== "Metro*") out.push("an opened building does not open on the Metro view: " + shots.join(", "));
+    return out;
+  },
   place: async (page) => {
     await page.waitForFunction(() => /Routed/.test((document.querySelector("#b-sub") || {}).textContent || ""), { timeout: 5000 }).catch(() => {});
     const r = await page.evaluate(() => ({
@@ -196,6 +207,12 @@ async function run(name, bundle, base, browser) {
     if (iso) {
       const [x, y] = [+iso[1], +iso[2]], sq = (h) => [[[x - h, y - h], [x + h, y - h], [x + h, y + h], [x - h, y + h], [x - h, y - h]]];
       return route.fulfill({ contentType: "application/json", body: JSON.stringify({ type: "FeatureCollection", features: [[30, .1], [20, .05], [10, .02]].map(([m, h]) => ({ type: "Feature", properties: { contour: m }, geometry: { type: "Polygon", coordinates: sq(h) } })) }) });
+    }
+    /* Walking route to the nearest station (the Metro view): a short dog-leg. */
+    const walk = url.match(/directions\/v5\/mapbox\/walking\/([-\d.]+),([-\d.]+);([-\d.]+),([-\d.]+)/);
+    if (walk) {
+      const [x1, y1, x2, y2] = walk.slice(1).map(Number);
+      return route.fulfill({ contentType: "application/json", body: JSON.stringify({ routes: [{ distance: 800, duration: 600, geometry: { type: "LineString", coordinates: [[x1, y1], [x2, y1], [x2, y2]] } }] }) });
     }
     if (/arcgisonline|api\.mapbox\.com\/styles|\/media\//.test(url)) return route.fulfill({ status: 200, contentType: "image/gif", body: Buffer.from("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7", "base64") });
     return route.continue();

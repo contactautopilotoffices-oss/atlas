@@ -1026,6 +1026,16 @@ function addLayers() {
   map.addSource("ex-link-lbl", { type: "geojson", data: exLinkFC() });
   add({ id: "ex-link", type: "line", source: "ex-link", filter: ["==", ["get", "part"], "line"], layout: { "line-cap": "round" },
     paint: { "line-color": "#2a1e16", "line-width": 2.2, "line-dasharray": [1.4, 1.4], "line-opacity": .8 } });
+  /* the walk from the open option to its nearest station (Metro view) */
+  map.addSource("stn-route", { type: "geojson", data: stnRouteFC() });
+  map.addSource("stn-route-lbl", { type: "geojson", data: stnRouteFC() });
+  const rline = { "line-cap": "round", "line-join": "round" };
+  add({ id: "stn-route-casing", type: "line", source: "stn-route", filter: ["==", ["get", "part"], "line"], layout: rline, paint: { "line-color": "#fff", "line-width": 8, "line-opacity": .9 } });
+  add({ id: "stn-route-walk", type: "line", source: "stn-route", filter: ["all", ["==", ["get", "part"], "line"], ["==", ["get", "kind"], "route"]], layout: rline, paint: { "line-color": "#a3502c", "line-width": 4.5 } });
+  add({ id: "stn-route-straight", type: "line", source: "stn-route", filter: ["all", ["==", ["get", "part"], "line"], ["==", ["get", "kind"], "straight"]], layout: { "line-cap": "butt" }, paint: { "line-color": "#a3502c", "line-width": 3.5, "line-dasharray": [1.4, 1.2] } });
+  add({ id: "stn-route-label", type: "symbol", source: "stn-route-lbl", filter: ["==", ["get", "part"], "label"], layout: { "text-field": ["get", "label"], "text-size": 13,
+    "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"], "text-allow-overlap": true, "text-ignore-placement": true, "text-offset": [0, -1.1] },
+    paint: { "text-color": "#7a3416", "text-halo-color": "#fff", "text-halo-width": 2 } });
   /* With no current office the source is empty rather than absent, so every
      ex-* layer still exists and the layer switches need no special case. */
   const exData = EX ? pt(EX.lng, EX.lat, { name: EX.name }) : FC([]);
@@ -1111,6 +1121,7 @@ function applyLayerVisibility() {
   set("rings", ringFC()); set("ring-labels", ringLabelFC());
   const lk = linkFC(); set("links", lk); set("links-lbl", lk);
   const ek = exLinkFC(); set("ex-link", ek); set("ex-link-lbl", ek);
+  const sr = stnRouteFC(); set("stn-route", sr); set("stn-route-lbl", sr);
   recede();
 }
 /* With an option open, only its own context keeps full weight: stations
@@ -1398,16 +1409,63 @@ function afterWeights(focusKey) {
 
 /* ---------------------------------------------------------- camera ------ */
 const SHOT_ZOOM = { building: 17.2, street: 16.3, locality: 15.2 };
+/* An atlas can turn on a Metro view (meta.stationShot): selecting an option
+   zooms to it and its nearest open station and draws the walk between them,
+   routed by Mapbox where it loads and a straight line, labelled as one, where
+   it does not. Off by default so the other atlases look as they did. */
+const STN_SHOT = !!(M && M.stationShot) && OPEN.length > 0;
 const SHOTS = {
+  ...(STN_SHOT ? { station: { label: "Metro", hint: "Zoomed to the building and its nearest metro station, with the walk between them." } } : {}),
   close: { label: "Close-up", hint: "Tilted view down onto the building and its streets." },
   street: { label: "Street", hint: "Low angle, as you would approach it by road." },
   area: { label: "Catchment", hint: `Top-down view of the ${RINGS.map(r => r.min).join(", ").replace(/, (\d+)$/, " and $1")} minute drive-time areas.` }
 };
+/* The walk from the open option to its nearest open station. */
+const STN_ROUTE = new Map();
+function stnRouteFC() {
+  const o = STN_SHOT && S.sel && O.find(x => x.id === S.sel);
+  if (!o) return FC([]);
+  const r = nearestOpen(o);
+  if (r.none) return FC([]);
+  const rt = STN_ROUTE.get(o.id);
+  if (rt && rt.coords) {
+    const mid = rt.coords[Math.floor(rt.coords.length / 2)];
+    return FC([ln(rt.coords, { part: "line", kind: "route" }), pt(mid[0], mid[1], { part: "label", label: `${fmtM(rt.m / 1000)} walk · ${Math.max(1, Math.round(rt.s / 60))} min` })]);
+  }
+  /* A pin that sits on the station (it marks the address) has no distance to draw. */
+  return FC([ln([[o.lng, o.lat], [r.s.lng, r.s.lat]], { part: "line", kind: "straight" }),
+    pt((o.lng + r.s.lng) / 2, (o.lat + r.s.lat) / 2, { part: "label", label: r.d < .03 ? `At ${r.s.name}` : `${fmtM(r.d)} straight line` })]);
+}
+function refreshRoute() {
+  if (!map) return;
+  const fc = stnRouteFC();
+  for (const id of ["stn-route", "stn-route-lbl"]) { const src = map.getSource(id); if (src) src.setData(fc); }
+}
+async function loadRoute(o) {
+  if (!STN_SHOT || !o || STN_ROUTE.has(o.id) || !window.MAPBOX_TOKEN || !window.fetch) return;
+  const r = nearestOpen(o);
+  if (r.none) return;
+  STN_ROUTE.set(o.id, null);
+  try {
+    const res = await fetch(`https://api.mapbox.com/directions/v5/mapbox/walking/${o.lng},${o.lat};${r.s.lng},${r.s.lat}?geometries=geojson&overview=full&access_token=${encodeURIComponent(window.MAPBOX_TOKEN)}`);
+    if (!res.ok) return;
+    const rt = ((await res.json()) || {}).routes;
+    const best = rt && rt[0];
+    if (best && best.geometry && Array.isArray(best.geometry.coordinates) && best.geometry.coordinates.length > 1) {
+      STN_ROUTE.set(o.id, { coords: best.geometry.coordinates, m: best.distance, s: best.duration });
+      refreshRoute();
+    }
+  } catch (e) { /* the straight line stays, and says it is one */ }
+}
 function flyToOption(o, shot) {
   if (!map || !o) return;
   S.shot = shot || "close";
   const phone = innerWidth <= 860, z = SHOT_ZOOM[o.precision] || 15.2, pad = padding();
-  if (S.shot === "area") {
+  const stnNear = STN_SHOT && S.shot === "station" ? nearestOpen(o) : null;
+  if (stnNear && !stnNear.none) {
+    const w = Math.min(o.lng, stnNear.s.lng), e = Math.max(o.lng, stnNear.s.lng), sw = Math.min(o.lat, stnNear.s.lat), n = Math.max(o.lat, stnNear.s.lat);
+    map.fitBounds([[w, sw], [e, n]], { padding: pad, pitch: 0, bearing: 0, maxZoom: 17.4, duration: REDUCED() ? 0 : 1300 });
+  } else if (S.shot === "area") {
     if (!S.layers.rings && cmsOn("layer:rings")) { S.layers.rings = true; renderLayers(); applyLayerVisibility(); }
     const f = isoFeature(isoOf(o), RINGS[RINGS.length - 1].min);
     const b = (f ? (f.geometry.type === "Polygon" ? f.geometry.coordinates[0] : f.geometry.coordinates.flatMap(p => p[0])) : circle([o.lng, o.lat], ringKm(IS_PLACE ? RINGS[RINGS.length - 1].min : 30), 16)).reduce((bb, p) => bb.extend(p), new mapboxgl.LngLatBounds());
@@ -1448,11 +1506,12 @@ function flyToPlace(id) {
 }
 function select(id, fly, fromRoute) {
   if (document.body.classList.contains("fold-panel")) setFold("panel", false);
-  S.sel = id; S.hov = null; S.pair = null; if (fly) S.shot = "close"; renderList(); renderPanel(); refreshMap();
+  S.sel = id; S.hov = null; S.pair = null; if (fly) S.shot = STN_SHOT ? "station" : "close"; renderList(); renderPanel(); refreshMap();
   if (!fromRoute) pushRoute();
   if (innerWidth <= 860 && !fromRoute) setSheet("half");
   const card = document.querySelector(`.card[data-id="${id}"]`); if (card) card.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
-  if (fly) flyToOption(O.find(x => x.id === id), "close");
+  if (fly) flyToOption(O.find(x => x.id === id), STN_SHOT ? "station" : "close");
+  if (STN_SHOT) loadRoute(O.find(x => x.id === id));
   if (IS_PLACE) loadIso(O.find(x => x.id === id));
   if (CMS && !fromRoute) CMS.open(id, (O.find(x => x.id === id) || {}).name);
   $("#p-body").scrollTop = 0;
@@ -1807,7 +1866,7 @@ function renderSite() {
     ${sat ? `<div class="hero"><img src="${sat}" alt="Satellite view of ${esc(o.name)}" onerror="this.closest('.hero').remove()"><span class="ph">Satellite · Esri, Vantor</span></div>` : ""}
     <div class="kpis">
       ${RINGS.map((rg, i) => `<div class="kpi"><div class="l">${esc(say("site.within", "Within"))} ${rg.min} min</div><div class="v">${total(i)}</div><div class="s">${esc(top(i) || "places mapped")}</div></div>`).join("")}
-      ${!r.none ? `<div class="kpi"><div class="l">${esc(say("option.railToday", "Station today"))}</div><div class="v">${fmtM(r.d)}</div><div class="s">${esc(r.s.name)}${r.s.lineName ? ` · ${esc(r.s.lineName)}` : ""}</div></div>` : ""}
+      ${!r.none ? `<div class="kpi"><div class="l">${esc(say("option.railToday", STN_SHOT ? "Nearest metro station" : "Station today"))}</div><div class="v">${fmtM(r.d)}</div><div class="s">${esc(r.s.name)}${r.s.lineName ? ` · ${esc(r.s.lineName)}` : ""}${STN_SHOT ? " · straight line" : ""}</div></div>` : ""}
       ${f ? `<div class="kpi"><div class="l">${esc(say("option.future", "Being built"))}</div><div class="v">${fmtM(f.d)}</div><div class="s">${esc(f.s.name)}${f.s.target ? ` · ${esc(f.s.target)}` : ""} · indicative</div></div>` : ""}
       ${ops.length ? `<div class="kpi"><div class="l">${esc(say("site.operators", "Operators nearby"))}</div><div class="v">${opsNear.length}</div><div class="s">within ${RINGS[last].min} min, of ${ops.length} on this atlas</div></div>` : ""}
     </div>
@@ -2305,7 +2364,7 @@ function renderOption(o) {
       ${colMeasures.slice(0, 2).map(m => `<div class="kpi"><div class="l">${esc(m.label || titleCase(m.key))}</div><div class="v">${esc(String(o[m.column]))}</div><div class="s">${esc(m.unit || (isFinite(m.max) ? `out of ${m.max}` : ""))}</div></div>`).join("")}
       ${EX ? `<div class="kpi"><div class="l">${esc(say("option.fromExisting", "From today's office"))}</div><div class="v">${isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(homeKm(o))}</div><div class="s">${esc(homeMin(o))} by road</div></div>` : ""}
       ${HAS_CHOOSER ? `<div class="kpi"><div class="l">${esc(say("option.fit", "Fit"))}</div><div class="v">${score(o)}<span style="font-size:13px;color:var(--mut)">/100</span></div><div class="s">#${rank} of ${O.length} on ${esc(presetName().toLowerCase())}</div></div>` : ""}
-      ${!r.none ? `<div class="kpi"><div class="l">${esc(say("option.railToday", "Station today"))}</div><div class="v">${fmtM(r.d)}</div><div class="s">${esc(r.s.name)}${r.s.lineName ? ` · ${esc(r.s.lineName)}` : ""}</div></div>` : ""}
+      ${!r.none ? `<div class="kpi"><div class="l">${esc(say("option.railToday", STN_SHOT ? "Nearest metro station" : "Station today"))}</div><div class="v">${fmtM(r.d)}</div><div class="s">${esc(r.s.name)}${r.s.lineName ? ` · ${esc(r.s.lineName)}` : ""}${STN_SHOT ? " · straight line" : ""}</div></div>` : ""}
       ${b ? `<div class="kpi"><div class="l">${esc(say("option.bus", "Bus stop"))}</div><div class="v">${fmtM(b.d)}</div><div class="s">${esc(b.s.name)} · ${esc(busWalk(b))} · ${esc(routesTxt(b.s.routes))}</div></div>` : ""}
       ${f ? `<div class="kpi"><div class="l">${esc(say("option.future", "Being built"))}</div><div class="v">${fmtM(f.d)}</div><div class="s">${esc(f.s.name)}${f.s.lineName ? ` · ${esc(f.s.lineName)}` : ""}${f.s.target ? ` · ${esc(f.s.target)}` : ""} · indicative</div></div>` : ""}
     </div>
