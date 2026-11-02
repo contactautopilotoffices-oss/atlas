@@ -4,7 +4,11 @@
    anyone can be sent atlas.autopilotoffices.com and will be routed by their
    own credentials. */
 window.CLIENT_MANIFEST = {
-  "FLIPDEMOACC": { slug: "flipkart-andheri", pass: "FLIP1234" },
+  /* The Flipkart atlas, rebuilt on the engine: a bundle committed under
+     /engine/atlases/ (scripts/examples/flipkart-andheri.js). It replaced the
+     older map view of this client (clients/flipkart-andheri/). The password's
+     SHA-256 is stored, not the password. */
+  "FLIPDEMOACC": { redirect: "/flipkart-andheri", passHash: "a9fc6e2c68a21babef48ecb9720cf24cf78dcc9adbc6ee072a09a8464d309e87" },
   "VFSDEMOACC":  { slug: "vfs-bkc",          pass: "VFS1234" },
   "CPDEMOACC":   { slug: "cp-delhi",         pass: "CP1234" },
   "INVDEMOACC":  { slug: "invesco-andheri",  pass: "INV1234" },

@@ -8,8 +8,8 @@ window.CLIENT = {
     sub: "Geospatial intelligence view for Flipkart · ~220 seats @ 4×2"
   },
   lb: {
-    title: "Why 723 Avenue leads",
-    why: 'Tiered by Flipkart\u2019s three asks: <b>contiguous block for 220 seats (4x2, about 55 sqft/seat)</b> | <b>2 metro hops or fewer from the Central Line</b> (Ghatkopar to Line 1) | <b>Line 3 = a 3rd hop = downgrade</b>. Numbers shown are real seat capacity, not scores. 723 Avenue is the client\u2019s Priority 1 and Corporate Avenue its Priority 2. Privilon has the most space (278 seats) but its floors and Jan 2027 approvals are unconfirmed.'
+    title: "Why the client priorities lead",
+    why: 'Deck order first: <b>723 Avenue is Priority 1</b> and <b>Corporate Avenue Priority 2</b>. Tiers use Flipkart\u2019s three asks: <b>contiguous block for 220 seats (4x2, about 55 sqft/seat)</b> | <b>2 metro hops or fewer from the Central Line</b> (Ghatkopar to Line 1) | <b>Line 3 = a 3rd hop = downgrade</b>. Numbers shown are real seat capacity, not scores. Corporate Avenue is the one option that is furnished, immediate and seats 220; 723 Avenue seats 206 at 4x2. Rates are per seat, from the deck.'
   },
   winnerBtnText: "\u25b6 Fly to 723 Avenue (Priority 1)",
   tierColors: true,   // buildings wear their verdict: green/amber/red on the map
@@ -18,7 +18,7 @@ window.CLIENT = {
   map: { center: [72.8710, 19.1105], zoom: 14.2, pitch: 60, bearing: -18 },
   // Engine registry: renderMode/height/color per building id (heights from sheet G+N x 3.2m)
   registry: {
-    avenue723:   { renderMode:"extrusion", heightMeters:51, color:"#2fbf71", footprintName:"723 Avenue" },
+    avenue723:   { renderMode:"extrusion", heightMeters:51, color:"#f0a020", footprintName:"723 Avenue" },
     corporate:   { renderMode:"extrusion", heightMeters:29, color:"#2fbf71", footprintName:"Corporate Avenue" },
     privilon:    { renderMode:"extrusion", heightMeters:51, color:"#f0a020", footprintName:"Privilon" },
     vaman:       { renderMode:"extrusion", heightMeters:26, color:"#f0a020", footprintName:"Vaman Techno Centre" },
@@ -49,9 +49,9 @@ window.BKC_LINE3 = {
 /* Metro Line 3 segment (dashed = the 3rd hop): Marol Naka to Sahar Road */
 window.BKC_LINE2 = {
   path: [
-    [72.87954,19.10820],[72.8745,19.0990],[72.86209,19.09861]
+    [72.87954,19.10820],[72.8745,19.1000],[72.86524,19.10220]
   ],
   stations: [
-    { name:"Sahar Road (L3 \u00b7 3rd hop)", lng:72.86209, lat:19.09861 }
+    { name:"Sahar Road (L3 \u00b7 3rd hop)", lng:72.86524, lat:19.10220 }
   ]
 };

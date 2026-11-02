@@ -87,6 +87,9 @@ async function cases() {
   /* A committed, real bundle: the Andheri East coworking competitors
      (scripts/examples/andheri-coworking.js). Keeps the example honest. */
   const andheriCoworking = JSON.parse(fs.readFileSync(path.join(ROOT, "examples", "andheri-coworking.bundle.json"), "utf8"));
+  /* The Flipkart atlas (scripts/examples/flipkart-andheri.js): seven options
+     with a per seat rate, two metro lines, a chooser and a priority flag. */
+  const flipkartAndheri = JSON.parse(fs.readFileSync(path.join(ROOT, "examples", "flipkart-andheri.bundle.json"), "utf8"));
 
   /* The two other layouts. A place: one site, competitors with operators,
      an employer, a deal, the market's facts and a metro line. */
@@ -119,11 +122,34 @@ async function cases() {
     facts: { Mumbai: [{ k: "Rent", v: "Rs 150 a sq ft", src: src + "m" }], network: [{ k: "Seats", v: "4,000", src: src + "t" }] }
   };
 
-  return { chennai, minimal, noChooser, noExisting, noTransit, oneOption, ownKinds, fromWorkbook, andheriCoworking, place, network };
+  return { chennai, minimal, noChooser, noExisting, noTransit, oneOption, ownKinds, fromWorkbook, andheriCoworking, flipkartAndheri, place, network };
 }
 
 /* What each layout must show as it opens, before anything is clicked. */
 const EXPECT = {
+  /* The Metro view: selecting a building draws the walk to its station. */
+  flipkartAndheri: async (page) => {
+    const r = await page.evaluate(() => ({ layers: ["stn-route-walk", "stn-route-straight", "stn-route-label"].filter(id => window.__atlasMap && window.__atlasMap._layers[id]).length }));
+    const out = [];
+    if (r.layers !== 3) out.push("the walk-to-station layers are missing: " + r.layers + " of 3");
+    await page.click("#list .card");
+    await page.waitForTimeout(120);
+    const shots = await page.evaluate(() => [...document.querySelectorAll(".shot")].map(b => b.textContent + (b.classList.contains("on") ? "*" : "")));
+    if (shots[0] !== "Metro*") out.push("an opened building does not open on the Metro view: " + shots.join(", "));
+    const conn = await page.evaluate(() => ({ heads: [...document.querySelectorAll(".conn .ch")].map(e => e.textContent), rows: document.querySelectorAll(".conn .cn").length,
+      layers: ["conn-line", "conn-pt", "conn-label"].filter(id => window.__atlasMap && window.__atlasMap._layers[id]).length }));
+    if (conn.heads.join("|") !== "Metro|Railway station") out.push("the connectivity section is not Metro, Railway station: " + conn.heads.join("|"));
+    if (conn.rows < 3) out.push("too few connections listed: " + conn.rows);
+    if (conn.layers !== 3) out.push("the connection layers are missing on the map: " + conn.layers + " of 3");
+    /* the feed's path replaced the bundle's for 723 Avenue to Marol Naka, the Google Maps figure stayed, and the panel names both sources */
+    await page.click('#list .card[data-id="723-avenue"]');
+    await page.waitForTimeout(150);
+    const fed = await page.evaluate(() => ({ note: (document.querySelector(".conn") || {}).innerText || "", first: ((document.querySelector('.cn.metro .cd') || {}).textContent || "") }));
+    if (!/Distances and walk times from Google Maps/.test(fed.note)) out.push("Google Maps is not named as the source of the figures: " + fed.note.slice(-200));
+    if (!/follows the streets \(Test feed\)/.test(fed.note)) out.push("the route feed is not named for the line on the map: " + fed.note.slice(-200));
+    if (fed.first !== "810 m") out.push("the Google Maps distance for Marol Naka did not stay: " + fed.first);
+    return out;
+  },
   place: async (page) => {
     await page.waitForFunction(() => /Routed/.test((document.querySelector("#b-sub") || {}).textContent || ""), { timeout: 5000 }).catch(() => {});
     const r = await page.evaluate(() => ({
@@ -194,6 +220,15 @@ async function run(name, bundle, base, browser) {
       const [x, y] = [+iso[1], +iso[2]], sq = (h) => [[[x - h, y - h], [x + h, y - h], [x + h, y + h], [x - h, y + h], [x - h, y - h]]];
       return route.fulfill({ contentType: "application/json", body: JSON.stringify({ type: "FeatureCollection", features: [[30, .1], [20, .05], [10, .02]].map(([m, h]) => ({ type: "Feature", properties: { contour: m }, geometry: { type: "Polygon", coordinates: sq(h) } })) }) });
     }
+    /* A routing feed (meta.routeFeed): one route, for 723 Avenue to Marol Naka. */
+    if (/\/api\/routes\//.test(url)) return route.fulfill({ contentType: "application/json", body: JSON.stringify({ source: "Test feed", routes: [
+      { option: "723-avenue", kind: "metro", name: "Marol Naka", m: 700, sec: 560, geometry: "cjssBwdz{LsCp@l@nCz@jCcA`FzMxBoAjF" }] }) });
+    /* Walking route to the nearest station (the Metro view): a short dog-leg. */
+    const walk = url.match(/directions\/v5\/mapbox\/walking\/([-\d.]+),([-\d.]+);([-\d.]+),([-\d.]+)/);
+    if (walk) {
+      const [x1, y1, x2, y2] = walk.slice(1).map(Number);
+      return route.fulfill({ contentType: "application/json", body: JSON.stringify({ routes: [{ distance: 800, duration: 600, geometry: { type: "LineString", coordinates: [[x1, y1], [x2, y1], [x2, y2]] } }] }) });
+    }
     if (/arcgisonline|api\.mapbox\.com\/styles|\/media\//.test(url)) return route.fulfill({ status: 200, contentType: "image/gif", body: Buffer.from("R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7", "base64") });
     return route.continue();
   });
@@ -229,6 +264,11 @@ async function run(name, bundle, base, browser) {
   await page.waitForTimeout(150);
   await leak("the compare sheet");
   await page.evaluate(() => { const c = document.querySelector("#cmp"); if (c) c.classList.remove("on"); });
+
+  /* The card that follows the pointer over a pin is built on hover, which
+     nothing above triggers: build it for every option and read it for NaN. */
+  const pops = await page.evaluate((ids) => window.__optPop ? ids.map(id => window.__optPop(id)) : [], bundle.options.map(o => o.id)).catch(e => { errors.push("hover card: " + e.message.split("\n")[0]); return []; });
+  pops.forEach((h, i) => { const m = String(h).match(/.{0,30}\b(NaN|undefined|\[object Object\])\b.{0,20}/); if (m) errors.push(`the hover card of option ${i + 1} prints "${m[1]}": ...${m[0].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim()}...`); });
 
   const inner = await page.evaluate(() => window.__atlasErrors || []);
   inner.forEach(x => errors.push("map: " + x));

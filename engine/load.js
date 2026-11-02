@@ -4,7 +4,8 @@
    Decides where this page's bundle comes from, before the engine starts.
 
      /engine/                    /engine/bundle.js, a static file: the demo
-     /<slug>                     the published bundle, from the CMS, which
+     /<slug>                     a bundle committed under /engine/atlases/, else
+                                 the published bundle, from the CMS, which
                                  needs the visitor's access cookie. Without
                                  one the sign-in form on this page asks for
                                  the access ID and password and the server
@@ -139,6 +140,16 @@
       }, function () { showGate(); message("No atlas was named. Open it at /<atlas id>, or sign in at the site root."); });
       return;
     }
-    fetchBundle().then(function (r) { settle(r, resolve); }).catch(function () { message("Could not reach the server."); });
+    var viaCms = function () { fetchBundle().then(function (r) { settle(r, resolve); }).catch(function () { message("Could not reach the server."); }); };
+    /* A bundle committed as /engine/atlases/<slug>.js is served as it is, the
+       way the demo bundle is, and checks its own sign-in (the bundle's gate
+       hash). Anything else is looked up in the CMS. */
+    if (!/^[a-z0-9-]+$/.test(slug)) { viaCms(); return; }
+    script("/engine/atlases/" + slug + ".js?v=1").then(function () {
+      if (window.ATLAS && window.ATLAS.slug === slug) {
+        if (!(window.ATLAS.gate && window.ATLAS.gate.hash)) hideGate();
+        resolve();
+      } else viaCms();
+    }, viaCms);
   });
 })();

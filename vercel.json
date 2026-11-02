@@ -420,6 +420,10 @@
     },
     "api/cms/track.js": {
       "maxDuration": 10
+    },
+    "api/routes/mappls.js": {
+      "maxDuration": 30,
+      "includeFiles": "api/routes/_pairs-*.json"
     }
   },
   "redirects": [
