@@ -87,6 +87,9 @@ async function cases() {
   /* A committed, real bundle: the Andheri East coworking competitors
      (scripts/examples/andheri-coworking.js). Keeps the example honest. */
   const andheriCoworking = JSON.parse(fs.readFileSync(path.join(ROOT, "examples", "andheri-coworking.bundle.json"), "utf8"));
+  /* The Flipkart atlas (scripts/examples/flipkart-andheri.js): seven options
+     with a per seat rate, two metro lines, a chooser and a priority flag. */
+  const flipkartAndheri = JSON.parse(fs.readFileSync(path.join(ROOT, "examples", "flipkart-andheri.bundle.json"), "utf8"));
 
   /* The two other layouts. A place: one site, competitors with operators,
      an employer, a deal, the market's facts and a metro line. */
@@ -119,7 +122,7 @@ async function cases() {
     facts: { Mumbai: [{ k: "Rent", v: "Rs 150 a sq ft", src: src + "m" }], network: [{ k: "Seats", v: "4,000", src: src + "t" }] }
   };
 
-  return { chennai, minimal, noChooser, noExisting, noTransit, oneOption, ownKinds, fromWorkbook, andheriCoworking, place, network };
+  return { chennai, minimal, noChooser, noExisting, noTransit, oneOption, ownKinds, fromWorkbook, andheriCoworking, flipkartAndheri, place, network };
 }
 
 /* What each layout must show as it opens, before anything is clicked. */
