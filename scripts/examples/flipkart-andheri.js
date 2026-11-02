@@ -187,7 +187,7 @@ const zones = [
 
 /* ---- the chooser: what Flipkart can weight ------------------------------ */
 const measures = [
-  { key: "price", kind: "column", column: "perSeatLow", label: "Per seat rate (low end of the range)", higherIsBetter: false,
+  { key: "price", kind: "column", column: "perSeatLow", label: "Per seat rate", higherIsBetter: false,
     question: "How much does the per seat rate matter?", of: "the low end of each option's per seat range in the deck" },
   { key: "space", kind: "column", column: "seatsAt55", label: "Seats it holds", higherIsBetter: true,
     question: "Does it have to hold the whole team?", of: "carpet area over 55 sqft a seat (4x2)" },

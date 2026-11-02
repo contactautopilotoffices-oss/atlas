@@ -714,7 +714,7 @@
    "key": "price",
    "kind": "column",
    "column": "perSeatLow",
-   "label": "Per seat rate (low end of the range)",
+   "label": "Per seat rate",
    "higherIsBetter": false,
    "question": "How much does the per seat rate matter?",
    "of": "the low end of each option's per seat range in the deck"
