@@ -25,8 +25,8 @@ const ROOT = path.join(__dirname, "..");
 const OUT = path.join(ROOT, "media", "flipkart-andheri");
 const B = JSON.parse(fs.readFileSync(path.join(ROOT, "examples", "flipkart-andheri.bundle.json"), "utf8"));
 const data = {
-  options: B.options.map(o => ({ name: o.name, priority: o.priority || "", lat: o.lat, lng: o.lng, pick: o.priority ? 2 : o.fit === "not-recommended" ? 0 : 1,
-    color: o.priority ? "#e0773f" : o.fit === "not-recommended" ? "#a08a74" : "#3a9cc0" })),
+  options: B.options.map(o => ({ name: o.name, priority: (o.reason.match(/^PRIORITY \d/) || [""])[0], lat: o.lat, lng: o.lng, pick: /^PRIORITY/.test(o.reason) ? 2 : 1,
+    color: /^PRIORITY/.test(o.reason) ? "#e0773f" : "#3a9cc0" })),
   lines: B.transit.lines.map(L => ({ color: L.color, stations: L.stations.map(s => ({ lat: s.lat, lng: s.lng, open: s.open !== false })) }))
 };
 

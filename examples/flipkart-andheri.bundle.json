@@ -1,7 +1,7 @@
 {
  "meta": {
   "title": "Flipkart Andheri East Atlas",
-  "sub": "Seven office options for Flipkart, read against the metro and the per seat rate",
+  "sub": "Office inventory options for Flipkart",
   "asOf": "2026-11",
   "asOfText": "November 2026",
   "city": "Mumbai",
@@ -10,153 +10,7 @@
    19.1085
   ],
   "zoom": 13.5,
-  "sheet": "Flipkart Property Inventory, Andheri East (Autopilot deck, Nov 2026). Positions and connectivity researched Nov 2026; each carries its source.",
-  "speed": {
-   "kmh": 16,
-   "factor": 1.3,
-   "note": "TomTom Traffic Index 2025, Mumbai rush hour"
-  },
-  "fits": {
-   "best-fit": {
-    "label": "Best fit",
-    "color": "#2e7d5b"
-   },
-   "workable": {
-    "label": "Workable",
-    "color": "#b7791f"
-   },
-   "not-recommended": {
-    "label": "Not recommended",
-    "color": "#b3402f"
-   }
-  },
-  "columns": {
-   "perSeat": {
-    "label": "Per seat",
-    "type": "text"
-   },
-   "perSeatLow": {
-    "label": "Per seat, low end",
-    "unit": "INR / seat / month + GST",
-    "type": "number",
-    "sortable": true,
-    "higherIsBetter": false
-   },
-   "perSeatHigh": {
-    "label": "Per seat, high end",
-    "unit": "INR / seat / month + GST",
-    "type": "number",
-    "sortable": true,
-    "higherIsBetter": false
-   },
-   "carpetArea": {
-    "label": "Carpet area",
-    "unit": "sq. ft.",
-    "type": "number",
-    "sortable": true,
-    "higherIsBetter": true
-   },
-   "builtUpArea": {
-    "label": "Built-up area",
-    "unit": "sq. ft.",
-    "type": "number",
-    "sortable": true
-   },
-   "seatsAt55": {
-    "label": "Seats at 4x2 (55 sqft)",
-    "unit": "seats",
-    "type": "number",
-    "sortable": true,
-    "higherIsBetter": true
-   },
-   "grade": {
-    "label": "Grade",
-    "type": "text"
-   },
-   "furnishing": {
-    "label": "Furnishing",
-    "type": "text"
-   },
-   "efficiency": {
-    "label": "Efficiency",
-    "type": "text"
-   },
-   "possession": {
-    "label": "Possession",
-    "type": "text"
-   },
-   "monthsToPossession": {
-    "label": "Months to possession",
-    "unit": "months from Nov 2026",
-    "type": "number",
-    "sortable": true,
-    "higherIsBetter": false
-   },
-   "floor": {
-    "label": "Floor / Unit",
-    "type": "text"
-   },
-   "totalFloors": {
-    "label": "Total floors",
-    "type": "text"
-   },
-   "microMarket": {
-    "label": "Micro-market",
-    "type": "text"
-   },
-   "buildingType": {
-    "label": "Building type",
-    "type": "text"
-   },
-   "ceilingHeight": {
-    "label": "Ceiling height",
-    "type": "text"
-   },
-   "parking": {
-    "label": "Parking",
-    "type": "text"
-   },
-   "parkingCharges": {
-    "label": "Parking charges",
-    "type": "text"
-   },
-   "fireNoc": {
-    "label": "Fire NOC",
-    "type": "text"
-   },
-   "ocCc": {
-    "label": "OC & CC",
-    "type": "text"
-   },
-   "dg": {
-    "label": "DG",
-    "type": "text"
-   },
-   "metroStation": {
-    "label": "Nearest metro",
-    "type": "text"
-   },
-   "metroWalk": {
-    "label": "Walk to metro",
-    "type": "text"
-   },
-   "hopsFromCentralLine": {
-    "label": "Metro hops from the Central Line",
-    "type": "number",
-    "sortable": true,
-    "higherIsBetter": false
-   },
-   "priority": {
-    "label": "Client priority",
-    "type": "text"
-   }
-  },
-  "nextSteps": [
-   "Confirm Privilon's carpet and built-up area, its floors and its January 2027 approvals with the landlord: the deck repeats 723 Avenue's figures.",
-   "Confirm the 220-seat ask and the two-hop commute rule, which come from the earlier brief and are not in the deck.",
-   "Walk the last stretch from the metro to 723 Avenue and Vaman Techno Centre: the sources give about 1 km and about 7 minutes.",
-   "Confirm Fulcrum's exact position; the pin is an estimate."
-  ]
+  "sheet": "Flipkart Property Inventory, Andheri East (Autopilot deck, Nov 2026). Positions and connectivity researched Nov 2026; each carries its source."
  },
  "options": [
   {
@@ -169,49 +23,98 @@
    "geoSrc": "https://dhcrealty.in/property/wadhwa-723-avenue/",
    "geoNote": "Plus code 4V5M+VQM printed on the listing, decoded. Marol Co-operative Industrial Estate Road, off Andheri-Kurla Road.",
    "micro": "marol",
-   "fit": "workable",
-   "reason": "Priority 1 in the deck. Bareshell, immediate; 206 seats at 4x2, 14 short of the 220 ask. Metro: Marol Naka (Line 1 and Line 3), about 1 km on the developer's figure (540 m in a straight line from the pin).",
+   "reason": "PRIORITY 1 · Floor 13th & 14th · Bareshell · Carpet area 11,331 sq. ft. · Possession: Immediately · Per seat: Rs. 16,000 - Rs. 16,500 + GST",
    "address": "Wadhwa 723 Avenue, Marol Co-operative Industrial Estate Road, Sag Baug, Marol, Andheri East, Mumbai 400059",
    "locality": "Andheri East",
-   "perSeat": "Rs. 16,000 - Rs. 16,500 + GST",
-   "perSeatLow": 16000,
-   "perSeatHigh": 16500,
-   "carpetArea": 11331,
-   "builtUpArea": 18885,
-   "seatsAt55": 206,
-   "grade": "A",
-   "furnishing": "Bareshell",
-   "efficiency": "60%",
-   "possession": "Immediately",
-   "monthsToPossession": 0,
-   "floor": "13th & 14th",
-   "totalFloors": "G+15",
-   "microMarket": "Marol",
-   "buildingType": "Commercial",
-   "ceilingHeight": "11.7 ft",
-   "parking": "11 Car Parking",
-   "fireNoc": "Available",
-   "ocCc": "Available",
-   "dg": "Common area only",
-   "metroStation": "Marol Naka (Line 1 and Line 3)",
-   "metroWalk": "about 1 km on the developer's figure (540 m in a straight line from the pin)",
-   "hopsFromCentralLine": 2,
    "facts": [
+    {
+     "k": "Micro-market",
+     "v": "Marol",
+     "conf": "high"
+    },
+    {
+     "k": "Floor / Unit",
+     "v": "13th & 14th",
+     "conf": "high"
+    },
+    {
+     "k": "Grade",
+     "v": "A",
+     "conf": "high"
+    },
+    {
+     "k": "Total floors",
+     "v": "G+15",
+     "conf": "high"
+    },
+    {
+     "k": "Building type",
+     "v": "Commercial",
+     "conf": "high"
+    },
+    {
+     "k": "Furnishing",
+     "v": "Bareshell",
+     "conf": "high"
+    },
+    {
+     "k": "Efficiency",
+     "v": "60%",
+     "conf": "high"
+    },
+    {
+     "k": "Carpet area",
+     "v": "11,331 sq. ft.",
+     "conf": "high"
+    },
+    {
+     "k": "Built-up area",
+     "v": "18,885 sq. ft.",
+     "conf": "high"
+    },
+    {
+     "k": "Ceiling height",
+     "v": "11.7 ft",
+     "conf": "high"
+    },
+    {
+     "k": "Per seat",
+     "v": "Rs. 16,000 - Rs. 16,500 + GST",
+     "conf": "high"
+    },
+    {
+     "k": "Parking",
+     "v": "11 Car Parking",
+     "conf": "high"
+    },
+    {
+     "k": "Fire NOC",
+     "v": "Available",
+     "conf": "high"
+    },
+    {
+     "k": "OC & CC",
+     "v": "Available",
+     "conf": "high"
+    },
+    {
+     "k": "DG",
+     "v": "Common area only",
+     "conf": "high"
+    },
+    {
+     "k": "Possession",
+     "v": "Immediately",
+     "conf": "high"
+    },
     {
      "k": "Nearest metro",
      "v": "Marol Naka (Line 1 and Line 3), about 1 km on the developer's figure (540 m in a straight line from the pin)",
      "src": "https://houseofwadhwa.com/wp-content/uploads/2023/08/Wadhwa-723-Avenue-Project-Brochure-3.pdf",
      "conf": "medium",
      "note": "The developer's brochure: '1 km away from Marol Naka Metro Station'."
-    },
-    {
-     "k": "Per seat",
-     "v": "Rs. 16,000 - Rs. 16,500 + GST",
-     "conf": "high",
-     "note": "From the deck: Flipkart Property Inventory, Andheri East (Autopilot deck, Nov 2026)."
     }
-   ],
-   "priority": "PRIORITY 1"
+   ]
   },
   {
    "id": "corporate-avenue",
@@ -223,49 +126,98 @@
    "geoSrc": "https://exa.ai/library/place/3kk3s3wpqbl",
    "geoNote": "Map place page; Wikimapia outlines 'Corporate Avenue (Atul Projects)' 55 m away. Sonawala Road, off Andheri-Kurla Road.",
    "micro": "chakala",
-   "fit": "best-fit",
-   "reason": "Priority 2 in the deck. Furnished, immediate; 225 seats at 4x2, 5 above the 220 ask. Metro: Western Express Highway and Gundavali, 650 m, 9 min walk; Chakala (J B Nagar) 850 m.",
+   "reason": "PRIORITY 2 · Floor 3rd and 4th · Furnished · Carpet area 12,414 sq. ft. · Possession: Immediately · Per seat: Rs. 15,200 - Rs. 15,700 + GST",
    "address": "Corporate Avenue, Sonawala Road, off Andheri-Kurla Road, Chakala, Andheri East, Mumbai",
    "locality": "Andheri East",
-   "perSeat": "Rs. 15,200 - Rs. 15,700 + GST",
-   "perSeatLow": 15200,
-   "perSeatHigh": 15700,
-   "carpetArea": 12414,
-   "builtUpArea": 20690,
-   "seatsAt55": 225,
-   "grade": "A-",
-   "furnishing": "Furnished",
-   "efficiency": "60%",
-   "possession": "Immediately",
-   "monthsToPossession": 0,
-   "floor": "3rd and 4th",
-   "totalFloors": "G+8",
-   "microMarket": "Chakala",
-   "buildingType": "Commercial",
-   "ceilingHeight": "11 ft",
-   "parking": "5 car parking per floor",
-   "fireNoc": "Available",
-   "ocCc": "Available",
-   "dg": "Common area only",
-   "metroStation": "Western Express Highway and Gundavali",
-   "metroWalk": "650 m, 9 min walk; Chakala (J B Nagar) 850 m",
-   "hopsFromCentralLine": 2,
    "facts": [
+    {
+     "k": "Micro-market",
+     "v": "Chakala",
+     "conf": "high"
+    },
+    {
+     "k": "Floor / Unit",
+     "v": "3rd and 4th",
+     "conf": "high"
+    },
+    {
+     "k": "Grade",
+     "v": "A-",
+     "conf": "high"
+    },
+    {
+     "k": "Total floors",
+     "v": "G+8",
+     "conf": "high"
+    },
+    {
+     "k": "Building type",
+     "v": "Commercial",
+     "conf": "high"
+    },
+    {
+     "k": "Furnishing",
+     "v": "Furnished",
+     "conf": "high"
+    },
+    {
+     "k": "Efficiency",
+     "v": "60%",
+     "conf": "high"
+    },
+    {
+     "k": "Carpet area",
+     "v": "12,414 sq. ft.",
+     "conf": "high"
+    },
+    {
+     "k": "Built-up area",
+     "v": "20,690 sq. ft.",
+     "conf": "high"
+    },
+    {
+     "k": "Ceiling height",
+     "v": "11 ft",
+     "conf": "high"
+    },
+    {
+     "k": "Per seat",
+     "v": "Rs. 15,200 - Rs. 15,700 + GST",
+     "conf": "high"
+    },
+    {
+     "k": "Parking",
+     "v": "5 car parking per floor",
+     "conf": "high"
+    },
+    {
+     "k": "Fire NOC",
+     "v": "Available",
+     "conf": "high"
+    },
+    {
+     "k": "OC & CC",
+     "v": "Available",
+     "conf": "high"
+    },
+    {
+     "k": "DG",
+     "v": "Common area only",
+     "conf": "high"
+    },
+    {
+     "k": "Possession",
+     "v": "Immediately",
+     "conf": "high"
+    },
     {
      "k": "Nearest metro",
      "v": "Western Express Highway and Gundavali, 650 m, 9 min walk; Chakala (J B Nagar) 850 m",
      "src": "https://myhq.in/dedicated/coworking-space/atul-corporate-avenue-chakala",
      "conf": "medium",
      "note": "myHQ lists Gundavali and WEH at 650 m (9 min) and Chakala J B Nagar at 850 m (11 min)."
-    },
-    {
-     "k": "Per seat",
-     "v": "Rs. 15,200 - Rs. 15,700 + GST",
-     "conf": "high",
-     "note": "From the deck: Flipkart Property Inventory, Andheri East (Autopilot deck, Nov 2026)."
     }
-   ],
-   "priority": "PRIORITY 2"
+   ]
   },
   {
    "id": "vaman-techno-centre",
@@ -276,60 +228,104 @@
    "precision": "building",
    "geoSrc": "https://exa.ai/library/place/3vrh78m08q4",
    "geoNote": "Map place page. Makwana Road, Marol. About 460 m from Marol Naka station in a straight line.",
-   "micro": "marol",
-   "fit": "best-fit",
-   "reason": "Bareshell, immediate; 223 seats at 4x2, 3 above the 220 ask. Metro: Marol Naka (Line 1 and Line 3), about 7 min walk.",
+   "micro": "marol-metro-station",
+   "reason": "Floor 3rd · Bareshell · Carpet area 12,300 sq. ft. · Possession: Immediately · Per seat: Rs. 13,400 - Rs. 13,900 + GST",
    "address": "Vaman Techno Centre, Makwana Road, Gamdevi, Marol, Andheri East, Mumbai 400059",
    "locality": "Andheri East",
-   "perSeat": "Rs. 13,400 - Rs. 13,900 + GST",
-   "perSeatLow": 13400,
-   "perSeatHigh": 13900,
-   "carpetArea": 12300,
-   "builtUpArea": 19700,
-   "seatsAt55": 223,
-   "grade": "B",
-   "furnishing": "Bareshell",
-   "efficiency": "62%",
-   "possession": "Immediately",
-   "monthsToPossession": 0,
-   "floor": "3rd",
-   "totalFloors": "G+7",
-   "microMarket": "Marol Metro Station",
-   "buildingType": "Commercial",
-   "ceilingHeight": "11 ft - 12 ft (approx.)",
-   "parking": "13 Car parking",
-   "fireNoc": "Available",
-   "ocCc": "Available",
-   "dg": "Common area only",
-   "metroStation": "Marol Naka (Line 1 and Line 3)",
-   "metroWalk": "about 7 min walk",
-   "hopsFromCentralLine": 2,
    "facts": [
+    {
+     "k": "Micro-market",
+     "v": "Marol Metro Station",
+     "conf": "high"
+    },
+    {
+     "k": "Floor / Unit",
+     "v": "3rd",
+     "conf": "high"
+    },
+    {
+     "k": "Grade",
+     "v": "B",
+     "conf": "high"
+    },
+    {
+     "k": "Total floors",
+     "v": "G+7",
+     "conf": "high"
+    },
+    {
+     "k": "Building type",
+     "v": "Commercial",
+     "conf": "high"
+    },
+    {
+     "k": "Furnishing",
+     "v": "Bareshell",
+     "conf": "high"
+    },
+    {
+     "k": "Efficiency",
+     "v": "62%",
+     "conf": "high"
+    },
+    {
+     "k": "Carpet area",
+     "v": "12,300 sq. ft.",
+     "conf": "high"
+    },
+    {
+     "k": "Built-up area",
+     "v": "19,700 sq. ft.",
+     "conf": "high"
+    },
+    {
+     "k": "Ceiling height",
+     "v": "11 ft - 12 ft (approx.)",
+     "conf": "high"
+    },
+    {
+     "k": "Per seat",
+     "v": "Rs. 13,400 - Rs. 13,900 + GST",
+     "conf": "high"
+    },
+    {
+     "k": "Parking",
+     "v": "13 Car parking",
+     "conf": "high"
+    },
+    {
+     "k": "Parking charges",
+     "v": "Rs. 5,000 per car park per month + Taxes",
+     "conf": "high"
+    },
+    {
+     "k": "Fire NOC",
+     "v": "Available",
+     "conf": "high"
+    },
+    {
+     "k": "OC & CC",
+     "v": "Available",
+     "conf": "high"
+    },
+    {
+     "k": "DG",
+     "v": "Common area only",
+     "conf": "high"
+    },
+    {
+     "k": "Possession",
+     "v": "Immediately",
+     "conf": "high"
+    },
     {
      "k": "Nearest metro",
      "v": "Marol Naka (Line 1 and Line 3), about 7 min walk",
      "src": "https://www.office-hub.com/in/properties/makwana-rd-marol-circle-near-web-techneeq-gamdevi-marol-andheri-east-mumbai-maharashtra-a0vQg000004wOE9IAM",
      "conf": "medium",
      "note": "Office Hub, for the Awfis centre in this building: Marol Naka metro, 7 minute walk. Awfis's own page says 0.30 km."
-    },
-    {
-     "k": "Per seat",
-     "v": "Rs. 13,400 - Rs. 13,900 + GST",
-     "conf": "high",
-     "note": "From the deck: Flipkart Property Inventory, Andheri East (Autopilot deck, Nov 2026)."
-    },
-    {
-     "k": "Parking charges",
-     "v": "Rs. 5,000 per car park per month + Taxes",
-     "conf": "high",
-     "note": "From the deck."
     }
-   ],
-   "parkingCharges": "Rs. 5,000 per car park per month + Taxes",
-   "flag": {
-    "v": "The deck says 'Marol Metro Station'. Listings put Marol Naka 0.3 km to 7 min away; confirm the walk on site.",
-    "src": "https://www.office-hub.com/in/properties/makwana-rd-marol-circle-near-web-techneeq-gamdevi-marol-andheri-east-mumbai-maharashtra-a0vQg000004wOE9IAM"
-   }
+   ]
   },
   {
    "id": "privilon",
@@ -341,59 +337,103 @@
    "geoSrc": "https://exa.ai/library/place/s8x6jf6zts0",
    "geoNote": "The place page pin sits within 10 m of the Marol Naka station coordinate, so it marks the address, not a footprint. The developer says 'right next to Marol Metro Station'.",
    "micro": "marol",
-   "fit": "workable",
-   "reason": "Bareshell, available Jan 2027; 206 seats at 4x2, 14 short of the 220 ask. Metro: Marol Naka (Line 1 and Line 3), right next to the station.",
+   "reason": "Floor Multiple · Bareshell · Carpet area 11,331 sq. ft. · Possession: Jan 2027 · Per seat: Rs. 18,000 - Rs. 18,500 + GST",
    "address": "Privilon, Metro Station Marol Naka, Gamdevi, Marol, Andheri East, Mumbai 400059",
    "locality": "Andheri East",
-   "perSeat": "Rs. 18,000 - Rs. 18,500 + GST",
-   "perSeatLow": 18000,
-   "perSeatHigh": 18500,
-   "carpetArea": 11331,
-   "builtUpArea": 18885,
-   "seatsAt55": 206,
-   "grade": "A",
-   "furnishing": "Bareshell",
-   "efficiency": "60%",
-   "possession": "Jan 2027",
-   "monthsToPossession": 2,
-   "floor": "Multiple",
-   "totalFloors": "G+15",
-   "microMarket": "Marol",
-   "buildingType": "Commercial",
-   "ceilingHeight": "11.7 ft",
-   "parking": "5 Car parking",
-   "fireNoc": "Jan 2027",
-   "ocCc": "Jan 2027",
-   "dg": "Common area only",
-   "metroStation": "Marol Naka (Line 1 and Line 3)",
-   "metroWalk": "right next to the station",
-   "hopsFromCentralLine": 2,
    "facts": [
+    {
+     "k": "Micro-market",
+     "v": "Marol",
+     "conf": "high"
+    },
+    {
+     "k": "Floor / Unit",
+     "v": "Multiple",
+     "conf": "high"
+    },
+    {
+     "k": "Grade",
+     "v": "A",
+     "conf": "high"
+    },
+    {
+     "k": "Total floors",
+     "v": "G+15",
+     "conf": "high"
+    },
+    {
+     "k": "Building type",
+     "v": "Commercial",
+     "conf": "high"
+    },
+    {
+     "k": "Furnishing",
+     "v": "Bareshell",
+     "conf": "high"
+    },
+    {
+     "k": "Efficiency",
+     "v": "60%",
+     "conf": "high"
+    },
+    {
+     "k": "Carpet area",
+     "v": "11,331 sq. ft.",
+     "conf": "high"
+    },
+    {
+     "k": "Built-up area",
+     "v": "18,885 sq. ft.",
+     "conf": "high"
+    },
+    {
+     "k": "Ceiling height",
+     "v": "11.7 ft",
+     "conf": "high"
+    },
+    {
+     "k": "Per seat",
+     "v": "Rs. 18,000 - Rs. 18,500 + GST",
+     "conf": "high"
+    },
+    {
+     "k": "Parking",
+     "v": "5 Car parking",
+     "conf": "high"
+    },
+    {
+     "k": "Parking charges",
+     "v": "To Be Discussed",
+     "conf": "high"
+    },
+    {
+     "k": "Fire NOC",
+     "v": "Jan 2027",
+     "conf": "high"
+    },
+    {
+     "k": "OC & CC",
+     "v": "Jan 2027",
+     "conf": "high"
+    },
+    {
+     "k": "DG",
+     "v": "Common area only",
+     "conf": "high"
+    },
+    {
+     "k": "Possession",
+     "v": "Jan 2027",
+     "conf": "high"
+    },
     {
      "k": "Nearest metro",
      "v": "Marol Naka (Line 1 and Line 3), right next to the station",
      "src": "https://bsafal.com/mumbai/",
      "conf": "medium",
      "note": "The developer: 'right next to Marol Metro Station'. OpenStreetMap puts Line 1 at about 0 m and Line 3 at about 100 m (mumbaipropertyexchange.com)."
-    },
-    {
-     "k": "Per seat",
-     "v": "Rs. 18,000 - Rs. 18,500 + GST",
-     "conf": "high",
-     "note": "From the deck: Flipkart Property Inventory, Andheri East (Autopilot deck, Nov 2026)."
-    },
-    {
-     "k": "Parking charges",
-     "v": "To Be Discussed",
-     "conf": "high",
-     "note": "From the deck."
     }
-   ],
-   "parkingCharges": "To Be Discussed",
-   "flag": {
-    "v": "The deck gives Privilon the same carpet (11,331) and built-up (18,885) as 723 Avenue, and the floors only as 'Multiple'. Fire NOC, OC & CC and possession are Jan 2027. Confirm the area, the floors and the date with the landlord.",
-    "src": ""
-   }
+   ]
   },
   {
    "id": "landmark",
@@ -405,46 +445,96 @@
    "geoSrc": "https://exa.ai/library/place/g4bgsvhmz93",
    "geoNote": "Map place page for Landmark, Suren Road, Gundavali, at the junction of the Western Express Highway and Andheri-Kurla Road.",
    "micro": "weh",
-   "fit": "workable",
-   "reason": "Furnished, immediate; 181 seats at 4x2, 39 short of the 220 ask. Metro: Western Express Highway (Line 1 and Line 7), about 200 m.",
+   "reason": "Floor 6th · Furnished · Carpet area 10,000 sq. ft. · Possession: Immediately · Per seat: Rs. 15,200 - Rs. 15,700 + GST",
    "address": "Landmark, Suren Road, Gundavali, Andheri East, Mumbai 400093",
    "locality": "Andheri East",
-   "perSeat": "Rs. 15,200 - Rs. 15,700 + GST",
-   "perSeatLow": 15200,
-   "perSeatHigh": 15700,
-   "carpetArea": 10000,
-   "builtUpArea": 16666.7,
-   "seatsAt55": 181,
-   "grade": "B",
-   "furnishing": "Furnished",
-   "efficiency": "60%",
-   "possession": "Immediately",
-   "monthsToPossession": 0,
-   "floor": "6th",
-   "totalFloors": "G+6",
-   "microMarket": "Western Express Highway",
-   "buildingType": "Commercial",
-   "ceilingHeight": "11 ft (approx.)",
-   "parking": "8 car parking",
-   "fireNoc": "Available",
-   "ocCc": "Available",
-   "dg": "Common area only",
-   "metroStation": "Western Express Highway (Line 1 and Line 7)",
-   "metroWalk": "about 200 m",
-   "hopsFromCentralLine": 2,
    "facts": [
+    {
+     "k": "Micro-market",
+     "v": "Western Express Highway",
+     "conf": "high"
+    },
+    {
+     "k": "Floor / Unit",
+     "v": "6th",
+     "conf": "high"
+    },
+    {
+     "k": "Grade",
+     "v": "B",
+     "conf": "high"
+    },
+    {
+     "k": "Total floors",
+     "v": "G+6",
+     "conf": "high"
+    },
+    {
+     "k": "Building type",
+     "v": "Commercial",
+     "conf": "high"
+    },
+    {
+     "k": "Furnishing",
+     "v": "Furnished",
+     "conf": "high"
+    },
+    {
+     "k": "Efficiency",
+     "v": "60%",
+     "conf": "high"
+    },
+    {
+     "k": "Carpet area",
+     "v": "10,000 sq. ft.",
+     "conf": "high"
+    },
+    {
+     "k": "Built-up area",
+     "v": "16,666.7 sq. ft.",
+     "conf": "high"
+    },
+    {
+     "k": "Ceiling height",
+     "v": "11 ft (approx.)",
+     "conf": "high"
+    },
+    {
+     "k": "Per seat",
+     "v": "Rs. 15,200 - Rs. 15,700 + GST",
+     "conf": "high"
+    },
+    {
+     "k": "Parking",
+     "v": "8 car parking",
+     "conf": "high"
+    },
+    {
+     "k": "Fire NOC",
+     "v": "Available",
+     "conf": "high"
+    },
+    {
+     "k": "OC & CC",
+     "v": "Available",
+     "conf": "high"
+    },
+    {
+     "k": "DG",
+     "v": "Common area only",
+     "conf": "high"
+    },
+    {
+     "k": "Possession",
+     "v": "Immediately",
+     "conf": "high"
+    },
     {
      "k": "Nearest metro",
      "v": "Western Express Highway (Line 1 and Line 7), about 200 m",
      "src": "https://property.jll.co.in/listings/landmark-wing-a-suren-road-gundavali",
      "conf": "medium",
      "note": "JLL: 'just 200 metres from the Western Express Highway metro station'."
-    },
-    {
-     "k": "Per seat",
-     "v": "Rs. 15,200 - Rs. 15,700 + GST",
-     "conf": "high",
-     "note": "From the deck: Flipkart Property Inventory, Andheri East (Autopilot deck, Nov 2026)."
     }
    ]
   },
@@ -458,46 +548,96 @@
    "geoSrc": "https://exa.ai/library/place/83qqct91nth",
    "geoNote": "Map place page; not the OSM 'Rustomjee' pin at 19.11642, 72.85428. Andheri-Kurla Road at the Chakala signal.",
    "micro": "chakala",
-   "fit": "workable",
-   "reason": "Furnished, available Feb 2027 - Can be discussed for early vacancy; 163 seats at 4x2, 57 short of the 220 ask. Metro: Western Express Highway (Line 1 and Line 7), 3 min walk; Chakala (J B Nagar) 0.7 km.",
+   "reason": "Floor 4th · Furnished · Carpet area 9,000 sq. ft. · Possession: Feb 2027 - Can be discussed for early vacancy · Per seat: Rs. 16,000 - Rs. 16,500 + GST",
    "address": "Rustomjee Central Park, Andheri-Kurla Road, Chakala, Andheri East, Mumbai 400093",
    "locality": "Andheri East",
-   "perSeat": "Rs. 16,000 - Rs. 16,500 + GST",
-   "perSeatLow": 16000,
-   "perSeatHigh": 16500,
-   "carpetArea": 9000,
-   "builtUpArea": 15000,
-   "seatsAt55": 163,
-   "grade": "B",
-   "furnishing": "Furnished",
-   "efficiency": "60%",
-   "possession": "Feb 2027 - Can be discussed for early vacancy",
-   "monthsToPossession": 3,
-   "floor": "4th",
-   "totalFloors": "G+9",
-   "microMarket": "Chakala",
-   "buildingType": "Commercial",
-   "ceilingHeight": "12 ft",
-   "parking": "10 Car parking",
-   "fireNoc": "Available",
-   "ocCc": "Available",
-   "dg": "Common area only",
-   "metroStation": "Western Express Highway (Line 1 and Line 7)",
-   "metroWalk": "3 min walk; Chakala (J B Nagar) 0.7 km",
-   "hopsFromCentralLine": 2,
    "facts": [
+    {
+     "k": "Micro-market",
+     "v": "Chakala",
+     "conf": "high"
+    },
+    {
+     "k": "Floor / Unit",
+     "v": "4th",
+     "conf": "high"
+    },
+    {
+     "k": "Grade",
+     "v": "B",
+     "conf": "high"
+    },
+    {
+     "k": "Total floors",
+     "v": "G+9",
+     "conf": "high"
+    },
+    {
+     "k": "Building type",
+     "v": "Commercial",
+     "conf": "high"
+    },
+    {
+     "k": "Furnishing",
+     "v": "Furnished",
+     "conf": "high"
+    },
+    {
+     "k": "Efficiency",
+     "v": "60%",
+     "conf": "high"
+    },
+    {
+     "k": "Carpet area",
+     "v": "9,000 sq. ft.",
+     "conf": "high"
+    },
+    {
+     "k": "Built-up area",
+     "v": "15,000 sq. ft.",
+     "conf": "high"
+    },
+    {
+     "k": "Ceiling height",
+     "v": "12 ft",
+     "conf": "high"
+    },
+    {
+     "k": "Per seat",
+     "v": "Rs. 16,000 - Rs. 16,500 + GST",
+     "conf": "high"
+    },
+    {
+     "k": "Parking",
+     "v": "10 Car parking",
+     "conf": "high"
+    },
+    {
+     "k": "Fire NOC",
+     "v": "Available",
+     "conf": "high"
+    },
+    {
+     "k": "OC & CC",
+     "v": "Available",
+     "conf": "high"
+    },
+    {
+     "k": "DG",
+     "v": "Common area only",
+     "conf": "high"
+    },
+    {
+     "k": "Possession",
+     "v": "Feb 2027 - Can be discussed for early vacancy",
+     "conf": "high"
+    },
     {
      "k": "Nearest metro",
      "v": "Western Express Highway (Line 1 and Line 7), 3 min walk; Chakala (J B Nagar) 0.7 km",
      "src": "https://rustomjeeltd.net/central-park-business-spaces/",
      "conf": "medium",
      "note": "The developer: 'The nearest metro stop, Western Express Highway, is a 3 min walk away'; Chakala Metro Station 0.7 km."
-    },
-    {
-     "k": "Per seat",
-     "v": "Rs. 16,000 - Rs. 16,500 + GST",
-     "conf": "high",
-     "note": "From the deck: Flipkart Property Inventory, Andheri East (Autopilot deck, Nov 2026)."
     }
    ]
   },
@@ -511,82 +651,130 @@
    "geoSrc": "https://property.jll.co.in/listings/fulcrum-ia-project-road-ashok-nagar",
    "geoNote": "An estimate. No map pin was found for the building; it adjoins the Hyatt Regency on IA Project Road, Sahar, so the pin is placed beside the hotel.",
    "micro": "csmi",
-   "fit": "not-recommended",
-   "reason": "Furnished, immediate; 212 seats at 4x2, 8 short of the 220 ask. Metro: Sahar Road (Line 3), about 690 m, measured from the Hyatt Regency next door.",
+   "reason": "Floor 1st · Furnished · Carpet area 11,700 sq. ft. · Possession: Immediately · Per seat: Rs. 14,400 - Rs. 14,900 + GST",
    "address": "Fulcrum, IA Project Road, Sahar Road, next to Hyatt Regency, Ashok Nagar, Andheri East, Mumbai 400099",
    "locality": "Andheri East",
-   "perSeat": "Rs. 14,400 - Rs. 14,900 + GST",
-   "perSeatLow": 14400,
-   "perSeatHigh": 14900,
-   "carpetArea": 11700,
-   "builtUpArea": 18000,
-   "seatsAt55": 212,
-   "grade": "B+",
-   "furnishing": "Furnished",
-   "efficiency": "65%",
-   "possession": "Immediately",
-   "monthsToPossession": 0,
-   "floor": "1st",
-   "totalFloors": "G+9",
-   "microMarket": "CSMI Metro",
-   "buildingType": "Commercial",
-   "ceilingHeight": "11 ft - 12 ft (approx.)",
-   "parking": "9 car parking",
-   "fireNoc": "Available",
-   "ocCc": "Available",
-   "dg": "Common area only",
-   "metroStation": "Sahar Road (Line 3)",
-   "metroWalk": "about 690 m, measured from the Hyatt Regency next door",
-   "hopsFromCentralLine": 3,
    "facts": [
+    {
+     "k": "Micro-market",
+     "v": "CSMI Metro",
+     "conf": "high"
+    },
+    {
+     "k": "Floor / Unit",
+     "v": "1st",
+     "conf": "high"
+    },
+    {
+     "k": "Grade",
+     "v": "B+",
+     "conf": "high"
+    },
+    {
+     "k": "Total floors",
+     "v": "G+9",
+     "conf": "high"
+    },
+    {
+     "k": "Building type",
+     "v": "Commercial",
+     "conf": "high"
+    },
+    {
+     "k": "Furnishing",
+     "v": "Furnished",
+     "conf": "high"
+    },
+    {
+     "k": "Efficiency",
+     "v": "65%",
+     "conf": "high"
+    },
+    {
+     "k": "Carpet area",
+     "v": "11,700 sq. ft.",
+     "conf": "high"
+    },
+    {
+     "k": "Built-up area",
+     "v": "18,000 sq. ft.",
+     "conf": "high"
+    },
+    {
+     "k": "Ceiling height",
+     "v": "11 ft - 12 ft (approx.)",
+     "conf": "high"
+    },
+    {
+     "k": "Per seat",
+     "v": "Rs. 14,400 - Rs. 14,900 + GST",
+     "conf": "high"
+    },
+    {
+     "k": "Parking",
+     "v": "9 car parking",
+     "conf": "high"
+    },
+    {
+     "k": "Fire NOC",
+     "v": "Available",
+     "conf": "high"
+    },
+    {
+     "k": "OC & CC",
+     "v": "Available",
+     "conf": "high"
+    },
+    {
+     "k": "DG",
+     "v": "Common area only",
+     "conf": "high"
+    },
+    {
+     "k": "Possession",
+     "v": "Immediately",
+     "conf": "high"
+    },
     {
      "k": "Nearest metro",
      "v": "Sahar Road (Line 3), about 690 m, measured from the Hyatt Regency next door",
      "src": "https://moovitapp.com/index/en/public_transit-Hyatt_Regency_Mumbai-Mumbai-site_36354746-3732",
      "conf": "medium",
      "note": "Moovit: Sahar Road station is 687 m and a 9 min walk from the Hyatt Regency. Line 3 only, so a 3rd hop for Central Line riders."
-    },
-    {
-     "k": "Per seat",
-     "v": "Rs. 14,400 - Rs. 14,900 + GST",
-     "conf": "high",
-     "note": "From the deck: Flipkart Property Inventory, Andheri East (Autopilot deck, Nov 2026)."
     }
-   ],
-   "flag": {
-    "v": "The pin is an estimate beside the Hyatt Regency, and the building is a 3rd hop for Central Line riders.",
-    "src": "https://property.jll.co.in/listings/fulcrum-ia-project-road-ashok-nagar"
-   }
+   ]
   }
  ],
  "zones": [
   {
-   "key": "weh",
-   "label": "WEH",
-   "name": "Western Express Highway end of Andheri-Kurla Road",
-   "color": "#1d6fa5",
-   "character": "Where Line 1 meets Line 7 and the highway."
-  },
-  {
    "key": "chakala",
    "label": "Chakala",
-   "name": "Chakala (Andheri-Kurla Road and Sonawala Road)",
-   "color": "#2e7d5b",
-   "character": "A short walk from the WEH and Chakala stations on Line 1."
+   "name": "Chakala",
+   "color": "#2e7d5b"
   },
   {
    "key": "marol",
    "label": "Marol",
-   "name": "Marol (Marol Naka interchange, Makwana Road, Sag Baug)",
-   "color": "#b7791f",
-   "character": "The interchange of Lines 1 and 3: the only place both are one walk away."
+   "name": "Marol",
+   "color": "#b7791f"
+  },
+  {
+   "key": "weh",
+   "label": "Western Express Highway",
+   "name": "Western Express Highway",
+   "color": "#1d6fa5"
+  },
+  {
+   "key": "marol-metro-station",
+   "label": "Marol Metro Station",
+   "name": "Marol Metro Station",
+   "color": "#8a3d6b"
   },
   {
    "key": "csmi",
-   "label": "CSMI",
-   "name": "Sahar Road, by the airport",
-   "color": "#8a3d6b",
-   "character": "Airport hotel belt. Reached on Line 3, not Line 1."
+   "label": "CSMI Metro",
+   "name": "CSMI Metro",
+   "color": "#5b7a8c"
   }
  ],
  "transit": {
@@ -601,7 +789,6 @@
     "color": "#1d6fa5",
     "status": "open",
     "src": "https://en.wikipedia.org/wiki/Western_Express_Highway_metro_station",
-    "note": "Versova to Ghatkopar. Central Line riders change at Ghatkopar: the first hop.",
     "stations": [
      {
       "name": "Western Express Highway",
@@ -643,7 +830,7 @@
     "color": "#1d8a8a",
     "status": "open",
     "src": "https://en.wikipedia.org/wiki/Sahar_Road_metro_station",
-    "note": "Underground, Aarey JVLR to Cuffe Parade. From Marol Naka a Central Line rider changes again: the third hop. The line is drawn straight between the stations shown, so it is indicative.",
+    "note": "Drawn straight between the stations shown, so the line is indicative.",
     "stations": [
      {
       "name": "SEEPZ",
@@ -673,148 +860,25 @@
    }
   ]
  },
- "facts": {
-  "brief": [
-   {
-    "k": "Seats",
-    "v": "About 220 seats on 4x2 workstations (about 55 sqft a seat, about 12,100 sqft)",
-    "conf": "medium",
-    "note": "Client-stated, carried over from the earlier Flipkart brief. Not in the deck: confirm."
-   },
-   {
-    "k": "Commute",
-    "v": "Two metro hops or fewer from the Central Line (Ghatkopar to Line 1); a Line 3 station is a third hop",
-    "conf": "medium",
-    "note": "Client-stated, carried over from the earlier Flipkart brief. Not in the deck: confirm."
-   },
-   {
-    "k": "Client priorities",
-    "v": "723 Avenue is Priority 1 and Corporate Avenue Priority 2",
-    "conf": "high",
-    "note": "Marked in the deck: Flipkart Property Inventory, Andheri East (Autopilot deck, Nov 2026)."
-   }
-  ],
-  "deck": [
-   {
-    "k": "Rates",
-    "v": "Per seat rates are a range per month and exclude GST",
-    "conf": "high",
-    "note": "As the deck gives them ('+ Taxes' on the summary, '+ GST' in the specifications)."
-   },
-   {
-    "k": "Same in every building",
-    "v": "Building type Commercial; DG common area only",
-    "conf": "high",
-    "note": "From the deck."
-   }
-  ]
- },
- "measures": [
-  {
-   "key": "price",
-   "kind": "column",
-   "column": "perSeatLow",
-   "label": "Per seat rate",
-   "higherIsBetter": false,
-   "question": "How much does the per seat rate matter?",
-   "of": "the low end of each option's per seat range in the deck"
-  },
-  {
-   "key": "space",
-   "kind": "column",
-   "column": "seatsAt55",
-   "label": "Seats it holds",
-   "higherIsBetter": true,
-   "question": "Does it have to hold the whole team?",
-   "of": "carpet area over 55 sqft a seat (4x2)"
-  },
-  {
-   "key": "ready",
-   "kind": "column",
-   "column": "monthsToPossession",
-   "label": "Ready now",
-   "higherIsBetter": false,
-   "question": "How soon must you move in?",
-   "of": "months to possession from November 2026, from the deck"
-  },
-  {
-   "key": "metro",
-   "kind": "nearestStation",
-   "status": "open",
-   "label": "Walk to a metro station",
-   "question": "Can people walk to a metro station?",
-   "of": "straight-line distance to the nearest open station"
-  },
-  {
-   "key": "hops",
-   "kind": "column",
-   "column": "hopsFromCentralLine",
-   "label": "Hops from the Central Line",
-   "higherIsBetter": false,
-   "question": "Is a third metro hop acceptable?",
-   "of": "the client's rule: two hops or fewer, Line 3 counts as a third (client-stated, to be confirmed)"
-  }
- ],
- "presets": [
-  {
-   "key": "balanced",
-   "label": "Balanced",
-   "note": "A bit of everything.",
-   "default": true,
-   "levels": {
-    "price": 2,
-    "space": 2,
-    "ready": 2,
-    "metro": 2,
-    "hops": 3
-   }
-  },
-  {
-   "key": "cost",
-   "label": "Cost first",
-   "note": "The lowest per seat rate wins.",
-   "levels": {
-    "price": 4,
-    "space": 1,
-    "ready": 1,
-    "metro": 1,
-    "hops": 2
-   }
-  },
-  {
-   "key": "space",
-   "label": "Whole team on one plate",
-   "note": "Capacity over everything else.",
-   "levels": {
-    "price": 1,
-    "space": 4,
-    "ready": 1,
-    "metro": 1,
-    "hops": 2
-   }
-  },
-  {
-   "key": "move",
-   "label": "Move in soon",
-   "note": "Ready now and close to the metro.",
-   "levels": {
-    "price": 1,
-    "space": 2,
-    "ready": 4,
-    "metro": 3,
-    "hops": 3
-   }
-  }
- ],
  "copy": {
   "overview": {
    "eyebrow": "Autopilot · Andheri East · Nov 2026",
-   "title": "Where Flipkart's team should sit in Andheri East",
-   "intro": "{optionCount} buildings from Autopilot's inventory deck, by per seat rate, seats and the walk to the metro. 723 Avenue is the client's Priority 1 and Corporate Avenue its Priority 2."
+   "title": "Flipkart office inventory, Andheri East",
+   "intro": "{optionCount} buildings from Autopilot's inventory deck, with the metro around them.",
+   "ranking": "The list"
   },
-  "connect": {
-   "title": "How people get to each option",
-   "intro": "Metro Line 1 is two hops from the Central Line; Line 3 is a third."
+  "sort": {
+   "rank": "Listed order"
+  },
+  "ranking": {
+   "ungrouped": "Options",
+   "option": "Option"
+  },
+  "insights": {
+   "first": "First on the list"
+  },
+  "option": {
+   "rank": false
   }
  }
 }
