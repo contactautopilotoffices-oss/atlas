@@ -1167,14 +1167,28 @@ function refreshMap() {
   if (!map || !map.getSource("options")) return;
   refreshPins(); applyLayerVisibility();
 }
+/* The card that follows the pointer over a pin. Each line is dropped when the
+   Atlas has nothing to say there: with no current office there is no distance
+   from it, and printing one gave "NaN km". */
+function optPopHTML(o) {
+  const r = nearStn(o), f = fitOf(o), b = nearestBus(o);
+  const lines = [
+    `<b>${nn(o)} · ${esc(o.name)}</b>`,
+    `${f ? `${esc(f.label)} · ` : ""}${esc(o.sheetMicro || (ZONE[o.micro] && ZONE[o.micro].label) || "")}`.replace(/ · $/, ""),
+    EX ? esc(homeTxt(o)) : "",
+    r.none ? "" : `${fmtM(r.d)} to ${esc(r.s.name)}${r.s.lineName ? ` (${esc(r.s.lineName)})` : ""}`,
+    b ? `${fmtM(b.d)} to ${esc(b.s.name)} bus stop` : ""
+  ].filter(Boolean);
+  return `<div class="pop">${tile(o, "pop")}<div>${lines.join("<br>")}</div></div>`;
+}
+window.__optPop = (id) => optPopHTML(O.find(x => x.id === id));
 function wireMap() {
   const pop = new mapboxgl.Popup({ closeButton: false, closeOnClick: false, offset: 12 });
   const hover = (layer, html) => {
     map.on("mouseenter", layer, e => { map.getCanvas().style.cursor = "pointer"; const f = e.features[0]; pop.setLngLat(f.geometry.coordinates).setHTML(html(f.properties)).addTo(map); });
     map.on("mouseleave", layer, () => { map.getCanvas().style.cursor = ""; pop.remove(); });
   };
-  hover("opt", p => { const o = O.find(x => x.id === p.id), r = nearestOpen(o), f = fitOf(o);
-    return `<div class="pop">${tile(o, "pop")}<div><b>${nn(o)} · ${esc(o.name)}</b><br>${f ? `${esc(f.label)} · ` : ""}${esc(o.sheetMicro)}<br>${esc(homeTxt(o))}<br>${fmtM(r.d)} to ${esc(r.s.name)} (${esc(r.s.lineName)})${(b => b ? `<br>${fmtM(b.d)} to ${esc(b.s.name)} bus stop` : "")(nearestBus(o))}</div></div>`; });
+  hover("opt", p => optPopHTML(O.find(x => x.id === p.id)));
   hover("places", p => placeHTML(PL.find(y => y.id === p.id)));
   if (IS_NET && map.getLayer("city-dot")) {
     hover("city-dot", p => `<b>${esc(p.name)}</b><br>${esc(nOf(+p.n))} · click to zoom in`);

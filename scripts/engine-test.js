@@ -255,6 +255,11 @@ async function run(name, bundle, base, browser) {
   await leak("the compare sheet");
   await page.evaluate(() => { const c = document.querySelector("#cmp"); if (c) c.classList.remove("on"); });
 
+  /* The card that follows the pointer over a pin is built on hover, which
+     nothing above triggers: build it for every option and read it for NaN. */
+  const pops = await page.evaluate((ids) => window.__optPop ? ids.map(id => window.__optPop(id)) : [], bundle.options.map(o => o.id)).catch(e => { errors.push("hover card: " + e.message.split("\n")[0]); return []; });
+  pops.forEach((h, i) => { const m = String(h).match(/.{0,30}\b(NaN|undefined|\[object Object\])\b.{0,20}/); if (m) errors.push(`the hover card of option ${i + 1} prints "${m[1]}": ...${m[0].replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim()}...`); });
+
   const inner = await page.evaluate(() => window.__atlasErrors || []);
   inner.forEach(x => errors.push("map: " + x));
 
