@@ -556,7 +556,7 @@ const LAYER_HINT = new Proxy({}, { get: (_, k) => say("layerHints." + String(k),
    in LAYERS at all, so it cannot be switched on. */
 const LAYERS_ON_AT_START = ["existing", "zones", "rail", "future", "bus", ...(IS_PLACE ? ["rings", ...KINDS] : [])];
 const S = {
-  tab: "overview", sel: null, hov: null, pair: null, shot: "close", sort: "rank", preset: DEFAULT_PRESET, sheet: "half",
+  tab: "overview", sel: null, hov: null, pair: null, conn: null, shot: "close", sort: "rank", preset: DEFAULT_PRESET, sheet: "half",
   lv: DEFAULT_PRESET ? { ...PRESETS[DEFAULT_PRESET].lv } : {}, filters: new Set(), auto: new Set(), only: new Set(), city: null, kinds: new Set(),
   layers: Object.fromEntries(LAYERS.map(l => [l.key, LAYERS_ON_AT_START.includes(l.key)]))
 };
@@ -1036,6 +1036,15 @@ function addLayers() {
   add({ id: "stn-route-label", type: "symbol", source: "stn-route-lbl", filter: ["==", ["get", "part"], "label"], layout: { "text-field": ["get", "label"], "text-size": 13,
     "text-font": ["DIN Pro Bold", "Arial Unicode MS Bold"], "text-allow-overlap": true, "text-ignore-placement": true, "text-offset": [0, -1.1] },
     paint: { "text-color": "#7a3416", "text-halo-color": "#fff", "text-halo-width": 2 } });
+  map.addSource("conn", { type: "geojson", data: connFC() });
+  const connColor = ["match", ["get", "kind"], "rail", "#7a4aa3", "#1d6fa5"];
+  add({ id: "conn-line", type: "line", source: "conn", filter: ["==", ["get", "part"], "line"], layout: { "line-cap": "round" },
+    paint: { "line-color": connColor, "line-width": ["match", ["get", "kind"], "rail", 2.4, 1.8], "line-dasharray": [.6, 1.6], "line-opacity": .9 } });
+  add({ id: "conn-pt", type: "circle", source: "conn", filter: ["==", ["get", "part"], "pt"],
+    paint: { "circle-radius": ["match", ["get", "kind"], "rail", 8, 6], "circle-color": connColor, "circle-stroke-color": "#fff", "circle-stroke-width": 2 } });
+  add({ id: "conn-label", type: "symbol", source: "conn", filter: ["==", ["get", "part"], "pt"], layout: { "text-field": ["get", "label"], "text-size": 11.5,
+    "text-font": ["DIN Pro Medium", "Arial Unicode MS Regular"], "text-offset": [0, 1], "text-anchor": "top", "text-optional": true, "text-max-width": 11 },
+    paint: { "text-color": ["match", ["get", "kind"], "rail", "#5b2d82", "#1d4f73"], "text-halo-color": "#fff", "text-halo-width": 1.8 } });
   /* With no current office the source is empty rather than absent, so every
      ex-* layer still exists and the layer switches need no special case. */
   const exData = EX ? pt(EX.lng, EX.lat, { name: EX.name }) : FC([]);
@@ -1121,7 +1130,7 @@ function applyLayerVisibility() {
   set("rings", ringFC()); set("ring-labels", ringLabelFC());
   const lk = linkFC(); set("links", lk); set("links-lbl", lk);
   const ek = exLinkFC(); set("ex-link", ek); set("ex-link-lbl", ek);
-  const sr = stnRouteFC(); set("stn-route", sr); set("stn-route-lbl", sr);
+  const sr = stnRouteFC(); set("stn-route", sr); set("stn-route-lbl", sr); set("conn", connFC());
   recede();
 }
 /* With an option open, only its own context keeps full weight: stations
@@ -1372,6 +1381,14 @@ function wireBoard() {
   $("#p-body").addEventListener("click", e => {
     const ix = e.target.closest("[data-intro-x]"); if (ix) { seenIntro.add(ix.dataset.introX); saveIntro(); ix.closest(".intro").outerHTML = introCard(ix.dataset.introX); return; }
     const io = e.target.closest("[data-intro-open]"); if (io) { seenIntro.delete(io.dataset.introOpen); saveIntro(); io.outerHTML = introCard(io.dataset.introOpen); return; }
+    const cn = e.target.closest("[data-conn]");
+    if (cn && S.sel) {
+      const i = cn.dataset.conn.indexOf("|");
+      S.conn = { kind: cn.dataset.conn.slice(0, i), name: cn.dataset.conn.slice(i + 1) };
+      S.shot = "station"; flyToOption(O.find(x => x.id === S.sel), "station");
+      document.querySelectorAll(".cn").forEach(b => b.classList.toggle("on", b === cn));
+      return;
+    }
     const a = e.target.closest("[data-go]"); if (a) { e.preventDefault(); select(a.dataset.go, true); return; }
     const t = e.target.closest("[data-tab]"); if (t) { e.preventDefault(); goTab(t.dataset.tab); return; }
     const pf = e.target.closest("[data-place]"); if (pf) { e.preventDefault(); flyToPlace(pf.dataset.place); return; }
@@ -1414,6 +1431,36 @@ const SHOT_ZOOM = { building: 17.2, street: 16.3, locality: 15.2 };
    routed by Mapbox where it loads and a straight line, labelled as one, where
    it does not. Off by default so the other atlases look as they did. */
 const STN_SHOT = !!(M && M.stationShot) && OPEN.length > 0;
+/* What is around a building, nearest first: metro, suburban railway and bus
+   stops. A station served by two lines (Marol Naka) is one row with both. */
+const METRO_ST = OPEN.filter(s => s.mode === "metro");
+const RAIL_ST = OPEN.filter(s => s.mode === "suburban" || s.mode === "rail");
+const nearStn = (p) => STN_SHOT ? ((p && nearest(p, METRO_ST.length ? METRO_ST : OPEN)) || NO_NEAR) : nearestOpen(p);
+function connOf(o) {
+  /* One row per name (a station on two lines, a bus stop on both sides of the
+     road), or per line for the railway, nearest first. */
+  const group = (list, n, keyOf = (s) => s.name) => {
+    const by = new Map();
+    for (const s of list) {
+      const d = km(o, s), k = keyOf(s), g = by.get(k);
+      if (!g) by.set(k, { s, d, lines: [s.lineName].filter(Boolean) });
+      else { if (d < g.d) { g.d = d; g.s = s; } if (s.lineName && !g.lines.includes(s.lineName)) g.lines.push(s.lineName); }
+    }
+    return [...by.values()].sort((a, b) => a.d - b.d).slice(0, n);
+  };
+  return { metro: group(METRO_ST, 2), rail: group(RAIL_ST, 3, (s) => s.line), bus: group(BUS, 3) };
+}
+/* The points the Metro view fits: the building, then what the clicked row
+   (or by default the nearest metro and the nearest bus stops) is. */
+function stationView(o) {
+  const m = nearStn(o);
+  if (m.none) return null;
+  const c = connOf(o), f = S.conn;
+  let pts = [m.s, ...c.bus.map(b => b.s)];
+  const hit = f && (f.kind === "rail" ? c.rail : f.kind === "bus" ? c.bus : c.metro).find(x => x.s.name === f.name);
+  if (hit) pts = [hit.s];
+  return [o, ...pts];
+}
 const SHOTS = {
   ...(STN_SHOT ? { station: { label: "Metro", hint: "Zoomed to the building and its nearest metro station, with the walk between them." } } : {}),
   close: { label: "Close-up", hint: "Tilted view down onto the building and its streets." },
@@ -1425,7 +1472,7 @@ const STN_ROUTE = new Map();
 function stnRouteFC() {
   const o = STN_SHOT && S.sel && O.find(x => x.id === S.sel);
   if (!o) return FC([]);
-  const r = nearestOpen(o);
+  const r = nearStn(o);
   if (r.none) return FC([]);
   const rt = STN_ROUTE.get(o.id);
   if (rt && rt.coords) {
@@ -1436,14 +1483,26 @@ function stnRouteFC() {
   return FC([ln([[o.lng, o.lat], [r.s.lng, r.s.lat]], { part: "line", kind: "straight" }),
     pt((o.lng + r.s.lng) / 2, (o.lat + r.s.lat) / 2, { part: "label", label: r.d < .03 ? `At ${r.s.name}` : `${fmtM(r.d)} straight line` })]);
 }
+/* Dotted lines to the nearest bus stops and the nearest railway stations,
+   each named with its straight-line distance. */
+function connFC() {
+  const o = STN_SHOT && S.sel && O.find(x => x.id === S.sel);
+  if (!o) return FC([]);
+  const c = connOf(o), out = [];
+  const add = (x, kind, label) => { out.push(ln([[o.lng, o.lat], [x.s.lng, x.s.lat]], { part: "line", kind })); out.push(pt(x.s.lng, x.s.lat, { part: "pt", kind, label })); };
+  c.bus.forEach(x => add(x, "bus", `${x.s.name} · ${fmtM(x.d)}`));
+  c.rail.forEach(x => add(x, "rail", `${x.s.name} railway · ${fmtM(x.d)}`));
+  return FC(out);
+}
 function refreshRoute() {
   if (!map) return;
-  const fc = stnRouteFC();
+  const fc = stnRouteFC(), cn = connFC();
   for (const id of ["stn-route", "stn-route-lbl"]) { const src = map.getSource(id); if (src) src.setData(fc); }
+  const cs = map.getSource("conn"); if (cs) cs.setData(cn);
 }
 async function loadRoute(o) {
   if (!STN_SHOT || !o || STN_ROUTE.has(o.id) || !window.MAPBOX_TOKEN || !window.fetch) return;
-  const r = nearestOpen(o);
+  const r = nearStn(o);
   if (r.none) return;
   STN_ROUTE.set(o.id, null);
   try {
@@ -1461,10 +1520,10 @@ function flyToOption(o, shot) {
   if (!map || !o) return;
   S.shot = shot || "close";
   const phone = innerWidth <= 860, z = SHOT_ZOOM[o.precision] || 15.2, pad = padding();
-  const stnNear = STN_SHOT && S.shot === "station" ? nearestOpen(o) : null;
-  if (stnNear && !stnNear.none) {
-    const w = Math.min(o.lng, stnNear.s.lng), e = Math.max(o.lng, stnNear.s.lng), sw = Math.min(o.lat, stnNear.s.lat), n = Math.max(o.lat, stnNear.s.lat);
-    map.fitBounds([[w, sw], [e, n]], { padding: pad, pitch: 0, bearing: 0, maxZoom: 17.4, duration: REDUCED() ? 0 : 1300 });
+  const view = STN_SHOT && S.shot === "station" ? stationView(o) : null;
+  if (view) {
+    const lngs = view.map(p => p.lng), lats = view.map(p => p.lat);
+    map.fitBounds([[Math.min(...lngs), Math.min(...lats)], [Math.max(...lngs), Math.max(...lats)]], { padding: pad, pitch: 0, bearing: 0, maxZoom: 17.4, duration: REDUCED() ? 0 : 1300 });
   } else if (S.shot === "area") {
     if (!S.layers.rings && cmsOn("layer:rings")) { S.layers.rings = true; renderLayers(); applyLayerVisibility(); }
     const f = isoFeature(isoOf(o), RINGS[RINGS.length - 1].min);
@@ -1506,7 +1565,7 @@ function flyToPlace(id) {
 }
 function select(id, fly, fromRoute) {
   if (document.body.classList.contains("fold-panel")) setFold("panel", false);
-  S.sel = id; S.hov = null; S.pair = null; if (fly) S.shot = STN_SHOT ? "station" : "close"; renderList(); renderPanel(); refreshMap();
+  S.sel = id; S.hov = null; S.pair = null; S.conn = null; if (fly) S.shot = STN_SHOT ? "station" : "close"; renderList(); renderPanel(); refreshMap();
   if (!fromRoute) pushRoute();
   if (innerWidth <= 860 && !fromRoute) setSheet("half");
   const card = document.querySelector(`.card[data-id="${id}"]`); if (card) card.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
@@ -2324,9 +2383,26 @@ function wirePanes() {
   });
 }
 
+/* How you get there: metro, railway and bus, nearest first. Each row opens
+   that connection on the map. */
+function connHTML(o) {
+  const c = connOf(o), rt = STN_ROUTE.get(o.id), by = (o.facts || []).find(x => x.k === "Railway by metro");
+  const row = (kind, x, extra) => `<button type="button" class="cn ${kind}${S.conn && S.conn.kind === kind && S.conn.name === x.s.name ? " on" : ""}" data-conn="${kind}|${esc(x.s.name)}"><span class="ck"></span><span class="cl"><b>${esc(x.s.name)}</b><i>${esc(extra)}</i></span><span class="cd">${fmtM(x.d)}</span></button>`;
+  const metro = c.metro.map((x, i) => row("metro", x, `${x.lines.join(" · ")} · ${i === 0 && rt && rt.m ? `walk ${fmtM(rt.m / 1000)}, ${Math.max(1, Math.round(rt.s / 60))} min, routed` : x.d < .03 ? "the pin marks the station address" : `about ${walkMin(x.d)} min walk, straight line`}`));
+  const rail = c.rail.map(x => row("rail", x, `${x.lines.join(" · ")} · straight line`));
+  const bus = c.bus.map(x => row("bus", x, `${walkMin(x.d)} min walk, straight line`));
+  const note = (t) => `<p class="note">${t}</p>`;
+  return `<h3>How you get there</h3><div class="conn">
+    ${metro.length ? `<div class="ch">Metro</div>${metro.join("")}` : ""}
+    ${rail.length ? `<div class="ch">Railway</div>${rail.join("")}${by ? `<p class="note">${esc(by.v)} ${cite(by.src)}</p>` : ""}` : ""}
+    ${bus.length ? `<div class="ch">Bus stops</div>${bus.join("")}<p class="note">${esc(BUSD.name || "Bus stops")}${BUSD.src ? ` ${cite(BUSD.src, "source")}` : ""}. ${esc(BUSD.note || "")}</p>` : ""}
+    <p class="note">Click a row to show it on the map. Distances are straight-line from the pin; the metro walk is a route where one loads.</p>
+  </div>`;
+}
+
 /* ---------- Option ---------- */
 function renderOption(o) {
-  const p = scoreParts(o), c = catchOf(o), r = nearestOpen(o), f = nearestPlan(o), w = W(), fit = fitOf(o);
+  const p = scoreParts(o), c = catchOf(o), r = nearStn(o), f = nearestPlan(o), w = W(), fit = fitOf(o);
   const rank = O.slice().sort(byFit).findIndex(x => x.id === o.id) + 1;
   const backTo = TABS.find(t => t.key === S.tab) || TABS[0];
   $("#p-head").innerHTML = `<button class="back" type="button">← Back to ${esc(backTo.label)}</button>
@@ -2369,6 +2445,7 @@ function renderOption(o) {
       ${f ? `<div class="kpi"><div class="l">${esc(say("option.future", "Being built"))}</div><div class="v">${fmtM(f.d)}</div><div class="s">${esc(f.s.name)}${f.s.lineName ? ` · ${esc(f.s.lineName)}` : ""}${f.s.target ? ` · ${esc(f.s.target)}` : ""} · indicative</div></div>` : ""}
     </div>
 
+    ${STN_SHOT ? connHTML(o) : ""}
     ${flagBox(o)}
     ${marketHTML(o)}
 

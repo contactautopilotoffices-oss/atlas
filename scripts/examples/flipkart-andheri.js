@@ -63,36 +63,42 @@ const D = [
 /* ---- research: pins and connectivity, each with its source -------------- */
 const R = {
   "723-avenue": {
+    l1: "Marol Naka",
     lat: 19.109713, lng: 72.884422, precision: "building", geoSrc: "https://dhcrealty.in/property/wadhwa-723-avenue/",
     geoNote: "Plus code 4V5M+VQM printed on the listing, decoded. Marol Co-operative Industrial Estate Road, off Andheri-Kurla Road.",
     address: "Wadhwa 723 Avenue, Marol Co-operative Industrial Estate Road, Sag Baug, Marol, Andheri East, Mumbai 400059",
     metro: "Marol Naka (Line 1 and Line 3)", walk: "about 1 km on the developer's figure (540 m in a straight line from the pin)",
     metroSrc: "https://houseofwadhwa.com/wp-content/uploads/2023/08/Wadhwa-723-Avenue-Project-Brochure-3.pdf", metroNote: "The developer's brochure: '1 km away from Marol Naka Metro Station'." },
   "corporate-avenue": {
+    l1: "Western Express Highway",
     lat: 19.110625, lng: 72.859637, precision: "complex", geoSrc: "https://exa.ai/library/place/3kk3s3wpqbl",
     geoNote: "Map place page; Wikimapia outlines 'Corporate Avenue (Atul Projects)' 55 m away. Sonawala Road, off Andheri-Kurla Road.",
     address: "Corporate Avenue, Sonawala Road, off Andheri-Kurla Road, Chakala, Andheri East, Mumbai",
     metro: "Western Express Highway and Gundavali", walk: "650 m, 9 min walk; Chakala (J B Nagar) 850 m",
     metroSrc: "https://myhq.in/dedicated/coworking-space/atul-corporate-avenue-chakala", metroNote: "myHQ lists Gundavali and WEH at 650 m (9 min) and Chakala J B Nagar at 850 m (11 min)." },
   "vaman-techno-centre": {
+    l1: "Marol Naka",
     lat: 19.111483, lng: 72.882235, precision: "building", geoSrc: "https://exa.ai/library/place/3vrh78m08q4",
     geoNote: "Map place page. Makwana Road, Marol. About 460 m from Marol Naka station in a straight line.",
     address: "Vaman Techno Centre, Makwana Road, Gamdevi, Marol, Andheri East, Mumbai 400059",
     metro: "Marol Naka (Line 1 and Line 3)", walk: "about 7 min walk",
     metroSrc: "https://www.office-hub.com/in/properties/makwana-rd-marol-circle-near-web-techneeq-gamdevi-marol-andheri-east-mumbai-maharashtra-a0vQg000004wOE9IAM", metroNote: "Office Hub, for the Awfis centre in this building: Marol Naka metro, 7 minute walk. Awfis's own page says 0.30 km." },
   "privilon": {
+    l1: "Marol Naka",
     lat: 19.108207, lng: 72.879563, precision: "approx", geoSrc: "https://exa.ai/library/place/s8x6jf6zts0",
     geoNote: "The place page pin sits within 10 m of the Marol Naka station coordinate, so it marks the address, not a footprint. The developer says 'right next to Marol Metro Station'.",
     address: "Privilon, Metro Station Marol Naka, Gamdevi, Marol, Andheri East, Mumbai 400059",
     metro: "Marol Naka (Line 1 and Line 3)", walk: "right next to the station",
     metroSrc: "https://bsafal.com/mumbai/", metroNote: "The developer: 'right next to Marol Metro Station'. OpenStreetMap puts Line 1 at about 0 m and Line 3 at about 100 m (mumbaipropertyexchange.com)." },
   "landmark": {
+    l1: "Western Express Highway",
     lat: 19.116739, lng: 72.855679, precision: "building", geoSrc: "https://exa.ai/library/place/g4bgsvhmz93",
     geoNote: "Map place page for Landmark, Suren Road, Gundavali, at the junction of the Western Express Highway and Andheri-Kurla Road.",
     address: "Landmark, Suren Road, Gundavali, Andheri East, Mumbai 400093",
     metro: "Western Express Highway (Line 1 and Line 7)", walk: "about 200 m",
     metroSrc: "https://property.jll.co.in/listings/landmark-wing-a-suren-road-gundavali", metroNote: "JLL: 'just 200 metres from the Western Express Highway metro station'." },
   "rustomjee-central-park": {
+    l1: "Western Express Highway",
     lat: 19.114042, lng: 72.860671, precision: "building", geoSrc: "https://exa.ai/library/place/83qqct91nth",
     geoNote: "Map place page; not the OSM 'Rustomjee' pin at 19.11642, 72.85428. Andheri-Kurla Road at the Chakala signal.",
     address: "Rustomjee Central Park, Andheri-Kurla Road, Chakala, Andheri East, Mumbai 400093",
@@ -105,6 +111,41 @@ const R = {
     metro: "Sahar Road (Line 3)", walk: "about 690 m, measured from the Hyatt Regency next door",
     metroSrc: "https://moovitapp.com/index/en/public_transit-Hyatt_Regency_Mumbai-Mumbai-site_36354746-3732", metroNote: "Moovit: Sahar Road station is 687 m and a 9 min walk from the Hyatt Regency. Line 3 only, so a 3rd hop for Central Line riders." },
 };
+
+/* ---- distances, bus stops and the railway ------------------------------ */
+const kmBetween = (a, b) => {
+  const t = Math.PI / 180, dLat = (b.lat - a.lat) * t, dLng = (b.lng - a.lng) * t;
+  const x = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * t) * Math.cos(b.lat * t) * Math.sin(dLng / 2) ** 2;
+  return 2 * 6371 * Math.asin(Math.sqrt(x));
+};
+const titleCase = (n) => n.toLowerCase().replace(/(^|[\s./(-])([a-z])/g, (m, a, b) => a + b.toUpperCase()).replace(/\b(Stn|Rly)\./g, (m, w) => w + ".");
+const BEST = JSON.parse(fs.readFileSync(path.join(__dirname, "data", "best-bus-stops-andheri-east.json"), "utf8"));
+const NEAR_BUS_KM = 0.9;
+const busStops = BEST.stops
+  .filter(b => D.some(o => kmBetween(R[o.id], b) <= NEAR_BUS_KM))
+  .map(b => ({ id: "best-" + b.id, name: titleCase(b.name), lat: b.lat, lng: b.lng }));
+
+/* Metro Line 1 chainage (km from Versova) and station order, from the line's
+   Wikipedia page. Andheri and Ghatkopar are the interchanges with the suburban
+   railway: Andheri with the Western and Harbour lines, Ghatkopar with the
+   Central line. */
+const L1 = [["Andheri", 3.111], ["Western Express Highway", 4.118], ["Chakala (J B Nagar)", 5.382], ["Airport Road", 6.107], ["Marol Naka", 6.705],
+  ["Saki Naka", 7.780], ["Asalpha", 8.903], ["Jagruti Nagar", 9.765], ["Ghatkopar", 10.821]];
+const L1_SRC = "https://en.wikipedia.org/wiki/Line_1_(Mumbai_Metro)";
+const l1Stops = (a, b) => Math.abs(L1.findIndex(x => x[0] === a) - L1.findIndex(x => x[0] === b));
+const l1Km = (a, b) => Math.abs(L1.find(x => x[0] === a)[1] - L1.find(x => x[0] === b)[1]);
+const plural = (n, w) => `${n} ${w}${n === 1 ? "" : "s"}`;
+/* "Railway by metro": from the property's own Line 1 station to the two
+   interchanges. Fulcrum is on Line 3, which meets Line 1 at Marol Naka. */
+function railByMetro(id) {
+  const st = R[id].l1;
+  if (st) {
+    const a = `Andheri (Western and Harbour lines): ${l1Km(st, "Andheri").toFixed(1)} km, ${plural(l1Stops(st, "Andheri"), "stop")}`;
+    const g = `Ghatkopar (Central line): ${l1Km(st, "Ghatkopar").toFixed(1)} km, ${plural(l1Stops(st, "Ghatkopar"), "stop")}`;
+    return { v: `From ${st} on Line 1: ${a}; ${g}. Both are metro and railway interchanges.`, src: L1_SRC };
+  }
+  return { v: "From Sahar Road on Line 3, change to Line 1 at Marol Naka (2 stops). From there Andheri (Western and Harbour lines) is 4 stops and Ghatkopar (Central line) 4 stops on Line 1.", src: L1_SRC };
+}
 
 /* ---- the card's one line: the deck's own words ------------------------- */
 const reason = (o) => [o.priority, `Floor ${o.floor}`, o.furnishing, `Carpet area ${o.carpet.toLocaleString("en-US")} sq. ft.`, `Possession: ${o.possession}`, `Per seat: ${o.perSeat}`].filter(Boolean).join(" · ");
@@ -125,6 +166,7 @@ const options = D.map((o, i) => {
     facts: [
       ...spec.map(([k, v]) => ({ k, v, conf: "high" })),
       { k: "Nearest metro", v: `${r.metro}, ${r.walk}`, src: r.metroSrc, conf: "medium", note: r.metroNote },
+      { k: "Railway by metro", v: railByMetro(o.id).v, src: railByMetro(o.id).src, conf: "medium" },
     ],
   };
 });
@@ -150,6 +192,20 @@ const transit = {
         { name: "Marol Naka", lat: 19.108195, lng: 72.879536, open: true },
         { name: "Sahar Road", lat: 19.102196, lng: 72.865236, open: true },
       ] },
+    { key: "western", name: "Western and Harbour lines (suburban railway)", short: "Western line", mode: "suburban", color: "#b3402f", status: "open", src: WIKI("Andheri_railway_station"),
+      note: "Andheri is the interchange with Metro Line 1. Harbour line trains also stop at these stations.",
+      stations: [
+        { name: "Jogeshwari", lat: 19.1365, lng: 72.849, open: true },
+        { name: "Andheri", lat: 19.119167, lng: 72.846944, open: true },
+        { name: "Vile Parle", lat: 19.099532, lng: 72.843964, open: true },
+      ] },
+    { key: "central", name: "Central line (suburban railway)", short: "Central line", mode: "suburban", color: "#7a4aa3", status: "open", src: WIKI("Kurla_railway_station"),
+      note: "Ghatkopar is the interchange with Metro Line 1. Kurla is also on the Harbour line.",
+      stations: [
+        { name: "Kurla", lat: 19.0656, lng: 72.8791, open: true },
+        { name: "Vidyavihar", lat: 19.07944, lng: 72.89722, open: true },
+        { name: "Ghatkopar", lat: 19.0857, lng: 72.9081, open: true },
+      ] },
   ],
 };
 
@@ -171,6 +227,11 @@ const bundle = {
     sheet: `${DECK}. Positions and connectivity researched Nov 2026; each carries its source.`,
   },
   options, zones, transit,
+  bus: {
+    name: "BEST", credit: "BEST, from the ChaloBEST GTFS feed", src: BEST.source,
+    note: "Stop positions only, within 900 m of a building. The feed predates today's route numbers, so no routes are shown; confirm a stop's name on site.",
+    stops: busStops,
+  },
   copy: {
     overview: { eyebrow: "Autopilot · Andheri East · Nov 2026", title: "Flipkart office inventory, Andheri East",
       intro: "{optionCount} buildings from Autopilot's inventory deck, with the metro around them.", ranking: "The list" },

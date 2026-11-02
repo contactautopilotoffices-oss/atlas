@@ -114,6 +114,12 @@
      "src": "https://houseofwadhwa.com/wp-content/uploads/2023/08/Wadhwa-723-Avenue-Project-Brochure-3.pdf",
      "conf": "medium",
      "note": "The developer's brochure: '1 km away from Marol Naka Metro Station'."
+    },
+    {
+     "k": "Railway by metro",
+     "v": "From Marol Naka on Line 1: Andheri (Western and Harbour lines): 3.6 km, 4 stops; Ghatkopar (Central line): 4.1 km, 4 stops. Both are metro and railway interchanges.",
+     "src": "https://en.wikipedia.org/wiki/Line_1_(Mumbai_Metro)",
+     "conf": "medium"
     }
    ]
   },
@@ -217,6 +223,12 @@
      "src": "https://myhq.in/dedicated/coworking-space/atul-corporate-avenue-chakala",
      "conf": "medium",
      "note": "myHQ lists Gundavali and WEH at 650 m (9 min) and Chakala J B Nagar at 850 m (11 min)."
+    },
+    {
+     "k": "Railway by metro",
+     "v": "From Western Express Highway on Line 1: Andheri (Western and Harbour lines): 1.0 km, 1 stop; Ghatkopar (Central line): 6.7 km, 7 stops. Both are metro and railway interchanges.",
+     "src": "https://en.wikipedia.org/wiki/Line_1_(Mumbai_Metro)",
+     "conf": "medium"
     }
    ]
   },
@@ -325,6 +337,12 @@
      "src": "https://www.office-hub.com/in/properties/makwana-rd-marol-circle-near-web-techneeq-gamdevi-marol-andheri-east-mumbai-maharashtra-a0vQg000004wOE9IAM",
      "conf": "medium",
      "note": "Office Hub, for the Awfis centre in this building: Marol Naka metro, 7 minute walk. Awfis's own page says 0.30 km."
+    },
+    {
+     "k": "Railway by metro",
+     "v": "From Marol Naka on Line 1: Andheri (Western and Harbour lines): 3.6 km, 4 stops; Ghatkopar (Central line): 4.1 km, 4 stops. Both are metro and railway interchanges.",
+     "src": "https://en.wikipedia.org/wiki/Line_1_(Mumbai_Metro)",
+     "conf": "medium"
     }
    ]
   },
@@ -433,6 +451,12 @@
      "src": "https://bsafal.com/mumbai/",
      "conf": "medium",
      "note": "The developer: 'right next to Marol Metro Station'. OpenStreetMap puts Line 1 at about 0 m and Line 3 at about 100 m (mumbaipropertyexchange.com)."
+    },
+    {
+     "k": "Railway by metro",
+     "v": "From Marol Naka on Line 1: Andheri (Western and Harbour lines): 3.6 km, 4 stops; Ghatkopar (Central line): 4.1 km, 4 stops. Both are metro and railway interchanges.",
+     "src": "https://en.wikipedia.org/wiki/Line_1_(Mumbai_Metro)",
+     "conf": "medium"
     }
    ]
   },
@@ -536,6 +560,12 @@
      "src": "https://property.jll.co.in/listings/landmark-wing-a-suren-road-gundavali",
      "conf": "medium",
      "note": "JLL: 'just 200 metres from the Western Express Highway metro station'."
+    },
+    {
+     "k": "Railway by metro",
+     "v": "From Western Express Highway on Line 1: Andheri (Western and Harbour lines): 1.0 km, 1 stop; Ghatkopar (Central line): 6.7 km, 7 stops. Both are metro and railway interchanges.",
+     "src": "https://en.wikipedia.org/wiki/Line_1_(Mumbai_Metro)",
+     "conf": "medium"
     }
    ]
   },
@@ -639,6 +669,12 @@
      "src": "https://rustomjeeltd.net/central-park-business-spaces/",
      "conf": "medium",
      "note": "The developer: 'The nearest metro stop, Western Express Highway, is a 3 min walk away'; Chakala Metro Station 0.7 km."
+    },
+    {
+     "k": "Railway by metro",
+     "v": "From Western Express Highway on Line 1: Andheri (Western and Harbour lines): 1.0 km, 1 stop; Ghatkopar (Central line): 6.7 km, 7 stops. Both are metro and railway interchanges.",
+     "src": "https://en.wikipedia.org/wiki/Line_1_(Mumbai_Metro)",
+     "conf": "medium"
     }
    ]
   },
@@ -742,6 +778,12 @@
      "src": "https://moovitapp.com/index/en/public_transit-Hyatt_Regency_Mumbai-Mumbai-site_36354746-3732",
      "conf": "medium",
      "note": "Moovit: Sahar Road station is 687 m and a 9 min walk from the Hyatt Regency. Line 3 only, so a 3rd hop for Central Line riders."
+    },
+    {
+     "k": "Railway by metro",
+     "v": "From Sahar Road on Line 3, change to Line 1 at Marol Naka (2 stops). From there Andheri (Western and Harbour lines) is 4 stops and Ghatkopar (Central line) 4 stops on Line 1.",
+     "src": "https://en.wikipedia.org/wiki/Line_1_(Mumbai_Metro)",
+     "conf": "medium"
     }
    ]
   }
@@ -858,6 +900,578 @@
       "open": true
      }
     ]
+   },
+   {
+    "key": "western",
+    "name": "Western and Harbour lines (suburban railway)",
+    "short": "Western line",
+    "mode": "suburban",
+    "color": "#b3402f",
+    "status": "open",
+    "src": "https://en.wikipedia.org/wiki/Andheri_railway_station",
+    "note": "Andheri is the interchange with Metro Line 1. Harbour line trains also stop at these stations.",
+    "stations": [
+     {
+      "name": "Jogeshwari",
+      "lat": 19.1365,
+      "lng": 72.849,
+      "open": true
+     },
+     {
+      "name": "Andheri",
+      "lat": 19.119167,
+      "lng": 72.846944,
+      "open": true
+     },
+     {
+      "name": "Vile Parle",
+      "lat": 19.099532,
+      "lng": 72.843964,
+      "open": true
+     }
+    ]
+   },
+   {
+    "key": "central",
+    "name": "Central line (suburban railway)",
+    "short": "Central line",
+    "mode": "suburban",
+    "color": "#7a4aa3",
+    "status": "open",
+    "src": "https://en.wikipedia.org/wiki/Kurla_railway_station",
+    "note": "Ghatkopar is the interchange with Metro Line 1. Kurla is also on the Harbour line.",
+    "stations": [
+     {
+      "name": "Kurla",
+      "lat": 19.0656,
+      "lng": 72.8791,
+      "open": true
+     },
+     {
+      "name": "Vidyavihar",
+      "lat": 19.07944,
+      "lng": 72.89722,
+      "open": true
+     },
+     {
+      "name": "Ghatkopar",
+      "lat": 19.0857,
+      "lng": 72.9081,
+      "open": true
+     }
+    ]
+   }
+  ]
+ },
+ "bus": {
+  "name": "BEST",
+  "credit": "BEST, from the ChaloBEST GTFS feed",
+  "src": "https://github.com/chalobest/ChaloBEST/blob/master/chaloBEST/gtfs/gtfs_mumbai_bus/stops.txt",
+  "note": "Stop positions only, within 900 m of a building. The feed predates today's route numbers, so no routes are shown; confirm a stop's name on site.",
+  "stops": [
+   {
+    "id": "best-73",
+    "name": "Garware Chk./ Koldongri No.2",
+    "lat": 19.110046,
+    "lng": 72.851766
+   },
+   {
+    "id": "best-74",
+    "name": "Shivaji Chk.",
+    "lat": 19.111389,
+    "lng": 72.850003
+   },
+   {
+    "id": "best-75",
+    "name": "Vijay Ngr.Scty.",
+    "lat": 19.115241,
+    "lng": 72.847364
+   },
+   {
+    "id": "best-76",
+    "name": "Agarkar Chk.",
+    "lat": 19.119823,
+    "lng": 72.848759
+   },
+   {
+    "id": "best-359",
+    "name": "Marol Maroshi Bus Stn.",
+    "lat": 19.119048,
+    "lng": 72.880271
+   },
+   {
+    "id": "best-363",
+    "name": "Dr.Datta Samant Chk./Saki Naka",
+    "lat": 19.104139,
+    "lng": 72.886772
+   },
+   {
+    "id": "best-364",
+    "name": "Mittal Est.",
+    "lat": 19.106957,
+    "lng": 72.884068
+   },
+   {
+    "id": "best-365",
+    "name": "Marolnaka/Mata Ramabai Ambedkar Chk",
+    "lat": 19.10846,
+    "lng": 72.878698
+   },
+   {
+    "id": "best-366",
+    "name": "Marol Village",
+    "lat": 19.112249,
+    "lng": 72.878983
+   },
+   {
+    "id": "best-367",
+    "name": "Borosil Glass Factory",
+    "lat": 19.11772,
+    "lng": 72.884604
+   },
+   {
+    "id": "best-369",
+    "name": "State Bank",
+    "lat": 19.106438,
+    "lng": 72.88833
+   },
+   {
+    "id": "best-370",
+    "name": "Chandivli Jn.",
+    "lat": 19.111887,
+    "lng": 72.888406
+   },
+   {
+    "id": "best-580",
+    "name": "Parsiwada",
+    "lat": 19.108839,
+    "lng": 72.855669
+   },
+   {
+    "id": "best-581",
+    "name": "Chakala Cigarette Factory",
+    "lat": 19.107379,
+    "lng": 72.859102
+   },
+   {
+    "id": "best-582",
+    "name": "Sahar P.& T.Cly.No 1",
+    "lat": 19.105189,
+    "lng": 72.86099
+   },
+   {
+    "id": "best-585",
+    "name": "Warehouse",
+    "lat": 19.10105,
+    "lng": 72.864249
+   },
+   {
+    "id": "best-587",
+    "name": "Sahar Police Stn.",
+    "lat": 19.103219,
+    "lng": 72.873594
+   },
+   {
+    "id": "best-588",
+    "name": "Chh. Shivaji Int.Airport(Sahara)",
+    "lat": 19.095879,
+    "lng": 72.873208
+   },
+   {
+    "id": "best-624",
+    "name": "Vishal Hall/Prakash Studio",
+    "lat": 19.1188,
+    "lng": 72.851361
+   },
+   {
+    "id": "best-625",
+    "name": "Natraj Studio",
+    "lat": 19.117714,
+    "lng": 72.853158
+   },
+   {
+    "id": "best-627",
+    "name": "Chakala",
+    "lat": 19.116164,
+    "lng": 72.855781
+   },
+   {
+    "id": "best-628",
+    "name": "Nelco",
+    "lat": 19.116072,
+    "lng": 72.861784
+   },
+   {
+    "id": "best-629",
+    "name": "Marol Depot",
+    "lat": 19.117998,
+    "lng": 72.86556
+   },
+   {
+    "id": "best-630",
+    "name": "E.S.I.S Hosp./Midc Police Stn.",
+    "lat": 19.117876,
+    "lng": 72.86804
+   },
+   {
+    "id": "best-635",
+    "name": "Bahar Cinema",
+    "lat": 19.108985,
+    "lng": 72.853452
+   },
+   {
+    "id": "best-636",
+    "name": "Darpan Cinema/ Sai Service",
+    "lat": 19.113866,
+    "lng": 72.85464
+   },
+   {
+    "id": "best-995",
+    "name": "Gundavli/Lion's Club",
+    "lat": 19.11604,
+    "lng": 72.855083
+   },
+   {
+    "id": "best-1164",
+    "name": "Jumbo Darshan",
+    "lat": 19.113647,
+    "lng": 72.853181
+   },
+   {
+    "id": "best-1165",
+    "name": "Divine Child Highschool",
+    "lat": 19.11245,
+    "lng": 72.865891
+   },
+   {
+    "id": "best-1166",
+    "name": "J.B.Ngr.",
+    "lat": 19.111622,
+    "lng": 72.868742
+   },
+   {
+    "id": "best-1168",
+    "name": "John Backer",
+    "lat": 19.113772,
+    "lng": 72.888569
+   },
+   {
+    "id": "best-1170",
+    "name": "Marol Lions Club",
+    "lat": 19.109717,
+    "lng": 72.87578
+   },
+   {
+    "id": "best-1184",
+    "name": "Chinai College",
+    "lat": 19.122206,
+    "lng": 72.850889
+   },
+   {
+    "id": "best-1378",
+    "name": "Gokhale Bridge",
+    "lat": 19.115249,
+    "lng": 72.848375
+   },
+   {
+    "id": "best-1382",
+    "name": "Tata Unisys",
+    "lat": 19.115037,
+    "lng": 72.868105
+   },
+   {
+    "id": "best-1636",
+    "name": "Teli Gully",
+    "lat": 19.115594,
+    "lng": 72.84946
+   },
+   {
+    "id": "best-1681",
+    "name": "Kamani Oil Industries",
+    "lat": 19.113144,
+    "lng": 72.890252
+   },
+   {
+    "id": "best-1686",
+    "name": "Sahar Cargo Complex",
+    "lat": 19.09667,
+    "lng": 72.865494
+   },
+   {
+    "id": "best-1687",
+    "name": "Sahar Air India Hotel",
+    "lat": 19.103138,
+    "lng": 72.870333
+   },
+   {
+    "id": "best-1691",
+    "name": "Teli Gully",
+    "lat": 19.115808,
+    "lng": 72.850488
+   },
+   {
+    "id": "best-1692",
+    "name": "Vishal Hall/Jumbo Darshan",
+    "lat": 19.119092,
+    "lng": 72.850745
+   },
+   {
+    "id": "best-1693",
+    "name": "Jumbo Darshan",
+    "lat": 19.113375,
+    "lng": 72.854479
+   },
+   {
+    "id": "best-1697",
+    "name": "St.Anthony Church",
+    "lat": 19.106149,
+    "lng": 72.889329
+   },
+   {
+    "id": "best-1698",
+    "name": "Lucky Hotel",
+    "lat": 19.106818,
+    "lng": 72.891775
+   },
+   {
+    "id": "best-1701",
+    "name": "Natraj Studio",
+    "lat": 19.117382,
+    "lng": 72.853445
+   },
+   {
+    "id": "best-1703",
+    "name": "New Qtrs( Chakala Cigarette Factory",
+    "lat": 19.107739,
+    "lng": 72.85926
+   },
+   {
+    "id": "best-1705",
+    "name": "Baman Pada",
+    "lat": 19.108287,
+    "lng": 72.858938
+   },
+   {
+    "id": "best-1709",
+    "name": "Tarun Bharat Scty.",
+    "lat": 19.107841,
+    "lng": 72.861707
+   },
+   {
+    "id": "best-1710",
+    "name": "Bahar Cinema",
+    "lat": 19.109689,
+    "lng": 72.853997
+   },
+   {
+    "id": "best-1937",
+    "name": "Ashok Ngr.",
+    "lat": 19.117122,
+    "lng": 72.883016
+   },
+   {
+    "id": "best-2115",
+    "name": "Ambassador Hotel",
+    "lat": 19.106382,
+    "lng": 72.874882
+   },
+   {
+    "id": "best-2117",
+    "name": "R.B.I.Cly.",
+    "lat": 19.11162,
+    "lng": 72.861132
+   },
+   {
+    "id": "best-2118",
+    "name": "Charatsingh Cly.",
+    "lat": 19.110829,
+    "lng": 72.861414
+   },
+   {
+    "id": "best-2154",
+    "name": "New Hindustan Dorr",
+    "lat": 19.112837,
+    "lng": 72.85727
+   },
+   {
+    "id": "best-2313",
+    "name": "Vaibhav Asavari Soc.(Ware House)",
+    "lat": 19.104151,
+    "lng": 72.866943
+   },
+   {
+    "id": "best-2314",
+    "name": "Jain Mandir (Om Ngr.)",
+    "lat": 19.10699,
+    "lng": 72.867115
+   },
+   {
+    "id": "best-2315",
+    "name": "Kranti Ngr.",
+    "lat": 19.108328,
+    "lng": 72.865141
+   },
+   {
+    "id": "best-2711",
+    "name": "Darpan Cinema/ Sai Service",
+    "lat": 19.115553,
+    "lng": 72.855069
+   },
+   {
+    "id": "best-2712",
+    "name": "Bahar Cinema",
+    "lat": 19.109519,
+    "lng": 72.853869
+   },
+   {
+    "id": "best-2713",
+    "name": "New Hindustan Dorr",
+    "lat": 19.112269,
+    "lng": 72.856755
+   },
+   {
+    "id": "best-2788",
+    "name": "Bela Nivas",
+    "lat": 19.114664,
+    "lng": 72.860803
+   },
+   {
+    "id": "best-2789",
+    "name": "Bela Nivas",
+    "lat": 19.114072,
+    "lng": 72.862007
+   },
+   {
+    "id": "best-2807",
+    "name": "Bela Nivas",
+    "lat": 19.113559,
+    "lng": 72.863062
+   },
+   {
+    "id": "best-2844",
+    "name": "Darpan Cinema/ Sai Service",
+    "lat": 19.113171,
+    "lng": 72.854799
+   },
+   {
+    "id": "best-2899",
+    "name": "Allahabad Bank",
+    "lat": 19.112471,
+    "lng": 72.853166
+   },
+   {
+    "id": "best-3045",
+    "name": "Marolnaka/Mata Ramabai Ambedkar Chk",
+    "lat": 19.108904,
+    "lng": 72.878682
+   },
+   {
+    "id": "best-3046",
+    "name": "Marolnaka/Mata Ramabai Ambedkar Chk",
+    "lat": 19.108377,
+    "lng": 72.878725
+   },
+   {
+    "id": "best-3049",
+    "name": "Dr.Datta Samant Chk./Saki Naka",
+    "lat": 19.103788,
+    "lng": 72.886461
+   },
+   {
+    "id": "best-3069",
+    "name": "Chakala",
+    "lat": 19.114418,
+    "lng": 72.859307
+   },
+   {
+    "id": "best-3070",
+    "name": "Chakala",
+    "lat": 19.114844,
+    "lng": 72.859554
+   },
+   {
+    "id": "best-3113",
+    "name": "Chakala (Satamwadi)",
+    "lat": 19.111944,
+    "lng": 72.858664
+   },
+   {
+    "id": "best-3301",
+    "name": "Ekta Scty.",
+    "lat": 19.108369,
+    "lng": 72.875783
+   },
+   {
+    "id": "best-3304",
+    "name": "Blossom Co.",
+    "lat": 19.117,
+    "lng": 72.880849
+   },
+   {
+    "id": "best-3314",
+    "name": "Chakala",
+    "lat": 19.11476,
+    "lng": 72.860026
+   },
+   {
+    "id": "best-3315",
+    "name": "Chakala",
+    "lat": 19.114354,
+    "lng": 72.859275
+   },
+   {
+    "id": "best-3367",
+    "name": "Maharashtra Kata",
+    "lat": 19.102996,
+    "lng": 72.888395
+   },
+   {
+    "id": "best-3397",
+    "name": "State Bank",
+    "lat": 19.116428,
+    "lng": 72.880006
+   },
+   {
+    "id": "best-3742",
+    "name": "Chakala",
+    "lat": 19.115268,
+    "lng": 72.860483
+   },
+   {
+    "id": "best-3851",
+    "name": "Chakala (Satamwadi)",
+    "lat": 19.111843,
+    "lng": 72.858803
+   },
+   {
+    "id": "best-4015",
+    "name": "Marva Indl.Est.",
+    "lat": 19.114012,
+    "lng": 72.887441
+   },
+   {
+    "id": "best-4016",
+    "name": "Tata Power Centre",
+    "lat": 19.116607,
+    "lng": 72.886969
+   },
+   {
+    "id": "best-4017",
+    "name": "Kalyan Ngr.",
+    "lat": 19.118087,
+    "lng": 72.886625
+   },
+   {
+    "id": "best-4149",
+    "name": "L & T Gate No.6",
+    "lat": 19.115278,
+    "lng": 72.888845
+   },
+   {
+    "id": "best-2312",
+    "name": "Om Ngr.(Ware House)",
+    "lat": 19.103049,
+    "lng": 72.866308
    }
   ]
  },
