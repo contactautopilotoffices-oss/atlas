@@ -52,7 +52,8 @@ def labels(im, pos, scale=1.0):
     f, fn = font(FONT, int(26 * scale)), font(MONO, int(20 * scale))
     placed = []
     for oid, (x, y, z) in sorted(pos.items(), key=lambda kv: kv[1][1]):
-        if z <= 0 or not (0 < x < 1 and 0 < y < 1): continue
+        if z <= 0 or not (0 < x < 1) or y > 1: continue
+        y = max(y, 0.16)   # a roof above the frame: label it at the top edge
         n, name = NAMES[oid]; px, py = x * W, y * H
         ly = py - 70 * scale
         for (qx, qy) in placed:

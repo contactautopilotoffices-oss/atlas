@@ -1,7 +1,7 @@
 """Andheri East 3D world: build the scene in Blender, export it for the web,
 and render stills.
 
-  python scripts/world/build.py SCENE.json OUT_DIR [--glb] [--render NAME ...] [--fast]
+  python scripts/world/build.py SCENE.json OUT_DIR [--glb] [--render NAME ...] [--fast] [--labels-only]
 
 Runs headless with Blender as a Python module (pip install bpy==5.2.3), the
 "Blender writes the geometry, three.js shows it" pipeline of the 3ditions kits
@@ -427,7 +427,8 @@ def render(name):
     sc.view_settings.exposure = -0.55 if mood == "day" else 0.2 if mood == "dusk" else 0.6
     sc.render.image_settings.file_format = "PNG"
     sc.render.filepath = os.path.join(OUT, f"{name_out}.png")
-    bpy.ops.render.render(write_still=True)
+    if "--labels-only" not in args: bpy.ops.render.render(write_still=True)
+    bpy.context.view_layer.update()   # the camera's matrix, when nothing was rendered
     # where the options fell in the frame, for labels
     from bpy_extras.object_utils import world_to_camera_view
     import mathutils
@@ -435,7 +436,10 @@ def render(name):
     for o in S["options"]:
         b = next(x for x in S["buildings"] if x.get("opt") == o["id"]) if any(x.get("opt") == o["id"] for x in S["buildings"]) else None
         h = b["h"] if b else 40
-        v = world_to_camera_view(sc, cam, mathutils.Vector((o["x"], o["y"], h)))
+        # label the building itself: its footprint centre, not the pin (a pin
+        # can mark an address on the next-door station)
+        cx, cy = (sum(p[0] for p in b["p"]) / len(b["p"]), sum(p[1] for p in b["p"]) / len(b["p"])) if b else (o["x"], o["y"])
+        v = world_to_camera_view(sc, cam, mathutils.Vector((cx, cy, h)))
         pos[o["id"]] = [round(v.x, 4), round(1 - v.y, 4), round(v.z, 1)]
     json.dump(pos, open(os.path.join(OUT, f"{name_out}.labels.json"), "w"))
     print("rendered", name)
