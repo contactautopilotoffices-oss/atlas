@@ -124,9 +124,19 @@
       return;
     }
     if (!slug) {
-      /* No atlas named: the static demo bundle. A missing file is a blank
-         page with a reason, not a broken one. */
-      script("/engine/bundle.js?v=eng1").then(resolve, function () { message("No atlas was named. Open it at /<atlas id>, or sign in at the site root."); });
+      /* No atlas named: the static demo bundle, which opens straight to the
+         map with no access ID or password. The sign-in screen is hidden
+         before the page paints, so it never shows while the CMS and the
+         engine load; it comes back only if the bundle carries its own gate
+         hash. A missing file is a blank page with a reason, not a broken one. */
+      var noGate = document.createElement("style");
+      noGate.textContent = "#gate{display:none!important}";
+      document.head.appendChild(noGate);
+      var showGate = function () { if (noGate.parentNode) noGate.parentNode.removeChild(noGate); };
+      script("/engine/bundle.js?v=eng2").then(function () {
+        if (window.ATLAS && window.ATLAS.gate && window.ATLAS.gate.hash) showGate();
+        resolve();
+      }, function () { showGate(); message("No atlas was named. Open it at /<atlas id>, or sign in at the site root."); });
       return;
     }
     fetchBundle().then(function (r) { settle(r, resolve); }).catch(function () { message("Could not reach the server."); });

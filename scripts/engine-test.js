@@ -84,9 +84,9 @@ async function cases() {
      fills one, read into a bundle, and rendered. If this passes, the team
      can make an Atlas without a developer. */
   const { bundle: fromWorkbook } = await readWorkbook(await fillSampleWorkbook());
-  /* A committed, real workbook: the Andheri East coworking competitors
+  /* A committed, real bundle: the Andheri East coworking competitors
      (scripts/examples/andheri-coworking.js). Keeps the example honest. */
-  const { bundle: andheriCoworking } = await readWorkbook(path.join(ROOT, "examples", "andheri-coworking.xlsx"));
+  const andheriCoworking = JSON.parse(fs.readFileSync(path.join(ROOT, "examples", "andheri-coworking.bundle.json"), "utf8"));
 
   /* The two other layouts. A place: one site, competitors with operators,
      an employer, a deal, the market's facts and a metro line. */
