@@ -158,8 +158,18 @@ const METRO_LINES = { "Marol Naka": ["L1", "L3"] };
 const metroLines = (name) => METRO_LINES[name] || [name === "Sahar Road" || name === "MIDC Andheri" || name === "SEEPZ" ? "L3" : "L1"];
 const RAIL_LINE = { "Jogeshwari": "western", "Andheri": "western", "Vile Parle": "western", "Kurla": "central", "Vidyavihar": "central", "Ghatkopar": "central" };
 const fmtRoad = (m) => m < 1000 ? `${Math.round(m / 10) * 10} m` : `${(m / 1000).toFixed(1)} km`;
+/* Every route runs from the building to the station or stop itself: the
+   router starts and ends on the nearest street, so the stretch from the
+   building out to that street, and from the street to the station, is added
+   to the path and to the distance (walk time scales with it). */
 function routesFor(id, linesOf) {
-  const mine = ROUTES.routes.filter(r => r.option === id).sort((a, b) => a.m - b.m);
+  const pin = { lat: R[id].lat, lng: R[id].lng };
+  const mine = ROUTES.routes.filter(r => r.option === id).map(r => {
+    const p0 = r.path[0], p1 = r.path[r.path.length - 1], to = { lng: r.to[0], lat: r.to[1] };
+    const lead = kmBetween(pin, { lng: p0[0], lat: p0[1] }) * 1000, tail = kmBetween({ lng: p1[0], lat: p1[1] }, to) * 1000;
+    const m = Math.round(r.m + lead + tail), sec = r.m > 0 ? r.sec * m / r.m : m / 1.3;
+    return { ...r, m, sec, path: [[pin.lng, pin.lat], ...r.path, [to.lng, to.lat]] };
+  }).sort((a, b) => a.m - b.m);
   const pick = (kind, n, keyOf = (r) => r.name) => { const seen = new Set(); return mine.filter(r => r.kind === kind && !seen.has(keyOf(r)) && seen.add(keyOf(r))).slice(0, n); };
   return [...pick("metro", 2), ...pick("rail", 2, r => RAIL_LINE[r.name]), ...pick("bus", 3)].map(r => ({
     kind: r.kind, name: r.name, lines: linesOf(r), lat: r.to[1], lng: r.to[0], m: r.m,
