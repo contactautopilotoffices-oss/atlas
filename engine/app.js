@@ -2507,9 +2507,10 @@ function renderOption(o) {
     <div class="bars">${PARTS.filter(x => measureApplies(x, o)).map(x => `<div class="bar" title="${esc(x.of || "")}"><span>${esc(x.label)}</span><div class="tr"><div class="fl" style="width:${Math.round(p[x.key] * 100)}%"></div></div><span class="val">${w[x.key] ? `${(p[x.key] * 100).toFixed(0)} · ×${w[x.key]}` : "skipped"}</span></div>`).join("")}</div>
     <p class="note">${esc(say("option.barNote", "Each bar is the measure out of 100; ×n is the weight from Your priorities."))}</p>` : ""}
 
-    ${others.length ? `<h3>Nearest other ${NOUN[1]}</h3>` : ""}
-    <div class="nb">${others.slice(0, 3).map(({ x, d }) => `<div class="r"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${optLink(x)}</span><div class="tr"><div class="fl" style="width:${Math.max(3, Math.round(d / nbMax * 100))}%"></div></div><span class="v">${fmtKm(d)} · ${driveMin(d)}′</span></div>`).join("")}</div>
-    <p class="note">Turn on Distances in the map bar to draw them. Micro-market rent, vacancy and supply are on <a href="#" data-tab="markets">Micro-markets</a>${o.geoSrc ? `; the pin's source is ${cite(o.geoSrc, host(o.geoSrc))}` : ""}.</p>`;
+    ${M.hideNearbyOptions ? "" : `${others.length ? `<h3>Nearest other ${NOUN[1]}</h3>` : ""}
+    <div class="nb">${others.slice(0, 3).map(({ x, d }) => `<div class="r"><span style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${optLink(x)}</span><div class="tr"><div class="fl" style="width:${Math.max(3, Math.round(d / nbMax * 100))}%"></div></div><span class="v">${fmtKm(d)} · ${driveMin(d)}′</span></div>`).join("")}</div>`}
+    ${M.hideNearbyOptions ? (o.geoSrc ? `<p class="note">The pin's source is ${cite(o.geoSrc, host(o.geoSrc))}.</p>` : "")
+      : `<p class="note">Turn on Distances in the map bar to draw them. Micro-market rent, vacancy and supply are on <a href="#" data-tab="markets">Micro-markets</a>${o.geoSrc ? `; the pin's source is ${cite(o.geoSrc, host(o.geoSrc))}` : ""}.</p>`}`;
   checkImgDate(o);
 }
 /* Photographs of the option itself, from the bundle: gallery is a list of
