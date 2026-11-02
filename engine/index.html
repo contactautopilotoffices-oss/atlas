@@ -117,6 +117,8 @@ button{font:inherit;color:inherit}
 #tabs::-webkit-scrollbar{display:none}
 #signout{flex:none;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 11px;font-size:12.5px;color:var(--mut);cursor:pointer;min-height:32px}
 #signout:hover{color:var(--bad);border-color:rgba(178,59,42,.35)}
+#to3d{flex:none;display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(163,80,44,.35);background:var(--accbg);border-radius:9px;padding:7px 11px;font-size:12.5px;font-weight:600;color:var(--acc);text-decoration:none;min-height:32px;margin-right:6px}
+#to3d:hover{background:var(--acc);color:#fff}
 .tab{border:0;background:transparent;padding:8px 12px;border-radius:9px;cursor:pointer;color:var(--mut);font-size:13px;white-space:nowrap}
 .tab:hover{background:var(--line2);color:var(--ink)}
 .tab.on{background:var(--ink);color:var(--paper)}
@@ -474,7 +476,7 @@ table.cmp td.best{background:#f1e6d8;font-weight:600}
   #brand .s{display:none}
   #brand{gap:8px;flex:1}
   #brand .logo{height:11px}
-  #signout{padding:6px 10px}
+  #signout,#to3d{padding:6px 10px}
   #brand .t{font-size:16px}
   #tabs{order:3;flex:0 0 100%;margin-left:-6px}
   .tab{padding:7px 9px;font-size:12px}
@@ -531,7 +533,7 @@ table.cmp td.best{background:#f1e6d8;font-weight:600}
   :root{--top-h:44px}
   #top{flex-wrap:nowrap;padding:0 6px 0 12px}
   #tabs{order:0;flex:1 1 auto;margin-left:auto}
-  #signout span{display:none}
+  #signout span,#to3d span{display:none}
   #panel{top:calc(var(--top-h) + 12px);left:auto;right:0;width:56vw;height:auto;border-radius:18px 0 0 0;border-bottom:1px solid rgba(255,255,255,.7)}
   #sheet-grip{display:none}
   #layers{right:calc(56vw + 6px)}

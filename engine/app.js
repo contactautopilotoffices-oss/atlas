@@ -724,6 +724,13 @@ function boot() {
   renderSort();
   renderTabs(); renderFilters(); renderList(); renderPanel(); renderLayers();
   wireBoard(); wireSheet(); wirePanes(); wireHints();
+  /* meta.world: the atlas's 3D model (engine/world.html), opened from the
+     top bar; the sign-in carries over within the tab. */
+  if (M.world && M.world.href) {
+    const w = document.createElement("a"); w.id = "to3d"; w.href = M.world.href; w.dataset.hint = say("world.hint", "Open the 3D model of the district: the buildings, the metro, weather and time of day.");
+    w.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M12 22V12"/><path d="M21 7l-9 5-9-5"/></svg><span>${esc(say("world.label", "3D world"))}</span>`;
+    $("#signout").before(w);
+  }
   const so = $("#signout");
   if (GATE_HASH) so.addEventListener("click", signOut);
   else if (window.AtlasAccess && window.AtlasAccess.slug) so.addEventListener("click", () => { if (CMS) CMS.signout(); window.AtlasAccess.signOut(); });

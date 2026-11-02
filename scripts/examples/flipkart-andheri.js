@@ -259,9 +259,14 @@ const bundle = {
     sub: "Office inventory options for Flipkart",
     asOf: "2026-11", asOfText: "November 2026", city: "Mumbai", center: [72.87, 19.1085], zoom: 13.5,
     stationShot: true,
+    backdrop: "blender",   /* the sign-in backdrop: the Blender render of the district (scripts/world/finish.py) */
     hideNearbyOptions: true,   /* no "Nearest other options" on a building's panel */
     routing: ROUTES.source,
-    routeFeed: "/api/routes/mappls?atlas=flipkart-andheri",   /* Mappls street paths, loaded in the browser where the site's key answers; the figures stay Google Maps' */
+    routeFeed: "/api/routes/mappls?atlas=flipkart-andheri",
+    /* The 3D world at /flipkart-andheri/world: the model is built in Blender
+       by scripts/world/ (see scripts/world/README.md). */
+    world: { href: "/flipkart-andheri/world", data: "/media/flipkart-andheri/world/", glb: "andheri-east.glb", poster: "hero.jpg",
+      renders: Object.fromEntries(D.map(o => [o.id, `opt-${o.id}.jpg`])) },   /* Mappls street paths, loaded in the browser where the site's key answers; the figures stay Google Maps' */
     sheet: `${DECK}. Positions and connectivity researched Nov 2026; each carries its source.`,
   },
   options, zones, transit,
