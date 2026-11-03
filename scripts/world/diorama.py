@@ -334,6 +334,16 @@ def build():
             if not built.buffer(1.5).contains(Point(c_[0] + OX, c_[1] + OY)) and not built.intersects(LineString([(c_[0] + OX, c_[1] + OY), (mx + nx * 8 + OX, my + ny * 8 + OY)])):
                 street_cam = c_; break
         if street_cam: break
+    if not street_cam:   # no clear spot in front: search all round for open ground with a clear view of the face
+        others = unary_union([p for b_, p in bpolys if b_.get("opt") != OID]) if bpolys else Polygon()
+        fx_, fy_ = mx + nx * 2 + OX, my + ny * 2 + OY
+        for rad in (back, back * 0.8, back * 1.3, back * 0.6, back * 1.7):
+            for t in np.linspace(0, math.tau, 48, endpoint=False):
+                c_ = (fx_ + math.cos(t) * rad, fy_ + math.sin(t) * rad)
+                if (math.cos(t) * nx + math.sin(t) * ny) < 0.2: continue   # stay in front of the face
+                if not built.buffer(1.5).contains(Point(c_)) and not others.intersects(LineString([c_, (fx_, fy_)])):
+                    street_cam = (c_[0] - OX, c_[1] - OY); break
+            if street_cam: break
     street_cam = street_cam or (mx + nx * back, my + ny * back)
     # make sure the walk starts on open ground (footpath or road)
     for k in range(1, 12):
