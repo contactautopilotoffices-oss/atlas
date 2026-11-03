@@ -265,8 +265,8 @@ const bundle = {
     routeFeed: "/api/routes/mappls?atlas=flipkart-andheri",
     /* The 3D world at /flipkart-andheri/world: the model is built in Blender
        by scripts/world/ (see scripts/world/README.md). */
-    world: { href: "/flipkart-andheri/world", data: "/media/flipkart-andheri/world/", glb: "andheri-east.glb", poster: "hero.jpg",
-      renders: Object.fromEntries(D.map(o => [o.id, `opt-${o.id}.jpg`])) },   /* Mappls street paths, loaded in the browser where the site's key answers; the figures stay Google Maps' */
+    world: { href: "/flipkart-andheri/world", data: "/media/flipkart-andheri/world/", sky: "sky.hdr", poster: "hero.jpg",
+      thumbs: Object.fromEntries(D.map(o => [o.id, `r/${o.id}-close.jpg`])), renders: Object.fromEntries(D.map(o => [o.id, `r/${o.id}-street.jpg`])) },
     sheet: `${DECK}. Positions and connectivity researched Nov 2026; each carries its source.`,
   },
   options, zones, transit,
