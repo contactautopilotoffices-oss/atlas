@@ -117,6 +117,8 @@ button{font:inherit;color:inherit}
 #tabs::-webkit-scrollbar{display:none}
 #signout{flex:none;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 11px;font-size:12.5px;color:var(--mut);cursor:pointer;min-height:32px}
 #signout:hover{color:var(--bad);border-color:rgba(178,59,42,.35)}
+#to3d{flex:none;display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(163,80,44,.35);background:var(--accbg);border-radius:9px;padding:7px 11px;font-size:12.5px;font-weight:600;color:var(--acc);text-decoration:none;min-height:32px;margin-right:6px}
+#to3d:hover{background:var(--acc);color:#fff}
 .tab{border:0;background:transparent;padding:8px 12px;border-radius:9px;cursor:pointer;color:var(--mut);font-size:13px;white-space:nowrap}
 .tab:hover{background:var(--line2);color:var(--ink)}
 .tab.on{background:var(--ink);color:var(--paper)}
@@ -215,6 +217,15 @@ table.rt .why{font-size:11.5px;color:var(--mut);line-height:1.45;margin-top:3px}
 .hero img{width:100%;height:100%;object-fit:cover;display:block}
 .hero .ph{position:absolute;left:10px;bottom:8px;font-family:var(--mono);font-size:10px;color:#fff;background:rgba(0,0,0,.45);padding:2px 7px;border-radius:5px}
 .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.conn{display:flex;flex-direction:column;gap:6px}
+.conn .ch{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin-top:6px}
+.cn{display:grid;grid-template-columns:14px 1fr auto;gap:9px;align-items:center;text-align:left;width:100%;padding:8px 10px;border:1px solid var(--line2);border-radius:10px;background:rgba(255,255,255,.7);font:inherit;color:var(--ink);cursor:pointer}
+.cn:hover,.cn.on{border-color:var(--acc2);background:#fff}
+.cn .ck{width:12px;height:12px;border-radius:50%;background:#1d6fa5;box-shadow:0 0 0 2px #fff,0 0 0 3px rgba(0,0,0,.12)}
+.cn.metro .ck{background:#a3502c}.cn.rail .ck{background:#7a4aa3}
+.cn .cl b{display:block;font-weight:600;font-size:13px}
+.cn .cl i{display:block;font-style:normal;font-size:11px;color:var(--mut);margin-top:1px}
+.cn .cd{font-family:var(--serif);font-size:16px;white-space:nowrap}
 .kpi{background:rgba(255,255,255,.7);border:1px solid var(--line2);border-radius:10px;padding:9px 10px;min-width:0}
 .kpi .l{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
 .kpi .v{font-family:var(--serif);font-size:19px;margin-top:2px;line-height:1.1}
@@ -465,7 +476,7 @@ table.cmp td.best{background:#f1e6d8;font-weight:600}
   #brand .s{display:none}
   #brand{gap:8px;flex:1}
   #brand .logo{height:11px}
-  #signout{padding:6px 10px}
+  #signout,#to3d{padding:6px 10px}
   #brand .t{font-size:16px}
   #tabs{order:3;flex:0 0 100%;margin-left:-6px}
   .tab{padding:7px 9px;font-size:12px}
@@ -522,7 +533,7 @@ table.cmp td.best{background:#f1e6d8;font-weight:600}
   :root{--top-h:44px}
   #top{flex-wrap:nowrap;padding:0 6px 0 12px}
   #tabs{order:0;flex:1 1 auto;margin-left:auto}
-  #signout span{display:none}
+  #signout span,#to3d span{display:none}
   #panel{top:calc(var(--top-h) + 12px);left:auto;right:0;width:56vw;height:auto;border-radius:18px 0 0 0;border-bottom:1px solid rgba(255,255,255,.7)}
   #sheet-grip{display:none}
   #layers{right:calc(56vw + 6px)}

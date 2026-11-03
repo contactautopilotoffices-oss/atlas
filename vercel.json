@@ -420,6 +420,10 @@
     },
     "api/cms/track.js": {
       "maxDuration": 10
+    },
+    "api/routes/mappls.js": {
+      "maxDuration": 30,
+      "includeFiles": "api/routes/_pairs-*.json"
     }
   },
   "redirects": [
@@ -489,6 +493,10 @@
     {
       "source": "/:slug([a-z0-9][a-z0-9-]{0,39})/case",
       "destination": "/casestudy/index.html"
+    },
+    {
+      "source": "/:slug([a-z0-9][a-z0-9-]{0,39})/world",
+      "destination": "/engine/world.html"
     },
     {
       "source": "/:slug([a-z0-9][a-z0-9-]{0,39})",

@@ -2908,6 +2908,7 @@ async function buildLeaderboard() {
       <div class="lb-main">
         <div class="lb-name">${o.unit}<span class="lb-star" title="Shortlisted">★</span></div>
         <div class="lb-meta"><span class="dot" style="background:${c}"></span>${grade}${o.fit} · ${o.floor} · ${o.carpet.toLocaleString()} sqft · ${o.aqua} km</div>
+          ${o.perSeat ? `<div class="lb-meta">Per seat ${o.perSeat}</div>` : ""}
         ${isInvesco ? "" : `<div class="lb-bar"><span style="width:${o.bar != null ? o.bar : o.score * 10}%;background:${c}"></span></div>`}
       </div>
       ${isInvesco ? "" : `<div class="lb-score">${o.scoreLabel ? o.score : o.score.toFixed(1)}</div>`}
@@ -3170,6 +3171,7 @@ function applyFilters() {
         <div class="lb-main">
           <div class="lb-name">${o.unit}</div>
           <div class="lb-meta"><span class="dot" style="background:${c}"></span>${grade}${o.fit} · ${o.floor} · ${o.carpet.toLocaleString()} sqft · ${o.aqua} km</div>
+          ${o.perSeat ? `<div class="lb-meta">Per seat ${o.perSeat}</div>` : ""}
           <div class="lb-bar"><span style="width:${r.score * 10}%;background:${r.pass ? c : "#5a636c"}"></span></div>
         </div>
         <div class="lb-score">${r.score.toFixed(1)}</div>

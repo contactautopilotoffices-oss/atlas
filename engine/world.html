@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>3D World · Autopilot ATLAS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#f3ede4; --mut:#b9b0a4; --dim:#8a8277; --line:rgba(255,245,230,.12); --line2:rgba(255,245,230,.07);
+  --glass:rgba(16,18,22,.66); --glass2:rgba(16,18,22,.82); --acc:#e08a4f; --acc2:#f2a86b; --accbg:rgba(224,138,79,.16);
+  --l1:#3b8fd0; --l3:#2fb3a8; --l7:#e0574f; --rail:#d0634e; --ok:#7fd1a2;
+  --serif:'Playfair Display',Georgia,serif; --font:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,Roboto,Helvetica,Arial,sans-serif; --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+  --r:14px; --board-w:330px; --panel-w:400px; --ease:cubic-bezier(.32,.72,0,1);
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0;height:100%;background:#0c0e12;color:var(--ink);font:14px/1.45 var(--font);overflow:hidden;-webkit-font-smoothing:antialiased}
+canvas#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none}
+#flash{position:fixed;inset:0;background:#dfe8ff;opacity:0;pointer-events:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+a{color:inherit}
+.glass{background:var(--glass);backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);border:1px solid var(--line);border-radius:var(--r);box-shadow:0 12px 40px rgba(0,0,0,.35)}
+.eyebrow{font:500 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--acc2)}
+.mono{font-family:var(--mono)}
+
+/* top bar */
+#top{position:fixed;left:12px;right:12px;top:12px;height:52px;display:flex;align-items:center;gap:10px;padding:0 10px 0 14px;z-index:5}
+#brand{display:flex;flex-direction:column;min-width:0;margin-right:auto}
+#brand b{font:600 17px/1.1 var(--serif);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#brand span{font:11px/1.3 var(--mono);color:var(--mut);white-space:nowrap}
+.seg{display:flex;gap:2px;padding:3px;border-radius:11px;background:rgba(255,255,255,.05);border:1px solid var(--line2)}
+.seg button{padding:6px 10px;border-radius:8px;font:500 12px/1 var(--font);color:var(--mut);white-space:nowrap}
+.seg button:hover{color:var(--ink);background:rgba(255,255,255,.06)}
+.seg button.on{background:var(--accbg);color:var(--acc2);box-shadow:inset 0 0 0 1px rgba(242,168,107,.35)}
+.seg button svg{width:14px;height:14px;vertical-align:-3px;margin-right:5px}
+#clock{display:flex;align-items:center;gap:8px;padding:0 8px;font:500 12px var(--mono);color:var(--mut)}
+#clock input{width:150px;accent-color:var(--acc)}
+#clock b{color:var(--ink);font-weight:500;min-width:62px;text-align:right}
+.link{padding:8px 12px;border-radius:10px;border:1px solid var(--line);font:500 12px/1 var(--font);text-decoration:none;white-space:nowrap}
+.link:hover{border-color:var(--acc);color:var(--acc2)}
+
+/* board: the list, same as the atlas */
+#board{position:fixed;left:12px;top:76px;bottom:12px;width:var(--board-w);display:flex;flex-direction:column;z-index:4;overflow:hidden}
+#board header{padding:16px 16px 10px;border-bottom:1px solid var(--line2)}
+#board h1{margin:6px 0 4px;font:600 22px/1.15 var(--serif)}
+#board p{margin:0;color:var(--mut);font-size:12.5px}
+#list{overflow:auto;padding:8px;flex:1}
+.card{display:grid;grid-template-columns:30px 1fr auto;gap:2px 10px;align-items:center;width:100%;text-align:left;padding:10px;border-radius:11px;border:1px solid transparent;margin-bottom:4px;transition:background .2s,border-color .2s}
+.card:hover{background:rgba(255,255,255,.05)}
+.card.on{background:var(--accbg);border-color:rgba(242,168,107,.4)}
+.card .n{grid-row:span 2;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font:500 12px var(--mono);background:rgba(255,255,255,.08);border:1px solid var(--line)}
+.card.on .n{background:var(--acc);color:#1a1006;border-color:var(--acc)}
+.card .nm{font-weight:600;font-size:14px}
+.card .sub{font-size:11.5px;color:var(--mut);grid-column:2}
+.card .m{grid-row:span 2;text-align:right;font:500 12px/1.2 var(--mono);color:var(--ink)}
+.card .m i{display:block;font:10px var(--mono);color:var(--dim);font-style:normal}
+.prio{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:5px;font:500 9.5px/1.5 var(--mono);letter-spacing:.06em;color:var(--acc2);background:var(--accbg)}
+#legend{padding:10px 16px 14px;border-top:1px solid var(--line2);display:flex;flex-wrap:wrap;gap:6px 12px;font:11px var(--mono);color:var(--mut)}
+#legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px}
+
+/* panel: one building */
+#panel{position:fixed;right:12px;top:76px;bottom:12px;width:var(--panel-w);z-index:4;display:flex;flex-direction:column;overflow:hidden;transform:translateX(calc(100% + 24px));transition:transform .5s var(--ease)}
+body.sel #panel{transform:none}
+#panel .ph{padding:16px 18px 12px;border-bottom:1px solid var(--line2)}
+#panel h2{margin:6px 0 6px;font:600 24px/1.1 var(--serif)}
+#panel .reason{margin:0;color:var(--mut);font-size:12.5px}
+#panel .pb{overflow:auto;padding:12px 18px 18px;flex:1}
+.close{position:absolute;right:12px;top:12px;width:30px;height:30px;border-radius:9px;border:1px solid var(--line);color:var(--mut)}
+.close:hover{color:var(--ink);border-color:var(--acc)}
+.shots{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+.shots button{padding:6px 10px;border-radius:8px;border:1px solid var(--line);font:500 12px var(--font);color:var(--mut)}
+.shots button.on{border-color:var(--acc);color:var(--acc2);background:var(--accbg)}
+h3{margin:16px 0 8px;font:500 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+.ch{margin:10px 0 4px;font:500 10px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.cn{display:grid;grid-template-columns:12px 1fr auto;gap:10px;align-items:center;width:100%;padding:9px 10px;border-radius:10px;border:1px solid var(--line2);margin-bottom:5px;text-align:left}
+.cn:hover{border-color:var(--line)}
+.cn.on{border-color:var(--acc);background:var(--accbg)}
+.cn .ck{width:10px;height:10px;border-radius:50%;background:var(--l1)}
+.cn.rail .ck{background:var(--rail);border-radius:2px}
+.cn b{display:block;font-size:13.5px}
+.cn i{font-style:normal;font-size:11.5px;color:var(--mut)}
+.cn .cd{font:500 13px var(--mono)}
+.note{font-size:11.5px;color:var(--dim);margin:8px 0 0}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;margin:0;font-size:12.5px}
+.facts dt{color:var(--mut)}
+.facts dd{margin:0;text-align:right}
+.render{margin:12px 0 0;border-radius:11px;overflow:hidden;border:1px solid var(--line);aspect-ratio:16/10;background:#1a1d22}
+.render img{width:100%;height:100%;object-fit:cover;display:block}
+.render figcaption{font:10.5px var(--mono);color:var(--dim);padding:6px 10px}
+
+/* labels in the world */
+#labels{position:fixed;inset:0;pointer-events:none;z-index:3}
+.lb{position:absolute;left:0;top:0;transform:translate(-50%,-100%);white-space:nowrap;pointer-events:auto;cursor:pointer;will-change:transform}
+.lb.opt{display:flex;align-items:center;gap:7px;padding:4px 10px 4px 4px;border-radius:999px;background:rgba(16,18,22,.78);border:1px solid rgba(255,255,255,.16);font:600 12.5px var(--font);box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.lb.opt .n{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--acc);color:#1a1006;font:600 11px var(--mono)}
+.lb.opt.on{background:var(--acc);color:#1a1006;border-color:var(--acc)}
+.lb.opt.on .n{background:#1a1006;color:var(--acc2)}
+.lb.opt::after{content:"";position:absolute;left:50%;top:100%;width:1px;height:16px;background:rgba(255,255,255,.5)}
+.lb.st{padding:3px 8px 3px 6px;border-radius:7px;background:rgba(16,18,22,.72);border:1px solid rgba(255,255,255,.12);font:500 11px var(--font);color:var(--ink);pointer-events:none;display:flex;gap:6px;align-items:center}
+.lb.st i{font-style:normal;font:600 9.5px var(--mono);padding:1px 4px;border-radius:4px;color:#fff}
+.lb.st.hl{border-color:var(--acc2);background:rgba(40,26,14,.9)}
+.lb.rt{padding:5px 10px;border-radius:9px;background:var(--acc);color:#1a1006;font:600 12px var(--mono);pointer-events:none;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.lb.hide{display:none}
+
+/* loading and sign-in */
+#load,#gate{position:fixed;inset:0;z-index:10;display:grid;place-items:center;background:#0c0e12 center/cover no-repeat}
+#load::before,#gate::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,9,12,.25),rgba(8,9,12,.85))}
+.box{position:relative;width:min(420px,calc(100vw - 32px));padding:26px}
+.box h1{margin:8px 0 6px;font:600 28px/1.1 var(--serif)}
+.box p{margin:0 0 16px;color:var(--mut)}
+.bar{height:4px;border-radius:4px;background:rgba(255,255,255,.12);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--acc);transition:width .3s}
+#gate input{width:100%;margin:0 0 10px;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:rgba(0,0,0,.35);color:var(--ink);font:14px var(--font)}
+#gate .go{width:100%;padding:11px;border-radius:10px;background:var(--acc);color:#1a1006;font-weight:600}
+#g-err{color:#ff9a8a;font-size:12.5px;min-height:18px;margin:6px 0 0}
+#credit{position:fixed;left:calc(var(--board-w) + 24px);right:12px;bottom:12px;z-index:2;font:10.5px var(--mono);color:rgba(255,255,255,.62);text-shadow:0 1px 2px rgba(0,0,0,.6);pointer-events:none}
+body.sel #credit{right:calc(var(--panel-w) + 24px)}
+#hint{position:fixed;left:50%;bottom:44px;transform:translateX(-50%);z-index:3;padding:8px 14px;border-radius:999px;font:12px var(--font);color:var(--mut);transition:opacity .6s}
+
+@media (max-width:1100px){ #clock input{width:96px} .seg button span{display:none} }
+@media (max-width:860px){
+  :root{--board-w:calc(100vw - 24px);--panel-w:calc(100vw - 24px)}
+  #top{height:auto;flex-wrap:wrap;padding:8px}
+  #board{top:auto;height:34dvh}
+  #panel{top:auto;height:60dvh}
+  #credit{display:none}
+}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="flash"></div>
+<div id="labels"></div>
+
+<header id="top" class="glass" hidden>
+  <div id="brand"><b id="t-title">3D World</b><span id="t-sub">Andheri East</span></div>
+  <div class="seg" id="wx" role="group" aria-label="Weather"></div>
+  <label id="clock"><span>Time</span><input id="hour" type="range" min="5.5" max="23.5" step="0.05" value="16.5" aria-label="Time of day"><b id="hour-t">4:30 pm</b></label>
+  <a class="link" id="to-map" href="/">2D map</a>
+</header>
+
+<aside id="board" class="glass" hidden>
+  <header>
+    <div class="eyebrow" id="b-eyebrow">Autopilot · Andheri East</div>
+    <h1 id="b-title">The list</h1>
+    <p id="b-sub"></p>
+  </header>
+  <div id="list"></div>
+  <div id="legend"></div>
+</aside>
+
+<aside id="panel" class="glass" hidden>
+  <button class="close" id="p-close" aria-label="Close">✕</button>
+  <div class="ph" id="p-head"></div>
+  <div class="pb" id="p-body"></div>
+</aside>
+
+<div id="credit"></div>
+<div id="hint" class="glass" hidden>Drag to move · Right-drag or two fingers to turn · Scroll to zoom</div>
+
+<div id="load"><div class="box glass"><div class="eyebrow">Autopilot ATLAS · 3D</div><h1 id="l-title">Building Andheri East</h1><p id="l-msg">24,000 buildings, the metro and the streets, from open map data.</p><div class="bar"><i id="l-bar"></i></div></div></div>
+<div id="gate" hidden><form class="box glass" id="g-form" autocomplete="on"><div class="eyebrow">Autopilot ATLAS · 3D</div><h1>Sign in</h1><p>Use the access ID and password you were given.</p>
+  <input id="g-id" placeholder="Access ID" autocomplete="username" required><input id="g-pw" type="password" placeholder="Password" autocomplete="current-password" required>
+  <button class="go" type="submit">Enter</button><div id="g-err"></div></form></div>
+
+<script type="importmap">{"imports":{"three":"/engine/vendor/three/three.module.min.js","three/addons/":"/engine/vendor/three/jsm/"}}</script>
+<script type="module" src="/engine/world.js"></script>
+</body>
+</html>
