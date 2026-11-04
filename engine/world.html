@@ -187,7 +187,10 @@ body.routing #walkhud,body.routing #hint{display:none}
   <input id="g-id" placeholder="Access ID" autocomplete="username" required><input id="g-pw" type="password" placeholder="Password" autocomplete="current-password" required>
   <button class="go" type="submit">Enter</button><div id="g-err"></div></form></div>
 
-<script type="importmap">{"imports":{"three":"/engine/vendor/three/three.module.min.js","three/addons/":"/engine/vendor/three/jsm/"}}</script>
+<script src="/config.js" onerror="window.GOOGLE_MAPS_KEY=''"></script>
+<script type="importmap">{"imports":{"three":"/engine/vendor/three/three.module.min.js","three/addons/":"/engine/vendor/three/jsm/","three/examples/jsm/":"/engine/vendor/three/jsm/",
+  "3d-tiles-renderer":"/engine/vendor/3d-tiles/index.js","3d-tiles-renderer/plugins":"/engine/vendor/3d-tiles/index.plugins.js","3d-tiles-renderer/three":"/engine/vendor/3d-tiles/index.three.js",
+  "3d-tiles-renderer/core":"/engine/vendor/3d-tiles/index.core.js","3d-tiles-renderer/core/plugins":"/engine/vendor/3d-tiles/index.core-plugins.js","3d-tiles-renderer/three/plugins":"/engine/vendor/3d-tiles/index.three-plugins.js"}}</script>
 <script type="module" src="/engine/world.js"></script>
 </body>
 </html>
