@@ -2354,7 +2354,7 @@
      ],
      "lat": 19.103528,
      "lng": 72.887962,
-     "m": 1016,
+     "m": 800,
      "mode": "walk",
      "path": [
       [
@@ -2454,8 +2454,8 @@
        19.103528
       ]
      ],
-     "src": "Overture Maps 2026-10-21 transportation segments (OpenStreetMap), shortest path (scripts/examples/overture-route.py)",
-     "dist": "OpenStreetMap streets (computed; to be checked in Google Maps)"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     },
     {
      "kind": "metro",
@@ -2466,7 +2466,7 @@
      ],
      "lat": 19.108195,
      "lng": 72.879536,
-     "m": 1560,
+     "m": 1200,
      "mode": "walk",
      "path": [
       [
@@ -2626,8 +2626,8 @@
        19.108195
       ]
      ],
-     "src": "Overture Maps 2026-10-21 transportation segments (OpenStreetMap), shortest path (scripts/examples/overture-route.py)",
-     "dist": "OpenStreetMap streets (computed; to be checked in Google Maps)"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     },
     {
      "kind": "rail",
@@ -2637,7 +2637,7 @@
      ],
      "lat": 19.119167,
      "lng": 72.846944,
-     "m": 6332,
+     "m": 4900,
      "mode": "road",
      "path": [
       [
@@ -3089,8 +3089,8 @@
        19.119167
       ]
      ],
-     "src": "Overture Maps 2026-10-21 transportation segments (OpenStreetMap), shortest path (scripts/examples/overture-route.py)",
-     "dist": "OpenStreetMap streets (computed; to be checked in Google Maps)"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     }
    ],
    "facts": [
@@ -3203,7 +3203,7 @@
      ],
      "lat": 19.103528,
      "lng": 72.887962,
-     "m": 1013,
+     "m": 800,
      "mode": "walk",
      "path": [
       [
@@ -3307,8 +3307,8 @@
        19.103528
       ]
      ],
-     "src": "Overture Maps 2026-10-21 transportation segments (OpenStreetMap), shortest path (scripts/examples/overture-route.py)",
-     "dist": "OpenStreetMap streets (computed; to be checked in Google Maps)"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     },
     {
      "kind": "metro",
@@ -3319,7 +3319,7 @@
      ],
      "lat": 19.108195,
      "lng": 72.879536,
-     "m": 1557,
+     "m": 1200,
      "mode": "walk",
      "path": [
       [
@@ -3483,8 +3483,8 @@
        19.108195
       ]
      ],
-     "src": "Overture Maps 2026-10-21 transportation segments (OpenStreetMap), shortest path (scripts/examples/overture-route.py)",
-     "dist": "OpenStreetMap streets (computed; to be checked in Google Maps)"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     },
     {
      "kind": "rail",
@@ -3494,7 +3494,7 @@
      ],
      "lat": 19.119167,
      "lng": 72.846944,
-     "m": 6329,
+     "m": 4900,
      "mode": "road",
      "path": [
       [
@@ -3950,8 +3950,8 @@
        19.119167
       ]
      ],
-     "src": "Overture Maps 2026-10-21 transportation segments (OpenStreetMap), shortest path (scripts/examples/overture-route.py)",
-     "dist": "OpenStreetMap streets (computed; to be checked in Google Maps)"
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
     }
    ],
    "facts": [
@@ -4206,7 +4206,7 @@
  },
  "copy": {
   "connect": {
-   "note": "Walking distance from each building to its two metro stations, and Andheri railway station by road: measured in Google Maps (Nov 2026), except for the two Marwah buildings, computed along OpenStreetMap streets and still to be checked."
+   "note": "Walking distance from each building to its two metro stations, and Andheri railway station by road, as measured in Google Maps (Nov 2026)."
   },
   "overview": {
    "eyebrow": "Autopilot · Andheri East · Nov 2026",
