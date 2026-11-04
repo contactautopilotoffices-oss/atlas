@@ -18,16 +18,25 @@
   "world": {
    "href": "/flipkart-andheri/world",
    "data": "/media/flipkart-andheri/world/",
-   "glb": "andheri-east.glb",
+   "sky": "sky.hdr",
    "poster": "hero.jpg",
+   "thumbs": {
+    "723-avenue": "r/723-avenue-close.jpg",
+    "corporate-avenue": "r/corporate-avenue-close.jpg",
+    "vaman-techno-centre": "r/vaman-techno-centre-close.jpg",
+    "privilon": "r/privilon-close.jpg",
+    "landmark": "r/landmark-close.jpg",
+    "rustomjee-central-park": "r/rustomjee-central-park-close.jpg",
+    "fulcrum": "r/fulcrum-close.jpg"
+   },
    "renders": {
-    "723-avenue": "opt-723-avenue.jpg",
-    "corporate-avenue": "opt-corporate-avenue.jpg",
-    "vaman-techno-centre": "opt-vaman-techno-centre.jpg",
-    "privilon": "opt-privilon.jpg",
-    "landmark": "opt-landmark.jpg",
-    "rustomjee-central-park": "opt-rustomjee-central-park.jpg",
-    "fulcrum": "opt-fulcrum.jpg"
+    "723-avenue": "r/723-avenue-street.jpg",
+    "corporate-avenue": "r/corporate-avenue-street.jpg",
+    "vaman-techno-centre": "r/vaman-techno-centre-street.jpg",
+    "privilon": "r/privilon-street.jpg",
+    "landmark": "r/landmark-street.jpg",
+    "rustomjee-central-park": "r/rustomjee-central-park-street.jpg",
+    "fulcrum": "r/fulcrum-street.jpg"
    }
   },
   "sheet": "Flipkart Property Inventory, Andheri East (Autopilot deck, Nov 2026). Positions and connectivity researched Nov 2026; each carries its source."
