@@ -8,6 +8,9 @@ window.CLIENT_MANIFEST = {
      /engine/atlases/ (scripts/examples/flipkart-andheri.js). It replaced the
      older map view of this client (clients/flipkart-andheri/). The password's
      SHA-256 is stored, not the password. */
+  /* Skymark F-1, Sector 6, Noida: the builder showcase at /skymark
+     (scripts/skymark/build.js). */
+  "SKYMARKDEMO": { redirect: "/skymark", passHash: "80be454ae12cb5d9b5d8ce9d0d4a869894202c59d08dc590bb50fffcb965dbd8" },
   "FLIPDEMOACC": { redirect: "/flipkart-andheri", passHash: "a9fc6e2c68a21babef48ecb9720cf24cf78dcc9adbc6ee072a09a8464d309e87" },
   "VFSDEMOACC":  { slug: "vfs-bkc",          pass: "VFS1234" },
   "CPDEMOACC":   { slug: "cp-delhi",         pass: "CP1234" },

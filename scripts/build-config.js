@@ -30,11 +30,18 @@ if (sbKey && /"role"\s*:\s*"service_role"/.test(Buffer.from((sbKey.split('.')[1]
   process.exit(1);
 }
 
+// Google Maps Platform BROWSER key (Map Tiles API for photorealistic 3D tiles,
+// Maps Embed API). It is meant to sit in the browser; restrict it in Google
+// Cloud to the site's referrers and to those APIs. Optional: pages that need it
+// fall back to their own model when it is missing.
+const gKey = process.env.GOOGLE_MAPS_BROWSER_KEY || '';
+
 const outPath = path.join(__dirname, '..', 'config.js');
 const content = [
   `window.MAPBOX_TOKEN = ${JSON.stringify(token)};`,
   `window.SUPABASE_URL = ${JSON.stringify(sbUrl)};`,
   `window.SUPABASE_ANON_KEY = ${JSON.stringify(sbKey)};`,
+  `window.GOOGLE_MAPS_KEY = ${JSON.stringify(gKey)};`,
   ''
 ].join('\n');
 
