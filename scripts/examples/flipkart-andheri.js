@@ -100,6 +100,26 @@ const R = {
     address: "Fulcrum, IA Project Road, Sahar Road, next to Hyatt Regency, Ashok Nagar, Andheri East, Mumbai 400099" },
 };
 
+/* The two Marwah buildings, added to the 2D atlas only from Autopilot's
+   "Flipkart Inventory Options Sheet" (Nov 2026). Marwah Business Park is the
+   campus on Krishanlal Marwah Marg; the developer lists Marwah House (G+2),
+   Marwah Centre (B+G+9) and Marwah Tower (G+14, foundations laid 2023) on it
+   (https://marwahbusinesspark.com/marwah-business-park). The sheet's "Marwah
+   Tower" is G+9 and its "Marwah Business Park" G+14, so the two names may be
+   the other way round: to be confirmed. Both pins are on the campus. */
+Object.assign(R, {
+  "marwah-tower": {
+    l1: "Saki Naka",
+    lat: 19.110954, lng: 72.886118, precision: "complex", geoSrc: "https://exa.ai/library/place/2n0pkm6kwgr",
+    geoNote: "The Marwah Centre address point on the Marwah Business Park campus (place page; findlatitudeandlongitude and an EV charger listing agree within 15 m). The sheet's G+9 matches Marwah Centre, not the G+14 Marwah Tower: the building is to be confirmed.",
+    address: "Marwah Business Park, Krishanlal Marwah Marg, off Saki Vihar Road, Marol, Andheri East, Mumbai 400072" },
+  "marwah-business-park": {
+    l1: "Saki Naka",
+    lat: 19.1114, lng: 72.8866, precision: "approx", geoSrc: "https://marwahbusinesspark.com/about-us",
+    geoNote: "Placed on the Marwah Business Park campus, beside Krishanlal Marwah Marg; the building on the campus is not identified. The sheet's G+14 matches the new Marwah Tower.",
+    address: "Marwah Business Park, Krishanlal Marwah Marg, Ganesh Nagar, Marol, Andheri East, Mumbai 400072" },
+});
+
 /* ---- distances, bus stops and the railway ------------------------------ */
 const kmBetween = (a, b) => {
   const t = Math.PI / 180, dLat = (b.lat - a.lat) * t, dLng = (b.lng - a.lng) * t;
@@ -333,6 +353,50 @@ flat.options = EAST_ORDER.map((id, i) => {
   };
   return { ...o, n: i + 1, routes: [...e.metro.map(([n, m]) => pickR("metro", n, m)), pickR("rail", "Andheri", e.rail)] };
 });
+/* The two Marwah buildings, from the sheet, in its words. Their distances
+   are Autopilot's Google Maps figures (Nov 2026), like the others; the line
+   on the map follows OpenStreetMap streets (Overture Maps,
+   scripts/examples/overture-route.py, as the OSRM servers were unreachable). */
+const SHEET = "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)";
+const MARWAH = [
+  { id: "marwah-tower", name: "Marwah Tower", floor: "3rd or 4th", grade: "B", floors: "G+9", furnishing: "Furnished", efficiency: "60%",
+    carpet: "5,600 sq. ft. per floor", builtUp: "9,333 sq. ft. per floor", ceiling: "10 ft - 11 ft (approx.)", perSeat: "Rs. 13,300 - Rs. 13,800",
+    parking: "4 per floor", noc: "Available", occ: "Available", dg: "NA", possession: "Immediately" },
+  { id: "marwah-business-park", name: "Marwah Business Park", floor: "Multiple floors", grade: "B", floors: "G+14", furnishing: "Bareshell", efficiency: "60%",
+    carpet: "5,150 and 5,450 sq. ft.", builtUp: "8,583 and 9,083 sq. ft.", ceiling: "10 ft - 11 ft (approx.)", perSeat: "Rs. 15,800 - Rs. 16,300",
+    parking: "5 per floor", noc: "NA", occ: "NA", dg: "NA", possession: "Feb - March 2027" },
+];
+const MARWAH_GMAPS = {
+  "marwah-tower":         { metro: [["Saki Naka", 800], ["Marol Naka", 1200]], rail: 4900 },
+  "marwah-business-park": { metro: [["Saki Naka", 800], ["Marol Naka", 1600]], rail: 4900 },
+};
+for (const o of MARWAH) {
+  const r = R[o.id], all = routesFor(o.id, LINES_OF);
+  const pick = (kind, name, m) => { const x = all.find(y => y.kind === kind && y.name === name); if (!x) throw new Error(`${o.id}: no street route to ${name}`); const { min, ...rest } = x; return { ...rest, m, src: GMAPS_SRC, dist: "Google Maps" }; };
+  const g = MARWAH_GMAPS[o.id];
+  const spec = [
+    ["Micro-market", "Sakinaka Metro"], ["Floor / Unit", o.floor], ["Grade", o.grade], ["Total floors", o.floors], ["Building type", "Commercial"],
+    ["Furnishing", o.furnishing], ["Efficiency", o.efficiency], ["Carpet area", o.carpet], ["Built-up area", o.builtUp], ["Ceiling height", o.ceiling],
+    ["Per seat", o.perSeat], ["Parking", o.parking], ["Fire NOC", o.noc], ["OC & CC", o.occ], ["DG", o.dg], ["Possession", o.possession],
+  ];
+  flat.options.push({
+    id: o.id, n: flat.options.length + 1, name: o.name, lat: r.lat, lng: r.lng, precision: r.precision, geoSrc: r.geoSrc, geoNote: r.geoNote,
+    micro: "sakinaka-metro", address: r.address, locality: "Andheri East",
+    reason: [`Floor ${o.floor}`, o.furnishing, `Carpet area ${o.carpet}`, `Possession: ${o.possession}`, `Per seat: ${o.perSeat}`].join(" · "),
+    routes: [...g.metro.map(([n, m]) => pick("metro", n, m)), pick("rail", "Andheri", g.rail)],
+    facts: [
+      ...spec.map(([k, v]) => ({ k, v, conf: "high" })),
+      { k: "Railway by metro", v: railByMetro(o.id).v, src: railByMetro(o.id).src, conf: "medium" },
+    ],
+  });
+}
+/* The 2D atlas is read by the client: the detail table shows the figures
+   only, bold, with no source links (the sources stay in this script). */
+for (const o of flat.options) o.facts = o.facts.map(({ src, ...f }) => f);
+flat.meta.boldSpec = true;
+flat.zones.push({ key: "sakinaka-metro", label: "Sakinaka Metro", name: "Sakinaka Metro", color: "#6b5bb5" });
+flat.meta.sheet = `${DECK}; Marwah Tower and Marwah Business Park from the ${SHEET}. Positions and connectivity researched Nov 2026; each carries its source.`;
+
 /* the two stations the other atlas does not draw */
 const L3 = flat.transit.lines.find(l => l.key === "line3");
 L3.stations.splice(L3.stations.findIndex(s => s.name === "Sahar Road"), 0, { name: "CSMIA T2", lat: 19.10233, lng: 72.87447, open: true });
