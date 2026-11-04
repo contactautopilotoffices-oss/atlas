@@ -43,6 +43,8 @@ const STILL = Q.get("still") === "1";
 const REALLOOK = Q.get("look") === "real";   // opt-in (?look=real) until checked on screen; the model look stays the default
 const SLUG = ((Q.get("atlas") || location.pathname.split("/")[1] || "") + "").toLowerCase().replace(/[^a-z0-9-]/g, "");
 const D2R = Math.PI / 180, clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+/* 50 mm on a 36x24 mm frame: the lens that matches the human eye. Vertical field of view in degrees. */
+const EYE_FOV = 2 * Math.atan(12 / 50) * 180 / Math.PI;
 const fmtM = (m) => m < 1000 ? [`${Math.round(m / 10) * 10}`, "M"] : [`${(m / 1000).toFixed(1)}`, "KM"];
 const fm = (m) => fmtM(m).join(" ");
 const LINE = { L1: ["#3d8fd6", "Line 1"], L3: ["#2bb3a6", "Line 3"], L7: ["#e2584f", "Line 7"] };
@@ -376,11 +378,11 @@ async function start(A, W) {
     frameOffset(true);
     controls.autoRotate = true; tilt.enabled = !REALLOOK; sunBox(R * 0.62, P3(0, 0));
     if (REALLOOK) {
-      // a photograph of the place: 35 mm lens (38 deg vertical), drone height, sky and haze behind
-      camera.fov = 38; camera.updateProjectionMatrix();
-      scene.background = hdr; scene.backgroundIntensity = 1.0; scene.fog = new THREE.Fog(0xd9cbb4, 320, 1100);
-      const h = D.building.h, tr = P3(c[0], c[1], h * 0.4), d2 = Math.max(230, h * 4.4), pol = 67 * D2R;
-      controls.minDistance = 70; controls.maxDistance = 750; controls.minPolarAngle = 35 * D2R; controls.maxPolarAngle = 84 * D2R;
+      // a photograph of the place through the eye's own lens: 50 mm on full frame (EYE_FOV, 27 deg vertical), pulled back so the frame holds the same street
+      camera.fov = EYE_FOV; camera.updateProjectionMatrix();
+      scene.background = hdr; scene.backgroundIntensity = 1.0; scene.fog = new THREE.Fog(0xd9cbb4, 460, 1500);
+      const h = D.building.h, tr = P3(c[0], c[1], h * 0.4), d2 = Math.max(330, h * 6.3), pol = 67 * D2R;
+      controls.minDistance = 100; controls.maxDistance = 1050; controls.minPolarAngle = 35 * D2R; controls.maxPolarAngle = 84 * D2R;
       flyTo(tr, new THREE.Vector3(tr.x + Math.cos(az) * Math.sin(pol) * d2, tr.y + Math.cos(pol) * d2, tr.z - Math.sin(az) * Math.sin(pol) * d2), ms);
     }
     for (const id of ["#walkhud", "#compass", "#mini", "#hint", "#route"]) $(id).hidden = true;
@@ -398,7 +400,7 @@ async function start(A, W) {
   function blocked(x, y) { if (!pip(x, y, D.slab, 0)) return true; for (const p of solid) if (pip(x, y, p, 0.6)) return true; return false; }
   function startWalk(at) {
     MODE = "walk"; document.body.classList.add("walk"); document.body.classList.remove("routing"); setModeUI(); controls.enabled = false; controls.autoRotate = false; tilt.enabled = false; fly = null;
-    camera.fov = 45; camera.near = 0.3;   /* eye level: 1.68 m up, a natural field of view (not wide-angle, not zoomed) */ camera.far = 2500; frameOffset(false); scene.background = hdr; scene.backgroundIntensity = 0.9; scene.fog = new THREE.Fog(0xd9cbb4, 260, 900);
+    camera.fov = EYE_FOV; camera.near = 0.3;   /* eye level: 1.68 m up, through a 50 mm lens: what the eye sees, not wide-angle, not zoomed */ camera.far = 2500; frameOffset(false); scene.background = hdr; scene.backgroundIntensity = 0.9; scene.fog = new THREE.Fog(0xd9cbb4, 260, 900);
     const w0 = at || D.street_cam || D.walk0; walk.pos.set(w0[0], w0[1]);
     const c = centroid(D.building.foot); walk.yaw = Math.atan2(c[0] - w0[0], c[1] - w0[1]); walk.pitch = clamp(Math.atan2(D.building.h * 0.42, Math.hypot(c[0] - w0[0], c[1] - w0[1])), 0, 0.9);
     for (const id of ["#walkhud", "#compass", "#mini", "#hint"]) $(id).hidden = false; $("#route").hidden = true; $("#hint").style.opacity = "1";
