@@ -30,6 +30,19 @@ page itself or through the site's front page.
     full width). A key plan would fix it.
 - **Street View** is the client's panorama, embedded without a key.
 
+## Furniture models
+
+`media/skymark-f1/models/` holds models made with Meshy (`meshy.py`):
+- `chair.glb`: the mesh task chair, used at every desk and meeting seat.
+- `lounge.glb`: the rust shell lounge chair.
+
+They are compressed with `gltf-transform optimize --texture-compress webp
+--texture-size 512 --compress meshopt`, which takes the chair from 7.5 MB to
+243 KB. Models made on Meshy's free plan are licensed CC BY 4.0, so the page
+credits Meshy. The other pieces (desks with screens and monitors, tables,
+sofas, planters, booths) are still modelled in code until more credits are
+available.
+
 ## Build
 
 ```bash

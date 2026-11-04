@@ -90,13 +90,13 @@ async function start(A) {
   scene.fog = new THREE.FogExp2(0xd7dde2, 0.00028);
   const LIGHT = {
     day:  { top: 0x4f86c6, hor: 0xd9e3ea, low: 0x8f8a80, sun: 0xfff1dc, sunI: 3.0, el: 52, az: 150, hemi: 0.9, fog: 0xd7dde2, exp: 1.0, night: 0 },
-    dusk: { top: 0x1d2b4f, hor: 0xe58f5c, low: 0x2b2524, sun: 0xff9a55, sunI: 1.2, el: 5, az: 255, hemi: 0.45, fog: 0x6b5b60, exp: 1.25, night: 1 },
+    dusk: { top: 0x16203d, hor: 0xd9814f, low: 0x221d1d, sun: 0xff8a45, sunI: 0.9, el: 4, az: 255, hemi: 0.22, fog: 0x3a3442, exp: 1.1, night: 1 },
   };
   const U = { uNight: { value: 0 } };
   function applyLight(k) {
     const L = LIGHT[k]; skyU.top.value.setHex(L.top); skyU.hor.value.setHex(L.hor); skyU.low.value.setHex(L.low); skyU.sunCol.value.setHex(L.sun);
     const d = new THREE.Vector3(Math.sin(L.az * D2R) * Math.cos(L.el * D2R), Math.sin(L.el * D2R), -Math.cos(L.az * D2R) * Math.cos(L.el * D2R)); skyU.sunDir.value.copy(d); SUN.copy(d);
-    sun.color.setHex(L.sun); sun.intensity = L.sunI; hemi.intensity = L.hemi; scene.fog.color.setHex(L.fog); renderer.toneMappingExposure = L.exp; U.uNight.value = L.night;
+    sun.color.setHex(L.sun); sun.intensity = L.sunI; hemi.intensity = L.hemi; scene.environmentIntensity = L.night ? 0.18 : 0.6; scene.fog.color.setHex(L.fog); renderer.toneMappingExposure = L.exp; U.uNight.value = L.night;
     for (const l of INT_LIGHTS) l.intensity = l.userData.k * (0.35 + L.night * 0.65);
     document.querySelectorAll("#light button").forEach((b) => b.classList.toggle("on", b.dataset.light === k));
   }
@@ -196,6 +196,9 @@ async function start(A) {
   box(10, 0.35, 4.5, M.acpDark, L_ / 2 + 2.25, ST.ground - 0.6, 0, bldg); for (const s of [-4.2, 4.2]) box(0.25, ST.ground - 0.8, 0.25, M.chrome, L_ / 2 + 4.2, (ST.ground - 0.8) / 2, s, bldg);
   bldg.updateMatrixWorld(true);
 
+  const gl = new GLTFLoader(); gl.setMeshoptDecoder(MeshoptDecoder);
+  const draco = new DRACOLoader(); draco.setDecoderPath("/engine/vendor/three/jsm/libs/draco/gltf/");
+
   /* --- Volt's first floor, from the deck's plan ------------------------- */
   const vf = new THREE.Group(); vf.visible = false; FLOORS[1].g.add(vf);
   const S_ = volt.scale, [OX, OY] = volt.origin, z1 = floorZ(1) + 0.47;
@@ -207,7 +210,7 @@ async function start(A) {
   // plan axes in bldg local: plan +x -> local -z... we rotate furniture by +90 so its own x runs along plan x
   const ROOMS = [];
   for (const r of volt.rooms) {
-    const [x0, y0, x1, y1] = r.rect, cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, w = pw(x1 - x0), d = pw(y1 - y0), c = PX(cx, cy);
+    const [x0, y0, x1, y1] = r.rect, cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, w = pw(x1 - x0), d = pw(y1 - y0), c = PX(cx, cy); c.y = z1;   // on the first floor
     ROOMS.push({ ...r, c, w, d });
     if (r.floor === "void") {     // the atrium: a hole with a glass balustrade
       const rails = [[cx, y0, w, 0.05], [cx, y1, w, 0.05], [x0, cy, 0.05, d], [x1, cy, 0.05, d]];
@@ -233,6 +236,7 @@ async function start(A) {
         for (let i = 0; i < cols; i++) for (let j = 0; j < rows; j++) {
           const x = ax0 + (ax1 - ax0) * (cols === 1 ? 0.5 : i / (cols - 1)), y = ay0 + (ay1 - ay0) * (rows === 1 ? 0.5 : j / (rows - 1));
           put("desk", x, y); put(((i + j) % 2) ? "screenO" : "screenW", x, y); put("chair", x + (i % 2 ? 1 : -1) * 22, y, i % 2 ? Math.PI : 0);
+          if (cols % 2 === 0 && i % 2 === 0) { const x2 = ax0 + (ax1 - ax0) * ((i + 1) / (cols - 1)); put("deskpair", (x + x2) / 2, y); }
         }
       } else if (k === "chairs" || k === "stools") { const [, ax, ay, bx, by, nn] = it; for (let i = 0; i < nn; i++) { const t = nn === 1 ? 0.5 : i / (nn - 1); put(k === "stools" ? "stool" : "chairM", ax + (bx - ax) * t, ay + (by - ay) * t, ay > (r.rect[1] + r.rect[3]) / 2 ? Math.PI / 2 : -Math.PI / 2); } }
       else if (k === "chair") put("chairM", it[1], it[2]);
@@ -259,7 +263,8 @@ async function start(A) {
   const proto = (parts) => parts;
   const P = {
     desk: [[1.2, 0.03, 0.6, M.woodLight, 0, 0.74, 0], [0.04, 0.72, 0.55, M.white, -0.57, 0.36, 0], [0.04, 0.72, 0.55, M.white, 0.57, 0.36, 0]],
-    screenW: [[1.2, 0.36, 0.025, M.white, 0, 0.94, -0.31]], screenO: [[1.2, 0.36, 0.025, M.orange, 0, 0.94, -0.31]],
+    screenW: [[1.2, 0.36, 0.025, M.white, 0, 0.94, -0.31], [0.55, 0.36, 0.02, M.screen, 0, 1.0, -0.2], [0.55, 0.07, 0.025, M.chrome, 0, 0.8, -0.2], [0.04, 0.16, 0.04, M.chrome, 0, 0.82, -0.22], [0.2, 0.01, 0.16, M.chrome, 0, 0.765, -0.22], [0.42, 0.012, 0.13, M.white, 0, 0.765, 0.04]],
+    screenO: [[1.2, 0.36, 0.025, M.orange, 0, 0.94, -0.31], [0.55, 0.36, 0.02, M.screen, 0, 1.0, -0.2], [0.55, 0.07, 0.025, M.chrome, 0, 0.8, -0.2], [0.04, 0.16, 0.04, M.chrome, 0, 0.82, -0.22], [0.2, 0.01, 0.16, M.chrome, 0, 0.765, -0.22], [0.42, 0.012, 0.13, M.white, 0, 0.765, 0.04]],
     chair: [[0.48, 0.07, 0.46, M.chair, 0, 0.46, 0], [0.46, 0.5, 0.05, M.chair, 0, 0.75, 0.22], [0.06, 0.42, 0.06, M.chrome, 0, 0.22, 0], [0.55, 0.03, 0.55, M.chrome, 0, 0.03, 0]],
     chairM: [[0.5, 0.07, 0.48, M.chair, 0, 0.47, 0], [0.48, 0.55, 0.05, M.chair, 0, 0.78, 0.23], [0.06, 0.42, 0.06, M.chrome, 0, 0.22, 0], [0.55, 0.03, 0.55, M.chrome, 0, 0.03, 0]],
     table: [[1, 0.05, 1, M.wood, 0, 0.74, 0], [0.7, 0.7, 0.7, M.charcoal, 0, 0.36, 0]],
@@ -278,20 +283,40 @@ async function start(A) {
     rack: [[0.8, 2.0, 1.0, M.rack, 0, 1.0, 0]],
     booth: [[1.3, 2.4, 0.08, M.blue, 0, 1.2, -0.7], [0.08, 2.4, 1.4, M.charcoal, -0.65, 1.2, 0], [0.08, 2.4, 1.4, M.charcoal, 0.65, 1.2, 0], [1.2, 0.04, 0.35, M.white, 0, 1.05, -0.5]],
   };
-  const PGEO = new Map(); const gkey = (w, h, d) => `${w}|${h}|${d}`;
+  const PGEO = new Map(), PIM = {}; const gkey = (w, h, d) => `${w}|${h}|${d}`;
   for (const [k, mats] of Object.entries(IM)) for (const [w, h, d, mat, x, y, z] of P[k] || []) {
     const geo = PGEO.get(gkey(w, h, d)) || new RoundedBoxGeometry(w, h, d, 2, Math.min(0.03, w / 3, h / 3, d / 3)); PGEO.set(gkey(w, h, d), geo);
     const im = new THREE.InstancedMesh(geo, mat, mats.length), off = new THREE.Matrix4().makeTranslation(x, y, z), t = new THREE.Matrix4();
-    mats.forEach((m, i) => im.setMatrixAt(i, t.multiplyMatrices(m, off))); im.castShadow = im.receiveShadow = true; vf.add(im);
+    mats.forEach((m, i) => im.setMatrixAt(i, t.multiplyMatrices(m, off))); im.castShadow = im.receiveShadow = true; vf.add(im); (PIM[k] = PIM[k] || []).push(im);
   }
+  /* Real models (Meshy, scripts/skymark/meshy.py) replace the blocks where we
+     have them: each is scaled to its real height, set on the floor, turned to
+     face the way the block did, and instanced at every place the plan has
+     one. keys: which block pieces it replaces; at: where it goes. */
+  const MODELS = [
+    { file: "chair.glb", at: ["chair", "chairM"], replaces: ["chair", "chairM"], height: 1.02, rot: Math.PI },
+    { file: "lounge.glb", at: ["lounge"], replaces: ["lounge"], height: 0.82, rot: Math.PI },
+  ];
+  async function upgrade(md) {
+    let g; try { g = await gl.loadAsync(A.media + "models/" + md.file); } catch (e) { if (!md.optional) console.warn(md.file, e); return; }
+    const root = g.scene; root.updateMatrixWorld(true); const bb = new THREE.Box3().setFromObject(root), sz = bb.getSize(new THREE.Vector3()), cc = bb.getCenter(new THREE.Vector3());
+    const k = md.height ? md.height / sz.y : md.width / Math.max(sz.x, sz.z);
+    const N = new THREE.Matrix4().makeRotationY(md.rot).multiply(new THREE.Matrix4().makeScale(k, k, k)).multiply(new THREE.Matrix4().makeTranslation(-cc.x, -bb.min.y, -cc.z));
+    const where = md.at.flatMap((key) => IM[key] || []); if (!where.length) return;
+    const t = new THREE.Matrix4();
+    root.traverse((o) => { if (!o.isMesh) return; const base = new THREE.Matrix4().multiplyMatrices(N, o.matrixWorld); const im = new THREE.InstancedMesh(o.geometry, o.material, where.length);
+      if (o.material) { o.material.envMapIntensity = 0.9; }
+      where.forEach((m, i) => im.setMatrixAt(i, t.multiplyMatrices(m, base))); im.castShadow = im.receiveShadow = true; vf.add(im); });
+    for (const key of md.replaces) for (const im of PIM[key] || []) { vf.remove(im); im.dispose(); }
+  }
+  MODELS.forEach((md) => upgrade(md));
   bldg.updateMatrixWorld(true);
 
   /* --- the context: Google's real mesh, else our 1 km model ------------- */
   const gkey_ = window.GOOGLE_MAPS_KEY || "";
   let tiles = null, flatten = null, flatShape = null, groundY = 0;
   const ctx = new THREE.Group(); scene.add(ctx);
-  const gl = new GLTFLoader(); gl.setMeshoptDecoder(MeshoptDecoder);
-  const draco = new DRACOLoader(); draco.setDecoderPath("/engine/vendor/three/jsm/libs/draco/gltf/");
+
   async function loadOwnContext() {
     const g = await gl.loadAsync(A.media + "context.glb");
     g.scene.traverse((o) => { if (!o.isMesh) return; const nm = o.name || ""; o.material = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: nm.startsWith("water") ? 0.1 : 0.9, flatShading: true, side: nm.startsWith("buildings") ? THREE.FrontSide : THREE.DoubleSide });
@@ -403,7 +428,8 @@ async function start(A) {
   function openRoom(id) {
     const r = ROOMS.find((x) => x.id === id); if (!r) return; ROOM = id; if (VIEW !== "floor" && VIEW !== "plan") go("floor", 0);
     const w = r.c.clone(); bldg.localToWorld(w); const t = w.clone().setY(w.y + 1); const dist = clamp(Math.max(r.w, r.d) * 1.6, 9, 30);
-    flyTo(t, VIEW === "plan" ? new THREE.Vector3(t.x, t.y + dist * 1.6, t.z + 0.01) : around(t, dist, 55, HERO_AZ + 18), 1300);
+    // from inside the floor, looking out towards the end facade, so no glass is in the way
+  flyTo(t, VIEW === "plan" ? around(t, dist * 1.6, 0.6, PLAN_AZ) : around(t, dist * 1.15, 46, PLAN_AZ), 1300);
     roomL.forEach((L) => L.el.classList.toggle("on", L.room.id === id)); renderCard(); renderCrumbs();
   }
   function openStreet() {
@@ -439,7 +465,7 @@ async function start(A) {
         ${r && r.slide ? `<figure id="photo"><img src="${A.media}slides/s${String(r.slide).padStart(2, "0")}.jpg" alt="${esc(r.name)}, from the deck"><span>The deck's render, slide ${r.slide}</span></figure>` : ""}
         ${r ? "" : `<h3>Capacity (the deck's legend)</h3><div class="legend">${volt.legend.map(([k, n]) => `<span>${esc(k)}</span><b>${n}</b>`).join("")}</div>`}
         <h3>Rooms</h3><div class="rooms">${ROOMS.filter((x) => x.floor !== "void").map((x) => `<button class="room${x.id === ROOM ? " on" : ""}" data-room="${esc(x.id)}"><b>${esc(x.name)}</b><span>${x.slide ? "PHOTO" : ""}</span></button>`).join("")}</div>
-        <span class="src">${esc(B.floors[1].deck)}. Traced to scale from its layout (1 px = 1.8 cm); furniture placed to the drawing. Where the floor sits in the building is indicative.</span>`;
+        <span class="src">${esc(B.floors[1].deck)}. Traced to scale from its layout (1 px = 1.8 cm); furniture placed to the drawing. Where the floor sits in the building is indicative. Chair models made with Meshy (CC BY 4.0).</span>`;
     } else {
       $("#card").innerHTML = `<span class="mono">${esc(B.address)}</span><h1>${esc(B.name)}</h1><p class="addr">Office building, IT/ITES</p>
         <dl class="facts">${B.facts.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>
@@ -456,7 +482,7 @@ async function start(A) {
 
   /* --- go ---------------------------------------------------------------- */
   // a reflection environment from the sky
-  { const pm = new THREE.PMREMGenerator(renderer); const es = new THREE.Scene(); const s2 = sky.clone(); s2.scale.setScalar(0.01); es.add(s2); applyLight("day"); scene.environment = pm.fromScene(es, 0, 1, 1000).texture; scene.environmentIntensity = 0.6; }
+  { const pm = new THREE.PMREMGenerator(renderer); const es = new THREE.Scene(); const s2 = sky.clone(); s2.scale.setScalar(0.01); es.add(s2); applyLight("day"); scene.environment = pm.fromScene(es, 0, 1, 1000).texture; }
   applyLight(Q.get("light") === "dusk" ? "dusk" : "day");
   renderStack(); renderCrumbs(); renderCard();
   for (const id of ["#crumbs", "#mode", "#card", "#stack", "#dock"]) $(id).hidden = false;
@@ -479,7 +505,7 @@ async function start(A) {
     if (!STILL) requestAnimationFrame(frame);
   }
   if (STILL) frame(performance.now()); else requestAnimationFrame(frame);
-  window.__sky = { go, openRoom, applyLight, clock, tick: (n = 1) => { for (let i = 0; i < n; i++) { last = performance.now() - 250; if (fly) fly.t0 -= 1e9; frame(performance.now()); } } };
+  window.__sky = { go, openRoom, applyLight, clock, cam: () => ({ p: camera.position.toArray().map((v) => +v.toFixed(1)), t: controls.target.toArray().map((v) => +v.toFixed(1)), fly: !!fly }), tick: (n = 1) => { for (let i = 0; i < n; i++) { last = performance.now() - 250; if (fly) fly.t0 -= 1e9; frame(performance.now()); } } };
 }
 
 boot();
