@@ -36,12 +36,18 @@ if (sbKey && /"role"\s*:\s*"service_role"/.test(Buffer.from((sbKey.split('.')[1]
 // fall back to their own model when it is missing.
 const gKey = process.env.GOOGLE_MAPS_BROWSER_KEY || '';
 
+// Cesium ion access token (browser): serves the same Google photorealistic 3D
+// tiles (ion asset 2275207) without a Google Cloud billing account. Optional;
+// restrict it in Cesium ion to the site's URLs and to that asset.
+const ionToken = process.env.CESIUM_ION_TOKEN || '';
+
 const outPath = path.join(__dirname, '..', 'config.js');
 const content = [
   `window.MAPBOX_TOKEN = ${JSON.stringify(token)};`,
   `window.SUPABASE_URL = ${JSON.stringify(sbUrl)};`,
   `window.SUPABASE_ANON_KEY = ${JSON.stringify(sbKey)};`,
   `window.GOOGLE_MAPS_KEY = ${JSON.stringify(gKey)};`,
+  `window.CESIUM_ION_TOKEN = ${JSON.stringify(ionToken)};`,
   ''
 ].join('\n');
 

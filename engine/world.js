@@ -171,18 +171,22 @@ async function start(A, W) {
      ?own=1 keeps the Blender dioramas. The world frame is scripts/world/
      prep.py's: metres east and north of 72.867 E, 19.111 N. */
   const GKEY = Q.get("own") === "1" ? "" : (window.GOOGLE_MAPS_KEY || "");
+  /* or through Cesium ion: the same Google tiles (asset 2275207), billed to a
+     free Cesium account instead of Google Cloud. Ion wins when both are set. */
+  const ION = Q.get("own") === "1" ? "" : (window.CESIUM_ION_TOKEN || Q.get("ion") || "");   // ?ion=<token>: to try a token before it is in the site's settings
   const LNG0 = 72.867, LAT0 = 19.111, KXW = Math.cos(LAT0 * D2R) * 111320, KYW = 110540;
   let tiles = null, tilesHold = null, TILES_MOD = null; window.__googleTiles = "off";
   const draco = new DRACOLoader(); draco.setDecoderPath("/engine/vendor/three/jsm/libs/draco/gltf/");
   async function googleAt(origin) {
-    if (!GKEY) return false;
+    if (!GKEY && !ION) return false;
     try {
       if (!TILES_MOD) TILES_MOD = await Promise.all([import("3d-tiles-renderer"), import("3d-tiles-renderer/plugins"), import("3d-tiles-renderer/three/plugins")]);
       const [{ TilesRenderer }, P, TP] = TILES_MOD;
       if (tiles) { tilesHold.remove(tiles.group); scene.remove(tilesHold); tiles.dispose(); tiles = null; }
       const lng = LNG0 + origin[0] / KXW, lat = LAT0 + origin[1] / KYW;
       const t = new TilesRenderer();
-      t.registerPlugin(new P.GoogleCloudAuthPlugin({ apiToken: GKEY, autoRefreshToken: true }));
+      if (ION) t.registerPlugin(new P.CesiumIonAuthPlugin({ apiToken: ION, assetId: "2275207", autoRefreshToken: true }));
+      else t.registerPlugin(new P.GoogleCloudAuthPlugin({ apiToken: GKEY, autoRefreshToken: true }));
       t.registerPlugin(new P.GLTFExtensionsPlugin({ dracoLoader: draco }));
       t.registerPlugin(new TP.TileCompressionPlugin()); t.registerPlugin(new P.TilesFadePlugin());
       t.registerPlugin(new P.ReorientationPlugin({ lat: lat * D2R, lon: lng * D2R, height: 0, up: "+y", recenter: true }));
@@ -199,7 +203,7 @@ async function start(A, W) {
       await new Promise((r) => setTimeout(r, 1500)); t.update();
       const hits = new THREE.Raycaster(new THREE.Vector3(0, 800, 0), new THREE.Vector3(0, -1, 0)).intersectObject(t.group, true);
       if (hits.length) tilesHold.position.y = -hits[hits.length - 1].point.y;
-      tiles = t; window.__googleTiles = "on";
+      tiles = t; window.__googleTiles = ION ? "on (Cesium ion)" : "on (Google key)";
       return true;
     } catch (e) { console.warn("Google 3D tiles:", e); window.__googleTiles = "failed"; return false; }
   }
