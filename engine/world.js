@@ -30,7 +30,6 @@ import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { GTAOPass } from "three/addons/postprocessing/GTAOPass.js";
 import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
-import { DRACOLoader } from "three/addons/loaders/DRACOLoader.js";
 
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -164,45 +163,6 @@ async function start(A, W) {
       mats.forEach((m, i) => im.setMatrixAt(i, t.multiplyMatrices(m, p.m))); im.castShadow = shadow; im.receiveShadow = true; scene.add(im); out.push(im); }
     return out;
   }
-  /* Google's photorealistic 3D tiles: the real buildings of Andheri, with
-     their real facades, in place of our Blender blocks, wherever the Maps key
-     allows it (window.GOOGLE_MAPS_KEY from /config.js, with the Map Tiles
-     API and billing on). Pins, routes, labels and walking stay ours.
-     ?own=1 keeps the Blender dioramas. The world frame is scripts/world/
-     prep.py's: metres east and north of 72.867 E, 19.111 N. */
-  const GKEY = Q.get("own") === "1" ? "" : (window.GOOGLE_MAPS_KEY || "");
-  const LNG0 = 72.867, LAT0 = 19.111, KXW = Math.cos(LAT0 * D2R) * 111320, KYW = 110540;
-  let tiles = null, tilesHold = null, TILES_MOD = null; window.__googleTiles = "off";
-  const draco = new DRACOLoader(); draco.setDecoderPath("/engine/vendor/three/jsm/libs/draco/gltf/");
-  async function googleAt(origin) {
-    if (!GKEY) return false;
-    try {
-      if (!TILES_MOD) TILES_MOD = await Promise.all([import("3d-tiles-renderer"), import("3d-tiles-renderer/plugins"), import("3d-tiles-renderer/three/plugins")]);
-      const [{ TilesRenderer }, P, TP] = TILES_MOD;
-      if (tiles) { tilesHold.remove(tiles.group); scene.remove(tilesHold); tiles.dispose(); tiles = null; }
-      const lng = LNG0 + origin[0] / KXW, lat = LAT0 + origin[1] / KYW;
-      const t = new TilesRenderer();
-      t.registerPlugin(new P.GoogleCloudAuthPlugin({ apiToken: GKEY, autoRefreshToken: true }));
-      t.registerPlugin(new P.GLTFExtensionsPlugin({ dracoLoader: draco }));
-      t.registerPlugin(new TP.TileCompressionPlugin()); t.registerPlugin(new P.TilesFadePlugin());
-      t.registerPlugin(new P.ReorientationPlugin({ lat: lat * D2R, lon: lng * D2R, height: 0, up: "+y", recenter: true }));
-      t.errorTarget = MOBILE ? 14 : 5;
-      t.setCamera(camera); t.setResolutionFromRenderer(camera, renderer);
-      // photographs, already lit: show their colours as they are
-      t.addEventListener("load-model", ({ scene: m }) => m.traverse((o) => { if (o.material) { o.material.toneMapped = false; o.castShadow = false; o.receiveShadow = false; } }));
-      let failed = false; t.addEventListener("load-error", () => { failed = true; });
-      tilesHold = new THREE.Group(); tilesHold.add(t.group); scene.add(tilesHold);
-      const ok = await new Promise((res) => { const t0 = performance.now(); const tick = () => { camera.updateMatrixWorld(); t.update(); let n = 0; t.group.traverse((o) => { if (o.isMesh) n++; });
-        if (n > 30) return res(true); if (failed || performance.now() - t0 > 15000) return res(false); requestAnimationFrame(tick); }; tick(); });
-      if (!ok) { scene.remove(tilesHold); t.dispose(); window.__googleTiles = "failed"; return false; }
-      // put Google's ground at our y = 0: the lowest surface straight down at the slab centre
-      await new Promise((r) => setTimeout(r, 1500)); t.update();
-      const hits = new THREE.Raycaster(new THREE.Vector3(0, 800, 0), new THREE.Vector3(0, -1, 0)).intersectObject(t.group, true);
-      if (hits.length) tilesHold.position.y = -hits[hits.length - 1].point.y;
-      tiles = t; window.__googleTiles = "on";
-      return true;
-    } catch (e) { console.warn("Google 3D tiles:", e); window.__googleTiles = "failed"; return false; }
-  }
   async function loadDiorama(id) {
     $("#veil").classList.add("on");
     const [gltf, data] = await Promise.all([
@@ -244,11 +204,6 @@ async function start(A, W) {
     }
     // solid footprints for walking
     solid = D.blocks.map((r) => r.map(([x, y]) => [x, y]));
-    // the real city, where Google's tiles load: our blocks, trees and traffic make way for it
-    const real = await googleAt(D.origin);
-    root.visible = !real; for (const m of inst) m.visible = !real;
-    $("#credit").textContent = real ? "3D: Google photorealistic 3D tiles (Map data ©Google). Pins, routes and labels: Autopilot. Distances: Google Maps."
-      : "Built in Blender from Overture Maps footprints. Heights around each building are estimated; the buildings use the deck's floors. Distances: Google Maps.";
     placeLabels(true);
     await new Promise((r) => setTimeout(r, 50));
     $("#veil").classList.remove("on");
@@ -455,7 +410,7 @@ async function start(A, W) {
   $("#strip").innerHTML = OPTS.map((o) => { const r = (o.routes || []).find((x) => x.kind === "metro"); const th = W.thumbs && W.thumbs[o.id];
     return `<button class="film" data-id="${esc(o.id)}" style="${th ? `background-image:url('${W.data}${th}')` : ""}"><span><span class="n">${String(o.n).padStart(2, "0")}</span><b>${esc(o.name)}</b>${r ? `<i>${fm(r.m)} · ${esc(r.name)}</i>` : ""}</span></button>`; }).join("");
   $("#strip").addEventListener("click", (e) => { const f = e.target.closest(".film"); if (f && f.dataset.id !== SEL) select(f.dataset.id); });
-  addEventListener("resize", () => { camera.aspect = innerWidth / innerHeight; frameOffset(MODE === "dollhouse"); renderer.setSize(innerWidth, innerHeight); composer.setSize(innerWidth, innerHeight); gtao.setSize(innerWidth, innerHeight); tilt.uniforms.uRes.value.set(innerWidth, innerHeight); if (tiles) tiles.setResolutionFromRenderer(camera, renderer); });
+  addEventListener("resize", () => { camera.aspect = innerWidth / innerHeight; frameOffset(MODE === "dollhouse"); renderer.setSize(innerWidth, innerHeight); composer.setSize(innerWidth, innerHeight); gtao.setSize(innerWidth, innerHeight); tilt.uniforms.uRes.value.set(innerWidth, innerHeight); });
 
   const deep = location.hash.slice(1); const first = OPTS.some((o) => o.id === deep) ? deep : OPTS[0].id;
   await select(first, true);
@@ -471,7 +426,6 @@ async function start(A, W) {
     if (MODE === "dollhouse") controls.update();
     else if (MODE === "walk") stepWalk(dt); else if (MODE === "route") stepRouteWalk(dt);
     stepMovers(dt);
-    if (tiles) { camera.updateMatrixWorld(); tiles.update(); }
     composer.render(); placeLabels(false); clock.frames++;
     if (!STILL) requestAnimationFrame(frame);
   }
