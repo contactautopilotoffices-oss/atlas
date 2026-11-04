@@ -2482,6 +2482,9 @@ function wirePanes() {
 const DIST_ROUTES = O.flatMap(o => o.routes || []);
 const DIST_SRC = DIST_ROUTES.length && DIST_ROUTES.every(r => r.dist && r.dist === DIST_ROUTES[0].dist) ? DIST_ROUTES[0].dist : "";
 const DIST_URL = DIST_SRC ? DIST_ROUTES[0].src : "";
+/* Each building says where its own figures come from: an atlas can mix
+   sources (Flipkart's 2D atlas has Google Maps for most, a listing for two). */
+const ownSrc = (o) => { const r = o.routes || []; return r.length && r.every(x => x.dist && x.dist === r[0].dist) ? r[0] : null; };
 function connHTML(o) {
   const c = connOf(o), sc = selConn(o), rt = STN_ROUTE.get(o.id), by = (o.facts || []).find(x => x.k === "Railway by metro");
   const routed = Array.isArray(o.routes) && o.routes.length > 0;
@@ -2496,7 +2499,7 @@ function connHTML(o) {
     ${metro.length ? `<div class="ch">Metro</div>${metro.join("")}` : ""}
     ${rail.length ? `<div class="ch">Railway station</div>${rail.join("")}${by ? `<p class="note">${esc(by.v)} ${cite(by.src)}</p>` : ""}` : ""}
     ${bus.length ? `<div class="ch">Bus stops</div>${bus.join("")}<p class="note">${esc(BUSD.name || "Bus stops")}${BUSD.src ? ` ${cite(BUSD.src, "source")}` : ""}. ${esc(BUSD.note || "")}</p>` : ""}
-    <p class="note">${routed && DIST_SRC ? `Distances${DIST_ROUTES.some(r => r.min) ? " and walk times" : ""} from ${esc(DIST_SRC)} ${cite(DIST_URL, "source")}. The line on the map follows the streets (${FEED_SOURCE ? esc(FEED_SOURCE.name) : "OpenStreetMap routing"}).`
+    <p class="note">${routed && ownSrc(o) ? `Distances${o.routes.some(r => r.min) ? " and walk times" : ""} from ${esc(ownSrc(o).dist)} ${cite(ownSrc(o).src, "source")}. The line on the map follows the streets (${FEED_SOURCE ? esc(FEED_SOURCE.name) : "OpenStreetMap routing"}).`
       : routed && FEED_SOURCE ? `Distances and paths follow the streets, from ${esc(FEED_SOURCE.name)}${FEED_SOURCE.used < FEED_SOURCE.total ? ` (${FEED_SOURCE.used} of ${FEED_SOURCE.total} routes; the rest from OpenStreetMap)` : ""}.`
       : routed ? `Distances and paths follow the streets: walking to ${bus.length ? "metro stations and bus stops" : "metro stations"}${rail.length ? `, by road to ${rail.length === 1 ? "the railway station" : "railway stations"}` : ""} (OpenStreetMap routing ${cite(M.routing || "https://routing.openstreetmap.de", "source")}).` : "Distances are straight-line from the pin; the metro walk is a route where one loads."} The map shows the row you pick.</p>
   </div>`;
