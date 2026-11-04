@@ -394,32 +394,63 @@ def build():
             a0, a1 = l.interpolate(max(0, t0 - 60)), l.interpolate(min(l.length, t0 + 60)); ang = math.atan2(a1.y - a0.y, a1.x - a0.x)
             px, py = L(p.x, p.y); ca, sa = math.cos(ang), math.sin(ang); nx2, ny2 = -sa, ca
             STATIONS.append({"name": s["name"], "line": key, "x": round(px, 1), "y": round(py, 1), "ang": round(ang, 3)})
-            for k in np.arange(-60, 61, 15):          # columns
-                for sg in (-1, 1): cyl(stn, px + ca * k + nx2 * sg * 9.5, py + sa * k + ny2 * sg * 9.5, 0, ZD - 2.3, 0.6, 0.6, 0, "concrete", 16)
-            boxm(stn, px, py, ZD - 9.0, ZD - 8.4, 96, 23, ang, "concrete", bottom=True)        # concourse slab
-            boxm(stn, px, py, ZD - 3.6, ZD - 2.4, 100, 24, ang, "concrete", bottom=True)      # concourse roof / platform underside
-            for sg in (-1, 1):                                                                 # concourse walls: glass band over cladding
-                boxm(stn, px + nx2 * sg * 11.6, py + ny2 * sg * 11.6, ZD - 8.4, ZD - 6.8, 96, 0.3, ang, "metal")
-                boxm(stn, px + nx2 * sg * 11.6, py + ny2 * sg * 11.6, ZD - 6.8, ZD - 3.6, 96, 0.12, ang, "station_glass")
-                boxm(stn, px + nx2 * sg * 11.7, py + ny2 * sg * 11.7, ZD - 5.4, ZD - 3.7, 22, 0.25, ang, "sign_l1")   # name board
-                boxm(stn, px + nx2 * sg * 12.0, py + ny2 * sg * 12.0, ZD + 0.05, ZD + 2.6, 138, 0.1, ang, "station_glass")  # platform screens
-            # platforms either side of the tracks
-            for sg in (-1, 1): boxm(stn, px + nx2 * sg * 7.6, py + ny2 * sg * 7.6, ZD - 0.6, ZD + 1.1, 136, 5.6, ang, "concrete")
-            # barrel roof
-            prof = [(n, ZD + 7.8 + 3.2 * math.cos(n / 13.5 * math.pi / 2)) for n in np.linspace(-13.5, 13.5, 19)]
-            pr2 = prof + [(n, z + 0.35) for n, z in prof[::-1]]
-            line2 = [(px - ca * 72, py - sa * 72), (px + ca * 72, py + sa * 72)]
+            # --- a Line 1 station as Mumbai builds it, not a block ---
+            R = lambda k, n: (px + ca * k + nx2 * n, py + sa * k + ny2 * n)   # station frame: k along the line, n across it
+            ZC0, ZC1 = ZD - 9.0, ZD - 3.0                                     # concourse floor and ceiling
+            # portal frames: twin round columns with a deep crosshead, every 15 m, carrying the concourse
+            for k in np.arange(-60, 61, 15):
+                for sg in (-1, 1): cyl(stn, *R(k, sg * 9.2), 0, ZC0, 0.75, 0.75, 0, "concrete", 20)
+                boxm(stn, *R(k, 0), ZC0 - 1.6, ZC0, 1.8, 21.0, ang, "concrete", bottom=True)
+            boxm(stn, px, py, ZC0, ZC0 + 0.45, 98, 23.6, ang, "concrete", bottom=True)            # concourse floor slab
+            boxm(stn, px, py, ZC1, ZC1 + 0.6, 100, 24.4, ang, "concrete", bottom=True)            # platform slab over it
+            boxm(stn, px, py, ZC0 + 0.45, ZC0 + 0.5, 97, 22.8, ang, "pavers")                     # concourse floor finish (seen through the glass)
+            for sg in (-1, 1):
+                n = sg * 11.6
+                boxm(stn, *R(0, n), ZC0 + 0.45, ZC0 + 1.4, 98, 0.35, ang, "metal")                 # ACP base band
+                boxm(stn, *R(0, sg * 11.5), ZC0 + 1.4, ZC1 - 0.1, 97, 0.06, ang, "station_glass")  # glazing
+                for k in np.arange(-48, 48.1, 1.5):                                               # mullions
+                    boxm(stn, *R(k, n + sg * 0.08), ZC0 + 1.4, ZC1 - 0.1, 0.09, 0.22, ang, "metal")
+                boxm(stn, *R(0, n + sg * 0.1), ZC1 - 0.45, ZC1, 99, 0.5, ang, "metal")            # head fascia
+                boxm(stn, *R(0, sg * 11.85), ZD - 5.2, ZD - 3.7, 26, 0.18, ang, "sign_l1")        # name board
+            # platforms: side platforms, open to the air behind louvres and a parapet
+            for sg in (-1, 1):
+                boxm(stn, *R(0, sg * 7.6), ZD - 0.6, ZD + 1.1, 136, 5.6, ang, "concrete")
+                boxm(stn, *R(0, sg * 7.6), ZD + 1.1, ZD + 1.14, 136, 5.4, ang, "pavers")
+                boxm(stn, *R(0, sg * 10.35), ZD + 1.14, ZD + 1.24, 136, 0.5, ang, "sign_l1")      # yellow-line edge stand-in: platform edge band
+                boxm(stn, *R(0, sg * 11.9), ZD + 1.1, ZD + 2.2, 138, 0.25, ang, "concrete")       # parapet
+                for k in np.arange(-68, 68.1, 0.9):                                               # vertical louvres above it
+                    boxm(stn, *R(k, sg * 12.0), ZD + 2.2, ZD + 6.6, 0.08, 0.32, ang, "metal")
+                boxm(stn, *R(0, sg * 12.0), ZD + 6.6, ZD + 6.85, 138, 0.4, ang, "metal")
+            # the roof: a shallow arch on exposed steel ribs, with overhanging eaves and a fascia
+            HALF = 14.2
+            prof = [(n, ZD + 8.0 + 2.6 * math.cos(n / HALF * math.pi / 2)) for n in np.linspace(-HALF, HALF, 21)]
+            pr2 = prof + [(n, z + 0.18) for n, z in prof[::-1]]
+            line2 = [(px - ca * 74, py - sa * 74), (px + ca * 74, py + sa * 74)]
             sweep(stn, line2, pr2, "station_roof", 6)
-            for k in np.arange(-66, 67, 12):          # roof posts on the platforms
-                for sg in (-1, 1): cyl(stn, px + ca * k + nx2 * sg * 11.2, py + sa * k + ny2 * sg * 11.2, ZD + 1.1, ZD + 7.9, 0.22, 0.22, 0, "metal", 10)
-            for sg in (-1, 1):                         # stair towers down to the footpath
+            for sg in (-1, 1):   # eaves fascia and gutter
+                sweep(stn, line2, [(sg * HALF - 0.3, ZD + 7.7), (sg * HALF + 0.35, ZD + 7.7), (sg * HALF + 0.35, ZD + 8.3), (sg * HALF - 0.3, ZD + 8.3)], "metal", 6)
+            for k in np.arange(-72, 72.1, 6):   # ribs: a curved steel I-section under the roof skin, on posts
+                rib = [(n, z - 0.05) for n, z in prof]; ribb = [(n, z - 0.75) for n, z in prof[::-1]]
+                sweep(stn, [R(k - 0.12, 0), R(k + 0.12, 0)], rib + ribb, "metal", 2)
+                for sg in (-1, 1): cyl(stn, *R(k, sg * 11.3), ZD + 1.1, ZD + 7.9, 0.2, 0.2, 0, "metal", 10)
+            for sg in (-1, 1):   # a purlin line each side, and the ridge
+                for nn in (sg * 5.0, sg * 10.0):
+                    zz = ZD + 8.0 + 2.6 * math.cos(nn / HALF * math.pi / 2) - 0.85
+                    boxm(stn, *R(0, nn), zz, zz + 0.2, 146, 0.2, ang, "metal")
+            # stairs and escalators down to the footpath, each under its own canopy
+            for sg in (-1, 1):
                 for e in (-1, 1):
                     bx2, by2 = px + ca * e * 52 + nx2 * sg * 16, py + sa * e * 52 + ny2 * sg * 16
                     for st_ in range(14):
-                        z0 = st_ * (ZD - 8.4) / 14; ox = (st_ - 7) * 1.6
-                        boxm(stn, bx2 + ca * ox, by2 + sa * ox, z0, z0 + (ZD - 8.4) / 14, 1.6, 3.2, ang, "concrete")
-                    boxm(stn, bx2, by2, ZD - 8.4, ZD - 8.0, 24, 3.8, ang, "station_roof")
-                    boxm(stn, bx2 + nx2 * -sg * 2.5, by2 + ny2 * -sg * 2.5, ZD - 9.0, ZD - 8.4, 6, 5, ang, "concrete")
+                        z0 = st_ * (ZC0) / 14; ox = (st_ - 7) * 1.6
+                        boxm(stn, bx2 + ca * ox, by2 + sa * ox, z0, z0 + ZC0 / 14, 1.6, 3.2, ang, "concrete")
+                    for side in (-1, 1):   # handrail walls in glass with a steel top rail
+                        sweep(stn, [(bx2 + ca * -11.2 + nx2 * side * 1.65, by2 + sa * -11.2 + ny2 * side * 1.65), (bx2 + ca * 11.2 + nx2 * side * 1.65, by2 + sa * 11.2 + ny2 * side * 1.65)],
+                              [(-0.03, 0.9), (0.03, 0.9), (0.03, 1.0), (-0.03, 1.0)], "metal", 4)
+                    boxm(stn, bx2, by2, ZC0 + 3.0, ZC0 + 3.25, 24, 4.4, ang, "station_roof")        # canopy
+                    for k in (-11, -3.5, 3.5, 11):
+                        for side in (-1, 1): cyl(stn, bx2 + ca * k + nx2 * side * 2.0, by2 + sa * k + ny2 * side * 2.0, 0, ZC0 + 3.0, 0.1, 0.1, 0, "metal", 8)
+                    boxm(stn, bx2 + nx2 * -sg * 2.5, by2 + ny2 * -sg * 2.5, ZC0, ZC0 + 0.45, 6, 5, ang, "concrete")   # landing to the concourse
             for sg in (-1, 1):
                 t = text_mesh(s["name"].upper(), 1.15, 0.05, f"sign_{s['name']}_{sg}")
                 t.data.materials.append(MATS["sign_text"])
@@ -451,11 +482,11 @@ def protos():
         # it then read as leaves, not as a solid blob
         rr = random.Random(name); uv = bm.loops.layers.uv.new("UVMap")
         for (x, y, z, rx, rz) in crowns:
-            for _ in range(int(14 + rx * 7)):
+            for _ in range(int(30 + rx * 14)):   # dense enough that the crown reads as foliage, not a few cards
                 u, v_, w_ = rr.uniform(-1, 1), rr.uniform(-1, 1), rr.uniform(-1, 1)
                 if u * u + v_ * v_ + w_ * w_ > 1: continue
                 cx_, cy_, cz_ = x + u * rx * 0.8, y + v_ * rx * 0.8, z + w_ * rz * 0.75
-                s_ = rr.uniform(1.6, 2.6) * (rx + rz) / 6
+                s_ = rr.uniform(1.2, 2.1) * (rx + rz) / 6
                 for k in range(2):   # two crossed cards per tuft
                     a = rr.uniform(0, math.pi) + k * math.pi / 2; tl = rr.uniform(-0.5, 0.5)
                     ex, ey, ez = math.cos(a) * s_, math.sin(a) * s_, 0.0
@@ -497,17 +528,61 @@ def protos():
     mb.build("proto_palm", MATS)
     mb = MB([]); cyl(mb, 0, 0, 0, 9.0, 0.09, 0.09, 0, "metal", 8); boxm(mb, 1.0, 0, 8.8, 8.95, 2.2, 0.08, 0, "metal"); boxm(mb, 2.0, 0, 8.6, 8.9, 0.8, 0.3, 0, "lamp_head")
     mat("lamp_head", "#e6e2d6", 0.4, emit="#fff0d0", ek=0.0); mb.build("proto_lamp", MATS)
-    mat("car_body", "#d8d8d6", 0.25, 0.6); mat("car_glass", "#22282d", 0.05, 0.5); mat("tyre", "#1b1b1b", 0.9)
-    mat("auto_body", "#2d7d3a", 0.4, 0.2); mat("auto_top", "#f0c22e", 0.5); mat("bus_body", "#b8322a", 0.4, 0.3)
-    def vehicle(name, L_, W_, H_, body, top, cabin=(0.55, 0.75, 0.42), wheels=0.32):
-        mb = MB([]); boxm(mb, 0, 0, wheels, H_ * 0.55, L_, W_, 0, body)
-        boxm(mb, -L_ * 0.05, 0, H_ * 0.55, H_, L_ * cabin[0], W_ * 0.92, 0, top)
-        for sx in (-1, 1):
-            for sy in (-1, 1): cyl(mb, sx * L_ * 0.32, sy * W_ * 0.5, wheels - 0.001, wheels + 0.001, wheels, wheels, 0, "tyre", 10)
-        return mb.build(name, MATS)
-    vehicle("proto_car", 4.3, 1.75, 1.5, "car_body", "car_glass")
-    vehicle("proto_auto", 2.7, 1.35, 1.75, "auto_body", "auto_top", (0.8, 0.9, 0.5), 0.22)
-    vehicle("proto_bus", 11.5, 2.5, 3.2, "bus_body", "bus_body", (0.98, 0.98, 0.5), 0.5)
+    mat("car_body", "#ffffff", 0.22, 0.55); mat("car_glass", "#1a2026", 0.04, 0.6); mat("tyre", "#161616", 0.9); mat("hub", "#b9bcbf", 0.3, 0.9)
+    mat("auto_body", "#2f7d36", 0.4, 0.15); mat("auto_top", "#f2c230", 0.55); mat("bus_body", "#b52a22", 0.35, 0.25)
+    mat("lamp_front", "#fff6e0", 0.2, emit="#fff6e0", ek=0.6); mat("lamp_rear", "#a01010", 0.3, emit="#ff2010", ek=0.4); mat("trim", "#202224", 0.5, 0.3)
+    def xprof(mb, prof, y0, y1, m, ox=0.0):
+        """Extrude a side profile [(x, z)] across the width (y0..y1), capped both sides."""
+        P = [(x + ox, z) for x, z in prof]; n = len(P)
+        for k in range(n):
+            a_, b_ = P[k], P[(k + 1) % n]
+            mb.quad((a_[0], y0, a_[1]), (b_[0], y0, b_[1]), (b_[0], y1, b_[1]), (a_[0], y1, a_[1]), [(0, 0), (1, 0), (1, 1), (0, 1)], m)
+        mb.poly([(x, y0, z) for x, z in P[::-1]], [(0, 0)] * n, m); mb.poly([(x, y1, z) for x, z in P], [(0, 0)] * n, m)
+    def wheel(mb, x, yc, r, w):
+        ring = [(x + r * math.cos(t), r + r * math.sin(t)) for t in np.linspace(0, math.tau, 16, endpoint=False)]
+        xprof(mb, ring, yc - w / 2, yc + w / 2, "tyre")
+        hub = [(x + r * 0.55 * math.cos(t), r + r * 0.55 * math.sin(t)) for t in np.linspace(0, math.tau, 12, endpoint=False)]
+        sg = 1 if yc > 0 else -1
+        xprof(mb, hub, yc + sg * w / 2, yc + sg * (w / 2 + 0.012), "hub")
+    # a saloon car, 4.4 m: low body to the beltline, a glass cabin set in from the sides, a body-colour roof
+    mb = MB([]); W2 = 0.88
+    xprof(mb, [(-2.2, 0.32), (2.2, 0.32), (2.24, 0.55), (2.12, 0.78), (1.25, 0.9), (-1.7, 0.95), (-2.18, 0.86), (-2.24, 0.55)], -W2, W2, "car_body")
+    xprof(mb, [(1.22, 0.9), (0.42, 1.36), (-0.92, 1.4), (-1.66, 0.96)], -W2 + 0.07, W2 - 0.07, "car_glass")
+    xprof(mb, [(0.46, 1.36), (-0.9, 1.4), (-0.9, 1.44), (0.44, 1.4)], -W2 + 0.09, W2 - 0.09, "car_body")
+    for sx in (1.38, -1.38):
+        for sy in (-W2 + 0.12, W2 - 0.12): wheel(mb, sx, sy, 0.32, 0.22)
+    for sy in (-0.62, 0.62):
+        xprof(mb, [(2.2, 0.62), (2.25, 0.62), (2.22, 0.74), (2.15, 0.74)], sy - 0.14, sy + 0.14, "lamp_front")
+        xprof(mb, [(-2.25, 0.7), (-2.2, 0.7), (-2.2, 0.82), (-2.22, 0.82)], sy - 0.15, sy + 0.15, "lamp_rear")
+    xprof(mb, [(2.21, 0.36), (2.27, 0.36), (2.27, 0.5), (2.23, 0.5)], -0.8, 0.8, "trim"); mb.build("proto_car", MATS)
+    # the auto rickshaw: green tub, yellow canvas hood, one wheel in front, two behind
+    mb = MB([]); W3 = 0.68
+    xprof(mb, [(-1.25, 0.28), (0.9, 0.28), (1.35, 0.55), (1.3, 1.0), (0.95, 1.05), (-1.25, 0.95)], -W3, W3, "auto_body")
+    xprof(mb, [(1.05, 1.05), (0.95, 1.72), (-1.05, 1.8), (-1.3, 1.45), (-1.25, 0.95)], -W3 - 0.04, W3 + 0.04, "auto_top")
+    xprof(mb, [(1.25, 1.0), (1.32, 1.0), (1.0, 1.62), (0.93, 1.62)], -W3 + 0.04, W3 - 0.04, "car_glass")   # windscreen
+    wheel(mb, 1.05, 0.0, 0.22, 0.12)
+    for sy in (-W3 + 0.08, W3 - 0.08): wheel(mb, -0.85, sy, 0.22, 0.14)
+    mb.build("proto_auto", MATS)
+    # a BEST bus, 11.5 m: red body, a dark window band, white roof
+    mb = MB([]); W4 = 1.25
+    xprof(mb, [(-5.75, 0.45), (5.75, 0.45), (5.85, 1.2), (5.8, 3.0), (5.6, 3.2), (-5.7, 3.2), (-5.8, 3.0), (-5.85, 1.2)], -W4, W4, "bus_body")
+    for sy in (-W4 - 0.01, W4 + 0.01):
+        boxm(mb, -0.2, sy, 1.75, 2.75, 10.6, 0.02, 0, "car_glass")
+    boxm(mb, 5.84, 0, 1.45, 2.85, 0.02, 2.2, 0, "car_glass")
+    boxm(mb, 0, 0, 3.2, 3.32, 11.2, 2.3, 0, "concrete")
+    for sx in (3.6, -3.4):
+        for sy in (-W4 + 0.15, W4 - 0.15): wheel(mb, sx, sy, 0.5, 0.3)
+    mb.build("proto_bus", MATS)
+    # a person, 1.7 m, walking: trousers, shirt (the page tints it per person), arms, head, hair
+    mat("person_trousers", "#2b3240", 0.85); mat("person_shirt", "#ffffff", 0.8); mat("person_skin", "#8a5a3c", 0.6); mat("person_hair", "#15110e", 0.7)
+    mb = MB([])
+    for sy in (-0.1, 0.1): boxm(mb, 0, sy, 0, 0.86, 0.15, 0.13, 0, "person_trousers")
+    boxm(mb, 0, 0, 0.86, 1.42, 0.24, 0.4, 0, "person_shirt"); boxm(mb, 0, 0, 1.36, 1.46, 0.2, 0.3, 0, "person_shirt")
+    for sy in (-0.25, 0.25): boxm(mb, 0, sy, 0.84, 1.4, 0.1, 0.09, 0, "person_shirt")
+    cyl(mb, 0, 0, 1.46, 1.52, 0.05, 0.05, 0, "person_skin", 8)
+    cyl(mb, 0, 0, 1.52, 1.71, 0.095, 0.085, 0, "person_skin", 12)
+    cyl(mb, -0.01, 0, 1.66, 1.73, 0.1, 0.09, 0, "person_hair", 12)
+    mb.build("proto_person", MATS)
     # one Line 1 car, 20 m: a rounded body, the window band and the blue stripe
     mat("train_body", "#eef1f4", 0.25, 0.5); mat("train_win", "#1e2832", 0.05, 0.6); mat("train_stripe", "#1c5fa8", 0.35)
     mb = MB([]); prof = [(-1.45, 0.4), (1.45, 0.4), (1.5, 2.6), (1.3, 3.6), (0.0, 3.9), (-1.3, 3.6), (-1.5, 2.6)]
