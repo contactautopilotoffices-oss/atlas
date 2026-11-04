@@ -547,6 +547,7 @@ async function start(A) {
     } else {
       $("#card").innerHTML = `<span class="mono">${esc(B.address)}</span><h1>${esc(B.name)}</h1><p class="addr">Office building, IT/ITES</p>
         <dl class="facts">${B.facts.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>
+        <p class="note">The footprint and the five storeys are real. The facade shown is a placeholder: it is not yet modelled from photos of the building.</p>
         <span class="src">Source: <a href="${esc(B.src)}" target="_blank" rel="noopener">Skymark Group</a>. Footprint: Overture Maps.</span>
         <div class="cta"><button class="btn pri" data-go="floor">Open Volt's floor</button><button class="btn" data-go="street">Street View</button></div>`;
     }
