@@ -417,7 +417,7 @@ async function start(A) {
     renderStack(); renderCard();
   }
   function go(view, ms) {
-    VIEW = view; if (view === "street") { openStreet(); return; }
+    VIEW = view; showRender(null); if (view === "street") { openStreet(); return; }
     $("#sv").hidden = true;
     setOpen(view === "floor" || view === "plan" ? 1 : null);
     outline.children.forEach((o) => { if (o.userData.ring) o.visible = view === "area"; });
@@ -431,7 +431,85 @@ async function start(A) {
     // from inside the floor, looking out towards the end facade, so no glass is in the way
   flyTo(t, VIEW === "plan" ? around(t, dist * 1.6, 0.6, PLAN_AZ) : around(t, dist * 1.15, 46, PLAN_AZ), 1300);
     roomL.forEach((L) => L.el.classList.toggle("on", L.room.id === id)); renderCard(); renderCrumbs();
+    showRender(id);
   }
+  /* a room with a Blender render opens as that picture, full screen: the 3D
+     gets you there, the render is what the client looks at */
+  const RENDERS = A.renders || {};
+  function showRender(id, which = "ours") {
+    const r = id && RENDERS[id], room = id && ROOMS.find((x) => x.id === id);
+    $("#rv").hidden = $("#rv-bar").hidden = !r; $("#mode").style.visibility = r ? "hidden" : "";
+    walkClose();
+    if (!r) return;
+    if (which === "walk" && WALK[id]) { $("#rv").hidden = true; walkOpen(id); }
+    const src = which === "deck" && room.slide ? `${A.media}slides/s${String(room.slide).padStart(2, "0")}.jpg` : A.media + r.src;
+    if (which === "3d" || which === "walk") { if (which === "3d") $("#rv").hidden = true; } else {
+      const img = $("#rv-img"); img.style.animation = "none"; void img.offsetWidth; img.style.animation = ""; img.src = src; img.alt = room.name;
+    }
+    $("#rv-cap").textContent = which === "deck" ? `The deck's render, slide ${room.slide}` : which === "3d" ? "The plan in 3D" : which === "walk" ? "Walk mode · 360° views rendered in Blender Cycles" : r.caption;
+    document.querySelectorAll("#rv-seg button").forEach((b) => { b.classList.toggle("on", b.dataset.rv === which); if (b.dataset.rv === "deck") b.hidden = !room.slide; if (b.dataset.rv === "walk") b.hidden = !WALK[id]; });
+  }
+
+  /* --- walk mode: stand in the room, drag to look, click a ring to move ---
+     Each point is a 360 panorama rendered in Cycles (scripts/skymark/blender,
+     --pano). The panorama's centre looks along the room's +x (the screen
+     wall), its left is the facade: in three.js terms room (x, y, up) is
+     (x, up, -y), which is how an equirectangular background wraps. */
+  const WALK = A.walk || {};
+  const W = { r: null, scene: null, cam: null, room: null, at: null, yaw: 0, pitch: -0.08, raf: 0, tex: new Map() };
+  function walkInit() {
+    if (W.r) return;
+    const c = $("#walk-c");
+    W.r = new THREE.WebGLRenderer({ canvas: c, antialias: true }); W.r.setPixelRatio(Math.min(devicePixelRatio, 2)); W.r.outputColorSpace = THREE.SRGBColorSpace;
+    W.scene = new THREE.Scene(); W.cam = new THREE.PerspectiveCamera(75, 1, 0.1, 100);
+    let drag = null;
+    c.addEventListener("pointerdown", (e) => { drag = { x: e.clientX, y: e.clientY, yaw: W.yaw, pitch: W.pitch }; c.setPointerCapture(e.pointerId); hint(false); });
+    c.addEventListener("pointermove", (e) => { if (!drag) return; const k = (W.cam.fov * D2R) / innerHeight;
+      W.yaw = drag.yaw - (e.clientX - drag.x) * k; W.pitch = clamp(drag.pitch + (e.clientY - drag.y) * k, -1.35, 1.35); });
+    c.addEventListener("pointerup", () => (drag = null));
+    c.addEventListener("wheel", (e) => { e.preventDefault(); W.cam.fov = clamp(W.cam.fov + e.deltaY * 0.04, 35, 95); W.cam.updateProjectionMatrix(); }, { passive: false });
+    addEventListener("keydown", (e) => { if ($("#walk").hidden) return; if (e.key === "ArrowLeft") W.yaw -= 0.12; if (e.key === "ArrowRight") W.yaw += 0.12; });
+    $("#walk-spots").addEventListener("click", (e) => { const b = e.target.closest("[data-pt]"); if (b) walkTo(b.dataset.pt); });
+  }
+  const hint = (on) => { const h = $("#walk-hint"); if (on) { h.hidden = false; h.style.opacity = "1"; } else { h.style.opacity = "0"; setTimeout(() => (h.hidden = true), 800); } };
+  function loadPano(p) {
+    if (!W.tex.has(p.src)) W.tex.set(p.src, new Promise((res) => new THREE.TextureLoader().load(A.media + p.src, (t) => { t.mapping = THREE.EquirectangularReflectionMapping; t.colorSpace = THREE.SRGBColorSpace; res(t); })));
+    return W.tex.get(p.src);
+  }
+  async function walkTo(id, first) {
+    const pts = WALK[W.room], p = pts.find((x) => x.id === id); if (!p) return;
+    const prev = W.at; W.at = p; const c = $("#walk-c");
+    if (!first) c.style.opacity = "0";
+    const t = await loadPano(p); if (W.at !== p) return;
+    // keep facing the way you were walking; the first view uses the point's yaw
+    if (first || !prev) W.yaw = (p.yaw || 0) * D2R; else W.yaw = Math.atan2(-(p.at[1] - prev.at[1]), p.at[0] - prev.at[0]);
+    W.scene.background = t; c.style.opacity = "1";
+    $("#walk-spots").innerHTML = pts.filter((q) => q !== p).map((q) => `<button data-pt="${esc(q.id)}" aria-label="Walk to: ${esc(q.name)}"></button><span>${esc(q.name)}</span>`).join("");
+    pts.filter((q) => q !== p).forEach(loadPano);   // the next steps are ready before you click
+  }
+  function walkOpen(room) {
+    walkInit(); W.room = room; $("#walk").hidden = false; hint(true);
+    walkTo(WALK[room][0].id, true);
+    cancelAnimationFrame(W.raf); const loop = () => { walkFrame(); W.raf = requestAnimationFrame(loop); }; loop();
+  }
+  function walkClose() { if (!W.r) return; cancelAnimationFrame(W.raf); $("#walk").hidden = true; $("#walk-hint").hidden = true; }
+  const _v = new THREE.Vector3();
+  function walkFrame() {
+    const w = innerWidth, h = innerHeight; if (W.r.domElement.width !== Math.round(w * W.r.getPixelRatio())) { W.r.setSize(w, h, false); }
+    W.cam.aspect = w / h; W.cam.updateProjectionMatrix();
+    const d = new THREE.Vector3(Math.cos(W.pitch) * Math.cos(W.yaw), Math.sin(W.pitch), Math.cos(W.pitch) * Math.sin(W.yaw));
+    W.cam.position.set(0, 0, 0); W.cam.lookAt(d); W.r.render(W.scene, W.cam);
+    // the rings on the floor, 1.6 m below the eye
+    const p = W.at; if (!p) return; const els = $("#walk-spots").children; let i = 0;
+    for (const q of WALK[W.room]) {
+      if (q === p) continue; const btn = els[i++], lab = els[i++]; if (!btn) break;
+      _v.set(q.at[0] - p.at[0], -1.58, -(q.at[1] - p.at[1])); const dist = _v.length(); const front = _v.dot(d) > 0;
+      _v.project(W.cam); const x = (_v.x + 1) / 2 * w, y = (1 - _v.y) / 2 * h; const vis = front && Math.abs(_v.x) < 1.2 && Math.abs(_v.y) < 1.2;
+      for (const el of [btn, lab]) { el.style.display = vis ? "" : "none"; el.style.left = x + "px"; el.style.top = y + "px"; }
+      btn.style.setProperty("--s", clamp(150 / dist, 34, 120) + "px");
+    }
+  }
+  $("#rv-seg").addEventListener("click", (e) => { const b = e.target.closest("[data-rv]"); if (b && ROOM) showRender(ROOM, b.dataset.rv); });
   function openStreet() {
     const sv = A.streetview; const f = $("#sv-frame");
     if (!f.src) f.src = `https://www.google.com/maps/embed?pb=!4v1730000000000!6m8!1m7!1s${sv.pano}!2m2!1d${sv.lat}!2d${sv.lng}!3f${sv.heading}!4f${sv.pitch}!5f0.7820865974627469`;
@@ -464,7 +542,7 @@ async function start(A) {
       $("#card").innerHTML = `<span class="mono">1st floor · Volt</span><h1>${esc(r ? r.name : "Volt")}</h1><p class="addr">${esc(r ? "From the deck's layout and renders." : "The proposed layout, in 3D, from the design and build deck.")}</p>
         ${r && r.slide ? `<figure id="photo"><img src="${A.media}slides/s${String(r.slide).padStart(2, "0")}.jpg" alt="${esc(r.name)}, from the deck"><span>The deck's render, slide ${r.slide}</span></figure>` : ""}
         ${r ? "" : `<h3>Capacity (the deck's legend)</h3><div class="legend">${volt.legend.map(([k, n]) => `<span>${esc(k)}</span><b>${n}</b>`).join("")}</div>`}
-        <h3>Rooms</h3><div class="rooms">${ROOMS.filter((x) => x.floor !== "void").map((x) => `<button class="room${x.id === ROOM ? " on" : ""}" data-room="${esc(x.id)}"><b>${esc(x.name)}</b><span>${x.slide ? "PHOTO" : ""}</span></button>`).join("")}</div>
+        <h3>Rooms</h3><div class="rooms">${ROOMS.filter((x) => x.floor !== "void").map((x) => `<button class="room${x.id === ROOM ? " on" : ""}" data-room="${esc(x.id)}"><b>${esc(x.name)}</b><span>${RENDERS[x.id] ? "RENDER" : x.slide ? "PHOTO" : ""}</span></button>`).join("")}</div>
         <span class="src">${esc(B.floors[1].deck)}. Traced to scale from its layout (1 px = 1.8 cm); furniture placed to the drawing. Where the floor sits in the building is indicative. Chair models made with Meshy (CC BY 4.0).</span>`;
     } else {
       $("#card").innerHTML = `<span class="mono">${esc(B.address)}</span><h1>${esc(B.name)}</h1><p class="addr">Office building, IT/ITES</p>
