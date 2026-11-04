@@ -40,7 +40,7 @@ const STILL = Q.get("still") === "1";
    a 35 mm lens from drone height, sky and haze behind, ground to the horizon,
    relief in the facades. ?look=model brings back the architect's-model look
    (tilt-shift, a high turntable, the slab floating on the page). */
-const REALLOOK = Q.get("look") !== "model";
+const REALLOOK = Q.get("look") === "real";   // opt-in (?look=real) until checked on screen; the model look stays the default
 const SLUG = ((Q.get("atlas") || location.pathname.split("/")[1] || "") + "").toLowerCase().replace(/[^a-z0-9-]/g, "");
 const D2R = Math.PI / 180, clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const fmtM = (m) => m < 1000 ? [`${Math.round(m / 10) * 10}`, "M"] : [`${(m / 1000).toFixed(1)}`, "KM"];
