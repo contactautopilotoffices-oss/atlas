@@ -368,7 +368,7 @@ const MARWAH = [
 ];
 const MARWAH_GMAPS = {
   "marwah-tower":         { metro: [["Saki Naka", 800], ["Marol Naka", 1200]], rail: 4900 },
-  "marwah-business-park": { metro: [["Saki Naka", 800], ["Marol Naka", 1200]], rail: 4900 },
+  "marwah-business-park": { metro: [["Saki Naka", 800], ["Marol Naka", 1600]], rail: 4900 },
 };
 for (const o of MARWAH) {
   const r = R[o.id], all = routesFor(o.id, LINES_OF);
