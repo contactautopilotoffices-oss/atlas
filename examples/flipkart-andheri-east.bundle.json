@@ -15,7 +15,8 @@
   "hideNearbyOptions": true,
   "routing": "https://routing.openstreetmap.de",
   "routeFeed": "/api/routes/mappls?atlas=flipkart-andheri",
-  "sheet": "Flipkart Property Inventory, Andheri East (Autopilot deck, Nov 2026); Marwah Tower and Marwah Business Park from the Flipkart Inventory Options Sheet (Autopilot, Nov 2026). Positions and connectivity researched Nov 2026; each carries its source."
+  "sheet": "Flipkart Property Inventory, Andheri East (Autopilot deck, Nov 2026); Marwah Tower and Marwah Business Park from the Flipkart Inventory Options Sheet (Autopilot, Nov 2026). Positions and connectivity researched Nov 2026; each carries its source.",
+  "boldSpec": true
  },
  "options": [
   {
@@ -355,7 +356,6 @@
     {
      "k": "Railway by metro",
      "v": "By metro: from Marol Naka, Line 1 runs to Andheri (Western and Harbour lines) in 4 stops, 3.6 km of track. Andheri is the metro and railway interchange.",
-     "src": "https://en.wikipedia.org/wiki/Line_1_(Mumbai_Metro)",
      "conf": "medium"
     }
    ]
@@ -684,7 +684,6 @@
     {
      "k": "Railway by metro",
      "v": "By metro: from Western Express Highway, Line 1 runs to Andheri (Western and Harbour lines) in 1 stop, 1.0 km of track. Andheri is the metro and railway interchange.",
-     "src": "https://en.wikipedia.org/wiki/Line_1_(Mumbai_Metro)",
      "conf": "medium"
     }
    ]
@@ -975,7 +974,6 @@
     {
      "k": "Railway by metro",
      "v": "By metro: from Marol Naka, Line 1 runs to Andheri (Western and Harbour lines) in 4 stops, 3.6 km of track. Andheri is the metro and railway interchange.",
-     "src": "https://en.wikipedia.org/wiki/Line_1_(Mumbai_Metro)",
      "conf": "medium"
     }
    ]
@@ -1284,7 +1282,6 @@
     {
      "k": "Railway by metro",
      "v": "By metro: from Western Express Highway, Line 1 runs to Andheri (Western and Harbour lines) in 1 stop, 1.0 km of track. Andheri is the metro and railway interchange.",
-     "src": "https://en.wikipedia.org/wiki/Line_1_(Mumbai_Metro)",
      "conf": "medium"
     }
    ]
@@ -1597,7 +1594,6 @@
     {
      "k": "Railway by metro",
      "v": "By metro: from Western Express Highway, Line 1 runs to Andheri (Western and Harbour lines) in 1 stop, 1.0 km of track. Andheri is the metro and railway interchange.",
-     "src": "https://en.wikipedia.org/wiki/Line_1_(Mumbai_Metro)",
      "conf": "medium"
     }
    ]
@@ -1908,7 +1904,6 @@
     {
      "k": "Railway by metro",
      "v": "By metro: from Marol Naka, Line 1 runs to Andheri (Western and Harbour lines) in 4 stops, 3.6 km of track. Andheri is the metro and railway interchange.",
-     "src": "https://en.wikipedia.org/wiki/Line_1_(Mumbai_Metro)",
      "conf": "medium"
     }
    ]
@@ -2333,7 +2328,6 @@
     {
      "k": "Railway by metro",
      "v": "By metro: from Airport Road, Line 1 runs to Andheri (Western and Harbour lines) in 3 stops, 3.0 km of track. Andheri is the metro and railway interchange.",
-     "src": "https://en.wikipedia.org/wiki/Line_1_(Mumbai_Metro)",
      "conf": "medium"
     }
    ]
@@ -3103,103 +3097,86 @@
     {
      "k": "Micro-market",
      "v": "Sakinaka Metro",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Floor / Unit",
      "v": "3rd or 4th",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Grade",
      "v": "B",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Total floors",
      "v": "G+9",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Building type",
      "v": "Commercial",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Furnishing",
      "v": "Furnished",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Efficiency",
      "v": "60%",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Carpet area",
      "v": "5,600 sq. ft. per floor",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Built-up area",
      "v": "9,333 sq. ft. per floor",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Ceiling height",
      "v": "10 ft - 11 ft (approx.)",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Per seat",
      "v": "Rs. 13,300 - Rs. 13,800",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Parking",
      "v": "4 per floor",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Fire NOC",
      "v": "Available",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "OC & CC",
      "v": "Available",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "DG",
      "v": "NA",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Possession",
      "v": "Immediately",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Railway by metro",
      "v": "By metro: from Saki Naka, Line 1 runs to Andheri (Western and Harbour lines) in 5 stops, 4.7 km of track. Andheri is the metro and railway interchange.",
-     "src": "https://en.wikipedia.org/wiki/Line_1_(Mumbai_Metro)",
      "conf": "medium"
     }
    ]
@@ -3981,103 +3958,86 @@
     {
      "k": "Micro-market",
      "v": "Sakinaka Metro",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Floor / Unit",
      "v": "Multiple floors",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Grade",
      "v": "B",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Total floors",
      "v": "G+14",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Building type",
      "v": "Commercial",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Furnishing",
      "v": "Bareshell",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Efficiency",
      "v": "60%",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Carpet area",
      "v": "5,150 and 5,450 sq. ft.",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Built-up area",
      "v": "8,583 and 9,083 sq. ft.",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Ceiling height",
      "v": "10 ft - 11 ft (approx.)",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Per seat",
      "v": "Rs. 15,800 - Rs. 16,300",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Parking",
      "v": "5 per floor",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Fire NOC",
      "v": "NA",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "OC & CC",
      "v": "NA",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "DG",
      "v": "NA",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Possession",
      "v": "Feb - March 2027",
-     "conf": "high",
-     "src": "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)"
+     "conf": "high"
     },
     {
      "k": "Railway by metro",
      "v": "By metro: from Saki Naka, Line 1 runs to Andheri (Western and Harbour lines) in 5 stops, 4.7 km of track. Andheri is the metro and railway interchange.",
-     "src": "https://en.wikipedia.org/wiki/Line_1_(Mumbai_Metro)",
      "conf": "medium"
     }
    ]

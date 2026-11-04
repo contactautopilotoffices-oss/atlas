@@ -380,11 +380,15 @@ for (const o of MARWAH) {
     reason: [`Floor ${o.floor}`, o.furnishing, `Carpet area ${o.carpet}`, `Possession: ${o.possession}`, `Per seat: ${o.perSeat}`].join(" · "),
     routes: [pick("metro", "Saki Naka"), pick("metro", "Marol Naka"), pick("rail", "Andheri")],
     facts: [
-      ...spec.map(([k, v]) => ({ k, v, conf: "high", src: SHEET })),
+      ...spec.map(([k, v]) => ({ k, v, conf: "high" })),
       { k: "Railway by metro", v: railByMetro(o.id).v, src: railByMetro(o.id).src, conf: "medium" },
     ],
   });
 }
+/* The 2D atlas is read by the client: the detail table shows the figures
+   only, bold, with no source links (the sources stay in this script). */
+for (const o of flat.options) o.facts = o.facts.map(({ src, ...f }) => f);
+flat.meta.boldSpec = true;
 flat.zones.push({ key: "sakinaka-metro", label: "Sakinaka Metro", name: "Sakinaka Metro", color: "#6b5bb5" });
 flat.meta.sheet = `${DECK}; Marwah Tower and Marwah Business Park from the ${SHEET}. Positions and connectivity researched Nov 2026; each carries its source.`;
 

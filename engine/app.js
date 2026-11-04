@@ -2555,7 +2555,7 @@ function renderOption(o) {
     ${marketHTML(o)}
 
     ${sheetRows.length ? `<h3>${esc(say("option.spec", "The detail"))}</h3>` : ""}
-    <table class="spec">${sheetRows.map(([k, v]) => `<tr><th>${esc(k)}</th><td>${v}</td></tr>`).join("")}
+    <table class="spec${M.boldSpec ? " strong" : ""}">${sheetRows.map(([k, v]) => `<tr><th>${esc(k)}</th><td>${v}</td></tr>`).join("")}
       ${(o.facts || []).map(x => `<tr><th>${esc(x.k)}</th><td>${esc(x.v)} ${cite(x.src)}</td></tr>`).join("")}</table>
 
     ${EX ? `<h3>${esc(say("option.against", "Against today's office"))}</h3>
