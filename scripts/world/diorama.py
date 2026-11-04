@@ -197,6 +197,29 @@ mat("sign_text", "#ffffff", 0.4, emit="#ffffff", ek=0.6); mat("rail", "#6f6a64",
 mat("mullion", "#c4c9cc", 0.3, 0.9); mat("slab_edge", "#e6e3dc", 0.6); mat("glass_lobby", "#6e8a96", 0.03, 0.6); mat("canopy", "#2b2e31", 0.4, 0.6)
 mat("opt_name", "#f2f0ea", 0.3, 0.6, emit="#fff4de", ek=0.4); mat("wire", "#3a3a3a", 0.5, 0.8); mat("ballast", "#7d7568", 0.95)
 
+# --- ground kept clear for the metro: the map's footprints include Line 1's stations and viaduct as plain
+# buildings, which extrude into tall solid blocks right where the station structure has to stand ---
+def _metro_clear():
+    zs = []
+    for key in ("L1",):
+        lines = [LineString(l) for l in S["metro"].get(key, {}).get("lines", [])]
+        zs += [l.buffer(5.5, cap_style=2) for l in lines]
+        for s in S["stations"]:
+            if s["line"] != key or not lines: continue
+            pt = Point(s["x"], s["y"]); l = min(lines, key=lambda l: l.distance(pt))
+            if l.distance(pt) > 80: continue
+            t0 = l.project(pt)
+            seg = LineString([l.interpolate(max(0, t0 - 75)), l.interpolate(min(l.length, t0 + 75))])
+            zs.append(seg.buffer(17, cap_style=2))
+            for e in (-52, 52):                       # the stairs down to each footpath
+                q = l.interpolate(min(l.length, max(0, t0 + e))); zs.append(q.buffer(22))
+    return unary_union(zs) if zs else Polygon()
+METRO_CLEAR = _metro_clear()
+def blocks_metro(p):
+    if METRO_CLEAR.is_empty: return False
+    i = p.intersection(METRO_CLEAR).area
+    return i > 40 or i > 0.25 * p.area
+
 # -------------------------------------------------------------- the build ----
 def build():
     sc = bpy.context.scene
@@ -207,6 +230,7 @@ def build():
     for b in S["buildings"]:
         p = Polygon(b["p"])
         if not p.is_valid: p = p.buffer(0)
+        if b.get("opt") != OID and blocks_metro(p): continue   # the map draws the station and viaduct as a building; we build the real thing there
         if SLAB.contains(p.centroid): bpolys.append((b, p.intersection(SLAB)))
     built = unary_union([p for _, p in bpolys]) if bpolys else Polygon()
 
@@ -616,7 +640,7 @@ def page_data(info):
             ls = LineString(line).intersection(SLAB.buffer(-1))
             for l in (ls.geoms if hasattr(ls, "geoms") else [ls]):
                 if l.geom_type == "LineString" and l.length > 60: metro.setdefault(key, []).append({"z": ZD, "p": [[round(a, 1), round(b, 1)] for a, b in (L(x, y) for x, y in l.coords)]})
-    blds = [[[round(a, 1), round(b, 1)] for a, b in (L(x, y) for x, y in Polygon(b["p"]).exterior.coords)] for b in S["buildings"] if SLAB.contains(Polygon(b["p"]).centroid) and Polygon(b["p"]).area > 20]
+    blds = [[[round(a, 1), round(b, 1)] for a, b in (L(x, y) for x, y in Polygon(b["p"]).exterior.coords)] for b in S["buildings"] if SLAB.contains(Polygon(b["p"]).centroid) and Polygon(b["p"]).area > 20 and (b.get("opt") == OID or not blocks_metro(Polygon(b["p"]).buffer(0)))]
     routes = [{"kind": r["kind"], "name": r["name"], "m": r["m"], "min": r.get("min"), "path": [[round(a, 1), round(b, 1)] for a, b in (L(x, y) for x, y in r["path"])]} for r in SO["routes"]]
     return {"id": OID, "name": BO["name"], "origin": [round(OX, 2), round(OY, 2)], "slab": [[round(a, 1), round(b, 1)] for a, b in SL.exterior.coords],
             "building": {"foot": [[round(a, 1), round(b, 1)] for a, b in (L(x, y) for x, y in OPTB["p"])], "h": round(info["H"], 1), "floors": info["floors"], "glassy": info["glassy"],
