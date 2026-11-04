@@ -323,8 +323,10 @@ box("handle2", (0.95, GY - 0.06, 0.55), (0.975, GY - 0.035, 1.75), "black", 0.00
 BW = 0.6
 box("band_n", (0, -BW, H_BAND), (LX, 0, H_BAND + 0.08), "gypsum", 0.002)
 box("band_s", (0, -DY, H_BAND), (LX, -DY + BW, H_BAND + 0.08), "gypsum", 0.002)
-box("band_w", (0, -DY, H_BAND), (BW, 0, H_BAND + 0.08), "gypsum", 0.002)
-box("band_e", (LX - BW, -DY, H_BAND), (LX, 0, H_BAND + 0.08), "gypsum", 0.002)
+# the end bands stop where the long ones begin: overlapping boxes with
+# coincident faces render black in Cycles (seen as a black square overhead in walk mode)
+box("band_w", (0, -DY + BW, H_BAND), (BW, -BW, H_BAND + 0.08), "gypsum", 0.002)
+box("band_e", (LX - BW, -DY + BW, H_BAND), (LX, -BW, H_BAND + 0.08), "gypsum", 0.002)
 box("field", (BW - 0.1, -DY + BW - 0.1, H_FIELD), (LX - BW + 0.1, -BW + 0.1, H_FIELD + 0.02), "tiles", 0)
 for nm, a, b in (("riser_n", (BW, -BW, H_BAND + 0.08), (LX - BW, -BW + 0.01, H_FIELD)),
                  ("riser_s", (BW, -DY + BW - 0.01, H_BAND + 0.08), (LX - BW, -DY + BW, H_FIELD)),
