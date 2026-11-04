@@ -55,6 +55,25 @@ a modelled room with known cameras (`DIR/truth.json`). Run `sfm.py DIR WORK
 true ones, in metres. That's the pipeline's own accuracy check, before real
 photos arrive.
 
+### Results so far (Volt conference room, 36 synthetic photos, 1024 x 576)
+
+| Run | Registered | Reprojection | Camera error, mean / max |
+| --- | --- | --- | --- |
+| Defaults (a lens per photo, exhaustive matching) | 36 / 36 | 0.76 px | 0.77 m / 3.1 m |
+| One shared lens, exhaustive | 36 / 36 | 0.76 px | 0.76 m / 2.8 m |
+| One shared lens, sequential (8) | 36 / 36 | 0.67 px | 0.62 m / 1.7 m |
+| Same, with nothing outside the window | 11 / 36 | 0.82 px | 0.58 m / 2.2 m |
+
+Low reprojection error with metre-level camera error means the solve agrees
+with itself but not with reality. This room is a hard case: both long walls are
+glass, the cameras face the window, and the chairs and bays repeat. Glass
+reflections put features where nothing is, and repeats get matched to the wrong
+copy. What helps on real photos: one lens for the set, sequential matching
+along a walk, GPS from the phone as a prior, shooting glass at an angle, and
+plenty of solid, textured surfaces in every frame (all in `CAPTURE.md`). Not
+yet tried: masking glass and sky, and GPS priors in the solve. A real exterior
+capture is the test that matters.
+
 ## Not here yet, on purpose
 
 - **The upload app, job queue and database** (Supabase tables `dt_*`, Redis

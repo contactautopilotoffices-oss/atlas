@@ -81,5 +81,11 @@ overlapping viewpoints. Without them, model the massing and mark the facade
 ## Tested so far
 
 - COLMAP on a synthetic capture with known cameras, rendered from the Volt
-  conference room (`conf18.py --capture`). `sfm.py --truth` reports the
-  camera error in metres. See `scripts/twin/README.md`.
+  conference room (`conf18.py --capture`); `sfm.py --truth` reports the
+  camera error in metres.
+- Result: every photo registered at under 1 px reprojection error, but the
+  cameras were 0.6 to 0.8 m off.
+- **Never trust reprojection error alone as proof of accuracy.** Check against
+  known positions or a measured dimension.
+- Glass and repeating elements are the failure modes. The numbers are in
+  `scripts/twin/README.md`.
