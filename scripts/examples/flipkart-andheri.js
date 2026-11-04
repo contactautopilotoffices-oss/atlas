@@ -353,9 +353,10 @@ flat.options = EAST_ORDER.map((id, i) => {
   };
   return { ...o, n: i + 1, routes: [...e.metro.map(([n, m]) => pickR("metro", n, m)), pickR("rail", "Andheri", e.rail)] };
 });
-/* The two Marwah buildings, from the sheet, in its words. No Google Maps
-   figures yet: their distances are computed along OpenStreetMap streets
-   (Overture Maps, scripts/examples/overture-route.py) and are to be checked. */
+/* The two Marwah buildings, from the sheet, in its words. Their distances
+   are Autopilot's Google Maps figures (Nov 2026), like the others; the line
+   on the map follows OpenStreetMap streets (Overture Maps,
+   scripts/examples/overture-route.py, as the OSRM servers were unreachable). */
 const SHEET = "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)";
 const MARWAH = [
   { id: "marwah-tower", name: "Marwah Tower", floor: "3rd or 4th", grade: "B", floors: "G+9", furnishing: "Furnished", efficiency: "60%",
@@ -365,10 +366,14 @@ const MARWAH = [
     carpet: "5,150 and 5,450 sq. ft.", builtUp: "8,583 and 9,083 sq. ft.", ceiling: "10 ft - 11 ft (approx.)", perSeat: "Rs. 15,800 - Rs. 16,300",
     parking: "5 per floor", noc: "NA", occ: "NA", dg: "NA", possession: "Feb - March 2027" },
 ];
-const OSM_DIST = "OpenStreetMap streets (computed; to be checked in Google Maps)";
+const MARWAH_GMAPS = {
+  "marwah-tower":         { metro: [["Saki Naka", 800], ["Marol Naka", 1200]], rail: 4900 },
+  "marwah-business-park": { metro: [["Saki Naka", 800], ["Marol Naka", 1200]], rail: 4900 },
+};
 for (const o of MARWAH) {
   const r = R[o.id], all = routesFor(o.id, LINES_OF);
-  const pick = (kind, name) => { const x = all.find(y => y.kind === kind && y.name === name); if (!x) throw new Error(`${o.id}: no street route to ${name}`); const { min, ...rest } = x; return { ...rest, dist: OSM_DIST }; };
+  const pick = (kind, name, m) => { const x = all.find(y => y.kind === kind && y.name === name); if (!x) throw new Error(`${o.id}: no street route to ${name}`); const { min, ...rest } = x; return { ...rest, m, src: GMAPS_SRC, dist: "Google Maps" }; };
+  const g = MARWAH_GMAPS[o.id];
   const spec = [
     ["Micro-market", "Sakinaka Metro"], ["Floor / Unit", o.floor], ["Grade", o.grade], ["Total floors", o.floors], ["Building type", "Commercial"],
     ["Furnishing", o.furnishing], ["Efficiency", o.efficiency], ["Carpet area", o.carpet], ["Built-up area", o.builtUp], ["Ceiling height", o.ceiling],
@@ -378,7 +383,7 @@ for (const o of MARWAH) {
     id: o.id, n: flat.options.length + 1, name: o.name, lat: r.lat, lng: r.lng, precision: r.precision, geoSrc: r.geoSrc, geoNote: r.geoNote,
     micro: "sakinaka-metro", address: r.address, locality: "Andheri East",
     reason: [`Floor ${o.floor}`, o.furnishing, `Carpet area ${o.carpet}`, `Possession: ${o.possession}`, `Per seat: ${o.perSeat}`].join(" · "),
-    routes: [pick("metro", "Saki Naka"), pick("metro", "Marol Naka"), pick("rail", "Andheri")],
+    routes: [...g.metro.map(([n, m]) => pick("metro", n, m)), pick("rail", "Andheri", g.rail)],
     facts: [
       ...spec.map(([k, v]) => ({ k, v, conf: "high" })),
       { k: "Railway by metro", v: railByMetro(o.id).v, src: railByMetro(o.id).src, conf: "medium" },
@@ -397,5 +402,5 @@ const L3 = flat.transit.lines.find(l => l.key === "line3");
 L3.stations.splice(L3.stations.findIndex(s => s.name === "Sahar Road"), 0, { name: "CSMIA T2", lat: 19.10233, lng: 72.87447, open: true });
 flat.transit.lines.splice(2, 0, { key: "line7", name: "Metro Line 7 (Red)", short: "L7", mode: "metro", color: "#d23c3c", status: "open", src: "https://en.wikipedia.org/wiki/Line_7_(Mumbai_Metro)",
   stations: [{ name: "Gundavali", lat: 19.11451, lng: 72.85516, open: true }] });
-flat.copy.connect.note = "Walking distance from each building to its two metro stations, and Andheri railway station by road: measured in Google Maps (Nov 2026), except for the two Marwah buildings, computed along OpenStreetMap streets and still to be checked.";
+flat.copy.connect.note = "Walking distance from each building to its two metro stations, and Andheri railway station by road, as measured in Google Maps (Nov 2026).";
 write(MAP_SLUG, flat, MAP_ACCESS, { media: `/media/${SLUG}/` });
