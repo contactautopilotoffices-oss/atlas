@@ -194,16 +194,22 @@ async function start(A, W) {
       t.setCamera(camera); t.setResolutionFromRenderer(camera, renderer);
       // photographs, already lit: show their colours as they are
       t.addEventListener("load-model", ({ scene: m }) => m.traverse((o) => { if (o.material) { o.material.toneMapped = false; o.castShadow = false; o.receiveShadow = false; } }));
-      let failed = false; t.addEventListener("load-error", () => { failed = true; });
+      // say on screen what is happening, so a failure can be read without the console
+      const say = (m) => { window.__googleTiles = m; const c = $("#credit"); if (c) c.textContent = m; console.info("[real buildings]", m); };
+      let failed = "", tilesetOk = false;
+      t.addEventListener("load-error", (e) => { const er = e && (e.error || e); failed = (er && (er.message || String(er))) || "a tile did not load"; if (e && e.url) failed += " (" + String(e.url).replace(/[?#].*$/, "").slice(0, 80) + ")"; console.warn("[real buildings] load-error", e); });
+      t.addEventListener("load-tile-set", () => { tilesetOk = true; });
+      say(`Real buildings: connecting to ${ION ? "Cesium ion" : "Google"}…`);
       tilesHold = new THREE.Group(); tilesHold.add(t.group); scene.add(tilesHold);
       const ok = await new Promise((res) => { const t0 = performance.now(); const tick = () => { camera.updateMatrixWorld(); t.update(); let n = 0; t.group.traverse((o) => { if (o.isMesh) n++; });
-        if (n > 30) return res(true); if (failed || performance.now() - t0 > 15000) return res(false); requestAnimationFrame(tick); }; tick(); });
-      if (!ok) { scene.remove(tilesHold); t.dispose(); window.__googleTiles = "failed"; return false; }
+        if (tilesetOk && n > 0 && performance.now() - t0 > 2500) return res(true);
+        if ((failed && !tilesetOk) || performance.now() - t0 > 40000) return res(false); requestAnimationFrame(tick); }; tick(); });
+      if (!ok) { scene.remove(tilesHold); t.dispose(); say(`Real buildings did not load: ${failed || (tilesetOk ? "the city loaded but no buildings arrived in 40 s" : "no answer from " + (ION ? "Cesium ion" : "Google") + " in 40 s")}. Showing our model.`); return false; }
       // put Google's ground at our y = 0: the lowest surface straight down at the slab centre
       await new Promise((r) => setTimeout(r, 1500)); t.update();
       const hits = new THREE.Raycaster(new THREE.Vector3(0, 800, 0), new THREE.Vector3(0, -1, 0)).intersectObject(t.group, true);
       if (hits.length) tilesHold.position.y = -hits[hits.length - 1].point.y;
-      tiles = t; window.__googleTiles = ION ? "on (Cesium ion)" : "on (Google key)";
+      tiles = t; window.__googleTiles = ION ? "on (Cesium ion)" : "on (Google key)"; console.info("[real buildings] on");
       return true;
     } catch (e) { console.warn("Google 3D tiles:", e); window.__googleTiles = "failed"; return false; }
   }
@@ -251,8 +257,8 @@ async function start(A, W) {
     // the real city, where Google's tiles load: our blocks, trees and traffic make way for it
     const real = await googleAt(D.origin);
     root.visible = !real; for (const m of inst) m.visible = !real;
-    $("#credit").textContent = real ? "3D: Google photorealistic 3D tiles (Map data ©Google). Pins, routes and labels: Autopilot. Distances: Google Maps."
-      : "Built in Blender from Overture Maps footprints. Heights around each building are estimated; the buildings use the deck's floors. Distances: Google Maps.";
+    if (real) $("#credit").textContent = "3D: Google photorealistic 3D tiles (Map data ©Google). Pins, routes and labels: Autopilot. Distances: Google Maps.";
+    else if (!(GKEY || ION)) $("#credit").textContent = "Built in Blender from Overture Maps footprints. Heights around each building are estimated; the buildings use the deck's floors. Distances: Google Maps.";
     placeLabels(true);
     await new Promise((r) => setTimeout(r, 50));
     $("#veil").classList.remove("on");
