@@ -175,7 +175,7 @@ async function start(A, W) {
      free Cesium account instead of Google Cloud. Ion wins when both are set. */
   const ION = Q.get("own") === "1" ? "" : (window.CESIUM_ION_TOKEN || Q.get("ion") || "");   // ?ion=<token>: to try a token before it is in the site's settings
   const LNG0 = 72.867, LAT0 = 19.111, KXW = Math.cos(LAT0 * D2R) * 111320, KYW = 110540;
-  let tiles = null, tilesHold = null, TILES_MOD = null; window.__googleTiles = "off";
+  let tiles = null, tilesHold = null, TILES_MOD = null, REAL = false; window.__googleTiles = "off";
   const draco = new DRACOLoader(); draco.setDecoderPath("/engine/vendor/three/jsm/libs/draco/gltf/");
   async function googleAt(origin) {
     if (!GKEY && !ION) return false;
@@ -190,10 +190,16 @@ async function start(A, W) {
       t.registerPlugin(new P.GLTFExtensionsPlugin({ dracoLoader: draco }));
       t.registerPlugin(new TP.TileCompressionPlugin()); t.registerPlugin(new P.TilesFadePlugin());
       t.registerPlugin(new P.ReorientationPlugin({ lat: lat * D2R, lon: lng * D2R, height: 0, up: "+y", recenter: true }));
-      t.errorTarget = MOBILE ? 14 : 5;
+      t.errorTarget = MOBILE ? 10 : 3;
       t.setCamera(camera); t.setResolutionFromRenderer(camera, renderer);
       // photographs, already lit: show their colours as they are
-      t.addEventListener("load-model", ({ scene: m }) => m.traverse((o) => { if (o.material) { o.material.toneMapped = false; o.castShadow = false; o.receiveShadow = false; } }));
+      t.addEventListener("load-model", ({ scene: m }) => m.traverse((o) => {
+        if (!o.isMesh || !o.material) return;
+        // the tiles are photographs with the daylight already in them: draw them unlit, as they were shot
+        // (lit as glTF PBR they come out dark, since an unset metalness reads as fully metallic)
+        const old = o.material; o.material = new THREE.MeshBasicMaterial({ map: old.map || null, color: old.map ? 0xffffff : (old.color || 0xcccccc), side: old.side, toneMapped: false });
+        old.dispose(); o.castShadow = false; o.receiveShadow = false;
+      }));
       // say on screen what is happening, so a failure can be read without the console
       const say = (m) => { window.__googleTiles = m; const c = $("#credit"); if (c) c.textContent = m; console.info("[real buildings]", m); };
       let failed = "", tilesetOk = false;
@@ -255,7 +261,7 @@ async function start(A, W) {
     // solid footprints for walking
     solid = D.blocks.map((r) => r.map(([x, y]) => [x, y]));
     // the real city, where Google's tiles load: our blocks, trees and traffic make way for it
-    const real = await googleAt(D.origin);
+    const real = await googleAt(D.origin); REAL = real;
     root.visible = !real; for (const m of inst) m.visible = !real;
     if (real) $("#credit").textContent = "3D: Google photorealistic 3D tiles (Map data ©Google). Pins, routes and labels: Autopilot. Distances: Google Maps.";
     else if (!(GKEY || ION)) $("#credit").textContent = "Built in Blender from Overture Maps footprints. Heights around each building are estimated; the buildings use the deck's floors. Distances: Google Maps.";
@@ -356,7 +362,14 @@ async function start(A, W) {
     controls.minDistance = Math.max(90, D.building.h * 1.4); controls.maxDistance = R * 3;
     flyTo(t, new THREE.Vector3(t.x + Math.cos(az) * Math.sin(polar) * dist, t.y + Math.cos(polar) * dist, t.z - Math.sin(az) * Math.sin(polar) * dist), ms);
     frameOffset(true);
-    controls.autoRotate = true; tilt.enabled = true; sunBox(R * 0.62, P3(0, 0));
+    controls.autoRotate = true; tilt.enabled = !REAL; gtao.enabled = !REAL; sunBox(R * 0.62, P3(0, 0));
+    if (REAL) {
+      // the real building, close enough for Google to send its detailed tiles; a daylight sky behind
+      scene.background = hdr; scene.backgroundIntensity = 1.0;
+      const h = D.building.h, tr = P3(c[0], c[1], h * 0.45), d2 = Math.max(260, h * 3.6), pol = 60 * D2R;
+      controls.minDistance = 60; controls.maxDistance = 1400;
+      flyTo(tr, new THREE.Vector3(tr.x + Math.cos(az) * Math.sin(pol) * d2, tr.y + Math.cos(pol) * d2, tr.z - Math.sin(az) * Math.sin(pol) * d2), ms);
+    }
     for (const id of ["#walkhud", "#compass", "#mini", "#hint", "#route"]) $(id).hidden = true;
   }
   /* on a wide screen the overlay takes the left, so the view's centre moves right */
@@ -371,7 +384,7 @@ async function start(A, W) {
     if (r) for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const [ax, ay] = P[j], [bx, by] = P[i]; const dx = bx - ax, dy = by - ay; const t = clamp(((x - ax) * dx + (y - ay) * dy) / (dx * dx + dy * dy + 1e-9), 0, 1); if (Math.hypot(x - ax - dx * t, y - ay - dy * t) < r) return true; } return false; }
   function blocked(x, y) { if (!pip(x, y, D.slab, 0)) return true; for (const p of solid) if (pip(x, y, p, 0.6)) return true; return false; }
   function startWalk(at) {
-    MODE = "walk"; document.body.classList.add("walk"); document.body.classList.remove("routing"); setModeUI(); controls.enabled = false; controls.autoRotate = false; tilt.enabled = false; fly = null;
+    MODE = "walk"; document.body.classList.add("walk"); document.body.classList.remove("routing"); setModeUI(); controls.enabled = false; controls.autoRotate = false; tilt.enabled = false; gtao.enabled = !REAL; fly = null;
     camera.fov = 62; camera.near = 0.3; camera.far = 2500; frameOffset(false); scene.background = hdr; scene.backgroundIntensity = 0.9; scene.fog = new THREE.Fog(0xd9cbb4, 260, 900);
     const w0 = at || D.street_cam || D.walk0; walk.pos.set(w0[0], w0[1]);
     const c = centroid(D.building.foot); walk.yaw = Math.atan2(c[0] - w0[0], c[1] - w0[1]); walk.pitch = clamp(Math.atan2(D.building.h * 0.42, Math.hypot(c[0] - w0[0], c[1] - w0[1])), 0, 0.9);
