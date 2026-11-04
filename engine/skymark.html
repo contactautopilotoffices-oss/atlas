@@ -97,6 +97,7 @@ h3{margin:18px 0 8px;font:600 11px/1 var(--mono);letter-spacing:.14em;text-trans
 #walk-spots span{position:absolute;pointer-events:none;transform:translate(-50%,calc(-100% - 18px));font-size:12px;color:#fff;background:rgba(0,0,0,.45);padding:4px 9px;border-radius:999px;white-space:nowrap}
 #walk-hint{position:fixed;left:50%;top:76px;transform:translateX(-50%);z-index:6;padding:8px 14px;font-size:12.5px;color:var(--mut);border-radius:999px;transition:opacity .8s}
 #rv{position:fixed;inset:0;z-index:4;background:#0b0c0e;overflow:hidden}
+#rv video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 #rv img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform-origin:60% 50%;animation:kb 30s ease-out forwards;transition:opacity .5s}
 @keyframes kb{from{transform:scale(1.0)}to{transform:scale(1.07)}}
 #rv-bar{position:fixed;right:20px;bottom:96px;z-index:6;display:flex;align-items:center;gap:10px;padding:6px 6px 6px 14px;border-radius:999px;font-size:12px;color:var(--mut)}
@@ -161,8 +162,8 @@ h3{margin:18px 0 8px;font:600 11px/1 var(--mono);letter-spacing:.14em;text-trans
 
 <section id="walk" hidden aria-label="Walk mode"><canvas id="walk-c"></canvas><div id="walk-spots"></div></section>
 <div id="walk-hint" class="glass" hidden>Drag to look around · click a ring on the floor to walk there</div>
-<section id="rv" hidden aria-label="Rendered view"><img id="rv-img" alt=""></section>
-<div id="rv-bar" class="glass" hidden><span id="rv-cap">Rendered in Blender Cycles</span><div class="seg" id="rv-seg"><button data-rv="ours" class="on">Our render</button><button data-rv="deck">The deck's</button><button data-rv="walk" hidden>Walk</button><button data-rv="3d">3D</button></div></div>
+<section id="rv" hidden aria-label="Rendered view"><img id="rv-img" alt=""><video id="rv-vid" muted playsinline loop preload="none" hidden></video></section>
+<div id="rv-bar" class="glass" hidden><span id="rv-cap">Rendered in Blender Cycles</span><div class="seg" id="rv-seg"><button data-rv="film" hidden>Film</button><button data-rv="ours" class="on">Our render</button><button data-rv="deck">The deck's</button><button data-rv="walk" hidden>Walk</button><button data-rv="3d">3D</button></div></div>
 <section id="sv" class="glass" hidden><header><span class="mono" style="color:var(--mut)">Google Street View · in front of Skymark F-1</span><button class="x" id="sv-x" aria-label="Close">✕</button></header><iframe id="sv-frame" title="Google Street View of Skymark F-1" loading="lazy" allowfullscreen referrerpolicy="no-referrer-when-downgrade"></iframe></section>
 <div id="src3d"></div>
 <div id="toast" class="glass" hidden></div>

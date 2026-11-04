@@ -10,6 +10,7 @@ physical sky and sun through the real facade, with the real Sector 6 context
       [--pano X,Y --res 4096x2048]   a 360 view for walk mode, standing at room x, y (metres)
       [--top]                        a plan check from above
       [--capture N --out DIR]        N photos along the room with known cameras (truth.json), to test scripts/twin
+      [--film N --out DIR]           a camera move in N frames (resumable); join with ffmpeg (see README)
 
 Rules followed (.claude/skills/archviz-quality-bar and the realism playlist):
 real scale; every edge bevelled; no pure black or white; roughness that varies;
@@ -439,14 +440,8 @@ box("lap_base", (lx - 0.16, ly - 0.11, 0.76), (lx + 0.16, ly + 0.11, 0.775), "al
 lid = box("lap_lid", (-0.16, 0, 0), (0.16, 0.006, 0.21), "alu", 0.002); lid.location = (lx, ly + 0.11, 0.775); lid.rotation_euler.x = math.radians(-12)
 # a conference phone
 lathe("confphone", [(0.0, 0), (0.12, 0), (0.12, 0.012), (0.1, 0.03), (0.0, 0.03)], "black", (TCX, TCY, 0.76))
-# a planter in the corner by the window
-box("planter", (LX - 0.95, -0.85, 0), (LX - 0.55, -0.45, 0.62), "oak", 0.004)
-box("soil", (LX - 0.93, -0.83, 0.58), (LX - 0.57, -0.47, 0.6), "soil", 0)
-for i in range(70):  # broad leaves on stems, a simple plant that still reads as alive
-    a = random.uniform(0, 2 * math.pi); h = random.uniform(0.75, 1.45); r = random.uniform(0.05, 0.28)
-    lf = plane(f"leaf{i}", 0.09, 0.32, "plant", (LX - 0.75 + r * math.cos(a), -0.65 + r * math.sin(a), h),
-               (math.radians(random.uniform(35, 75)), 0, a + math.pi / 2))
-    sd = lf.modifiers.new("bend", "SIMPLE_DEFORM"); sd.deform_method = "BEND"; sd.angle = math.radians(40); sd.deform_axis = "X"
+# No plant: a convincing one needs a real model, and a fake one (flat leaf cards) ruins the shot
+# (archviz-blender-photorealism, rule 13). Add one when a proper plant model is available.
 
 # ---------------------------------------------------------------- beyond the glass: the open office
 for i in range(4):
@@ -556,6 +551,25 @@ if "--top" in sys.argv:   # a plan check: orthographic, from above, ceiling hidd
     cam.location = (LX / 2, -DY / 2, 2.5); cam.rotation_euler = (0, 0, 0)
     for o in COL.objects:
         if o.location.z > 2.3 or o.name.startswith(("slab", "band", "field", "riser", "cove", "lip", "pendant", "cable", "head")): o.hide_render = True
+if "--film" in sys.argv:  # a camera move, frame by frame: from the door, along the glass, turning to the window and the screen
+    nf = int(arg("--film")); outdir = OUT; os.makedirs(outdir, exist_ok=True)
+    sc.render.use_persistent_data = True          # keep the scene in memory between frames
+    cam_d.lens = 22; cam_d.shift_y = -0.04; cam_d.dof.aperture_fstop = 5.6
+    sm = lambda t: t * t * (3 - 2 * t)             # ease in and out
+    lerp = lambda a, b, t: tuple(x + (y - x) * t for x, y in zip(a, b))
+    P0, P1 = (0.30, -2.70, 1.42), (5.2, -2.72, 1.30)                   # eye: door to two thirds down the room, clear of the glass
+    T0, T1 = (LX, -1.05, 1.15), (LX - 0.2, -0.75, 1.05)              # looking: down the room, ending on the window and the screen
+    for i in range(nf):
+        out_f = os.path.join(outdir, f"f{i:04d}.png")
+        if os.path.exists(out_f): continue                              # resumable
+        t = sm(i / max(1, nf - 1))
+        pe, pt = lerp(P0, P1, t), lerp(T0, T1, t)
+        d = Vector(pt) - Vector(pe)
+        cam.location = pe; cam.rotation_euler = d.to_track_quat("-Z", "Y").to_euler()
+        foc.location = lerp((TCX, TCY, 0.8), (TCX + 1.8, TCY + 0.4, 0.8), t)
+        sc.render.filepath = out_f; bpy.ops.render.render(write_still=True)
+        print("frame", i + 1, "of", nf, flush=True)
+    raise SystemExit
 if "--capture" in sys.argv:  # a synthetic photo set with known cameras, to test the reconstruction pipeline (scripts/twin)
     n = int(arg("--capture")); outdir = OUT; os.makedirs(outdir, exist_ok=True)
     cam_d.dof.use_dof = False; cam_d.shift_y = 0; cam_d.lens = 24

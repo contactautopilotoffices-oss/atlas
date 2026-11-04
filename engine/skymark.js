@@ -436,18 +436,22 @@ async function start(A) {
   /* a room with a Blender render opens as that picture, full screen: the 3D
      gets you there, the render is what the client looks at */
   const RENDERS = A.renders || {};
-  function showRender(id, which = "ours") {
+  const FILMS = A.films || {};
+  function showRender(id, which = id && FILMS[id] ? "film" : id && WALK[id] ? "walk" : "ours") {
+    const vid = $("#rv-vid"); if (which !== "film") { vid.pause(); vid.hidden = true; }
     const r = id && RENDERS[id], room = id && ROOMS.find((x) => x.id === id);
     $("#rv").hidden = $("#rv-bar").hidden = !r; $("#mode").style.visibility = r ? "hidden" : "";
     walkClose();
     if (!r) return;
     if (which === "walk" && WALK[id]) { $("#rv").hidden = true; walkOpen(id); }
     const src = which === "deck" && room.slide ? `${A.media}slides/s${String(room.slide).padStart(2, "0")}.jpg` : A.media + r.src;
-    if (which === "3d" || which === "walk") { if (which === "3d") $("#rv").hidden = true; } else {
+    if (which === "film" && FILMS[id]) { const f = FILMS[id]; $("#rv-img").hidden = true; vid.hidden = false; vid.poster = A.media + f.poster; if (!vid.src.endsWith(f.src)) vid.src = A.media + f.src; vid.play().catch(() => {}); }
+    else if (which === "3d" || which === "walk") { if (which === "3d") $("#rv").hidden = true; } else {
+      $("#rv-img").hidden = false;
       const img = $("#rv-img"); img.style.animation = "none"; void img.offsetWidth; img.style.animation = ""; img.src = src; img.alt = room.name;
     }
-    $("#rv-cap").textContent = which === "deck" ? `The deck's render, slide ${room.slide}` : which === "3d" ? "The plan in 3D" : which === "walk" ? "Walk mode · 360° views rendered in Blender Cycles" : r.caption;
-    document.querySelectorAll("#rv-seg button").forEach((b) => { b.classList.toggle("on", b.dataset.rv === which); if (b.dataset.rv === "deck") b.hidden = !room.slide; if (b.dataset.rv === "walk") b.hidden = !WALK[id]; });
+    $("#rv-cap").textContent = which === "deck" ? `The deck's render, slide ${room.slide}` : which === "3d" ? "The plan in 3D" : which === "walk" ? "Walk mode · 360° views rendered in Blender Cycles" : which === "film" ? "A camera move through the room, rendered in Blender Cycles" : r.caption;
+    document.querySelectorAll("#rv-seg button").forEach((b) => { b.classList.toggle("on", b.dataset.rv === which); if (b.dataset.rv === "deck") b.hidden = !room.slide; if (b.dataset.rv === "walk") b.hidden = !WALK[id]; if (b.dataset.rv === "film") b.hidden = !FILMS[id]; });
   }
 
   /* --- walk mode: stand in the room, drag to look, click a ring to move ---
@@ -463,7 +467,8 @@ async function start(A) {
     W.r = new THREE.WebGLRenderer({ canvas: c, antialias: true }); W.r.setPixelRatio(Math.min(devicePixelRatio, 2)); W.r.outputColorSpace = THREE.SRGBColorSpace;
     W.scene = new THREE.Scene(); W.cam = new THREE.PerspectiveCamera(75, 1, 0.1, 100);
     let drag = null;
-    c.addEventListener("pointerdown", (e) => { drag = { x: e.clientX, y: e.clientY, yaw: W.yaw, pitch: W.pitch }; c.setPointerCapture(e.pointerId); hint(false); });
+    c.addEventListener("pointerdown", (e) => { drag = { x: e.clientX, y: e.clientY, yaw: W.yaw, pitch: W.pitch }; c.setPointerCapture(e.pointerId); hint(false); W.touched = performance.now(); W.anim = null; });
+    c.addEventListener("pointermove", () => { if (drag) W.touched = performance.now(); });
     c.addEventListener("pointermove", (e) => { if (!drag) return; const k = (W.cam.fov * D2R) / innerHeight;
       W.yaw = drag.yaw - (e.clientX - drag.x) * k; W.pitch = clamp(drag.pitch + (e.clientY - drag.y) * k, -1.35, 1.35); });
     c.addEventListener("pointerup", () => (drag = null));
@@ -476,14 +481,27 @@ async function start(A) {
     if (!W.tex.has(p.src)) W.tex.set(p.src, new Promise((res) => new THREE.TextureLoader().load(A.media + p.src, (t) => { t.mapping = THREE.EquirectangularReflectionMapping; t.colorSpace = THREE.SRGBColorSpace; res(t); })));
     return W.tex.get(p.src);
   }
+  const tween = (ms, fn) => new Promise((res) => { const t0 = performance.now(); const step = (now) => { const t = Math.min(1, (now - t0) / ms); fn(ease(t)); if (t < 1) requestAnimationFrame(step); else res(); }; requestAnimationFrame(step); });
   async function walkTo(id, first) {
     const pts = WALK[W.room], p = pts.find((x) => x.id === id); if (!p) return;
-    const prev = W.at; W.at = p; const c = $("#walk-c");
+    const prev = W.at; const c = $("#walk-c");
+    if (!first && prev) {
+      // face the spot you clicked, then move towards it (a push in), so a step reads as walking, not a cut
+      W.touched = performance.now(); const want = Math.atan2(-(p.at[1] - prev.at[1]), p.at[0] - prev.at[0]);
+      const y0 = W.yaw, dy = ((want - y0 + Math.PI * 3) % (Math.PI * 2)) - Math.PI, p0 = W.pitch, f0 = W.cam.fov;
+      await tween(420, (e) => { W.yaw = y0 + dy * e; W.pitch = p0 + (-0.08 - p0) * e; });
+      const load = loadPano(p);
+      c.style.transition = "opacity .45s"; c.style.opacity = "0";
+      await tween(480, (e) => { W.cam.fov = f0 - 26 * e; W.cam.updateProjectionMatrix(); });
+      await load; W.cam.fov = f0 + 6; W.cam.updateProjectionMatrix();
+    }
+    W.at = p;
     if (!first) c.style.opacity = "0";
     const t = await loadPano(p); if (W.at !== p) return;
     // keep facing the way you were walking; the first view uses the point's yaw
     if (first || !prev) W.yaw = (p.yaw || 0) * D2R; else W.yaw = Math.atan2(-(p.at[1] - prev.at[1]), p.at[0] - prev.at[0]);
     W.scene.background = t; c.style.opacity = "1";
+    if (!first) { const f1 = W.cam.fov; tween(600, (e) => { W.cam.fov = f1 + (75 - f1) * e; W.cam.updateProjectionMatrix(); }); }
     $("#walk-spots").innerHTML = pts.filter((q) => q !== p).map((q) => `<button data-pt="${esc(q.id)}" aria-label="Walk to: ${esc(q.name)}"></button><span>${esc(q.name)}</span>`).join("");
     pts.filter((q) => q !== p).forEach(loadPano);   // the next steps are ready before you click
   }
@@ -495,6 +513,7 @@ async function start(A) {
   function walkClose() { if (!W.r) return; cancelAnimationFrame(W.raf); $("#walk").hidden = true; $("#walk-hint").hidden = true; }
   const _v = new THREE.Vector3();
   function walkFrame() {
+    if (performance.now() - (W.touched || 0) > 3500) W.yaw += 0.0009;
     const w = innerWidth, h = innerHeight; if (W.r.domElement.width !== Math.round(w * W.r.getPixelRatio())) { W.r.setSize(w, h, false); }
     W.cam.aspect = w / h; W.cam.updateProjectionMatrix();
     const d = new THREE.Vector3(Math.cos(W.pitch) * Math.cos(W.yaw), Math.sin(W.pitch), Math.cos(W.pitch) * Math.sin(W.yaw));

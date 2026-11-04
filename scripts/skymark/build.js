@@ -48,6 +48,9 @@ const data = {
   renders: Object.fromEntries([
     ["conf18", "renders/conf18.jpg", "18 seater conference room, rendered in Blender Cycles from the plan"],
   ].filter(([, f]) => fs.existsSync(path.join(root, "media", "skymark-f1", f))).map(([id, src, caption]) => [id, { src, caption }])),
+  /* films: a camera move through a room (conf18.py --film, joined with ffmpeg) */
+  films: Object.fromEntries(["conf18"].filter((id) => fs.existsSync(path.join(root, "media", "skymark-f1", "films", `${id}.mp4`)))
+    .map((id) => [id, { src: `films/${id}.mp4`, poster: `films/${id}-poster.jpg` }])),
   /* walk mode: 360 panoramas rendered in Cycles at the points in
      scripts/skymark/blender/walk.json; a room walks once two exist */
   walk: (() => {
