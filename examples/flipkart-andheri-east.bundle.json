@@ -41,8 +41,7 @@
      ],
      "lat": 19.108195,
      "lng": 72.879536,
-     "m": 810,
-     "min": 11,
+     "m": 700,
      "mode": "walk",
      "path": [
       [
@@ -93,8 +92,7 @@
      ],
      "lat": 19.103528,
      "lng": 72.887962,
-     "m": 940,
-     "min": 13,
+     "m": 800,
      "mode": "walk",
      "path": [
       [
@@ -169,7 +167,7 @@
      ],
      "lat": 19.119167,
      "lng": 72.846944,
-     "m": 5500,
+     "m": 4400,
      "mode": "road",
      "path": [
       [
@@ -378,78 +376,13 @@
    "routes": [
     {
      "kind": "metro",
-     "name": "Western Express Highway",
-     "lines": [
-      "L1"
-     ],
-     "lat": 19.11556,
-     "lng": 72.85639,
-     "m": 920,
-     "min": 12,
-     "mode": "walk",
-     "path": [
-      [
-       72.859637,
-       19.110625
-      ],
-      [
-       72.85984,
-       19.11155
-      ],
-      [
-       72.85867,
-       19.11177
-      ],
-      [
-       72.85867,
-       19.11202
-      ],
-      [
-       72.85888,
-       19.11302
-      ],
-      [
-       72.85914,
-       19.1137
-      ],
-      [
-       72.85937,
-       19.11485
-      ],
-      [
-       72.85857,
-       19.11494
-      ],
-      [
-       72.85784,
-       19.1151
-      ],
-      [
-       72.85701,
-       19.11536
-      ],
-      [
-       72.85647,
-       19.11569
-      ],
-      [
-       72.85639,
-       19.11556
-      ]
-     ],
-     "src": "https://www.google.com/maps",
-     "dist": "Google Maps"
-    },
-    {
-     "kind": "metro",
      "name": "Chakala (J B Nagar)",
      "lines": [
       "L1"
      ],
      "lat": 19.112045,
      "lng": 72.867696,
-     "m": 990,
-     "min": 13,
+     "m": 850,
      "mode": "walk",
      "path": [
       [
@@ -509,6 +442,69 @@
      "dist": "Google Maps"
     },
     {
+     "kind": "metro",
+     "name": "Western Express Highway",
+     "lines": [
+      "L1"
+     ],
+     "lat": 19.11556,
+     "lng": 72.85639,
+     "m": 900,
+     "mode": "walk",
+     "path": [
+      [
+       72.859637,
+       19.110625
+      ],
+      [
+       72.85984,
+       19.11155
+      ],
+      [
+       72.85867,
+       19.11177
+      ],
+      [
+       72.85867,
+       19.11202
+      ],
+      [
+       72.85888,
+       19.11302
+      ],
+      [
+       72.85914,
+       19.1137
+      ],
+      [
+       72.85937,
+       19.11485
+      ],
+      [
+       72.85857,
+       19.11494
+      ],
+      [
+       72.85784,
+       19.1151
+      ],
+      [
+       72.85701,
+       19.11536
+      ],
+      [
+       72.85647,
+       19.11569
+      ],
+      [
+       72.85639,
+       19.11556
+      ]
+     ],
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
+    },
+    {
      "kind": "rail",
      "name": "Andheri",
      "lines": [
@@ -516,7 +512,7 @@
      ],
      "lat": 19.119167,
      "lng": 72.846944,
-     "m": 2500,
+     "m": 1500,
      "mode": "road",
      "path": [
       [
@@ -694,321 +690,8 @@
    ]
   },
   {
-   "id": "vaman-techno-centre",
-   "n": 3,
-   "name": "Vaman Techno Centre",
-   "lat": 19.111483,
-   "lng": 72.882235,
-   "precision": "building",
-   "geoSrc": "https://exa.ai/library/place/3vrh78m08q4",
-   "geoNote": "Map place page. Makwana Road, Marol. About 460 m from Marol Naka station in a straight line.",
-   "micro": "marol-metro-station",
-   "reason": "Floor 3rd · Bareshell · Carpet area 12,300 sq. ft. · Possession: Immediately · Per seat: Rs. 13,400 - Rs. 13,900 + GST",
-   "address": "Vaman Techno Centre, Makwana Road, Gamdevi, Marol, Andheri East, Mumbai 400059",
-   "locality": "Andheri East",
-   "routes": [
-    {
-     "kind": "metro",
-     "name": "Marol Naka",
-     "lines": [
-      "L1",
-      "L3"
-     ],
-     "lat": 19.108195,
-     "lng": 72.879536,
-     "m": 600,
-     "min": 8,
-     "mode": "walk",
-     "path": [
-      [
-       72.882235,
-       19.111483
-      ],
-      [
-       72.88209,
-       19.11157
-      ],
-      [
-       72.8814,
-       19.11046
-      ],
-      [
-       72.88071,
-       19.10779
-      ],
-      [
-       72.87953,
-       19.10819
-      ],
-      [
-       72.879536,
-       19.108195
-      ]
-     ],
-     "src": "https://www.google.com/maps",
-     "dist": "Google Maps"
-    },
-    {
-     "kind": "metro",
-     "name": "Airport Road",
-     "lines": [
-      "L1"
-     ],
-     "lat": 19.11027,
-     "lng": 72.87475,
-     "m": 1200,
-     "min": 16,
-     "mode": "walk",
-     "path": [
-      [
-       72.882235,
-       19.111483
-      ],
-      [
-       72.88209,
-       19.11157
-      ],
-      [
-       72.8814,
-       19.11046
-      ],
-      [
-       72.88071,
-       19.10779
-      ],
-      [
-       72.87924,
-       19.1084
-      ],
-      [
-       72.87885,
-       19.10854
-      ],
-      [
-       72.87881,
-       19.10849
-      ],
-      [
-       72.87483,
-       19.10997
-      ],
-      [
-       72.87485,
-       19.11001
-      ],
-      [
-       72.87467,
-       19.11008
-      ],
-      [
-       72.87475,
-       19.11027
-      ]
-     ],
-     "src": "https://www.google.com/maps",
-     "dist": "Google Maps"
-    },
-    {
-     "kind": "rail",
-     "name": "Andheri",
-     "lines": [
-      "Western and Harbour lines"
-     ],
-     "lat": 19.119167,
-     "lng": 72.846944,
-     "m": 5200,
-     "mode": "road",
-     "path": [
-      [
-       72.882235,
-       19.111483
-      ],
-      [
-       72.88209,
-       19.11157
-      ],
-      [
-       72.8814,
-       19.11046
-      ],
-      [
-       72.88065,
-       19.1076
-      ],
-      [
-       72.87265,
-       19.11057
-      ],
-      [
-       72.86687,
-       19.11214
-      ],
-      [
-       72.8663,
-       19.11168
-      ],
-      [
-       72.86559,
-       19.11142
-      ],
-      [
-       72.8627,
-       19.11092
-      ],
-      [
-       72.86176,
-       19.11091
-      ],
-      [
-       72.86018,
-       19.11147
-      ],
-      [
-       72.85867,
-       19.11177
-      ],
-      [
-       72.85473,
-       19.11318
-      ],
-      [
-       72.85355,
-       19.11338
-      ],
-      [
-       72.85043,
-       19.11508
-      ],
-      [
-       72.84813,
-       19.11529
-      ],
-      [
-       72.84377,
-       19.11625
-      ],
-      [
-       72.84403,
-       19.11652
-      ],
-      [
-       72.84527,
-       19.11619
-      ],
-      [
-       72.84583,
-       19.11622
-      ],
-      [
-       72.84622,
-       19.11922
-      ],
-      [
-       72.846944,
-       19.119167
-      ]
-     ],
-     "src": "https://www.google.com/maps",
-     "dist": "Google Maps"
-    }
-   ],
-   "facts": [
-    {
-     "k": "Micro-market",
-     "v": "Marol Metro Station",
-     "conf": "high"
-    },
-    {
-     "k": "Floor / Unit",
-     "v": "3rd",
-     "conf": "high"
-    },
-    {
-     "k": "Grade",
-     "v": "B",
-     "conf": "high"
-    },
-    {
-     "k": "Total floors",
-     "v": "G+7",
-     "conf": "high"
-    },
-    {
-     "k": "Building type",
-     "v": "Commercial",
-     "conf": "high"
-    },
-    {
-     "k": "Furnishing",
-     "v": "Bareshell",
-     "conf": "high"
-    },
-    {
-     "k": "Efficiency",
-     "v": "62%",
-     "conf": "high"
-    },
-    {
-     "k": "Carpet area",
-     "v": "12,300 sq. ft.",
-     "conf": "high"
-    },
-    {
-     "k": "Built-up area",
-     "v": "19,700 sq. ft.",
-     "conf": "high"
-    },
-    {
-     "k": "Ceiling height",
-     "v": "11 ft - 12 ft (approx.)",
-     "conf": "high"
-    },
-    {
-     "k": "Per seat",
-     "v": "Rs. 13,400 - Rs. 13,900 + GST",
-     "conf": "high"
-    },
-    {
-     "k": "Parking",
-     "v": "13 Car parking",
-     "conf": "high"
-    },
-    {
-     "k": "Parking charges",
-     "v": "Rs. 5,000 per car park per month + Taxes",
-     "conf": "high"
-    },
-    {
-     "k": "Fire NOC",
-     "v": "Available",
-     "conf": "high"
-    },
-    {
-     "k": "OC & CC",
-     "v": "Available",
-     "conf": "high"
-    },
-    {
-     "k": "DG",
-     "v": "Common area only",
-     "conf": "high"
-    },
-    {
-     "k": "Possession",
-     "v": "Immediately",
-     "conf": "high"
-    },
-    {
-     "k": "Railway by metro",
-     "v": "By metro: from Marol Naka, Line 1 runs to Andheri (Western and Harbour lines) in 4 stops, 3.6 km of track. Andheri is the metro and railway interchange.",
-     "src": "https://en.wikipedia.org/wiki/Line_1_(Mumbai_Metro)",
-     "conf": "medium"
-    }
-   ]
-  },
-  {
    "id": "privilon",
-   "n": 4,
+   "n": 3,
    "name": "Privilon",
    "lat": 19.108207,
    "lng": 72.879563,
@@ -1029,8 +712,7 @@
      ],
      "lat": 19.108195,
      "lng": 72.879536,
-     "m": 140,
-     "min": 2,
+     "m": 40,
      "mode": "walk",
      "path": [
       [
@@ -1069,8 +751,7 @@
      ],
      "lat": 19.11027,
      "lng": 72.87475,
-     "m": 580,
-     "min": 8,
+     "m": 500,
      "mode": "walk",
      "path": [
       [
@@ -1109,7 +790,7 @@
      ],
      "lat": 19.119167,
      "lng": 72.846944,
-     "m": 4900,
+     "m": 3700,
      "mode": "road",
      "path": [
       [
@@ -1301,7 +982,7 @@
   },
   {
    "id": "landmark",
-   "n": 5,
+   "n": 4,
    "name": "Landmark",
    "lat": 19.116739,
    "lng": 72.855679,
@@ -1321,8 +1002,7 @@
      ],
      "lat": 19.11556,
      "lng": 72.85639,
-     "m": 320,
-     "min": 4,
+     "m": 48,
      "mode": "walk",
      "path": [
       [
@@ -1359,14 +1039,13 @@
     },
     {
      "kind": "metro",
-     "name": "Chakala (J B Nagar)",
+     "name": "Gundavali",
      "lines": [
-      "L1"
+      "L7"
      ],
-     "lat": 19.112045,
-     "lng": 72.867696,
-     "m": 1400,
-     "min": 19,
+     "lat": 19.11451,
+     "lng": 72.85516,
+     "m": 350,
      "mode": "walk",
      "path": [
       [
@@ -1382,36 +1061,16 @@
        19.11631
       ],
       [
-       72.85744,
-       19.11537
+       72.85534,
+       19.11658
       ],
       [
-       72.85832,
-       19.11512
+       72.85505,
+       19.11453
       ],
       [
-       72.86023,
-       19.11491
-      ],
-      [
-       72.861,
-       19.11474
-      ],
-      [
-       72.8621,
-       19.11427
-      ],
-      [
-       72.86461,
-       19.11293
-      ],
-      [
-       72.86771,
-       19.11209
-      ],
-      [
-       72.867696,
-       19.112045
+       72.85516,
+       19.11451
       ]
      ],
      "src": "https://www.google.com/maps",
@@ -1425,7 +1084,7 @@
      ],
      "lat": 19.119167,
      "lng": 72.846944,
-     "m": 3200,
+     "m": 3000,
      "mode": "road",
      "path": [
       [
@@ -1632,7 +1291,7 @@
   },
   {
    "id": "rustomjee-central-park",
-   "n": 6,
+   "n": 5,
    "name": "Rustomjee Central Park",
    "lat": 19.114042,
    "lng": 72.860671,
@@ -1652,8 +1311,7 @@
      ],
      "lat": 19.11556,
      "lng": 72.85639,
-     "m": 570,
-     "min": 8,
+     "m": 550,
      "mode": "walk",
      "path": [
       [
@@ -1700,8 +1358,7 @@
      ],
      "lat": 19.112045,
      "lng": 72.867696,
-     "m": 870,
-     "min": 12,
+     "m": 900,
      "mode": "walk",
      "path": [
       [
@@ -1752,7 +1409,7 @@
      ],
      "lat": 19.119167,
      "lng": 72.846944,
-     "m": 2900,
+     "m": 1700,
      "mode": "road",
      "path": [
       [
@@ -1946,6 +1603,317 @@
    ]
   },
   {
+   "id": "vaman-techno-centre",
+   "n": 6,
+   "name": "Vaman Techno Centre",
+   "lat": 19.111483,
+   "lng": 72.882235,
+   "precision": "building",
+   "geoSrc": "https://exa.ai/library/place/3vrh78m08q4",
+   "geoNote": "Map place page. Makwana Road, Marol. About 460 m from Marol Naka station in a straight line.",
+   "micro": "marol-metro-station",
+   "reason": "Floor 3rd · Bareshell · Carpet area 12,300 sq. ft. · Possession: Immediately · Per seat: Rs. 13,400 - Rs. 13,900 + GST",
+   "address": "Vaman Techno Centre, Makwana Road, Gamdevi, Marol, Andheri East, Mumbai 400059",
+   "locality": "Andheri East",
+   "routes": [
+    {
+     "kind": "metro",
+     "name": "Marol Naka",
+     "lines": [
+      "L1",
+      "L3"
+     ],
+     "lat": 19.108195,
+     "lng": 72.879536,
+     "m": 500,
+     "mode": "walk",
+     "path": [
+      [
+       72.882235,
+       19.111483
+      ],
+      [
+       72.88209,
+       19.11157
+      ],
+      [
+       72.8814,
+       19.11046
+      ],
+      [
+       72.88071,
+       19.10779
+      ],
+      [
+       72.87953,
+       19.10819
+      ],
+      [
+       72.879536,
+       19.108195
+      ]
+     ],
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
+    },
+    {
+     "kind": "metro",
+     "name": "Airport Road",
+     "lines": [
+      "L1"
+     ],
+     "lat": 19.11027,
+     "lng": 72.87475,
+     "m": 1100,
+     "mode": "walk",
+     "path": [
+      [
+       72.882235,
+       19.111483
+      ],
+      [
+       72.88209,
+       19.11157
+      ],
+      [
+       72.8814,
+       19.11046
+      ],
+      [
+       72.88071,
+       19.10779
+      ],
+      [
+       72.87924,
+       19.1084
+      ],
+      [
+       72.87885,
+       19.10854
+      ],
+      [
+       72.87881,
+       19.10849
+      ],
+      [
+       72.87483,
+       19.10997
+      ],
+      [
+       72.87485,
+       19.11001
+      ],
+      [
+       72.87467,
+       19.11008
+      ],
+      [
+       72.87475,
+       19.11027
+      ]
+     ],
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
+    },
+    {
+     "kind": "rail",
+     "name": "Andheri",
+     "lines": [
+      "Western and Harbour lines"
+     ],
+     "lat": 19.119167,
+     "lng": 72.846944,
+     "m": 4300,
+     "mode": "road",
+     "path": [
+      [
+       72.882235,
+       19.111483
+      ],
+      [
+       72.88209,
+       19.11157
+      ],
+      [
+       72.8814,
+       19.11046
+      ],
+      [
+       72.88065,
+       19.1076
+      ],
+      [
+       72.87265,
+       19.11057
+      ],
+      [
+       72.86687,
+       19.11214
+      ],
+      [
+       72.8663,
+       19.11168
+      ],
+      [
+       72.86559,
+       19.11142
+      ],
+      [
+       72.8627,
+       19.11092
+      ],
+      [
+       72.86176,
+       19.11091
+      ],
+      [
+       72.86018,
+       19.11147
+      ],
+      [
+       72.85867,
+       19.11177
+      ],
+      [
+       72.85473,
+       19.11318
+      ],
+      [
+       72.85355,
+       19.11338
+      ],
+      [
+       72.85043,
+       19.11508
+      ],
+      [
+       72.84813,
+       19.11529
+      ],
+      [
+       72.84377,
+       19.11625
+      ],
+      [
+       72.84403,
+       19.11652
+      ],
+      [
+       72.84527,
+       19.11619
+      ],
+      [
+       72.84583,
+       19.11622
+      ],
+      [
+       72.84622,
+       19.11922
+      ],
+      [
+       72.846944,
+       19.119167
+      ]
+     ],
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
+    }
+   ],
+   "facts": [
+    {
+     "k": "Micro-market",
+     "v": "Marol Metro Station",
+     "conf": "high"
+    },
+    {
+     "k": "Floor / Unit",
+     "v": "3rd",
+     "conf": "high"
+    },
+    {
+     "k": "Grade",
+     "v": "B",
+     "conf": "high"
+    },
+    {
+     "k": "Total floors",
+     "v": "G+7",
+     "conf": "high"
+    },
+    {
+     "k": "Building type",
+     "v": "Commercial",
+     "conf": "high"
+    },
+    {
+     "k": "Furnishing",
+     "v": "Bareshell",
+     "conf": "high"
+    },
+    {
+     "k": "Efficiency",
+     "v": "62%",
+     "conf": "high"
+    },
+    {
+     "k": "Carpet area",
+     "v": "12,300 sq. ft.",
+     "conf": "high"
+    },
+    {
+     "k": "Built-up area",
+     "v": "19,700 sq. ft.",
+     "conf": "high"
+    },
+    {
+     "k": "Ceiling height",
+     "v": "11 ft - 12 ft (approx.)",
+     "conf": "high"
+    },
+    {
+     "k": "Per seat",
+     "v": "Rs. 13,400 - Rs. 13,900 + GST",
+     "conf": "high"
+    },
+    {
+     "k": "Parking",
+     "v": "13 Car parking",
+     "conf": "high"
+    },
+    {
+     "k": "Parking charges",
+     "v": "Rs. 5,000 per car park per month + Taxes",
+     "conf": "high"
+    },
+    {
+     "k": "Fire NOC",
+     "v": "Available",
+     "conf": "high"
+    },
+    {
+     "k": "OC & CC",
+     "v": "Available",
+     "conf": "high"
+    },
+    {
+     "k": "DG",
+     "v": "Common area only",
+     "conf": "high"
+    },
+    {
+     "k": "Possession",
+     "v": "Immediately",
+     "conf": "high"
+    },
+    {
+     "k": "Railway by metro",
+     "v": "By metro: from Marol Naka, Line 1 runs to Andheri (Western and Harbour lines) in 4 stops, 3.6 km of track. Andheri is the metro and railway interchange.",
+     "src": "https://en.wikipedia.org/wiki/Line_1_(Mumbai_Metro)",
+     "conf": "medium"
+    }
+   ]
+  },
+  {
    "id": "fulcrum",
    "n": 7,
    "name": "Fulcrum",
@@ -1961,14 +1929,76 @@
    "routes": [
     {
      "kind": "metro",
+     "name": "CSMIA T2",
+     "lines": [
+      "L3"
+     ],
+     "lat": 19.10233,
+     "lng": 72.87447,
+     "m": 650,
+     "mode": "walk",
+     "path": [
+      [
+       72.872132,
+       19.104032
+      ],
+      [
+       72.87266,
+       19.10449
+      ],
+      [
+       72.87288,
+       19.1042
+      ],
+      [
+       72.87294,
+       19.10318
+      ],
+      [
+       72.87262,
+       19.10318
+      ],
+      [
+       72.87257,
+       19.10301
+      ],
+      [
+       72.87378,
+       19.10306
+      ],
+      [
+       72.87379,
+       19.10289
+      ],
+      [
+       72.87389,
+       19.10289
+      ],
+      [
+       72.87389,
+       19.10279
+      ],
+      [
+       72.87402,
+       19.10279
+      ],
+      [
+       72.87447,
+       19.10233
+      ]
+     ],
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
+    },
+    {
+     "kind": "metro",
      "name": "Airport Road",
      "lines": [
       "L1"
      ],
      "lat": 19.11027,
      "lng": 72.87475,
-     "m": 1300,
-     "min": 17,
+     "m": 1200,
      "mode": "walk",
      "path": [
       [
@@ -2088,114 +2118,6 @@
      "dist": "Google Maps"
     },
     {
-     "kind": "metro",
-     "name": "Sahar Road",
-     "lines": [
-      "L3"
-     ],
-     "lat": 19.102196,
-     "lng": 72.865236,
-     "m": 1300,
-     "min": 18,
-     "mode": "walk",
-     "path": [
-      [
-       72.872132,
-       19.104032
-      ],
-      [
-       72.87266,
-       19.10449
-      ],
-      [
-       72.87288,
-       19.1042
-      ],
-      [
-       72.87294,
-       19.10318
-      ],
-      [
-       72.87262,
-       19.10318
-      ],
-      [
-       72.87257,
-       19.10301
-      ],
-      [
-       72.86742,
-       19.10282
-      ],
-      [
-       72.86734,
-       19.10251
-      ],
-      [
-       72.8672,
-       19.1023
-      ],
-      [
-       72.86724,
-       19.10196
-      ],
-      [
-       72.86718,
-       19.10175
-      ],
-      [
-       72.86723,
-       19.10145
-      ],
-      [
-       72.86667,
-       19.10128
-      ],
-      [
-       72.8663,
-       19.10082
-      ],
-      [
-       72.86621,
-       19.10077
-      ],
-      [
-       72.86613,
-       19.10087
-      ],
-      [
-       72.86579,
-       19.10102
-      ],
-      [
-       72.86543,
-       19.10127
-      ],
-      [
-       72.86553,
-       19.1016
-      ],
-      [
-       72.86534,
-       19.10175
-      ],
-      [
-       72.86531,
-       19.10191
-      ],
-      [
-       72.86523,
-       19.10197
-      ],
-      [
-       72.865236,
-       19.102196
-      ]
-     ],
-     "src": "https://www.google.com/maps",
-     "dist": "Google Maps"
-    },
-    {
      "kind": "rail",
      "name": "Andheri",
      "lines": [
@@ -2203,7 +2125,7 @@
      ],
      "lat": 19.119167,
      "lng": 72.846944,
-     "m": 4700,
+     "m": 4100,
      "mode": "road",
      "path": [
       [
@@ -2523,9 +2445,32 @@
       "open": true
      },
      {
+      "name": "CSMIA T2",
+      "lat": 19.10233,
+      "lng": 72.87447,
+      "open": true
+     },
+     {
       "name": "Sahar Road",
       "lat": 19.102196,
       "lng": 72.865236,
+      "open": true
+     }
+    ]
+   },
+   {
+    "key": "line7",
+    "name": "Metro Line 7 (Red)",
+    "short": "L7",
+    "mode": "metro",
+    "color": "#d23c3c",
+    "status": "open",
+    "src": "https://en.wikipedia.org/wiki/Line_7_(Mumbai_Metro)",
+    "stations": [
+     {
+      "name": "Gundavali",
+      "lat": 19.11451,
+      "lng": 72.85516,
       "open": true
      }
     ]
@@ -2551,7 +2496,7 @@
  },
  "copy": {
   "connect": {
-   "note": "Walking distance and time from each building to its two metro stations, and Andheri railway station by road, as measured in Google Maps."
+   "note": "Walking distance from each building to its two metro stations, and Andheri railway station by road, as measured in Google Maps (Nov 2026)."
   },
   "overview": {
    "eyebrow": "Autopilot · Andheri East · Nov 2026",
