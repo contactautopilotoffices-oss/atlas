@@ -36,6 +36,11 @@ const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&":
 const Q = new URLSearchParams(location.search);
 const MOBILE = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
 const STILL = Q.get("still") === "1";
+/* The look: "real" (default) reads as a photograph of the place: no tilt-shift,
+   a 35 mm lens from drone height, sky and haze behind, ground to the horizon,
+   relief in the facades. ?look=model brings back the architect's-model look
+   (tilt-shift, a high turntable, the slab floating on the page). */
+const REALLOOK = Q.get("look") !== "model";
 const SLUG = ((Q.get("atlas") || location.pathname.split("/")[1] || "") + "").toLowerCase().replace(/[^a-z0-9-]/g, "");
 const D2R = Math.PI / 180, clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const fmtM = (m) => m < 1000 ? [`${Math.round(m / 10) * 10}`, "M"] : [`${(m / 1000).toFixed(1)}`, "KM"];
@@ -87,7 +92,10 @@ async function start(A, W) {
   const hdr = await new RGBELoader().loadAsync(W.data + W.sky);
   hdr.mapping = THREE.EquirectangularReflectionMapping;
   const pmrem = new THREE.PMREMGenerator(renderer); const env = pmrem.fromEquirectangular(hdr).texture;
-  scene.environment = env; scene.environmentIntensity = 0.55;
+  scene.environment = env; scene.environmentIntensity = REALLOOK ? 0.75 : 0.55;
+  /* real look: the ground runs on past the slab to the horizon, under the haze */
+  const farGround = new THREE.Mesh(new THREE.CircleGeometry(6000, 64).rotateX(-Math.PI / 2), new THREE.MeshStandardMaterial({ color: 0x8c8476, roughness: 1 }));
+  farGround.position.y = -0.04; farGround.receiveShadow = true; farGround.visible = REALLOOK; scene.add(farGround);
   /* the sun the sky was rendered with: azimuth 235, elevation 24 (golden afternoon) */
   const SUN = new THREE.Vector3(Math.sin(235 * D2R) * Math.cos(24 * D2R), Math.sin(24 * D2R), -Math.cos(235 * D2R) * Math.cos(24 * D2R)).normalize();
   const sun = new THREE.DirectionalLight(0xffe6c4, 3.1); sun.castShadow = true;
@@ -105,7 +113,8 @@ async function start(A, W) {
     let m;
     if (name.startsWith("wall_")) {
       const k = name.slice(5);
-      m = new THREE.MeshStandardMaterial({ map: tex(k), roughnessMap: tex(k + "_r", false), roughness: 1, metalness: 0, envMapIntensity: 1 });
+      m = new THREE.MeshStandardMaterial({ map: tex(k), roughnessMap: tex(k + "_r", false), roughness: 1, metalness: 0, envMapIntensity: GLASSY.has(name) && REALLOOK ? 1.7 : 1 });
+      if (REALLOOK) { m.normalMap = tex(k + "_n", false); m.normalScale = new THREE.Vector2(0.9, 0.9); }   // relief from scripts/world/normals.py
       if (GLASSY.has(name)) m.onBeforeCompile = (sh) => { sh.fragmentShader = sh.fragmentShader.replace("#include <metalnessmap_fragment>", "#include <metalnessmap_fragment>\n metalnessFactor = 1.0 - smoothstep(0.22, 0.5, roughnessFactor);"); };
     } else {
       const C = {
@@ -117,7 +126,7 @@ async function start(A, W) {
         auto_body: [0x2d7d3a, 0.4, 0.2], auto_top: [0xf0c22e, 0.5], bus_body: [0xb8322a, 0.4, 0.3], train_body: [0xeef1f4, 0.25, 0.45], train_win: [0x1e2832, 0.05, 0.6], train_stripe: [0x1c5fa8, 0.35],
       }[name] || [0x9a9a9a, 0.8];
       m = new THREE.MeshStandardMaterial({ color: C[0], roughness: C[1], metalness: C[2] || 0 });
-      if (C[3]) m.map = tex(C[3]);
+      if (C[3]) { m.map = tex(C[3]); if (REALLOOK) { m.normalMap = tex(C[3] + "_n", false); m.normalScale = new THREE.Vector2(0.6, 0.6); } }
       if (name === "station_glass") Object.assign(m, { color: new THREE.Color(0x9cc0cf), roughness: 0.05, metalness: 0.3, transparent: true, opacity: 0.32, depthWrite: false });
       if (name === "sign_text" || name === "opt_name") Object.assign(m, { color: new THREE.Color(0xffffff), emissive: new THREE.Color(name === "opt_name" ? 0xfff2da : 0xffffff), emissiveIntensity: 0.55, roughness: 0.4 });
       if (name === "leaf" || name === "leaf_b") Object.assign(m, { color: new THREE.Color(0xffffff), map: tex(name === "leaf" ? "leaves_a" : "leaves_b"), alphaTest: 0.5, side: THREE.DoubleSide, roughness: 0.78 });
@@ -135,7 +144,7 @@ async function start(A, W) {
   const composer = new EffectComposer(renderer, target);
   composer.addPass(new RenderPass(scene, camera));
   const gtao = new GTAOPass(scene, camera, innerWidth, innerHeight); gtao.output = GTAOPass.OUTPUT.Default;
-  gtao.updateGtaoMaterial({ radius: 6, distanceExponent: 1.4, thickness: 6, scale: 1.2, samples: 16 }); gtao.blendIntensity = 0.9;
+  gtao.updateGtaoMaterial({ radius: 6, distanceExponent: 1.4, thickness: 6, scale: 1.2, samples: 16 }); gtao.blendIntensity = REALLOOK ? 0.5 : 0.9;
   if (!LOW && Q.get("ao") !== "0") composer.addPass(gtao);
   /* tilt-shift: sharp across the middle band, blurred above and below, the
      miniature read of a model photographed close */
@@ -301,7 +310,15 @@ async function start(A, W) {
     controls.minDistance = Math.max(90, D.building.h * 1.4); controls.maxDistance = R * 3;
     flyTo(t, new THREE.Vector3(t.x + Math.cos(az) * Math.sin(polar) * dist, t.y + Math.cos(polar) * dist, t.z - Math.sin(az) * Math.sin(polar) * dist), ms);
     frameOffset(true);
-    controls.autoRotate = true; tilt.enabled = true; sunBox(R * 0.62, P3(0, 0));
+    controls.autoRotate = true; tilt.enabled = !REALLOOK; sunBox(R * 0.62, P3(0, 0));
+    if (REALLOOK) {
+      // a photograph of the place: 35 mm lens (38 deg vertical), drone height, sky and haze behind
+      camera.fov = 38; camera.updateProjectionMatrix();
+      scene.background = hdr; scene.backgroundIntensity = 1.0; scene.fog = new THREE.Fog(0xd9cbb4, 320, 1100);
+      const h = D.building.h, tr = P3(c[0], c[1], h * 0.4), d2 = Math.max(230, h * 4.4), pol = 67 * D2R;
+      controls.minDistance = 70; controls.maxDistance = 750; controls.minPolarAngle = 35 * D2R; controls.maxPolarAngle = 84 * D2R;
+      flyTo(tr, new THREE.Vector3(tr.x + Math.cos(az) * Math.sin(pol) * d2, tr.y + Math.cos(pol) * d2, tr.z - Math.sin(az) * Math.sin(pol) * d2), ms);
+    }
     for (const id of ["#walkhud", "#compass", "#mini", "#hint", "#route"]) $(id).hidden = true;
   }
   /* on a wide screen the overlay takes the left, so the view's centre moves right */
