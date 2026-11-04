@@ -9,6 +9,7 @@ physical sky and sun through the real facade, with the real Sector 6 context
       [--samples 256] [--res 1920x1080] [--exposure 0.6] [--sun 3.2] [--sky 0.12]
       [--pano X,Y --res 4096x2048]   a 360 view for walk mode, standing at room x, y (metres)
       [--top]                        a plan check from above
+      [--capture N --out DIR]        N photos along the room with known cameras (truth.json), to test scripts/twin
 
 Rules followed (.claude/skills/archviz-quality-bar and the realism playlist):
 real scale; every edge bevelled; no pure black or white; roughness that varies;
@@ -552,6 +553,25 @@ if "--top" in sys.argv:   # a plan check: orthographic, from above, ceiling hidd
     cam.location = (LX / 2, -DY / 2, 2.5); cam.rotation_euler = (0, 0, 0)
     for o in COL.objects:
         if o.location.z > 2.3 or o.name.startswith(("slab", "band", "field", "riser", "cove", "lip", "pendant", "cable", "head")): o.hide_render = True
+if "--capture" in sys.argv:  # a synthetic photo set with known cameras, to test the reconstruction pipeline (scripts/twin)
+    n = int(arg("--capture")); outdir = OUT; os.makedirs(outdir, exist_ok=True)
+    cam_d.dof.use_dof = False; cam_d.shift_y = 0; cam_d.lens = 24
+    poses = []
+    for i in range(n):
+        t = i / max(1, n - 1)
+        x = 0.6 + 7.0 * t; z = 1.25 if i % 2 else 1.65
+        yaw = math.radians(90 + 28 * math.sin(t * 2 * math.pi * 2.0))      # facing the window and table, swaying
+        pitch = math.radians(-8 if i % 2 else -14)
+        cam.location = (x, -3.0, z); cam.rotation_euler = (math.radians(90) + pitch, 0, yaw - math.radians(90))
+        bpy.context.view_layer.update()
+        sc.render.filepath = os.path.join(outdir, f"img{i:03d}.png"); bpy.ops.render.render(write_still=True)
+        mw = cam.matrix_world
+        poses.append({"image": f"img{i:03d}.png", "centre": list(mw.translation), "rotation": [list(r) for r in mw.to_3x3()],
+                      "focal_px": cam_d.lens / cam_d.sensor_width * RX, "size": [RX, RY]})
+        print("captured", i + 1, "of", n, flush=True)
+    json.dump({"about": "Ground truth for a synthetic capture of Volt's conference room: camera centres in metres (room frame), Blender camera rotation (looks down -z).", "poses": poses},
+              open(os.path.join(outdir, "truth.json"), "w"), indent=1)
+    raise SystemExit
 bpy.context.view_layer.update()
 print("room", round(LX, 2), "x", round(DY, 2), "m; rendering", RX, "x", RY, "at", SAMPLES, "samples", flush=True)
 sc.render.filepath = OUT
