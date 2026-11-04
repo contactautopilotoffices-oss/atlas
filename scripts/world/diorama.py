@@ -370,9 +370,10 @@ def build():
             if street_cam: break
     street_cam = street_cam or (mx + nx * back, my + ny * back)
     # make sure the walk starts on open ground (footpath or road)
-    for k in range(1, 12):
-        if not built.contains(Point(walk0[0] + OX, walk0[1] + OY)): break
-        walk0 = (mx + nx * (16 + k * 4), my + ny * (16 + k * 4))
+    # and not under the station's stairs or viaduct, where the eye would sit inside the structure
+    def _open(w): q = Point(w[0] + OX, w[1] + OY); return not built.contains(q) and not METRO_CLEAR.contains(q)
+    cands = [(mx + nx * d - ny * t, my + ny * d + nx * t) for d in range(16, 64, 4) for t in (0, -8, 8, -16, 16)]
+    walk0 = next((w for w in cands if _open(w)), walk0)
 
     # --- the metro ---
     mt = MB([]); stn = MB([]); STATIONS = []
