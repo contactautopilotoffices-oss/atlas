@@ -504,7 +504,8 @@ CTX = {"buildings": building_mat(), "roads": principled("asphalt", (0.06, 0.06, 
        "foot": principled("paving", (0.32, 0.30, 0.27), 0.8), "green": principled("grass", (0.07, 0.13, 0.035), 0.9, bump=0.3, bump_scale=30),
        "water": principled("water", (0.02, 0.04, 0.05), 0.05), "ground": principled("dust", (0.30, 0.27, 0.22), 0.95)}
 before = set(bpy.data.objects)
-bpy.ops.import_scene.gltf(filepath=CONTEXT_GLB)
+if "--no-context" not in sys.argv:   # --no-context: an empty world outside (used to test reconstruction without repeating facades)
+    bpy.ops.import_scene.gltf(filepath=CONTEXT_GLB)
 for o in [o for o in bpy.data.objects if o not in before]:
     if o.type != "MESH": continue
     o.matrix_world = W2R @ o.matrix_world

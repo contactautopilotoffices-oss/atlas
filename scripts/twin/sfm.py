@@ -2,7 +2,8 @@
 point cloud from photos, with COLMAP (pycolmap, runs on CPU).
 
   pip install pycolmap==4.2.1 numpy
-  python3 scripts/twin/sfm.py PHOTOS_DIR WORK_DIR [--sequential] [--truth truth.json] [--scale-from truth.json]
+  python3 scripts/twin/sfm.py PHOTOS_DIR WORK_DIR [--sequential [N]] [--focal-px F] [--per-image]
+                              [--truth truth.json] [--scale-from truth.json]
 
 Writes WORK_DIR/sparse/0 (the COLMAP model), WORK_DIR/cameras.json (one pose
 per registered photo), WORK_DIR/points.ply and WORK_DIR/sfm.json (what was
@@ -30,8 +31,22 @@ def main():
     os.makedirs(work, exist_ok=True); db = os.path.join(work, "database.db")
     if os.path.exists(db): os.remove(db)
     t0 = time.time()
-    pycolmap.extract_features(db, photos)
-    (pycolmap.match_sequential if "--sequential" in sys.argv else pycolmap.match_exhaustive)(db)
+    names = sorted(f for f in os.listdir(photos) if f.lower().endswith((".jpg", ".jpeg", ".png")))
+    # One lens for the whole set when the photos are the same size (one phone,
+    # one zoom, as CAPTURE.md asks). Letting every photo have its own focal
+    # length let repeated chairs and bays pull cameras to the wrong place.
+    from PIL import Image
+    sizes = {Image.open(os.path.join(photos, n)).size for n in names}
+    single = len(sizes) == 1 and "--per-image" not in sys.argv
+    ro = pycolmap.ImageReaderOptions(); ro.camera_model = "SIMPLE_RADIAL"
+    if "--focal-px" in sys.argv:   # a known focal length in pixels (from EXIF or the lens)
+        w, h = next(iter(sizes)); f = float(sys.argv[sys.argv.index("--focal-px") + 1]); ro.camera_params = f"{f},{w / 2},{h / 2},0"
+    pycolmap.extract_features(db, photos, camera_mode=pycolmap.CameraMode.SINGLE if single else pycolmap.CameraMode.AUTO, reader_options=ro)
+    if "--sequential" in sys.argv:   # a walk: match each photo with its neighbours only, plus loop closure off
+        po = pycolmap.SequentialPairingOptions(); po.overlap = int(sys.argv[sys.argv.index("--sequential") + 1]) if len(sys.argv) > sys.argv.index("--sequential") + 1 and sys.argv[sys.argv.index("--sequential") + 1].isdigit() else 8
+        pycolmap.match_sequential(db, pairing_options=po)
+    else:
+        pycolmap.match_exhaustive(db)
     sp = os.path.join(work, "sparse"); shutil.rmtree(sp, ignore_errors=True); os.makedirs(sp)
     recs = pycolmap.incremental_mapping(db, photos, sp)
     if not recs: raise SystemExit("COLMAP could not register the photos: too little overlap, or too few distinct features")
@@ -48,7 +63,7 @@ def main():
         f.write(f"ply\nformat ascii 1.0\nelement vertex {len(pts)}\nproperty float x\nproperty float y\nproperty float z\n"
                 "property uchar red\nproperty uchar green\nproperty uchar blue\nend_header\n")
         for p, c in zip(pts, col): f.write(f"{p[0]:.4f} {p[1]:.4f} {p[2]:.4f} {int(c[0])} {int(c[1])} {int(c[2])}\n")
-    report = {"photos": n_in, "registered": len(cams), "points": len(pts),
+    report = {"photos": n_in, "registered": len(cams), "single_camera": single, "matching": "sequential" if "--sequential" in sys.argv else "exhaustive", "points": len(pts),
               "mean_reprojection_error_px": round(float(rec.compute_mean_reprojection_error()), 3),
               "seconds": round(time.time() - t0, 1), "scale": "relative (not yet tied to a measurement)"}
     truth_f = sys.argv[sys.argv.index("--truth") + 1] if "--truth" in sys.argv else None
