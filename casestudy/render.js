@@ -404,12 +404,12 @@
       var chartFor = function (key, big) {
         /* big: true for the page's only chart; a number for a row of that many charts, sized so
            every chart's type lands at about the same printed size */
-        var sz = big === true ? { w: 460, h: 250 } : big === 2 ? { w: 440, h: 230 } : big ? { w: 300, h: 175 } : {};
+        var sz = big === true ? { w: 820, h: 280 } : big === 2 ? { w: 440, h: 230 } : big ? { w: 300, h: 175 } : {};
         var pts = series(key); if (!pts.length) return "";
         var title = { vacancy: "Vacancy", rent: "Average rent · " + sym + " a sq ft a month", topBand: "Office rent, top Grade-A buildings · " + sym + " a sq ft a month · dashed = projection", flexSeats: "Flex seats leased, first half of each year", operatorOccupancy: "Settled centres are this full", absorptionShare: "Share of net absorption" }[key] || key;
         var body;
         if (key === "vacancy" || key === "rent") body = lineChart(pts, { w: sz.w, h: sz.h, fmt: key === "vacancy" ? function (v) { return (+v).toFixed(1) + "%"; } : function (v) { return sym + Math.round(v); }, color: key === "vacancy" ? COLORS[1] : COLORS[0] });
-        else if (key === "operatorOccupancy") body = hbars(pts.map(function (p) { return { label: p.label, value: p.value, note: p.value + "%" }; }), { max: 100, refLine: c.breakEven * 100, refLabel: "our break-even " + pc(c.breakEven), pl: 80, rowH: big ? 26 : 15, w: sz.w });
+        else if (key === "operatorOccupancy") body = hbars(pts.map(function (p) { return { label: p.label, value: p.value, note: p.value + "%" }; }), { max: 100, refLine: c.breakEven * 100, refLabel: "our break-even " + pc(c.breakEven), pl: 80, rowH: big ? Math.max(15, Math.round((sz.h - 30) / pts.length)) : 15, w: sz.w });
         else body = barChart(pts, { w: sz.w, h: sz.h, fmt: function (v) { return key === "flexSeats" ? fmt(v) : key === "topBand" ? sym + Math.round(v) : (+v).toFixed(+v % 1 ? 1 : 0) + (key === "absorptionShare" ? "%" : ""); }, color: key === "flexSeats" ? COLORS[2] : COLORS[0] });
         var note = pts.filter(function (p) { return p.note; }).map(function (p) { return p.label + ": " + p.note; }).join(" · ");
         return "<div" + (big ? " class='chart-big'" : "") + "><div class='t tiny mut' style='letter-spacing:.1em;text-transform:uppercase;margin-bottom:1mm'>" + esc(title) + "</div>" + body + (note ? "<div class='tiny mut' style='margin-top:1mm'>" + esc(note) + "</div>" : "") + "</div>";
@@ -428,7 +428,8 @@
         var layout;
         if (charts.length >= 2) layout = "<div class='cols c2'><div class='cols c" + Math.min(charts.length, 3) + "' style='grid-column:1 / -1;flex:0 0 auto'>" + chartHtml + "</div></div><div class='foot'>" + kpiHtml + meansHtml + "</div>";
         /* one chart: the chart takes the wide column, the figure and its meaning sit beside it */
-        else if (charts.length === 1) layout = "<div class='cols c32' style='align-items:start'>" + chartHtml + "<div>" + kpiHtml + meansHtml + "</div></div>";
+        /* one chart: the chart takes the page width, the figure and its meaning sit at the foot */
+        else if (charts.length === 1) layout = chartHtml + "<div class='foot'>" + kpiHtml + meansHtml + "</div>";
         /* no chart: a statement page, the figure large beside what it means, centred in the page */
         else layout = "<div class='statement" + (p.kpi ? "" : " solo") + "'>" + (p.kpi ? "<div class='kpi'><div class='v'>" + esc(code(b, c, p.kpi)) + "</div><div class='l'>" + esc(p.kpiLabel || "") + "</div></div>" : "") + meansHtml + "</div>";
         d.add({ hdr: h3, src: src(b, "market") + (p.chart === "flexSeats" ? " " + src(b, "flex") : ""), body: "<h2><span class='pt'><span class='n'>" + String(p.n || "").padStart(2, "0") + "</span></span>" + esc(p.title) + "</h2>" + layout });

@@ -108,6 +108,8 @@ svg .grid{stroke:var(--line);stroke-width:.5}
 .leg i{display:inline-block;width:3mm;height:3mm;border-radius:1px;vertical-align:-.4mm;margin-right:1.2mm}
 .grp{break-inside:avoid}
 .chart-big svg{max-height:104mm}
+/* a foot with a figure beside its meaning: side by side, not stacked */
+.foot:has(> .kpi){display:grid;grid-template-columns:1fr 3fr;gap:8mm;align-items:center}
 /* pages of numbered points: the points read at deck size, the takeaway sits at the foot */
 .lg .pt h3{font-size:13.5pt;margin-bottom:1.8mm}
 .lg .pt p{font-size:10pt;line-height:1.45}

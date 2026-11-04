@@ -76,8 +76,5 @@ what it fixes, and fixes the worst one to three first.
 - Recent deals: with no "what it means" copy the table now takes the full
   width, but the page still has no pairing box.
 - The terms table sets the small notes under big figures in the serif face.
-- Market points with one chart (page 15): the chart now sits under the
-  headline, but the "what it means" box beside it is short, so the right
-  column is empty below it.
-- Market points with several charts (pages 14 and 18): the charts are larger
-  and the figure sits at the foot, but a band of space stays between them.
+- Market point 01 (page 14): the three charts stop at about half the page;
+  a band of space stays above the figure and its meaning at the foot.
