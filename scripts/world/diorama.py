@@ -186,9 +186,11 @@ def mat(name, col="#808080", rough=0.8, metal=0.0, tex=None, rtex=None, glass=Fa
 
 WALL_STYLES = ["res_cream", "res_peach", "res_grey", "res_ochre"]
 MOD = {"res_cream": (6, 12), "res_peach": (6, 12), "res_grey": (6, 12), "res_ochre": (6, 12), "res_tower": (6, 12), "com_ribbon": (8, 16), "com_glass": (6, 16),
-       "shop": (6, 4.5), "chawl": (4, 3), "opt_glass": (6, 16.4), "opt_plaster": (6, 16.4), "glass723": (6, 4.1), "retail723": (7.2, 5.6)}
-for k in MOD: mat("wall_" + k, tex=k + ".jpg", rtex=k + "_r.jpg", glass=k in ("com_glass", "opt_glass", "com_ribbon", "opt_plaster", "res_tower", "glass723", "retail723"))
+       "shop": (6, 4.5), "chawl": (4, 3), "opt_glass": (6, 16.4), "opt_plaster": (6, 16.4), "glass723": (6, 4.1), "retail723": (7.2, 5.6),
+       "cw_teal": (6, 4.1), "cw_blue": (6, 4.1), "cw_grey": (6, 4.1), "cw_silver": (6, 4.1), "ribbon_red": (6, 4.1), "ribbon_white": (6, 4.1)}
+for k in MOD: mat("wall_" + k, tex=k + ".jpg", rtex=k + "_r.jpg", glass=k in ("com_glass", "opt_glass", "com_ribbon", "opt_plaster", "res_tower", "glass723", "retail723") or k.startswith(("cw_", "ribbon_")))
 mat("fin_723", "#3d4752", 0.45, 0.35); mat("pier_723", "#32373d", 0.5, 0.3); mat("band_723", "#c8cbcd", 0.55, 0.15); mat("frame_723", "#d9dcde", 0.35, 0.7)
+mat("acp_grey", "#b8bcbf", 0.4, 0.55); mat("acp_red", "#ad322c", 0.42, 0.35); mat("acp_white", "#e7e7e3", 0.45, 0.25); mat("fin_white", "#ecebe7", 0.5, 0.1)
 mat("roof", tex="roof.jpg", rough=0.9); mat("roof_tin", "#8f8f8a", 0.45, 0.6); mat("roof_tarp", "#2f63a8", 0.6); mat("roof_tin_rust", "#7a5b45", 0.7, 0.3)
 mat("parapet", "#cfc8b8", 0.9); mat("ground", "#a29c8f", 0.95, tex="roof.jpg"); mat("asphalt", tex="asphalt.jpg", rough=0.85); mat("pavers", tex="pavers.jpg", rough=0.9)
 mat("kerb", "#bdb8ab", 0.85); mat("grass", tex="grass.jpg", rough=0.95); mat("water", "#3d5257", 0.05, 0.1); mat("marking", "#efefe8", 0.6)
@@ -323,6 +325,73 @@ def house_of_wadhwa_front(ob, A, B, r, GH, FH, H):
     boxm(ob, *_at(A, B, d, wn / 2, n, 0.3), H - 0.3, H + 0.3, wn + 0.4, 0.8, ang, "frame_723", bottom=True)
     boxm(ob, *_at(A, B, d, wn + 0.2, n, 0.3), zn, H, 0.4, 0.8, ang, "frame_723")
 
+# --- the other six options, after what their developers, brokers and RERA filings say (see the PR notes):
+#     a curtain-wall or ribbon-window skin, and the structural pieces each one is known for ---
+SPECS = {
+    # Atul Corporate Avenue, Chakala: a glass-fronted G+8 block of wings round a full-height atrium, rooftop sundecks
+    "corporate-avenue": dict(skin="cw_teal", mull=1.5, bands=("acp_grey", 0.45, 0.4), corners="acp_grey", crown="acp_grey", roofdeck=True, skylight=True),
+    # Bsafal Privilon (Morphogenesis): a 14-storey slab with a kinetic facade of sunbreakers, double-height lobby, landscaped roof deck
+    "privilon": dict(skin="cw_grey", lobby2=True, fins=dict(step=1.1, d0=0.3, d1=1.4, w=0.16, mat="fin_white"), crown="fin_white", roofgarden=True),
+    # Silver Landmark (1998, Uttam C. Jain): ACP and glass, the building people know as the red one by the highway
+    "landmark": dict(skin="ribbon_red", corners="acp_red", crown="acp_red"),
+    # Rustomjee Central Park (Sanjay Puri): a full glass curtain wall in performance glazing, an 18 ft sheltered driveway
+    "rustomjee-central-park": dict(skin="cw_silver", mull=1.25, crown="acp_grey", porte=True),
+    # Vaman Techno Centre (2007): a mid-rise block; facade not documented, so a typical ribbon of blue glass in white ACP
+    "vaman-techno-centre": dict(skin="ribbon_white", corners="acp_white", crown="acp_white"),
+    # Hiranandani Fulcrum (2013): a glass-fronted G+9 of two wings, double glazed, a cafeteria on the terrace
+    "fulcrum": dict(skin="cw_blue", mull=1.5, bands=("acp_grey", 0.35, 0.3), crown="acp_grey", roofdeck=True),
+}
+
+def facade_spec(ob, q, ring, GH, FH, floors, H, sp):
+    lob = GH + (FH if sp.get("lobby2") else 0)
+    walls(ob, ring, 0, lob, "glass_lobby", 3, lob)
+    walls(ob, ring, lob, H, "wall_" + sp["skin"], 6, FH, v0=GH)
+    if sp.get("bands"):   # an ACP band at every slab
+        m, d_, h_ = sp["bands"]; out = q.buffer(d_, join_style="mitre"); oring = [L(x, y) for x, y in out.exterior.coords]
+        for k in range(1 if sp.get("lobby2") else 0, floors):
+            z = GH + k * FH; walls(ob, oring, z - h_, z, m, 2, 2); flat(ob, lpoly(out.difference(q)), z, m, 2); flat(ob, lpoly(out.difference(q)), z - h_, m, 2, up=False)
+    F = _faces(ring)
+    for i, (A, B, d, ang, n) in enumerate(F):
+        if sp.get("mull"):
+            s_ = sp["mull"] / 2
+            while s_ < d:
+                boxm(ob, *_at(A, B, d, s_, n, 0.11), lob, H + 0.3, 0.08, 0.22, ang, "mullion"); s_ += sp["mull"]
+        if sp.get("fins"):   # sunbreakers whose depth rises and falls across each face: the kinetic read
+            f = sp["fins"]; s_ = f["step"] / 2
+            while s_ < d - 0.2:
+                t = s_ / d; dep = f["d0"] + (f["d1"] - f["d0"]) * (0.5 + 0.5 * math.sin(math.tau * (t * 1.3 + i * 0.3)))
+                boxm(ob, *_at(A, B, d, s_, n, dep / 2), lob, H + 1.6, f["w"], dep, ang, f["mat"]); s_ += f["step"]
+    if sp.get("corners"):   # solid cladding at the corners, full height
+        r = ring[:-1] if ring[0] == ring[-1] else ring
+        for k in range(len(r)):
+            a0 = math.atan2(r[k][1] - r[k - 1][1], r[k][0] - r[k - 1][0])
+            boxm(ob, r[k][0], r[k][1], 0, H + 1.4, 1.3, 1.3, a0, sp["corners"])
+    # parapet, roof and plant
+    cm = sp.get("crown", "parapet"); inner = q.buffer(-0.3)
+    walls(ob, ring, H, H + 1.4, cm, 2, 2); walls(ob, [L(x, y) for x, y in inner.exterior.coords], H, H + 1.4, cm, 2, 2, outward=False)
+    flat(ob, lpoly(q.difference(inner)), H + 1.4, cm, 2); flat(ob, lpoly(inner), H + 0.1, "roof", 5)
+    c = inner.representative_point(); a_ = math.sqrt(inner.area)
+    if sp.get("skylight"):   # the atrium's glass roof
+        boxm(ob, *L(c.x, c.y), H, H + 1.3, a_ * 0.32, a_ * 0.22, 0.0, "glass_lobby")
+    else:
+        boxm(ob, *L(c.x, c.y), H, H + 3.4, a_ * 0.3, a_ * 0.25, 0.0, "concrete")
+    if sp.get("roofdeck"):   # a shaded sundeck: slender posts and a slatted pergola over part of the roof
+        px0, py0 = L(c.x + a_ * 0.22, c.y + a_ * 0.18)
+        for ix in range(4):
+            for iy in range(3): cyl(ob, px0 + (ix - 1.5) * 3.2, py0 + (iy - 1) * 3.2, H + 0.1, H + 3.2, 0.09, 0.09, 0, "metal", 8)
+        for k in range(14): boxm(ob, px0 + (k - 6.5) * 0.8, py0, H + 3.2, H + 3.45, 0.12, 7.6, 0.0, "fin_white")
+    if sp.get("roofgarden"):   # the landscaped roof terrace: lawn, planters, shade
+        g = inner.buffer(-2.0)
+        if not g.is_empty: flat(ob, lpoly(g), H + 0.35, "grass", 4)
+        for k in range(5): boxm(ob, *L(c.x + (k - 2) * a_ * 0.15, c.y - a_ * 0.28), H + 0.1, H + 1.0, 2.4, 1.0, 0.0, "concrete")
+
+def porte_cochere(ob, A, B, GH):
+    """An 18 ft (5.5 m) sheltered driveway: a deep slab on two round columns in front of the entrance."""
+    d = math.hypot(B[0] - A[0], B[1] - A[1]); ang = math.atan2(B[1] - A[1], B[0] - A[0]); n = (math.sin(ang), -math.cos(ang))
+    w = min(16.0, d * 0.55); c = _at(A, B, d, d / 2, n, 5.0)
+    boxm(ob, *c, 5.5, 6.2, w, 10.0, ang, "acp_grey", bottom=True)
+    for e in (-1, 1): cyl(ob, *_at(A, B, d, d / 2 + e * w * 0.38, n, 8.6), 0, 5.5, 0.45, 0.45, 0, "concrete", 18)
+
 # -------------------------------------------------------------- the build ----
 def build():
     sc = bpy.context.scene
@@ -411,6 +480,8 @@ def build():
     style = "opt_glass" if glassy else "opt_plaster"
     if OID == "723-avenue":
         house_of_wadhwa(ob, q, ring, GH, FH, floors, H)
+    elif OID in SPECS:
+        facade_spec(ob, q, ring, GH, FH, floors, H, SPECS[OID])
     else:
         generic_option(ob, q, ring, GH, FH, floors, H, glassy, style)
     # entrance: the face nearest a road gets a canopy and the name
@@ -427,8 +498,10 @@ def build():
     mx, my = (ax + bx_) / 2, (ay + by) / 2; cw = min(14, d * 0.6)
     if OID == "723-avenue":
         house_of_wadhwa_front(ob, (ax, ay), (bx_, by), r, GH, FH, H)
-    boxm(ob, mx + nx * 3.2, my + ny * 3.2, GH - 0.1, GH + 0.45, cw, 6.4, ang, "canopy", bottom=True)
-    for sgn in (-1, 1): cyl(ob, mx + nx * 6.0 + math.cos(ang) * sgn * cw * 0.42, my + ny * 6.0 + math.sin(ang) * sgn * cw * 0.42, 0, GH, 0.18, 0.18, 0, "metal", 12)
+    if SPECS.get(OID, {}).get("porte"): porte_cochere(ob, (ax, ay), (bx_, by), GH)
+    else:
+      boxm(ob, mx + nx * 3.2, my + ny * 3.2, GH - 0.1, GH + 0.45, cw, 6.4, ang, "canopy", bottom=True)
+      for sgn in (-1, 1): cyl(ob, mx + nx * 6.0 + math.cos(ang) * sgn * cw * 0.42, my + ny * 6.0 + math.sin(ang) * sgn * cw * 0.42, 0, GH, 0.18, 0.18, 0, "metal", 12)
     ob.build("opt_" + OID, MATS)
     tm = text_mesh(BO["name"].upper(), 1.1, 0.08, "opt_name")
     tm.data.materials.append(MATS["opt_name"])

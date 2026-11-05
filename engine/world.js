@@ -108,7 +108,7 @@ async function start(A, W) {
   /* textures, loaded once and shared by every diorama */
   const texL = new THREE.TextureLoader(); const TEX = {}; const aniso = renderer.capabilities.getMaxAnisotropy();
   const tex = (name, srgb = true) => TEX[name] || (TEX[name] = (() => { const t = texL.load(W.data + "tex/" + name + (name.startsWith("leaves") ? ".png" : ".jpg")); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = aniso; if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.flipY = false; return t; })());
-  const GLASSY = new Set(["wall_com_glass", "wall_opt_glass", "wall_com_ribbon", "wall_opt_plaster", "wall_res_tower", "wall_glass723", "wall_retail723"]);
+  const GLASSY = new Set(["wall_com_glass", "wall_opt_glass", "wall_com_ribbon", "wall_opt_plaster", "wall_res_tower", "wall_glass723", "wall_retail723", "wall_cw_teal", "wall_cw_blue", "wall_cw_grey", "wall_cw_silver", "wall_ribbon_red", "wall_ribbon_white"]);
   const MAT = {};
   function material(name) {
     if (MAT[name]) return MAT[name];
@@ -126,7 +126,7 @@ async function start(A, W) {
         glass_lobby: [0x4e6a76, 0.04, 0.75], canopy: [0x2b2e31, 0.4, 0.6], wire: [0x333333, 0.5, 0.8], ballast: [0x7d7568, 0.95], roof_tin: [0x8f8f8a, 0.42, 0.6], roof_tarp: [0x2f63a8, 0.6], roof_tin_rust: [0x7a5b45, 0.7, 0.3],
         trunk: [0x5b4a3b, 0.9], leaf: [0xffffff, 0.8], leaf_b: [0xffffff, 0.8], frond: [0x5a8735, 0.75], lamp_head: [0xe6e2d6, 0.4], car_body: [0xffffff, 0.22, 0.55], car_glass: [0x1a2026, 0.04, 0.6], tyre: [0x161616, 0.9], hub: [0xb9bcbf, 0.3, 0.9], trim: [0x202224, 0.5, 0.3],
         lamp_front: [0xfff6e0, 0.2], lamp_rear: [0xa01010, 0.3], person_trousers: [0x2b3240, 0.85], person_shirt: [0xffffff, 0.8], person_skin: [0x8a5a3c, 0.6], person_hair: [0x15110e, 0.7],
-        fin_723: [0x3d4752, 0.45, 0.35], pier_723: [0x32373d, 0.5, 0.3], band_723: [0xc8cbcd, 0.55, 0.15], frame_723: [0xd9dcde, 0.35, 0.7],   /* House of Wadhwa 723 Avenue */
+        fin_723: [0x3d4752, 0.45, 0.35], pier_723: [0x32373d, 0.5, 0.3], band_723: [0xc8cbcd, 0.55, 0.15], frame_723: [0xd9dcde, 0.35, 0.7], acp_grey: [0xb8bcbf, 0.4, 0.55], acp_red: [0xad322c, 0.42, 0.35], acp_white: [0xe7e7e3, 0.45, 0.25], fin_white: [0xecebe7, 0.5, 0.1],   /* House of Wadhwa 723 Avenue */
         auto_body: [0x2d7d3a, 0.4, 0.2], auto_top: [0xf0c22e, 0.5], bus_body: [0xb8322a, 0.4, 0.3], train_body: [0xeef1f4, 0.25, 0.45], train_win: [0x1e2832, 0.05, 0.6], train_stripe: [0x1c5fa8, 0.35],
       }[name] || [0x9a9a9a, 0.8];
       m = new THREE.MeshStandardMaterial({ color: C[0], roughness: C[1], metalness: C[2] || 0 });
@@ -180,6 +180,36 @@ async function start(A, W) {
     for (const [n, m] of Object.entries(MAT)) if (REFLECTS.has(n) && m.envMap !== probeRT.texture) { m.envMap = probeRT.texture; m.envMapIntensity = n.startsWith("wall_") ? 1.9 : 1.4; m.needsUpdate = true; }
   }
 
+  /* ------------------------------------------- the map beyond the model ---- */
+  /* the model covers a few hundred metres round each building; past its edge the ground is the real map
+     (Mapbox satellite with streets), so a route to a station 4 km away runs across Andheri, not empty haze */
+  const LNG0 = 72.867, LAT0 = 19.111, KX = Math.cos(LAT0 * D2R) * 111320, KY = 110540;
+  let mapGround = null;
+  function buildMapGround() {
+    if (mapGround) { scene.remove(mapGround); mapGround.traverse((o) => { if (o.isMesh) { o.geometry.dispose(); if (o.material.map) o.material.map.dispose(); o.material.dispose(); } }); mapGround = null; }
+    const tok = window.MAPBOX_TOKEN; if (!tok || !D || !D.origin || Q.get("map") === "0") return;
+    const [ox, oy] = D.origin, Z = 15, N = 2 ** Z;
+    const toLL = (x, y) => [LNG0 + (x + ox) / KX, LAT0 + (y + oy) / KY];
+    const toXY = (lng, lat) => [(lng - LNG0) * KX - ox, (lat - LAT0) * KY - oy];
+    const tx = (lng) => (lng + 180) / 360 * N, ty = (lat) => (1 - Math.log(Math.tan(lat * D2R) + 1 / Math.cos(lat * D2R)) / Math.PI) / 2 * N;
+    const lngOf = (x) => x / N * 360 - 180, latOf = (y) => Math.atan(Math.sinh(Math.PI * (1 - 2 * y / N))) / D2R;
+    // cover the model and every route from it, with a margin
+    let x0 = -1600, x1 = 1600, y0 = -1600, y1 = 1600;
+    for (const r of D.routes || []) for (const [x, y] of r.path) { x0 = Math.min(x0, x - 900); x1 = Math.max(x1, x + 900); y0 = Math.min(y0, y - 900); y1 = Math.max(y1, y + 900); }
+    const [lA, bA] = toLL(x0, y0), [lB, bB] = toLL(x1, y1);
+    const X0 = Math.floor(tx(lA)), X1 = Math.floor(tx(lB)), Y0 = Math.floor(ty(bB)), Y1 = Math.floor(ty(bA));
+    if ((X1 - X0 + 1) * (Y1 - Y0 + 1) > 120) return;
+    mapGround = new THREE.Group(); mapGround.name = "map_ground";
+    for (let X = X0; X <= X1; X++) for (let Y = Y0; Y <= Y1; Y++) {
+      const [ax, ay] = toXY(lngOf(X), latOf(Y)), [bx, by] = toXY(lngOf(X + 1), latOf(Y + 1));
+      const t = texL.load(`https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/tiles/512/${Z}/${X}/${Y}?access_token=${encodeURIComponent(tok)}`);
+      t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = aniso;
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(bx - ax, ay - by).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ map: t, color: 0xd8d4cc, fog: false }));
+      m.position.copy(P3((ax + bx) / 2, (ay + by) / 2, -0.6)); m.renderOrder = -1; mapGround.add(m);
+    }
+    scene.add(mapGround); farGround.position.y = -1.5;
+  }
+
   /* ----------------------------------------------------- the diorama ---- */
   const loader = new GLTFLoader(); loader.setMeshoptDecoder(MeshoptDecoder);
   let D = null, root = null, inst = [], movers = [], solid = [], groundMeshes = [];
@@ -202,7 +232,7 @@ async function start(A, W) {
       fetch(`${W.data}d/${id}.json`).then((r) => r.json())]);
     if (root) { scene.remove(root); root.traverse((o) => { if (o.isMesh) o.geometry.dispose(); }); }
     for (const m of inst) { scene.remove(m); m.dispose(); } inst = []; movers = []; groundMeshes = [];
-    D = data; root = gltf.scene; scene.add(root);
+    D = data; root = gltf.scene; scene.add(root); buildMapGround();
     const protos = {};
     root.traverse((o) => {
       if (o.name && o.name.startsWith("proto_") && !o.name.endsWith("_c") && !o.name.includes("_crown") && o.parent === root) protos[o.name] = o;
@@ -410,6 +440,7 @@ async function start(A, W) {
   /* on a wide screen the overlay takes the left, so the view's centre moves right */
   function frameOffset(on) { const w = innerWidth, h = innerHeight; if (on && w > 900) camera.setViewOffset(w, h, -w * 0.16, h * 0.04, w, h); else camera.clearViewOffset(); camera.updateProjectionMatrix(); }
   function frameRoute() { if (!ROUTE) return; const box = new THREE.Box3(); ROUTE.path.forEach(([x, y]) => box.expandByPoint(P3(x, y))); const c = box.getCenter(new THREE.Vector3()), s = box.getSize(new THREE.Vector3()), R = Math.max(s.x, s.z, 200);
+    if (scene.fog) { scene.fog.near = Math.max(scene.fog.near, R * 1.4); scene.fog.far = Math.max(scene.fog.far, R * 4); }   // a long route is seen whole, not through haze
     const az = Math.atan2(camera.position.x - c.x, camera.position.z - c.z); controls.autoRotate = false; flyTo(c, new THREE.Vector3(c.x + Math.sin(az) * R * 0.9, R * 0.95, c.z + Math.cos(az) * R * 0.9)); }
 
   /* walk: yaw/pitch by drag, WASD to move, click the ground to go there */
