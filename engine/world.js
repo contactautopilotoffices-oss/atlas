@@ -30,7 +30,6 @@ import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { GTAOPass } from "three/addons/postprocessing/GTAOPass.js";
 import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
-import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -160,8 +159,6 @@ async function start(A, W) {
         for (int i = -4; i <= 4; i++) for (int j = -4; j <= 4; j++) { vec2 o = vec2(float(i), float(j)) * r / uRes; float w = exp(-float(i*i + j*j) / 12.); c += texture2D(tDiffuse, vUv + o) * w; tw += w; }
         vec4 base = texture2D(tDiffuse, vUv); gl_FragColor = mix(base, c / tw, smoothstep(0.0, 0.5, r)); }` });
   composer.addPass(tilt);
-  /* a soft bloom: only the brightest highlights (the sun caught in glass, lit signs) spill a little light */
-  if (REALLOOK && !LOW) composer.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.22, 0.55, 0.92));
   composer.addPass(new OutputPass());
 
   /* ------------------------------------------------ reflections ---- */
@@ -171,8 +168,9 @@ async function start(A, W) {
   const probeRT = new THREE.WebGLCubeRenderTarget(LOW ? 256 : 512, { type: THREE.HalfFloatType, generateMipmaps: true, minFilter: THREE.LinearMipmapLinearFilter });
   const probe = new THREE.CubeCamera(1, 4000, probeRT);
   const REFLECTS = new Set([...GLASSY, "glass_lobby", "station_glass", "car_glass", "train_win", "water"]);
-  function captureReflections() {
-    if (!REALLOOK || !D || !root) return;
+  function captureReflections() { try { captureReflections_(); } catch (e) { console.warn("reflections skipped", e); } }
+  function captureReflections_() {
+    if (!REALLOOK || !D || !root || Q.get("refl") === "0") return;
     const hide = []; root.traverse((o) => { if (o.visible && o.name && (o.name.startsWith("opt_") || o.name.startsWith("sign_723"))) { o.visible = false; hide.push(o); } });
     const c = centroid(D.building.foot); probe.position.copy(P3(c[0], c[1], Math.max(12, D.building.h * 0.45)));
     const bg = scene.background, fog = scene.fog, bands_ = bands.map((b) => b.visible);
