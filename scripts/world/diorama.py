@@ -889,9 +889,9 @@ def render(kind, data, info):
         a = st["ang"] + math.pi / 2
         camera(sc, (st["x"] + math.cos(a) * 70 + math.cos(st["ang"]) * 50, st["y"] + math.sin(a) * 70 + math.sin(st["ang"]) * 50, 22), (st["x"], st["y"], 10), 28)
         size = (1600, 1000)
-    sc.render.engine = "CYCLES"; sc.cycles.device = "CPU"; sc.cycles.samples = 16 if FAST else 64; sc.cycles.use_denoising = True
+    sc.render.engine = "CYCLES"; sc.cycles.device = "CPU"; sc.cycles.samples = int(sys.argv[sys.argv.index("--samples") + 1]) if "--samples" in sys.argv else 16 if FAST else 64; sc.cycles.use_denoising = True
     sc.cycles.max_bounces = 6; sc.cycles.transparent_max_bounces = 8
-    sc.render.resolution_x, sc.render.resolution_y = size; sc.render.resolution_percentage = 40 if FAST else 100
+    sc.render.resolution_x, sc.render.resolution_y = size; sc.render.resolution_percentage = int(sys.argv[sys.argv.index("--pct") + 1]) if "--pct" in sys.argv else 40 if FAST else 100
     sc.view_settings.view_transform = "AgX"; sc.view_settings.look = "AgX - Medium High Contrast"; sc.view_settings.exposure = -0.3
     sc.render.film_transparent = kind == "hero"
     sc.render.image_settings.file_format = "PNG"; sc.render.image_settings.color_mode = "RGBA"
