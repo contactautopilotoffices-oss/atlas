@@ -100,6 +100,26 @@ const R = {
     address: "Fulcrum, IA Project Road, Sahar Road, next to Hyatt Regency, Ashok Nagar, Andheri East, Mumbai 400099" },
 };
 
+/* The two Marwah buildings, added to the 2D atlas only from Autopilot's
+   "Flipkart Inventory Options Sheet" (Nov 2026). Marwah Business Park is the
+   campus on Krishanlal Marwah Marg; the developer lists Marwah House (G+2),
+   Marwah Centre (B+G+9) and Marwah Tower (G+14, foundations laid 2023) on it
+   (https://marwahbusinesspark.com/marwah-business-park). The sheet's "Marwah
+   Tower" is G+9 and its "Marwah Business Park" G+14, so the two names may be
+   the other way round: to be confirmed. Both pins are on the campus. */
+Object.assign(R, {
+  "marwah-tower": {
+    l1: "Saki Naka",
+    lat: 19.110954, lng: 72.886118, precision: "complex", geoSrc: "https://exa.ai/library/place/2n0pkm6kwgr",
+    geoNote: "The Marwah Centre address point on the Marwah Business Park campus (place page; findlatitudeandlongitude and an EV charger listing agree within 15 m). The sheet's G+9 matches Marwah Centre, not the G+14 Marwah Tower: the building is to be confirmed.",
+    address: "Marwah Business Park, Krishanlal Marwah Marg, off Saki Vihar Road, Marol, Andheri East, Mumbai 400072" },
+  "marwah-business-park": {
+    l1: "Saki Naka",
+    lat: 19.1114, lng: 72.8866, precision: "approx", geoSrc: "https://marwahbusinesspark.com/about-us",
+    geoNote: "Placed on the Marwah Business Park campus, beside Krishanlal Marwah Marg; the building on the campus is not identified. The sheet's G+14 matches the new Marwah Tower.",
+    address: "Marwah Business Park, Krishanlal Marwah Marg, Ganesh Nagar, Marol, Andheri East, Mumbai 400072" },
+});
+
 /* ---- distances, bus stops and the railway ------------------------------ */
 const kmBetween = (a, b) => {
   const t = Math.PI / 180, dLat = (b.lat - a.lat) * t, dLng = (b.lng - a.lng) * t;
@@ -136,7 +156,8 @@ function railByMetro(id) {
    car router's time is free-flow, so only its distance is shown. */
 const ROUTES = JSON.parse(fs.readFileSync(path.join(__dirname, "data", "flipkart-routes.json"), "utf8"));
 const METRO_LINES = { "Marol Naka": ["L1", "L3"] };
-const metroLines = (name) => METRO_LINES[name] || [name === "Sahar Road" || name === "MIDC Andheri" || name === "SEEPZ" ? "L3" : "L1"];
+const metroLines = (name) => METRO_LINES[name] || [name === "Sahar Road" || name === "MIDC Andheri" || name === "SEEPZ" || name === "CSMIA T2" ? "L3" : name === "Gundavali" ? "L7" : "L1"];
+const LINES_OF = (x) => x.kind === "metro" ? metroLines(x.name) : x.kind === "rail" ? ["Western and Harbour lines"] : [];
 const RAIL_LINE = { "Jogeshwari": "western", "Andheri": "western", "Vile Parle": "western", "Kurla": "central", "Vidyavihar": "central", "Ghatkopar": "central" };
 const fmtRoad = (m) => m < 1000 ? `${Math.round(m / 10) * 10} m` : `${(m / 1000).toFixed(1)} km`;
 /* Every route runs from the building to the station or stop itself: the
@@ -203,7 +224,7 @@ const options = D.map((o, i) => {
     ["Ceiling height", o.ceiling], ["Per seat", o.perSeat], ["Parking", o.parking], ["Parking charges", o.parkingCharges],
     ["Fire NOC", o.noc], ["OC & CC", o.occ], ["DG", o.dg], ["Possession", o.possession],
   ].filter(([, v]) => v);
-  const routes = gmapsRoutes(o.id, routesFor(o.id, (x) => x.kind === "metro" ? metroLines(x.name) : x.kind === "rail" ? ["Western and Harbour lines"] : []));
+  const routes = gmapsRoutes(o.id, routesFor(o.id, LINES_OF));
   return {
     id: o.id, n: i + 1, name: o.name, lat: r.lat, lng: r.lng, precision: r.precision, geoSrc: r.geoSrc, geoNote: r.geoNote,
     micro: o.micro, reason: reason(o), address: r.address, locality: "Andheri East",
@@ -306,4 +327,80 @@ write(SLUG, bundle, ACCESS);
    backdrop is read from the first atlas's media folder. */
 const MAP_SLUG = "flipkart-andheri-east", MAP_ACCESS = ACCESS;   // the same ID and password as /flipkart-andheri
 const flat = JSON.parse(JSON.stringify(bundle)); delete flat.meta.world;
+/* Its own connectivity, as Autopilot measured it in Google Maps (Nov 2026): two metro stations
+   and Andheri railway station per building, distances only (no walk times
+   were given, so none are shown). Landmark's second station is Gundavali
+   (Line 7) and Fulcrum's is CSMIA T2 (Line 3); the line on the map follows
+   the streets (OpenStreetMap routing); the figure is the measured one. */
+const EAST = {
+  "723-avenue":             { metro: [["Marol Naka", 700], ["Saki Naka", 800]], rail: 4400 },
+  "corporate-avenue":       { metro: [["Chakala (J B Nagar)", 850], ["Western Express Highway", 900]], rail: 1500 },
+  "privilon":               { metro: [["Marol Naka", 40], ["Airport Road", 500]], rail: 3700 },
+  "landmark":               { metro: [["Western Express Highway", 48], ["Gundavali", 350]], rail: 3000 },
+  "rustomjee-central-park": { metro: [["Western Express Highway", 550], ["Chakala (J B Nagar)", 900]], rail: 1700 },
+  "vaman-techno-centre":    { metro: [["Marol Naka", 500], ["Airport Road", 1100]], rail: 4300 },
+  "fulcrum":                { metro: [["CSMIA T2", 650], ["Airport Road", 1200]], rail: 4100 },
+};
+/* ...and its own order: 723 Avenue, Corporate Avenue, Privilon, Landmark,
+   Rustomjee Central Park, Vaman Techno Centre, Fulcrum. */
+const EAST_ORDER = ["723-avenue", "corporate-avenue", "privilon", "landmark", "rustomjee-central-park", "vaman-techno-centre", "fulcrum"];
+flat.options = EAST_ORDER.map((id, i) => {
+  const o = flat.options.find(x => x.id === id), e = EAST[id], all = routesFor(id, LINES_OF);
+  const pickR = (kind, name, m) => {
+    const r = all.find(x => x.kind === kind && x.name === name);
+    if (!r) throw new Error(`${id}: no street route to ${name}`);
+    const { min, ...rest } = r; return { ...rest, m, src: GMAPS_SRC, dist: "Google Maps" };
+  };
+  return { ...o, n: i + 1, routes: [...e.metro.map(([n, m]) => pickR("metro", n, m)), pickR("rail", "Andheri", e.rail)] };
+});
+/* The two Marwah buildings, from the sheet, in its words. Their distances
+   are Autopilot's Google Maps figures (Nov 2026), like the others; the line
+   on the map follows OpenStreetMap streets (Overture Maps,
+   scripts/examples/overture-route.py, as the OSRM servers were unreachable). */
+const SHEET = "Flipkart Inventory Options Sheet (Autopilot, Nov 2026)";
+const MARWAH = [
+  { id: "marwah-tower", name: "Marwah Tower", floor: "3rd or 4th", grade: "B", floors: "G+9", furnishing: "Furnished", efficiency: "60%",
+    carpet: "5,600 sq. ft. per floor", builtUp: "9,333 sq. ft. per floor", ceiling: "10 ft - 11 ft (approx.)", perSeat: "Rs. 13,300 - Rs. 13,800",
+    parking: "4 per floor", noc: "Available", occ: "Available", dg: "NA", possession: "Immediately" },
+  { id: "marwah-business-park", name: "Marwah Business Park", floor: "Multiple floors", grade: "B", floors: "G+14", furnishing: "Bareshell", efficiency: "60%",
+    carpet: "5,150 and 5,450 sq. ft.", builtUp: "8,583 and 9,083 sq. ft.", ceiling: "10 ft - 11 ft (approx.)", perSeat: "Rs. 15,800 - Rs. 16,300",
+    parking: "5 per floor", noc: "NA", occ: "NA", dg: "NA", possession: "Feb - March 2027" },
+];
+const MARWAH_GMAPS = {
+  "marwah-tower":         { metro: [["Saki Naka", 800], ["Marol Naka", 1200]], rail: 4900 },
+  "marwah-business-park": { metro: [["Saki Naka", 800], ["Marol Naka", 1600]], rail: 4900 },
+};
+for (const o of MARWAH) {
+  const r = R[o.id], all = routesFor(o.id, LINES_OF);
+  const pick = (kind, name, m) => { const x = all.find(y => y.kind === kind && y.name === name); if (!x) throw new Error(`${o.id}: no street route to ${name}`); const { min, ...rest } = x; return { ...rest, m, src: GMAPS_SRC, dist: "Google Maps" }; };
+  const g = MARWAH_GMAPS[o.id];
+  const spec = [
+    ["Micro-market", "Sakinaka Metro"], ["Floor / Unit", o.floor], ["Grade", o.grade], ["Total floors", o.floors], ["Building type", "Commercial"],
+    ["Furnishing", o.furnishing], ["Efficiency", o.efficiency], ["Carpet area", o.carpet], ["Built-up area", o.builtUp], ["Ceiling height", o.ceiling],
+    ["Per seat", o.perSeat], ["Parking", o.parking], ["Fire NOC", o.noc], ["OC & CC", o.occ], ["DG", o.dg], ["Possession", o.possession],
+  ];
+  flat.options.push({
+    id: o.id, n: flat.options.length + 1, name: o.name, lat: r.lat, lng: r.lng, precision: r.precision, geoSrc: r.geoSrc, geoNote: r.geoNote,
+    micro: "sakinaka-metro", address: r.address, locality: "Andheri East",
+    reason: [`Floor ${o.floor}`, o.furnishing, `Carpet area ${o.carpet}`, `Possession: ${o.possession}`, `Per seat: ${o.perSeat}`].join(" · "),
+    routes: [...g.metro.map(([n, m]) => pick("metro", n, m)), pick("rail", "Andheri", g.rail)],
+    facts: [
+      ...spec.map(([k, v]) => ({ k, v, conf: "high" })),
+      { k: "Railway by metro", v: railByMetro(o.id).v, src: railByMetro(o.id).src, conf: "medium" },
+    ],
+  });
+}
+/* The 2D atlas is read by the client: the detail table shows the figures
+   only, bold, with no source links (the sources stay in this script). */
+for (const o of flat.options) o.facts = o.facts.map(({ src, ...f }) => f);
+flat.meta.boldSpec = true;
+flat.zones.push({ key: "sakinaka-metro", label: "Sakinaka Metro", name: "Sakinaka Metro", color: "#6b5bb5" });
+flat.meta.sheet = `${DECK}; Marwah Tower and Marwah Business Park from the ${SHEET}. Positions and connectivity researched Nov 2026; each carries its source.`;
+
+/* the two stations the other atlas does not draw */
+const L3 = flat.transit.lines.find(l => l.key === "line3");
+L3.stations.splice(L3.stations.findIndex(s => s.name === "Sahar Road"), 0, { name: "CSMIA T2", lat: 19.10233, lng: 72.87447, open: true });
+flat.transit.lines.splice(2, 0, { key: "line7", name: "Metro Line 7 (Red)", short: "L7", mode: "metro", color: "#d23c3c", status: "open", src: "https://en.wikipedia.org/wiki/Line_7_(Mumbai_Metro)",
+  stations: [{ name: "Gundavali", lat: 19.11451, lng: 72.85516, open: true }] });
+flat.copy.connect.note = "Walking distance from each building to its two metro stations, and Andheri railway station by road, as measured in Google Maps (Nov 2026).";
 write(MAP_SLUG, flat, MAP_ACCESS, { media: `/media/${SLUG}/` });

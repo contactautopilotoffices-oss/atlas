@@ -209,7 +209,7 @@ const METHOD = `Drive times are straight-line distances at ${SPEED_KMH} km/h wit
 /* The method line for counts around one pin: routed where it can be. */
 const methodFor = (o) => { const iso = isoOf(o); return iso ? `Drive-time areas are routed by Mapbox for ${RINGS.map(r => r.min).join(", ").replace(/, (\d+)$/, " and $1")} minutes${iso.profile === "driving-traffic" ? ", with typical traffic" : ""}. A place counts in the first area it falls inside.` : METHOD; };
 const fmtKm = (d) => `${d < 1 ? d.toFixed(2) : d < 10 ? d.toFixed(1) : Math.round(d)} km`;
-const fmtM = (d) => d < 1 ? `${Math.round(d * 1000 / 10) * 10} m` : fmtKm(d);
+const fmtM = (d) => d < 0.1 ? `${Math.round(d * 1000)} m` : d < 1 ? `${Math.round(d * 1000 / 10) * 10} m` : fmtKm(d);   // under 100 m, to the metre
 const walkMin = (d) => Math.round(d * 1000 / 80);
 
 /* --------------------------------------------------------------- rail ----
@@ -1563,7 +1563,7 @@ function stnRouteFC() {
   if (!sc) return FC([]);
   if (sc.x.route) {
     const r = sc.x.route, p = r.path, mid = p[Math.floor(p.length / 2)];
-    const label = r.mode === "walk" ? `${fmtM(r.m / 1000)} walk · ${r.min} min` : `${fmtM(r.m / 1000)} by road`;
+    const label = r.mode === "walk" ? `${fmtM(r.m / 1000)} walk${r.min ? ` · ${r.min} min` : ""}` : `${fmtM(r.m / 1000)} by road`;
     return FC([ln(p, { part: "line", kind: "route", mode: sc.kind }), pt(mid[0], mid[1], { part: "label", label })]);
   }
   if (sc.kind !== "metro" || sc.x !== connOf(o).metro[0]) return FC([]);
@@ -2018,7 +2018,7 @@ function renderSite() {
     ${sat ? `<div class="hero"><img src="${sat}" alt="Satellite view of ${esc(o.name)}" onerror="this.closest('.hero').remove()"><span class="ph">Satellite · Esri, Vantor</span></div>` : ""}
     <div class="kpis">
       ${RINGS.map((rg, i) => `<div class="kpi"><div class="l">${esc(say("site.within", "Within"))} ${rg.min} min</div><div class="v">${total(i)}</div><div class="s">${esc(top(i) || "places mapped")}</div></div>`).join("")}
-      ${!r.none ? `<div class="kpi"><div class="l">${esc(say("option.railToday", STN_SHOT ? "Nearest metro station" : "Station today"))}</div><div class="v">${fmtM(r.d)}</div><div class="s">${esc(r.s.name)}${r.s.lineName ? ` · ${esc(r.s.lineName)}` : ""}${r.road ? ` · ${r.min ? `${r.min} min walk by road` : "by road"}` : STN_SHOT ? " · straight line" : ""}</div></div>` : ""}
+      ${!r.none ? `<div class="kpi"><div class="l">${esc(say("option.railToday", STN_SHOT ? "Nearest metro station" : "Station today"))}</div><div class="v">${fmtM(r.d)}</div><div class="s">${esc(r.s.name)}${r.s.lineName ? ` · ${esc(r.s.lineName)}` : ""}${r.road ? ` · ${r.min ? `${r.min} min walk by road` : r.s.mode === "metro" ? "on foot" : "by road"}` : STN_SHOT ? " · straight line" : ""}</div></div>` : ""}
       ${f ? `<div class="kpi"><div class="l">${esc(say("option.future", "Being built"))}</div><div class="v">${fmtM(f.d)}</div><div class="s">${esc(f.s.name)}${f.s.target ? ` · ${esc(f.s.target)}` : ""} · indicative</div></div>` : ""}
       ${ops.length ? `<div class="kpi"><div class="l">${esc(say("site.operators", "Operators nearby"))}</div><div class="v">${opsNear.length}</div><div class="s">within ${RINGS[last].min} min, of ${ops.length} on this atlas</div></div>` : ""}
     </div>
@@ -2140,7 +2140,7 @@ function renderConnect() {
   const rows = O.slice().sort((a, b) => nearestOpen(a).d - nearestOpen(b).d).map(o => {
     const r = nearestOpen(o), f = nearestPlan(o), b = nearestBus(o);
     const cell = {
-      open: r.none ? "-" : `<b class="num">${fmtM(r.d)}</b> to ${esc(r.s.name)}<br><span class="note">${esc(r.s.lineName || "")} · ${esc(r.min ? `${r.min} min walk` : accessWord(r.d))}</span>`,
+      open: r.none ? "-" : `<b class="num">${fmtM(r.d)}</b> to ${esc(r.s.name)}<br><span class="note">${esc(r.s.lineName || "")} · ${esc(r.min ? `${r.min} min walk` : r.road ? "on foot" : accessWord(r.d))}</span>`,
       plan: f ? `<b class="num">${fmtM(f.d)}</b> to ${esc(f.s.name)}<br><span class="note">${esc(f.s.lineName || "")}${f.s.target ? ` · ${esc(f.s.target)}` : ""}</span>` : "-",
       bus: b ? `<b class="num">${fmtM(b.d)}</b> to ${esc(b.s.name)}<br><span class="note">${esc(busWalk(b))} · ${esc(routesTxt(b.s.routes))}</span>` : "-"
     };
@@ -2482,12 +2482,15 @@ function wirePanes() {
 const DIST_ROUTES = O.flatMap(o => o.routes || []);
 const DIST_SRC = DIST_ROUTES.length && DIST_ROUTES.every(r => r.dist && r.dist === DIST_ROUTES[0].dist) ? DIST_ROUTES[0].dist : "";
 const DIST_URL = DIST_SRC ? DIST_ROUTES[0].src : "";
+/* Each building says where its own figures come from: an atlas can mix
+   sources (Flipkart's 2D atlas has Google Maps for most, a listing for two). */
+const ownSrc = (o) => { const r = o.routes || []; return r.length && r.every(x => x.dist && x.dist === r[0].dist) ? r[0] : null; };
 function connHTML(o) {
   const c = connOf(o), sc = selConn(o), rt = STN_ROUTE.get(o.id), by = (o.facts || []).find(x => x.k === "Railway by metro");
   const routed = Array.isArray(o.routes) && o.routes.length > 0;
   const row = (kind, x, extra) => `<button type="button" class="cn ${kind}${sc && sc.kind === kind && sc.x.s.name === x.s.name ? " on" : ""}" data-conn="${kind}|${esc(x.s.name)}"><span class="ck"></span><span class="cl"><b>${esc(x.s.name)}</b><i>${esc(extra)}</i></span><span class="cd">${fmtM(x.d)}</span></button>`;
   const lines = (x) => x.lines.length ? `${x.lines.join(" · ")} · ` : "";
-  const walk = (x, i) => x.route ? `${lines(x)}${x.route.min} min walk by road`
+  const walk = (x, i) => x.route ? `${lines(x)}${x.route.min ? `${x.route.min} min walk by road` : "on foot"}`
     : `${lines(x)}${i === 0 && rt && rt.m ? `walk ${fmtM(rt.m / 1000)}, ${Math.max(1, Math.round(rt.s / 60))} min, routed` : x.d < .03 ? "the pin marks the station address" : `about ${walkMin(x.d)} min walk, straight line`}`;
   const metro = c.metro.map((x, i) => row("metro", x, walk(x, i)));
   const rail = c.rail.map(x => row("rail", x, `${lines(x)}${x.route ? "by road" : "straight line"}`));
@@ -2496,7 +2499,7 @@ function connHTML(o) {
     ${metro.length ? `<div class="ch">Metro</div>${metro.join("")}` : ""}
     ${rail.length ? `<div class="ch">Railway station</div>${rail.join("")}${by ? `<p class="note">${esc(by.v)} ${cite(by.src)}</p>` : ""}` : ""}
     ${bus.length ? `<div class="ch">Bus stops</div>${bus.join("")}<p class="note">${esc(BUSD.name || "Bus stops")}${BUSD.src ? ` ${cite(BUSD.src, "source")}` : ""}. ${esc(BUSD.note || "")}</p>` : ""}
-    <p class="note">${routed && DIST_SRC ? `Distances and walk times from ${esc(DIST_SRC)} ${cite(DIST_URL, "source")}. The line on the map follows the streets (${FEED_SOURCE ? esc(FEED_SOURCE.name) : "OpenStreetMap routing"}).`
+    <p class="note">${routed && ownSrc(o) ? `Distances${o.routes.some(r => r.min) ? " and walk times" : ""} from ${esc(ownSrc(o).dist)} ${cite(ownSrc(o).src, "source")}. The line on the map follows the streets (${FEED_SOURCE ? esc(FEED_SOURCE.name) : "OpenStreetMap routing"}).`
       : routed && FEED_SOURCE ? `Distances and paths follow the streets, from ${esc(FEED_SOURCE.name)}${FEED_SOURCE.used < FEED_SOURCE.total ? ` (${FEED_SOURCE.used} of ${FEED_SOURCE.total} routes; the rest from OpenStreetMap)` : ""}.`
       : routed ? `Distances and paths follow the streets: walking to ${bus.length ? "metro stations and bus stops" : "metro stations"}${rail.length ? `, by road to ${rail.length === 1 ? "the railway station" : "railway stations"}` : ""} (OpenStreetMap routing ${cite(M.routing || "https://routing.openstreetmap.de", "source")}).` : "Distances are straight-line from the pin; the metro walk is a route where one loads."} The map shows the row you pick.</p>
   </div>`;
@@ -2542,7 +2545,7 @@ function renderOption(o) {
       ${colMeasures.slice(0, 2).map(m => `<div class="kpi"><div class="l">${esc(m.label || titleCase(m.key))}</div><div class="v">${esc(String(o[m.column]))}</div><div class="s">${esc(m.unit || (isFinite(m.max) ? `out of ${m.max}` : ""))}</div></div>`).join("")}
       ${EX ? `<div class="kpi"><div class="l">${esc(say("option.fromExisting", "From today's office"))}</div><div class="v">${isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(homeKm(o))}</div><div class="s">${esc(homeMin(o))} by road</div></div>` : ""}
       ${HAS_CHOOSER ? `<div class="kpi"><div class="l">${esc(say("option.fit", "Fit"))}</div><div class="v">${score(o)}<span style="font-size:13px;color:var(--mut)">/100</span></div><div class="s">#${rank} of ${O.length} on ${esc(presetName().toLowerCase())}</div></div>` : ""}
-      ${!r.none ? `<div class="kpi"><div class="l">${esc(say("option.railToday", STN_SHOT ? "Nearest metro station" : "Station today"))}</div><div class="v">${fmtM(r.d)}</div><div class="s">${esc(r.s.name)}${r.s.lineName ? ` · ${esc(r.s.lineName)}` : ""}${r.road ? ` · ${r.min ? `${r.min} min walk by road` : "by road"}` : STN_SHOT ? " · straight line" : ""}</div></div>` : ""}
+      ${!r.none ? `<div class="kpi"><div class="l">${esc(say("option.railToday", STN_SHOT ? "Nearest metro station" : "Station today"))}</div><div class="v">${fmtM(r.d)}</div><div class="s">${esc(r.s.name)}${r.s.lineName ? ` · ${esc(r.s.lineName)}` : ""}${r.road ? ` · ${r.min ? `${r.min} min walk by road` : r.s.mode === "metro" ? "on foot" : "by road"}` : STN_SHOT ? " · straight line" : ""}</div></div>` : ""}
       ${b ? `<div class="kpi"><div class="l">${esc(say("option.bus", "Bus stop"))}</div><div class="v">${fmtM(b.d)}</div><div class="s">${esc(b.s.name)} · ${esc(busWalk(b))} · ${esc(routesTxt(b.s.routes))}</div></div>` : ""}
       ${f ? `<div class="kpi"><div class="l">${esc(say("option.future", "Being built"))}</div><div class="v">${fmtM(f.d)}</div><div class="s">${esc(f.s.name)}${f.s.lineName ? ` · ${esc(f.s.lineName)}` : ""}${f.s.target ? ` · ${esc(f.s.target)}` : ""} · indicative</div></div>` : ""}
     </div>
@@ -2552,7 +2555,7 @@ function renderOption(o) {
     ${marketHTML(o)}
 
     ${sheetRows.length ? `<h3>${esc(say("option.spec", "The detail"))}</h3>` : ""}
-    <table class="spec">${sheetRows.map(([k, v]) => `<tr><th>${esc(k)}</th><td>${v}</td></tr>`).join("")}
+    <table class="spec${M.boldSpec ? " strong" : ""}">${sheetRows.map(([k, v]) => `<tr><th>${esc(k)}</th><td>${v}</td></tr>`).join("")}
       ${(o.facts || []).map(x => `<tr><th>${esc(x.k)}</th><td>${esc(x.v)} ${cite(x.src)}</td></tr>`).join("")}</table>
 
     ${EX ? `<h3>${esc(say("option.against", "Against today's office"))}</h3>
