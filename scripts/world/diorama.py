@@ -188,7 +188,7 @@ WALL_STYLES = ["res_cream", "res_peach", "res_grey", "res_ochre"]
 MOD = {"res_cream": (6, 12), "res_peach": (6, 12), "res_grey": (6, 12), "res_ochre": (6, 12), "res_tower": (6, 12), "com_ribbon": (8, 16), "com_glass": (6, 16),
        "shop": (6, 4.5), "chawl": (4, 3), "opt_glass": (6, 16.4), "opt_plaster": (6, 16.4), "glass723": (6, 4.1), "retail723": (7.2, 5.6)}
 for k in MOD: mat("wall_" + k, tex=k + ".jpg", rtex=k + "_r.jpg", glass=k in ("com_glass", "opt_glass", "com_ribbon", "opt_plaster", "res_tower", "glass723", "retail723"))
-mat("fin_723", "#262b31", 0.42, 0.65); mat("pier_723", "#32373d", 0.5, 0.3); mat("band_723", "#c8cbcd", 0.55, 0.15); mat("frame_723", "#d9dcde", 0.35, 0.7)
+mat("fin_723", "#3d4752", 0.45, 0.35); mat("pier_723", "#32373d", 0.5, 0.3); mat("band_723", "#c8cbcd", 0.55, 0.15); mat("frame_723", "#d9dcde", 0.35, 0.7)
 mat("roof", tex="roof.jpg", rough=0.9); mat("roof_tin", "#8f8f8a", 0.45, 0.6); mat("roof_tarp", "#2f63a8", 0.6); mat("roof_tin_rust", "#7a5b45", 0.7, 0.3)
 mat("parapet", "#cfc8b8", 0.9); mat("ground", "#a29c8f", 0.95, tex="roof.jpg"); mat("asphalt", tex="asphalt.jpg", rough=0.85); mat("pavers", tex="pavers.jpg", rough=0.9)
 mat("kerb", "#bdb8ab", 0.85); mat("grass", tex="grass.jpg", rough=0.95); mat("water", "#3d5257", 0.05, 0.1); mat("marking", "#efefe8", 0.6)
@@ -286,7 +286,7 @@ def house_of_wadhwa(ob, q, ring, GH, FH, floors, H):
     F = _faces(ring)
     for i, (A, B, d, ang, n) in enumerate(F):
         # where the solid piers and the light band break the fins on this face
-        breaks = [(0.71 * d, 0.71 * d + 3.6, "pier_723")] if i % 2 == 0 else [(0.31 * d, 0.31 * d + 2.4, "pier_723"), (d - 3.2, d, "band_723")]
+        breaks = [(0.71 * d, 0.71 * d + 3.6, "band_723")] if i % 2 == 0 else [(0.31 * d, 0.31 * d + 2.4, "pier_723"), (d - 3.2, d, "band_723")]
         for b0, b1, m in breaks:
             c0 = _at(A, B, d, (b0 + b1) / 2, n, 0.22)
             boxm(ob, *c0, GH, H + 0.4, b1 - b0, 0.45, ang, m)

@@ -126,7 +126,7 @@ async function start(A, W) {
         glass_lobby: [0x4e6a76, 0.04, 0.75], canopy: [0x2b2e31, 0.4, 0.6], wire: [0x333333, 0.5, 0.8], ballast: [0x7d7568, 0.95], roof_tin: [0x8f8f8a, 0.42, 0.6], roof_tarp: [0x2f63a8, 0.6], roof_tin_rust: [0x7a5b45, 0.7, 0.3],
         trunk: [0x5b4a3b, 0.9], leaf: [0xffffff, 0.8], leaf_b: [0xffffff, 0.8], frond: [0x5a8735, 0.75], lamp_head: [0xe6e2d6, 0.4], car_body: [0xffffff, 0.22, 0.55], car_glass: [0x1a2026, 0.04, 0.6], tyre: [0x161616, 0.9], hub: [0xb9bcbf, 0.3, 0.9], trim: [0x202224, 0.5, 0.3],
         lamp_front: [0xfff6e0, 0.2], lamp_rear: [0xa01010, 0.3], person_trousers: [0x2b3240, 0.85], person_shirt: [0xffffff, 0.8], person_skin: [0x8a5a3c, 0.6], person_hair: [0x15110e, 0.7],
-        fin_723: [0x262b31, 0.42, 0.65], pier_723: [0x32373d, 0.5, 0.3], band_723: [0xc8cbcd, 0.55, 0.15], frame_723: [0xd9dcde, 0.35, 0.7],   /* House of Wadhwa 723 Avenue */
+        fin_723: [0x3d4752, 0.45, 0.35], pier_723: [0x32373d, 0.5, 0.3], band_723: [0xc8cbcd, 0.55, 0.15], frame_723: [0xd9dcde, 0.35, 0.7],   /* House of Wadhwa 723 Avenue */
         auto_body: [0x2d7d3a, 0.4, 0.2], auto_top: [0xf0c22e, 0.5], bus_body: [0xb8322a, 0.4, 0.3], train_body: [0xeef1f4, 0.25, 0.45], train_win: [0x1e2832, 0.05, 0.6], train_stripe: [0x1c5fa8, 0.35],
       }[name] || [0x9a9a9a, 0.8];
       m = new THREE.MeshStandardMaterial({ color: C[0], roughness: C[1], metalness: C[2] || 0 });
