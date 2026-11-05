@@ -30,6 +30,7 @@ import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { GTAOPass } from "three/addons/postprocessing/GTAOPass.js";
 import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 
 const $ = (s) => document.querySelector(s);
 const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -40,7 +41,7 @@ const STILL = Q.get("still") === "1";
    a 35 mm lens from drone height, sky and haze behind, ground to the horizon,
    relief in the facades. ?look=model brings back the architect's-model look
    (tilt-shift, a high turntable, the slab floating on the page). */
-const REALLOOK = Q.get("look") === "real";   // opt-in (?look=real) until checked on screen; the model look stays the default
+const REALLOOK = Q.get("look") !== "model";   // the photographic look is the default; ?look=model brings back the plain model look
 const SLUG = ((Q.get("atlas") || location.pathname.split("/")[1] || "") + "").toLowerCase().replace(/[^a-z0-9-]/g, "");
 const D2R = Math.PI / 180, clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 /* 50 mm on a 36x24 mm frame: the lens that matches the human eye. Vertical field of view in degrees. */
@@ -159,7 +160,27 @@ async function start(A, W) {
         for (int i = -4; i <= 4; i++) for (int j = -4; j <= 4; j++) { vec2 o = vec2(float(i), float(j)) * r / uRes; float w = exp(-float(i*i + j*j) / 12.); c += texture2D(tDiffuse, vUv + o) * w; tw += w; }
         vec4 base = texture2D(tDiffuse, vUv); gl_FragColor = mix(base, c / tw, smoothstep(0.0, 0.5, r)); }` });
   composer.addPass(tilt);
+  /* a soft bloom: only the brightest highlights (the sun caught in glass, lit signs) spill a little light */
+  if (REALLOOK && !LOW) composer.addPass(new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.22, 0.55, 0.92));
   composer.addPass(new OutputPass());
+
+  /* ------------------------------------------------ reflections ---- */
+  /* glass reflects the real street, not just the sky: a cube camera at the chosen building's middle
+     photographs the diorama around it (with the building itself hidden), and every glass surface uses
+     that picture as its reflection. Taken once per building, and again once its textures have arrived. */
+  const probeRT = new THREE.WebGLCubeRenderTarget(LOW ? 256 : 512, { type: THREE.HalfFloatType, generateMipmaps: true, minFilter: THREE.LinearMipmapLinearFilter });
+  const probe = new THREE.CubeCamera(1, 4000, probeRT);
+  const REFLECTS = new Set([...GLASSY, "glass_lobby", "station_glass", "car_glass", "train_win", "water"]);
+  function captureReflections() {
+    if (!REALLOOK || !D || !root) return;
+    const hide = []; root.traverse((o) => { if (o.visible && o.name && (o.name.startsWith("opt_") || o.name.startsWith("sign_723"))) { o.visible = false; hide.push(o); } });
+    const c = centroid(D.building.foot); probe.position.copy(P3(c[0], c[1], Math.max(12, D.building.h * 0.45)));
+    const bg = scene.background, fog = scene.fog, bands_ = bands.map((b) => b.visible);
+    scene.background = hdr; scene.fog = null; bands.forEach((b) => (b.visible = false));
+    probe.update(renderer, scene); probeRT.texture.needsPMREMUpdate = true;
+    scene.background = bg; scene.fog = fog; bands.forEach((b, i) => (b.visible = bands_[i])); hide.forEach((o) => (o.visible = true));
+    for (const [n, m] of Object.entries(MAT)) if (REFLECTS.has(n) && m.envMap !== probeRT.texture) { m.envMap = probeRT.texture; m.envMapIntensity = n.startsWith("wall_") ? 1.9 : 1.4; m.needsUpdate = true; }
+  }
 
   /* ----------------------------------------------------- the diorama ---- */
   const loader = new GLTFLoader(); loader.setMeshoptDecoder(MeshoptDecoder);
@@ -483,6 +504,7 @@ async function start(A, W) {
     RW = null; ROUTE = null; renderHUD(o);
     await loadDiorama(id);
     FLOOR_SEL = null; setBands(o);
+    captureReflections(); setTimeout(captureReflections, 2500);
     setRoute(routeOf(o.routes.find((x) => x.kind === "metro"))); renderHUD(o);
     if (MODE === "walk" || MODE === "route") startWalk(); else dollhouse(first ? 0 : 1600);
     if (first && fly) { controls.target.copy(fly.b.t); const p0 = fly.b.p.clone(); fly = null; camera.position.copy(controls.target.clone().add(p0.clone().sub(controls.target).multiplyScalar(1.6))); flyTo(controls.target.clone(), p0, 2600); }
