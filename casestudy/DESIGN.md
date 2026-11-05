@@ -69,12 +69,8 @@ what it fixes, and fixes the worst one to three first.
 - Table pages open their rows to use spare height (casestudy/index.html,
   fitTables, up to 6 mm a row): they now reach close to the foot, but levers
   (six rows) reads airy rather than full.
-- "What each floor must earn" ends at about four fifths: the chart column
-  could still take the full width with the two price cards below it.
 - Numbered-point pages with one row of points (pipeline 1, risks) set their
   points larger now, but still keep a smaller gap above the takeaway.
 - Recent deals: with no "what it means" copy the table now takes the full
   width, but the page still has no pairing box.
 - The terms table sets the small notes under big figures in the serif face.
-- Market point 01 (page 14): the three charts stop at about half the page;
-  a band of space stays above the figure and its meaning at the foot.
