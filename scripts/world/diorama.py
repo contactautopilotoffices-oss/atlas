@@ -215,6 +215,8 @@ def _metro_clear():
                 q = l.interpolate(min(l.length, max(0, t0 + e))); zs.append(q.buffer(22))
     return unary_union(zs) if zs else Polygon()
 METRO_CLEAR = _metro_clear()
+# where the eye must not stand: inside the Line 1 station or its stairs, or under a Line 3 entrance canopy
+KEEP_OUT = unary_union([METRO_CLEAR] + [Point(s["x"], s["y"]).buffer(30) for s in S["stations"] if s["line"] == "L3"])
 def blocks_metro(p):
     if METRO_CLEAR.is_empty: return False
     i = p.intersection(METRO_CLEAR).area
@@ -355,7 +357,7 @@ def build():
     for side in (0.35, -0.35, 0.6, -0.6, 0.0, 0.9, -0.9):
         for kk in (1.0, 0.8, 1.25, 0.65, 1.5):
             c_ = (mx + nx * back * kk + math.cos(ang) * back * side, my + ny * back * kk + math.sin(ang) * back * side)
-            if not built.buffer(1.5).contains(Point(c_[0] + OX, c_[1] + OY)) and not built.intersects(LineString([(c_[0] + OX, c_[1] + OY), (mx + nx * 8 + OX, my + ny * 8 + OY)])):
+            if not built.buffer(1.5).contains(Point(c_[0] + OX, c_[1] + OY)) and not KEEP_OUT.contains(Point(c_[0] + OX, c_[1] + OY)) and not built.intersects(LineString([(c_[0] + OX, c_[1] + OY), (mx + nx * 8 + OX, my + ny * 8 + OY)])):
                 street_cam = c_; break
         if street_cam: break
     if not street_cam:   # no clear spot in front: search all round for open ground with a clear view of the face
@@ -365,13 +367,13 @@ def build():
             for t in np.linspace(0, math.tau, 48, endpoint=False):
                 c_ = (fx_ + math.cos(t) * rad, fy_ + math.sin(t) * rad)
                 if (math.cos(t) * nx + math.sin(t) * ny) < 0.2: continue   # stay in front of the face
-                if not built.buffer(1.5).contains(Point(c_)) and not others.intersects(LineString([c_, (fx_, fy_)])):
+                if not built.buffer(1.5).contains(Point(c_)) and not KEEP_OUT.contains(Point(c_)) and not others.intersects(LineString([c_, (fx_, fy_)])):
                     street_cam = (c_[0] - OX, c_[1] - OY); break
             if street_cam: break
     street_cam = street_cam or (mx + nx * back, my + ny * back)
     # make sure the walk starts on open ground (footpath or road)
     # and not under the station's stairs or viaduct, where the eye would sit inside the structure
-    def _open(w): q = Point(w[0] + OX, w[1] + OY); return not built.contains(q) and not METRO_CLEAR.contains(q)
+    def _open(w): q = Point(w[0] + OX, w[1] + OY); return not built.contains(q) and not KEEP_OUT.contains(q)
     cands = [(mx + nx * d - ny * t, my + ny * d + nx * t) for d in range(16, 64, 4) for t in (0, -8, 8, -16, 16)]
     walk0 = next((w for w in cands if _open(w)), walk0)
 
