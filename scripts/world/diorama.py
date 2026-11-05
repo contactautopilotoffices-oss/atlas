@@ -186,8 +186,9 @@ def mat(name, col="#808080", rough=0.8, metal=0.0, tex=None, rtex=None, glass=Fa
 
 WALL_STYLES = ["res_cream", "res_peach", "res_grey", "res_ochre"]
 MOD = {"res_cream": (6, 12), "res_peach": (6, 12), "res_grey": (6, 12), "res_ochre": (6, 12), "res_tower": (6, 12), "com_ribbon": (8, 16), "com_glass": (6, 16),
-       "shop": (6, 4.5), "chawl": (4, 3), "opt_glass": (6, 16.4), "opt_plaster": (6, 16.4)}
-for k in MOD: mat("wall_" + k, tex=k + ".jpg", rtex=k + "_r.jpg", glass=k in ("com_glass", "opt_glass", "com_ribbon", "opt_plaster", "res_tower"))
+       "shop": (6, 4.5), "chawl": (4, 3), "opt_glass": (6, 16.4), "opt_plaster": (6, 16.4), "glass723": (6, 4.1), "retail723": (7.2, 5.6)}
+for k in MOD: mat("wall_" + k, tex=k + ".jpg", rtex=k + "_r.jpg", glass=k in ("com_glass", "opt_glass", "com_ribbon", "opt_plaster", "res_tower", "glass723", "retail723"))
+mat("fin_723", "#262b31", 0.42, 0.65); mat("pier_723", "#32373d", 0.5, 0.3); mat("band_723", "#c8cbcd", 0.55, 0.15); mat("frame_723", "#d9dcde", 0.35, 0.7)
 mat("roof", tex="roof.jpg", rough=0.9); mat("roof_tin", "#8f8f8a", 0.45, 0.6); mat("roof_tarp", "#2f63a8", 0.6); mat("roof_tin_rust", "#7a5b45", 0.7, 0.3)
 mat("parapet", "#cfc8b8", 0.9); mat("ground", "#a29c8f", 0.95, tex="roof.jpg"); mat("asphalt", tex="asphalt.jpg", rough=0.85); mat("pavers", tex="pavers.jpg", rough=0.9)
 mat("kerb", "#bdb8ab", 0.85); mat("grass", tex="grass.jpg", rough=0.95); mat("water", "#3d5257", 0.05, 0.1); mat("marking", "#efefe8", 0.6)
@@ -221,6 +222,106 @@ def blocks_metro(p):
     if METRO_CLEAR.is_empty: return False
     i = p.intersection(METRO_CLEAR).area
     return i > 40 or i > 0.25 * p.area
+
+def generic_option(ob, q, ring, GH, FH, floors, H, glassy, style):
+    """An option building in the house style: lobby glass, a facade texture, slab edges, mullions, a crown."""
+    walls(ob, ring, 0, GH, "glass_lobby", 3, GH)
+    walls(ob, ring, GH, H, "wall_" + style, *MOD[style], v0=GH)
+    # slab edges at every floor, and chajjas on plaster buildings
+    for k in range(floors):
+        z = GH + k * FH if k else GH
+        out = q.buffer(0.28 if glassy else 0.6, join_style="mitre")
+        walls(ob, [L(x, y) for x, y in out.exterior.coords], z - 0.42, z, "slab_edge", 2, 2)
+        flat(ob, lpoly(out.difference(q)), z, "slab_edge", 2); flat(ob, lpoly(out.difference(q)), z - 0.42, "slab_edge", 2, up=False)
+    # mullions: fins every 1.5 m along each face
+    if glassy:
+        r = ring[:-1] if ring[0] == ring[-1] else ring
+        if not Polygon(r).exterior.is_ccw: r = r[::-1]
+        for i in range(len(r)):
+            (ax, ay), (bx_, by) = r[i], r[(i + 1) % len(r)]; d = math.hypot(bx_ - ax, by - ay); ang = math.atan2(by - ay, bx_ - ax)
+            nx, ny = math.sin(ang), -math.cos(ang)
+            for s_ in np.arange(0.75, d, 1.5):
+                px, py = ax + (bx_ - ax) * s_ / d + nx * 0.16, ay + (by - ay) * s_ / d + ny * 0.16
+                boxm(ob, px, py, GH, H + 2.2, 0.1, 0.32, ang, "mullion", top=True)
+    # crown, roof and plant
+    inner = q.buffer(-0.3)
+    walls(ob, ring, H, H + 2.4, "wall_" + style if glassy else "parapet", *MOD[style], v0=GH)
+    walls(ob, [L(x, y) for x, y in inner.exterior.coords], H, H + 2.4, "parapet", 2, 2, outward=False)
+    flat(ob, lpoly(q.difference(inner)), H + 2.4, "slab_edge", 2); flat(ob, lpoly(inner), H + 0.1, "roof", 5)
+    c = inner.representative_point(); a_ = math.sqrt(inner.area)
+    boxm(ob, *L(c.x, c.y), H, H + 4.5, a_ * 0.35, a_ * 0.3, 0.0, "concrete")
+    for k in range(4): boxm(ob, *L(c.x + (k - 1.5) * 3.2, c.y - a_ * 0.25), H, H + 1.6, 2.2, 1.6, 0.0, "metal")
+
+def _faces(ring):
+    """The footprint's faces, counter-clockwise, each as (A, B, length, angle, outward normal)."""
+    r = ring[:-1] if ring[0] == ring[-1] else ring
+    if not Polygon(r).exterior.is_ccw: r = r[::-1]
+    out = []
+    for i in range(len(r)):
+        (ax, ay), (bx_, by) = r[i], r[(i + 1) % len(r)]; d = math.hypot(bx_ - ax, by - ay)
+        if d < 2: continue
+        ang = math.atan2(by - ay, bx_ - ax); out.append(((ax, ay), (bx_, by), d, ang, (math.sin(ang), -math.cos(ang))))
+    return out
+
+def _at(A, B, d, s_, n, off):
+    return (A[0] + (B[0] - A[0]) * s_ / d + n[0] * off, A[1] + (B[1] - A[1]) * s_ / d + n[1] * off)
+
+FIN_STEP, FIN_D, FIN_W = 0.62, 0.38, 0.08
+def house_of_wadhwa(ob, q, ring, GH, FH, floors, H):
+    """House of Wadhwa 723 Avenue, after the developer's image: a dark glass tower wrapped in dense full-height
+    vertical fins, solid piers that break each face, a light grey end band, slim floor lines, an open crown of
+    blades above the roof, and a lit glass retail ground floor. The front face gets its own pieces below."""
+    walls(ob, ring, 0, GH, "wall_retail723", *MOD["retail723"])
+    walls(ob, ring, GH, H, "wall_glass723", *MOD["glass723"], v0=GH)
+    # floor lines: a slim transom at every slab
+    for k in range(floors):
+        z = GH + k * FH
+        out = q.buffer(0.14, join_style="mitre")
+        walls(ob, [L(x, y) for x, y in out.exterior.coords], z - 0.1, z + 0.1, "fin_723", 2, 2)
+        flat(ob, lpoly(out.difference(q)), z + 0.1, "fin_723", 2)
+    # the podium's dark head band over the retail glass, projecting like a fascia
+    out = q.buffer(1.2, join_style="mitre")
+    walls(ob, [L(x, y) for x, y in out.exterior.coords], GH - 0.9, GH + 0.15, "pier_723", 2, 2)
+    flat(ob, lpoly(out.difference(q)), GH + 0.15, "pier_723", 2); flat(ob, lpoly(out.difference(q)), GH - 0.9, "pier_723", 2, up=False)
+    F = _faces(ring)
+    for i, (A, B, d, ang, n) in enumerate(F):
+        # where the solid piers and the light band break the fins on this face
+        breaks = [(0.71 * d, 0.71 * d + 3.6, "pier_723")] if i % 2 == 0 else [(0.31 * d, 0.31 * d + 2.4, "pier_723"), (d - 3.2, d, "band_723")]
+        for b0, b1, m in breaks:
+            c0 = _at(A, B, d, (b0 + b1) / 2, n, 0.22)
+            boxm(ob, *c0, GH, H + 0.4, b1 - b0, 0.45, ang, m)
+        s_ = 0.4
+        while s_ < d - 0.3:
+            if not any(b0 - 0.2 <= s_ <= b1 + 0.2 for b0, b1, _ in breaks):
+                boxm(ob, *_at(A, B, d, s_, n, FIN_D / 2), GH, H + 0.4, FIN_W, FIN_D, ang, "fin_723")
+            s_ += FIN_STEP
+        # the crown: an open screen of thin blades standing above the roof line
+        s_ = 0.3
+        while s_ < d - 0.2:
+            boxm(ob, *_at(A, B, d, s_, n, 0.2), H, H + 6.0, 0.07, 0.12, ang, "frame_723")
+            s_ += 1.2
+        boxm(ob, *_at(A, B, d, d / 2, n, 0.2), H + 5.85, H + 6.05, d, 0.22, ang, "frame_723")
+    # the roof and its plant
+    inner = q.buffer(-0.3)
+    flat(ob, lpoly(q), H + 0.05, "roof", 5)
+    walls(ob, ring, H, H + 1.1, "pier_723", 2, 2)
+    c = inner.representative_point(); a_ = math.sqrt(inner.area)
+    boxm(ob, *L(c.x, c.y), H, H + 3.0, a_ * 0.45, a_ * 0.4, 0.0, "pier_723")
+
+def house_of_wadhwa_front(ob, A, B, r, GH, FH, H):
+    """The pieces only the front face has: the projecting two-storey frame box low on the left, and the framed
+    notch at the top left corner."""
+    d = math.hypot(B[0] - A[0], B[1] - A[1]); ang = math.atan2(B[1] - A[1], B[0] - A[0]); n = (math.sin(ang), -math.cos(ang))
+    zb = GH + 2 * FH; w = min(9.0, d * 0.32); c = _at(A, B, d, 0.6 + w / 2, n, 0.8)
+    for z0, z1 in ((zb - 0.35, zb + 0.35), (zb + 2 * FH - 0.35, zb + 2 * FH + 0.35)):
+        boxm(ob, *c, z0, z1, w + 0.6, 1.6, ang, "frame_723", bottom=True)
+    for e in (-1, 1):
+        boxm(ob, *_at(A, B, d, 0.6 + w / 2 + e * (w / 2), n, 0.8), zb, zb + 2 * FH, 0.6, 1.6, ang, "frame_723")
+    boxm(ob, *_at(A, B, d, 0.6 + w / 2, n, 1.3), zb + 0.35, zb + 2 * FH - 0.35, w - 0.6, 0.06, ang, "wall_glass723")
+    # top left: two floors set back behind a white frame
+    zn = H - 2 * FH; wn = min(5.0, d * 0.2)
+    boxm(ob, *_at(A, B, d, wn / 2, n, 0.3), H - 0.3, H + 0.3, wn + 0.4, 0.8, ang, "frame_723", bottom=True)
+    boxm(ob, *_at(A, B, d, wn + 0.2, n, 0.3), zn, H, 0.4, 0.8, ang, "frame_723")
 
 # -------------------------------------------------------------- the build ----
 def build():
@@ -308,32 +409,10 @@ def build():
     grade = FACT.get("Grade", "B"); glassy = grade.startswith("A") or grade == "B+"
     FH, GH = 4.1, 5.6; H = GH + (floors - 1) * FH
     style = "opt_glass" if glassy else "opt_plaster"
-    walls(ob, ring, 0, GH, "glass_lobby", 3, GH)
-    walls(ob, ring, GH, H, "wall_" + style, *MOD[style], v0=GH)
-    # slab edges at every floor, and chajjas on plaster buildings
-    for k in range(floors):
-        z = GH + k * FH if k else GH
-        out = q.buffer(0.28 if glassy else 0.6, join_style="mitre")
-        walls(ob, [L(x, y) for x, y in out.exterior.coords], z - 0.42, z, "slab_edge", 2, 2)
-        flat(ob, lpoly(out.difference(q)), z, "slab_edge", 2); flat(ob, lpoly(out.difference(q)), z - 0.42, "slab_edge", 2, up=False)
-    # mullions: fins every 1.5 m along each face
-    if glassy:
-        r = ring[:-1] if ring[0] == ring[-1] else ring
-        if not Polygon(r).exterior.is_ccw: r = r[::-1]
-        for i in range(len(r)):
-            (ax, ay), (bx_, by) = r[i], r[(i + 1) % len(r)]; d = math.hypot(bx_ - ax, by - ay); ang = math.atan2(by - ay, bx_ - ax)
-            nx, ny = math.sin(ang), -math.cos(ang)
-            for s_ in np.arange(0.75, d, 1.5):
-                px, py = ax + (bx_ - ax) * s_ / d + nx * 0.16, ay + (by - ay) * s_ / d + ny * 0.16
-                boxm(ob, px, py, GH, H + 2.2, 0.1, 0.32, ang, "mullion", top=True)
-    # crown, roof and plant
-    inner = q.buffer(-0.3)
-    walls(ob, ring, H, H + 2.4, "wall_" + style if glassy else "parapet", *MOD[style], v0=GH)
-    walls(ob, [L(x, y) for x, y in inner.exterior.coords], H, H + 2.4, "parapet", 2, 2, outward=False)
-    flat(ob, lpoly(q.difference(inner)), H + 2.4, "slab_edge", 2); flat(ob, lpoly(inner), H + 0.1, "roof", 5)
-    c = inner.representative_point(); a_ = math.sqrt(inner.area)
-    boxm(ob, *L(c.x, c.y), H, H + 4.5, a_ * 0.35, a_ * 0.3, 0.0, "concrete")
-    for k in range(4): boxm(ob, *L(c.x + (k - 1.5) * 3.2, c.y - a_ * 0.25), H, H + 1.6, 2.2, 1.6, 0.0, "metal")
+    if OID == "723-avenue":
+        house_of_wadhwa(ob, q, ring, GH, FH, floors, H)
+    else:
+        generic_option(ob, q, ring, GH, FH, floors, H, glassy, style)
     # entrance: the face nearest a road gets a canopy and the name
     roads = unary_union([ROAD["major"], ROAD["minor"]])
     r = ring[:-1] if ring[0] == ring[-1] else ring
@@ -346,12 +425,19 @@ def build():
         if best is None or dist < best[0]: best = (dist, (ax, ay), (bx_, by), d)
     _, (ax, ay), (bx_, by), d = best; ang = math.atan2(by - ay, bx_ - ax); nx, ny = math.sin(ang), -math.cos(ang)
     mx, my = (ax + bx_) / 2, (ay + by) / 2; cw = min(14, d * 0.6)
+    if OID == "723-avenue":
+        house_of_wadhwa_front(ob, (ax, ay), (bx_, by), r, GH, FH, H)
     boxm(ob, mx + nx * 3.2, my + ny * 3.2, GH - 0.1, GH + 0.45, cw, 6.4, ang, "canopy", bottom=True)
     for sgn in (-1, 1): cyl(ob, mx + nx * 6.0 + math.cos(ang) * sgn * cw * 0.42, my + ny * 6.0 + math.sin(ang) * sgn * cw * 0.42, 0, GH, 0.18, 0.18, 0, "metal", 12)
     ob.build("opt_" + OID, MATS)
     tm = text_mesh(BO["name"].upper(), 1.1, 0.08, "opt_name")
     tm.data.materials.append(MATS["opt_name"])
     tm.rotation_euler = (math.pi / 2, 0, ang); tm.location = (mx + nx * 6.45, my + ny * 6.45, GH + 0.18)
+    if OID == "723-avenue":   # the brand on the crown, high on the front face
+        for txt, size, dz in (("WADHWA", 2.2, 2.2), ("HOUSE OF", 0.85, 4.7)):
+            t2 = text_mesh(txt, size, 0.08, "sign_723_" + txt.replace(" ", "_")); t2.data.materials.append(MATS["sign_text"])
+            sx, sy = ax + (bx_ - ax) * 0.3, ay + (by - ay) * 0.3
+            t2.rotation_euler = (math.pi / 2, 0, ang); t2.location = (sx + nx * 0.6, sy + ny * 0.6, H + dz)
     entrance = (mx + nx * 0.5, my + ny * 0.5); walk0 = (mx + nx * 16, my + ny * 16)
     back = max(38.0, H * 0.62); street_cam = None
     for side in (0.35, -0.35, 0.6, -0.6, 0.0, 0.9, -0.9):
