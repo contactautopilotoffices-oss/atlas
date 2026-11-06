@@ -71,6 +71,5 @@ what it fixes, and fixes the worst one to three first.
   (six rows) reads airy rather than full.
 - Numbered-point pages with one row of points (pipeline 1, risks) set their
   points larger now, but still keep a smaller gap above the takeaway.
-- Recent deals: with no "what it means" copy the table now takes the full
-  width, but the page still has no pairing box.
-- The terms table sets the small notes under big figures in the serif face.
+- Contents page: the "read this first" box and credits fill only the top half
+  of the right column.

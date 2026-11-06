@@ -436,7 +436,16 @@
       });
       /* deals */
       if ((b.deals || []).length) {
-        d.add({ hdr: h3, src: src(b, "deals"), body: "<h2>Recent deals in and around " + esc(b.meta.place || "the area") + "</h2><div class='cols " + (means(b, "deals") ? "c21" : "") + "'><table><thead><tr><th>Who</th><th>Building</th><th class='n'>Area</th><th class='n'>Rent</th><th>When</th><th>Kind</th></tr></thead><tbody>" + b.deals.map(function (x) { return "<tr><td><b>" + esc(x.who) + "</b>" + (x.note ? "<br><span class='tiny mut'>" + esc(x.note) + "</span>" : "") + "</td><td class='small'>" + esc(x.building || "") + "</td><td class='n'>" + esc(x.area) + "</td><td class='n'>" + esc(x.rent || "") + "</td><td class='small'>" + esc(x.when || "") + "</td><td class='small'>" + esc(x.kind || "") + "</td></tr>"; }).join("") + "</tbody></table><div>" + means(b, "deals") + "</div></div>" });
+        /* With no copy for the page, the pairing box says what the rows themselves show. */
+        var num = function (t) { var m = String(t || "").replace(/,/g, "").match(/\d+(\.\d+)?/); return m ? +m[0] : NaN; };
+        var dealsAuto = [], byArea = b.deals.filter(function (x) { return isFinite(num(x.area)); }).sort(function (p, q) { return num(q.area) - num(p.area); });
+        if (byArea.length) dealsAuto.push(b.deals.length + " deals here; the largest is " + byArea[0].who + " at " + byArea[0].area + (byArea[0].building ? ", " + byArea[0].building : "") + ".");
+        var rents = b.deals.map(function (x) { return num(x.rent); }).filter(isFinite);
+        if (rents.length > 1) dealsAuto.push("Where the rent is known it runs from " + sym + Math.min.apply(null, rents) + " to " + sym + Math.max.apply(null, rents) + " a sq ft a month, " + rents.length + " of " + b.deals.length + " deals.");
+        var flexN = b.deals.filter(function (x) { return /flex|operator/i.test(x.kind || ""); }).length;
+        if (flexN) dealsAuto.push(flexN + " of the " + b.deals.length + " are flex operators taking space to sell on.");
+        var dealsMeans = means(b, "deals", copy(b, "deals").length ? [] : dealsAuto);
+        d.add({ hdr: h3, src: src(b, "deals"), body: "<h2>Recent deals in and around " + esc(b.meta.place || "the area") + "</h2><div class='cols " + (dealsMeans ? "c21" : "") + "'><table><thead><tr><th>Who</th><th>Building</th><th class='n'>Area</th><th class='n'>Rent</th><th>When</th><th>Kind</th></tr></thead><tbody>" + b.deals.map(function (x) { return "<tr><td><b>" + esc(x.who) + "</b>" + (x.note ? "<br><span class='tiny mut'>" + esc(x.note) + "</span>" : "") + "</td><td class='small'>" + esc(x.building || "") + "</td><td class='n'>" + esc(x.area) + "</td><td class='n'>" + esc(x.rent || "") + "</td><td class='small'>" + esc(x.when || "") + "</td><td class='small'>" + esc(x.kind || "") + "</td></tr>"; }).join("") + "</tbody></table><div>" + dealsMeans + "</div></div>" });
       }
       /* catchment */
       if ((b.occupiers || []).length) {
