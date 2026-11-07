@@ -264,6 +264,35 @@ def hedge(x0, x1, y):
     o.show_instancer_for_render = False
 
 
+# ---- a better palm for the stills: each frond an arching midrib with leaflets drooping off both sides
+def palm(x, y, h):
+    curve = bpy.data.curves.new("palm_trunk", "CURVE"); curve.dimensions = "3D"; curve.bevel_depth = 0.19; curve.bevel_resolution = 4
+    sp = curve.splines.new("BEZIER"); sp.bezier_points.add(2); lean = random.uniform(-0.8, 0.8)
+    for i, (px, py, pz) in enumerate(((x, y, 0), (x + lean * 0.35, y + lean * 0.1, h * 0.5), (x + lean, y + lean * 0.3, h))):
+        bp = sp.bezier_points[i]; bp.co = (px, py, pz); bp.handle_left_type = bp.handle_right_type = "AUTO"
+    o = bpy.data.objects.new("palm_trunk", curve); COL.objects.link(o); o.data.materials.append(M["trunk"])
+    tx, ty = x + lean, y + lean * 0.3
+    me = bpy.data.meshes.new("palm_crown"); bm = bmesh.new()
+    for k in range(18):
+        a = k / 18 * 2 * math.pi + random.uniform(-0.15, 0.15); Lf = random.uniform(2.8, 3.8); rise = random.uniform(0.6, 1.3)
+        ca, sa = math.cos(a), math.sin(a); prev = None
+        for s_ in range(26):
+            t = s_ / 25; r = Lf * t; z = h + 0.2 + rise * math.sin(t * math.pi * 0.7) - 1.9 * t * t
+            c = Vector((tx + ca * r, ty + sa * r, z))
+            if s_ > 2:                                   # a pair of leaflets at this point of the midrib
+                ll = (0.25 + 0.75 * math.sin(min(1, t * 1.15) * math.pi)) * random.uniform(0.75, 0.95); w = 0.05
+                for side in (-1, 1):
+                    dvec = Vector((-sa * side, ca * side, 0)) * 0.8 + Vector((ca, sa, 0)) * 0.35; dvec.normalize()
+                    tip = c + dvec * ll + Vector((0, 0, -0.45 * ll))
+                    v0 = bm.verts.new(c + Vector((ca, sa, 0)) * -w); v1 = bm.verts.new(c + Vector((ca, sa, 0)) * w)
+                    v2 = bm.verts.new(tip + Vector((ca, sa, 0)) * w * 0.4); v3 = bm.verts.new(tip - Vector((ca, sa, 0)) * w * 0.4)
+                    bm.faces.new((v0, v1, v2, v3))
+            if prev is not None:
+                v0 = bm.verts.new(prev + Vector((0, 0, 0.03))); v1 = bm.verts.new(prev - Vector((0, 0, 0.03))); v2 = bm.verts.new(c - Vector((0, 0, 0.03))); v3 = bm.verts.new(c + Vector((0, 0, 0.03)))
+                bm.faces.new((v0, v1, v2, v3))
+            prev = c
+    bm.to_mesh(me); bm.free(); f = bpy.data.objects.new("palm_crown", me); COL.objects.link(f); f.data.materials.append(M["palm"])
+
 # ------------------------------------------------------------------ the building, floor by floor
 GROUP = {}; CUR = ["shell_0"]
 _box = box
