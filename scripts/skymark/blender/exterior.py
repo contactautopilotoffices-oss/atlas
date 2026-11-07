@@ -1,7 +1,8 @@
 """Skymark F-1, Sector 6, Noida: the real exterior, in Blender, after photos of the building.
 
   bl/bin/python scripts/skymark/blender/exterior.py --glb OUT.glb            the model the page loads
-  bl/bin/python scripts/skymark/blender/exterior.py --render OUT.png --cam front|aerial [--res 3840x2160] [--samples 96]
+  bl/bin/python scripts/skymark/blender/exterior.py --render OUT.png --cam front|aerial|close [--res 3840x2160] [--samples 96] [--context RAW.glb]
+  blender -b -P scripts/skymark/blender/exterior.py -- --save skymark.blend [--context RAW.glb]   the scene, to open in Blender
 
 Built in the page's own building frame (x along the footprint's long axis to the south-east end,
 y across it to the north-east side, z up; the same a, b the page uses), sliced floor by floor
@@ -562,6 +563,9 @@ d = look - pos
 cam.location = pos
 if pitch is None: cam.rotation_euler = d.to_track_quat("-Z", "Y").to_euler()
 else: cam.rotation_euler = (math.radians(90), 0, math.atan2(d.y, d.x) - math.radians(90))
+if arg("--save"):   # keep the whole scene as a .blend to open and work on in Blender itself
+    bpy.ops.wm.save_as_mainfile(filepath=os.path.abspath(arg("--save"))); print("saved", arg("--save"), flush=True)
+    if not OUT: sys.exit(0)
 sc.render.filepath = OUT; sc.render.image_settings.file_format = "PNG"
 print("rendering", CAM, RX, "x", RY, "at", SAMPLES, "samples", flush=True)
 bpy.ops.render.render(write_still=True); print("saved", OUT, flush=True)
