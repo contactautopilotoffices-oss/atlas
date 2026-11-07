@@ -1,0 +1,51 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://atlas.autopilotoffices.com/schemas/building.schema.json",
+ "title": "Autopilot digital twin: a building and its elements, each with the evidence behind it",
+ "type": "object",
+ "required": ["id", "name", "frame", "elements"],
+ "properties": {
+  "id": {"type": "string", "pattern": "^[a-z0-9-]+$", "description": "Stable building id, e.g. skymark-f1"},
+  "name": {"type": "string"},
+  "address": {"type": "string"},
+  "location": {"type": "object", "properties": {"lat": {"type": "number"}, "lng": {"type": "number"}}},
+  "frame": {
+   "type": "object",
+   "description": "The one coordinate frame every representation (structured model, splat, point cloud, web viewer) shares. Metres, x east, y north, z up, around origin.",
+   "required": ["origin"],
+   "properties": {"origin": {"type": "array", "items": {"type": "number"}, "minItems": 2, "maxItems": 2, "description": "lng, lat"},
+                  "ground_m": {"type": "number", "description": "Ground level above sea level, where known"}}
+  },
+  "elements": {"type": "array", "items": {"$ref": "#/$defs/element"}},
+  "versions": {"type": "array", "items": {"type": "object", "properties": {
+   "version": {"type": "integer"}, "date": {"type": "string"}, "glb": {"type": "string"}, "splat": {"type": "string"}, "approved_by": {"type": "string"}, "notes": {"type": "string"}}}}
+ },
+ "$defs": {
+  "evidence": {
+   "type": "object",
+   "required": ["class"],
+   "properties": {
+    "class": {"enum": ["measured", "documented", "reconstructed", "estimated", "unknown"],
+     "description": "measured: by us, with an instrument or a scaled survey. documented: from an authoritative document (developer, approved drawings, a fit-out deck). reconstructed: derived from several photos or map data. estimated: inferred from limited evidence or typical values. unknown: no evidence; shown as a placeholder only."},
+    "sources": {"type": "array", "items": {"type": "object", "properties": {
+     "kind": {"enum": ["photo", "document", "map", "survey", "model", "assumption"]}, "ref": {"type": "string"}, "note": {"type": "string"}}}},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1, "description": "Optional, and only where it can be computed (e.g. from reprojection error); never a made up score"}
+   }
+  },
+  "element": {
+   "type": "object",
+   "required": ["id", "type", "evidence"],
+   "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9.-]+$", "description": "Stable id, never reused: building.part.sub, e.g. skymark-f1.storey.1"},
+    "parent": {"type": "string"},
+    "type": {"enum": ["site", "footprint", "storey", "slab", "roof", "facade", "curtain-wall", "window", "door", "entrance", "canopy", "core", "column", "plant", "basement",
+                      "tenancy", "room", "zone", "furniture", "asset", "landscape"]},
+    "name": {"type": "string"},
+    "storeys": {"type": "array", "items": {"type": "string"}},
+    "geometry": {"type": "object", "description": "Parameters the generator uses (heights, grid spacing, polygons), not a mesh"},
+    "properties": {"type": "object", "description": "Facts about it: material, area, tenant, capacity"},
+    "evidence": {"$ref": "#/$defs/evidence"}
+   }
+  }
+ }
+}

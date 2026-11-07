@@ -1,0 +1,8 @@
+{
+ "about": "Walk mode points: where a viewer can stand in each rendered room. Room metres as in conf18.py (x along the room from the door end, y = 0 on the facade, negative into the building). yaw: the first view, degrees from the screen wall (+x), positive to the right. Render each with: conf18.py --pano X,Y --res 3072x1536 --out media/skymark-f1/walk/<room>-<id>.jpg",
+ "conf18": [
+  {"id": "door", "at": [0.55, -2.95], "name": "At the door", "yaw": -12},
+  {"id": "mid", "at": [4.3, -3.0], "name": "Along the glass", "yaw": -50},
+  {"id": "tv", "at": [7.75, -2.95], "name": "By the screen", "yaw": 180}
+ ]
+}

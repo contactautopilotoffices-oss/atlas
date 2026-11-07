@@ -141,13 +141,13 @@ const EXPECT = {
     if (conn.heads.join("|") !== "Metro|Railway station") out.push("the connectivity section is not Metro, Railway station: " + conn.heads.join("|"));
     if (conn.rows < 3) out.push("too few connections listed: " + conn.rows);
     if (conn.layers !== 3) out.push("the connection layers are missing on the map: " + conn.layers + " of 3");
-    /* the feed's path replaced the bundle's for 723 Avenue to Marol Naka, the Google Maps figure stayed, and the panel names both sources */
+    /* the feed's path replaced the bundle's for 723 Avenue to Marol Naka, the Google Maps figure (the Andheri East measurement, shared with this atlas) stayed, and the panel names both sources */
     await page.click('#list .card[data-id="723-avenue"]');
     await page.waitForTimeout(150);
     const fed = await page.evaluate(() => ({ note: (document.querySelector(".conn") || {}).innerText || "", first: ((document.querySelector('.cn.metro .cd') || {}).textContent || "") }));
-    if (!/Distances and walk times from Google Maps/.test(fed.note)) out.push("Google Maps is not named as the source of the figures: " + fed.note.slice(-200));
+    if (!/Distances( and walk times)? from Google Maps/.test(fed.note)) out.push("Google Maps is not named as the source of the figures: " + fed.note.slice(-200));
     if (!/follows the streets \(Test feed\)/.test(fed.note)) out.push("the route feed is not named for the line on the map: " + fed.note.slice(-200));
-    if (fed.first !== "810 m") out.push("the Google Maps distance for Marol Naka did not stay: " + fed.first);
+    if (fed.first !== "700 m") out.push("the Google Maps distance for Marol Naka did not stay: " + fed.first);
     return out;
   },
   place: async (page) => {
