@@ -336,57 +336,75 @@ def ribbon(face, s0, s1, z0, z1, n, step=1.5):
     s = s0 + step
     while s < s1 - 0.2: F(face, s - 0.04, s + 0.04, z0 + 0.25, z1 - 0.35, 0, 0.12, "mullion"); s += step
 
-PIER0 = HL - 9.0                   # the corner pier on the long face
-COLS = (-HW + 2.4, -HW + 4.4)      # the charcoal column on the front
-GL = (COLS[1], HW - 13.0); TILE = (HW - 13.0, HW - 5.5); BLOCK = (HW - 5.5, HW)
-WING = (-HL, -HL + 24.0)
-FR_L, FR_W = -HL + 2.0, 1.8        # the white frame's left leg and member width
-def frame_x(z):                    # the raking right leg: 20 m in at the first floor, 16 m in at the roof
-    t = (z - floorZ(1)) / (TOP - floorZ(1)); return -HL + 20.0 + (16.0 - 20.0) * t
+# ---- the street front (the long south-west face), left to right as in the photos, widths read off them
+#      against the 59 m face: the wing with the white angled frame, a recessed strip of dark glass with a
+#      maroon panel at its foot, the tall light grey sign pier, the blue glass curtain wall in its charcoal
+#      frame, the grey tiled panel, a lower charcoal block; the two-storey glass podium projects in front
+#      of the right-hand part under the bronze sign fascia.
+s0 = -HL
+WING, RECESS, MAROON, PIER = (s0, s0 + 20.6), (s0 + 20.6, s0 + 24.8), (s0 + 24.8, s0 + 25.6), (s0 + 25.6, s0 + 31.0)
+GLASS, TILE, BLOCK = (s0 + 31.0, s0 + 49.7), (s0 + 49.7, s0 + 53.4), (s0 + 53.4, HL)
+POD = (s0 + 40.2, HL + 1.5); POD_TOP, POD_D = floorZ(2), 4.0
+ZF = floorZ(4)                                    # the white frame's head: the wing's top floor sits above it
+FRAME_L = (s0 + 2.2, s0 + 4.0)                    # its left leg
+FRAME_RB, FRAME_RT, FW = s0 + 16.5, s0 + 12.5, 1.8  # its raking right leg: inner edge at the foot and at the head
+BLOCK_TOP = floorZ(3)
+M["maroon"] = pbr("maroon", (0.28, 0.07, 0.05), 0.5, 0.3); M["slab"] = pbr("slab", (0.5, 0.5, 0.49), 0.8)
+EL, SL = [], []                                  # whole-height pieces, cut into each floor's slice below
+def el(face, a, b, z0, z1, d0, d1, m): EL.append((face, a, b, z0, z1, d0, d1, m))
+el("sw", *PIER, 0, TOP + 3.0, -0.3, 0.8, "acp_light")                       # the sign pier, above the roof
+el("sw", *MAROON, 0, floorZ(2), 0, 0.3, "maroon")
+el("sw", GLASS[0], GLASS[0] + 0.9, 0, TOP + 1.2, 0, 0.55, "charcoal")       # the glass block's charcoal frame: its left side
+el("sw", GLASS[0], GLASS[1], TOP - 0.4, TOP + 1.2, 0, 0.55, "charcoal")     # and its head
+el("sw", *TILE, POD_TOP + 0.2, TOP - 0.6, -0.2, 0.1, "acp_tile")
+el("sw", *BLOCK, 0, BLOCK_TOP, 0, 0.45, "charcoal")
+el("sw", *FRAME_L, 0.3, ZF, -0.2, 1.6, "white_frame")                       # the white frame: left leg, head, raking leg
+el("sw", FRAME_L[0], FRAME_RT + FW, ZF - FW, ZF, -0.2, 1.6, "white_frame")
+SL.append(("sw", FRAME_RB, FRAME_RT, FW, 0.3, ZF, -0.2, 1.6, "white_frame"))
+el("sw", s0, s0 + 10.0, ZF, ZF + 0.45, 0, 2.6, "acp_light")                 # the grey cornice over the frame's head
+el("sw", *POD, POD_TOP - 1.7, POD_TOP + 0.2, 0, POD_D + 0.2, "bronze")      # the podium: sign fascia, roof, end, glass
+el("sw", *POD, POD_TOP + 0.0, POD_TOP + 0.2, 0, POD_D, "slab")
+el("sw", POD[1] - 0.8, POD[1], 0, POD_TOP + 0.2, 0, POD_D + 0.2, "charcoal")
+el("sw", POD[0], POD[1] - 0.8, 0.1, POD_TOP - 1.7, POD_D - 0.1, POD_D - 0.05, "shopglass")
+el("sw", POD[0], POD[1] - 0.8, ST["ground"] - 0.1, ST["ground"] + 0.1, POD_D - 0.15, POD_D, "mullion")
+el("sw", POD[0], POD[1] - 0.8, 0, POD_TOP - 1.8, 0.4, 0.5, "shop")
+mx = POD[0] + 2.4
+while mx < POD[1] - 1.0: el("sw", mx - 0.05, mx + 0.05, 0.1, POD_TOP - 1.7, POD_D - 0.15, POD_D, "mullion"); mx += 2.4
 
+def frame_inner(z):  # where the raking leg's inner edge is at height z
+    return FRAME_RB + (FRAME_RT - FRAME_RB) * max(0, min(1, (z - 0.3) / (ZF - 0.3)))
 for n in range(NF):
     z0, z1 = floorZ(n), floorZ(n) + floorH(n); CUR[0] = f"shell_{n}"; top = n == NF - 1
-    # ---- the front (south-east)
-    F("se", COLS[0], COLS[1], z0, z1 + (1.8 if top else 0), -0.1, 0.9, "charcoal")
-    if n == 0:
-        F("se", GL[0], HW - 0.6, 0.0, z1 - 1.5, -1.25, -1.2, "shopglass")
-        F("se", GL[0], HW - 0.6, 0.0, z1 - 0.2, -4.0, -3.9, "shop")
-        F("se", GL[0], HW - 0.6, z1 - 1.6, z1 - 1.5, -4.0, -1.2, "ceiling_led")
-        s = GL[0] + 2.4
-        while s < HW - 0.8: F("se", s - 0.05, s + 0.05, 0.0, z1 - 1.5, -1.3, -1.15, "mullion"); s += 2.4
-        F("se", GL[0], HW - 0.4, z1 - 1.55, z1 + 0.15, -1.2, 1.7, "bronze")               # the sign fascia
-        F("se", HW - 0.6, HW, 0, z1 + 0.15, -1.2, 1.7, "charcoal")
+    hi = 1e9 if top else z1
+    for face, a, b, za, zb, d0, d1, m in EL:     # this floor's slice of every whole-height piece
+        lo_, hi_ = max(za, z0), min(zb, hi)
+        if hi_ - lo_ > 0.01: F(face, a, b, lo_, hi_, d0, d1, m)
+    for face, sb, st, w, za, zb, d0, d1, m in SL:
+        lo_, hi_ = max(za, z0), min(zb, hi)
+        if hi_ - lo_ > 0.01: slant(face, frame_inner(lo_), frame_inner(hi_), w, lo_, hi_, d0, d1, m)
+    # the wing: grey ACP, dark glass inside the white frame, ribbon windows beside it and on its top floor
+    if z1 <= ZF + 0.01:
+        F("sw", WING[0], FRAME_L[0], z0, z1, 0, 0.12, "acp_light")
+        inner = min(frame_inner(z0), frame_inner(z1))
+        F("sw", FRAME_L[1], inner + 0.4, z0, z1, -0.7, -0.65, "glass_dark")
+        for zz in (z0 + 0.05, z1 - 0.3): F("sw", FRAME_L[1], inner + 0.4, zz, zz + 0.25, -0.7, -0.4, "acp_light")
+        ribbon("sw", max(frame_inner(z0), frame_inner(z1)) + FW, WING[1], z0, z1, n)
     else:
-        F("se", GL[0], GL[1], z0, z1, -0.05, 0.0, "glass_blue")
-        F("se", GL[0], GL[1], z0 - 0.05, z0 + 0.55, 0.0, 0.28, "charcoal")              # a dark band at every slab
-        s = GL[0] + 1.5
-        while s < GL[1] - 0.2: F("se", s - 0.035, s + 0.035, z0 + 0.55, z1 - 0.05, 0, 0.1, "mullion"); s += 1.5
-        F("se", TILE[0], TILE[1] if n < NF - 1 else HW, z0, z1, 0.0, 0.3, "acp_tile")
-        if n < NF - 1: F("se", BLOCK[0], BLOCK[1], z0, z1, 0.0, 0.6, "charcoal")
-        if top: F("se", COLS[1], GL[1], z1, z1 + 1.8, -0.1, 0.9, "charcoal")               # the head of the glass frame
-    # ---- the long face (south-west)
-    F("sw", PIER0, HL + 0.9, z0, z1 + (3.2 if top else 0), -0.4, 0.6, "acp_light")       # the corner pier, above the roof at the top
-    if n == 0:
-        s = -HL
-        while s < PIER0 - 0.5:
-            e = min(s + 6.0, PIER0); F("sw", s, s + 0.6, z0, z1, 0, 0.35, "acp_light"); F("sw", s + 0.6, e, z0 + 0.3, z1 - 0.5, -0.05, 0, "glass_dark")
-            F("sw", s, e, z1 - 0.5, z1, 0, 0.3, "acp_light"); s = e
-    else:
-        # the north-west wing: grey ACP, with the white angled frame round dark glass
-        xr0, xr1 = frame_x(z0), frame_x(z1)
-        F("sw", WING[0], FR_L, z0, z1, 0, 0.12, "acp_light")
-        F("sw", FR_L + FR_W, min(xr0, xr1), z0, z1, -0.6, -0.55, "glass_dark")
-        slant("sw", xr0 - 0.2, xr1 - 0.2, 0.6, z0, z1, -0.6, -0.55, "glass_dark")
-        F("sw", FR_L, FR_L + FR_W, z0, z1, -0.2, 1.6, "white_frame")
-        slant("sw", xr0, xr1, FR_W, z0, z1, -0.2, 1.6, "white_frame")
-        right = max(xr0, xr1) + FR_W
-        F("sw", right, WING[1], z0, z1, 0, 0.12, "acp_light")
-        slant("sw", xr0 + FR_W, xr1 + FR_W, (WING[1] - right) * 0 + 0.01, z0, z1, 0, 0.12, "acp_light")
-        if n == 1: F("sw", FR_L, xr0 + FR_W, z0, z0 + FR_W, -0.2, 1.6, "white_frame")      # the frame's sill
-        if top: F("sw", FR_L, xr1 + FR_W, z1 - FR_W, z1, -0.2, 1.6, "white_frame")         # and its head
-        ribbon("sw", WING[1], PIER0, z0, z1, n)
-    # ---- the back faces
-    ribbon("ne", -HL, HL, z0, z1, n); ribbon("nw", -HW, HW, z0, z1, n)
+        ribbon("sw", *WING, z0, z1, n)
+    # the recess: a strip of dark glass set back between the wing and the pier
+    F("sw", MAROON[1] if z0 < floorZ(2) else RECESS[0], RECESS[1] if z0 < floorZ(2) else MAROON[1], z0, z1, -0.8, -0.75, "glass_dark")
+    F("sw", RECESS[0], RECESS[1], z0, z0 + 0.3, -0.8, -0.2, "acp_light")
+    # the blue curtain wall, ground to roof, a dark band at every slab and mullions every 1.5 m
+    g0 = GLASS[0] + 0.9
+    F("sw", g0, GLASS[1], z0, z1, -0.05, 0.0, "glass_blue")
+    if n: F("sw", g0, GLASS[1], z0 - 0.05, z0 + 0.32, 0.0, 0.16, "charcoal")
+    m_ = g0 + 1.5
+    while m_ < GLASS[1] - 0.2: F("sw", m_ - 0.035, m_ + 0.035, z0, z1, 0, 0.1, "mullion"); m_ += 1.5
+    # above the charcoal block, and under the tiled panel behind the podium: ribbon windows
+    if z0 >= BLOCK_TOP - 0.01: ribbon("sw", *BLOCK, z0, z1, n)
+    if z1 <= POD_TOP + 0.01: F("sw", *TILE, z0, z1, -0.6, -0.55, "glass_dark")
+    # the other three faces
+    ribbon("se", -HW, HW, z0, z1, n); ribbon("ne", -HL, HL, z0, z1, n); ribbon("nw", -HW, HW, z0, z1, n)
 
 # ---- people at work: every upper floor fitted out behind the glass (carpet, a core, a lit ceiling,
 #      rows of desks along the facades with screens, chairs and people at most of them)
@@ -434,18 +452,19 @@ for n in range(1, NF):
             seat(acc, (s_, HW - d_), (0, 1), (1, 0), zf, k); k += 1
     acc.build(f"office{n}")
 
-# ---- signs: on the corner pier, on the front fascia, the name on top
+# ---- signs: the pier (care at the top, Clovia below), skymark over the glass, the podium fascia
 CUR[0] = f"shell_{NF - 1}"
-pc = (PIER0 + HL + 0.9) / 2
-text("sk_name", "skymark", 1.7, "sw", pc, TOP + 1.7, 0.62, "sign_white"); box("sk_star", (*at("sw", pc + 3.9, 0.62)[:1], -HW - 0.7, TOP + 2.4), (at("sw", pc + 4.5, 0.62)[0], -HW - 0.62, TOP + 3.0), "sign_orange")
-F("sw", PIER0 + 0.5, HL + 0.4, TOP - 4.6, TOP - 2.6, 0.6, 0.72, "sign_blue"); F("sw", PIER0 + 0.5, HL + 0.4, TOP - 2.6, TOP - 1.4, 0.6, 0.72, "sign_green")
-text("care1", "care", 1.5, "sw", pc - 1.6, TOP - 3.6, 0.76, "sign_white"); text("care1b", "HEALTH", 0.5, "sw", pc + 2.5, TOP - 3.5, 0.76, "sign_white")
-F("sw", PIER0 + 0.5, HL + 0.4, TOP - 8.8, TOP - 6.0, 0.6, 0.72, "sign_magenta"); text("clovia1", "Clovia", 1.6, "sw", pc, TOP - 7.4, 0.76, "sign_white")
-text("sk_name2", "skymark", 1.3, "se", (COLS[1] + GL[1]) / 2, TOP + 0.9, 0.95, "sign_white")
-CUR[0] = "shell_0"
-fz = floorZ(1)
-text("care2", "care", 1.15, "se", GL[0] + 5.0, fz - 0.72, 1.75, "sign_white"); text("care2b", "HEALTH  INSURANCE", 0.36, "se", GL[0] + 10.2, fz - 0.7, 1.75, "sign_white")
-F("se", TILE[0] - 1.0, HW - 1.2, fz - 1.45, fz + 0.05, 1.7, 1.78, "sign_magenta"); text("clovia2", "Clovia", 1.0, "se", (TILE[0] - 1.0 + HW - 1.2) / 2, fz - 0.7, 1.82, "sign_white")
+pc = (PIER[0] + PIER[1]) / 2; pw_ = PIER[1] - PIER[0] - 0.6
+F("sw", PIER[0] + 0.3, PIER[1] - 0.3, TOP - 0.6, TOP + 2.2, 0.8, 0.9, "sign_blue"); F("sw", PIER[0] + 0.3, PIER[1] - 0.3, TOP + 2.2, TOP + 2.8, 0.8, 0.9, "sign_green")
+text("care1", "care", 1.3, "sw", pc - 0.9, TOP + 0.9, 0.95, "sign_white"); text("care1b", "HEALTH", 0.42, "sw", pc + 1.7, TOP + 1.2, 0.95, "sign_white")
+F("sw", PIER[0] + 0.3, PIER[1] - 0.3, TOP - 4.6, TOP - 1.6, 0.8, 0.9, "sign_magenta"); text("clovia1", "Clovia", 1.25, "sw", pc, TOP - 3.1, 0.95, "sign_white")
+text("sk_name", "skymark", 1.25, "sw", GLASS[0] + 4.2, TOP + 0.4, 0.6, "sign_white")
+sx = at("sw", GLASS[0] + 7.2, 0.6)[0]; box("sk_star", (sx, -HW - 0.68, TOP + 0.75), (sx + 0.45, -HW - 0.6, TOP + 1.2), "sign_orange")
+CUR[0] = "shell_1"
+fz = POD_TOP - 0.8
+text("care2", "care", 1.0, "sw", POD[0] + 4.0, fz, POD_D + 0.25, "sign_white"); text("care2b", "HEALTH  |  INSURANCE", 0.32, "sw", POD[0] + 8.6, fz, POD_D + 0.25, "sign_white")
+F("sw", POD[1] - 9.5, POD[1] - 1.2, POD_TOP - 1.55, POD_TOP + 0.05, POD_D + 0.2, POD_D + 0.28, "sign_magenta")
+text("clovia2", "Clovia", 0.95, "sw", POD[1] - 5.35, fz, POD_D + 0.32, "sign_white")
 
 # ---- the roof: parapet, plant, solar
 CUR[0] = "roof"
@@ -468,7 +487,7 @@ if not GLB:
   _hedge = hedge
   def hedge(x0, x1, y):
       before = set(bpy.data.objects); _hedge(x0, x1, y); new = [o for o in bpy.data.objects if o not in before]; return new[0]
-  hedge_y(HL + 3.0, GL[0], HW - 1.0); hedge(-HL + 2, PIER0 - 2, -HW - 3.0)
+  hedge_y(HL + 3.0, -HW + 2.0, HW - 1.0); hedge(-HL + 2, PIER[0] - 2, -HW - 3.0)
   for o in set(bpy.data.objects) - VEG0:
       if o.name != "leaf_proto" and o not in GROUP.get("veg", []): GROUP.setdefault("veg", []).append(o)
 
@@ -505,7 +524,7 @@ if GLB:
 
 # ------------------------------------------------------------------ the street and the city, for the stills
 box("plaza", (-HL - 16, -HW - 14, -0.15), (HL + 16, HW + 14, 0.0), "pavers")
-box("lawn_sw", (-HL + 1, -HW - 8.5, -0.05), (PIER0 - 1, -HW - 1.5, 0.05), "lawn")
+box("lawn_sw", (-HL + 1, -HW - 8.5, -0.05), (PIER[0] - 1, -HW - 2.4, 0.05), "lawn")
 box("road_se", (HL + 16, -HW - 120, -0.3), (HL + 31, HW + 120, -0.15), "asphalt"); box("road_sw", (-HL - 120, -HW - 29, -0.3), (HL + 120, -HW - 14, -0.15), "asphalt")
 for i in range(24): box(f"lane_se{i}", (HL + 23.4, -HW - 110 + i * 9.5, -0.149), (HL + 23.6, -HW - 106 + i * 9.5, -0.148), "kerb")
 box("kerb_se", (HL + 15.8, -HW - 120, -0.3), (HL + 16.0, HW + 120, 0.12), "kerb"); box("kerb_sw", (-HL - 120, -HW - 14.2, -0.3), (HL + 120, -HW - 14.0, 0.12), "kerb")
@@ -521,6 +540,24 @@ if os.path.exists(ctx):
         if o.type == "MESH":
             bb_ = [o.matrix_world @ Vector(c) for c in o.bound_box]
             if max(abs(p.x) for p in bb_) < HL + 12 and max(abs(p.y) for p in bb_) < HW + 12 and max(p.z for p in bb_) > 3: o.hide_render = True   # Skymark's own block
+    # the city in Skymark's warm palette, not white: each building its own colour from its vertex grey
+    def warm_city(name):
+        m, nt, out = nodes(name)
+        ca = N(nt, "ShaderNodeVertexColor"); mth = N(nt, "ShaderNodeMath", operation="MULTIPLY"); mth.inputs[1].default_value = 23.7
+        bw = N(nt, "ShaderNodeRGBToBW"); L(nt, ca.outputs["Color"], bw.inputs[0]); L(nt, bw.outputs[0], mth.inputs[0])
+        fr = N(nt, "ShaderNodeMath", operation="FRACT"); L(nt, mth.outputs[0], fr.inputs[0])
+        cr = N(nt, "ShaderNodeValToRGB"); cr.color_ramp.interpolation = "CONSTANT"; els = cr.color_ramp.elements
+        pal = [(0.0, (0.74, 0.62, 0.46)), (0.3, (0.64, 0.5, 0.36)), (0.52, (0.6, 0.42, 0.3)), (0.68, (0.55, 0.52, 0.47)), (0.86, (0.66, 0.52, 0.3))]
+        els[0].position, els[0].color = pal[0][0], (*pal[0][1], 1); els[1].position, els[1].color = pal[1][0], (*pal[1][1], 1)
+        for pos, col in pal[2:]: e = els.new(pos); e.color = (*col, 1)
+        L(nt, fr.outputs[0], cr.inputs[0])
+        b = N(nt, "ShaderNodeBsdfPrincipled", Roughness=0.82); L(nt, cr.outputs["Color"], b.inputs["Base Color"]); L(nt, b.outputs[0], out.inputs["Surface"]); return m
+    CITY = {"buildings": warm_city("city_buildings"), "roads": M["asphalt"], "foot": M["pavers"], "green": M["lawn"],
+            "water": pbr("city_water", (0.12, 0.2, 0.22), 0.08), "ground": pbr("city_ground", (0.55, 0.47, 0.36), 0.95, bump=0.1, bscale=40)}
+    for o in set(bpy.data.objects) - before:
+        if o.type != "MESH": continue
+        k = next((k for k in CITY if o.name.startswith(k)), None)
+        if k: o.data.materials.clear(); o.data.materials.append(CITY[k])
 # ------------------------------------------------------------------ sky, sun, camera
 w = bpy.data.worlds.new("sky"); sc.world = w; w.use_nodes = True; nt = w.node_tree; nt.nodes.clear()
 sky = nt.nodes.new("ShaderNodeTexSky")
@@ -553,12 +590,12 @@ SUN_DIR = Vector((0.55, -0.62, 0.58)).normalized()   # from the south, morning-h
 sun.rotation_euler = (-SUN_DIR).to_track_quat("-Z", "Y").to_euler()
 cd = bpy.data.cameras.new("cam"); cd.sensor_width = 36; cd.sensor_fit = "AUTO"; cd.clip_end = 3000
 cam = bpy.data.objects.new("cam", cd); COL.objects.link(cam); sc.camera = cam
-if CAM == "aerial":   # the developer's view: high across the road, the long face and the front together
-    pos, look, cd.lens, pitch, cd.shift_y = Vector((HL + 58, -HW - 70, 30)), Vector((HL - 14, -4, 9)), 34, None, 0.0
+if CAM == "aerial":   # the developer's view: high across the road, the whole street front, the podium end right of centre
+    pos, look, cd.lens, pitch, cd.shift_y = Vector((18, -HW - 95, 34)), Vector((4, -HW, 8)), 30, None, 0.0
 elif CAM == "close":  # close to the long face at the first floor: the offices and the people behind the glass
-    pos, look, cd.lens, pitch, cd.shift_y = Vector((HL - 30, -HW - 13, 7.5)), Vector((HL - 12, -HW, 7.0)), 30, 0.0, 0.0
-else:                 # the street view of the front: across the road, the shopfront and the glass above
-    pos, look, cd.lens, pitch, cd.shift_y = Vector((HL + 34, -HW + 2, 1.7)), Vector((HL, 3.0, 1.7)), 22, 0.0, 0.3
+    pos, look, cd.lens, pitch, cd.shift_y = Vector((-HL + 22, -HW - 13, 10.5)), Vector((-HL + 40, -HW, 10.0)), 30, 0.0, 0.0
+else:                 # the street view of the second photo: below the glass block and the podium, palms in front
+    pos, look, cd.lens, pitch, cd.shift_y = Vector((-HL + 43, -HW - 30, 1.7)), Vector((-HL + 43, -HW, 1.7)), 24, 0.0, 0.32
 d = look - pos
 cam.location = pos
 if pitch is None: cam.rotation_euler = d.to_track_quat("-Z", "Y").to_euler()

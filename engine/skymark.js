@@ -378,14 +378,23 @@ async function start(A) {
 
   async function loadOwnContext() {
     const g = await gl.loadAsync(A.media + "context.glb");
-    g.scene.traverse((o) => { if (!o.isMesh) return; const nm = o.name || ""; o.material = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: nm.startsWith("water") ? 0.1 : 0.9, flatShading: true, side: nm.startsWith("buildings") ? THREE.FrontSide : THREE.DoubleSide });
+    /* the city in the hero's warm palette (archviz-sales-configurator): plainer than Skymark, but lit and
+       coloured, never white. Ground sand, pavers, asphalt, real green; buildings cream, sand, light
+       terracotta, warm grey and ochre, one per building, with warmer roofs and blue-grey glass. */
+    const CTX = { roads: [0x4a4c4f, 0.85], foot: [0xc8b89c, 0.9], green: [0x6f8f4a, 0.95], water: [0x587d8a, 0.12], ground: [0xd6c3a2, 0.95] };
+    g.scene.traverse((o) => { if (!o.isMesh) return; const nm = o.name || ""; const k = Object.keys(CTX).find((x) => nm.startsWith(x));
+      o.material = nm.startsWith("buildings") ? new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.85, flatShading: true, side: THREE.FrontSide })
+        : new THREE.MeshStandardMaterial({ color: k ? CTX[k][0] : 0xd6c3a2, roughness: k ? CTX[k][1] : 0.95, flatShading: true, side: THREE.DoubleSide });   // flat shading: the context carries no normals
       o.receiveShadow = true; o.castShadow = nm.startsWith("buildings");
       if (nm.startsWith("buildings")) o.material.onBeforeCompile = (sh) => { // windows from world position, lit at dusk
         sh.uniforms.uNight = U.uNight; sh.vertexShader = "varying vec3 vW;\n" + sh.vertexShader.replace("#include <worldpos_vertex>", "#include <worldpos_vertex>\n vW = (modelMatrix * vec4(transformed, 1.0)).xyz;");
         sh.fragmentShader = "uniform float uNight; varying vec3 vW;\n" + sh.fragmentShader.replace("#include <color_fragment>", `#include <color_fragment>
           vec3 n = normalize(cross(dFdx(vW), dFdy(vW))); float wall = 1.0 - step(0.5, abs(n.y)); float hor = abs(n.x) > abs(n.z) ? vW.z : vW.x;
+          float pick = fract(dot(diffuseColor.rgb, vec3(7.31, 3.17, 5.03)) * 9.7);   // the building's own grey picks its colour
+          vec3 warm = pick < 0.3 ? vec3(0.74, 0.62, 0.47) : pick < 0.52 ? vec3(0.67, 0.53, 0.38) : pick < 0.68 ? vec3(0.62, 0.42, 0.31) : pick < 0.86 ? vec3(0.58, 0.54, 0.48) : vec3(0.7, 0.55, 0.32);
+          diffuseColor.rgb = mix(warm * 0.86, warm, wall);   // roofs a shade darker
           vec2 f = fract(vec2(hor / 2.8, vW.y / 3.4)); float win = wall * step(2.6, vW.y) * step(0.2, f.x) * step(f.x, 0.8) * step(0.3, f.y) * step(f.y, 0.85);
-          diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.16, 0.2, 0.24), win * 0.8);`).replace("#include <emissivemap_fragment>", `#include <emissivemap_fragment>
+          diffuseColor.rgb = mix(diffuseColor.rgb, vec3(0.22, 0.27, 0.31), win * 0.75);`).replace("#include <emissivemap_fragment>", `#include <emissivemap_fragment>
           float r = fract(sin(dot(floor(vec3(hor / 2.8, vW.y / 3.4, vW.x * 0.01)), vec3(12.9898, 78.233, 37.719))) * 43758.5453); totalEmissiveRadiance += vec3(1.0, 0.75, 0.45) * win * step(0.55, r) * uNight * 1.3;`); };
     });
     ctx.add(g.scene); $("#src3d").textContent = "Context: " + site.source + ". Google 3D appears when the Maps key is set.";
@@ -441,8 +450,8 @@ async function start(A) {
   function flyTo(t, p, ms = 1700) { fly = { t0: performance.now(), ms, a: { t: controls.target.clone(), p: camera.position.clone() }, b: { t, p } }; }
   const centre = (h = 0) => new THREE.Vector3(C.x, h + groundY, -C.y);
   const around = (t, dist, polar, azDeg) => new THREE.Vector3(t.x + dist * Math.sin(polar * D2R) * Math.sin(azDeg * D2R), t.y + dist * Math.cos(polar * D2R), t.z + dist * Math.sin(polar * D2R) * Math.cos(azDeg * D2R));
-  // the hero angle: from the south-east, where the entrance and Street View are
-  const HERO_AZ = (Math.atan2(u.x, -u.y) / D2R) + 25;
+  // the hero angle: across the road from the street front (the long south-west face), as in the photos
+  const HERO_AZ = (Math.atan2(-v.x, v.y) / D2R) + 20;
   // the middle of Volt's floor, for the floor and plan shots
   const VC = PX(volt.origin[0] + volt.size_px[0] / 2, volt.origin[1] + volt.size_px[1] / 2); bldg.localToWorld(VC);
   const U3 = new THREE.Vector3(u.x, 0, -u.y), PLAN_AZ = Math.atan2(-U3.x, -U3.z) / D2R;   // the plan's top (the end facade) to the top of the screen
