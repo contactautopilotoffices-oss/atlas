@@ -193,11 +193,51 @@ async function start(A) {
   box(8, 3.2, 6, M.acp, -L_ * 0.18, TOP + 2, 2, roof, 0.1); box(12, 1.8, 4, M.acpDark, L_ * 0.12, TOP + 1.3, -W_ * 0.22, roof);
   for (let i = 0; i < 6; i++) box(3.6, 1.6, 2.2, M.concrete, -L_ * 0.38 + i * 4.2, TOP + 1.2, W_ * 0.3, roof);
   // entrance canopy on the south-east end, where Street View stands
-  box(10, 0.35, 4.5, M.acpDark, L_ / 2 + 2.25, ST.ground - 0.6, 0, bldg); for (const s of [-4.2, 4.2]) box(0.25, ST.ground - 0.8, 0.25, M.chrome, L_ / 2 + 4.2, (ST.ground - 0.8) / 2, s, bldg);
+  const CANOPY = [box(10, 0.35, 4.5, M.acpDark, L_ / 2 + 2.25, ST.ground - 0.6, 0, bldg)]; for (const s of [-4.2, 4.2]) CANOPY.push(box(0.25, ST.ground - 0.8, 0.25, M.chrome, L_ / 2 + 4.2, (ST.ground - 0.8) / 2, s, bldg));
   bldg.updateMatrixWorld(true);
 
   const gl = new GLTFLoader(); gl.setMeshoptDecoder(MeshoptDecoder);
   const draco = new DRACOLoader(); draco.setDecoderPath("/engine/vendor/three/jsm/libs/draco/gltf/");
+
+  /* --- the real exterior (scripts/skymark/blender/exterior.py, after photos of the building) ---
+     Built in Blender in this same building frame and sliced floor by floor (shell_0..shell_4, roof,
+     veg): each slice replaces that floor's generic glass shell, so the floor stack, the cutaway and
+     Volt's floor work as before. If it does not load, the generic shell stays. */
+  const XM = (c, o = {}) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.4, metalness: 0.4, ...o });
+  const EXT_MAT = {
+    acp_light: XM(0x8e9192, { metalness: 0.5, roughness: 0.34 }), acp_tile: XM(0xa7aaab, { metalness: 0.5, roughness: 0.32 }),
+    charcoal: XM(0x25282c, { metalness: 0.5, roughness: 0.4 }), white_frame: XM(0xe7e7e4, { metalness: 0.3, roughness: 0.3 }),
+    bronze: XM(0x5f4126, { metalness: 0.6, roughness: 0.38 }), mullion: M.frame,
+    sign_white: XM(0xffffff, { emissive: 0xffffff, emissiveIntensity: 0.9, metalness: 0 }), sign_orange: XM(0xff7a10, { emissive: 0xff7a10, emissiveIntensity: 1.2, metalness: 0 }),
+    sign_magenta: XM(0x9c1556, { metalness: 0.1, roughness: 0.35 }), sign_blue: XM(0x1f63a8, { metalness: 0.1 }), sign_green: XM(0x76a51d, { metalness: 0.1 }),
+    shop: XM(0xf0c48c, { emissive: 0xf0b878, emissiveIntensity: 0.9, metalness: 0 }), ceiling_led: M.lit, interior: M.carpetDark,
+    leaf: XM(0x3b6e2a, { metalness: 0, roughness: 0.75, side: THREE.DoubleSide }), palm: XM(0x4f7d2c, { metalness: 0, roughness: 0.7, side: THREE.DoubleSide }),
+    hedge: XM(0x31602a, { metalness: 0, roughness: 0.8, side: THREE.DoubleSide }), lawn: XM(0x4a7a2e, { metalness: 0, roughness: 0.95 }), trunk: XM(0x5b4a3b, { metalness: 0, roughness: 0.9 }),
+  };
+  const GLASS_MAT = {
+    glass_blue: new THREE.MeshPhysicalMaterial({ color: 0x24456e, metalness: 0.35, roughness: 0.04, transparent: true, opacity: 0.88, envMapIntensity: 1.8, depthWrite: false }),
+    glass_dark: new THREE.MeshPhysicalMaterial({ color: 0x18202a, metalness: 0.35, roughness: 0.05, transparent: true, opacity: 0.9, envMapIntensity: 1.6, depthWrite: false }),
+    shopglass: M.glassClear,
+  };
+  for (const g of [GLASS_MAT.glass_blue, GLASS_MAT.glass_dark]) g.onBeforeCompile = M.glass.onBeforeCompile;
+  gl.loadAsync(A.media + "exterior.glb").then((g) => {
+    const nodes = {}; g.scene.traverse((o) => { if (/^(shell_\d|roof|veg)$/.test(o.name)) nodes[o.name] = o; });
+    if (!nodes.shell_0) return;
+    const fix = (root) => root.traverse((m) => {
+      if (!m.isMesh) return; const n = (m.material && m.material.name || "").replace(/\.\d+$/, "");
+      if (GLASS_MAT[n]) { m.material = GLASS_MAT[n]; m.userData.glass = true; m.userData.glassMat = GLASS_MAT[n]; m.castShadow = false; }
+      else { if (EXT_MAT[n]) m.material = EXT_MAT[n]; m.castShadow = true; }
+      m.receiveShadow = true;
+    });
+    for (const f of FLOORS) {
+      const nd = nodes["shell_" + f.n]; if (!nd) continue; fix(nd);
+      f.shell.clear(); const holder = new THREE.Group(); holder.add(nd); f.shell.add(holder);
+    }
+    if (nodes.roof) { fix(nodes.roof); roof.clear(); roof.add(nodes.roof); }
+    if (nodes.veg) { fix(nodes.veg); bldg.add(nodes.veg); }
+    for (const c of CANOPY) c.visible = false;
+    bldg.updateMatrixWorld(true); window.__skyExterior = true;
+  }).catch((e) => console.warn("exterior model not loaded, keeping the generic shell", e));
 
   /* --- Volt's first floor, from the deck's plan ------------------------- */
   const vf = new THREE.Group(); vf.visible = false; FLOORS[1].g.add(vf);
@@ -401,7 +441,7 @@ async function start(A) {
     for (const f of FLOORS) {
       const above = n != null && f.n > n, here = n != null && f.n === n;
       f.g.visible = !above; f.shell.visible = !usingGoogle || n != null;
-      f.shell.traverse((o) => { if (o.userData.glass) o.material = here ? M.glassClear : M.glass; });
+      f.shell.traverse((o) => { if (o.userData.glass) o.material = here ? M.glassClear : (o.userData.glassMat || M.glass); });
       f.shell.children.forEach((o) => { if (here && !o.userData.glass && o.position.y > f.z0 + f.h - 0.6) o.visible = false; else o.visible = true; });
     }
     roof.visible = n == null && !usingGoogle; vf.visible = n === 1;
