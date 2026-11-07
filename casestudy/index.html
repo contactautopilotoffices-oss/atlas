@@ -101,6 +101,14 @@ tr.hd td{font-size:7.2pt;letter-spacing:.1em;text-transform:uppercase;color:var(
 .toc .row .t{flex:1} .toc .row .t b{display:block;font-family:var(--serif);font-size:12.5pt}
 .toc .row .t span{font-size:8.6pt;color:var(--mut)}
 .toc .row .p{font-family:var(--mono);color:var(--dim);font-size:9pt}
+/* the contents read at deck size: larger section titles, and the
+   "read this first" box at body size */
+.contents .toc .row{padding:2.6mm 0}
+.contents .toc .row .t b{font-size:13.5pt}
+.contents .toc .row .t span{font-size:9.2pt}
+.contents .box{padding:5mm 6mm}
+.contents .box p.small{font-size:10.5pt;line-height:1.5;margin-bottom:3.5mm}
+.contents .box b.t{font-size:8pt;margin-bottom:3mm}
 svg{display:block;overflow:visible;max-height:64mm;margin:0 auto}
 svg text{font-family:var(--font);fill:var(--ink)}
 svg .ax{font-size:7pt;fill:var(--mut)} svg .lbl{font-size:7.4pt;fill:var(--ink)} svg .val{font-size:7.6pt;font-weight:600} svg .t{font-size:7.2pt;letter-spacing:.1em;text-transform:uppercase;fill:var(--mut)}

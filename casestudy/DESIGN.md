@@ -71,5 +71,5 @@ what it fixes, and fixes the worst one to three first.
   (six rows) reads airy rather than full.
 - Numbered-point pages with one row of points (pipeline 1, risks) set their
   points larger now, but still keep a smaller gap above the takeaway.
-- Contents page: the "read this first" box and credits fill only the top half
-  of the right column.
+- Contents page: the list now fills the page, but the "read this first" box
+  and credits still fill only the top two thirds of the right column.

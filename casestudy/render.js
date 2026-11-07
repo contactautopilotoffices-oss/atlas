@@ -549,7 +549,7 @@
 
     /* ---- contents, now that the pages are numbered ---- */
     var readFirst = copy(b, "readFirst", "intro");
-    d.pages[tocIndex - 1].body = "<h2>What is inside</h2><div class='cols c21'><div class='toc'>" + d.toc.map(function (t) { return "<div class='row'><span class='n'>" + t.n + "</span><span class='t'><b>" + esc(t.title) + "</b><span>" + esc(t.sub) + "</span></span><span class='p'>" + t.page + "</span></div>"; }).join("") + "</div><div>" + (readFirst.length ? "<div class='box'><b class='t'>Read this first: " + (["one", "two", "three", "four", "five"][readFirst.length - 1] || readFirst.length) + " things the numbers say</b>" + readFirst.map(function (t) { return "<p class='small'>" + esc(t) + "</p>"; }).join("") + "</div>" : "") + (b.meta.credits ? "<p class='tiny mut' style='margin-top:4mm'>" + esc(b.meta.credits) + "</p>" : "") + "</div></div>";
+    d.pages[tocIndex - 1].body = "<h2>What is inside</h2><div class='cols c21 contents'><div class='toc'>" + d.toc.map(function (t) { return "<div class='row'><span class='n'>" + t.n + "</span><span class='t'><b>" + esc(t.title) + "</b><span>" + esc(t.sub) + "</span></span><span class='p'>" + t.page + "</span></div>"; }).join("") + "</div><div>" + (readFirst.length ? "<div class='box'><b class='t'>Read this first: " + (["one", "two", "three", "four", "five"][readFirst.length - 1] || readFirst.length) + " things the numbers say</b>" + readFirst.map(function (t) { return "<p class='small'>" + esc(t) + "</p>"; }).join("") + "</div>" : "") + (b.meta.credits ? "<p class='tiny mut' style='margin-top:4mm'>" + esc(b.meta.credits) + "</p>" : "") + "</div></div>";
 
     /* ---- out ---- */
     var html = d.pages.map(function (p, i) {
