@@ -66,12 +66,10 @@ For each page, from its PNG:
 The daily review keeps this list current: it adds what it finds, removes
 what it fixes, and fixes the worst one to three first.
 
-- Occupancy page: the threshold labels (running costs covered, every cost
-  covered, with ads) and the "most rivals" box collide above the bar.
-- Several pages end in the top half (levers, risks, infrastructure, the
-  pipeline pages, the price ladder): the content does not use the height.
-- Market point pages with a single chart leave the chart small and the
-  right column sparse.
-- "How full rival centres run": the operator names under the bars are dense
-  and hard to read.
-- The wider corridor tables wrap occupancy onto two lines.
+- Table pages open their rows to use spare height (casestudy/index.html,
+  fitTables, up to 6 mm a row): they now reach close to the foot, but levers
+  (six rows) reads airy rather than full.
+- Numbered-point pages with one row of points (pipeline 1, risks) set their
+  points larger now, but still keep a smaller gap above the takeaway.
+- Contents page: the list now fills the page, but the "read this first" box
+  and credits still fill only the top two thirds of the right column.
