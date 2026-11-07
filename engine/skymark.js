@@ -153,6 +153,10 @@ async function start(A) {
     rack: new THREE.MeshStandardMaterial({ color: 0x1a1c1f, metalness: 0.5, roughness: 0.5, emissive: 0x0f3a1c, emissiveIntensity: 0.3 }),
     voidRail: new THREE.MeshPhysicalMaterial({ color: 0xdfeef0, roughness: 0.05, transparent: true, opacity: 0.3, depthWrite: false }),
     lit: new THREE.MeshStandardMaterial({ color: 0xfff3dc, emissive: 0xfff1d8, emissiveIntensity: 1.2 }),
+    skin: new THREE.MeshStandardMaterial({ color: 0x8a5a3c, roughness: 0.55 }), skin2: new THREE.MeshStandardMaterial({ color: 0x6b4129, roughness: 0.55 }),
+    hair: new THREE.MeshStandardMaterial({ color: 0x120e0b, roughness: 0.6 }), trousers: new THREE.MeshStandardMaterial({ color: 0x1b1f27, roughness: 0.8 }),
+    shirtW: new THREE.MeshStandardMaterial({ color: 0xe3e3df, roughness: 0.8 }), shirtB: new THREE.MeshStandardMaterial({ color: 0x40639e, roughness: 0.8 }),
+    shirtG: new THREE.MeshStandardMaterial({ color: 0x6b7078, roughness: 0.8 }), shirtM: new THREE.MeshStandardMaterial({ color: 0x7d2a3a, roughness: 0.8 }),
     hl: new THREE.MeshBasicMaterial({ color: 0xf39a2b, transparent: true, opacity: 0.0, depthWrite: false, side: THREE.DoubleSide }),
   };
   M.glass.onBeforeCompile = (sh) => { sh.uniforms.uNight = U.uNight; sh.fragmentShader = "uniform float uNight;\n" + sh.fragmentShader.replace("#include <emissivemap_fragment>", "#include <emissivemap_fragment>\n totalEmissiveRadiance += vec3(1.0, 0.86, 0.66) * uNight * 0.55;"); };
@@ -210,18 +214,24 @@ async function start(A) {
     bronze: XM(0x5f4126, { metalness: 0.6, roughness: 0.38 }), mullion: M.frame,
     sign_white: XM(0xffffff, { emissive: 0xffffff, emissiveIntensity: 0.9, metalness: 0 }), sign_orange: XM(0xff7a10, { emissive: 0xff7a10, emissiveIntensity: 1.2, metalness: 0 }),
     sign_magenta: XM(0x9c1556, { metalness: 0.1, roughness: 0.35 }), sign_blue: XM(0x1f63a8, { metalness: 0.1 }), sign_green: XM(0x76a51d, { metalness: 0.1 }),
-    shop: XM(0xf0c48c, { emissive: 0xf0b878, emissiveIntensity: 0.9, metalness: 0 }), ceiling_led: M.lit, interior: M.carpetDark,
+    shop: XM(0xb89a78, { emissive: 0x6e5236, emissiveIntensity: 0.6, metalness: 0 }), ceiling_led: M.lit, interior: M.carpetDark,
     leaf: XM(0x3b6e2a, { metalness: 0, roughness: 0.75, side: THREE.DoubleSide }), palm: XM(0x4f7d2c, { metalness: 0, roughness: 0.7, side: THREE.DoubleSide }),
-    hedge: XM(0x31602a, { metalness: 0, roughness: 0.8, side: THREE.DoubleSide }), lawn: XM(0x4a7a2e, { metalness: 0, roughness: 0.95 }), trunk: XM(0x5b4a3b, { metalness: 0, roughness: 0.9 }),
+    hedge: XM(0x31602a, { metalness: 0, roughness: 0.8, side: THREE.DoubleSide }),
+    carpet: XM(0x2c2e31, { metalness: 0, roughness: 0.95 }), core: XM(0x9e9c96, { metalness: 0, roughness: 0.85 }), ceiling: XM(0xdcdcd8, { metalness: 0, roughness: 0.9 }),
+    panel_led: XM(0xffffff, { emissive: 0xfff6e8, emissiveIntensity: 1.4, metalness: 0 }), desk: XM(0xc7b39a, { metalness: 0, roughness: 0.5 }), deskleg: XM(0xd9d9d6, { metalness: 0.5, roughness: 0.4 }),
+    chair: XM(0x141415, { metalness: 0.1, roughness: 0.6 }), screen: XM(0x5a7fb8, { emissive: 0x3d5f99, emissiveIntensity: 0.8, metalness: 0 }),
+    skin: XM(0x8a5a3c, { metalness: 0, roughness: 0.55 }), skin2: XM(0x6b4129, { metalness: 0, roughness: 0.55 }), hair: XM(0x120e0b, { metalness: 0, roughness: 0.6 }),
+    trousers: XM(0x1b1f27, { metalness: 0, roughness: 0.8 }), shirt_w: XM(0xe3e3df, { metalness: 0, roughness: 0.8 }), shirt_b: XM(0x40639e, { metalness: 0, roughness: 0.8 }),
+    shirt_g: XM(0x6b7078, { metalness: 0, roughness: 0.8 }), shirt_m: XM(0x7d2a3a, { metalness: 0, roughness: 0.8 }), lawn: XM(0x4a7a2e, { metalness: 0, roughness: 0.95 }), trunk: XM(0x5b4a3b, { metalness: 0, roughness: 0.9 }),
   };
   const GLASS_MAT = {
-    glass_blue: new THREE.MeshPhysicalMaterial({ color: 0x24456e, metalness: 0.35, roughness: 0.04, transparent: true, opacity: 0.88, envMapIntensity: 1.8, depthWrite: false }),
+    glass_blue: new THREE.MeshPhysicalMaterial({ color: 0x5d86b4, metalness: 0.2, roughness: 0.03, transparent: true, opacity: 0.5, envMapIntensity: 1.6, depthWrite: false }),
     glass_dark: new THREE.MeshPhysicalMaterial({ color: 0x18202a, metalness: 0.35, roughness: 0.05, transparent: true, opacity: 0.9, envMapIntensity: 1.6, depthWrite: false }),
     shopglass: M.glassClear,
   };
   for (const g of [GLASS_MAT.glass_blue, GLASS_MAT.glass_dark]) g.onBeforeCompile = M.glass.onBeforeCompile;
   gl.loadAsync(A.media + "exterior.glb").then((g) => {
-    const nodes = {}; g.scene.traverse((o) => { if (/^(shell_\d|roof|veg)$/.test(o.name)) nodes[o.name] = o; });
+    const nodes = {}; g.scene.traverse((o) => { if (/^(shell_\d|int_\d|roof|veg)$/.test(o.name)) nodes[o.name] = o; });
     if (!nodes.shell_0) return;
     const fix = (root) => root.traverse((m) => {
       if (!m.isMesh) return; const n = (m.material && m.material.name || "").replace(/\.\d+$/, "");
@@ -232,6 +242,7 @@ async function start(A) {
     for (const f of FLOORS) {
       const nd = nodes["shell_" + f.n]; if (!nd) continue; fix(nd);
       f.shell.clear(); const holder = new THREE.Group(); holder.add(nd); f.shell.add(holder);
+      const it = nodes["int_" + f.n]; if (it) { fix(it); it.traverse((m) => { if (m.isMesh) m.castShadow = false; }); f.g.add(it); f.int = it; }   // the offices and the people at work
     }
     if (nodes.roof) { fix(nodes.roof); roof.clear(); roof.add(nodes.roof); }
     if (nodes.veg) { fix(nodes.veg); bldg.add(nodes.veg); }
@@ -276,9 +287,11 @@ async function start(A) {
         for (let i = 0; i < cols; i++) for (let j = 0; j < rows; j++) {
           const x = ax0 + (ax1 - ax0) * (cols === 1 ? 0.5 : i / (cols - 1)), y = ay0 + (ay1 - ay0) * (rows === 1 ? 0.5 : j / (rows - 1));
           put("desk", x, y); put(((i + j) % 2) ? "screenO" : "screenW", x, y); put("chair", x + (i % 2 ? 1 : -1) * 22, y, i % 2 ? Math.PI : 0);
+          if ((i * 7 + j * 3 + r.id.length) % 10 < 7) put("person" + "ABCD"[(i + j * 2 + r.id.length) % 4], x + (i % 2 ? 1 : -1) * 22, y, i % 2 ? Math.PI : 0);   // most desks taken: people at work
           if (cols % 2 === 0 && i % 2 === 0) { const x2 = ax0 + (ax1 - ax0) * ((i + 1) / (cols - 1)); put("deskpair", (x + x2) / 2, y); }
         }
-      } else if (k === "chairs" || k === "stools") { const [, ax, ay, bx, by, nn] = it; for (let i = 0; i < nn; i++) { const t = nn === 1 ? 0.5 : i / (nn - 1); put(k === "stools" ? "stool" : "chairM", ax + (bx - ax) * t, ay + (by - ay) * t, ay > (r.rect[1] + r.rect[3]) / 2 ? Math.PI / 2 : -Math.PI / 2); } }
+      } else if (k === "chairs" || k === "stools") { const [, ax, ay, bx, by, nn] = it; for (let i = 0; i < nn; i++) { const t = nn === 1 ? 0.5 : i / (nn - 1), rot = ay > (r.rect[1] + r.rect[3]) / 2 ? Math.PI / 2 : -Math.PI / 2; put(k === "stools" ? "stool" : "chairM", ax + (bx - ax) * t, ay + (by - ay) * t, rot);
+        if (k === "chairs" && r.id === "conf18" && i % 3 !== 1) put("person" + "BADC"[i % 4], ax + (bx - ax) * t, ay + (by - ay) * t, rot); } }   // a meeting under way in the 18 seater
       else if (k === "chair") put("chairM", it[1], it[2]);
       else if (k === "table") { const [, ax, ay, bx, by] = it; put("table", (ax + bx) / 2, (ay + by) / 2, 0, pw(bx - ax), 1, pw(by - ay)); }
       else if (k === "exec") { const [, ax, ay, bx, by] = it; put("table", (ax + bx) / 2, (ay + by) / 2, 0, pw(bx - ax), 1, pw(by - ay)); put("chair", bx - 12, (ay + by) / 2, Math.PI / 2); }
@@ -301,6 +314,10 @@ async function start(A) {
   for (const [x, y] of volt.columns) { const p = PX(x, y); box(0.6, 2.9, 0.6, M.wall, p.x, z1 + 1.45, p.z, vf); }
   // furniture prototypes (modelled pieces, instanced); sizes in metres, built along x
   const proto = (parts) => parts;
+  function personParts(shirt, skin) {
+    return [[0.34, 0.13, 0.42, M.trousers, 0, 0.55, -0.1], [0.3, 0.46, 0.11, M.trousers, 0, 0.27, -0.3], [0.38, 0.52, 0.2, shirt, 0, 0.86, 0.09],
+      [0.08, 0.08, 0.34, shirt, -0.22, 0.79, -0.1], [0.08, 0.08, 0.34, shirt, 0.22, 0.79, -0.1], [0.17, 0.21, 0.19, skin, 0, 1.25, 0.06], [0.18, 0.06, 0.2, M.hair, 0, 1.37, 0.07]];
+  }
   const P = {
     desk: [[1.2, 0.03, 0.6, M.woodLight, 0, 0.74, 0], [0.04, 0.72, 0.55, M.white, -0.57, 0.36, 0], [0.04, 0.72, 0.55, M.white, 0.57, 0.36, 0]],
     screenW: [[1.2, 0.36, 0.025, M.white, 0, 0.94, -0.31], [0.55, 0.36, 0.02, M.screen, 0, 1.0, -0.2], [0.55, 0.07, 0.025, M.chrome, 0, 0.8, -0.2], [0.04, 0.16, 0.04, M.chrome, 0, 0.82, -0.22], [0.2, 0.01, 0.16, M.chrome, 0, 0.765, -0.22], [0.42, 0.012, 0.13, M.white, 0, 0.765, 0.04]],
@@ -321,6 +338,8 @@ async function start(A) {
     high: [[0.7, 0.05, 3.6, M.white, 0, 1.05, 0], [0.5, 1.02, 0.08, M.orange, 0, 0.51, 0]],
     tv: [[0.06, 0.8, 1.4, M.screen, 0, 1.5, 0]],
     rack: [[0.8, 2.0, 1.0, M.rack, 0, 1.0, 0]],
+    // a person seated in a chair, facing the desk (the chair's back is at +z): simple, but read as people at work
+    personA: personParts(M.shirtW, M.skin), personB: personParts(M.shirtB, M.skin2), personC: personParts(M.shirtG, M.skin), personD: personParts(M.shirtM, M.skin2),
     booth: [[1.3, 2.4, 0.08, M.blue, 0, 1.2, -0.7], [0.08, 2.4, 1.4, M.charcoal, -0.65, 1.2, 0], [0.08, 2.4, 1.4, M.charcoal, 0.65, 1.2, 0], [1.2, 0.04, 0.35, M.white, 0, 1.05, -0.5]],
   };
   const PGEO = new Map(), PIM = {}; const gkey = (w, h, d) => `${w}|${h}|${d}`;
@@ -443,6 +462,7 @@ async function start(A) {
       f.g.visible = !above; f.shell.visible = !usingGoogle || n != null;
       f.shell.traverse((o) => { if (o.userData.glass) o.material = here ? M.glassClear : (o.userData.glassMat || M.glass); });
       f.shell.children.forEach((o) => { if (here && !o.userData.glass && o.position.y > f.z0 + f.h - 0.6) o.visible = false; else o.visible = true; });
+      if (f.int) f.int.visible = !here && (!usingGoogle || n != null);   // the generic offices make way when a floor is opened (Volt's real plan on the first)
     }
     roof.visible = n == null && !usingGoogle; vf.visible = n === 1;
     if (tiles && flatten) {   // press Google's Skymark flat under ours
@@ -606,7 +626,7 @@ async function start(A) {
     } else {
       $("#card").innerHTML = `<span class="mono">${esc(B.address)}</span><h1>${esc(B.name)}</h1><p class="addr">Office building, IT/ITES</p>
         <dl class="facts">${B.facts.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("")}</dl>
-        <p class="note">The footprint and the five storeys are real. The facade shown is a placeholder: it is not yet modelled from photos of the building.</p>
+        <p class="note">The footprint and the five storeys are real. The facade is modelled from photos of the building: the blue glass front with its charcoal frame and tiled panel, the bronze sign fascia over the shops, the white angled frame on the long side and the corner pier with the signs. The offices and people behind the glass are illustrative; Volt\'s first floor follows the deck\'s plan.</p>
         <span class="src">Source: <a href="${esc(B.src)}" target="_blank" rel="noopener">Skymark Group</a>. Footprint: Overture Maps.</span>
         <div class="cta"><button class="btn pri" data-go="floor">Open Volt's floor</button><button class="btn" data-go="street">Street View</button></div>`;
     }

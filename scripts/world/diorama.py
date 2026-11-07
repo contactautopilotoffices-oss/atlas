@@ -34,6 +34,7 @@ the footpath at eye height, verticals kept straight) and station.
 import sys, os, json, math, random
 import numpy as np
 import bpy, bmesh
+from mathutils import Matrix
 import shapely
 from shapely.geometry import Polygon, MultiPolygon, LineString, Point, box
 from shapely.ops import unary_union
@@ -44,7 +45,7 @@ bpy.ops.wm.read_factory_settings(use_empty=True)
 FAST = "--fast" in A
 os.makedirs(OUT, exist_ok=True)
 S = json.load(open(SCENE)); WJ = json.load(open(WORLD))
-BUNDLE = json.load(open("examples/flipkart-andheri.bundle.json"))
+BUNDLE = json.load(open(S.get("bundle", "examples/flipkart-andheri.bundle.json")))
 BO = next(o for o in BUNDLE["options"] if o["id"] == OID)
 FACT = {f["k"]: f["v"] for f in BO["facts"]}
 SO = next(o for o in S["options"] if o["id"] == OID)
@@ -476,9 +477,12 @@ def build():
     ob = MB([]); q = Polygon(OPTB["p"]).simplify(0.2); ring = [L(x, y) for x, y in q.exterior.coords]
     floors = 1 + int(''.join(ch for ch in FACT.get("Total floors", "G+9").split("+")[-1] if ch.isdigit()) or 9)
     grade = FACT.get("Grade", "B"); glassy = grade.startswith("A") or grade == "B+"
-    FH, GH = 4.1, 5.6; H = GH + (floors - 1) * FH
+    FH, GH = S.get("floor_h", 4.1), S.get("ground_h", 5.6); H = GH + (floors - 1) * FH
+    EXT = A[A.index("--exterior") + 1] if "--exterior" in A else None   # a building modelled on its own (scripts/skymark/blender/exterior.py)
     style = "opt_glass" if glassy else "opt_plaster"
-    if OID == "723-avenue":
+    if EXT:
+        pass   # placed after the entrance is found, below
+    elif OID == "723-avenue":
         house_of_wadhwa(ob, q, ring, GH, FH, floors, H)
     elif OID in SPECS:
         facade_spec(ob, q, ring, GH, FH, floors, H, SPECS[OID])
@@ -498,14 +502,24 @@ def build():
     mx, my = (ax + bx_) / 2, (ay + by) / 2; cw = min(14, d * 0.6)
     if OID == "723-avenue":
         house_of_wadhwa_front(ob, (ax, ay), (bx_, by), r, GH, FH, H)
-    if SPECS.get(OID, {}).get("porte"): porte_cochere(ob, (ax, ay), (bx_, by), GH)
+    if EXT: pass
+    elif SPECS.get(OID, {}).get("porte"): porte_cochere(ob, (ax, ay), (bx_, by), GH)
     else:
       boxm(ob, mx + nx * 3.2, my + ny * 3.2, GH - 0.1, GH + 0.45, cw, 6.4, ang, "canopy", bottom=True)
       for sgn in (-1, 1): cyl(ob, mx + nx * 6.0 + math.cos(ang) * sgn * cw * 0.42, my + ny * 6.0 + math.sin(ang) * sgn * cw * 0.42, 0, GH, 0.18, 0.18, 0, "metal", 12)
-    ob.build("opt_" + OID, MATS)
-    tm = text_mesh(BO["name"].upper(), 1.1, 0.08, "opt_name")
-    tm.data.materials.append(MATS["opt_name"])
-    tm.rotation_euler = (math.pi / 2, 0, ang); tm.location = (mx + nx * 6.45, my + ny * 6.45, GH + 0.18)
+    if EXT:
+        # the modelled building, in its own frame (x along the footprint's long axis, y across), moved onto the footprint
+        fr = json.load(open(EXT + ".frame.json")); before = set(bpy.data.objects)
+        bpy.ops.import_scene.gltf(filepath=EXT)
+        Mx = Matrix.Translation((fr["C"][0] - OX, fr["C"][1] - OY, 0)) @ Matrix.Rotation(fr["phi"], 4, "Z")
+        for o in set(bpy.data.objects) - before:
+            if o.parent is None: o.matrix_world = Mx @ o.matrix_world
+            o.name = "opt_" + OID + "_" + o.name
+    else:
+        ob.build("opt_" + OID, MATS)
+        tm = text_mesh(BO["name"].upper(), 1.1, 0.08, "opt_name")
+        tm.data.materials.append(MATS["opt_name"])
+        tm.rotation_euler = (math.pi / 2, 0, ang); tm.location = (mx + nx * 6.45, my + ny * 6.45, GH + 0.18)
     if OID == "723-avenue":   # the brand on the crown, high on the front face
         for txt, size, dz in (("WADHWA", 2.2, 2.2), ("HOUSE OF", 0.85, 4.7)):
             t2 = text_mesh(txt, size, 0.08, "sign_723_" + txt.replace(" ", "_")); t2.data.materials.append(MATS["sign_text"])

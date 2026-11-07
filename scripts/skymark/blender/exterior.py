@@ -154,10 +154,12 @@ def leaves(name, base):
 
 
 def blue_glass(name):
-    m = curtain_glass(name)
-    for nd in m.node_tree.nodes:
-        if nd.type == "BSDF_PRINCIPLED": nd.inputs["Base Color"].default_value = (0.02, 0.07, 0.16, 1); nd.inputs["Metallic"].default_value = 0.45
-    return m
+    """Tinted float glass: clear enough to see the offices through, blue from the tint and the sky it
+    reflects at an angle (Fresnel), as the building's glass looks in the photos."""
+    m, nt, out = nodes(name)
+    b = N(nt, "ShaderNodeBsdfPrincipled", **{"Base Color": (0.5, 0.66, 0.82, 1), "Roughness": 0.015, "Metallic": 0.0, "IOR": 1.5})
+    b.inputs["Transmission Weight"].default_value = 1.0
+    L(nt, b.outputs[0], out.inputs["Surface"]); return m
 def tile_acp(name, col, joint):
     m, nt, out = nodes(name)
     tc = N(nt, "ShaderNodeTexCoord"); sp = N(nt, "ShaderNodeSeparateXYZ"); L(nt, tc.outputs["Object"], sp.inputs[0])
@@ -184,6 +186,12 @@ M = {
     "pavers": pavers("pavers"), "kerb": pbr("kerb", (0.62, 0.61, 0.58), 0.8), "lawn": leaves("lawn", (0.1, 0.19, 0.05)),
     "leaf": leaves("leaf", (0.11, 0.2, 0.06)), "palm": leaves("palm", (0.16, 0.26, 0.07)), "trunk": pbr("trunk", (0.27, 0.22, 0.17), 0.9, bump=0.4, bscale=40),
     "hedge": leaves("hedge", (0.09, 0.18, 0.05)),
+    "carpet": pbr("carpet", (0.16, 0.17, 0.18), 0.95), "core": pbr("core", (0.62, 0.61, 0.58), 0.85), "ceiling": pbr("ceiling", (0.82, 0.82, 0.8), 0.9),
+    "panel_led": emission("panel_led", (1.0, 0.97, 0.92), 4.0), "desk": pbr("desk", (0.78, 0.7, 0.58), 0.5), "deskleg": pbr("deskleg", (0.85, 0.85, 0.84), 0.4, 0.5),
+    "chair": pbr("chair", (0.05, 0.05, 0.055), 0.6), "screen": emission("screen", (0.35, 0.5, 0.75), 0.9),
+    "skin": pbr("skin", (0.42, 0.25, 0.16), 0.55), "skin2": pbr("skin2", (0.3, 0.18, 0.11), 0.55), "hair": pbr("hair", (0.03, 0.025, 0.02), 0.6),
+    "trousers": pbr("trousers", (0.06, 0.07, 0.09), 0.8), "shirt_w": pbr("shirt_w", (0.82, 0.82, 0.8), 0.8), "shirt_b": pbr("shirt_b", (0.18, 0.3, 0.55), 0.8),
+    "shirt_g": pbr("shirt_g", (0.35, 0.37, 0.4), 0.8), "shirt_m": pbr("shirt_m", (0.42, 0.1, 0.16), 0.8),
 }
 def box(name, c0, c1, m, bevel=0.0):
     (ax, ay, az), (bx, by, bz) = c0, c1
@@ -302,7 +310,7 @@ PIER0 = HL - 9.0                   # the corner pier on the long face
 COLS = (-HW + 2.4, -HW + 4.4)      # the charcoal column on the front
 GL = (COLS[1], HW - 13.0); TILE = (HW - 13.0, HW - 5.5); BLOCK = (HW - 5.5, HW)
 WING = (-HL, -HL + 24.0)
-FR_L, FR_W = -HL + 2.0, 1.5        # the white frame's left leg and member width
+FR_L, FR_W = -HL + 2.0, 1.8        # the white frame's left leg and member width
 def frame_x(z):                    # the raking right leg: 20 m in at the first floor, 16 m in at the roof
     t = (z - floorZ(1)) / (TOP - floorZ(1)); return -HL + 20.0 + (16.0 - 20.0) * t
 
@@ -350,6 +358,52 @@ for n in range(NF):
     # ---- the back faces
     ribbon("ne", -HL, HL, z0, z1, n); ribbon("nw", -HW, HW, z0, z1, n)
 
+# ---- people at work: every upper floor fitted out behind the glass (carpet, a core, a lit ceiling,
+#      rows of desks along the facades with screens, chairs and people at most of them)
+class Acc:
+    """Many boxes, one mesh per material: thousands of desk and people parts without thousands of objects."""
+    def __init__(s): s.bm = {}
+    def box(s, c0, c1, m):
+        bm = s.bm.setdefault(m, bmesh.new()); c = [(a + b) / 2 for a, b in zip(c0, c1)]; d = [max(abs(b - a), 1e-3) for a, b in zip(c0, c1)]
+        bmesh.ops.create_cube(bm, size=1.0, matrix=Matrix.Translation(c) @ Matrix.Diagonal((*d, 1)))
+    def build(s, name):
+        for m, bm in s.bm.items():
+            me = bpy.data.meshes.new(f"{name}_{m}"); bm.to_mesh(me); bm.free(); o = bpy.data.objects.new(f"{name}_{m}", me); COL.objects.link(o)
+            o.data.materials.append(M[m]); GROUP.setdefault(CUR[0], []).append(o)
+SHIRTS = ("shirt_w", "shirt_b", "shirt_g", "shirt_m", "shirt_w", "shirt_b")
+def seat(acc, p, f, t, z, k):
+    """A desk with a screen at p, its chair behind and (most of the time) a person in it facing the glass.
+    f: unit vector out to the facade, t: along it; both axis-aligned in this frame."""
+    def bx(fo0, fo1, ta0, ta1, z0_, z1_, m):
+        xs = sorted((p[0] + f[0] * fo0 + t[0] * ta0, p[0] + f[0] * fo1 + t[0] * ta1)); ys = sorted((p[1] + f[1] * fo0 + t[1] * ta0, p[1] + f[1] * fo1 + t[1] * ta1))
+        acc.box((xs[0], ys[0], z + z0_), (xs[1], ys[1], z + z1_), m)
+    bx(-0.35, 0.35, -0.7, 0.7, 0.72, 0.75, "desk"); bx(-0.33, 0.33, -0.68, -0.64, 0.0, 0.72, "deskleg"); bx(-0.33, 0.33, 0.64, 0.68, 0.0, 0.72, "deskleg")
+    bx(0.12, 0.15, -0.3, 0.3, 0.8, 1.15, "screen"); bx(0.15, 0.17, -0.31, 0.31, 0.78, 1.17, "chair")
+    bx(-0.95, -0.55, -0.24, 0.24, 0.44, 0.5, "chair"); bx(-1.0, -0.95, -0.23, 0.23, 0.5, 1.0, "chair"); bx(-0.78, -0.72, -0.04, 0.04, 0.0, 0.44, "chair")
+    r = random.random()
+    if r < 0.78:
+        sh = SHIRTS[k % len(SHIRTS)]; sk = "skin" if random.random() < 0.6 else "skin2"
+        bx(-0.88, -0.5, -0.17, 0.17, 0.5, 0.62, "trousers"); bx(-0.52, -0.42, -0.16, 0.16, 0.05, 0.6, "trousers")
+        bx(-0.92, -0.7, -0.19, 0.19, 0.6, 1.12, sh); bx(-0.7, -0.38, -0.23, -0.15, 0.82, 0.9, sh); bx(-0.7, -0.38, 0.15, 0.23, 0.82, 0.9, sh)
+        bx(-0.86, -0.68, -0.09, 0.09, 1.14, 1.36, sk); bx(-0.88, -0.68, -0.1, 0.1, 1.33, 1.41, "hair")
+for n in range(1, NF):
+    z0, h = floorZ(n), floorH(n); CUR[0] = f"int_{n}"; zf = z0 + 0.46; acc = Acc(); random.seed(100 + n)
+    acc.box((-HL + 0.4, -HW + 0.4, zf - 0.01), (HL - 0.4, HW - 0.4, zf), "carpet")
+    acc.box((-HL + 8.5, -HW + 8.5, zf), (HL - 8.5, HW - 8.5, z0 + h - 0.6), "core")                       # lifts, stairs and services
+    acc.box((-HL + 0.4, -HW + 0.4, z0 + h - 0.62), (HL - 0.4, HW - 0.4, z0 + h - 0.6), "ceiling")
+    for xx in range(int(-HL + 2), int(HL - 1), 3):
+        for yy in (-HW + 2.2, -HW + 5.4, HW - 2.2, HW - 5.4): acc.box((xx - 0.6, yy - 0.3, z0 + h - 0.63), (xx + 0.6, yy + 0.3, z0 + h - 0.62), "panel_led")
+    for yy in range(int(-HW + 2), int(HW - 1), 3):
+        for xx in (HL - 2.2, HL - 5.4, -HL + 2.2, -HL + 5.4): acc.box((xx - 0.3, yy - 0.6, z0 + h - 0.63), (xx + 0.3, yy + 0.6, z0 + h - 0.62), "panel_led")
+    k = n * 7
+    for d_ in (1.6, 4.6):                       # two rows along each face, desks to the glass
+        for s_ in [v * 1.5 for v in range(int((-HW + 9.5) / 1.5), int((HW - 9.5) / 1.5) + 1)]:
+            seat(acc, (HL - d_, s_), (1, 0), (0, 1), zf, k); k += 1
+        for s_ in [v * 1.5 for v in range(int((-HL + 9.5) / 1.5), int((HL - 9.5) / 1.5) + 1)]:
+            seat(acc, (s_, -HW + d_), (0, -1), (1, 0), zf, k); k += 1
+            seat(acc, (s_, HW - d_), (0, 1), (1, 0), zf, k); k += 1
+    acc.build(f"office{n}")
+
 # ---- signs: on the corner pier, on the front fascia, the name on top
 CUR[0] = f"shell_{NF - 1}"
 pc = (PIER0 + HL + 0.9) / 2
@@ -369,23 +423,24 @@ for face, s0, s1 in (("se", -HW, HW), ("nw", -HW, HW), ("sw", -HL, HL), ("ne", -
 box("plant", (-HL * 0.4, -3, TOP), (-HL * 0.4 + 9, 4, TOP + 3.0), "acp_light"); box("lift", (HL * 0.15, 2, TOP), (HL * 0.15 + 6, 8, TOP + 3.6), "charcoal")
 for i in range(7): box(f"pv{i}", (-HL + 4 + i * 4.4, HW - 10, TOP + 0.5), (-HL + 7.8 + i * 4.4, HW - 4, TOP + 1.1), "glass_dark")
 
-# ---- planting
-CUR[0] = "veg"
-VEG0 = set(bpy.data.objects)
-for k, yy in enumerate((-HW + 6.5, -HW + 13.5, HW - 9.0, HW - 2.5)): palm(HL + 5.2 + random.uniform(-0.5, 0.5), yy + random.uniform(-0.6, 0.6), random.uniform(8.5, 11.0))
-for xx in (-HL + 6, -HL + 15, -HL + 30, -HL + 39): palm(xx + random.uniform(-0.8, 0.8), -HW - 5.5 + random.uniform(-0.6, 0.6), random.uniform(8.0, 10.5))
-FAST_LEAVES = 1600 if GLB else 9000
-_crown = crown
-def crown(name, at_, radius, count, mat, squash=0.8): return _crown(name, at_, radius, min(count, FAST_LEAVES), mat, squash)
-tree(HL + 11, -HW - 9, 11, 4.0); tree(-HL - 6, -HW - 7, 12, 4.4); tree(HL + 9, HW + 6, 10, 3.6); tree(-HL + 23, -HW - 6.5, 9, 3.2)
-def hedge_y(x, y0, y1):
-    o = hedge(y0, y1, 0); o.rotation_euler = (0, 0, math.pi / 2); o.location = (x, (y0 + y1) / 2, 0.45); return o
-_hedge = hedge
-def hedge(x0, x1, y):
-    before = set(bpy.data.objects); _hedge(x0, x1, y); new = [o for o in bpy.data.objects if o not in before]; return new[0]
-hedge_y(HL + 3.0, GL[0], HW - 1.0); hedge(-HL + 2, PIER0 - 2, -HW - 3.0)
-for o in set(bpy.data.objects) - VEG0:
-    if o.name != "leaf_proto" and o not in GROUP.get("veg", []): GROUP.setdefault("veg", []).append(o)
+# ---- planting (the stills only: the page plants its own instanced trees and palms)
+if not GLB:
+  CUR[0] = "veg"
+  VEG0 = set(bpy.data.objects)
+  for k, yy in enumerate((-HW + 6.5, -HW + 13.5, HW - 9.0, HW - 2.5)): palm(HL + 5.2 + random.uniform(-0.5, 0.5), yy + random.uniform(-0.6, 0.6), random.uniform(8.5, 11.0))
+  for xx in (-HL + 6, -HL + 15, -HL + 30, -HL + 39): palm(xx + random.uniform(-0.8, 0.8), -HW - 5.5 + random.uniform(-0.6, 0.6), random.uniform(8.0, 10.5))
+  FAST_LEAVES = 1600 if GLB else 9000
+  _crown = crown
+  def crown(name, at_, radius, count, mat, squash=0.8): return _crown(name, at_, radius, min(count, FAST_LEAVES), mat, squash)
+  tree(HL + 11, -HW - 9, 11, 4.0); tree(-HL - 6, -HW - 7, 12, 4.4); tree(HL + 9, HW + 6, 10, 3.6); tree(-HL + 23, -HW - 6.5, 9, 3.2)
+  def hedge_y(x, y0, y1):
+      o = hedge(y0, y1, 0); o.rotation_euler = (0, 0, math.pi / 2); o.location = (x, (y0 + y1) / 2, 0.45); return o
+  _hedge = hedge
+  def hedge(x0, x1, y):
+      before = set(bpy.data.objects); _hedge(x0, x1, y); new = [o for o in bpy.data.objects if o not in before]; return new[0]
+  hedge_y(HL + 3.0, GL[0], HW - 1.0); hedge(-HL + 2, PIER0 - 2, -HW - 3.0)
+  for o in set(bpy.data.objects) - VEG0:
+      if o.name != "leaf_proto" and o not in GROUP.get("veg", []): GROUP.setdefault("veg", []).append(o)
 
 # ------------------------------------------------------------------ export the page's model
 if GLB:
@@ -415,6 +470,7 @@ if GLB:
     for o in list(bpy.data.objects):
         if o.name not in keep: bpy.data.objects.remove(o)
     bpy.ops.export_scene.gltf(filepath=GLB, export_format="GLB", export_apply=True, export_yup=True)
+    json.dump({"C": list(C), "phi": math.atan2(u[1], u[0]), "L": L_, "W": W_, "top": TOP, "about": "site metres east/north round the site origin; x along u, y along v"}, open(GLB + ".frame.json", "w"))
     print("exterior glb", GLB, flush=True); sys.exit(0)
 
 # ------------------------------------------------------------------ the street and the city, for the stills
@@ -425,7 +481,7 @@ for i in range(24): box(f"lane_se{i}", (HL + 23.4, -HW - 110 + i * 9.5, -0.149),
 box("kerb_se", (HL + 15.8, -HW - 120, -0.3), (HL + 16.0, HW + 120, 0.12), "kerb"); box("kerb_sw", (-HL - 120, -HW - 14.2, -0.3), (HL + 120, -HW - 14.0, 0.12), "kerb")
 box("ground_far", (-900, -900, -0.5), (900, 900, -0.32), "concrete")
 # the real neighbourhood (Overture footprints) round it, moved into the building's frame
-ctx = os.path.join(ROOT, "media/skymark-f1/context.glb")
+ctx = arg("--context", os.path.join(ROOT, "media/skymark-f1/context.glb"))   # pass an uncompressed copy: Blender has no meshopt decoder
 if os.path.exists(ctx):
     before = set(bpy.data.objects); bpy.ops.import_scene.gltf(filepath=ctx)
     phi = math.atan2(u[1], u[0])
@@ -469,6 +525,8 @@ cd = bpy.data.cameras.new("cam"); cd.sensor_width = 36; cd.sensor_fit = "AUTO"; 
 cam = bpy.data.objects.new("cam", cd); COL.objects.link(cam); sc.camera = cam
 if CAM == "aerial":   # the developer's view: high across the road, the long face and the front together
     pos, look, cd.lens, pitch, cd.shift_y = Vector((HL + 58, -HW - 70, 30)), Vector((HL - 14, -4, 9)), 34, None, 0.0
+elif CAM == "close":  # close to the long face at the first floor: the offices and the people behind the glass
+    pos, look, cd.lens, pitch, cd.shift_y = Vector((HL - 30, -HW - 13, 7.5)), Vector((HL - 12, -HW, 7.0)), 30, 0.0, 0.0
 else:                 # the street view of the front: across the road, the shopfront and the glass above
     pos, look, cd.lens, pitch, cd.shift_y = Vector((HL + 34, -HW + 2, 1.7)), Vector((HL, 3.0, 1.7)), 22, 0.0, 0.3
 d = look - pos
