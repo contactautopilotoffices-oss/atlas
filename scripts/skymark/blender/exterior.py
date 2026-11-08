@@ -600,7 +600,10 @@ d = look - pos
 cam.location = pos
 if pitch is None: cam.rotation_euler = d.to_track_quat("-Z", "Y").to_euler()
 else: cam.rotation_euler = (math.radians(90), 0, math.atan2(d.y, d.x) - math.radians(90))
-if arg("--save"):   # keep the whole scene as a .blend to open and work on in Blender itself
+if arg("--save"):   # keep the whole scene as a .blend to open and work on in Blender itself (objects named by their group: shell_2__p.014)
+    for gname, objs in GROUP.items():
+        for o in objs:
+            if o.name in bpy.data.objects and not o.name.startswith(gname + "__"): o.name = f"{gname}__{o.name}"
     bpy.ops.wm.save_as_mainfile(filepath=os.path.abspath(arg("--save"))); print("saved", arg("--save"), flush=True)
     if not OUT: sys.exit(0)
 sc.render.filepath = OUT; sc.render.image_settings.file_format = "PNG"
