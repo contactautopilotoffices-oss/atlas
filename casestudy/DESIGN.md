@@ -73,3 +73,5 @@ what it fixes, and fixes the worst one to three first.
   points larger now, but still keep a smaller gap above the takeaway.
 - Contents page: the list now fills the page, but the "read this first" box
   and credits still fill only the top two thirds of the right column.
+- Getting there (page 12) and the buildings side by side (page 11) end at
+  about four fifths; their tables are small print.
