@@ -71,9 +71,7 @@ what it fixes, and fixes the worst one to three first.
   (six rows) reads airy rather than full.
 - Numbered-point pages with one row of points (pipeline 1, risks) set their
   points larger now, but still keep a smaller gap above the takeaway.
-- Contents page: the list now fills the page, but the "read this first" box
-  and credits still fill only the top two thirds of the right column.
-- Getting there (page 12): the box now sits at the foot, but the rows reach
-  their 6 mm cap and a band stays between the tables and the box.
+- Getting there (page 12): rows may open up to 10 mm under a foot box now,
+  but four short rows a table still leave a narrow band above the box.
 - The buildings side by side (page 11): the parameter table is small print,
   and the right column ends at about three fifths.

@@ -107,6 +107,9 @@ tr.hd td{font-size:7.2pt;letter-spacing:.1em;text-transform:uppercase;color:var(
 .contents .toc .row .t b{font-size:13.5pt}
 .contents .toc .row .t span{font-size:9.2pt}
 .contents .box{padding:5mm 6mm}
+/* the right column runs the list's full height: the credits sit at its foot */
+.contents > div:last-child{display:flex;flex-direction:column;align-self:stretch}
+.contents > div:last-child > p:last-child{margin-top:auto!important}
 .contents .box p.small{font-size:10.5pt;line-height:1.5;margin-bottom:3.5mm}
 .contents .box b.t{font-size:8pt;margin-bottom:3mm}
 svg{display:block;overflow:visible;max-height:64mm;margin:0 auto}
@@ -219,7 +222,9 @@ function fitTables(deck) {
     };
     var fits = function () { return bottom() <= limit() && page.scrollHeight <= page.clientHeight + 1; };
     if (limit() - bottom() < page.clientHeight * 0.18) return;
-    for (var k = 1; k * STEP <= CAP; k++) {
+    /* with a box at the foot the rows can never reach the source line, so they may open further */
+    var cap = foot ? 10 : CAP;
+    for (var k = 1; k * STEP <= cap; k++) {
       apply(k);
       if (!fits()) { apply(k - 1); break; }
       if (limit() - bottom() < page.clientHeight * 0.06) break;
