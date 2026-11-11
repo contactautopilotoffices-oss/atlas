@@ -35,12 +35,10 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Chromium for the headless tests
-        # --with-deps also installs fonts from Ubuntu's mirror, which is sometimes
-        # unreachable from the runner ("Temporary failure resolving"). Retry once after
-        # refreshing the package lists; if the mirror is still down, install Chromium
-        # alone: the runner image already has the libraries headless Chromium needs.
-        run: |
-          npx playwright install --with-deps chromium \
-            || (sleep 20 && sudo apt-get update -o Acquire::Retries=3 && npx playwright install --with-deps chromium) \
-            || npx playwright install chromium
+        # Chromium only, no --with-deps: the Ubuntu 24.04 runner image already has the
+        # libraries headless Chromium needs, and --with-deps fetches fonts from Ubuntu's
+        # mirror, which has been unreachable from the runner and stalled the job until
+        # it was cancelled.
+        timeout-minutes: 5
+        run: npx playwright install chromium
       - run: npm test
