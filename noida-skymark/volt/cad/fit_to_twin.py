@@ -73,6 +73,9 @@ for g in parts:
         p0, p1 = from_twin((ax, az), dx, dy), from_twin((bx, bz), dx, dy)
         edges.append([round(p0[0], 3), round(p0[1], 3), round(p1[0], 3), round(p1[1], 3)])
 L["podium_edges"] = edges
+outline = unary_union([body, annex] + parts).buffer(0.35, join_style=2)
+outline = max(outline.geoms, key=lambda g: g.area) if isinstance(outline, MultiPolygon) else outline
+L["shell_outline"] = [[round(v, 3) for v in from_twin(c, dx, dy)] for c in list(outline.simplify(0.05).exterior.coords)[:-1]]
 L["podium_about"] = "Two-storey glass block (ground and first floor, 9.7 m like the annex) where the CAD's first floor runs beyond the twin. Plan coordinates."
 
 C_ = json.load(open(ctx_p)); fp = Polygon([b["ring"] for b in C_["buildings"] if b["id"].startswith("22e4bdbe")][0])

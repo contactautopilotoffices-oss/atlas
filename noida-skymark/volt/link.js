@@ -16,7 +16,8 @@ export async function sha256hex(s) {
 }
 export const norm = (v) => String(v || '').trim().toUpperCase().replace(/[\s-]/g, '');
 /** A value derived from the ID and password (never the password itself). Stored by the gate at sign-in. */
-export const credKey = (id, pw) => sha256hex('remote-key:' + norm(id) + ':' + norm(pw));
+export const credKeyFromHash = (h) => sha256hex('remote-key:' + h);
+export const credKey = async (id, pw) => credKeyFromHash(await gateHash(id, pw));
 export const gateHash = (id, pw) => sha256hex(norm(id) + ':' + norm(pw));
 export function randomSecret(bytes = 16) {
   const a = crypto.getRandomValues(new Uint8Array(bytes));

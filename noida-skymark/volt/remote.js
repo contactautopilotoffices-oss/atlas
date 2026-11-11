@@ -14,8 +14,8 @@ else { try { cred = sessionStorage.getItem('volt-remote-cred'); } catch (e) {} i
 
 $('#f-sign').addEventListener('submit', async (e) => {
   e.preventDefault(); $('#e-sign').textContent = '';
-  const id = $('#i-id').value, pw = $('#i-pw').value, want = window.ATLAS && window.ATLAS.gate && window.ATLAS.gate.hash;
-  if (!want || await gateHash(id, pw) !== want) { $('#e-sign').textContent = 'Not recognised. Use your Atlas ID and password.'; $('#i-pw').value = ''; return; }
+  const id = $('#i-id').value, pw = $('#i-pw').value, ok = (window.VOLT_REMOTE && window.VOLT_REMOTE.presenters) || [];
+  if (!ok.includes(await gateHash(id, pw))) { $('#e-sign').textContent = 'Not recognised. Use the presenter ID and password.'; $('#i-pw').value = ''; return; }
   cred = await credKey(id, pw); try { sessionStorage.setItem('volt-remote-cred', cred); } catch (e2) {}
   connect(false);
 });
@@ -44,7 +44,7 @@ async function onMsg(msg) {
   if (!(await verify(msg, keys, early ? 'k0' : mode))) return;
   lastN = msg.n;
   if (msg.t === 'busy') { $('#w-title').textContent = 'Someone else has the remote'; $('#w-text').textContent = 'Another presenter is connected to this display.'; $('#b-take').style.display = ''; return; }
-  if (msg.t === 'denied') { try { sessionStorage.removeItem('volt-remote-cred'); } catch (e) {} cred = null; link.close(); link = null; show('s-sign'); $('#e-sign').textContent = 'This display was signed in with a different ID and password.'; return; }
+  if (msg.t === 'denied') { try { sessionStorage.removeItem('volt-remote-cred'); } catch (e) {} cred = null; link.close(); link = null; show('s-sign'); $('#e-sign').textContent = 'The display did not accept that ID and password.'; return; }
   if (msg.t === 'wait') { $('#w-title').textContent = 'Signed in. The display is loading…'; $('#w-text').textContent = 'It will be ready in a moment.'; return; }
   if (msg.t === 'taken') { setLive(false); show('s-wait'); $('#w-title').textContent = 'Another presenter took the remote'; $('#w-text').textContent = ''; $('#b-take').style.display = ''; hello = null; return; }
   if (msg.t === 'welcome') { mode = msg.a.mode; msgr.setMode(mode); hello = msg.a.hello; build(); show('ctl'); setLive(true); wake(); return; }

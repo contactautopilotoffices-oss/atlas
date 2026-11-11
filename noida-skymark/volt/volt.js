@@ -467,8 +467,8 @@ const cityP = (async () => {
   const g = await ctxP; if (!g) return;
   g.scene.traverse(o => { if (o.isMesh) { o.receiveShadow = true; o.castShadow = false;
     for (const m of [].concat(o.material)) if (m && /CTX_(wall|roof|parapet)/.test(m.name || '')) m.side = THREE.FrontSide; } });   // buildings solid from outside
-  try { const sat = await track('the satellite photo', withTimeout(satellite(), 12000)); drape(g.scene, sat); document.body.dataset.sat = 'on'; }
-  catch (e) { document.body.dataset.sat = 'off'; console.warn('[volt] satellite', e && e.message); }
+  // The satellite photo is not painted on here: matched to these footprints it smeared tree and roof colours across the roofs.
+  document.body.dataset.sat = 'off';
   twinFrame.add(g.scene);
 })();
 // where the twin's entrance is (the porch modelled on the street front), in plan coordinates
@@ -509,10 +509,10 @@ const plateSlab = add(extrudeUp(plateShape, .3, -.34), [M(0xb9b3aa, { roughness:
 const levelGlass = [], levelMeshes = [];
 const bandsG = new THREE.Group(); scene.add(bandsG);
 for (let lv = 0; lv < 5; lv++) {
-  const y0 = (lv - 1) * FTF, gm = new THREE.MeshBasicMaterial({ color: lv === 1 ? 0xdd8d36 : 0x9fb3c8, transparent: true, opacity: 0, depthWrite: false, depthTest: false, side: THREE.DoubleSide });   // drawn over the facade, like the coloured floors on a sales table
-  const P = L.plate, gl = [];
+  const y0 = (lv - 1) * FTF, gm = new THREE.MeshBasicMaterial({ color: lv === 1 ? 0xdd8d36 : 0x9fb3c8, transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide });   // a coloured band on that floor, like the floors on a sales table
+  const P = L.shell_outline || L.plate, gl = [];        // just outside the building's own facade, so it reads as that floor's band
   for (let i = 0; i < P.length; i++) { const [x0, ya] = P[i], [x1, yb] = P[(i + 1) % P.length]; const len = Math.hypot(x1 - x0, yb - ya); if (len < .15) continue;
-    gl.push(at(new THREE.BoxGeometry(len, FTF - .3, .9), 0, y0 + (FTF - .3) / 2 + .15, 0).applyMatrix4(place((x0 + x1) / 2, (ya + yb) / 2, Math.atan2(yb - ya, x1 - x0)))); }
+    gl.push(at(new THREE.BoxGeometry(len + .04, FTF - .5, .06), 0, y0 + (FTF - .5) / 2 + .2, 0).applyMatrix4(place((x0 + x1) / 2, (ya + yb) / 2, Math.atan2(yb - ya, x1 - x0)))); }
   const m = new THREE.Mesh(mergeGeometries(gl), gm); m.userData.level = lv; m.renderOrder = 8; bandsG.add(m); levelGlass.push(gm); levelMeshes.push(m);
 }
 const LX = L.lifts.length ? L.lifts.reduce((a, p) => a + p[0], 0) / L.lifts.length : (bx0 + bx1) / 2;
@@ -578,7 +578,7 @@ function groundView(on) {
 let hoverLv = -1;
 function hoverLevel(lv) {
   hoverLv = lv;
-  levelGlass.forEach((m, i) => { m.opacity = i === lv ? (i === 1 ? .34 : .16) : (i === 1 ? .16 : 0); });
+  levelGlass.forEach((m, i) => { m.opacity = i === lv ? (i === 1 ? .62 : .3) : (i === 1 ? .38 : 0); });
   document.querySelectorAll('#floors [data-lv]').forEach(el => el.classList.toggle('hl', +el.dataset.lv === lv));
   canvas.style.cursor = lv === 1 ? 'pointer' : ''; needRender = true;
 }

@@ -1,7 +1,7 @@
 // Presenter remote, display side. The display shows a QR code; a phone opens the
 // link in it, signs in with the same Atlas ID and password, and then drives this
 // page. The page itself decides what each command does (see runCommand in volt.js).
-import { randomSecret, sessionKeys, channelName, openLink, messenger, verify, loadScript } from './link.js';
+import { randomSecret, sessionKeys, channelName, openLink, messenger, verify, loadScript, credKeyFromHash } from './link.js';
 
 const $ = (s) => document.querySelector(s);
 export function createPresenter({ run, hello, state }) {
@@ -10,8 +10,10 @@ export function createPresenter({ run, hello, state }) {
   async function open() {
     if (P.on) return;
     P.secret = randomSecret();
-    let cred = null; try { cred = sessionStorage.getItem('noida-skymark-rk'); } catch (e) {}
-    P.keys = await sessionKeys(P.secret, cred); P.mode = cred ? 'k' : 'k0';
+    // every allowed presenter (remote-config.js) gets a key; the phone proves it knows one of their passwords
+    const hashes = (window.VOLT_REMOTE && window.VOLT_REMOTE.presenters) || [];
+    P.cands = await Promise.all(hashes.map(async h => (await sessionKeys(P.secret, await credKeyFromHash(h))).k));
+    P.keys = await sessionKeys(P.secret, null); P.mode = 'k';
     P.link = await openLink(await channelName(P.secret), onMsg, (st) => { P.status = st; paint(); });
     P.cnt = { n: 0 }; P.msgr = messenger(P.link, P.keys, 'display', P.cnt); P.msgr.setMode(P.mode);
     P.m0 = messenger(P.link, P.keys, 'display', P.cnt); P.m0.setMode('k0');
@@ -32,7 +34,7 @@ export function createPresenter({ run, hello, state }) {
     $('#pairurl').textContent = P.url.replace(/^https?:\/\//, '');
     $('#pairnote').textContent = P.status === 'local' ? 'No live link is set up on this site, so the remote only works in another tab of this same browser.'
       : P.status === 'down' ? 'The live link dropped. Check the internet connection on this display.'
-      : (P.mode === 'k' ? 'Sign in on the phone with the same Atlas ID and password as this display.' : 'Sign in on the phone with your Atlas ID and password.');
+      : 'Sign in on the phone with the presenter ID and password.';
     const chip = $('#pairchip'); chip.textContent = P.ctrl ? 'Remote connected' : 'Waiting for the remote · show QR'; chip.classList.toggle('ok', !!P.ctrl);
   }
   function showPair(on) { $('#pair').classList.toggle('show', on); }
@@ -41,10 +43,11 @@ export function createPresenter({ run, hello, state }) {
     if (!msg || msg.f === 'display') return;
     if (!(msg.n > (P.lastN[msg.f] || 0))) return;                           // old or replayed
     if (msg.t === 'hello') {
-      const ok = await verify(msg, P.keys, P.mode);
-      if (!ok) { if (P.mode === 'k' && await verify(msg, P.keys, 'k0')) { P.lastN[msg.f] = msg.n; reply0('denied', { to: msg.f }); } return; }
+      let key = null;
+      for (const k of P.cands) if (await verify(msg, { k0: P.keys.k0, k }, 'k')) { key = k; break; }
+      if (!key) { if (await verify(msg, P.keys, 'k0')) { P.lastN[msg.f] = msg.n; reply0('denied', { to: msg.f }); } return; }
       P.lastN[msg.f] = msg.n;
-      if (P.mode === 'k0' && !(msg.a && msg.a.auth)) return;
+      if (P.ctrl !== msg.f || P.keys.k !== key) { P.keys = { k0: P.keys.k0, k: key }; P.msgr = messenger(P.link, P.keys, 'display', P.cnt); P.msgr.setMode('k'); }
       if (P.ctrl && P.ctrl !== msg.f && !(msg.a && msg.a.take) && Date.now() - P.lastSeen < 15000) { reply0('busy', { to: msg.f }); return; }
       if (P.ctrl && P.ctrl !== msg.f) reply0('taken', { to: P.ctrl });
       P.ctrl = msg.f; P.lastSeen = Date.now(); P.sent = ''; paint(); showPair(false);
