@@ -1,0 +1,435 @@
+{
+  "meta": {
+    "building": "F1 Skymark (Skymark F-1)",
+    "requested_as": "FM Skymark",
+    "address": "Plot No. F-01, Sector 6, Noida, Uttar Pradesh 201301",
+    "units": "metres",
+    "frame": "Local frame. Origin = ground level at the corner between the side elevation (B) and the front elevation (A); that corner is the left edge of the white corner pier in the photograph. +X runs along elevation A (left to right in the photo). +Y runs along elevation B away from the camera. A faces -Y, B faces -X. The exported model is re-centred on the footprint centre.",
+    "facade_u_v": "u is the distance along an elevation, v is the height above ground. Elevation A: u from the corner (x = u). Elevation B: u from its far end (left edge in the photo), so y = side_length_B - u.",
+    "confidence_scale": {
+      "high": "stated by a published source",
+      "medium": "measured from the reference photograph against a stated dimension",
+      "low": "estimated from the photograph without a reference dimension, or inferred where the photograph does not show it"
+    },
+    "sources": {
+      "developer": {
+        "url": "https://www.skymarkgroup.in/our-project-offices.html",
+        "facts": "Single tower of G+4 with dedicated basements; total leasable area 90,551 sq ft; plot size 2,940 sq m; Plot No. F-01, Sector 6, Noida."
+      },
+      "autopilot_listing": {
+        "url": "https://www.linkedin.com/posts/autopilot0ffices_f1-skymark-activity-7437467291967086592-c4qI",
+        "facts": "Configuration G+4 commercial tower; dedicated basement parking."
+      },
+      "tenant_clovia": {
+        "url": "https://magicpin.in/Noida/Sector-6/Other/Clovia-Corporate-Office/store/1895150",
+        "facts": "Clovia Corporate Office, 4th Floor, Plot 1, F Block, Sector 6, Noida (explains the Clovia signage)."
+      },
+      "tenant_sprint": {
+        "url": "https://www.sprintindia.work/our-location/sprint-coworking-space-in-noida/coworking-space-in-f1-skymark-noida/",
+        "facts": "Sprint F1 Skymark, 3rd Floor, Sky Mark Building, F1 Sector 6."
+      },
+      "photo": {
+        "id": "reference_photo_supplied_in_chat",
+        "description": "Elevated three-quarter view (about roof height), portrait, roughly 830 x 900 px. Shows the front elevation nearly frontal and the side elevation receding to the left, with the road in the foreground.",
+        "note": "The photograph was supplied in the conversation and could not be saved as a file in the build environment, so it is not loaded as a pixel overlay. All photo measurements below were read from it by eye, in pixels, and converted with the scale noted on each block."
+      }
+    },
+    "photo_scale_notes": [
+      "Corner pier spans about 400 px from parapet to ground; the front about 361 px; side B about 309 px. Readings are by eye, good to about 10 px.",
+      "Height: G+4 at an assumed 4.1 m per floor plus a 2 m parapet = 22.5 m. Width and length were then set so the reference render reproduces the photo's width-to-height ratios (0.90 for the front, 0.77 for the side).",
+      "The far end of side B is about 0.7 times as tall in the image as the corner, which puts the camera about 88 m from the corner; 400 px for 22.5 m at 88 m is a 63 mm lens on a 36 mm sensor at this crop.",
+      "Yaw is about 32 degrees from the front's normal.",
+      "Positions along B were corrected for perspective: s = t / (1.43 - 0.43 t), where t is the image fraction from the far end and s the true fraction.",
+      "Roof lines fall and ground lines rise away from the corner in a ratio of about 1 to 2, which puts the camera about 15 m above the ground."
+    ]
+  },
+  "massing": {
+    "front_width_A": 27.7,
+    "side_length_B": 44.7,
+    "floors_above_ground": 5,
+    "floor_labels": [
+      "Ground",
+      "1st",
+      "2nd",
+      "3rd",
+      "4th"
+    ],
+    "floor_to_floor": 4.1,
+    "roof_level": 20.5,
+    "parapet_top": 22.5,
+    "confidence": {
+      "floors_above_ground": "high",
+      "floor_to_floor": "low",
+      "front_width_A": "medium",
+      "side_length_B": "low",
+      "parapet_top": "medium"
+    },
+    "source": {
+      "floors_above_ground": "developer: G+4",
+      "floor_to_floor": "Photo: slab lines on the front glass are about 70 px apart against a 400 px pier, so 5 floors plus a 2 m parapet fill the height. 4.1 m is assumed as a normal office floor height; no source states it.",
+      "side_length_B": "Photo: side B is about 309 px wide against the same 400 px pier. Set so that the reference render gives the same ratio (0.77). 27.7 m x 44.7 m is about 1,240 sq m per floor, or about 66,600 sq ft over G+4. Published leasable figures are 45,000 sq ft (Autopilot listing) and 90,551 sq ft (developer); this sits between them and the difference is not resolved.",
+      "front_width_A": "Photo: the front is about 361 px wide against a 400 px tall pier. Set so that the render from the reference camera gives the same width-to-height ratio (0.90)."
+    },
+    "hidden_sides": "The rear and the far side are not visible in the photograph. They are closed with plain cladding massing only, tagged observed = false."
+  },
+  "front_A": {
+    "corner_pier": {
+      "u0": 0.0,
+      "u1": 7.41,
+      "v0": 0.0,
+      "v1": 22.5,
+      "panel_w": 1.5,
+      "panel_h": 1.5,
+      "projection": 0.35,
+      "confidence": "medium",
+      "source": "photo: 95 px of the 363 px front"
+    },
+    "glass_block": {
+      "u0": 11.01,
+      "u1": 24.73,
+      "v0": 0.0,
+      "v1": 21.26,
+      "mullion_spacing": 1.39,
+      "transom_spacing": 2.05,
+      "spandrel_at_slabs": true,
+      "spandrel_h": 0.55,
+      "confidence": "medium",
+      "source": "photo: about 8 lit vertical bays and two glass rows per floor above the annex roof; slab lines about 70 px (4.5 m) apart"
+    },
+    "right_pier": {
+      "u0": 24.73,
+      "u1": 27.7,
+      "v0": 0.0,
+      "v1": 22.5,
+      "projection": 0.35,
+      "confidence": "medium",
+      "source": "photo: 38 px white pier at the right edge"
+    },
+    "parapet_band": {
+      "u0": 7.41,
+      "u1": 24.73,
+      "v0": 21.26,
+      "v1": 22.5,
+      "projection": 0.35,
+      "confidence": "medium",
+      "source": "photo: thick white band above the curtain wall"
+    },
+    "dark_recess": {
+      "u0": 7.41,
+      "u1": 11.01,
+      "v0": 0.0,
+      "v1": 21.26,
+      "recess": 0.5,
+      "mullion_spacing": 1.45,
+      "transom_spacing": 2.05,
+      "confidence": "low",
+      "source": "photo: darker glazed strip, about 45 px wide, between the corner pier and the lit glass; whether it is a recess or the return of a projecting glass box cannot be told from one view"
+    }
+  },
+  "side_B": {
+    "end_pier": {
+      "u0": 0.0,
+      "u1": 2.86,
+      "v0": 0.0,
+      "v1": 22.5,
+      "projection": 0.3,
+      "confidence": "medium",
+      "source": "photo: white column at the far left end"
+    },
+    "top_ribbon": {
+      "u0": 6.08,
+      "u1": 32.9,
+      "v0": 17.47,
+      "v1": 21.0,
+      "mullion_spacing": 5.4,
+      "sill_h": 0.5,
+      "confidence": "low",
+      "source": "photo: strip of four wide openings with white piers between them, just under the parapet; its sill reads about 20 m up, which is above the middle of the 4th floor, so it may be partly a roof-level screen. Not resolved from one photo.",
+      "mullion_w": 0.45
+    },
+    "parapet_band": {
+      "u0": 2.86,
+      "u1": 32.9,
+      "v0": 21.0,
+      "v1": 21.71,
+      "projection": 0.3,
+      "confidence": "medium",
+      "source": "photo: side B's parapet reads about 1 m lower than the corner pier's top"
+    },
+    "angular_frame": {
+      "left_u": 3.1,
+      "top_right_u": 20.11,
+      "bottom_right_u": 24.34,
+      "bottom_v": 2.21,
+      "top_v": 14.12,
+      "member_width": 1.2,
+      "projection": 1.5,
+      "infill_recess": 0.3,
+      "confidence": "low",
+      "source": "photo: trapezoid frame; left edge vertical, right edge leaning toward the corner at the bottom. Corners read at (78,505) (215,510) (243,690) (78,640) px and converted with the perspective correction; expect 1 to 2 m of error along the facade and about 1 m in height"
+    },
+    "frame_top_band": {
+      "u0": 3.1,
+      "u1": 22.35,
+      "v0": 15.53,
+      "v1": 16.32,
+      "projection": 1.9,
+      "confidence": "low",
+      "source": "photo: white ledge above the frame, reading as a projecting canopy from the far end to just past the frame"
+    },
+    "slanted_glazing": {
+      "u_from": "angular_frame right edge",
+      "u1": 32.9,
+      "v0": 2.21,
+      "v1": 14.12,
+      "mullion_spacing": 1.5,
+      "transom_spacing": 2.05,
+      "tilt_out_at_bottom": 1.2,
+      "confidence": "low",
+      "source": "photo: blue-grey glazing between the frame's leaning edge and the white panel pier reads as an inclined plane following that edge"
+    },
+    "accent_strip": {
+      "u0": 40.23,
+      "u1": 44.7,
+      "v0": 0.0,
+      "v1": 21.71,
+      "projection": 0.15,
+      "confidence": "medium",
+      "source": "photo: full-height dark brown strip at the corner, between the white panel pier on B and the corner pier on A"
+    },
+    "ground_base": {
+      "u0": 2.86,
+      "u1": 32.9,
+      "v0": 0.0,
+      "v1": 2.21,
+      "pilaster_spacing": 4.8,
+      "pilaster_w": 0.6,
+      "confidence": "low",
+      "source": "photo: dark base under the frame, partly hidden by trees and the boundary wall"
+    },
+    "upper_glazing": {
+      "u0": 3.1,
+      "u1": 32.9,
+      "v0": 14.12,
+      "v1": 15.53,
+      "mullion_spacing": 1.5,
+      "confidence": "low",
+      "source": "photo: dark band between the frame's top edge and the white ledge"
+    },
+    "corner_return_pier": {
+      "u0": 32.9,
+      "u1": 40.23,
+      "v0": 0.0,
+      "v1": 21.71,
+      "panel_w": 1.5,
+      "panel_h": 1.5,
+      "projection": 0.3,
+      "confidence": "medium",
+      "source": "photo: white panel grid, about 40 px wide and full height, between the glazing and the brown strip"
+    },
+    "wall_plane_setback": 0.45
+  },
+  "annex": {
+    "u0": 16.07,
+    "u1": 26.3,
+    "depth": 8.0,
+    "height": 9.7,
+    "sign_band": {
+      "v0": 8.1,
+      "v1": 9.7
+    },
+    "first_floor_glazing": {
+      "v0": 4.3,
+      "v1": 7.8,
+      "mullion_spacing": 1.45,
+      "louvre_spacing": 1.0
+    },
+    "ground_glazing": {
+      "v0": 0.3,
+      "v1": 3.6,
+      "mullion_spacing": 2.9
+    },
+    "confidence": {
+      "plan_position": "low",
+      "height": "medium",
+      "depth": "low"
+    },
+    "source": "photo: two-storey block in front of the curtain wall, reaching about 40 px past the main block's right edge, with the second care / Clovia sign band on its parapet, pale glazing with white horizontal lines on the first floor and dark glazing on its left side. Its depth cannot be measured from a near-frontal view",
+    "side_walls": "glass_dark"
+  },
+  "signage": [
+    {
+      "id": "care_pier",
+      "host": "front_A",
+      "u0": 0.31,
+      "u1": 7.12,
+      "v0": 19.24,
+      "v1": 22.24,
+      "text": "care",
+      "text2": "HEALTH",
+      "bg_left": "#1f6fa8",
+      "bg_right": "#c9d64a",
+      "split": 0.42,
+      "text_color": "#ffffff",
+      "confidence": "medium",
+      "source": "photo: blue tile with 'care' and a yellow-green field reading 'HEALTH', top of the corner pier"
+    },
+    {
+      "id": "clovia_pier",
+      "host": "front_A",
+      "u0": 0.31,
+      "u1": 7.12,
+      "v0": 15.88,
+      "v1": 18.88,
+      "text": "Clovia",
+      "bg_left": "#d6336c",
+      "bg_right": "#d6336c",
+      "split": 1.0,
+      "text_color": "#ffffff",
+      "confidence": "medium",
+      "source": "photo: pink panel under the care sign"
+    },
+    {
+      "id": "skymark_crown",
+      "host": "front_A_roof",
+      "u0": 7.8,
+      "u1": 13.97,
+      "v0": 22.5,
+      "v1": 23.74,
+      "text": "skymark",
+      "bg_left": "#f2f2f2",
+      "bg_right": "#f2f2f2",
+      "split": 1.0,
+      "text_color": "#3b3b3b",
+      "mark_color": "#ef7d22",
+      "confidence": "medium",
+      "source": "photo: wordmark with an orange star mark standing on the parapet above the curtain wall"
+    },
+    {
+      "id": "care_annex",
+      "host": "annex_front",
+      "u0": 16.47,
+      "u1": 23.3,
+      "v0": 8.2,
+      "v1": 9.6,
+      "text": "care",
+      "text2": "HEALTH",
+      "bg_left": "#1f6fa8",
+      "bg_right": "#e6e05a",
+      "split": 0.0,
+      "text_color": "#ffffff",
+      "confidence": "low",
+      "source": "photo: yellow band with the care tile on the annex parapet",
+      "tile": {
+        "u0": 19.3,
+        "u1": 21.2
+      }
+    },
+    {
+      "id": "clovia_annex",
+      "host": "annex_front",
+      "u0": 23.3,
+      "u1": 25.9,
+      "v0": 8.2,
+      "v1": 9.6,
+      "text": "Clovia",
+      "bg_left": "#d6336c",
+      "bg_right": "#d6336c",
+      "split": 1.0,
+      "text_color": "#ffffff",
+      "confidence": "low",
+      "source": "photo: pink panel at the right end of the annex sign band"
+    }
+  ],
+  "entrance": {
+    "host": "annex_front",
+    "u0": 20.0,
+    "u1": 24.0,
+    "door_h": 2.82,
+    "canopy_depth": 2.2,
+    "canopy_v": 3.18,
+    "canopy_th": 0.3,
+    "confidence": "low",
+    "observed": false,
+    "source": "Inferred. The ground floor of the annex shows dark glazing and the driveway kerbs (yellow and black) lead to it, but the doors themselves are hidden behind the palm trees. Placement must be confirmed on site."
+  },
+  "roof": {
+    "mast": {
+      "x": 3.5,
+      "y": 38.0,
+      "height": 6.0,
+      "base": 1.2,
+      "confidence": "low",
+      "source": "photo: lattice telecom mast above the left end of the roof; plan position estimated"
+    },
+    "slab_th": 0.3
+  },
+  "site": {
+    "plot_area_sqm": 2940,
+    "paving_margin": 9.0,
+    "boundary_wall_h": 1.6,
+    "confidence": "low",
+    "source": "developer: plot 2,940 sq m. Paving extent is a neutral plinth for the model, not a surveyed plot boundary."
+  },
+  "reference_camera": {
+    "aspect": [
+      830,
+      900
+    ],
+    "lens_mm": 63.0,
+    "sensor_width_mm": 36.0,
+    "yaw_from_front_normal_deg": 32.0,
+    "distance_to_corner_m": 88.0,
+    "height_m": 15.0,
+    "look_at": [
+      2.8,
+      -1.75,
+      17.2
+    ],
+    "confidence": "low",
+    "source": "Solved by hand from the photograph (see meta.photo_scale_notes), then checked against test renders. No EXIF and no surveyed control points, so this is a visual match, not a calibrated camera."
+  },
+  "materials": {
+    "glass_bluegrey": {
+      "base": "#6f8798",
+      "metallic": 0.55,
+      "roughness": 0.07
+    },
+    "glass_dark": {
+      "base": "#1d2730",
+      "metallic": 0.45,
+      "roughness": 0.09
+    },
+    "cladding_white": {
+      "base": "#d9dcdd",
+      "metallic": 0.15,
+      "roughness": 0.42
+    },
+    "aluminium": {
+      "base": "#b9bec4",
+      "metallic": 1.0,
+      "roughness": 0.32
+    },
+    "concrete": {
+      "base": "#8b8781",
+      "metallic": 0.0,
+      "roughness": 0.9
+    },
+    "paving": {
+      "base": "#77726b",
+      "metallic": 0.0,
+      "roughness": 0.95
+    },
+    "accent_brown": {
+      "base": "#4a2a1a",
+      "metallic": 0.1,
+      "roughness": 0.55
+    }
+  },
+  "map": {
+    "lat": null,
+    "lng": null,
+    "front_A_faces_bearing_deg": null,
+    "note": "Filled in from the location research; the bearing needs a satellite view of the roof to confirm."
+  }
+}

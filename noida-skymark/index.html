@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="robots" content="noindex"/>
+<meta name="theme-color" content="#2a1e16"/>
+<meta name="description" content="Autopilot · F1 Skymark, Plot F-1, Sector 6, Noida: the property and the location around it, read on a 2D map."/>
+<meta property="og:title" content="F1 Skymark · Sector 6 Noida · Autopilot"/>
+<meta property="og:description" content="The property at the centre, with the metro, roads, talent, employers, coworking, food, hotels and hospitals around it."/>
+<title>F1 Skymark · Autopilot ATLAS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://api.mapbox.com" crossorigin>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css">
+<link rel="icon" href="../autopilot-logo-trimmed.png">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+/* Files load by relative path, so the page only works at /noida-skymark/
+   (with the slash). Never leave an ID or password in the address bar. */
+(function () {
+  var l = location;
+  if (!/\/$/.test(l.pathname)) { l.replace(l.pathname + "/" + l.hash); return; }
+  if (/[?&](username|password)=/i.test(l.search)) history.replaceState(null, "", l.pathname + l.hash);
+})();
+</script>
+<!-- three.js is vendored with the site (engine/vendor/three); the twin viewer and the map layer import it by name. -->
+<script type="importmap">{"imports":{"three":"/engine/vendor/three/three.module.min.js","three/addons/":"/engine/vendor/three/jsm/"}}</script>
+<script src="../config.js?v=sky1"></script>
+<script src="./data.js?v=sky1"></script>
+<style>
+/* The Noida study's design: espresso, cream and terracotta. Colour never
+   carries meaning alone; every distance and category is also written. */
+:root{
+  --bg:#efe7dc; --paper:#f7f2ea; --panel:rgba(250,246,240,.88); --panel-solid:#faf6f0;
+  --ink:#2a1e16; --mut:#6c5b4d; --dim:#9a8878; --line:rgba(60,40,25,.13); --line2:rgba(60,40,25,.07);
+  --acc:#a3502c; --acc2:#c8693a; --accbg:rgba(163,80,44,.09);
+  --ok:#2e7d5b; --warn:#b7791f; --bad:#b23b2a;
+  --serif:'Playfair Display',Georgia,'Times New Roman',serif;
+  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,Roboto,Helvetica,Arial,sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+  --e1:0 1px 2px rgba(42,30,22,.10);
+  --e2:0 12px 32px rgba(42,30,22,.16), 0 2px 8px rgba(42,30,22,.08);
+  --r:14px; --board-w:330px; --panel-w:500px; --top-h:58px;
+  --ease:cubic-bezier(.32,.72,0,1);
+  --hexes:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100' viewBox='0 0 56 100'%3E%3Cpath d='M28 66L0 50L0 16L28 0L56 16L56 50L28 66L28 100' fill='none' stroke='%23e9b48f' stroke-opacity='.16' stroke-width='1'/%3E%3Cpath d='M28 0L28 34L0 50L0 84L28 100L56 84L56 50L28 34' fill='none' stroke='%23e9b48f' stroke-opacity='.11' stroke-width='1'/%3E%3C/svg%3E");
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:14px;overflow:hidden;-webkit-font-smoothing:antialiased}
+:focus-visible{outline:2px solid var(--acc2);outline-offset:2px;border-radius:4px}
+a{color:var(--acc);text-underline-offset:2px;text-decoration-color:rgba(163,80,44,.35)}
+a:hover{text-decoration-color:var(--acc)}
+button{font:inherit;color:inherit}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+::-webkit-scrollbar{width:9px;height:9px}
+::-webkit-scrollbar-thumb{background:rgba(60,40,25,.18);border-radius:5px}
+::-webkit-scrollbar-track{background:transparent}
+
+/* ---------------- gate ---------------- */
+#gate{position:fixed;inset:0;z-index:200;overflow:auto;color:#f7f2ea;transition:opacity .45s var(--ease);
+  background:var(--hexes) center/56px 100px,radial-gradient(1100px 700px at 65% 35%,#4a3526,#1f1610 70%);background-color:#1f1610}
+#gate.out{opacity:0;pointer-events:none}
+#gate .shade{position:absolute;inset:0;background:linear-gradient(100deg,rgba(24,16,11,.86) 0%,rgba(24,16,11,.5) 45%,rgba(24,16,11,.15) 100%)}
+#gate .gwrap{position:relative;min-height:100%;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(320px,400px);gap:48px;align-items:center;padding:56px clamp(20px,6vw,88px)}
+#gate .logo{display:block;width:170px;height:auto;filter:invert(1) brightness(1.4)}
+#gate .eyebrow{color:#e9b48f;margin-top:26px}
+#gate h1{font-family:var(--serif);font-weight:500;font-size:clamp(40px,6vw,72px);line-height:1.02;margin:10px 0 14px;letter-spacing:-.01em}
+#gate .gcopy p{max-width:520px;font-size:15px;line-height:1.6;color:rgba(247,242,234,.82);margin:0}
+#gate .gstats{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+#gate .gstats span{border:1px solid rgba(247,242,234,.22);background:rgba(247,242,234,.08);border-radius:999px;padding:7px 13px;font-size:12.5px}
+#gate .gstats b{font-family:var(--serif);font-weight:600;font-size:15px;margin-right:4px}
+#gate .box{background:rgba(250,246,240,.95);color:var(--ink);border-radius:20px;padding:28px 26px 22px;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+#gate .box h2{font-family:var(--serif);font-weight:500;font-size:22px;margin:0 0 4px}
+#gate .sub{color:var(--mut);font-size:12.5px;line-height:1.5;margin-bottom:18px}
+#gate label{display:block;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin:0 0 5px}
+#gate input{width:100%;padding:12px 13px;border-radius:10px;border:1px solid var(--line);background:#fff;font:inherit;font-size:16px;margin-bottom:12px;color:var(--ink)}
+#gate input:focus{border-color:var(--acc2);outline:none;box-shadow:0 0 0 3px var(--accbg)}
+#gate button{width:100%;padding:13px;border:0;border-radius:10px;background:var(--ink);color:var(--paper);font-weight:600;cursor:pointer;font-size:14px}
+#gate button:hover{background:#3d2c20}
+#gate button[disabled]{opacity:.7;cursor:progress}
+#gate .err{color:var(--bad);font-size:12px;min-height:16px;margin-top:9px}
+/* The radar on the sign-in page: the property at the centre with its 1, 3
+   and 5 km rings, drawn in CSS so it never depends on an image. */
+#gate .radar{position:absolute;right:-12vmin;top:50%;width:92vmin;height:92vmin;transform:translateY(-50%);border-radius:50%;pointer-events:none;opacity:.55;
+  background:radial-gradient(circle,rgba(233,180,143,.0) 0 19.6%,rgba(233,180,143,.35) 19.8% 20%,transparent 20.2% 59.6%,rgba(233,180,143,.25) 59.8% 60%,transparent 60.2% 99.4%,rgba(233,180,143,.18) 99.6% 100%,transparent 100%)}
+#gate .radar::after{content:"";position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px;border-radius:50%;background:#e0773f;box-shadow:0 0 0 6px rgba(224,119,63,.25),0 0 0 14px rgba(224,119,63,.1)}
+@media (max-width:860px){
+  #gate .gwrap{grid-template-columns:1fr;gap:22px;padding:36px 18px 48px;align-content:end}
+  #gate .shade{background:linear-gradient(180deg,rgba(24,16,11,.40) 0%,rgba(24,16,11,.70) 45%,rgba(24,16,11,.92) 100%)}
+  #gate .radar{right:auto;left:50%;top:22%;transform:translate(-50%,-50%);width:110vmin;height:110vmin}
+}
+
+/* ---------------- frame ---------------- */
+#map{position:fixed;inset:0;background:#e5dccf}
+.pane{background:var(--panel);-webkit-backdrop-filter:blur(22px) saturate(160%);backdrop-filter:blur(22px) saturate(160%);
+  border:1px solid rgba(255,255,255,.7);box-shadow:var(--e2);border-radius:var(--r)}
+#top{position:fixed;top:10px;left:10px;right:10px;height:var(--top-h);z-index:30;display:flex;align-items:center;gap:14px;padding:0 10px 0 16px}
+#brand{display:flex;align-items:center;gap:12px;flex:none;min-width:0}
+#brand .logo{display:block;width:auto;height:15px;filter:brightness(.4)}
+#brand .t{font-family:var(--serif);font-size:18px;white-space:nowrap}
+#brand .s{font-family:var(--mono);font-size:10.5px;color:var(--mut);letter-spacing:.06em;white-space:nowrap}
+#tabs{display:flex;gap:2px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+#tabs::-webkit-scrollbar{display:none}
+.tab{border:0;background:transparent;padding:8px 12px;border-radius:9px;cursor:pointer;color:var(--mut);font-size:13px;white-space:nowrap}
+.tab:hover{background:var(--line2);color:var(--ink)}
+.tab.on{background:var(--ink);color:var(--paper)}
+.tab.ph{display:none}
+#signout{flex:none;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 11px;font-size:12.5px;color:var(--mut);cursor:pointer;min-height:32px}
+#signout:hover{color:var(--bad);border-color:rgba(178,59,42,.35)}
+
+#board{position:fixed;top:calc(var(--top-h) + 20px);left:10px;bottom:10px;width:var(--board-w);z-index:20;display:flex;flex-direction:column;overflow:hidden}
+#panel{position:fixed;top:calc(var(--top-h) + 20px);right:10px;bottom:10px;width:var(--panel-w);z-index:20;display:flex;flex-direction:column;overflow:hidden}
+.bhead{padding:14px 14px 10px;border-bottom:1px solid var(--line)}
+.bhead .big{font-family:var(--serif);font-size:20px}
+.bhead .note{margin-top:2px}
+.ctrl{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}
+.chip{border:1px solid var(--line);background:rgba(255,255,255,.55);padding:5px 10px;border-radius:999px;font-size:12px;cursor:pointer;color:var(--mut);min-height:28px;display:inline-flex;align-items:center;gap:6px}
+.chip:hover{color:var(--ink);border-color:rgba(60,40,25,.25)}
+.chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.chip .c{font-family:var(--mono);font-size:10.5px;opacity:.75}
+#list{flex:1;overflow:auto;padding:6px 8px 10px}
+.grp{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin:12px 6px 4px;display:flex;align-items:center;gap:6px}
+.it{display:grid;grid-template-columns:22px 1fr auto;gap:9px;align-items:center;width:100%;text-align:left;border:1px solid transparent;background:transparent;border-radius:10px;padding:7px 8px;cursor:pointer}
+.it:hover{background:rgba(255,255,255,.65)}
+.it.sel{background:#fff;border-color:rgba(163,80,44,.35);box-shadow:var(--e1)}
+.it .ic{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;color:#fff;font-family:var(--mono);font-size:10px;font-weight:500}
+.it .nm{font-size:13px;font-weight:600;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.it .sb{font-size:11.5px;color:var(--mut);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.it > div{min-width:0}
+.it .d{font-family:var(--mono);font-size:11.5px;text-align:right;white-space:nowrap}
+.it .d small{display:block;font-size:10px;color:var(--dim)}
+
+.phead{padding:16px 18px 10px;border-bottom:1px solid var(--line);flex:none}
+.pbody{flex:1;overflow:auto;padding:4px 18px 22px}
+.eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
+h2{font-family:var(--serif);font-weight:500;font-size:26px;line-height:1.12;margin:4px 0 2px}
+h3{font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin:22px 0 8px;font-weight:500}
+p{line-height:1.55;margin:6px 0}
+.lede{color:var(--mut);font-size:13px;line-height:1.55}
+.note{font-size:12px;color:var(--mut);line-height:1.5}
+.src{font-family:var(--mono);font-size:10.5px;color:var(--dim)}
+
+/* the property, centre stage */
+.hero{position:relative;margin:12px -18px 0;background:linear-gradient(180deg,#f1e7da,#e8dccb);border-top:1px solid var(--line2);border-bottom:1px solid var(--line2);min-height:180px;display:grid;place-items:center;overflow:hidden}
+.hero svg{display:block;width:100%;height:auto;max-height:260px}
+.hero img{display:block;width:100%;height:240px;object-fit:cover;cursor:zoom-in}
+.hero .ph{position:absolute;left:10px;bottom:8px;font-family:var(--mono);font-size:10px;color:#fff;background:rgba(0,0,0,.45);padding:2px 7px;border-radius:5px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}
+.kpi{background:rgba(255,255,255,.75);border:1px solid var(--line2);border-radius:10px;padding:9px 10px;min-width:0}
+.kpi .l{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)}
+.kpi .v{font-family:var(--serif);font-size:19px;margin-top:2px;line-height:1.1}
+.kpi .s{font-size:11px;color:var(--mut);margin-top:2px;line-height:1.35}
+.kpi.lead{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.kpi.lead .l,.kpi.lead .s{color:rgba(247,242,234,.72)}
+table.spec{width:100%;border-collapse:collapse;font-size:12.5px}
+table.spec th{text-align:left;font-weight:400;color:var(--mut);width:36%;padding:7px 8px 7px 0;vertical-align:top;border-bottom:1px solid var(--line2)}
+table.spec td{padding:7px 0;border-bottom:1px solid var(--line2);vertical-align:top}
+.read{border:1px solid var(--line2);border-left:4px solid var(--acc);background:rgba(255,255,255,.75);border-radius:0 11px 11px 0;padding:10px 12px;margin:14px 0 4px}
+.read b.h{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--acc);font-weight:600}
+.read ul{margin:6px 0 0;padding-left:17px;font-size:13px;line-height:1.55}
+.read li+li{margin-top:3px}
+.flag{border-left:3px solid var(--warn);background:rgba(183,121,31,.08);padding:9px 11px;border-radius:0 9px 9px 0;margin:12px 0 4px;font-size:12.5px;line-height:1.5}
+.flag b{display:block;margin-bottom:2px;font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--warn)}
+.prec{font-size:11px;color:var(--mut);display:inline-flex;align-items:center;gap:5px}
+.prec::before{content:"";width:7px;height:7px;border-radius:50%;background:#0a8a3a}
+.prec.locality::before{background:#a3502c}
+.prec.street::before{background:#d9a400}
+
+/* ring and distance tables */
+table.rt{width:100%;border-collapse:collapse;font-size:12.5px}
+table.rt th,table.rt td{padding:7px 5px;border-bottom:1px solid var(--line2);text-align:left;vertical-align:top}
+table.rt th{font-weight:500;color:var(--mut);font-size:11px}
+table.rt td.n,table.rt th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+table.rt tbody tr{cursor:pointer}
+table.rt tbody tr:hover{background:rgba(163,80,44,.06)}
+table.rt .k{display:inline-flex;align-items:center;gap:6px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;flex:none}
+.bars{display:flex;flex-direction:column;gap:7px}
+.bar{display:grid;grid-template-columns:minmax(0,1fr) 120px 76px;gap:10px;align-items:center;font-size:12.5px;cursor:pointer;border-radius:6px;padding:2px 0}
+.bar:hover{background:rgba(163,80,44,.05)}
+.bar .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar .tr{height:7px;background:var(--line2);border-radius:4px;overflow:hidden}
+.bar .fl{height:100%;border-radius:4px}
+.bar .val{font-family:var(--mono);font-size:11px;text-align:right;color:var(--mut);white-space:nowrap}
+.cnt{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.cnt div{background:rgba(255,255,255,.75);border:1px solid var(--line2);border-radius:9px;padding:7px 8px;font-size:11px;color:var(--mut)}
+.cnt b{display:block;font-family:var(--serif);font-size:19px;color:var(--ink);font-weight:500}
+.srcs{list-style:none;padding:0;margin:0}
+.srcs li{padding:7px 0;border-bottom:1px solid var(--line2);font-size:12px;line-height:1.45}
+.srcs li .src{display:block}
+.act{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 10px;font-size:12px;cursor:pointer;color:var(--ink)}
+.act:hover{border-color:rgba(60,40,25,.3)}
+.actions{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+
+/* layer chips, which are also the legend */
+#layers{position:fixed;left:calc(var(--board-w) + 20px);right:calc(var(--panel-w) + 20px);bottom:10px;z-index:15;padding:8px;display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.chip.lay:not(.on){opacity:.72}
+.chip.lay.on{background:#fff;color:var(--ink);border-color:rgba(60,40,25,.28)}
+.sw{display:inline-block;width:18px;height:4px;border-radius:2px}
+
+/* the property marker: a terracotta pin with a slow pulse, larger than
+   anything else on the map */
+/* No `position` here: Mapbox positions the marker itself (absolute), and
+   that also makes it the anchor for the three parts below. */
+.hq{width:0;height:0}
+.hq .pulse{position:absolute;left:-30px;top:-30px;width:60px;height:60px;border-radius:50%;background:rgba(224,119,63,.28);animation:pulse 2.6s ease-out infinite}
+.hq .pin{position:absolute;left:-17px;top:-17px;width:34px;height:34px;border-radius:50%;background:#a3502c;border:3px solid #fff;box-shadow:0 6px 18px rgba(42,30,22,.4);display:grid;place-items:center;color:#fff;font-family:var(--mono);font-weight:600;font-size:12px;cursor:pointer}
+.hq .tag{position:absolute;left:24px;top:-17px;white-space:nowrap;background:var(--ink);color:var(--paper);border-radius:9px;padding:5px 10px 6px;box-shadow:var(--e2);pointer-events:none}
+.hq .tag b{display:block;font-family:var(--serif);font-weight:500;font-size:15px;line-height:1.1}
+.hq .tag span{font-family:var(--mono);font-size:10px;color:#e9b48f;letter-spacing:.06em}
+/* Close in, the twin itself marks the spot, so the pin and its tag step aside. */
+.hq.near{display:none}
+.hero canvas{display:block;width:100%!important;height:auto!important;cursor:grab}
+.hero canvas:active{cursor:grabbing}
+@keyframes pulse{0%{transform:scale(.5);opacity:.9}100%{transform:scale(1.9);opacity:0}}
+
+.mapboxgl-popup-content{border-radius:10px;padding:9px 12px;font-family:var(--font);font-size:12px;color:var(--ink);box-shadow:var(--e2);max-width:270px}
+.mapboxgl-popup-content b{font-size:12.5px}
+.nomap{padding:160px 24px;text-align:center;color:var(--mut)}
+.nomap.warn{position:absolute;z-index:5;left:50%;top:calc(var(--top-h) + 70px);transform:translateX(-50%);width:min(440px,calc(100% - 32px));padding:10px 14px;border-radius:10px;background:var(--paper);box-shadow:var(--e2);font-size:12.5px;line-height:1.45;color:var(--ink)}
+#lightbox{position:fixed;inset:0;z-index:80;background:rgba(20,14,10,.85);display:none;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+#lightbox.on{display:flex}
+#lightbox img{max-width:100%;max-height:100%;border-radius:10px}
+
+@media print{
+  html,body{overflow:visible;height:auto;background:#fff}
+  #map,#board,#layers,#top,#gate,.actions,#lightbox{display:none!important}
+  #panel{position:static;width:auto;height:auto;border:0;box-shadow:none;background:#fff;-webkit-backdrop-filter:none;backdrop-filter:none}
+  .pbody{overflow:visible;padding:0}
+}
+@media (max-width:1280px) and (min-width:861px){
+  :root{--board-w:290px;--panel-w:430px}
+  #brand .s{display:none}
+  .tab{padding:8px 9px;font-size:12.5px}
+}
+/* Phone: map on top, the panel as a bottom sheet, the nearby list moves into
+   the panel as its own tab. */
+@media (max-width:860px){
+  :root{--top-h:92px}
+  #top{top:6px;left:6px;right:6px;padding:6px 6px 4px 12px;gap:2px 8px;flex-wrap:wrap;align-content:space-between}
+  #brand .s{display:none}
+  #brand{gap:8px;flex:1}
+  #brand .logo{height:11px}
+  #brand .t{font-size:16px}
+  #tabs{order:3;flex:0 0 100%;margin-left:-6px}
+  .tab{padding:7px 9px;font-size:12px;min-height:40px}
+  .tab.ph{display:inline-block}
+  #board{display:none}
+  #layers{left:6px;right:6px;bottom:auto;top:calc(var(--top-h) + 12px);padding:5px;overflow-x:auto;flex-wrap:nowrap;scrollbar-width:none}
+  #layers::-webkit-scrollbar{display:none}
+  #layers .chip{flex:none;min-height:36px}
+  #panel{top:auto;left:0;right:0;bottom:0;width:auto;height:54dvh;border-radius:18px 18px 0 0;border-bottom:0;padding-bottom:env(safe-area-inset-bottom)}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .cnt{grid-template-columns:repeat(2,1fr)}
+  .bar{grid-template-columns:minmax(0,1fr) 70px 70px}
+  .mapboxgl-ctrl-group{display:none}
+  #signout{min-height:40px}
+  .hq .tag{display:none}
+}
+</style>
+</head>
+<body>
+
+<div id="gate" role="dialog" aria-labelledby="g-title">
+  <div class="radar" aria-hidden="true"></div>
+  <div class="shade"></div>
+  <div class="gwrap">
+    <div class="gcopy">
+      <img class="logo" src="../autopilot-logo-trimmed.png" alt="Autopilot" width="319" height="44">
+      <div class="eyebrow" id="g-eyebrow">Location intelligence · Sector 6 · Noida</div>
+      <h1 id="g-title">F1 Skymark</h1>
+      <p id="g-lede">One property at the centre of the map, and everything that matters around it: the metro, the roads into Delhi, the talent, the employers and coworking next door, food, hotels and hospitals.</p>
+      <div class="gstats" id="g-stats"></div>
+    </div>
+    <form class="box" id="g-form" autocomplete="on" method="post" action="javascript:void(0)">
+      <h2>Sign in</h2>
+      <div class="sub">Use the access ID and password you were given.</div>
+      <label for="g-id">Access ID</label>
+      <input id="g-id" name="username" autocomplete="username" spellcheck="false" autocapitalize="characters" required/>
+      <label for="g-pw">Password</label>
+      <input id="g-pw" name="password" type="password" autocomplete="current-password" required/>
+      <button id="g-go" type="submit">Open the property</button>
+      <div class="err" id="g-err" role="alert"></div>
+    </form>
+  </div>
+</div>
+
+<div id="map" aria-label="Map of F1 Skymark and its surroundings"></div>
+
+<header id="top" class="pane">
+  <div id="brand"><img class="logo" src="../autopilot-logo-trimmed.png" alt="Autopilot" width="319" height="44"><span class="t">F1 Skymark</span><span class="s">LOCATION INTELLIGENCE · SECTOR 6 · NOIDA</span></div>
+  <nav id="tabs" aria-label="Sections"></nav>
+  <button id="signout" type="button" aria-label="Sign out"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3"/><path d="M10 17l-5-5 5-5"/><path d="M5 12h11"/></svg><span>Sign out</span></button>
+</header>
+
+<aside id="board" class="pane" aria-label="Around F1 Skymark">
+  <div class="bhead">
+    <div class="big">Around the property</div>
+    <div class="note" id="b-sub"></div>
+    <div class="ctrl" id="filters"></div>
+  </div>
+  <div id="list" role="list"></div>
+</aside>
+
+<section id="panel" class="pane" aria-live="polite">
+  <div class="phead" id="p-head"></div>
+  <div class="pbody" id="p-body"></div>
+</section>
+
+<div id="layers" class="pane" aria-label="Map layers"></div>
+<div id="lightbox"><img alt=""/></div>
+
+<script src="../atlas-cms.js?v=cms1"></script>
+<script>
+if (window.AtlasCMS) AtlasCMS.boot("noida-skymark", { app: "./app.js?v=sky1" });
+else { var s = document.createElement("script"); s.src = "./app.js?v=sky1"; document.body.appendChild(s); }
+</script>
+</body>
+</html>

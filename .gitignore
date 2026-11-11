@@ -15,6 +15,11 @@ trim-*.ps1
 *.mov
 *.MOV
 
+# F1 Skymark twin: the audit preview and the stills from Blender commit with the page
+!noida-skymark/**/*.png
+!noida-skymark/**/*.jpg
+*.blend1
+
 
 # OS / editor
 .DS_Store

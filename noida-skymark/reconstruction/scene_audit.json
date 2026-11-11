@@ -1,0 +1,30 @@
+{
+  "source_blend": null,
+  "existing_model_found": false,
+  "finding": "No existing .blend for this building was found: not in the repository, its git history, or the build container. The audit below is of the empty starting scene, and the reconstruction starts from it. If a .blend exists elsewhere, re-run with --blend and the reconstruction is added beside it without touching it.",
+  "blender_version": "5.2.3 LTS",
+  "unit_system": "METRIC",
+  "scale_length": 1.0,
+  "up_axis": "Z (Blender)",
+  "collections": {
+    "name": "Scene Collection",
+    "objects": [],
+    "children": []
+  },
+  "object_count": 0,
+  "mesh_count": 0,
+  "main_building_mass": null,
+  "facade_geometry_detected": [],
+  "cameras": [],
+  "render": {
+    "engine": "BLENDER_EEVEE",
+    "resolution": [
+      1920,
+      1080
+    ],
+    "resolution_percentage": 100,
+    "fps": 24
+  },
+  "scale_and_orientation": "No geometry to measure.",
+  "backup": "exports/fm_skymark_base_backup.blend"
+}
