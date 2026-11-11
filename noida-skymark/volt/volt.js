@@ -524,7 +524,7 @@ entTag.onclick = (e) => { e.stopPropagation(); entranceView(); };
 $('#labels').appendChild(entTag);
 function entranceView() {
   lastInput = performance.now() + 20000; controls.smoothTime = ST(1.1);
-  const p = W(ENTR[0] + OUT[0] * 19 + OUT[1] * 5, ENTR[1] + OUT[1] * 19 - OUT[0] * 5, GROUND + 1.8), t = W(ENTR[0], ENTR[1], GROUND + 3.2);
+  const p = W(ENTR[0] + OUT[0] * 22 + OUT[1] * 6, ENTR[1] + OUT[1] * 22 - OUT[0] * 6, GROUND + 6), t = W(ENTR[0], ENTR[1], GROUND + 2.6);
   controls.setLookAt(p.x, p.y, p.z, t.x, t.y, t.z, true).then(() => { controls.smoothTime = ST(.32); });
 }
 let hoverLv = -1;
@@ -1067,12 +1067,12 @@ function tourPose(r) {
 }
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 const fade = (on) => { $('#fade').classList.toggle('on', on); return sleep(on ? 520 : 50); };
-const OUT = (() => { const d = [ENTR[0] - SF.plate_centroid[0], ENTR[1] - SF.plate_centroid[1]], l = Math.hypot(...d) || 1; return [d[0] / l, d[1] / l]; })();
+const OUT = bearingToPlan(146);                    // straight out of the street front
 function buildStops() {
   const lobby = nearestFree(LX, LY + 3.4), rec = ROOMS.find(x => x.name === 'Reception');
   const stops = [
-    { cap: 'Skymark F-1, Sector 6, Noida', sub: 'Plot F-01 · G+4 · the street front', ext: true, p: W(ENTR[0] + OUT[0] * 44 + OUT[1] * 16, ENTR[1] + OUT[1] * 44 - OUT[0] * 16, GROUND + 1.7), t: W(SF.plate_centroid[0], SF.plate_centroid[1], GROUND + 8) },
-    { cap: 'The way in', sub: 'The entrance porch on the street front, as modelled in the twin', ext: true, p: W(ENTR[0] + OUT[0] * 10, ENTR[1] + OUT[1] * 10, GROUND + 1.6), t: W(ENTR[0], ENTR[1], GROUND + 2) },
+    { cap: 'Skymark F-1, Sector 6, Noida', sub: 'Plot F-01 · G+4 · the street front', ext: true, p: W(ENTR[0] + OUT[0] * 46 + OUT[1] * 14, ENTR[1] + OUT[1] * 46 - OUT[0] * 14, GROUND + 4.5), t: W(SF.plate_centroid[0], SF.plate_centroid[1], GROUND + 9) },
+    { cap: 'The way in', sub: 'Through the gate to the entrance porch on the street front', ext: true, p: W(ENTR[0] + OUT[0] * 5.6, ENTR[1] + OUT[1] * 5.6, GROUND + 1.65), t: W(ENTR[0] - OUT[0] * 2, ENTR[1] - OUT[1] * 2, GROUND + 2.5) },
     { cap: 'Lift lobby, first floor', sub: 'Out of the lift, Volt\'s reception is ahead', fade: true, p: W(lobby[0], lobby[1], EYE), t: W(rec.cx, rec.cy, 1.2) },
   ];
   for (const n of TOUR) { const r = ROOMS.find(x => x.name === n); if (r) { const tp = tourPose(r); stops.push({ r, cap: r.name, p: tp.p, t: tp.t }); } }
