@@ -32,7 +32,7 @@ OVERRIDE = {
     'Control room / command centre': (1.0, 15.3, 3.6, 20.4, 18, 1.5, 0.95),   # deck page 16: across the desk rows from the front corner
     'Cafeteria': (4.45, 23.8, 1.5, 26.7, 18, 1.5, 0.95),                   # deck page 21: the tables, the high counter and the windows
     'Lounge area (north)': (32.9, 24.9, 30.8, 27.0, 20, 1.45, 0.8),        # deck page 13: the sofa against the wall, the armchair beside it
-    'Collab area 01': (21.7, 14.2, 19.7, 11.0, 18, 1.45, 0.8),             # deck page 18: the sofa group with the phone booths behind
+    'Collab area 01': (21.2, 11.3, 19.3, 13.6, 20, 1.45, 0.8),             # deck page 18: the sofa group, seen from the phone booth side
     'Reception': (30.4, 8.2, 26.5, 6.3, 18, 1.5, 0.95),                    # no deck page: the desk as you see it coming in
     'Calling room': (12.95, 14.2, 12.9, 10.8, 18, 1.5, 0.95),              # no deck page: down the aisle between the two desk rows
     'Finance room': (21.75, 25.45, 25.6, 26.7, 18, 1.5, 0.95),             # no deck page: from the door, along both desk rows

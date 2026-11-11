@@ -33,7 +33,10 @@ const GROUP_COL = { W: 0xd6452b, M: 0x2b62d6, C: 0x1f9a55, L: 0xd68a1f, O: 0x8a8
 const DECK = { 'Open workstations': [4, 5, 6, 7], 'Sales office': [8, 9], 'Director cabin 01': [10, 11], 'Director cabin 02': [12],
   'Lounge area (north)': [13], '18 seater conference room': [14, 15], 'Control room / command centre': [16, 17],
   'Collab area 01': [18], 'Collab area 02': [19], 'Phone booths PH-05 to 07': [20], 'Cafeteria': [21, 22] };
-const OURS = { '18 seater conference room': ['/media/noida-skymark/volt/renders/conf18.jpg'], 'Open workstations': ['/media/noida-skymark/volt/renders/open-workstations.jpg'] };   // rendered in Blender Cycles from the room's layout
+const RD = '/media/noida-skymark/volt/renders/';
+const OURS = { '18 seater conference room': [RD + '18-seater-conference-room.jpg', RD + 'conf18.jpg'], 'Open workstations': [RD + 'open-workstations.jpg'], 'Cafeteria': [RD + 'cafeteria.jpg'] };   // Blender Cycles base, finished with Higgsfield
+try { const rj = await (await fetch(RD + 'renders.json', { cache: 'no-cache' })).json(); const m = rj.rooms || rj; for (const [k, v] of Object.entries(m)) if (Array.isArray(v) && v.length) OURS[k] = v.map(f => f.startsWith('/') ? f : RD + f); } catch (e) { /* no list yet: the static one above stands */ }
+Object.values(OURS).flat().forEach(u => { const i = new Image(); i.src = u; });                // warm the cache so cards never flash empty
 const TOUR = ['Reception', 'Open workstations', 'Control room / command centre', 'Sales office', 'Calling room', 'Cafeteria',
   '18 seater conference room', 'Finance room', 'Lounge area (north)', 'Director cabin 01', 'Collab area 01'];
 
@@ -822,7 +825,7 @@ function setFocus(r) {
   $('#cmeta').textContent = `${(r.area).toFixed(0)} m² (${(r.area * 10.764).toFixed(0)} sq ft) · floor: ${r.floor}`;
   $('#cseats').innerHTML = Object.entries(r.by).map(([g, n]) => `<span style="color:#${GROUP_COL[g].toString(16).padStart(6, '0')}">${n} ${GN[g]}</span>`).join('') || '<span>No seats</span>';
   const imgs = roomImages(r), img = $('#cimg');
-  if (imgs.length) { img.style.display = ''; img.style.backgroundImage = `url(${imgs[0]})`;
+  if (imgs.length) { img.style.display = ''; const want = imgs[0]; img.dataset.want = want; const pre = new Image(); pre.onload = () => { if (img.dataset.want === want) img.style.backgroundImage = `url(${want})`; }; pre.src = want; if (pre.complete) img.style.backgroundImage = `url(${want})`;
     img.querySelector('.tag').textContent = OURS[r.name] ? 'Photoreal render' : 'Design render'; $('#ccnt').textContent = imgs.length > 1 ? `1 / ${imgs.length}` : ''; }
   else img.style.display = 'none';
   card.classList.add('show');
@@ -901,13 +904,16 @@ const grid = (() => {
   L.columns.forEach(cc => { poly(cc); g.fill(); });
   g.strokeStyle = '#000'; g.lineWidth = .12 * GRID;
   L.glass.forEach(([x0, y0, x1, y1]) => { g.beginPath(); g.moveTo(...T([x0, y0])); g.lineTo(...T([x1, y1])); g.stroke(); });
+  g.fillStyle = '#fff';                                                         // every door is an opening you can walk through (the leaf is drawn separately)
+  L.doors.forEach(d => { const ca = Math.cos(d.a), sa = Math.sin(d.a), hw = Math.max(d.w, .9) / 2 - .02, hd = .45; poly([[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([u, v]) => [d.c[0] + ca * u * hw - sa * v * hd, d.c[1] + sa * u * hw + ca * v * hd])); g.fill(); });
+  g.fillStyle = '#000';
   L.desks.forEach(d => { const ca = Math.cos(d.a), sa = Math.sin(d.a); poly([[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([u, v]) => [d.c[0] + ca * u * d.w / 2 - sa * v * d.d / 2, d.c[1] + sa * u * d.w / 2 + ca * v * d.d / 2])); g.fill(); });
   L.tables.forEach(t => { if (t.circle) { const [a, b] = T(t.circle); g.beginPath(); g.arc(a, b, t.circle[2] * GRID, 0, 7); g.fill(); } else { poly(t.poly); g.fill(); } });
   L.planters.forEach(p => { const ca = Math.cos(p.a), sa = Math.sin(p.a); poly([[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([u, v]) => [p.c[0] + ca * u * p.w / 2 - sa * v * p.d / 2, p.c[1] + sa * u * p.w / 2 + ca * v * p.d / 2])); g.fill(); });
   const data = g.getImageData(0, 0, c.width, c.height).data;
   return { c, T, free(x, y) { const [a, b] = T([x, y]); const i = ((b | 0) * c.width + (a | 0)) * 4; return a >= 0 && b >= 0 && a < c.width && b < c.height && data[i] > 128; } };
 })();
-const R_BODY = .24;
+const R_BODY = .16;
 const freeAt = (x, y) => { for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4; if (!grid.free(x + Math.cos(a) * R_BODY, y + Math.sin(a) * R_BODY)) return false; } return grid.free(x, y); };
 function clearance(x, y) { if (!freeAt(x, y)) return 0; let r = .3; for (; r < 2; r += .1) { let ok = true; for (let k = 0; k < 12 && ok; k++) { const a = k * Math.PI / 6; ok = grid.free(x + Math.cos(a) * r, y + Math.sin(a) * r); } if (!ok) break; } return r; }
 function clearSpot(r, bias = [0, 0]) {
@@ -919,7 +925,33 @@ function clearSpot(r, bias = [0, 0]) {
 }
 function nearestFree(x, y) { if (freeAt(x, y)) return [x, y]; for (let r = .1; r < 4; r += .1) for (let k = 0; k < 16; k++) { const a = k * Math.PI / 8, X = x + Math.cos(a) * r, Y = y + Math.sin(a) * r; if (freeAt(X, Y)) return [X, Y]; } return [x, y]; }
 const EYE = 1.55;
-const walk = { x: 0, y: 0, yaw: 0, pitch: -.05, keys: {}, glide: null, joy: [0, 0] };
+const walk = { x: 0, y: 0, yaw: 0, pitch: -.05, keys: {}, glide: null, path: null, joy: [0, 0] };
+// ---------------------------------------------------------------- path-finding: tap anywhere and the walker goes round the walls
+const PG = { cs: .1, x0: Math.min(...PX) - 1, y0: Math.min(...PY) - 1 }; PG.nx = Math.ceil((Math.max(...PX) - PG.x0 + 1) / PG.cs); PG.ny = Math.ceil((Math.max(...PY) - PG.y0 + 1) / PG.cs);
+const pgFree = new Uint8Array(PG.nx * PG.ny);                                  // 0 unknown, 1 free, 2 blocked (the scene is static, so this is kept)
+const cellOf = (x, y) => [Math.round((x - PG.x0) / PG.cs), Math.round((y - PG.y0) / PG.cs)];
+const cellXY = (i, j) => [PG.x0 + i * PG.cs, PG.y0 + j * PG.cs];
+function cellFree(i, j) { if (i < 0 || j < 0 || i >= PG.nx || j >= PG.ny) return false; const k = j * PG.nx + i; if (!pgFree[k]) { const [x, y] = cellXY(i, j); pgFree[k] = freeAt(x, y) ? 1 : 2; } return pgFree[k] === 1; }
+function flood(x, y) {                                                          // distance from the walker to every reachable cell (8 neighbours)
+  const par = new Int32Array(PG.nx * PG.ny).fill(-1), dist = new Float32Array(PG.nx * PG.ny).fill(-1);
+  let [ci, cj] = cellOf(x, y); if (!cellFree(ci, cj)) { const [fx, fy] = nearestFree(x, y); [ci, cj] = cellOf(fx, fy); }
+  const q = [ci + cj * PG.nx]; dist[q[0]] = 0; par[q[0]] = q[0];
+  for (let h = 0; h < q.length; h++) { const k = q[h], i = k % PG.nx, j = (k / PG.nx) | 0;
+    for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++) { if (!a && !b) continue; const ni = i + a, nj = j + b, nk = nj * PG.nx + ni;
+      if (dist[nk] >= 0 || !cellFree(ni, nj)) continue; if (a && b && !(cellFree(i + a, j) && cellFree(i, j + b))) continue;   // no cutting corners
+      dist[nk] = dist[k] + (a && b ? 1.414 : 1) * PG.cs; par[nk] = k; q.push(nk); } }
+  return { par, dist };
+}
+function pathTo(F, x, y) { let [i, j] = cellOf(x, y); let k = j * PG.nx + i; if (!(F.dist[k] >= 0)) { const [fx, fy] = nearestFree(x, y); [i, j] = cellOf(fx, fy); k = j * PG.nx + i; if (!(F.dist[k] >= 0)) return null; }
+  const pts = []; for (let g = 0; g < 5000; g++) { pts.push(cellXY(k % PG.nx, (k / PG.nx) | 0)); if (F.par[k] === k) break; k = F.par[k]; } return pts.reverse(); }
+const lineFree = (a, b) => { const d = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.ceil(d / .1); for (let t = 1; t <= n; t++) if (!freeAt(a[0] + (b[0] - a[0]) * t / n, a[1] + (b[1] - a[1]) * t / n)) return false; return true; };
+function smooth(pts) { if (!pts || pts.length < 3) return pts; const out = [pts[0]]; let a = 0; while (a < pts.length - 1) { let b = pts.length - 1; while (b > a + 1 && !lineFree(pts[a], pts[b])) b--; out.push(pts[b]); a = b; } return out; }
+function goTo(x, y) {
+  const [tx, ty] = nearestFree(x, y); const pts = smooth(pathTo(flood(walk.x, walk.y), tx, ty));
+  if (!pts || pts.length < 2) { walk.glide = { x: tx, y: ty }; walk.path = null; return !!pts; }
+  const wp = pts.slice(1); wp[wp.length - 1] = [tx, ty]; const f = wp.shift(); walk.glide = { x: f[0], y: f[1] }; walk.path = wp; return true;
+}
+
 
 // ---------------------------------------------------------------- live CAD locator: the drawing itself, with you on it
 // The blueprint is drawn from the DWG's own lines (cad/blueprint.py). The marker is the walker's real position in the
@@ -983,7 +1015,7 @@ function locToScreen(x, y) { const v = loc.view, dx = (x - v.cx) * v.k, dy = -(y
 function screenToLoc(px, py) { const v = loc.view, dx = px - v.cw / 2, dy = py - v.chh / 2, c = Math.cos(-v.rot), sn = Math.sin(-v.rot); return [v.cx + (c * dx - sn * dy) / v.k, v.cy - (sn * dx + c * dy) / v.k]; }
 locC.onpointerdown = (e) => {
   if (!loc.view || mode !== 'walk') return; const r = locC.getBoundingClientRect(), [x, y] = screenToLoc(e.clientX - r.left, e.clientY - r.top);
-  const [fx, fy] = nearestFree(x, y); walk.glide = { x: fx, y: fy }; e.stopPropagation();
+  goTo(x, y); e.stopPropagation();
 };
 $('#locsize').onclick = () => { loc.big = !loc.big; $('#loc').classList.toggle('big', loc.big); needRender = true; };
 $('#locmode').onclick = () => { loc.headUp = !loc.headUp; $('#locmode').textContent = loc.headUp ? 'Heading up' : 'Plan up'; needRender = true; };
@@ -1027,7 +1059,7 @@ async function enterWalk(r) {
   const [x, y] = toPlan(tp.p), [tx, ty] = toPlan(tp.t);
   const jump = walk.active;                       // already inside: cut with a short fade instead of flying through walls
   if (jump) await fade(true);
-  walk.active = false; walk.glide = null;
+  walk.active = false; walk.glide = null; walk.path = null;
   walk.x = x; walk.y = y; walk.yaw = Math.atan2(ty - y, tx - x); walk.pitch = -.07;
   setMode('walk'); setFocus(start);
   const { p, t } = walkPose();
@@ -1064,7 +1096,7 @@ canvas.addEventListener('pointerup', (e) => {
   if (!click) return;
   if (stage === 'building') { if (pickLevel(e) === 1) enterVolt(); return; }
   const hit = pickFloor(e); if (!hit) return;
-  if (walk.active) { const [fx, fy] = nearestFree(...hit); walk.glide = { x: fx, y: fy }; }
+  if (walk.active) goTo(hit[0], hit[1]);
   else if (mode === 'orbit' && stage === 'floor') { const r = roomAt(...hit); if (r) enterWalk(r); }
 });
 canvas.addEventListener('dblclick', (e) => { if (mode === 'orbit' && stage === 'floor') { const hit = pickFloor(e); const r = hit && roomAt(...hit); if (r) enterWalk(r); } });
@@ -1107,14 +1139,15 @@ function stepWalk(dt) {
   let moving = false;
   if (walk.glide) {
     const dx = walk.glide.x - walk.x, dy = walk.glide.y - walk.y, d = Math.hypot(dx, dy);
-    if (d < .05) walk.glide = null;
-    else { const sp = Math.min(d, Math.max(1.2, d * 2.2) * dt); tryMove(dx / d * sp, dy / d * sp) || (walk.glide = null);
+    const more = walk.path && walk.path.length;
+    if (d < (more ? .12 : .05)) { const n = more ? walk.path.shift() : null; walk.glide = n ? { x: n[0], y: n[1] } : null; if (!n) walk.path = null; }
+    else { const sp = Math.min(d, (more ? 2.2 : Math.max(1.2, d * 2.2)) * dt); tryMove(dx / d * sp, dy / d * sp) || (walk.glide = null, walk.path = null);
       const want = Math.atan2(dy, dx); let da = want - walk.yaw; da = Math.atan2(Math.sin(da), Math.cos(da)); walk.yaw += da * Math.min(1, dt * 3); moving = true; }
   }
   if (f || s) {
     const sp = (k.ShiftLeft ? 3.2 : 1.9) * dt, l = Math.hypot(f, s); f /= Math.max(1, l); s /= Math.max(1, l);
     const dx = (Math.cos(walk.yaw) * f + Math.sin(walk.yaw) * s) * sp, dy = (Math.sin(walk.yaw) * f - Math.cos(walk.yaw) * s) * sp;
-    tryMove(dx, dy); moving = true; walk.glide = null;
+    tryMove(dx, dy); moving = true; walk.glide = null; walk.path = null;
   }
   if (k.ArrowLeft || k.ArrowRight) moving = true;
   return moving;
@@ -1125,6 +1158,22 @@ function tryMove(dx, dy) {
   if (freeAt(walk.x, walk.y + dy)) { walk.y += dy; return true; }
   return false;
 }
+
+
+// ---------------------------------------------------------------- "where to next": arrows to the nearest rooms, turning as you turn
+const wayEl = document.getElementById('way'); let wayItems = [], wayAt = [1e9, 1e9, null];
+function wayUpdate(force) {
+  if (!wayEl) return; if (!(mode === 'walk' && walk.active)) { wayEl.classList.remove('show'); return; }
+  const here = roomAt(walk.x, walk.y);
+  if (!force && Math.hypot(walk.x - wayAt[0], walk.y - wayAt[1]) < .6 && here === wayAt[2]) return;
+  wayAt = [walk.x, walk.y, here]; const F = flood(walk.x, walk.y), cand = [];
+  for (const r of RAIL) { if (r === here) continue; const [sx, sy] = clearSpot(r); const pts = pathTo(F, sx, sy); if (!pts) continue; cand.push({ r, sx, sy, pts, d: F.dist[cellOf(sx, sy)[1] * PG.nx + cellOf(sx, sy)[0]] }); }
+  cand.sort((a, b) => a.d - b.d); wayItems = cand.slice(0, 4).map(c => { let k = 0, acc = 0; while (k < c.pts.length - 1 && acc < 1.5) { acc += Math.hypot(c.pts[k + 1][0] - c.pts[k][0], c.pts[k + 1][1] - c.pts[k][1]); k++; } const t = c.pts[k]; return { ...c, bx: t[0] - walk.x, by: t[1] - walk.y }; });
+  wayEl.innerHTML = '<small>Where to next</small>';
+  wayItems.forEach(it => { const b = document.createElement('button'); b.innerHTML = `<svg viewBox="0 0 24 24"><path d="M12 3l7 12h-5v6h-4v-6H5z"/></svg><span>${it.r.name.replace(' / command centre', '')}</span><em>${Math.max(1, Math.round(it.d))} m</em>`; b.onclick = () => { goTo(it.sx, it.sy); toast('Walking to ' + it.r.name); }; it.el = b; wayEl.appendChild(b); });
+  wayEl.classList.add('show'); wayTurn();
+}
+function wayTurn() { for (const it of wayItems) { const a = Math.atan2(it.by, it.bx) - walk.yaw, d = Math.atan2(Math.sin(a), Math.cos(a)) * 180 / Math.PI; it.el.firstChild.style.transform = `rotate(${-d}deg)`; it.el.dataset.side = Math.abs(d) < 25 ? 'ahead' : Math.abs(d) > 150 ? 'behind' : d > 0 ? 'left' : 'right'; } }
 
 // ---------------------------------------------------------------- guided tour
 let tourI = -1, tourTimer = null;
@@ -1227,7 +1276,7 @@ function setMode(m, toOverview) {
   if (mode === 'walk' && m !== 'walk') exitWalk();
   if (mode === 'elev' && m !== 'elev') { renderer.clippingPlanes = []; ortCtl.enabled = false; controls.enabled = true; setShell(stage === 'building' ? 1 : 0, true); }
   mode = m;
-  document.body.dataset.mode = m;
+  document.body.dataset.mode = m; if (m !== 'walk') wayUpdate();
   $('#walkui').classList.toggle('show', m === 'walk' || m === 'tour');
   if (m === 'walk' || m === 'tour') { loc.trail = []; loc.lastRoom = null; clearTimeout(hintT); $('#hint').classList.remove('gone'); hintT = setTimeout(() => $('#hint').classList.add('gone'), 6000); }
   $('#elev').classList.toggle('show', m === 'elev');
@@ -1279,7 +1328,7 @@ function frame() {
   if (walk.active) {
     if (stepWalk(dt)) moved = true;
     const { p, t } = walkPose(); camera.position.copy(p); camera.lookAt(t);
-    if ((frameN++ & 15) === 0) { const rr = roomAt(walk.x, walk.y); if (rr && rr !== focus) setFocus(rr); }
+    if ((frameN++ & 15) === 0) { const rr = roomAt(walk.x, walk.y); if (rr && rr !== focus) setFocus(rr); wayUpdate(); } if ((frameN & 3) === 0) wayTurn();
     if (needRender) moved = true;
   } else if (mode === 'elev') { if (ortCtl.update(dt)) moved = true; }
   else if (controls.update(dt)) moved = true;
@@ -1320,7 +1369,7 @@ const CMD = {
     if (walk.active) { walk.yaw -= dx; walk.pitch = THREE.MathUtils.clamp(walk.pitch - dy, -1.1, 1.0); } else if (mode === 'orbit') { lastInput = performance.now(); controls.rotate(-dx, -dy, true); }
     needRender = true; },
   zoom: (a) => { if (mode === 'orbit') { lastInput = performance.now(); controls.dolly(clampN(a.d) * controls.distance * .35, true); } },
-  goto: (a) => { if (stage !== 'floor') return; const [fx, fy] = nearestFree(+a.x, +a.y); if (walk.active) walk.glide = { x: fx, y: fy }; else { const r = roomAt(fx, fy); if (r) enterWalk(r); } },
+  goto: (a) => { if (stage !== 'floor') return; const [fx, fy] = nearestFree(+a.x, +a.y); if (walk.active) goTo(fx, fy); else { const r = roomAt(fx, fy); if (r) enterWalk(r); } },
   tod: (a) => { const t = clampN(a.t, 0, 1); $('#tod').value = Math.round(t * 1000); setTOD(t); },
   plan: () => $('#b-plan').click(), seats: () => $('#b-seats').click(), walls: () => $('#b-walls').click(),
   elev: (a) => { stopTour(); if (a.kind === 'section' || a.kind === 'facade') elevKind = a.kind; if (FACADES[a.dir] !== undefined) elevDir = a.dir;
@@ -1372,4 +1421,4 @@ function snap(name, fov = 62) {
 }
 presenter.ready();
 if (/[?&]present\b/.test(location.search) && !presenter.on) presenter.toggle();
-window.__volt = { enterVolt, entranceView, presenter, runCommand, remoteState, snap, POIS, showPlace, entranceView, L, ROOMS, controls, flyToRoom, overview, enterWalk, setMode, startTour, stopTour, walk, enterFloor, toBuilding, setTOD, get stage() { return stage; }, get mode() { return mode; }, render: () => { needRender = true; } };
+window.__volt = { RAIL, flood, pathTo, clearSpot, cellOf, PG, goTo, enterVolt, entranceView, presenter, runCommand, remoteState, snap, POIS, showPlace, entranceView, L, ROOMS, controls, flyToRoom, overview, enterWalk, setMode, startTour, stopTour, walk, enterFloor, toBuilding, setTOD, get stage() { return stage; }, get mode() { return mode; }, render: () => { needRender = true; } };
