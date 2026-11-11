@@ -52,3 +52,4 @@ media/_cms-dev/
 
 # Facade textures painted at build time by scripts/world/textures.py
 noida-skymark/reconstruction/.tex/
+__pycache__/
