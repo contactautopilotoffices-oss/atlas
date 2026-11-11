@@ -1,0 +1,68 @@
+{
+ "about": "Volt, first floor, Skymark F-1: one still per room. Each is a Blender Cycles render built from the CAD layout (base/), then a Higgsfield finishing pass (nano_banana_2_1) that was checked against the base for added or missing walls, glass, doors and furniture. Positions and counts are from the CAD. Heights, finishes, the small things on desks and the window sill and head heights are assumed. conf18.jpg is an older render from another script and is not listed here. Not rendered: Director cabin 01 (its desk sits in cabin 02 in the layout), Collab area 02 (a sealed room with no lights in the layout) and Reception (no ceiling lights in the layout, so it renders dark).",
+ "rooms": {
+  "Open workstations": {
+   "file": "open-workstations.jpg",
+   "base": "base/open-workstations.jpg",
+   "finish": "higgsfield",
+   "deck_page": 4,
+   "notes": "Third AI attempt kept. The first turned the plants into ferns and dropped the planters' dark tray rims, so it was redone with a firmer prompt. Monitor screens are shown switched off. Nothing structural changed."
+  },
+  "Sales office": {
+   "file": "sales-office.jpg",
+   "base": "base/sales-office.jpg",
+   "finish": "higgsfield",
+   "deck_page": 8,
+   "notes": "Monitor screens are shown switched off. Nothing structural changed."
+  },
+  "18 seater conference room": {
+   "file": "18-seater-conference-room.jpg",
+   "base": "base/18-seater-conference-room.jpg",
+   "finish": "higgsfield",
+   "deck_page": 14,
+   "notes": ""
+  },
+  "Control room / command centre": {
+   "file": "control-room-command-centre.jpg",
+   "base": "base/control-room-command-centre.jpg",
+   "finish": "higgsfield",
+   "deck_page": 16,
+   "notes": "The desk bases are oak panels in the final (the deck's finish); the Blender base has them charcoal. Nothing structural changed."
+  },
+  "Cafeteria": {
+   "file": "cafeteria.jpg",
+   "base": "base/cafeteria.jpg",
+   "finish": "higgsfield",
+   "deck_page": 21,
+   "notes": ""
+  },
+  "Lounge area (north)": {
+   "file": "lounge-area-north.jpg",
+   "base": "base/lounge-area-north.jpg",
+   "finish": "higgsfield",
+   "deck_page": 13,
+   "notes": "The sky outside is burnt out to white. Nothing structural changed."
+  },
+  "Collab area 01": {
+   "file": "collab-area-01.jpg",
+   "base": "base/collab-area-01.jpg",
+   "finish": "higgsfield",
+   "deck_page": 18,
+   "notes": "The potted plant became a small palm in a woven pot. Nothing structural changed."
+  },
+  "Calling room": {
+   "file": "calling-room.jpg",
+   "base": "base/calling-room.jpg",
+   "finish": "higgsfield",
+   "deck_page": null,
+   "notes": "No deck page: the approved Open workstations picture was the style reference. Monitor screens are shown switched off."
+  },
+  "Finance room": {
+   "file": "finance-room.jpg",
+   "base": "base/finance-room.jpg",
+   "finish": "higgsfield",
+   "deck_page": null,
+   "notes": "No deck page: the approved Open workstations picture was the style reference. Monitor screens are shown switched off."
+  }
+ }
+}

@@ -36,7 +36,7 @@ const DECK = { 'Open workstations': [4, 5, 6, 7], 'Sales office': [8, 9], 'Direc
 const RD = '/media/noida-skymark/volt/renders/';
 const OURS = { '18 seater conference room': [RD + '18-seater-conference-room.jpg', RD + 'conf18.jpg'], 'Open workstations': [RD + 'open-workstations.jpg'], 'Cafeteria': [RD + 'cafeteria.jpg'],
   'Control room / command centre': [RD + 'control-room-command-centre.jpg'], 'Finance room': [RD + 'finance-room.jpg'], 'Lounge area (north)': [RD + 'lounge-area-north.jpg'], 'Sales office': [RD + 'sales-office.jpg'] };   // Blender Cycles base, finished with Higgsfield
-try { const rj = await (await fetch(RD + 'renders.json', { cache: 'no-cache' })).json(); const m = rj.rooms || rj; for (const [k, v] of Object.entries(m)) if (Array.isArray(v) && v.length) OURS[k] = v.map(f => f.startsWith('/') ? f : RD + f); } catch (e) { /* no list yet: the static one above stands */ }
+try { const rj = await (await fetch(RD + 'renders.json', { cache: 'no-cache' })).json(); for (const [k, v] of Object.entries(rj.rooms || rj)) { const f = typeof v === 'string' ? v : Array.isArray(v) ? v[0] : v && v.file; if (!f) continue; const u = f.startsWith('/') ? f : RD + f; OURS[k] = [u].concat((OURS[k] || []).filter(x => x !== u)); } } catch (e) { /* no list: the static one above stands */ }
 Object.values(OURS).flat().forEach(u => { const i = new Image(); i.src = u; });                // warm the cache so cards never flash empty
 const TOUR = ['Reception', 'Open workstations', 'Control room / command centre', 'Sales office', 'Calling room', 'Cafeteria',
   '18 seater conference room', 'Finance room', 'Lounge area (north)', 'Director cabin 01', 'Collab area 01'];
