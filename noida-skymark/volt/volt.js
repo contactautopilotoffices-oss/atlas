@@ -12,6 +12,8 @@ import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 
 CameraControls.install({ THREE });
 const $ = (s) => document.querySelector(s);
@@ -42,7 +44,7 @@ renderer.setPixelRatio(DPR);
 renderer.setSize(innerWidth, innerHeight, false);
 renderer.toneMapping = THREE.AgXToneMapping; renderer.toneMappingExposure = 1.18;
 renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap; renderer.shadowMap.autoUpdate = false;
-renderer.localClippingEnabled = false;
+renderer.localClippingEnabled = true;
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0xe7e3dc);
 const pmrem = new THREE.PMREMGenerator(renderer);
@@ -356,75 +358,63 @@ const seatDots = (() => {
   if (glassD.length) { const m = add(mergeGeometries(glassD), mat.glass, { cast: false, parent: wallsG }); m.renderOrder = 5; }
 }
 
-// ---------------------------------------------------------------- the building: the CAD's first-floor outline extruded as G+4
+// ---------------------------------------------------------------- the building: the existing Skymark twin, with Volt's CAD floor fitted inside it
+// noida-skymark/volt/cad/fit_twin.py fits the CAD's first-floor outline to the real footprint the twin stands on
+// (Overture Maps, IoU about 0.89) and stores the turn and shift as L.site_fit.
 const FTF = L.storeys.floor_to_floor, GROUND = -FTF, ROOF = 4 * FTF;
+const SF = L.site_fit, D2R = Math.PI / 180, RHO = SF.rot_deg * D2R, PHI = SF.twin_phi_deg * D2R;
+const enuToPlan = ([ex, ey]) => { const x = ex - SF.footprint_centroid[0] - SF.dx, y = ey - SF.footprint_centroid[1] - SF.dy, c = Math.cos(-RHO), s = Math.sin(-RHO);
+  return [c * x - s * y + SF.plate_centroid[0], s * x + c * y + SF.plate_centroid[1]]; };
+const bearingToPlan = (b) => { const e = [Math.sin(b * D2R), Math.cos(b * D2R)], c = Math.cos(-RHO), s = Math.sin(-RHO); return [c * e[0] - s * e[1], s * e[0] + c * e[1]]; };
 const bldg = new THREE.Group(); scene.add(bldg);
-const upper = new THREE.Group(), lvl1 = new THREE.Group(), lower = new THREE.Group(); bldg.add(upper, lvl1, lower);
+const twinFrame = new THREE.Group(); bldg.add(twinFrame);
+{ const o = enuToPlan(SF.twin_C); twinFrame.position.copy(W(o[0], o[1], GROUND)); twinFrame.rotation.y = PHI - RHO; }
+const CUTY = -.04;                                     // the twin is opened just under Volt's floor
+const cutLow = new THREE.Plane(new THREE.Vector3(0, -1, 0), CUTY), cutHigh = new THREE.Plane(new THREE.Vector3(0, 1, 0), -CUTY);
+const gltf = new GLTFLoader(); gltf.setMeshoptDecoder(MeshoptDecoder);
+$('#load b').textContent = 'Loading the Skymark twin…';
+const twinGLTF = await gltf.loadAsync('/noida-skymark/exports/fm_skymark_atlas.glb');
+const highMats = [];
+function prepTwin(rootObj, plane, list) {
+  rootObj.traverse(o => {
+    if (!o.isMesh) return; o.castShadow = true; o.receiveShadow = true;
+    const ms = (Array.isArray(o.material) ? o.material : [o.material]).map(m => { const c = m.clone(); c.clippingPlanes = [plane];
+      c.userData.o = c.opacity; c.userData.t = c.transparent; c.userData.dw = c.depthWrite; list && list.push(c); return c; });
+    o.material = Array.isArray(o.material) ? ms : ms[0];
+  });
+}
+const twinLow = twinGLTF.scene, twinHigh = twinGLTF.scene.clone(true);
+prepTwin(twinLow, cutLow); prepTwin(twinHigh, cutHigh, highMats);
+twinFrame.add(twinLow, twinHigh);
+const twinInteriorsLow = twinLow.getObjectByName('Interiors');
+// the 500 m round it, in the same frame (streets, blocks, trees): loaded after the first frame
+gltf.loadAsync('/noida-skymark/exports/fm_skymark_context_500m.glb').then(g => {
+  g.scene.traverse(o => { if (o.isMesh) { o.receiveShadow = true; o.castShadow = false; } }); twinFrame.add(g.scene); needRender = true; shadowsDirty = true;
+}).catch(e => console.warn('[volt] context', e && e.message));
+// where the twin's entrance is (the porch modelled on the street front), in plan coordinates
+const ENTR = (() => {
+  const box = new THREE.Box3(); let n = 0; twinFrame.updateMatrixWorld(true);
+  twinLow.traverse(o => { if (o.isMesh && /entrance|porch|canopy|door/i.test(o.name)) { box.union(new THREE.Box3().setFromObject(o)); n++; } });
+  const c = n ? box.getCenter(new THREE.Vector3()) : W(SF.plate_centroid[0], SF.plate_centroid[1]);
+  return toPlan(c);
+})();
+// first-floor slab over the whole plate (under Volt and the part marked OCCUPIED)
 const plateShape = shapeFrom(L.plate);
 const PX = L.plate.map(p => p[0]), PY = L.plate.map(p => p[1]);
 const PB = [Math.min(...PX), Math.min(...PY), Math.max(...PX), Math.max(...PY)];
-const finMat = M(0xc9ccd0, { roughness: .35, metalness: .6, transparent: true });
-const bandMat = M(0x3a3d42, { roughness: .6, transparent: true });
-const slabMat = M(0x8f8a83, { roughness: .9, transparent: true });
-const levelGlass = [];
-const shellMats = [finMat, bandMat, slabMat];
-function storey(level, parent, glassParent) {
-  const y0 = (level - 1) * FTF, gh = FTF - .45;
-  const gm = new THREE.MeshPhysicalMaterial({ color: level === 0 ? 0x5b7e9c : 0x2f5a8a, roughness: .06, metalness: .25, transparent: true,
-    opacity: level === 0 ? .55 : .8, envMapIntensity: 1.7, emissive: 0x000000 });
-  levelGlass[level] = gm; shellMats.push(gm);
-  if (level !== 1) add(extrudeUp(plateShape, .45, y0 - .45), [slabMat, bandMat], { parent });
-  const P = L.plate, gl = [], fins = [], spd = [];
-  for (let i = 0; i < P.length; i++) {
-    const [x0, ya] = P[i], [x1, yb] = P[(i + 1) % P.length]; const len = Math.hypot(x1 - x0, yb - ya); if (len < .15) continue;
-    const ang = Math.atan2(yb - ya, x1 - x0), M4 = place((x0 + x1) / 2, (ya + yb) / 2, ang);
-    gl.push(at(new THREE.BoxGeometry(len, gh, .05), 0, y0 + gh / 2, 0).applyMatrix4(M4));
-    spd.push(at(new THREE.BoxGeometry(len + .04, .5, .14), 0, y0 - .2, 0).applyMatrix4(M4));
-    const n = Math.floor(len / 1.6);
-    for (let k = 1; k <= n; k++) fins.push(at(new THREE.BoxGeometry(.06, gh, .3), -len / 2 + k * len / (n + 1), y0 + gh / 2, 0).applyMatrix4(M4));
-  }
-  const g = add(mergeGeometries(gl), gm, { cast: false, parent: glassParent || parent }); g.userData.level = level; g.renderOrder = 4;
-  add(mergeGeometries(spd), bandMat, { parent: glassParent || parent });
-  if (fins.length) add(mergeGeometries(fins), finMat, { parent: glassParent || parent });
-  return g;
-}
-const levelMeshes = [storey(0, lower), storey(1, lower, lvl1), storey(2, upper), storey(3, upper), storey(4, upper)];
-add(extrudeUp(plateShape, .45, -.47), [M(0xb9b3aa, { roughness: .9 }), bandMat], { parent: lower });           // first-floor slab under Volt and the occupied part
-{ // roof and parapet
-  add(extrudeUp(plateShape, .5, ROOF - .5), [M(0xbdb7ae, { roughness: .95, transparent: true }), bandMat], { parent: upper });
-  const par = []; const P = L.plate;
+const plateSlab = add(extrudeUp(plateShape, .3, -.32), [M(0xb9b3aa, { roughness: .9 }), mat.slab], { cast: false });
+// hover bands for picking a floor: the CAD outline at each level, invisible until hovered
+const levelGlass = [], levelMeshes = [];
+const bandsG = new THREE.Group(); scene.add(bandsG);
+for (let lv = 0; lv < 5; lv++) {
+  const y0 = (lv - 1) * FTF, gm = new THREE.MeshBasicMaterial({ color: lv === 1 ? 0xdd8d36 : 0x9fb3c8, transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide });
+  const P = L.plate, gl = [];
   for (let i = 0; i < P.length; i++) { const [x0, ya] = P[i], [x1, yb] = P[(i + 1) % P.length]; const len = Math.hypot(x1 - x0, yb - ya); if (len < .15) continue;
-    par.push(at(new THREE.BoxGeometry(len + .1, 1.1, .2), 0, ROOF + .55, 0).applyMatrix4(place((x0 + x1) / 2, (ya + yb) / 2, Math.atan2(yb - ya, x1 - x0)))); }
-  add(mergeGeometries(par), bandMat, { parent: upper });
+    gl.push(at(new THREE.BoxGeometry(len, FTF - .3, .9), 0, y0 + (FTF - .3) / 2 + .15, 0).applyMatrix4(place((x0 + x1) / 2, (ya + yb) / 2, Math.atan2(yb - ya, x1 - x0)))); }
+  const m = new THREE.Mesh(mergeGeometries(gl), gm); m.userData.level = lv; m.renderOrder = 8; bandsG.add(m); levelGlass.push(gm); levelMeshes.push(m);
 }
-// ground, road, trees and the entrance at the lift core
 const LX = L.lifts.length ? L.lifts.reduce((a, p) => a + p[0], 0) / L.lifts.length : (bx0 + bx1) / 2;
 const LY = L.lifts.length ? L.lifts[0][1] : by0;
-{
-  const gg = new THREE.CircleGeometry(220, 72); gg.rotateX(-Math.PI / 2); gg.translate(W(PB[0], PB[1]).x + 30, GROUND - .02, 0);
-  add(gg, M(0xd6d0c4, { roughness: 1 }), { cast: false, parent: lower });
-  const pave = new THREE.Shape([[PB[0] - 6, PB[1] - 9], [PB[2] + 6, PB[1] - 9], [PB[2] + 6, PB[3] + 6], [PB[0] - 6, PB[3] + 6]].map(([x, y]) => new THREE.Vector2(x - CX, y - CY)));
-  add(flatPlan(pave, GROUND), mat.stone, { cast: false, parent: lower });
-  const road = new THREE.Shape([[PB[0] - 80, PB[1] - 21], [PB[2] + 80, PB[1] - 21], [PB[2] + 80, PB[1] - 11], [PB[0] - 80, PB[1] - 11]].map(([x, y]) => new THREE.Vector2(x - CX, y - CY)));
-  add(flatPlan(road, GROUND + .01), M(0x55565a, { roughness: .9 }), { cast: false, parent: lower });
-  const trunks = [], crowns = [];
-  const ring = []; for (let x = PB[0] - 3; x <= PB[2] + 3; x += 7) ring.push([x, PB[1] - 8], [x, PB[3] + 4.5]);
-  for (let y = PB[1]; y <= PB[3]; y += 7) ring.push([PB[0] - 4.5, y], [PB[2] + 4.5, y]);
-  for (const [x, y] of ring) { if (Math.abs(x - LX) < 9 && y < PB[1]) continue;
-    trunks.push(place(x, y, rnd() * 6, GROUND)); for (let k = 0; k < 3; k++) crowns.push(place(x + (rnd() - .5), y + (rnd() - .5), rnd() * 6, GROUND + 2.6 + k * .9, 4.2 - k * .8)); }
-  const tr = new THREE.InstancedMesh(at(new THREE.CylinderGeometry(.12, .18, 3.4, 8), 0, 1.7, 0), M(0x5b4636, { roughness: .9 }), trunks.length);
-  trunks.forEach((m, i) => tr.setMatrixAt(i, m)); tr.castShadow = true; lower.add(tr);
-  const sprig = []; for (let i = 0; i < 9; i++) { const q = new THREE.PlaneGeometry(.55, .55); q.translate(0, .27, 0); q.rotateX(-.35 - (i % 3) * .12); q.rotateY(i / 9 * Math.PI * 2); sprig.push(q); }
-  const cr = new THREE.InstancedMesh(mergeGeometries(sprig), mat.leaf, crowns.length); crowns.forEach((m, i) => cr.setMatrixAt(i, m)); cr.castShadow = true; lower.add(cr);
-  // entrance canopy and doors on the south face, in front of the lift core
-  const ex = LX, ey = PB[1];
-  const sign = canvasTex(512, (g, n) => { g.fillStyle = '#2b2d31'; g.fillRect(0, 0, n, n); g.fillStyle = '#e9e4da'; g.font = '600 64px Inter,sans-serif'; g.textAlign = 'center'; g.fillText('SKYMARK F-1', n / 2, n / 2 + 22); });
-  sign.repeat.set(1, 1);
-  const can = add(at(new THREE.BoxGeometry(9, .35, 4.2), 0, GROUND + 3.6, 0), [bandMat, bandMat, bandMat, bandMat, M(0xffffff, { map: sign }), bandMat], { parent: lower });
-  can.applyMatrix4(place(ex, ey - 2.1, 0));
-  for (const s of [-1, 1]) add(at(new THREE.BoxGeometry(.25, 3.6, .25), s * 4.2, GROUND + 1.8, 0), finMat, { parent: lower }).applyMatrix4(place(ex, ey - 3.9, 0));
-  const dg = add(at(new THREE.BoxGeometry(4.2, 2.6, .05), 0, GROUND + 1.3, 0), mat.glass, { cast: false, parent: lower }); dg.applyMatrix4(place(ex, ey - .12, 0));
-}
 
 // floor picker tags on the building
 const FLOOR_NAMES = ['Ground floor · lobby and lifts', 'First floor · Volt', 'Second floor', 'Third floor', 'Fourth floor'];
@@ -438,27 +428,34 @@ const ftags = FLOOR_NAMES.map((t, lv) => {
 let hoverLv = -1;
 function hoverLevel(lv) {
   hoverLv = lv;
-  levelGlass.forEach((m, i) => { m.emissive.setHex(i === lv ? (i === 1 ? 0xdd8d36 : 0x6f7f90) : 0x000000); m.emissiveIntensity = i === lv ? .55 : 1; });
+  levelGlass.forEach((m, i) => { m.opacity = i === lv ? (i === 1 ? .42 : .22) : 0; });
   canvas.style.cursor = lv === 1 ? 'pointer' : ''; needRender = true;
 }
 let stage = 'building', shellA = 1, shellT = 1, upY = 0, upT = 0;
 function setShell(a, instant) { shellT = a; upT = a > .5 ? 0 : 16; if (instant) { shellA = a; upY = upT; applyShell(); } }
+let highTransparent = false;
 function applyShell() {
-  for (const m of shellMats) { m.opacity = (m === levelGlass[0] ? .55 : m.isMeshPhysicalMaterial ? .8 : 1) * shellA; m.depthWrite = shellA > .95; }
-  upper.position.y = upY; upper.visible = shellA > .01; lvl1.visible = shellA > .01;
-  sun.shadow.camera.left = -60 + 34 * (1 - shellA); sun.shadow.camera.right = 40 - 14 * (1 - shellA);
-  sun.shadow.camera.top = 40 - 18 * (1 - shellA); sun.shadow.camera.bottom = -40 + 18 * (1 - shellA); sun.shadow.camera.updateProjectionMatrix();
+  twinHigh.position.y = upY; cutHigh.constant = -(CUTY + upY);
+  const fadeOn = shellA < .995;
+  if (fadeOn !== highTransparent) { highTransparent = fadeOn; for (const m of highMats) { m.transparent = fadeOn || m.userData.t; m.depthWrite = fadeOn ? false : m.userData.dw; m.needsUpdate = true; } }
+  for (const m of highMats) m.opacity = m.userData.o * shellA;
+  twinHigh.visible = shellA > .01;
+  root.visible = shellA < .99; plateSlab.visible = root.visible;
+  if (twinInteriorsLow) twinInteriorsLow.visible = shellA > .5;
+  bandsG.visible = stage === 'building' && shellA > .9;
+  sun.shadow.camera.left = -60 + 34 * (1 - shellA); sun.shadow.camera.right = 60 - 34 * (1 - shellA);
+  sun.shadow.camera.top = 50 - 28 * (1 - shellA); sun.shadow.camera.bottom = -50 + 28 * (1 - shellA); sun.shadow.camera.updateProjectionMatrix();
   shadowsDirty = true;
 }
 const BUILDING_VIEW = { az: -.55, polar: 1.12 };
-function buildingPts() { const p = []; L.plate.forEach(([x, y]) => p.push([x, y, GROUND], [x, y, ROOF + 1.2])); return p; }
+function buildingPts() { const p = []; L.plate.forEach(([x, y]) => p.push([x, y, GROUND], [x, y, ROOF + 2.2])); return p; }
 async function toBuilding(t = true) {
   if (mode !== 'orbit') setMode('orbit', 'stay');
   stage = 'building'; setFocus(null); setShell(1); document.body.dataset.stage = 'building'; updateCrumbs();
   controls.maxDistance = 400; controls.maxPolarAngle = 1.45;
   controls.setBoundary(null);
   const { tgt, dist } = frameView(buildingPts(), BUILDING_VIEW.az, BUILDING_VIEW.polar, false);
-  return Promise.all([controls.moveTo(tgt.x, tgt.y, tgt.z, t), controls.rotateTo(BUILDING_VIEW.az, BUILDING_VIEW.polar, t), controls.dollyTo(dist, t)]);
+  return Promise.all([controls.moveTo(tgt.x, tgt.y, tgt.z, t), controls.rotateTo(BUILDING_VIEW.az, BUILDING_VIEW.polar, t), controls.dollyTo(dist * 1.3, t)]);
 }
 async function enterFloor() {
   stage = 'floor'; document.body.dataset.stage = 'floor'; hoverLevel(-1); setShell(0);
@@ -623,7 +620,6 @@ function setTOD(t) {
   scene.environmentIntensity = .38 + .3 * day;
   const bg = day > .5 ? bgDay.clone().lerp(bgDusk, low * .8) : bgNight.clone().lerp(bgDusk, day * 2);
   scene.background.copy(bg); if (scene.fog) scene.fog.color.copy(bg);
-  levelGlass.forEach((m, i) => { if (i !== hoverLv) { m.emissive.setHex(0xffc27a); m.emissiveIntensity = (1 - day) * .55; } });
   mat.panel.color.setScalar(1 + (1 - day) * 1.5);
   const h = Math.floor(hr), mm = Math.round((hr - h) * 60 / 15) * 15;
   $('#todl').textContent = `${((h + 11) % 12) + 1}:${String(mm % 60).padStart(2, '0')} ${h < 12 ? 'am' : 'pm'}`;
@@ -852,11 +848,12 @@ function tourPose(r) {
 }
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 const fade = (on) => { $('#fade').classList.toggle('on', on); return sleep(on ? 520 : 50); };
+const OUT = (() => { const d = [ENTR[0] - SF.plate_centroid[0], ENTR[1] - SF.plate_centroid[1]], l = Math.hypot(...d) || 1; return [d[0] / l, d[1] / l]; })();
 function buildStops() {
   const lobby = nearestFree(LX, LY + 3.4), rec = ROOMS.find(x => x.name === 'Reception');
   const stops = [
-    { cap: 'Skymark F-1, Sector 6, Noida', sub: 'Plot F-01 · G+4 · the outline is read from the CAD', ext: true, p: W(LX - 14, PB[1] - 34, GROUND + 1.7), t: W(LX - 4, PB[1], GROUND + 6) },
-    { cap: 'The way in', sub: 'Entrance at the lift core (indicative: the ground floor is not in this drawing)', ext: true, p: W(LX, PB[1] - 9, GROUND + 1.6), t: W(LX, PB[1] + 2, GROUND + 1.9) },
+    { cap: 'Skymark F-1, Sector 6, Noida', sub: 'Plot F-01 · G+4 · the street front', ext: true, p: W(ENTR[0] + OUT[0] * 44 + OUT[1] * 16, ENTR[1] + OUT[1] * 44 - OUT[0] * 16, GROUND + 1.7), t: W(SF.plate_centroid[0], SF.plate_centroid[1], GROUND + 8) },
+    { cap: 'The way in', sub: 'The entrance porch on the street front, as modelled in the twin', ext: true, p: W(ENTR[0] + OUT[0] * 10, ENTR[1] + OUT[1] * 10, GROUND + 1.6), t: W(ENTR[0], ENTR[1], GROUND + 2) },
     { cap: 'Lift lobby, first floor', sub: 'Out of the lift, Volt\'s reception is ahead', fade: true, p: W(lobby[0], lobby[1], EYE), t: W(rec.cx, rec.cy, 1.2) },
   ];
   for (const n of TOUR) { const r = ROOMS.find(x => x.name === n); if (r) { const tp = tourPose(r); stops.push({ r, cap: r.name, p: tp.p, t: tp.t }); } }
@@ -896,32 +893,42 @@ function stopTour() { if (mode !== 'tour') return; clearTimeout(tourTimer); $('#
 $('#b-tour').onclick = () => mode === 'tour' ? stopTour() : startTour();
 
 // ---------------------------------------------------------------- elevations (orthographic, live section cut)
-let elevDir = 'N';
-const DIRS = { N: [0, 1], S: [0, -1], E: [1, 0], W: [-1, 0] };
+let elevDir = 'front', elevKind = 'section';
+const FACADES = { front: 146, road: 236, rear: 326, side: 56 };   // outward bearing of each face of the real building
 const clip = new THREE.Plane();
 function elevSetup(first) {
-  const [dx, dy] = DIRS[elevDir]; const D = new THREE.Vector3(dx, 0, -dy);
-  const lo = dx ? (dx > 0 ? bx0 : bx1) : (dy > 0 ? by0 : by1), hi = dx ? (dx > 0 ? bx1 : bx0) : (dy > 0 ? by1 : by0);
+  const n = bearingToPlan(FACADES[elevDir]), dx = -n[0], dy = -n[1];          // looking at that face
+  const D = new THREE.Vector3(dx, 0, -dy).normalize();
+  const sec = elevKind === 'section';
+  const pts = sec ? L.floor[0].outer : L.plate;
+  const pr = pts.map(([x, y]) => x * dx + y * dy), pp = pts.map(([x, y]) => -x * dy + y * dx);
+  const lo = Math.min(...pr), hi = Math.max(...pr);
   const f = +$('#cut').value / 1000, s = lo + (hi - lo) * f;
-  const S = dx ? W(s, CY) : W(CX, s);
-  clip.normal.copy(D); clip.constant = -D.dot(S);
-  renderer.clippingPlanes = [clip];
-  $('#cutl').textContent = `Section cut at ${(Math.abs(s - lo)).toFixed(1)} m`;
-  const span = dx ? (by1 - by0) : (bx1 - bx0);
+  const mid = (Math.min(...pp) + Math.max(...pp)) / 2;
+  const S = W(dx * s - dy * mid, dy * s + dx * mid);
+  if (sec) { clip.normal.copy(D); clip.constant = -D.dot(S); renderer.clippingPlanes = [clip]; setShell(0, true); }
+  else { renderer.clippingPlanes = []; setShell(1, true); bandsG.visible = false; }
+  $('#cut').style.display = sec ? '' : 'none';
+  $('#cutl').textContent = sec ? `Section cut ${(s - lo).toFixed(1)} m in` : 'Facade of the twin';
+  const span = Math.max(...pp) - Math.min(...pp);
   ortho.left = -innerWidth / 2; ortho.right = innerWidth / 2; ortho.top = innerHeight / 2; ortho.bottom = -innerHeight / 2; ortho.updateProjectionMatrix();
   if (first) {
-    const eye = S.clone().addScaledVector(D, -60); eye.y = 1.4; const tgt = S.clone(); tgt.y = 1.4;
+    const cy = sec ? 1.4 : GROUND + 11, F = sec ? S : W(dx * lo - dy * mid, dy * lo + dx * mid);
+    const eye = F.clone().addScaledVector(D, -90); eye.y = cy; const tgt = F.clone(); tgt.y = cy;
     ortCtl.setLookAt(eye.x, eye.y, eye.z, tgt.x, tgt.y, tgt.z, false);
-    ortCtl.zoomTo(Math.min(innerWidth / (span * 1.08), innerHeight / 6), false);
+    ortCtl.zoomTo(Math.min(innerWidth / (span * 1.12), innerHeight / (sec ? 6 : 30)), false);
   }
   document.querySelectorAll('#elev [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === elevDir));
+  document.querySelectorAll('#elev [data-k]').forEach(b => b.classList.toggle('on', b.dataset.k === elevKind));
   needRender = true;
 }
 document.querySelectorAll('#elev [data-d]').forEach(b => b.onclick = () => { elevDir = b.dataset.d; elevSetup(true); });
+document.querySelectorAll('#elev [data-k]').forEach(b => b.onclick = () => { elevKind = b.dataset.k; elevSetup(true); });
 $('#cut').oninput = () => elevSetup(false);
 function drawRuler() {
   const el = $('#ruler'); if (mode !== 'elev') { el.style.display = 'none'; return; } el.style.display = 'block';
-  const marks = [[0, 'Floor 0.00'], [.75, 'Desk 0.75'], [L.heights.planter, ''], [1.05, 'Rail 1.05'], [H, `Ceiling ${H.toFixed(2)}`]];
+  const marks = elevKind === 'section' ? [[0, 'Floor 0.00'], [.75, 'Desk 0.75'], [1.05, 'Rail 1.05'], [H, `Ceiling ${H.toFixed(2)}`]]
+    : [[GROUND, 'Ground 0.00'], [0, `First floor +${FTF.toFixed(2)}`], [ROOF, `Roof +${(ROOF - GROUND).toFixed(2)}`], [ROOF + 2, `Parapet +${(ROOF + 2 - GROUND).toFixed(2)}`]];
   el.innerHTML = marks.filter(m => m[1]).map(([h, t]) => { v3.set(0, h, 0); const tgt = ortCtl.getTarget(new THREE.Vector3()); v3.x = tgt.x; v3.z = tgt.z; v3.project(ortho);
     return `<div style="top:${(-v3.y * .5 + .5) * innerHeight}px">${t} m</div>`; }).join('');
 }
@@ -931,7 +938,7 @@ let mode = 'orbit';
 function setMode(m, toOverview) {
   if (mode === 'tour' && m !== 'tour') { clearTimeout(tourTimer); $('#caption').style.display = 'none'; controls.smoothTime = .32; }
   if (mode === 'walk' && m !== 'walk') exitWalk();
-  if (mode === 'elev' && m !== 'elev') { renderer.clippingPlanes = []; ortCtl.enabled = false; controls.enabled = true; }
+  if (mode === 'elev' && m !== 'elev') { renderer.clippingPlanes = []; ortCtl.enabled = false; controls.enabled = true; setShell(stage === 'building' ? 1 : 0, true); }
   mode = m;
   document.body.dataset.mode = m;
   $('#walkui').classList.toggle('show', m === 'walk');
@@ -956,7 +963,7 @@ function setMode(m, toOverview) {
 $('#b-over').onclick = () => { if (stage === 'building') { if (mode !== 'orbit') setMode('orbit', 'stay'); enterFloor(); } else setMode('orbit', true); };
 const needFloor = async () => { if (stage !== 'floor') { await enterFloor(); } };
 $('#b-walk').onclick = async () => { if (mode === 'walk') return setMode('orbit'); await needFloor(); enterWalk(focus); };
-$('#b-elev').onclick = async () => { if (mode === 'elev') return setMode('orbit'); if (stage !== 'floor') { stage = 'floor'; document.body.dataset.stage = 'floor'; setShell(0, true); } setMode('elev'); };
+$('#b-elev').onclick = async () => { if (mode === 'elev') return setMode('orbit'); elevKind = stage === 'building' ? 'facade' : 'section'; setMode('elev'); };
 
 // ---------------------------------------------------------------- loop
 let shadowsDirty = true, lastInput = 0;
@@ -991,7 +998,7 @@ function frame() {
   requestAnimationFrame(frame);
 }
 renderer.shadowMap.needsUpdate = true;
-scene.fog = new THREE.Fog(0xe7e3dc, 95, 260);
+scene.fog = new THREE.Fog(0xe7e3dc, 260, 900);
 setTOD(TOD.t); setShell(1, true);
 if (/[#&]floor/.test(location.hash)) { stage = 'floor'; setShell(0, true); document.body.dataset.stage = 'floor'; controls.maxDistance = 85; overview(false); } else toBuilding(false);
 controls.update(0); updateCrumbs();
