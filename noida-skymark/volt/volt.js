@@ -54,6 +54,7 @@ const pmrem = new THREE.PMREMGenerator(renderer);
 scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 scene.environmentIntensity = 0.62;
 const camera = new THREE.PerspectiveCamera(MOBILE ? 50 : 38, innerWidth / innerHeight, 0.08, 3000);
+const BASE_FOV = camera.fov;
 const ortho = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 400);
 
 const hemi = new THREE.HemisphereLight(0xfffaf2, 0xb9a88f, 0.55); scene.add(hemi);
@@ -1179,6 +1180,7 @@ function setMode(m, toOverview) {
     else if (toOverview === true) overview(); else if (toOverview !== 'stay') { if (focus) flyToRoom(focus); else overview(); }
   }
   document.body.classList.toggle('immersive', m === 'walk' || m === 'tour' || m === 'elev');
+  { const fov = (m === 'walk' || m === 'tour') ? 62 : BASE_FOV; if (camera.fov !== fov) { camera.fov = fov; camera.updateProjectionMatrix(); } }
   updateCrumbs(); shadowsDirty = true; needRender = true;
 }
 $('#b-plan').onclick = async () => {
@@ -1237,4 +1239,13 @@ controls.update(0); updateCrumbs();
 frame();
 setTimeout(() => $('#load').classList.add('done'), 120);
 setTimeout(() => { $('#load').remove(); }, 900);
-window.__volt = { POIS, showPlace, entranceView, L, ROOMS, controls, flyToRoom, overview, enterWalk, setMode, startTour, stopTour, walk, enterFloor, toBuilding, setTOD, get stage() { return stage; }, get mode() { return mode; }, render: () => { needRender = true; } };
+function snap(name, fov = 62) {
+  const r = ROOMS.find(x => x.name === name); if (!r) return null;
+  stage = 'floor'; setShell(0, true); wallsG.scale.y = 1; wallScale = wallTarget = 1; ceiling.visible = true; seatDots.visible = false;
+  const tp = tourPose(r), keep = camera.fov; camera.fov = fov; camera.updateProjectionMatrix();
+  camera.position.copy(tp.p); camera.lookAt(tp.t); camera.updateMatrixWorld();
+  renderer.shadowMap.needsUpdate = true; renderer.render(scene, camera);
+  const url = canvas.toDataURL('image/jpeg', .93); camera.fov = keep; camera.updateProjectionMatrix();
+  return { url, pose: { x: toPlan(tp.p)[0], y: toPlan(tp.p)[1], tx: toPlan(tp.t)[0], ty: toPlan(tp.t)[1] } };
+}
+window.__volt = { snap, POIS, showPlace, entranceView, L, ROOMS, controls, flyToRoom, overview, enterWalk, setMode, startTour, stopTour, walk, enterFloor, toBuilding, setTOD, get stage() { return stage; }, get mode() { return mode; }, render: () => { needRender = true; } };
