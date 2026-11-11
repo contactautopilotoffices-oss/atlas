@@ -18,6 +18,8 @@ import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
 CameraControls.install({ THREE });
 const $ = (s) => document.querySelector(s);
 const MOBILE = matchMedia('(max-width:760px)').matches || matchMedia('(pointer:coarse)').matches;
+const LITE = /[?&]lite\b/.test(location.search);
+const ST = (v) => LITE ? .02 : v;                       // camera easing time; near-instant in the light test mode      // light mode for automated checks: no city, small shadows, no AO
 
 // Deck palette (page 3 of the Volt presentation, sampled)
 const PAL = { orange: 0xdd8d36, teal: 0x286e7a, charcoal: 0x474747, warmGray: 0xa69687, beige: 0xd4c2ae, lightWood: 0xd5a97f,
@@ -50,13 +52,13 @@ scene.background = new THREE.Color(0xe7e3dc);
 const pmrem = new THREE.PMREMGenerator(renderer);
 scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
 scene.environmentIntensity = 0.62;
-const camera = new THREE.PerspectiveCamera(MOBILE ? 50 : 38, innerWidth / innerHeight, 0.08, 400);
+const camera = new THREE.PerspectiveCamera(MOBILE ? 50 : 38, innerWidth / innerHeight, 0.08, 3000);
 const ortho = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 400);
 
 const hemi = new THREE.HemisphereLight(0xfffaf2, 0xb9a88f, 0.55); scene.add(hemi);
 const sun = new THREE.DirectionalLight(0xfff1de, 2.2);
 sun.position.set(-18, 34, -22); sun.target.position.set(0, 0, 0); scene.add(sun, sun.target);
-sun.castShadow = true; sun.shadow.mapSize.set(MOBILE ? 2048 : 4096, MOBILE ? 2048 : 4096);
+sun.castShadow = true; { const sm = LITE ? 1024 : MOBILE ? 2048 : 4096; sun.shadow.mapSize.set(sm, sm); }
 Object.assign(sun.shadow.camera, { left: -26, right: 26, top: 22, bottom: -22, near: 1, far: 90 });
 sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.02; sun.shadow.radius = 4;
 
@@ -388,8 +390,47 @@ prepTwin(twinLow, cutLow); prepTwin(twinHigh, cutHigh, highMats);
 twinFrame.add(twinLow, twinHigh);
 const twinInteriorsLow = twinLow.getObjectByName('Interiors');
 // the 500 m round it, in the same frame (streets, blocks, trees): loaded after the first frame
-gltf.loadAsync('/noida-skymark/exports/fm_skymark_context_500m.glb').then(g => {
+for (const t of [twinLow, twinHigh]) { const pm = t.getObjectByName('SKY_Site_Palm_2'); if (pm) pm.visible = false; }   // this palm stood in front of the porch
+const PIN0 = window.SKY_MODEL?.anchor || { lat: 28.5913167, lng: 77.3189671 }, KLAT = 110574, KLNG = 111320 * Math.cos(PIN0.lat * D2R);
+const planToEnu = ([px, py]) => { const x = px - SF.plate_centroid[0], y = py - SF.plate_centroid[1], c = Math.cos(RHO), sn = Math.sin(RHO);
+  return [c * x - sn * y + SF.footprint_centroid[0] + SF.dx, sn * x + c * y + SF.footprint_centroid[1] + SF.dy]; };
+const llToPlan = (lat, lng) => enuToPlan([(lng - PIN0.lng) * KLNG, (lat - PIN0.lat) * KLAT]);
+// Satellite photo draped on the ground and roofs of the city model, as on the atlas page (needs the site's map key)
+async function satellite() {
+  if (!window.MAPBOX_TOKEN) throw new Error('no map key');
+  const Z = 17, RAD = 580, merc = (lng, lat) => { const n = 256 * 2 ** Z, sn = Math.sin(lat * D2R); return [(lng + 180) / 360 * n, (0.5 - Math.log((1 + sn) / (1 - sn)) / (4 * Math.PI)) * n]; };
+  const dl = RAD / KLAT, dg = RAD / KLNG, [x0, y0] = merc(PIN0.lng - dg, PIN0.lat + dl), [x1, y1] = merc(PIN0.lng + dg, PIN0.lat - dl);
+  const tx0 = Math.floor(x0 / 256), ty0 = Math.floor(y0 / 256), nx = Math.floor(x1 / 256) - tx0 + 1, ny = Math.floor(y1 / 256) - ty0 + 1, T = 512;
+  const cv = document.createElement('canvas'); cv.width = nx * T; cv.height = ny * T; const g = cv.getContext('2d'); g.fillStyle = '#8b8778'; g.fillRect(0, 0, cv.width, cv.height);
+  let got = 0;
+  await Promise.all([...Array(nx * ny).keys()].map(i => new Promise(ok => { const tx = tx0 + (i % nx), ty = ty0 + Math.floor(i / nx), im = new Image(); im.crossOrigin = 'anonymous';
+    im.onload = () => { g.drawImage(im, (tx - tx0) * T, (ty - ty0) * T, T, T); got++; ok(); }; im.onerror = () => ok();
+    im.src = `https://api.mapbox.com/v4/mapbox.satellite/${Z}/${tx}/${ty}@2x.jpg90?access_token=${encodeURIComponent(window.MAPBOX_TOKEN)}`; })));
+  if (!got) throw new Error('no satellite tiles');
+  const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
+  const uv = (x, z) => { const [e, n] = planToEnu([x + CX, -z + CY]), [px, py] = merc(PIN0.lng + e / KLNG, PIN0.lat + n / KLAT); return [(px - tx0 * 256) / (nx * 256), 1 - (py - ty0 * 256) / (ny * 256)]; };
+  const o = uv(0, 0), ax = uv(1, 0), az = uv(0, 1);
+  return { tex, o, ux: [ax[0] - o[0], ax[1] - o[1]], uz: [az[0] - o[0], az[1] - o[1]] };
+}
+function drape(rootObj, sat) {
+  const U = { uSat: { value: sat.tex }, uSatO: { value: new THREE.Vector2(...sat.o) }, uSatX: { value: new THREE.Vector2(...sat.ux) }, uSatZ: { value: new THREE.Vector2(...sat.uz) } };
+  const done = new Set();
+  rootObj.traverse(o => { if (!o.isMesh) return;
+    for (const m of [].concat(o.material)) { if (!m || done.has(m) || /trunk|leaf|frond|Sign|Glass|Aluminium/i.test(m.name || '')) continue; done.add(m);
+      m.onBeforeCompile = (sh) => { Object.assign(sh.uniforms, U);
+        sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying vec3 vSatW; varying vec3 vSatN;')
+          .replace('#include <project_vertex>', '#include <project_vertex>\nvSatW = (modelMatrix * vec4(transformed, 1.0)).xyz; vSatN = normalize(mat3(modelMatrix) * objectNormal);');
+        sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nvarying vec3 vSatW; varying vec3 vSatN; uniform sampler2D uSat; uniform vec2 uSatO, uSatX, uSatZ;')
+          .replace('#include <map_fragment>', `#include <map_fragment>
+            { float up = smoothstep(0.7, 0.95, normalize(vSatN).y);
+              vec2 suv = uSatO + uSatX * vSatW.x + uSatZ * vSatW.z;
+              if (up > 0.0 && suv.x > 0.0 && suv.y > 0.0 && suv.x < 1.0 && suv.y < 1.0) diffuseColor.rgb = mix(diffuseColor.rgb, texture2D(uSat, suv).rgb, up); }`); };
+      m.needsUpdate = true; } });
+}
+// the 500 m round it, in the same frame (streets, blocks, trees): loaded after the first frame
+if (!LITE) gltf.loadAsync('/noida-skymark/exports/fm_skymark_context_500m.glb').then(g => {
   g.scene.traverse(o => { if (o.isMesh) { o.receiveShadow = true; o.castShadow = false; } }); twinFrame.add(g.scene); needRender = true; shadowsDirty = true;
+  satellite().then(sat => { drape(g.scene, sat); document.body.dataset.sat = 'on'; needRender = true; }).catch(e => { document.body.dataset.sat = 'off'; console.warn('[volt] satellite', e && e.message); });
 }).catch(e => console.warn('[volt] context', e && e.message));
 // where the twin's entrance is (the porch modelled on the street front), in plan coordinates
 const ENTR = (() => {
@@ -425,6 +466,44 @@ const ftags = FLOOR_NAMES.map((t, lv) => {
   el.onmouseenter = () => hoverLevel(lv); el.onmouseleave = () => hoverLevel(-1);
   $('#labels').appendChild(el); return { el, lv };
 });
+// known places round the building, from the atlas's own list (noida-skymark/data.js), at their real positions
+const KIND = { metro: ['Metro', '#2b6cb0'], corp: ['Office', '#5b4bb5'], cowork: ['Coworking', '#0f8a7e'], retail: ['Shops', '#c2571f'], health: ['Health', '#c2334d'],
+  hotel: ['Hotel', '#8a5a14'], edu: ['Education', '#2f7a36'], res: ['Housing', '#6b6b6b'], pg: ['PG', '#6b6b6b'] };
+const POIS = (() => {
+  const dist = (q) => Math.hypot((q.lng - PIN0.lng) * KLNG, (q.lat - PIN0.lat) * KLAT), out = [];
+  const st = (window.SKY_TRANSIT?.lines || []).flatMap(l => l.stations.map(x => ({ ...x, line: l.short }))).sort((a, b) => dist(a) - dist(b))[0];
+  if (st) out.push({ name: st.name + ' metro', sub: st.line, kind: 'metro', lat: st.lat, lng: st.lng });
+  const per = {};
+  for (const q of [...(window.SKY_PLACES || [])].sort((a, b) => dist(a) - dist(b))) { const d = dist(q);
+    if (d < 30 || d > 700 || q.kind === 'pg' || q.kind === 'res') continue; if ((per[q.kind] = (per[q.kind] || 0) + 1) > 2) continue; out.push(q); if (out.length >= 9) break; }
+  return out.map(q => ({ ...q, d: dist(q), plan: llToPlan(q.lat, q.lng) }));
+})();
+const PIN_H = GROUND + 26;
+{ const pos = []; for (const q of POIS) { const a = W(q.plan[0], q.plan[1], GROUND), b = W(q.plan[0], q.plan[1], PIN_H); pos.push(a.x, a.y, a.z, b.x, b.y, b.z); }
+  const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+  var pinStems = new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: 0x1d1c1a, transparent: true, opacity: .55, fog: false })); scene.add(pinStems); }
+for (const q of POIS) {
+  const el = document.createElement('div'); el.className = 'poi'; const [kn, kc] = KIND[q.kind] || ['Place', '#555'];
+  const dtxt = q.d >= 1000 ? (q.d / 1000).toFixed(1) + ' km' : Math.round(q.d / 10) * 10 + ' m';
+  el.innerHTML = `<i style="background:${kc}"></i><span>${q.name.replace(/\s*\(.*?\)/g, '').slice(0, 34)}</span><small>${kn} · ${dtxt}</small>`;
+  el.title = `${q.name}${q.sub ? ' · ' + q.sub : ''} · ${dtxt} in a straight line`;
+  el.onclick = (e) => { e.stopPropagation(); showPlace(q); };
+  $('#labels').appendChild(el); q.el = el; q.p = W(q.plan[0], q.plan[1], PIN_H);
+}
+function showPlace(q) {
+  const pts = buildingPts(); pts.push([q.plan[0], q.plan[1], GROUND], [q.plan[0], q.plan[1], PIN_H + 4]);
+  const d = [SF.plate_centroid[0] - q.plan[0], SF.plate_centroid[1] - q.plan[1]], az = Math.atan2(d[0], -d[1]) + .5;
+  const { tgt, dist } = frameView(pts, az, .98, false); lastInput = performance.now() + 20000;
+  controls.moveTo(tgt.x, tgt.y, tgt.z, true); controls.rotateTo(az, .98, true); controls.dollyTo(dist * 1.05, true);
+}
+const entTag = document.createElement('div'); entTag.className = 'ftag ent'; entTag.innerHTML = 'Main entrance <small>street front</small>';
+entTag.onclick = (e) => { e.stopPropagation(); entranceView(); };
+$('#labels').appendChild(entTag);
+function entranceView() {
+  lastInput = performance.now() + 20000; controls.smoothTime = ST(1.1);
+  const p = W(ENTR[0] + OUT[0] * 19 + OUT[1] * 5, ENTR[1] + OUT[1] * 19 - OUT[0] * 5, GROUND + 1.8), t = W(ENTR[0], ENTR[1], GROUND + 3.2);
+  controls.setLookAt(p.x, p.y, p.z, t.x, t.y, t.z, true).then(() => { controls.smoothTime = ST(.32); });
+}
 let hoverLv = -1;
 function hoverLevel(lv) {
   hoverLv = lv;
@@ -432,7 +511,7 @@ function hoverLevel(lv) {
   canvas.style.cursor = lv === 1 ? 'pointer' : ''; needRender = true;
 }
 let stage = 'building', shellA = 1, shellT = 1, upY = 0, upT = 0;
-function setShell(a, instant) { shellT = a; upT = a > .5 ? 0 : 16; if (instant) { shellA = a; upY = upT; applyShell(); } }
+function setShell(a, instant) { shellT = a; upT = a > .5 ? 0 : 16; if (instant || LITE) { shellA = a; upY = upT; applyShell(); } }
 let highTransparent = false;
 function applyShell() {
   twinHigh.position.y = upY; cutHigh.constant = -(CUTY + upY);
@@ -447,12 +526,13 @@ function applyShell() {
   sun.shadow.camera.top = 50 - 28 * (1 - shellA); sun.shadow.camera.bottom = -50 + 28 * (1 - shellA); sun.shadow.camera.updateProjectionMatrix();
   shadowsDirty = true;
 }
-const BUILDING_VIEW = { az: -.55, polar: 1.12 };
+const camAzFor = (bearing) => { const n = bearingToPlan(bearing); return Math.atan2(n[0], -n[1]); };
+const BUILDING_VIEW = { az: camAzFor(186), polar: 1.1 };
 function buildingPts() { const p = []; L.plate.forEach(([x, y]) => p.push([x, y, GROUND], [x, y, ROOF + 2.2])); return p; }
 async function toBuilding(t = true) {
   if (mode !== 'orbit') setMode('orbit', 'stay');
   stage = 'building'; setFocus(null); setShell(1); document.body.dataset.stage = 'building'; updateCrumbs();
-  controls.maxDistance = 400; controls.maxPolarAngle = 1.45;
+  controls.maxDistance = 1500; controls.maxPolarAngle = 1.45;
   controls.setBoundary(null);
   const { tgt, dist } = frameView(buildingPts(), BUILDING_VIEW.az, BUILDING_VIEW.polar, false);
   return Promise.all([controls.moveTo(tgt.x, tgt.y, tgt.z, t), controls.rotateTo(BUILDING_VIEW.az, BUILDING_VIEW.polar, t), controls.dollyTo(dist * 1.3, t)]);
@@ -483,7 +563,7 @@ const countTxt = (r) => { const g = mainGroup(r); const n = r.by[g] || 0; return
 
 // ---------------------------------------------------------------- camera controls
 const controls = new CameraControls(camera, canvas);
-controls.smoothTime = .32; controls.draggingSmoothTime = .09; controls.dollyToCursor = true; controls.infinityDolly = false;
+controls.smoothTime = ST(.32); controls.draggingSmoothTime = .09; controls.dollyToCursor = true; controls.infinityDolly = false;
 controls.minDistance = 2.5; controls.maxDistance = 85; controls.minPolarAngle = .05; controls.maxPolarAngle = 1.38;
 controls.azimuthRotateSpeed = .9; controls.polarRotateSpeed = .9; controls.dollySpeed = .7; controls.truckSpeed = 2.2;
 controls.setBoundary(new THREE.Box3(new THREE.Vector3(bx0 - CX - 2, -1, -(by1 - CY) - 2), new THREE.Vector3(bx1 - CX + 2, 3, -(by0 - CY) + 2)));
@@ -521,11 +601,11 @@ function frameView(pts, az, polar, card) {
   }
   return { tgt, dist };
 }
-const OVER = { az: -.42, polar: .8 };
+const OVER = { az: .62, polar: .8 };
 const platePts = () => { const p = []; L.floor.forEach(f => f.outer.forEach(([x, y]) => { p.push([x, y, 0], [x, y, CUT]); })); return p; };
 function overview(t = true) {
   setFocus(null);
-  const { tgt, dist } = frameView(platePts(), OVER.az, OVER.polar, false);
+  const { tgt, dist } = frameView(platePts(), OVER.az, OVER.polar, innerWidth > 760);
   return Promise.all([controls.moveTo(tgt.x, tgt.y, tgt.z, t), controls.rotateTo(OVER.az, OVER.polar, t), controls.dollyTo(dist, t)]);
 }
 function flyToRoom(r, t = true) {
@@ -554,7 +634,7 @@ for (const r of ROOMS) {
   const el = document.createElement('div'); el.className = 'lab';
   const g = mainGroup(r), c = countTxt(r);
   el.innerHTML = `${r.name.replace(' / command centre', '')}${c ? `<small class="${g.toLowerCase()}">${c}</small>` : ''}`;
-  el.onclick = (e) => { e.stopPropagation(); if (mode === 'orbit') flyToRoom(r); };
+  el.onclick = (e) => { e.stopPropagation(); if (mode === 'orbit') enterWalk(r); };
   labelsEl.appendChild(el); labels.push({ el, r, p: W(r.cx, r.cy, 1.4), big: r.total >= 9 });
 }
 { const el = document.createElement('div'); el.className = 'lab'; el.style.opacity = .8; el.innerHTML = 'Occupied · other tenant';
@@ -569,7 +649,7 @@ function showSeatNumbers(r) {
   }
 }
 function updateLabels() {
-  placeFloorTags();
+  placeFloorTags(); placeHotspots();
   const cam = mode === 'elev' ? ortho : camera;
   const show = mode === 'orbit' && stage === 'floor';
   const dist = controls.distance;
@@ -596,6 +676,13 @@ function placeFloorTags() {
     const vis = on && v3.z < 1; t.el.style.opacity = vis ? (t.lv === 1 || hoverLv === t.lv ? 1 : .75) : 0; t.el.style.pointerEvents = vis ? 'auto' : 'none';
     if (vis) t.el.style.transform = `translate(${(v3.x * .5 + .5) * innerWidth}px,${(-v3.y * .5 + .5) * innerHeight}px) translate(-50%,-50%)`;
   }
+  pinStems.visible = on;
+  for (const q of POIS) { v3.copy(q.p).project(camera); const vis = on && v3.z < 1 && Math.abs(v3.x) < 1.1 && Math.abs(v3.y) < 1.1;
+    q.el.style.opacity = vis ? 1 : 0; q.el.style.pointerEvents = vis ? 'auto' : 'none';
+    if (vis) q.el.style.transform = `translate(${(v3.x * .5 + .5) * innerWidth}px,${(-v3.y * .5 + .5) * innerHeight}px) translate(-50%,-100%)`; }
+  { v3.copy(W(ENTR[0], ENTR[1], GROUND + 6.4)).project(camera); const vis = on && v3.z < 1;
+    entTag.style.opacity = vis ? 1 : 0; entTag.style.pointerEvents = vis ? 'auto' : 'none';
+    if (vis) entTag.style.transform = `translate(${(v3.x * .5 + .5) * innerWidth}px,${(-v3.y * .5 + .5) * innerHeight}px) translate(-50%,-50%)`; }
 }
 // breadcrumbs, back pill and time of day
 function updateCrumbs() {
@@ -605,6 +692,7 @@ function updateCrumbs() {
   if (mode === 'walk') c.push('<span>Walking</span>'); if (mode === 'elev') c.push('<span>Elevations</span>'); if (mode === 'tour') c.push('<span>Tour</span>');
   $('#crumbs .path').innerHTML = c.join('<i>›</i>');
   $('#back').style.display = stage === 'floor' ? '' : 'none';
+  $('#list').classList.toggle('show', stage === 'floor' && mode === 'orbit' && !focus);
   $('#back').textContent = '← ' + (focus || mode !== 'orbit' ? 'Floor' : 'Building');
   $('#crumbs .path').querySelectorAll('[data-go]').forEach(el => el.onclick = () => el.dataset.go === 'building' ? toBuilding() : setMode('orbit', true));
 }
@@ -634,10 +722,15 @@ const rail = $('#rail');
 for (const r of RAIL) {
   const b = document.createElement('button'); b.className = 'glass'; const g = mainGroup(r);
   b.innerHTML = `${r.name.replace(' / command centre', '').replace(' room', '')}${r.total ? `<span class="n ${g === 'W' ? '' : g.toLowerCase()}">${r.by[g] || r.total}</span>` : ''}`;
-  b.onclick = () => { if (mode !== 'orbit') setMode('orbit'); flyToRoom(r); };
+  b.onclick = () => enterWalk(r);
   b.onmouseenter = () => hover(r); b.onmouseleave = () => hover(null);
   r.btn = b; rail.appendChild(b);
 }
+{ const list = $('#list .rows');
+  for (const r of RAIL) { const g = mainGroup(r), b = document.createElement('button'); b.dataset.room = r.name;
+    b.innerHTML = `<span>${r.name.replace(' / command centre', '')}</span><small class="${g.toLowerCase()}">${r.total ? (r.by[g] || r.total) + ' ' + ({ W: 'work', M: 'meeting', C: 'cafe', L: 'lounge', O: 'operator' })[g] : ''}</small><i>→</i>`;
+    b.onclick = () => enterWalk(r); b.onmouseenter = () => hover(r); b.onmouseleave = () => hover(null); list.appendChild(b); }
+  $('#list .fig').innerHTML = `<b>${nWork}</b> work seats <span>· ${nAll} seats in all</span>`; }
 function hover(r) { for (const m of roomMeshes) { const on = r && m.userData.room === r.name; m.material.opacity = on ? .22 : (focus && m.userData.room === focus.name ? .14 : 0); } needRender = true; }
 const GN = { W: 'work seats', M: 'meeting seats', C: 'cafeteria seats', L: 'lounge and visitor seats', O: 'operator seats' };
 function setFocus(r) {
@@ -646,7 +739,9 @@ function setFocus(r) {
   if (r?.btn) r.btn.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
   $('#b-over').classList.toggle('on', !r && mode === 'orbit');
   hover(null);
-  showSeatNumbers(r); updateCrumbs();
+  showSeatNumbers(r); showHotspots(mode === 'walk' || mode === 'tour' ? r : null); updateCrumbs();
+  $('#walkhere').textContent = mode === 'walk' ? 'Seats from above' : 'Step inside';
+  document.querySelectorAll('#list [data-room]').forEach(el => el.classList.toggle('on', !!r && el.dataset.room === r.name));
   const card = $('#card');
   if (!r) { card.classList.remove('show'); return; }
   $('#cname').textContent = r.name;
@@ -660,10 +755,50 @@ function setFocus(r) {
   card.classList.add('show');
 }
 $('#cimg').onclick = () => { const p = $('#cimg').dataset.p.split(','); openLB(p.map(n => `/media/noida-skymark/volt/deck/p${n.padStart(2, '0')}.jpg`), `${focus.name}: design render from the Volt deck (21 Aug 2026)`); };
-$('#cardx').onclick = () => overview();
-const step = (k) => { const i = RAIL.indexOf(focus); const r = RAIL[(i + k + RAIL.length) % RAIL.length]; flyToRoom(r); };
+$('#cardx').onclick = () => setMode('orbit', true);
+const step = (k) => { const i = RAIL.indexOf(focus); const r = RAIL[(i + k + RAIL.length) % RAIL.length]; mode === 'walk' ? enterWalk(r) : flyToRoom(r); };
 $('#prev').onclick = () => step(-1); $('#next').onclick = () => step(1);
-$('#walkhere').onclick = () => enterWalk(focus);
+$('#walkhere').onclick = () => { if (mode === 'walk') { const r = focus; setMode('orbit', 'stay'); seatDots.visible = true; $('#b-seats').classList.add('on'); flyToRoom(r); } else enterWalk(focus); };
+
+// hotspots: pills on the real things in the room, counted from the CAD
+let hots = [];
+function roomHotspots(r) {
+  const inR = (x, y, pad = 0) => x >= r.box[0] - pad && x <= r.box[2] + pad && y >= r.box[1] - pad && y <= r.box[3] + pad, hs = [];
+  const cen = (list, f) => { const c = list.reduce((a, o) => { const q = f(o); a[0] += q[0]; a[1] += q[1]; return a; }, [0, 0]); return [c[0] / list.length, c[1] / list.length]; };
+  const byK = {}; L.desks.filter(d => d.kind.includes('workstation') && inR(d.c[0], d.c[1])).forEach(d => (byK[d.kind] = byK[d.kind] || []).push(d));
+  for (const [k, list] of Object.entries(byK)) { const c = cen(list, d => d.c); hs.push({ t: `${list.length} desks · ${k.replace(' workstation', '')}`, p: [c[0], c[1], 1.25] }); }
+  const ss = seatsIn(r.name), nOf = (g) => ss.filter(x => x.group === g).reduce((a, x) => a + placesOf(x), 0);
+  if (nOf('M')) { const tb = L.tables.filter(t => inR(...tCentre(t))).sort((a, b) => tArea(b) - tArea(a))[0]; if (tb) hs.push({ t: `${nOf('M')}-seat meeting table`, p: [...tCentre(tb), 1.0] }); }
+  if (nOf('C')) { const c = cen(ss, x => [x.x, x.y]); hs.push({ t: `Cafe seating · ${nOf('C')}`, p: [c[0], c[1], 1.0] }); }
+  const lg = ss.filter(x => x.group === 'L'); if (lg.length) { const c = cen(lg, x => [x.x, x.y]); hs.push({ t: `Lounge seating · ${nOf('L')}`, p: [c[0], c[1], .95] }); }
+  const pl = L.planters.filter(q => inR(q.c[0], q.c[1])); if (pl.length) hs.push({ t: `${pl.length} planter boxes`, p: [pl[0].c[0], pl[0].c[1], 1.05] });
+  const li = L.lights.filter(l => inR(l.c[0], l.c[1])); if (li.length) { const n = li.sort((a, b) => Math.hypot(a.c[0] - r.cx, a.c[1] - r.cy) - Math.hypot(b.c[0] - r.cx, b.c[1] - r.cy))[0];
+    hs.push({ t: `${li.length} ceiling lights · from the ceiling plan`, p: [n.c[0], n.c[1], H - .12] }); }
+  const gl = L.glass.filter(g => g[4] !== 'AR-WINDOW' && inR((g[0] + g[2]) / 2, (g[1] + g[3]) / 2, .35)).sort((a, b) => Math.hypot(b[2] - b[0], b[3] - b[1]) - Math.hypot(a[2] - a[0], a[3] - a[1]))[0];
+  if (gl) hs.push({ t: 'Glass partition · frosted band', p: [(gl[0] + gl[2]) / 2, (gl[1] + gl[3]) / 2, 1.75] });
+  const wn = L.glass.filter(g => g[4] === 'AR-WINDOW' && inR((g[0] + g[2]) / 2, (g[1] + g[3]) / 2, .8))[0];
+  if (wn) hs.push({ t: 'Facade window', p: [(wn[0] + wn[2]) / 2, (wn[1] + wn[3]) / 2, 1.9] });
+  if (DECK[r.name]) hs.push({ t: 'See the design render', render: true, p: [r.cx, r.cy, 2.05] });
+  return hs;
+}
+const tCentre = (t) => t.circle ? [t.circle[0], t.circle[1]] : [t.poly.reduce((a, q) => a + q[0], 0) / t.poly.length, t.poly.reduce((a, q) => a + q[1], 0) / t.poly.length];
+const tArea = (t) => t.circle ? Math.PI * t.circle[2] ** 2 : (Math.max(...t.poly.map(q => q[0])) - Math.min(...t.poly.map(q => q[0]))) * (Math.max(...t.poly.map(q => q[1])) - Math.min(...t.poly.map(q => q[1])));
+function showHotspots(r) {
+  hots.forEach(h => h.el.remove()); hots = [];
+  if (!r) return;
+  for (const h of roomHotspots(r)) {
+    const el = document.createElement('div'); el.className = 'hot' + (h.render ? ' r' : ''); el.innerHTML = `<i></i>${h.t}`;
+    if (h.render) el.onclick = (e) => { e.stopPropagation(); $('#cimg').onclick(); };
+    labelsEl.appendChild(el); hots.push({ el, p: W(h.p[0], h.p[1], h.p[2]), render: h.render });
+  }
+}
+function placeHotspots() {
+  const on = mode === 'walk' || mode === 'tour';
+  for (const h of hots) { v3.copy(h.p).project(camera); const d = h.p.distanceTo(camera.position);
+    const vis = on && v3.z < 1 && Math.abs(v3.x) < .98 && Math.abs(v3.y) < .95 && d < 22 && d > .6;
+    h.el.style.opacity = vis ? 1 : 0; h.el.style.pointerEvents = vis && h.render ? 'auto' : 'none';
+    if (vis) h.el.style.transform = `translate(${(v3.x * .5 + .5) * innerWidth}px,${(-v3.y * .5 + .5) * innerHeight}px) translate(-50%,-50%)`; }
+}
 
 // lightbox
 let lbList = [], lbI = 0;
@@ -712,31 +847,86 @@ function nearestFree(x, y) { if (freeAt(x, y)) return [x, y]; for (let r = .1; r
 const EYE = 1.55;
 const walk = { x: 0, y: 0, yaw: 0, pitch: -.05, keys: {}, glide: null, joy: [0, 0] };
 
-// minimap
-const mini = $('#minic'), mctx = mini.getContext('2d');
-{ const s = 240 / grid.c.width; mini.width = 480; mini.height = Math.round(grid.c.height * 480 / grid.c.width); }
-const miniBase = (() => {
-  const c = document.createElement('canvas'); c.width = mini.width; c.height = mini.height; const g = c.getContext('2d');
-  const k = c.width / grid.c.width; g.fillStyle = '#e7e3dc'; g.fillRect(0, 0, c.width, c.height);
-  const T = ([x, y]) => grid.T([x, y]).map(v => v * k);
-  const poly = (pts) => { g.beginPath(); pts.forEach((p, i) => { const [a, b] = T(p); i ? g.lineTo(a, b) : g.moveTo(a, b); }); g.closePath(); };
-  g.fillStyle = '#fbfaf8'; L.floor.forEach(f => { poly(f.outer); g.fill(); });
-  g.fillStyle = '#c7d9dc'; if (L.atrium) { poly(L.atrium); g.fill(); }
-  g.fillStyle = 'rgba(213,169,127,.7)'; L.desks.forEach(d => { const ca = Math.cos(d.a), sa = Math.sin(d.a); poly([[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([u, v]) => [d.c[0] + ca * u * d.w / 2 - sa * v * d.d / 2, d.c[1] + sa * u * d.w / 2 + ca * v * d.d / 2])); g.fill(); });
-  g.fillStyle = '#2b2a28'; L.walls.forEach(w => { poly(w.outer); g.fill(); g.fillStyle = '#fbfaf8'; w.holes.forEach(h => { poly(h); g.fill(); }); g.fillStyle = '#2b2a28'; });
-  g.strokeStyle = '#3e8ea0'; g.lineWidth = 2; L.glass.forEach(([x0, y0, x1, y1]) => { g.beginPath(); g.moveTo(...T([x0, y0])); g.lineTo(...T([x1, y1])); g.stroke(); });
-  return { c, k, T };
-})();
-function drawMini() {
-  mctx.drawImage(miniBase.c, 0, 0); const [a, b] = miniBase.T([walk.x, walk.y]);
-  mctx.fillStyle = 'rgba(221,141,54,.25)'; mctx.beginPath(); mctx.moveTo(a, b); mctx.arc(a, b, 46, -walk.yaw - .55, -walk.yaw + .55); mctx.closePath(); mctx.fill();
-  mctx.fillStyle = '#dd8d36'; mctx.strokeStyle = '#fff'; mctx.lineWidth = 3; mctx.beginPath(); mctx.arc(a, b, 8, 0, 7); mctx.fill(); mctx.stroke();
+// ---------------------------------------------------------------- live CAD locator: the drawing itself, with you on it
+// The blueprint is drawn from the DWG's own lines (cad/blueprint.py). The marker is the walker's real position in the
+// drawing's frame, so the map, the 3D and the seat list all agree.
+const BP = await (await fetch('./cad_blueprint.json')).json();
+const bpImg = new Image(); bpImg.src = '/media/noida-skymark/volt/cad_blueprint.png'; bpImg.onload = () => { needRender = true; };
+const locC = $('#locc'), lctx = locC.getContext('2d');
+const loc = { big: false, headUp: false, trail: [], view: null, lastRoom: null };
+const NORTH = bearingToPlan(0);                                   // true north as a direction on the plan
+const ENTRY = (L.labels.find(l => /^ENTRY$/i.test(l.t.trim())) || null);
+const CARD8 = ['north', 'north-east', 'east', 'south-east', 'south', 'south-west', 'west', 'north-west'];
+function locPose() {
+  if (walk.active) return { x: walk.x, y: walk.y, yaw: walk.yaw };
+  const d = camera.getWorldDirection(new THREE.Vector3()), [x, y] = toPlan(camera.position);
+  return { x, y, yaw: Math.atan2(-d.z, d.x) };
 }
-mini.onpointerdown = (e) => {
-  const r = mini.getBoundingClientRect(); const px = (e.clientX - r.left) / r.width * mini.width, py = (e.clientY - r.top) / r.height * mini.height;
-  const x = px / miniBase.k / GRID + bx0 - 1, y = by1 + 1 - py / miniBase.k / GRID;
+function trueBearing(yaw) { const dx = Math.cos(yaw), dy = Math.sin(yaw), c = Math.cos(RHO), sn = Math.sin(RHO); return (Math.atan2(c * dx - sn * dy, sn * dx + c * dy) / D2R + 360) % 360; }
+const ftIn = (m) => { const t = Math.round(m / .0254), f = Math.floor(Math.abs(t) / 12), i = Math.abs(t) % 12; return `${t < 0 ? '-' : ''}${f}′${i}″`; };
+function drawLoc() {
+  const inside = stage === 'floor' && camera.position.y > -1 && camera.position.y < H + .5;
+  $('#loc').style.display = inside ? '' : 'none'; $('#compass').style.display = inside ? '' : 'none';
+  if (!inside) return;
+  const P = locPose(), dpr = Math.min(2, devicePixelRatio || 1), cw = locC.clientWidth, chh = locC.clientHeight;
+  if (locC.width !== Math.round(cw * dpr) || locC.height !== Math.round(chh * dpr)) { locC.width = Math.round(cw * dpr); locC.height = Math.round(chh * dpr); }
+  const [x0, y0, x1, y1] = BP.bounds, follow = !loc.big || loc.headUp;
+  const k = (follow ? cw / (loc.big ? 30 : 17) : Math.min(cw / (x1 - x0), chh / (y1 - y0))), rot = loc.headUp ? P.yaw - Math.PI / 2 : 0;
+  const cx = follow ? P.x : (x0 + x1) / 2, cy = follow ? P.y : (y0 + y1) / 2;
+  loc.view = { k, rot, cx, cy, cw, chh };
+  lctx.setTransform(dpr, 0, 0, dpr, 0, 0); lctx.fillStyle = '#123b7a'; lctx.fillRect(0, 0, cw, chh);
+  lctx.save(); lctx.translate(cw / 2, chh / 2); lctx.rotate(rot); lctx.scale(k, k); lctx.translate(-cx, cy);
+  if (bpImg.complete && bpImg.naturalWidth) lctx.drawImage(bpImg, x0, -y1, x1 - x0, y1 - y0);
+  const rm = roomAt(P.x, P.y);
+  if (rm) { lctx.fillStyle = 'rgba(242,162,76,.22)'; lctx.strokeStyle = 'rgba(242,162,76,.9)'; lctx.lineWidth = 1.5 / k; lctx.fillRect(rm.box[0], -rm.box[3], rm.w, rm.d); lctx.strokeRect(rm.box[0], -rm.box[3], rm.w, rm.d); }
+  if (loc.trail.length > 1) { lctx.strokeStyle = 'rgba(255,255,255,.75)'; lctx.lineWidth = 2 / k; lctx.setLineDash([5 / k, 5 / k]); lctx.beginPath(); loc.trail.forEach(([tx, ty], i) => i ? lctx.lineTo(tx, -ty) : lctx.moveTo(tx, -ty)); lctx.stroke(); lctx.setLineDash([]); }
+  if (ENTRY) { lctx.fillStyle = '#35d07f'; lctx.beginPath(); lctx.arc(ENTRY.x + .9, -ENTRY.y + .35, 5 / k, 0, 7); lctx.fill(); }
+  // you: view cone and dot
+  lctx.translate(P.x, -P.y); lctx.rotate(-P.yaw);
+  const g = lctx.createRadialGradient(0, 0, 0, 0, 0, 5); g.addColorStop(0, 'rgba(255,190,90,.75)'); g.addColorStop(1, 'rgba(255,190,90,0)');
+  lctx.fillStyle = g; lctx.beginPath(); lctx.moveTo(0, 0); lctx.arc(0, 0, 5, -.5, .5); lctx.closePath(); lctx.fill();
+  lctx.fillStyle = '#ff9f2e'; lctx.strokeStyle = '#fff'; lctx.lineWidth = 2.5 / k; lctx.beginPath(); lctx.arc(0, 0, 6.5 / k, 0, 7); lctx.fill(); lctx.stroke();
+  lctx.fillStyle = '#fff'; lctx.beginPath(); lctx.moveTo(12 / k, 0); lctx.lineTo(6 / k, -4 / k); lctx.lineTo(6 / k, 4 / k); lctx.closePath(); lctx.fill();
+  lctx.restore();
+  if (ENTRY) { const [ex, ey] = locToScreen(ENTRY.x + .9, ENTRY.y - .35); lctx.font = '700 10px Inter,sans-serif'; lctx.fillStyle = '#35d07f'; lctx.fillText('IN / OUT', ex + 8, ey + 3); }
+  // true north
+  { const na = Math.atan2(-NORTH[1], NORTH[0]) + rot, ox = cw - 26, oy = 26; lctx.save(); lctx.translate(ox, oy);
+    lctx.fillStyle = 'rgba(8,24,56,.75)'; lctx.beginPath(); lctx.arc(0, 0, 19, 0, 7); lctx.fill(); lctx.rotate(na);
+    lctx.fillStyle = '#ff5a4d'; lctx.beginPath(); lctx.moveTo(15, 0); lctx.lineTo(-3, -6); lctx.lineTo(-3, 6); lctx.closePath(); lctx.fill();
+    lctx.fillStyle = '#fff'; lctx.beginPath(); lctx.moveTo(-15, 0); lctx.lineTo(-3, -6); lctx.lineTo(-3, 6); lctx.closePath(); lctx.fill(); lctx.restore();
+    lctx.font = '800 10px Inter,sans-serif'; lctx.fillStyle = '#fff'; lctx.textAlign = 'center'; lctx.fillText('N', ox + Math.cos(na) * 27, oy + Math.sin(na) * 27 + 3.5); lctx.textAlign = 'left'; }
+  // readouts
+  const br = trueBearing(P.yaw), [e, n] = planToEnu([P.x, P.y]);
+  $('#locroom').textContent = rm ? rm.name : 'Passage';
+  $('#locface').textContent = `Facing ${CARD8[Math.round(br / 45) % 8]} · ${Math.round(br)}°`;
+  $('#locxy').textContent = `CAD  X ${P.x.toFixed(1)} m (${ftIn(P.x)})  ·  Y ${P.y.toFixed(1)} m (${ftIn(P.y)})`;
+  $('#locll').textContent = `GPS  ${(PIN0.lat + n / KLAT).toFixed(5)}° N, ${(PIN0.lng + e / KLNG).toFixed(5)}° E  (approx.)`;
+  const lt = loc.trail[loc.trail.length - 1]; if (!lt || Math.hypot(lt[0] - P.x, lt[1] - P.y) > .5) { loc.trail.push([P.x, P.y]); if (loc.trail.length > 500) loc.trail.shift(); }
+  if (rm !== loc.lastRoom) { if (loc.lastRoom !== null && rm && mode === 'walk') toast(`Entering ${rm.name}`); else if (loc.lastRoom && !rm && mode === 'walk') toast(`Leaving ${loc.lastRoom.name}`); loc.lastRoom = rm || null; }
+  drawCompass(br);
+}
+function locToScreen(x, y) { const v = loc.view, dx = (x - v.cx) * v.k, dy = -(y - v.cy) * v.k, c = Math.cos(v.rot), sn = Math.sin(v.rot); return [v.cw / 2 + c * dx - sn * dy, v.chh / 2 + sn * dx + c * dy]; }
+function screenToLoc(px, py) { const v = loc.view, dx = px - v.cw / 2, dy = py - v.chh / 2, c = Math.cos(-v.rot), sn = Math.sin(-v.rot); return [v.cx + (c * dx - sn * dy) / v.k, v.cy - (sn * dx + c * dy) / v.k]; }
+locC.onpointerdown = (e) => {
+  if (!loc.view || mode !== 'walk') return; const r = locC.getBoundingClientRect(), [x, y] = screenToLoc(e.clientX - r.left, e.clientY - r.top);
   const [fx, fy] = nearestFree(x, y); walk.glide = { x: fx, y: fy }; e.stopPropagation();
 };
+$('#locsize').onclick = () => { loc.big = !loc.big; $('#loc').classList.toggle('big', loc.big); needRender = true; };
+$('#locmode').onclick = () => { loc.headUp = !loc.headUp; $('#locmode').textContent = loc.headUp ? 'Heading up' : 'Plan up'; needRender = true; };
+let toastT = 0;
+function toast(t) { const el = $('#toast'); el.textContent = t; el.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => el.classList.remove('show'), 1900); }
+const compC = $('#compc'), cctx = compC.getContext('2d');
+function drawCompass(br) {
+  const dpr = Math.min(2, devicePixelRatio || 1), w = compC.clientWidth, h = compC.clientHeight;
+  if (compC.width !== Math.round(w * dpr)) { compC.width = Math.round(w * dpr); compC.height = Math.round(h * dpr); }
+  cctx.setTransform(dpr, 0, 0, dpr, 0, 0); cctx.clearRect(0, 0, w, h); cctx.textAlign = 'center';
+  const ppd = w / 150;                                             // 150 degrees across the strip
+  for (let d = Math.ceil((br - 80) / 15) * 15; d <= br + 80; d += 15) { const x = w / 2 + (d - br) * ppd, dd = ((d % 360) + 360) % 360, main = dd % 45 === 0;
+    const fadeA = 1 - Math.min(1, Math.abs(d - br) / 78); cctx.globalAlpha = fadeA;
+    cctx.fillStyle = dd === 0 ? '#ff5a4d' : '#fff'; cctx.fillRect(x - .75, main ? 4 : 8, 1.5, main ? 9 : 5);
+    if (main) { cctx.font = `${dd % 90 === 0 ? 800 : 600} ${dd % 90 === 0 ? 13 : 10.5}px Inter,sans-serif`; cctx.fillText(['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'][dd / 45], x, 28); } }
+  cctx.globalAlpha = 1; cctx.fillStyle = '#f2a24c'; cctx.beginPath(); cctx.moveTo(w / 2, 3); cctx.lineTo(w / 2 - 5, -3); cctx.lineTo(w / 2 + 5, -3); cctx.closePath(); cctx.fill(); cctx.fillRect(w / 2 - 1, 0, 2, 15);
+}
 
 function walkPose() {
   const p = W(walk.x, walk.y, EYE); const dir = new THREE.Vector3(Math.cos(walk.yaw) * Math.cos(walk.pitch), Math.sin(walk.pitch), -Math.sin(walk.yaw) * Math.cos(walk.pitch));
@@ -744,19 +934,25 @@ function walkPose() {
 }
 async function enterWalk(r) {
   stopTour();
+  if (stage !== 'floor') { stage = 'floor'; document.body.dataset.stage = 'floor'; hoverLevel(-1); setShell(0); }
   const start = r || ROOMS.find(x => x.name === 'Reception');
-  const [x, y] = clearSpot(start, [.25, .2]);
-  walk.x = x; walk.y = y; walk.yaw = r ? Math.atan2(start.cy - y, start.cx - x) : Math.PI; walk.pitch = -.06;
-  setMode('walk');
+  const tp = tourPose(start), [x, y] = toPlan(tp.p), [tx, ty] = toPlan(tp.t);
+  const jump = walk.active;                       // already inside: cut with a short fade instead of flying through walls
+  if (jump) await fade(true);
+  walk.active = false; walk.glide = null;
+  walk.x = x; walk.y = y; walk.yaw = Math.atan2(ty - y, tx - x); walk.pitch = -.07;
+  setMode('walk'); setFocus(start);
   const { p, t } = walkPose();
-  controls.enabled = true; controls.maxPolarAngle = Math.PI; controls.minDistance = 0.01;
-  await controls.setLookAt(p.x, p.y, p.z, t.x, t.y, t.z, true);
+  controls.enabled = true; controls.maxPolarAngle = Math.PI; controls.minDistance = 0.01; controls.setBoundary(null);
+  if (jump) { controls.setLookAt(p.x, p.y, p.z, t.x, t.y, t.z, false); controls.update(0); needRender = true; await sleep(120); fade(false); }
+  else { controls.smoothTime = ST(.9); await controls.setLookAt(p.x, p.y, p.z, t.x, t.y, t.z, true); controls.smoothTime = ST(.32); }
   if (mode !== 'walk') return;
   controls.enabled = false; walk.active = true; needRender = true;
 }
 function exitWalk() {
   if (walk.active) { const { p, t } = walkPose(); const far = p.clone().add(t.clone().sub(p).multiplyScalar(4)); controls.setLookAt(p.x, p.y, p.z, far.x, far.y, far.z, false); }
   walk.active = false; controls.enabled = true; controls.minDistance = 2.5; controls.maxPolarAngle = 1.38;
+  controls.setBoundary(new THREE.Box3(new THREE.Vector3(bx0 - CX - 2, -1, -(by1 - CY) - 2), new THREE.Vector3(bx1 - CX + 2, 3, -(by0 - CY) + 2)));
 }
 
 // look by dragging, glide by clicking the floor
@@ -778,7 +974,7 @@ canvas.addEventListener('pointerup', (e) => {
   if (stage === 'building') { if (pickLevel(e) === 1) enterFloor(); return; }
   const hit = pickFloor(e); if (!hit) return;
   if (walk.active) { const [fx, fy] = nearestFree(...hit); walk.glide = { x: fx, y: fy }; }
-  else if (mode === 'orbit' && stage === 'floor') { const r = roomAt(...hit); if (r && r !== focus) flyToRoom(r); }
+  else if (mode === 'orbit' && stage === 'floor') { const r = roomAt(...hit); if (r) enterWalk(r); }
 });
 canvas.addEventListener('dblclick', (e) => { if (mode === 'orbit' && stage === 'floor') { const hit = pickFloor(e); const r = hit && roomAt(...hit); if (r) enterWalk(r); } });
 const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
@@ -880,15 +1076,15 @@ async function nextStop() {
     controls.setLookAt(p.x, p.y, p.z, t.x, t.y, t.z, false); controls.update(0); needRender = true;
     await sleep(250); fade(false);
   } else {
-    controls.smoothTime = st.ext ? 1.6 : 1.1;
+    controls.smoothTime = ST(st.ext ? 1.6 : 1.1);
     await controls.setLookAt(p.x, p.y, p.z, t.x, t.y, t.z, true);
-    controls.smoothTime = .32;
+    controls.smoothTime = ST(.32);
   }
   updateCrumbs();
   if (mode !== 'tour') return;
   clearTimeout(tourTimer); tourTimer = setTimeout(nextStop, st.ext ? 1800 : 2600);
 }
-function stopTour() { if (mode !== 'tour') return; clearTimeout(tourTimer); $('#caption').style.display = 'none'; controls.smoothTime = .32; $('#fade').classList.remove('on');
+function stopTour() { if (mode !== 'tour') return; clearTimeout(tourTimer); $('#caption').style.display = 'none'; controls.smoothTime = ST(.32); $('#fade').classList.remove('on');
   setMode('orbit', 'stay'); if (stage === 'building') toBuilding(); }
 $('#b-tour').onclick = () => mode === 'tour' ? stopTour() : startTour();
 
@@ -934,14 +1130,15 @@ function drawRuler() {
 }
 
 // ---------------------------------------------------------------- modes
-let mode = 'orbit';
+let mode = 'orbit', hintT = 0;
 function setMode(m, toOverview) {
-  if (mode === 'tour' && m !== 'tour') { clearTimeout(tourTimer); $('#caption').style.display = 'none'; controls.smoothTime = .32; }
+  if (mode === 'tour' && m !== 'tour') { clearTimeout(tourTimer); $('#caption').style.display = 'none'; controls.smoothTime = ST(.32); }
   if (mode === 'walk' && m !== 'walk') exitWalk();
   if (mode === 'elev' && m !== 'elev') { renderer.clippingPlanes = []; ortCtl.enabled = false; controls.enabled = true; setShell(stage === 'building' ? 1 : 0, true); }
   mode = m;
   document.body.dataset.mode = m;
-  $('#walkui').classList.toggle('show', m === 'walk');
+  $('#walkui').classList.toggle('show', m === 'walk' || m === 'tour');
+  if (m === 'walk' || m === 'tour') { loc.trail = []; loc.lastRoom = null; clearTimeout(hintT); $('#hint').classList.remove('gone'); hintT = setTimeout(() => $('#hint').classList.add('gone'), 6000); }
   $('#elev').classList.toggle('show', m === 'elev');
   $('#rail').style.display = m === 'orbit' ? '' : 'none';
   $('#help').style.display = m === 'orbit' ? '' : 'none';
@@ -949,7 +1146,8 @@ function setMode(m, toOverview) {
   $('#b-over').classList.toggle('on', m === 'orbit' && !focus);
   ceiling.visible = m === 'walk' || m === 'tour';
   seatDots.visible = seatDots.visible && m === 'orbit';
-  if (m !== 'tour' && m !== 'orbit') $('#card').classList.remove('show');
+  if (m === 'elev') $('#card').classList.remove('show');
+  if (m !== 'walk' && m !== 'tour') showHotspots(null);
   setWalls(wallsFull);
   if (m === 'elev') { controls.enabled = false; ortCtl.enabled = true; elevSetup(true); }
   if (m === 'orbit') {
@@ -960,13 +1158,19 @@ function setMode(m, toOverview) {
   document.body.classList.toggle('immersive', m === 'walk' || m === 'tour');
   updateCrumbs(); shadowsDirty = true; needRender = true;
 }
+$('#b-plan').onclick = async () => {
+  if (stage !== 'floor') await enterFloor(); if (mode !== 'orbit') setMode('orbit', 'stay');
+  setFocus(null); seatDots.visible = true; $('#b-seats').classList.add('on');
+  const { tgt, dist } = frameView(platePts(), 0, .06, innerWidth > 760);
+  controls.moveTo(tgt.x, tgt.y, tgt.z, true); controls.rotateTo(0, .06, true); controls.dollyTo(dist, true);
+};
 $('#b-over').onclick = () => { if (stage === 'building') { if (mode !== 'orbit') setMode('orbit', 'stay'); enterFloor(); } else setMode('orbit', true); };
 const needFloor = async () => { if (stage !== 'floor') { await enterFloor(); } };
 $('#b-walk').onclick = async () => { if (mode === 'walk') return setMode('orbit'); await needFloor(); enterWalk(focus); };
 $('#b-elev').onclick = async () => { if (mode === 'elev') return setMode('orbit'); elevKind = stage === 'building' ? 'facade' : 'section'; setMode('elev'); };
 
 // ---------------------------------------------------------------- loop
-let shadowsDirty = true, lastInput = 0;
+let shadowsDirty = true, lastInput = 0, frameN = 0;
 addEventListener('pointerdown', () => { lastInput = performance.now(); }, true); addEventListener('wheel', () => { lastInput = performance.now(); }, true);
 const clock = new THREE.Clock();
 function resize() {
@@ -982,7 +1186,8 @@ function frame() {
   if (Math.abs(wallScale - wallTarget) > .001) { wallScale += (wallTarget - wallScale) * Math.min(1, dt * 7); wallsG.scale.y = wallScale; moved = true; shadowsDirty = true; }
   if (walk.active) {
     if (stepWalk(dt)) moved = true;
-    const { p, t } = walkPose(); camera.position.copy(p); camera.lookAt(t); drawMini();
+    const { p, t } = walkPose(); camera.position.copy(p); camera.lookAt(t);
+    if ((frameN++ & 15) === 0) { const rr = roomAt(walk.x, walk.y); if (rr && rr !== focus) setFocus(rr); }
     if (needRender) moved = true;
   } else if (mode === 'elev') { if (ortCtl.update(dt)) moved = true; }
   else if (controls.update(dt)) moved = true;
@@ -991,18 +1196,22 @@ function frame() {
   if (moved || needRender || (still && !aoDone)) {
     if (shadowsDirty && (still || !moved)) { renderer.shadowMap.needsUpdate = true; shadowsDirty = false; }
     if (mode === 'elev') renderer.render(scene, ortho);
-    else if (still) { composer.render(); aoDone = true; }
+    else if (still && !LITE) { composer.render(); aoDone = true; }
+    else if (still) { renderer.render(scene, camera); aoDone = true; }
     else renderer.render(scene, camera);
-    updateLabels(); drawRuler(); needRender = false;
+    updateLabels(); drawRuler(); if (mode === 'walk' || mode === 'tour') drawLoc(); needRender = false;
   }
   requestAnimationFrame(frame);
 }
 renderer.shadowMap.needsUpdate = true;
 scene.fog = new THREE.Fog(0xe7e3dc, 260, 900);
 setTOD(TOD.t); setShell(1, true);
-if (/[#&]floor/.test(location.hash)) { stage = 'floor'; setShell(0, true); document.body.dataset.stage = 'floor'; controls.maxDistance = 85; overview(false); } else toBuilding(false);
+if (/[#&]floor/.test(location.hash)) { stage = 'floor'; setShell(0, true); document.body.dataset.stage = 'floor'; controls.maxDistance = 85; overview(false); }
+else { await toBuilding(false);
+  if (!LITE && !matchMedia('(prefers-reduced-motion: reduce)').matches) { controls.rotateTo(BUILDING_VIEW.az + .9, .5, false); controls.dollyTo(controls.distance * 3.2, false);
+    setTimeout(() => { if (stage === 'building' && mode === 'orbit') { controls.smoothTime = ST(1.7); toBuilding(true).then(() => { controls.smoothTime = ST(.32); }); } }, 700); } }
 controls.update(0); updateCrumbs();
 frame();
 setTimeout(() => $('#load').classList.add('done'), 120);
 setTimeout(() => { $('#load').remove(); }, 900);
-window.__volt = { L, ROOMS, controls, flyToRoom, overview, enterWalk, setMode, startTour, stopTour, walk, enterFloor, toBuilding, setTOD, get stage() { return stage; }, get mode() { return mode; }, render: () => { needRender = true; } };
+window.__volt = { POIS, showPlace, entranceView, L, ROOMS, controls, flyToRoom, overview, enterWalk, setMode, startTour, stopTour, walk, enterFloor, toBuilding, setTOD, get stage() { return stage; }, get mode() { return mode; }, render: () => { needRender = true; } };
