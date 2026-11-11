@@ -23,7 +23,8 @@ soft += [Point(s['x'], s['y']).buffer(0.3) for s in L['seats']]
 if L.get('atrium'): hard.append(Polygon(L['atrium']))
 HARD = unary_union(hard); ALL = unary_union(hard + soft)
 floor = unary_union([Polygon(f['outer'], f['holes']) for f in L['floor']])
-# still cameras set by hand to match the design deck's own views (x, y, look x, look y)
+# still cameras set by hand to match the design deck's own views:
+# (x, y, look x, look y), then optionally the lens in mm, the eye height and the height looked at
 OVERRIDE = {'Open workstations': (9.3, 14.75, 18.5, 21.2)}   # deck page 4: from the passage corner, along the bench rows
 SKIP = {'Phone booths PH-05 to 07', 'Phone booths PH-01 to 04', 'UPS room', 'Server room', 'Wet pantry', 'Entry', 'Atrium-side lounge'}
 out = []
@@ -51,13 +52,18 @@ for r in L['rooms']:
                 if best_s is None or s > best_s[0]: best_s = (s, x, y, cx + (tx - cx) * 0.35, cy + (ty - cy) * 0.35)
             sp = min(c, 1.4) * 2 - dc * 1.5
             if best_p is None or sp > best_p[0]: best_p = (sp, x, y)
-    if r['name'] in OVERRIDE: best_s = (9, *OVERRIDE[r['name']])
+    lens, eye, look_z = 20, EYE, 1.05
+    if r['name'] in OVERRIDE:
+        o = OVERRIDE[r['name']]; best_s = (9, *o[:4])
+        if len(o) > 4: lens = o[4]
+        if len(o) > 5: eye = o[5]
+        if len(o) > 6: look_z = o[6]
     if best_s is None and best_p is None: continue
     if best_s is None: best_s = (0, best_p[1], best_p[2], cx, cy)
     slug = ''.join(ch if ch.isalnum() else '-' for ch in r['name'].lower()).strip('-')
     while '--' in slug: slug = slug.replace('--', '-')
     out.append({"room": r['name'], "slug": slug, "floor": r['floor'],
-                "still": {"pos": [round(best_s[1], 2), round(best_s[2], 2), EYE], "look": [round(best_s[3], 2), round(best_s[4], 2), 1.05], "lens_mm": 20},
+                "still": {"pos": [round(best_s[1], 2), round(best_s[2], 2), eye], "look": [round(best_s[3], 2), round(best_s[4], 2), look_z], "lens_mm": lens},
                 "pano": {"pos": [round(best_p[1], 2), round(best_p[2], 2), EYE]}})
 json.dump({"about": "Camera for each room, in the CAD layout's frame (metres, x east, y north, z up). Made by make_cameras.py.", "eye": EYE, "rooms": out}, open(sys.argv[2], 'w'), indent=1)
 print(len(out), 'rooms:', ', '.join(o['slug'] for o in out))

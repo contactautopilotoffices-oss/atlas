@@ -34,7 +34,7 @@ What makes the picture read as a photograph (all of it is in this file):
   - roughness varies across every surface, walls are scuffed low down;
   - light is a physical sky and a sun through the facade windows (with light
     portals), plus the ceiling lights at 4000 K; the camera is white balanced
-    at 4500 K, so lamps read slightly warm and daylight slightly cool;
+    at about 4150 K, so lamps read slightly warm and daylight slightly cool;
   - the camera has depth of field (f/8, seven blades);
   - after the denoised render, a small finishing step in numpy: a faint glow
     round the lights, a touch of chromatic aberration, a slight softening, a
@@ -86,7 +86,7 @@ def kelvin(t):
     b = 255.0 if t >= 66 else (0.0 if t <= 19 else 138.5177312231 * math.log(t - 10) - 305.0447927307)
     c = [min(255.0, max(0.0, v)) / 255 for v in (r, g, b)]
     return tuple(((v + 0.055) / 1.055) ** 2.4 if v > 0.04045 else v / 12.92 for v in c)
-WB_K = 4500.0      # assumed: the camera's white balance, between the 4000 K lamps and daylight
+WB_K = 4150.0      # assumed: the camera's white balance, between the 4000 K lamps and daylight
 LAMP_K = 4000.0    # assumed: neutral white office lamps
 SUN_K = 5200.0     # a morning sun
 def light_col(t, amount=1.0):
@@ -140,7 +140,7 @@ def bump(nt, b, height_socket, strength, distance=0.002):
     nt.links.new(height_socket, bp.inputs["Height"]); nt.links.new(bp.outputs["Normal"], b.inputs["Normal"])
 
 def mat_carpet():
-    m, nt, b = pbr("carpet", "#45423f", rough=0.95, sheen=0.3)
+    m, nt, b = pbr("carpet", "#2a2928", rough=0.95, sheen=0.08)
     # tile-to-tile tone
     mpt = world_coords(nt, (2.0, 2.0, 1.0)); br = N(nt, "ShaderNodeTexBrick", (-560, 320)); br.offset = 0.5
     br.inputs["Scale"].default_value = 1.0; br.inputs["Mortar Size"].default_value = 0.004; br.inputs["Brick Width"].default_value = 1.0; br.inputs["Row Height"].default_value = 1.0; br.inputs["Bias"].default_value = -0.2
@@ -154,8 +154,8 @@ def mat_carpet():
     a1 = N(nt, "ShaderNodeMath", (-380, 120), operation="MULTIPLY_ADD"); a1.inputs[1].default_value = 0.7; nt.links.new(n1.outputs["Fac"], a1.inputs[0]); nt.links.new(n2.outputs["Fac"], a1.inputs[2])
     sep = N(nt, "ShaderNodeSeparateColor", (-380, 320)) if hasattr(bpy.types, "ShaderNodeSeparateColor") else N(nt, "ShaderNodeSeparateRGB", (-380, 320))
     nt.links.new(br.outputs["Color"], sep.inputs[0])
-    a2 = N(nt, "ShaderNodeMath", (-240, 200), operation="MULTIPLY_ADD"); a2.inputs[1].default_value = 0.22; nt.links.new(sep.outputs[0], a2.inputs[0]); nt.links.new(a1.outputs[0], a2.inputs[2])
-    r = ramp(nt, [(0.42, "#1d1c1c"), (0.62, "#2e2d2c"), (0.8, "#413f3d"), (0.95, "#5c5853")], (-80, 100))
+    a2 = N(nt, "ShaderNodeMath", (-240, 200), operation="MULTIPLY_ADD"); a2.inputs[1].default_value = 0.34; nt.links.new(sep.outputs[0], a2.inputs[0]); nt.links.new(a1.outputs[0], a2.inputs[2])
+    r = ramp(nt, [(0.42, "#141414"), (0.62, "#201f1f"), (0.8, "#2e2d2c"), (0.95, "#44423f")], (-80, 100))
     nt.links.new(a2.outputs[0], r.inputs["Fac"]); nt.links.new(r.outputs["Color"], b.inputs["Base Color"])
     mp3 = world_coords(nt, (700, 700, 700)); n3 = N(nt, "ShaderNodeTexNoise", (-560, -400)); n3.inputs["Scale"].default_value = 1.0
     nt.links.new(mp3.outputs["Vector"], n3.inputs["Vector"]); bump(nt, b, n3.outputs["Fac"], 0.6, 0.003)
@@ -202,7 +202,7 @@ def mat_glass(name, tint="#eef5f4"):
 def mat_leaf():
     """A thin leaf: light passes through it, the midrib and side veins are paler and sit in a groove, every leaf is its
     own green. u runs across the leaf and v along it (UV map "UVMap"); the second map "id" holds a random number per leaf."""
-    m, nt, b = pbr("leaf", "#2f6a2c", rough=0.36, coat=0.12, vary=0.3, vscale=30.0)
+    m, nt, b = pbr("leaf", "#2f6a2c", rough=0.3, coat=0.15, vary=0.3, vscale=30.0)
     out = next(n for n in nt.nodes if n.type == "OUTPUT_MATERIAL")
     uv = N(nt, "ShaderNodeUVMap", (-1500, 200)); uv.uv_map = "UVMap"; s1 = N(nt, "ShaderNodeSeparateXYZ", (-1320, 200)); nt.links.new(uv.outputs[0], s1.inputs[0])
     idn = N(nt, "ShaderNodeUVMap", (-1500, -100)); idn.uv_map = "id"; s2 = N(nt, "ShaderNodeSeparateXYZ", (-1320, -100)); nt.links.new(idn.outputs[0], s2.inputs[0])
@@ -225,22 +225,22 @@ def mat_leaf():
     g = N(nt, "ShaderNodeNewGeometry", (-1500, -400)); nz = N(nt, "ShaderNodeTexNoise", (-1320, -400)); nz.inputs["Scale"].default_value = 14.0; nz.inputs["Detail"].default_value = 3.0
     nt.links.new(g.outputs["Position"], nz.inputs["Vector"])
     tone = math_("MULTIPLY_ADD", nz.outputs["Fac"], 0.35, math_("MULTIPLY", s2.outputs["X"], 0.75, loc=(-1140, -160)), (-980, -200))
-    r = ramp(nt, [(0.08, "#1c4a20"), (0.4, "#2c6427"), (0.7, "#41802f"), (1.0, "#63973a")], (-800, -200)); nt.links.new(tone, r.inputs["Fac"])
+    r = ramp(nt, [(0.08, "#12361a"), (0.4, "#1d4c21"), (0.7, "#2c6428"), (1.0, "#477d33")], (-800, -200)); nt.links.new(tone, r.inputs["Fac"])
     pale = math_("MAXIMUM", math_("MULTIPLY", midrib, 0.6, loc=(-640, 320)), math_("MULTIPLY", vein, 0.22, loc=(0, 120)), loc=(160, 240))
-    stalk = mrange(s1.outputs["Y"], 0.0, 0.03, 1.0, 0.0, (-800, 480)); pale2 = math_("MAXIMUM", pale, math_("MULTIPLY", stalk, 0.75, loc=(-640, 480)), loc=(320, 300))
-    mixc = N(nt, "ShaderNodeMix", (480, 200)); mixc.data_type = "RGBA"; nt.links.new(pale2, mixc.inputs[0]); nt.links.new(r.outputs["Color"], mixc.inputs[6]); mixc.inputs[7].default_value = (*lin("#a9c46a"), 1)
+    stalk = mrange(s1.outputs["Y"], 0.0, 0.03, 1.0, 0.0, (-800, 480)); pale2 = math_("MAXIMUM", pale, math_("MULTIPLY", stalk, 0.3, loc=(-640, 480)), loc=(320, 300))
+    mixc = N(nt, "ShaderNodeMix", (480, 200)); mixc.data_type = "RGBA"; nt.links.new(pale2, mixc.inputs[0]); nt.links.new(r.outputs["Color"], mixc.inputs[6]); mixc.inputs[7].default_value = (*lin("#8fb05a"), 1)
     nt.links.new(mixc.outputs[2], b.inputs["Base Color"])
     hgt = math_("MULTIPLY_ADD", midrib, -1.0, math_("MULTIPLY", vein, -0.45, loc=(160, 0)), (320, 0)); bump(nt, b, hgt, 0.35, 0.0012)
-    tr = N(nt, "ShaderNodeBsdfTranslucent", (700, 60)); sc = N(nt, "ShaderNodeVectorMath", (560, 0), operation="MULTIPLY"); sc.inputs[1].default_value = (1.5, 1.9, 0.7)
+    tr = N(nt, "ShaderNodeBsdfTranslucent", (700, 60)); sc = N(nt, "ShaderNodeVectorMath", (560, 0), operation="MULTIPLY"); sc.inputs[1].default_value = (1.2, 1.5, 0.6)
     nt.links.new(mixc.outputs[2], sc.inputs[0]); nt.links.new(sc.outputs[0], tr.inputs["Color"])
-    ms = N(nt, "ShaderNodeMixShader", (900, 200)); ms.inputs[0].default_value = 0.3      # how much light the leaf lets through
+    ms = N(nt, "ShaderNodeMixShader", (900, 200)); ms.inputs[0].default_value = 0.22      # how much light the leaf lets through
     nt.links.new(b.outputs["BSDF"], ms.inputs[1]); nt.links.new(tr.outputs["BSDF"], ms.inputs[2]); nt.links.new(ms.outputs["Shader"], out.inputs["Surface"])
 def mat_screen():
     """A monitor that is switched on: a soft abstract wallpaper as a dim emission, under glass with fingerprints."""
     m, nt, b = pbr("screen_glass", "#050506", rough=0.16, coat=0.6, vary=0.45, vscale=9.0)
     tc = N(nt, "ShaderNodeTexCoord", (-900, 300)); mp = N(nt, "ShaderNodeMapping", (-720, 300)); mp.inputs["Scale"].default_value = (1.6, 1.0, 2.4); nt.links.new(tc.outputs["Object"], mp.inputs["Vector"])
-    nz = N(nt, "ShaderNodeTexNoise", (-540, 300)); nz.inputs["Scale"].default_value = 1.6; nz.inputs["Detail"].default_value = 1.0; nz.inputs["Distortion"].default_value = 1.2; nt.links.new(mp.outputs["Vector"], nz.inputs["Vector"])
-    r = ramp(nt, [(0.3, "#14253a"), (0.48, "#2c5566"), (0.64, "#cfd6d8"), (0.8, "#c98a4a")], (-340, 300)); nt.links.new(nz.outputs["Fac"], r.inputs["Fac"])
+    nz = N(nt, "ShaderNodeTexNoise", (-540, 300)); nz.inputs["Scale"].default_value = 0.9; nz.inputs["Detail"].default_value = 0.0; nz.inputs["Distortion"].default_value = 0.4; nt.links.new(mp.outputs["Vector"], nz.inputs["Vector"])
+    r = ramp(nt, [(0.25, "#1a2a44"), (0.5, "#33566a"), (0.7, "#7f9aa3"), (0.9, "#c9a27a")], (-340, 300)); nt.links.new(nz.outputs["Fac"], r.inputs["Fac"])
     for nm in ("Emission Color", "Emission"):
         if nm in b.inputs: nt.links.new(r.outputs["Color"], b.inputs[nm]); break
     setin(b, ["Emission Strength"], 0.7)
@@ -253,8 +253,14 @@ mat_ceiling()
 mat_fabric("screen_orange", "#dd8d36"); mat_fabric("screen_white", "#f1efea"); mat_fabric("sofa_grey", "#a69687"); mat_fabric("sofa_teal", "#286e7a")
 mat_fabric("sofa_orange", "#d98733"); mat_fabric("blind", "#d8cfc0", 0.95); mat_fabric("acoustic", "#3d6a8b")
 pbr("white_metal", "#f1f0ed", rough=0.42, metal=0.0, coat=0.3); pbr("black_metal", "#1c1c1d", rough=0.38, metal=0.85); pbr("alu", "#c9cbce", rough=0.3, metal=1.0)
-mat_screen(); pbr("plastic_black", "#18181a", rough=0.5); pbr("plastic_orange", "#dd8d36", rough=0.45)
-pbr("planter_white", "#f3f2ef", rough=0.5); pbr("planter_top", "#333334", rough=0.7); pbr("soil", "#2a2018", rough=1.0)
+mat_screen(); pbr("plastic_black", "#18181a", rough=0.5); pbr("plastic_orange", "#dd8d36", rough=0.45); pbr("plastic_grey", "#b4b2ad", rough=0.45)
+pbr("planter_white", "#f3f2ef", rough=0.5); pbr("planter_top", "#333334", rough=0.7)
+def mat_soil():
+    m, nt, b = pbr("soil", "#2a2018", rough=1.0, vary=0)      # loose, lumpy potting soil
+    mp = world_coords(nt, (55, 55, 55)); n = N(nt, "ShaderNodeTexNoise", (-520, 0)); n.inputs["Scale"].default_value = 1.0; n.inputs["Detail"].default_value = 6.0
+    nt.links.new(mp.outputs["Vector"], n.inputs["Vector"]); r = ramp(nt, [(0.3, "#120d09"), (0.55, "#2a2018"), (0.75, "#4a3a2a")], (-300, 0))
+    nt.links.new(n.outputs["Fac"], r.inputs["Fac"]); nt.links.new(r.outputs["Color"], b.inputs["Base Color"]); bump(nt, b, n.outputs["Fac"], 1.0, 0.012)
+mat_soil()
 pbr("stone", "#d7d2c9", rough=0.25); pbr("tile", "#eeece8", rough=0.2); pbr("vinyl", "#b7b3ac", rough=0.55)
 pbr("frost", "#f6f6f4", rough=0.6, alpha=0.86); pbr("pot", "#3a3a3a", rough=0.6)
 # the lamps: 4000 K (assumed), seen through the camera's white balance
@@ -514,8 +520,12 @@ for room, ds in rows.items():
         for u in (-ln / 2 + 0.3, ln / 2 - 0.3): put(cyl_mesh(0.003, H - 2.39, "black_metal", 6), T(x + ca * u, y + sa * u, 2.39), "wire")
 
 # tables
+stools = [s for s in L["seats"] if s["kind"] == "cafe stool"]
 for t in L["tables"]:
     h = t["h"]
+    if "poly" in t and any(min(math.hypot(s["x"] - px, s["y"] - py) for px, py in t["poly"]) < 0.9 or
+                           (min(p[0] for p in t["poly"]) - 0.1 <= s["x"] <= max(p[0] for p in t["poly"]) + 0.1 and min(p[1] for p in t["poly"]) - 0.6 <= s["y"] <= max(p[1] for p in t["poly"]) + 0.6) for s in stools):
+        h = L["heights"]["high_desk"]      # bar stools stand at it, so it is a high counter (assumed, like every height)
     if "circle" in t:
         x, y, r = t["circle"]; put(lathe_mesh(((0.0, 0.0), (r - 0.006, 0.0), (r, 0.006), (r, 0.029), (r - 0.006, 0.035), (0.0, 0.035)), "oak", 56), T(x, y, h - 0.035), "table_top")
         put(cyl_mesh(0.035, h - 0.035, "black_metal", 16), T(x, y, 0), "table_leg"); put(cyl_mesh(r * 0.55, 0.015, "black_metal"), T(x, y, 0), "table_base")
@@ -551,8 +561,48 @@ def load_model(path, height, seat_band):
     me = ch.data; bpy.data.objects.remove(ch); return me
 CHAIR = load_model(os.path.join(HERE, "models", "chair.glb"), 1.02, (0.40, 0.52))
 LOUNGE = load_model(os.path.join(HERE, "models", "lounge.glb"), 0.82, (0.30, 0.50))
-cafe_seat = box_mesh(0.44, 0.44, 0.05, 0.02, "plastic_orange"); cafe_back = box_mesh(0.05, 0.42, 0.36, 0.02, "plastic_orange"); cafe_leg = cyl_mesh(0.014, 0.45, "oak", 10)
-stool_seat = cyl_mesh(0.19, 0.05, "plastic_orange"); stool_leg = cyl_mesh(0.013, 0.66, "black_metal", 8)
+def shell_mesh(mat, seat_h, w, depth, back_h, lean=12.0, thick=0.012):
+    """A one-piece moulded seat shell, as on the deck's cafe chairs: a seat that curves up into a back, cupped across,
+    with rounded corners. The chair faces +x. The shape is assumed; where each chair stands is from the CAD."""
+    key = ("shell", mat, seat_h, w, depth, back_h)
+    if key in _MESH: return _MESH[key]
+    nu, nv = 12, 26; R = 0.085; turn = math.radians(90 - lean); Ls = depth - R; La = R * turn; total = Ls + La + back_h
+    pts = []; x, z, n_steps = depth / 2, seat_h, 400; prev = 0.0; k = 0
+    for i in range(n_steps + 1):
+        s_ = total * i / n_steps
+        phi = math.pi if s_ < Ls else (math.pi - (s_ - Ls) / R if s_ < Ls + La else math.pi - turn)
+        if i: x += math.cos(phi) * (s_ - prev); z += math.sin(phi) * (s_ - prev)
+        prev = s_
+        if i == round(n_steps * k / nv): pts.append((x, z, phi, s_ / total)); k += 1
+    bm = bmesh.new(); grid = []
+    for (x, z, phi, v) in pts:
+        on_back = max(0.0, (v * total - Ls) / (La + back_h)); end = min(v, 1 - v) * total
+        hw = w / 2 * (1 - 0.16 * on_back) * (0.8 + 0.2 * math.sin(min(1.0, end / 0.07) * math.pi / 2)); nx, nz = math.sin(phi), -math.cos(phi)
+        dip = -0.012 * math.sin(min(1.0, v * total / 0.1) * math.pi / 2) + 0.012          # the front edge rolls down a little
+        row = []
+        for i in range(nu + 1):
+            u = -1 + 2 * i / nu; cup = (0.03 * u * u + 0.02 * u ** 4) * (1 + 0.8 * on_back)
+            row.append(bm.verts.new((x + nx * cup, u * hw, z + nz * cup - dip)))
+        grid.append(row)
+    for a_, b_ in zip(grid, grid[1:]):
+        for i in range(nu): bm.faces.new((a_[i], a_[i + 1], b_[i + 1], b_[i]))
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces); bmesh.ops.solidify(bm, geom=list(bm.faces), thickness=thick)
+    me = bpy.data.meshes.new("shell"); bm.to_mesh(me); bm.free(); me.materials.append(MATS[mat]); weighted_normals(me, math.radians(60))
+    _MESH[key] = me; return me
+def rod(M0, p0, p1, r0, r1, mat, seg=12, name="leg"):
+    """A straight tapered rod from p0 to p1 (chair legs, footrests)."""
+    d = Vector(p1) - Vector(p0); me = cyl_mesh(r0, round(d.length, 3), mat, seg, r1)
+    put(me, M0 @ Matrix.Translation(p0) @ Vector((0, 0, 1)).rotation_difference(d).to_matrix().to_4x4(), name)
+def cafe_chair(M0, mat):
+    put(shell_mesh(mat, 0.45, 0.46, 0.43, 0.34), M0, "cafe_shell")
+    for sx in (-1, 1):
+        for sy in (-1, 1): rod(M0, (sx * 0.13 - 0.02, sy * 0.13, 0.445), (sx * 0.21 - 0.02, sy * 0.2, 0.0), 0.017, 0.011, "oak")
+def cafe_stool(M0):
+    put(shell_mesh("planter_white", 0.74, 0.4, 0.37, 0.13), M0, "stool_shell")
+    for sx in (-1, 1):
+        for sy in (-1, 1): rod(M0, (sx * 0.1 - 0.02, sy * 0.1, 0.735), (sx * 0.2 - 0.02, sy * 0.19, 0.0), 0.016, 0.011, "oak")
+    for sy in (-1, 1): rod(M0, (-0.15 - 0.02, sy * 0.145, 0.27), (0.15 - 0.02, sy * 0.145, 0.27), 0.007, 0.007, "black_metal", 8, "footrest")
+    for sx in (-1, 1): rod(M0, (sx * 0.15 - 0.02, -0.145, 0.27), (sx * 0.15 - 0.02, 0.145, 0.27), 0.007, 0.007, "black_metal", 8, "footrest")
 def sofa(x, y, a, length, depth, places, mat):
     M0 = T(x, y, 0) @ RZ(a)
     put(box_mesh(depth, length, 0.24, 0.06, mat), M0 @ T(0, 0, 0.16), "sofa_seat"); put(box_mesh(0.2, length, 0.44, 0.07, mat), M0 @ T(-depth / 2 + 0.1, 0, 0.3), "sofa_back")
@@ -576,18 +626,15 @@ def arc_back(r_in, r_out, z0, z1, half_angle, mat, seg=28):
     bm.faces.new(rings[0]); bm.faces.new(rings[-1]); bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
     me = bpy.data.meshes.new("arc_back"); bm.to_mesh(me); bm.free(); me.materials.append(MATS[mat]); weighted_normals(me, math.radians(55)); return me
 TUB_BACK = arc_back(0.24, 0.36, 0.3, 0.72, math.radians(100), "sofa_teal")
+n_cafe = 0
 for s in L["seats"]:
     k = s["kind"]; a = s["face"] + random.uniform(-0.09, 0.09); x, y = s["x"], s["y"]
     if k in ("task chair", "meeting chair", "staff chair", "director chair"):
         pull = random.choice((0.0, 0.0, 0.04, 0.09)); put(CHAIR, T(x - math.cos(a) * pull, y - math.sin(a) * pull, 0) @ RZ(a), "chair")
     elif k in ("lounge armchair", "visitor chair"): put(LOUNGE, T(x, y, 0) @ RZ(a), "lounge")
     elif k == "cafe chair":
-        M0 = T(x, y, 0) @ RZ(a); put(cafe_seat, M0 @ T(0, 0, 0.43), "cafe_seat"); put(cafe_back, M0 @ T(-0.2, 0, 0.5), "cafe_back")
-        for sx in (-1, 1):
-            for sy in (-1, 1): put(cafe_leg, M0 @ T(sx * 0.18, sy * 0.18, 0), "cafe_leg")
-    elif k == "cafe stool":
-        M0 = T(x, y, 0); put(stool_seat, M0 @ T(0, 0, 0.64), "stool")
-        for i in range(4): put(stool_leg, M0 @ T(math.cos(i * math.pi / 2 + 0.78) * 0.14, math.sin(i * math.pi / 2 + 0.78) * 0.14, 0), "stool_leg")
+        n_cafe += 1; cafe_chair(T(x, y, 0) @ RZ(a), "plastic_orange" if n_cafe % 2 else "plastic_grey")      # orange and grey by turns, as in the deck
+    elif k == "cafe stool": cafe_stool(T(x, y, 0) @ RZ(a))
     elif k in ("lounge tub chair", "lounge chair"):
         M0 = T(x, y, 0) @ RZ(a); put(TUB_SEAT, M0, "tub"); put(TUB_BACK, M0, "tub_back")
     elif "sofa" in k:
@@ -604,9 +651,9 @@ def leafy(x, y, z, n, spread, hgt):
         age = (i + PR.random()) / n                                    # 0 is a young leaf in the middle, 1 an old one outside
         ang = PR.uniform(0, 6.283); r0 = spread * (0.1 + 0.6 * age) * PR.uniform(0.4, 1.0)
         pos = Vector((x + math.cos(ang) * r0, y + math.sin(ang) * r0, z))
-        lp = hgt * PR.uniform(0.34, 0.58) * (0.75 + 0.35 * age); lb = hgt * PR.uniform(0.42, 0.62) * (0.7 + 0.3 * min(1.0, age * 2.5))
+        lp = hgt * PR.uniform(0.12, 0.6) * (0.8 + 0.3 * age); lb = hgt * PR.uniform(0.46, 0.72) * (0.7 + 0.3 * min(1.0, age * 2.5))
         wb = lb * PR.uniform(0.26, 0.37) / 2                             # half the blade's width
-        th0 = math.radians(3 + 36 * age * PR.uniform(0.5, 1.2)); bend = math.radians(PR.uniform(22, 70)) * (0.45 + 0.75 * age)
+        th0 = math.radians(3 + 46 * age * PR.uniform(0.5, 1.2)); bend = math.radians(PR.uniform(22, 70)) * (0.45 + 0.75 * age)
         fold = math.radians(PR.uniform(12, 34)); roll = PR.uniform(-0.7, 0.7); wav = PR.uniform(0.002, 0.006); ph = PR.uniform(0, 6.283); kv = PR.uniform(9, 17)
         dx, dy = math.cos(ang), math.sin(ang); side0 = Vector((-dy, dx, 0)); lid = PR.random(); k0 = len(V); total = lp + lb; prev_t = None; s_prev = 0.0
         for j in range(NS + NB + 1):
@@ -634,16 +681,21 @@ PH = L["heights"]["planter"]
 for p in L["planters"]:
     x, y = p["c"]; a, w, d = p["a"], p["w"], p["d"]
     box(x, y, 0.04, w, d, PH - 0.04, a, "planter_white", 0.008, "planter"); box(x, y, 0.06, w * 0.5, d + 0.01, PH - 0.12, a, "oak", 0.004, "planter_panel")
-    box(x, y, PH, w + 0.02, d + 0.02, 0.07, a, "planter_top", 0.008, "planter_tray"); box(x, y, PH + 0.05, w - 0.04, d - 0.04, 0.025, a, "soil")
-    ca, sa = math.cos(a), math.sin(a); nc = max(3, round(w / 0.3))
+    # the dark tray on top is a trough: a rim all round, with the soil sunk a little below it
+    ca, sa = math.cos(a), math.sin(a); rim = 0.03
+    for s_ in (-1, 1):
+        box(x - sa * s_ * (d / 2 + 0.01 - rim / 2), y + ca * s_ * (d / 2 + 0.01 - rim / 2), PH, w + 0.02, rim, 0.075, a, "planter_top", 0.006, "planter_tray")
+        box(x + ca * s_ * (w / 2 + 0.01 - rim / 2), y + sa * s_ * (w / 2 + 0.01 - rim / 2), PH, rim, d + 0.02 - 2 * rim + 0.004, 0.075, a, "planter_top", 0.006, "planter_tray")
+    box(x, y, PH - 0.005, w - 0.03, d - 0.03, 0.045, a, "soil")
+    nc = max(4, round(w / 0.21))
     for i in range(nc):
-        u = -w / 2 + w * (i + 0.5) / nc + PR.uniform(-0.03, 0.03); v = PR.uniform(-0.05, 0.05)
-        leafy(x + ca * u - sa * v, y + sa * u + ca * v, PH + 0.07, PR.randint(13, 18), min(d, 0.3) * 0.45, PR.uniform(0.36, 0.46))
+        u = -w / 2 + w * (i + 0.5) / nc + PR.uniform(-0.03, 0.03); v = PR.uniform(-0.06, 0.06)
+        leafy(x + ca * u - sa * v, y + sa * u + ca * v, PH + 0.04, PR.randint(24, 32), min(d, 0.3) * 0.5, PR.uniform(0.36, 0.46))
 POT = lathe_mesh(((0.0, 0.0), (0.125, 0.0), (0.132, 0.006), (0.168, 0.425), (0.172, 0.44), (0.166, 0.446), (0.156, 0.44), (0.153, 0.415), (0.0, 0.415)), "pot", 36)
 for p in L["plants"]:
     if p.get("in_box"): continue
     put(POT, T(p["x"], p["y"], 0), "pot"); put(cyl_mesh(0.152, 0.01, "soil", 28), T(p["x"], p["y"], 0.41), "soil")
-    leafy(p["x"], p["y"], 0.42, PR.randint(18, 24), 0.1, PR.uniform(0.6, 0.72))
+    leafy(p["x"], p["y"], 0.42, PR.randint(30, 38), 0.1, PR.uniform(0.6, 0.72))
 plants_done()
 
 # ------------------------------------------------------------------ light from outside: sky and a morning sun
@@ -763,12 +815,12 @@ def finish_picture(src, dst, still=True, seed=1):
         ca = 0.0007                                                                                      # red a hair larger, blue a hair smaller
         lin_ = np.concatenate([sample(lin_[..., 0:1], cy + (yy - cy) / (1 + ca), cx + (xx - cx) / (1 + ca)), lin_[..., 1:2],
                                sample(lin_[..., 2:3], cy + (yy - cy) / (1 - ca), cx + (xx - cx) / (1 - ca))], axis=2)
-    lin_ = 0.72 * lin_ + 0.28 * blur(lin_, 0.7 * k)
+    lin_ = 0.82 * lin_ + 0.18 * blur(lin_, 0.6 * k)
     if still:
         rr = ((xx - cx) ** 2 + (yy - cy) ** 2) / (cx * cx + cy * cy); lin_ = lin_ * (1 - 0.16 * rr ** 1.3)[..., None]
     out = np.clip(lin_, 0, 1) ** (1 / 2.2); rng = np.random.default_rng(seed)
     lum = out.mean(axis=2, keepdims=True); g = 0.85 * rng.normal(0, 1, (h, w, 1)) + 0.3 * rng.normal(0, 1, (h, w, 3))
-    out = out + blur(g.astype(np.float32), 0.55 * max(1.0, k)) * 0.022 * (0.35 + 0.65 * 4 * lum * (1 - lum))
+    out = out + blur(g.astype(np.float32), 0.55 * max(1.0, k)) * 0.017 * (0.35 + 0.65 * 4 * lum * (1 - lum))
     px[..., :3] = np.clip(out, 0, 1); px[..., 3] = 1.0; img.pixels.foreach_set(px.ravel())
     img.filepath_raw = dst; img.file_format = "JPEG"
     try: img.save(quality=93)
