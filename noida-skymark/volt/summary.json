@@ -1,0 +1,51 @@
+{
+ "Work seats (desk + chair)": {
+  "total": 116,
+  "rooms": {
+   "Staff room": 4,
+   "Finance room": 7,
+   "Director cabin 01": 1,
+   "Director cabin 02": 1,
+   "Control room / command centre": 13,
+   "Open workstations": 48,
+   "Sales office": 33,
+   "Calling room": 9
+  }
+ },
+ "Meeting room seats": {
+  "total": 38,
+  "rooms": {
+   "18 seater conference room": 18,
+   "06 seater meeting room": 6,
+   "04 seater meeting room 03": 4,
+   "04 seater meeting room 01": 4,
+   "06 seater meeting room (east)": 6
+  }
+ },
+ "Cafeteria seats": {
+  "total": 12,
+  "rooms": {
+   "Cafeteria": 12
+  }
+ },
+ "Lounge, collab and visitor seats": {
+  "total": 41,
+  "rooms": {
+   "Collab area 02": 5,
+   "Lounge area (north)": 10,
+   "Director cabin 01": 2,
+   "Lounge area (south)": 8,
+   "Director cabin 02": 5,
+   "Open workstations": 3,
+   "Collab area 01": 4,
+   "Atrium-side lounge": 4
+  }
+ },
+ "Operator (Autopilot cabin, reception)": {
+  "total": 6,
+  "rooms": {
+   "Reception": 2,
+   "Autopilot cabin": 4
+  }
+ }
+}

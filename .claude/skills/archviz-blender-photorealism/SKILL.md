@@ -120,6 +120,56 @@ around it.
 14. **Don't show everything** (video 7). Frame the shot so what's in it is
     finished. A tight, well-lit view beats a wide one with weak corners.
 
+## The three forces: models, lighting, camera
+
+From a talk on photo-scanning and realism that the user shared (Nov 2026).
+A shot reads as real only when all three are right. Scan quality depends on
+the same three things.
+
+**Models.**
+- The best detail comes from a real object, photo-scanned: Kiri, Polycam or
+  a phone photogrammetry app. A scan records small blemishes and wear, and
+  that is the difference between CG and real.
+- Scan rules:
+  - pick an object with plenty of features (shape and colour detail);
+  - put it on a plain, lightly textured base with no clutter around it;
+  - shoot in soft, even light: an overcast day outdoors, or a bright room
+    out of direct sun. Hard sun bakes contrast into the texture;
+  - keep the overlap between photos high and the camera steady, or put the
+    object on a turntable and the phone on a stand;
+  - turn auto object masking on;
+  - for plain objects with few features, use a video-based neural scan.
+- For a fit-out like Volt, ask the site team to scan one of each repeated
+  item (task chair, desk, planter, lounge chair). One good scan, instanced
+  at every CAD position, beats any number of modelled chairs.
+
+**Lighting.**
+- First, decide what lies outside the frame: the windows, time of day,
+  weather and which fixtures are on. Then light for that world.
+- Aim for the best-looking light that is still believable. One light alone
+  is rarely enough.
+- The recipe:
+  - an HDRI at low strength, for coloured fill only;
+  - an area light as the key, with a gobo (blinds or leaves) where it fits;
+  - a second, soft area light to open up the shadows;
+  - bounce planes or objects for extra light and reflections;
+  - optionally, a cube with Volume Scatter at very low density and high
+    anisotropy (about 0.7 to 0.9), so the window light shows a little haze.
+- Always light against a reference photo, and keep going back to it.
+
+**Camera.**
+- Decide what took the picture: a phone snap, a DSLR shot or an old video
+  camera. Then match that camera's lens and sensor: focal length, depth of
+  field, grain, vignette, bloom and distortion.
+- Add the imperfections in the compositor:
+  - vignette: an ellipse mask, blurred, mixed with Alpha Over;
+  - grain: a noise texture mixed in at the pixel scale;
+  - lens distortion: a node at the end of the tree, at a very low value,
+    or it looks fake.
+- For our interiors, copy the deck renders: a 20 to 24 mm lens at about
+  1.5 m eye height, verticals kept straight, a light vignette and fine
+  grain.
+
 ## The pipeline in this repo
 
 - `scripts/skymark/blender/conf18.py`: builds a room from
