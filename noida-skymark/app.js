@@ -106,7 +106,10 @@ function initGate() {
     let ok = false;
     try { ok = (await sha256(norm($("#g-id").value) + ":" + norm($("#g-pw").value))) === GATE_HASH; } catch (e) { ok = false; }
     busy = false; $("#g-go").disabled = false;
-    if (ok) { try { sessionStorage.setItem(AUTH_KEY, "1"); sessionStorage.setItem("noida-skymark-auth", "1"); } catch (e) {} if (CMS) CMS.signin(norm($("#g-id").value)); openApp(); }
+    if (ok) { try { sessionStorage.setItem(AUTH_KEY, "1"); sessionStorage.setItem("noida-skymark-auth", "1");
+        /* the presenter remote (volt/link.js) proves it knows the same ID and password with this derived value; the password itself is not kept */
+        sessionStorage.setItem("noida-skymark-rk", await sha256("remote-key:" + norm($("#g-id").value) + ":" + norm($("#g-pw").value))); } catch (e) {}
+      if (CMS) CMS.signin(norm($("#g-id").value)); openApp(); }
     else { $("#g-err").textContent = "Not recognised. Access is issued per person."; $("#g-pw").value = ""; $("#g-pw").focus(); }
   };
   startMap();

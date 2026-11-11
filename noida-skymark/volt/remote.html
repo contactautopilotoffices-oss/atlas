@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#16171a">
+<title>Volt Remote</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="/config.js"></script>
+<script src="/engine/atlases/noida-skymark.js"></script>
+<style>
+:root{--bg:#16171a;--card:#22242a;--card2:#2b2e36;--ink:#f3efe8;--sub:#b3ada3;--line:rgba(255,255,255,.09);--orange:#dd8d36;--ok:#35d07f;--bad:#ff6b5e}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font:15px/1.4 Inter,system-ui,sans-serif;overscroll-behavior:none;touch-action:manipulation}
+button,input{font:inherit;color:inherit}
+button{border:0;background:var(--card2);border-radius:14px;padding:14px 12px;font-weight:600;cursor:pointer;min-height:52px}
+button:active{filter:brightness(1.25)} button.p{background:var(--orange);color:#1d1c1a} button.on{background:#f3efe8;color:#1d1c1a} button.ghost{background:transparent;border:1px solid var(--line)}
+.screen{display:none;min-height:100%;padding:calc(18px + env(safe-area-inset-top)) 16px calc(18px + env(safe-area-inset-bottom));max-width:560px;margin:0 auto}
+.screen.show{display:block}
+h1{font-size:22px;margin:0 0 4px;letter-spacing:-.01em} .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--sub);font-weight:700}
+p{color:var(--sub);margin:8px 0 16px}
+label{display:block;font-size:12.5px;font-weight:600;color:var(--sub);margin:14px 0 6px}
+input[type=text],input[type=password]{width:100%;padding:15px 14px;border-radius:14px;border:1px solid var(--line);background:var(--card);font-size:17px;outline:none}
+input:focus{border-color:var(--orange)}
+.err{color:var(--bad);font-weight:600;min-height:22px;margin:10px 0 0;font-size:13.5px}
+.full{width:100%;margin-top:14px}
+/* controller */
+#top{position:sticky;top:0;z-index:3;background:var(--bg);padding:calc(10px + env(safe-area-inset-top)) 16px 10px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--line)}
+#dot{width:10px;height:10px;border-radius:50%;background:var(--bad);flex:none} #dot.ok{background:var(--ok)}
+#where{flex:1;min-width:0} #where b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:15.5px} #where small{color:var(--sub);font-size:12px}
+#top button{min-height:38px;padding:8px 12px;border-radius:10px;font-size:12.5px}
+#ctl{display:none;height:100%;flex-direction:column;max-width:560px;margin:0 auto} #ctl.show{display:flex}
+.pane{display:none;flex:1;overflow:auto;padding:14px 16px 20px;-webkit-overflow-scrolling:touch} .pane.show{display:block}
+.row{display:grid;gap:8px;margin-bottom:10px} .c2{grid-template-columns:1fr 1fr} .c3{grid-template-columns:1fr 1fr 1fr} .c4{grid-template-columns:repeat(4,1fr)}
+h3{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--sub);margin:18px 0 8px;font-weight:700}
+.rooms button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;margin-bottom:6px;background:var(--card);min-height:54px}
+.rooms button span{flex:1} .rooms button small{font-weight:700;font-size:12px;color:#f08a70} .rooms small.m{color:#8fb0ff} .rooms small.c{color:#6fd39b} .rooms small.l{color:#f2b65c}
+.rooms button.on{background:#f3efe8;color:#1d1c1a} .rooms button i{font-style:normal;opacity:.5}
+.places button{background:var(--card);font-weight:500;font-size:13.5px;text-align:left;width:100%;margin-bottom:6px;min-height:46px} .places small{color:var(--sub);float:right}
+#nav{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;padding:8px 12px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--line);background:var(--bg)}
+#nav button{background:transparent;min-height:50px;font-size:13px;border-radius:12px} #nav button.on{background:var(--card2);color:var(--orange)}
+#map{width:100%;border-radius:14px;display:block;background:#123b7a;touch-action:none}
+.pads{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.pad{position:relative;aspect-ratio:1;border-radius:20px;background:var(--card);touch-action:none;overflow:hidden;user-select:none;-webkit-user-select:none}
+.pad small{position:absolute;left:0;right:0;bottom:8px;text-align:center;color:var(--sub);font-size:11.5px;font-weight:600;pointer-events:none}
+#stick i{position:absolute;left:50%;top:50%;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;background:var(--orange);pointer-events:none}
+#lookpad:before{content:"";position:absolute;inset:18%;border-radius:50%;border:1px dashed rgba(255,255,255,.18)}
+#ptrpad{aspect-ratio:16/9;border-radius:14px;background:var(--card);position:relative;touch-action:none;margin-bottom:10px}
+#ptrpad small{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--sub);font-size:12.5px;font-weight:600;pointer-events:none}
+input[type=range]{width:100%;accent-color:var(--orange);height:34px}
+.note{font-size:12.5px;color:var(--sub);margin:6px 0 0}
+</style>
+</head>
+<body>
+
+<div class="screen" id="s-nolink">
+  <div class="k">Volt · presenter remote</div>
+  <h1>Scan the code on the display</h1>
+  <p>Open the Volt floor on the big screen, choose Remote, and scan the QR code it shows with this phone's camera. That link brings you back here, ready to sign in.</p>
+</div>
+
+<div class="screen" id="s-sign">
+  <div class="k">Volt · presenter remote</div>
+  <h1>Sign in to take the remote</h1>
+  <p>Use the same Atlas ID and password you use for F1 Skymark.</p>
+  <form id="f-sign" autocomplete="off">
+    <label for="i-id">ID</label><input id="i-id" type="text" autocapitalize="characters" autocorrect="off" spellcheck="false" inputmode="text">
+    <label for="i-pw">Password</label><input id="i-pw" type="password">
+    <div class="err" id="e-sign"></div>
+    <button class="p full" id="b-sign" type="submit">Connect</button>
+  </form>
+</div>
+
+<div class="screen" id="s-wait">
+  <div class="k">Volt · presenter remote</div>
+  <h1 id="w-title">Connecting to the display…</h1>
+  <p id="w-text">Keep the display on the QR code screen.</p>
+  <button class="p full" id="b-take" style="display:none">Take control</button>
+  <button class="ghost full" id="b-retry">Try again</button>
+</div>
+
+<div id="ctl">
+  <div id="top"><span id="dot"></span><div id="where"><b id="w-room">Skymark F-1</b><small id="w-sub">Building</small></div><button id="b-qr" class="ghost">Show QR</button><button id="b-end" class="ghost">End</button></div>
+
+  <div class="pane show" id="p-places">
+    <div class="row c3"><button data-c="building">Building</button><button data-c="entrance">Entrance</button><button data-c="floor" class="p">Volt floor</button></div>
+    <div class="row c2"><button data-c="prev">&larr; Previous room</button><button data-c="next">Next room &rarr;</button></div>
+    <h3>Rooms · tap to step inside</h3>
+    <div class="rooms" id="rooms"></div>
+    <h3>Around the building</h3>
+    <div class="places" id="places"></div>
+  </div>
+
+  <div class="pane" id="p-walk">
+    <canvas id="map" width="1040" height="780"></canvas>
+    <div class="note" id="mapnote">Tap the drawing to go there. You show as the orange marker once you are inside a room.</div>
+    <div class="pads">
+      <div class="pad" id="stick"><i></i><small>Move</small></div>
+      <div class="pad" id="lookpad"><small>Look · drag</small></div>
+    </div>
+    <div class="row c4" style="margin-top:12px"><button data-c="zoom" data-a='{"d":1}'>Zoom in</button><button data-c="zoom" data-a='{"d":-1}'>Zoom out</button><button data-c="walk">Step in</button><button id="b-above">From above</button></div>
+  </div>
+
+  <div class="pane" id="p-show">
+    <div class="row c2"><button id="b-tour" class="p">Play the tour</button><button data-c="render">Open render · next</button></div>
+    <div class="row c4"><button data-c="plan">2D plan</button><button data-c="seats" id="b-seats">Seats</button><button data-c="walls" id="b-walls">Walls</button><button data-c="proof">Seat proof</button></div>
+    <h3>Time of day</h3>
+    <input id="tod" type="range" min="0" max="100" value="30">
+    <h3>Section and facades</h3>
+    <div class="row c2"><button data-c="elev" data-a='{"kind":"section"}'>Section through the floor</button><button data-c="elev" data-a='{"kind":"facade"}'>Building facade</button></div>
+    <div class="row c4" id="dirs"><button data-c="elev" data-a='{"dir":"front"}'>Front</button><button data-c="elev" data-a='{"dir":"road"}'>Road</button><button data-c="elev" data-a='{"dir":"rear"}'>Rear</button><button data-c="elev" data-a='{"dir":"side"}'>Side</button></div>
+    <input id="cut" type="range" min="0" max="100" value="64">
+    <div class="note">The slider moves the section cut.</div>
+    <h3>Pointer</h3>
+    <div id="ptrpad"><small>Drag here to point at the screen</small></div>
+    <div class="row c2"><button data-c="render" data-a='{"open":false}'>Close picture</button><button data-c="reset">Back to the start</button></div>
+  </div>
+
+  <div id="nav"><button data-p="places" class="on">Places</button><button data-p="walk">Walk</button><button data-p="show">Show</button></div>
+</div>
+
+<script type="module" src="./remote.js"></script>
+</body>
+</html>

@@ -7,7 +7,8 @@
 <title>Volt First Floor</title>
 <script>
   // Same sign-in as the Skymark atlas: send people to its gate if they have not passed it.
-  try { if (sessionStorage.getItem("noida-skymark-auth") !== "1") location.replace("/noida-skymark/?next=volt"); } catch (e) {}
+  // ?present on a display with no keyboard: stay here and let a phone sign in through the QR code.
+  try { if (sessionStorage.getItem("noida-skymark-auth") !== "1") { if (/[?&]present\b/.test(location.search)) window.__pairFirst = true; else location.replace("/noida-skymark/?next=volt"); } } catch (e) {}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -165,6 +166,24 @@ body[data-stage=building] #list,body[data-stage=building] #b-plan{display:none}
 #hint{top:auto!important;bottom:calc(128px + env(safe-area-inset-bottom));transition:opacity .6s} #hint.gone{opacity:0}
 body[data-mode=tour] #joy,body[data-mode=tour] #hint{display:none!important}
 #card .x{color:#1d1c1a}
+/* presenter remote: pairing card, status chip, pointer, presentation mode */
+#pair{position:fixed;inset:0;background:rgba(16,16,18,.72);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:40;display:none;align-items:center;justify-content:center;padding:20px}
+#pair.show{display:flex}
+body.pairgate #pair{background:#16171a}
+#pair .box{position:relative;background:#fbfaf7;color:#1d1c1a;border-radius:22px;padding:26px 30px 22px;max-width:520px;width:100%;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.45)}
+#pair .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#5d5852;font-weight:700}
+#pair h2{margin:6px 0 14px;font-size:22px;letter-spacing:-.01em}
+#pair canvas{width:min(62vh,300px);height:auto;border-radius:12px;image-rendering:pixelated}
+#pair p{margin:12px 0 0;font-size:14px;color:#3d3a36} #pair p.u{font-size:11.5px;color:#7a746c;word-break:break-all}
+#pairx{position:absolute;right:12px;top:10px;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.06);font-size:20px}
+body.pairgate #pairx{display:none}
+#pairchip{position:fixed;left:16px;bottom:16px;z-index:8;display:none;padding:8px 13px;border-radius:999px;background:rgba(24,26,30,.86);color:#fff;font-size:12px;font-weight:600}
+#pairchip:before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#e0a23c;margin-right:7px}
+#pairchip.ok:before{background:#35d07f}
+body.present #pairchip{display:block}
+body.present #dock,body.present #list,body.present #rail,body.present #help,body.present #hint,body.present #joy,body.present #brand .links{display:none!important}
+#ptr{position:fixed;left:50%;top:50%;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:radial-gradient(circle,#ff3b30 0 32%,rgba(255,59,48,.35) 34% 62%,rgba(255,59,48,0) 64%);z-index:35;pointer-events:none;opacity:0;transition:opacity .25s,left .08s linear,top .08s linear}
+#ptr.show{opacity:1}
 /* lightbox */
 #lb{position:fixed;inset:0;background:rgba(20,18,16,.86);z-index:20;display:none;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
 #lb.show{display:flex}
@@ -242,6 +261,7 @@ body[data-mode=tour] #joy,body[data-mode=tour] #hint{display:none!important}
   <span class="sep"></span>
   <button id="b-elev" title="Elevations (E)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18M5 21V9h6v12M13 21V4h6v17"/></svg>Elevation</button>
   <button id="b-tour" title="Guided tour (T)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 5v14l11-7z"/></svg>Tour</button>
+  <button id="b-present" title="Present with a phone as the remote (P)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg>Remote</button>
   <button id="b-walk" title="Walk (W)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13" cy="4" r="2"/><path d="M9 21l3-7 3 3v4M7 12l3-4h4l3 4"/></svg>Walk</button>
 </div>
 
@@ -263,6 +283,16 @@ body[data-mode=tour] #joy,body[data-mode=tour] #hint{display:none!important}
 </div>
 <div id="ruler"></div>
 <div id="help" class="glass">Drag to orbit · right-drag to pan · scroll to zoom · click a room</div>
+<div id="pair"><div class="box">
+  <button id="pairx" aria-label="Close">&times;</button>
+  <div class="k">Presenter remote</div>
+  <h2>Scan to control this screen from your phone</h2>
+  <canvas id="pairqr"></canvas>
+  <p id="pairnote"></p>
+  <p class="u">Or open <b id="pairurl"></b></p>
+</div></div>
+<button id="pairchip"></button>
+<div id="ptr"></div>
 <div id="lb"><img id="lbimg" alt=""><div class="cap" id="lbcap"></div></div>
 <div id="load"><b>Building Volt's floor from the CAD…</b></div>
 <script type="module" src="./volt.js"></script>

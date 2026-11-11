@@ -141,3 +141,43 @@ reference videos:
 - **Exterior.** The facade on this page is a plain curtain wall built from the
   CAD outline. The photo-based twin of the real facade is at
   /noida-skymark/world.
+
+## Presenter remote
+
+Drive the Volt floor on a big screen from a phone, without touching the display.
+
+1. On the display, open `/noida-skymark/volt/` and choose **Remote** (or press
+   P). A QR code appears. On a TV with no keyboard, open
+   `/noida-skymark/volt/?present` instead: it shows the QR straight away and
+   the phone's sign-in unlocks the screen.
+2. Scan the QR with the phone. It opens `remote.html` with a one-time code.
+3. Sign in on the phone with the same Atlas ID and password.
+4. The phone now controls the display:
+   - **Places:** building, entrance, the floor, every room, previous and next,
+     places around the building.
+   - **Walk:** the CAD drawing with your position (tap to go there), a move
+     stick, a look pad, zoom.
+   - **Show:** the tour, 2D plan, seats, walls, time of day, the section and
+     the facades, a room's render, a pointer dot on the screen, back to start.
+
+How it works:
+
+- `present.js` (display) and `remote.js` (phone) talk over a Supabase Realtime
+  broadcast channel, using the site's public Supabase config in `/config.js`.
+  With no config (a local test) they fall back to a BroadcastChannel, which
+  only reaches another tab of the same browser.
+- The channel name comes from a one-time secret in the QR link. It is in the
+  link's `#` part, so it is not sent to any server.
+- Every message is signed. If the display was signed in at the gate, the phone
+  must know the same ID and password for its messages to verify. If the
+  display was unlocked by the phone (`?present`), the check is the phone's own
+  sign-in plus the one-time secret. That is as strong as the atlas gate
+  itself, which is also checked in the browser.
+- One presenter at a time. A second phone can take control. If the phone goes
+  quiet for 20 seconds the display stops any movement and frees the remote.
+- Commands go through one function, `runCommand` in `volt.js`, so the remote
+  can do only what the on-screen buttons can do. It cannot edit content.
+
+Tested here in a headless browser with the local fallback link: pairing, a
+room command, the state coming back to the phone, the move stick and reset.
+Not yet tested: the live Supabase link between two real devices.

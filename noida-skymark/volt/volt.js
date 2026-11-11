@@ -14,11 +14,16 @@ import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+import { createPresenter } from './present.js';
 
 CameraControls.install({ THREE });
 const $ = (s) => document.querySelector(s);
 const MOBILE = matchMedia('(max-width:760px)').matches || matchMedia('(pointer:coarse)').matches;
 const LITE = /[?&]lite\b/.test(location.search);
+// Presenter remote: a phone drives this page through runCommand() below. On a display with no keyboard
+// (opened with ?present) the page waits here until a phone signs in.
+const presenter = createPresenter({ run: (t, a) => runCommand(t, a), hello: () => helloPayload(), state: () => remoteState() });
+await presenter.gateIfNeeded();
 const ST = (v) => LITE ? .02 : v;                       // camera easing time; near-instant in the light test mode      // light mode for automated checks: no city, small shadows, no AO
 
 // Deck palette (page 3 of the Volt presentation, sampled)
@@ -1228,6 +1233,53 @@ function frame() {
   }
   requestAnimationFrame(frame);
 }
+// ---------------------------------------------------------------- one command layer (used by the presenter remote)
+const clampN = (v, a = -1, b = 1) => Math.max(a, Math.min(b, +v || 0));
+let lastRemoteMove = 0;
+const CMD = {
+  building: () => { stopTour(); return toBuilding(); },
+  entrance: async () => { stopTour(); if (stage !== 'building') await toBuilding(false); entranceView(); },
+  place: async (a) => { const q = POIS[a.i | 0]; if (!q) return; stopTour(); if (stage !== 'building') await toBuilding(false); showPlace(q); },
+  floor: () => { stopTour(); if (stage !== 'floor') return enterFloor(); setMode('orbit', true); },
+  room: (a) => { const r = ROOMS.find(x => x.name === a.name); if (r) enterWalk(r); },
+  above: async (a) => { const r = ROOMS.find(x => x.name === a.name) || focus; if (!r) return; stopTour(); if (stage !== 'floor') await enterFloor(); if (mode !== 'orbit') setMode('orbit', 'stay');
+    seatDots.visible = true; $('#b-seats').classList.add('on'); flyToRoom(r); },
+  next: () => step(1), prev: () => step(-1),
+  walk: () => enterWalk(focus),
+  tour: (a) => { if (a.on === false) stopTour(); else if (mode !== 'tour') startTour(); },
+  move: (a) => { walk.joy = [clampN(a.s), clampN(a.f)]; lastRemoteMove = performance.now(); needRender = true; },
+  look: (a) => { const dx = clampN(a.dx, -.6, .6), dy = clampN(a.dy, -.6, .6);
+    if (walk.active) { walk.yaw -= dx; walk.pitch = THREE.MathUtils.clamp(walk.pitch - dy, -1.1, 1.0); } else if (mode === 'orbit') { lastInput = performance.now(); controls.rotate(-dx, -dy, true); }
+    needRender = true; },
+  zoom: (a) => { if (mode === 'orbit') { lastInput = performance.now(); controls.dolly(clampN(a.d) * controls.distance * .35, true); } },
+  goto: (a) => { if (stage !== 'floor') return; const [fx, fy] = nearestFree(+a.x, +a.y); if (walk.active) walk.glide = { x: fx, y: fy }; else { const r = roomAt(fx, fy); if (r) enterWalk(r); } },
+  tod: (a) => { const t = clampN(a.t, 0, 1); $('#tod').value = Math.round(t * 1000); setTOD(t); },
+  plan: () => $('#b-plan').click(), seats: () => $('#b-seats').click(), walls: () => $('#b-walls').click(),
+  elev: (a) => { stopTour(); if (a.kind === 'section' || a.kind === 'facade') elevKind = a.kind; if (FACADES[a.dir] !== undefined) elevDir = a.dir;
+    if (mode !== 'elev') setMode('elev'); else elevSetup(true); },
+  cut: (a) => { if (mode === 'elev') { $('#cut').value = Math.round(clampN(a.f, 0, 1) * 1000); elevSetup(false); } },
+  render: (a) => { const lb = $('#lb'); if (a.open === false) { lb.classList.remove('show'); return; }
+    if (lb.classList.contains('show')) lb.onclick(); else if (focus && roomImages(focus).length) $('#cimg').onclick(); },
+  proof: () => $('#proof').click(),
+  reset: () => { stopTour(); $('#lb').classList.remove('show'); return toBuilding(); },
+};
+function runCommand(t, a) { const f = CMD[t]; if (f) return f(a || {}); }
+setInterval(() => { if ((walk.joy[0] || walk.joy[1]) && joy.dataset.on !== '1' && performance.now() - lastRemoteMove > 700) { walk.joy = [0, 0]; } }, 250);   // a dropped link must not leave the walker moving
+function helloPayload() {
+  return { title: 'Volt · First floor · Skymark F-1', seats: { work: nWork, all: nAll },
+    rooms: RAIL.map(r => ({ name: r.name, n: r.total ? (r.by[mainGroup(r)] || r.total) : 0, g: mainGroup(r), box: r.box, img: roomImages(r).length })),
+    places: POIS.map(q => ({ name: q.name, kind: q.kind, d: Math.round(q.d) })),
+    bp: { img: '/media/noida-skymark/volt/cad_blueprint.png', bounds: BP.bounds }, facades: Object.keys(FACADES) };
+}
+function remoteState() {
+  const inside = stage === 'floor' && (mode === 'walk' || mode === 'tour') && camera.position.y > -1 && camera.position.y < H + .5;
+  const p = inside ? locPose() : null;
+  return { stage, mode, room: focus ? focus.name : null, tod: Math.round(TOD.t * 100) / 100, lb: $('#lb').classList.contains('show'), seats: seatDots.visible, walls: wallsFull,
+    elev: mode === 'elev' ? { kind: elevKind, dir: elevDir } : null, pose: p ? { x: Math.round(p.x * 10) / 10, y: Math.round(p.y * 10) / 10, yaw: Math.round(p.yaw * 20) / 20 } : null };
+}
+$('#b-present').onclick = () => presenter.toggle();
+addEventListener('keydown', (e) => { if (e.code === 'KeyP' && e.target.tagName !== 'INPUT' && !walk.active) presenter.toggle(); });
+
 renderer.shadowMap.needsUpdate = true;
 scene.fog = new THREE.Fog(0xe7e3dc, 260, 900);
 setTOD(TOD.t); setShell(1, true);
@@ -1248,4 +1300,6 @@ function snap(name, fov = 62) {
   const url = canvas.toDataURL('image/jpeg', .93); camera.fov = keep; camera.updateProjectionMatrix();
   return { url, pose: { x: toPlan(tp.p)[0], y: toPlan(tp.p)[1], tx: toPlan(tp.t)[0], ty: toPlan(tp.t)[1] } };
 }
-window.__volt = { snap, POIS, showPlace, entranceView, L, ROOMS, controls, flyToRoom, overview, enterWalk, setMode, startTour, stopTour, walk, enterFloor, toBuilding, setTOD, get stage() { return stage; }, get mode() { return mode; }, render: () => { needRender = true; } };
+presenter.ready();
+if (/[?&]present\b/.test(location.search) && !presenter.on) presenter.toggle();
+window.__volt = { presenter, runCommand, remoteState, snap, POIS, showPlace, entranceView, L, ROOMS, controls, flyToRoom, overview, enterWalk, setMode, startTour, stopTour, walk, enterFloor, toBuilding, setTOD, get stage() { return stage; }, get mode() { return mode; }, render: () => { needRender = true; } };
