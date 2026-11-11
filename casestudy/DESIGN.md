@@ -73,5 +73,8 @@ what it fixes, and fixes the worst one to three first.
   points larger now, but still keep a smaller gap above the takeaway.
 - Getting there (page 12): rows may open up to 10 mm under a foot box now,
   but four short rows a table still leave a narrow band above the box.
-- The buildings side by side (page 11): the parameter table is small print,
-  and the right column ends at about three fifths.
+- The buildings side by side (page 11): the parameter table is small print
+  (eleven rows of prose); the right column now runs the table's height.
+- Side columns of a table page (pages 5, 9, 11, 34, 38): the last box now
+  sits level with the table's foot, which leaves a gap in the middle of the
+  column; boxes that grew to share the height would read fuller.

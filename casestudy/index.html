@@ -231,10 +231,26 @@ function fitTables(deck) {
     }
   });
 }
+/* After the rows are sized: beside a table, a side column of two or more
+   boxes drops its last box so its foot is level with the table's foot.
+   Undone on any page where that would overflow. */
+function alignSides(deck) {
+  Array.prototype.forEach.call(deck.querySelectorAll(".page .cols"), function (cols) {
+    var main = cols.firstElementChild, side = cols.lastElementChild;
+    if (!main || main === side || side.children.length < 2) return;
+    if (!(main.tagName === "TABLE" || main.querySelector(":scope > table"))) return;
+    var last = side.lastElementChild, gap = main.getBoundingClientRect().bottom - last.getBoundingClientRect().bottom;
+    if (gap < 4) return;
+    var was = last.style.marginTop, page = cols.closest(".page");
+    last.style.marginTop = (parseFloat(getComputedStyle(last).marginTop) + gap) + "px";
+    if (page.scrollHeight > page.clientHeight + 1) last.style.marginTop = was;
+  });
+}
 (window.CaseLoad || Promise.resolve()).then(function () {
   if (!window.CASE) return;
   var out = CaseRender.render(window.CASE, document.getElementById("deck"));
   fitTables(document.getElementById("deck"));
+  alignSides(document.getElementById("deck"));
   document.title = (window.CASE.meta && window.CASE.meta.title) || "Case study";
   document.getElementById("bar-title").textContent = document.title;
   document.getElementById("bar-pages").textContent = out.pages + " pages";
