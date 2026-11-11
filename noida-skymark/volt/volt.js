@@ -28,6 +28,7 @@ const GROUP_COL = { W: 0xd6452b, M: 0x2b62d6, C: 0x1f9a55, L: 0xd68a1f, O: 0x8a8
 const DECK = { 'Open workstations': [4, 5, 6, 7], 'Sales office': [8, 9], 'Director cabin 01': [10, 11], 'Director cabin 02': [12],
   'Lounge area (north)': [13], '18 seater conference room': [14, 15], 'Control room / command centre': [16, 17],
   'Collab area 01': [18], 'Collab area 02': [19], 'Phone booths PH-05 to 07': [20], 'Cafeteria': [21, 22] };
+const OURS = { '18 seater conference room': ['/media/noida-skymark/volt/renders/conf18.jpg'] };   // rendered in Blender Cycles from the room's layout
 const TOUR = ['Reception', 'Open workstations', 'Control room / command centre', 'Sales office', 'Calling room', 'Cafeteria',
   '18 seater conference room', 'Finance room', 'Lounge area (north)', 'Director cabin 01', 'Collab area 01'];
 
@@ -241,7 +242,8 @@ for (const s of L.seats) {
   else if (k === 'lounge tub chair' || k === 'lounge chair') bucket('tub', tubChair, [mat.sofaTeal]).push(place(s.x, s.y, a));
   else if (k.includes('sofa')) sofaList.push(s);
 }
-for (const { maker, mats, list } of seatBuckets.values()) { const geos = maker(); geos.forEach((g, i) => g && instanced(g, mats[i], list)); }
+const bucketMeshes = {};
+for (const [key, { maker, mats, list }] of seatBuckets) { const geos = maker(); bucketMeshes[key] = geos.map((g, i) => g && instanced(g, mats[i], list)).filter(Boolean); }
 for (const s of sofaList) {     // sofas are sized to the block in the drawing
   const len = Math.max(1.3, s.len), dep = Math.min(.95, Math.max(.75, s.dep));
   const g = mergeGeometries([at(RB(dep, .24, len, .07), 0, .28, 0), at(RB(.2, .44, len, .07), -dep / 2 + .1, .52, 0),
@@ -389,6 +391,27 @@ const twinLow = twinGLTF.scene, twinHigh = twinGLTF.scene.clone(true);
 prepTwin(twinLow, cutLow); prepTwin(twinHigh, cutHigh, highMats);
 twinFrame.add(twinLow, twinHigh);
 const twinInteriorsLow = twinLow.getObjectByName('Interiors');
+// real furniture models (the mesh chair and lounge chair used for the Cycles render of the conference room) in place of the block ones
+async function realModel(url, height, keys, seatBand) {
+  const g = await gltf.loadAsync(url); let mesh = null; g.scene.updateMatrixWorld(true); g.scene.traverse(o => { if (o.isMesh && !mesh) mesh = o; });
+  const src = mesh.geometry.attributes.position, P = new Float32Array(src.count * 3), q = new THREE.Vector3();
+  for (let i = 0; i < src.count; i++) { q.fromBufferAttribute(src, i).applyMatrix4(mesh.matrixWorld); P[i * 3] = q.x; P[i * 3 + 1] = q.y; P[i * 3 + 2] = q.z; }
+  const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(P, 3));
+  if (mesh.geometry.attributes.uv) geo.setAttribute('uv', mesh.geometry.attributes.uv); geo.setIndex(mesh.geometry.index);
+  geo.computeBoundingBox(); const bb = geo.boundingBox, k = height / (bb.max.y - bb.min.y);
+  geo.translate(-(bb.min.x + bb.max.x) / 2, -bb.min.y, -(bb.min.z + bb.max.z) / 2); geo.scale(k, k, k);
+  // which way it faces: from the top of the backrest towards the seat
+  let bx = 0, bz = 0, bn = 0, sx = 0, sz = 0, sn = 0; const A = geo.attributes.position;
+  for (let i = 0; i < A.count; i++) { const y = A.getY(i) / height; if (y > .86) { bx += A.getX(i); bz += A.getZ(i); bn++; } if (y > seatBand[0] && y < seatBand[1]) { sx += A.getX(i); sz += A.getZ(i); sn++; } }
+  geo.rotateY(Math.atan2(sz / sn - bz / bn, sx / sn - bx / bn)); geo.computeVertexNormals();
+  const m = mesh.material; m.normalMap = null; m.envMapIntensity = .9;
+  for (const key of keys) { const b = seatBuckets.get(key); if (!b) continue;
+    const im = new THREE.InstancedMesh(geo, m, b.list.length); b.list.forEach((x, i) => im.setMatrixAt(i, x)); im.castShadow = true; im.receiveShadow = true; im.computeBoundingSphere();
+    root.add(im); (bucketMeshes[key] || []).forEach(o => root.remove(o)); }
+  needRender = true; shadowsDirty = true;
+}
+realModel('/media/noida-skymark/volt/models/chair.glb', 1.02, ['task'], [.40, .52]).catch(e => console.warn('[volt] chair model', e && e.message));
+realModel('/media/noida-skymark/volt/models/lounge.glb', .82, ['armO', 'armT'], [.3, .5]).catch(e => console.warn('[volt] lounge model', e && e.message));
 // the 500 m round it, in the same frame (streets, blocks, trees): loaded after the first frame
 for (const t of [twinLow, twinHigh]) { const pm = t.getObjectByName('SKY_Site_Palm_2'); if (pm) pm.visible = false; }   // this palm stood in front of the porch
 const PIN0 = window.SKY_MODEL?.anchor || { lat: 28.5913167, lng: 77.3189671 }, KLAT = 110574, KLNG = 111320 * Math.cos(PIN0.lat * D2R);
@@ -747,14 +770,14 @@ function setFocus(r) {
   $('#cname').textContent = r.name;
   $('#cmeta').textContent = `${(r.area).toFixed(0)} m² (${(r.area * 10.764).toFixed(0)} sq ft) · floor: ${r.floor}`;
   $('#cseats').innerHTML = Object.entries(r.by).map(([g, n]) => `<span style="color:#${GROUP_COL[g].toString(16).padStart(6, '0')}">${n} ${GN[g]}</span>`).join('') || '<span>No seats</span>';
-  const pages = DECK[r.name];
-  const img = $('#cimg');
-  if (pages) { img.style.display = ''; img.style.backgroundImage = `url(/media/noida-skymark/volt/deck/p${String(pages[0]).padStart(2, '0')}.jpg)`; img.dataset.p = pages.join(','); img.dataset.i = 0;
-    $('#ccnt').textContent = pages.length > 1 ? `1 / ${pages.length}` : ''; }
+  const imgs = roomImages(r), img = $('#cimg');
+  if (imgs.length) { img.style.display = ''; img.style.backgroundImage = `url(${imgs[0]})`;
+    img.querySelector('.tag').textContent = OURS[r.name] ? 'Photoreal render' : 'Design render'; $('#ccnt').textContent = imgs.length > 1 ? `1 / ${imgs.length}` : ''; }
   else img.style.display = 'none';
   card.classList.add('show');
 }
-$('#cimg').onclick = () => { const p = $('#cimg').dataset.p.split(','); openLB(p.map(n => `/media/noida-skymark/volt/deck/p${n.padStart(2, '0')}.jpg`), `${focus.name}: design render from the Volt deck (21 Aug 2026)`); };
+const roomImages = (r) => (OURS[r.name] || []).concat((DECK[r.name] || []).map(n => `/media/noida-skymark/volt/deck/p${String(n).padStart(2, '0')}.jpg`));
+$('#cimg').onclick = () => { if (!focus) return; openLB(roomImages(focus), `${focus.name}: ${OURS[focus.name] ? 'our Cycles render first, then ' : ''}design renders from the Volt deck (21 Aug 2026)`); };
 $('#cardx').onclick = () => setMode('orbit', true);
 const step = (k) => { const i = RAIL.indexOf(focus); const r = RAIL[(i + k + RAIL.length) % RAIL.length]; mode === 'walk' ? enterWalk(r) : flyToRoom(r); };
 $('#prev').onclick = () => step(-1); $('#next').onclick = () => step(1);
@@ -778,7 +801,7 @@ function roomHotspots(r) {
   if (gl) hs.push({ t: 'Glass partition · frosted band', p: [(gl[0] + gl[2]) / 2, (gl[1] + gl[3]) / 2, 1.75] });
   const wn = L.glass.filter(g => g[4] === 'AR-WINDOW' && inR((g[0] + g[2]) / 2, (g[1] + g[3]) / 2, .8))[0];
   if (wn) hs.push({ t: 'Facade window', p: [(wn[0] + wn[2]) / 2, (wn[1] + wn[3]) / 2, 1.9] });
-  if (DECK[r.name]) hs.push({ t: 'See the design render', render: true, p: [r.cx, r.cy, 2.05] });
+  if (roomImages(r).length) hs.push({ t: OURS[r.name] ? 'See the photoreal render' : 'See the design render', render: true, p: [r.cx, r.cy, 2.05] });
   return hs;
 }
 const tCentre = (t) => t.circle ? [t.circle[0], t.circle[1]] : [t.poly.reduce((a, q) => a + q[0], 0) / t.poly.length, t.poly.reduce((a, q) => a + q[1], 0) / t.poly.length];
@@ -1109,10 +1132,10 @@ function elevSetup(first) {
   const span = Math.max(...pp) - Math.min(...pp);
   ortho.left = -innerWidth / 2; ortho.right = innerWidth / 2; ortho.top = innerHeight / 2; ortho.bottom = -innerHeight / 2; ortho.updateProjectionMatrix();
   if (first) {
-    const cy = sec ? 1.4 : GROUND + 11, F = sec ? S : W(dx * lo - dy * mid, dy * lo + dx * mid);
+    const cy = sec ? 1.4 : GROUND + (ROOF - GROUND) / 2 + 1.5, F = sec ? S : W(dx * lo - dy * mid, dy * lo + dx * mid);
     const eye = F.clone().addScaledVector(D, -90); eye.y = cy; const tgt = F.clone(); tgt.y = cy;
     ortCtl.setLookAt(eye.x, eye.y, eye.z, tgt.x, tgt.y, tgt.z, false);
-    ortCtl.zoomTo(Math.min(innerWidth / (span * 1.12), innerHeight / (sec ? 6 : 30)), false);
+    ortCtl.zoomTo(Math.min(innerWidth / (span * (sec ? 1.12 : 1.35)), (innerHeight - (sec ? 0 : 210)) / (sec ? 6 : ROOF - GROUND + 5)), false);
   }
   document.querySelectorAll('#elev [data-d]').forEach(b => b.classList.toggle('on', b.dataset.d === elevDir));
   document.querySelectorAll('#elev [data-k]').forEach(b => b.classList.toggle('on', b.dataset.k === elevKind));
@@ -1155,7 +1178,7 @@ function setMode(m, toOverview) {
     if (stage === 'building') { if (toOverview !== 'stay') toBuilding(); }
     else if (toOverview === true) overview(); else if (toOverview !== 'stay') { if (focus) flyToRoom(focus); else overview(); }
   }
-  document.body.classList.toggle('immersive', m === 'walk' || m === 'tour');
+  document.body.classList.toggle('immersive', m === 'walk' || m === 'tour' || m === 'elev');
   updateCrumbs(); shadowsDirty = true; needRender = true;
 }
 $('#b-plan').onclick = async () => {
