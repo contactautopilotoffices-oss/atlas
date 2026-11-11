@@ -268,7 +268,7 @@ pbr("led", "#ffffff", emit=light_col(LAMP_K), emit_strength=12.0); pbr("led_spot
 # small things people leave on desks (assumed, not in the CAD)
 pbr("mug_white", "#eeece6", rough=0.18, coat=0.5); pbr("mug_orange", "#dd8d36", rough=0.2, coat=0.5); pbr("mug_navy", "#1c2440", rough=0.2, coat=0.5)
 pbr("bottle", "#2c6a74", rough=0.35, metal=1.0); pbr("paper", "#f2f0ea", rough=0.8); pbr("cover_black", "#1d1d1f", rough=0.6); pbr("cover_orange", "#c9772c", rough=0.6); pbr("cover_navy", "#222b4a", rough=0.6)
-mat_fabric("bag", "#26282c", 0.85); pbr("ground", "#8d8a84", rough=0.9)
+mat_fabric("bag", "#26282c", 0.85); pbr("ground", "#8d8a84", rough=0.9); mat_fabric("rug", "#8f8a82", 0.95)
 mat_glass("glass"); mat_leaf()
 for m in MATS.values():
     if hasattr(m, "blend_method") and m.name == "frost":
@@ -526,6 +526,12 @@ for t in L["tables"]:
     if "poly" in t and any(min(math.hypot(s["x"] - px, s["y"] - py) for px, py in t["poly"]) < 0.9 or
                            (min(p[0] for p in t["poly"]) - 0.1 <= s["x"] <= max(p[0] for p in t["poly"]) + 0.1 and min(p[1] for p in t["poly"]) - 0.6 <= s["y"] <= max(p[1] for p in t["poly"]) + 0.6) for s in stools):
         h = L["heights"]["high_desk"]      # bar stools stand at it, so it is a high counter (assumed, like every height)
+    if "poly" in t and h < 0.5:
+        xs = [p[0] for p in t["poly"]]; ys = [p[1] for p in t["poly"]]
+        if (max(xs) - min(xs)) * (max(ys) - min(ys)) > 3.0 and any(min(xs) < s["x"] < max(xs) and min(ys) < s["y"] < max(ys) for s in L["seats"]):
+            # A big low outline with seats standing inside it cannot be a table top: it is drawn as a rug. The outline is
+            # the CAD's; reading it as a rug is our call (the layout lists it as a coffee table).
+            prism("rug", t["poly"], [], 0.0, 0.012, "rug", 0.004); continue
     if "circle" in t:
         x, y, r = t["circle"]; put(lathe_mesh(((0.0, 0.0), (r - 0.006, 0.0), (r, 0.006), (r, 0.029), (r - 0.006, 0.035), (0.0, 0.035)), "oak", 56), T(x, y, h - 0.035), "table_top")
         put(cyl_mesh(0.035, h - 0.035, "black_metal", 16), T(x, y, 0), "table_leg"); put(cyl_mesh(r * 0.55, 0.015, "black_metal"), T(x, y, 0), "table_base")
