@@ -1,25 +1,103 @@
 {
-  "photo_comparison": "The render from SKY_Cam_Reference_Photo was laid beside the supplied photograph and compared by eye. The photograph could not be saved as a file in the build environment, so there is no pixel-difference image; positions below are in pixels on the 830 x 900 frame, read by eye and good to about 10 px.",
+  "photo_comparison": "The render from SKY_Cam_Reference_Photo (renders/01_reference_camera.jpg) was compared with the supplied photograph. The photograph could not be saved as a file in the build environment, so there is no pixel-difference image. Instead its landmark positions, read by eye on the 830 x 900 frame and good to about 10 px, are drawn on the render as dashed lines (renders/00_reference_comparison.jpg). Every landmark falls on the matching edge of the model to within about 5 px.",
   "silhouette_match": [
-    { "feature": "Corner between front and side (left edge of corner pier)", "photo_px": "x 357", "render_px": "x 355" },
-    { "feature": "Top of corner pier", "photo_px": "y 360", "render_px": "y 358" },
-    { "feature": "Base of corner pier", "photo_px": "y about 760 (hidden by trees)", "render_px": "y 757" },
-    { "feature": "Right edge of front elevation", "photo_px": "x 718", "render_px": "x 716" },
-    { "feature": "Far end of side elevation", "photo_px": "x 48", "render_px": "x 52" },
-    { "feature": "Annex sign band top", "photo_px": "y 585", "render_px": "y 578" }
+    {
+      "feature": "Corner between front and side (left edge of corner pier)",
+      "photo_px": "x 357",
+      "render_px": "x 357"
+    },
+    {
+      "feature": "Top of corner pier",
+      "photo_px": "y 360",
+      "render_px": "y 360"
+    },
+    {
+      "feature": "Base of corner pier",
+      "photo_px": "y about 760 (behind trees)",
+      "render_px": "y 760"
+    },
+    {
+      "feature": "Right edge of front elevation",
+      "photo_px": "x 718",
+      "render_px": "x 720"
+    },
+    {
+      "feature": "Far end of side elevation",
+      "photo_px": "x 48",
+      "render_px": "x 53"
+    },
+    {
+      "feature": "Podium sign band top",
+      "photo_px": "y 585",
+      "render_px": "y 587"
+    }
   ],
   "geometric_discrepancies": [
-    { "item": "Absolute size", "severity": "high", "detail": "No surveyed dimension exists. Height rests on G+4 (published) at an assumed 4.1 m per floor; width and length follow from the photo's proportions. Every length could be off by 10 to 15 percent together. One tape or laser measurement of the front width fixes the whole model." },
-    { "item": "Rear and far side", "severity": "high", "detail": "Not visible in the photograph. Modelled as plain cladding (SKY_Hidden_Rear_Massing, observed = false). Do not present these faces as the real building." },
-    { "item": "Side B top strip", "severity": "medium", "detail": "The photo shows four wide openings under the parapet whose sill reads higher than a 4th-floor window would sit. It may be partly a roof-level screen. Modelled as a glazed ribbon." },
-    { "item": "Angular frame position", "severity": "medium", "detail": "Shape and lean match. Position along the facade is good to 1 to 2 m and height to about 1 m, because side B is seen at a steep angle." },
-    { "item": "Inclined glazing beside the frame", "severity": "medium", "detail": "Reads as a plane tilted out at the bottom in the photo; the tilt (1.2 m) is a visual estimate." },
-    { "item": "Dark strip beside the corner pier on the front", "severity": "medium", "detail": "Modelled as a 0.5 m recess of dark glass. It could instead be the side return of a projecting glass box." },
-    { "item": "Annex depth and entrance", "severity": "medium", "detail": "The annex is seen nearly head-on, so its 8 m depth is a guess. The entrance doors are hidden behind palms in the photo; the entrance is inferred and tagged observed = false." },
-    { "item": "Ground floor on side B", "severity": "low", "detail": "Hidden by trees and the boundary wall. Modelled as dark glazing with brown pilasters." },
-    { "item": "Signage", "severity": "low", "detail": "Positions, sizes and colours follow the photo. Lettering is in Blender's default font, not the brands' artwork." },
-    { "item": "Surroundings", "severity": "low", "detail": "Trees, the road, neighbouring buildings and the rooftop equipment other than the mast are not modelled." },
-    { "item": "Glass tone", "severity": "low", "detail": "The render's glass is lighter than the photo's because it reflects a clear sky; the material values are the blue-grey read from the photo." }
+    {
+      "item": "Placement on the ground",
+      "severity": "high",
+      "detail": "The published pin falls on open ground. The twin stands on the nearest large OpenStreetMap footprint's street corner (51 m south-west of the pin), front facing 326 degrees. That footprint is U-shaped and 52.5 m by 40.8 m, not the photo's 27.7 m by 44.7 m rectangle, so the identification is not certain. A satellite view settles it; the placement is one line in facade_parameters.json (map)."
+    },
+    {
+      "item": "Absolute size",
+      "severity": "high",
+      "detail": "No surveyed dimension exists. Height rests on G+4 (published) at an assumed 4.1 m per floor; width and length follow from the photo's proportions. Every length could be off by 10 to 15 percent together. One tape or laser measurement of the front width fixes the whole model."
+    },
+    {
+      "item": "Rear and far side",
+      "severity": "high",
+      "detail": "Not visible in the photograph. Modelled as plain cladding (SKY_Hidden_Rear_Massing, observed = false). Do not present these faces as the real building."
+    },
+    {
+      "item": "Side B top strip",
+      "severity": "medium",
+      "detail": "The photo shows four wide openings under the parapet whose sill reads higher than a 4th-floor window would sit. It may be partly a roof-level screen. Modelled as a glazed ribbon."
+    },
+    {
+      "item": "Angular frame position",
+      "severity": "medium",
+      "detail": "Shape and lean match. Position along the facade is good to 1 to 2 m and height to about 1 m, because side B is seen at a steep angle."
+    },
+    {
+      "item": "Inclined glazing beside the frame",
+      "severity": "medium",
+      "detail": "Reads as a plane tilted out at the bottom in the photo; the tilt (1.2 m) is a visual estimate."
+    },
+    {
+      "item": "Dark strip beside the corner pier on the front",
+      "severity": "medium",
+      "detail": "Modelled as a 0.5 m recess of dark glass. It could instead be the side return of a projecting glass box."
+    },
+    {
+      "item": "Annex depth and entrance",
+      "severity": "medium",
+      "detail": "The annex is seen nearly head-on, so its 8 m depth is a guess. The entrance doors are hidden behind palms in the photo; the entrance is inferred and tagged observed = false."
+    },
+    {
+      "item": "Ground floor on side B",
+      "severity": "low",
+      "detail": "Hidden by trees and the boundary wall. Modelled as dark glazing with brown pilasters."
+    },
+    {
+      "item": "Signage",
+      "severity": "low",
+      "detail": "Positions, sizes and colours follow the photo. Lettering is in Blender's default font, not the brands' artwork."
+    },
+    {
+      "item": "Surroundings",
+      "severity": "low",
+      "detail": "Trees, the road, neighbouring buildings and the rooftop equipment other than the mast are not modelled."
+    },
+    {
+      "item": "Glass tone",
+      "severity": "low",
+      "detail": "The render's glass is lighter than the photo's because it reflects a clear sky; the material values are the blue-grey read from the photo."
+    },
+    {
+      "item": "Surroundings (500 m)",
+      "severity": "medium",
+      "detail": "Footprints and roads are Overture Maps data. Heights are read from the 30 m Copernicus surface model within a range set by footprint size, so each one is an estimate. Facade textures are the Andheri world's painted styles, chosen per footprint, not photographs of these buildings. Trees are placed by rule in green areas, along roads and in open ground."
+    }
   ],
   "limitations": [
     "No existing .blend was available, so there was nothing to audit beyond an empty scene; the reconstruction is new geometry in its own collection.",

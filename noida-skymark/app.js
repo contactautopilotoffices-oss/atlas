@@ -42,6 +42,9 @@ async function sha256(txt) {
 
 /* ------------------------------------------------------------ geometry -- */
 const HOME = { lat: PR.lat, lng: PR.lng };
+/* Where the twin stands: on the footprint it was fitted to (MD.anchor),
+   which is not exactly the published pin. Distances stay from the pin. */
+const SPOT = MD.anchor || HOME;
 function km(a, b) {
   const toR = Math.PI / 180, dLat = (b.lat - a.lat) * toR, dLng = (b.lng - a.lng) * toR;
   const s = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * toR) * Math.cos(b.lat * toR) * Math.sin(dLng / 2) ** 2;
@@ -84,8 +87,8 @@ const fact = (k) => (PR.facts.find(f => f.k === k) || {}).v || "";
 
 /* --------------------------------------------------------------- state -- */
 const S = {
-  tab: "property", sel: null, kinds: new Set(), twin: true, bearing: MD.frontBearing,
-  layers: Object.fromEntries([["sat", false], ["rail", true], ["rings", true], ...KINDS.map(k => [k.key, ["corp", "cowork"].includes(k.key)])])
+  tab: "property", sel: null, kinds: new Set(), twin: true, bearing: MD.frontBearing, realSat: true,
+  layers: Object.fromEntries([["sat", true], ["rail", true], ["rings", true], ...KINDS.map(k => [k.key, ["corp", "cowork"].includes(k.key)])])
 };
 try { const b = parseFloat(localStorage.getItem("sky-bearing")); if (!MD.bearingConfirmed && isFinite(b)) S.bearing = b; } catch (e) {}
 const TABS = [
@@ -134,8 +137,88 @@ function loadThree() {
     .then(([THREE, g, o]) => ({ THREE, GLTFLoader: g.GLTFLoader, OrbitControls: o.OrbitControls }));
   return THREEP;
 }
-let GLTFP = null;
-const loadTwin = () => GLTFP || (GLTFP = loadThree().then(({ GLTFLoader }) => new Promise((ok, no) => new GLTFLoader().load(MD.glb, g => ok(g.scene), undefined, no))));
+/* The twin, and the 500 m round it (meshopt-compressed, as the Andheri
+   world's models are, so the loader needs the decoder). */
+const GLB = {};
+const loadGLB = (url) => GLB[url] || (GLB[url] = loadThree().then(async ({ GLTFLoader }) => {
+  const l = new GLTFLoader();
+  try { const { MeshoptDecoder } = await import("three/addons/libs/meshopt_decoder.module.js"); l.setMeshoptDecoder(MeshoptDecoder); } catch (e) {}
+  return new Promise((ok, no) => l.load(url, g => ok(g.scene), undefined, no));
+}));
+const loadTwin = () => loadGLB(MD.glb);
+
+/* ------------------------------------------------- real satellite drape --
+   The 500 m model's walls are painted (no open source has real wall
+   images), but everything seen from above is real: the page fetches the
+   Mapbox satellite tiles round the property with its own map key, stitches
+   them on a canvas, and lays the photo on every upward-facing surface of the
+   surroundings: ground, streets, parks and roofs. */
+const SAT_Z = 17, SAT_R = 580;
+const KLAT_M = 110574, KLNG_M = 111320 * Math.cos(SPOT.lat * Math.PI / 180);
+const TH = (180 - (MD.frontBearing ?? 180)) * Math.PI / 180;   // the model's frame -> east/north
+function mercPx(lng, lat, z) {
+  const n = 256 * 2 ** z, s = Math.sin(lat * Math.PI / 180);
+  return [(lng + 180) / 360 * n, (0.5 - Math.log((1 + s) / (1 - s)) / (4 * Math.PI)) * n];
+}
+/* glTF is y-up: scene x is the model's x, scene z is minus the model's y. */
+function sceneLngLat(x, z) {
+  const lx = x, ly = -z, e = lx * Math.cos(TH) - ly * Math.sin(TH), n = lx * Math.sin(TH) + ly * Math.cos(TH);
+  return [SPOT.lng + e / KLNG_M, SPOT.lat + n / KLAT_M];
+}
+let SATP = null;
+function loadSatellite(THREE) {
+  if (SATP) return SATP;
+  if (!window.MAPBOX_TOKEN) return (SATP = Promise.reject(new Error("no map key")));
+  SATP = (async () => {
+    const dl = SAT_R / KLAT_M, dg = SAT_R / KLNG_M;
+    const [x0, y0] = mercPx(SPOT.lng - dg, SPOT.lat + dl, SAT_Z), [x1, y1] = mercPx(SPOT.lng + dg, SPOT.lat - dl, SAT_Z);
+    const tx0 = Math.floor(x0 / 256), ty0 = Math.floor(y0 / 256), tx1 = Math.floor(x1 / 256), ty1 = Math.floor(y1 / 256);
+    const nx = tx1 - tx0 + 1, ny = ty1 - ty0 + 1, T = 512;
+    const cv = document.createElement("canvas"); cv.width = nx * T; cv.height = ny * T;
+    const g = cv.getContext("2d"); g.fillStyle = "#8b8778"; g.fillRect(0, 0, cv.width, cv.height);
+    let got = 0;
+    await Promise.all([...Array(nx * ny).keys()].map(i => new Promise(ok => {
+      const tx = tx0 + (i % nx), ty = ty0 + Math.floor(i / nx), im = new Image();
+      im.crossOrigin = "anonymous";
+      im.onload = () => { g.drawImage(im, (tx - tx0) * T, (ty - ty0) * T, T, T); got++; ok(); };
+      im.onerror = () => ok();
+      im.src = `https://api.mapbox.com/v4/mapbox.satellite/${SAT_Z}/${tx}/${ty}@2x.jpg90?access_token=${encodeURIComponent(window.MAPBOX_TOKEN)}`;
+    })));
+    if (!got) throw new Error("no satellite tiles");
+    const tex = new THREE.CanvasTexture(cv); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
+    /* scene (x, z) -> texture uv, as an affine map (Mercator is linear to
+       well under a pixel over a kilometre) */
+    const uv = (x, z) => { const [lng, lat] = sceneLngLat(x, z), [px, py] = mercPx(lng, lat, SAT_Z);
+      return [(px - tx0 * 256) / (nx * 256), 1 - (py - ty0 * 256) / (ny * 256)]; };
+    const o = uv(0, 0), ax = uv(1, 0), az = uv(0, 1);
+    return { tex, o, ux: [ax[0] - o[0], ax[1] - o[1]], uz: [az[0] - o[0], az[1] - o[1]], tiles: got };
+  })();
+  return SATP;
+}
+const NOT_DRAPED = /trunk|leaf|frond|Sign|Glass|Aluminium/i;
+function drape(THREE, root, sat, state) {
+  const U = { uSat: { value: sat.tex }, uSatO: { value: new THREE.Vector2(...sat.o) }, uSatX: { value: new THREE.Vector2(...sat.ux) },
+    uSatZ: { value: new THREE.Vector2(...sat.uz) }, uSatMix: state };
+  const done = new Set();
+  root.traverse(o => {
+    if (!o.isMesh) return;
+    for (const m of [].concat(o.material)) {
+      if (!m || done.has(m) || NOT_DRAPED.test(m.name || "")) continue;
+      done.add(m);
+      m.onBeforeCompile = (sh) => {
+        Object.assign(sh.uniforms, U);
+        sh.vertexShader = sh.vertexShader.replace("#include <common>", "#include <common>\nvarying vec3 vSatW; varying vec3 vSatN;")
+          .replace("#include <project_vertex>", "#include <project_vertex>\nvSatW = (modelMatrix * vec4(transformed, 1.0)).xyz; vSatN = normalize(mat3(modelMatrix) * objectNormal);");
+        sh.fragmentShader = sh.fragmentShader.replace("#include <common>", "#include <common>\nvarying vec3 vSatW; varying vec3 vSatN; uniform sampler2D uSat; uniform vec2 uSatO, uSatX, uSatZ; uniform float uSatMix;")
+          .replace("#include <map_fragment>", `#include <map_fragment>
+            { float up = smoothstep(0.7, 0.95, normalize(vSatN).y) * uSatMix;
+              vec2 suv = uSatO + uSatX * vSatW.x + uSatZ * vSatW.z;
+              if (up > 0.0 && suv.x > 0.0 && suv.y > 0.0 && suv.x < 1.0 && suv.y < 1.0) diffuseColor.rgb = mix(diffuseColor.rgb, texture2D(uSat, suv).rgb, up); }`);
+      };
+      m.needsUpdate = true;
+    }
+  });
+}
 /* A soft sky to reflect in the glass: blue overhead, pale at the horizon,
    warm grey below. Without it the metallic glass would render black. */
 function skyEnv(THREE, renderer) {
@@ -149,38 +232,86 @@ function skyEnv(THREE, renderer) {
   pm.dispose(); geo.dispose();
   return tex;
 }
-function lightScene(THREE, scene) {
-  scene.add(new THREE.HemisphereLight(0xffffff, 0x8d8880, 1.1));
-  const sun = new THREE.DirectionalLight(0xfff1dc, 2.2); sun.position.set(-40, 60, 50); scene.add(sun);
+/* Daylight as in the Blender stills: a warm sun from the front left, high
+   enough for short shadows, a soft sky fill, and shadows from every block
+   and tree. `span` is the radius the shadows must cover. */
+function lightScene(THREE, scene, renderer, span = 60) {
+  scene.add(new THREE.HemisphereLight(0xdfe9f5, 0x6f6658, 0.75));
+  const sun = new THREE.DirectionalLight(0xfff0db, 2.9);
+  /* the stills' sun: toward (-0.42, -0.72, 0.55) in the model's frame; glTF y-up */
+  const d = new THREE.Vector3(-0.42, 0.55, 0.72).normalize();
+  sun.position.copy(d.multiplyScalar(span * 2.2)); sun.target.position.set(0, 0, 0);
+  scene.add(sun); scene.add(sun.target);
+  if (renderer && renderer.shadowMap) {
+    renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    sun.castShadow = true;
+    const c = sun.shadow.camera; c.left = -span; c.right = span; c.top = span; c.bottom = -span; c.near = 1; c.far = span * 5;
+    sun.shadow.mapSize.set(span > 200 ? 4096 : 2048, span > 200 ? 4096 : 2048);
+    sun.shadow.bias = -0.0004; sun.shadow.normalBias = span > 200 ? 0.6 : 0.05;
+  }
+  return sun;
 }
+const shadowsOn = (root) => root.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
 
 /* The viewer in the Property tab: the twin on a turntable. Drag to turn it,
    scroll or pinch to zoom. It stops when its tab is not showing. */
 let viewer = null;
-function mountViewer(el) {
+function mountViewer(el, withContext) {
   if (viewer) { viewer.dispose(); viewer = null; }
   const still = () => { el.innerHTML = `<img src="./renders/${esc(MD.renders[0][0])}" alt="F1 Skymark, rendered from the 3D twin"><span class="ph">Still from the 3D twin</span>`; };
   loadThree().then(async ({ THREE, OrbitControls }) => {
     if (!el.isConnected) return;
     const model = (await loadTwin()).clone(true);
-    const w = el.clientWidth || 460, h = Math.round(Math.min(300, Math.max(210, w * .58)));
+    const ctx = withContext && MD.contextGlb ? await loadGLB(MD.contextGlb).catch(() => null) : null;
+    if (!el.isConnected) return;
+    const w = el.clientWidth || 460, h = Math.round(Math.min(withContext ? 380 : 300, Math.max(210, w * (withContext ? .72 : .58))));
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setPixelRatio(Math.min(2, devicePixelRatio || 1)); renderer.setSize(w, h);
-    renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
-    const scene = new THREE.Scene(); scene.environment = skyEnv(THREE, renderer); lightScene(THREE, scene); scene.add(model);
-    const cam = new THREE.PerspectiveCamera(32, w / h, 1, 2000);
-    /* Start where the photograph was taken from: in front, toward side B. */
-    cam.position.set(-62, 30, 78);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
+    const scene = new THREE.Scene(); scene.environment = skyEnv(THREE, renderer); scene.environmentIntensity = 0.8;
+    lightScene(THREE, scene, renderer, ctx ? 560 : 60); shadowsOn(model); scene.add(model);
+    /* distant blocks fade into a light haze, as they do in the stills */
+    if (ctx) scene.fog = new THREE.Fog(0xe9e4dc, 700, 2600);
+    let satState = null;
+    if (ctx) {
+      const c = ctx.clone(true);
+      c.traverse(o => { if (o.isMesh) o.material = Array.isArray(o.material) ? o.material.map(m => m.clone()) : o.material.clone(); });
+      shadowsOn(c); scene.add(c);
+      satState = { value: S.realSat ? 1 : 0 };
+      loadSatellite(THREE).then(sat => { drape(THREE, c, sat, satState); window.__skySatTiles = sat.tiles; el.dataset.sat = "on"; if (viewer) viewer.redraw(); })
+        .catch(e => { el.dataset.sat = "off"; console.warn("[skymark] satellite", e && e.message); });
+    }
+    const cam = new THREE.PerspectiveCamera(32, w / h, 1, 6000);
+    /* Start where the photograph was taken from: in front, toward side B.
+       With the surroundings, start high, as the Andheri dollhouse does. */
+    if (ctx) cam.position.set(-330, 300, 420); else cam.position.set(-62, 30, 78);
     const ctl = new OrbitControls(cam, renderer.domElement);
-    ctl.target.set(0, MD.heightM * .42, 0); ctl.enablePan = false; ctl.minDistance = 45; ctl.maxDistance = 220; ctl.maxPolarAngle = Math.PI * .49;
-    ctl.autoRotate = !REDUCED(); ctl.autoRotateSpeed = .7; ctl.enableDamping = true;
+    ctl.target.set(0, ctx ? 0 : MD.heightM * .42, 0); ctl.enablePan = !!ctx; ctl.minDistance = ctx ? 60 : 45; ctl.maxDistance = ctx ? 1400 : 220; ctl.maxPolarAngle = Math.PI * .47;
+    /* The sun and the city never move, so shadows are drawn once, and the
+       large model redraws only when the view changes. */
+    if (renderer.shadowMap.enabled) { renderer.shadowMap.autoUpdate = false; renderer.shadowMap.needsUpdate = true; }
+    let dirty = true;
+    const redraw = () => { dirty = true; };
+    ctl.autoRotate = !REDUCED() && !ctx; ctl.autoRotateSpeed = .7; ctl.enableDamping = true;
     ctl.addEventListener("start", () => { ctl.autoRotate = false; });
+    ctl.addEventListener("change", redraw);
     el.innerHTML = ""; el.appendChild(renderer.domElement);
-    el.insertAdjacentHTML("beforeend", `<span class="ph">3D twin · drag to turn</span>`);
-    let raf = 0, alive = true;
-    const tick = () => { if (!alive) return; if (el.isConnected) { ctl.update(); renderer.render(scene, cam); raf = requestAnimationFrame(tick); } else viewer && viewer.dispose(); };
+    el.insertAdjacentHTML("beforeend", `<span class="ph">${ctx ? "3D twin and the real 500 m round it · drag to turn, scroll to zoom" : "3D twin · drag to turn"}</span>`);
+    let raf = 0, alive = true, cw = w, ch = h;
+    /* follows the box it sits in, so full screen and back just work */
+    const fit = () => {
+      const W = el.clientWidth || cw, H = el.classList.contains("full") ? el.clientHeight : h;
+      if (W !== cw || H !== ch) { cw = W; ch = H; renderer.setSize(W, H); cam.aspect = W / H; cam.updateProjectionMatrix(); dirty = true; }
+    };
+    const tick = () => {
+      if (!alive) return;
+      if (!el.isConnected) { viewer && viewer.dispose(); return; }
+      fit(); ctl.update();
+      if (dirty || ctl.autoRotate) { dirty = false; renderer.render(scene, cam); }
+      raf = requestAnimationFrame(tick);
+    };
     tick();
-    viewer = { dispose() { alive = false; cancelAnimationFrame(raf); ctl.dispose(); renderer.dispose(); if (viewer === this) viewer = null; } };
+    viewer = { redraw, setSat(on) { if (satState) satState.value = on ? 1 : 0; redraw(); }, dispose() { alive = false; cancelAnimationFrame(raf); ctl.dispose(); renderer.dispose(); if (viewer === this) viewer = null; } };
     window.__skyViewerReady = true;
   }).catch((e) => { console.warn("[skymark] viewer", e && e.message); still(); });
 }
@@ -189,7 +320,7 @@ function mountViewer(el) {
    its footprint centre at the origin; glTF +Z is the front. With no turn the
    front faces south, so the turn is 180 degrees minus the front's bearing. */
 function twinLayer(THREE, model) {
-  const mc = mapboxgl.MercatorCoordinate.fromLngLat([HOME.lng, HOME.lat], 0);
+  const mc = mapboxgl.MercatorCoordinate.fromLngLat([SPOT.lng, SPOT.lat], 0);
   const s = mc.meterInMercatorCoordinateUnits();
   const rotX = new THREE.Matrix4().makeRotationX(Math.PI / 2);
   let renderer, scene, camera;
@@ -268,7 +399,7 @@ function addHQ() {
   const el = document.createElement("div"); el.className = "hq";
   el.innerHTML = `<div class="pulse"></div><div class="pin" title="F1 Skymark">F1</div><div class="tag"><b>F1 Skymark</b><span>PLOT F-01 · SECTOR 6</span></div>`;
   el.querySelector(".pin").addEventListener("click", () => { select(null); goTab("property"); });
-  hq = new mapboxgl.Marker({ element: el, anchor: "center" }).setLngLat([HOME.lng, HOME.lat]).addTo(map);
+  hq = new mapboxgl.Marker({ element: el, anchor: "center" }).setLngLat([SPOT.lng, SPOT.lat]).addTo(map);
   syncHQ(); map.on("zoom", syncHQ);
 }
 /* Close in, the twin is the marker; the pin steps back to a small dot. */
@@ -296,7 +427,7 @@ function frame(animate = true) {
        the camera stands in front of the building, 32 degrees round toward
        side B. `offset` centres the twin in the gap between the panes; padding
        is not used here because the map keeps it and adds it to the next fit. */
-    return map.easeTo({ center: [HOME.lng, HOME.lat], zoom: PHONE() ? 17.3 : 17.9, pitch: 56, bearing: (S.bearing + 180 + 32) % 360,
+    return map.easeTo({ center: [SPOT.lng, SPOT.lat], zoom: PHONE() ? 17.3 : 17.9, pitch: 56, bearing: (S.bearing + 180 + 32) % 360,
       offset: [(pad.left - pad.right) / 2, (pad.top - pad.bottom) / 2], duration: dur });
   }
   const r = S.tab === "connect" ? Math.max(3, ...STATIONS.slice(0, 6).map(s => s.d)) : OUTER;
@@ -465,9 +596,22 @@ function renderPanel() {
   }
   body.scrollTop = 0;
   body.onclick = panelClick; body.oninput = panelInput;
-  const v = $("#viewer"); if (v) mountViewer(v); else if (viewer) viewer.dispose();
+  const v = $("#viewer"); if (v) mountViewer(v, v.dataset.context === "1"); else if (viewer) viewer.dispose();
 }
+function setFull(on) {
+  const v = $("#viewer"); if (!v) return;
+  v.classList.toggle("full", on);
+  if (on && !v.querySelector(".vx")) { v.insertAdjacentHTML("beforeend", `<button class="vx act" type="button">Close full screen</button>`); v.querySelector(".vx").onclick = () => setFull(false); }
+  if (!on) { const x = v.querySelector(".vx"); if (x) x.remove(); }
+}
+addEventListener("keydown", (e) => { if (e.key === "Escape") setFull(false); });
 function panelClick(e) {
+  if (e.target.closest("#vfull")) return setFull(true);
+  if (e.target.closest("#realsat")) {
+    S.realSat = !S.realSat; if (viewer && viewer.setSat) viewer.setSat(S.realSat);
+    const b = $("#realsat"); b.classList.toggle("pri", S.realSat); b.textContent = `Real satellite on the ground and roofs: ${S.realSat ? "on" : "off"}`;
+    return;
+  }
   const id = e.target.closest("[data-id]"); if (id) return select(id.dataset.id);
   const tab = e.target.closest("[data-go]"); if (tab) return goTab(tab.dataset.go);
   if (e.target.closest("[data-back]")) return select(null);
@@ -540,16 +684,19 @@ function aroundHTML() {
   ${KINDS.map(k => { const t = top(k.key); return t.length ? `<h3><span class="dot" style="background:${k.color};margin-right:6px"></span>${esc(k.label)} · ${esc(k.hint)}</h3>${barRows(t, k.color, OUTER)}` : ""; }).join("")}`;
 }
 function twinHTML() {
-  return `<div class="hero" id="viewer"><img src="./renders/${esc(MD.renders[0][0])}" alt="F1 Skymark, rendered from the 3D twin"><span class="ph">Loading the 3D twin</span></div>
+  return `<div class="hero" id="viewer" data-context="1"><img src="./renders/${esc(MD.renders[0][0])}" alt="F1 Skymark, rendered from the 3D twin"><span class="ph">Loading the 3D twin</span></div>
   <div class="kpis">${kpi("Front", `${MD.widthM} m`, "From the photo's proportions", true)}${kpi("Side", `${MD.lengthM} m`, "From the photo's proportions")}${kpi("Height", `${MD.heightM} m`, `${MD.floors} at an assumed ${MD.floorToFloorM} m a floor`)}</div>
+  <div class="actions"><button class="act" id="vfull" type="button">Full screen</button><button class="act${S.realSat ? " pri" : ""}" id="realsat" type="button">${S.realSat ? "Real satellite on the ground and roofs: on" : "Real satellite on the ground and roofs: off"}</button></div>
+  <p class="note">The ground, streets, parks and roofs round the building carry the real Mapbox satellite photo. The walls of the surrounding blocks are painted in the Andheri world's styles: no open source has photographs of every wall. The footprints and streets are real (Overture Maps); heights come from the Copernicus surface model. Imagery © Mapbox © Maxar.</p>
   <div class="flag"><b>What this model is</b>${esc(MD.basis)} The back and the far side are not in the photograph and are plain walls in the model. One measured length on site would fix the scale of everything.</div>
-  <h3>On the map</h3>
+  <h3>Where it stands</h3>
   <p class="note">${esc(MD.bearingNote)}</p>
   <p class="note"><label for="rot">Rotate: the front faces <b id="rot-v">${S.bearing}°</b> from north</label><br><input id="rot" type="range" min="0" max="355" step="5" value="${S.bearing}" style="width:100%"></p>
   <h3>Stills</h3>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">${MD.renders.map(([f, cap]) => `<figure style="margin:0"><img src="./renders/${esc(f)}" data-zoom="./renders/${esc(f)}" alt="${esc(cap)}" loading="lazy" style="width:100%;border-radius:9px;display:block;cursor:zoom-in;aspect-ratio:4/3;object-fit:cover"><figcaption class="src" style="margin-top:3px">${esc(cap)}</figcaption></figure>`).join("")}</div>
   <h3>Files</h3>
-  <ul class="srcs"><li><a href="${esc(MD.glb)}" download>fm_skymark_atlas.glb</a><span class="src">The model as shown here (glTF binary, metres, PBR materials)</span></li>
+  <ul class="srcs"><li><a href="${esc(MD.glb)}" download>fm_skymark_atlas.glb</a><span class="src">The building (glTF binary, metres, PBR materials, one group per facade)</span></li>
+  <li><a href="${esc(MD.contextGlb)}" download>fm_skymark_context_500m.glb</a><span class="src">The 500 m round it, in the same frame</span></li>
   <li><a href="${esc(MD.blend)}" download>fm_skymark_final.blend</a><span class="src">The editable Blender file</span></li>
   <li><a href="${esc(MD.report)}" target="_blank" rel="noopener">validation_report.json</a><span class="src">What matches the photograph, what does not, and how sure each part is</span></li>
   <li><a href="${esc(MD.params)}" target="_blank" rel="noopener">facade_parameters.json</a><span class="src">Every dimension with its source and confidence</span></li></ul>`;

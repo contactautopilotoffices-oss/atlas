@@ -154,9 +154,9 @@ window.SKY_PROPERTY = {
 window.SKY_MODEL = {
  "glb": "./exports/fm_skymark_atlas.glb",
  "blend": "./exports/fm_skymark_final.blend",
- "frontBearing": 180,
+ "frontBearing": 326,
  "bearingConfirmed": false,
- "bearingNote": "Which way the front faces on the ground is not confirmed: no satellite view of the roof could be checked from the build environment. The twin stands at the property's pin facing south until someone sets the real bearing (Twin tab, Rotate), then writes it into data.js.",
+ "bearingNote": "Placement is assumed, not confirmed. The published pin falls on open ground, so the twin stands on the nearest large building footprint in OpenStreetMap (51 m south-west of the pin), on its street corner, with the front facing north-north-west (326 degrees) and the angular frame facing the side road. A satellite view of the roof would confirm it. Distances on this page are from the published pin.",
  "widthM": 27.7,
  "lengthM": 44.7,
  "heightM": 22.5,
@@ -166,6 +166,14 @@ window.SKY_MODEL = {
   [
    "01_reference_camera.jpg",
    "From the photograph's viewpoint"
+  ],
+  [
+   "06_context_close.jpg",
+   "In its street, from the air"
+  ],
+  [
+   "05_context_500m.jpg",
+   "The 500 m around it"
   ],
   [
    "04_three_quarter.jpg",
@@ -178,11 +186,20 @@ window.SKY_MODEL = {
   [
    "03_side_elevation.jpg",
    "Side elevation"
+  ],
+  [
+   "00_reference_comparison.jpg",
+   "Checked against the photograph's landmarks"
   ]
  ],
- "basis": "Built in Blender from one photograph and the published G+4 floor count. Proportions follow the photograph; no length is surveyed.",
+ "basis": "Built in Blender from one photograph and the published G+4 floor count: every pane, mullion, cladding panel and frame member is real geometry. Proportions follow the photograph; no length is surveyed. The 500 m around it is built from Overture Maps footprints and roads, with heights from the Copernicus surface model, the same way as the Andheri East world.",
  "report": "./reconstruction/validation_report.json",
- "params": "./reconstruction/facade_parameters.json"
+ "params": "./reconstruction/facade_parameters.json",
+ "contextGlb": "./exports/fm_skymark_context_500m.glb",
+ "anchor": {
+  "lat": 28.593137,
+  "lng": 77.318332
+ }
 };
 
 window.SKY_TRANSIT = {

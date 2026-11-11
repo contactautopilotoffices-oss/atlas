@@ -41,7 +41,8 @@
       "Yaw is about 32 degrees from the front's normal.",
       "Positions along B were corrected for perspective: s = t / (1.43 - 0.43 t), where t is the image fraction from the far end and s the true fraction.",
       "Roof lines fall and ground lines rise away from the corner in a ratio of about 1 to 2, which puts the camera about 15 m above the ground."
-    ]
+    ],
+    "iteration": 2
   },
   "massing": {
     "front_width_A": 27.7,
@@ -366,10 +367,33 @@
   },
   "site": {
     "plot_area_sqm": 2940,
-    "paving_margin": 9.0,
     "boundary_wall_h": 1.6,
     "confidence": "low",
-    "source": "developer: plot 2,940 sq m. Paving extent is a neutral plinth for the model, not a surveyed plot boundary."
+    "source": "developer: plot 2,940 sq m. Paving, wall, kerb, palms and trees are read from the photograph; their positions are approximate and the plot boundary is not surveyed.",
+    "margin_side_B": 6.0,
+    "margin_front": 3.0,
+    "margin_other": 2.0,
+    "palms": [
+      [
+        8.2,
+        -3.0,
+        9.0
+      ],
+      [
+        10.8,
+        -4.2,
+        10.5
+      ],
+      [
+        13.0,
+        -2.6,
+        8.5
+      ]
+    ],
+    "trees_side_B": {
+      "count": 5,
+      "height": 8.0
+    }
   },
   "reference_camera": {
     "aspect": [
@@ -387,28 +411,68 @@
       17.2
     ],
     "confidence": "low",
-    "source": "Solved by hand from the photograph (see meta.photo_scale_notes), then checked against test renders. No EXIF and no surveyed control points, so this is a visual match, not a calibrated camera."
+    "source": "Solved by hand from the photograph (see meta.photo_scale_notes), then checked against test renders. No EXIF and no surveyed control points, so this is a visual match, not a calibrated camera.",
+    "clip_start_m": 55,
+    "photo_landmarks_px": [
+      {
+        "x": 357,
+        "label": "corner",
+        "row": 0
+      },
+      {
+        "x": 718,
+        "label": "front right edge",
+        "row": 1
+      },
+      {
+        "x": 48,
+        "label": "side far end",
+        "row": 2
+      },
+      {
+        "y": 360,
+        "label": "pier top"
+      },
+      {
+        "y": 760,
+        "label": "pier base (behind trees)"
+      },
+      {
+        "y": 585,
+        "label": "podium sign band top"
+      }
+    ]
   },
   "materials": {
     "glass_bluegrey": {
-      "base": "#6f8798",
-      "metallic": 0.55,
-      "roughness": 0.07
+      "base": "#4f6f8c",
+      "metallic": 0.9,
+      "roughness": 0.05
     },
     "glass_dark": {
-      "base": "#1d2730",
-      "metallic": 0.45,
-      "roughness": 0.09
+      "base": "#18222c",
+      "metallic": 0.85,
+      "roughness": 0.07
     },
     "cladding_white": {
-      "base": "#d9dcdd",
-      "metallic": 0.15,
-      "roughness": 0.42
+      "base": "#e4e6e6",
+      "metallic": 0.0,
+      "roughness": 0.38
     },
     "aluminium": {
-      "base": "#b9bec4",
+      "base": "#aab0b6",
       "metallic": 1.0,
-      "roughness": 0.32
+      "roughness": 0.35
+    },
+    "aluminium_dark": {
+      "base": "#2e3338",
+      "metallic": 0.8,
+      "roughness": 0.4
+    },
+    "joint_dark": {
+      "base": "#22252a",
+      "metallic": 0.0,
+      "roughness": 0.85
     },
     "concrete": {
       "base": "#8b8781",
@@ -416,20 +480,41 @@
       "roughness": 0.9
     },
     "paving": {
-      "base": "#77726b",
+      "base": "#8f8a80",
       "metallic": 0.0,
       "roughness": 0.95
     },
+    "asphalt": {
+      "base": "#3d3e41",
+      "metallic": 0.0,
+      "roughness": 0.92
+    },
     "accent_brown": {
-      "base": "#4a2a1a",
+      "base": "#4b2b1c",
       "metallic": 0.1,
       "roughness": 0.55
+    },
+    "roof_membrane": {
+      "base": "#b9bbb8",
+      "metallic": 0.0,
+      "roughness": 0.85
     }
   },
   "map": {
-    "lat": null,
-    "lng": null,
-    "front_A_faces_bearing_deg": null,
-    "note": "Filled in from the location research; the bearing needs a satellite view of the roof to confirm."
-  }
+    "pin": {
+      "lat": 28.593565,
+      "lng": 77.3188016,
+      "source": "https://www.coworkingcafe.com/coworking-property/in/up/noida/efc-skymark/"
+    },
+    "corner_enu": [
+      -44.7,
+      -24.4
+    ],
+    "front_bearing_deg": 326,
+    "confirmed": false,
+    "replaces_footprint_id": "13c57407-869d-48e4-a9ca-04a66a98fe2a",
+    "context_source": "Overture Maps release/2026-10-21.0",
+    "note": "ASSUMED PLACEMENT, to be confirmed. The published pin falls on open ground 15 m from a road, with no footprint under it, so the building is not exactly there. The nearest large footprint is an OpenStreetMap building 51 m south-west of the pin (1,494 sq m). It fits what is published: about half of the developer's 2,940 sq m plot, and five floors of it plus two basements come to roughly the architect's 125,000 sq ft. The twin stands on that footprint's street corner (roads on its north-west and north-east sides), aligned to the street grid, front facing 326 degrees. Not confirmed: that this footprint is F1 Skymark, or which of its sides is the front. That footprint is U-shaped, 52.5 m by 40.8 m overall, which does not match the photo-derived rectangle (27.7 m by 44.7 m), so either the identification or the photo reading is off. One look at a satellite map settles it."
+  },
+  "materials_note": "Colours read from the photograph by eye. Glass is a tinted reflective surface (metallic 0.85 to 0.9, low roughness), so what it shows is mostly the sky and surroundings; two close variants of each glass and cladding are generated so panes and panels differ slightly."
 }

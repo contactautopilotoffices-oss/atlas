@@ -211,6 +211,9 @@ table.rt .k{display:inline-flex;align-items:center;gap:6px}
 /* Close in, the twin itself marks the spot, so the pin and its tag step aside. */
 .hq.near{display:none}
 .hero canvas{display:block;width:100%!important;height:auto!important;cursor:grab}
+.hero.full{position:fixed;inset:0;z-index:95;margin:0;min-height:0;background:radial-gradient(1200px 800px at 50% 45%,#3a3632,#181614 75%)}
+.hero.full canvas{height:100%!important}
+.hero .vx{position:absolute;top:14px;right:14px;z-index:2}
 .hero canvas:active{cursor:grabbing}
 @keyframes pulse{0%{transform:scale(.5);opacity:.9}100%{transform:scale(1.9);opacity:0}}
 

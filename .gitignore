@@ -46,3 +46,9 @@ media/indore/backdrop-*.webp
 .cms-dev-store.json
 media/_cms-dev/
 /docs-out/
+
+# Copernicus surface model tile, fetched by noida-skymark/reconstruction/fetch_context.py
+.dsm_*.tif
+
+# Facade textures painted at build time by scripts/world/textures.py
+noida-skymark/reconstruction/.tex/
