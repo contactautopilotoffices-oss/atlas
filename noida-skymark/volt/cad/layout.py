@@ -18,7 +18,7 @@ OX, OY = 2996150.0, -3366400.0
 RCP_DX, RCP_DY = 108.8966, -2522.2322      # ceiling-plan copy -> furniture copy
 X0, X1, Y0, Y1 = 2996150, 2997640, -3366400, -3365250
 HEIGHTS = {"ceiling": 2.85, "wall": 2.85, "desk": 0.75, "high_desk": 1.05, "coffee": 0.42,
-           "screen": 0.40, "planter": 0.62, "source": "assumed: standard fit-out heights, not in the 2D drawing"}
+           "screen": 0.40, "planter": 1.05, "source": "assumed: standard fit-out heights, not in the 2D drawing"}
 
 def m(x, y): return (round((x - OX) * IN, 3), round((y - OY) * IN, 3))
 def inb(p): return X0 < p[0] < X1 and Y0 < p[1] < Y1
@@ -35,9 +35,19 @@ ins_all = {r['id']: r for r in d if r['t'] == 'INS'}
 # ---------------- walls
 WALL = {'AR WALL', 'AR-WALL', 'WS-WALL-PRTN', 'WS-WALL', 'L-WALL', 'I- Partition- Jaali Stall'}
 lines = []
+# L-WALL holds one outline per room. For enclosed rooms the outline is the partition. Two outlines are not walls:
+# the open workstation zone (the design deck's renders, pages 4 to 7, show it open to the passages, with planters
+# along its edge) and a 7.0 x 6.9 m outline that cuts across the UPS room, collab area 01 and the entry. They are
+# kept as "zones" and not built as walls.
+OPEN_ZONES = [(17.6, 7.11), (7.03, 6.91)]
+zones = []
 for r in prims:
     if r['ch'] or r['L'] not in WALL or not any(inb(q) for q in r['p']): continue
     pts = [m(*q) for q in r['p']]
+    if r['L'] == 'L-WALL':
+        xs = [q[0] for q in pts]; ys = [q[1] for q in pts]; sz = (max(xs) - min(xs), max(ys) - min(ys))
+        if any(abs(sz[0] - a) < 0.12 and abs(sz[1] - b) < 0.12 for a, b in OPEN_ZONES):
+            zones.append([round(min(xs), 3), round(min(ys), 3), round(max(xs), 3), round(max(ys), 3)]); continue
     if len(pts) > 1: lines.append(LineString(pts))
 booths = [o['id'] for o in I.values() if o['name'] == 'A$Cbfba1e20']
 for b in booths:   # phone booth shells are drawn inside a block
@@ -246,7 +256,8 @@ out = {"about": "Volt, first floor, Skymark F-1, Noida. Read from 20260915_SKY_M
        "atrium": ring(atrium) if atrium is not None else None,
        "walls": [poly_json(g) for g in walls], "glass": glass, "columns": [ring(c) for c in cols],
        "rooms": rooms, "desks": desks, "tables": tables, "seats": seat_objs, "planters": planters, "plants": plants,
-       "doors": doors, "lights": lights, "labels": labels,
+       "doors": doors, "lights": lights, "labels": labels, "zones": zones,
+       "skirting": [poly_json(g) for w_ in walls for g in ([w_.buffer(0.009, join_style=2)] if w_.buffer(0.009, join_style=2).geom_type == "Polygon" else list(w_.buffer(0.009, join_style=2).geoms))],
        "plate": ring(plate), "lifts": lifts, "storeys": {"count": "G+4", "floor_to_floor": 4.1, "volt_level": 1, "source": "G+4 and 4.1 m floor to floor from the Skymark reconstruction (facade_parameters.json); the plan is labelled FIRST FLOOR"}}
 json.dump(out, open(sys.argv[1] if len(sys.argv) > 1 else 'layout.json', 'w'), separators=(',', ':'))
 print({k: len(v) for k, v in out.items() if isinstance(v, list)})

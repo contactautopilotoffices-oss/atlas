@@ -28,7 +28,7 @@ const GROUP_COL = { W: 0xd6452b, M: 0x2b62d6, C: 0x1f9a55, L: 0xd68a1f, O: 0x8a8
 const DECK = { 'Open workstations': [4, 5, 6, 7], 'Sales office': [8, 9], 'Director cabin 01': [10, 11], 'Director cabin 02': [12],
   'Lounge area (north)': [13], '18 seater conference room': [14, 15], 'Control room / command centre': [16, 17],
   'Collab area 01': [18], 'Collab area 02': [19], 'Phone booths PH-05 to 07': [20], 'Cafeteria': [21, 22] };
-const OURS = { '18 seater conference room': ['/media/noida-skymark/volt/renders/conf18.jpg'] };   // rendered in Blender Cycles from the room's layout
+const OURS = { '18 seater conference room': ['/media/noida-skymark/volt/renders/conf18.jpg'], 'Open workstations': ['/media/noida-skymark/volt/renders/open-workstations.jpg'] };   // rendered in Blender Cycles from the room's layout
 const TOUR = ['Reception', 'Open workstations', 'Control room / command centre', 'Sales office', 'Calling room', 'Cafeteria',
   '18 seater conference room', 'Finance room', 'Lounge area (north)', 'Director cabin 01', 'Collab area 01'];
 

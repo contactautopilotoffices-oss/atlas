@@ -18,6 +18,7 @@ b = L['bounds']; PAD = 1.6
 x0, y0, x1, y1 = b[0] - PAD, b[1] - PAD, b[2] + PAD, b[3] + PAD
 inb = lambda p: x0 < p[0] < x1 and y0 < p[1] < y1
 WALL = {'AR WALL', 'AR-WALL', 'WS-WALL-PRTN', 'WS-WALL', 'L-WALL', 'column', 'RCC COLUMN', 'COL', 'I- Partition- Jaali Stall'}
+ZONES = [tuple(z) for z in L.get('zones', [])]   # room outlines that are not walls: drawn thin
 GLASS = {'WS-GLAZ-GLAS', 'STR. GLAZING', 'AR-WINDOW', 'WS-DOOR-GLAZ'}
 SKIP = {'WS-TREE', 'APO- PLANTERS', 'FORMAT-A1', 'PDF4_Geometry', 'WS-ANNO-DIMS', 'Dim-INT', 'LEADER', 'DIM'}
 walls, glass, furn = [], [], []
@@ -26,6 +27,9 @@ for r in d:
     if r['L'] in SKIP or r.get('fill'): continue
     P = [m(q) for q in r['p']]
     if not any(inb(p) for p in P): continue
+    if r['L'] == 'L-WALL':
+        xs = [q[0] for q in P]; ys = [q[1] for q in P]
+        if any(abs(min(xs) - z[0]) < 0.05 and abs(max(xs) - z[2]) < 0.05 and abs(min(ys) - z[1]) < 0.05 and abs(max(ys) - z[3]) < 0.05 for z in ZONES): furn.append(P); continue
     (walls if r['L'] in WALL else glass if r['L'] in GLASS else furn).append(P)
 W_PX = 2400; H_PX = round(W_PX * (y1 - y0) / (x1 - x0))
 fig = plt.figure(figsize=(W_PX / 200, H_PX / 200), dpi=200); ax = fig.add_axes([0, 0, 1, 1])
