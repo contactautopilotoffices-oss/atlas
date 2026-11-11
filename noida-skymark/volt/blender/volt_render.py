@@ -368,17 +368,22 @@ for s in L["seats"]:
 
 # planters and plants (upright blades, like a snake plant; nothing fussy that would look fake)
 def blades(x, y, z, n, spread, hgt):
-    """A clump of broad leaves: each leaf has a folded midrib, widens then tapers, and arches outwards."""
+    """A clump of slender leaves on thin stems: each leaf is narrow, pointed and paper-thin, with a light fold along
+    the midrib, and arches outwards. Many thin leaves read as a real plant; a few wide ones read as plastic."""
     verts, faces = [], []
     for i in range(n):
         ang = random.uniform(0, 6.283); r0 = random.uniform(0, spread); bx, by = x + math.cos(ang) * r0, y + math.sin(ang) * r0
-        ln = hgt * random.uniform(0.7, 1.25); wmax = random.uniform(0.05, 0.085); arch = random.uniform(0.35, 1.0); k = len(verts); S = 9
-        dx, dy = math.cos(ang), math.sin(ang); px, py = -dy, dx
+        ln = hgt * random.uniform(0.65, 1.3); wmax = random.uniform(0.016, 0.03); arch = random.uniform(0.25, 1.1); k = len(verts); S = 10
+        stem = random.uniform(0.25, 0.45)                    # the first part is a bare stem
+        dx, dy = math.cos(ang), math.sin(ang); px, py = -dy, dx; twist = random.uniform(-0.5, 0.5)
         for j in range(S + 1):
-            t = j / S; ww = wmax * math.sin(math.pi * min(1.0, 0.08 + t * 0.95)) ** 0.8 + 0.002
-            out = ln * (0.15 * t + arch * 0.55 * t * t); up = ln * (t - 0.42 * arch * t ** 2.6)
+            t = j / S
+            lt = max(0.0, (t - stem) / (1 - stem))            # 0..1 along the leaf blade
+            ww = 0.0025 + (wmax * math.sin(math.pi * min(1.0, 0.04 + lt * 0.96)) ** 0.7 if t > stem else 0.0)
+            out = ln * (0.1 * t + arch * 0.6 * t * t); up = ln * (t - 0.5 * arch * t ** 2.8)
             cx_, cy_, cz_ = bx + dx * out, by + dy * out, z + up
-            verts += [(cx_ - px * ww, cy_ - py * ww, cz_ + ww * 0.35), (cx_, cy_, cz_), (cx_ + px * ww, cy_ + py * ww, cz_ + ww * 0.35)]
+            ca_, sa_ = math.cos(twist * lt), math.sin(twist * lt); qx, qy = px * ca_, py * ca_
+            verts += [(cx_ - qx * ww, cy_ - qy * ww, cz_ + ww * (0.25 + sa_)), (cx_, cy_, cz_), (cx_ + qx * ww, cy_ + qy * ww, cz_ + ww * (0.25 - sa_))]
         for j in range(S):
             a_ = k + 3 * j; faces += [(a_, a_ + 1, a_ + 4, a_ + 3), (a_ + 1, a_ + 2, a_ + 5, a_ + 4)]
     add("plant", verts, faces, "leaf", smooth=True)
@@ -388,11 +393,11 @@ for p in L["planters"]:
     box(x, y, 0.04, w, d, PH - 0.04, a, "planter_white", 0.006, "planter"); box(x, y, 0.06, w * 0.5, d + 0.01, PH - 0.12, a, "oak", 0.003, "planter_panel")
     box(x, y, PH, w + 0.02, d + 0.02, 0.07, a, "planter_top", 0.006, "planter_tray"); box(x, y, PH + 0.05, w - 0.04, d - 0.04, 0.025, a, "soil")
     ca, sa = math.cos(a), math.sin(a)
-    for u in (-w / 3, -w / 9, w / 9, w / 3): blades(x + ca * u, y + sa * u, PH + 0.06, 16, min(d, 0.3) * 0.4, 0.42)
+    for u in (-w * 0.38, -w * 0.23, -w * 0.08, w * 0.08, w * 0.23, w * 0.38): blades(x + ca * u, y + sa * u, PH + 0.06, 30, min(d, 0.3) * 0.42, 0.46)
 for p in L["plants"]:
     if p.get("in_box"): continue
     put(cyl_mesh(0.17, 0.44, "pot", 28, 0.13), T(p["x"], p["y"], 0), "pot"); put(cyl_mesh(0.15, 0.02, "soil", 28), T(p["x"], p["y"], 0.42), "soil")
-    blades(p["x"], p["y"], 0.42, 20, 0.06, 0.6)
+    blades(p["x"], p["y"], 0.42, 46, 0.07, 0.62)
 
 # ------------------------------------------------------------------ light from outside: sky and a morning sun
 sf = L["site_fit"]; rho = math.radians(sf["rot_deg"])
