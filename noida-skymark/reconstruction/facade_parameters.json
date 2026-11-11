@@ -69,14 +69,14 @@
       "floors_above_ground": "developer: G+4",
       "floor_to_floor": "Photo: slab lines on the front glass are about 70 px apart against a 400 px pier, so 5 floors plus a 2 m parapet fill the height. 4.1 m is assumed as a normal office floor height; no source states it.",
       "side_length_B": "Same footprint: its 59.2 m long side less the 8 m podium in front of the street face. The features along this side were scaled from the photo fit (44.7 m) to 51 m.",
-      "front_width_A": "Overture Maps footprint used by the earlier Skymark study (media/skymark-f1/site.json): 59.2 m by 33.9 m. The front is the short south-east side; the photo-fitted composition (corner pier, glass, right pier) takes 27.7 m and the light grey east wing the rest."
+      "front_width_A": "Overture Maps footprint used by the earlier Skymark study (media/skymark-f1/site.json): 59.2 m by 33.9 m. The photo-fitted front (corner pier, glass, right pier) is stretched to fill the 33.5 m short side; there is no separate wing (the grey wing in an earlier render does not exist)."
     },
     "hidden_sides": "The rear and the far side are not visible in the photograph. They are closed with plain cladding massing only, tagged observed = false."
   },
   "front_A": {
     "corner_pier": {
       "u0": 0.0,
-      "u1": 7.41,
+      "u1": 8.96,
       "v0": 0.0,
       "v1": 22.5,
       "panel_w": 1.5,
@@ -86,11 +86,11 @@
       "source": "photo: 95 px of the 363 px front"
     },
     "glass_block": {
-      "u0": 11.01,
-      "u1": 24.73,
+      "u0": 13.32,
+      "u1": 29.91,
       "v0": 0.0,
       "v1": 21.26,
-      "mullion_spacing": 1.39,
+      "mullion_spacing": 1.68,
       "transom_spacing": 2.05,
       "spandrel_at_slabs": true,
       "spandrel_h": 0.55,
@@ -98,8 +98,8 @@
       "source": "photo: about 8 lit vertical bays and two glass rows per floor above the annex roof; slab lines about 70 px (4.5 m) apart"
     },
     "right_pier": {
-      "u0": 24.73,
-      "u1": 27.7,
+      "u0": 29.91,
+      "u1": 33.5,
       "v0": 0.0,
       "v1": 22.5,
       "projection": 0.35,
@@ -107,8 +107,8 @@
       "source": "photo: 38 px white pier at the right edge"
     },
     "parapet_band": {
-      "u0": 7.41,
-      "u1": 24.73,
+      "u0": 8.96,
+      "u1": 29.91,
       "v0": 21.26,
       "v1": 22.5,
       "projection": 0.35,
@@ -116,8 +116,8 @@
       "source": "photo: thick white band above the curtain wall"
     },
     "dark_recess": {
-      "u0": 7.41,
-      "u1": 11.01,
+      "u0": 8.96,
+      "u1": 13.32,
       "v0": 0.0,
       "v1": 21.26,
       "recess": 0.5,
@@ -125,33 +125,6 @@
       "transom_spacing": 2.05,
       "confidence": "low",
       "source": "photo: darker glazed strip, about 45 px wide, between the corner pier and the lit glass; whether it is a recess or the return of a projecting glass box cannot be told from one view"
-    },
-    "east_wing": {
-      "u0": 27.7,
-      "u1": 33.5,
-      "v0": 0.0,
-      "v1": 21.3,
-      "setback": 0.6,
-      "ribbons": [
-        [
-          9.4,
-          12.6
-        ],
-        [
-          13.3,
-          16.5
-        ],
-        [
-          17.2,
-          20.4
-        ]
-      ],
-      "charcoal": [
-        4.6,
-        8.7
-      ],
-      "confidence": "medium",
-      "source": "photo: the light grey block on the right of the photograph (taken earlier for a neighbour) and the earlier study's photos: light grey ACP with ribbon windows on the upper floors and a charcoal block lower down, its parapet about 1 m below the main one"
     }
   },
   "side_B": {
@@ -258,8 +231,8 @@
     "wall_plane_setback": 0.45
   },
   "annex": {
-    "u0": 16.07,
-    "u1": 26.3,
+    "u0": 19.43,
+    "u1": 31.81,
     "depth": 8.0,
     "height": 9.7,
     "sign_band": {
@@ -289,8 +262,8 @@
     {
       "id": "care_pier",
       "host": "front_A",
-      "u0": 0.31,
-      "u1": 7.12,
+      "u0": 0.37,
+      "u1": 8.61,
       "v0": 19.24,
       "v1": 22.24,
       "text": "care",
@@ -305,8 +278,8 @@
     {
       "id": "clovia_pier",
       "host": "front_A",
-      "u0": 0.31,
-      "u1": 7.12,
+      "u0": 0.37,
+      "u1": 8.61,
       "v0": 15.88,
       "v1": 18.88,
       "text": "Clovia",
@@ -320,8 +293,8 @@
     {
       "id": "skymark_crown",
       "host": "front_A_roof",
-      "u0": 7.8,
-      "u1": 13.97,
+      "u0": 9.43,
+      "u1": 16.9,
       "v0": 22.5,
       "v1": 23.74,
       "text": "skymark",
@@ -336,8 +309,8 @@
     {
       "id": "care_annex",
       "host": "annex_front",
-      "u0": 16.47,
-      "u1": 23.3,
+      "u0": 19.92,
+      "u1": 28.18,
       "v0": 8.2,
       "v1": 9.6,
       "text": "care",
@@ -349,15 +322,15 @@
       "confidence": "low",
       "source": "photo: yellow band with the care tile on the annex parapet",
       "tile": {
-        "u0": 19.3,
-        "u1": 21.2
+        "u0": 23.34,
+        "u1": 25.64
       }
     },
     {
       "id": "clovia_annex",
       "host": "annex_front",
-      "u0": 23.3,
-      "u1": 25.9,
+      "u0": 28.18,
+      "u1": 31.32,
       "v0": 8.2,
       "v1": 9.6,
       "text": "Clovia",
@@ -371,8 +344,8 @@
   ],
   "entrance": {
     "host": "annex_front",
-    "u0": 19.2,
-    "u1": 23.4,
+    "u0": 23.22,
+    "u1": 28.3,
     "recess": 2.0,
     "door_h": 2.7,
     "transom_h": 0.6,
@@ -408,17 +381,17 @@
     "margin_other": 2.0,
     "palms": [
       [
-        6.5,
+        7.86,
         -9.6,
         9.0
       ],
       [
-        24.8,
+        29.99,
         -9.6,
         10.5
       ],
       [
-        30.5,
+        36.89,
         -9.4,
         8.5
       ]
@@ -429,19 +402,19 @@
     },
     "gate": {
       "vehicle": [
-        8.0,
-        15.0
+        9.68,
+        18.14
       ],
       "pedestrian": [
-        19.4,
-        21.0
+        23.46,
+        25.4
       ],
       "pillar": 0.6,
       "pillar_h": 2.3,
       "leaf_h": 1.9,
       "cabin": [
-        3.6,
-        6.2
+        4.35,
+        7.5
       ],
       "cabin_size": [
         2.6,

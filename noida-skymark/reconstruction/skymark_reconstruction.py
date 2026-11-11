@@ -253,8 +253,8 @@ MAT_NAMES = {
     "context_building": "SKY_Context_Building", "context_road": "SKY_Context_Road", "context_ground": "SKY_Context_Ground",
 }
 MAT_DEFAULTS = {
-    "glass_bluegrey": {"base": "#8aa3b8", "metallic": 0.0, "roughness": 0.03, "transmission": 0.88, "ior": 2.0},
-    "glass_dark": {"base": "#4a5866", "metallic": 0.0, "roughness": 0.04, "transmission": 0.62, "ior": 2.0},
+    "glass_bluegrey": {"base": "#2f5a8a", "metallic": 0.0, "roughness": 0.03, "transmission": 0.55, "ior": 2.2},
+    "glass_dark": {"base": "#1d3248", "metallic": 0.0, "roughness": 0.04, "transmission": 0.4, "ior": 2.2},
     "cladding_white": {"base": "#e4e6e6", "metallic": 0.0, "roughness": 0.38},
     "aluminium": {"base": "#aab0b6", "metallic": 1.0, "roughness": 0.35},
     "aluminium_dark": {"base": "#2e3338", "metallic": 0.8, "roughness": 0.4},
@@ -1685,10 +1685,16 @@ def _export(path, objs, texcoords=True):
     return path
 
 
+# Kept in the .blend for the stills, left out of the web model: on a map or
+# in the explorer the real ground is already there, and a plate of paving
+# round the building reads as a white base under it.
+WEB_SKIP = ("SKY_Site_Paving", "SKY_Site_Footpath_Kerb")
+
+
 def export_glb(path, root):
     loc = root.location.copy()
     root.location = (0, 0, 0)  # model origin = footprint centre at ground
-    _export(path, [root] + list(root.children_recursive))
+    _export(path, [o for o in [root] + list(root.children_recursive) if o.name not in WEB_SKIP])
     root.location = loc
     return path
 
@@ -1801,15 +1807,21 @@ def main(argv):
     sc.camera = bpy.data.objects.get("SKY_Cam_Reference_Photo") or sc.camera
     bpy.ops.wm.save_as_mainfile(filepath=final_blend)
     meshes = [o for o in objs if o.type == "MESH"]
-    expected = {"root": ROOT_NAME, "names": [ROOT_NAME] + [g.name for g in groups] + [o.name for o in objs],
+    expected = {"root": ROOT_NAME, "names": [ROOT_NAME] + [g.name for g in groups] + [o.name for o in objs if o.name not in WEB_SKIP],
                 "groups": [g.name for g in groups],
                 "materials": sorted({m.name for o in meshes for m in o.data.materials if m}),
-                "height": max(_world_bbox(o)[1].z for o in meshes) - min(_world_bbox(o)[0].z for o in meshes)}
+                "height": max(_world_bbox(o)[1].z for o in meshes) - min(_world_bbox(o)[0].z for o in meshes if o.name not in WEB_SKIP)}
     built = [{"name": o.name, "group": o.get("sky_group"), "component": o.get("sky_component"), "confidence": o.get("sky_confidence"),
               "observed": o.get("sky_observed"), "source": o.get("sky_source"), "mesh": _mesh_stats(o)} for o in objs]
     panes = sum(o.get("sky_panes", 0) for o in objs)
     hierarchy = {g.name: sorted(o.name for o in objs if o.get("sky_group") == g.name) for g in groups}
     glb = export_glb(os.path.join(exp, "fm_skymark_atlas.glb"), root)
+    mp = P.get("map", {})
+    if mp.get("region_xy") is not None and mp.get("phi_deg") is not None:
+        # where the explorer stands the twin: its origin (the footprint centre) at C in the
+        # region's metres (scripts/world/regions/noida-skymark.json), turned phi about up
+        write_json(glb + ".frame.json", {"C": mp["region_xy"], "phi": math.radians(mp["phi_deg"]),
+                                         "about": "FM_SKYMARK origin = footprint centre; front (Facade_Front_A) faces -Y before the turn, so it faces bearing " + str(mp.get("front_bearing_deg")) + " after it."})
     ctx_glb = export_context_glb(os.path.join(exp, "fm_skymark_context_500m.glb"), ctx_root) if ctx_root else None
     ctx_expected = {"root": "SKY_Context_500m", "names": ["SKY_Context_500m", "SKY_Context_Buildings", "SKY_Context_Ground", "SKY_Context_Plinth", "SKY_Context_Trees"],
                     "materials": [], "height": 0, "uv": False}

@@ -183,7 +183,9 @@ async function start(A, W) {
   /* ------------------------------------------- the map beyond the model ---- */
   /* the model covers a few hundred metres round each building; past its edge the ground is the real map
      (Mapbox satellite with streets), so a route to a station 4 km away runs across Andheri, not empty haze */
-  const LNG0 = 72.867, LAT0 = 19.111, KX = Math.cos(LAT0 * D2R) * 111320, KY = 110540;
+  /* the region's origin: Andheri East unless the atlas names another (W.origin, W.ky), as the
+     Noida explorer does (scripts/world/regions/*.json) */
+  const [LNG0, LAT0] = W.origin || [72.867, 19.111], KX = Math.cos(LAT0 * D2R) * 111320, KY = W.ky || 110540;
   let mapGround = null;
   function buildMapGround() {
     if (mapGround) { scene.remove(mapGround); mapGround.traverse((o) => { if (o.isMesh) { o.geometry.dispose(); if (o.material.map) o.material.map.dispose(); o.material.dispose(); } }); mapGround = null; }
@@ -237,7 +239,11 @@ async function start(A, W) {
     root.traverse((o) => {
       if (o.name && o.name.startsWith("proto_") && !o.name.endsWith("_c") && !o.name.includes("_crown") && o.parent === root) protos[o.name] = o;
       if (!o.isMesh) return;
-      const n = o.material && o.material.name; o.material = material(n || "concrete");
+      const n = o.material && o.material.name;
+      /* a building modelled on its own (the F1 Skymark twin) brings its own PBR materials,
+         named SKY_*: keep them, with the scene's sky in their reflections */
+      if (/^SKY_/.test(n || "")) { o.material.envMapIntensity = 1; if (o.material.transmission) o.material.thickness = 0.02; }
+      else o.material = material(n || "concrete");
       o.castShadow = !/^(ground|asphalt|pavers|grass|marking|water|kerb|soil)$/.test(n); o.receiveShadow = true;
       if (/^(ground|asphalt|pavers|grass|kerb|marking|water)$/.test(n)) groundMeshes.push(o);
     });
@@ -539,10 +545,12 @@ async function start(A, W) {
     if (first && fly) { controls.target.copy(fly.b.t); const p0 = fly.b.p.clone(); fly = null; camera.position.copy(controls.target.clone().add(p0.clone().sub(controls.target).multiplyScalar(1.6))); flyTo(controls.target.clone(), p0, 2600); }
     try { history.replaceState(null, "", `#${id}`); } catch (e) {}
   }
-  $("#t-eyebrow").textContent = "Autopilot · Flipkart";
-  $("#t-title").textContent = "Andheri East";
+  /* the wording is the atlas's when it gives it (W.brand, W.credit), Andheri East's otherwise */
+  const BR = W.brand || { kicker: "Autopilot · Flipkart", title: "Andheri East" };
+  $("#t-eyebrow").textContent = BR.kicker; $("#t-title").textContent = BR.title;
+  if ($("#l-title")) $("#l-title").textContent = BR.title;
   $("#to-map").href = A.path || "/" + SLUG;
-  $("#credit").textContent = "Built in Blender from Overture Maps footprints. Heights around each building are estimated; the buildings use the deck's floors. Distances: Google Maps.";
+  $("#credit").textContent = W.credit || "Built in Blender from Overture Maps footprints. Heights around each building are estimated; the buildings use the deck's floors. Distances: Google Maps.";
   $("#strip").innerHTML = OPTS.map((o) => { const r = (o.routes || []).find((x) => x.kind === "metro"); const th = W.thumbs && W.thumbs[o.id];
     return `<button class="film" data-id="${esc(o.id)}" style="${th ? `background-image:url('${W.data}${th}')` : ""}"><span><span class="n">${String(o.n).padStart(2, "0")}</span><b>${esc(o.name)}</b>${r ? `<i>${fm(r.m)} · ${esc(r.name)}</i>` : ""}</span></button>`; }).join("");
   $("#strip").addEventListener("click", (e) => { const f = e.target.closest(".film"); if (f && f.dataset.id !== SEL) select(f.dataset.id); });

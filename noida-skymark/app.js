@@ -93,7 +93,7 @@ const S = {
 try { const b = parseFloat(localStorage.getItem("sky-bearing")); if (!MD.bearingConfirmed && isFinite(b)) S.bearing = b; } catch (e) {}
 const TABS = [
   { key: "property", label: "Property" }, { key: "connect", label: "Connectivity" }, { key: "around", label: "Around" },
-  { key: "nearby", label: "Nearby list", ph: true }, { key: "twin", label: "3D twin" }, { key: "sources", label: "Sources" }
+  { key: "nearby", label: "Nearby list", ph: true }, { key: "twin", label: "3D twin", href: MD.world || "/noida-skymark/world" }, { key: "sources", label: "Sources" }
 ];
 
 /* ================================================================ gate == */
@@ -106,7 +106,7 @@ function initGate() {
     let ok = false;
     try { ok = (await sha256(norm($("#g-id").value) + ":" + norm($("#g-pw").value))) === GATE_HASH; } catch (e) { ok = false; }
     busy = false; $("#g-go").disabled = false;
-    if (ok) { try { sessionStorage.setItem(AUTH_KEY, "1"); } catch (e) {} if (CMS) CMS.signin(norm($("#g-id").value)); openApp(); }
+    if (ok) { try { sessionStorage.setItem(AUTH_KEY, "1"); sessionStorage.setItem("noida-skymark-auth", "1"); } catch (e) {} if (CMS) CMS.signin(norm($("#g-id").value)); openApp(); }
     else { $("#g-err").textContent = "Not recognised. Access is issued per person."; $("#g-pw").value = ""; $("#g-pw").focus(); }
   };
   startMap();
@@ -117,14 +117,14 @@ function initGate() {
   let authed = false;
   try { if (handoff === HANDOFF) sessionStorage.setItem(AUTH_KEY, "1"); authed = sessionStorage.getItem(AUTH_KEY) === "1"; } catch (e) {}
   if (handoff === HANDOFF && CMS) { let id = null; try { id = sessionStorage.getItem("atlas-access-id"); } catch (e) {} CMS.signin(id); }
-  if (authed) { $("#gate").remove(); boot(); return; }
+  if (authed) { try { sessionStorage.setItem("noida-skymark-auth", "1"); } catch (e) {} $("#gate").remove(); boot(); return; }
   try { if (sessionStorage.getItem("sky-out") === "1") { sessionStorage.removeItem("sky-out"); const e = $("#g-err"); e.style.color = "var(--ok)"; e.textContent = "You have signed out on this device."; } } catch (e) {}
   $("#g-form").addEventListener("submit", e => { e.preventDefault(); $("#g-err").removeAttribute("style"); go(); });
   $("#g-id").focus();
 }
 function signOut() {
   if (CMS) CMS.signout();
-  try { sessionStorage.removeItem(AUTH_KEY); sessionStorage.removeItem("atlas-handoff"); sessionStorage.setItem("sky-out", "1"); } catch (e) {}
+  try { sessionStorage.removeItem(AUTH_KEY); sessionStorage.removeItem("noida-skymark-auth"); sessionStorage.removeItem("atlas-handoff"); sessionStorage.setItem("sky-out", "1"); } catch (e) {}
   location.replace(location.pathname);
 }
 
@@ -522,7 +522,8 @@ function pushRoute() { const h = routeHash(); if (location.hash !== h && !(h ===
 function applyRoute(render) {
   const [kind, val] = location.hash.replace(/^#\/?/, "").split("/");
   S.sel = kind === "place" && ALL.has(val) ? val : null;
-  if (!S.sel) S.tab = TABS.some(t => t.key === kind) ? kind : "property";
+  if (kind === "twin") { location.replace(MD.world || "/noida-skymark/world"); return; }
+  if (!S.sel) S.tab = TABS.some(t => t.key === kind && !t.href) ? kind : "property";
   if (render) { renderTabs(); renderList(); renderPanel(); applyLayers(); frame(); }
 }
 function goTab(key) { S.tab = key; S.sel = null; pushRoute(); renderTabs(); renderList(); renderPanel(); applyLayers(); frame(); }
@@ -533,7 +534,11 @@ function select(id) {
 
 /* ============================================================== board === */
 function renderTabs() {
-  $("#tabs").innerHTML = TABS.map(t => `<button class="tab${t.ph ? " ph" : ""}${!S.sel && S.tab === t.key ? " on" : ""}" data-tab="${t.key}">${esc(t.label)}</button>`).join("");
+  /* "3D twin" is a link: it opens the explorer (the Andheri East world's dollhouse and walk),
+     at /noida-skymark/world, signed in already */
+  $("#tabs").innerHTML = TABS.map(t => t.href
+    ? `<a class="tab tw" href="${esc(t.href)}" data-world>${esc(t.label)} <span aria-hidden="true">↗</span></a>`
+    : `<button class="tab${t.ph ? " ph" : ""}${!S.sel && S.tab === t.key ? " on" : ""}" data-tab="${t.key}">${esc(t.label)}</button>`).join("");
   $("#tabs").onclick = (e) => { const b = e.target.closest("[data-tab]"); if (b) goTab(b.dataset.tab); };
 }
 function renderFilters() {
@@ -645,7 +650,7 @@ function propertyHTML() {
     <li><b>An established office pocket:</b> ${co.length} employers and ${cw.length} coworking spaces are mapped within ${OUTER} km${co[0] ? `; the nearest is ${esc(co[0].name)} at ${fmtKm(co[0].d)}` : ""}.</li>
     <li><b>Homes close by:</b> ${rs.length} residential areas within 3 km${rs[0] ? `, the nearest ${esc(rs[0].name)} at ${fmtKm(rs[0].d)}` : ""}.</li>
   </ul></div>
-  <div class="actions"><button class="act" data-go="connect">See connectivity</button><button class="act" data-go="around">See what is around</button><button class="act" data-go="twin">About the 3D twin</button></div>
+  <div class="actions"><button class="act" data-go="connect">See connectivity</button><button class="act" data-go="around">See what is around</button><a class="act pri" href="${esc(MD.world || "/noida-skymark/world")}">Open the 3D twin ↗</a></div>
   <h3>What is published about the building</h3>
   <table class="spec">${PR.facts.map(f => `<tr><th>${esc(f.k)}</th><td>${esc(f.v)}<div class="src">${cite(f.src)}</div></td></tr>`).join("")}</table>
   <div class="flag"><b>Check before quoting</b>Sources disagree on the leasable area (45,000 sq ft on Autopilot's listing, 90,551 sq ft on the developer's page) and on the plot number some listings use. Each figure above is shown with its own source.</div>

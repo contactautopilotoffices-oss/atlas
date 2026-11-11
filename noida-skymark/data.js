@@ -24,8 +24,8 @@ window.SKY_META = {
  "title": "F1 Skymark",
  "asOf": "2026-11-11",
  "center": [
-  77.3188016,
-  28.593565
+  77.3189671,
+  28.5913167
  ],
  "rings": [
   1,
@@ -62,11 +62,11 @@ window.SKY_META = {
 window.SKY_PROPERTY = {
  "name": "F1 Skymark (Skymark F-1)",
  "address": "Plot No. F-01 (F-1), Sector 6, Noida, Uttar Pradesh 201301",
- "lat": 28.593565,
- "lng": 77.3188016,
+ "lat": 28.5913167,
+ "lng": 77.3189671,
  "precision": "building",
- "geoSrc": "https://www.coworkingcafe.com/coworking-property/in/up/noida/efc-skymark/",
- "geoNote": "Coordinate is the schema.org GeoCoordinates embedded in the CoworkingCafe listing 'Sprint - EFC - Skymark, 3rd Floor, F-1, Noida sector 6'. Cross-checks: Moovit puts 'Paytm-F1 Sector 6 Noida (Paytm Office)' 1,012 m from Noida Sector 15 metro; this point is 1.17 km straight-line from the Wikipedia station coordinate, so the pin may be off by roughly 100 to 200 m. CoworkingCafe lists Amigo Coworking (C-25 Sector 8) 0.3 miles away, consistent with its own embedded coordinate. The point falls in the same DIGIPIN level-6 cell (39J-53L, about 1 km) as Paytm's B-121 Sector 5 office. Treat as building-level, moderate confidence.",
+ "geoSrc": "https://overturemaps.org",
+ "geoNote": "Centre of the building's own footprint in Overture Maps (1,784 sq m, 59 m by 34 m), the footprint an earlier Autopilot study matched to the client's Street View panorama of the building. The listing pin used before was about 270 m north, on open ground. Every distance on this page is measured from this point.",
  "facts": [
   {
    "k": "Building",
@@ -148,15 +148,21 @@ window.SKY_PROPERTY = {
    "v": "Noida Sector 15 (Blue Line), about 1,012 m, 13 min walk; New Ashok Nagar 2,354 m",
    "src": "https://moovitapp.com/index/en/public_transit-Paytm_F1_Sector_6_Noida_Paytm_Office-Delhi-site_249915616-3801"
   }
- ]
+ ],
+ "listingPin": {
+  "lat": 28.593565,
+  "lng": 77.3188016,
+  "src": "https://www.coworkingcafe.com/coworking-property/in/up/noida/efc-skymark/",
+  "note": "The pin a coworking listing gives; it falls on open ground about 270 m north of the building."
+ }
 };
 
 window.SKY_MODEL = {
  "glb": "./exports/fm_skymark_atlas.glb",
  "blend": "./exports/fm_skymark_final.blend",
- "frontBearing": 326,
- "bearingConfirmed": false,
- "bearingNote": "Placement is assumed, not confirmed. The published pin falls on open ground, so the twin stands on the nearest large building footprint in OpenStreetMap (51 m south-west of the pin), on its street corner, with the front facing north-north-west (326 degrees) and the angular frame facing the side road. A satellite view of the roof would confirm it. Distances on this page are from the published pin.",
+ "frontBearing": 146,
+ "bearingConfirmed": true,
+ "bearingNote": "The twin stands on the building's own footprint, its glass front and podium facing south-east (146 degrees) onto the street, the face with the angular frame along the road to the south-west.",
  "widthM": 27.7,
  "lengthM": 44.7,
  "heightM": 22.5,
@@ -197,9 +203,10 @@ window.SKY_MODEL = {
  "params": "./reconstruction/facade_parameters.json",
  "contextGlb": "./exports/fm_skymark_context_500m.glb",
  "anchor": {
-  "lat": 28.593137,
-  "lng": 77.318332
- }
+  "lat": 28.5913167,
+  "lng": 77.3189671
+ },
+ "world": "/noida-skymark/world"
 };
 
 window.SKY_TRANSIT = {
