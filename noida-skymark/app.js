@@ -93,14 +93,14 @@ const S = {
 try { const b = parseFloat(localStorage.getItem("sky-bearing")); if (!MD.bearingConfirmed && isFinite(b)) S.bearing = b; } catch (e) {}
 const TABS = [
   { key: "property", label: "Property" }, { key: "connect", label: "Connectivity" }, { key: "around", label: "Around" },
-  { key: "nearby", label: "Nearby list", ph: true }, { key: "twin", label: "3D twin", href: MD.world || "/noida-skymark/world" }, { key: "sources", label: "Sources" }
+  { key: "nearby", label: "Nearby list", ph: true }, { key: "twin", label: "3D twin", href: MD.world || "/noida-skymark/world" }, { key: "volt", label: "Volt floor", href: "/noida-skymark/volt/" }, { key: "sources", label: "Sources" }
 ];
 
 /* ================================================================ gate == */
 function initGate() {
   const norm = (v) => v.trim().toUpperCase().replace(/[\s-]/g, "");
   let busy = false;
-  const openApp = () => { const g = $("#gate"); g.classList.add("out"); setTimeout(() => g.remove(), 450); boot(); };
+  const openApp = () => { if (/[?&]next=volt\b/.test(location.search)) { location.replace("/noida-skymark/volt/"); return; } const g = $("#gate"); g.classList.add("out"); setTimeout(() => g.remove(), 450); boot(); };
   const go = async () => {
     if (busy) return; busy = true; $("#g-go").disabled = true;
     let ok = false;

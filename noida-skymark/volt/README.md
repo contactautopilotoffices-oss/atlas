@@ -81,3 +81,63 @@ node cad/flatten.mjs <the.dwg> flat.json && python3 cad/inst.py && python3 cad/r
 
 `flatten.mjs` expects `S` to point at a folder with acad-ts installed under
 `lwtest/node_modules`. Change the import path if it lives elsewhere.
+
+## The 3D site: /noida-skymark/volt/
+
+Everything is built in the browser (three.js r169) from
+`volt-floor1.layout.json`. `cad/layout.py` writes that file from the DWG.
+Nothing in the layout is modelled by hand. The flow, following the two
+reference videos:
+
+1. **Building.**
+   - The CAD's whole first-floor outline (Volt plus the part marked OCCUPIED,
+     about 59 m x 29.5 m) is extruded as G+4 at 4.1 m floor to floor, with
+     glass, fins, slabs and a roof parapet.
+   - Hover a floor to see its tag. Click "First floor · Volt": the floors
+     above lift away and the shell fades.
+2. **Floor.**
+   - The cutaway floor plate:
+     - walls and partitions, cut at 1.15 m, or full height with "Walls";
+     - glass with a frosted band;
+     - the 31 door leaves from the CAD door blocks;
+     - columns, the atrium with its rail;
+     - every desk with its screen and monitor, every table, every chair facing
+       its desk or table, sofas, planters and plants;
+     - floor finishes by room.
+   - Room tags show seat counts.
+   - The room rail and Prev/Next mean you never need to zoom by hand.
+3. **Room.**
+   - One click flies the camera in, framed to the free part of the screen.
+   - The card shows the seats and the deck's design render of that room
+     (pages 4 to 22 of the 21 Aug 2026 Volt deck).
+4. **Walk.**
+   - First person at eye height (1.55 m), with collision against the CAD walls,
+     glass, desks and tables.
+   - Drag to look, use W A S D or the joystick to move, click the floor to glide.
+   - The minimap jumps you to any point you tap.
+5. **Tour.**
+   - Starts at the street, comes in at the entrance by the lift core and fades
+     through the lift to the first-floor lobby.
+   - Then it visits reception, workstations, control room, sales, calling,
+     cafeteria, conference, finance, lounge, director cabin and collab.
+6. **Elevation.**
+   - Orthographic views looking N, E, S or W, with a live section cut you can
+     slide, and a height ruler (floor, desk, rail, ceiling).
+7. **Time of day.**
+   - The slider runs from 7 am to 10 pm and moves the sun, its colour, the sky
+     and the shadows.
+   - At night the facade glows and the ceiling panels light up.
+   - The panels sit where the drawing's ceiling plan puts them: 2' x 2' LED
+     panels and downlights.
+
+### What is assumed
+
+- **Heights.** The plan has no heights. These are standard values:
+  - desk 0.75 m
+  - ceiling 2.85 m
+  - planter 0.62 m
+- **Entrance.** The street entrance is placed at the lift core and marked as
+  indicative, because the ground floor is not in this drawing.
+- **Exterior.** The facade on this page is a plain curtain wall built from the
+  CAD outline. The photo-based twin of the real facade is at
+  /noida-skymark/world.
