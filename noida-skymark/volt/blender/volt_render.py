@@ -262,7 +262,7 @@ def mat_soil():
     nt.links.new(n.outputs["Fac"], r.inputs["Fac"]); nt.links.new(r.outputs["Color"], b.inputs["Base Color"]); bump(nt, b, n.outputs["Fac"], 1.0, 0.012)
 mat_soil()
 pbr("stone", "#d7d2c9", rough=0.25); pbr("tile", "#eeece8", rough=0.2); pbr("vinyl", "#b7b3ac", rough=0.55)
-pbr("frost", "#f6f6f4", rough=0.6, alpha=0.86); pbr("pot", "#3a3a3a", rough=0.6)
+pbr("frost", "#f6f6f4", rough=0.6, alpha=0.7); pbr("pot", "#3a3a3a", rough=0.6)
 # the lamps: 4000 K (assumed), seen through the camera's white balance
 pbr("led", "#ffffff", emit=light_col(LAMP_K), emit_strength=12.0); pbr("led_spot", "#ffffff", emit=light_col(LAMP_K), emit_strength=420.0); pbr("led_line", "#ffffff", emit=light_col(LAMP_K), emit_strength=150.0)
 # small things people leave on desks (assumed, not in the CAD)
@@ -304,19 +304,20 @@ def weighted_normals(me, limit=math.radians(42)):
             out.append(acc.normalized() if acc.length > 1e-12 else pn.copy())
     try: me.normals_split_custom_set(out)
     except Exception: pass
-def bevel_mesh(me, width, segs=3, vertical_only=False):
-    """Round the convex hard edges of a mesh. Real corners are never knife sharp, and a soft edge catches the light."""
+def bevel_mesh(me, width, segs=3, ends=None):
+    """Round the convex hard edges of a mesh. Real corners are never knife sharp, and a soft edge catches the light.
+    ends=(z0, z1) leaves alone the edges that lie on those two levels (where a wall meets the floor and the ceiling)."""
     bm = bmesh.new(); bm.from_mesh(me); es = []
     for e in bm.edges:
         if len(e.link_faces) != 2 or not e.is_convex or e.calc_face_angle(0.0) < 0.6: continue
         a, b = e.verts
-        if vertical_only and (abs(a.co.x - b.co.x) > 1e-5 or abs(a.co.y - b.co.y) > 1e-5): continue
+        if ends and any(abs(a.co.z - z) < 1e-4 and abs(b.co.z - z) < 1e-4 for z in ends): continue
         es.append(e)
     if es:
         try: bmesh.ops.bevel(bm, geom=es, offset=width, segments=segs, profile=0.5, affect="EDGES", clamp_overlap=True)
         except Exception as ex: print("bevel skipped:", ex)
     bm.to_mesh(me); bm.free(); weighted_normals(me)
-def prism(name, outer, holes, z0, z1, mat, bevel=0.0, vertical_only=False):
+def prism(name, outer, holes, z0, z1, mat, bevel=0.0, ends=False):
     loops = [outer] + list(holes or []); pts = [p for l in loops for p in l]; n = len(pts)
     tris = tessellate_polygon([[Vector((x, y, 0)) for x, y in l] for l in loops])
     verts = [(x, y, z0) for x, y in pts] + [(x, y, z1) for x, y in pts]
@@ -326,7 +327,7 @@ def prism(name, outer, holes, z0, z1, mat, bevel=0.0, vertical_only=False):
         for i in range(m): a, b = k + i, k + (i + 1) % m; faces.append((a, b, b + n, a + n))
         k += m
     o = add(name, verts, faces, mat)
-    if bevel > 0: bevel_mesh(o.data, bevel, 3, vertical_only)
+    if bevel > 0: bevel_mesh(o.data, bevel, 3, (z0, z1) if ends else None)
     return o
 _MESH = {}
 def box_mesh(w, d, h, bevel=0.0, mat="paint"):
@@ -399,8 +400,94 @@ for r in L["rooms"]:      # tile grid where the drawing shows 2x2 panels
     x0, y0, x1, y1 = r["box"]
     if sum(1 for l in L["lights"] if l["kind"] == "panel600" and x0 <= l["c"][0] <= x1 and y0 <= l["c"][1] <= y1) >= 2:
         add("grid_" + r["name"], [(x0, y0, H - 0.002), (x1, y0, H - 0.002), (x1, y1, H - 0.002), (x0, y1, H - 0.002)], [(0, 3, 2, 1)], "ceiling")
+# ---- walls, and the glass that stands in them
+# The CAD draws a glazed partition or a facade window as glass lines along an unbroken wall line (the wall line is the
+# partition's own frame, or the wall below and above a window). Built exactly as drawn, every window would be bricked
+# up and every glass partition would be a solid wall. So where a glass line runs along a thin wall strip, the glass
+# wins: the strip is opened over the length of the glass, and nowhere else. Where the glass is comes from the CAD.
+# How high the opening is does not, a plan has no heights:
+SILL, HEAD = 0.9, 2.25             # assumed: a facade window runs from 0.9 m to 2.25 m above the floor (the deck shows a sill)
+GLAZ_BASE, GLAZ_TOP = 0.1, 2.4     # assumed: a glazed partition stands on a low kerb and stops under a bulkhead, as in the deck
+def in_poly(x, y, poly):
+    c = False; j = len(poly) - 1
+    for i in range(len(poly)):
+        xi, yi = poly[i]; xj, yj = poly[j]
+        if (yi > y) != (yj > y) and x < (xj - xi) * (y - yi) / (yj - yi) + xi: c = not c
+        j = i
+    return c
+WBOX = [(min(p[0] for p in w["outer"]), min(p[1] for p in w["outer"]), max(p[0] for p in w["outer"]), max(p[1] for p in w["outer"])) for w in L["walls"]]
+def in_wall(x, y):
+    for w, b in zip(L["walls"], WBOX):
+        if b[0] <= x <= b[2] and b[1] <= y <= b[3] and in_poly(x, y, w["outer"]) and not any(in_poly(x, y, h) for h in w["holes"]): return True
+    return False
+def strip_at(px, py, nx, ny, reach):
+    """The thin wall strip that runs along a glass line at this point, as (from, to) across the line, or None."""
+    step = 0.0125; k = int(reach / step); hits = [in_wall(px + nx * i * step, py + ny * i * step) for i in range(-k, k + 1)]; runs = []; i = 0
+    while i < len(hits):
+        if hits[i]:
+            j = i
+            while j + 1 < len(hits) and hits[j + 1]: j += 1
+            if 0 < i and j < len(hits) - 1 and (j - i) * step <= 0.2: runs.append(((i - k) * step - step, (j - k) * step + step))
+            i = j + 1
+        else: i += 1
+    return min(runs, key=lambda r: min(abs(r[0]), abs(r[1]))) if runs else None
+def same_partition(a, b):
+    """Two glass lines that are the two faces of one partition, or one line drawn twice."""
+    la, ana, _, _ = seg_frame(*a[:4]); lb, anb, _, _ = seg_frame(*b[:4]); ux, uy = math.cos(ana), math.sin(ana)
+    if abs(math.sin(ana - anb)) > 0.05 or abs(-(b[0] - a[0]) * uy + (b[1] - a[1]) * ux) > 0.12: return False
+    sb = sorted(((b[0] - a[0]) * ux + (b[1] - a[1]) * uy, (b[2] - a[0]) * ux + (b[3] - a[1]) * uy))
+    return min(la, sb[1]) - max(0.0, sb[0]) > 0.6 * min(la, lb)
+fxs = [p[0] for f in L["floor"] for p in f["outer"]]; fys = [p[1] for f in L["floor"] for p in f["outer"]]; MID = ((min(fxs) + max(fxs)) / 2, (min(fys) + max(fys)) / 2)
+GLASS_RUNS, CUTS, kept = [], [], []
+for g in L["glass"]:
+    x0, y0, x1, y1, layer = g; ln, an, cx, cy = seg_frame(x0, y0, x1, y1)
+    if ln < 0.2: continue
+    facade = layer == "AR-WINDOW"; n = max(1, round(ln / 1.2))
+    if any(same_partition(k_, g) for k_ in kept):
+        GLASS_RUNS.append({"skip": True, "facade": facade, "n": n}); continue
+    kept.append(g); ux, uy = math.cos(an), math.sin(an); nx, ny = -uy, ux
+    strips = []
+    for i in range(n):
+        st = None
+        for f in (0.5, 0.25, 0.75):
+            u = ln * (i + f) / n; st = strip_at(x0 + ux * u, y0 + uy * u, nx, ny, 0.45 if facade else 0.17)
+            if st: break
+        strips.append(st)
+    i = 0
+    while i < n:                      # runs of bays that all have, or all lack, a wall strip
+        j = i
+        while j + 1 < n and (strips[j + 1] is None) == (strips[i] is None): j += 1
+        st = None
+        if strips[i] is not None:
+            ss = strips[i:j + 1]; st = (sorted(a for a, b in ss)[len(ss) // 2], sorted(b for a, b in ss)[len(ss) // 2])
+        u0, u1 = ln * i / n, ln * (j + 1) / n; mx, my = x0 + ux * (u0 + u1) / 2, y0 + uy * (u0 + u1) / 2
+        GLASS_RUNS.append({"skip": False, "facade": facade, "n": j + 1 - i, "len": u1 - u0, "an": an, "c": (mx, my), "strip": st,
+                           "in": 1.0 if (MID[0] - mx) * nx + (MID[1] - my) * ny > 0 else -1.0})
+        if st: CUTS.append((mx, my, an, u1 - u0, (st[0] + st[1]) / 2, st[1] - st[0], SILL if facade else GLAZ_BASE, HEAD if facade else GLAZ_TOP))
+        i = j + 1
+def cut_walls(objs):
+    """Open the wall strips where the glass stands (see above). If a cut fails the wall is left whole."""
+    cutters = [put(box_mesh(ln, th, z1 - z0, 0, "paint"), T(cx, cy, z0) @ RZ(an) @ T(0, tc, 0), "cutter") for (cx, cy, an, ln, tc, th, z0, z1) in CUTS]
+    bpy.context.view_layer.update()
+    for o in objs:
+        xs = [v.co.x for v in o.data.vertices]; ys = [v.co.y for v in o.data.vertices]; b = (min(xs), min(ys), max(xs), max(ys)); used = 0
+        for c, cut in zip(cutters, CUTS):
+            r = cut[3] / 2 + cut[5] + abs(cut[4])
+            if cut[0] + r < b[0] or cut[0] - r > b[2] or cut[1] + r < b[1] or cut[1] - r > b[3]: continue
+            m = o.modifiers.new("cut", "BOOLEAN"); m.operation = "DIFFERENCE"; m.object = c; used += 1
+            try: m.solver = "EXACT"
+            except Exception: pass
+        if not used: continue
+        try:
+            me = bpy.data.meshes.new_from_object(o.evaluated_get(bpy.context.evaluated_depsgraph_get()))
+            if len(me.polygons) > 0: o.modifiers.clear(); o.data = me
+            else: o.modifiers.clear()
+        except Exception as ex: print("wall opening skipped:", ex); o.modifiers.clear()
+    for c in cutters: bpy.data.objects.remove(c)
+walls = [prism(f"wall{i}", w["outer"], w["holes"], 0.0, H, "paint") for i, w in enumerate(L["walls"])]
+cut_walls(walls)
 # plaster and column corners are rounded a little (8 to 10 mm), the way a trowel and a few coats of paint leave them
-for i, w in enumerate(L["walls"]): prism(f"wall{i}", w["outer"], w["holes"], 0.0, H, "paint", 0.008, True)
+for o in walls: bevel_mesh(o.data, 0.008, 3, (0.0, H))
 for i, w in enumerate(L.get("skirting", [])): prism(f"skirting{i}", w["outer"], w["holes"], 0.0, 0.09, "charcoal", 0.003)
 for i, c in enumerate(L["columns"]): prism(f"column{i}", c, [], 0.0, H, "charcoal", 0.01, True)
 if L.get("atrium"):
@@ -410,23 +497,48 @@ if L.get("atrium"):
         ln, an, cx, cy = seg_frame(x0, y0, x1, y1)
         box(cx, cy, 0.0, ln, 0.012, 1.05, an, "glass"); box(cx, cy, 1.05, ln, 0.05, 0.04, an, "black_metal", 0.008)
         box(cx, cy, -4.1, ln, 0.2, 4.1, an, "paint")
+        # The atrium runs on up through the floors above (the layout's storeys: G+4, this is level 1), so its walls are
+        # carried up to the roof. Without them the sun would pour onto this floor as if it were the top one.
+        st_ = L.get("storeys", {}); f2f = st_.get("floor_to_floor", 4.1)
+        try: above = int(str(st_.get("count", "G+4")).split("+")[1]) - int(st_.get("volt_level", 1))
+        except Exception: above = 3
+        if above > 0: box(cx, cy, H, ln, 0.2, above * f2f + (f2f - H), an, "paint", name="atrium_shaft")
 
 # ------------------------------------------------------------------ glass partitions, facade windows, doors
-for (x0, y0, x1, y1, layer) in L["glass"]:
-    ln, an, cx, cy = seg_frame(x0, y0, x1, y1)
-    if ln < 0.2: continue
-    facade = layer == "AR-WINDOW"
-    box(cx, cy, 0.04, ln, 0.012, H - 0.08, an, "glass", name="glass")
-    box(cx, cy, 0.0, ln, 0.05, 0.04, an, "black_metal", 0.004); box(cx, cy, H - 0.04, ln, 0.05, 0.04, an, "black_metal", 0.004)
-    n = max(1, round(ln / 1.2)); ca, sa = math.cos(an), math.sin(an)
+PORTALS = []      # (centre x, centre y, along x, along y, indoors x, indoors y, length, from z, to z)
+BLIND_DROPS = (0.45, 0.6, 0.6, 0.8)
+for run in GLASS_RUNS:
+    if run["skip"]:
+        if run["facade"]: [random.choice(BLIND_DROPS) for _ in range(run["n"])]      # keep the dice in step with earlier versions
+        continue
+    ln, an, (cx, cy), n, st, facade, s_in = run["len"], run["an"], run["c"], run["n"], run["strip"], run["facade"], run["in"]
+    ca, sa = math.cos(an), math.sin(an); nx, ny = -sa, ca
+    if st: z0, z1 = (SILL, HEAD) if facade else (GLAZ_BASE, GLAZ_TOP)
+    else: z0, z1 = 0.0, H
+    tc = 0.0 if (facade or not st) else (st[0] + st[1]) / 2          # a partition's pane stands in the middle of its strip
+    gx, gy = cx + nx * tc, cy + ny * tc
+    box(gx, gy, z0 + 0.04, ln, 0.012, z1 - z0 - 0.08, an, "glass", name="glass")
+    box(gx, gy, z0, ln, 0.05, 0.04, an, "black_metal", 0.004); box(gx, gy, z1 - 0.04, ln, 0.05, 0.04, an, "black_metal", 0.004)
     for i in range(n + 1):
-        u = -ln / 2 + ln * i / n; box(cx + ca * u, cy + sa * u, 0.0, 0.04, 0.05, H, an, "black_metal", 0.004)
-    if facade:   # roller blinds, part way down, on the room side
-        for i in range(n):
-            u = -ln / 2 + ln * (i + 0.5) / n; drop = random.choice((0.45, 0.6, 0.6, 0.8))
-            for s_ in (-1, 1): box(cx + ca * u - sa * 0.05 * s_, cy + sa * u + ca * 0.05 * s_, H - drop, ln / n - 0.06, 0.004, drop, an, "blind")
+        u = -ln / 2 + ln * i / n; box(gx + ca * u, gy + sa * u, z0, 0.04, 0.05, z1 - z0, an, "black_metal", 0.004)
+    if facade:
+        PORTALS.append((cx, cy, ca, sa, nx * s_in, ny * s_in, ln, z0 + 0.04, z1 - 0.04))
+        if st:
+            near, far = (st[0], st[1]) if s_in > 0 else (-st[1], -st[0])      # the strip's two faces, measured indoors from the glass
+            if near > 0.03:        # the reveal between the glass and the wall: a sill board, a head board and two ends
+                for z in (SILL - 0.03, HEAD): box(cx + nx * s_in * near / 2, cy + ny * s_in * near / 2, z, ln, near + 0.02, 0.03, an, "paint", 0.004, "reveal")
+                for e in (-1, 1): box(cx + ca * e * (ln / 2 + 0.015) + nx * s_in * near / 2, cy + sa * e * (ln / 2 + 0.015) + ny * s_in * near / 2, SILL, 0.03, near + 0.02, HEAD - SILL, an, "paint", 0, "reveal")
+            top = HEAD + 0.12; bx, by = cx + nx * s_in * (far + 0.035), cy + ny * s_in * (far + 0.035)
+            box(bx, by, top, ln, 0.05, 0.05, an, "white_metal", 0.006, "blind_rail")
+            for i in range(n):     # roller blinds on the room side, each pulled down a different amount
+                u = -ln / 2 + ln * (i + 0.5) / n; drop = random.choice(BLIND_DROPS)
+                box(bx + ca * u, by + sa * u, top - drop, ln / n - 0.04, 0.004, drop, an, "blind")
+        else:
+            for i in range(n):
+                u = -ln / 2 + ln * (i + 0.5) / n; drop = random.choice(BLIND_DROPS)
+                for e in (-1, 1): box(cx + ca * u - sa * 0.05 * e, cy + sa * u + ca * 0.05 * e, H - drop, ln / n - 0.06, 0.004, drop, an, "blind")
     else:
-        for k in range(4): box(cx, cy, 0.95 + k * 0.145, ln - 0.05, 0.018, 0.1, an, "frost", name="frost")
+        for k in range(7): box(gx, gy, 0.95 + k * 0.078, ln - 0.05, 0.015, 0.056, an, "frost", name="frost")      # a band of frosted film stripes
 for d in L["doors"]:
     m = "glass" if d.get("glass") else ("charcoal" if d.get("fire") else "oak")
     box(d["c"][0], d["c"][1], 0.0, d["w"], max(0.04, d["d"]) if m != "glass" else 0.012, 2.1, d["a"], m, 0.004, "door")
@@ -731,18 +843,13 @@ to_sun = Vector((sd[0] * math.cos(el), sd[1] * math.cos(el), math.sin(el))); so.
 # the ground outside, one storey below this floor (assumed: plain paving, only there so the windows do not look onto nothing)
 add("ground", [(-300, -300, -4.15), (340, -300, -4.15), (340, 330, -4.15), (-300, 330, -4.15)], [(0, 1, 2, 3)], "ground")
 # light portals: one in every facade window (the layout's AR-WINDOW glass). They tell Cycles where daylight gets in.
-fx = [p[0] for f in L["floor"] for p in f["outer"]]; fy = [p[1] for f in L["floor"] for p in f["outer"]]; mid = ((min(fx) + max(fx)) / 2, (min(fy) + max(fy)) / 2)
-for (x0, y0, x1, y1, layer) in L["glass"]:
-    if layer != "AR-WINDOW": continue
-    ln, an, cx, cy = seg_frame(x0, y0, x1, y1)
-    if ln < 0.2: continue
-    ca, sa = math.cos(an), math.sin(an); nx, ny = -sa, ca
-    if (mid[0] - cx) * nx + (mid[1] - cy) * ny < 0: nx, ny, ca, sa = -nx, -ny, -ca, -sa        # the normal has to point indoors
-    pl = bpy.data.lights.new("Portal", "AREA"); pl.shape = "RECTANGLE"; pl.size = ln; pl.size_y = H - 0.08
+for (cx, cy, ca, sa, ix, iy, ln, z0, z1) in PORTALS:
+    if (ca * iy - sa * ix) < 0: ca, sa = -ca, -sa        # keep the frame right handed
+    pl = bpy.data.lights.new("Portal", "AREA"); pl.shape = "RECTANGLE"; pl.size = ln; pl.size_y = z1 - z0
     try: pl.cycles.is_portal = True
     except Exception: bpy.data.lights.remove(pl); continue
     po = bpy.data.objects.new("Portal", pl); COL.objects.link(po)
-    po.matrix_world = Matrix(((ca, 0, -nx, cx - nx * 0.12), (sa, 0, -ny, cy - ny * 0.12), (0, 1, 0, H / 2), (0, 0, 0, 1)))      # an area light shines along its own -z
+    po.matrix_world = Matrix(((ca, 0, -ix, cx - ix * 0.1), (sa, 0, -iy, cy - iy * 0.1), (0, 1, 0, (z0 + z1) / 2), (0, 0, 0, 1)))      # an area light shines along its own -z
 
 # ------------------------------------------------------------------ render settings
 SC.render.engine = "CYCLES"; C = SC.cycles

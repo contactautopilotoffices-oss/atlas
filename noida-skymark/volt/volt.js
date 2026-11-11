@@ -379,11 +379,18 @@ const bearingToPlan = (b) => { const e = [Math.sin(b * D2R), Math.cos(b * D2R)],
 const bldg = new THREE.Group(); scene.add(bldg);
 const twinFrame = new THREE.Group(); bldg.add(twinFrame);
 { const o = enuToPlan(SF.twin_C); twinFrame.position.copy(W(o[0], o[1], GROUND)); twinFrame.rotation.y = PHI - RHO; }
-const CUTY = -.04;                                     // the twin is opened just under Volt's floor
+const CUTY = -.06;                                     // the twin is opened just under Volt's floor
 const cutLow = new THREE.Plane(new THREE.Vector3(0, -1, 0), CUTY), cutHigh = new THREE.Plane(new THREE.Vector3(0, 1, 0), -CUTY);
 const gltf = new GLTFLoader(); gltf.setMeshoptDecoder(MeshoptDecoder);
-$('#load b').textContent = 'Loading the Skymark twin…';
-const twinGLTF = await gltf.loadAsync('/noida-skymark/exports/fm_skymark_atlas.glb');
+// Everything the first view needs is fetched in parallel behind the loading screen and shown together.
+const LOADS = [];
+function track(label, pr) { LOADS.push(label); const el = $('#load b'); const done = () => { LOADS.splice(LOADS.indexOf(label), 1); el.textContent = LOADS.length ? `Loading ${LOADS[0]}…` : 'Ready'; };
+  el.textContent = `Loading ${LOADS[0]}…`; return pr.then(v => { done(); return v; }, e => { done(); throw e; }); }
+const withTimeout = (pr, ms) => Promise.race([pr, new Promise((_, no) => setTimeout(() => no(new Error('timeout')), ms))]);
+const ctxP = LITE ? Promise.resolve(null) : track('the streets round it', gltf.loadAsync('/noida-skymark/exports/fm_skymark_context_500m.glb')).catch(e => { console.warn('[volt] context', e && e.message); return null; });
+const chairP = track('the chairs', gltf.loadAsync('/media/noida-skymark/volt/models/chair.glb')).catch(() => null);
+const loungeP = track('the lounge chairs', gltf.loadAsync('/media/noida-skymark/volt/models/lounge.glb')).catch(() => null);
+const twinGLTF = await track('the Skymark twin', gltf.loadAsync('/noida-skymark/exports/fm_skymark_atlas.glb'));
 const highMats = [];
 function prepTwin(rootObj, plane, list) {
   rootObj.traverse(o => {
@@ -398,8 +405,8 @@ prepTwin(twinLow, cutLow); prepTwin(twinHigh, cutHigh, highMats);
 twinFrame.add(twinLow, twinHigh);
 const twinInteriorsLow = twinLow.getObjectByName('Interiors');
 // real furniture models (the mesh chair and lounge chair used for the Cycles render of the conference room) in place of the block ones
-async function realModel(url, height, keys, seatBand) {
-  const g = await gltf.loadAsync(url); let mesh = null; g.scene.updateMatrixWorld(true); g.scene.traverse(o => { if (o.isMesh && !mesh) mesh = o; });
+async function realModel(gP, height, keys, seatBand) {
+  const g = await gP; if (!g) return; let mesh = null; g.scene.updateMatrixWorld(true); g.scene.traverse(o => { if (o.isMesh && !mesh) mesh = o; });
   const src = mesh.geometry.attributes.position, P = new Float32Array(src.count * 3), q = new THREE.Vector3();
   for (let i = 0; i < src.count; i++) { q.fromBufferAttribute(src, i).applyMatrix4(mesh.matrixWorld); P[i * 3] = q.x; P[i * 3 + 1] = q.y; P[i * 3 + 2] = q.z; }
   const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(P, 3));
@@ -416,8 +423,7 @@ async function realModel(url, height, keys, seatBand) {
     root.add(im); (bucketMeshes[key] || []).forEach(o => root.remove(o)); }
   needRender = true; shadowsDirty = true;
 }
-realModel('/media/noida-skymark/volt/models/chair.glb', 1.02, ['task'], [.40, .52]).catch(e => console.warn('[volt] chair model', e && e.message));
-realModel('/media/noida-skymark/volt/models/lounge.glb', .82, ['armO', 'armT'], [.3, .5]).catch(e => console.warn('[volt] lounge model', e && e.message));
+const modelsP = Promise.all([realModel(chairP, 1.02, ['task'], [.40, .52]), realModel(loungeP, .82, ['armO', 'armT'], [.3, .5])]).catch(e => console.warn('[volt] furniture models', e && e.message));
 // the 500 m round it, in the same frame (streets, blocks, trees): loaded after the first frame
 for (const t of [twinLow, twinHigh]) { const pm = t.getObjectByName('SKY_Site_Palm_2'); if (pm) pm.visible = false; }   // this palm stood in front of the porch
 const PIN0 = window.SKY_MODEL?.anchor || { lat: 28.5913167, lng: 77.3189671 }, KLAT = 110574, KLNG = 111320 * Math.cos(PIN0.lat * D2R);
@@ -457,10 +463,14 @@ function drape(rootObj, sat) {
       m.needsUpdate = true; } });
 }
 // the 500 m round it, in the same frame (streets, blocks, trees): loaded after the first frame
-if (!LITE) gltf.loadAsync('/noida-skymark/exports/fm_skymark_context_500m.glb').then(g => {
-  g.scene.traverse(o => { if (o.isMesh) { o.receiveShadow = true; o.castShadow = false; } }); twinFrame.add(g.scene); needRender = true; shadowsDirty = true;
-  satellite().then(sat => { drape(g.scene, sat); document.body.dataset.sat = 'on'; needRender = true; }).catch(e => { document.body.dataset.sat = 'off'; console.warn('[volt] satellite', e && e.message); });
-}).catch(e => console.warn('[volt] context', e && e.message));
+const cityP = (async () => {
+  const g = await ctxP; if (!g) return;
+  g.scene.traverse(o => { if (o.isMesh) { o.receiveShadow = true; o.castShadow = false;
+    for (const m of [].concat(o.material)) if (m && /CTX_(wall|roof|parapet)/.test(m.name || '')) m.side = THREE.FrontSide; } });   // buildings solid from outside
+  try { const sat = await track('the satellite photo', withTimeout(satellite(), 12000)); drape(g.scene, sat); document.body.dataset.sat = 'on'; }
+  catch (e) { document.body.dataset.sat = 'off'; console.warn('[volt] satellite', e && e.message); }
+  twinFrame.add(g.scene);
+})();
 // where the twin's entrance is (the porch modelled on the street front), in plan coordinates
 const ENTR = (() => {
   const box = new THREE.Box3(); let n = 0; twinFrame.updateMatrixWorld(true);
@@ -468,16 +478,38 @@ const ENTR = (() => {
   const c = n ? box.getCenter(new THREE.Vector3()) : W(SF.plate_centroid[0], SF.plate_centroid[1]);
   return toPlan(c);
 })();
+// the podium: a two-storey glass wing where the CAD's first floor runs beyond the twin (cad/fit_to_twin.py)
+const podLow = new THREE.Group(), podHigh = new THREE.Group(); bldg.add(podLow, podHigh);
+{
+  const PH = 9.7, gl = [], mul = [], band = [];
+  for (const [x0, y0, x1, y1] of (L.podium_edges || [])) {
+    const len = Math.hypot(x1 - x0, y1 - y0), ang = Math.atan2(y1 - y0, x1 - x0), M4 = place((x0 + x1) / 2, (y0 + y1) / 2, ang);
+    gl.push(at(new THREE.BoxGeometry(len, PH - .9, .05), 0, GROUND + (PH - .9) / 2, 0).applyMatrix4(M4));
+    band.push(at(new THREE.BoxGeometry(len + .06, .55, .16), 0, -.24, 0).applyMatrix4(M4), at(new THREE.BoxGeometry(len + .06, .9, .2), 0, GROUND + PH - .45, 0).applyMatrix4(M4));
+    const n = Math.max(1, Math.round(len / 1.5));
+    for (let i = 0; i <= n; i++) mul.push(at(new THREE.BoxGeometry(.07, PH - .9, .14), -len / 2 + len * i / n, GROUND + (PH - .9) / 2, 0).applyMatrix4(M4));
+  }
+  const roofs = (L.podium || []).map(r => extrudeUp(shapeFrom(r), .5, GROUND + PH - .5));
+  const parts = [[gl, new THREE.MeshPhysicalMaterial({ color: 0x2c4f72, roughness: .06, metalness: .3, transparent: true, opacity: .82, envMapIntensity: 1.6 })],
+    [mul, M(0xc9ccd0, { roughness: .35, metalness: .6 })], [band, M(0x3a3d42, { roughness: .6 })], [roofs, M(0xbdb7ae, { roughness: .95 })]];
+  for (const [geos, m0] of parts) {
+    if (!geos.length) continue; const g = mergeGeometries(geos);
+    for (const [grp, plane, list] of [[podLow, cutLow, null], [podHigh, cutHigh, highMats]]) {
+      const m = m0.clone(); m.clippingPlanes = [plane]; m.userData.o = m.opacity; m.userData.t = m.transparent; m.userData.dw = m.depthWrite; list && list.push(m);
+      const mesh = new THREE.Mesh(g, m); mesh.castShadow = true; mesh.receiveShadow = true; grp.add(mesh);
+    }
+  }
+}
 // first-floor slab over the whole plate (under Volt and the part marked OCCUPIED)
 const plateShape = shapeFrom(L.plate);
 const PX = L.plate.map(p => p[0]), PY = L.plate.map(p => p[1]);
 const PB = [Math.min(...PX), Math.min(...PY), Math.max(...PX), Math.max(...PY)];
-const plateSlab = add(extrudeUp(plateShape, .3, -.32), [M(0xb9b3aa, { roughness: .9 }), mat.slab], { cast: false });
+const plateSlab = add(extrudeUp(plateShape, .3, -.34), [M(0xb9b3aa, { roughness: .9 }), mat.slab], { cast: false });
 // hover bands for picking a floor: the CAD outline at each level, invisible until hovered
 const levelGlass = [], levelMeshes = [];
 const bandsG = new THREE.Group(); scene.add(bandsG);
 for (let lv = 0; lv < 5; lv++) {
-  const y0 = (lv - 1) * FTF, gm = new THREE.MeshBasicMaterial({ color: lv === 1 ? 0xdd8d36 : 0x9fb3c8, transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide });
+  const y0 = (lv - 1) * FTF, gm = new THREE.MeshBasicMaterial({ color: lv === 1 ? 0xdd8d36 : 0x9fb3c8, transparent: true, opacity: 0, depthWrite: false, depthTest: false, side: THREE.DoubleSide });   // drawn over the facade, like the coloured floors on a sales table
   const P = L.plate, gl = [];
   for (let i = 0; i < P.length; i++) { const [x0, ya] = P[i], [x1, yb] = P[(i + 1) % P.length]; const len = Math.hypot(x1 - x0, yb - ya); if (len < .15) continue;
     gl.push(at(new THREE.BoxGeometry(len, FTF - .3, .9), 0, y0 + (FTF - .3) / 2 + .15, 0).applyMatrix4(place((x0 + x1) / 2, (ya + yb) / 2, Math.atan2(yb - ya, x1 - x0)))); }
@@ -486,15 +518,16 @@ for (let lv = 0; lv < 5; lv++) {
 const LX = L.lifts.length ? L.lifts.reduce((a, p) => a + p[0], 0) / L.lifts.length : (bx0 + bx1) / 2;
 const LY = L.lifts.length ? L.lifts[0][1] : by0;
 
-// floor picker tags on the building
-const FLOOR_NAMES = ['Ground floor · lobby and lifts', 'First floor · Volt', 'Second floor', 'Third floor', 'Fourth floor'];
-const ftags = FLOOR_NAMES.map((t, lv) => {
-  const el = document.createElement('div'); el.className = 'ftag' + (lv === 1 ? ' volt' : '');
-  el.innerHTML = lv === 1 ? `<b>CLICK · FIRST FLOOR</b> Volt <small>${L.seats.filter(s => s.group === 'W').length} work seats</small>` : t;
-  if (lv === 1) el.onclick = (e) => { e.stopPropagation(); enterFloor(); };
-  el.onmouseenter = () => hoverLevel(lv); el.onmouseleave = () => hoverLevel(-1);
-  $('#labels').appendChild(el); return { el, lv };
-});
+// floor picker: a list beside the building (as on the touch table in the reference), Volt's floor marked on the building itself
+const FLOORS = [[4, 'Fourth floor', ''], [3, 'Third floor', ''], [2, 'Second floor', ''], [1, 'First floor · Volt', `${L.seats.filter(s => s.group === 'W').length} work seats`], [0, 'Ground floor', 'Entrance, lobby and lifts']];
+{ const ul = $('#floors .rows');
+  for (const [lv, name, sub] of FLOORS) {
+    const b = document.createElement('button'); b.className = lv === 1 ? 'volt' : lv === 0 ? 'gf' : 'other'; b.dataset.lv = lv;
+    b.innerHTML = `<span class="n">${lv === 0 ? 'G' : lv}</span><span class="t">${name}<small>${sub || 'Not in this drawing'}</small></span>${lv === 1 ? '<em>Enter</em>' : lv === 0 ? '<em>View</em>' : ''}`;
+    b.onmouseenter = () => hoverLevel(lv); b.onmouseleave = () => hoverLevel(-1);
+    b.onclick = () => { if (lv === 1) enterVolt(); else if (lv === 0) entranceView(); };
+    ul.appendChild(b);
+  } }
 // known places round the building, from the atlas's own list (noida-skymark/data.js), at their real positions
 const KIND = { metro: ['Metro', '#2b6cb0'], corp: ['Office', '#5b4bb5'], cowork: ['Coworking', '#0f8a7e'], retail: ['Shops', '#c2571f'], health: ['Health', '#c2334d'],
   hotel: ['Hotel', '#8a5a14'], edu: ['Education', '#2f7a36'], res: ['Housing', '#6b6b6b'], pg: ['PG', '#6b6b6b'] };
@@ -528,19 +561,34 @@ function showPlace(q) {
 const entTag = document.createElement('div'); entTag.className = 'ftag ent'; entTag.innerHTML = 'Main entrance <small>street front</small>';
 entTag.onclick = (e) => { e.stopPropagation(); entranceView(); };
 $('#labels').appendChild(entTag);
-function entranceView() {
-  lastInput = performance.now() + 20000; controls.smoothTime = ST(1.1);
-  const p = W(ENTR[0] + OUT[0] * 22 + OUT[1] * 6, ENTR[1] + OUT[1] * 22 - OUT[0] * 6, GROUND + 6), t = W(ENTR[0], ENTR[1], GROUND + 2.6);
-  controls.setLookAt(p.x, p.y, p.z, t.x, t.y, t.z, true).then(() => { controls.smoothTime = ST(.32); });
+// The entrance seen from Skymark's own drive, inside the gate: the camera never goes past the boundary wall into the street or a neighbour.
+async function entranceView() {
+  lastInput = performance.now() + 60000;
+  const p = W(ENTR[0] + OUT[0] * 8.2 + OUT[1] * 3.0, ENTR[1] + OUT[1] * 8.2 - OUT[0] * 3.0, GROUND + 1.9), t = W(ENTR[0] - OUT[0] * 1.5, ENTR[1] - OUT[1] * 1.5, GROUND + 3.6);
+  await fade(true); groundView(true);
+  controls.setLookAt(p.x, p.y, p.z, t.x, t.y, t.z, false); controls.update(0); needRender = true; await sleep(150); fade(false);
+}
+// At the entrance the camera is a person on the drive; anywhere else outside it stays above the rooftops.
+function groundView(on) {
+  camera.fov = on ? 58 : BASE_FOV; camera.updateProjectionMatrix();
+  if (on) { controls.minDistance = 1; controls.maxDistance = 14; controls.maxPolarAngle = 1.62; controls.minPolarAngle = .9; controls.setBoundary(null); }
+  else { controls.minDistance = 45; controls.maxDistance = 900; controls.minPolarAngle = .05; controls.maxPolarAngle = 1.12;
+    controls.setBoundary(new THREE.Box3(new THREE.Vector3(PB[0] - CX - 40, -3, -(PB[3] - CY) - 40), new THREE.Vector3(PB[2] - CX + 40, 20, -(PB[1] - CY) + 40))); }
 }
 let hoverLv = -1;
 function hoverLevel(lv) {
   hoverLv = lv;
-  levelGlass.forEach((m, i) => { m.opacity = i === lv ? (i === 1 ? .42 : .22) : 0; });
+  levelGlass.forEach((m, i) => { m.opacity = i === lv ? (i === 1 ? .34 : .16) : (i === 1 ? .16 : 0); });
+  document.querySelectorAll('#floors [data-lv]').forEach(el => el.classList.toggle('hl', +el.dataset.lv === lv));
   canvas.style.cursor = lv === 1 ? 'pointer' : ''; needRender = true;
 }
 let stage = 'building', shellA = 1, shellT = 1, upY = 0, upT = 0;
-function setShell(a, instant) { shellT = a; upT = a > .5 ? 0 : 16; if (instant || LITE) { shellA = a; upY = upT; applyShell(); } }
+function setShell(a, instant) {
+  shellT = a; upT = a > .5 ? 0 : 16;
+  const sc = sun.shadow.camera, k = a > .5 ? 1 : 0;                       // the shadow area changes once per view, never while moving
+  Object.assign(sc, k ? { left: -70, right: 70, top: 60, bottom: -60 } : { left: -26, right: 26, top: 22, bottom: -22 }); sc.updateProjectionMatrix();
+  if (instant || LITE) { shellA = a; upY = upT; applyShell(); }
+}
 let highTransparent = false;
 function applyShell() {
   twinHigh.position.y = upY; cutHigh.constant = -(CUTY + upY);
@@ -550,25 +598,27 @@ function applyShell() {
   twinHigh.visible = shellA > .01;
   root.visible = shellA < .99; plateSlab.visible = root.visible;
   if (twinInteriorsLow) twinInteriorsLow.visible = shellA > .5;
-  bandsG.visible = stage === 'building' && shellA > .9;
-  sun.shadow.camera.left = -60 + 34 * (1 - shellA); sun.shadow.camera.right = 60 - 34 * (1 - shellA);
-  sun.shadow.camera.top = 50 - 28 * (1 - shellA); sun.shadow.camera.bottom = -50 + 28 * (1 - shellA); sun.shadow.camera.updateProjectionMatrix();
+  bandsG.visible = stage === 'building' && shellA > .9 && camera.position.y > GROUND + 12;   // the floor marker is for the view from above, not at the door
+  podHigh.position.y = upY;
   shadowsDirty = true;
 }
 const camAzFor = (bearing) => { const n = bearingToPlan(bearing); return Math.atan2(n[0], -n[1]); };
-const BUILDING_VIEW = { az: camAzFor(186), polar: 1.1 };
+const BUILDING_VIEW = { az: camAzFor(176), polar: .98 };    // from the street front, high enough to see the roads round it
 function buildingPts() { const p = []; L.plate.forEach(([x, y]) => p.push([x, y, GROUND], [x, y, ROOF + 2.2])); return p; }
 async function toBuilding(t = true) {
   if (mode !== 'orbit') setMode('orbit', 'stay');
+  const low = t && camera.position.y < GROUND + 8;                        // leaving the drive or a room: a short cut, never a climb through walls
+  if (low) { await fade(true); t = false; }
   stage = 'building'; setFocus(null); setShell(1); document.body.dataset.stage = 'building'; updateCrumbs();
-  controls.maxDistance = 1500; controls.maxPolarAngle = 1.45;
-  controls.setBoundary(null);
+  groundView(false);
   const { tgt, dist } = frameView(buildingPts(), BUILDING_VIEW.az, BUILDING_VIEW.polar, false);
-  return Promise.all([controls.moveTo(tgt.x, tgt.y, tgt.z, t), controls.rotateTo(BUILDING_VIEW.az, BUILDING_VIEW.polar, t), controls.dollyTo(dist * 1.3, t)]);
+  const pr = Promise.all([controls.moveTo(tgt.x, tgt.y, tgt.z, t), controls.rotateTo(BUILDING_VIEW.az, BUILDING_VIEW.polar, t), controls.dollyTo(Math.max(70, dist * 1.25), t)]);
+  if (low) { controls.update(0); needRender = true; await sleep(150); fade(false); }
+  return pr;
 }
 async function enterFloor() {
   stage = 'floor'; document.body.dataset.stage = 'floor'; hoverLevel(-1); setShell(0);
-  controls.maxDistance = 85;
+  controls.minDistance = 2.5; controls.maxDistance = 85; controls.minPolarAngle = .05; controls.maxPolarAngle = 1.38;
   controls.setBoundary(new THREE.Box3(new THREE.Vector3(bx0 - CX - 2, -1, -(by1 - CY) - 2), new THREE.Vector3(bx1 - CX + 2, 3, -(by0 - CY) + 2)));
   updateCrumbs(); return overview();
 }
@@ -700,16 +750,11 @@ function placeFloorTags() {
   // put the tags on the building face nearest the camera
   const sides = [[(PB[0] + PB[2]) / 2, PB[1]], [(PB[0] + PB[2]) / 2, PB[3]], [PB[0], (PB[1] + PB[3]) / 2], [PB[2], (PB[1] + PB[3]) / 2]];
   let best = sides[0], bd = 1e9; for (const sd of sides) { const d = W(sd[0], sd[1]).distanceTo(camera.position); if (d < bd) { bd = d; best = sd; } }
-  for (const t of ftags) {
-    const y = (t.lv - 1) * FTF + FTF * .45; v3.copy(W(best[0], best[1], y)).project(camera);
-    const vis = on && v3.z < 1; t.el.style.opacity = vis ? (t.lv === 1 || hoverLv === t.lv ? 1 : .75) : 0; t.el.style.pointerEvents = vis ? 'auto' : 'none';
-    if (vis) t.el.style.transform = `translate(${(v3.x * .5 + .5) * innerWidth}px,${(-v3.y * .5 + .5) * innerHeight}px) translate(-50%,-50%)`;
-  }
   pinStems.visible = on;
   for (const q of POIS) { v3.copy(q.p).project(camera); const vis = on && v3.z < 1 && Math.abs(v3.x) < 1.1 && Math.abs(v3.y) < 1.1;
     q.el.style.opacity = vis ? 1 : 0; q.el.style.pointerEvents = vis ? 'auto' : 'none';
     if (vis) q.el.style.transform = `translate(${(v3.x * .5 + .5) * innerWidth}px,${(-v3.y * .5 + .5) * innerHeight}px) translate(-50%,-100%)`; }
-  { v3.copy(W(ENTR[0], ENTR[1], GROUND + 6.4)).project(camera); const vis = on && v3.z < 1;
+  { v3.copy(W(ENTR[0], ENTR[1], GROUND + 3.2)).project(camera); const vis = on && v3.z < 1;
     entTag.style.opacity = vis ? 1 : 0; entTag.style.pointerEvents = vis ? 'auto' : 'none';
     if (vis) entTag.style.transform = `translate(${(v3.x * .5 + .5) * innerWidth}px,${(-v3.y * .5 + .5) * innerHeight}px) translate(-50%,-50%)`; }
 }
@@ -961,11 +1006,25 @@ function walkPose() {
   const p = W(walk.x, walk.y, EYE); const dir = new THREE.Vector3(Math.cos(walk.yaw) * Math.cos(walk.pitch), Math.sin(walk.pitch), -Math.sin(walk.yaw) * Math.cos(walk.pitch));
   return { p, t: p.clone().add(dir) };
 }
+// Clicking Volt's floor: the floors above lift away and you arrive in the lift lobby at eye level, as a visitor would.
+async function enterVolt() {
+  stopTour(); hoverLevel(-1);
+  stage = 'floor'; document.body.dataset.stage = 'floor'; setShell(0);
+  controls.minDistance = 2.5; controls.maxDistance = 85; controls.minPolarAngle = .05; controls.maxPolarAngle = 1.38;
+  const lob = lobbyPose();
+  controls.smoothTime = ST(1.0);
+  await controls.setLookAt(lob.x - 2, 16, -(lob.y - CY) + 6, lob.x, 0, -(lob.y - CY), true);   // over the lobby while the floors lift
+  controls.smoothTime = ST(.32);
+  return enterWalk(null);
+}
+function lobbyPose() { const [x, y] = nearestFree(LX, LY + 3.4); return { x: x - CX, y, px: x, py: y }; }
 async function enterWalk(r) {
   stopTour();
   if (stage !== 'floor') { stage = 'floor'; document.body.dataset.stage = 'floor'; hoverLevel(-1); setShell(0); }
-  const start = r || ROOMS.find(x => x.name === 'Reception');
-  const tp = tourPose(start), [x, y] = toPlan(tp.p), [tx, ty] = toPlan(tp.t);
+  const rec = ROOMS.find(x => x.name === 'Reception'), start = r || rec;
+  let tp = tourPose(start);
+  if (!r) { const lb = lobbyPose(); tp = { p: W(lb.px, lb.py, EYE), t: W(rec.cx, rec.cy, 1.2) }; }       // no room asked for: start in the lift lobby
+  const [x, y] = toPlan(tp.p), [tx, ty] = toPlan(tp.t);
   const jump = walk.active;                       // already inside: cut with a short fade instead of flying through walls
   if (jump) await fade(true);
   walk.active = false; walk.glide = null;
@@ -974,7 +1033,10 @@ async function enterWalk(r) {
   const { p, t } = walkPose();
   controls.enabled = true; controls.maxPolarAngle = Math.PI; controls.minDistance = 0.01; controls.setBoundary(null);
   if (jump) { controls.setLookAt(p.x, p.y, p.z, t.x, t.y, t.z, false); controls.update(0); needRender = true; await sleep(120); fade(false); }
-  else { controls.smoothTime = ST(.9); await controls.setLookAt(p.x, p.y, p.z, t.x, t.y, t.z, true); controls.smoothTime = ST(.32); }
+  else {   // come down inside the room: first above the spot, then straight down, so the camera never passes through a wall
+    controls.smoothTime = ST(.7); const dir = t.clone().sub(p).setY(0).normalize();
+    await controls.setLookAt(p.x - dir.x * .6, 7.5, p.z - dir.z * .6, p.x + dir.x * 3, 0, p.z + dir.z * 3, true);
+    controls.smoothTime = ST(.8); await controls.setLookAt(p.x, p.y, p.z, t.x, t.y, t.z, true); controls.smoothTime = ST(.32); }
   if (mode !== 'walk') return;
   controls.enabled = false; walk.active = true; needRender = true;
 }
@@ -1000,7 +1062,7 @@ canvas.addEventListener('pointermove', (e) => {
 canvas.addEventListener('pointerup', (e) => {
   if (!drag) return; const click = drag.moved < 6 && performance.now() - drag.t < 450; drag = null;
   if (!click) return;
-  if (stage === 'building') { if (pickLevel(e) === 1) enterFloor(); return; }
+  if (stage === 'building') { if (pickLevel(e) === 1) enterVolt(); return; }
   const hit = pickFloor(e); if (!hit) return;
   if (walk.active) { const [fx, fy] = nearestFree(...hit); walk.glide = { x: fx, y: fy }; }
   else if (mode === 'orbit' && stage === 'floor') { const r = roomAt(...hit); if (r) enterWalk(r); }
@@ -1077,8 +1139,8 @@ const OUT = bearingToPlan(146);                    // straight out of the street
 function buildStops() {
   const lobby = nearestFree(LX, LY + 3.4), rec = ROOMS.find(x => x.name === 'Reception');
   const stops = [
-    { cap: 'Skymark F-1, Sector 6, Noida', sub: 'Plot F-01 · G+4 · the street front', ext: true, p: W(ENTR[0] + OUT[0] * 46 + OUT[1] * 14, ENTR[1] + OUT[1] * 46 - OUT[0] * 14, GROUND + 4.5), t: W(SF.plate_centroid[0], SF.plate_centroid[1], GROUND + 9) },
-    { cap: 'The way in', sub: 'Through the gate to the entrance porch on the street front', ext: true, p: W(ENTR[0] + OUT[0] * 5.6, ENTR[1] + OUT[1] * 5.6, GROUND + 1.65), t: W(ENTR[0] - OUT[0] * 2, ENTR[1] - OUT[1] * 2, GROUND + 2.5) },
+    { cap: 'Skymark F-1, Sector 6, Noida', sub: 'Plot F-01 · G+4 · the street front, with the road in front and along the long side', ext: true, p: W(ENTR[0] + OUT[0] * 62 + OUT[1] * 24, ENTR[1] + OUT[1] * 62 - OUT[0] * 24, GROUND + 46), t: W(SF.plate_centroid[0], SF.plate_centroid[1], GROUND + 6) },
+    { cap: 'The way in', sub: 'On the drive inside the gate, at the entrance porch', ext: true, cut: true, p: W(ENTR[0] + OUT[0] * 7.5 + OUT[1] * 2.2, ENTR[1] + OUT[1] * 7.5 - OUT[0] * 2.2, GROUND + 1.7), t: W(ENTR[0], ENTR[1], GROUND + 2.9) },
     { cap: 'Lift lobby, first floor', sub: 'Out of the lift, Volt\'s reception is ahead', fade: true, p: W(lobby[0], lobby[1], EYE), t: W(rec.cx, rec.cy, 1.2) },
   ];
   for (const n of TOUR) { const r = ROOMS.find(x => x.name === n); if (r) { const tp = tourPose(r); stops.push({ r, cap: r.name, p: tp.p, t: tp.t }); } }
@@ -1099,11 +1161,11 @@ async function nextStop() {
   const r = st.r;
   cap.innerHTML = `${st.cap}<small>${r ? (Object.entries(r.by).map(([g, n]) => `${n} ${GN[g]}`).join(' · ') || '') + (DECK[r.name] ? ' · the card has the design render' : '') : st.sub}</small>`;
   setFocus(r || null); $('#card').classList.toggle('show', !!r && !MOBILE && !!DECK[r.name]);
-  if (st.fade) {
+  if (st.fade || st.cut || (r && tourI > 0)) {     // between places that a camera cannot fly between (through walls or neighbours): a short cut
     await fade(true); if (mode !== 'tour') return fade(false);
-    stage = 'floor'; document.body.dataset.stage = 'floor'; setShell(0, true);
+    if (st.fade) { stage = 'floor'; document.body.dataset.stage = 'floor'; setShell(0, true); }
     controls.setLookAt(p.x, p.y, p.z, t.x, t.y, t.z, false); controls.update(0); needRender = true;
-    await sleep(250); fade(false);
+    await sleep(200); fade(false);
   } else {
     controls.smoothTime = ST(st.ext ? 1.6 : 1.1);
     await controls.setLookAt(p.x, p.y, p.z, t.x, t.y, t.z, true);
@@ -1181,7 +1243,7 @@ function setMode(m, toOverview) {
   if (m === 'elev') { controls.enabled = false; ortCtl.enabled = true; elevSetup(true); }
   if (m === 'orbit') {
     controls.enabled = true; controls.minDistance = 2.5; controls.maxPolarAngle = 1.38;
-    if (stage === 'building') { if (toOverview !== 'stay') toBuilding(); }
+    if (stage === 'building') { if (toOverview !== 'stay') toBuilding(); else groundView(false); }
     else if (toOverview === true) overview(); else if (toOverview !== 'stay') { if (focus) flyToRoom(focus); else overview(); }
   }
   document.body.classList.toggle('immersive', m === 'walk' || m === 'tour' || m === 'elev');
@@ -1221,6 +1283,11 @@ function frame() {
     if (needRender) moved = true;
   } else if (mode === 'elev') { if (ortCtl.update(dt)) moved = true; }
   else if (controls.update(dt)) moved = true;
+  if (stage === 'building') { const bv = shellA > .9 && camera.position.y > GROUND + 12; if (bandsG.visible !== bv) { bandsG.visible = bv; moved = true; } }
+  { // depth range to suit the view: close planes indoors, far ones over the city (keeps surfaces from shimmering)
+    const inside = walk.active || ((mode === 'tour' || mode === 'walk') && camera.position.y < 5);
+    const nr = inside ? .05 : stage === 'floor' ? .2 : .8, fr = inside ? 900 : stage === 'floor' ? 1600 : 2600;
+    if (camera.near !== nr || camera.far !== fr) { camera.near = nr; camera.far = fr; camera.updateProjectionMatrix(); moved = true; } }
   if (moved) { lastMove = performance.now(); aoDone = false; }
   const still = performance.now() - lastMove > 160;
   if (moved || needRender || (still && !aoDone)) {
@@ -1241,6 +1308,7 @@ const CMD = {
   entrance: async () => { stopTour(); if (stage !== 'building') await toBuilding(false); entranceView(); },
   place: async (a) => { const q = POIS[a.i | 0]; if (!q) return; stopTour(); if (stage !== 'building') await toBuilding(false); showPlace(q); },
   floor: () => { stopTour(); if (stage !== 'floor') return enterFloor(); setMode('orbit', true); },
+  enter: () => enterVolt(),
   room: (a) => { const r = ROOMS.find(x => x.name === a.name); if (r) enterWalk(r); },
   above: async (a) => { const r = ROOMS.find(x => x.name === a.name) || focus; if (!r) return; stopTour(); if (stage !== 'floor') await enterFloor(); if (mode !== 'orbit') setMode('orbit', 'stay');
     seatDots.visible = true; $('#b-seats').classList.add('on'); flyToRoom(r); },
@@ -1282,14 +1350,16 @@ addEventListener('keydown', (e) => { if (e.code === 'KeyP' && e.target.tagName !
 
 renderer.shadowMap.needsUpdate = true;
 scene.fog = new THREE.Fog(0xe7e3dc, 260, 900);
-setTOD(TOD.t); setShell(1, true);
+setTOD(TOD.t); setShell(1, true); hoverLevel(-1); document.body.dataset.mode = 'orbit';
+await Promise.all([cityP, modelsP, new Promise(ok => { if (bpImg.complete) ok(); else { bpImg.addEventListener('load', ok); bpImg.addEventListener('error', ok); } })]);
+shadowsDirty = true;
 if (/[#&]floor/.test(location.hash)) { stage = 'floor'; setShell(0, true); document.body.dataset.stage = 'floor'; controls.maxDistance = 85; overview(false); }
 else { await toBuilding(false);
-  if (!LITE && !matchMedia('(prefers-reduced-motion: reduce)').matches) { controls.rotateTo(BUILDING_VIEW.az + .9, .5, false); controls.dollyTo(controls.distance * 3.2, false);
-    setTimeout(() => { if (stage === 'building' && mode === 'orbit') { controls.smoothTime = ST(1.7); toBuilding(true).then(() => { controls.smoothTime = ST(.32); }); } }, 700); } }
+  if (!LITE && !matchMedia('(prefers-reduced-motion: reduce)').matches) { controls.rotateTo(BUILDING_VIEW.az + .35, .62, false); controls.dollyTo(controls.distance * 1.8, false);
+    setTimeout(() => { if (stage === 'building' && mode === 'orbit') { controls.smoothTime = ST(2.2); toBuilding(true).then(() => { controls.smoothTime = ST(.32); }); } }, 900); } }
 controls.update(0); updateCrumbs();
 frame();
-setTimeout(() => $('#load').classList.add('done'), 120);
+renderer.render(scene, camera); setTimeout(() => $('#load').classList.add('done'), 60);
 setTimeout(() => { $('#load').remove(); }, 900);
 function snap(name, fov = 62) {
   const r = ROOMS.find(x => x.name === name); if (!r) return null;
@@ -1302,4 +1372,4 @@ function snap(name, fov = 62) {
 }
 presenter.ready();
 if (/[?&]present\b/.test(location.search) && !presenter.on) presenter.toggle();
-window.__volt = { presenter, runCommand, remoteState, snap, POIS, showPlace, entranceView, L, ROOMS, controls, flyToRoom, overview, enterWalk, setMode, startTour, stopTour, walk, enterFloor, toBuilding, setTOD, get stage() { return stage; }, get mode() { return mode; }, render: () => { needRender = true; } };
+window.__volt = { enterVolt, entranceView, presenter, runCommand, remoteState, snap, POIS, showPlace, entranceView, L, ROOMS, controls, flyToRoom, overview, enterWalk, setMode, startTour, stopTour, walk, enterFloor, toBuilding, setTOD, get stage() { return stage; }, get mode() { return mode; }, render: () => { needRender = true; } };

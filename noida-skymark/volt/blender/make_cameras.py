@@ -25,7 +25,18 @@ HARD = unary_union(hard); ALL = unary_union(hard + soft)
 floor = unary_union([Polygon(f['outer'], f['holes']) for f in L['floor']])
 # still cameras set by hand to match the design deck's own views:
 # (x, y, look x, look y), then optionally the lens in mm, the eye height and the height looked at
-OVERRIDE = {'Open workstations': (9.3, 14.75, 18.5, 21.2)}   # deck page 4: from the passage corner, along the bench rows
+OVERRIDE = {
+    'Open workstations': (9.3, 14.75, 18.5, 21.2),                         # deck page 4: from the passage corner, along the bench rows
+    'Sales office': (10.55, 14.05, 3.5, 11.0, 18, 1.5, 1.0),               # deck page 8: down the room, the glass partition on the right
+    '18 seater conference room': (9.5, 27.25, 16.5, 25.3, 18, 1.5, 0.95),  # deck page 14: along the table, windows left, glass right
+    'Control room / command centre': (1.0, 15.3, 3.6, 20.4, 18, 1.5, 0.95),   # deck page 16: across the desk rows from the front corner
+    'Cafeteria': (4.45, 23.8, 1.5, 26.7, 18, 1.5, 0.95),                   # deck page 21: the tables, the high counter and the windows
+    'Lounge area (north)': (32.9, 24.9, 30.8, 27.0, 20, 1.45, 0.8),        # deck page 13: the sofa against the wall, the armchair beside it
+    'Collab area 01': (21.7, 14.2, 19.7, 11.0, 18, 1.45, 0.8),             # deck page 18: the sofa group with the phone booths behind
+    'Reception': (30.4, 8.2, 26.5, 6.3, 18, 1.5, 0.95),                    # no deck page: the desk as you see it coming in
+    'Calling room': (12.95, 14.2, 12.9, 10.8, 18, 1.5, 0.95),              # no deck page: down the aisle between the two desk rows
+    'Finance room': (21.75, 25.45, 25.6, 26.7, 18, 1.5, 0.95),             # no deck page: from the door, along both desk rows
+}
 SKIP = {'Phone booths PH-05 to 07', 'Phone booths PH-01 to 04', 'UPS room', 'Server room', 'Wet pantry', 'Entry', 'Atrium-side lounge'}
 out = []
 for r in L['rooms']:
