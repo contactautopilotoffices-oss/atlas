@@ -45,8 +45,8 @@
     "iteration": 2
   },
   "massing": {
-    "front_width_A": 27.7,
-    "side_length_B": 44.7,
+    "front_width_A": 33.5,
+    "side_length_B": 51.0,
     "floors_above_ground": 5,
     "floor_labels": [
       "Ground",
@@ -62,14 +62,14 @@
       "floors_above_ground": "high",
       "floor_to_floor": "low",
       "front_width_A": "medium",
-      "side_length_B": "low",
+      "side_length_B": "medium",
       "parapet_top": "medium"
     },
     "source": {
       "floors_above_ground": "developer: G+4",
       "floor_to_floor": "Photo: slab lines on the front glass are about 70 px apart against a 400 px pier, so 5 floors plus a 2 m parapet fill the height. 4.1 m is assumed as a normal office floor height; no source states it.",
-      "side_length_B": "Photo: side B is about 309 px wide against the same 400 px pier. Set so that the reference render gives the same ratio (0.77). 27.7 m x 44.7 m is about 1,240 sq m per floor, or about 66,600 sq ft over G+4. Published leasable figures are 45,000 sq ft (Autopilot listing) and 90,551 sq ft (developer); this sits between them and the difference is not resolved.",
-      "front_width_A": "Photo: the front is about 361 px wide against a 400 px tall pier. Set so that the render from the reference camera gives the same width-to-height ratio (0.90)."
+      "side_length_B": "Same footprint: its 59.2 m long side less the 8 m podium in front of the street face. The features along this side were scaled from the photo fit (44.7 m) to 51 m.",
+      "front_width_A": "Overture Maps footprint used by the earlier Skymark study (media/skymark-f1/site.json): 59.2 m by 33.9 m. The front is the short south-east side; the photo-fitted composition (corner pier, glass, right pier) takes 27.7 m and the light grey east wing the rest."
     },
     "hidden_sides": "The rear and the far side are not visible in the photograph. They are closed with plain cladding massing only, tagged observed = false."
   },
@@ -125,12 +125,39 @@
       "transom_spacing": 2.05,
       "confidence": "low",
       "source": "photo: darker glazed strip, about 45 px wide, between the corner pier and the lit glass; whether it is a recess or the return of a projecting glass box cannot be told from one view"
+    },
+    "east_wing": {
+      "u0": 27.7,
+      "u1": 33.5,
+      "v0": 0.0,
+      "v1": 21.3,
+      "setback": 0.6,
+      "ribbons": [
+        [
+          9.4,
+          12.6
+        ],
+        [
+          13.3,
+          16.5
+        ],
+        [
+          17.2,
+          20.4
+        ]
+      ],
+      "charcoal": [
+        4.6,
+        8.7
+      ],
+      "confidence": "medium",
+      "source": "photo: the light grey block on the right of the photograph (taken earlier for a neighbour) and the earlier study's photos: light grey ACP with ribbon windows on the upper floors and a charcoal block lower down, its parapet about 1 m below the main one"
     }
   },
   "side_B": {
     "end_pier": {
       "u0": 0.0,
-      "u1": 2.86,
+      "u1": 3.26,
       "v0": 0.0,
       "v1": 22.5,
       "projection": 0.3,
@@ -138,19 +165,19 @@
       "source": "photo: white column at the far left end"
     },
     "top_ribbon": {
-      "u0": 6.08,
-      "u1": 32.9,
+      "u0": 6.94,
+      "u1": 37.54,
       "v0": 17.47,
       "v1": 21.0,
-      "mullion_spacing": 5.4,
+      "mullion_spacing": 6.16,
       "sill_h": 0.5,
       "confidence": "low",
       "source": "photo: strip of four wide openings with white piers between them, just under the parapet; its sill reads about 20 m up, which is above the middle of the 4th floor, so it may be partly a roof-level screen. Not resolved from one photo.",
       "mullion_w": 0.45
     },
     "parapet_band": {
-      "u0": 2.86,
-      "u1": 32.9,
+      "u0": 3.26,
+      "u1": 37.54,
       "v0": 21.0,
       "v1": 21.71,
       "projection": 0.3,
@@ -158,9 +185,9 @@
       "source": "photo: side B's parapet reads about 1 m lower than the corner pier's top"
     },
     "angular_frame": {
-      "left_u": 3.1,
-      "top_right_u": 20.11,
-      "bottom_right_u": 24.34,
+      "left_u": 3.54,
+      "top_right_u": 22.94,
+      "bottom_right_u": 27.77,
       "bottom_v": 2.21,
       "top_v": 14.12,
       "member_width": 1.2,
@@ -170,8 +197,8 @@
       "source": "photo: trapezoid frame; left edge vertical, right edge leaning toward the corner at the bottom. Corners read at (78,505) (215,510) (243,690) (78,640) px and converted with the perspective correction; expect 1 to 2 m of error along the facade and about 1 m in height"
     },
     "frame_top_band": {
-      "u0": 3.1,
-      "u1": 22.35,
+      "u0": 3.54,
+      "u1": 25.5,
       "v0": 15.53,
       "v1": 16.32,
       "projection": 1.9,
@@ -180,7 +207,7 @@
     },
     "slanted_glazing": {
       "u_from": "angular_frame right edge",
-      "u1": 32.9,
+      "u1": 37.54,
       "v0": 2.21,
       "v1": 14.12,
       "mullion_spacing": 1.5,
@@ -190,8 +217,8 @@
       "source": "photo: blue-grey glazing between the frame's leaning edge and the white panel pier reads as an inclined plane following that edge"
     },
     "accent_strip": {
-      "u0": 40.23,
-      "u1": 44.7,
+      "u0": 45.9,
+      "u1": 51.0,
       "v0": 0.0,
       "v1": 21.71,
       "projection": 0.15,
@@ -199,8 +226,8 @@
       "source": "photo: full-height dark brown strip at the corner, between the white panel pier on B and the corner pier on A"
     },
     "ground_base": {
-      "u0": 2.86,
-      "u1": 32.9,
+      "u0": 3.26,
+      "u1": 37.54,
       "v0": 0.0,
       "v1": 2.21,
       "pilaster_spacing": 4.8,
@@ -209,8 +236,8 @@
       "source": "photo: dark base under the frame, partly hidden by trees and the boundary wall"
     },
     "upper_glazing": {
-      "u0": 3.1,
-      "u1": 32.9,
+      "u0": 3.54,
+      "u1": 37.54,
       "v0": 14.12,
       "v1": 15.53,
       "mullion_spacing": 1.5,
@@ -218,8 +245,8 @@
       "source": "photo: dark band between the frame's top edge and the white ledge"
     },
     "corner_return_pier": {
-      "u0": 32.9,
-      "u1": 40.23,
+      "u0": 37.54,
+      "u1": 45.9,
       "v0": 0.0,
       "v1": 21.71,
       "panel_w": 1.5,
@@ -344,20 +371,26 @@
   ],
   "entrance": {
     "host": "annex_front",
-    "u0": 20.0,
-    "u1": 24.0,
-    "door_h": 2.82,
-    "canopy_depth": 2.2,
-    "canopy_v": 3.18,
-    "canopy_th": 0.3,
+    "u0": 19.2,
+    "u1": 23.4,
+    "recess": 2.0,
+    "door_h": 2.7,
+    "transom_h": 0.6,
+    "canopy_depth": 2.6,
+    "canopy_v": 3.6,
+    "canopy_th": 0.22,
+    "steps": 3,
+    "riser": 0.15,
+    "tread": 0.35,
+    "name": "SKYMARK F-1",
     "confidence": "low",
     "observed": false,
-    "source": "Inferred. The ground floor of the annex shows dark glazing and the driveway kerbs (yellow and black) lead to it, but the doors themselves are hidden behind the palm trees. Placement must be confirmed on site."
+    "source": "Inferred. The podium's ground floor is glazed and the drive leads to it, but the doors are hidden behind the palms in the photograph. A recessed glass porch with two pairs of doors, a canopy, steps and a ramp is modelled; confirm on site."
   },
   "roof": {
     "mast": {
       "x": 3.5,
-      "y": 38.0,
+      "y": 43.4,
       "height": 6.0,
       "base": 1.2,
       "confidence": "low",
@@ -371,28 +404,53 @@
     "confidence": "low",
     "source": "developer: plot 2,940 sq m. Paving, wall, kerb, palms and trees are read from the photograph; their positions are approximate and the plot boundary is not surveyed.",
     "margin_side_B": 6.0,
-    "margin_front": 3.0,
+    "margin_front": 9.0,
     "margin_other": 2.0,
     "palms": [
       [
-        8.2,
-        -3.0,
+        6.5,
+        -9.6,
         9.0
       ],
       [
-        10.8,
-        -4.2,
+        24.8,
+        -9.6,
         10.5
       ],
       [
-        13.0,
-        -2.6,
+        30.5,
+        -9.4,
         8.5
       ]
     ],
     "trees_side_B": {
       "count": 5,
       "height": 8.0
+    },
+    "gate": {
+      "vehicle": [
+        8.0,
+        15.0
+      ],
+      "pedestrian": [
+        19.4,
+        21.0
+      ],
+      "pillar": 0.6,
+      "pillar_h": 2.3,
+      "leaf_h": 1.9,
+      "cabin": [
+        3.6,
+        6.2
+      ],
+      "cabin_size": [
+        2.6,
+        2.4,
+        2.7
+      ],
+      "confidence": "low",
+      "observed": false,
+      "source": "The photograph shows the boundary wall and the driveway kerbs (yellow and black) by the podium, but not the gate itself. A vehicle gate onto the drive, a pedestrian gate in line with the entrance and a guard cabin are what such a plot has; positions are assumed."
     }
   },
   "reference_camera": {
@@ -498,23 +556,54 @@
       "base": "#b9bbb8",
       "metallic": 0.0,
       "roughness": 0.85
+    },
+    "cladding_grey": {
+      "base": "#c9cdd0",
+      "metallic": 0.05,
+      "roughness": 0.4
+    },
+    "charcoal": {
+      "base": "#2f3236",
+      "metallic": 0.2,
+      "roughness": 0.5
     }
   },
   "map": {
     "pin": {
-      "lat": 28.593565,
-      "lng": 77.3188016,
-      "source": "https://www.coworkingcafe.com/coworking-property/in/up/noida/efc-skymark/"
+      "lat": 28.5913167,
+      "lng": 77.3189671,
+      "source": "Centre of Skymark F-1's Overture Maps footprint, as used by the earlier Skymark study (media/skymark-f1/site.json and engine/atlases/skymark-f1.js on branch claude/determined-fermat-kowald)"
     },
-    "corner_enu": [
-      -44.7,
-      -24.4
+    "region_xy": [
+      -0.97,
+      -0.04
     ],
-    "front_bearing_deg": 326,
-    "confirmed": false,
-    "replaces_footprint_id": "13c57407-869d-48e4-a9ca-04a66a98fe2a",
-    "context_source": "Overture Maps release/2026-10-21.0",
-    "note": "ASSUMED PLACEMENT, to be confirmed. The published pin falls on open ground 15 m from a road, with no footprint under it, so the building is not exactly there. The nearest large footprint is an OpenStreetMap building 51 m south-west of the pin (1,494 sq m). It fits what is published: about half of the developer's 2,940 sq m plot, and five floors of it plus two basements come to roughly the architect's 125,000 sq ft. The twin stands on that footprint's street corner (roads on its north-west and north-east sides), aligned to the street grid, front facing 326 degrees. Not confirmed: that this footprint is F1 Skymark, or which of its sides is the front. That footprint is U-shaped, 52.5 m by 40.8 m overall, which does not match the photo-derived rectangle (27.7 m by 44.7 m), so either the identification or the photo reading is off. One look at a satellite map settles it."
+    "phi_deg": 34.0,
+    "corner_enu": [
+      -1.86,
+      -27.19
+    ],
+    "front_bearing_deg": 146,
+    "confirmed": true,
+    "replaces_footprint_id": "22e4bdbe-e4dd-4c86-91cf-620224273f93",
+    "street_view": {
+      "lat": 28.5910204,
+      "lng": 77.3193201,
+      "heading": 336.12
+    },
+    "note": "Placed on the building's own footprint (Overture Maps, 59.2 m by 33.9 m), the one the earlier Skymark study matched to the client's Street View panorama. The street front, with the curtain wall and the podium, faces south-east (146 degrees); the long face with the angular frame faces south-west (236 degrees), along the road. The listing pin used before (28.593565, 77.318802) was about 270 m north, on open ground."
   },
-  "materials_note": "Colours read from the photograph by eye. Glass is a tinted reflective surface (metallic 0.85 to 0.9, low roughness), so what it shows is mostly the sky and surroundings; two close variants of each glass and cladding are generated so panes and panels differ slightly."
+  "materials_note": "Colours read from the photograph by eye. Glass is a tinted reflective surface (metallic 0.85 to 0.9, low roughness), so what it shows is mostly the sky and surroundings; two close variants of each glass and cladding are generated so panes and panels differ slightly.",
+  "interiors": {
+    "floors": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "depth": 6.5,
+    "confidence": "low",
+    "observed": false,
+    "source": "Lit offices behind the glass so it reads like the photo, where ceilings and lights show through. A typical open office (light panels, desks with screens) is assumed; the real layouts are not known."
+  }
 }

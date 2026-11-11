@@ -19,7 +19,9 @@ from shapely import wkb
 
 OUT = sys.argv[1]
 R = float(sys.argv[2]) if len(sys.argv) > 2 else 650.0
-LAT, LNG = 28.593565, 77.3188016          # the property's pin (noida-skymark/data.js)
+# the centre: the building's own footprint (facade_parameters.json, map.pin), or LAT LNG given after R
+_P = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "facade_parameters.json")))["map"]["pin"]
+LAT, LNG = (float(sys.argv[3]), float(sys.argv[4])) if len(sys.argv) > 4 else (_P["lat"], _P["lng"])
 KLAT, KLNG = 110574.0, 111320.0 * math.cos(math.radians(LAT))
 BB = (LNG - R / KLNG, LAT - R / KLAT, LNG + R / KLNG, LAT + R / KLAT)
 s3 = pafs.S3FileSystem(anonymous=True, region="us-west-2")

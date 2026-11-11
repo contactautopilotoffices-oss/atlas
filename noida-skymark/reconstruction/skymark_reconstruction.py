@@ -244,13 +244,17 @@ MAT_NAMES = {
     "aluminium_dark": "SKY_Aluminium_Dark_Mullion", "joint_dark": "SKY_Joint_Shadow",
     "concrete": "SKY_Concrete", "paving": "SKY_Ground_Paving", "asphalt": "SKY_Asphalt",
     "accent_brown": "SKY_Accent_BrownPanel", "roof_membrane": "SKY_Roof_Membrane",
-    "kerb_yellow": "SKY_Kerb_Yellow", "kerb_black": "SKY_Kerb_Black",
+    "kerb_yellow": "SKY_Kerb_Yellow", "kerb_black": "SKY_Kerb_Black", "zebra": "SKY_Road_Zebra",
+    "cladding_grey": "SKY_Cladding_LightGrey_ACP", "charcoal": "SKY_Charcoal_Panel",
+    "interior_light": "SKY_Interior_LightPanel", "interior_ceiling": "SKY_Interior_Ceiling", "interior_carpet": "SKY_Interior_Carpet",
+    "interior_core": "SKY_Interior_CoreWall", "interior_desk": "SKY_Interior_Desk", "interior_screen": "SKY_Interior_Screen",
+    "interior_chair": "SKY_Interior_Chair",
     "leaf": "SKY_Vegetation_Leaf", "trunk": "SKY_Vegetation_Trunk",
     "context_building": "SKY_Context_Building", "context_road": "SKY_Context_Road", "context_ground": "SKY_Context_Ground",
 }
 MAT_DEFAULTS = {
-    "glass_bluegrey": {"base": "#4f6f8c", "metallic": 0.9, "roughness": 0.05},
-    "glass_dark": {"base": "#18222c", "metallic": 0.85, "roughness": 0.07},
+    "glass_bluegrey": {"base": "#8aa3b8", "metallic": 0.0, "roughness": 0.03, "transmission": 0.88, "ior": 2.0},
+    "glass_dark": {"base": "#4a5866", "metallic": 0.0, "roughness": 0.04, "transmission": 0.62, "ior": 2.0},
     "cladding_white": {"base": "#e4e6e6", "metallic": 0.0, "roughness": 0.38},
     "aluminium": {"base": "#aab0b6", "metallic": 1.0, "roughness": 0.35},
     "aluminium_dark": {"base": "#2e3338", "metallic": 0.8, "roughness": 0.4},
@@ -261,6 +265,16 @@ MAT_DEFAULTS = {
     "accent_brown": {"base": "#4b2b1c", "metallic": 0.1, "roughness": 0.55},
     "roof_membrane": {"base": "#b9bbb8", "metallic": 0.0, "roughness": 0.85},
     "kerb_yellow": {"base": "#e0b81f", "metallic": 0.0, "roughness": 0.8},
+    "zebra": {"base": "#ecebe4", "metallic": 0.0, "roughness": 0.7},
+    "cladding_grey": {"base": "#c9cdd0", "metallic": 0.05, "roughness": 0.4},
+    "charcoal": {"base": "#2f3236", "metallic": 0.2, "roughness": 0.5},
+    "interior_light": {"base": "#fff6e8", "metallic": 0.0, "roughness": 0.5, "emit": 7.0},
+    "interior_ceiling": {"base": "#e9e6df", "metallic": 0.0, "roughness": 0.9},
+    "interior_carpet": {"base": "#55585b", "metallic": 0.0, "roughness": 0.95},
+    "interior_core": {"base": "#3a3d40", "metallic": 0.0, "roughness": 0.9},
+    "interior_desk": {"base": "#d9d3c7", "metallic": 0.0, "roughness": 0.55},
+    "interior_screen": {"base": "#1b2430", "metallic": 0.2, "roughness": 0.3, "emit": 0.6},
+    "interior_chair": {"base": "#2c2f33", "metallic": 0.0, "roughness": 0.7},
     "kerb_black": {"base": "#1c1c1c", "metallic": 0.0, "roughness": 0.8},
     "leaf": {"base": "#3f6b2e", "metallic": 0.0, "roughness": 0.85},
     "trunk": {"base": "#6a543c", "metallic": 0.0, "roughness": 0.9},
@@ -285,18 +299,26 @@ def apply_facade_materials(P):
     not all one flat tone. Glass is a tinted reflective surface, not an
     opaque blue: almost all of what it shows is reflection."""
     spec = {**MAT_DEFAULTS, **P.get("materials", {})}
+    for key in ("glass_bluegrey", "glass_dark"):        # the archviz skill's glass, whatever the json says
+        spec[key] = {**spec.get(key, {}), **{k: v for k, v in MAT_DEFAULTS[key].items() if k in ("transmission", "ior", "metallic")}}
+        spec[key]["base"] = MAT_DEFAULTS[key]["base"]; spec[key]["roughness"] = MAT_DEFAULTS[key]["roughness"]
     for key, s in spec.items():
-        MATS[key] = _material(MAT_NAMES.get(key, "SKY_" + key), s["base"], s["metallic"], s["roughness"])
+        MATS[key] = _material(MAT_NAMES.get(key, "SKY_" + key), s["base"], s["metallic"], s["roughness"],
+                              emit=s.get("emit", 0.0), transmission=s.get("transmission", 0.0), ior=s.get("ior", 1.5),
+                              finish=key.startswith(("cladding", "accent", "charcoal", "concrete", "paving", "aluminium")))
 
     def variant(key, suffix, k, dr):
         s = spec[key]
-        MATS[key + suffix] = _material(MAT_NAMES[key] + suffix.upper(), _shade(s["base"], k), s["metallic"], max(0.02, s["roughness"] + dr))
+        MATS[key + suffix] = _material(MAT_NAMES[key] + suffix.upper(), _shade(s["base"], k), s["metallic"], max(0.02, s["roughness"] + dr),
+                                       transmission=s.get("transmission", 0.0), ior=s.get("ior", 1.5), finish=key.startswith(("cladding", "accent")))
         return key + suffix
 
     VARIANTS["glass_bluegrey"] = [("glass_bluegrey", 6), (variant("glass_bluegrey", "_b", 0.90, 0.03), 2), (variant("glass_bluegrey", "_c", 1.08, -0.02), 2)]
     VARIANTS["glass_dark"] = [("glass_dark", 6), (variant("glass_dark", "_b", 1.25, 0.03), 3)]
     VARIANTS["cladding_white"] = [("cladding_white", 7), (variant("cladding_white", "_b", 0.955, 0.04), 2)]
     VARIANTS["accent_brown"] = [("accent_brown", 5), (variant("accent_brown", "_b", 1.12, 0.03), 2)]
+    VARIANTS["cladding_grey"] = [("cladding_grey", 7), (variant("cladding_grey", "_b", 0.95, 0.04), 2)]
+    VARIANTS["charcoal"] = [("charcoal", 1)]
     MATS["leaf_b"] = _material("SKY_Vegetation_Leaf_B", _shade(spec["leaf"]["base"], 1.25), 0.0, 0.85)
     for sg in P.get("signage", []):
         for side in ("bg_left", "bg_right", "text_color", "mark_color"):
@@ -305,19 +327,37 @@ def apply_facade_materials(P):
     return list(MATS.values())
 
 
-def _material(name, base, metal, rough, emit=0.0):
+def _material(name, base, metal, rough, emit=0.0, transmission=0.0, ior=1.5, finish=False):
+    """Principled BSDF. Glass is transmissive with a high IOR, so it reflects
+    the sky and shows the lit offices behind it (archviz-blender-photorealism).
+    `finish` adds, for Cycles only, what the skill asks of every hard surface:
+    a bevel on the edges (6 mm) and roughness that drifts by about 15 percent.
+    The glTF export keeps the plain values."""
     m = bpy.data.materials.get(name) or bpy.data.materials.new(name)
     try:
         m.use_nodes = True
     except Exception:
         pass
-    b = m.node_tree.nodes.get("Principled BSDF")
+    nt = m.node_tree
+    b = nt.nodes.get("Principled BSDF")
     b.inputs["Base Color"].default_value = hexc(base)
     b.inputs["Metallic"].default_value = metal
     b.inputs["Roughness"].default_value = rough
+    if transmission:
+        b.inputs["Transmission Weight"].default_value = transmission
+        b.inputs["IOR"].default_value = ior
     if emit:
         b.inputs["Emission Color"].default_value = hexc(base)
         b.inputs["Emission Strength"].default_value = emit
+    if finish:
+        try:
+            bv = nt.nodes.new("ShaderNodeBevel"); bv.inputs["Radius"].default_value = 0.006; bv.samples = 6
+            nt.links.new(bv.outputs["Normal"], b.inputs["Normal"])
+            nz = nt.nodes.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 2.5
+            mr = nt.nodes.new("ShaderNodeMapRange"); mr.inputs["To Min"].default_value = rough * 0.85; mr.inputs["To Max"].default_value = min(1.0, rough * 1.15)
+            nt.links.new(nz.outputs["Fac"], mr.inputs["Value"]); nt.links.new(mr.outputs["Result"], b.inputs["Roughness"])
+        except Exception as ex:
+            print("finish skipped on", name, ex)
     m.diffuse_color = hexc(base)
     m["sky_pbr"] = json.dumps({"base": base, "metallic": metal, "roughness": rough})
     return m
@@ -449,7 +489,12 @@ def _curtain_regions(P, F):
     ac = conf_of(an, "height")
     ff, gf = an["first_floor_glazing"], an["ground_glazing"]
     add("Annex_FirstFloor", "annex", ff, "glass_bluegrey", u0=an["u0"] + 0.4, u1=an["u1"] - 0.4, conf=ac, src=an["source"])
-    add("Annex_Ground", "annex", gf, "glass_dark", u0=an["u0"] + 0.4, u1=an["u1"] - 0.4, conf=ac, src=an["source"])
+    e = P.get("entrance")
+    if e:   # the ground floor glazing stops either side of the entrance porch
+        add("Annex_Ground", "annex", gf, "glass_dark", u0=an["u0"] + 0.4, u1=e["u0"] - 0.35, conf=ac, src=an["source"])
+        add("Annex_Ground_Right", "annex", gf, "glass_dark", u0=e["u1"] + 0.35, u1=an["u1"] - 0.4, conf=ac, src=an["source"])
+    else:
+        add("Annex_Ground", "annex", gf, "glass_dark", u0=an["u0"] + 0.4, u1=an["u1"] - 0.4, conf=ac, src=an["source"])
     return R
 
 
@@ -627,14 +672,41 @@ def generate_cladding_panels(P, F):
     mb.box((an["u0"] + 0.25, -d + 0.25, h - 0.9), (an["u1"] - 0.25, -0.05, h - 0.6), "roof_membrane")  # roof, set down
     mb.box((an["u0"] + 0.4, -d, an["first_floor_glazing"]["v1"]), (an["u1"] - 0.4, -d + 0.3, sb["v0"]), "cladding_white")
     mb.box((an["u0"] + 0.4, -d, an["ground_glazing"]["v1"]), (an["u1"] - 0.4, -d + 0.3, an["first_floor_glazing"]["v0"]), "cladding_white")
-    mb.box((an["u0"] + 0.4, -d, 0.0), (an["u1"] - 0.4, -d + 0.3, an["ground_glazing"]["v0"]), "concrete")
-    mb.box((an["u0"] + 0.4, -d + 0.3, 0.0), (an["u1"] - 0.4, -d + 0.5, sb["v0"]), "glass_dark")
+    e = P.get("entrance", {})
+    for (ua, ub) in ((an["u0"] + 0.4, e.get("u0", an["u1"]) - 0.35), (e.get("u1", an["u1"]) + 0.35, an["u1"] - 0.4)):
+        if ub - ua > 0.05:
+            mb.box((ua, -d, 0.0), (ub, -d + 0.3, an["ground_glazing"]["v0"]), "concrete")
+    mb.box((an["u0"] + 0.4, -d + 2.4, 0.0), (an["u1"] - 0.4, -d + 2.6, sb["v0"]), "glass_dark")
     obs.append(mb.to_object(c, tag("podium_body", conf_of(an, "plan_position"), an["source"])))
     # the podium's fascia: panelled cladding that carries the sign band
     mb = MeshBuilder("SKY_Annex_Fascia_Cladding")
     ff = lambda s, v, out: F.annex_front(P, an["u0"] + (an["u1"] - an["u0"]) * s, v, out - 0.25)
     _clad(mb, ff, lambda v: an["u1"] - an["u0"], sb["v0"], sb["v1"], 0.25, "cladding_white", _rng(mb.name), vs=[sb["v0"], sb["v1"]], pw=1.45)
     obs.append(mb.to_object(c, tag("podium_fascia", conf_of(an, "height"), an["source"])))
+    ew = A.get("east_wing")
+    if ew:
+        # the light grey east wing: ACP panels with ribbon windows on the
+        # upper floors and a charcoal block lower down, set back from the front
+        mb = MeshBuilder("SKY_FrontA_EastWing")
+        sb_ = ew["setback"]
+        fw = lambda s_, v, out: F.A(ew["u0"] + (ew["u1"] - ew["u0"]) * s_, v, out - sb_)
+        cuts = sorted([tuple(r) for r in ew["ribbons"]] + [tuple(ew["charcoal"])])
+        z = 0.0
+        for (za, zb) in cuts + [(ew["v1"], ew["v1"])]:
+            if za - z > 0.05:
+                _clad(mb, fw, lambda v: ew["u1"] - ew["u0"], z, za, 0.3, "cladding_grey", _rng(mb.name + str(z)), pw=1.45, body="cladding_grey")
+            z = zb
+        for (za, zb) in ew["ribbons"]:
+            mb.box((ew["u0"], sb_ - 0.02, za), (ew["u1"], sb_ + 0.05, zb), "glass_dark")
+            u = ew["u0"]
+            while u <= ew["u1"] + EPS:
+                mb.box((u - 0.03, sb_ - 0.14, za), (u + 0.03, sb_ - 0.02, zb), "aluminium_dark")
+                u += 1.45
+        za, zb = ew["charcoal"]
+        mb.box((ew["u0"], sb_ - 0.45, za), (ew["u1"], sb_, zb), "charcoal")
+        mb.box((ew["u0"], sb_ - 0.02, 0.0), (ew["u1"], sb_ + 0.05, za), "glass_dark")       # ground floor glazing
+        mb.box((ew["u0"], -0.35, 0.0), (ew["u0"] + 0.06, sb_, ew["v1"]), "cladding_grey")   # return to the main front
+        obs.append(mb.to_object(c, tag("east_wing", ew["confidence"], ew["source"])))
     lv = an["first_floor_glazing"].get("louvre_spacing")
     if lv:
         mb = MeshBuilder("SKY_Annex_Louvres")
@@ -772,20 +844,146 @@ def generate_signage_zones(P, F, standoff=0.1, box=0.12):
 
 # ============================================================== entrance ===
 def generate_entrance(P, F):
-    """Glazed entrance with a slim canopy on the podium front. Its position
-    is inferred (the doors are hidden in the photo): observed = false."""
+    """The way in: a recessed glass porch in the podium front. A glass
+    screen with two pairs of doors and pull handles, fixed side lights and a
+    transom, set back under a soffit; a fascia with the building's name; a
+    slim cantilevered canopy on two tie rods; three steps and a ramp with
+    handrails down to the drive. Its position is inferred (the doors are
+    hidden in the photo), so every part is tagged observed = false."""
     c = sub_collection("Entrance")
     e = P["entrance"]
     d = P["annex"]["depth"]
-    mb = MeshBuilder("SKY_Entrance")
-    u0, u1 = e["u0"], e["u1"]
-    mb.box((u0, -d - 0.12, 0.0), (u1, -d - 0.02, e["door_h"]), "glass_dark")
-    for u in (u0, (u0 + u1) / 2, u1):
-        mb.box((u - 0.05, -d - 0.16, 0.0), (u + 0.05, -d - 0.02, e["door_h"]), "aluminium_dark")
-    mb.box((u0 - 0.05, -d - 0.16, e["door_h"]), (u1 + 0.05, -d - 0.02, e["door_h"] + 0.12), "aluminium_dark")
-    mb.box((u0 - 0.6, -d - e["canopy_depth"], e["canopy_v"]), (u1 + 0.6, -d, e["canopy_v"] + e["canopy_th"]), "cladding_white")
-    mb.box((u0 - 0.6, -d - e["canopy_depth"], 0.0), (u1 + 0.6, -d, 0.15), "concrete")
-    return [mb.to_object(c, tag("entrance", e["confidence"], e["source"], e.get("observed", False)))]
+    u0, u1, rc = e["u0"], e["u1"], e["recess"]
+    n, rs, td = e.get("steps", 3), e.get("riser", 0.15), e.get("tread", 0.35)
+    zf = n * rs                                    # porch floor level
+    dh, th_ = e["door_h"], e.get("transom_h", 0.6)
+    yb = -d + rc                                   # the glass screen, at the back of the recess
+    src, conf = e["source"], e["confidence"]
+    obs = []
+    mb = MeshBuilder("SKY_Entrance_Porch")
+    mb.box((u0, -d, 0.0), (u1, yb, zf), "concrete")                                  # porch floor
+    mb.box((u0, -d, zf), (u1, yb, zf + 0.02), "paving")
+    for ua, ub in ((u0 - 0.35, u0), (u1, u1 + 0.35)):                                # recess side walls
+        mb.box((ua, -d - 0.05, 0.0), (ub, yb + 0.05, zf + dh + th_ + 0.25), "cladding_white")
+    mb.box((u0, -d - 0.05, zf + dh + th_), (u1, yb, zf + dh + th_ + 0.25), "cladding_white")   # soffit
+    for k in range(int((u1 - u0) / 1.2)):                                            # downlights in the soffit
+        uu = u0 + 0.6 + k * 1.2
+        mb.box((uu - 0.09, -d + rc / 2 - 0.09, zf + dh + th_ - 0.01), (uu + 0.09, -d + rc / 2 + 0.09, zf + dh + th_), "interior_light")
+    obs.append(mb.to_object(c, tag("entrance_porch", conf, src, False)))
+
+    gl = MeshBuilder("SKY_Entrance_GlassScreen")
+    mid = (u0 + u1) / 2
+    leaves = [mid - 2.0, mid - 1.0, mid, mid + 1.0, mid + 2.0]                       # two pairs of 1 m leaves
+    gl.box((u0 + 0.05, yb - 0.04, zf), (u1 - 0.05, yb - 0.02, zf + dh + th_), "glass_bluegrey")
+    for uu in [u0 + 0.05, u1 - 0.05] + leaves:
+        gl.box((uu - 0.04, yb - 0.09, zf), (uu + 0.04, yb + 0.01, zf + dh + th_), "aluminium_dark")
+    gl.box((u0, yb - 0.09, zf + dh - 0.05), (u1, yb + 0.01, zf + dh + 0.05), "aluminium_dark")       # transom bar
+    gl.box((u0, yb - 0.09, zf), (u1, yb + 0.01, zf + 0.08), "aluminium_dark")                        # threshold
+    for uu in (mid - 1.0, mid + 1.0):                                                # the two pairs' meeting stiles
+        for sgn in (-1, 1):
+            hx = uu + sgn * 0.12
+            gl.box((hx - 0.018, yb - 0.16, zf + 0.5), (hx + 0.018, yb - 0.12, zf + 1.7), "aluminium")  # pull handles
+            for zz in (zf + 0.55, zf + 1.65):
+                gl.box((hx - 0.012, yb - 0.12, zz - 0.012), (hx + 0.012, yb - 0.09, zz + 0.012), "aluminium")
+    obs.append(gl.to_object(c, tag("entrance_doors", conf, src, False)))
+
+    cn = MeshBuilder("SKY_Entrance_Canopy")
+    zc = e["canopy_v"]
+    cn.box((u0 - 0.9, -d - e["canopy_depth"], zc), (u1 + 0.9, -d, zc + e["canopy_th"]), "aluminium_dark")
+    cn.box((u0 - 0.9, -d - e["canopy_depth"], zc - 0.01), (u1 + 0.9, -d, zc), "cladding_white")
+    for uu in (u0 - 0.4, u1 + 0.4):                                                  # tie rods back to the fascia
+        cn.slab_between((uu, -d - e["canopy_depth"] + 0.15, zc + e["canopy_th"]), (uu, -d, zc + 2.0), 0.03, 0.03, (1, 0, 0), "aluminium")
+    for k in range(int((u1 - u0 + 1.8) / 1.4)):                                      # downlights under the canopy
+        uu = u0 - 0.5 + k * 1.4
+        cn.box((uu - 0.08, -d - e["canopy_depth"] / 2 - 0.08, zc - 0.012), (uu + 0.08, -d - e["canopy_depth"] / 2 + 0.08, zc - 0.01), "interior_light")
+    obs.append(cn.to_object(c, tag("entrance_canopy", conf, src, False)))
+
+    st = MeshBuilder("SKY_Entrance_Steps_Ramp")
+    ramp_w = 1.3
+    su1 = u1 - ramp_w - 0.1
+    for k in range(1, n):                                                            # treads outside the recess
+        st.box((u0, -d - k * td, 0.0), (su1, -d - (k - 1) * td, zf - k * rs), "concrete")
+        st.box((u0, -d - k * td, zf - k * rs), (su1, -d - k * td + 0.04, zf - k * rs + 0.005), "kerb_yellow")   # nosing
+    rl = zf * 12.0                                                                   # 1:12 ramp
+    ra, rb = u1 - ramp_w, u1
+    st.hexa([(ra, -d - rl, 0.0), (rb, -d - rl, 0.0), (rb, -d, 0.0), (ra, -d, 0.0),
+             (ra, -d - rl, 0.01), (rb, -d - rl, 0.01), (rb, -d, zf), (ra, -d, zf)], "concrete")
+    for uu in (ra + 0.05, rb - 0.05):                                                # handrails both sides
+        for k in range(4):
+            yy = -d - rl * k / 3
+            zz = zf * (1 - k / 3)
+            st.box((uu - 0.025, yy - 0.025, zz), (uu + 0.025, yy + 0.025, zz + 0.9), "aluminium")
+        st.slab_between((uu, -d - rl, 0.9), (uu, -d, zf + 0.9), 0.045, 0.045, (1, 0, 0), "aluminium")
+    obs.append(st.to_object(c, tag("entrance_steps_ramp", conf, src, False)))
+
+    # the name on the fascia above the porch
+    name = e.get("name")
+    if name:
+        rot = Matrix.Rotation(math.radians(90), 4, "X")
+        me = _text_mesh(name, 0.42, "SKY_Entrance_Name", _sign_mat("#f3efe6"))
+        ob = bpy.data.objects.new(me.name, me)
+        c.objects.link(ob)
+        ob.matrix_world = Matrix.Translation(((u0 + u1) / 2, -d - 0.32, zc + e["canopy_th"] + 0.42)) @ rot
+        for k, v in tag("entrance_name", conf, src, False).items():
+            ob[k] = v
+        obs.append(ob)
+    return obs
+
+
+# ============================================================== interiors ==
+def generate_interiors(P, F):
+    """Lit offices behind the glass, so the glazing reads as it does in the
+    photograph: per floor, a carpet, a false ceiling with light panels, two
+    rows of desks with screens along the facade and a dark core wall behind.
+    Only the zone the glass shows (6.5 m deep) is fitted out."""
+    I = P.get("interiors")
+    if not I:
+        return []
+    c = sub_collection("Interiors")
+    m = P["massing"]
+    f2f, dep = m["floor_to_floor"], I["depth"]
+    A, B = P["front_A"], P["side_B"]
+    zones = [("FrontA", "A", A["dark_recess"]["u0"] + 0.2, A["glass_block"]["u1"] - 0.2)]
+    fr = B["angular_frame"]
+    zones.append(("SideB", "B", fr["left_u"] + 0.4, B["slanted_glazing"]["u1"] - 0.3))
+    obs = []
+    for zname, fac, ua, ub in zones:
+        mb = MeshBuilder(f"SKY_Interior_{zname}")
+        rng = _rng(mb.name)
+
+        def bx(u0_, u1_, in0, in1, z0, z1, mat):
+            # u along the facade, `in` metres in from the glass line
+            if fac == "A":
+                mb.box((u0_, in0, z0), (u1_, in1, z1), mat)
+            else:
+                mb.box((in0, F.L - u1_, z0), (in1, F.L - u0_, z1), mat)
+        for fl in I["floors"]:
+            z = fl * f2f
+            ceil = z + f2f - 0.75
+            bx(ua, ub, 0.5, dep, z + 0.0, z + 0.03, "interior_carpet")
+            bx(ua, ub, 0.5, dep, ceil, ceil + 0.03, "interior_ceiling")
+            bx(ua, ub, dep, dep + 0.2, z, ceil, "interior_core")
+            u = ua + 1.2
+            while u < ub - 0.9:                                         # light panels 0.6 x 1.2
+                for inn in (1.6, 3.6, 5.6):
+                    bx(u - 0.3, u + 0.3, inn - 0.6, inn + 0.6, ceil - 0.012, ceil, "interior_light")
+                u += 2.4
+            for row in (1.6, 3.9):                                      # desks with screens
+                u = ua + 0.9
+                while u < ub - 0.9:
+                    w = 1.4
+                    bx(u, u + w, row, row + 0.7, z + 0.72, z + 0.75, "interior_desk")
+                    bx(u + 0.05, u + 0.09, row + 0.05, row + 0.65, z, z + 0.72, "interior_desk")
+                    bx(u + w - 0.09, u + w - 0.05, row + 0.05, row + 0.65, z, z + 0.72, "interior_desk")
+                    if rng.random() < 0.85:
+                        bx(u + 0.45, u + 0.95, row + 0.5, row + 0.53, z + 0.8, z + 1.12, "interior_screen")
+                    if rng.random() < 0.55:                             # a chair, pushed in or pulled out
+                        off = rng.uniform(-0.1, 0.35)
+                        bx(u + 0.45, u + 0.95, row - 0.55 - off, row - 0.05 - off, z + 0.42, z + 0.48, "interior_chair")
+                        bx(u + 0.45, u + 0.95, row - 0.6 - off, row - 0.55 - off, z + 0.48, z + 1.05, "interior_chair")
+                    u += 1.6
+        obs.append(mb.to_object(c, tag("interior_fitout", I["confidence"], I["source"], False)))
+    return obs
 
 
 # ============================================================ mass / roof ==
@@ -810,29 +1008,36 @@ def generate_core_massing(P, F):
         mb.box((0.9, 0.9, z - th), (W - 0.5, L - 0.5, z), "concrete")
     obs.append(mb.to_object(c, tag("floor_slabs", conf_of(m, "floor_to_floor"), m["source"]["floor_to_floor"])))
     core = MeshBuilder("SKY_Interior_Core")
-    core.box((2.1, 2.1, 0), (W - 2.2, L - 2.2, roof - th), "glass_dark")
+    ew = P["front_A"].get("east_wing")
+    core.box((7.4, 7.4, 0), (W - 2.2, L - 2.2, roof - th), "glass_dark")   # behind the fitted-out zone
     obs.append(core.to_object(c, tag("interior_core", "low", "Neutral dark volume behind the glazing; the interior is not surveyed", False)))
     mb = MeshBuilder("SKY_FacadeC_Rear_Unobserved")
     mb.box((0.2, L - 0.3, 0), (W, L, H), "cladding_white")
     obs.append(mb.to_object(c, tag("facade_rear", "low", m["hidden_sides"], False)))
     mb = MeshBuilder("SKY_FacadeD_FarSide_Unobserved")
-    mb.box((W - 0.3, 0.2, 0), (W, L - 0.3, H), "cladding_white")
+    HD = ew["v1"] if ew else H
+    mb.box((W - 0.3, 0.2 + (ew["setback"] if ew else 0), 0), (W, L - 0.3, HD), "cladding_grey" if ew else "cladding_white")
     obs.append(mb.to_object(c, tag("facade_far_side", "low", m["hidden_sides"], False)))
     mb = MeshBuilder("SKY_Roof_Slab")
     mb.box((0.2, 0.2, roof - th), (W - 0.3, L - 0.3, roof), "roof_membrane")
     obs.append(mb.to_object(c, tag("roof_slab", "medium", "photo: flat roof behind a parapet; finish not visible")))
     mb = MeshBuilder("SKY_Roof_Parapet_Inner")
-    mb.box((0.0, 0.0, roof), (W - 0.3, 0.2, H), "cladding_white")                 # behind A's parapet
+    WA = ew["u0"] if ew else W - 0.3
+    mb.box((0.0, 0.0, roof), (WA, 0.2, H), "cladding_white")                      # behind A's parapet
+    if ew:
+        mb.box((WA, ew["setback"], roof), (W - 0.3, ew["setback"] + 0.2, ew["v1"]), "cladding_grey")
     mb.box((0.0, 0.2, roof), (0.2, L - ep, Bp), "cladding_white")                # behind B's parapet (lower)
     mb.box((0.0, L - ep, roof), (0.2, L - 0.3, H), "cladding_white")             # behind the end pier
     obs.append(mb.to_object(c, tag("parapet_inner", "medium", "photo: parapet line continuous along A and B; B's reads about 1 m lower")))
     mb = MeshBuilder("SKY_Roof_Coping")
     o, t = 0.05, 0.06
-    mb.box((-o, -pa - o, H), (W + o, 0.2 + o, H + t), "aluminium")                # along A
+    mb.box((-o, -pa - o, H), ((WA if ew else W) + o, 0.2 + o, H + t), "aluminium")   # along A
+    if ew:
+        mb.box((WA, ew["setback"] - o, ew["v1"]), (W + o, ew["setback"] + 0.2 + o, ew["v1"] + t), "aluminium")
     mb.box((-pb - o, 0.2 + o, Bp), (0.2 + o, L - ep, Bp + t), "aluminium")        # along B
     mb.box((-pb - o, L - ep, H), (0.2 + o, L + o, H + t), "aluminium")            # end pier
     mb.box((0.2 + o, L - 0.3 - o, H), (W + o, L + o, H + t), "aluminium")         # rear
-    mb.box((W - 0.3 - o, 0.2 + o, H), (W + o, L - 0.3 - o, H + t), "aluminium")   # far side
+    mb.box((W - 0.3 - o, 0.2 + o, HD), (W + o, L - 0.3 - o, HD + t), "aluminium")   # far side
     obs.append(mb.to_object(c, tag("parapet_coping", "low", "Coping assumed: every parapet has one, but its profile is too small to read in the photograph", False)))
     ms = P.get("roof", {}).get("mast")
     if ms:
@@ -846,6 +1051,78 @@ def generate_core_massing(P, F):
             mb.box((x - s, y - s, zz), (x + s, y + s, zz + 0.05), "aluminium")
         mb.slab_between((x, y, z0 + h), (x, y, z0 + h + 2.0), 0.06, 0.06, (1, 0, 0), "aluminium")
         obs.append(mb.to_object(c, tag("roof_mast", ms["confidence"], ms["source"])))
+    return obs
+
+
+# ================================================================= gate ====
+def generate_gate(P, F, G, y0, x0):
+    """The front gate: clad pillars with caps and lamps at each opening, a
+    sliding vehicle gate shown open (parked behind the wall on its track), a
+    pedestrian gate swung open, a raised boom barrier and a guard cabin.
+    Positions are assumed (the photograph does not show the gate)."""
+    c = sub_collection("Site")
+    src, conf = G.get("source", ""), G.get("confidence", "low")
+    gv, gp = G["vehicle"], G.get("pedestrian")
+    pw, ph = G.get("pillar", 0.6), G.get("pillar_h", 2.3)
+    lh = G.get("leaf_h", 1.9)
+    obs = []
+    mb = MeshBuilder("SKY_Site_Gate_Pillars")
+    for ga, gb in [gv] + ([gp] if gp else []):
+        for uu in (ga - pw / 2, gb + pw / 2):
+            mb.box((uu - pw / 2, y0 - 0.17, 0.0), (uu + pw / 2, y0 + 0.42, ph), "cladding_white")
+            mb.box((uu - pw / 2 - 0.08, y0 - 0.25, ph), (uu + pw / 2 + 0.08, y0 + 0.5, ph + 0.12), "aluminium_dark")
+            mb.box((uu - 0.12, y0 - 0.06, ph + 0.12), (uu + 0.12, y0 + 0.31, ph + 0.42), "interior_light")   # pillar lamp
+    obs.append(mb.to_object(c, tag("gate_pillars", conf, src, False)))
+
+    gt = MeshBuilder("SKY_Site_Gate_Leaves")
+    ln = gv[1] - gv[0]
+    ya = y0 + 0.45                                                   # the leaf, slid open behind the wall
+    ua = gv[0] - ln - 0.1
+    gt.box((gv[0] - ln - 0.3, ya - 0.05, 0.0), (gv[1], ya + 0.05, 0.03), "aluminium")   # ground track across the opening
+    for zz in (0.12, lh - 0.06):
+        gt.box((ua, ya - 0.04, zz - 0.04), (ua + ln, ya + 0.04, zz + 0.04), "charcoal")
+    u = ua
+    while u <= ua + ln + EPS:
+        gt.box((u - 0.012, ya - 0.012, 0.08), (u + 0.012, ya + 0.012, lh), "charcoal")
+        u += 0.12
+    for k in range(3):                                               # wheels on the track
+        uu = ua + 0.4 + k * (ln - 0.8) / 2
+        gt.box((uu - 0.08, ya - 0.03, 0.0), (uu + 0.08, ya + 0.03, 0.12), "charcoal")
+    if gp:   # the pedestrian gate, swung inward
+        w_ = gp[1] - gp[0]
+        hinge = gp[0]
+        for zz in (0.12, lh - 0.06):
+            gt.box((hinge - 0.04, y0 + 0.3, zz - 0.04), (hinge + 0.04, y0 + 0.3 + w_, zz + 0.04), "charcoal")
+        yy = y0 + 0.3
+        while yy <= y0 + 0.3 + w_ + EPS:
+            gt.box((hinge - 0.012, yy - 0.012, 0.08), (hinge + 0.012, yy + 0.012, lh), "charcoal")
+            yy += 0.12
+    obs.append(gt.to_object(c, tag("gate_leaves", conf, src, False)))
+
+    bb = MeshBuilder("SKY_Site_BoomBarrier")
+    ub = gv[1] + 0.9
+    yb_ = y0 + 1.1
+    bb.box((ub - 0.18, yb_ - 0.18, 0.0), (ub + 0.18, yb_ + 0.18, 1.0), "kerb_yellow")
+    for k in range(8):                                               # the arm, raised
+        bb.box((ub - 0.05, yb_ - 0.05, 1.0 + k * 0.5), (ub + 0.05, yb_ + 0.05, 1.5 + k * 0.5), _sign_mat("#d23c32") if k % 2 == 0 else "cladding_white")
+    obs.append(bb.to_object(c, tag("boom_barrier", conf, src, False)))
+
+    cb = MeshBuilder("SKY_Site_GuardCabin")
+    ca, cb_ = G.get("cabin", [gv[0] - 4.4, gv[0] - 1.8])
+    cw, cd, chh = G.get("cabin_size", [2.6, 2.4, 2.7])
+    ya, yb2 = y0 + 1.3, y0 + 1.3 + cd
+    cb.box((ca, ya, 0.0), (cb_, yb2, 0.15), "concrete")
+    for (xa, xb, ya_, yb_2) in ((ca, cb_, ya, ya + 0.12), (ca, cb_, yb2 - 0.12, yb2), (ca, ca + 0.12, ya, yb2), (cb_ - 0.12, cb_, ya, yb2)):
+        cb.box((xa, ya_, 0.15), (xb, yb_2, 1.0), "cladding_white")
+        cb.box((xa, ya_, 2.2), (xb, yb_2, chh), "cladding_white")
+    cb.box((ca + 0.05, ya + 0.05, 1.0), (cb_ - 0.05, yb2 - 0.05, 2.2), "glass_dark")          # window band on all sides
+    for uu in (ca, cb_):
+        for yy in (ya, yb2):
+            cb.box((uu - 0.06, yy - 0.06, 1.0), (uu + 0.06, yy + 0.06, 2.2), "aluminium_dark")
+    cb.box((cb_ - 0.02, ya + 0.6, 0.15), (cb_ + 0.02, ya + 1.5, 2.1), "charcoal")               # door
+    cb.box((ca - 0.3, ya - 0.3, chh), (cb_ + 0.3, yb2 + 0.3, chh + 0.18), "cladding_white")    # roof slab
+    cb.box((ca + 0.6, ya + 0.6, chh - 0.02), (ca + 1.2, ya + 1.2, chh), "interior_light")
+    obs.append(cb.to_object(c, tag("guard_cabin", conf, src, False)))
     return obs
 
 
@@ -864,16 +1141,48 @@ def generate_site(P, F):
     h = s["boundary_wall_h"]
     src = "photo: read from one oblique view; positions approximate"
     obs = []
+    G = s.get("gate", {})
+    gv, gp = G.get("vehicle", [P["annex"]["u0"] - 1.0, P["annex"]["u1"] + 1.0]), G.get("pedestrian")
     mb = MeshBuilder("SKY_Site_Paving")
     mb.box((x0, y0, -0.3), (x1, y1, 0.0), "paving")
-    mb.box((P["annex"]["u0"] - 1.0, y0 - 2.0, -0.3), (P["annex"]["u1"] + 1.0, y0, 0.01), "asphalt")     # driveway apron
+    mb.box((gv[0] - 1.5, y0 - 6.0, -0.3), (gv[1] + 1.5, y0 + 0.3, 0.01), "asphalt")                  # apron to the street
     obs.append(mb.to_object(c, tag("site_paving", s["confidence"], s["source"])))
+    if G:
+        e = P["entrance"]
+        dr = MeshBuilder("SKY_Site_Drive")
+        ydrop = -d - 3.2
+        dr.box((gv[0], y0 + 0.25, 0.0), (gv[1], ydrop, 0.012), "asphalt")                         # the drive in
+        dr.box((gv[0], ydrop - 0.01, 0.0), (e["u1"] + 2.5, -d - 0.6, 0.012), "asphalt")          # drop-off along the podium
+        for k in range(int((gv[1] - gv[0]) / 0.5)):                                              # speed breaker at the gate
+            dr.box((gv[0] + k * 0.5, y0 + 2.0, 0.0), (gv[0] + (k + 1) * 0.5, y0 + 2.5, 0.07), "kerb_yellow" if k % 2 == 0 else "kerb_black")
+        if gp:   # the footpath from the pedestrian gate to the steps, with a zebra across the drop-off
+            dr.box((gp[0], y0 + 0.25, 0.0), (gp[1], ydrop, 0.02), "paving")
+            yy = ydrop
+            while yy < -d - 0.7:
+                dr.box((gp[0], yy, 0.012), (gp[1], min(yy + 0.45, -d - 0.6), 0.02), "zebra")
+                yy += 0.9
+        # kerbs along the drive
+        for (xa, xb) in ((gv[0] - 0.15, gv[0]), (gv[1], gv[1] + 0.15)):
+            yy, k = y0 + 0.25, 0
+            while yy < ydrop - 0.01:
+                dr.box((xa, yy, 0.0), (xb, min(yy + 1.0, ydrop), 0.14), "kerb_yellow" if k % 2 == 0 else "kerb_black")
+                yy += 1.0; k += 1
+        obs.append(dr.to_object(c, tag("drive_and_path", "low", G.get("source", ""), False)))
     mb = MeshBuilder("SKY_Site_BoundaryWall")
-    g0, g1 = P["annex"]["u0"] - 1.0, P["annex"]["u1"] + 1.0
-    mb.box((x0, y0, 0), (g0, y0 + 0.25, h), "concrete")
-    mb.box((g1, y0, 0), (x1, y0 + 0.25, h), "concrete")
+    gaps = sorted([tuple(gv)] + ([tuple(gp)] if gp else []))
+    u = x0
+    for (ga, gb) in gaps:
+        if ga - u > 0.05:
+            mb.box((u, y0, 0), (ga, y0 + 0.25, h), "concrete")
+            mb.box((u, y0 - 0.03, h), (ga, y0 + 0.28, h + 0.08), "cladding_white")              # coping
+        u = gb
+    mb.box((u, y0, 0), (x1, y0 + 0.25, h), "concrete")
+    mb.box((u, y0 - 0.03, h), (x1, y0 + 0.28, h + 0.08), "cladding_white")
     mb.box((x0, y0 + 0.25, 0), (x0 + 0.25, y1, h), "concrete")
-    obs.append(mb.to_object(c, tag("boundary_wall", "low", "photo: low wall along the road on side B; the gate is inferred at the podium")))
+    mb.box((x0 - 0.03, y0 + 0.25, h), (x0 + 0.28, y1, h + 0.08), "cladding_white")
+    obs.append(mb.to_object(c, tag("boundary_wall", "low", "photo: low wall along the road on side B and across the front; gates where the drive and the path cross it")))
+    if G:
+        obs += generate_gate(P, F, G, y0, x0)
     mb = MeshBuilder("SKY_Site_Footpath_Kerb")
     mb.box((x0 - 1.6, y0, -0.3), (x0, y1, 0.12), "concrete")
     n, seg = 0, 1.0
@@ -1290,6 +1599,7 @@ GROUPS = [
     ("Roof", "Roof slab, parapets, coping, mast", True),
     ("Podium", "Two-storey block in front of the curtain wall, with the entrance", True),
     ("Signage", "Sign boxes, mounts and lettering", True),
+    ("Interiors", "Lit offices behind the glass (assumed layout)", False),
     ("Site", "Paving, boundary wall, kerb, palms and trees", True),
 ]
 
@@ -1299,6 +1609,8 @@ def group_of(name):
         return "Signage"
     if "Annex" in name or "Entrance" in name:
         return "Podium"
+    if "Interior" in name:
+        return "Interiors"
     if "Site_" in name:
         return "Site"
     if "Roof" in name:
@@ -1332,6 +1644,7 @@ def build(P):
     objs += generate_angular_facade_frame(P, F)
     objs += generate_signage_zones(P, F)
     objs += generate_entrance(P, F)
+    objs += generate_interiors(P, F)
     objs += generate_site(P, F)
     coll = bpy.data.collections[COLL_NAME]
     root = bpy.data.objects.new(ROOT_NAME, None)
