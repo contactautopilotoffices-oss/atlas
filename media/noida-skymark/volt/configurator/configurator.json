@@ -1,0 +1,58 @@
+{
+ "parts": [
+  "panels",
+  "seating",
+  "floor",
+  "surfaces",
+  "walls",
+  "soft",
+  "cafe"
+ ],
+ "views": [
+  {
+   "slug": "cafeteria",
+   "room": "Cafeteria",
+   "beauty": "beauty.jpg",
+   "masks": {
+    "panels": "mask_panels.png",
+    "seating": "mask_seating.png",
+    "floor": "mask_floor.png",
+    "surfaces": "mask_surfaces.png",
+    "walls": "mask_walls.png",
+    "soft": "mask_soft.png",
+    "cafe": "mask_cafe.png"
+   },
+   "variants": []
+  },
+  {
+   "slug": "18-seater-conference-room",
+   "room": "18 seater conference room",
+   "beauty": "beauty.jpg",
+   "masks": {
+    "panels": "mask_panels.png",
+    "seating": "mask_seating.png",
+    "floor": "mask_floor.png",
+    "surfaces": "mask_surfaces.png",
+    "walls": "mask_walls.png",
+    "soft": "mask_soft.png",
+    "cafe": "mask_cafe.png"
+   },
+   "variants": []
+  },
+  {
+   "slug": "open-workstations",
+   "room": "Open workstations",
+   "beauty": "beauty.jpg",
+   "masks": {
+    "panels": "mask_panels.png",
+    "seating": "mask_seating.png",
+    "floor": "mask_floor.png",
+    "surfaces": "mask_surfaces.png",
+    "walls": "mask_walls.png",
+    "soft": "mask_soft.png",
+    "cafe": "mask_cafe.png"
+   },
+   "variants": []
+  }
+ ]
+}
