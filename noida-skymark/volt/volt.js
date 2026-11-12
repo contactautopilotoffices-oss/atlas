@@ -1191,6 +1191,9 @@ function pickFloor(e) {
 }
 addEventListener('keydown', (e) => {
   if (e.target.tagName === 'INPUT') return;
+  if (walk.active && panoReady && panoCur && !e.repeat && ['KeyW', 'ArrowUp', 'KeyS', 'ArrowDown'].includes(e.code)) {     // in a 360: each press is one hop
+    const n = hopDir(e.code === 'KeyS' || e.code === 'ArrowDown' ? -1 : 1); if (n) { hopTo(n, false); walk.hopLatch = true; return; }
+  }
   walk.keys[e.code] = true;
   if (e.code === 'Escape') { if ($('#lb').classList.contains('show')) $('#lb').classList.remove('show'); else setMode('orbit', true); }
   if (mode === 'orbit' && !walk.active) {
@@ -1213,11 +1216,14 @@ function moveJoy(e) { const r = joy.getBoundingClientRect(); let x = (e.clientX 
 function stepWalk(dt) {
   const k = walk.keys; let f = (k.KeyW || k.ArrowUp ? 1 : 0) - (k.KeyS || k.ArrowDown ? 1 : 0) + walk.joy[1];
   if (panoReady && panoCur && !walk.glide) {
-    hopCool = Math.max(0, hopCool - dt);
     if (k.ArrowLeft) walk.yaw += dt * 1.6; if (k.ArrowRight) walk.yaw -= dt * 1.6;
-    if (Math.abs(f) > .4 && hopCool === 0) { const n = hopDir(f > 0 ? 1 : -1); if (n) return hopTo(n, false); }
-    if (Math.abs(f) > .4 && hopDir(f > 0 ? 1 : -1)) return k.ArrowLeft || k.ArrowRight;   // waiting out the hop: do not slide
-    if (k.ArrowLeft || k.ArrowRight) return true;
+    if (Math.abs(f) < .2) walk.hopLatch = false;
+    if (Math.abs(f) > .4) {                                   // one hop per press (or per push of the stick): never bounce on
+      if (walk.hopLatch) return k.ArrowLeft || k.ArrowRight;
+      const n = hopDir(f > 0 ? 1 : -1); walk.hopLatch = true;
+      if (n) return hopTo(n, false);
+      walk.hopLatch = false;                                  // no 360 that way: walk on in the model
+    } else if (k.ArrowLeft || k.ArrowRight) return true;
   }
   let s = (k.KeyD ? 1 : 0) - (k.KeyA ? 1 : 0) + walk.joy[0];
   if (k.ArrowLeft) walk.yaw += dt * 1.6; if (k.ArrowRight) walk.yaw -= dt * 1.6;
@@ -1344,10 +1350,18 @@ function hopTo(n, faceIt) {
   if (!n) return false; if (faceIt) walk.yaw = Math.atan2(n.y - walk.y, n.x - walk.x);
   walk.x = n.x; walk.y = n.y; walk.glide = null; walk.path = null; hopCool = .55; needRender = true; return true;
 }
-function hopDir(sign) {                    // sign 1: the 360 ahead, -1: the one behind
+let hopF = null, hopFor = null;
+function hopDir(sign) {                    // sign 1: the 360 ahead, -1: the one behind. "Ahead" follows the walkable route (through doors), not just a straight line
+  const ox = walk.x, oy = walk.y, key = ox.toFixed(2) + ',' + oy.toFixed(2); if (hopFor !== key) { hopF = flood(ox, oy); hopFor = key; }      // from where you stand (a picture may still be loading)
   const fx = Math.cos(walk.yaw) * sign, fy = Math.sin(walk.yaw) * sign; let best = null, bs = 1e9;
-  for (const o of hopCands()) { const ax = (o.n.x - panoCur.x) / o.d, ay = (o.n.y - panoCur.y) / o.d, cos = ax * fx + ay * fy; if (cos < .55) continue;
-    const sc = o.d * (2 - cos); if (sc < bs) { bs = sc; best = o.n; } }
+  for (const n of NODES) {
+    if (Math.hypot(n.x - ox, n.y - oy) < .5) continue; const [i, j] = cellOf(n.x, n.y), d = hopF.dist[j * PG.nx + i];
+    if (!(d > .8 && d < 15)) continue; const pts = pathTo(hopF, n.x, n.y); if (!pts || pts.length < 2) continue;
+    let k = 0, acc = 0; while (k < pts.length - 1 && acc < 1.5) { acc += Math.hypot(pts[k + 1][0] - pts[k][0], pts[k + 1][1] - pts[k][1]); k++; }
+    const bx = pts[k][0] - ox, by = pts[k][1] - oy, bl = Math.hypot(bx, by) || 1, sx = n.x - ox, sy = n.y - oy, sl = Math.hypot(sx, sy) || 1;
+    const cos = Math.max((bx * fx + by * fy) / bl, (sx * fx + sy * fy) / sl);      // ahead either by the first steps of the route or by where it finally is
+    if (cos < .4) continue; const sc = d * (2.2 - cos); if (sc < bs) { bs = sc; best = n; }
+  }
   return best;
 }
 const hopEl = document.createElement('div'); hopEl.id = 'hops'; hopEl.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:3'; document.body.appendChild(hopEl);
@@ -1671,4 +1685,4 @@ function moodApply(k, hex) { const g = MOOD.find(x => x.k === k); if (!g) return
 $('#b-finish').onclick = () => { const on = !$('#mood').classList.contains('show'); $('#mood').classList.toggle('show', on); $('#b-finish').classList.toggle('on', on); if (on && photoOn) photoHide(); };
 $('#moodx').onclick = () => { $('#mood').classList.remove('show'); $('#b-finish').classList.remove('on'); };
 { const m = location.hash.match(/mb=([^&]+)/); if (m) m[1].split(',').forEach(p => { const [k, c] = p.split(':'); if (k && /^[0-9a-f]{6}$/i.test(c || '')) moodApply(k, '#' + c); }); }
-window.__volt = { pano: () => ({ ready: panoReady, n: NODES.length, cur: panoCur && panoCur.id, near: NODES.map(q => [q.id, +Math.hypot(q.x - walk.x, q.y - walk.y).toFixed(1), lineSee([walk.x, walk.y], [q.x, q.y])]).sort((a, b) => a[1] - b[1]).slice(0, 5) }), RAIL, flood, pathTo, clearSpot, cellOf, PG, goTo, enterVolt, entranceView, presenter, runCommand, remoteState, snap, POIS, showPlace, entranceView, L, ROOMS, controls, flyToRoom, overview, enterWalk, setMode, startTour, stopTour, walk, enterFloor, toBuilding, setTOD, get stage() { return stage; }, get mode() { return mode; }, render: () => { needRender = true; } };
+window.__volt = { hopDir: (sg) => { const n = hopDir(sg); return n && n.id; }, nodes: () => NODES, pano: () => ({ ready: panoReady, n: NODES.length, cur: panoCur && panoCur.id, near: NODES.map(q => [q.id, +Math.hypot(q.x - walk.x, q.y - walk.y).toFixed(1), lineSee([walk.x, walk.y], [q.x, q.y])]).sort((a, b) => a[1] - b[1]).slice(0, 5) }), RAIL, flood, pathTo, clearSpot, cellOf, PG, goTo, enterVolt, entranceView, presenter, runCommand, remoteState, snap, POIS, showPlace, entranceView, L, ROOMS, controls, flyToRoom, overview, enterWalk, setMode, startTour, stopTour, walk, enterFloor, toBuilding, setTOD, get stage() { return stage; }, get mode() { return mode; }, render: () => { needRender = true; } };
