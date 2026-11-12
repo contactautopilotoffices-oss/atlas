@@ -15,6 +15,13 @@ const STEPS = [
   { k: 'cafe', name: 'Cafe', hint: 'Cafe chairs and stools.', sw: [['Orange', '#dd8d36'], ['Yellow', '#e8c547'], ['White', '#f3f1ec'], ['Teal', '#2f7d74'], ['Black', '#1d1d1f']] },
   { k: 'done', name: 'Good to go' },
 ];
+const PRESETS = [   // the same four as blender/variants.json; until those are rendered in full they are applied live
+  { name: 'volt', label: 'Volt as designed', palette: {} },
+  { name: 'sunlit', label: 'Sunlit yellow', palette: { panels: '#e8c547', seating: '#3b3f46', floor: '#8d877f', surfaces: '#e9e4dc', walls: '#f4efe6', soft: '#b8b2a9', cafe: '#e8c547' } },
+  { name: 'calm', label: 'Calm sage', palette: { panels: '#8aa37b', seating: '#22324f', floor: '#6f7a80', surfaces: '#c8a27c', walls: '#e4e9e1', soft: '#2f5d58', cafe: '#f3f1ec' } },
+  { name: 'deep', label: 'Deep navy', palette: { panels: '#2c4a7a', seating: '#1d1d1f', floor: '#3b3d42', surfaces: '#8a6a52', walls: '#ebe7e1', soft: '#2c4a7a', cafe: '#1d1d1f' } },
+];
+const palettes = () => (view && view.variants && view.variants.length) ? view.variants : PRESETS;
 const pick = {};                     // part -> hex
 let cfg = null, view = null, step = 0, base = null, lum = null, masks = {}, ref = {}, cv = $('#cv'), g = cv.getContext('2d', { willReadFrequently: true });
 const toLin = new Float32Array(256).map((_, i) => { const c = i / 255; return c <= .04045 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4; });
@@ -65,24 +72,27 @@ function drawPanel() {
   if (s.k === 'done') {
     const rows = STEPS.filter(x => x.sw).map(x => { const c = pick[x.k], nm = c ? (x.sw.find(q => q[1] === c) || [c])[0] : 'As designed'; return `<div><b style="background:${c || 'transparent'}"></b>${x.name}: ${nm}</div>`; }).join('');
     P.innerHTML = `<h3>Good to go</h3><p>Your choices for this office. Share the link, or call and we will render it properly.</p><div id="sum">${rows}</div>
-      ${view && view.variants && view.variants.length ? `<p style="margin-top:12px">Designer palettes, each a full render of the same view:</p><div id="pal">${view.variants.map(v => `<button data-v="${v.name}">${v.label}</button>`).join('')}</div>` : ''}
+      <p style="margin-top:12px">Designer palettes:</p><div id="pal">${palettes().map(v => `<button data-v="${v.name}">${v.label}</button>`).join('')}</div>
       <div class="row"><button class="btn" id="back">&larr; Back</button><span style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn w" id="share">Copy link to this design</button><a class="btn p" href="tel:+919004363328" style="text-decoration:none">Call 90043 63328</a><a class="btn" href="./" style="text-decoration:none">Walk the floor</a></span></div>`;
     document.querySelectorAll('#pal button').forEach(b => b.onclick = () => showVariant(b.dataset.v));
     $('#share').onclick = async () => { const u = share(); try { await navigator.clipboard.writeText(u); $('#share').textContent = 'Link copied'; } catch (e) { prompt('Copy this link', u); } };
   } else {
     const has = !!masks[s.k];
-    P.innerHTML = `<h3>${step + 1}. ${s.name}</h3><p>${s.hint}${has ? '' : ' (not in this view; pick another room above to see it)'}</p>
+    P.innerHTML = `<div id="pal" style="margin:0 0 10px">${palettes().map(v => `<button data-v="${v.name}">${v.label}</button>`).join('')}</div><h3>${step + 1}. ${s.name}</h3><p>${s.hint}${has ? '' : ' (not in this view; pick another room above to see it)'}</p>
       <div class="sw">${s.sw.map(([n, c]) => `<button data-c="${c}" style="background:${c}" class="${pick[s.k] === c ? 'on' : ''}" title="${n}"><span>${n}</span></button>`).join('')}<button data-c="" style="background:conic-gradient(#ddd 0 25%,#999 0 50%,#ddd 0 75%,#999 0)" title="As designed" class="${!pick[s.k] ? 'on' : ''}"><span>As designed</span></button></div>
       <div class="row"><button class="btn" id="back" ${step ? '' : 'disabled style="opacity:.4"'}>&larr; Back</button><button class="btn p" id="next">${step === STEPS.length - 2 ? 'Good to go' : 'Next'} &rarr;</button></div>`;
+    document.querySelectorAll('#pal button').forEach(b => b.onclick = () => showVariant(b.dataset.v));
     P.querySelectorAll('.sw button').forEach(b => b.onclick = () => { if (b.dataset.c) pick[s.k] = b.dataset.c; else delete pick[s.k]; $('#vimg').classList.remove('on'); paint(); share(); drawSteps(); drawPanel(); });
     $('#next').onclick = () => { step = Math.min(STEPS.length - 1, step + 1); drawSteps(); drawPanel(); };
   }
   const bk = $('#back'); if (bk) bk.onclick = () => { step = Math.max(0, step - 1); drawSteps(); drawPanel(); };
 }
 async function showVariant(name) {
-  const v = view.variants.find(x => x.name === name); if (!v) return;
+  const v = palettes().find(x => x.name === name); if (!v) return;
   Object.keys(pick).forEach(k => delete pick[k]); Object.assign(pick, v.palette); share();
-  const el = $('#vimg'); el.classList.remove('on'); el.src = CFG + view.slug + '/' + v.file; await el.decode().catch(() => {}); el.classList.add('on'); paint();
+  const el = $('#vimg'); el.classList.remove('on');
+  if (v.file) { el.src = CFG + view.slug + '/' + v.file; await el.decode().catch(() => {}); el.classList.add('on'); }      // a full render of this palette, when there is one
+  paint(); drawSteps(); drawPanel();
   document.querySelectorAll('#pal button').forEach(b => b.classList.toggle('btn', true));
 }
 const hold = $('#hold');
