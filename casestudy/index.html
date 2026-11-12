@@ -232,7 +232,7 @@ function fitTables(deck) {
   });
 }
 /* After the rows are sized: beside a table, a side column of two or more
-   boxes drops its last box so its foot is level with the table's foot.
+   boxes spreads them so the last one's foot is level with the table's foot.
    Undone on any page where that would overflow. */
 function alignSides(deck) {
   Array.prototype.forEach.call(deck.querySelectorAll(".page .cols"), function (cols) {
@@ -241,9 +241,11 @@ function alignSides(deck) {
     if (!(main.tagName === "TABLE" || main.querySelector(":scope > table"))) return;
     var last = side.lastElementChild, gap = main.getBoundingClientRect().bottom - last.getBoundingClientRect().bottom;
     if (gap < 4) return;
-    var was = last.style.marginTop, page = cols.closest(".page");
-    last.style.marginTop = (parseFloat(getComputedStyle(last).marginTop) + gap) + "px";
-    if (page.scrollHeight > page.clientHeight + 1) last.style.marginTop = was;
+    /* the free height is shared between the boxes, so no one gap opens in the middle */
+    var boxes = Array.prototype.slice.call(side.children, 1), each = gap / boxes.length, page = cols.closest(".page");
+    var was = boxes.map(function (el) { return el.style.marginTop; });
+    boxes.forEach(function (el) { el.style.marginTop = (parseFloat(getComputedStyle(el).marginTop) + each) + "px"; });
+    if (page.scrollHeight > page.clientHeight + 1) boxes.forEach(function (el, i) { el.style.marginTop = was[i]; });
   });
 }
 (window.CaseLoad || Promise.resolve()).then(function () {
