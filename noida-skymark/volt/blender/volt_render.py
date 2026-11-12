@@ -396,6 +396,8 @@ FIN = {"wood": "oak_floor", "stone": "stone", "tile": "tile", "vinyl": "vinyl"}
 for r in L["rooms"]:
     if r["floor"] in FIN:
         x0, y0, x1, y1 = r["box"]; add("finish_" + r["name"], [(x0, y0, 0.003), (x1, y0, 0.003), (x1, y1, 0.003), (x0, y1, 0.003)], [(0, 1, 2, 3)], FIN[r["floor"]])
+for r in L.get("extra_rooms", []):     # washrooms: tiled floor (assumed finish; the CAD gives only the fixtures)
+    x0, y0, x1, y1 = r["box"]; add("finish_" + r["name"], [(x0, y0, 0.004), (x1, y0, 0.004), (x1, y1, 0.004), (x0, y1, 0.004)], [(0, 1, 2, 3)], "tile")
 for r in L["rooms"]:      # tile grid where the drawing shows 2x2 panels
     x0, y0, x1, y1 = r["box"]
     if sum(1 for l in L["lights"] if l["kind"] == "panel600" and x0 <= l["c"][0] <= x1 and y0 <= l["c"][1] <= y1) >= 2:
@@ -546,6 +548,18 @@ for d in L["doors"]:
     for s_ in (-1, 1): box(d["c"][0] + ca * (d["w"] / 2 - 0.09) - sa * 0.035 * s_, d["c"][1] + sa * (d["w"] / 2 - 0.09) + ca * 0.035 * s_, 0.95, 0.025, 0.03, 0.3, d["a"], "alu", 0.008, "handle")
 
 # ------------------------------------------------------------------ ceiling lights (positions from the drawing's ceiling plan)
+# rooms the ceiling plan leaves without lights (reception, entry, washrooms...) get downlights on a 1.8 m grid: assumed, and real lamps so they are lit
+ASSUMED_LIGHTS = []
+for r in list(L["rooms"]) + L.get("extra_rooms", []):
+    b = r["box"]
+    if r["name"] in ("UPS room", "Server room") or any(b[0] <= l["c"][0] <= b[2] and b[1] <= l["c"][1] <= b[3] for l in L["lights"]): continue
+    nx, ny = max(1, round((b[2] - b[0]) / 1.8)), max(1, round((b[3] - b[1]) / 1.8))
+    for i in range(nx):
+        for j in range(ny): ASSUMED_LIGHTS.append([b[0] + (i + .5) * (b[2] - b[0]) / nx, b[1] + (j + .5) * (b[3] - b[1]) / ny])
+for x, y in ASSUMED_LIGHTS:
+    L["lights"].append({"kind": "downlight", "c": [x, y], "assumed": True})
+    lt = bpy.data.lights.new("Downlight", "SPOT"); lt.energy = 22; lt.spot_size = math.radians(110); lt.spot_blend = 0.6; lt.shadow_soft_size = 0.05; lt.color = light_col(4000, 0.9)
+    lo = bpy.data.objects.new("Downlight", lt); COL.objects.link(lo); lo.location = (x, y, H - 0.03)
 panel = box_mesh(0.6, 0.6, 0.004, 0, "led"); spot = cyl_mesh(0.055, 0.004, "led_spot", 20)
 trim = lathe_mesh(((0.056, 0.0), (0.060, -0.004), (0.078, -0.004), (0.082, 0.0)), "white_metal", 24)        # the downlight's white rim
 frame = [box_mesh(0.62, 0.012, 0.008, 0.003, "white_metal"), box_mesh(0.012, 0.62, 0.008, 0.003, "white_metal")]   # the panel's thin frame
@@ -555,6 +569,30 @@ for l in L["lights"]:
     if l["kind"] == "panel600":
         for s_ in (-1, 1): put(frame[0], T(x, y + s_ * 0.304, H - 0.009), "light_frame"); put(frame[1], T(x + s_ * 0.304, y, H - 0.009), "light_frame")
     else: put(trim, T(x, y, H - 0.001), "light_trim")
+
+# ------------------------------------------------------------------ washroom fixtures (WCs, urinals, health faucets from the CAD's plumbing blocks)
+def wall_behind(x, y):
+    best = None
+    for k_ in range(16):
+        a_ = k_ * math.pi / 8; dx, dy = math.cos(a_), math.sin(a_)
+        for i in range(1, 30):
+            if in_wall(x + dx * i * 0.04, y + dy * i * 0.04):
+                if best is None or i < best[0]: best = (i, a_)
+                break
+    return (best[1], best[0] * 0.04) if best else (0.0, 0.6)
+for f in L.get("fixtures", []):
+    x, y = f["c"]; a_, dw = wall_behind(x, y); ca, sa = math.cos(a_), math.sin(a_); rz = a_ - math.pi / 2
+    P = lambda t: (x + ca * t, y + sa * t)
+    if f["kind"] == "wc":
+        cx, cy = P(dw - 0.09); box(cx, cy, 0.40, 0.38, 0.16, 0.40, rz, "mug_white", 0.03, "wc_cistern")
+        fx, fy = P(dw - 0.172); box(fx, fy, 0.63, 0.20, 0.008, 0.13, rz, "alu", 0.003, "wc_flush")
+        bx, by = P(dw - 0.17 - 0.27); box(bx, by, 0.0, 0.36, 0.52, 0.39, rz, "mug_white", 0.08, "wc_pan")
+        sx, sy = P(dw - 0.17 - 0.29); box(sx, sy, 0.39, 0.37, 0.47, 0.025, rz, "mug_white", 0.012, "wc_seat")
+    elif f["kind"] == "urinal":
+        ux, uy = P(dw - 0.15); box(ux, uy, 0.42, 0.36, 0.30, 0.64, rz, "mug_white", 0.08, "urinal")
+        px, py = P(dw - 0.03); box(px, py, 1.06, 0.03, 0.03, 0.45, rz, "alu", 0.008, "urinal_pipe")
+    else:
+        hx, hy = P(dw - 0.03); box(hx, hy, 0.5, 0.05, 0.05, 0.13, rz, "alu", 0.01, "health_faucet")
 
 # ------------------------------------------------------------------ furniture
 def in_box(b, x, y, pad=0.0): return b[0] - pad <= x <= b[2] + pad and b[1] - pad <= y <= b[3] + pad

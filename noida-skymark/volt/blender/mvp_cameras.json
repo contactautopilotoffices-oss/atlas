@@ -1,0 +1,226 @@
+{
+ "about": "MVP shot list: the most important places of the office, in walking order. Five cameras set by hand (lift lobby, reception, entry, both washrooms); four from cameras.json.",
+ "eye": 1.5,
+ "rooms": [
+  {
+   "room": "Lift lobby",
+   "slug": "lift-lobby",
+   "still": {
+    "pos": [
+     26.7,
+     4.7,
+     1.5
+    ],
+    "look": [
+     29.2,
+     8.2,
+     1.1
+    ],
+    "lens_mm": 18
+   },
+   "pano": {
+    "pos": [
+     26.7,
+     4.7,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "Reception",
+   "slug": "reception",
+   "still": {
+    "pos": [
+     30.6,
+     8.6,
+     1.5
+    ],
+    "look": [
+     25.9,
+     5.0,
+     1.1
+    ],
+    "lens_mm": 20
+   },
+   "pano": {
+    "pos": [
+     30.6,
+     8.6,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "Entry",
+   "slug": "entry",
+   "still": {
+    "pos": [
+     24.3,
+     8.7,
+     1.5
+    ],
+    "look": [
+     15.5,
+     8.6,
+     1.1
+    ],
+    "lens_mm": 20
+   },
+   "pano": {
+    "pos": [
+     24.3,
+     8.7,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "Open workstations",
+   "slug": "open-workstations",
+   "floor": "carpet",
+   "still": {
+    "pos": [
+     9.3,
+     14.75,
+     1.5
+    ],
+    "look": [
+     18.5,
+     21.2,
+     1.05
+    ],
+    "lens_mm": 20
+   },
+   "pano": {
+    "pos": [
+     12.99,
+     22.56,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "06 seater meeting room",
+   "slug": "06-seater-meeting-room",
+   "floor": "carpet",
+   "still": {
+    "pos": [
+     26.9,
+     27.14,
+     1.5
+    ],
+    "look": [
+     28.59,
+     26.12,
+     1.05
+    ],
+    "lens_mm": 20
+   },
+   "pano": {
+    "pos": [
+     27.1,
+     27.14,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "18 seater conference room",
+   "slug": "18-seater-conference-room",
+   "floor": "carpet",
+   "still": {
+    "pos": [
+     9.5,
+     27.25,
+     1.5
+    ],
+    "look": [
+     16.5,
+     25.3,
+     0.95
+    ],
+    "lens_mm": 18
+   },
+   "pano": {
+    "pos": [
+     16.94,
+     27.05,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "Cafeteria",
+   "slug": "cafeteria",
+   "floor": "wood",
+   "still": {
+    "pos": [
+     4.45,
+     23.8,
+     1.5
+    ],
+    "look": [
+     1.5,
+     26.7,
+     0.95
+    ],
+    "lens_mm": 18
+   },
+   "pano": {
+    "pos": [
+     4.05,
+     23.89,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "Gents washroom",
+   "slug": "gents-washroom",
+   "still": {
+    "pos": [
+     21.6,
+     3.3,
+     1.5
+    ],
+    "look": [
+     24.6,
+     2.0,
+     0.9
+    ],
+    "lens_mm": 16
+   },
+   "pano": {
+    "pos": [
+     21.6,
+     3.3,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "Ladies washroom",
+   "slug": "ladies-washroom",
+   "still": {
+    "pos": [
+     24.6,
+     5.3,
+     1.5
+    ],
+    "look": [
+     21.8,
+     6.5,
+     0.9
+    ],
+    "lens_mm": 16
+   },
+   "pano": {
+    "pos": [
+     24.6,
+     5.3,
+     1.5
+    ]
+   }
+  }
+ ]
+}
