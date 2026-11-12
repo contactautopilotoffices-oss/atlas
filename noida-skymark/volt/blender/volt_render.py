@@ -796,6 +796,11 @@ def plants_done():
     for p in me.polygons: p.use_smooth = True
     me.materials.append(MATS["leaf"]); o = bpy.data.objects.new("plants", me); COL.objects.link(o)
 PH = L["heights"]["planter"]
+# the stair read from the CAD STAIR layer: 25 risers, drawn as solid steps (balusters are left out)
+if L.get("stairs"):
+    ST = L["stairs"]
+    for i, (sx0, sy0, sx1, sy1) in enumerate(ST["steps"]):
+        box((sx0 + sx1) / 2, (sy0 + sy1) / 2, 0.0, sx1 - sx0, sy1 - sy0, min((i + 1) * ST["riser"], 2.75), 0.0, "paint", 0.006, "stair_step")
 for p in L["planters"]:
     x, y = p["c"]; a, w, d = p["a"], p["w"], p["d"]
     box(x, y, 0.04, w, d, PH - 0.04, a, "planter_white", 0.008, "planter"); box(x, y, 0.06, w * 0.5, d + 0.01, PH - 0.12, a, "oak", 0.004, "planter_panel")

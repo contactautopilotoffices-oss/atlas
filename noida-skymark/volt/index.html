@@ -205,6 +205,27 @@ body[data-stage=building][data-mode=orbit] #floors{display:block}
 @media (max-width:760px){ #floors{top:auto;bottom:calc(84px + env(safe-area-inset-bottom));transform:none;right:8px;left:8px;width:auto} #floors .rows{display:flex;gap:4px;overflow-x:auto} #floors .rows button{flex:none;width:auto;margin:0} #floors .rows button small,#floors .h{display:none} }
 /* lightbox */
 #info .logo,.logo{height:34px;display:block;margin:0 0 8px}
+#photo{position:fixed;inset:0;z-index:3;display:none;background:#111;overflow:hidden;pointer-events:auto}
+#photo.show{display:block}
+#photo .pl{position:absolute;inset:0;background:#222 center/cover no-repeat;opacity:0;transition:opacity .7s ease;transform:scale(1.0)}
+#photo .pl.on{opacity:1;animation:kb 16s ease-out forwards}
+@keyframes kb{from{transform:scale(1.0)}to{transform:scale(1.07)}}
+#photo .pshade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.25),transparent 22%,transparent 60%,rgba(0,0,0,.6));pointer-events:none}
+#photo .plogo{position:absolute;right:18px;top:16px;background:rgba(255,255,255,.94);border-radius:12px;padding:7px 14px;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+#photo .plogo img{height:34px;display:block}
+#photo .pinfo{position:absolute;left:18px;bottom:calc(182px + env(safe-area-inset-bottom));color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.6);max-width:46vw}
+#photo .pinfo b{display:block;font-size:30px;letter-spacing:-.01em;line-height:1.1;margin-top:6px} #photo .pinfo small{display:block;font-size:13.5px;opacity:.9;margin-top:4px}
+#photo .ptag{display:inline-block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;background:#dd8d36;color:#1d1c1a;border-radius:999px;padding:4px 10px;text-shadow:none}
+#photo .pdots{display:flex;gap:6px;margin-top:10px} #photo .pdots i{width:34px;height:5px;border-radius:3px;background:rgba(255,255,255,.4);cursor:pointer} #photo .pdots i.on{background:#fff}
+#photo .pnav{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:64px;border-radius:12px;background:rgba(0,0,0,.35);color:#fff;font-size:34px;line-height:1;backdrop-filter:blur(6px)}
+#photo .pnav.l{left:12px} #photo .pnav.r{right:12px}
+#photo .pbtns{position:absolute;right:18px;bottom:calc(182px + env(safe-area-inset-bottom));display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+#photo .pbtns button,#photo .pbtns a{padding:11px 16px;border-radius:12px;font-weight:700;font-size:13.5px;background:rgba(255,255,255,.92);color:#1d1c1a;text-decoration:none}
+#photo .pbtns a.pcall{background:#dd8d36}
+#pback{position:fixed;left:50%;bottom:calc(182px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:8;display:none;padding:10px 16px;border-radius:999px;font-weight:700;font-size:13px;background:#dd8d36;color:#1d1c1a;box-shadow:0 8px 24px rgba(0,0,0,.3)}
+#pback.show{display:block}
+body.photo #card,body.photo #hint,body.photo #caption{display:none!important}
+@media (max-width:700px){#photo .pinfo b{font-size:22px}#photo .pnav{width:38px;height:52px}#photo .pbtns{left:12px;right:12px;bottom:calc(120px + env(safe-area-inset-bottom));justify-content:center}#photo .pinfo{bottom:calc(172px + env(safe-area-inset-bottom));max-width:80vw}}
 #gal{position:fixed;inset:0;z-index:9;background:rgba(24,22,20,.94);display:none;flex-direction:column;padding:22px 22px 18px;color:#f3efe8;overflow:auto}
 #gal.show{display:flex} #gal .gh{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:16px} #gal .gh b{font-size:22px} #gal .gh span{opacity:.65;font-size:13px;flex:1;min-width:200px}
 #gal .gh button{background:#f3efe8;color:#1d1c1a;padding:9px 16px;border-radius:10px;font-weight:700;font-size:13px}
@@ -323,6 +344,15 @@ body[data-stage=building][data-mode=orbit] #floors{display:block}
 </div></div>
 <button id="pairchip"></button>
 <div id="ptr"></div>
+<div id="photo">
+  <div class="pl" id="pla"></div><div class="pl" id="plb"></div>
+  <div class="pshade"></div>
+  <div class="plogo"><img src="/media/noida-skymark/volt/volt-logo.png" alt="Volt"></div>
+  <div class="pinfo"><span class="ptag" id="ptag">Photoreal render</span><b id="pname"></b><small id="pmeta"></small><div class="pdots" id="pdots"></div></div>
+  <button class="pnav l" id="pprev" aria-label="Previous room">&#8249;</button><button class="pnav r" id="pnext" aria-label="Next room">&#8250;</button>
+  <div class="pbtns"><button id="pfree">Free walk in the 3D model</button><a class="pcall" href="tel:+919004363328">Call 90043 63328</a></div>
+</div>
+<button id="pback">Back to the photoreal view</button>
 <div id="gal"></div>
 <div id="lb"><img id="lbimg" alt=""><div class="cap" id="lbcap"></div></div>
 <div id="load"><b>Building Volt's floor from the CAD…</b></div>
