@@ -964,11 +964,12 @@ const grid = (() => {
   g.fillStyle = '#fff';                                                         // every door is an opening you can walk through (the leaf is drawn separately)
   L.doors.forEach(d => { const ca = Math.cos(d.a), sa = Math.sin(d.a), hw = Math.max(d.w, .9) / 2 - .02, hd = .45; poly([[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([u, v]) => [d.c[0] + ca * u * hw - sa * v * hd, d.c[1] + sa * u * hw + ca * v * hd])); g.fill(); });
   g.fillStyle = '#000';
+  const sightData = g.getImageData(0, 0, c.width, c.height).data;     // walls, columns and glass only (no furniture): for what you can see, not where you can stand
   L.desks.forEach(d => { const ca = Math.cos(d.a), sa = Math.sin(d.a); poly([[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([u, v]) => [d.c[0] + ca * u * d.w / 2 - sa * v * d.d / 2, d.c[1] + sa * u * d.w / 2 + ca * v * d.d / 2])); g.fill(); });
   L.tables.forEach(t => { if (t.circle) { const [a, b] = T(t.circle); g.beginPath(); g.arc(a, b, t.circle[2] * GRID, 0, 7); g.fill(); } else { poly(t.poly); g.fill(); } });
   L.planters.forEach(p => { const ca = Math.cos(p.a), sa = Math.sin(p.a); poly([[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([u, v]) => [p.c[0] + ca * u * p.w / 2 - sa * v * p.d / 2, p.c[1] + sa * u * p.w / 2 + ca * v * p.d / 2])); g.fill(); });
   const data = g.getImageData(0, 0, c.width, c.height).data;
-  return { c, T, free(x, y) { const [a, b] = T([x, y]); const i = ((b | 0) * c.width + (a | 0)) * 4; return a >= 0 && b >= 0 && a < c.width && b < c.height && data[i] > 128; } };
+  return { c, T, see(x, y) { const [a, b] = T([x, y]); const i = ((b | 0) * c.width + (a | 0)) * 4; return a >= 0 && b >= 0 && a < c.width && b < c.height && sightData[i] > 128; }, free(x, y) { const [a, b] = T([x, y]); const i = ((b | 0) * c.width + (a | 0)) * 4; return a >= 0 && b >= 0 && a < c.width && b < c.height && data[i] > 128; } };
 })();
 const R_BODY = .16;
 const freeAt = (x, y) => { for (let k = 0; k < 8; k++) { const a = k * Math.PI / 4; if (!grid.free(x + Math.cos(a) * R_BODY, y + Math.sin(a) * R_BODY)) return false; } return grid.free(x, y); };
@@ -1016,6 +1017,7 @@ function flood(x, y) {                                                          
 }
 function pathTo(F, x, y) { let [i, j] = cellOf(x, y); let k = j * PG.nx + i; if (!(F.dist[k] >= 0)) { const [fx, fy] = nearestFree(x, y); [i, j] = cellOf(fx, fy); k = j * PG.nx + i; if (!(F.dist[k] >= 0)) return null; }
   const pts = []; for (let g = 0; g < 5000; g++) { pts.push(cellXY(k % PG.nx, (k / PG.nx) | 0)); if (F.par[k] === k) break; k = F.par[k]; } return pts.reverse(); }
+const lineSee = (a, b) => { const d = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.ceil(d / .08); for (let t = 1; t < n; t++) if (!grid.see(a[0] + (b[0] - a[0]) * t / n, a[1] + (b[1] - a[1]) * t / n)) return false; return true; };
 const lineFree = (a, b) => { const d = Math.hypot(b[0] - a[0], b[1] - a[1]), n = Math.ceil(d / .1); for (let t = 1; t <= n; t++) if (!freeAt(a[0] + (b[0] - a[0]) * t / n, a[1] + (b[1] - a[1]) * t / n)) return false; return true; };
 function smooth(pts) { if (!pts || pts.length < 3) return pts; const out = [pts[0]]; let a = 0; while (a < pts.length - 1) { let b = pts.length - 1; while (b > a + 1 && !lineFree(pts[a], pts[b])) b--; out.push(pts[b]); a = b; } return out; }
 function goTo(x, y) {
@@ -1310,7 +1312,7 @@ function panoLoad(id) {
 }
 function panoPick(x, y) {                           // the nearest render that can see you (no wall between), with some stickiness so it does not flicker
   const near = NODES.map(n => ({ n, d: Math.hypot(n.x - x, n.y - y) })).sort((p, q) => p.d - q.d).slice(0, 8);
-  const R = 3.5, ok = (o) => o.d < R && (o.d < .35 || lineFree([x, y], [o.n.x, o.n.y]));      // a 360 only where you really are; elsewhere the model shows
+  const R = 3.5, ok = (o) => o.d < R && (o.d < .35 || lineSee([x, y], [o.n.x, o.n.y]));      // a 360 only where you really are; elsewhere the model shows
   let best = near.find(ok);
   if (panoCur) { const cur = near.find(o => o.n === panoCur); if (cur && ok(cur) && (!best || cur.d < best.d + .8)) best = cur; }
   return best ? best.n : null;
@@ -1336,7 +1338,7 @@ let hopCool = 0;
 function hopCands() {
   if (!panoCur) return [];
   return NODES.filter(n => n !== panoCur).map(n => ({ n, d: Math.hypot(n.x - panoCur.x, n.y - panoCur.y) }))
-    .filter(o => o.d > .8 && o.d < 16 && lineFree([panoCur.x, panoCur.y], [o.n.x, o.n.y]));
+    .filter(o => o.d > .8 && o.d < 16 && lineSee([panoCur.x, panoCur.y], [o.n.x, o.n.y]));
 }
 function hopTo(n, faceIt) {
   if (!n) return false; if (faceIt) walk.yaw = Math.atan2(n.y - walk.y, n.x - walk.x);
@@ -1669,4 +1671,4 @@ function moodApply(k, hex) { const g = MOOD.find(x => x.k === k); if (!g) return
 $('#b-finish').onclick = () => { const on = !$('#mood').classList.contains('show'); $('#mood').classList.toggle('show', on); $('#b-finish').classList.toggle('on', on); if (on && photoOn) photoHide(); };
 $('#moodx').onclick = () => { $('#mood').classList.remove('show'); $('#b-finish').classList.remove('on'); };
 { const m = location.hash.match(/mb=([^&]+)/); if (m) m[1].split(',').forEach(p => { const [k, c] = p.split(':'); if (k && /^[0-9a-f]{6}$/i.test(c || '')) moodApply(k, '#' + c); }); }
-window.__volt = { pano: () => ({ ready: panoReady, n: NODES.length, cur: panoCur && panoCur.id, near: NODES.map(q => [q.id, +Math.hypot(q.x - walk.x, q.y - walk.y).toFixed(1), lineFree([walk.x, walk.y], [q.x, q.y])]).sort((a, b) => a[1] - b[1]).slice(0, 5) }), RAIL, flood, pathTo, clearSpot, cellOf, PG, goTo, enterVolt, entranceView, presenter, runCommand, remoteState, snap, POIS, showPlace, entranceView, L, ROOMS, controls, flyToRoom, overview, enterWalk, setMode, startTour, stopTour, walk, enterFloor, toBuilding, setTOD, get stage() { return stage; }, get mode() { return mode; }, render: () => { needRender = true; } };
+window.__volt = { pano: () => ({ ready: panoReady, n: NODES.length, cur: panoCur && panoCur.id, near: NODES.map(q => [q.id, +Math.hypot(q.x - walk.x, q.y - walk.y).toFixed(1), lineSee([walk.x, walk.y], [q.x, q.y])]).sort((a, b) => a[1] - b[1]).slice(0, 5) }), RAIL, flood, pathTo, clearSpot, cellOf, PG, goTo, enterVolt, entranceView, presenter, runCommand, remoteState, snap, POIS, showPlace, entranceView, L, ROOMS, controls, flyToRoom, overview, enterWalk, setMode, startTour, stopTour, walk, enterFloor, toBuilding, setTOD, get stage() { return stage; }, get mode() { return mode; }, render: () => { needRender = true; } };
