@@ -1,7 +1,7 @@
 // Presenter remote, phone side. Opened from the QR code on the display
 // (remote.html#s=<one-time secret>). After signing in with the same Atlas ID and
 // password, every control here sends a signed command to the display.
-import { sessionKeys, channelName, openLink, messenger, verify, credKey, gateHash, randomSecret } from './link.js';
+import { sessionKeys, channelName, openLink, messenger, verify, credKey, credKeyFromHash, gateHash, sha256hex, norm, randomSecret } from './link.js';
 
 const $ = (s) => document.querySelector(s);
 const show = (id) => { document.querySelectorAll('.screen').forEach(e => e.classList.toggle('show', e.id === id)); $('#ctl').classList.toggle('show', id === 'ctl'); };
@@ -15,8 +15,10 @@ else { try { cred = sessionStorage.getItem('volt-remote-cred'); } catch (e) {} i
 $('#f-sign').addEventListener('submit', async (e) => {
   e.preventDefault(); $('#e-sign').textContent = '';
   const id = $('#i-id').value, pw = $('#i-pw').value, ok = (window.VOLT_REMOTE && window.VOLT_REMOTE.presenters) || [];
-  if (!ok.includes(await gateHash(id, pw))) { $('#e-sign').textContent = 'Not recognised. Use the presenter ID and password.'; $('#i-pw').value = ''; return; }
-  cred = await credKey(id, pw); try { sessionStorage.setItem('volt-remote-cred', cred); } catch (e2) {}
+  const roots = (window.VOLT_REMOTE && window.VOLT_REMOTE.rootLogins) || {}, rp = await sha256hex(norm(pw));   // the Atlas root sign-in: ID in the list, password hash matches
+  const isRoot = roots[norm(id)] === rp;
+  if (!isRoot && !ok.includes(await gateHash(id, pw))) { $('#e-sign').textContent = 'Not recognised. Use the presenter ID and password.'; $('#i-pw').value = ''; return; }
+  cred = isRoot ? await credKeyFromHash('root:' + rp) : await credKey(id, pw); try { sessionStorage.setItem('volt-remote-cred', cred); } catch (e2) {}
   connect(false);
 });
 $('#b-retry').onclick = () => connect(false);

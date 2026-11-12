@@ -884,6 +884,18 @@ function openLB(list, cap) { lbList = list; lbI = 0; $('#lbimg').src = list[0]; 
 $('#lb').onclick = () => { if (lbList.length > 1 && lbI < lbList.length - 1) { lbI++; $('#lbimg').src = lbList[lbI]; $('#lbcap').textContent = $('#lb').dataset.cap + ` · ${lbI + 1}/${lbList.length}`; } else $('#lb').classList.remove('show'); };
 $('#proof').onclick = () => openLB(['/media/noida-skymark/volt/volt_seat_plan.png'], 'Every seat numbered on the CAD plan (W work, M meeting, C cafeteria, L lounge, O operator)');
 
+// ---------------------------------------------------------------- gallery of every photoreal render
+function openGallery(on = true) {
+  const g = $('#gal'); if (!on) { g.classList.remove('show'); $('#b-renders').classList.remove('on'); return; }
+  const names = Object.keys(OURS);
+  g.innerHTML = `<div class="gh"><b>Photoreal renders</b><span>${names.length} rooms. Blender Cycles from the CAD drawing, finished with Higgsfield. Tap one to enlarge.</span><button id="galx">Close</button></div><div class="gg"></div>`;
+  const grid2 = g.querySelector('.gg');
+  for (const n of names) { const t = document.createElement('div'); t.className = 't'; t.style.backgroundImage = `url(${OURS[n][0]})`; t.innerHTML = `<span>${n.replace(' / command centre', '')}</span>`;
+    t.onclick = () => openLB(roomImages({ name: n }), `${n}: photoreal render first, then the design renders from the Volt deck`); grid2.appendChild(t); }
+  g.querySelector('#galx').onclick = () => openGallery(false); g.classList.add('show'); $('#b-renders').classList.add('on');
+}
+$('#b-renders').onclick = () => openGallery(!$('#gal').classList.contains('show'));
+
 // ---------------------------------------------------------------- walls height (cut-away by default)
 let wallScale = CUT / H, wallTarget = CUT / H, wallsFull = false;
 wallsG.scale.y = wallScale;
@@ -1376,6 +1388,7 @@ const CMD = {
   elev: (a) => { stopTour(); if (a.kind === 'section' || a.kind === 'facade') elevKind = a.kind; if (FACADES[a.dir] !== undefined) elevDir = a.dir;
     if (mode !== 'elev') setMode('elev'); else elevSetup(true); },
   cut: (a) => { if (mode === 'elev') { $('#cut').value = Math.round(clampN(a.f, 0, 1) * 1000); elevSetup(false); } },
+  gallery: (a) => openGallery(a.open !== false),
   render: (a) => { const lb = $('#lb'); if (a.open === false) { lb.classList.remove('show'); return; }
     if (lb.classList.contains('show')) lb.onclick(); else if (focus && roomImages(focus).length) $('#cimg').onclick(); },
   proof: () => $('#proof').click(),
