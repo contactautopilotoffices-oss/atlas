@@ -186,7 +186,11 @@ function initGate() {
   let authed = false;
   try { if (handoff === HANDOFF) sessionStorage.setItem(AUTH_KEY, "1"); authed = sessionStorage.getItem(AUTH_KEY) === "1"; } catch (e) {}
   if (handoff === HANDOFF && CMS) { let id = null; try { id = sessionStorage.getItem("atlas-access-id"); } catch (e) {} CMS.signin(id); }
-  if (authed) { $("#gate").remove(); boot(); return; }
+  /* 2026-11-12: the gate is switched off at the founder's request, so the
+     study opens straight away for anyone with the link (it is linked from the
+     landlord page). The gate code above is kept so it can be switched back on
+     by restoring `if (authed)` here. */
+  if (authed || true) { $("#gate").remove(); $("#signout").style.display = "none"; boot(); return; }
   try { if (sessionStorage.getItem("noi-out") === "1") { sessionStorage.removeItem("noi-out"); const e = $("#g-err"); e.style.color = "var(--ok)"; e.textContent = "You have signed out on this device."; } } catch (e) {}
   $("#g-form").addEventListener("submit", e => { e.preventDefault(); $("#g-err").removeAttribute("style"); go(); });
   $("#g-id").focus();
