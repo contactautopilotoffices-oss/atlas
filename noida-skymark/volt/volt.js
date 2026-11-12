@@ -1607,4 +1607,24 @@ function snap(name, fov = 62) {
 presenter.ready();
 if (/[?&]present\b/.test(location.search) && !presenter.on) presenter.toggle();
 await panoInit();
+
+// ---------------------------------------------------------------- finishes: a live mood board. Each group is one material in the model, so a click recolours every item of that kind.
+const MOOD = [
+  { k: 'screens', name: 'Acoustic desk screens', mats: () => [mat.screenO], sw: ['#dd8d36', '#e8c547', '#2f7d74', '#2c4a7a', '#8aa37b', '#9a9690', '#c4553f'] },
+  { k: 'chairs', name: 'Task chairs', mats: () => [mat.chair], sw: ['#1d1d1f', '#3b3f46', '#22324f', '#2f5d58', '#6b2f2f'] },
+  { k: 'carpet', name: 'Carpet', mats: () => [mat.carpet], sw: ['#ffffff', '#c9c3bb', '#a7b0b8', '#b9a48d', '#9aa596'] },
+  { k: 'desks', name: 'Desk and table tops', mats: () => [mat.deskTop, mat.table], sw: ['#ffffff', '#c8a27c', '#8a6a52', '#e9e4dc', '#5e5a55'] },
+  { k: 'walls', name: 'Walls', mats: () => [mat.wall], sw: ['#f2efea', '#e7e1d6', '#dfe5dc', '#dde3ea', '#efe6e1'] },
+  { k: 'sofas', name: 'Lounge sofas', mats: () => [mat.sofa, mat.sofaTeal, mat.sofaOrange], sw: ['#a69687', '#286e7a', '#dd8d36', '#2c4a7a', '#7d8a6e', '#b8b2a9'] },
+  { k: 'cafe', name: 'Cafe chairs', mats: () => [mat.cafeShell], sw: ['#dd8d36', '#e8c547', '#f3f1ec', '#2f7d74', '#1d1d1f'] },
+];
+const moodSel = {};
+function moodApply(k, hex) { const g = MOOD.find(x => x.k === k); if (!g) return; moodSel[k] = hex; for (const m of g.mats()) if (m && m.color) m.color.set(hex); needRender = true; shadowsDirty = true;
+  document.querySelectorAll(`#moodg [data-k="${k}"] button`).forEach(b => b.classList.toggle('on', b.dataset.c === hex));
+  try { history.replaceState(null, '', '#mb=' + Object.entries(moodSel).map(([a, b]) => a + ':' + b.slice(1)).join(',')); } catch (e) {} }
+{ const g = $('#moodg'); for (const grp of MOOD) { const d = document.createElement('div'); d.innerHTML = `<h4>${grp.name}</h4><div class="sw" data-k="${grp.k}">${grp.sw.map(c => `<button data-c="${c}" title="${c}" style="background:${c}"></button>`).join('')}</div>`; g.appendChild(d);
+    d.querySelectorAll('button').forEach(b => b.onclick = () => moodApply(grp.k, b.dataset.c)); } }
+$('#b-finish').onclick = () => { const on = !$('#mood').classList.contains('show'); $('#mood').classList.toggle('show', on); $('#b-finish').classList.toggle('on', on); if (on && photoOn) photoHide(); };
+$('#moodx').onclick = () => { $('#mood').classList.remove('show'); $('#b-finish').classList.remove('on'); };
+{ const m = location.hash.match(/mb=([^&]+)/); if (m) m[1].split(',').forEach(p => { const [k, c] = p.split(':'); if (k && /^[0-9a-f]{6}$/i.test(c || '')) moodApply(k, '#' + c); }); }
 window.__volt = { RAIL, flood, pathTo, clearSpot, cellOf, PG, goTo, enterVolt, entranceView, presenter, runCommand, remoteState, snap, POIS, showPlace, entranceView, L, ROOMS, controls, flyToRoom, overview, enterWalk, setMode, startTour, stopTour, walk, enterFloor, toBuilding, setTOD, get stage() { return stage; }, get mode() { return mode; }, render: () => { needRender = true; } };
