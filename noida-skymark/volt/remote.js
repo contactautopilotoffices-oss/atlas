@@ -7,6 +7,7 @@ const $ = (s) => document.querySelector(s);
 const show = (id) => { document.querySelectorAll('.screen').forEach(e => e.classList.toggle('show', e.id === id)); $('#ctl').classList.toggle('show', id === 'ctl'); };
 const secret = (location.hash.match(/s=([0-9a-f]{16,64})/) || [])[1];
 const me = 'r-' + randomSecret(6);
+let rx = 0, bad = 0, tx = 0, retry = null;
 let link = null, keys = null, msgr = null, mode = 'k0', hello = null, state = {}, lastN = 0, cred = null, live = false, lastState = 0;
 
 if (!secret) show('s-nolink');
@@ -32,7 +33,11 @@ async function connect(take) {
       link = await openLink(await channelName(secret), onMsg, (st) => { if (st === 'down') setLive(false); });
       msgr = messenger(link, keys, me);
     }
-    await msgr.send('hello', { auth: true, take: !!take }, true);
+    $('#w-text').textContent = link.kind === 'local' ? 'WARNING: this site has no live link (Supabase keys missing), so this phone cannot reach the display. It only works between two tabs of one browser.' : 'Live link is up. Waiting for the display to answer…';
+    clearInterval(retry); tx = 0; rx = 0; bad = 0;
+    const ping = async () => { tx++; await msgr.send('hello', { auth: true, take: !!take }, true);
+      if (!hello && $('#s-wait').classList.contains('show')) $('#w-text').textContent = `${link.kind === 'local' ? 'No live link on this site. ' : 'Live link is up. '}Sent ${tx} hello${tx > 1 ? 's' : ''}; heard ${rx} message${rx === 1 ? '' : 's'} from the display${bad ? `, ${bad} could not be verified (sign-in mismatch)` : ''}.`; };
+    await ping(); retry = setInterval(() => { if (hello || tx >= 8) return clearInterval(retry); ping(); }, 2500);
     setTimeout(() => { if (!hello && $('#s-wait').classList.contains('show') && $('#b-take').style.display === 'none') {
       $('#w-title').textContent = 'No answer from the display'; $('#w-text').textContent = link.kind === 'local'
         ? 'This site has no live link set up, so the remote only reaches a display open in this same browser.' : 'Check that the display is still showing the QR code, then try again. Codes change each time Remote is opened.'; } }, 6000);
@@ -40,10 +45,11 @@ async function connect(take) {
 }
 
 async function onMsg(msg) {
+  if (msg && msg.f === 'display') rx++;
   if (!msg || msg.f !== 'display' || !(msg.n > lastN)) return;
   if (msg.a && msg.a.to && msg.a.to !== me) return;            // meant for another phone
   const early = ['welcome', 'busy', 'denied', 'wait', 'taken'].includes(msg.t);
-  if (!(await verify(msg, keys, early ? 'k0' : mode))) return;
+  if (!(await verify(msg, keys, early ? 'k0' : mode))) { bad++; return; }
   lastN = msg.n;
   if (msg.t === 'busy') { $('#w-title').textContent = 'Someone else has the remote'; $('#w-text').textContent = 'Another presenter is connected to this display.'; $('#b-take').style.display = ''; return; }
   if (msg.t === 'denied') { try { sessionStorage.removeItem('volt-remote-cred'); } catch (e) {} cred = null; link.close(); link = null; show('s-sign'); $('#e-sign').textContent = 'The display did not accept that ID and password.'; return; }

@@ -35,17 +35,19 @@ export function createPresenter({ run, hello, state }) {
     $('#pairnote').textContent = P.status === 'local' ? 'No live link is set up on this site, so the remote only works in another tab of this same browser.'
       : P.status === 'down' ? 'The live link dropped. Check the internet connection on this display.'
       : 'Sign in on the phone with the presenter ID and password.';
-    const chip = $('#pairchip'); chip.textContent = P.ctrl ? 'Remote connected' : 'Waiting for the remote · show QR'; chip.classList.toggle('ok', !!P.ctrl);
+    if (P.heard) $('#pairnote').textContent += ` Heard ${P.heard} message${P.heard === 1 ? '' : 's'} from phones${P.denied ? `, ${P.denied} with a sign-in that did not match` : ''}.`;
+    const chip = $('#pairchip'); chip.textContent = (P.ctrl ? 'Remote connected' : 'Waiting for the remote · show QR') + (P.status === 'local' ? ' · same-browser link only' : P.status === 'down' ? ' · link down' : ''); chip.classList.toggle('ok', !!P.ctrl);
   }
   function showPair(on) { $('#pair').classList.toggle('show', on); }
 
   async function onMsg(msg) {
     if (!msg || msg.f === 'display') return;
+    P.heard = (P.heard || 0) + 1; paint();
     if (!(msg.n > (P.lastN[msg.f] || 0))) return;                           // old or replayed
     if (msg.t === 'hello') {
       let key = null;
       for (const k of P.cands) if (await verify(msg, { k0: P.keys.k0, k }, 'k')) { key = k; break; }
-      if (!key) { if (await verify(msg, P.keys, 'k0')) { P.lastN[msg.f] = msg.n; reply0('denied', { to: msg.f }); } return; }
+      if (!key) { P.denied = (P.denied || 0) + 1; paint(); if (await verify(msg, P.keys, 'k0')) { P.lastN[msg.f] = msg.n; reply0('denied', { to: msg.f }); } return; }
       P.lastN[msg.f] = msg.n;
       if (P.ctrl !== msg.f || P.keys.k !== key) { P.keys = { k0: P.keys.k0, k: key }; P.msgr = messenger(P.link, P.keys, 'display', P.cnt); P.msgr.setMode('k'); }
       if (P.ctrl && P.ctrl !== msg.f && !(msg.a && msg.a.take) && Date.now() - P.lastSeen < 15000) { reply0('busy', { to: msg.f }); return; }

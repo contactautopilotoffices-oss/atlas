@@ -337,11 +337,17 @@ for (const t of L.tables) {
 
 // ceiling with light panels: one-sided, facing down, so it shows when walking and vanishes from above
 const ceiling = new THREE.Group(); root.add(ceiling);
+const STR = L.stairs, stairHole = () => { const [a, b, c, d] = STR.bbox, p = new THREE.Path(); [[a, b], [c, b], [c, d], [a, d]].forEach(([x, y], i) => { const v = [x - CX, -(y - CY)]; i ? p.lineTo(...v) : p.moveTo(...v); }); return p; };
 L.floor.forEach(f => {
   const s = new THREE.Shape(f.outer.map(([x, y]) => new THREE.Vector2(x - CX, -(y - CY))));
+  if (STR && f.outer.some(([x, y]) => x > STR.bbox[0] && x < STR.bbox[2] + 6 && y < STR.bbox[3] + 6) && new THREE.Box2().setFromPoints(s.getPoints()).containsPoint(new THREE.Vector2((STR.bbox[0] + STR.bbox[2]) / 2 - CX, -((STR.bbox[1] + STR.bbox[3]) / 2 - CY)))) s.holes.push(stairHole());   // the stair goes up through the ceiling
   const g = new THREE.ShapeGeometry(s); g.rotateX(Math.PI / 2); g.translate(0, H, 0);
   const m = new THREE.Mesh(g, mat.ceiling); m.receiveShadow = false; ceiling.add(m);
 });
+// lid: closes the top of the floor's own storey, so walking never shows sky, other buildings or the floors above
+const LID_Y = 3.62;
+{ const s = new THREE.Shape((L.shell_outline || L.plate).map(([x, y]) => new THREE.Vector2(x - CX, -(y - CY)))); if (STR) s.holes.push(stairHole());
+  const g = new THREE.ShapeGeometry(s); g.rotateX(Math.PI / 2); g.translate(0, LID_Y, 0); ceiling.add(new THREE.Mesh(g, M(0xe9e6e0, { roughness: .95 }))); }
 {
   const pg = new THREE.PlaneGeometry(.6, .6); pg.rotateX(Math.PI / 2); pg.translate(0, H - .005, 0);
   const dg = new THREE.CircleGeometry(.07, 16); dg.rotateX(Math.PI / 2); dg.translate(0, H - .005, 0);
@@ -352,6 +358,24 @@ L.floor.forEach(f => {
 }
 ceiling.visible = false;
 
+// ---------------------------------------------------------------- the stair, from the CAD's STAIR layer
+const stairG = new THREE.Group(); root.add(stairG);
+if (STR) {
+  const treads = [], posts = [];
+  STR.steps.forEach(([x0, y0, x1, y1], i) => { const top = (i + 1) * STR.riser, w = x1 - x0, d = y1 - y0;
+    treads.push(at(new THREE.BoxGeometry(w, top, d), (x0 + x1) / 2 - CX, top / 2, -((y0 + y1) / 2 - CY)));
+    const edgeY = i < 9 ? 2.42 : (i >= 12 && i < 21) ? 3.33 : null;                       // balusters stand on the open-well edge of the two straight flights
+    if (edgeY !== null) posts.push(at(new THREE.BoxGeometry(.03, .9, .03), (x0 + x1) / 2 - CX, top + .45, -(edgeY - CY))); });
+  const top = STR.risers * STR.riser;
+  treads.push(at(new THREE.BoxGeometry(2.52, .14, 1.53), 32.6 - CX, top - .07, -(1.65 - CY)));   // the landing on the floor above, over the first flight
+  add(mergeGeometries(treads), M(0xbdb8b0, { roughness: .85 }), { parent: stairG });
+  add(mergeGeometries(posts), M(0x2b2b2b, { roughness: .5, metalness: .6 }), { parent: stairG });
+}
+
+// ---------------------------------------------------------------- the Volt logo on the reception wall
+const logoTex = new THREE.TextureLoader().load('/media/noida-skymark/volt/volt-logo.png'); logoTex.colorSpace = THREE.SRGBColorSpace; logoTex.anisotropy = 8;
+const logoSign = new THREE.Group(); root.add(logoSign);
+
 // seat markers (discs over every chair, one colour per group) ------------------
 const seatDots = (() => {
   const g = new THREE.CircleGeometry(.17, 20); g.rotateX(-Math.PI / 2);
@@ -360,16 +384,30 @@ const seatDots = (() => {
   m.renderOrder = 10; m.visible = false; root.add(m); return m;
 })();
 
-// ---------------------------------------------------------------- doors (leaves read from the CAD door blocks, drawn open as in the plan)
+// ---------------------------------------------------------------- doors (one leaf per CAD door block, hinged, opens as you walk up)
+const DOORS = [];
 {
-  const wood = [], glassD = [], fire = [];
+  // every door is its own leaf on a hinge, so it can swing open when you walk up to it
+  const matWood = M(0xffffff, { map: woodTex, roughness: .5 }), matFire = M(0x6b6f74, { roughness: .45, metalness: .3 });
   for (const d of L.doors) {
-    const g = at(new THREE.BoxGeometry(d.w, 2.1, Math.max(.04, d.d)), 0, 1.05, 0).applyMatrix4(place(d.c[0], d.c[1], d.a));
-    (d.glass ? glassD : d.fire ? fire : wood).push(g);
+    const hinge = new THREE.Group(), leaf = new THREE.Mesh(new THREE.BoxGeometry(d.w, 2.1, Math.max(.04, d.d)), d.glass ? mat.glass : d.fire ? matFire : matWood);
+    leaf.position.set(d.w / 2, 1.05, 0); leaf.castShadow = !d.glass; if (d.glass) leaf.renderOrder = 5;
+    const pivot = new THREE.Group(); pivot.position.set(-d.w / 2, 0, 0); pivot.add(leaf); hinge.add(pivot);
+    hinge.applyMatrix4(place(d.c[0], d.c[1], d.a)); wallsG.add(hinge);
+    DOORS.push({ d, pivot, open: 0, ca: Math.cos(d.a), sa: Math.sin(d.a) });
   }
-  if (wood.length) add(mergeGeometries(wood), M(0xffffff, { map: woodTex, roughness: .5 }), { parent: wallsG });
-  if (fire.length) add(mergeGeometries(fire), M(0x6b6f74, { roughness: .45, metalness: .3 }), { parent: wallsG });
-  if (glassD.length) { const m = add(mergeGeometries(glassD), mat.glass, { cast: false, parent: wallsG }); m.renderOrder = 5; }
+}
+function updateDoors(dt, px, py) {                       // px, py: where the viewer is in plan metres
+  let moved = false;
+  for (const o of DOORS) {
+    const dx = px - o.d.c[0], dy = py - o.d.c[1], near = Math.hypot(dx, dy) < 1.7;
+    const across = -o.sa * dx + o.ca * dy;                  // which side of the door the viewer is on
+    if (near && !o.dir) o.dir = across > 0 ? -1 : 1;          // swing away from the viewer
+    const target = near ? 1 : 0, next = o.open + (target - o.open) * Math.min(1, dt * 5);
+    if (Math.abs(next - o.open) > .002) { o.open = next; o.pivot.rotation.y = (o.dir || 1) * o.open * 1.7; moved = true; }
+    if (!near && o.open < .01) o.dir = 0;
+  }
+  return moved;
 }
 
 // ---------------------------------------------------------------- the building: the existing Skymark twin, with Volt's CAD floor fitted inside it
@@ -587,6 +625,9 @@ function hoverLevel(lv) {
   canvas.style.cursor = lv === 1 ? 'pointer' : ''; needRender = true;
 }
 let stage = 'building', shellA = 1, shellT = 1, upY = 0, upT = 0;
+// walking: the twin's own first-floor facade stays round the floor (cut off at the lid), so you stay inside the building's height
+const capPlane = new THREE.Plane(new THREE.Vector3(0, -1, 0), 1000); let envOn = false;
+function setEnvelope(on) { if (on === envOn) return; envOn = on; applyShell(); needRender = true; }
 function setShell(a, instant) {
   shellT = a; upT = a > .5 ? 0 : 16;
   const sc = sun.shadow.camera, k = a > .5 ? 1 : 0;                       // the shadow area changes once per view, never while moving
@@ -595,15 +636,17 @@ function setShell(a, instant) {
 }
 let highTransparent = false;
 function applyShell() {
-  twinHigh.position.y = upY; cutHigh.constant = -(CUTY + upY);
-  const fadeOn = shellA < .995;
+  if (!highMats._cp) { highMats._cp = true; for (const m of highMats) { m.clippingPlanes = [cutHigh, capPlane]; m.clipShadows = true; m.needsUpdate = true; } }
+  const lift = envOn ? 0 : upY; capPlane.constant = envOn ? LID_Y + .04 : 1000;
+  twinHigh.position.y = lift; cutHigh.constant = -(CUTY + lift); const tin = twinHigh.getObjectByName('Interiors'); if (tin) tin.visible = !envOn;
+  const fadeOn = shellA < .995 && !envOn;
   if (fadeOn !== highTransparent) { highTransparent = fadeOn; for (const m of highMats) { m.transparent = fadeOn || m.userData.t; m.depthWrite = fadeOn ? false : m.userData.dw; m.needsUpdate = true; } }
-  for (const m of highMats) m.opacity = m.userData.o * shellA;
-  twinHigh.visible = shellA > .01;
+  for (const m of highMats) m.opacity = m.userData.o * (envOn ? 1 : shellA);
+  twinHigh.visible = envOn || shellA > .01;
   root.visible = shellA < .99; plateSlab.visible = root.visible;
   if (twinInteriorsLow) twinInteriorsLow.visible = shellA > .5;
   bandsG.visible = stage === 'building' && shellA > .9 && camera.position.y > GROUND + 12;   // the floor marker is for the view from above, not at the door
-  podHigh.position.y = upY;
+  podHigh.position.y = lift;
   shadowsDirty = true;
 }
 const camAzFor = (bearing) => { const n = bearingToPlan(bearing); return Math.atan2(n[0], -n[1]); };
@@ -915,6 +958,7 @@ const grid = (() => {
   if (L.atrium) { poly(L.atrium); g.fill(); }
   L.walls.forEach(w => { poly(w.outer); g.fill('evenodd'); w.holes.forEach(h => { g.fillStyle = '#fff'; poly(h); g.fill(); g.fillStyle = '#000'; }); });
   L.columns.forEach(cc => { poly(cc); g.fill(); });
+  if (L.stairs) { const [a0, b0, c0, d0] = L.stairs.bbox; poly([[a0, b0], [c0, b0], [c0, d0], [a0, d0]]); g.fill(); }
   g.strokeStyle = '#000'; g.lineWidth = .12 * GRID;
   L.glass.forEach(([x0, y0, x1, y1]) => { g.beginPath(); g.moveTo(...T([x0, y0])); g.lineTo(...T([x1, y1])); g.stroke(); });
   g.fillStyle = '#fff';                                                         // every door is an opening you can walk through (the leaf is drawn separately)
@@ -937,6 +981,21 @@ function clearSpot(r, bias = [0, 0]) {
   return best;
 }
 function nearestFree(x, y) { if (freeAt(x, y)) return [x, y]; for (let r = .1; r < 4; r += .1) for (let k = 0; k < 16; k++) { const a = k * Math.PI / 8, X = x + Math.cos(a) * r, Y = y + Math.sin(a) * r; if (freeAt(X, Y)) return [X, Y]; } return [x, y]; }
+
+// ---------------------------------------------------------------- Volt logo sign on the most solid wall of Reception
+(function placeLogo() {
+  const r = ROOMS.find(x => x.name === 'Reception'); if (!r) return; const [x0, y0, x1, y1] = r.box;
+  const sides = [{ n: [0, 1], a: [x0, y0 - .2], b: [x1, y0 - .2], at: [(x0 + x1) / 2, y0] }, { n: [0, -1], a: [x0, y1 + .2], b: [x1, y1 + .2], at: [(x0 + x1) / 2, y1] },
+    { n: [1, 0], a: [x0 - .2, y0], b: [x0 - .2, y1], at: [x0, (y0 + y1) / 2] }, { n: [-1, 0], a: [x1 + .2, y0], b: [x1 + .2, y1], at: [x1, (y0 + y1) / 2] }];
+  let best = null, bs = .35;
+  for (const sd of sides) { const len = Math.hypot(sd.b[0] - sd.a[0], sd.b[1] - sd.a[1]); if (len < 2.2) continue; let hit = 0, N = 24;
+    for (let i = 1; i < N; i++) { const t = .15 + .7 * i / N; if (!grid.free(sd.a[0] + (sd.b[0] - sd.a[0]) * t, sd.a[1] + (sd.b[1] - sd.a[1]) * t)) hit++; }
+    const sc = hit / (N - 1); if (sc > bs) { bs = sc; best = sd; } }
+  if (!best) return;
+  const W_ = 1.9, H_ = W_ * 436 / 768, ry = Math.atan2(best.n[0], -best.n[1]), px = best.at[0] + best.n[0] * .05, py = best.at[1] + best.n[1] * .05;
+  const board = new THREE.Mesh(new THREE.BoxGeometry(W_ + .3, H_ + .3, .03), M(0xf6f3ee, { roughness: .6 })); const plane = new THREE.Mesh(new THREE.PlaneGeometry(W_, H_), new THREE.MeshBasicMaterial({ map: logoTex, transparent: true, toneMapped: false })); plane.position.z = .02;
+  logoSign.add(board, plane); logoSign.position.set(px - CX, 1.9, -(py - CY)); logoSign.rotation.y = ry; logoSign.userData.where = best;
+})();
 const EYE = 1.55;
 const walk = { x: 0, y: 0, yaw: 0, pitch: -.05, keys: {}, glide: null, path: null, joy: [0, 0] };
 // ---------------------------------------------------------------- path-finding: tap anywhere and the walker goes round the walls
@@ -1297,7 +1356,7 @@ function setMode(m, toOverview) {
   $('#help').style.display = m === 'orbit' ? '' : 'none';
   $('#b-walk').classList.toggle('on', m === 'walk'); $('#b-elev').classList.toggle('on', m === 'elev'); $('#b-tour').classList.toggle('on', m === 'tour');
   $('#b-over').classList.toggle('on', m === 'orbit' && !focus);
-  ceiling.visible = m === 'walk' || m === 'tour';
+  ceiling.visible = m === 'walk' || m === 'tour'; setEnvelope(ceiling.visible);
   seatDots.visible = seatDots.visible && m === 'orbit';
   if (m === 'elev') $('#card').classList.remove('show');
   if (m !== 'walk' && m !== 'tour') showHotspots(null);
@@ -1341,6 +1400,7 @@ function frame() {
   if (walk.active) {
     if (stepWalk(dt)) moved = true;
     const { p, t } = walkPose(); camera.position.copy(p); camera.lookAt(t);
+    if (updateDoors(dt, camera.position.x + CX, CY - camera.position.z)) { moved = true; shadowsDirty = true; }
     if ((frameN++ & 15) === 0) { const rr = roomAt(walk.x, walk.y); if (rr && rr !== focus) setFocus(rr); wayUpdate(); } if ((frameN & 3) === 0) wayTurn();
     if (needRender) moved = true;
   } else if (mode === 'elev') { if (ortCtl.update(dt)) moved = true; }
@@ -1426,7 +1486,7 @@ renderer.render(scene, camera); setTimeout(() => $('#load').classList.add('done'
 setTimeout(() => { $('#load').remove(); }, 900);
 function snap(name, fov = 62) {
   const r = ROOMS.find(x => x.name === name); if (!r) return null;
-  stage = 'floor'; setShell(0, true); wallsG.scale.y = 1; wallScale = wallTarget = 1; ceiling.visible = true; seatDots.visible = false;
+  stage = 'floor'; setShell(0, true); wallsG.scale.y = 1; wallScale = wallTarget = 1; ceiling.visible = true; setEnvelope(true); seatDots.visible = false;
   const tp = tourPose(r), keep = camera.fov; camera.fov = fov; camera.updateProjectionMatrix();
   camera.position.copy(tp.p); camera.lookAt(tp.t); camera.updateMatrixWorld();
   renderer.shadowMap.needsUpdate = true; renderer.render(scene, camera);
