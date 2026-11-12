@@ -1139,7 +1139,7 @@ async function enterWalk(r) {
   const { p, t } = walkPose();
   controls.enabled = true; controls.maxPolarAngle = Math.PI; controls.minDistance = 0.01; controls.setBoundary(null);
   if (jump) { controls.setLookAt(p.x, p.y, p.z, t.x, t.y, t.z, false); controls.update(0); needRender = true;
-    if (usePano) { walk.active = true; controls.enabled = false; const nn = panoPick(walk.x, walk.y); await Promise.race([panoLoad(nn.id), sleep(6000)]); panoUpdate(0); await sleep(80); }
+    if (usePano) { walk.active = true; controls.enabled = false; const nn = panoPick(walk.x, walk.y); if (nn) await Promise.race([panoLoad(nn.id), sleep(6000)]); panoUpdate(0); await sleep(80); }
     if (!quick) { await sleep(usePano ? 0 : 120); fade(false); } }
   else {   // come down inside the room: first above the spot, then straight down, so the camera never passes through a wall
     controls.smoothTime = ST(.7); const dir = t.clone().sub(p).setY(0).normalize();
@@ -1210,6 +1210,13 @@ function moveJoy(e) { const r = joy.getBoundingClientRect(); let x = (e.clientX 
 
 function stepWalk(dt) {
   const k = walk.keys; let f = (k.KeyW || k.ArrowUp ? 1 : 0) - (k.KeyS || k.ArrowDown ? 1 : 0) + walk.joy[1];
+  if (panoReady && panoCur && !walk.glide) {
+    hopCool = Math.max(0, hopCool - dt);
+    if (k.ArrowLeft) walk.yaw += dt * 1.6; if (k.ArrowRight) walk.yaw -= dt * 1.6;
+    if (Math.abs(f) > .4 && hopCool === 0) { const n = hopDir(f > 0 ? 1 : -1); if (n) return hopTo(n, false); }
+    if (Math.abs(f) > .4 && hopDir(f > 0 ? 1 : -1)) return k.ArrowLeft || k.ArrowRight;   // waiting out the hop: do not slide
+    if (k.ArrowLeft || k.ArrowRight) return true;
+  }
   let s = (k.KeyD ? 1 : 0) - (k.KeyA ? 1 : 0) + walk.joy[0];
   if (k.ArrowLeft) walk.yaw += dt * 1.6; if (k.ArrowRight) walk.yaw -= dt * 1.6;
   let moving = false;
@@ -1242,7 +1249,7 @@ function tryMove(dx, dy) {
 // The plain 3D model is only a free-walk option ("Free walk in the 3D model"). Rooms with no render yet fall back to the 3D walk.
 let photoOn = false, photoPref = true, photoRoom = null, photoImgs = [], photoI = 0, photoLayer = 0;
 const hasPhoto = (r) => !!r && roomImages(r).length > 0;
-function updatePback() { const pb = $('#pback'); if (pb) pb.classList.toggle('show', mode === 'walk' && !photoOn && hasPhoto(focus)); }
+function updatePback() { const pb = $('#pback'); if (pb) pb.classList.toggle('show', !panoReady && mode === 'walk' && !photoOn && hasPhoto(focus)); }
 function photoImg(i) {
   photoI = i; const url = photoImgs[i], A = [$('#pla'), $('#plb')], nxt = A[photoLayer ^ 1], cur = A[photoLayer];
   const go = () => { nxt.style.backgroundImage = `url(${url})`; nxt.classList.remove('on'); void nxt.offsetWidth; nxt.classList.add('on'); cur.classList.remove('on'); photoLayer ^= 1; };
@@ -1303,23 +1310,53 @@ function panoLoad(id) {
 }
 function panoPick(x, y) {                           // the nearest render that can see you (no wall between), with some stickiness so it does not flicker
   const near = NODES.map(n => ({ n, d: Math.hypot(n.x - x, n.y - y) })).sort((p, q) => p.d - q.d).slice(0, 8);
-  let best = near.find(o => o.d < .35 || lineFree([x, y], [o.n.x, o.n.y])) || near[0];
-  if (panoCur && panoCur !== best.n) { const cur = near.find(o => o.n === panoCur); if (cur && cur.d < best.d + .8 && (cur.d < .35 || lineFree([x, y], [cur.n.x, cur.n.y]))) best = cur; }
-  return best.n;
+  const R = 3.5, ok = (o) => o.d < R && (o.d < .35 || lineFree([x, y], [o.n.x, o.n.y]));      // a 360 only where you really are; elsewhere the model shows
+  let best = near.find(ok);
+  if (panoCur) { const cur = near.find(o => o.n === panoCur); if (cur && ok(cur) && (!best || cur.d < best.d + .8)) best = cur; }
+  return best ? best.n : null;
 }
 let panoWant = null;
 function panoUpdate(dt) {
   const n = panoPick(walk.x, walk.y);
-  if (n !== panoCur && n !== panoWant) { panoWant = n; panoLoad(n.id).then(t => {
+  if (!n) { if (panoCur) { panoCur = null; panoWant = null; needRender = true; } }
+  else if (n !== panoCur && n !== panoWant) { panoWant = n; panoLoad(n.id).then(t => {
     if (panoWant !== n) return; panoWant = null;
     if (panoCur && panoCache.has(panoCur.id)) { panoMat.uniforms.b.value = panoCache.get(panoCur.id); panoMix = 1; } panoMat.uniforms.a.value = t; panoCur = n; needRender = true;
   }).catch(() => { panoWant = null; }); }
   if (panoMix > 0) { panoMix = Math.max(0, panoMix - dt * 2.2); needRender = true; }
   const u = panoMat.uniforms; u.mixv.value = panoMix; u.yaw.value = walk.yaw; u.pitch.value = Math.max(-1.3, Math.min(1.3, walk.pitch));
   u.th.value = Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2); u.asp.value = camera.aspect;
-  for (const m of NODES.slice().sort((p, q) => Math.hypot(p.x - walk.x, p.y - walk.y) - Math.hypot(q.x - walk.x, q.y - walk.y)).slice(0, 3)) panoLoad(m.id).catch(() => {});   // warm the neighbours
+  for (const m of NODES.slice().sort((p, q) => Math.hypot(p.x - walk.x, p.y - walk.y) - Math.hypot(q.x - walk.x, q.y - walk.y)).slice(0, 4)) panoLoad(m.id).catch(() => {});   // warm the neighbours
+  hopMarks();
 }
 const panoActive = () => panoReady && (mode === 'walk' || mode === 'tourwalk') && panoCur !== null || (panoReady && mode === 'walk');
+
+// ---------------------------------------------------------------- hopping between 360s: forward takes you to the next 360 you are facing, markers show the ones you can see
+let hopCool = 0;
+function hopCands() {
+  if (!panoCur) return [];
+  return NODES.filter(n => n !== panoCur).map(n => ({ n, d: Math.hypot(n.x - panoCur.x, n.y - panoCur.y) }))
+    .filter(o => o.d > .8 && o.d < 16 && lineFree([panoCur.x, panoCur.y], [o.n.x, o.n.y]));
+}
+function hopTo(n, faceIt) {
+  if (!n) return false; if (faceIt) walk.yaw = Math.atan2(n.y - walk.y, n.x - walk.x);
+  walk.x = n.x; walk.y = n.y; walk.glide = null; walk.path = null; hopCool = .55; needRender = true; return true;
+}
+function hopDir(sign) {                    // sign 1: the 360 ahead, -1: the one behind
+  const fx = Math.cos(walk.yaw) * sign, fy = Math.sin(walk.yaw) * sign; let best = null, bs = 1e9;
+  for (const o of hopCands()) { const ax = (o.n.x - panoCur.x) / o.d, ay = (o.n.y - panoCur.y) / o.d, cos = ax * fx + ay * fy; if (cos < .55) continue;
+    const sc = o.d * (2 - cos); if (sc < bs) { bs = sc; best = o.n; } }
+  return best;
+}
+const hopEl = document.createElement('div'); hopEl.id = 'hops'; hopEl.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:3'; document.body.appendChild(hopEl);
+function hopMarks() {
+  if (!panoCur || mode !== 'walk') { if (hopEl.childElementCount) hopEl.innerHTML = ''; return; }
+  const list = hopCands(), v = new THREE.Vector3(), w = innerWidth, h = innerHeight; let html = '';
+  for (const o of list) { v.copy(W(o.n.x, o.n.y, .02)).project(camera); if (v.z > 1 || v.x < -1.1 || v.x > 1.1 || v.y < -1.1 || v.y > 1.1) continue;
+    const sz = Math.max(26, Math.min(64, 140 / o.d)), x = (v.x + 1) / 2 * w, y = (1 - v.y) / 2 * h;
+    html += `<button data-id="${o.n.id}" title="${o.n.room}" style="position:absolute;left:${x - sz / 2}px;top:${y - sz / 4}px;width:${sz}px;height:${sz / 2}px;border-radius:50%;border:3px solid #fff;background:rgba(221,141,54,.55);box-shadow:0 0 0 2px rgba(0,0,0,.25);pointer-events:auto;cursor:pointer"></button>`; }
+  if (hopEl.innerHTML !== html) { hopEl.innerHTML = html; hopEl.querySelectorAll('button').forEach(b => b.onclick = () => hopTo(NODES.find(n => n.id === b.dataset.id), true)); }
+}
 async function panoInit() {
   try {
     const j = await (await fetch('./nodes.json', { cache: 'no-cache' })).json(); NODES = j.nodes || [];
@@ -1392,7 +1429,7 @@ async function nextStop() {
     await fade(true); if (mode !== 'tour') return fade(false);
     stage = 'floor'; document.body.dataset.stage = 'floor'; setShell(0, true);
     const [lx, ly] = toPlan(st.p), [tx, ty] = toPlan(st.t); walk.x = lx; walk.y = ly; walk.yaw = Math.atan2(ty - ly, tx - lx); walk.pitch = -.03; walk.glide = null; walk.path = null;
-    walk.active = true; controls.enabled = false; await Promise.race([panoLoad(panoPick(lx, ly).id), sleep(6000)]); panoUpdate(0); needRender = true; await sleep(80); fade(false);
+    walk.active = true; controls.enabled = false; { const pn = panoPick(lx, ly); if (pn) await Promise.race([panoLoad(pn.id), sleep(6000)]); } panoUpdate(0); needRender = true; await sleep(80); fade(false);
   } else if (panoReady && r && stage === 'floor' && walk.active) {
     const [gx, gy] = clearSpot(r); goTo(gx, gy); const t0 = performance.now();
     while (mode === 'tour' && (walk.glide || walk.path) && performance.now() - t0 < 60000) await sleep(120);
@@ -1632,4 +1669,4 @@ function moodApply(k, hex) { const g = MOOD.find(x => x.k === k); if (!g) return
 $('#b-finish').onclick = () => { const on = !$('#mood').classList.contains('show'); $('#mood').classList.toggle('show', on); $('#b-finish').classList.toggle('on', on); if (on && photoOn) photoHide(); };
 $('#moodx').onclick = () => { $('#mood').classList.remove('show'); $('#b-finish').classList.remove('on'); };
 { const m = location.hash.match(/mb=([^&]+)/); if (m) m[1].split(',').forEach(p => { const [k, c] = p.split(':'); if (k && /^[0-9a-f]{6}$/i.test(c || '')) moodApply(k, '#' + c); }); }
-window.__volt = { RAIL, flood, pathTo, clearSpot, cellOf, PG, goTo, enterVolt, entranceView, presenter, runCommand, remoteState, snap, POIS, showPlace, entranceView, L, ROOMS, controls, flyToRoom, overview, enterWalk, setMode, startTour, stopTour, walk, enterFloor, toBuilding, setTOD, get stage() { return stage; }, get mode() { return mode; }, render: () => { needRender = true; } };
+window.__volt = { pano: () => ({ ready: panoReady, n: NODES.length, cur: panoCur && panoCur.id, near: NODES.map(q => [q.id, +Math.hypot(q.x - walk.x, q.y - walk.y).toFixed(1), lineFree([walk.x, walk.y], [q.x, q.y])]).sort((a, b) => a[1] - b[1]).slice(0, 5) }), RAIL, flood, pathTo, clearSpot, cellOf, PG, goTo, enterVolt, entranceView, presenter, runCommand, remoteState, snap, POIS, showPlace, entranceView, L, ROOMS, controls, flyToRoom, overview, enterWalk, setMode, startTour, stopTour, walk, enterFloor, toBuilding, setTOD, get stage() { return stage; }, get mode() { return mode; }, render: () => { needRender = true; } };
