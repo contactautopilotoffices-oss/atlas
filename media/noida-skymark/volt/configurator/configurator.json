@@ -10,6 +10,78 @@
  ],
  "views": [
   {
+   "slug": "lift-lobby",
+   "room": "Lift lobby",
+   "beauty": "beauty.jpg",
+   "masks": {
+    "panels": "mask_panels.png",
+    "seating": "mask_seating.png",
+    "floor": "mask_floor.png",
+    "surfaces": "mask_surfaces.png",
+    "walls": "mask_walls.png",
+    "soft": "mask_soft.png",
+    "cafe": "mask_cafe.png"
+   },
+   "variants": [
+    {
+     "name": "volt",
+     "label": "Volt as designed",
+     "palette": {
+      "panels": "#dd8d36",
+      "seating": "#1d1d1f",
+      "floor": "#4a4744",
+      "surfaces": "#d8bf9b",
+      "walls": "#efece7",
+      "soft": "#a69687",
+      "cafe": "#dd8d36"
+     },
+     "file": "variant_volt.jpg"
+    },
+    {
+     "name": "sunlit",
+     "label": "Sunlit yellow",
+     "palette": {
+      "panels": "#e8c547",
+      "seating": "#3b3f46",
+      "floor": "#8d877f",
+      "surfaces": "#e9e4dc",
+      "walls": "#f4efe6",
+      "soft": "#b8b2a9",
+      "cafe": "#e8c547"
+     },
+     "file": "variant_sunlit.jpg"
+    },
+    {
+     "name": "calm",
+     "label": "Calm sage",
+     "palette": {
+      "panels": "#8aa37b",
+      "seating": "#22324f",
+      "floor": "#6f7a80",
+      "surfaces": "#c8a27c",
+      "walls": "#e4e9e1",
+      "soft": "#2f5d58",
+      "cafe": "#f3f1ec"
+     },
+     "file": "variant_calm.jpg"
+    },
+    {
+     "name": "deep",
+     "label": "Deep navy",
+     "palette": {
+      "panels": "#2c4a7a",
+      "seating": "#1d1d1f",
+      "floor": "#3b3d42",
+      "surfaces": "#8a6a52",
+      "walls": "#ebe7e1",
+      "soft": "#2c4a7a",
+      "cafe": "#1d1d1f"
+     },
+     "file": "variant_deep.jpg"
+    }
+   ]
+  },
+  {
    "slug": "cafeteria",
    "room": "Cafeteria",
    "beauty": "beauty.jpg",
@@ -42,6 +114,21 @@
   {
    "slug": "open-workstations",
    "room": "Open workstations",
+   "beauty": "beauty.jpg",
+   "masks": {
+    "panels": "mask_panels.png",
+    "seating": "mask_seating.png",
+    "floor": "mask_floor.png",
+    "surfaces": "mask_surfaces.png",
+    "walls": "mask_walls.png",
+    "soft": "mask_soft.png",
+    "cafe": "mask_cafe.png"
+   },
+   "variants": []
+  },
+  {
+   "slug": "reception",
+   "room": "Reception",
    "beauty": "beauty.jpg",
    "masks": {
     "panels": "mask_panels.png",

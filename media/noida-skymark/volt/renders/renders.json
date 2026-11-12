@@ -63,6 +63,24 @@
    "finish": "higgsfield",
    "deck_page": null,
    "notes": "No deck page: the approved Open workstations picture was the style reference. Monitor screens are shown switched off."
+  },
+  "Reception": {
+   "file": "mac-reception.jpg",
+   "finish": "blender (studio Mac)",
+   "notes": "Blender Cycles on the studio Mac, no AI finishing",
+   "also": [
+    "mac-lift-lobby.jpg"
+   ]
+  },
+  "Entry": {
+   "file": "mac-entry.jpg",
+   "finish": "blender (studio Mac)",
+   "notes": "Blender Cycles on the studio Mac, no AI finishing"
+  },
+  "06 seater meeting room": {
+   "file": "mac-06-seater-meeting-room.jpg",
+   "finish": "blender (studio Mac)",
+   "notes": "Blender Cycles on the studio Mac, no AI finishing"
   }
  }
 }

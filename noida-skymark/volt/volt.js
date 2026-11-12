@@ -36,7 +36,7 @@ const DECK = { 'Open workstations': [4, 5, 6, 7], 'Sales office': [8, 9], 'Direc
 const RD = '/media/noida-skymark/volt/renders/';
 const OURS = { '18 seater conference room': [RD + '18-seater-conference-room.jpg', RD + 'conf18.jpg'], 'Open workstations': [RD + 'open-workstations.jpg'], 'Cafeteria': [RD + 'cafeteria.jpg'],
   'Control room / command centre': [RD + 'control-room-command-centre.jpg'], 'Finance room': [RD + 'finance-room.jpg'], 'Lounge area (north)': [RD + 'lounge-area-north.jpg'], 'Sales office': [RD + 'sales-office.jpg'] };   // Blender Cycles base, finished with Higgsfield
-try { const rj = await (await fetch(RD + 'renders.json', { cache: 'no-cache' })).json(); for (const [k, v] of Object.entries(rj.rooms || rj)) { const f = typeof v === 'string' ? v : Array.isArray(v) ? v[0] : v && v.file; if (!f) continue; const u = f.startsWith('/') ? f : RD + f; OURS[k] = [u].concat((OURS[k] || []).filter(x => x !== u)); } } catch (e) { /* no list: the static one above stands */ }
+try { const rj = await (await fetch(RD + 'renders.json', { cache: 'no-cache' })).json(); for (const [k, v] of Object.entries(rj.rooms || rj)) { const f = typeof v === 'string' ? v : Array.isArray(v) ? v[0] : v && v.file; if (!f) continue; const u = f.startsWith('/') ? f : RD + f, more = ((v && v.also) || []).map(x => x.startsWith('/') ? x : RD + x); OURS[k] = [u, ...more].concat((OURS[k] || []).filter(x => x !== u && !more.includes(x))); } } catch (e) { /* no list: the static one above stands */ }
 Object.values(OURS).flat().forEach(u => { const i = new Image(); i.src = u; });                // warm the cache so cards never flash empty
 const TOUR = ['Reception', 'Open workstations', 'Control room / command centre', 'Sales office', 'Calling room', 'Cafeteria',
   '18 seater conference room', 'Finance room', 'Lounge area (north)', 'Director cabin 01', 'Collab area 01'];
@@ -1288,7 +1288,9 @@ const panoMat = new THREE.ShaderMaterial({
     void main(){ vec3 f = vec3(cos(yaw) * cos(pitch), sin(yaw) * cos(pitch), sin(pitch)), r = vec3(sin(yaw), -cos(yaw), 0.), u = cross(r, f);
       vec3 d = normalize(f + r * vp.x * th * asp + u * vp.y * th); vec2 uv = eq(d);
       vec4 c = texture2D(a, uv); if (mixv > 0.001) c = mix(c, texture2D(b, uv), mixv);
-      gl_FragColor = vec4(c.rgb, 1.); #include <colorspace_fragment> }`,
+      gl_FragColor = vec4(c.rgb, 1.);
+      #include <colorspace_fragment>
+    }`,
   depthTest: false, depthWrite: false, toneMapped: false });
 const panoScene = new THREE.Scene(), panoCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
 { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(new Float32Array([-1, -1, 0, 3, -1, 0, -1, 3, 0]), 3)); const m = new THREE.Mesh(g, panoMat); m.frustumCulled = false; panoScene.add(m); }
