@@ -59,6 +59,9 @@ ap.add_argument("--exposure", type=float, default=0.6); ap.add_argument("--no-re
 ap.add_argument("--sky", type=float, default=0.35); ap.add_argument("--sun", type=float, default=22.0)
 ap.add_argument("--cameras", default=os.path.join(HERE, "cameras.json")); ap.add_argument("--res-scale", type=float, default=1.0)
 ap.add_argument("--no-post", action="store_true")
+ap.add_argument("--palette", default="", help="JSON file (or inline JSON) of part -> colour, e.g. {\"panels\": \"#e8c547\"}")
+ap.add_argument("--variants", default="", help="JSON file: [{\"name\": \"sunny\", \"palette\": {...}}, ...]; renders every still once per variant")
+ap.add_argument("--masks", action="store_true", help="also render a black and white mask per part for each still (for the web configurator)")
 A = ap.parse_args(argv)
 OUT = os.path.abspath(A.out); os.makedirs(os.path.join(OUT, "stills"), exist_ok=True); os.makedirs(os.path.join(OUT, "panos"), exist_ok=True)
 Q = {"preview": dict(samples=24, still=(1280, 720), pano=(2048, 1024)),
@@ -1027,5 +1030,105 @@ if not A.no_render:
         left = len(jobs) - len(manifest["renders"]); avg = (time.time() - t_all) / max(1, done)
         print(f"[{len(manifest['renders'])}/{len(jobs)}] {rec['file']}  {rec['seconds']} s   about {round(left * avg / 60)} min left", flush=True)
         json.dump(manifest, open(os.path.join(OUT, "manifest.json"), "w"), indent=1)
+# ------------------------------------------------------------------ configurator: palettes, variants of the same view, part masks
+# Parts are what a client changes, in the order the web configurator shows them. "@chair" / "@lounge" are the mesh chairs.
+PARTS = {"panels": ["screen_orange", "acoustic", "accent"], "seating": ["@chair"], "floor": ["carpet"], "surfaces": ["oak"],
+         "walls": ["paint"], "soft": ["sofa_grey", "sofa_teal", "sofa_orange", "@lounge"], "cafe": ["plastic_orange", "plastic_grey"]}
+_TINT, _ORIG_FAB = {}, {}
+def _bsdf(m): return next((n for n in m.node_tree.nodes if n.type == "BSDF_PRINCIPLED"), None) if m and m.use_nodes else None
+def tint(m, hexc):
+    b = _bsdf(m)
+    if not b: return
+    inp = b.inputs["Base Color"]; col = (tuple(lin(hexc)) + (1.0,)) if hexc else None
+    if m.name in _TINT:
+        kind, ref = _TINT[m.name]
+        if kind == "mix": ref.inputs["Factor"].default_value = 0.8 if hexc else 0.0; ref.inputs[7].default_value = col if hexc else ref.inputs[7].default_value
+        else: inp.default_value = col if hexc else ref
+        return
+    if inp.is_linked:                                   # textured: keep 20 % of the pattern so carpet and wood still read as carpet and wood
+        src = inp.links[0].from_socket; nt = m.node_tree; mx = nt.nodes.new("ShaderNodeMix"); mx.data_type = "RGBA"; mx.blend_type = "MIX"
+        nt.links.new(src, mx.inputs[6]); mx.inputs[7].default_value = col; mx.inputs["Factor"].default_value = 0.8 if hexc else 0.0
+        nt.links.new(mx.outputs[2], inp); _TINT[m.name] = ("mix", mx)
+    else:
+        _TINT[m.name] = ("flat", tuple(inp.default_value)); inp.default_value = col
+def tint_mesh(me, key, hexc):
+    if key not in _ORIG_FAB: _ORIG_FAB[key] = list(me.materials)
+    if not hexc:
+        me.materials.clear(); [me.materials.append(x) for x in _ORIG_FAB[key]]; return
+    name = key + "_fabric"
+    if name not in MATS: mat_fabric(name, hexc)
+    tint(MATS[name], hexc); me.materials.clear()
+    for _ in range(max(1, len(_ORIG_FAB[key]))): me.materials.append(MATS[name])
+def apply_palette(pal):
+    for part, names in PARTS.items():
+        hexc = (pal or {}).get(part, "")
+        for n in names:
+            if n == "@chair": tint_mesh(CHAIR, "chair", hexc)
+            elif n == "@lounge": tint_mesh(LOUNGE, "lounge", hexc)
+            elif n in MATS:
+                if hexc: tint(MATS[n], hexc)
+                elif n in _TINT: tint(MATS[n], "")
+def _load_json(v): return json.loads(v) if v.strip().startswith(("{", "[")) else json.load(open(v))
+def render_still(r, path):
+    set_pano(False); cam_data.lens = r["still"]["lens_mm"]; aim(r["still"]["pos"], r["still"]["look"], r["still"].get("focus_m"))
+    SC.render.resolution_x, SC.render.resolution_y = int(Q["still"][0] * A.res_scale), int(Q["still"][1] * A.res_scale)
+    raw = path[:-4] + ".raw.png"; SC.render.filepath = raw; bpy.ops.render.render(write_still=True)
+    try:
+        if A.no_post: plain_jpeg(raw, path)
+        else: finish_picture(raw, path, True, seed=7)
+        os.remove(raw)
+    except Exception as e: print("finishing failed, plain render kept:", e, flush=True)
+def render_masks(r, outdir):
+    """One white-on-black mask per part, same camera: emission only, so it is quick and exact."""
+    W_ = bpy.data.materials.get("_mask_w") or bpy.data.materials.new("_mask_w"); B_ = bpy.data.materials.get("_mask_b") or bpy.data.materials.new("_mask_b")
+    for m_, v_ in ((W_, 1.0), (B_, 0.0)):
+        m_.use_nodes = True; nt = m_.node_tree; nt.nodes.clear(); e = nt.nodes.new("ShaderNodeEmission"); e.inputs["Color"].default_value = (v_, v_, v_, 1); e.inputs["Strength"].default_value = 1.0
+        o_ = nt.nodes.new("ShaderNodeOutputMaterial"); nt.links.new(e.outputs[0], o_.inputs[0])
+    keep = (C.samples, C.use_denoising, SC.view_settings.view_transform, SC.view_settings.look, SC.view_settings.exposure, W.node_tree.nodes["Background"].inputs[1].default_value if "Background" in W.node_tree.nodes else None)
+    C.samples = 8; C.use_denoising = False; SC.view_settings.view_transform = "Standard"
+    try: SC.view_settings.look = "None"
+    except Exception: pass
+    SC.view_settings.exposure = 0.0
+    if keep[5] is not None: W.node_tree.nodes["Background"].inputs[1].default_value = 0.0
+    hidden = [o for o in SC.objects if o.type == "LIGHT" and not o.hide_render]
+    for o in hidden: o.hide_render = True
+    set_pano(False); cam_data.lens = r["still"]["lens_mm"]; aim(r["still"]["pos"], r["still"]["look"], r["still"].get("focus_m"))
+    SC.render.resolution_x, SC.render.resolution_y = int(Q["still"][0] * A.res_scale), int(Q["still"][1] * A.res_scale)
+    meshes = [o for o in SC.objects if o.type == "MESH"]
+    for part, names in PARTS.items():
+        mats = {n for n in names if not n.startswith("@")}; objs = {n[1:] for n in names if n.startswith("@")}
+        for o in meshes:
+            hit_obj = any(o.name.startswith(p) for p in objs)
+            for i_, sl in enumerate(o.material_slots):
+                dm = o.data.materials[i_] if o.data and i_ < len(o.data.materials) else None      # the real material, not the mask one set for the last part
+                hit = hit_obj or (dm is not None and dm.name in mats) or (dm is not None and dm.name.startswith(tuple(p + "_fabric" for p in objs)))
+                sl.link = "OBJECT"; sl.material = W_ if hit else B_
+        SC.render.filepath = os.path.join(outdir, f"mask_{part}.png"); bpy.ops.render.render(write_still=True)
+    for o in meshes:
+        for sl in o.material_slots: sl.link = "DATA"
+    for o in hidden: o.hide_render = False
+    C.samples, C.use_denoising = keep[0], keep[1]; SC.view_settings.view_transform = keep[2]
+    try: SC.view_settings.look = keep[3]
+    except Exception: pass
+    SC.view_settings.exposure = keep[4]
+    if keep[5] is not None: W.node_tree.nodes["Background"].inputs[1].default_value = keep[5]
+if A.palette and not A.no_render: apply_palette(_load_json(A.palette))
+if (A.variants or A.masks) and not A.no_render:
+    stills = [r for r in CAMS["rooms"] if (not only or r["slug"] in only)]
+    cfg = {"parts": list(PARTS), "views": []}
+    for r in stills:
+        d = os.path.join(OUT, "configurator", r["slug"]); os.makedirs(d, exist_ok=True); view = {"slug": r["slug"], "room": r["room"], "beauty": "beauty.jpg", "masks": {}, "variants": []}
+        if not os.path.exists(os.path.join(d, "beauty.jpg")): apply_palette({}); render_still(r, os.path.join(d, "beauty.jpg"))
+        if A.masks:
+            if not os.path.exists(os.path.join(d, "mask_walls.png")): render_masks(r, d)
+            view["masks"] = {p: f"mask_{p}.png" for p in PARTS}
+        if A.variants:
+            for v in _load_json(A.variants):
+                p_ = os.path.join(d, f"variant_{v['name']}.jpg")
+                if not os.path.exists(p_): apply_palette(v["palette"]); render_still(r, p_); print("variant", r["slug"], v["name"], flush=True)
+                view["variants"].append({"name": v["name"], "label": v.get("label", v["name"]), "palette": v["palette"], "file": f"variant_{v['name']}.jpg"})
+            apply_palette({})
+        cfg["views"].append(view); json.dump(cfg, open(os.path.join(OUT, "configurator", "configurator.json"), "w"), indent=1)
+    print("configurator pictures in", os.path.join(OUT, "configurator"), flush=True)
 json.dump(manifest, open(os.path.join(OUT, "manifest.json"), "w"), indent=1)
 print(f"\nDone. {done} new pictures in {OUT}\nZip that folder and send it back.\n", flush=True)
