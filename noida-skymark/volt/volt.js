@@ -1251,10 +1251,13 @@ function photoImg(i) {
   $('#pdots').innerHTML = photoImgs.length > 1 ? photoImgs.map((_, k) => `<i class="${k === i ? 'on' : ''}" data-i="${k}"></i>`).join('') : '';
   $('#pdots').querySelectorAll('i').forEach(d => d.onclick = (e) => { e.stopPropagation(); photoImg(+d.dataset.i); });
 }
+let STUDIO = new Set(); fetch('/media/noida-skymark/volt/configurator/configurator.json', { cache: 'no-cache' }).then(r => r.json()).then(j => { STUDIO = new Set((j.views || []).map(v => v.slug)); if (photoOn && photoRoom) photoShow(photoRoom); }).catch(() => {});
+const slugOf = (n) => n.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 function photoShow(r) {
   photoRoom = r; photoImgs = roomImages(r); photoOn = true; document.body.classList.add('photo'); $('#photo').classList.add('show');
   $('#pname').textContent = r.name.replace(' / command centre', '');
   $('#pmeta').textContent = `${r.area.toFixed(0)} m² · ` + (Object.entries(r.by).map(([g, n]) => `${n} ${GN[g]}`).join(' · ') || 'no seats');
+  const sl = slugOf(r.name), pd = $('#pdesign'); pd.style.display = STUDIO.has(sl) ? '' : 'none'; pd.href = './studio.html#v=' + sl;      // this view can be recoloured in the design studio
   photoImg(0); updatePback(); needRender = true;
 }
 function photoHide() { if (!photoOn) { updatePback(); return; } photoOn = false; document.body.classList.remove('photo'); $('#photo').classList.remove('show'); updatePback(); needRender = true; }
