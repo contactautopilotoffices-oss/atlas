@@ -1,0 +1,33 @@
+{
+  "id": "skymark-f1",
+  "about": "Skymark F-1, Sector 6, Noida. Source: the Blender exterior our builder saves (blender -b -P scripts/skymark/blender/exterior.py -- --save build/skymark.blend --context build/context_raw.glb). Frame: x along the footprint's long axis, y across, metres; the street front is the -y face.",
+  "source": { "kind": "blend", "path": "build/skymark.blend" },
+  "site": { "lat": 28.5911248, "lng": 77.319213, "name": "Plot F-01, Sector 6, Noida" },
+  "date": "2026-11-15",
+  "north_vector": [-0.832, 0.555],
+  "hero": { "prefixes": ["shell_", "int_", "roof", "sk_", "care", "clovia", "plant", "lift", "pv"], "front_deg": -90, "floor1_z": 4.5 },
+  "city": {
+    "scene_json": "build/noida/scene.json",
+    "about": "scripts/world/prep.py <skydata> build/noida/scene.json build/noida/world.json --region scripts/world/regions/noida-skymark.json. hero_xy is Skymark's footprint centroid in that scene; rot_deg turns the scene's east/north into this frame (-phi of exterior.py's frame.json).",
+    "hero_xy": [-0.972, -0.037], "frame": { "dx": 0, "dy": 0, "rot_deg": 56.36 },
+    "near": 130, "mid": 420, "far": 900
+  },
+  "planting": {
+    "palms": [[-28, -22.5], [-19, -23], [-11, -22.6], [-3, -23], [6, -22.5], [14, -23]],
+    "trees": [[-35, -26], [24, -27], [34, -8], [34, 8]],
+    "grass_density": 7
+  },
+  "entourage": {
+    "parked": [[-22, -20.5, 90], [-16.5, -20.5, 90], [2, -20.6, 88], [8, -20.4, 92]],
+    "people": [[-8, -19.5, 60], [-6.5, -19.8, 250], [12, -19.2, 120], [-30, -20, 300], [20, -19.6, 20]],
+    "lamps": [[-26, -21.5], [-4, -21.5], [18, -21.5]],
+    "benches": [[-10, -20.2, 0], [10, -20.2, 0]],
+    "bins": [[-12.5, -20.3], [12.5, -20.3]]
+  },
+  "light": {},
+  "finish": { "bloom": 0.06, "vignette": 0.16 },
+  "shots": {
+    "street": { "lens": 24, "shift": 0.33 },
+    "three_quarter": { "lens": 32 }
+  }
+}

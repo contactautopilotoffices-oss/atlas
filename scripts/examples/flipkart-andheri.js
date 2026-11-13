@@ -318,8 +318,7 @@ function write(slug, b, access, extra = {}) {
     JSON.stringify({ slug, path: "/" + slug, gate: { hash }, ...extra, ...b }) + ";\n");
   console.log(`Wrote examples/${slug}.bundle.json and engine/atlases/${slug}.js (${b.options.length} options)`);
 }
-/* /flipkart-andheri: the atlas with the 3D explorer (a work in progress). */
-write(SLUG, bundle, ACCESS);
+/* /flipkart-andheri: written last, below, from the same data as the 2D atlas. */
 /* /flipkart-andheri-east: the same atlas, 2D only, to send out while the 3D
    explorer is finished. Same deck, same figures; no meta.world, so no 3D
    button. It takes the same ID and password, on its own sign-in page (the
@@ -404,3 +403,10 @@ flat.transit.lines.splice(2, 0, { key: "line7", name: "Metro Line 7 (Red)", shor
   stations: [{ name: "Gundavali", lat: 19.11451, lng: 72.85516, open: true }] });
 flat.copy.connect.note = "Walking distance from each building to its two metro stations, and Andheri railway station by road, as measured in Google Maps (Nov 2026).";
 write(MAP_SLUG, flat, MAP_ACCESS, { media: `/media/${SLUG}/` });
+
+/* /flipkart-andheri: the same buildings, figures, order and Google Maps
+   distances as /flipkart-andheri-east, plus the 3D explorer. One source, so
+   the map and the 3D world always agree. Buildings with no 3D model yet
+   (the two Marwah buildings) show on the map only. */
+const withWorld = JSON.parse(JSON.stringify(flat)); withWorld.meta.world = bundle.meta.world;
+write(SLUG, withWorld, ACCESS);

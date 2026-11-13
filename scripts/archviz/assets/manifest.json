@@ -1,0 +1,49 @@
+{
+  "about": "What the archviz finish wants in its library, slot by slot. `fetch` pulls the Poly Haven ones (CC0, no key) into assets/library/. Point `local` slots at your own Quixel, Botaniq, Graswald or BlenderKit files. Every slot is optional: missing ones fall back to procedural materials or built-in proxies.",
+  "slots": {
+    "hdri.noon":    { "type": "hdri", "source": "polyhaven", "id": "kloofendal_48d_partly_cloudy_puresky", "query": "partly cloudy puresky midday", "res": "4k" },
+    "hdri.afternoon": { "type": "hdri", "source": "polyhaven", "id": "qwantani_afternoon_puresky", "query": "afternoon puresky clear", "res": "4k" },
+    "hdri.golden":  { "type": "hdri", "source": "polyhaven", "id": "kloofendal_43d_clear_puresky", "query": "sunset golden puresky clear low sun", "res": "4k" },
+    "hdri.dusk":    { "type": "hdri", "source": "polyhaven", "id": "kiara_1_dawn", "query": "dusk twilight blue hour sky", "res": "4k" },
+    "hdri.night":   { "type": "hdri", "source": "polyhaven", "id": "moonless_golf", "query": "night sky stars", "res": "4k" },
+    "hdri.overcast": { "type": "hdri", "source": "polyhaven", "id": "kloppenheim_06_puresky", "query": "overcast puresky soft", "res": "4k" },
+
+    "tex.concrete":  { "type": "texture", "source": "polyhaven", "id": "concrete_wall_008", "query": "concrete wall smooth" },
+    "tex.plaster":   { "type": "texture", "source": "polyhaven", "id": "painted_plaster_wall", "query": "painted plaster wall" },
+    "tex.asphalt":   { "type": "texture", "source": "polyhaven", "id": "asphalt_02", "query": "asphalt road" },
+    "tex.pavers":    { "type": "texture", "source": "polyhaven", "id": "pavement_02", "query": "pavement paving stones" },
+    "tex.kerb":      { "type": "texture", "source": "polyhaven", "id": "concrete_floor_worn_001", "query": "concrete floor worn" },
+    "tex.grass":     { "type": "texture", "source": "polyhaven", "id": "aerial_grass_rock", "query": "grass ground" },
+    "tex.soil":      { "type": "texture", "source": "polyhaven", "id": "brown_mud_leaves_01", "query": "dry ground mud leaves" },
+    "tex.metal":     { "type": "texture", "source": "polyhaven", "id": "metal_plate", "query": "brushed metal" },
+    "tex.acp":       { "type": "texture", "source": "polyhaven", "id": "painted_metal_shutter", "query": "painted metal panel" },
+    "tex.stone":     { "type": "texture", "source": "polyhaven", "id": "granite_tile", "query": "granite tiles" },
+    "tex.roof_felt": { "type": "texture", "source": "polyhaven", "id": "roof_07", "query": "roof tiles" },
+    "tex.wood":      { "type": "texture", "source": "polyhaven", "id": "wood_table_001", "query": "wood planks" },
+    "tex.carpet":    { "type": "texture", "source": "polyhaven", "id": "fabric_pattern_07", "query": "carpet fabric" },
+
+    "tree.broadleaf_a": { "type": "model", "source": "polyhaven", "id": "island_tree_01", "query": "tree", "height_m": 11 },
+    "tree.broadleaf_b": { "type": "model", "source": "polyhaven", "id": "island_tree_02", "query": "tree broadleaf", "height_m": 9 },
+    "tree.palm":        { "type": "model", "source": "local", "path": "library/palm.glb", "height_m": 9, "note": "Poly Haven has no palm; use a Botaniq / Sketchfab royal palm or Washingtonia, 8 to 11 m" },
+    "shrub.hedge":      { "type": "model", "source": "polyhaven", "id": "shrub_02", "query": "shrub bush", "height_m": 0.9 },
+    "grass.clump":      { "type": "model", "source": "polyhaven", "id": "grass_medium_01", "query": "grass clump", "height_m": 0.25 },
+    "plant.potted":     { "type": "model", "source": "polyhaven", "id": "potted_plant_01", "query": "potted plant", "height_m": 1.0 },
+
+    "car.saloon_a":  { "type": "model", "source": "local", "path": "library/car_saloon_a.glb", "length_m": 4.4, "note": "a Sketchfab / BlenderKit sedan, white or silver" },
+    "car.saloon_b":  { "type": "model", "source": "local", "path": "library/car_saloon_b.glb", "length_m": 4.5 },
+    "car.suv":       { "type": "model", "source": "local", "path": "library/car_suv.glb", "length_m": 4.7 },
+    "car.auto":      { "type": "model", "source": "local", "path": "library/auto_rickshaw.glb", "length_m": 2.6 },
+
+    "person.standing_a": { "type": "model", "source": "local", "path": "library/person_standing_a.glb", "height_m": 1.75, "note": "Renderpeople free, Mixamo, or BlenderKit scanned people" },
+    "person.standing_b": { "type": "model", "source": "local", "path": "library/person_standing_b.glb", "height_m": 1.68 },
+    "person.walking_a":  { "type": "model", "source": "local", "path": "library/person_walking_a.glb", "height_m": 1.78 },
+    "person.sitting_a":  { "type": "model", "source": "local", "path": "library/person_sitting_a.glb", "height_m": 1.3 },
+
+    "prop.lamp_post":  { "type": "model", "source": "polyhaven", "id": "street_lamp_02", "query": "street lamp", "height_m": 7.5 },
+    "prop.bench":      { "type": "model", "source": "polyhaven", "id": "park_bench_01", "query": "park bench", "height_m": 0.85 },
+    "prop.bollard":    { "type": "model", "source": "local", "path": "library/bollard.glb", "height_m": 0.9 },
+    "prop.bin":        { "type": "model", "source": "polyhaven", "id": "trash_can_01", "query": "trash can", "height_m": 1.0 },
+    "prop.ac_unit":    { "type": "model", "source": "polyhaven", "id": "air_conditioner_01", "query": "air conditioner", "height_m": 0.7 },
+    "prop.water_tank": { "type": "model", "source": "local", "path": "library/water_tank.glb", "height_m": 1.4, "note": "the black Sintex tank every Indian roof has" }
+  }
+}

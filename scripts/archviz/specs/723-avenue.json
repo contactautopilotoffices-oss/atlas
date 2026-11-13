@@ -1,0 +1,20 @@
+{
+  "id": "723-avenue",
+  "about": "House of Wadhwa 723 Avenue, Marol, Andheri East. Source: the diorama our builder exports (scripts/world/diorama.py ... 723-avenue ... --glb), uncompressed: npx -y @gltf-transform/cli@4 copy media/flipkart-andheri/world/d/723-avenue.glb build/723-avenue.glb. Frame: metres round the diorama's origin, x east, y north.",
+  "source": { "kind": "glb", "path": "build/723-avenue.glb", "json": "media/flipkart-andheri/world/d/723-avenue.json" },
+  "site": { "lat": 19.109713, "lng": 72.884422, "name": "Marol Co-operative Industrial Estate Road, Andheri East" },
+  "date": "2026-11-15",
+  "north_vector": [0, 1],
+  "hero": { "prefixes": ["opt_", "sign_723"] },
+  "city": {
+    "scene_json": "build/andheri/scene.json",
+    "about": "scripts/world/prep.py <w3data> build/andheri/scene.json build/andheri/world.json. hero_xy is the diorama's origin in that scene (its JSON `origin`).",
+    "hero_xy": [1574.69, -230.44], "frame": { "dx": 0, "dy": 0, "rot_deg": 0 },
+    "near": 140, "mid": 420, "far": 1000, "skip_opt": true
+  },
+  "planting": { "grass_density": 5 },
+  "entourage": {},
+  "light": {},
+  "finish": { "bloom": 0.07, "vignette": 0.16 },
+  "shots": { "street": { "lens": 20, "shift": 0.36 } }
+}

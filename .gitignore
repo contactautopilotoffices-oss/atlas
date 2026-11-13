@@ -41,3 +41,6 @@ media/indore/backdrop-*.webp
 .cms-dev-store.json
 media/_cms-dev/
 /docs-out/
+__pycache__/
+build/
+renders/
