@@ -87,11 +87,16 @@ tr.hd td{font-size:7.2pt;letter-spacing:.1em;text-transform:uppercase;color:var(
 .chain span::after{content:"\2192";margin-left:1.5mm;color:var(--acc)}
 .chain span:last-child::after{content:""}
 .img{position:absolute;inset:0;background:linear-gradient(135deg,#3a2a20,#6b4a36 55%,#a3502c);background-size:cover;background-position:center}
-.img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,12,8,.1),rgba(20,12,8,.62))}
+/* the photograph is darkened where the type sits: the title at the top and
+   the figures at the foot, lighter through the middle so the picture shows */
+.img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,12,8,.72) 0%,rgba(20,12,8,.38) 34%,rgba(20,12,8,.18) 52%,rgba(20,12,8,.5) 74%,rgba(20,12,8,.86) 100%)}
 .img.band{position:relative;inset:auto;height:100%;min-height:40mm;border-radius:6px;overflow:hidden}
 .img .cap{position:absolute;right:3mm;bottom:2mm;font-size:6.8pt;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);z-index:1}
 .over{position:relative;z-index:1;color:#f7f2ea;display:flex;flex-direction:column;height:100%}
-.over .mut,.over .dim{color:rgba(247,242,234,.75)}
+.over .mut,.over .dim{color:rgba(247,242,234,.88)}
+.over{text-shadow:0 1px 10px rgba(20,12,8,.55)}
+.over .kpi .l,.over .kpi .s{color:rgba(247,242,234,.9)}
+.over .secnum{color:#e8a87c;opacity:1}
 .over .kpi .v{color:#f7f2ea}
 .over h1,.over h2{color:#fff}
 .secnum{font-family:var(--serif);font-size:44pt;line-height:1;color:var(--acc);opacity:.9}

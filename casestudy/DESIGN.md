@@ -78,3 +78,7 @@ what it fixes, and fixes the worst one to three first.
 - Side columns of a table page (pages 5, 9, 11, 34, 38): the boxes now
   spread evenly down the table's height; with only two short boxes (levers)
   the space between them is wide.
+- Openers with a photograph: the subtitle over bright window frames (01, 05)
+  is the weakest text on those pages; a panel behind it would be firmer.
+- Opener 07 (top three risks) shows no photograph in the Andheri render; its
+  plain band is the only opener that looks unlike the rest.
