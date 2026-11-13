@@ -1,0 +1,214 @@
+seat_id,group,room,kind,at_desk,block,parent_block,x_in,y_in,instance
+W1,Work seats (desk + chair),Staff room,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996871.7,-3365340.2,1386
+W2,Work seats (desk + chair),Staff room,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996922.1,-3365340.2,1384
+W3,Work seats (desk + chair),Staff room,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996871.4,-3365380.4,1390
+W4,Work seats (desk + chair),Staff room,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996921.8,-3365380.4,1388
+W5,Work seats (desk + chair),Finance room,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2997018.0,-3365340.2,1212
+W6,Work seats (desk + chair),Finance room,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2997063.6,-3365340.2,1214
+W7,Work seats (desk + chair),Finance room,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2997111.6,-3365340.2,1222
+W8,Work seats (desk + chair),Finance room,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2997162.0,-3365340.2,1216
+W9,Work seats (desk + chair),Finance room,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2997063.3,-3365380.4,1218
+W10,Work seats (desk + chair),Finance room,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2997111.3,-3365380.4,1224
+W11,Work seats (desk + chair),Finance room,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2997161.7,-3365380.4,1220
+W12,Work seats (desk + chair),Director cabin 01,director chair,,A$Cee30255b,A$C7e9a1dde,2997543.3,-3365411.7,1592
+W13,Work seats (desk + chair),Director cabin 02,director chair,,A$Cee30255b,A$C7e9a1dde,2997535.2,-3365527.8,1560
+W14,Work seats (desk + chair),Control room / command centre,task chair,,A$C136922d8,,2996263.5,-3365517.3,1515
+W15,Work seats (desk + chair),Control room / command centre,task chair,,A$C136922d8,,2996323.5,-3365517.3,1518
+W16,Work seats (desk + chair),Control room / command centre,task chair,,A$C136922d8,,2996263.5,-3365553.3,1514
+W17,Work seats (desk + chair),Control room / command centre,task chair,,A$C136922d8,,2996323.5,-3365553.3,1517
+W18,Work seats (desk + chair),Control room / command centre,task chair,,A$C136922d8,,2996263.5,-3365589.3,1513
+W19,Work seats (desk + chair),Control room / command centre,task chair,,A$C136922d8,,2996323.5,-3365589.3,1516
+W20,Work seats (desk + chair),Control room / command centre,task chair,,A$C136922d8,,2996263.5,-3365661.3,1479
+W21,Work seats (desk + chair),Control room / command centre,task chair,,A$C136922d8,,2996323.5,-3365661.3,1482
+W22,Work seats (desk + chair),Control room / command centre,task chair,,A$C136922d8,,2996263.5,-3365697.3,1478
+W23,Work seats (desk + chair),Control room / command centre,task chair,,A$C136922d8,,2996323.5,-3365697.3,1481
+W24,Work seats (desk + chair),Control room / command centre,task chair,,A$C136922d8,,2996263.5,-3365733.3,1477
+W25,Work seats (desk + chair),Control room / command centre,task chair,,A$C136922d8,,2996323.5,-3365733.3,1480
+W26,Work seats (desk + chair),Control room / command centre,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996183.6,-3365809.2,1394
+W27,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996398.5,-3365541.6,1426
+W28,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996438.6,-3365541.8,1412
+W29,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996506.5,-3365541.6,1410
+W30,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996546.6,-3365541.8,1291
+W31,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996614.5,-3365541.6,1289
+W32,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996807.6,-3365541.8,1241
+W33,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996875.5,-3365541.6,1239
+W34,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996915.6,-3365541.8,1271
+W35,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996983.5,-3365541.6,1269
+W36,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2997023.6,-3365541.8,1251
+W37,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996398.5,-3365587.1,1418
+W38,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996438.6,-3365587.4,1404
+W39,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996506.5,-3365587.1,1396
+W40,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996546.6,-3365587.4,1281
+W41,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996614.5,-3365587.1,1273
+W42,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996807.6,-3365587.4,1233
+W43,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996875.5,-3365587.1,1227
+W44,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996915.6,-3365587.4,1261
+W45,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996983.5,-3365587.1,1253
+W46,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2997023.6,-3365587.4,1243
+W47,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996398.5,-3365635.1,1420
+W48,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996438.6,-3365635.4,1406
+W49,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996506.5,-3365635.1,1398
+W50,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996546.6,-3365635.4,1283
+W51,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996614.5,-3365635.1,1275
+W52,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996807.6,-3365635.4,1235
+W53,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996875.5,-3365635.1,1229
+W54,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996915.6,-3365635.4,1263
+W55,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996983.5,-3365635.1,1255
+W56,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2997023.6,-3365635.4,1245
+W57,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996398.5,-3365683.1,1422
+W58,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996438.6,-3365683.4,1408
+W59,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996506.5,-3365683.1,1400
+W60,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996546.6,-3365683.4,1285
+W61,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996614.5,-3365683.1,1277
+W62,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996807.6,-3365683.4,1237
+W63,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996875.5,-3365683.1,1231
+W64,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996915.6,-3365683.4,1265
+W65,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996983.5,-3365683.1,1257
+W66,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2997023.6,-3365683.4,1247
+W67,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996398.5,-3365731.1,1424
+W68,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996506.5,-3365731.1,1402
+W69,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996546.6,-3365731.4,1287
+W70,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996614.5,-3365731.1,1279
+W71,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996875.5,-3365731.1,1524
+W72,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996915.6,-3365731.4,1267
+W73,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2996983.5,-3365731.1,1259
+W74,Work seats (desk + chair),Open workstations,task chair,4'x2' workstation,A$C136922d8,A$C779abbf3,2997023.6,-3365731.4,1249
+W75,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996183.6,-3365857.2,1333
+W76,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996183.6,-3365893.2,1335
+W77,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996243.6,-3365893.2,1323
+W78,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996291.6,-3365893.2,1325
+W79,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996351.6,-3365893.2,1349
+W80,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996399.6,-3365893.2,1351
+W81,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996459.6,-3365893.2,1365
+W82,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996507.6,-3365893.2,1367
+W83,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996567.6,-3365893.2,1375
+W84,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996183.6,-3365929.2,1331
+W85,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996243.6,-3365929.2,1319
+W86,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996291.6,-3365929.2,1321
+W87,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996351.6,-3365929.2,1345
+W88,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996399.6,-3365929.2,1347
+W89,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996459.6,-3365929.2,1361
+W90,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996507.6,-3365929.2,1363
+W91,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996567.6,-3365929.2,1373
+W92,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996183.6,-3365965.2,1329
+W93,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996243.6,-3365965.2,1315
+W94,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996291.6,-3365965.2,1317
+W95,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996351.6,-3365965.2,1341
+W96,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996399.6,-3365965.2,1343
+W97,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996459.6,-3365965.2,1357
+W98,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996507.6,-3365965.2,1359
+W99,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996567.6,-3365965.2,1371
+W100,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996183.6,-3366001.2,1327
+W101,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996243.6,-3366001.2,1311
+W102,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996291.6,-3366001.2,1313
+W103,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996351.6,-3366001.2,1337
+W104,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996399.6,-3366001.2,1339
+W105,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996459.6,-3366001.2,1353
+W106,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996507.6,-3366001.2,1355
+W107,Work seats (desk + chair),Sales office,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996567.6,-3366001.2,1369
+W108,Work seats (desk + chair),Calling room,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996618.6,-3365857.2,1476
+W109,Work seats (desk + chair),Calling room,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996618.6,-3365893.2,1464
+W110,Work seats (desk + chair),Calling room,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996678.6,-3365893.2,1472
+W111,Work seats (desk + chair),Calling room,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996618.6,-3365929.2,1462
+W112,Work seats (desk + chair),Calling room,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996678.6,-3365929.2,1470
+W113,Work seats (desk + chair),Calling room,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996618.6,-3365965.2,1460
+W114,Work seats (desk + chair),Calling room,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996678.6,-3365965.2,1468
+W115,Work seats (desk + chair),Calling room,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996618.6,-3366001.2,1458
+W116,Work seats (desk + chair),Calling room,task chair,3'x2' workstation,A$C136922d8,WS-3'X2',2996678.6,-3366001.2,1466
+M1,Meeting room seats,18 seater conference room,meeting chair,,A$Cd2419d53,,2996575.1,-3365342.5,1489
+M2,Meeting room seats,18 seater conference room,meeting chair,,A$Cd2419d53,,2996602.8,-3365342.5,1490
+M3,Meeting room seats,18 seater conference room,meeting chair,,A$Cd2419d53,,2996630.9,-3365342.5,1488
+M4,Meeting room seats,18 seater conference room,meeting chair,,A$Cd2419d53,,2996657.5,-3365342.5,1487
+M5,Meeting room seats,18 seater conference room,meeting chair,,A$Cd2419d53,,2996689.6,-3365342.5,1495
+M6,Meeting room seats,18 seater conference room,meeting chair,,A$Cd2419d53,,2996717.7,-3365342.5,1496
+M7,Meeting room seats,18 seater conference room,meeting chair,,A$Cd2419d53,,2996745.9,-3365342.5,1498
+M8,Meeting room seats,18 seater conference room,meeting chair,,A$Cd2419d53,,2996767.5,-3365342.5,1497
+M9,Meeting room seats,18 seater conference room,meeting chair,,A$Cd2419d53,,2996552.8,-3365372.3,1503
+M10,Meeting room seats,18 seater conference room,meeting chair,,A$Cd2419d53,,2996795.8,-3365372.4,1504
+M11,Meeting room seats,18 seater conference room,meeting chair,,A$Cd2419d53,,2996574.3,-3365402.1,1493
+M12,Meeting room seats,18 seater conference room,meeting chair,,A$Cd2419d53,,2996603.0,-3365402.1,1494
+M13,Meeting room seats,18 seater conference room,meeting chair,,A$Cd2419d53,,2996631.1,-3365402.1,1492
+M14,Meeting room seats,18 seater conference room,meeting chair,,A$Cd2419d53,,2996657.7,-3365402.1,1491
+M15,Meeting room seats,18 seater conference room,meeting chair,,A$Cd2419d53,,2996689.6,-3365402.1,1499
+M16,Meeting room seats,18 seater conference room,meeting chair,,A$Cd2419d53,,2996718.0,-3365402.1,1500
+M17,Meeting room seats,18 seater conference room,meeting chair,,A$Cd2419d53,,2996746.1,-3365402.1,1502
+M18,Meeting room seats,18 seater conference room,meeting chair,,A$Cd2419d53,,2996767.8,-3365402.1,1501
+M19,Meeting room seats,06 seater meeting room,meeting chair,,A$Cd2419d53,,2997257.9,-3365336.5,1206
+M20,Meeting room seats,06 seater meeting room,meeting chair,,A$Cd2419d53,,2997285.1,-3365336.5,1204
+M21,Meeting room seats,06 seater meeting room,meeting chair,,A$Cd2419d53,,2997312.1,-3365336.5,1203
+M22,Meeting room seats,06 seater meeting room,meeting chair,,A$Cd2419d53,,2997257.6,-3365384.1,1205
+M23,Meeting room seats,06 seater meeting room,meeting chair,,A$Cd2419d53,,2997285.3,-3365384.1,1202
+M24,Meeting room seats,06 seater meeting room,meeting chair,,A$Cd2419d53,,2997312.0,-3365384.1,1201
+M25,Meeting room seats,04 seater meeting room 03,meeting chair,,A$Cd2419d53,,2997189.7,-3365525.1,1377
+M26,Meeting room seats,04 seater meeting room 03,meeting chair,,A$Cd2419d53,,2997237.4,-3365525.1,1379
+M27,Meeting room seats,04 seater meeting room 03,meeting chair,,A$Cd2419d53,,2997189.7,-3365553.8,1376
+M28,Meeting room seats,04 seater meeting room 03,meeting chair,,A$Cd2419d53,,2997237.4,-3365553.8,1378
+M29,Meeting room seats,04 seater meeting room 01,meeting chair,,A$Cd2419d53,,2997066.8,-3365845.9,1539
+M30,Meeting room seats,04 seater meeting room 01,meeting chair,,A$Cd2419d53,,2997114.4,-3365845.9,1541
+M31,Meeting room seats,04 seater meeting room 01,meeting chair,,A$Cd2419d53,,2997066.8,-3365879.3,1540
+M32,Meeting room seats,04 seater meeting room 01,meeting chair,,A$Cd2419d53,,2997114.4,-3365879.4,1542
+M33,Meeting room seats,06 seater meeting room (east),meeting chair,,A$Cd2419d53,,2997526.6,-3366051.1,1604
+M34,Meeting room seats,06 seater meeting room (east),meeting chair,,A$Cd2419d53,,2997574.3,-3366051.1,1602
+M35,Meeting room seats,06 seater meeting room (east),meeting chair,,A$Cd2419d53,,2997526.6,-3366078.1,1605
+M36,Meeting room seats,06 seater meeting room (east),meeting chair,,A$Cd2419d53,,2997574.3,-3366077.9,1603
+M37,Meeting room seats,06 seater meeting room (east),meeting chair,,A$Cd2419d53,,2997526.6,-3366105.2,1607
+M38,Meeting room seats,06 seater meeting room (east),meeting chair,,A$Cd2419d53,,2997574.3,-3366105.5,1606
+C1,Cafeteria seats,Cafeteria,cafe stool,,A$C445ca927,,2996182.6,-3365337.9,1196
+C2,Cafeteria seats,Cafeteria,cafe stool,,A$C445ca927,,2996207.8,-3365337.9,1197
+C3,Cafeteria seats,Cafeteria,cafe stool,,A$C445ca927,,2996233.1,-3365337.9,1198
+C4,Cafeteria seats,Cafeteria,cafe stool,,A$C445ca927,,2996258.3,-3365337.9,1554
+C5,Cafeteria seats,Cafeteria,cafe chair,,A$Caa80c39f,A$Ce427abf2,2996199.4,-3365387.5,1436
+C6,Cafeteria seats,Cafeteria,cafe chair,,A$Caa80c39f,A$Ce427abf2,2996228.1,-3365388.8,1435
+C7,Cafeteria seats,Cafeteria,cafe chair,,A$Caa80c39f,A$Ce427abf2,2996274.7,-3365387.5,1441
+C8,Cafeteria seats,Cafeteria,cafe chair,,A$Caa80c39f,A$Ce427abf2,2996303.5,-3365388.8,1440
+C9,Cafeteria seats,Cafeteria,cafe chair,,A$Caa80c39f,A$Ce427abf2,2996199.3,-3365417.4,1434
+C10,Cafeteria seats,Cafeteria,cafe chair,,A$Caa80c39f,A$Ce427abf2,2996228.1,-3365418.2,1433
+C11,Cafeteria seats,Cafeteria,cafe chair,,A$Caa80c39f,A$Ce427abf2,2996274.6,-3365417.4,1439
+C12,Cafeteria seats,Cafeteria,cafe chair,,A$Caa80c39f,A$Ce427abf2,2996303.4,-3365418.2,1438
+L1,"Lounge, collab and visitor seats",Collab area 02,lounge armchair,,A$Cd18c31fc,,2996425.2,-3365395.7,1511
+L2,"Lounge, collab and visitor seats",Collab area 02,3-seat sofa,,A$C897f58da,,2996360.0,-3365420.5,1508
+L3,"Lounge, collab and visitor seats",Collab area 02,3-seat sofa,,A$C897f58da,,2996360.0,-3365420.5,1508
+L4,"Lounge, collab and visitor seats",Collab area 02,3-seat sofa,,A$C897f58da,,2996360.0,-3365420.5,1508
+L5,"Lounge, collab and visitor seats",Collab area 02,lounge armchair,,A$Cd18c31fc,,2996424.4,-3365436.9,1512
+L6,"Lounge, collab and visitor seats",Lounge area (north),lounge armchair,,A$Cd18c31fc,,2997417.8,-3365332.6,1573
+L7,"Lounge, collab and visitor seats",Lounge area (north),lounge armchair,,A$Cd18c31fc,,2997417.8,-3365332.6,1574
+L8,"Lounge, collab and visitor seats",Lounge area (north),3-seat sofa,,A$C897f58da,,2997350.1,-3365359.3,1572
+L9,"Lounge, collab and visitor seats",Lounge area (north),3-seat sofa,,A$C897f58da,,2997350.1,-3365359.3,1572
+L10,"Lounge, collab and visitor seats",Lounge area (north),3-seat sofa,,A$C897f58da,,2997350.1,-3365359.3,1572
+L11,"Lounge, collab and visitor seats",Lounge area (north),lounge tub chair,,*U54,A$Cca73c950,2997413.2,-3365448.6,1584
+L12,"Lounge, collab and visitor seats",Lounge area (north),2-seat sofa,,*U55,A$Cca73c950,2997432.2,-3365446.2,1587
+L13,"Lounge, collab and visitor seats",Lounge area (north),2-seat sofa,,*U55,A$Cca73c950,2997432.2,-3365446.2,1587
+L14,"Lounge, collab and visitor seats",Lounge area (north),lounge tub chair,,*U52,A$Cca73c950,2997441.1,-3365448.5,1585
+L15,"Lounge, collab and visitor seats",Lounge area (north),lounge tub chair,,*U53,A$Cca73c950,2997451.7,-3365448.5,1586
+L16,"Lounge, collab and visitor seats",Director cabin 01,visitor chair,,A$Cc5b0ed80,A$C7e9a1dde,2997498.7,-3365406.2,1590
+L17,"Lounge, collab and visitor seats",Director cabin 01,visitor chair,,A$Cc5b0ed80,A$C7e9a1dde,2997498.7,-3365431.3,1591
+L18,"Lounge, collab and visitor seats",Lounge area (south),lounge tub chair,,*U53,A$Cca73c950,2997298.5,-3365507.2,1565
+L19,"Lounge, collab and visitor seats",Lounge area (south),lounge tub chair,,*U52,A$Cca73c950,2997298.5,-3365516.9,1564
+L20,"Lounge, collab and visitor seats",Lounge area (south),lounge tub chair,,*U53,A$Cca73c950,2997401.1,-3365522.5,1570
+L21,"Lounge, collab and visitor seats",Lounge area (south),lounge tub chair,,*U52,A$Cca73c950,2997401.1,-3365533.1,1569
+L22,"Lounge, collab and visitor seats",Lounge area (south),2-seat sofa,,*U55,A$Cca73c950,2997398.7,-3365542.0,1571
+L23,"Lounge, collab and visitor seats",Lounge area (south),2-seat sofa,,*U55,A$Cca73c950,2997398.7,-3365542.0,1571
+L24,"Lounge, collab and visitor seats",Lounge area (south),lounge tub chair,,*U54,A$Cca73c950,2997298.5,-3365550.7,1563
+L25,"Lounge, collab and visitor seats",Lounge area (south),lounge tub chair,,*U54,A$Cca73c950,2997401.1,-3365561.0,1568
+L26,"Lounge, collab and visitor seats",Director cabin 02,visitor chair,,A$Cc5b0ed80,A$C7e9a1dde,2997529.5,-3365483.3,1558
+L27,"Lounge, collab and visitor seats",Director cabin 02,visitor chair,,A$Cc5b0ed80,A$C7e9a1dde,2997554.6,-3365483.3,1559
+L28,"Lounge, collab and visitor seats",Director cabin 02,lounge tub chair,,*U53,A$Cca73c950,2997442.9,-3365507.2,1581
+L29,"Lounge, collab and visitor seats",Director cabin 02,lounge tub chair,,*U52,A$Cca73c950,2997442.9,-3365516.9,1580
+L30,"Lounge, collab and visitor seats",Director cabin 02,lounge tub chair,,*U54,A$Cca73c950,2997442.9,-3365550.7,1579
+L31,"Lounge, collab and visitor seats",Open workstations,lounge chair,,*U22,A$C753d1f16,2996711.8,-3365710.5,1532
+L32,"Lounge, collab and visitor seats",Open workstations,lounge chair,,A$C9b980f9b,A$C753d1f16,2996683.1,-3365730.3,1530
+L33,"Lounge, collab and visitor seats",Open workstations,lounge chair,,A$C9b980f9b,A$C753d1f16,2996740.7,-3365735.9,1531
+L34,"Lounge, collab and visitor seats",Collab area 01,lounge armchair,,A$Cd18c31fc,,2996932.0,-3365841.2,1304
+L35,"Lounge, collab and visitor seats",Collab area 01,3-seat sofa,,A$C897f58da,,2996902.1,-3365890.9,1306
+L36,"Lounge, collab and visitor seats",Collab area 01,3-seat sofa,,A$C897f58da,,2996902.1,-3365890.9,1306
+L37,"Lounge, collab and visitor seats",Collab area 01,3-seat sofa,,A$C897f58da,,2996902.1,-3365890.9,1306
+L38,"Lounge, collab and visitor seats",Atrium-side lounge,2-seat sofa,,*U55,A$Cca73c950,2997300.9,-3365591.1,1566
+L39,"Lounge, collab and visitor seats",Atrium-side lounge,2-seat sofa,,*U55,A$Cca73c950,2997300.9,-3365591.1,1566
+L40,"Lounge, collab and visitor seats",Atrium-side lounge,2-seat sofa,,*U55,A$Cca73c950,2997445.2,-3365591.1,1582
+L41,"Lounge, collab and visitor seats",Atrium-side lounge,2-seat sofa,,*U55,A$Cca73c950,2997445.2,-3365591.1,1582
+O1,"Operator (Autopilot cabin, reception)",Reception,task chair,,A$C136922d8,,2997177.1,-3366119.6,1622
+O2,"Operator (Autopilot cabin, reception)",Reception,task chair,,A$C136922d8,,2997177.1,-3366155.9,1621
+O3,"Operator (Autopilot cabin, reception)",Autopilot cabin,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2997402.7,-3366069.5,1617
+O4,"Operator (Autopilot cabin, reception)",Autopilot cabin,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2997438.7,-3366069.5,1615
+O5,"Operator (Autopilot cabin, reception)",Autopilot cabin,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2997474.7,-3366069.5,1613
+O6,"Operator (Autopilot cabin, reception)",Autopilot cabin,staff chair,,Staff Chair - Staff Chair_1-171-Level 1,5555 FT TABLE,2997451.6,-3366115.9,1610

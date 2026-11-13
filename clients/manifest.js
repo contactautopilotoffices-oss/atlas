@@ -17,6 +17,11 @@ window.CLIENT_MANIFEST = {
      (it replaced the older map view of this client). Only the password's
      SHA-256 is stored, as for Indore and Chennai. */
   "DIGDEMOACC":  { redirect: "/noida/",     passHash: "62ffad2586cdaaca43fe963237ace65edc2da7627fe23c231b94e96b724a824d" },
+  /* F1 Skymark, Sector 6, Noida: one property at the centre of a flat map,
+     with its 3D twin standing on it and the location around it. A separate
+     app at /noida-skymark/ with its own gate; only the password's SHA-256
+     is stored. */
+  "SKYMARK-AP":  { redirect: "/noida-skymark/", passHash: "903383a41eaa14c85eeed164c6bacdfeaa875954011143300c436ed5ba65fdf9" },
   /* The Digitide GROUP command centre is a separate app at /digitide/ with its
      own gate. It is listed here with a `redirect` rather than a `slug` so that
      signing in at the site root sends you there instead of failing with

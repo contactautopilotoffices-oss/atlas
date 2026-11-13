@@ -1,0 +1,481 @@
+{
+ "about": "Camera for each room, in the CAD layout's frame (metres, x east, y north, z up). Made by make_cameras.py.",
+ "eye": 1.5,
+ "rooms": [
+  {
+   "room": "Cafeteria",
+   "slug": "cafeteria",
+   "floor": "wood",
+   "still": {
+    "pos": [
+     4.45,
+     23.8,
+     1.5
+    ],
+    "look": [
+     1.5,
+     26.7,
+     0.95
+    ],
+    "lens_mm": 18
+   },
+   "pano": {
+    "pos": [
+     4.05,
+     23.89,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "Collab area 02",
+   "slug": "collab-area-02",
+   "floor": "carpet",
+   "still": {
+    "pos": [
+     8.22,
+     24.7,
+     1.5
+    ],
+    "look": [
+     6.48,
+     25.44,
+     1.05
+    ],
+    "lens_mm": 20
+   },
+   "pano": {
+    "pos": [
+     8.02,
+     24.9,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "18 seater conference room",
+   "slug": "18-seater-conference-room",
+   "floor": "carpet",
+   "still": {
+    "pos": [
+     9.5,
+     27.25,
+     1.5
+    ],
+    "look": [
+     16.5,
+     25.3,
+     0.95
+    ],
+    "lens_mm": 18
+   },
+   "pano": {
+    "pos": [
+     16.94,
+     27.05,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "Staff room",
+   "slug": "staff-room",
+   "floor": "carpet",
+   "still": {
+    "pos": [
+     20.5,
+     26.34,
+     1.5
+    ],
+    "look": [
+     19.22,
+     26.4,
+     1.05
+    ],
+    "lens_mm": 20
+   },
+   "pano": {
+    "pos": [
+     20.5,
+     26.34,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "Finance room",
+   "slug": "finance-room",
+   "floor": "carpet",
+   "still": {
+    "pos": [
+     21.75,
+     25.45,
+     1.5
+    ],
+    "look": [
+     25.6,
+     26.7,
+     0.95
+    ],
+    "lens_mm": 18
+   },
+   "pano": {
+    "pos": [
+     23.91,
+     26.34,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "06 seater meeting room",
+   "slug": "06-seater-meeting-room",
+   "floor": "carpet",
+   "still": {
+    "pos": [
+     26.9,
+     27.14,
+     1.5
+    ],
+    "look": [
+     28.59,
+     26.12,
+     1.05
+    ],
+    "lens_mm": 20
+   },
+   "pano": {
+    "pos": [
+     27.1,
+     27.14,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "Lounge area (north)",
+   "slug": "lounge-area-north",
+   "floor": "carpet",
+   "still": {
+    "pos": [
+     32.9,
+     24.9,
+     1.45
+    ],
+    "look": [
+     30.8,
+     27.0,
+     0.8
+    ],
+    "lens_mm": 20
+   },
+   "pano": {
+    "pos": [
+     32.9,
+     25.71,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "Director cabin 01",
+   "slug": "director-cabin-01",
+   "floor": "wood",
+   "still": {
+    "pos": [
+     33.93,
+     26.51,
+     1.5
+    ],
+    "look": [
+     35.34,
+     25.51,
+     1.05
+    ],
+    "lens_mm": 20
+   },
+   "pano": {
+    "pos": [
+     34.93,
+     26.31,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "Lounge area (south)",
+   "slug": "lounge-area-south",
+   "floor": "carpet",
+   "still": {
+    "pos": [
+     29.28,
+     23.32,
+     1.5
+    ],
+    "look": [
+     30.96,
+     22.03,
+     1.05
+    ],
+    "lens_mm": 20
+   },
+   "pano": {
+    "pos": [
+     30.88,
+     22.92,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "Director cabin 02",
+   "slug": "director-cabin-02",
+   "floor": "wood",
+   "still": {
+    "pos": [
+     32.68,
+     23.32,
+     1.5
+    ],
+    "look": [
+     34.93,
+     22.03,
+     1.05
+    ],
+    "lens_mm": 20
+   },
+   "pano": {
+    "pos": [
+     33.88,
+     22.12,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "Control room / command centre",
+   "slug": "control-room-command-centre",
+   "floor": "carpet",
+   "still": {
+    "pos": [
+     1.0,
+     15.3,
+     1.5
+    ],
+    "look": [
+     3.6,
+     20.4,
+     0.95
+    ],
+    "lens_mm": 18
+   },
+   "pano": {
+    "pos": [
+     3.05,
+     15.67,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "Open workstations",
+   "slug": "open-workstations",
+   "floor": "carpet",
+   "still": {
+    "pos": [
+     9.3,
+     14.75,
+     1.5
+    ],
+    "look": [
+     18.5,
+     21.2,
+     1.05
+    ],
+    "lens_mm": 20
+   },
+   "pano": {
+    "pos": [
+     12.99,
+     22.56,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "Sales office",
+   "slug": "sales-office",
+   "floor": "carpet",
+   "still": {
+    "pos": [
+     10.55,
+     14.05,
+     1.5
+    ],
+    "look": [
+     3.5,
+     11.0,
+     1.0
+    ],
+    "lens_mm": 18
+   },
+   "pano": {
+    "pos": [
+     7.25,
+     13.76,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "Calling room",
+   "slug": "calling-room",
+   "floor": "carpet",
+   "still": {
+    "pos": [
+     12.95,
+     14.2,
+     1.5
+    ],
+    "look": [
+     12.9,
+     10.8,
+     0.95
+    ],
+    "lens_mm": 18
+   },
+   "pano": {
+    "pos": [
+     13.02,
+     13.76,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "Collab area 01",
+   "slug": "collab-area-01",
+   "floor": "carpet",
+   "still": {
+    "pos": [
+     21.2,
+     11.3,
+     1.45
+    ],
+    "look": [
+     19.3,
+     13.6,
+     0.8
+    ],
+    "lens_mm": 20
+   },
+   "pano": {
+    "pos": [
+     19.23,
+     11.15,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "04 seater meeting room 01",
+   "slug": "04-seater-meeting-room-01",
+   "floor": "carpet",
+   "still": {
+    "pos": [
+     24.74,
+     12.34,
+     1.5
+    ],
+    "look": [
+     23.54,
+     13.44,
+     1.05
+    ],
+    "lens_mm": 20
+   },
+   "pano": {
+    "pos": [
+     23.94,
+     12.54,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "Reception",
+   "slug": "reception",
+   "floor": "stone",
+   "still": {
+    "pos": [
+     30.4,
+     8.2,
+     1.5
+    ],
+    "look": [
+     26.5,
+     6.3,
+     0.95
+    ],
+    "lens_mm": 18
+   },
+   "pano": {
+    "pos": [
+     28.59,
+     7.04,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "Autopilot cabin",
+   "slug": "autopilot-cabin",
+   "floor": "wood",
+   "still": {
+    "pos": [
+     31.87,
+     5.65,
+     1.5
+    ],
+    "look": [
+     33.06,
+     7.67,
+     1.05
+    ],
+    "lens_mm": 20
+   },
+   "pano": {
+    "pos": [
+     32.07,
+     7.05,
+     1.5
+    ]
+   }
+  },
+  {
+   "room": "06 seater meeting room (east)",
+   "slug": "06-seater-meeting-room-east",
+   "floor": "carpet",
+   "still": {
+    "pos": [
+     34.53,
+     5.65,
+     1.5
+    ],
+    "look": [
+     36.18,
+     7.67,
+     1.05
+    ],
+    "lens_mm": 20
+   },
+   "pano": {
+    "pos": [
+     36.33,
+     6.25,
+     1.5
+    ]
+   }
+  }
+ ]
+}
