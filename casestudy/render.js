@@ -44,7 +44,8 @@
   function img(b, slot, cls) {
     var im = (b.images || {})[slot] || {};
     var style = im.url ? ' style="background-image:url(' + esc(im.url) + ')"' : "";
-    return '<div class="img ' + (cls || "") + '"' + style + '><span class="cap">' + esc(im.caption || "AI-generated illustration") + "</span></div>";
+    /* the caption names a picture, so a band with no picture carries none */
+    return '<div class="img ' + (cls || "") + (im.url ? "" : " none") + '"' + style + ">" + (im.url ? '<span class="cap">' + esc(im.caption || "AI-generated illustration") + "</span>" : "") + "</div>";
   }
   function walk(m, a) { return Math.max(1, Math.round(m / (Costing.num(a && a.walkMPerMin, 80)))); }
   function median(xs) { var s = xs.slice().sort(function (p, q) { return p - q; }); return s.length ? (s.length % 2 ? s[(s.length - 1) / 2] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2) : 0; }
