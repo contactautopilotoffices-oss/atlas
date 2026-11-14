@@ -71,6 +71,7 @@ th{font-size:7.2pt;letter-spacing:.1em;text-transform:uppercase;color:var(--mut)
 td{padding:1.6mm 2mm;border-bottom:1px solid var(--line2);vertical-align:top}
 td.n,th.n{text-align:right;font-family:var(--mono);white-space:nowrap}
 td.big{font-family:var(--serif);font-size:12pt;font-weight:600;white-space:nowrap}
+td.big .tiny{font-family:var(--font);font-weight:400}
 tr.sum td{border-top:1px solid var(--ink);font-weight:600}
 table.tight{font-size:8.2pt} table.tight td{padding:1mm 2mm} table.tight tr.hd td{padding-top:2mm}
 tr.hd td{font-size:7.2pt;letter-spacing:.1em;text-transform:uppercase;color:var(--acc);font-weight:600;padding-top:3mm;border-bottom:0}
@@ -86,11 +87,20 @@ tr.hd td{font-size:7.2pt;letter-spacing:.1em;text-transform:uppercase;color:var(
 .chain span::after{content:"\2192";margin-left:1.5mm;color:var(--acc)}
 .chain span:last-child::after{content:""}
 .img{position:absolute;inset:0;background:linear-gradient(135deg,#3a2a20,#6b4a36 55%,#a3502c);background-size:cover;background-position:center}
-.img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,12,8,.1),rgba(20,12,8,.62))}
+/* the photograph is darkened where the type sits: the title at the top and
+   the figures at the foot, lighter through the middle so the picture shows */
+.img::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(20,12,8,.5) 0%,rgba(20,12,8,.22) 45%,rgba(20,12,8,0) 70%),linear-gradient(180deg,rgba(20,12,8,.72) 0%,rgba(20,12,8,.38) 34%,rgba(20,12,8,.18) 52%,rgba(20,12,8,.5) 74%,rgba(20,12,8,.86) 100%)}
+/* the type sits on the left, so the left of the picture is shaded a little more */
+/* with no picture the band is plain: a fine accent rule frames it instead */
+.img.none::after{background:linear-gradient(180deg,rgba(20,12,8,0),rgba(20,12,8,.35))}
+.img.none{background:linear-gradient(135deg,#2a1e16,#3a2a20 60%,#5a3a28);box-shadow:inset 0 -2px 0 var(--acc)}
 .img.band{position:relative;inset:auto;height:100%;min-height:40mm;border-radius:6px;overflow:hidden}
 .img .cap{position:absolute;right:3mm;bottom:2mm;font-size:6.8pt;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.7);z-index:1}
 .over{position:relative;z-index:1;color:#f7f2ea;display:flex;flex-direction:column;height:100%}
-.over .mut,.over .dim{color:rgba(247,242,234,.75)}
+.over .mut,.over .dim{color:rgba(247,242,234,.88)}
+.over{text-shadow:0 1px 10px rgba(20,12,8,.55)}
+.over .kpi .l,.over .kpi .s{color:rgba(247,242,234,.9)}
+.over .secnum{color:#e8a87c;opacity:1}
 .over .kpi .v{color:#f7f2ea}
 .over h1,.over h2{color:#fff}
 .secnum{font-family:var(--serif);font-size:44pt;line-height:1;color:var(--acc);opacity:.9}
@@ -100,6 +110,17 @@ tr.hd td{font-size:7.2pt;letter-spacing:.1em;text-transform:uppercase;color:var(
 .toc .row .t{flex:1} .toc .row .t b{display:block;font-family:var(--serif);font-size:12.5pt}
 .toc .row .t span{font-size:8.6pt;color:var(--mut)}
 .toc .row .p{font-family:var(--mono);color:var(--dim);font-size:9pt}
+/* the contents read at deck size: larger section titles, and the
+   "read this first" box at body size */
+.contents .toc .row{padding:2.6mm 0}
+.contents .toc .row .t b{font-size:13.5pt}
+.contents .toc .row .t span{font-size:9.2pt}
+.contents .box{padding:5mm 6mm}
+/* the right column runs the list's full height: the credits sit at its foot */
+.contents > div:last-child{display:flex;flex-direction:column;align-self:stretch}
+.contents > div:last-child > p:last-child{margin-top:auto!important}
+.contents .box p.small{font-size:10.5pt;line-height:1.5;margin-bottom:3.5mm}
+.contents .box b.t{font-size:8pt;margin-bottom:3mm}
 svg{display:block;overflow:visible;max-height:64mm;margin:0 auto}
 svg text{font-family:var(--font);fill:var(--ink)}
 svg .ax{font-size:7pt;fill:var(--mut)} svg .lbl{font-size:7.4pt;fill:var(--ink)} svg .val{font-size:7.6pt;font-weight:600} svg .t{font-size:7.2pt;letter-spacing:.1em;text-transform:uppercase;fill:var(--mut)}
@@ -107,7 +128,41 @@ svg .grid{stroke:var(--line);stroke-width:.5}
 .leg{display:flex;flex-wrap:wrap;gap:1.5mm 4mm;font-size:7.6pt;color:var(--mut);margin-top:1.5mm}
 .leg i{display:inline-block;width:3mm;height:3mm;border-radius:1px;vertical-align:-.4mm;margin-right:1.2mm}
 .grp{break-inside:avoid}
+.chart-big svg{max-height:104mm}
+/* a foot with a figure beside its meaning: side by side, not stacked */
+.foot:has(> .kpi){display:grid;grid-template-columns:1fr 3fr;gap:8mm;align-items:center}
+/* pages of numbered points: the points read at deck size, the takeaway sits at the foot */
+.lg .pt h3{font-size:13.5pt;margin-bottom:1.8mm}
+.lg .pt p{font-size:10pt;line-height:1.45}
+.lg .pt .mit{font-size:9.4pt}
+.pts.lg{gap:9mm 10mm}
+/* the points take the height left above the takeaway in equal rows, each
+   point at the top of its cell: one row stays under the headline, two or
+   more rows share the page instead of leaving an empty band at the foot */
+.pts.lg{flex:1 1 auto!important;grid-auto-rows:1fr;align-items:start}
+/* one row of points in columns (pipeline 1, risks): the page has the room, so
+   the points read larger rather than leave a band above the foot */
+.cols.lg .pt h3{font-size:15pt}
+.cols.lg .pt p{font-size:11pt;line-height:1.5}
+.cols.lg .pt .mit{font-size:10.4pt;margin-top:3mm}
+.cols.lg .pt .kpi .v{font-size:28pt!important}
+/* the catchment's sector cards: long name lists, so the body grows less */
+.pts.catch .pt p{font-size:8.8pt;line-height:1.45}
+.pts.catch .pt h3{font-size:12.5pt}
+.cols.lg .chain{font-size:9.4pt}
+.foot{margin-top:auto;padding:5mm 0 7mm}
+.statement{flex:1;min-height:0;display:grid;grid-template-columns:2fr 3fr;gap:14mm;align-items:center;padding:0 8mm 14mm}
+.statement .kpi .v{font-size:56pt}
+.statement .kpi .l{font-size:11pt;margin-top:3mm;max-width:95mm}
+.statement .means{font-size:11.5pt;line-height:1.5;padding:6mm 7mm}
+.statement .means b{font-size:8pt;margin-bottom:3mm}
+.statement.solo{grid-template-columns:1fr;justify-items:center}
+.statement.solo .means{max-width:230mm}
 .ladder td{padding:1mm 2mm}
+.ladder td:last-child{white-space:nowrap}
+.edge{white-space:nowrap}
+/* who sits in each occupancy band: at the 7.5 pt floor */
+.who{margin-top:1.5mm;font-size:7.5pt;line-height:1.3;color:var(--mut)}
 #bar{position:fixed;top:0;left:0;right:0;height:56px;background:rgba(42,30,22,.94);color:#f7f2ea;display:flex;align-items:center;gap:14px;padding:0 18px;z-index:5;font-size:13px;backdrop-filter:blur(8px)}
 #bar b{font-family:var(--serif);font-weight:600;font-size:15px;margin-right:auto}
 #bar button,#bar a{appearance:none;border:1px solid rgba(255,255,255,.3);background:transparent;color:#f7f2ea;padding:7px 12px;border-radius:8px;font:inherit;cursor:pointer;text-decoration:none}
@@ -147,9 +202,66 @@ svg .grid{stroke:var(--line);stroke-width:.5}
 <script src="/casestudy/costing.js?v=cs1"></script>
 <script src="/casestudy/render.js?v=cs1"></script>
 <script>
+/* A table page whose content stops well short of the foot gets roomier rows
+   and slightly larger type, step by step, until it uses the height. It never
+   comes within 4 mm of the source line and never overflows the page. */
+function fitTables(deck) {
+  /* type grows by at most 0.6 pt, so narrow columns do not start to wrap */
+  var MM = 96 / 25.4, STEP = 0.4, CAP = 6, FONT_CAP = 10.2, FONT_UP = 0.6;
+  Array.prototype.forEach.call(deck.querySelectorAll(".page"), function (page) {
+    var body = page.querySelector(".body"), ftr = page.querySelector(".ftr");
+    var tables = body ? Array.prototype.filter.call(body.querySelectorAll("table"), function (tb) { return !tb.closest(".means"); }) : [];
+    if (!tables.length) return;
+    /* a box at the foot is the floor the rows grow to; without one, the source line */
+    var foot = body.querySelector(":scope > .foot");
+    var limit = function () { return foot ? foot.getBoundingClientRect().top - 2 * MM : (ftr ? ftr.getBoundingClientRect().top : body.getBoundingClientRect().bottom) - 4 * MM; };
+    var bottom = function () {
+      var m = 0;
+      Array.prototype.forEach.call(body.querySelectorAll(":scope > :not(.cols):not(.foot), .cols > *"), function (el) { m = Math.max(m, el.getBoundingClientRect().bottom); });
+      return m;
+    };
+    var cells = [], fonts = [];
+    tables.forEach(function (tb) {
+      fonts.push(parseFloat(getComputedStyle(tb).fontSize) * 0.75);
+      Array.prototype.forEach.call(tb.querySelectorAll("td"), function (td) { var cs = getComputedStyle(td); cells.push({ td: td, top: parseFloat(cs.paddingTop), bot: parseFloat(cs.paddingBottom) }); });
+    });
+    var apply = function (k) {
+      cells.forEach(function (c) { c.td.style.paddingTop = (c.top + k * STEP * MM / 2) + "px"; c.td.style.paddingBottom = (c.bot + k * STEP * MM / 2) + "px"; });
+      tables.forEach(function (tb, i) { tb.style.fontSize = Math.min(FONT_CAP, fonts[i] + FONT_UP, fonts[i] + k * 0.12) + "pt"; });
+    };
+    var fits = function () { return bottom() <= limit() && page.scrollHeight <= page.clientHeight + 1; };
+    if (limit() - bottom() < page.clientHeight * 0.18) return;
+    /* with a box at the foot the rows can never reach the source line, so they may open further */
+    var cap = foot ? 10 : CAP;
+    for (var k = 1; k * STEP <= cap; k++) {
+      apply(k);
+      if (!fits()) { apply(k - 1); break; }
+      if (limit() - bottom() < page.clientHeight * 0.06) break;
+    }
+  });
+}
+/* After the rows are sized: beside a table, a side column of two or more
+   boxes spreads them so the last one's foot is level with the table's foot.
+   Undone on any page where that would overflow. */
+function alignSides(deck) {
+  Array.prototype.forEach.call(deck.querySelectorAll(".page .cols"), function (cols) {
+    var main = cols.firstElementChild, side = cols.lastElementChild;
+    if (!main || main === side || side.children.length < 2) return;
+    if (!(main.tagName === "TABLE" || main.querySelector(":scope > table"))) return;
+    var last = side.lastElementChild, gap = main.getBoundingClientRect().bottom - last.getBoundingClientRect().bottom;
+    if (gap < 4) return;
+    /* the free height is shared between the boxes, so no one gap opens in the middle */
+    var boxes = Array.prototype.slice.call(side.children, 1), each = gap / boxes.length, page = cols.closest(".page");
+    var was = boxes.map(function (el) { return el.style.marginTop; });
+    boxes.forEach(function (el) { el.style.marginTop = (parseFloat(getComputedStyle(el).marginTop) + each) + "px"; });
+    if (page.scrollHeight > page.clientHeight + 1) boxes.forEach(function (el, i) { el.style.marginTop = was[i]; });
+  });
+}
 (window.CaseLoad || Promise.resolve()).then(function () {
   if (!window.CASE) return;
   var out = CaseRender.render(window.CASE, document.getElementById("deck"));
+  fitTables(document.getElementById("deck"));
+  alignSides(document.getElementById("deck"));
   document.title = (window.CASE.meta && window.CASE.meta.title) || "Case study";
   document.getElementById("bar-title").textContent = document.title;
   document.getElementById("bar-pages").textContent = out.pages + " pages";
