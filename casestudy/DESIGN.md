@@ -80,3 +80,6 @@ what it fixes, and fixes the worst one to three first.
   the space between them is wide.
 - Opener 07 (top three risks) has no photograph and no figures in the
   Andheri workbook: its band is plain and its lower two thirds are empty.
+- Statement pages (market points with no chart, pages 16 and 17): set large
+  now, but a figure long enough not to fit its column on one line at 64 pt
+  would overflow; the size should step down with the figure's length.

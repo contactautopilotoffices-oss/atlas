@@ -151,13 +151,15 @@ svg .grid{stroke:var(--line);stroke-width:.5}
 .pts.catch .pt h3{font-size:12.5pt}
 .cols.lg .chain{font-size:9.4pt}
 .foot{margin-top:auto;padding:5mm 0 7mm}
-.statement{flex:1;min-height:0;display:grid;grid-template-columns:2fr 3fr;gap:14mm;align-items:center;padding:0 8mm 14mm}
-.statement .kpi .v{font-size:56pt}
-.statement .kpi .l{font-size:11pt;margin-top:3mm;max-width:95mm}
-.statement .means{font-size:11.5pt;line-height:1.5;padding:6mm 7mm}
-.statement .means b{font-size:8pt;margin-bottom:3mm}
-.statement.solo{grid-template-columns:1fr;justify-items:center}
-.statement.solo .means{max-width:230mm}
+/* a statement page carries one idea: the figure and the sentence are the
+   page, so they are set large and the box runs most of the page height */
+.statement{flex:1;min-height:0;display:grid;grid-template-columns:5fr 6fr;gap:14mm;align-items:center;padding:0 4mm 12mm}
+.statement .kpi .v{font-size:64pt;white-space:nowrap}
+.statement .kpi .l{font-size:13pt;margin-top:4mm;max-width:110mm;line-height:1.35}
+.statement .means{font-size:15pt;line-height:1.5;padding:12mm 12mm;border-left-width:5px}
+.statement .means b{font-size:9pt;margin-bottom:5mm}
+.statement.solo{grid-template-columns:1fr;justify-items:stretch}
+.statement.solo .means{font-size:17pt;line-height:1.5;padding:14mm 16mm}
 .ladder td{padding:1mm 2mm}
 .ladder td:last-child{white-space:nowrap}
 .edge{white-space:nowrap}
