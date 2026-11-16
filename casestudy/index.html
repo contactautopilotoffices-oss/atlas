@@ -101,6 +101,10 @@ tr.hd td{font-size:7.2pt;letter-spacing:.1em;text-transform:uppercase;color:var(
 .over{text-shadow:0 1px 10px rgba(20,12,8,.55)}
 .over .kpi .l,.over .kpi .s{color:rgba(247,242,234,.9)}
 .over .secnum{color:#e8a87c;opacity:1}
+.over.bare{justify-content:flex-end;padding-bottom:12mm}
+.over.bare .kpis{display:none}
+.over.bare h1{font-size:40pt}
+.over.bare p.mut{font-size:13pt!important}
 .over .kpi .v{color:#f7f2ea}
 .over h1,.over h2{color:#fff}
 .secnum{font-family:var(--serif);font-size:44pt;line-height:1;color:var(--acc);opacity:.9}
@@ -154,7 +158,8 @@ svg .grid{stroke:var(--line);stroke-width:.5}
 /* a statement page carries one idea: the figure and the sentence are the
    page, so they are set large and the box runs most of the page height */
 .statement{flex:1;min-height:0;display:grid;grid-template-columns:5fr 6fr;gap:14mm;align-items:center;padding:0 4mm 12mm}
-.statement .kpi .v{font-size:64pt;white-space:nowrap}
+/* the figure's size steps down with its length (render.js), so it stays on one line */
+.statement .kpi .v{white-space:nowrap}
 .statement .kpi .l{font-size:13pt;margin-top:4mm;max-width:110mm;line-height:1.35}
 .statement .means{font-size:15pt;line-height:1.5;padding:12mm 12mm;border-left-width:5px}
 .statement .means b{font-size:9pt;margin-bottom:5mm}

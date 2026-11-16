@@ -78,8 +78,5 @@ what it fixes, and fixes the worst one to three first.
 - Side columns of a table page (pages 5, 9, 11, 34, 38): the boxes now
   spread evenly down the table's height; with only two short boxes (levers)
   the space between them is wide.
-- Opener 07 (top three risks) has no photograph and no figures in the
-  Andheri workbook: its band is plain and its lower two thirds are empty.
-- Statement pages (market points with no chart, pages 16 and 17): set large
-  now, but a figure long enough not to fit its column on one line at 64 pt
-  would overflow; the size should step down with the figure's length.
+- Openers with no figures (07 in the Andheri workbook) now set the title low
+  like a part title; with no photograph either, the band is still plain.

@@ -291,7 +291,8 @@
     this.secNo++;
     var n = String(this.secNo).padStart(2, "0");
     this.toc.push({ n: n, title: title, sub: sub, page: this.pages.length + 1 });
-    var body = img(this.b, slot) + '<div class="over"><div class="secnum">' + n + '</div><h1 style="margin-top:4mm">' + esc(title) + '</h1><p class="mut" style="font-size:11pt;max-width:170mm;margin-top:3mm">' + esc(sub) + '</p><div class="kpis">' + kpis.join("") + "</div></div>";
+    /* an opener with no figures sets its title low on the page, like a book's part title */
+    var body = img(this.b, slot) + '<div class="over' + (kpis.length ? "" : " bare") + '"><div class="secnum">' + n + '</div><h1 style="margin-top:4mm">' + esc(title) + '</h1><p class="mut" style="font-size:11pt;max-width:170mm;margin-top:3mm">' + esc(sub) + '</p><div class="kpis">' + kpis.join("") + "</div></div>";
     this.add({ cls: "dark", body: body, noHdr: true, sec: n });
     return n + " · " + title.toUpperCase();
   };
@@ -432,7 +433,7 @@
         /* one chart: the chart takes the page width, the figure and its meaning sit at the foot */
         else if (charts.length === 1) layout = chartHtml + "<div class='foot'>" + kpiHtml + meansHtml + "</div>";
         /* no chart: a statement page, the figure large beside what it means, centred in the page */
-        else layout = "<div class='statement" + (p.kpi ? "" : " solo") + "'>" + (p.kpi ? "<div class='kpi'><div class='v'>" + esc(code(b, c, p.kpi)) + "</div><div class='l'>" + esc(p.kpiLabel || "") + "</div></div>" : "") + meansHtml + "</div>";
+        else layout = "<div class='statement" + (p.kpi ? "" : " solo") + "'>" + (p.kpi ? "<div class='kpi'><div class='v' style='font-size:" + Math.max(36, Math.min(64, Math.round(760 / Math.max(10, String(code(b, c, p.kpi)).length)))) + "pt'>" + esc(code(b, c, p.kpi)) + "</div><div class='l'>" + esc(p.kpiLabel || "") + "</div></div>" : "") + meansHtml + "</div>";
         d.add({ hdr: h3, src: src(b, "market") + (p.chart === "flexSeats" ? " " + src(b, "flex") : ""), body: "<h2><span class='pt'><span class='n'>" + String(p.n || "").padStart(2, "0") + "</span></span>" + esc(p.title) + "</h2>" + layout });
       });
       /* deals */
