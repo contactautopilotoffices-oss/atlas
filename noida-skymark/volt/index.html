@@ -8,7 +8,8 @@
 <script>
   // Same sign-in as the Skymark atlas: send people to its gate if they have not passed it.
   // ?present on a display with no keyboard: stay here and let a phone sign in through the QR code.
-  try { if (sessionStorage.getItem("noida-skymark-auth") !== "1") { if (/[?&]present\b/.test(location.search)) window.__pairFirst = true; else location.replace("/noida-skymark/?next=volt"); } } catch (e) {}
+  /* Public: no sign-in. Only a TV opened with ?present waits for a phone to pair. */
+  try { if (sessionStorage.getItem("noida-skymark-auth") !== "1" && /[?&]present\b/.test(location.search)) window.__pairFirst = true; } catch (e) {}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">

@@ -97,7 +97,14 @@ const TABS = [
 ];
 
 /* ================================================================ gate == */
+/* Public: no sign-in. Anyone with the link (or the landlord page frame) goes straight in. */
+const PUBLIC = true;
 function initGate() {
+  if (PUBLIC) {
+    try { sessionStorage.setItem(AUTH_KEY, "1"); sessionStorage.setItem("noida-skymark-auth", "1"); } catch (e) {}
+    if (/[?&]next=volt\b/.test(location.search)) { location.replace("/noida-skymark/volt/"); return; }
+    $("#gate")?.remove(); const so = $("#signout"); if (so) so.style.display = "none"; boot(); return;
+  }
   const norm = (v) => v.trim().toUpperCase().replace(/[\s-]/g, "");
   let busy = false;
   const openApp = () => { if (/[?&]next=volt\b/.test(location.search)) { location.replace("/noida-skymark/volt/"); return; } const g = $("#gate"); g.classList.add("out"); setTimeout(() => g.remove(), 450); boot(); };
