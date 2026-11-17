@@ -87,7 +87,7 @@ const fact = (k) => (PR.facts.find(f => f.k === k) || {}).v || "";
 
 /* --------------------------------------------------------------- state -- */
 const S = {
-  tab: "property", sel: null, kinds: new Set(), twin: true, bearing: MD.frontBearing, realSat: true,
+  tab: "property", sel: null, kinds: new Set(), twin: false, bearing: MD.frontBearing, realSat: true,
   layers: Object.fromEntries([["sat", true], ["rail", true], ["rings", true], ...KINDS.map(k => [k.key, ["corp", "cowork"].includes(k.key)])])
 };
 try { const b = parseFloat(localStorage.getItem("sky-bearing")); if (!MD.bearingConfirmed && isFinite(b)) S.bearing = b; } catch (e) {}
@@ -438,6 +438,9 @@ function frame(animate = true) {
        the camera stands in front of the building, 32 degrees round toward
        side B. `offset` centres the twin in the gap between the panes; padding
        is not used here because the map keeps it and adds it to the next fit. */
+    /* Opens as a flat 2D map with the F1 pin. Only when the 3D twin chip is switched on does it tilt to show the building. */
+    if (!S.twin) return map.easeTo({ center: [SPOT.lng, SPOT.lat], zoom: PHONE() ? 15.4 : 16, pitch: 0, bearing: 0,
+      offset: [(pad.left - pad.right) / 2, (pad.top - pad.bottom) / 2], duration: dur });
     return map.easeTo({ center: [SPOT.lng, SPOT.lat], zoom: PHONE() ? 17.3 : 17.9, pitch: 56, bearing: (S.bearing + 180 + 32) % 360,
       offset: [(pad.left - pad.right) / 2, (pad.top - pad.bottom) / 2], duration: dur });
   }
@@ -595,6 +598,7 @@ function renderLayers() {
     if (k === "twin") S.twin = !S.twin; else S.layers[k] = !S.layers[k];
     renderLayers();
     if (k === "sat" && map && layered) map.setStyle(styleUrl(), { diff: false }); else applyLayers();
+    if (k === "twin" && map) { syncHQ(); map.triggerRepaint(); if (!S.sel && (S.tab === "property" || S.tab === "twin")) frame(); }
   };
 }
 
