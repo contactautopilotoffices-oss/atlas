@@ -150,6 +150,12 @@ svg .grid{stroke:var(--line);stroke-width:.5}
 .cols.lg .pt p{font-size:11pt;line-height:1.5}
 .cols.lg .pt .mit{font-size:10.4pt;margin-top:3mm}
 .cols.lg .pt .kpi .v{font-size:28pt!important}
+/* one row of points takes the height between the headline and the foot and
+   sits in its middle, between two hairlines, instead of hanging under the
+   headline with a band of empty page below it */
+.body > .cols.lg:has(+ .foot){flex:1 1 auto!important;align-content:center;position:relative;padding:6mm 0}
+.body > .cols.lg:has(+ .foot)::before,.body > .cols.lg:has(+ .foot)::after{content:"";position:absolute;left:0;right:0;border-top:1px solid var(--line)}
+.body > .cols.lg:has(+ .foot)::before{top:0} .body > .cols.lg:has(+ .foot)::after{bottom:0}
 /* the catchment's sector cards: long name lists, so the body grows less */
 .pts.catch .pt p{font-size:8.8pt;line-height:1.45}
 .pts.catch .pt h3{font-size:12.5pt}

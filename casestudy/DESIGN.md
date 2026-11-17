@@ -69,8 +69,10 @@ what it fixes, and fixes the worst one to three first.
 - Table pages open their rows to use spare height (casestudy/index.html,
   fitTables, up to 6 mm a row): they now reach close to the foot, but levers
   (six rows) reads airy rather than full.
-- Numbered-point pages with one row of points (pipeline 1, risks) set their
-  points larger now, but still keep a smaller gap above the takeaway.
+- Numbered-point pages with one row of points: where the row is followed by
+  the foot box (risks, demand catchment) it now sits centred between two
+  hairlines. Pipeline 1 has a row of figures between its points and the
+  foot, so it keeps its gap above the takeaway.
 - Getting there (page 12): rows may open up to 10 mm under a foot box now,
   but four short rows a table still leave a narrow band above the box.
 - The buildings side by side (page 11): the parameter table is small print
