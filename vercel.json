@@ -265,7 +265,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "frame-ancestors 'self' https://f1-skymark-landlord.vercel.app https://*.vercel.app https://autopilotoffices.com https://*.autopilotoffices.com https://claude.ai https://*.claude.ai https://*.claudeusercontent.com"
+          "value": "frame-ancestors *"
         }
       ]
     },
