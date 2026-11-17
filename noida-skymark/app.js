@@ -103,6 +103,7 @@ function initGate() {
   if (PUBLIC) {
     try { sessionStorage.setItem(AUTH_KEY, "1"); sessionStorage.setItem("noida-skymark-auth", "1"); } catch (e) {}
     if (/[?&]next=volt\b/.test(location.search)) { location.replace("/noida-skymark/volt/"); return; }
+    startMap();   /* the gate used to start the map behind it; with no gate it has to start here */
     $("#gate")?.remove(); const so = $("#signout"); if (so) so.style.display = "none"; boot(); return;
   }
   const norm = (v) => v.trim().toUpperCase().replace(/[\s-]/g, "");
