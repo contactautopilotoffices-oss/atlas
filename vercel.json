@@ -497,6 +497,11 @@
       "permanent": true
     },
     {
+      "source": "/landlord",
+      "destination": "/landlord/",
+      "permanent": true
+    },
+    {
       "source": "/noida-skymark",
       "destination": "/noida-skymark/",
       "permanent": true
