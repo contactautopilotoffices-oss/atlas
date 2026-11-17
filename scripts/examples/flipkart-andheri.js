@@ -212,7 +212,7 @@ function gmapsRoutes(id, routes) {
 }
 
 /* ---- the card's one line: the deck's own words ------------------------- */
-const reason = (o) => [o.priority, `Floor ${o.floor}`, o.furnishing, `Carpet area ${o.carpet.toLocaleString("en-US")} sq. ft.`, `Possession: ${o.possession}`, `Per seat: ${o.perSeat}`].filter(Boolean).join(" · ");
+const reason = (o) => [o.priority, `Floor ${o.floor}`, o.furnishing, `Carpet area ${o.carpet.toLocaleString("en-US")} sq. ft.`, `Possession: ${o.possession}`].filter(Boolean).join(" · ");
 
 const sqft = (n) => n.toLocaleString("en-US") + " sq. ft.";
 const options = D.map((o, i) => {
@@ -221,7 +221,7 @@ const options = D.map((o, i) => {
   const spec = [
     ["Micro-market", o.microText], ["Floor / Unit", o.floor], ["Grade", o.grade], ["Total floors", o.floors], ["Building type", "Commercial"],
     ["Furnishing", o.furnishing], ["Efficiency", o.efficiency], ["Carpet area", sqft(o.carpet)], ["Built-up area", sqft(o.builtUp)],
-    ["Ceiling height", o.ceiling], ["Per seat", o.perSeat], ["Parking", o.parking], ["Parking charges", o.parkingCharges],
+    ["Ceiling height", o.ceiling], ["Parking", o.parking], ["Parking charges", o.parkingCharges],
     ["Fire NOC", o.noc], ["OC & CC", o.occ], ["DG", o.dg], ["Possession", o.possession],
   ].filter(([, v]) => v);
   const routes = gmapsRoutes(o.id, routesFor(o.id, LINES_OF));
@@ -377,12 +377,12 @@ for (const o of MARWAH) {
   const spec = [
     ["Micro-market", "Sakinaka Metro"], ["Floor / Unit", o.floor], ["Grade", o.grade], ["Total floors", o.floors], ["Building type", "Commercial"],
     ["Furnishing", o.furnishing], ["Efficiency", o.efficiency], ["Carpet area", o.carpet], ["Built-up area", o.builtUp], ["Ceiling height", o.ceiling],
-    ["Per seat", o.perSeat], ["Parking", o.parking], ["Fire NOC", o.noc], ["OC & CC", o.occ], ["DG", o.dg], ["Possession", o.possession],
+    ["Parking", o.parking], ["Fire NOC", o.noc], ["OC & CC", o.occ], ["DG", o.dg], ["Possession", o.possession],
   ];
   flat.options.push({
     id: o.id, n: flat.options.length + 1, name: o.name, lat: r.lat, lng: r.lng, precision: r.precision, geoSrc: r.geoSrc, geoNote: r.geoNote,
     micro: "sakinaka-metro", address: r.address, locality: "Andheri East",
-    reason: [`Floor ${o.floor}`, o.furnishing, `Carpet area ${o.carpet}`, `Possession: ${o.possession}`, `Per seat: ${o.perSeat}`].join(" · "),
+    reason: [`Floor ${o.floor}`, o.furnishing, `Carpet area ${o.carpet}`, `Possession: ${o.possession}`].join(" · "),
     routes: [...g.metro.map(([n, m]) => pick("metro", n, m)), pick("rail", "Andheri", g.rail)],
     facts: [
       ...spec.map(([k, v]) => ({ k, v, conf: "high" })),

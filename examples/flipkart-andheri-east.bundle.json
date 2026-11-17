@@ -29,7 +29,7 @@
    "geoSrc": "https://dhcrealty.in/property/wadhwa-723-avenue/",
    "geoNote": "Plus code 4V5M+VQM printed on the listing, decoded. Marol Co-operative Industrial Estate Road, off Andheri-Kurla Road.",
    "micro": "marol",
-   "reason": "PRIORITY 1 · Floor 13th & 14th · Bareshell · Carpet area 11,331 sq. ft. · Possession: Immediately · Per seat: Rs. 16,000 - Rs. 16,500 + GST",
+   "reason": "PRIORITY 1 · Floor 13th & 14th · Bareshell · Carpet area 11,331 sq. ft. · Possession: Immediately",
    "address": "Wadhwa 723 Avenue, Marol Co-operative Industrial Estate Road, Sag Baug, Marol, Andheri East, Mumbai 400059",
    "locality": "Andheri East",
    "routes": [
@@ -324,11 +324,6 @@
      "conf": "high"
     },
     {
-     "k": "Per seat",
-     "v": "Rs. 16,000 - Rs. 16,500 + GST",
-     "conf": "high"
-    },
-    {
      "k": "Parking",
      "v": "11 Car Parking",
      "conf": "high"
@@ -370,7 +365,7 @@
    "geoSrc": "https://exa.ai/library/place/3kk3s3wpqbl",
    "geoNote": "Map place page; Wikimapia outlines 'Corporate Avenue (Atul Projects)' 55 m away. Sonawala Road, off Andheri-Kurla Road.",
    "micro": "chakala",
-   "reason": "PRIORITY 2 · Floor 3rd and 4th · Furnished · Carpet area 12,414 sq. ft. · Possession: Immediately · Per seat: Rs. 15,200 - Rs. 15,700 + GST",
+   "reason": "PRIORITY 2 · Floor 3rd and 4th · Furnished · Carpet area 12,414 sq. ft. · Possession: Immediately",
    "address": "Corporate Avenue, Sonawala Road, off Andheri-Kurla Road, Chakala, Andheri East, Mumbai",
    "locality": "Andheri East",
    "routes": [
@@ -652,11 +647,6 @@
      "conf": "high"
     },
     {
-     "k": "Per seat",
-     "v": "Rs. 15,200 - Rs. 15,700 + GST",
-     "conf": "high"
-    },
-    {
      "k": "Parking",
      "v": "5 car parking per floor",
      "conf": "high"
@@ -698,7 +688,7 @@
    "geoSrc": "https://exa.ai/library/place/s8x6jf6zts0",
    "geoNote": "The place page pin sits within 10 m of the Marol Naka station coordinate, so it marks the address, not a footprint. The developer says 'right next to Marol Metro Station'.",
    "micro": "marol",
-   "reason": "Floor Multiple · Bareshell · Carpet area 11,331 sq. ft. · Possession: Jan 2027 · Per seat: Rs. 18,000 - Rs. 18,500 + GST",
+   "reason": "Floor Multiple · Bareshell · Carpet area 11,331 sq. ft. · Possession: Jan 2027",
    "address": "Privilon, Metro Station Marol Naka, Gamdevi, Marol, Andheri East, Mumbai 400059",
    "locality": "Andheri East",
    "routes": [
@@ -937,11 +927,6 @@
      "conf": "high"
     },
     {
-     "k": "Per seat",
-     "v": "Rs. 18,000 - Rs. 18,500 + GST",
-     "conf": "high"
-    },
-    {
      "k": "Parking",
      "v": "5 Car parking",
      "conf": "high"
@@ -988,7 +973,7 @@
    "geoSrc": "https://exa.ai/library/place/g4bgsvhmz93",
    "geoNote": "Map place page for Landmark, Suren Road, Gundavali, at the junction of the Western Express Highway and Andheri-Kurla Road.",
    "micro": "weh",
-   "reason": "Floor 6th · Furnished · Carpet area 10,000 sq. ft. · Possession: Immediately · Per seat: Rs. 15,200 - Rs. 15,700 + GST",
+   "reason": "Floor 6th · Furnished · Carpet area 10,000 sq. ft. · Possession: Immediately",
    "address": "Landmark, Suren Road, Gundavali, Andheri East, Mumbai 400093",
    "locality": "Andheri East",
    "routes": [
@@ -1250,11 +1235,6 @@
      "conf": "high"
     },
     {
-     "k": "Per seat",
-     "v": "Rs. 15,200 - Rs. 15,700 + GST",
-     "conf": "high"
-    },
-    {
      "k": "Parking",
      "v": "8 car parking",
      "conf": "high"
@@ -1296,7 +1276,7 @@
    "geoSrc": "https://exa.ai/library/place/83qqct91nth",
    "geoNote": "Map place page; not the OSM 'Rustomjee' pin at 19.11642, 72.85428. Andheri-Kurla Road at the Chakala signal.",
    "micro": "chakala",
-   "reason": "Floor 4th · Furnished · Carpet area 9,000 sq. ft. · Possession: Feb 2027 - Can be discussed for early vacancy · Per seat: Rs. 16,000 - Rs. 16,500 + GST",
+   "reason": "Floor 4th · Furnished · Carpet area 9,000 sq. ft. · Possession: Feb 2027 - Can be discussed for early vacancy",
    "address": "Rustomjee Central Park, Andheri-Kurla Road, Chakala, Andheri East, Mumbai 400093",
    "locality": "Andheri East",
    "routes": [
@@ -1562,11 +1542,6 @@
      "conf": "high"
     },
     {
-     "k": "Per seat",
-     "v": "Rs. 16,000 - Rs. 16,500 + GST",
-     "conf": "high"
-    },
-    {
      "k": "Parking",
      "v": "10 Car parking",
      "conf": "high"
@@ -1608,7 +1583,7 @@
    "geoSrc": "https://exa.ai/library/place/3vrh78m08q4",
    "geoNote": "Map place page. Makwana Road, Marol. About 460 m from Marol Naka station in a straight line.",
    "micro": "marol-metro-station",
-   "reason": "Floor 3rd · Bareshell · Carpet area 12,300 sq. ft. · Possession: Immediately · Per seat: Rs. 13,400 - Rs. 13,900 + GST",
+   "reason": "Floor 3rd · Bareshell · Carpet area 12,300 sq. ft. · Possession: Immediately",
    "address": "Vaman Techno Centre, Makwana Road, Gamdevi, Marol, Andheri East, Mumbai 400059",
    "locality": "Andheri East",
    "routes": [
@@ -1867,11 +1842,6 @@
      "conf": "high"
     },
     {
-     "k": "Per seat",
-     "v": "Rs. 13,400 - Rs. 13,900 + GST",
-     "conf": "high"
-    },
-    {
      "k": "Parking",
      "v": "13 Car parking",
      "conf": "high"
@@ -1918,7 +1888,7 @@
    "geoSrc": "https://exa.ai/library/place/55wlsy8vkny",
    "geoNote": "Map place page for The Empire Business Centre, A Wing, 5th Floor, Fulcrum, IA Project Road, beside the Hyatt Regency (OpenStreetMap puts the hotel at 19.1037, 72.8713).",
    "micro": "csmi",
-   "reason": "Floor 1st · Furnished · Carpet area 11,700 sq. ft. · Possession: Immediately · Per seat: Rs. 14,400 - Rs. 14,900 + GST",
+   "reason": "Floor 1st · Furnished · Carpet area 11,700 sq. ft. · Possession: Immediately",
    "address": "Fulcrum, IA Project Road, Sahar Road, next to Hyatt Regency, Ashok Nagar, Andheri East, Mumbai 400099",
    "locality": "Andheri East",
    "routes": [
@@ -2296,11 +2266,6 @@
      "conf": "high"
     },
     {
-     "k": "Per seat",
-     "v": "Rs. 14,400 - Rs. 14,900 + GST",
-     "conf": "high"
-    },
-    {
      "k": "Parking",
      "v": "9 car parking",
      "conf": "high"
@@ -2344,7 +2309,7 @@
    "micro": "sakinaka-metro",
    "address": "Marwah Business Park, Krishanlal Marwah Marg, off Saki Vihar Road, Marol, Andheri East, Mumbai 400072",
    "locality": "Andheri East",
-   "reason": "Floor 3rd or 4th · Furnished · Carpet area 5,600 sq. ft. per floor · Possession: Immediately · Per seat: Rs. 13,300 - Rs. 13,800",
+   "reason": "Floor 3rd or 4th · Furnished · Carpet area 5,600 sq. ft. per floor · Possession: Immediately",
    "routes": [
     {
      "kind": "metro",
@@ -3145,11 +3110,6 @@
      "conf": "high"
     },
     {
-     "k": "Per seat",
-     "v": "Rs. 13,300 - Rs. 13,800",
-     "conf": "high"
-    },
-    {
      "k": "Parking",
      "v": "4 per floor",
      "conf": "high"
@@ -3193,7 +3153,7 @@
    "micro": "sakinaka-metro",
    "address": "Marwah Business Park, Krishanlal Marwah Marg, Ganesh Nagar, Marol, Andheri East, Mumbai 400072",
    "locality": "Andheri East",
-   "reason": "Floor Multiple floors · Bareshell · Carpet area 5,150 and 5,450 sq. ft. · Possession: Feb - March 2027 · Per seat: Rs. 15,800 - Rs. 16,300",
+   "reason": "Floor Multiple floors · Bareshell · Carpet area 5,150 and 5,450 sq. ft. · Possession: Feb - March 2027",
    "routes": [
     {
      "kind": "metro",
@@ -4003,11 +3963,6 @@
     {
      "k": "Ceiling height",
      "v": "10 ft - 11 ft (approx.)",
-     "conf": "high"
-    },
-    {
-     "k": "Per seat",
-     "v": "Rs. 15,800 - Rs. 16,300",
      "conf": "high"
     },
     {
