@@ -20,6 +20,12 @@ trim-*.ps1
 !noida-skymark/**/*.jpg
 *.blend1
 
+# Landlord page (/landlord/, a copy of the f1-skymark-landlord repo): its photos, logos and its two
+# short videos (hero reel and ARCIL CEO, about 9 MB) ship with the page, which plays them on iPhone too
+!landlord/**/*.jpg
+!landlord/**/*.png
+!landlord/**/*.mp4
+
 
 # OS / editor
 .DS_Store
