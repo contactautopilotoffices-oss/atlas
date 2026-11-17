@@ -36,8 +36,15 @@ const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&":
 const Q = new URLSearchParams(location.search);
 const MOBILE = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
 const STILL = Q.get("still") === "1";
+/* The look: "real" (default) reads as a photograph of the place: no tilt-shift,
+   a 35 mm lens from drone height, sky and haze behind, ground to the horizon,
+   relief in the facades. ?look=model brings back the architect's-model look
+   (tilt-shift, a high turntable, the slab floating on the page). */
+const REALLOOK = Q.get("look") !== "model";   // the photographic look is the default; ?look=model brings back the plain model look
 const SLUG = ((Q.get("atlas") || location.pathname.split("/")[1] || "") + "").toLowerCase().replace(/[^a-z0-9-]/g, "");
 const D2R = Math.PI / 180, clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+/* 50 mm on a 36x24 mm frame: the lens that matches the human eye. Vertical field of view in degrees. */
+const EYE_FOV = 2 * Math.atan(12 / 50) * 180 / Math.PI;
 const fmtM = (m) => m < 1000 ? [`${Math.round(m / 10) * 10}`, "M"] : [`${(m / 1000).toFixed(1)}`, "KM"];
 const fm = (m) => fmtM(m).join(" ");
 const LINE = { L1: ["#3d8fd6", "Line 1"], L3: ["#2bb3a6", "Line 3"], L7: ["#e2584f", "Line 7"] };
@@ -87,7 +94,10 @@ async function start(A, W) {
   const hdr = await new RGBELoader().loadAsync(W.data + W.sky);
   hdr.mapping = THREE.EquirectangularReflectionMapping;
   const pmrem = new THREE.PMREMGenerator(renderer); const env = pmrem.fromEquirectangular(hdr).texture;
-  scene.environment = env; scene.environmentIntensity = 0.55;
+  scene.environment = env; scene.environmentIntensity = REALLOOK ? 0.75 : 0.55;
+  /* real look: the ground runs on past the slab to the horizon, under the haze */
+  const farGround = new THREE.Mesh(new THREE.CircleGeometry(6000, 64).rotateX(-Math.PI / 2), new THREE.MeshStandardMaterial({ color: 0x8c8476, roughness: 1 }));
+  farGround.position.y = -0.04; farGround.receiveShadow = true; farGround.visible = REALLOOK; scene.add(farGround);
   /* the sun the sky was rendered with: azimuth 235, elevation 24 (golden afternoon) */
   const SUN = new THREE.Vector3(Math.sin(235 * D2R) * Math.cos(24 * D2R), Math.sin(24 * D2R), -Math.cos(235 * D2R) * Math.cos(24 * D2R)).normalize();
   const sun = new THREE.DirectionalLight(0xffe6c4, 3.1); sun.castShadow = true;
@@ -98,14 +108,15 @@ async function start(A, W) {
   /* textures, loaded once and shared by every diorama */
   const texL = new THREE.TextureLoader(); const TEX = {}; const aniso = renderer.capabilities.getMaxAnisotropy();
   const tex = (name, srgb = true) => TEX[name] || (TEX[name] = (() => { const t = texL.load(W.data + "tex/" + name + (name.startsWith("leaves") ? ".png" : ".jpg")); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = aniso; if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.flipY = false; return t; })());
-  const GLASSY = new Set(["wall_com_glass", "wall_opt_glass", "wall_com_ribbon", "wall_opt_plaster", "wall_res_tower"]);
+  const GLASSY = new Set(["wall_com_glass", "wall_opt_glass", "wall_com_ribbon", "wall_opt_plaster", "wall_res_tower", "wall_glass723", "wall_retail723", "wall_cw_teal", "wall_cw_blue", "wall_cw_grey", "wall_cw_silver", "wall_ribbon_red", "wall_ribbon_white"]);
   const MAT = {};
   function material(name) {
     if (MAT[name]) return MAT[name];
     let m;
     if (name.startsWith("wall_")) {
       const k = name.slice(5);
-      m = new THREE.MeshStandardMaterial({ map: tex(k), roughnessMap: tex(k + "_r", false), roughness: 1, metalness: 0, envMapIntensity: 1 });
+      m = new THREE.MeshStandardMaterial({ map: tex(k), roughnessMap: tex(k + "_r", false), roughness: 1, metalness: 0, envMapIntensity: GLASSY.has(name) && REALLOOK ? 1.7 : 1 });
+      if (REALLOOK) { m.normalMap = tex(k + "_n", false); m.normalScale = new THREE.Vector2(0.9, 0.9); }   // relief from scripts/world/normals.py
       if (GLASSY.has(name)) m.onBeforeCompile = (sh) => { sh.fragmentShader = sh.fragmentShader.replace("#include <metalnessmap_fragment>", "#include <metalnessmap_fragment>\n metalnessFactor = 1.0 - smoothstep(0.22, 0.5, roughnessFactor);"); };
     } else {
       const C = {
@@ -113,11 +124,13 @@ async function start(A, W) {
         parapet: [0xcfc8b8, 0.9], kerb: [0xbdb8ab, 0.85], water: [0x3b4f54, 0.06, 0.2], marking: [0xeeeee6, 0.6], concrete: [0xcac6bc, 0.78], concrete_dark: [0x9f9b92, 0.82], metal: [0xa9adb1, 0.35, 0.9],
         station_roof: [0xdadde0, 0.28, 0.85], sign_l1: [0x1c5fa8, 0.4], sign_l3: [0x1d8a8a, 0.4], rail: [0x77716a, 0.35, 0.9], tank: [0x1d1f22, 0.5], mullion: [0xc4c9cc, 0.28, 0.9], slab_edge: [0xe8e5de, 0.6],
         glass_lobby: [0x4e6a76, 0.04, 0.75], canopy: [0x2b2e31, 0.4, 0.6], wire: [0x333333, 0.5, 0.8], ballast: [0x7d7568, 0.95], roof_tin: [0x8f8f8a, 0.42, 0.6], roof_tarp: [0x2f63a8, 0.6], roof_tin_rust: [0x7a5b45, 0.7, 0.3],
-        trunk: [0x5b4a3b, 0.9], leaf: [0xffffff, 0.8], leaf_b: [0xffffff, 0.8], frond: [0x5a8735, 0.75], lamp_head: [0xe6e2d6, 0.4], car_body: [0xd8d8d6, 0.25, 0.55], car_glass: [0x1f252a, 0.06, 0.5], tyre: [0x1b1b1b, 0.9],
+        trunk: [0x5b4a3b, 0.9], leaf: [0xffffff, 0.8], leaf_b: [0xffffff, 0.8], frond: [0x5a8735, 0.75], lamp_head: [0xe6e2d6, 0.4], car_body: [0xffffff, 0.22, 0.55], car_glass: [0x1a2026, 0.04, 0.6], tyre: [0x161616, 0.9], hub: [0xb9bcbf, 0.3, 0.9], trim: [0x202224, 0.5, 0.3],
+        lamp_front: [0xfff6e0, 0.2], lamp_rear: [0xa01010, 0.3], person_trousers: [0x2b3240, 0.85], person_shirt: [0xffffff, 0.8], person_skin: [0x8a5a3c, 0.6], person_hair: [0x15110e, 0.7],
+        fin_723: [0x3d4752, 0.45, 0.35], pier_723: [0x32373d, 0.5, 0.3], band_723: [0xc8cbcd, 0.55, 0.15], frame_723: [0xd9dcde, 0.35, 0.7], acp_grey: [0xb8bcbf, 0.4, 0.55], acp_red: [0xad322c, 0.42, 0.35], acp_white: [0xe7e7e3, 0.45, 0.25], fin_white: [0xecebe7, 0.5, 0.1],   /* House of Wadhwa 723 Avenue */
         auto_body: [0x2d7d3a, 0.4, 0.2], auto_top: [0xf0c22e, 0.5], bus_body: [0xb8322a, 0.4, 0.3], train_body: [0xeef1f4, 0.25, 0.45], train_win: [0x1e2832, 0.05, 0.6], train_stripe: [0x1c5fa8, 0.35],
       }[name] || [0x9a9a9a, 0.8];
       m = new THREE.MeshStandardMaterial({ color: C[0], roughness: C[1], metalness: C[2] || 0 });
-      if (C[3]) m.map = tex(C[3]);
+      if (C[3]) { m.map = tex(C[3]); if (REALLOOK) { m.normalMap = tex(C[3] + "_n", false); m.normalScale = new THREE.Vector2(0.6, 0.6); } }
       if (name === "station_glass") Object.assign(m, { color: new THREE.Color(0x9cc0cf), roughness: 0.05, metalness: 0.3, transparent: true, opacity: 0.32, depthWrite: false });
       if (name === "sign_text" || name === "opt_name") Object.assign(m, { color: new THREE.Color(0xffffff), emissive: new THREE.Color(name === "opt_name" ? 0xfff2da : 0xffffff), emissiveIntensity: 0.55, roughness: 0.4 });
       if (name === "leaf" || name === "leaf_b") Object.assign(m, { color: new THREE.Color(0xffffff), map: tex(name === "leaf" ? "leaves_a" : "leaves_b"), alphaTest: 0.5, side: THREE.DoubleSide, roughness: 0.78 });
@@ -135,7 +148,7 @@ async function start(A, W) {
   const composer = new EffectComposer(renderer, target);
   composer.addPass(new RenderPass(scene, camera));
   const gtao = new GTAOPass(scene, camera, innerWidth, innerHeight); gtao.output = GTAOPass.OUTPUT.Default;
-  gtao.updateGtaoMaterial({ radius: 6, distanceExponent: 1.4, thickness: 6, scale: 1.2, samples: 16 }); gtao.blendIntensity = 0.9;
+  gtao.updateGtaoMaterial({ radius: 6, distanceExponent: 1.4, thickness: 6, scale: 1.2, samples: 16 }); gtao.blendIntensity = REALLOOK ? 0.5 : 0.9;
   if (!LOW && Q.get("ao") !== "0") composer.addPass(gtao);
   /* tilt-shift: sharp across the middle band, blurred above and below, the
      miniature read of a model photographed close */
@@ -148,10 +161,61 @@ async function start(A, W) {
   composer.addPass(tilt);
   composer.addPass(new OutputPass());
 
+  /* ------------------------------------------------ reflections ---- */
+  /* glass reflects the real street, not just the sky: a cube camera at the chosen building's middle
+     photographs the diorama around it (with the building itself hidden), and every glass surface uses
+     that picture as its reflection. Taken once per building, and again once its textures have arrived. */
+  const probeRT = new THREE.WebGLCubeRenderTarget(LOW ? 256 : 512, { type: THREE.HalfFloatType, generateMipmaps: true, minFilter: THREE.LinearMipmapLinearFilter });
+  const probe = new THREE.CubeCamera(1, 4000, probeRT);
+  const REFLECTS = new Set([...GLASSY, "glass_lobby", "station_glass", "car_glass", "train_win", "water"]);
+  function captureReflections() { try { captureReflections_(); } catch (e) { console.warn("reflections skipped", e); } }
+  function captureReflections_() {
+    if (!REALLOOK || !D || !root || Q.get("refl") === "0") return;
+    const hide = []; root.traverse((o) => { if (o.visible && o.name && (o.name.startsWith("opt_") || o.name.startsWith("sign_723"))) { o.visible = false; hide.push(o); } });
+    const c = centroid(D.building.foot); probe.position.copy(P3(c[0], c[1], Math.max(12, D.building.h * 0.45)));
+    const bg = scene.background, fog = scene.fog, bands_ = bands.map((b) => b.visible);
+    scene.background = hdr; scene.fog = null; bands.forEach((b) => (b.visible = false));
+    probe.update(renderer, scene); probeRT.texture.needsPMREMUpdate = true;
+    scene.background = bg; scene.fog = fog; bands.forEach((b, i) => (b.visible = bands_[i])); hide.forEach((o) => (o.visible = true));
+    for (const [n, m] of Object.entries(MAT)) if (REFLECTS.has(n) && m.envMap !== probeRT.texture) { m.envMap = probeRT.texture; m.envMapIntensity = n.startsWith("wall_") ? 1.9 : 1.4; m.needsUpdate = true; }
+  }
+
+  /* ------------------------------------------- the map beyond the model ---- */
+  /* the model covers a few hundred metres round each building; past its edge the ground is the real map
+     (Mapbox satellite with streets), so a route to a station 4 km away runs across Andheri, not empty haze */
+  /* the region's origin: Andheri East unless the atlas names another (W.origin, W.ky), as the
+     Noida explorer does (scripts/world/regions/*.json) */
+  const [LNG0, LAT0] = W.origin || [72.867, 19.111], KX = Math.cos(LAT0 * D2R) * 111320, KY = W.ky || 110540;
+  let mapGround = null;
+  function buildMapGround() {
+    if (mapGround) { scene.remove(mapGround); mapGround.traverse((o) => { if (o.isMesh) { o.geometry.dispose(); if (o.material.map) o.material.map.dispose(); o.material.dispose(); } }); mapGround = null; }
+    const tok = window.MAPBOX_TOKEN; if (!tok || !D || !D.origin || Q.get("map") === "0") return;
+    const [ox, oy] = D.origin, Z = 15, N = 2 ** Z;
+    const toLL = (x, y) => [LNG0 + (x + ox) / KX, LAT0 + (y + oy) / KY];
+    const toXY = (lng, lat) => [(lng - LNG0) * KX - ox, (lat - LAT0) * KY - oy];
+    const tx = (lng) => (lng + 180) / 360 * N, ty = (lat) => (1 - Math.log(Math.tan(lat * D2R) + 1 / Math.cos(lat * D2R)) / Math.PI) / 2 * N;
+    const lngOf = (x) => x / N * 360 - 180, latOf = (y) => Math.atan(Math.sinh(Math.PI * (1 - 2 * y / N))) / D2R;
+    // cover the model and every route from it, with a margin
+    let x0 = -1600, x1 = 1600, y0 = -1600, y1 = 1600;
+    for (const r of D.routes || []) for (const [x, y] of r.path) { x0 = Math.min(x0, x - 900); x1 = Math.max(x1, x + 900); y0 = Math.min(y0, y - 900); y1 = Math.max(y1, y + 900); }
+    const [lA, bA] = toLL(x0, y0), [lB, bB] = toLL(x1, y1);
+    const X0 = Math.floor(tx(lA)), X1 = Math.floor(tx(lB)), Y0 = Math.floor(ty(bB)), Y1 = Math.floor(ty(bA));
+    if ((X1 - X0 + 1) * (Y1 - Y0 + 1) > 120) return;
+    mapGround = new THREE.Group(); mapGround.name = "map_ground";
+    for (let X = X0; X <= X1; X++) for (let Y = Y0; Y <= Y1; Y++) {
+      const [ax, ay] = toXY(lngOf(X), latOf(Y)), [bx, by] = toXY(lngOf(X + 1), latOf(Y + 1));
+      const t = texL.load(`https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/tiles/512/${Z}/${X}/${Y}?access_token=${encodeURIComponent(tok)}`);
+      t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = aniso;
+      const m = new THREE.Mesh(new THREE.PlaneGeometry(bx - ax, ay - by).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ map: t, color: 0xd8d4cc, fog: false }));
+      m.position.copy(P3((ax + bx) / 2, (ay + by) / 2, -0.6)); m.renderOrder = -1; mapGround.add(m);
+    }
+    scene.add(mapGround); farGround.position.y = -1.5;
+  }
+
   /* ----------------------------------------------------- the diorama ---- */
   const loader = new GLTFLoader(); loader.setMeshoptDecoder(MeshoptDecoder);
   let D = null, root = null, inst = [], movers = [], solid = [], groundMeshes = [];
-  const OPTS = A.options;
+  const OPTS = A.options.filter((o) => !W.thumbs || W.thumbs[o.id]);   // buildings with a 3D model
   function protoParts(node) {   // every mesh under a prototype, with its transform relative to it
     const out = []; node.updateMatrixWorld(true); const inv = node.matrixWorld.clone().invert();
     node.traverse((o) => { if (o.isMesh) out.push({ geo: o.geometry, mat: material(o.material.name), m: inv.clone().multiply(o.matrixWorld) }); });
@@ -170,12 +234,16 @@ async function start(A, W) {
       fetch(`${W.data}d/${id}.json`).then((r) => r.json())]);
     if (root) { scene.remove(root); root.traverse((o) => { if (o.isMesh) o.geometry.dispose(); }); }
     for (const m of inst) { scene.remove(m); m.dispose(); } inst = []; movers = []; groundMeshes = [];
-    D = data; root = gltf.scene; scene.add(root);
+    D = data; root = gltf.scene; scene.add(root); buildMapGround();
     const protos = {};
     root.traverse((o) => {
       if (o.name && o.name.startsWith("proto_") && !o.name.endsWith("_c") && !o.name.includes("_crown") && o.parent === root) protos[o.name] = o;
       if (!o.isMesh) return;
-      const n = o.material && o.material.name; o.material = material(n || "concrete");
+      const n = o.material && o.material.name;
+      /* a building modelled on its own (the F1 Skymark twin) brings its own PBR materials,
+         named SKY_*: keep them, with the scene's sky in their reflections */
+      if (/^SKY_/.test(n || "")) { o.material.envMapIntensity = 1; if (o.material.transmission) o.material.thickness = 0.02; }
+      else o.material = material(n || "concrete");
       o.castShadow = !/^(ground|asphalt|pavers|grass|marking|water|kerb|soil)$/.test(n); o.receiveShadow = true;
       if (/^(ground|asphalt|pavers|grass|kerb|marking|water)$/.test(n)) groundMeshes.push(o);
     });
@@ -193,7 +261,19 @@ async function start(A, W) {
       const r = Math.random(), k = r < 0.3 ? "proto_auto" : r > 0.95 ? "proto_bus" : "proto_car", dir = Math.random() < 0.5 ? 1 : -1;
       kinds[k].push({ ln, s, dir, v: (6 + Math.random() * 6) * (k === "proto_bus" ? 0.8 : 1), lane: dir * ln.w * (0.18 + Math.random() * 0.1) });
     }
-    for (const [k, list] of Object.entries(kinds)) { if (!list.length) continue; const parts = instance(pp(k), list.map(() => new THREE.Matrix4())); inst.push(...parts); movers.push({ parts, list, base: pp(k) }); }
+    // people on the footpaths either side of every lane, at walking pace
+    if (protos.proto_person) {
+      kinds.proto_person = [];
+      for (const ln of lanes) for (const side of [-1, 1]) for (let s = Math.random() * 12; s < ln.len; s += 7 + Math.random() * 22)
+        kinds.proto_person.push({ ln, s, dir: Math.random() < 0.5 ? 1 : -1, v: 1.1 + Math.random() * 0.45, lane: side * (ln.w * 0.5 + 1.4 + Math.random() * 1.2), walk: true });
+    }
+    const PAINT = [0xf4f4f2, 0xf4f4f2, 0xc9ccd0, 0x8e9297, 0x2b2d31, 0x16171a, 0x7a1d1d, 0x1f3a6b, 0xb8b2a6];
+    const SHIRT = [0xf2f2f0, 0x2f4f7f, 0x8a1f2b, 0xd9c7a4, 0x3a5a3a, 0x6b4a8a, 0xe0a030, 0x1f1f22, 0xa8c4d8];
+    for (const [k, list] of Object.entries(kinds)) { if (!list.length) continue; const parts = instance(pp(k), list.map(() => new THREE.Matrix4())); inst.push(...parts); movers.push({ parts, list, base: pp(k) });
+      // each car its own paint, each person their own shirt
+      const tint = k === "proto_car" ? ["car_body", PAINT] : k === "proto_person" ? ["person_shirt", SHIRT] : null;
+      if (tint) parts.forEach((im) => { if (im.material && im.material.name === tint[0]) { const c = new THREE.Color(); list.forEach((_, i) => im.setColorAt(i, c.setHex(tint[1][Math.floor(Math.random() * tint[1].length)]))); im.instanceColor.needsUpdate = true; } });
+    }
     // the Line 1 / Line 7 trains
     for (const [key, ls] of Object.entries(D.metro || {})) for (const m of ls.slice(0, 1)) {
       const P = m.p.map(([x, y]) => new THREE.Vector2(x, -y)); const L = [0]; for (let i = 1; i < P.length; i++) L.push(L[i - 1] + P[i].distanceTo(P[i - 1]));
@@ -215,7 +295,7 @@ async function start(A, W) {
   function stepMovers(dt) {
     for (const mv of movers) {
       if (mv.list) mv.list.forEach((c, i) => { c.s += c.v * c.dir * dt; if (c.s > c.ln.len) c.s -= c.ln.len; if (c.s < 0) c.s += c.ln.len;
-        const a = along(c.ln, c.s, _v2); _p.set(_v2.x - Math.sin(a) * c.lane, 0.06, _v2.y + Math.cos(a) * c.lane); _e.set(0, -a + (c.dir < 0 ? Math.PI : 0), 0); _q.setFromEuler(_e); _m.compose(_p, _q, _one);
+        const a = along(c.ln, c.s, _v2); _p.set(_v2.x - Math.sin(a) * c.lane, c.walk ? 0.16 : 0.06, _v2.y + Math.cos(a) * c.lane); _e.set(0, -a + (c.dir < 0 ? Math.PI : 0), 0); _q.setFromEuler(_e); _m.compose(_p, _q, _one);
         mv.parts.forEach((im, k) => im.setMatrixAt(i, _t.multiplyMatrices(_m, mv.base[k].m))); });
       if (mv.trains) mv.trains.forEach((t, j) => { if (t.wait > 0) t.wait -= dt; else { t.s += t.v * t.dir * dt; if (t.s > t.ln.len - 50 || t.s < 50) { t.dir *= -1; t.wait = 5; t.s = clamp(t.s, 50, t.ln.len - 50); } }
         for (let c = 0; c < 4; c++) { const a = along(t.ln, t.s - t.dir * c * 20.5, _v2); _p.set(_v2.x - Math.sin(a) * t.off, t.ln.z + 0.48, _v2.y + Math.cos(a) * t.off); _e.set(0, -a, 0); _q.setFromEuler(_e); _m.compose(_p, _q, _one);
@@ -259,13 +339,57 @@ async function start(A, W) {
     const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3)); g.setAttribute("aS", new THREE.Float32BufferAttribute(sa, 1)); g.setIndex(idx);
     routeMesh = new THREE.Mesh(g, ribbonMat); routeMesh.renderOrder = 5; scene.add(routeMesh);
     r._P = P; r._L = [0]; for (let i = 1; i < P.length; i++) r._L.push(r._L[i - 1] + P[i].distanceTo(P[i - 1])); r._len = r._L[r._L.length - 1];
-    const mid = P[Math.floor(P.length / 2)]; const L = LBL.find((x) => x.dist); if (L) { L.v.set(mid.x, 12, mid.y); L.el.textContent = r.kind === "metro" ? `${fm(r.m)} · ${r.min} MIN WALK` : `${fm(r.m)} BY ROAD`; }
+    const mid = P[Math.floor(P.length / 2)]; const L = LBL.find((x) => x.dist); if (L) { L.v.set(mid.x, 12, mid.y); L.el.textContent = r.kind === "metro" ? `${fm(r.m)}${r.min ? ` · ${r.min} MIN WALK` : " WALK"}` : `${fm(r.m)} BY ROAD`; }
   }
   const routeOf = (r) => { const dr = r && D.routes.find((x) => x.kind === r.kind && x.name === r.name); return dr ? { ...r, path: dr.path } : null; };
 
   /* ---------------------------------------------------- the HUD ---- */
   let SEL = null;
   const factOf = (o, k) => ((o.facts || []).find((f) => f.k === k) || {}).v || "";
+  /* Floors: G is the 5.6 m lobby, then 4.1 m a floor (scripts/world/prep.py);
+     the offered floors come from the atlas's "Floor / Unit" (the deck's words). */
+  const floorZ = (n) => n === 0 ? 0 : 5.6 + (n - 1) * 4.1, floorH = (n) => n === 0 ? 5.6 : 4.1;
+  const ORD = { first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9, tenth: 10 };
+  function offered(o) {
+    const t = String(factOf(o, "Floor / Unit") || "").toLowerCase(); const out = new Set();
+    for (const m of t.matchAll(/(\d+)\s*(st|nd|rd|th)?/g)) out.add(+m[1]);
+    for (const [w, n] of Object.entries(ORD)) if (t.includes(w)) out.add(n);
+    return { floors: [...out].filter((n) => n >= 0 && n < (D ? D.building.floors : 99)), text: factOf(o, "Floor / Unit") || "" };
+  }
+  let bands = [], FLOOR_SEL = null;
+  const bandMat = new THREE.MeshBasicMaterial({ color: 0xffb020, transparent: true, opacity: 0.42, depthWrite: false, side: THREE.DoubleSide, toneMapped: false });
+  const hoverMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.32, depthWrite: false, side: THREE.DoubleSide, toneMapped: false });
+  function floorBand(n, mat) {   // a lit slice of the building at floor n: its footprint, a hair larger, extruded through the floor
+    const sh = new THREE.Shape(D.building.foot.map(([x, y]) => new THREE.Vector2(x, y)));
+    const g = new THREE.ExtrudeGeometry(sh, { depth: floorH(n) - 0.25, bevelEnabled: false }); g.rotateX(-Math.PI / 2);
+    const m = new THREE.Mesh(g, mat); const c = centroid(D.building.foot); m.position.set(-c[0] * 0.012, floorZ(n) + 0.12, c[1] * 0.012); m.scale.set(1.012, 1, 1.012);
+    m.renderOrder = 4; scene.add(m); return m;
+  }
+  function setBands(o) {
+    for (const b of bands) { scene.remove(b); b.geometry.dispose(); } bands = [];
+    if (!D) return; for (const n of offered(o).floors) bands.push(floorBand(n, bandMat));
+  }
+  let hoverBand = null;
+  function hoverFloor(n) { if (hoverBand) { scene.remove(hoverBand); hoverBand.geometry.dispose(); hoverBand = null; } if (n != null && D) hoverBand = floorBand(n, hoverMat); }
+  function renderStack(o) {
+    const el = $("#floors"); if (!el || !D) return;
+    const F = D.building.floors, on = new Set(offered(o).floors), H = Math.min(22, Math.max(13, Math.floor(330 / F))), gap = 3;
+    let y = 4, rows = "";
+    for (let n = F - 1; n >= 0; n--) {
+      const lit = on.has(n), lab = n === 0 ? "G" : String(n);
+      rows += `<g class="fl${lit ? " on" : ""}${FLOOR_SEL === n ? " sel" : ""}" data-n="${n}" transform="translate(0,${y})"><rect class="b" x="0" y="0" width="150" height="${H}" rx="5"/><text x="12" y="${H / 2 + 4}">${lab}</text>${lit ? `<text class="tag" x="138" y="${H / 2 + 3.5}" text-anchor="end">ON OFFER</text>` : ""}</g>`;
+      y += H + gap;
+    }
+    el.querySelector("svg").innerHTML = rows; el.querySelector("svg").setAttribute("viewBox", `0 0 150 ${y}`);
+    el.querySelector(".fnote").textContent = on.size ? `Floor ${offered(o).text}, lit on the building` : `Floor: ${offered(o).text || "not given"}`;
+  }
+  function flyToFloor(n) {   // push in to a floor: level with it, close enough to read the slab
+    if (!D) return; FLOOR_SEL = n; const o = OPTS.find((x) => x.id === SEL); renderStack(o);
+    const c = centroid(D.building.foot), z = floorZ(n) + floorH(n) / 2, t = P3(c[0], c[1], z), az = D.building.facing + Math.PI / 2 + 0.55, d = 70 + D.building.h * 0.4;
+    if (MODE !== "dollhouse") dollhouse(0);
+    controls.autoRotate = false;
+    flyTo(t, new THREE.Vector3(t.x + Math.cos(az) * d, Math.max(z + 6, 8), t.z - Math.sin(az) * d), 1500);
+  }
   function renderHUD(o) {
     const pr = (o.reason || "").startsWith("PRIORITY") ? o.reason.split(" · ")[0] : "";
     $("#h-eyebrow").textContent = `${String(o.n).padStart(2, "0")} · ${factOf(o, "Micro-market")}`;
@@ -275,13 +399,20 @@ async function start(A, W) {
     $("#line2").textContent = [factOf(o, "Per seat") && `${factOf(o, "Per seat")} per seat`, factOf(o, "Possession") && `Possession: ${factOf(o, "Possession")}`].filter(Boolean).join(" · ");
     const rows = (o.routes || []);
     $("#conn").innerHTML = `<div class="mono">From the entrance</div>` + rows.map((r, i) => { const [v, u] = fmtM(r.m); const col = r.kind === "rail" ? "var(--rail)" : (LINE[(r.lines || [])[0]] || ["#3d8fd6"])[0];
-      return `<button class="row${ROUTE && ROUTE.name === r.name && ROUTE.kind === r.kind ? " on" : ""}" data-i="${i}"><span class="dot" style="background:${col}"></span><span><b>${esc(r.kind === "rail" ? `${r.name} station` : r.name)}</b><i>${esc((r.lines || []).join(" · "))}${r.kind === "rail" ? " · by road" : " · on foot"}</i></span><span class="v">${v}<small>${u}</small>${r.kind === "rail" ? "" : `<em>${r.min} MIN</em>`}</span></button>`; }).join("");
+      return `<button class="row${ROUTE && ROUTE.name === r.name && ROUTE.kind === r.kind ? " on" : ""}" data-i="${i}"><span class="dot" style="background:${col}"></span><span><b>${esc(r.kind === "rail" ? `${r.name} station` : r.name)}</b><i>${esc((r.lines || []).join(" · "))}${r.kind === "rail" ? " · by road" : " · on foot"}</i></span><span class="v">${v}<small>${u}</small>${r.kind === "rail" || !r.min ? "" : `<em>${r.min} MIN</em>`}</span></button>`; }).join("");
     const r = ROUTE && ROUTE.kind !== "rail" ? ROUTE : rows.find((x) => x.kind === "metro");
     $("#go").hidden = !r; if (r) $("#go").innerHTML = `Walk to ${esc(r.name)} <span aria-hidden="true">→</span>`;
     $("#src").textContent = (A.copy && A.copy.connect && A.copy.connect.note) || "";
     $("#spec").innerHTML = (o.facts || []).filter((f) => !f.src).map((f) => `<dt>${esc(f.k)}</dt><dd>${esc(f.v)}</dd>`).join("");
     const ph = W.renders && W.renders[o.id]; $("#photo").hidden = !ph || $("#spec").hidden; if (ph) $("#photo img").src = W.data + ph;
+    renderStack(o);
   }
+  { const f = $("#floors");
+    if (f) {
+      f.addEventListener("pointerover", (e) => { const g = e.target.closest(".fl"); hoverFloor(g ? +g.dataset.n : null); });
+      f.addEventListener("pointerleave", () => hoverFloor(null));
+      f.addEventListener("click", (e) => { const g = e.target.closest(".fl"); if (g) flyToFloor(+g.dataset.n); });
+    } }
   $("#more").addEventListener("click", () => { const h = !$("#spec").hidden; $("#spec").hidden = h; $("#photo").hidden = h || !(W.renders && W.renders[SEL]); $("#more").textContent = h ? "Property details" : "Hide details"; });
   $("#conn").addEventListener("click", (e) => { const b = e.target.closest("[data-i]"); if (!b) return; const o = OPTS.find((x) => x.id === SEL); setRoute(routeOf(o.routes[+b.dataset.i])); renderHUD(o); if (MODE === "dollhouse") frameRoute(); });
   $("#go").addEventListener("click", () => startRouteWalk());
@@ -301,12 +432,21 @@ async function start(A, W) {
     controls.minDistance = Math.max(90, D.building.h * 1.4); controls.maxDistance = R * 3;
     flyTo(t, new THREE.Vector3(t.x + Math.cos(az) * Math.sin(polar) * dist, t.y + Math.cos(polar) * dist, t.z - Math.sin(az) * Math.sin(polar) * dist), ms);
     frameOffset(true);
-    controls.autoRotate = true; tilt.enabled = true; sunBox(R * 0.62, P3(0, 0));
+    controls.autoRotate = true; tilt.enabled = !REALLOOK; sunBox(R * 0.62, P3(0, 0));
+    if (REALLOOK) {
+      // a photograph of the place through the eye's own lens: 50 mm on full frame (EYE_FOV, 27 deg vertical), pulled back so the frame holds the same street
+      camera.fov = EYE_FOV; camera.updateProjectionMatrix();
+      scene.background = hdr; scene.backgroundIntensity = 1.0; scene.fog = new THREE.Fog(0xd9cbb4, 460, 1500);
+      const h = D.building.h, tr = P3(c[0], c[1], h * 0.4), d2 = Math.max(330, h * 6.3), pol = 67 * D2R;
+      controls.minDistance = 100; controls.maxDistance = 1050; controls.minPolarAngle = 35 * D2R; controls.maxPolarAngle = 84 * D2R;
+      flyTo(tr, new THREE.Vector3(tr.x + Math.cos(az) * Math.sin(pol) * d2, tr.y + Math.cos(pol) * d2, tr.z - Math.sin(az) * Math.sin(pol) * d2), ms);
+    }
     for (const id of ["#walkhud", "#compass", "#mini", "#hint", "#route"]) $(id).hidden = true;
   }
   /* on a wide screen the overlay takes the left, so the view's centre moves right */
   function frameOffset(on) { const w = innerWidth, h = innerHeight; if (on && w > 900) camera.setViewOffset(w, h, -w * 0.16, h * 0.04, w, h); else camera.clearViewOffset(); camera.updateProjectionMatrix(); }
   function frameRoute() { if (!ROUTE) return; const box = new THREE.Box3(); ROUTE.path.forEach(([x, y]) => box.expandByPoint(P3(x, y))); const c = box.getCenter(new THREE.Vector3()), s = box.getSize(new THREE.Vector3()), R = Math.max(s.x, s.z, 200);
+    if (scene.fog) { scene.fog.near = Math.max(scene.fog.near, R * 1.4); scene.fog.far = Math.max(scene.fog.far, R * 4); }   // a long route is seen whole, not through haze
     const az = Math.atan2(camera.position.x - c.x, camera.position.z - c.z); controls.autoRotate = false; flyTo(c, new THREE.Vector3(c.x + Math.sin(az) * R * 0.9, R * 0.95, c.z + Math.cos(az) * R * 0.9)); }
 
   /* walk: yaw/pitch by drag, WASD to move, click the ground to go there */
@@ -317,7 +457,7 @@ async function start(A, W) {
   function blocked(x, y) { if (!pip(x, y, D.slab, 0)) return true; for (const p of solid) if (pip(x, y, p, 0.6)) return true; return false; }
   function startWalk(at) {
     MODE = "walk"; document.body.classList.add("walk"); document.body.classList.remove("routing"); setModeUI(); controls.enabled = false; controls.autoRotate = false; tilt.enabled = false; fly = null;
-    camera.fov = 62; camera.near = 0.3; camera.far = 2500; frameOffset(false); scene.background = hdr; scene.backgroundIntensity = 0.9; scene.fog = new THREE.Fog(0xd9cbb4, 260, 900);
+    camera.fov = EYE_FOV; camera.near = 0.3;   /* eye level: 1.68 m up, through a 50 mm lens: what the eye sees, not wide-angle, not zoomed */ camera.far = 2500; frameOffset(false); scene.background = hdr; scene.backgroundIntensity = 0.9; scene.fog = new THREE.Fog(0xd9cbb4, 260, 900);
     const w0 = at || D.street_cam || D.walk0; walk.pos.set(w0[0], w0[1]);
     const c = centroid(D.building.foot); walk.yaw = Math.atan2(c[0] - w0[0], c[1] - w0[1]); walk.pitch = clamp(Math.atan2(D.building.h * 0.42, Math.hypot(c[0] - w0[0], c[1] - w0[1])), 0, 0.9);
     for (const id of ["#walkhud", "#compass", "#mini", "#hint"]) $(id).hidden = false; $("#route").hidden = true; $("#hint").style.opacity = "1";
@@ -386,7 +526,7 @@ async function start(A, W) {
     walk.pos.set(_v2.x, -_v2.y); const want = Math.atan2(ahead.x - _v2.x, -(ahead.y - _v2.y)); walk.yaw += Math.atan2(Math.sin(want - walk.yaw), Math.cos(want - walk.yaw)) * Math.min(1, dt * 2.5); walk.pitch += (0.05 - walk.pitch) * Math.min(1, dt * 2);
     placeWalkCam(false);
     const f = RW.s / ROUTE._len, left = ROUTE.m * (1 - f), [v, u] = fmtM(left), mins = Math.max(0, Math.ceil((ROUTE.min || 0) * (1 - f)));
-    $("#route").innerHTML = `<div class="top"><div><span class="mono">Walking to the metro · ${fm(ROUTE.m)} · ${ROUTE.min} min · shown 9x faster</span><h4>${esc(ROUTE.name)}</h4></div><div class="big">${f >= 1 ? "ARRIVED" : `${v} ${u}`}<small>${f >= 1 ? "" : `${mins} MIN TO GO`}</small></div></div>
+    $("#route").innerHTML = `<div class="top"><div><span class="mono">Walking to the metro · ${fm(ROUTE.m)}${ROUTE.min ? ` · ${ROUTE.min} min` : ""} · shown 9x faster</span><h4>${esc(ROUTE.name)}</h4></div><div class="big">${f >= 1 ? "ARRIVED" : `${v} ${u}`}<small>${f >= 1 ? "" : `${mins} MIN TO GO`}</small></div></div>
       <div class="track"><i style="width:${(f * 100).toFixed(1)}%"></i><b style="left:${(f * 100).toFixed(1)}%"></b></div><div class="ends"><span class="mono">${esc(D.name)}</span><div class="ctl"><button data-rw="pause">${RW.paused ? "Resume" : "Pause"}</button><button data-rw="exit">Look around</button><button data-rw="back">Dollhouse</button></div><span class="mono">${esc(ROUTE.name)}</span></div>`;
   }
   $("#route").addEventListener("click", (e) => { const b = e.target.closest("[data-rw]"); if (!b) return; const k = b.dataset.rw;
@@ -398,15 +538,19 @@ async function start(A, W) {
     document.querySelectorAll(".film").forEach((f) => f.classList.toggle("on", f.dataset.id === id));
     RW = null; ROUTE = null; renderHUD(o);
     await loadDiorama(id);
+    FLOOR_SEL = null; setBands(o);
+    captureReflections(); setTimeout(captureReflections, 2500);
     setRoute(routeOf(o.routes.find((x) => x.kind === "metro"))); renderHUD(o);
     if (MODE === "walk" || MODE === "route") startWalk(); else dollhouse(first ? 0 : 1600);
     if (first && fly) { controls.target.copy(fly.b.t); const p0 = fly.b.p.clone(); fly = null; camera.position.copy(controls.target.clone().add(p0.clone().sub(controls.target).multiplyScalar(1.6))); flyTo(controls.target.clone(), p0, 2600); }
     try { history.replaceState(null, "", `#${id}`); } catch (e) {}
   }
-  $("#t-eyebrow").textContent = "Autopilot · Flipkart";
-  $("#t-title").textContent = "Andheri East";
+  /* the wording is the atlas's when it gives it (W.brand, W.credit), Andheri East's otherwise */
+  const BR = W.brand || { kicker: "Autopilot · Flipkart", title: "Andheri East" };
+  $("#t-eyebrow").textContent = BR.kicker; $("#t-title").textContent = BR.title;
+  if ($("#l-title")) $("#l-title").textContent = BR.title;
   $("#to-map").href = A.path || "/" + SLUG;
-  $("#credit").textContent = "Built in Blender from Overture Maps footprints. Heights around each building are estimated; the buildings use the deck's floors. Distances: Google Maps.";
+  $("#credit").textContent = W.credit || "Built in Blender from Overture Maps footprints. Heights around each building are estimated; the buildings use the deck's floors. Distances: Google Maps.";
   $("#strip").innerHTML = OPTS.map((o) => { const r = (o.routes || []).find((x) => x.kind === "metro"); const th = W.thumbs && W.thumbs[o.id];
     return `<button class="film" data-id="${esc(o.id)}" style="${th ? `background-image:url('${W.data}${th}')` : ""}"><span><span class="n">${String(o.n).padStart(2, "0")}</span><b>${esc(o.name)}</b>${r ? `<i>${fm(r.m)} · ${esc(r.name)}</i>` : ""}</span></button>`; }).join("");
   $("#strip").addEventListener("click", (e) => { const f = e.target.closest(".film"); if (f && f.dataset.id !== SEL) select(f.dataset.id); });

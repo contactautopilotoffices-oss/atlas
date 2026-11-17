@@ -118,6 +118,14 @@ a{color:inherit;text-decoration:none}
 #route .ctl button{padding:8px 12px;border-radius:999px;border:1px solid var(--line);font:600 12px/1 var(--disp);letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
 #route .ctl button:hover{color:var(--ink);border-color:var(--ink)}
 
+#floors{position:fixed;right:28px;top:50%;transform:translateY(-50%);z-index:3;width:178px;padding:14px 14px 12px;border-radius:16px;background:rgba(14,15,17,.62);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.08)}
+#floors .mono{font:500 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:10px}
+#floors svg{width:150px;display:block;max-height:52vh}
+#floors .fl{cursor:pointer}#floors .fl .b{fill:rgba(255,255,255,.06);stroke:rgba(255,255,255,.12)}#floors .fl text{fill:rgba(255,255,255,.72);font:600 10.5px var(--mono)}
+#floors .fl:hover .b{fill:rgba(255,255,255,.16)}#floors .fl.on .b{fill:#ffb020;stroke:#ffb020}#floors .fl.on text{fill:#141414}#floors .fl .tag{font:700 8.5px var(--mono);letter-spacing:.08em}
+#floors .fl.sel .b{stroke:#fff;stroke-width:1.5}#floors .fnote{margin:10px 0 0;font:400 11px/1.35 var(--mono);color:var(--dim)}
+body.walk #floors{display:none}
+@media (max-width:860px){#floors{display:none}}
 #credit{position:fixed;right:28px;top:66px;z-index:2;max-width:420px;text-align:right;font:400 10.5px/1.4 var(--mono);color:var(--dim)}
 
 /* loading and sign-in */
@@ -173,6 +181,7 @@ body.routing #walkhud,body.routing #hint{display:none}
 </section>
 
 <div id="credit"></div>
+<aside id="floors" class="glass" aria-label="Floors"><div class="mono">Floors</div><svg role="list"></svg><p class="fnote"></p></aside>
 <nav id="strip" aria-label="Buildings" hidden></nav>
 
 <div id="walkhud" hidden></div>
@@ -187,6 +196,7 @@ body.routing #walkhud,body.routing #hint{display:none}
   <input id="g-id" placeholder="Access ID" autocomplete="username" required><input id="g-pw" type="password" placeholder="Password" autocomplete="current-password" required>
   <button class="go" type="submit">Enter</button><div id="g-err"></div></form></div>
 
+<script src="/config.js"></script>
 <script type="importmap">{"imports":{"three":"/engine/vendor/three/three.module.min.js","three/addons/":"/engine/vendor/three/jsm/"}}</script>
 <script type="module" src="/engine/world.js"></script>
 </body>

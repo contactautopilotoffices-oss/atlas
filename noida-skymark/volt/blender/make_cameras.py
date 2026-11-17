@@ -1,0 +1,80 @@
+"""Pick a camera for every room from the CAD layout: one for a still (standing
+near a corner, looking across the room) and one for a 360 panorama (standing
+in the clearest spot near the middle). Both stand only where a person could:
+clear of walls, glass, columns, desks, tables and planters.
+
+Usage: python3 make_cameras.py <volt-floor1.layout.json> <cameras.json>
+"""
+import json, math, sys
+from shapely.geometry import Polygon, LineString, Point, box
+from shapely.ops import unary_union
+from shapely import affinity
+
+L = json.load(open(sys.argv[1]))
+EYE = 1.5
+def rect(c, w, d, a):
+    return affinity.translate(affinity.rotate(box(-w / 2, -d / 2, w / 2, d / 2), a, origin=(0, 0), use_radians=True), c[0], c[1])
+hard = [Polygon(w['outer'], w['holes']) for w in L['walls']] + [Polygon(c) for c in L['columns']]
+hard += [LineString([(g[0], g[1]), (g[2], g[3])]).buffer(0.06) for g in L['glass']]
+soft = [rect(d['c'], d['w'], d['d'], d['a']) for d in L['desks']] + [rect(p['c'], p['w'], p['d'], p['a']) for p in L['planters']]
+for t in L['tables']:
+    soft.append(Point(t['circle'][:2]).buffer(t['circle'][2]) if 'circle' in t else Polygon(t['poly']))
+soft += [Point(s['x'], s['y']).buffer(0.3) for s in L['seats']]
+if L.get('atrium'): hard.append(Polygon(L['atrium']))
+HARD = unary_union(hard); ALL = unary_union(hard + soft)
+floor = unary_union([Polygon(f['outer'], f['holes']) for f in L['floor']])
+# still cameras set by hand to match the design deck's own views:
+# (x, y, look x, look y), then optionally the lens in mm, the eye height and the height looked at
+OVERRIDE = {
+    'Open workstations': (9.3, 14.75, 18.5, 21.2),                         # deck page 4: from the passage corner, along the bench rows
+    'Sales office': (10.55, 14.05, 3.5, 11.0, 18, 1.5, 1.0),               # deck page 8: down the room, the glass partition on the right
+    '18 seater conference room': (9.5, 27.25, 16.5, 25.3, 18, 1.5, 0.95),  # deck page 14: along the table, windows left, glass right
+    'Control room / command centre': (1.0, 15.3, 3.6, 20.4, 18, 1.5, 0.95),   # deck page 16: across the desk rows from the front corner
+    'Cafeteria': (4.45, 23.8, 1.5, 26.7, 18, 1.5, 0.95),                   # deck page 21: the tables, the high counter and the windows
+    'Lounge area (north)': (32.9, 24.9, 30.8, 27.0, 20, 1.45, 0.8),        # deck page 13: the sofa against the wall, the armchair beside it
+    'Collab area 01': (21.2, 11.3, 19.3, 13.6, 20, 1.45, 0.8),             # deck page 18: the sofa group, seen from the phone booth side
+    'Reception': (30.4, 8.2, 26.5, 6.3, 18, 1.5, 0.95),                    # no deck page: the desk as you see it coming in
+    'Calling room': (12.95, 14.2, 12.9, 10.8, 18, 1.5, 0.95),              # no deck page: down the aisle between the two desk rows
+    'Finance room': (21.75, 25.45, 25.6, 26.7, 18, 1.5, 0.95),             # no deck page: from the door, along both desk rows
+}
+SKIP = {'Phone booths PH-05 to 07', 'Phone booths PH-01 to 04', 'UPS room', 'Server room', 'Wet pantry', 'Entry', 'Atrium-side lounge'}
+out = []
+for r in L['rooms']:
+    if r['name'] in SKIP: continue
+    x0, y0, x1, y1 = r['box']; cx, cy = (x0 + x1) / 2, (y0 + y1) / 2; diag = math.hypot(x1 - x0, y1 - y0)
+    best_s = best_p = None
+    xs = [x0 + 0.35 + i * 0.2 for i in range(int((x1 - x0 - 0.7) / 0.2) + 1)]; ys = [y0 + 0.35 + i * 0.2 for i in range(int((y1 - y0 - 0.7) / 0.2) + 1)]
+    for x in xs:
+        for y in ys:
+            p = Point(x, y)
+            if not floor.contains(p): continue
+            c = ALL.distance(p)
+            if c < 0.32: continue
+            dc = math.hypot(x - cx, y - cy) / diag
+            tx, ty = 2 * cx - x, 2 * cy - y; dl = math.hypot(tx - x, ty - y) or 1; ux, uy = (tx - x) / dl, (ty - y) / dl
+            sight = LineString([(x, y), (x + ux * 1.6, y + uy * 1.6)])
+            if not HARD.intersects(sight):
+                # how far the view runs before it meets furniture: a desk right under the lens ruins a shot
+                free = 0.0
+                for k in range(1, 9):
+                    if ALL.intersects(LineString([(x, y), (x + ux * 0.4 * k, y + uy * 0.4 * k)])): break
+                    free = 0.4 * k
+                s = min(c, 0.9) * 2.0 + dc * 3.0 + min(free, 2.4) * 1.6
+                if best_s is None or s > best_s[0]: best_s = (s, x, y, cx + (tx - cx) * 0.35, cy + (ty - cy) * 0.35)
+            sp = min(c, 1.4) * 2 - dc * 1.5
+            if best_p is None or sp > best_p[0]: best_p = (sp, x, y)
+    lens, eye, look_z = 20, EYE, 1.05
+    if r['name'] in OVERRIDE:
+        o = OVERRIDE[r['name']]; best_s = (9, *o[:4])
+        if len(o) > 4: lens = o[4]
+        if len(o) > 5: eye = o[5]
+        if len(o) > 6: look_z = o[6]
+    if best_s is None and best_p is None: continue
+    if best_s is None: best_s = (0, best_p[1], best_p[2], cx, cy)
+    slug = ''.join(ch if ch.isalnum() else '-' for ch in r['name'].lower()).strip('-')
+    while '--' in slug: slug = slug.replace('--', '-')
+    out.append({"room": r['name'], "slug": slug, "floor": r['floor'],
+                "still": {"pos": [round(best_s[1], 2), round(best_s[2], 2), eye], "look": [round(best_s[3], 2), round(best_s[4], 2), look_z], "lens_mm": lens},
+                "pano": {"pos": [round(best_p[1], 2), round(best_p[2], 2), EYE]}})
+json.dump({"about": "Camera for each room, in the CAD layout's frame (metres, x east, y north, z up). Made by make_cameras.py.", "eye": EYE, "rooms": out}, open(sys.argv[2], 'w'), indent=1)
+print(len(out), 'rooms:', ', '.join(o['slug'] for o in out))

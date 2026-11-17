@@ -1,0 +1,313 @@
+{
+  "source_blend": "exports/fm_skymark_v1.blend",
+  "existing_model_found": true,
+  "finding": "The existing model is the iteration 1 reconstruction. Its glass is real geometry: one quad per pane (258 panes in 9 objects), with separate mullion and transom bars. Nothing is a texture; no material uses an image.",
+  "blender_version": "5.2.3 LTS",
+  "unit_system": "METRIC",
+  "scale_length": 1.0,
+  "up_axis": "Z (Blender)",
+  "collections": {
+    "name": "Scene Collection",
+    "objects": [
+      "SKY_Sun"
+    ],
+    "children": [
+      {
+        "name": "SKY_Reconstruction",
+        "objects": [
+          "SKY_F1_Skymark"
+        ],
+        "children": [
+          {
+            "name": "SKY_Reconstruction_Massing",
+            "objects": [
+              "SKY_Floor_Slabs",
+              "SKY_Interior_Core",
+              "SKY_Hidden_Rear_Massing",
+              "SKY_Roof_Parapet_Returns"
+            ],
+            "children": []
+          },
+          {
+            "name": "SKY_Reconstruction_CurtainWall",
+            "objects": [
+              "SKY_FrontA_CurtainWall_HeadSill",
+              "SKY_FrontA_DarkRecess_HeadSill",
+              "SKY_SideB_TopRibbon_HeadSill",
+              "SKY_SideB_UpperGlazing_HeadSill",
+              "SKY_SideB_FrameInfill_HeadSill",
+              "SKY_SideB_SlantedGlazing_HeadSill",
+              "SKY_SideB_GroundBase_HeadSill",
+              "SKY_Annex_FirstFloor_HeadSill",
+              "SKY_Annex_Ground_HeadSill"
+            ],
+            "children": []
+          },
+          {
+            "name": "SKY_Reconstruction_Glass",
+            "objects": [
+              "SKY_FrontA_CurtainWall_Glass",
+              "SKY_FrontA_DarkRecess_Glass",
+              "SKY_SideB_TopRibbon_Glass",
+              "SKY_SideB_UpperGlazing_Glass",
+              "SKY_SideB_FrameInfill_Glass",
+              "SKY_SideB_SlantedGlazing_Glass",
+              "SKY_SideB_GroundBase_Glass",
+              "SKY_Annex_FirstFloor_Glass",
+              "SKY_Annex_Ground_Glass"
+            ],
+            "children": []
+          },
+          {
+            "name": "SKY_Reconstruction_Mullions",
+            "objects": [
+              "SKY_FrontA_CurtainWall_Mullions",
+              "SKY_FrontA_DarkRecess_Mullions",
+              "SKY_SideB_TopRibbon_Mullions",
+              "SKY_SideB_UpperGlazing_Mullions",
+              "SKY_SideB_FrameInfill_Mullions",
+              "SKY_SideB_SlantedGlazing_Mullions",
+              "SKY_SideB_GroundBase_Mullions",
+              "SKY_Annex_FirstFloor_Mullions",
+              "SKY_Annex_Ground_Mullions"
+            ],
+            "children": []
+          },
+          {
+            "name": "SKY_Reconstruction_FloorBands",
+            "objects": [
+              "SKY_Spandrel_Bands",
+              "SKY_Parapet_Bands",
+              "SKY_SideB_Ledge_AboveFrame"
+            ],
+            "children": []
+          },
+          {
+            "name": "SKY_Reconstruction_Cladding",
+            "objects": [
+              "SKY_FrontA_CornerPier_Cladding",
+              "SKY_FrontA_RightPier_Cladding",
+              "SKY_SideB_EndPier_Cladding",
+              "SKY_SideB_PanelPier_Cladding",
+              "SKY_SideB_AccentStrip_Brown",
+              "SKY_SideB_Ground_Pilasters",
+              "SKY_SideB_Wall_Plane",
+              "SKY_Annex_Body",
+              "SKY_Annex_Louvres"
+            ],
+            "children": []
+          },
+          {
+            "name": "SKY_Reconstruction_AngularFrame",
+            "objects": [
+              "SKY_SideB_AngularFrame"
+            ],
+            "children": []
+          },
+          {
+            "name": "SKY_Reconstruction_Signage",
+            "objects": [
+              "SKY_Sign_care_pier_Panel",
+              "SKY_Sign_care_pier_Text1",
+              "SKY_Sign_care_pier_Text2",
+              "SKY_Sign_clovia_pier_Panel",
+              "SKY_Sign_clovia_pier_Text1",
+              "SKY_Sign_skymark_crown_Panel",
+              "SKY_Sign_skymark_crown_Text1",
+              "SKY_Sign_skymark_crown_Mark",
+              "SKY_Sign_care_annex_Panel",
+              "SKY_Sign_care_annex_Text1",
+              "SKY_Sign_care_annex_Text2",
+              "SKY_Sign_clovia_annex_Panel",
+              "SKY_Sign_clovia_annex_Text1"
+            ],
+            "children": []
+          },
+          {
+            "name": "SKY_Reconstruction_Entrance",
+            "objects": [
+              "SKY_Entrance"
+            ],
+            "children": []
+          },
+          {
+            "name": "SKY_Reconstruction_Site",
+            "objects": [
+              "SKY_Roof_TelecomMast",
+              "SKY_Site_Paving",
+              "SKY_Site_BoundaryWall"
+            ],
+            "children": []
+          },
+          {
+            "name": "SKY_Reconstruction_Cameras",
+            "objects": [
+              "SKY_Cam_Reference_Photo",
+              "SKY_Cam_Front_Elevation",
+              "SKY_Cam_Side_Elevation",
+              "SKY_Cam_Three_Quarter"
+            ],
+            "children": []
+          }
+        ]
+      },
+      {
+        "name": "SKY_RenderOnly",
+        "objects": [
+          "SKY_RenderOnly_Ground"
+        ],
+        "children": []
+      }
+    ]
+  },
+  "object_count": 68,
+  "mesh_count": 61,
+  "total_triangles": 17120,
+  "identified": {
+    "main_building_mesh": [
+      "SKY_Floor_Slabs",
+      "SKY_Hidden_Rear_Massing",
+      "SKY_Interior_Core"
+    ],
+    "front_glazed_elevation": [
+      "SKY_FrontA_CurtainWall_Glass",
+      "SKY_FrontA_CurtainWall_HeadSill",
+      "SKY_FrontA_CurtainWall_Mullions",
+      "SKY_FrontA_DarkRecess_Glass",
+      "SKY_FrontA_DarkRecess_HeadSill",
+      "SKY_FrontA_DarkRecess_Mullions"
+    ],
+    "side_glazed_elevation": [
+      "SKY_SideB_FrameInfill_Glass",
+      "SKY_SideB_FrameInfill_HeadSill",
+      "SKY_SideB_FrameInfill_Mullions",
+      "SKY_SideB_GroundBase_Glass",
+      "SKY_SideB_GroundBase_HeadSill",
+      "SKY_SideB_GroundBase_Mullions",
+      "SKY_SideB_SlantedGlazing_Glass",
+      "SKY_SideB_SlantedGlazing_HeadSill",
+      "SKY_SideB_SlantedGlazing_Mullions",
+      "SKY_SideB_TopRibbon_Glass",
+      "SKY_SideB_TopRibbon_HeadSill",
+      "SKY_SideB_TopRibbon_Mullions",
+      "SKY_SideB_UpperGlazing_Glass",
+      "SKY_SideB_UpperGlazing_HeadSill",
+      "SKY_SideB_UpperGlazing_Mullions"
+    ],
+    "angular_white_frame": [
+      "SKY_SideB_AngularFrame"
+    ],
+    "central_cladding_block": [
+      "SKY_FrontA_CornerPier_Cladding"
+    ],
+    "podium": [
+      "SKY_Annex_Body",
+      "SKY_Annex_FirstFloor_Glass",
+      "SKY_Annex_FirstFloor_HeadSill",
+      "SKY_Annex_FirstFloor_Mullions",
+      "SKY_Annex_Ground_Glass",
+      "SKY_Annex_Ground_HeadSill",
+      "SKY_Annex_Ground_Mullions",
+      "SKY_Annex_Louvres",
+      "SKY_Entrance"
+    ],
+    "roof": [
+      "SKY_Parapet_Bands",
+      "SKY_Roof_Parapet_Returns",
+      "SKY_Roof_TelecomMast"
+    ],
+    "signage": [
+      "SKY_Sign_care_annex_Panel",
+      "SKY_Sign_care_annex_Text1",
+      "SKY_Sign_care_annex_Text2",
+      "SKY_Sign_care_pier_Panel",
+      "SKY_Sign_care_pier_Text1",
+      "SKY_Sign_care_pier_Text2",
+      "SKY_Sign_clovia_annex_Panel",
+      "SKY_Sign_clovia_annex_Text1",
+      "SKY_Sign_clovia_pier_Panel",
+      "SKY_Sign_clovia_pier_Text1",
+      "SKY_Sign_skymark_crown_Mark",
+      "SKY_Sign_skymark_crown_Panel",
+      "SKY_Sign_skymark_crown_Text1"
+    ]
+  },
+  "images_used_by_materials": [],
+  "cameras": [
+    {
+      "name": "SKY_Cam_Front_Elevation",
+      "type": "ORTHO",
+      "lens_mm": 35.0,
+      "sensor_width": 36.0,
+      "location": [
+        13.850000381469727,
+        -120.0,
+        11.25
+      ],
+      "rotation_euler_deg": [
+        90.00000250447816,
+        -0.0,
+        0.0
+      ]
+    },
+    {
+      "name": "SKY_Cam_Reference_Photo",
+      "type": "PERSP",
+      "lens_mm": 63.0,
+      "sensor_width": 36.0,
+      "location": [
+        -46.632896423339844,
+        -74.62823486328125,
+        15.0
+      ],
+      "rotation_euler_deg": [
+        91.43109789032509,
+        -1.3914921642515394e-06,
+        -34.14882166123188
+      ]
+    },
+    {
+      "name": "SKY_Cam_Side_Elevation",
+      "type": "ORTHO",
+      "lens_mm": 35.0,
+      "sensor_width": 36.0,
+      "location": [
+        -120.0,
+        18.350000381469727,
+        11.25
+      ],
+      "rotation_euler_deg": [
+        89.999995674289,
+        -0.0,
+        -89.999995674289
+      ]
+    },
+    {
+      "name": "SKY_Cam_Three_Quarter",
+      "type": "PERSP",
+      "lens_mm": 30.0,
+      "sensor_width": 36.0,
+      "location": [
+        -48.0,
+        -62.0,
+        34.0
+      ],
+      "rotation_euler_deg": [
+        75.98940621476027,
+        4.0983447003441116e-07,
+        -36.68118259790581
+      ]
+    }
+  ],
+  "render": {
+    "engine": "CYCLES",
+    "resolution": [
+      1400,
+      1000
+    ],
+    "resolution_percentage": 100
+  },
+  "scale_and_orientation": "Metres, Z up. Building bounds [-9.0, -17.0, -0.3] to [36.7, 53.7, 28.5]. Local frame: origin at the photographed corner, front along +X facing -Y, side B along +Y facing -X.",
+  "backup": "exports/fm_skymark_v1.blend (the file as it was; this run reads it and writes fm_skymark_final.blend beside it)",
+  "preserved_in_result": "68 objects kept under the V1_ prefix, hidden from render"
+}

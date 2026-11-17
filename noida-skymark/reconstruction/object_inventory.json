@@ -1,0 +1,3671 @@
+[
+  {
+    "name": "SKY_Annex_Body",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Cladding"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      10.229999542236328,
+      8.0,
+      9.699999809265137
+    ],
+    "world_bbox_min": [
+      16.06999969482422,
+      -8.0,
+      0.0
+    ],
+    "world_bbox_max": [
+      26.299999237060547,
+      0.0,
+      9.699999809265137
+    ],
+    "mesh": {
+      "vertices": 52,
+      "faces": 48,
+      "triangles": 96,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Glass_DarkTint",
+        "SKY_Cladding_WhiteLightGrey",
+        "SKY_Concrete"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "annex_body",
+      "sky_confidence": "low",
+      "sky_source": "photo: two-storey block in front of the curtain wall, reaching about 40 px past the main block's right edge, with the second care / Clovia sign band on its parapet, pale glazing with white horizontal lines on the first floor and dark glazing on its left side. Its depth cannot be measured from a near-frontal view",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Annex_FirstFloor_Glass",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Glass"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      9.430000305175781,
+      0.0,
+      3.5
+    ],
+    "world_bbox_min": [
+      16.469999313354492,
+      -8.050000190734863,
+      4.300000190734863
+    ],
+    "world_bbox_max": [
+      25.899999618530273,
+      -8.050000190734863,
+      7.800000190734863
+    ],
+    "mesh": {
+      "vertices": 16,
+      "faces": 7,
+      "triangles": 14,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Glass_BlueGrey_Reflective"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "glass_panels",
+      "sky_confidence": "medium",
+      "sky_source": "photo: two-storey block in front of the curtain wall, reaching about 40 px past the main block's right edge, with the second care / Clovia sign band on its parapet, pale glazing with white horizontal lines on the first floor and dark glazing on its left side. Its depth cannot be measured from a near-frontal view",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Annex_FirstFloor_HeadSill",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_CurtainWall"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      9.430000305175781,
+      0.2200002670288086,
+      3.619999885559082
+    ],
+    "world_bbox_min": [
+      16.469999313354492,
+      -8.220000267028809,
+      4.240000247955322
+    ],
+    "world_bbox_max": [
+      25.899999618530273,
+      -8.0,
+      7.860000133514404
+    ],
+    "mesh": {
+      "vertices": 16,
+      "faces": 12,
+      "triangles": 24,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Aluminium_Frame"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "curtain_wall_head_sill",
+      "sky_confidence": "medium",
+      "sky_source": "photo: two-storey block in front of the curtain wall, reaching about 40 px past the main block's right edge, with the second care / Clovia sign band on its parapet, pale glazing with white horizontal lines on the first floor and dark glazing on its left side. Its depth cannot be measured from a near-frontal view",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Annex_FirstFloor_Mullions",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Mullions"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      9.5,
+      0.15999984741210938,
+      3.5
+    ],
+    "world_bbox_min": [
+      16.434999465942383,
+      -8.15999984741211,
+      4.300000190734863
+    ],
+    "world_bbox_max": [
+      25.934999465942383,
+      -8.0,
+      7.800000190734863
+    ],
+    "mesh": {
+      "vertices": 64,
+      "faces": 48,
+      "triangles": 96,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Aluminium_Frame"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "mullions",
+      "sky_confidence": "medium",
+      "sky_source": "photo: two-storey block in front of the curtain wall, reaching about 40 px past the main block's right edge, with the second care / Clovia sign band on its parapet, pale glazing with white horizontal lines on the first floor and dark glazing on its left side. Its depth cannot be measured from a near-frontal view",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Annex_Ground_Glass",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Glass"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      9.430000305175781,
+      0.0,
+      3.299999952316284
+    ],
+    "world_bbox_min": [
+      16.469999313354492,
+      -8.050000190734863,
+      0.30000001192092896
+    ],
+    "world_bbox_max": [
+      25.899999618530273,
+      -8.050000190734863,
+      3.5999999046325684
+    ],
+    "mesh": {
+      "vertices": 8,
+      "faces": 3,
+      "triangles": 6,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Glass_DarkTint"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "glass_panels",
+      "sky_confidence": "medium",
+      "sky_source": "photo: two-storey block in front of the curtain wall, reaching about 40 px past the main block's right edge, with the second care / Clovia sign band on its parapet, pale glazing with white horizontal lines on the first floor and dark glazing on its left side. Its depth cannot be measured from a near-frontal view",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Annex_Ground_HeadSill",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_CurtainWall"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      9.430000305175781,
+      0.2200002670288086,
+      3.419999837875366
+    ],
+    "world_bbox_min": [
+      16.469999313354492,
+      -8.220000267028809,
+      0.24000000953674316
+    ],
+    "world_bbox_max": [
+      25.899999618530273,
+      -8.0,
+      3.6599998474121094
+    ],
+    "mesh": {
+      "vertices": 16,
+      "faces": 12,
+      "triangles": 24,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Aluminium_Frame"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "curtain_wall_head_sill",
+      "sky_confidence": "medium",
+      "sky_source": "photo: two-storey block in front of the curtain wall, reaching about 40 px past the main block's right edge, with the second care / Clovia sign band on its parapet, pale glazing with white horizontal lines on the first floor and dark glazing on its left side. Its depth cannot be measured from a near-frontal view",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Annex_Ground_Mullions",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Mullions"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      9.5,
+      0.15999984741210938,
+      3.299999952316284
+    ],
+    "world_bbox_min": [
+      16.434999465942383,
+      -8.15999984741211,
+      0.30000001192092896
+    ],
+    "world_bbox_max": [
+      25.934999465942383,
+      -8.0,
+      3.5999999046325684
+    ],
+    "mesh": {
+      "vertices": 32,
+      "faces": 24,
+      "triangles": 48,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Aluminium_Frame"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "mullions",
+      "sky_confidence": "medium",
+      "sky_source": "photo: two-storey block in front of the curtain wall, reaching about 40 px past the main block's right edge, with the second care / Clovia sign band on its parapet, pale glazing with white horizontal lines on the first floor and dark glazing on its left side. Its depth cannot be measured from a near-frontal view",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Annex_Louvres",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Cladding"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      9.430000305175781,
+      0.09999942779541016,
+      2.1200003623962402
+    ],
+    "world_bbox_min": [
+      16.469999313354492,
+      -8.279999732971191,
+      5.239999771118164
+    ],
+    "world_bbox_max": [
+      25.899999618530273,
+      -8.180000305175781,
+      7.360000133514404
+    ],
+    "mesh": {
+      "vertices": 24,
+      "faces": 18,
+      "triangles": 36,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Cladding_WhiteLightGrey"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "annex_louvres",
+      "sky_confidence": "low",
+      "sky_source": "photo: white horizontal lines across the annex's first-floor glazing",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Cam_Front_Elevation",
+    "type": "CAMERA",
+    "parent": null,
+    "collections": [
+      "SKY_Reconstruction_Cameras"
+    ],
+    "location": [
+      13.850000381469727,
+      -120.0,
+      11.25
+    ],
+    "rotation_euler_deg": [
+      90.00000250447816,
+      -0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "world_bbox_min": [
+      13.850000381469727,
+      -120.0,
+      11.25
+    ],
+    "world_bbox_max": [
+      13.850000381469727,
+      -120.0,
+      11.25
+    ],
+    "mesh": null,
+    "custom_properties": {}
+  },
+  {
+    "name": "SKY_Cam_Reference_Photo",
+    "type": "CAMERA",
+    "parent": null,
+    "collections": [
+      "SKY_Reconstruction_Cameras"
+    ],
+    "location": [
+      -46.632896423339844,
+      -74.62823486328125,
+      15.0
+    ],
+    "rotation_euler_deg": [
+      91.43109789032509,
+      -1.3914921642515394e-06,
+      -34.14882166123188
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "world_bbox_min": [
+      -46.632896423339844,
+      -74.62823486328125,
+      15.0
+    ],
+    "world_bbox_max": [
+      -46.632896423339844,
+      -74.62823486328125,
+      15.0
+    ],
+    "mesh": null,
+    "custom_properties": {
+      "sky_confidence": "low",
+      "sky_source": "Solved by hand from the photograph (see meta.photo_scale_notes), then checked against test renders. No EXIF and no surveyed control points, so this is a visual match, not a calibrated camera."
+    }
+  },
+  {
+    "name": "SKY_Cam_Side_Elevation",
+    "type": "CAMERA",
+    "parent": null,
+    "collections": [
+      "SKY_Reconstruction_Cameras"
+    ],
+    "location": [
+      -120.0,
+      18.350000381469727,
+      11.25
+    ],
+    "rotation_euler_deg": [
+      89.999995674289,
+      -0.0,
+      -89.999995674289
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "world_bbox_min": [
+      -120.0,
+      18.350000381469727,
+      11.25
+    ],
+    "world_bbox_max": [
+      -120.0,
+      18.350000381469727,
+      11.25
+    ],
+    "mesh": null,
+    "custom_properties": {}
+  },
+  {
+    "name": "SKY_Cam_Three_Quarter",
+    "type": "CAMERA",
+    "parent": null,
+    "collections": [
+      "SKY_Reconstruction_Cameras"
+    ],
+    "location": [
+      -48.0,
+      -62.0,
+      34.0
+    ],
+    "rotation_euler_deg": [
+      75.98940621476027,
+      4.0983447003441116e-07,
+      -36.68118259790581
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "world_bbox_min": [
+      -48.0,
+      -62.0,
+      34.0
+    ],
+    "world_bbox_max": [
+      -48.0,
+      -62.0,
+      34.0
+    ],
+    "mesh": null,
+    "custom_properties": {}
+  },
+  {
+    "name": "SKY_Entrance",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Entrance"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      5.200000762939453,
+      2.1999998092651367,
+      3.4800000190734863
+    ],
+    "world_bbox_min": [
+      19.399999618530273,
+      -10.199999809265137,
+      0.0
+    ],
+    "world_bbox_max": [
+      24.600000381469727,
+      -8.0,
+      3.4800000190734863
+    ],
+    "mesh": {
+      "vertices": 52,
+      "faces": 42,
+      "triangles": 84,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Glass_DarkTint",
+        "SKY_Aluminium_Frame",
+        "SKY_Cladding_WhiteLightGrey",
+        "SKY_Concrete"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "entrance",
+      "sky_confidence": "low",
+      "sky_source": "Inferred. The ground floor of the annex shows dark glazing and the driveway kerbs (yellow and black) lead to it, but the doors themselves are hidden behind the palm trees. Placement must be confirmed on site.",
+      "sky_observed": false
+    }
+  },
+  {
+    "name": "SKY_F1_Skymark",
+    "type": "EMPTY",
+    "parent": null,
+    "collections": [
+      "SKY_Reconstruction"
+    ],
+    "location": [
+      13.850000381469727,
+      18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "world_bbox_min": [
+      13.850000381469727,
+      18.350000381469727,
+      0.0
+    ],
+    "world_bbox_max": [
+      13.850000381469727,
+      18.350000381469727,
+      0.0
+    ],
+    "mesh": null,
+    "custom_properties": {
+      "sky_component": "root",
+      "sky_source": "facade_parameters.json",
+      "sky_note": "Children are in metres relative to the footprint centre. Elevation A (front, main glass) faces -Y; side B faces -X.",
+      "sky_footprint_centre_local": "<bpy id property array [2]>"
+    }
+  },
+  {
+    "name": "SKY_Floor_Slabs",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Massing"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      26.30000114440918,
+      43.29999923706055,
+      16.69999885559082
+    ],
+    "world_bbox_min": [
+      0.8999999761581421,
+      0.8999999761581421,
+      -0.30000001192092896
+    ],
+    "world_bbox_max": [
+      27.200000762939453,
+      44.20000076293945,
+      16.399999618530273
+    ],
+    "mesh": {
+      "vertices": 40,
+      "faces": 30,
+      "triangles": 60,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Concrete"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "floor_slabs",
+      "sky_confidence": "low",
+      "sky_source": "Photo: slab lines on the front glass are about 70 px apart against a 400 px pier, so 5 floors plus a 2 m parapet fill the height. 4.1 m is assumed as a normal office floor height; no source states it.",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_FrontA_CornerPier_Cladding",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Cladding"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      7.409999847412109,
+      0.3499999940395355,
+      22.5
+    ],
+    "world_bbox_min": [
+      0.0,
+      -0.3499999940395355,
+      0.0
+    ],
+    "world_bbox_max": [
+      7.409999847412109,
+      0.0,
+      22.5
+    ],
+    "mesh": {
+      "vertices": 608,
+      "faces": 456,
+      "triangles": 912,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Cladding_WhiteLightGrey",
+        "SKY_Concrete"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "corner_pier",
+      "sky_confidence": "medium",
+      "sky_source": "photo: 95 px of the 363 px front",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_FrontA_CurtainWall_Glass",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Glass"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      13.719999313354492,
+      0.0,
+      21.260000228881836
+    ],
+    "world_bbox_min": [
+      11.010000228881836,
+      -0.05000000074505806,
+      0.0
+    ],
+    "world_bbox_max": [
+      24.729999542236328,
+      -0.05000000074505806,
+      21.260000228881836
+    ],
+    "mesh": {
+      "vertices": 121,
+      "faces": 100,
+      "triangles": 200,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Glass_BlueGrey_Reflective"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "glass_panels",
+      "sky_confidence": "medium",
+      "sky_source": "photo: about 8 lit vertical bays and two glass rows per floor above the annex roof; slab lines about 70 px (4.5 m) apart",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_FrontA_CurtainWall_HeadSill",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_CurtainWall"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      13.719999313354492,
+      0.2199999988079071,
+      21.3799991607666
+    ],
+    "world_bbox_min": [
+      11.010000228881836,
+      -0.2199999988079071,
+      -0.05999999865889549
+    ],
+    "world_bbox_max": [
+      24.729999542236328,
+      0.0,
+      21.31999969482422
+    ],
+    "mesh": {
+      "vertices": 16,
+      "faces": 12,
+      "triangles": 24,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Aluminium_Frame"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "curtain_wall_head_sill",
+      "sky_confidence": "medium",
+      "sky_source": "photo: about 8 lit vertical bays and two glass rows per floor above the annex roof; slab lines about 70 px (4.5 m) apart",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_FrontA_CurtainWall_Mullions",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Mullions"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      13.789999008178711,
+      0.18000000715255737,
+      21.260000228881836
+    ],
+    "world_bbox_min": [
+      10.975000381469727,
+      -0.18000000715255737,
+      0.0
+    ],
+    "world_bbox_max": [
+      24.764999389648438,
+      0.0,
+      21.260000228881836
+    ],
+    "mesh": {
+      "vertices": 556,
+      "faces": 615,
+      "triangles": 1230,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Aluminium_Frame"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "mullions",
+      "sky_confidence": "medium",
+      "sky_source": "photo: about 8 lit vertical bays and two glass rows per floor above the annex roof; slab lines about 70 px (4.5 m) apart",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_FrontA_DarkRecess_Glass",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Glass"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      3.6000003814697266,
+      0.0,
+      21.260000228881836
+    ],
+    "world_bbox_min": [
+      7.409999847412109,
+      0.44999998807907104,
+      0.0
+    ],
+    "world_bbox_max": [
+      11.010000228881836,
+      0.44999998807907104,
+      21.260000228881836
+    ],
+    "mesh": {
+      "vertices": 33,
+      "faces": 20,
+      "triangles": 40,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Glass_DarkTint"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "glass_panels",
+      "sky_confidence": "low",
+      "sky_source": "photo: darker glazed strip, about 45 px wide, between the corner pier and the lit glass; whether it is a recess or the return of a projecting glass box cannot be told from one view",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_FrontA_DarkRecess_HeadSill",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_CurtainWall"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      3.6000003814697266,
+      0.2199999988079071,
+      21.3799991607666
+    ],
+    "world_bbox_min": [
+      7.409999847412109,
+      0.2800000011920929,
+      -0.05999999865889549
+    ],
+    "world_bbox_max": [
+      11.010000228881836,
+      0.5,
+      21.31999969482422
+    ],
+    "mesh": {
+      "vertices": 16,
+      "faces": 12,
+      "triangles": 24,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Aluminium_Frame"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "curtain_wall_head_sill",
+      "sky_confidence": "low",
+      "sky_source": "photo: darker glazed strip, about 45 px wide, between the corner pier and the lit glass; whether it is a recess or the return of a projecting glass box cannot be told from one view",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_FrontA_DarkRecess_Mullions",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Mullions"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      3.6700000762939453,
+      0.18000000715255737,
+      21.260000228881836
+    ],
+    "world_bbox_min": [
+      7.375,
+      0.3199999928474426,
+      0.0
+    ],
+    "world_bbox_max": [
+      11.045000076293945,
+      0.5,
+      21.260000228881836
+    ],
+    "mesh": {
+      "vertices": 204,
+      "faces": 207,
+      "triangles": 414,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Aluminium_Frame"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "mullions",
+      "sky_confidence": "low",
+      "sky_source": "photo: darker glazed strip, about 45 px wide, between the corner pier and the lit glass; whether it is a recess or the return of a projecting glass box cannot be told from one view",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_FrontA_RightPier_Cladding",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Cladding"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      2.970001220703125,
+      0.3499999940395355,
+      22.5
+    ],
+    "world_bbox_min": [
+      24.729999542236328,
+      -0.3499999940395355,
+      0.0
+    ],
+    "world_bbox_max": [
+      27.700000762939453,
+      0.0,
+      22.5
+    ],
+    "mesh": {
+      "vertices": 248,
+      "faces": 186,
+      "triangles": 372,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Cladding_WhiteLightGrey",
+        "SKY_Concrete"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "right_pier",
+      "sky_confidence": "medium",
+      "sky_source": "photo: 38 px white pier at the right edge",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Hidden_Rear_Massing",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Massing"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      27.400001525878906,
+      44.400001525878906,
+      22.5
+    ],
+    "world_bbox_min": [
+      0.30000001192092896,
+      0.30000001192092896,
+      0.0
+    ],
+    "world_bbox_max": [
+      27.700000762939453,
+      44.70000076293945,
+      22.5
+    ],
+    "mesh": {
+      "vertices": 22,
+      "faces": 18,
+      "triangles": 36,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Cladding_WhiteLightGrey",
+        "SKY_Concrete"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "hidden_massing",
+      "sky_confidence": "low",
+      "sky_source": "The rear and the far side are not visible in the photograph. They are closed with plain cladding massing only, tagged observed = false.",
+      "sky_observed": false
+    }
+  },
+  {
+    "name": "SKY_Interior_Core",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Massing"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      23.399999618530273,
+      40.400001525878906,
+      20.5
+    ],
+    "world_bbox_min": [
+      2.0999999046325684,
+      2.0999999046325684,
+      0.0
+    ],
+    "world_bbox_max": [
+      25.5,
+      42.5,
+      20.5
+    ],
+    "mesh": {
+      "vertices": 8,
+      "faces": 6,
+      "triangles": 12,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Glass_DarkTint"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "interior_core",
+      "sky_confidence": "low",
+      "sky_source": "Neutral dark volume behind the glazing; interior not surveyed",
+      "sky_observed": false
+    }
+  },
+  {
+    "name": "SKY_Parapet_Bands",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_FloorBands"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      25.029998779296875,
+      42.189998626708984,
+      1.5
+    ],
+    "world_bbox_min": [
+      -0.30000001192092896,
+      -0.3499999940395355,
+      21.0
+    ],
+    "world_bbox_max": [
+      24.729999542236328,
+      41.84000015258789,
+      22.5
+    ],
+    "mesh": {
+      "vertices": 16,
+      "faces": 12,
+      "triangles": 24,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Cladding_WhiteLightGrey"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "parapet_bands",
+      "sky_confidence": "medium",
+      "sky_source": "photo: thick white band above the curtain wall",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_RenderOnly_Ground",
+    "type": "MESH",
+    "parent": null,
+    "collections": [
+      "SKY_RenderOnly"
+    ],
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      1200.0,
+      1200.0,
+      0.30000001192092896
+    ],
+    "world_bbox_min": [
+      -600.0,
+      -600.0,
+      -0.6000000238418579
+    ],
+    "world_bbox_max": [
+      600.0,
+      600.0,
+      -0.30000001192092896
+    ],
+    "mesh": {
+      "vertices": 8,
+      "faces": 6,
+      "triangles": 12,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_RenderOnly_Ground"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "render_only"
+    }
+  },
+  {
+    "name": "SKY_Roof_Parapet_Returns",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Massing"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      27.700000762939453,
+      44.70000076293945,
+      2.0
+    ],
+    "world_bbox_min": [
+      0.0,
+      0.0,
+      20.5
+    ],
+    "world_bbox_max": [
+      27.700000762939453,
+      44.70000076293945,
+      22.5
+    ],
+    "mesh": {
+      "vertices": 14,
+      "faces": 12,
+      "triangles": 24,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Cladding_WhiteLightGrey"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "parapet_returns",
+      "sky_confidence": "medium",
+      "sky_source": "photo: parapet line continuous along A and B",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Roof_TelecomMast",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Site"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      1.2799997329711914,
+      1.2798004150390625,
+      8.002792358398438
+    ],
+    "world_bbox_min": [
+      2.9000000953674316,
+      37.36009979248047,
+      20.497207641601562
+    ],
+    "world_bbox_max": [
+      4.179999828338623,
+      38.63990020751953,
+      28.5
+    ],
+    "mesh": {
+      "vertices": 80,
+      "faces": 60,
+      "triangles": 120,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Aluminium_Frame"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "roof_mast",
+      "sky_confidence": "low",
+      "sky_source": "photo: lattice telecom mast above the left end of the roof; plan position estimated",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_SideB_AccentStrip_Brown",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Cladding"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      0.15000000596046448,
+      4.519999980926514,
+      21.709999084472656
+    ],
+    "world_bbox_min": [
+      -0.15000000596046448,
+      -0.05000000074505806,
+      0.0
+    ],
+    "world_bbox_max": [
+      0.0,
+      4.46999979019165,
+      21.709999084472656
+    ],
+    "mesh": {
+      "vertices": 126,
+      "faces": 96,
+      "triangles": 192,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Accent_BrownPanel",
+        "SKY_Concrete"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "accent_strip",
+      "sky_confidence": "medium",
+      "sky_source": "photo: full-height dark brown strip at the corner, between the white panel pier on B and the corner pier on A",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_SideB_AngularFrame",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_AngularFrame"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      1.5,
+      21.839998245239258,
+      11.90999984741211
+    ],
+    "world_bbox_min": [
+      -1.5,
+      19.760000228881836,
+      2.2100000381469727
+    ],
+    "world_bbox_max": [
+      0.0,
+      41.599998474121094,
+      14.119999885559082
+    ],
+    "mesh": {
+      "vertices": 24,
+      "faces": 24,
+      "triangles": 48,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Cladding_WhiteLightGrey"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "angular_frame",
+      "sky_confidence": "low",
+      "sky_source": "photo: trapezoid frame; left edge vertical, right edge leaning toward the corner at the bottom. Corners read at (78,505) (215,510) (243,690) (78,640) px and converted with the perspective correction; expect 1 to 2 m of error along the facade and about 1 m in height",
+      "sky_observed": true,
+      "sky_params": "{\"left_u\": 3.1, \"top_right_u\": 20.11, \"bottom_right_u\": 24.34, \"bottom_v\": 2.21, \"top_v\": 14.12, \"member_width\": 1.2, \"projection\": 1.5}"
+    }
+  },
+  {
+    "name": "SKY_SideB_EndPier_Cladding",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Cladding"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      0.30000001192092896,
+      2.8600006103515625,
+      22.5
+    ],
+    "world_bbox_min": [
+      -0.30000001192092896,
+      41.84000015258789,
+      0.0
+    ],
+    "world_bbox_max": [
+      0.0,
+      44.70000076293945,
+      22.5
+    ],
+    "mesh": {
+      "vertices": 248,
+      "faces": 186,
+      "triangles": 372,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Cladding_WhiteLightGrey",
+        "SKY_Concrete"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "end_pier",
+      "sky_confidence": "medium",
+      "sky_source": "photo: white column at the far left end",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_SideB_FrameInfill_Glass",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Glass"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      0.0,
+      19.013805389404297,
+      9.510000228881836
+    ],
+    "world_bbox_min": [
+      0.25,
+      21.38619613647461,
+      3.4100000858306885
+    ],
+    "world_bbox_max": [
+      0.25,
+      40.400001525878906,
+      12.920000076293945
+    ],
+    "mesh": {
+      "vertices": 87,
+      "faces": 48,
+      "triangles": 96,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Glass_DarkTint"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "glass_panels",
+      "sky_confidence": "low",
+      "sky_source": "photo: trapezoid frame; left edge vertical, right edge leaning toward the corner at the bottom. Corners read at (78,505) (215,510) (243,690) (78,640) px and converted with the perspective correction; expect 1 to 2 m of error along the facade and about 1 m in height",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_SideB_FrameInfill_HeadSill",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_CurtainWall"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      0.2199999988079071,
+      19.013805389404297,
+      9.630000114440918
+    ],
+    "world_bbox_min": [
+      0.08000001311302185,
+      21.38619613647461,
+      3.3500001430511475
+    ],
+    "world_bbox_max": [
+      0.30000001192092896,
+      40.400001525878906,
+      12.980000495910645
+    ],
+    "mesh": {
+      "vertices": 16,
+      "faces": 12,
+      "triangles": 24,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Aluminium_Frame"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "curtain_wall_head_sill",
+      "sky_confidence": "low",
+      "sky_source": "photo: trapezoid frame; left edge vertical, right edge leaning toward the corner at the bottom. Corners read at (78,505) (215,510) (243,690) (78,640) px and converted with the perspective correction; expect 1 to 2 m of error along the facade and about 1 m in height",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_SideB_FrameInfill_Mullions",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Mullions"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      0.18000000715255737,
+      19.081787109375,
+      9.533428192138672
+    ],
+    "world_bbox_min": [
+      0.12000000476837158,
+      21.353214263916016,
+      3.3982861042022705
+    ],
+    "world_bbox_max": [
+      0.30000001192092896,
+      40.435001373291016,
+      12.931714057922363
+    ],
+    "mesh": {
+      "vertices": 372,
+      "faces": 313,
+      "triangles": 626,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Aluminium_Frame"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "mullions",
+      "sky_confidence": "low",
+      "sky_source": "photo: trapezoid frame; left edge vertical, right edge leaning toward the corner at the bottom. Corners read at (78,505) (215,510) (243,690) (78,640) px and converted with the perspective correction; expect 1 to 2 m of error along the facade and about 1 m in height",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_SideB_Ground_Pilasters",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Cladding"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      0.3499999940395355,
+      24.60000228881836,
+      2.2100000381469727
+    ],
+    "world_bbox_min": [
+      -0.3499999940395355,
+      15.140000343322754,
+      0.0
+    ],
+    "world_bbox_max": [
+      0.0,
+      39.7400016784668,
+      2.2100000381469727
+    ],
+    "mesh": {
+      "vertices": 48,
+      "faces": 36,
+      "triangles": 72,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Accent_BrownPanel"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "ground_pilasters",
+      "sky_confidence": "low",
+      "sky_source": "photo: dark base under the frame, partly hidden by trees and the boundary wall",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_SideB_GroundBase_Glass",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Glass"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      0.0,
+      30.040000915527344,
+      2.2100000381469727
+    ],
+    "world_bbox_min": [
+      -0.05000000074505806,
+      11.800000190734863,
+      0.0
+    ],
+    "world_bbox_max": [
+      -0.05000000074505806,
+      41.84000015258789,
+      2.2100000381469727
+    ],
+    "mesh": {
+      "vertices": 28,
+      "faces": 13,
+      "triangles": 26,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Glass_DarkTint"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "glass_panels",
+      "sky_confidence": "low",
+      "sky_source": "photo: dark base under the frame, partly hidden by trees and the boundary wall",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_SideB_GroundBase_HeadSill",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_CurtainWall"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      0.2199999988079071,
+      30.040000915527344,
+      2.3299999237060547
+    ],
+    "world_bbox_min": [
+      -0.2199999988079071,
+      11.800000190734863,
+      -0.05999999865889549
+    ],
+    "world_bbox_max": [
+      0.0,
+      41.84000015258789,
+      2.2699999809265137
+    ],
+    "mesh": {
+      "vertices": 16,
+      "faces": 12,
+      "triangles": 24,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Aluminium_Frame"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "curtain_wall_head_sill",
+      "sky_confidence": "low",
+      "sky_source": "photo: dark base under the frame, partly hidden by trees and the boundary wall",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_SideB_GroundBase_Mullions",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Mullions"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      0.1599999964237213,
+      30.110000610351562,
+      2.2100000381469727
+    ],
+    "world_bbox_min": [
+      -0.1599999964237213,
+      11.765000343322754,
+      0.0
+    ],
+    "world_bbox_max": [
+      0.0,
+      41.875,
+      2.2100000381469727
+    ],
+    "mesh": {
+      "vertices": 112,
+      "faces": 84,
+      "triangles": 168,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Aluminium_Frame"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "mullions",
+      "sky_confidence": "low",
+      "sky_source": "photo: dark base under the frame, partly hidden by trees and the boundary wall",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_SideB_Ledge_AboveFrame",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_FloorBands"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      1.899999976158142,
+      19.249998092651367,
+      0.7899999618530273
+    ],
+    "world_bbox_min": [
+      -1.899999976158142,
+      22.350000381469727,
+      15.529999732971191
+    ],
+    "world_bbox_max": [
+      0.0,
+      41.599998474121094,
+      16.31999969482422
+    ],
+    "mesh": {
+      "vertices": 8,
+      "faces": 6,
+      "triangles": 12,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Cladding_WhiteLightGrey"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "ledge_above_frame",
+      "sky_confidence": "low",
+      "sky_source": "photo: white ledge above the frame, reading as a projecting canopy from the far end to just past the frame",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_SideB_PanelPier_Cladding",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Cladding"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      0.30000001192092896,
+      7.330000400543213,
+      21.709999084472656
+    ],
+    "world_bbox_min": [
+      -0.30000001192092896,
+      4.46999979019165,
+      0.0
+    ],
+    "world_bbox_max": [
+      0.0,
+      11.800000190734863,
+      21.709999084472656
+    ],
+    "mesh": {
+      "vertices": 568,
+      "faces": 426,
+      "triangles": 852,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Cladding_WhiteLightGrey",
+        "SKY_Concrete"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "panel_pier",
+      "sky_confidence": "medium",
+      "sky_source": "photo: white panel grid, about 40 px wide and full height, between the glazing and the brown strip",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_SideB_SlantedGlazing_Glass",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Glass"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      1.2000000476837158,
+      12.1899995803833,
+      11.90999984741211
+    ],
+    "world_bbox_min": [
+      -1.25,
+      11.800000190734863,
+      2.2100000381469727
+    ],
+    "world_bbox_max": [
+      -0.05000000074505806,
+      23.989999771118164,
+      14.119999885559082
+    ],
+    "mesh": {
+      "vertices": 68,
+      "faces": 42,
+      "triangles": 84,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Glass_BlueGrey_Reflective"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "glass_panels",
+      "sky_confidence": "low",
+      "sky_source": "photo: blue-grey glazing between the frame's leaning edge and the white panel pier reads as an inclined plane following that edge",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_SideB_SlantedGlazing_HeadSill",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_CurtainWall"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      1.4200000762939453,
+      12.1899995803833,
+      12.030000686645508
+    ],
+    "world_bbox_min": [
+      -1.4200000762939453,
+      11.800000190734863,
+      2.1500000953674316
+    ],
+    "world_bbox_max": [
+      0.0,
+      23.989999771118164,
+      14.180000305175781
+    ],
+    "mesh": {
+      "vertices": 16,
+      "faces": 12,
+      "triangles": 24,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Aluminium_Frame"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "curtain_wall_head_sill",
+      "sky_confidence": "low",
+      "sky_source": "photo: blue-grey glazing between the frame's leaning edge and the white panel pier reads as an inclined plane following that edge",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_SideB_SlantedGlazing_Mullions",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Mullions"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      1.3600000143051147,
+      12.257981300354004,
+      11.933427810668945
+    ],
+    "world_bbox_min": [
+      -1.3600000143051147,
+      11.765000343322754,
+      2.1982860565185547
+    ],
+    "world_bbox_max": [
+      0.0,
+      24.022981643676758,
+      14.1317138671875
+    ],
+    "mesh": {
+      "vertices": 312,
+      "faces": 290,
+      "triangles": 580,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Aluminium_Frame"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "mullions",
+      "sky_confidence": "low",
+      "sky_source": "photo: blue-grey glazing between the frame's leaning edge and the white panel pier reads as an inclined plane following that edge",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_SideB_TopRibbon_Glass",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Glass"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      0.0,
+      26.81999969482422,
+      3.530000686645508
+    ],
+    "world_bbox_min": [
+      -0.05000000074505806,
+      11.800000190734863,
+      17.469999313354492
+    ],
+    "world_bbox_max": [
+      -0.05000000074505806,
+      38.619998931884766,
+      21.0
+    ],
+    "mesh": {
+      "vertices": 12,
+      "faces": 5,
+      "triangles": 10,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Glass_DarkTint"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "glass_panels",
+      "sky_confidence": "low",
+      "sky_source": "photo: strip of four wide openings with white piers between them, just under the parapet; its sill reads about 20 m up, which is above the middle of the 4th floor, so it may be partly a roof-level screen. Not resolved from one photo.",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_SideB_TopRibbon_HeadSill",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_CurtainWall"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      0.2199999988079071,
+      26.81999969482422,
+      3.6499996185302734
+    ],
+    "world_bbox_min": [
+      -0.2199999988079071,
+      11.800000190734863,
+      17.40999984741211
+    ],
+    "world_bbox_max": [
+      0.0,
+      38.619998931884766,
+      21.059999465942383
+    ],
+    "mesh": {
+      "vertices": 16,
+      "faces": 12,
+      "triangles": 24,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Aluminium_Frame"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "curtain_wall_head_sill",
+      "sky_confidence": "low",
+      "sky_source": "photo: strip of four wide openings with white piers between them, just under the parapet; its sill reads about 20 m up, which is above the middle of the 4th floor, so it may be partly a roof-level screen. Not resolved from one photo.",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_SideB_TopRibbon_Mullions",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Mullions"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      0.1599999964237213,
+      27.269996643066406,
+      3.530000686645508
+    ],
+    "world_bbox_min": [
+      -0.1599999964237213,
+      11.574999809265137,
+      17.469999313354492
+    ],
+    "world_bbox_max": [
+      0.0,
+      38.84499740600586,
+      21.0
+    ],
+    "mesh": {
+      "vertices": 48,
+      "faces": 36,
+      "triangles": 72,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Cladding_WhiteLightGrey"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "mullions",
+      "sky_confidence": "low",
+      "sky_source": "photo: strip of four wide openings with white piers between them, just under the parapet; its sill reads about 20 m up, which is above the middle of the 4th floor, so it may be partly a roof-level screen. Not resolved from one photo.",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_SideB_UpperGlazing_Glass",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Glass"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      0.0,
+      29.799999237060547,
+      1.4099998474121094
+    ],
+    "world_bbox_min": [
+      -0.05000000074505806,
+      11.800000190734863,
+      14.119999885559082
+    ],
+    "world_bbox_max": [
+      -0.05000000074505806,
+      41.599998474121094,
+      15.529999732971191
+    ],
+    "mesh": {
+      "vertices": 42,
+      "faces": 20,
+      "triangles": 40,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Glass_DarkTint"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "glass_panels",
+      "sky_confidence": "low",
+      "sky_source": "photo: dark band between the frame's top edge and the white ledge",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_SideB_UpperGlazing_HeadSill",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_CurtainWall"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      0.2199999988079071,
+      29.799999237060547,
+      1.5300006866455078
+    ],
+    "world_bbox_min": [
+      -0.2199999988079071,
+      11.800000190734863,
+      14.059999465942383
+    ],
+    "world_bbox_max": [
+      0.0,
+      41.599998474121094,
+      15.59000015258789
+    ],
+    "mesh": {
+      "vertices": 16,
+      "faces": 12,
+      "triangles": 24,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Aluminium_Frame"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "curtain_wall_head_sill",
+      "sky_confidence": "low",
+      "sky_source": "photo: dark band between the frame's top edge and the white ledge",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_SideB_UpperGlazing_Mullions",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Mullions"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      0.1599999964237213,
+      29.869998931884766,
+      1.4099998474121094
+    ],
+    "world_bbox_min": [
+      -0.1599999964237213,
+      11.765000343322754,
+      14.119999885559082
+    ],
+    "world_bbox_max": [
+      0.0,
+      41.6349983215332,
+      15.529999732971191
+    ],
+    "mesh": {
+      "vertices": 168,
+      "faces": 126,
+      "triangles": 252,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Aluminium_Frame"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "mullions",
+      "sky_confidence": "low",
+      "sky_source": "photo: dark band between the frame's top edge and the white ledge",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_SideB_Wall_Plane",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Cladding"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      0.06000000238418579,
+      44.70000076293945,
+      21.709999084472656
+    ],
+    "world_bbox_min": [
+      0.44999998807907104,
+      0.0,
+      0.0
+    ],
+    "world_bbox_max": [
+      0.5099999904632568,
+      44.70000076293945,
+      21.709999084472656
+    ],
+    "mesh": {
+      "vertices": 8,
+      "faces": 6,
+      "triangles": 12,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Cladding_WhiteLightGrey"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "side_b_wall_plane",
+      "sky_confidence": "low",
+      "sky_source": "Wall plane behind side B's features; visible only as narrow strips between them",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Sign_care_annex_Panel",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Signage"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      6.829999923706055,
+      0.22999954223632812,
+      1.4000005722045898
+    ],
+    "world_bbox_min": [
+      16.469999313354492,
+      -8.229999542236328,
+      8.199999809265137
+    ],
+    "world_bbox_max": [
+      23.299999237060547,
+      -8.0,
+      9.600000381469727
+    ],
+    "mesh": {
+      "vertices": 16,
+      "faces": 12,
+      "triangles": 24,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Sign_E6E05A",
+        "SKY_Sign_1F6FA8"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "signage_panel",
+      "sky_confidence": "low",
+      "sky_source": "photo: yellow band with the care tile on the annex parapet",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Sign_care_annex_Text1",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Signage"
+    ],
+    "location": [
+      6.400000095367432,
+      -26.584999084472656,
+      8.899999618530273
+    ],
+    "rotation_euler_deg": [
+      89.999995674289,
+      -0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      1.1661999225616455,
+      0.32690003514289856,
+      0.10000000149011612
+    ],
+    "world_bbox_min": [
+      19.669700622558594,
+      -8.284998893737793,
+      8.683699607849121
+    ],
+    "world_bbox_max": [
+      20.835899353027344,
+      -8.184998512268066,
+      9.010600090026855
+    ],
+    "mesh": {
+      "vertices": 1704,
+      "faces": 1270,
+      "triangles": 1696,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Sign_FFFFFF"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "signage_text",
+      "sky_confidence": "low",
+      "sky_source": "photo: yellow band with the care tile on the annex parapet",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Sign_care_annex_Text2",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Signage"
+    ],
+    "location": [
+      8.399999618530273,
+      -26.584999084472656,
+      8.899999618530273
+    ],
+    "rotation_euler_deg": [
+      89.999995674289,
+      -0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      1.9356403350830078,
+      0.3721550405025482,
+      0.10000000149011612
+    ],
+    "world_bbox_min": [
+      21.28190803527832,
+      -8.284998893737793,
+      8.737249374389648
+    ],
+    "world_bbox_max": [
+      23.217548370361328,
+      -8.184998512268066,
+      9.109404563903809
+    ],
+    "mesh": {
+      "vertices": 244,
+      "faces": 163,
+      "triangles": 224,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Sign_3A3A3A"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "signage_text",
+      "sky_confidence": "low",
+      "sky_source": "photo: yellow band with the care tile on the annex parapet",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Sign_care_pier_Panel",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Signage"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      6.809999942779541,
+      0.1599999964237213,
+      3.0
+    ],
+    "world_bbox_min": [
+      0.3100000023841858,
+      -0.5099999904632568,
+      19.239999771118164
+    ],
+    "world_bbox_max": [
+      7.119999885559082,
+      -0.3499999940395355,
+      22.239999771118164
+    ],
+    "mesh": {
+      "vertices": 12,
+      "faces": 11,
+      "triangles": 22,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Sign_1F6FA8",
+        "SKY_Sign_C9D64A"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "signage_panel",
+      "sky_confidence": "medium",
+      "sky_source": "photo: blue tile with 'care' and a yellow-green field reading 'HEALTH', top of the corner pier",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Sign_care_pier_Text1",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Signage"
+    ],
+    "location": [
+      -12.109899520874023,
+      -18.895000457763672,
+      20.739999771118164
+    ],
+    "rotation_euler_deg": [
+      89.999995674289,
+      -0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      1.8464736938476562,
+      0.5175889730453491,
+      0.10000000149011612
+    ],
+    "world_bbox_min": [
+      0.8212973475456238,
+      -0.5950000882148743,
+      20.397525787353516
+    ],
+    "world_bbox_max": [
+      2.6677708625793457,
+      -0.49500006437301636,
+      20.915115356445312
+    ],
+    "mesh": {
+      "vertices": 1704,
+      "faces": 1270,
+      "triangles": 1696,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Sign_FFFFFF"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "signage_text",
+      "sky_confidence": "medium",
+      "sky_source": "photo: blue tile with 'care' and a yellow-green field reading 'HEALTH', top of the corner pier",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Sign_care_pier_Text2",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Signage"
+    ],
+    "location": [
+      -8.704899787902832,
+      -18.895000457763672,
+      20.739999771118164
+    ],
+    "rotation_euler_deg": [
+      89.999995674289,
+      -0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      3.640662670135498,
+      0.6999704837799072,
+      0.10000000149011612
+    ],
+    "world_bbox_min": [
+      3.3242592811584473,
+      -0.5950000882148743,
+      20.433889389038086
+    ],
+    "world_bbox_max": [
+      6.964921951293945,
+      -0.49500003457069397,
+      21.133861541748047
+    ],
+    "mesh": {
+      "vertices": 244,
+      "faces": 163,
+      "triangles": 224,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Sign_3A3A3A"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "signage_text",
+      "sky_confidence": "medium",
+      "sky_source": "photo: blue tile with 'care' and a yellow-green field reading 'HEALTH', top of the corner pier",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Sign_clovia_annex_Panel",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Signage"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      2.6000003814697266,
+      0.19999980926513672,
+      1.4000005722045898
+    ],
+    "world_bbox_min": [
+      23.299999237060547,
+      -8.199999809265137,
+      8.199999809265137
+    ],
+    "world_bbox_max": [
+      25.899999618530273,
+      -8.0,
+      9.600000381469727
+    ],
+    "mesh": {
+      "vertices": 8,
+      "faces": 6,
+      "triangles": 12,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Sign_D6336C"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "signage_panel",
+      "sky_confidence": "low",
+      "sky_source": "photo: pink panel at the right end of the annex sign band",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Sign_clovia_annex_Text1",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Signage"
+    ],
+    "location": [
+      10.75,
+      -26.584999084472656,
+      8.899999618530273
+    ],
+    "rotation_euler_deg": [
+      89.999995674289,
+      -0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      1.678495168685913,
+      0.47016671299934387,
+      0.10000000149011612
+    ],
+    "world_bbox_min": [
+      23.771499633789062,
+      -8.284998893737793,
+      8.69245433807373
+    ],
+    "world_bbox_max": [
+      25.449995040893555,
+      -8.184998512268066,
+      9.16262149810791
+    ],
+    "mesh": {
+      "vertices": 1724,
+      "faces": 1273,
+      "triangles": 1704,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Sign_FFFFFF"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "signage_text",
+      "sky_confidence": "low",
+      "sky_source": "photo: pink panel at the right end of the annex sign band",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Sign_clovia_pier_Panel",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Signage"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      6.809999942779541,
+      0.1599999964237213,
+      2.9999990463256836
+    ],
+    "world_bbox_min": [
+      0.3100000023841858,
+      -0.5099999904632568,
+      15.880000114440918
+    ],
+    "world_bbox_max": [
+      7.119999885559082,
+      -0.3499999940395355,
+      18.8799991607666
+    ],
+    "mesh": {
+      "vertices": 8,
+      "faces": 6,
+      "triangles": 12,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Sign_D6336C"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "signage_panel",
+      "sky_confidence": "medium",
+      "sky_source": "photo: pink panel under the care sign",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Sign_clovia_pier_Text1",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Signage"
+    ],
+    "location": [
+      -10.135000228881836,
+      -18.895000457763672,
+      17.3799991607666
+    ],
+    "rotation_euler_deg": [
+      89.999995674289,
+      -0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      3.748500347137451,
+      1.0500000715255737,
+      0.10000000149011612
+    ],
+    "world_bbox_min": [
+      1.8647499084472656,
+      -0.5950000882148743,
+      16.9164981842041
+    ],
+    "world_bbox_max": [
+      5.613250255584717,
+      -0.49500003457069397,
+      17.96649932861328
+    ],
+    "mesh": {
+      "vertices": 1724,
+      "faces": 1273,
+      "triangles": 1704,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Sign_FFFFFF"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "signage_text",
+      "sky_confidence": "medium",
+      "sky_source": "photo: pink panel under the care sign",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Sign_skymark_crown_Mark",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Signage"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      0.5208005905151367,
+      0.050000011920928955,
+      0.5207996368408203
+    ],
+    "world_bbox_min": [
+      13.475239753723145,
+      -0.4000000059604645,
+      23.27128028869629
+    ],
+    "world_bbox_max": [
+      13.996040344238281,
+      -0.3499999940395355,
+      23.79207992553711
+    ],
+    "mesh": {
+      "vertices": 32,
+      "faces": 24,
+      "triangles": 48,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Sign_EF7D22"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "signage_mark",
+      "sky_confidence": "medium",
+      "sky_source": "photo: wordmark with an orange star mark standing on the parapet above the curtain wall",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Sign_skymark_crown_Panel",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Signage"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      6.170000076293945,
+      0.19999998807907104,
+      1.239999771118164
+    ],
+    "world_bbox_min": [
+      7.800000190734863,
+      -0.3499999940395355,
+      22.5
+    ],
+    "world_bbox_max": [
+      13.970000267028809,
+      -0.15000000596046448,
+      23.739999771118164
+    ],
+    "mesh": {
+      "vertices": 8,
+      "faces": 6,
+      "triangles": 12,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Sign_F2F2F2"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "signage_panel",
+      "sky_confidence": "medium",
+      "sky_source": "photo: wordmark with an orange star mark standing on the parapet above the curtain wall",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Sign_skymark_crown_Text1",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Signage"
+    ],
+    "location": [
+      -2.9649996757507324,
+      -18.735000610351562,
+      23.1200008392334
+    ],
+    "rotation_euler_deg": [
+      89.999995674289,
+      -0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      2.0801000595092773,
+      0.5654400587081909,
+      0.10000000149011612
+    ],
+    "world_bbox_min": [
+      9.86417007446289,
+      -0.4350002408027649,
+      22.791400909423828
+    ],
+    "world_bbox_max": [
+      11.944270133972168,
+      -0.335000216960907,
+      23.356840133666992
+    ],
+    "mesh": {
+      "vertices": 1992,
+      "faces": 1462,
+      "triangles": 1960,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Sign_3B3B3B"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "signage_text",
+      "sky_confidence": "medium",
+      "sky_source": "photo: wordmark with an orange star mark standing on the parapet above the curtain wall",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Site_BoundaryWall",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Site"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      45.70000076293945,
+      70.69999694824219,
+      1.600000023841858
+    ],
+    "world_bbox_min": [
+      -9.0,
+      -17.0,
+      0.0
+    ],
+    "world_bbox_max": [
+      36.70000076293945,
+      53.70000076293945,
+      1.600000023841858
+    ],
+    "mesh": {
+      "vertices": 22,
+      "faces": 18,
+      "triangles": 36,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Concrete"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "boundary_wall",
+      "sky_confidence": "low",
+      "sky_source": "photo: low wall along the road on the side B frontage; the gate is inferred at the annex",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Site_Paving",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_Site"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      45.70000076293945,
+      70.69999694824219,
+      0.30000001192092896
+    ],
+    "world_bbox_min": [
+      -9.0,
+      -17.0,
+      -0.30000001192092896
+    ],
+    "world_bbox_max": [
+      36.70000076293945,
+      53.70000076293945,
+      0.0
+    ],
+    "mesh": {
+      "vertices": 8,
+      "faces": 6,
+      "triangles": 12,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Ground_Paving"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "site_paving",
+      "sky_confidence": "low",
+      "sky_source": "developer: plot 2,940 sq m. Paving extent is a neutral plinth for the model, not a surveyed plot boundary.",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Spandrel_Bands",
+    "type": "MESH",
+    "parent": "SKY_F1_Skymark",
+    "collections": [
+      "SKY_Reconstruction_FloorBands"
+    ],
+    "location": [
+      -13.850000381469727,
+      -18.350000381469727,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      25.9672794342041,
+      40.60000228881836,
+      16.950000762939453
+    ],
+    "world_bbox_min": [
+      -1.2372796535491943,
+      -0.20000000298023224,
+      3.549999952316284
+    ],
+    "world_bbox_max": [
+      24.729999542236328,
+      40.400001525878906,
+      20.5
+    ],
+    "mesh": {
+      "vertices": 120,
+      "faces": 90,
+      "triangles": 180,
+      "uv_layers": [
+        "UVMap"
+      ],
+      "materials": [
+        "SKY_Glass_DarkTint"
+      ]
+    },
+    "custom_properties": {
+      "sky_component": "spandrel_bands",
+      "sky_confidence": "medium",
+      "sky_source": "photo: darker horizontal band at every slab edge across the curtain wall",
+      "sky_observed": true
+    }
+  },
+  {
+    "name": "SKY_Sun",
+    "type": "LIGHT",
+    "parent": null,
+    "collections": [
+      "Scene Collection"
+    ],
+    "location": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rotation_euler_deg": [
+      51.999999170302104,
+      0.0,
+      -125.00000234007703
+    ],
+    "scale": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "dimensions": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "world_bbox_min": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "world_bbox_max": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "mesh": null,
+    "custom_properties": {}
+  }
+]

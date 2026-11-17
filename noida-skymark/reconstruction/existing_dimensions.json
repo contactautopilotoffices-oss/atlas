@@ -1,0 +1,324 @@
+{
+  "overall_world_bbox_min": [
+    -9.0,
+    -17.0,
+    -0.30000001192092896
+  ],
+  "overall_world_bbox_max": [
+    36.70000076293945,
+    53.70000076293945,
+    28.5
+  ],
+  "overall_size_m": [
+    45.70000076293945,
+    70.69999694824219,
+    28.799999237060547
+  ],
+  "per_object": {
+    "SKY_Annex_Body": [
+      10.23,
+      8.0,
+      9.7
+    ],
+    "SKY_Annex_FirstFloor_Glass": [
+      9.43,
+      0.0,
+      3.5
+    ],
+    "SKY_Annex_FirstFloor_HeadSill": [
+      9.43,
+      0.22,
+      3.62
+    ],
+    "SKY_Annex_FirstFloor_Mullions": [
+      9.5,
+      0.16,
+      3.5
+    ],
+    "SKY_Annex_Ground_Glass": [
+      9.43,
+      0.0,
+      3.3
+    ],
+    "SKY_Annex_Ground_HeadSill": [
+      9.43,
+      0.22,
+      3.42
+    ],
+    "SKY_Annex_Ground_Mullions": [
+      9.5,
+      0.16,
+      3.3
+    ],
+    "SKY_Annex_Louvres": [
+      9.43,
+      0.1,
+      2.12
+    ],
+    "SKY_Entrance": [
+      5.2,
+      2.2,
+      3.48
+    ],
+    "SKY_Floor_Slabs": [
+      26.3,
+      43.3,
+      16.7
+    ],
+    "SKY_FrontA_CornerPier_Cladding": [
+      7.41,
+      0.35,
+      22.5
+    ],
+    "SKY_FrontA_CurtainWall_Glass": [
+      13.72,
+      0.0,
+      21.26
+    ],
+    "SKY_FrontA_CurtainWall_HeadSill": [
+      13.72,
+      0.22,
+      21.38
+    ],
+    "SKY_FrontA_CurtainWall_Mullions": [
+      13.79,
+      0.18,
+      21.26
+    ],
+    "SKY_FrontA_DarkRecess_Glass": [
+      3.6,
+      0.0,
+      21.26
+    ],
+    "SKY_FrontA_DarkRecess_HeadSill": [
+      3.6,
+      0.22,
+      21.38
+    ],
+    "SKY_FrontA_DarkRecess_Mullions": [
+      3.67,
+      0.18,
+      21.26
+    ],
+    "SKY_FrontA_RightPier_Cladding": [
+      2.97,
+      0.35,
+      22.5
+    ],
+    "SKY_Hidden_Rear_Massing": [
+      27.4,
+      44.4,
+      22.5
+    ],
+    "SKY_Interior_Core": [
+      23.4,
+      40.4,
+      20.5
+    ],
+    "SKY_Parapet_Bands": [
+      25.03,
+      42.19,
+      1.5
+    ],
+    "SKY_Roof_Parapet_Returns": [
+      27.7,
+      44.7,
+      2.0
+    ],
+    "SKY_Roof_TelecomMast": [
+      1.28,
+      1.28,
+      8.003
+    ],
+    "SKY_SideB_AccentStrip_Brown": [
+      0.15,
+      4.52,
+      21.71
+    ],
+    "SKY_SideB_AngularFrame": [
+      1.5,
+      21.84,
+      11.91
+    ],
+    "SKY_SideB_EndPier_Cladding": [
+      0.3,
+      2.86,
+      22.5
+    ],
+    "SKY_SideB_FrameInfill_Glass": [
+      0.0,
+      19.014,
+      9.51
+    ],
+    "SKY_SideB_FrameInfill_HeadSill": [
+      0.22,
+      19.014,
+      9.63
+    ],
+    "SKY_SideB_FrameInfill_Mullions": [
+      0.18,
+      19.082,
+      9.533
+    ],
+    "SKY_SideB_Ground_Pilasters": [
+      0.35,
+      24.6,
+      2.21
+    ],
+    "SKY_SideB_GroundBase_Glass": [
+      0.0,
+      30.04,
+      2.21
+    ],
+    "SKY_SideB_GroundBase_HeadSill": [
+      0.22,
+      30.04,
+      2.33
+    ],
+    "SKY_SideB_GroundBase_Mullions": [
+      0.16,
+      30.11,
+      2.21
+    ],
+    "SKY_SideB_Ledge_AboveFrame": [
+      1.9,
+      19.25,
+      0.79
+    ],
+    "SKY_SideB_PanelPier_Cladding": [
+      0.3,
+      7.33,
+      21.71
+    ],
+    "SKY_SideB_SlantedGlazing_Glass": [
+      1.2,
+      12.19,
+      11.91
+    ],
+    "SKY_SideB_SlantedGlazing_HeadSill": [
+      1.42,
+      12.19,
+      12.03
+    ],
+    "SKY_SideB_SlantedGlazing_Mullions": [
+      1.36,
+      12.258,
+      11.933
+    ],
+    "SKY_SideB_TopRibbon_Glass": [
+      0.0,
+      26.82,
+      3.53
+    ],
+    "SKY_SideB_TopRibbon_HeadSill": [
+      0.22,
+      26.82,
+      3.65
+    ],
+    "SKY_SideB_TopRibbon_Mullions": [
+      0.16,
+      27.27,
+      3.53
+    ],
+    "SKY_SideB_UpperGlazing_Glass": [
+      0.0,
+      29.8,
+      1.41
+    ],
+    "SKY_SideB_UpperGlazing_HeadSill": [
+      0.22,
+      29.8,
+      1.53
+    ],
+    "SKY_SideB_UpperGlazing_Mullions": [
+      0.16,
+      29.87,
+      1.41
+    ],
+    "SKY_SideB_Wall_Plane": [
+      0.06,
+      44.7,
+      21.71
+    ],
+    "SKY_Sign_care_annex_Panel": [
+      6.83,
+      0.23,
+      1.4
+    ],
+    "SKY_Sign_care_annex_Text1": [
+      1.166,
+      0.327,
+      0.1
+    ],
+    "SKY_Sign_care_annex_Text2": [
+      1.936,
+      0.372,
+      0.1
+    ],
+    "SKY_Sign_care_pier_Panel": [
+      6.81,
+      0.16,
+      3.0
+    ],
+    "SKY_Sign_care_pier_Text1": [
+      1.846,
+      0.518,
+      0.1
+    ],
+    "SKY_Sign_care_pier_Text2": [
+      3.641,
+      0.7,
+      0.1
+    ],
+    "SKY_Sign_clovia_annex_Panel": [
+      2.6,
+      0.2,
+      1.4
+    ],
+    "SKY_Sign_clovia_annex_Text1": [
+      1.678,
+      0.47,
+      0.1
+    ],
+    "SKY_Sign_clovia_pier_Panel": [
+      6.81,
+      0.16,
+      3.0
+    ],
+    "SKY_Sign_clovia_pier_Text1": [
+      3.749,
+      1.05,
+      0.1
+    ],
+    "SKY_Sign_skymark_crown_Mark": [
+      0.521,
+      0.05,
+      0.521
+    ],
+    "SKY_Sign_skymark_crown_Panel": [
+      6.17,
+      0.2,
+      1.24
+    ],
+    "SKY_Sign_skymark_crown_Text1": [
+      2.08,
+      0.565,
+      0.1
+    ],
+    "SKY_Site_BoundaryWall": [
+      45.7,
+      70.7,
+      1.6
+    ],
+    "SKY_Site_Paving": [
+      45.7,
+      70.7,
+      0.3
+    ],
+    "SKY_Spandrel_Bands": [
+      25.967,
+      40.6,
+      16.95
+    ]
+  }
+}

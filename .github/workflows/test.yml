@@ -23,7 +23,9 @@ concurrency:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    # ubuntu-latest moved to 26.04, which Playwright 1.56 cannot install Chromium on;
+    # pinned until Playwright supports it.
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
@@ -33,5 +35,10 @@ jobs:
           cache: npm
       - run: npm ci
       - name: Chromium for the headless tests
-        run: npx playwright install --with-deps chromium
+        # Chromium only, no --with-deps: the Ubuntu 24.04 runner image already has the
+        # libraries headless Chromium needs, and --with-deps fetches fonts from Ubuntu's
+        # mirror, which has been unreachable from the runner and stalled the job until
+        # it was cancelled.
+        timeout-minutes: 5
+        run: npx playwright install chromium
       - run: npm test

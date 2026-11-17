@@ -1,0 +1,2417 @@
+{
+  "building": "F1 Skymark (Skymark F-1)",
+  "iteration": 2,
+  "glb_validation": {
+    "glb": "fm_skymark_atlas.glb",
+    "bytes": 2940632,
+    "reopened": true,
+    "objects": 106,
+    "meshes": 95,
+    "triangles": 45002,
+    "root_found": true,
+    "hierarchy": {
+      "Building_Mass": 1,
+      "Facade_Front_A": 11,
+      "Facade_Rear_C": 1,
+      "Facade_Side_B": 25,
+      "Facade_Side_D": 1,
+      "Interiors": 3,
+      "Podium": 17,
+      "Roof": 4,
+      "Signage": 18,
+      "Site": 14
+    },
+    "meshes_outside_a_group": [],
+    "names_expected": 106,
+    "names_missing": [],
+    "materials": [
+      "SKY_Accent_BrownPanel",
+      "SKY_Accent_BrownPanel_B",
+      "SKY_Aluminium_Dark_Mullion",
+      "SKY_Aluminium_Frame",
+      "SKY_Asphalt",
+      "SKY_Charcoal_Panel",
+      "SKY_Cladding_WhiteLightGrey",
+      "SKY_Cladding_WhiteLightGrey_B",
+      "SKY_Concrete",
+      "SKY_Glass_BlueGrey_Reflective",
+      "SKY_Glass_BlueGrey_Reflective_B",
+      "SKY_Glass_BlueGrey_Reflective_C",
+      "SKY_Glass_DarkTint",
+      "SKY_Glass_DarkTint_B",
+      "SKY_Ground_Paving",
+      "SKY_Interior_Carpet",
+      "SKY_Interior_Ceiling",
+      "SKY_Interior_Chair",
+      "SKY_Interior_CoreWall",
+      "SKY_Interior_Desk",
+      "SKY_Interior_LightPanel",
+      "SKY_Interior_Screen",
+      "SKY_Joint_Shadow",
+      "SKY_Kerb_Black",
+      "SKY_Kerb_Yellow",
+      "SKY_Road_Zebra",
+      "SKY_Roof_Membrane",
+      "SKY_Sign_1F6FA8",
+      "SKY_Sign_3A3A3A",
+      "SKY_Sign_3B3B3B",
+      "SKY_Sign_C9D64A",
+      "SKY_Sign_D23C32",
+      "SKY_Sign_D6336C",
+      "SKY_Sign_E6E05A",
+      "SKY_Sign_EF7D22",
+      "SKY_Sign_F2F2F2",
+      "SKY_Sign_F3EFE6",
+      "SKY_Sign_FFFFFF",
+      "SKY_Vegetation_Leaf",
+      "SKY_Vegetation_Leaf_B",
+      "SKY_Vegetation_Trunk"
+    ],
+    "materials_missing": [],
+    "images_embedded": [],
+    "meshes_without_uv": [],
+    "custom_properties_kept_on_meshes": 95,
+    "bounds_min_m": [
+      -23.23,
+      -38.75,
+      -0.3
+    ],
+    "bounds_max_m": [
+      23.14,
+      31.5,
+      28.5
+    ],
+    "size_m": [
+      46.37,
+      70.25,
+      28.8
+    ],
+    "expected_height_m": 28.8,
+    "scale_ok": true,
+    "pass": true
+  },
+  "context_glb_validation": {
+    "glb": "fm_skymark_context_500m.glb",
+    "bytes": 12698248,
+    "reopened": true,
+    "objects": 1877,
+    "meshes": 1872,
+    "triangles": 706019,
+    "root_found": true,
+    "hierarchy": {
+      "SKY_Context_Buildings": 0,
+      "SKY_Context_Buildings_NearPhotoCamera": 0,
+      "SKY_Context_Ground": 0,
+      "SKY_Context_Plinth": 0,
+      "SKY_Context_Rooftops": 0,
+      "SKY_Context_Rooftops_NearPhotoCamera": 0,
+      "SKY_Context_Trees": 1869
+    },
+    "meshes_outside_a_group": [],
+    "names_expected": 5,
+    "names_missing": [],
+    "materials": [
+      "CTX_asphalt",
+      "CTX_frond",
+      "CTX_grass",
+      "CTX_ground",
+      "CTX_kerb",
+      "CTX_leaf",
+      "CTX_leaf_b",
+      "CTX_marking",
+      "CTX_parapet",
+      "CTX_pavers",
+      "CTX_roof",
+      "CTX_roof_tarp",
+      "CTX_roof_tin",
+      "CTX_roof_tin_rust",
+      "CTX_soil",
+      "CTX_tank",
+      "CTX_trunk",
+      "CTX_wall_chawl",
+      "CTX_wall_com_glass",
+      "CTX_wall_com_ribbon",
+      "CTX_wall_res_cream",
+      "CTX_wall_res_grey",
+      "CTX_wall_res_ochre",
+      "CTX_wall_res_peach",
+      "CTX_wall_shop"
+    ],
+    "materials_missing": [],
+    "images_embedded": [
+      "asphalt",
+      "chawl",
+      "chawl_r",
+      "com_glass",
+      "com_glass_r",
+      "com_ribbon",
+      "com_ribbon_r",
+      "grass",
+      "leaves_a",
+      "leaves_b",
+      "pavers",
+      "res_cream",
+      "res_cream_r",
+      "res_grey",
+      "res_grey_r",
+      "res_ochre",
+      "res_ochre_r",
+      "res_peach",
+      "res_peach_r",
+      "roof",
+      "shop",
+      "shop_r",
+      "soil"
+    ],
+    "meshes_without_uv": [],
+    "custom_properties_kept_on_meshes": 0,
+    "bounds_min_m": [
+      -501.04,
+      -501.84,
+      -14.0
+    ],
+    "bounds_max_m": [
+      505.07,
+      504.75,
+      29.9
+    ],
+    "size_m": [
+      1006.11,
+      1006.59,
+      43.9
+    ],
+    "pass": true
+  },
+  "context": {
+    "source": "Overture Maps release/2026-10-21.0",
+    "heights": "Copernicus GLO-30 DSM, tile N28 E077 (copernicus-dem-30m on AWS)",
+    "radius_m": 500.0,
+    "buildings": 1219,
+    "styles": {
+      "res_cream": 195,
+      "res_grey": 202,
+      "res_peach": 211,
+      "res_ochre": 188,
+      "chawl": 393,
+      "com_ribbon": 29,
+      "com_glass": 1
+    },
+    "road_segments": 361,
+    "green_areas": 12,
+    "trees": 1866,
+    "placement": "Placed on the building's own footprint (Overture Maps, 59.2 m by 33.9 m), the one the earlier Skymark study matched to the client's Street View panorama. The street front, with the curtain wall and the podium, faces south-east (146 degrees); the long face with the angular frame faces south-west (236 degrees), along the road. The listing pin used before (28.593565, 77.318802) was about 270 m north, on open ground.",
+    "textures": "scripts/world/textures.py (the Andheri painter), at half size"
+  },
+  "geometry": {
+    "glass_panes_as_individual_quads": 299,
+    "mesh_objects": 97,
+    "triangles": 45740,
+    "textures": "none: every facade detail is geometry"
+  },
+  "hierarchy": {
+    "Building_Mass": [
+      "SKY_Floor_Slabs"
+    ],
+    "Facade_Front_A": [
+      "SKY_FrontA_CornerPier_Cladding",
+      "SKY_FrontA_CurtainWall_Glass",
+      "SKY_FrontA_CurtainWall_HeadSill",
+      "SKY_FrontA_CurtainWall_Mullions",
+      "SKY_FrontA_CurtainWall_SlabEdgeBands",
+      "SKY_FrontA_DarkRecess_Glass",
+      "SKY_FrontA_DarkRecess_HeadSill",
+      "SKY_FrontA_DarkRecess_Mullions",
+      "SKY_FrontA_DarkRecess_SlabEdgeBands",
+      "SKY_FrontA_ParapetBand",
+      "SKY_FrontA_RightPier_Cladding"
+    ],
+    "Facade_Side_B": [
+      "SKY_SideB_AccentStrip_Brown",
+      "SKY_SideB_AngularFrame",
+      "SKY_SideB_EndPier_Cladding",
+      "SKY_SideB_FrameInfill_Glass",
+      "SKY_SideB_FrameInfill_HeadSill",
+      "SKY_SideB_FrameInfill_Mullions",
+      "SKY_SideB_FrameInfill_SlabEdgeBands",
+      "SKY_SideB_GroundBase_Glass",
+      "SKY_SideB_GroundBase_HeadSill",
+      "SKY_SideB_GroundBase_Mullions",
+      "SKY_SideB_Ground_Pilasters",
+      "SKY_SideB_Ledge_AboveFrame",
+      "SKY_SideB_PanelPier_Cladding",
+      "SKY_SideB_ParapetBand",
+      "SKY_SideB_SlantedGlazing_Glass",
+      "SKY_SideB_SlantedGlazing_HeadSill",
+      "SKY_SideB_SlantedGlazing_Mullions",
+      "SKY_SideB_SlantedGlazing_SlabEdgeBands",
+      "SKY_SideB_TopRibbon_Glass",
+      "SKY_SideB_TopRibbon_HeadSill",
+      "SKY_SideB_TopRibbon_Mullions",
+      "SKY_SideB_UpperGlazing_Glass",
+      "SKY_SideB_UpperGlazing_HeadSill",
+      "SKY_SideB_UpperGlazing_Mullions",
+      "SKY_SideB_Wall_Plane"
+    ],
+    "Facade_Rear_C": [
+      "SKY_FacadeC_Rear_Unobserved"
+    ],
+    "Facade_Side_D": [
+      "SKY_FacadeD_FarSide_Unobserved"
+    ],
+    "Roof": [
+      "SKY_Roof_Coping",
+      "SKY_Roof_Parapet_Inner",
+      "SKY_Roof_Slab",
+      "SKY_Roof_TelecomMast"
+    ],
+    "Podium": [
+      "SKY_Annex_Body",
+      "SKY_Annex_Fascia_Cladding",
+      "SKY_Annex_FirstFloor_Glass",
+      "SKY_Annex_FirstFloor_HeadSill",
+      "SKY_Annex_FirstFloor_Mullions",
+      "SKY_Annex_Ground_Glass",
+      "SKY_Annex_Ground_HeadSill",
+      "SKY_Annex_Ground_Mullions",
+      "SKY_Annex_Ground_Right_Glass",
+      "SKY_Annex_Ground_Right_HeadSill",
+      "SKY_Annex_Ground_Right_Mullions",
+      "SKY_Annex_Louvres",
+      "SKY_Entrance_Canopy",
+      "SKY_Entrance_GlassScreen",
+      "SKY_Entrance_Name",
+      "SKY_Entrance_Porch",
+      "SKY_Entrance_Steps_Ramp"
+    ],
+    "Signage": [
+      "SKY_Sign_care_annex_Mount",
+      "SKY_Sign_care_annex_Panel",
+      "SKY_Sign_care_annex_Text1",
+      "SKY_Sign_care_annex_Text2",
+      "SKY_Sign_care_pier_Mount",
+      "SKY_Sign_care_pier_Panel",
+      "SKY_Sign_care_pier_Text1",
+      "SKY_Sign_care_pier_Text2",
+      "SKY_Sign_clovia_annex_Mount",
+      "SKY_Sign_clovia_annex_Panel",
+      "SKY_Sign_clovia_annex_Text1",
+      "SKY_Sign_clovia_pier_Mount",
+      "SKY_Sign_clovia_pier_Panel",
+      "SKY_Sign_clovia_pier_Text1",
+      "SKY_Sign_skymark_crown_Mark",
+      "SKY_Sign_skymark_crown_Mount",
+      "SKY_Sign_skymark_crown_Panel",
+      "SKY_Sign_skymark_crown_Text1"
+    ],
+    "Interiors": [
+      "SKY_Interior_Core",
+      "SKY_Interior_FrontA",
+      "SKY_Interior_SideB"
+    ],
+    "Site": [
+      "SKY_Site_BoomBarrier",
+      "SKY_Site_BoundaryWall",
+      "SKY_Site_Drive",
+      "SKY_Site_Footpath_Kerb",
+      "SKY_Site_Gate_Leaves",
+      "SKY_Site_Gate_Pillars",
+      "SKY_Site_GuardCabin",
+      "SKY_Site_Palm_1",
+      "SKY_Site_Palm_2",
+      "SKY_Site_Palm_3",
+      "SKY_Site_Paving",
+      "SKY_Site_Tree_1",
+      "SKY_Site_Tree_2",
+      "SKY_Site_Tree_3",
+      "SKY_Site_Tree_4",
+      "SKY_Site_Tree_5"
+    ]
+  },
+  "renders": {
+    "01_reference_camera": "renders/01_reference_camera.jpg",
+    "02_front_elevation": "renders/02_front_elevation.jpg",
+    "03_side_elevation": "renders/03_side_elevation.jpg",
+    "04_three_quarter": "renders/04_three_quarter.jpg",
+    "05_context_500m": "renders/05_context_500m.jpg",
+    "06_context_close": "renders/06_context_close.jpg",
+    "00_reference_comparison": "renders/00_reference_comparison.jpg"
+  },
+  "components": [
+    {
+      "name": "SKY_Floor_Slabs",
+      "group": "Building_Mass",
+      "component": "floor_slabs",
+      "confidence": "low",
+      "observed": true,
+      "source": "Photo: slab lines on the front glass are about 70 px apart against a 400 px pier, so 5 floors plus a 2 m parapet fill the height. 4.1 m is assumed as a normal office floor height; no source states it.",
+      "mesh": {
+        "vertices": 40,
+        "faces": 30,
+        "triangles": 60,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Concrete"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Interior_Core",
+      "group": "Interiors",
+      "component": "interior_core",
+      "confidence": "low",
+      "observed": false,
+      "source": "Neutral dark volume behind the glazing; the interior is not surveyed",
+      "mesh": {
+        "vertices": 8,
+        "faces": 6,
+        "triangles": 12,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Glass_DarkTint"
+        ]
+      }
+    },
+    {
+      "name": "SKY_FacadeC_Rear_Unobserved",
+      "group": "Facade_Rear_C",
+      "component": "facade_rear",
+      "confidence": "low",
+      "observed": false,
+      "source": "The rear and the far side are not visible in the photograph. They are closed with plain cladding massing only, tagged observed = false.",
+      "mesh": {
+        "vertices": 8,
+        "faces": 6,
+        "triangles": 12,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Cladding_WhiteLightGrey"
+        ]
+      }
+    },
+    {
+      "name": "SKY_FacadeD_FarSide_Unobserved",
+      "group": "Facade_Side_D",
+      "component": "facade_far_side",
+      "confidence": "low",
+      "observed": false,
+      "source": "The rear and the far side are not visible in the photograph. They are closed with plain cladding massing only, tagged observed = false.",
+      "mesh": {
+        "vertices": 8,
+        "faces": 6,
+        "triangles": 12,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Cladding_WhiteLightGrey"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Roof_Slab",
+      "group": "Roof",
+      "component": "roof_slab",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: flat roof behind a parapet; finish not visible",
+      "mesh": {
+        "vertices": 8,
+        "faces": 6,
+        "triangles": 12,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Roof_Membrane"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Roof_Parapet_Inner",
+      "group": "Roof",
+      "component": "parapet_inner",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: parapet line continuous along A and B; B's reads about 1 m lower",
+      "mesh": {
+        "vertices": 21,
+        "faces": 18,
+        "triangles": 36,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Cladding_WhiteLightGrey"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Roof_Coping",
+      "group": "Roof",
+      "component": "parapet_coping",
+      "confidence": "low",
+      "observed": false,
+      "source": "Coping assumed: every parapet has one, but its profile is too small to read in the photograph",
+      "mesh": {
+        "vertices": 34,
+        "faces": 30,
+        "triangles": 60,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Frame"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Roof_TelecomMast",
+      "group": "Roof",
+      "component": "roof_mast",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: lattice telecom mast above the left end of the roof; plan position estimated",
+      "mesh": {
+        "vertices": 80,
+        "faces": 60,
+        "triangles": 120,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Frame"
+        ]
+      }
+    },
+    {
+      "name": "SKY_FrontA_CurtainWall_HeadSill",
+      "group": "Facade_Front_A",
+      "component": "curtain_wall_head_sill",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: about 8 lit vertical bays and two glass rows per floor above the annex roof; slab lines about 70 px (4.5 m) apart",
+      "mesh": {
+        "vertices": 16,
+        "faces": 12,
+        "triangles": 24,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_FrontA_DarkRecess_HeadSill",
+      "group": "Facade_Front_A",
+      "component": "curtain_wall_head_sill",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: darker glazed strip, about 45 px wide, between the corner pier and the lit glass; whether it is a recess or the return of a projecting glass box cannot be told from one view",
+      "mesh": {
+        "vertices": 16,
+        "faces": 12,
+        "triangles": 24,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_SideB_TopRibbon_HeadSill",
+      "group": "Facade_Side_B",
+      "component": "curtain_wall_head_sill",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: strip of four wide openings with white piers between them, just under the parapet; its sill reads about 20 m up, which is above the middle of the 4th floor, so it may be partly a roof-level screen. Not resolved from one photo.",
+      "mesh": {
+        "vertices": 16,
+        "faces": 12,
+        "triangles": 24,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_SideB_UpperGlazing_HeadSill",
+      "group": "Facade_Side_B",
+      "component": "curtain_wall_head_sill",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: dark band between the frame's top edge and the white ledge",
+      "mesh": {
+        "vertices": 16,
+        "faces": 12,
+        "triangles": 24,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_SideB_FrameInfill_HeadSill",
+      "group": "Facade_Side_B",
+      "component": "curtain_wall_head_sill",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: trapezoid frame; left edge vertical, right edge leaning toward the corner at the bottom. Corners read at (78,505) (215,510) (243,690) (78,640) px and converted with the perspective correction; expect 1 to 2 m of error along the facade and about 1 m in height",
+      "mesh": {
+        "vertices": 16,
+        "faces": 12,
+        "triangles": 24,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_SideB_SlantedGlazing_HeadSill",
+      "group": "Facade_Side_B",
+      "component": "curtain_wall_head_sill",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: blue-grey glazing between the frame's leaning edge and the white panel pier reads as an inclined plane following that edge",
+      "mesh": {
+        "vertices": 16,
+        "faces": 12,
+        "triangles": 24,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_SideB_GroundBase_HeadSill",
+      "group": "Facade_Side_B",
+      "component": "curtain_wall_head_sill",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: dark base under the frame, partly hidden by trees and the boundary wall",
+      "mesh": {
+        "vertices": 16,
+        "faces": 12,
+        "triangles": 24,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Annex_FirstFloor_HeadSill",
+      "group": "Podium",
+      "component": "curtain_wall_head_sill",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: two-storey block in front of the curtain wall, reaching about 40 px past the main block's right edge, with the second care / Clovia sign band on its parapet, pale glazing with white horizontal lines on the first floor and dark glazing on its left side. Its depth cannot be measured from a near-frontal view",
+      "mesh": {
+        "vertices": 16,
+        "faces": 12,
+        "triangles": 24,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Annex_Ground_HeadSill",
+      "group": "Podium",
+      "component": "curtain_wall_head_sill",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: two-storey block in front of the curtain wall, reaching about 40 px past the main block's right edge, with the second care / Clovia sign band on its parapet, pale glazing with white horizontal lines on the first floor and dark glazing on its left side. Its depth cannot be measured from a near-frontal view",
+      "mesh": {
+        "vertices": 16,
+        "faces": 12,
+        "triangles": 24,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Annex_Ground_Right_HeadSill",
+      "group": "Podium",
+      "component": "curtain_wall_head_sill",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: two-storey block in front of the curtain wall, reaching about 40 px past the main block's right edge, with the second care / Clovia sign band on its parapet, pale glazing with white horizontal lines on the first floor and dark glazing on its left side. Its depth cannot be measured from a near-frontal view",
+      "mesh": {
+        "vertices": 16,
+        "faces": 12,
+        "triangles": 24,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_FrontA_CurtainWall_Glass",
+      "group": "Facade_Front_A",
+      "component": "glass_panels",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: about 8 lit vertical bays and two glass rows per floor above the annex roof; slab lines about 70 px (4.5 m) apart",
+      "mesh": {
+        "vertices": 377,
+        "faces": 100,
+        "triangles": 200,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Glass_BlueGrey_Reflective_B",
+          "SKY_Glass_BlueGrey_Reflective",
+          "SKY_Glass_BlueGrey_Reflective_C"
+        ]
+      }
+    },
+    {
+      "name": "SKY_FrontA_DarkRecess_Glass",
+      "group": "Facade_Front_A",
+      "component": "glass_panels",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: darker glazed strip, about 45 px wide, between the corner pier and the lit glass; whether it is a recess or the return of a projecting glass box cannot be told from one view",
+      "mesh": {
+        "vertices": 111,
+        "faces": 30,
+        "triangles": 60,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Glass_DarkTint",
+          "SKY_Glass_DarkTint_B"
+        ]
+      }
+    },
+    {
+      "name": "SKY_SideB_TopRibbon_Glass",
+      "group": "Facade_Side_B",
+      "component": "glass_panels",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: strip of four wide openings with white piers between them, just under the parapet; its sill reads about 20 m up, which is above the middle of the 4th floor, so it may be partly a roof-level screen. Not resolved from one photo.",
+      "mesh": {
+        "vertices": 20,
+        "faces": 5,
+        "triangles": 10,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Glass_DarkTint_B",
+          "SKY_Glass_DarkTint"
+        ]
+      }
+    },
+    {
+      "name": "SKY_SideB_UpperGlazing_Glass",
+      "group": "Facade_Side_B",
+      "component": "glass_panels",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: dark band between the frame's top edge and the white ledge",
+      "mesh": {
+        "vertices": 92,
+        "faces": 23,
+        "triangles": 46,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Glass_DarkTint",
+          "SKY_Glass_DarkTint_B"
+        ]
+      }
+    },
+    {
+      "name": "SKY_SideB_FrameInfill_Glass",
+      "group": "Facade_Side_B",
+      "component": "glass_panels",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: trapezoid frame; left edge vertical, right edge leaning toward the corner at the bottom. Corners read at (78,505) (215,510) (243,690) (78,640) px and converted with the perspective correction; expect 1 to 2 m of error along the facade and about 1 m in height",
+      "mesh": {
+        "vertices": 262,
+        "faces": 69,
+        "triangles": 138,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Glass_DarkTint",
+          "SKY_Glass_DarkTint_B"
+        ]
+      }
+    },
+    {
+      "name": "SKY_SideB_SlantedGlazing_Glass",
+      "group": "Facade_Side_B",
+      "component": "glass_panels",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: blue-grey glazing between the frame's leaning edge and the white panel pier reads as an inclined plane following that edge",
+      "mesh": {
+        "vertices": 183,
+        "faces": 48,
+        "triangles": 96,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Glass_BlueGrey_Reflective",
+          "SKY_Glass_BlueGrey_Reflective_C",
+          "SKY_Glass_BlueGrey_Reflective_B"
+        ]
+      }
+    },
+    {
+      "name": "SKY_SideB_GroundBase_Glass",
+      "group": "Facade_Side_B",
+      "component": "glass_panels",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: dark base under the frame, partly hidden by trees and the boundary wall",
+      "mesh": {
+        "vertices": 54,
+        "faces": 14,
+        "triangles": 28,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Glass_DarkTint_B",
+          "SKY_Glass_DarkTint"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Annex_FirstFloor_Glass",
+      "group": "Podium",
+      "component": "glass_panels",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: two-storey block in front of the curtain wall, reaching about 40 px past the main block's right edge, with the second care / Clovia sign band on its parapet, pale glazing with white horizontal lines on the first floor and dark glazing on its left side. Its depth cannot be measured from a near-frontal view",
+      "mesh": {
+        "vertices": 31,
+        "faces": 8,
+        "triangles": 16,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Glass_BlueGrey_Reflective",
+          "SKY_Glass_BlueGrey_Reflective_C"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Annex_Ground_Glass",
+      "group": "Podium",
+      "component": "glass_panels",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: two-storey block in front of the curtain wall, reaching about 40 px past the main block's right edge, with the second care / Clovia sign band on its parapet, pale glazing with white horizontal lines on the first floor and dark glazing on its left side. Its depth cannot be measured from a near-frontal view",
+      "mesh": {
+        "vertices": 4,
+        "faces": 1,
+        "triangles": 2,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Glass_DarkTint"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Annex_Ground_Right_Glass",
+      "group": "Podium",
+      "component": "glass_panels",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: two-storey block in front of the curtain wall, reaching about 40 px past the main block's right edge, with the second care / Clovia sign band on its parapet, pale glazing with white horizontal lines on the first floor and dark glazing on its left side. Its depth cannot be measured from a near-frontal view",
+      "mesh": {
+        "vertices": 4,
+        "faces": 1,
+        "triangles": 2,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Glass_DarkTint"
+        ]
+      }
+    },
+    {
+      "name": "SKY_FrontA_CurtainWall_Mullions",
+      "group": "Facade_Front_A",
+      "component": "mullions",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: about 8 lit vertical bays and two glass rows per floor above the annex roof; slab lines about 70 px (4.5 m) apart",
+      "mesh": {
+        "vertices": 556,
+        "faces": 615,
+        "triangles": 1230,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_FrontA_DarkRecess_Mullions",
+      "group": "Facade_Front_A",
+      "component": "mullions",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: darker glazed strip, about 45 px wide, between the corner pier and the lit glass; whether it is a recess or the return of a projecting glass box cannot be told from one view",
+      "mesh": {
+        "vertices": 248,
+        "faces": 258,
+        "triangles": 516,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_SideB_TopRibbon_Mullions",
+      "group": "Facade_Side_B",
+      "component": "mullions",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: strip of four wide openings with white piers between them, just under the parapet; its sill reads about 20 m up, which is above the middle of the 4th floor, so it may be partly a roof-level screen. Not resolved from one photo.",
+      "mesh": {
+        "vertices": 48,
+        "faces": 36,
+        "triangles": 72,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Cladding_WhiteLightGrey"
+        ]
+      }
+    },
+    {
+      "name": "SKY_SideB_UpperGlazing_Mullions",
+      "group": "Facade_Side_B",
+      "component": "mullions",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: dark band between the frame's top edge and the white ledge",
+      "mesh": {
+        "vertices": 192,
+        "faces": 144,
+        "triangles": 288,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_SideB_FrameInfill_Mullions",
+      "group": "Facade_Side_B",
+      "component": "mullions",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: trapezoid frame; left edge vertical, right edge leaning toward the corner at the bottom. Corners read at (78,505) (215,510) (243,690) (78,640) px and converted with the perspective correction; expect 1 to 2 m of error along the facade and about 1 m in height",
+      "mesh": {
+        "vertices": 492,
+        "faces": 435,
+        "triangles": 870,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_SideB_SlantedGlazing_Mullions",
+      "group": "Facade_Side_B",
+      "component": "mullions",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: blue-grey glazing between the frame's leaning edge and the white panel pier reads as an inclined plane following that edge",
+      "mesh": {
+        "vertices": 348,
+        "faces": 323,
+        "triangles": 646,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_SideB_GroundBase_Mullions",
+      "group": "Facade_Side_B",
+      "component": "mullions",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: dark base under the frame, partly hidden by trees and the boundary wall",
+      "mesh": {
+        "vertices": 120,
+        "faces": 90,
+        "triangles": 180,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Annex_FirstFloor_Mullions",
+      "group": "Podium",
+      "component": "mullions",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: two-storey block in front of the curtain wall, reaching about 40 px past the main block's right edge, with the second care / Clovia sign band on its parapet, pale glazing with white horizontal lines on the first floor and dark glazing on its left side. Its depth cannot be measured from a near-frontal view",
+      "mesh": {
+        "vertices": 72,
+        "faces": 54,
+        "triangles": 108,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Annex_Ground_Mullions",
+      "group": "Podium",
+      "component": "mullions",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: two-storey block in front of the curtain wall, reaching about 40 px past the main block's right edge, with the second care / Clovia sign band on its parapet, pale glazing with white horizontal lines on the first floor and dark glazing on its left side. Its depth cannot be measured from a near-frontal view",
+      "mesh": {
+        "vertices": 16,
+        "faces": 12,
+        "triangles": 24,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Annex_Ground_Right_Mullions",
+      "group": "Podium",
+      "component": "mullions",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: two-storey block in front of the curtain wall, reaching about 40 px past the main block's right edge, with the second care / Clovia sign band on its parapet, pale glazing with white horizontal lines on the first floor and dark glazing on its left side. Its depth cannot be measured from a near-frontal view",
+      "mesh": {
+        "vertices": 16,
+        "faces": 12,
+        "triangles": 24,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_FrontA_CurtainWall_SlabEdgeBands",
+      "group": "Facade_Front_A",
+      "component": "slab_edge_bands",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: a darker horizontal band at every slab edge across the curtain wall",
+      "mesh": {
+        "vertices": 120,
+        "faces": 90,
+        "triangles": 180,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Glass_DarkTint",
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_FrontA_DarkRecess_SlabEdgeBands",
+      "group": "Facade_Front_A",
+      "component": "slab_edge_bands",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: a darker horizontal band at every slab edge across the curtain wall",
+      "mesh": {
+        "vertices": 120,
+        "faces": 90,
+        "triangles": 180,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Glass_DarkTint",
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_SideB_FrameInfill_SlabEdgeBands",
+      "group": "Facade_Side_B",
+      "component": "slab_edge_bands",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: a darker horizontal band at every slab edge across the curtain wall",
+      "mesh": {
+        "vertices": 48,
+        "faces": 36,
+        "triangles": 72,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Glass_DarkTint",
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_SideB_SlantedGlazing_SlabEdgeBands",
+      "group": "Facade_Side_B",
+      "component": "slab_edge_bands",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: a darker horizontal band at every slab edge across the curtain wall",
+      "mesh": {
+        "vertices": 72,
+        "faces": 54,
+        "triangles": 108,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Glass_DarkTint",
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_FrontA_ParapetBand",
+      "group": "Facade_Front_A",
+      "component": "parapet_band",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: thick white band above the curtain wall",
+      "mesh": {
+        "vertices": 128,
+        "faces": 96,
+        "triangles": 192,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Cladding_WhiteLightGrey",
+          "SKY_Joint_Shadow",
+          "SKY_Cladding_WhiteLightGrey_B"
+        ]
+      }
+    },
+    {
+      "name": "SKY_SideB_ParapetBand",
+      "group": "Facade_Side_B",
+      "component": "parapet_band",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: side B's parapet reads about 1 m lower than the corner pier's top",
+      "mesh": {
+        "vertices": 208,
+        "faces": 156,
+        "triangles": 312,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Cladding_WhiteLightGrey",
+          "SKY_Joint_Shadow",
+          "SKY_Cladding_WhiteLightGrey_B"
+        ]
+      }
+    },
+    {
+      "name": "SKY_SideB_Ledge_AboveFrame",
+      "group": "Facade_Side_B",
+      "component": "ledge_above_frame",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: white ledge above the frame, reading as a projecting canopy from the far end to just past the frame",
+      "mesh": {
+        "vertices": 136,
+        "faces": 102,
+        "triangles": 204,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Cladding_WhiteLightGrey",
+          "SKY_Joint_Shadow",
+          "SKY_Cladding_WhiteLightGrey_B"
+        ]
+      }
+    },
+    {
+      "name": "SKY_FrontA_CornerPier_Cladding",
+      "group": "Facade_Front_A",
+      "component": "corner_pier",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: 95 px of the 363 px front",
+      "mesh": {
+        "vertices": 832,
+        "faces": 624,
+        "triangles": 1248,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Cladding_WhiteLightGrey",
+          "SKY_Joint_Shadow",
+          "SKY_Cladding_WhiteLightGrey_B"
+        ]
+      }
+    },
+    {
+      "name": "SKY_FrontA_RightPier_Cladding",
+      "group": "Facade_Front_A",
+      "component": "right_pier",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: 38 px white pier at the right edge",
+      "mesh": {
+        "vertices": 424,
+        "faces": 318,
+        "triangles": 636,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Cladding_WhiteLightGrey",
+          "SKY_Joint_Shadow",
+          "SKY_Cladding_WhiteLightGrey_B"
+        ]
+      }
+    },
+    {
+      "name": "SKY_SideB_EndPier_Cladding",
+      "group": "Facade_Side_B",
+      "component": "end_pier",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: white column at the far left end",
+      "mesh": {
+        "vertices": 424,
+        "faces": 318,
+        "triangles": 636,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Cladding_WhiteLightGrey",
+          "SKY_Joint_Shadow",
+          "SKY_Cladding_WhiteLightGrey_B"
+        ]
+      }
+    },
+    {
+      "name": "SKY_SideB_PanelPier_Cladding",
+      "group": "Facade_Side_B",
+      "component": "panel_pier",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: white panel grid, about 40 px wide and full height, between the glazing and the brown strip",
+      "mesh": {
+        "vertices": 784,
+        "faces": 588,
+        "triangles": 1176,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Cladding_WhiteLightGrey",
+          "SKY_Joint_Shadow",
+          "SKY_Cladding_WhiteLightGrey_B"
+        ]
+      }
+    },
+    {
+      "name": "SKY_SideB_AccentStrip_Brown",
+      "group": "Facade_Side_B",
+      "component": "accent_strip",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: full-height dark brown strip at the corner, between the white panel pier on B and the corner pier on A",
+      "mesh": {
+        "vertices": 400,
+        "faces": 300,
+        "triangles": 600,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Accent_BrownPanel",
+          "SKY_Joint_Shadow",
+          "SKY_Accent_BrownPanel_B"
+        ]
+      }
+    },
+    {
+      "name": "SKY_SideB_Ground_Pilasters",
+      "group": "Facade_Side_B",
+      "component": "ground_pilasters",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: dark base under the frame, partly hidden by trees and the boundary wall",
+      "mesh": {
+        "vertices": 56,
+        "faces": 42,
+        "triangles": 84,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Accent_BrownPanel"
+        ]
+      }
+    },
+    {
+      "name": "SKY_SideB_Wall_Plane",
+      "group": "Facade_Side_B",
+      "component": "side_b_wall_plane",
+      "confidence": "low",
+      "observed": true,
+      "source": "Wall plane behind side B's features; visible only as narrow strips between them",
+      "mesh": {
+        "vertices": 8,
+        "faces": 6,
+        "triangles": 12,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Cladding_WhiteLightGrey"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Annex_Body",
+      "group": "Podium",
+      "component": "podium_body",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: two-storey block in front of the curtain wall, reaching about 40 px past the main block's right edge, with the second care / Clovia sign band on its parapet, pale glazing with white horizontal lines on the first floor and dark glazing on its left side. Its depth cannot be measured from a near-frontal view",
+      "mesh": {
+        "vertices": 74,
+        "faces": 60,
+        "triangles": 120,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Glass_DarkTint",
+          "SKY_Cladding_WhiteLightGrey",
+          "SKY_Roof_Membrane",
+          "SKY_Concrete"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Annex_Fascia_Cladding",
+      "group": "Podium",
+      "component": "podium_fascia",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: two-storey block in front of the curtain wall, reaching about 40 px past the main block's right edge, with the second care / Clovia sign band on its parapet, pale glazing with white horizontal lines on the first floor and dark glazing on its left side. Its depth cannot be measured from a near-frontal view",
+      "mesh": {
+        "vertices": 88,
+        "faces": 66,
+        "triangles": 132,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Cladding_WhiteLightGrey",
+          "SKY_Joint_Shadow",
+          "SKY_Cladding_WhiteLightGrey_B"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Annex_Louvres",
+      "group": "Podium",
+      "component": "podium_louvres",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: white horizontal lines across the podium's first-floor glazing",
+      "mesh": {
+        "vertices": 24,
+        "faces": 18,
+        "triangles": 36,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Cladding_WhiteLightGrey"
+        ]
+      }
+    },
+    {
+      "name": "SKY_SideB_AngularFrame",
+      "group": "Facade_Side_B",
+      "component": "angular_frame",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: trapezoid frame; left edge vertical, right edge leaning toward the corner at the bottom. Corners read at (78,505) (215,510) (243,690) (78,640) px and converted with the perspective correction; expect 1 to 2 m of error along the facade and about 1 m in height",
+      "mesh": {
+        "vertices": 416,
+        "faces": 318,
+        "triangles": 636,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Cladding_WhiteLightGrey",
+          "SKY_Joint_Shadow",
+          "SKY_Cladding_WhiteLightGrey_B"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Sign_care_pier_Panel",
+      "group": "Signage",
+      "component": "signage_panel",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: blue tile with 'care' and a yellow-green field reading 'HEALTH', top of the corner pier",
+      "mesh": {
+        "vertices": 12,
+        "faces": 11,
+        "triangles": 22,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Sign_1F6FA8",
+          "SKY_Sign_C9D64A"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Sign_care_pier_Mount",
+      "group": "Signage",
+      "component": "signage_mount",
+      "confidence": "low",
+      "observed": false,
+      "source": "Mounting assumed (standoff frame); the photograph shows the signs proud of the cladding but not how they are fixed",
+      "mesh": {
+        "vertices": 24,
+        "faces": 24,
+        "triangles": 48,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Sign_care_pier_Text1",
+      "group": "Signage",
+      "component": "signage_text",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: blue tile with 'care' and a yellow-green field reading 'HEALTH', top of the corner pier",
+      "mesh": {
+        "vertices": 1704,
+        "faces": 1270,
+        "triangles": 1696,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Sign_FFFFFF"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Sign_care_pier_Text2",
+      "group": "Signage",
+      "component": "signage_text",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: blue tile with 'care' and a yellow-green field reading 'HEALTH', top of the corner pier",
+      "mesh": {
+        "vertices": 244,
+        "faces": 163,
+        "triangles": 224,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Sign_3A3A3A"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Sign_clovia_pier_Panel",
+      "group": "Signage",
+      "component": "signage_panel",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: pink panel under the care sign",
+      "mesh": {
+        "vertices": 8,
+        "faces": 6,
+        "triangles": 12,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Sign_D6336C"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Sign_clovia_pier_Mount",
+      "group": "Signage",
+      "component": "signage_mount",
+      "confidence": "low",
+      "observed": false,
+      "source": "Mounting assumed (standoff frame); the photograph shows the signs proud of the cladding but not how they are fixed",
+      "mesh": {
+        "vertices": 24,
+        "faces": 24,
+        "triangles": 48,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Sign_clovia_pier_Text1",
+      "group": "Signage",
+      "component": "signage_text",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: pink panel under the care sign",
+      "mesh": {
+        "vertices": 1724,
+        "faces": 1273,
+        "triangles": 1704,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Sign_FFFFFF"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Sign_skymark_crown_Panel",
+      "group": "Signage",
+      "component": "signage_panel",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: wordmark with an orange star mark standing on the parapet above the curtain wall",
+      "mesh": {
+        "vertices": 8,
+        "faces": 6,
+        "triangles": 12,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Sign_F2F2F2"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Sign_skymark_crown_Mount",
+      "group": "Signage",
+      "component": "signage_mount",
+      "confidence": "low",
+      "observed": false,
+      "source": "Mounting assumed (standoff frame); the photograph shows the signs proud of the cladding but not how they are fixed",
+      "mesh": {
+        "vertices": 16,
+        "faces": 12,
+        "triangles": 24,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Sign_skymark_crown_Text1",
+      "group": "Signage",
+      "component": "signage_text",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: wordmark with an orange star mark standing on the parapet above the curtain wall",
+      "mesh": {
+        "vertices": 1992,
+        "faces": 1462,
+        "triangles": 1960,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Sign_3B3B3B"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Sign_skymark_crown_Mark",
+      "group": "Signage",
+      "component": "signage_mark",
+      "confidence": "medium",
+      "observed": true,
+      "source": "photo: wordmark with an orange star mark standing on the parapet above the curtain wall",
+      "mesh": {
+        "vertices": 32,
+        "faces": 24,
+        "triangles": 48,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Sign_EF7D22"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Sign_care_annex_Panel",
+      "group": "Signage",
+      "component": "signage_panel",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: yellow band with the care tile on the annex parapet",
+      "mesh": {
+        "vertices": 16,
+        "faces": 12,
+        "triangles": 24,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Sign_E6E05A",
+          "SKY_Sign_1F6FA8"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Sign_care_annex_Mount",
+      "group": "Signage",
+      "component": "signage_mount",
+      "confidence": "low",
+      "observed": false,
+      "source": "Mounting assumed (standoff frame); the photograph shows the signs proud of the cladding but not how they are fixed",
+      "mesh": {
+        "vertices": 24,
+        "faces": 24,
+        "triangles": 48,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Sign_care_annex_Text1",
+      "group": "Signage",
+      "component": "signage_text",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: yellow band with the care tile on the annex parapet",
+      "mesh": {
+        "vertices": 1704,
+        "faces": 1270,
+        "triangles": 1696,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Sign_FFFFFF"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Sign_care_annex_Text2",
+      "group": "Signage",
+      "component": "signage_text",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: yellow band with the care tile on the annex parapet",
+      "mesh": {
+        "vertices": 244,
+        "faces": 163,
+        "triangles": 224,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Sign_3A3A3A"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Sign_clovia_annex_Panel",
+      "group": "Signage",
+      "component": "signage_panel",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: pink panel at the right end of the annex sign band",
+      "mesh": {
+        "vertices": 8,
+        "faces": 6,
+        "triangles": 12,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Sign_D6336C"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Sign_clovia_annex_Mount",
+      "group": "Signage",
+      "component": "signage_mount",
+      "confidence": "low",
+      "observed": false,
+      "source": "Mounting assumed (standoff frame); the photograph shows the signs proud of the cladding but not how they are fixed",
+      "mesh": {
+        "vertices": 24,
+        "faces": 24,
+        "triangles": 48,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Dark_Mullion"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Sign_clovia_annex_Text1",
+      "group": "Signage",
+      "component": "signage_text",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: pink panel at the right end of the annex sign band",
+      "mesh": {
+        "vertices": 1724,
+        "faces": 1273,
+        "triangles": 1704,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Sign_FFFFFF"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Entrance_Porch",
+      "group": "Podium",
+      "component": "entrance_porch",
+      "confidence": "low",
+      "observed": false,
+      "source": "Inferred. The podium's ground floor is glazed and the drive leads to it, but the doors are hidden behind the palms in the photograph. A recessed glass porch with two pairs of doors, a canopy, steps and a ramp is modelled; confirm on site.",
+      "mesh": {
+        "vertices": 66,
+        "faces": 53,
+        "triangles": 106,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Concrete",
+          "SKY_Ground_Paving",
+          "SKY_Cladding_WhiteLightGrey",
+          "SKY_Interior_LightPanel"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Entrance_GlassScreen",
+      "group": "Podium",
+      "component": "entrance_doors",
+      "confidence": "low",
+      "observed": false,
+      "source": "Inferred. The podium's ground floor is glazed and the drive leads to it, but the doors are hidden behind the palms in the photograph. A recessed glass porch with two pairs of doors, a canopy, steps and a ramp is modelled; confirm on site.",
+      "mesh": {
+        "vertices": 176,
+        "faces": 132,
+        "triangles": 264,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Glass_BlueGrey_Reflective",
+          "SKY_Aluminium_Dark_Mullion",
+          "SKY_Aluminium_Frame"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Entrance_Canopy",
+      "group": "Podium",
+      "component": "entrance_canopy",
+      "confidence": "low",
+      "observed": false,
+      "source": "Inferred. The podium's ground floor is glazed and the drive leads to it, but the doors are hidden behind the palms in the photograph. A recessed glass porch with two pairs of doors, a canopy, steps and a ramp is modelled; confirm on site.",
+      "mesh": {
+        "vertices": 60,
+        "faces": 47,
+        "triangles": 94,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Dark_Mullion",
+          "SKY_Cladding_WhiteLightGrey",
+          "SKY_Aluminium_Frame",
+          "SKY_Interior_LightPanel"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Entrance_Steps_Ramp",
+      "group": "Podium",
+      "component": "entrance_steps_ramp",
+      "confidence": "low",
+      "observed": false,
+      "source": "Inferred. The podium's ground floor is glazed and the drive leads to it, but the doors are hidden behind the palms in the photograph. A recessed glass porch with two pairs of doors, a canopy, steps and a ramp is modelled; confirm on site.",
+      "mesh": {
+        "vertices": 114,
+        "faces": 90,
+        "triangles": 180,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Concrete",
+          "SKY_Kerb_Yellow",
+          "SKY_Aluminium_Frame"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Entrance_Name",
+      "group": "Podium",
+      "component": "entrance_name",
+      "confidence": "low",
+      "observed": false,
+      "source": "Inferred. The podium's ground floor is glazed and the drive leads to it, but the doors are hidden behind the palms in the photograph. A recessed glass porch with two pairs of doors, a canopy, steps and a ramp is modelled; confirm on site.",
+      "mesh": {
+        "vertices": 1164,
+        "faces": 841,
+        "triangles": 1132,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Sign_F3EFE6"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Interior_FrontA",
+      "group": "Interiors",
+      "component": "interior_fitout",
+      "confidence": "low",
+      "observed": false,
+      "source": "Lit offices behind the glass so it reads like the photo, where ceilings and lights show through. A typical open office (light panels, desks with screens) is assumed; the real layouts are not known.",
+      "mesh": {
+        "vertices": 4590,
+        "faces": 3540,
+        "triangles": 7080,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Interior_Carpet",
+          "SKY_Interior_Ceiling",
+          "SKY_Interior_CoreWall",
+          "SKY_Interior_LightPanel",
+          "SKY_Interior_Desk",
+          "SKY_Interior_Screen",
+          "SKY_Interior_Chair"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Interior_SideB",
+      "group": "Interiors",
+      "component": "interior_fitout",
+      "confidence": "low",
+      "observed": false,
+      "source": "Lit offices behind the glass so it reads like the photo, where ceilings and lights show through. A typical open office (light panels, desks with screens) is assumed; the real layouts are not known.",
+      "mesh": {
+        "vertices": 7636,
+        "faces": 5880,
+        "triangles": 11760,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Interior_Carpet",
+          "SKY_Interior_Ceiling",
+          "SKY_Interior_CoreWall",
+          "SKY_Interior_LightPanel",
+          "SKY_Interior_Desk",
+          "SKY_Interior_Screen",
+          "SKY_Interior_Chair"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Site_Paving",
+      "group": "Site",
+      "component": "site_paving",
+      "confidence": "low",
+      "observed": true,
+      "source": "developer: plot 2,940 sq m. Paving, wall, kerb, palms and trees are read from the photograph; their positions are approximate and the plot boundary is not surveyed.",
+      "mesh": {
+        "vertices": 16,
+        "faces": 12,
+        "triangles": 24,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Ground_Paving",
+          "SKY_Asphalt"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Site_Drive",
+      "group": "Site",
+      "component": "drive_and_path",
+      "confidence": "low",
+      "observed": false,
+      "source": "The photograph shows the boundary wall and the driveway kerbs (yellow and black) by the podium, but not the gate itself. A vehicle gate onto the drive, a pedestrian gate in line with the entrance and a guard cabin are what such a plot has; positions are assumed.",
+      "mesh": {
+        "vertices": 166,
+        "faces": 179,
+        "triangles": 358,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Asphalt",
+          "SKY_Kerb_Yellow",
+          "SKY_Kerb_Black",
+          "SKY_Ground_Paving",
+          "SKY_Road_Zebra"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Site_BoundaryWall",
+      "group": "Site",
+      "component": "boundary_wall",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: low wall along the road on side B and across the front; gates where the drive and the path cross it",
+      "mesh": {
+        "vertices": 62,
+        "faces": 48,
+        "triangles": 96,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Concrete",
+          "SKY_Cladding_WhiteLightGrey"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Site_Gate_Pillars",
+      "group": "Site",
+      "component": "gate_pillars",
+      "confidence": "low",
+      "observed": false,
+      "source": "The photograph shows the boundary wall and the driveway kerbs (yellow and black) by the podium, but not the gate itself. A vehicle gate onto the drive, a pedestrian gate in line with the entrance and a guard cabin are what such a plot has; positions are assumed.",
+      "mesh": {
+        "vertices": 96,
+        "faces": 72,
+        "triangles": 144,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Cladding_WhiteLightGrey",
+          "SKY_Aluminium_Dark_Mullion",
+          "SKY_Interior_LightPanel"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Site_Gate_Leaves",
+      "group": "Site",
+      "component": "gate_leaves",
+      "confidence": "low",
+      "observed": false,
+      "source": "The photograph shows the boundary wall and the driveway kerbs (yellow and black) by the podium, but not the gate itself. A vehicle gate onto the drive, a pedestrian gate in line with the entrance and a guard cabin are what such a plot has; positions are assumed.",
+      "mesh": {
+        "vertices": 768,
+        "faces": 576,
+        "triangles": 1152,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Aluminium_Frame",
+          "SKY_Charcoal_Panel"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Site_BoomBarrier",
+      "group": "Site",
+      "component": "boom_barrier",
+      "confidence": "low",
+      "observed": false,
+      "source": "The photograph shows the boundary wall and the driveway kerbs (yellow and black) by the podium, but not the gate itself. A vehicle gate onto the drive, a pedestrian gate in line with the entrance and a guard cabin are what such a plot has; positions are assumed.",
+      "mesh": {
+        "vertices": 44,
+        "faces": 47,
+        "triangles": 94,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Kerb_Yellow",
+          "SKY_Sign_D23C32",
+          "SKY_Cladding_WhiteLightGrey"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Site_GuardCabin",
+      "group": "Site",
+      "component": "guard_cabin",
+      "confidence": "low",
+      "observed": false,
+      "source": "The photograph shows the boundary wall and the driveway kerbs (yellow and black) by the podium, but not the gate itself. A vehicle gate onto the drive, a pedestrian gate in line with the entrance and a guard cabin are what such a plot has; positions are assumed.",
+      "mesh": {
+        "vertices": 116,
+        "faces": 102,
+        "triangles": 204,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Concrete",
+          "SKY_Cladding_WhiteLightGrey",
+          "SKY_Glass_DarkTint",
+          "SKY_Aluminium_Dark_Mullion",
+          "SKY_Charcoal_Panel",
+          "SKY_Interior_LightPanel"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Site_Footpath_Kerb",
+      "group": "Site",
+      "component": "footpath_kerb",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: yellow and black kerb along the road; photo: read from one oblique view; positions approximate",
+      "mesh": {
+        "vertices": 290,
+        "faces": 357,
+        "triangles": 714,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Concrete",
+          "SKY_Kerb_Yellow",
+          "SKY_Kerb_Black"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Site_Palm_1",
+      "group": "Site",
+      "component": "palm",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: palms in front of the front glazing; photo: read from one oblique view; positions approximate",
+      "mesh": {
+        "vertices": 68,
+        "faces": 27,
+        "triangles": 60,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Vegetation_Trunk",
+          "SKY_Vegetation_Leaf",
+          "SKY_Vegetation_Leaf_B"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Site_Palm_2",
+      "group": "Site",
+      "component": "palm",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: palms in front of the front glazing; photo: read from one oblique view; positions approximate",
+      "mesh": {
+        "vertices": 68,
+        "faces": 27,
+        "triangles": 60,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Vegetation_Trunk",
+          "SKY_Vegetation_Leaf",
+          "SKY_Vegetation_Leaf_B"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Site_Palm_3",
+      "group": "Site",
+      "component": "palm",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: palms in front of the front glazing; photo: read from one oblique view; positions approximate",
+      "mesh": {
+        "vertices": 68,
+        "faces": 27,
+        "triangles": 60,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Vegetation_Trunk",
+          "SKY_Vegetation_Leaf",
+          "SKY_Vegetation_Leaf_B"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Site_Tree_1",
+      "group": "Site",
+      "component": "tree",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: trees along side B's boundary; photo: read from one oblique view; positions approximate",
+      "mesh": {
+        "vertices": 98,
+        "faces": 169,
+        "triangles": 184,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Vegetation_Trunk",
+          "SKY_Vegetation_Leaf",
+          "SKY_Vegetation_Leaf_B"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Site_Tree_2",
+      "group": "Site",
+      "component": "tree",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: trees along side B's boundary; photo: read from one oblique view; positions approximate",
+      "mesh": {
+        "vertices": 98,
+        "faces": 169,
+        "triangles": 184,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Vegetation_Trunk",
+          "SKY_Vegetation_Leaf",
+          "SKY_Vegetation_Leaf_B"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Site_Tree_3",
+      "group": "Site",
+      "component": "tree",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: trees along side B's boundary; photo: read from one oblique view; positions approximate",
+      "mesh": {
+        "vertices": 98,
+        "faces": 169,
+        "triangles": 184,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Vegetation_Trunk",
+          "SKY_Vegetation_Leaf",
+          "SKY_Vegetation_Leaf_B"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Site_Tree_4",
+      "group": "Site",
+      "component": "tree",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: trees along side B's boundary; photo: read from one oblique view; positions approximate",
+      "mesh": {
+        "vertices": 98,
+        "faces": 169,
+        "triangles": 184,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Vegetation_Trunk",
+          "SKY_Vegetation_Leaf",
+          "SKY_Vegetation_Leaf_B"
+        ]
+      }
+    },
+    {
+      "name": "SKY_Site_Tree_5",
+      "group": "Site",
+      "component": "tree",
+      "confidence": "low",
+      "observed": true,
+      "source": "photo: trees along side B's boundary; photo: read from one oblique view; positions approximate",
+      "mesh": {
+        "vertices": 98,
+        "faces": 169,
+        "triangles": 184,
+        "uv_layers": [
+          "UVMap"
+        ],
+        "materials": [
+          "SKY_Vegetation_Trunk",
+          "SKY_Vegetation_Leaf",
+          "SKY_Vegetation_Leaf_B"
+        ]
+      }
+    }
+  ],
+  "confidence_summary": {
+    "low": 63,
+    "medium": 34
+  },
+  "unobserved_components": [
+    "SKY_Interior_Core",
+    "SKY_FacadeC_Rear_Unobserved",
+    "SKY_FacadeD_FarSide_Unobserved",
+    "SKY_Roof_Coping",
+    "SKY_Sign_care_pier_Mount",
+    "SKY_Sign_clovia_pier_Mount",
+    "SKY_Sign_skymark_crown_Mount",
+    "SKY_Sign_care_annex_Mount",
+    "SKY_Sign_clovia_annex_Mount",
+    "SKY_Entrance_Porch",
+    "SKY_Entrance_GlassScreen",
+    "SKY_Entrance_Canopy",
+    "SKY_Entrance_Steps_Ramp",
+    "SKY_Entrance_Name",
+    "SKY_Interior_FrontA",
+    "SKY_Interior_SideB",
+    "SKY_Site_Drive",
+    "SKY_Site_Gate_Pillars",
+    "SKY_Site_Gate_Leaves",
+    "SKY_Site_BoomBarrier",
+    "SKY_Site_GuardCabin"
+  ],
+  "photo_comparison": "The render from SKY_Cam_Reference_Photo (renders/01_reference_camera.jpg) was compared with the supplied photograph. The photograph could not be saved as a file in the build environment, so there is no pixel-difference image. Instead its landmark positions, read by eye on the 830 x 900 frame and good to about 10 px, are drawn on the render as dashed lines (renders/00_reference_comparison.jpg). Every landmark falls on the matching edge of the model to within about 5 px.",
+  "silhouette_match": [
+    {
+      "feature": "Corner between front and side (left edge of corner pier)",
+      "photo_px": "x 357",
+      "render_px": "x 357"
+    },
+    {
+      "feature": "Top of corner pier",
+      "photo_px": "y 360",
+      "render_px": "y 360"
+    },
+    {
+      "feature": "Base of corner pier",
+      "photo_px": "y about 760 (behind trees)",
+      "render_px": "y 760"
+    },
+    {
+      "feature": "Right edge of front elevation",
+      "photo_px": "x 718",
+      "render_px": "x 720"
+    },
+    {
+      "feature": "Far end of side elevation",
+      "photo_px": "x 48",
+      "render_px": "x 53"
+    },
+    {
+      "feature": "Podium sign band top",
+      "photo_px": "y 585",
+      "render_px": "y 587"
+    }
+  ],
+  "geometric_discrepancies": [
+    {
+      "item": "Placement on the ground",
+      "severity": "high",
+      "detail": "The published pin falls on open ground. The twin stands on the nearest large OpenStreetMap footprint's street corner (51 m south-west of the pin), front facing 326 degrees. That footprint is U-shaped and 52.5 m by 40.8 m, not the photo's 27.7 m by 44.7 m rectangle, so the identification is not certain. A satellite view settles it; the placement is one line in facade_parameters.json (map)."
+    },
+    {
+      "item": "Absolute size",
+      "severity": "high",
+      "detail": "No surveyed dimension exists. Height rests on G+4 (published) at an assumed 4.1 m per floor; width and length follow from the photo's proportions. Every length could be off by 10 to 15 percent together. One tape or laser measurement of the front width fixes the whole model."
+    },
+    {
+      "item": "Rear and far side",
+      "severity": "high",
+      "detail": "Not visible in the photograph. Modelled as plain cladding (SKY_Hidden_Rear_Massing, observed = false). Do not present these faces as the real building."
+    },
+    {
+      "item": "Side B top strip",
+      "severity": "medium",
+      "detail": "The photo shows four wide openings under the parapet whose sill reads higher than a 4th-floor window would sit. It may be partly a roof-level screen. Modelled as a glazed ribbon."
+    },
+    {
+      "item": "Angular frame position",
+      "severity": "medium",
+      "detail": "Shape and lean match. Position along the facade is good to 1 to 2 m and height to about 1 m, because side B is seen at a steep angle."
+    },
+    {
+      "item": "Inclined glazing beside the frame",
+      "severity": "medium",
+      "detail": "Reads as a plane tilted out at the bottom in the photo; the tilt (1.2 m) is a visual estimate."
+    },
+    {
+      "item": "Dark strip beside the corner pier on the front",
+      "severity": "medium",
+      "detail": "Modelled as a 0.5 m recess of dark glass. It could instead be the side return of a projecting glass box."
+    },
+    {
+      "item": "Annex depth and entrance",
+      "severity": "medium",
+      "detail": "The annex is seen nearly head-on, so its 8 m depth is a guess. The entrance doors are hidden behind palms in the photo; the entrance is inferred and tagged observed = false."
+    },
+    {
+      "item": "Ground floor on side B",
+      "severity": "low",
+      "detail": "Hidden by trees and the boundary wall. Modelled as dark glazing with brown pilasters."
+    },
+    {
+      "item": "Signage",
+      "severity": "low",
+      "detail": "Positions, sizes and colours follow the photo. Lettering is in Blender's default font, not the brands' artwork."
+    },
+    {
+      "item": "Surroundings",
+      "severity": "low",
+      "detail": "Trees, the road, neighbouring buildings and the rooftop equipment other than the mast are not modelled."
+    },
+    {
+      "item": "Glass tone",
+      "severity": "low",
+      "detail": "The render's glass is lighter than the photo's because it reflects a clear sky; the material values are the blue-grey read from the photo."
+    },
+    {
+      "item": "Surroundings (500 m)",
+      "severity": "medium",
+      "detail": "Footprints and roads are Overture Maps data. Heights are read from the 30 m Copernicus surface model within a range set by footprint size, so each one is an estimate. Facade textures are the Andheri world's painted styles, chosen per footprint, not photographs of these buildings. Trees are placed by rule in green areas, along roads and in open ground."
+    }
+  ],
+  "limitations": [
+    "No existing .blend was available, so there was nothing to audit beyond an empty scene; the reconstruction is new geometry in its own collection.",
+    "One photograph, one viewpoint. Nothing here is a measured survey.",
+    "The reference camera is a hand-solved visual match, not a calibrated camera."
+  ],
+  "files": {
+    "blend": "exports/fm_skymark_final.blend",
+    "glb": "exports/fm_skymark_atlas.glb",
+    "context_glb": "exports/fm_skymark_context_500m.glb",
+    "previous_model": "exports/fm_skymark_v1.blend"
+  }
+}
