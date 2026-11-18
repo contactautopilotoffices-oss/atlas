@@ -263,7 +263,9 @@ async function prepBake(root, manifest, base, { glassFor }) {
   root.traverse(o => {
     if (!o.isMesh) return; o.castShadow = true; o.receiveShadow = true;
     o.material = [].concat(o.material).map(m => {
-      if (/glass/i.test(m.name || '')) { o.renderOrder = 6; o.castShadow = false; return glassFor(m.name); }
+      // only RTP's own vision glass becomes see-through (its floors are behind it); the neighbours' curtain walls keep
+      // their baked, opaque look (ctxB_glass_curtain*), or they read as ghost boxes
+      if (/^(facade_glass|rail_glass)/.test(m.name || '')) { o.renderOrder = 6; o.castShadow = false; return glassFor(m.name); }
       if (m.userData && m.userData.polygonOffset || /road_marking/.test(m.name || '')) { m.polygonOffset = true; m.polygonOffsetFactor = -4; m.polygonOffsetUnits = -4; }
       return m; });
     if (o.material.length === 1) o.material = o.material[0];
