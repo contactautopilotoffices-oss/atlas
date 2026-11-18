@@ -32,7 +32,7 @@ Image: `rtp6-a_G0.png` (true north up). Numbers: `rtp6-a_G0.json`.
 | BOARD ROOM | 1 | 1 | 0 | **no** | CAD labels: none |
 | CABINS | 6 | 2 | 2 | yes | CAD labels: CABIN (41, 79), CABIN (15, 106) |
 | CEO CABIN | 1 | 1 | 0 | **no** | CAD labels: none |
-| WORKSTATION 4' X2' | 450 | 429 | 429 | yes | work seats (chair at a desk): 202 120-degree workstation, 189 4'x2' workstation, 36 4'x2' workstation (block, chair nested), 2 1050x600 workstation (block, chair nested) |
+| WORKSTATION 4' X2' | 450 | 429 | 429 | yes | work seats (chair at a desk): 237 120-degree workstation, 154 4'x2' workstation, 36 4'x2' workstation (block, chair nested), 2 1050x600 workstation (block, chair nested) |
 | TELEPHONE BOOTH | 0 | 1 | 1 | yes | CAD labels: TELEPHONE BOOTH (28, 80) |
 | REPRO | 1 | 2 | 6 | **no** | CAD labels: PRINTER (13, 80), REPRO AREA (13, 82), REPRO (27, 56), REPRO (16, 79), REPRO (17, 67), REPRO (17, 31) |
 | TRAINING ROOM | 1 | 1 | 2 | **no** | CAD labels: TRAINING ROOM (33, 22), TRAINING-STYLE ROOM (unlabelled) (34, 80) |
@@ -49,8 +49,8 @@ measured carpet = every closed room, open-plan zone and circulation polygon insi
 
 | Use | m2 | sq ft |
 |---|---:|---:|
-| work | 1,057 | 11,375 |
-| circulation | 982 | 10,569 |
+| work | 1,078 | 11,603 |
+| circulation | 961 | 10,341 |
 | core | 230 | 2,470 |
 | cafe | 216 | 2,320 |
 | service | 179 | 1,924 |
@@ -106,7 +106,7 @@ clear width = shortest chord through the point between walls, glass, columns, de
 |---|---|---:|---:|---:|---|
 | 1500 MM WIDE PASSAGE | (20, 77) | 1.50 | 2.94 | 3.31 | yes |
 | 1500 MM WIDE PASSAGE | (31, 77) | 1.50 | 1.91 | 2.52 | yes |
-| 1200 MM WIDE PASSAGE | (21, 57) | 1.20 | 1.79 | 2.88 | yes |
+| 1200 MM WIDE PASSAGE | (21, 57) | 1.20 | 1.79 | 2.59 | yes |
 | 1200 MM WIDE PASSAGE | (22, 31) | 1.20 | 2.48 | 2.63 | yes |
 | 1200 MM WIDE PASSAGE | (18, 20) | 1.20 | 1.95 | 1.95 | yes |
 | 1200 MM WIDE PASSAGE | (31, 26) | 1.20 | 3.23 | 3.77 | yes |
@@ -119,7 +119,7 @@ clear width = shortest chord through the point between walls, glass, columns, de
 | 1700 MM WIDE PASSAGE | (20, 87) | 1.70 | 2.49 | 3.05 | yes |
 | 1700 MM WIDE PASSAGE | (12, 87) | 1.70 | 2.51 | 4.87 | yes |
 
-Pinch points under 1.2 m found on circulation centrelines (door openings excluded): 22 of 534 sample points: 1.01 m at (36, 55); 0.94 m at (42, 55); 0.85 m at (42, 56); 0.85 m at (42, 55); 0.80 m at (12, 84); 0.87 m at (12, 84); 1.14 m at (12, 88); 1.17 m at (17, 21); 1.15 m at (12, 98); 0.60 m at (12, 100); 0.70 m at (39, 32); 0.70 m at (38, 32). Most are strips along the facade or beside a column, not walking routes; they are listed for the G1 check.
+Pinch points under 1.2 m found on circulation centrelines (door openings excluded): 21 of 502 sample points: 0.80 m at (42, 70); 0.85 m at (42, 56); 0.85 m at (42, 55); 0.80 m at (12, 84); 0.87 m at (12, 84); 1.14 m at (12, 88); 1.17 m at (17, 21); 1.20 m at (20, 18); 0.59 m at (12, 100); 0.70 m at (39, 32); 0.70 m at (38, 32); 0.70 m at (37, 32). Most are strips along the facade or beside a column, not walking routes; they are listed for the G1 check.
 
 ## Daylight by true facade
 

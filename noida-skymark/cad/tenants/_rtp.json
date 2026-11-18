@@ -210,5 +210,18 @@
  "site_label": "RELIABLE TECH PARK, AIROLI",
  "cabin_rooms": "CABIN",
  "door_arc_tol_m": 0.06,
- "door_from_arc_entity": true
+ "door_from_arc_entity": true,
+ "twin": {
+  "heights": {
+   "ceiling": 3.05,
+   "soffit": 3.35,
+   "floor_to_floor": 3.6,
+   "ffl_base_m": 0.6,
+   "source": "user instruction relayed by the advisor, 19 Nov 2026: 10 ft ceilings = 3.05 m clear to the false ceiling, soffit 3.35 m (11 ft), 3.6 m floor to floor, floor n at 0.6 + 3.6 n m above ground. Not in the drawings."
+  },
+  "table_layers": [
+   "FURN-TOA"
+  ],
+  "storeys": "about 8 floors plus roof drums (photos; not confirmed)"
+ }
 }

@@ -5,7 +5,7 @@ RECEPTION AND WAITING AREA,1,1,1,True,"CAD labels: RECEPTION & WAITING AREA (28,
 BOARD ROOM,1,1,1,True,"CAD labels: BOARD ROOM (135, 97)"
 CABINS,6,2,6,False,"CAD labels: CABIN (46, 83), CABIN (52, 111), CABIN (51, 108), CABIN (124, 107), CABIN (118, 108), CABIN (128, 107)"
 CEO CABIN,1,1,0,False,CAD labels: none
-WORKSTATION 4' X2',450,429,723,False,"work seats (chair at a desk): 389 4'x2' workstation, 298 120-degree workstation, 36 4'x2' workstation (block, chair nested)"
+WORKSTATION 4' X2',450,429,723,False,"work seats (chair at a desk): 402 120-degree workstation, 285 4'x2' workstation, 36 4'x2' workstation (block, chair nested)"
 TELEPHONE BOOTH,0,1,0,False,CAD labels: none
 REPRO,1,2,5,False,"CAD labels: REPRO (27, 56), REPRO (17, 67), REPRO (17, 31), REPRO (81, 84), REPRO (78, 83)"
 TRAINING ROOM,1,1,2,False,"CAD labels: TRAINING ROOM (33, 22), TRAINING ROOM (43, 92)"

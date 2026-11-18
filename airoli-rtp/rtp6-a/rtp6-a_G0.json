@@ -121,7 +121,7 @@
     "cad": 429,
     "matches_provided": true,
     "meets_required": false,
-    "cad_evidence": "work seats (chair at a desk): 202 120-degree workstation, 189 4'x2' workstation, 36 4'x2' workstation (block, chair nested), 2 1050x600 workstation (block, chair nested)"
+    "cad_evidence": "work seats (chair at a desk): 237 120-degree workstation, 154 4'x2' workstation, 36 4'x2' workstation (block, chair nested), 2 1050x600 workstation (block, chair nested)"
    },
    {
     "item": "TELEPHONE BOOTH",
@@ -237,8 +237,8 @@
  },
  "areas": {
   "by_kind_m2": {
-   "work": 1056.8,
-   "circulation": 981.9,
+   "work": 1078.0,
+   "circulation": 960.7,
    "core": 229.5,
    "cafe": 215.5,
    "service": 178.7,
@@ -754,12 +754,12 @@
     ],
     "label_m": 1.2,
     "measured_m": 1.79,
-    "desk_to_desk_m": 2.88,
+    "desk_to_desk_m": 2.59,
     "samples_m": [
      1.71,
      1.77,
-     2.28,
-     2.29,
+     2.11,
+     2.01,
      1.79
     ],
     "diff_mm": 587,
@@ -990,28 +990,20 @@
   "labels_checked": 14,
   "labels_at_least_as_wide": 12,
   "scan": {
-   "points": 534,
+   "points": 502,
    "under_1_2_m": [
     {
      "at": [
-      35.9,
-      55.3
+      41.6,
+      69.5
      ],
-     "width_m": 1.01,
-     "in": "Circulation 4"
+     "width_m": 0.8,
+     "in": "Circulation 3"
     },
     {
      "at": [
       42.1,
-      54.8
-     ],
-     "width_m": 0.94,
-     "in": "Circulation 4"
-    },
-    {
-     "at": [
-      42.1,
-      56.2
+      55.9
      ],
      "width_m": 0.85,
      "in": "Circulation 4"
@@ -1019,7 +1011,7 @@
     {
      "at": [
       42.1,
-      55.2
+      54.9
      ],
      "width_m": 0.85,
      "in": "Circulation 4"
@@ -1054,23 +1046,23 @@
       21.2
      ],
      "width_m": 1.17,
-     "in": "Circulation 8"
+     "in": "Circulation 7"
     },
     {
      "at": [
-      11.8,
-      98.2
+      20.1,
+      18.0
      ],
-     "width_m": 1.15,
-     "in": "Circulation 28"
+     "width_m": 1.2,
+     "in": "Circulation 7"
     },
     {
      "at": [
       12.0,
       100.4
      ],
-     "width_m": 0.6,
-     "in": "Circulation 28"
+     "width_m": 0.59,
+     "in": "Circulation 25"
     },
     {
      "at": [
@@ -1078,7 +1070,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 31"
+     "in": "Circulation 28"
     },
     {
      "at": [
@@ -1086,7 +1078,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 31"
+     "in": "Circulation 28"
     },
     {
      "at": [
@@ -1094,7 +1086,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 31"
+     "in": "Circulation 28"
     },
     {
      "at": [
@@ -1102,7 +1094,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 31"
+     "in": "Circulation 28"
     },
     {
      "at": [
@@ -1110,7 +1102,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 31"
+     "in": "Circulation 28"
     },
     {
      "at": [
@@ -1118,7 +1110,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 31"
+     "in": "Circulation 28"
     },
     {
      "at": [
@@ -1126,7 +1118,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 31"
+     "in": "Circulation 28"
     },
     {
      "at": [
@@ -1134,7 +1126,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 31"
+     "in": "Circulation 28"
     },
     {
      "at": [
@@ -1142,7 +1134,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 31"
+     "in": "Circulation 28"
     },
     {
      "at": [
@@ -1150,7 +1142,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 31"
+     "in": "Circulation 28"
     },
     {
      "at": [
@@ -1158,7 +1150,7 @@
       46.8
      ],
      "width_m": 1.0,
-     "in": "Circulation 37"
+     "in": "Circulation 34"
     },
     {
      "at": [
@@ -1166,10 +1158,10 @@
       45.8
      ],
      "width_m": 0.85,
-     "in": "Circulation 37"
+     "in": "Circulation 34"
     }
    ],
-   "n_under_1_2_m": 22
+   "n_under_1_2_m": 21
   }
  },
  "daylight": {

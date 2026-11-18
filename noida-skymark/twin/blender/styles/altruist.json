@@ -1,0 +1,455 @@
+{
+ "extends": "volt.json",
+ "tenant": "altruist",
+ "label": "Altruist (client) as its future office in Reliable Tech Park, Airoli, matched to five photos of its current Noida office (airoli-rtp/brand/): charcoal 600x1200 reception wall with the built, backlit logo; white reception desk with a royal-blue front; dark grey 600 tiles at reception, polished beige marble in the lobby; charcoal streaked carpet in the work halls; white desks, royal-blue fabric screens, kraft side screens, black mesh chairs; white walls, black skirting and columns; full-height glass in thin black frames with a frosted stripe band 0.9-1.8 m; 600 grid ceilings with 600 LED panels and square AC diffusers; olive fabric wall in cabins.",
+ "light": {
+  "lamp_k": 4000,
+  "cove_k": 3000,
+  "wb_k": 4200,
+  "downlight_w": 18,
+  "grey_target": 0.18,
+  "portals": true
+ },
+ "heights": {
+  "ceiling": 3.05,
+  "soffit": 3.35,
+  "slab": 0.25,
+  "source": "user instruction (via the advisor, 19 Nov 2026): 10 ft ceilings = 3.05 m clear, soffit 3.35 m, 3.6 m floor to floor"
+ },
+ "facade": {
+  "layers": [
+   "STRUCTURAL GLAZING",
+   "WINDOW"
+  ],
+  "by_position": true,
+  "sill": 0.05,
+  "head": 3.05,
+  "frame": "black_metal",
+  "blinds": false
+ },
+ "glass": {
+  "pane": "glass",
+  "frame": "black_metal",
+  "frost": "frost",
+  "top": 3.05,
+  "rail": "steel",
+  "frost_band": {
+   "pattern": "stripes",
+   "z": 0.9,
+   "stripes": 12,
+   "stripe_h": 0.05,
+   "gap": 0.025
+  }
+ },
+ "walls": {
+  "paint": "paint_white",
+  "skirting": "black_paint",
+  "column": "black_paint",
+  "soffit": "soffit_paint",
+  "slab": "concrete",
+  "stair": "paint_white"
+ },
+ "doors": {
+  "leaf": "white_top",
+  "glass_leaf": "glass",
+  "fire_leaf": "black_paint",
+  "frame": "black_metal",
+  "handle": "steel"
+ },
+ "room_kinds": [
+  {
+   "match": "shaft|duct|lift|stair|void|balcony|outdoor unit|working slab",
+   "kind": "core"
+  },
+  {
+   "match": "^reception",
+   "kind": "reception_main"
+  },
+  {
+   "match": "lobby|waiting",
+   "kind": "reception"
+  },
+  {
+   "match": "board|meeting|conference|interview|seater",
+   "kind": "meeting"
+  },
+  {
+   "match": "training|induction",
+   "kind": "training"
+  },
+  {
+   "match": "cabin",
+   "kind": "cabin"
+  },
+  {
+   "match": "work|open|call cent|admin|hr room",
+   "kind": "work"
+  },
+  {
+   "match": "toilet|toielt|washroom",
+   "kind": "wet"
+  },
+  {
+   "match": "cafeteria|pantry|kitchen|pot wash|counter",
+   "kind": "social"
+  },
+  {
+   "match": "ups|server|store|hub|locker|it room|repro|printer|umbrella|electrical",
+   "kind": "plant_room"
+  },
+  {
+   "match": "booth|phone",
+   "kind": "booth"
+  },
+  {
+   "match": "circulation|corridor|passage|unlabelled",
+   "kind": "circulation"
+  }
+ ],
+ "floors": {
+  "carpet": "carpet_charcoal",
+  "stone": "marble_beige",
+  "tile": "tile_darkgrey"
+ },
+ "floor_by_kind": {
+  "work": "carpet_charcoal",
+  "meeting": "carpet_charcoal",
+  "training": "carpet_charcoal",
+  "cabin": "carpet_charcoal",
+  "booth": "carpet_charcoal",
+  "reception_main": "tile_darkgrey",
+  "reception": "marble_beige",
+  "social": "tile_grey",
+  "wet": "tile_grey",
+  "plant_room": "vinyl",
+  "core": "tile_grey",
+  "circulation": "carpet_charcoal",
+  "corridor": "carpet_charcoal"
+ },
+ "aisle": {
+  "kinds": [],
+  "material": "carpet_charcoal",
+  "clear": 0.9
+ },
+ "ceilings": {
+  "default": {
+   "type": "grid",
+   "tile": "ceiling_tile",
+   "grid": "white_metal",
+   "ac_every": 4,
+   "ac": "white_metal",
+   "assumed_kind": "panel600",
+   "assumed_grid": 1.8
+  },
+  "kinds": {
+   "reception_main": {
+    "type": "plain",
+    "board": "gypsum",
+    "assumed_kind": "downlight",
+    "assumed_grid": 2.0
+   },
+   "wet": {
+    "type": "plain",
+    "board": "gypsum"
+   },
+   "plant_room": {
+    "type": "plain",
+    "board": "gypsum"
+   },
+   "core": {
+    "type": "plain",
+    "board": "gypsum"
+   },
+   "booth": {
+    "type": "plain",
+    "board": "gypsum"
+   },
+   "cabin": {
+    "type": "grid",
+    "tile": "ceiling_tile",
+    "grid": "white_metal",
+    "ac_every": 4,
+    "ac": "white_metal",
+    "assumed_kind": "panel600",
+    "assumed_grid": 1.8
+   }
+  },
+  "rooms": {}
+ },
+ "no_light_rooms": "UPS|Server|Shaft|Lift|Duct|Outdoor",
+ "furniture": {
+  "desk_top": "white_top",
+  "desk_frame": "white_metal",
+  "desk_screens": [
+   "screen_royal"
+  ],
+  "desk_side_screen": "kraft",
+  "monitor": "screen_glass",
+  "table_top": "white_top",
+  "table_base": "black_metal",
+  "chair_material": "mesh_black",
+  "sofa": [
+   "fabric_grey",
+   "fabric_grey"
+  ],
+  "tub": "fabric_grey",
+  "cafe": [
+   "plastic_white",
+   "plastic_royal"
+  ],
+  "cafe_legs": "steel",
+  "planter": "planter_white",
+  "planter_panel": "white_top",
+  "pot": "pot_white",
+  "desk_bank_light": null,
+  "clutter": true,
+  "reception_desk": {
+   "room": "^RECEPTION",
+   "material": "royal_blue",
+   "top": "white_top",
+   "height": 1.05,
+   "min_area_m2": 0.6
+  }
+ },
+ "logo": [
+  {
+   "room": "^RECEPTION",
+   "text": "altruist",
+   "material": "logo_marble",
+   "height": 0.3,
+   "z": 1.85,
+   "wall": "feature",
+   "depth": 0.04,
+   "standoff": 0.03,
+   "mark": {
+    "material": "logo_mark_blue",
+    "chevron": "logo_white"
+   },
+   "halo": {
+    "material": "logo_halo",
+    "pad": 0.05
+   }
+  },
+  {
+   "room": "^LOBBY$|^LOBBY \\(|^MAIN LOBBY",
+   "text": "altruist",
+   "material": "logo_marble",
+   "height": 0.26,
+   "z": 1.85,
+   "wall": "auto",
+   "depth": 0.04,
+   "standoff": 0.03,
+   "mark": {
+    "material": "logo_mark_blue",
+    "chevron": "logo_white"
+   },
+   "halo": {
+    "material": "logo_halo",
+    "pad": 0.05
+   }
+  }
+ ],
+ "feature_walls": [
+  {
+   "room": "^RECEPTION",
+   "side": "door",
+   "type": "panel",
+   "material": "panel_charcoal",
+   "z0": 0.0,
+   "z1": 3.05,
+   "width": 4.2,
+   "logo_wall": true
+  },
+  {
+   "kind": "cabin",
+   "side": "auto",
+   "type": "panel",
+   "material": "fabric_olive",
+   "z0": 0.1,
+   "z1": 2.7
+  }
+ ],
+ "materials": {
+  "carpet_charcoal": {
+   "kind": "carpet",
+   "colors": [
+    "#232427",
+    "#2c2d30",
+    "#36373b",
+    "#9a9ca1"
+   ],
+   "tile": [
+    0.6,
+    0.6
+   ],
+   "tile_tone": 0.05,
+   "rough": 0.95,
+   "sheen": 0.08
+  },
+  "tile_darkgrey": {
+   "kind": "tile",
+   "colors": [
+    "#4b4c4f",
+    "#56575a"
+   ],
+   "tile": [
+    0.6,
+    0.6
+   ],
+   "joint": 0.0015,
+   "joint_color": "#3c3c3e",
+   "rough": 0.55
+  },
+  "tile_grey": {
+   "kind": "tile",
+   "colors": [
+    "#9c9d9f",
+    "#a8a9ab"
+   ],
+   "tile": [
+    0.6,
+    0.6
+   ],
+   "joint": 0.0015,
+   "joint_color": "#7d7e80",
+   "rough": 0.4
+  },
+  "marble_beige": {
+   "kind": "stone",
+   "colors": [
+    "#cdb48d",
+    "#dccaa9",
+    "#e8dbc3",
+    "#b8915f"
+   ],
+   "tile": [
+    0.8,
+    0.8
+   ],
+   "rough": 0.1,
+   "coat": 0.5
+  },
+  "paint_white": {
+   "kind": "paint",
+   "color": "#f2f1ee",
+   "rough": 0.85
+  },
+  "black_paint": {
+   "kind": "paint",
+   "color": "#1c1c1e",
+   "rough": 0.6
+  },
+  "panel_charcoal": {
+   "kind": "tile",
+   "colors": [
+    "#222224",
+    "#29292b"
+   ],
+   "tile": [
+    0.6,
+    1.2
+   ],
+   "joint": 0.002,
+   "joint_color": "#101011",
+   "rough": 0.85
+  },
+  "royal_blue": {
+   "kind": "plastic",
+   "color": "#1d3cc2",
+   "rough": 0.4,
+   "coat": 0.2
+  },
+  "plastic_royal": {
+   "kind": "plastic",
+   "color": "#1d3cc2",
+   "rough": 0.45
+  },
+  "white_top": {
+   "kind": "plastic",
+   "color": "#f4f4f2",
+   "rough": 0.32,
+   "coat": 0.1
+  },
+  "screen_royal": {
+   "kind": "fabric",
+   "color": "#2442b0",
+   "rough": 0.9
+  },
+  "kraft": {
+   "kind": "fabric",
+   "color": "#b38657",
+   "rough": 0.9
+  },
+  "fabric_olive": {
+   "kind": "fabric",
+   "color": "#8FA04A",
+   "rough": 0.9
+  },
+  "fabric_grey": {
+   "kind": "fabric",
+   "color": "#8d8e90",
+   "rough": 0.9
+  },
+  "mesh_black": {
+   "kind": "fabric",
+   "color": "#141415",
+   "rough": 0.7,
+   "sheen": 0.2
+  },
+  "plastic_white": {
+   "kind": "plastic",
+   "color": "#f2f1ee",
+   "rough": 0.4
+  },
+  "pot_white": {
+   "kind": "plastic",
+   "color": "#eeede9",
+   "rough": 0.45
+  },
+  "logo_marble": {
+   "kind": "stone",
+   "colors": [
+    "#f5f5f3",
+    "#ebebe9",
+    "#d6d6d4",
+    "#b9b9b9"
+   ],
+   "tile": [
+    0.4,
+    0.4
+   ],
+   "tiles_per_texture": 1,
+   "rough": 0.25,
+   "coat": 0.3
+  },
+  "logo_mark_blue": {
+   "kind": "plastic",
+   "color": "#3ea6ea",
+   "rough": 0.35,
+   "coat": 0.3
+  },
+  "logo_white": {
+   "kind": "plastic",
+   "color": "#ffffff",
+   "rough": 0.4
+  },
+  "logo_halo": {
+   "kind": "emission",
+   "kelvin": 3000,
+   "strength": 6.0
+  },
+  "vinyl": {
+   "kind": "plain",
+   "color": "#a9a8a5",
+   "rough": 0.55
+  }
+ },
+ "brief_gaps": [
+  "airport benches (grey perforated metal) along the lobby glass: not built (no CAD block; the CAD's lobby seats are sofas)",
+  "smoke detectors and sprinkler heads in the grid ceilings: not built",
+  "warm LED strip under the reception counter: not built",
+  "two downlights over the logo: the reception's plain ceiling gets assumed downlights on a 2 m grid instead"
+ ],
+ "camera_skip": "Shaft|LIFT|Duct|Outdoor|Unlabelled|Circulation|STORE|BALCONY|SLAB",
+ "weld_max_faces": 4000
+}

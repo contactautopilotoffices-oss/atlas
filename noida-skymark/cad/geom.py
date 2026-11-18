@@ -145,9 +145,12 @@ def desk_shapes(d, F, specs):
             P = Polygon([F.m(*q) for q in r['p']])
             if ok(P, len(r['p']) - 1): got.append((P, sp['name'], 'closed polyline'))
         if sp.get('from_lines'):
-            segs = [LineString([F.m(*q) for q in r['p']]) for r in d if r['t'] == 'Line' and not r['ch'] and r['L'] in lay and F.inwin(r['p'][0])]
-            for P in polygonize(unary_union(segs)):
-                P = P.simplify(0.01)
+            # the line work is not noded (ends overshoot or stop short by a few mm), so close it by thickening every
+            # line and polyline 6 mm and taking the holes left between them, grown back by the same 6 mm
+            segs = [LineString([F.m(*q) for q in r['p']]) for r in d if r['t'] in ('Line', 'LwPolyline') and not r['ch'] and r['L'] in lay and F.inwin(r['p'][0]) and len(r['p']) > 1]
+            U = unary_union([g.buffer(0.006) for g in segs])
+            for h in (Polygon(h_) for g in getattr(U, 'geoms', [U]) for h_ in g.interiors):
+                P = h.buffer(0.006, join_style=2).simplify(0.01)
                 if ok(P, len(P.exterior.coords) - 1) and not any(g.centroid.distance(P.centroid) < 0.05 for g, _, _ in got):
                     got.append((P, sp['name'], 'closed by loose lines'))
         out += got

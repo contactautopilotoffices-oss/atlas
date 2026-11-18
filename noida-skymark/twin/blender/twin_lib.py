@@ -174,8 +174,8 @@ class Raster:
         self.X, self.Y = np.meshgrid(gx, gy)
         self.floor = np.zeros(self.X.shape, bool)
         for f in L["floor"]:
-            m = pip(self.X, self.Y, f["outer"])
-            for h in f["holes"]: m &= ~pip(self.X, self.Y, h)
+            m = self.pip_box(f["outer"])
+            for h in f["holes"]: m &= ~self.pip_box(h)
             self.floor |= m
         if L.get("atrium"): self.floor &= ~pip(self.X, self.Y, L["atrium"])
         rooms = L["rooms_all"]
@@ -187,8 +187,17 @@ class Raster:
             for i in range(len(p)): a += p[i][0] * p[(i + 1) % len(p)][1] - p[(i + 1) % len(p)][0] * p[i][1]
             areas.append(abs(a) / 2)
         for i in sorted(range(len(rooms)), key=lambda i: -areas[i]):
-            m = pip(self.X, self.Y, rooms[i]["poly"]) & self.floor; self.label[m] = i
+            m = self.pip_box(rooms[i]["poly"]) & self.floor; self.label[m] = i
         self.label[(self.label < 0) & self.floor] = len(rooms)
+    def pip_box(self, poly):
+        """pip() over the whole grid, evaluated only inside the polygon's bounding box (same cells, much faster on a
+        large plate: a 6,000 m2 floor is 27 million cells)."""
+        out = np.zeros(self.X.shape, bool)
+        xs = [p[0] for p in poly]; ys = [p[1] for p in poly]
+        j0, j1 = max(0, int((min(xs) - self.x0) / self.res) - 1), min(self.nx, int((max(xs) - self.x0) / self.res) + 2)
+        i0, i1 = max(0, int((min(ys) - self.y0) / self.res) - 1), min(self.ny, int((max(ys) - self.y0) / self.res) + 2)
+        if j1 > j0 and i1 > i0: out[i0:i1, j0:j1] = pip(self.X[i0:i1, j0:j1], self.Y[i0:i1, j0:j1], poly)
+        return out
     def ij(self, x, y):
         return int((y - self.y0) / self.res), int((x - self.x0) / self.res)
     def room_at(self, x, y):
@@ -420,6 +429,8 @@ class Materials:
 
 
 # ------------------------------------------------------------------ mesh building: one mesh per CAD block, many materials
+WELD_MAX_FACES = None        # set by build_floor.py from the style
+
 class MB:
     """Accumulates parts (each with its own material) and makes ONE mesh. Parts never share vertices, so weighted
     normals stay per part. UVs are box-projected in metres unless the part gives its own."""
@@ -485,6 +496,15 @@ class MB:
     def empty(self): return not self.f
     def build(self, name, normals=True):
         me = bpy.data.meshes.new(name); me.from_pydata(self.v, [], self.f); me.validate(clean_customdata=False); me.update()
+        if getattr(self, "weld", False) and WELD_MAX_FACES and len(self.f) > WELD_MAX_FACES:
+            self.weld = False          # opt-in cap (style 'weld_max_faces'): a huge grid stays a connected quad grid (no slivers, no
+                                       # cracks), because dissolving 100k quads is quadratic in Blender; the GLB export merges it anyway
+        if getattr(self, "weld", False):        # grid surfaces: dissolve the coplanar grid into a few big faces
+            for nm in self.names: me.materials.append(self.mats.get(nm))
+            if len(me.polygons) == len(self.fm): me.polygons.foreach_set("material_index", self.fm)
+            bm = bmesh.new(); bm.from_mesh(me)
+            bmesh.ops.dissolve_limit(bm, angle_limit=0.0017, use_dissolve_boundaries=False, verts=bm.verts[:], edges=bm.edges[:], delimit={"MATERIAL"})
+            bm.to_mesh(me); bm.free(); box_uv(me); return me
         for nm in self.names: me.materials.append(self.mats.get(nm))
         if len(me.polygons) == len(self.fm):
             me.polygons.foreach_set("material_index", self.fm); me.polygons.foreach_set("use_smooth", self.smooth)

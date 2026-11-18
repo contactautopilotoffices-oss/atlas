@@ -48,6 +48,7 @@ for g, spec in STYLE.get("options", {}).items():      # an option group not chos
         STYLE = deep_merge(STYLE, spec.get(spec["_default"], {})); STYLE.setdefault("_chosen", {})[g] = spec["_default"]
 LAYOUT = norm_layout(json.load(open(A.layout)))
 TIMER = Timer(OUT, TEN)
+TL.WELD_MAX_FACES = STYLE.get("weld_max_faces")
 def blend(stage): return os.path.join(OUT, f"{TEN}_{stage}.blend")
 
 
@@ -136,7 +137,7 @@ def stage_geometry():
     step("slab and floor finishes", sh.slab_and_floors)
     step("glass runs", sh.glass_runs); step("walls", sh.walls); step("cad closures", sh.closures); step("enclosure", sh.enclosure); step("atrium", sh.atrium)
     step("glazing", sh.glazing); step("doors", sh.doors); step("ceilings", sh.ceilings)
-    step("desks", fu.desks); step("tables", fu.tables); step("seats", fu.seats); step("plants", fu.plants)
+    step("desks", fu.desks); step("desk polygons", fu.desk_polys); step("tables", fu.tables); step("seats", fu.seats); step("plants", fu.plants)
     step("fixtures and stair", fu.fixtures); step("ceiling fixtures", fu.light_fixtures); step("bank lights", fu.bank_lights)
     bpy.context.view_layer.update()
     step("feature walls", fu.feature_walls); step("logo", fu.logo)

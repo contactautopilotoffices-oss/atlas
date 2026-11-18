@@ -6,7 +6,7 @@ Image: `rtp6-b_G0.png` (true north up). Numbers: `rtp6-b_G0.json`.
 ## Headline
 
 - **723 work seats, 985 seats in all.** Work (desk + chair) 723, Meeting 51, Training 51, Cafeteria 120, Reception, lounge, visitor 26, Cabin (desk chair + visitors) 14.
-- **Area:** measured carpet 5,630 m2 (60,604 sq ft) of free floor, 64,096 sq ft with the inner partitions; the sheet states no area for this plan.
+- **Area:** measured carpet 5,631 m2 (60,611 sq ft) of free floor, 64,096 sq ft with the inner partitions; the sheet states no area for this plan.
 - **Exits:** 9 exit stairs reached; 873 of 985 seats have two. Nearest exit: median 17 m, worst 34 m.
 - **Daylight:** 23 % of work seats within 6 m of a window.
 - **Flags:** 35 differences or open points (below).
@@ -34,7 +34,7 @@ _Option B has no legend of its own; it is compared with the Option A legend (sam
 | BOARD ROOM | 1 | 1 | 1 | yes | CAD labels: BOARD ROOM (135, 97) |
 | CABINS | 6 | 2 | 6 | **no** | CAD labels: CABIN (46, 83), CABIN (52, 111), CABIN (51, 108), CABIN (124, 107), CABIN (118, 108), CABIN (128, 107) |
 | CEO CABIN | 1 | 1 | 0 | **no** | CAD labels: none |
-| WORKSTATION 4' X2' | 450 | 429 | 723 | **no** | work seats (chair at a desk): 389 4'x2' workstation, 298 120-degree workstation, 36 4'x2' workstation (block, chair nested) |
+| WORKSTATION 4' X2' | 450 | 429 | 723 | **no** | work seats (chair at a desk): 402 120-degree workstation, 285 4'x2' workstation, 36 4'x2' workstation (block, chair nested) |
 | TELEPHONE BOOTH | 0 | 1 | 0 | **no** | CAD labels: none |
 | REPRO | 1 | 2 | 5 | **no** | CAD labels: REPRO (27, 56), REPRO (17, 67), REPRO (17, 31), REPRO (81, 84), REPRO (78, 83) |
 | TRAINING ROOM | 1 | 1 | 2 | **no** | CAD labels: TRAINING ROOM (33, 22), TRAINING ROOM (43, 92) |
@@ -51,10 +51,10 @@ measured carpet = every closed room, open-plan zone and circulation polygon insi
 
 | Use | m2 | sq ft |
 |---|---:|---:|
-| circulation | 2,890 | 31,102 |
-| work | 1,806 | 19,441 |
+| circulation | 2,821 | 30,361 |
+| work | 1,878 | 20,216 |
 | core | 364 | 3,914 |
-| service | 252 | 2,714 |
+| service | 250 | 2,689 |
 | cafe | 216 | 2,320 |
 | training | 98 | 1,053 |
 | wc | 97 | 1,040 |
@@ -63,7 +63,7 @@ measured carpet = every closed room, open-plan zone and circulation polygon insi
 | meeting | 63 | 682 |
 | reception | 42 | 448 |
 | lounge | 9 | 96 |
-| **Measured carpet, free floor (all but core)** | **5,630** | **60,604** |
+| **Measured carpet, free floor (all but core)** | **5,631** | **60,611** |
 | Measured carpet with inner partitions (gross less cores) | 5,955 | 64,096 |
 | Gross plate inside the offer | 6,318 | 68,010 |
 
@@ -111,7 +111,7 @@ clear width = shortest chord through the point between walls, glass, columns, de
 | 1200 MM WIDE PASSAGE | (18, 20) | 1.20 | 1.95 | 1.95 | yes |
 | 1200 MM WIDE PASSAGE | (31, 26) | 1.20 | 3.23 | 3.77 | yes |
 | 1200 MM WIDE PASSAGE | (18, 40) | 1.20 | 0.98 | 2.06 | **no** |
-| 1200 MM WIDE PASSAGE | (78, 83) | 1.20 | 3.18 | 3.35 | yes |
+| 1200 MM WIDE PASSAGE | (78, 83) | 1.20 | 2.94 | 2.94 | yes |
 | 1200 MM WIDE PASSAGE | (46, 86) | 1.20 | 1.6 | 1.6 | yes |
 | 1200 MM WIDE PASSAGE | (79, 97) | 1.20 | 1.36 | 1.12 | yes |
 | 1500 MM WIDE PASSAGE | (47, 97) | 1.50 | 4.43 | 4.0 | yes |
@@ -127,7 +127,7 @@ clear width = shortest chord through the point between walls, glass, columns, de
 | 1500 MM WIDE PASSAGE | (108, 105) | 1.50 | 3.09 | 3.5 | yes |
 | 1500 MM WIDE PASSAGE | (119, 105) | 1.50 | 2.8 | 3.4 | yes |
 
-Pinch points under 1.2 m found on circulation centrelines (door openings excluded): 34 of 1214 sample points: 0.64 m at (114, 108); 1.14 m at (121, 111); 0.85 m at (137, 102); 0.80 m at (120, 82); 1.08 m at (12, 79); 0.90 m at (12, 78); 1.09 m at (11, 77); 1.17 m at (11, 76); 0.86 m at (11, 74); 0.84 m at (12, 83); 1.10 m at (41, 106); 1.04 m at (42, 80). Most are strips along the facade or beside a column, not walking routes; they are listed for the G1 check.
+Pinch points under 1.2 m found on circulation centrelines (door openings excluded): 34 of 1186 sample points: 0.64 m at (114, 108); 1.14 m at (121, 111); 0.85 m at (137, 102); 0.80 m at (120, 82); 1.08 m at (12, 79); 0.90 m at (12, 78); 1.09 m at (11, 77); 1.17 m at (11, 76); 0.86 m at (11, 74); 0.84 m at (12, 83); 1.10 m at (41, 106); 1.17 m at (42, 80). Most are strips along the facade or beside a column, not walking routes; they are listed for the G1 check.
 
 ## Daylight by true facade
 
@@ -143,7 +143,7 @@ distance from each work seat to the nearest facade glass line on the plate edge;
 2. Legend '06/08 MEETING ROOM': sheet says 4 provided (2 required); the CAD shows 0. meeting rooms with 6-9 chairs: none
 3. Legend 'CABINS': sheet says 2 provided (6 required); the CAD shows 6. CAD labels: CABIN (46, 83), CABIN (52, 111), CABIN (51, 108), CABIN (124, 107), CABIN (118, 108), CABIN (128, 107)
 4. Legend 'CEO CABIN': sheet says 1 provided (1 required); the CAD shows 0. CAD labels: none
-5. Legend 'WORKSTATION 4' X2'': sheet says 429 provided (450 required); the CAD shows 723. work seats (chair at a desk): 389 4'x2' workstation, 298 120-degree workstation, 36 4'x2' workstation (block, chair nested)
+5. Legend 'WORKSTATION 4' X2'': sheet says 429 provided (450 required); the CAD shows 723. work seats (chair at a desk): 402 120-degree workstation, 285 4'x2' workstation, 36 4'x2' workstation (block, chair nested)
 6. Legend 'TELEPHONE BOOTH': sheet says 1 provided (0 required); the CAD shows 0. CAD labels: none
 7. Legend 'REPRO': sheet says 2 provided (1 required); the CAD shows 5. CAD labels: REPRO (27, 56), REPRO (17, 67), REPRO (17, 31), REPRO (81, 84), REPRO (78, 83)
 8. Legend 'TRAINING ROOM': sheet says 1 provided (1 required); the CAD shows 2. CAD labels: TRAINING ROOM (33, 22), TRAINING ROOM (43, 92)

@@ -129,7 +129,7 @@
     "cad": 723,
     "matches_provided": false,
     "meets_required": true,
-    "cad_evidence": "work seats (chair at a desk): 389 4'x2' workstation, 298 120-degree workstation, 36 4'x2' workstation (block, chair nested)"
+    "cad_evidence": "work seats (chair at a desk): 402 120-degree workstation, 285 4'x2' workstation, 36 4'x2' workstation (block, chair nested)"
    },
    {
     "item": "TELEPHONE BOOTH",
@@ -245,10 +245,10 @@
  },
  "areas": {
   "by_kind_m2": {
-   "circulation": 2889.5,
-   "work": 1806.1,
+   "circulation": 2820.6,
+   "work": 1878.1,
    "core": 363.6,
-   "service": 252.1,
+   "service": 249.8,
    "cafe": 215.5,
    "training": 97.8,
    "wc": 96.6,
@@ -258,8 +258,8 @@
    "reception": 41.6,
    "lounge": 8.9
   },
-  "measured_carpet_m2": 5630.3,
-  "measured_carpet_sqft": 60604,
+  "measured_carpet_m2": 5631.0,
+  "measured_carpet_sqft": 60611,
   "core_in_offer_m2": 363.6,
   "offer_gross_m2": 6318.3,
   "offer_gross_sqft": 68010,
@@ -766,16 +766,16 @@
      83.2
     ],
     "label_m": 1.2,
-    "measured_m": 3.18,
-    "desk_to_desk_m": 3.35,
+    "measured_m": 2.94,
+    "desk_to_desk_m": 2.94,
     "samples_m": [
-     3.34,
-     3.24,
-     3.18,
+     2.94,
+     2.94,
+     2.94,
      1.04,
      1.07
     ],
-    "diff_mm": 1982,
+    "diff_mm": 1743,
     "ok": false,
     "at_least_label": true
    },
@@ -1063,7 +1063,7 @@
   "labels_checked": 19,
   "labels_at_least_as_wide": 18,
   "scan": {
-   "points": 1214,
+   "points": 1186,
    "under_1_2_m": [
     {
      "at": [
@@ -1095,7 +1095,7 @@
       81.8
      ],
      "width_m": 0.8,
-     "in": "Circulation 5"
+     "in": "Circulation 6"
     },
     {
      "at": [
@@ -1155,16 +1155,16 @@
     },
     {
      "at": [
-      42.1,
-      79.9
+      42.0,
+      79.7
      ],
-     "width_m": 1.04,
+     "width_m": 1.17,
      "in": "Circulation 7"
     },
     {
      "at": [
       42.1,
-      56.2
+      56.1
      ],
      "width_m": 0.85,
      "in": "Circulation 7"
@@ -1172,7 +1172,7 @@
     {
      "at": [
       42.1,
-      55.2
+      55.1
      ],
      "width_m": 0.85,
      "in": "Circulation 7"
@@ -1183,7 +1183,7 @@
       110.7
      ],
      "width_m": 0.71,
-     "in": "Circulation 12"
+     "in": "Circulation 10"
     },
     {
      "at": [
@@ -1191,7 +1191,7 @@
       110.5
      ],
      "width_m": 1.15,
-     "in": "Circulation 13"
+     "in": "Circulation 11"
     },
     {
      "at": [
@@ -1199,7 +1199,7 @@
       109.0
      ],
      "width_m": 0.76,
-     "in": "Circulation 14"
+     "in": "Circulation 12"
     },
     {
      "at": [
@@ -1207,7 +1207,7 @@
       109.0
      ],
      "width_m": 1.11,
-     "in": "Circulation 14"
+     "in": "Circulation 12"
     },
     {
      "at": [
@@ -1215,7 +1215,7 @@
       83.5
      ],
      "width_m": 1.08,
-     "in": "Circulation 15"
+     "in": "Circulation 13"
     },
     {
      "at": [
@@ -1223,7 +1223,7 @@
       112.6
      ],
      "width_m": 0.86,
-     "in": "Circulation 30"
+     "in": "Circulation 21"
     },
     {
      "at": [
@@ -1231,7 +1231,7 @@
       21.2
      ],
      "width_m": 1.17,
-     "in": "Circulation 33"
+     "in": "Circulation 23"
     },
     {
      "at": [
@@ -1239,7 +1239,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 45"
+     "in": "Circulation 35"
     },
     {
      "at": [
@@ -1247,7 +1247,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 45"
+     "in": "Circulation 35"
     },
     {
      "at": [
@@ -1255,7 +1255,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 45"
+     "in": "Circulation 35"
     },
     {
      "at": [
@@ -1263,7 +1263,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 45"
+     "in": "Circulation 35"
     },
     {
      "at": [
@@ -1271,7 +1271,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 45"
+     "in": "Circulation 35"
     },
     {
      "at": [
@@ -1279,7 +1279,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 45"
+     "in": "Circulation 35"
     },
     {
      "at": [
@@ -1287,7 +1287,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 45"
+     "in": "Circulation 35"
     },
     {
      "at": [
@@ -1295,7 +1295,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 45"
+     "in": "Circulation 35"
     },
     {
      "at": [
@@ -1303,7 +1303,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 45"
+     "in": "Circulation 35"
     },
     {
      "at": [
@@ -1311,7 +1311,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 45"
+     "in": "Circulation 35"
     },
     {
      "at": [
@@ -1319,7 +1319,7 @@
       46.8
      ],
      "width_m": 1.0,
-     "in": "Circulation 50"
+     "in": "Circulation 40"
     },
     {
      "at": [
@@ -1327,7 +1327,7 @@
       45.8
      ],
      "width_m": 0.85,
-     "in": "Circulation 50"
+     "in": "Circulation 40"
     },
     {
      "at": [
@@ -1335,7 +1335,7 @@
       81.3
      ],
      "width_m": 1.06,
-     "in": "Circulation 51"
+     "in": "Circulation 41"
     }
    ],
    "n_under_1_2_m": 34
@@ -1386,7 +1386,7 @@
   "Legend '06/08 MEETING ROOM': sheet says 4 provided (2 required); the CAD shows 0. meeting rooms with 6-9 chairs: none",
   "Legend 'CABINS': sheet says 2 provided (6 required); the CAD shows 6. CAD labels: CABIN (46, 83), CABIN (52, 111), CABIN (51, 108), CABIN (124, 107), CABIN (118, 108), CABIN (128, 107)",
   "Legend 'CEO CABIN': sheet says 1 provided (1 required); the CAD shows 0. CAD labels: none",
-  "Legend 'WORKSTATION 4' X2'': sheet says 429 provided (450 required); the CAD shows 723. work seats (chair at a desk): 389 4'x2' workstation, 298 120-degree workstation, 36 4'x2' workstation (block, chair nested)",
+  "Legend 'WORKSTATION 4' X2'': sheet says 429 provided (450 required); the CAD shows 723. work seats (chair at a desk): 402 120-degree workstation, 285 4'x2' workstation, 36 4'x2' workstation (block, chair nested)",
   "Legend 'TELEPHONE BOOTH': sheet says 1 provided (0 required); the CAD shows 0. CAD labels: none",
   "Legend 'REPRO': sheet says 2 provided (1 required); the CAD shows 5. CAD labels: REPRO (27, 56), REPRO (17, 67), REPRO (17, 31), REPRO (81, 84), REPRO (78, 83)",
   "Legend 'TRAINING ROOM': sheet says 1 provided (1 required); the CAD shows 2. CAD labels: TRAINING ROOM (33, 22), TRAINING ROOM (43, 92)",

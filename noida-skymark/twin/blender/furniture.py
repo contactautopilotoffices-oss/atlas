@@ -45,6 +45,43 @@ class Furnisher:
                 rr = self.c.ras.room_at(cx, cy); rows.setdefault(rr["name"] if rr else "", []).append(d)
         self.rows = rows
 
+    def desk_polys(self):
+        """Desks the CAD draws as polygons (RTP's 120-degree workstations): the top follows the CAD outline exactly,
+        a modesty screen runs along the outer (back) edges, one monitor faces the chair. Identical shapes share one mesh."""
+        seats = [s for s in self.L["seats"] if SEAT_MAP.get(s["kind"], "chair") == "chair"]
+        screens = self.f("desk_screens", ["screen_white"]); side = self.f("desk_side_screen", None)
+        for i, d in enumerate(self.L.get("desk_polys", [])):
+            P = [tuple(p) for p in d["poly"]]; n = len(P); h = d.get("h", 0.75)
+            cx = sum(p[0] for p in P) / n; cy = sum(p[1] for p in P) / n
+            ch = min(seats, key=lambda s: math.hypot(s["x"] - cx, s["y"] - cy), default=None)
+            # local frame: x along the direction from the chair to the desk centroid, so identical desks get identical keys
+            ang = math.atan2(cy - ch["y"], cx - ch["x"]) if ch and math.hypot(ch["x"] - cx, ch["y"] - cy) < 1.5 else 0.0
+            ca, sa = math.cos(-ang), math.sin(-ang)
+            loc = [(round((x - cx) * ca - (y - cy) * sa, 2), round((x - cx) * sa + (y - cy) * ca, 2)) for x, y in P]
+            scr = screens[i % len(screens)]; key = ("deskpoly", tuple(loc), round(h, 3), scr)
+            def mk(loc=loc, h=h, scr=scr):
+                m = self.mb(); top = self.f("desk_top", "oak"); fr = self.f("desk_frame", "white_metal")
+                m.prism(loc, h - 0.025, h, top, bevel=0.004)
+                # back edges: the edges farthest from the chair side (local -x is the chair): a 380 mm fabric screen on each
+                for k in range(len(loc)):
+                    (x0, y0), (x1, y1) = loc[k], loc[(k + 1) % len(loc)]; L_ = math.hypot(x1 - x0, y1 - y0)
+                    if L_ < 0.45 or (x0 + x1) / 2 < 0.05: continue
+                    a_ = math.atan2(y1 - y0, x1 - x0); nx_, ny_ = math.sin(a_), -math.cos(a_)
+                    mx, my = (x0 + x1) / 2 - nx_ * 0.012, (y0 + y1) / 2 - ny_ * 0.012
+                    m.box(L_ - 0.03, 0.024, 0.38, T(mx, my, h) @ RZ(a_), scr, 0.006)
+                    m.box(0.024, 0.5, h - 0.03, T(mx, my, 0.0) @ RZ(a_ + math.pi / 2) @ T(0, 0, 0), side or fr, 0.004) if side else None
+                # legs: two panel legs under the top, square to the chair direction
+                for sy in (-1, 1): m.box(0.03, 0.42, h - 0.025, T(0.05, sy * 0.3, 0.0), fr, 0.004)
+                Mm = T(0.1, 0, h)
+                m.box(0.2, 0.17, 0.008, Mm @ RZ(math.pi / 2), "alu", 0.003); m.box(0.02, 0.11, 0.14, Mm @ T(0.03, 0, 0.008), "alu", 0.006)
+                m.box(0.012, 0.56, 0.33, Mm @ T(-0.004, 0, 0.195), self.f("monitor", "screen_glass"), 0.004); m.box(0.014, 0.565, 0.345, Mm @ T(0.012, 0, 0.19), "plastic_black", 0.006)
+                m.box(0.13, 0.42, 0.014, Mm @ T(-0.27, 0, 0), "plastic_black", 0.004)
+                return m.build("workstation_poly")
+            me = self.c.proto(key, mk)
+            self.R.put("DESK", d.get("block", "deskpoly"), me, T(cx, cy, 0) @ RZ(ang), props={"cad_kind": d.get("kind", "workstation")})
+            rr = self.c.ras.room_at(cx, cy)
+            if rr: getattr(self, "rows", {}).setdefault(rr["name"], [])
+
     def _desk(self, w, dp, h, scr, var):
         m = self.mb(); top = self.f("desk_top", "oak"); fr = self.f("desk_frame", "white_metal")
         m.box(w, dp, 0.025, T(0, 0, h - 0.025), top, 0.004)
@@ -357,6 +394,7 @@ class Furnisher:
                 self.R.put("LIGHT", "downlight", self.c.proto("downlight", mk), T(x, y, z), props={"assumed": int(l["assumed"]), "lamp": "spot", "lamp_z": -0.01, "room": l["room"]})
         for (r, spec, (cx, cy), zb, along_x) in self.c.extra_pendants:     # one slim linear pendant over a cove raft (meeting / board rooms)
             ln = spec.get("pendant_length", 1.8); drop = 0.6; z = zb - drop
+            if self.c.shell.ceiling_of.get(r["name"], {}).get("type") in ("open", "baffle"): drop = round(self.c.Hs - 0.003 - z, 3)     # hung from the soffit
             me = self.c.proto(("bank", "linear", ln, drop), lambda: self._bank("linear", ln, drop))
             self.R.put("LIGHT", "linearpendant", me, T(cx, cy, z) @ RZ(0 if along_x else math.pi / 2), props={"assumed": 1, "lamp": "none", "room": r["name"]})
 
@@ -452,19 +490,52 @@ class Furnisher:
             m = self.mb(); m.add([(-wd / 2, 0, -hgt / 2), (wd / 2, 0, -hgt / 2), (wd / 2, 0, hgt / 2), (-wd / 2, 0, hgt / 2)], [(0, 1, 2, 3)], "logo_image", None, False, [(0, 0), (1, 0), (1, 1), (0, 1)])
             me = m.build("logo")
             mode = "image"
+        elif lg.get("depth"):
+            # built letters (opt-in): text extruded to `depth`, an optional square mark tile on the left, and a thin
+            # emissive halo plate behind both (backlit letters: the halo is what lights the wall round them)
+            me, wd = self._logo_built(lg, hgt); mode = "built"
         else:
             cu = bpy.data.curves.new("logo_text", "FONT"); cu.body = lg.get("text", self.c.tenant.upper()); cu.size = hgt; cu.extrude = 0.006; cu.align_x = "CENTER"; cu.align_y = "CENTER"
             tmp = bpy.data.objects.new("tmp", cu); bpy.context.scene.collection.objects.link(tmp); bpy.context.view_layer.update()
             me = bpy.data.meshes.new_from_object(tmp.evaluated_get(bpy.context.evaluated_depsgraph_get())); bpy.data.objects.remove(tmp); bpy.data.curves.remove(cu)
             me.transform(Matrix.Rotation(math.pi / 2, 4, "X")); me.materials.clear(); me.materials.append(self.M.get(lg.get("material", "logo")))
             mode = "text"
-        M_ = Matrix.Translation(w["point"] + n * ((0.012 if mode == "text" else 0.005) + (w.get("thickness", 0.0) if fwall else 0.0)) + Vector((0, 0, z))) @ RZ(ang)
+        stand = {"text": 0.012, "image": 0.005, "built": lg.get("standoff", 0.03) + lg.get("depth", 0.04) / 2}[mode]
+        M_ = Matrix.Translation(w["point"] + n * (stand + (w.get("thickness", 0.0) if fwall else 0.0)) + Vector((0, 0, z))) @ RZ(ang)
         lo = self.R.put("LOGO", "tenantlogo", me, M_, props={"room": r["name"], "mode": mode})
         dg = bpy.context.evaluated_depsgraph_get(); pt = M_.translation + n * 0.05
         blocked = [d_ for d_ in (-0.6, 0.0, 0.6) if bpy.context.scene.ray_cast(dg, pt + t * d_, n, distance=2.0)[0]]
         lo["front_clear_2m"] = not blocked
         if blocked: print(f"logo in {r['name']}: something stands within 2 m in front of it (offsets {blocked})", flush=True)
         self.c.meta["log"].setdefault("logo", []).append({"room": r["name"], "mode": mode, "at": [round(v, 2) for v in w["point"]][:2]})
+
+    def _logo_built(self, lg, hgt):
+        dep = lg.get("depth", 0.04); m = self.mb(); parts = []
+        cu = bpy.data.curves.new("logo_text", "FONT"); cu.body = lg.get("text", self.c.tenant); cu.size = hgt * 1.3; cu.extrude = dep / 2; cu.align_x = "LEFT"; cu.align_y = "CENTER"
+        if lg.get("font") and os.path.exists(lg["font"]): cu.font = bpy.data.fonts.load(lg["font"], check_existing=True)
+        try: cu.body_format[0].use_bold = True
+        except Exception: pass
+        tmp = bpy.data.objects.new("tmp", cu); bpy.context.scene.collection.objects.link(tmp); bpy.context.view_layer.update()
+        tm = bpy.data.meshes.new_from_object(tmp.evaluated_get(bpy.context.evaluated_depsgraph_get())); bpy.data.objects.remove(tmp); bpy.data.curves.remove(cu)
+        xs = [v.co.x for v in tm.vertices] or [0, 1]; tw = max(xs) - min(xs); mark = lg.get("mark")
+        ms = hgt * 1.05 if mark else 0.0; gap = hgt * 0.18 if mark else 0.0; total = ms + gap + tw; x0 = -total / 2
+        tm.transform(Matrix.Translation((x0 + ms + gap - min(xs), 0, 0)))
+        tm.transform(Matrix.Rotation(math.pi / 2, 4, "X"))          # letters stand in the x-z plane, depth along -y (out of the wall)
+        tm.materials.clear(); tm.materials.append(self.M.get(lg.get("material", "logo")))
+        import bmesh as _bm
+        bm = _bm.new(); bm.from_mesh(tm); bpy.data.meshes.remove(tm)
+        m.add_bm(bm, lg.get("material", "logo")); bm.free()
+        if mark:                       # the square "A" tile: a 40 mm deep block with a white chevron raised 3 mm on its face
+            mx = x0 + ms / 2
+            m.box(ms, dep, ms, T(mx, 0, -ms / 2), mark.get("material", "logo_mark"), 0.003)
+            for s_ in (-1, 1):
+                L_ = ms * 0.62; a_ = math.radians(62) * s_
+                m.box(ms * 0.11, 0.004, L_, T(mx + s_ * ms * 0.15, -dep / 2 - 0.002, -ms * 0.02) @ Matrix.Rotation(a_, 4, "Y"), mark.get("chevron", "logo"), 0.0)
+        hl = lg.get("halo")
+        if hl:                         # warm emissive plate 4 mm thick, set back behind the letters, a little larger than them
+            pad = hl.get("pad", 0.05)
+            m.box(total + 2 * pad, 0.004, hgt * 1.5 + 2 * pad, T(0, dep / 2 + lg.get("standoff", 0.03) - 0.008, -(hgt * 1.5 + 2 * pad) / 2 + hgt * 0.08), hl.get("material", "logo_halo"), 0.0)
+        return m.build("logo_built"), total
 
     def feature_walls(self):
         for fw in self.S.get("feature_walls", []):

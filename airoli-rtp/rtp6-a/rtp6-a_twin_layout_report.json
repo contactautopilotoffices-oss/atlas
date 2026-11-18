@@ -1,0 +1,29 @@
+{
+ "offer": {
+  "area_m2": 3198.5,
+  "how": "offer outline",
+  "rooms": 119,
+  "walls": 31,
+  "glass": 235,
+  "doors": 46,
+  "seats": 661
+ },
+ "furniture": {
+  "desks_from_blocks": 38,
+  "desks_from_drawn_rectangles": 154,
+  "desk_polys_120deg": 202,
+  "tables": 63,
+  "tables_added": 63,
+  "chairs_turned_to_desk_or_table": 632
+ },
+ "frame": {
+  "rotation_deg": -91.004,
+  "plate_bounds_rtp_local": [
+   -56.2,
+   80.9,
+   48.1,
+   117.8
+  ],
+  "ffl_m": 22.200000000000003
+ }
+}

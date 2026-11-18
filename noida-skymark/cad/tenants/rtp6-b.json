@@ -230,5 +230,26 @@
    ],
    "why": "third round 4-seat table room beside the two labelled MEETING ROOM 04 PAX rooms; no label of its own in the CAD"
   }
- ]
+ ],
+ "twin": {
+  "heights": {
+   "ceiling": 3.05,
+   "soffit": 3.35,
+   "floor_to_floor": 3.6,
+   "ffl_base_m": 0.6,
+   "source": "user instruction relayed by the advisor, 19 Nov 2026: 10 ft ceilings = 3.05 m clear to the false ceiling, soffit 3.35 m (11 ft), 3.6 m floor to floor, floor n at 0.6 + 3.6 n m above ground. Not in the drawings."
+  },
+  "table_layers": [
+   "FURN-TOA"
+  ],
+  "storeys": "about 8 floors plus roof drums (photos; not confirmed)",
+  "level": 6,
+  "table_blocks": [
+   "U7",
+   "Reception Table - Reception Table 6_ 0-442-Level 1",
+   "Corner Table - Corner Table 1_ 6_ X 1_ 6_ X 1_ 4__1-208-Level 1",
+   "R",
+   "AR-FURN-SNOOKER"
+  ]
+ }
 }
