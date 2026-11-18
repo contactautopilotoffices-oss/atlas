@@ -52,6 +52,11 @@
    "option": null
   },
   {
+   "camera": "rtp6-a_CAM_meeting-room-1_inside",
+   "src": "models/rtp6-a/stills/rtp6-a_meeting-room-1_inside.jpg",
+   "option": null
+  },
+  {
    "camera": "rtp6-a_CAM_training-room_entry",
    "src": "models/rtp6-a/stills/rtp6-a_training-room_entry.jpg",
    "option": null
