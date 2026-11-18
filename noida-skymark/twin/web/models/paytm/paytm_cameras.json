@@ -24,16 +24,16 @@
    {
     "kind": "feature",
     "position": [
-     34.505,
+     38.704,
      1.55,
-     -10.767
+     -14.092
     ],
     "target": [
-     34.917,
-     1.116,
-     -15.713
+     35.674,
+     1.281,
+     -14.592
     ],
-    "hfov_deg": 75,
+    "hfov_deg": 78,
     "room": "WORKSTATION - 71 NOS (3'0\"X1'7\")",
     "label": "Workstation - 71 Nos (3'0\"X1'7\"): feature",
     "name": "paytm_CAM_workstation-71-nos-3-0-x1-7_feature",
@@ -82,14 +82,14 @@
    {
     "kind": "entry",
     "position": [
-     19.715,
+     13.773,
      1.55,
-     -17.057
+     -21.643
     ],
     "target": [
-     20.589,
-     0.939,
-     -23.986
+     23.727,
+     0.678,
+     -22.035
     ],
     "hfov_deg": 72,
     "room": "WORKSTATION - 173 NOS (3'0\" X1'7\")",
@@ -100,14 +100,14 @@
    {
     "kind": "feature",
     "position": [
-     19.455,
+     18.705,
      1.55,
-     -20.191
+     -21.816
     ],
     "target": [
-     18.755,
-     1.228,
-     -23.81
+     18.859,
+     0.925,
+     -28.964
     ],
     "hfov_deg": 72,
     "room": "WORKSTATION - 173 NOS (3'0\" X1'7\")",
@@ -118,14 +118,14 @@
    {
     "kind": "reverse",
     "position": [
-     19.979,
+     19.68,
      1.55,
-     -32.292
+     -30.542
     ],
     "target": [
-     18.867,
-     1.036,
-     -26.526
+     19.704,
+     0.678,
+     -20.58
     ],
     "hfov_deg": 72,
     "room": "WORKSTATION - 173 NOS (3'0\" X1'7\")",
@@ -174,13 +174,13 @@
    {
     "kind": "feature",
     "position": [
-     9.83,
+     9.88,
      1.55,
-     -13.517
+     -13.542
     ],
     "target": [
-     4.995,
-     0.581,
+     4.973,
+     0.82,
      -16.127
     ],
     "hfov_deg": 72,
@@ -192,16 +192,16 @@
    {
     "kind": "reverse",
     "position": [
-     7.129,
+     12.104,
      1.55,
-     -14.941
+     -16.191
     ],
     "target": [
-     12.132,
-     0.301,
-     -9.927
+     10.225,
+     0.89,
+     -12.952
     ],
-    "hfov_deg": 72,
+    "hfov_deg": 75,
     "room": "RECEPTION/ WAITING AREA",
     "label": "Reception/ Waiting Area: reverse",
     "name": "paytm_CAM_reception-waiting-area_reverse",
@@ -248,14 +248,14 @@
    {
     "kind": "feature",
     "position": [
-     17.354,
+     16.979,
      1.55,
-     -15.292
+     -14.991
     ],
     "target": [
      12.624,
-     1.086,
-     -12.889
+     0.915,
+     -12.923
     ],
     "hfov_deg": 72,
     "room": "LOUNGE AREA",
@@ -266,16 +266,16 @@
    {
     "kind": "reverse",
     "position": [
-     18.904,
+     18.979,
      1.55,
-     -7.692
+     -7.766
     ],
     "target": [
-     19.093,
-     1.214,
+     19.145,
+     1.228,
      -9.587
     ],
-    "hfov_deg": 72,
+    "hfov_deg": 78,
     "room": "LOUNGE AREA",
     "label": "Lounge Area: reverse",
     "name": "paytm_CAM_lounge-area_reverse",
@@ -360,14 +360,14 @@
    {
     "kind": "feature",
     "position": [
-     10.179,
+     10.255,
      1.55,
-     -30.341
+     -30.642
     ],
     "target": [
-     4.054,
-     0.451,
-     -29.203
+     4.079,
+     0.958,
+     -27.872
     ],
     "hfov_deg": 72,
     "room": "GENTS TOILET-01",
@@ -416,16 +416,16 @@
    {
     "kind": "feature",
     "position": [
-     4.305,
+     10.255,
      1.55,
-     -25.191
+     -24.992
     ],
     "target": [
-     9.445,
-     0.846,
-     -26.653
+     4.054,
+     0.724,
+     -25.932
     ],
-    "hfov_deg": 72,
+    "hfov_deg": 75,
     "room": "LADIES TOILET-01",
     "label": "Ladies Toilet-01: feature",
     "name": "paytm_CAM_ladies-toilet-01_feature",
@@ -592,14 +592,14 @@
    {
     "kind": "feature",
     "position": [
-     21.055,
+     21.279,
      1.55,
      -5.417
     ],
     "target": [
      23.707,
-     0.645,
-     -11.762
+     0.634,
+     -11.935
     ],
     "hfov_deg": 75,
     "room": "16 SEATER CONFERENCE ROOM",
@@ -726,38 +726,20 @@
    {
     "kind": "feature",
     "position": [
-     43.204,
+     43.055,
      1.55,
-     -7.667
+     -7.792
     ],
     "target": [
      44.745,
-     1.261,
-     -8.229
+     1.237,
+     -8.341
     ],
     "hfov_deg": 72,
     "room": "GENTS WASHROOM",
     "label": "Gents Washroom: feature",
     "name": "paytm_CAM_gents-washroom_feature",
     "still": "stills/paytm_CAM_gents-washroom_feature.png"
-   },
-   {
-    "kind": "reverse",
-    "position": [
-     46.505,
-     1.55,
-     -7.692
-    ],
-    "target": [
-     44.968,
-     1.188,
-     -9.052
-    ],
-    "hfov_deg": 72,
-    "room": "GENTS WASHROOM",
-    "label": "Gents Washroom: reverse",
-    "name": "paytm_CAM_gents-washroom_reverse",
-    "still": "stills/paytm_CAM_gents-washroom_reverse.png"
    }
   ],
   "WET PANTRY": [
@@ -864,14 +846,14 @@
    {
     "kind": "entry",
     "position": [
-     55.697,
+     55.908,
      1.55,
-     -11.908
+     -12.164
     ],
     "target": [
      50.434,
-     1.073,
-     -13.335
+     0.811,
+     -13.397
     ],
     "hfov_deg": 72,
     "room": "RECEPTION",
@@ -882,16 +864,16 @@
    {
     "kind": "feature",
     "position": [
-     54.729,
+     54.279,
      1.55,
-     -13.842
+     -14.017
     ],
     "target": [
      50.454,
-     0.906,
-     -11.469
+     0.945,
+     -11.47
     ],
-    "hfov_deg": 75,
+    "hfov_deg": 78,
     "room": "RECEPTION",
     "label": "Reception: feature",
     "name": "paytm_CAM_reception_feature",
