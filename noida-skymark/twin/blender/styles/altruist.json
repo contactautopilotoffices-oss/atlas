@@ -217,7 +217,18 @@
    "cabin chair": "chair",
    "work chair": "chair"
   },
-  "screen_inset": 0.003
+  "screen_inset": 0.003,
+  "chair_parts": [
+   {
+    "z_below": 0.13,
+    "material": "chrome"
+   },
+   {
+    "z_below": 0.42,
+    "r_below": 0.12,
+    "material": "chrome"
+   }
+  ]
  },
  "logo": [
   {
@@ -236,7 +247,8 @@
    "halo": {
     "material": "logo_halo",
     "pad": 0.05
-   }
+   },
+   "downlights": true
   },
   {
    "room": "^LOBBY$|^LOBBY \\(|^MAIN LOBBY",
@@ -254,7 +266,8 @@
    "halo": {
     "material": "logo_halo",
     "pad": 0.05
-   }
+   },
+   "downlights": true
   }
  ],
  "feature_walls": [
@@ -281,16 +294,23 @@
   "carpet_charcoal": {
    "kind": "carpet",
    "colors": [
-    "#232427",
-    "#2c2d30",
-    "#36373b",
-    "#9a9ca1"
+    "#2e3135",
+    "#3a3d42",
+    "#4a4d52",
+    "#8d9095"
    ],
    "tile": [
     0.6,
     0.6
    ],
-   "tile_tone": 0.05,
+   "tiles_per_texture": 4,
+   "tile_tone": 0.02,
+   "streak_threshold": 0.62,
+   "streak_amp": 0.55,
+   "streak_gamma": 1.6,
+   "fine_amp": 0.1,
+   "blot_amp": 0.03,
+   "seam_depth": 0.035,
    "rough": 0.95,
    "sheen": 0.08
   },
@@ -380,29 +400,72 @@
   },
   "screen_royal": {
    "kind": "fabric",
-   "color": "#2442b0",
-   "rough": 0.9
+   "colors": [
+    "#1c3389",
+    "#2442b0",
+    "#2a4dcf"
+   ],
+   "weave": true,
+   "thread": 0.0015,
+   "period": 0.2,
+   "rough": 0.85,
+   "sheen": 0.3
   },
   "kraft": {
    "kind": "fabric",
-   "color": "#b38657",
-   "rough": 0.9
+   "colors": [
+    "#8b6843",
+    "#b38657",
+    "#d39e66"
+   ],
+   "weave": true,
+   "thread": 0.0015,
+   "period": 0.2,
+   "rough": 0.85,
+   "sheen": 0.3
   },
   "fabric_olive": {
    "kind": "fabric",
-   "color": "#8FA04A",
-   "rough": 0.9
+   "colors": [
+    "#6f7c39",
+    "#8FA04A",
+    "#a8bc57"
+   ],
+   "weave": true,
+   "thread": 0.0015,
+   "period": 0.2,
+   "rough": 0.85,
+   "sheen": 0.3
   },
   "fabric_grey": {
    "kind": "fabric",
-   "color": "#8d8e90",
-   "rough": 0.9
+   "colors": [
+    "#555657",
+    "#8a8b8d",
+    "#acadb0"
+   ],
+   "weave": true,
+   "thread": 0.003,
+   "period": 0.2,
+   "rough": 0.85,
+   "sheen": 0.3,
+   "weave_amp": 0.3,
+   "slub_amp": 0.4,
+   "mottle_amp": 0.25,
+   "bump": 0.6
   },
   "mesh_black": {
    "kind": "fabric",
-   "color": "#141415",
-   "rough": 0.7,
-   "sheen": 0.2
+   "colors": [
+    "#121214",
+    "#18181a",
+    "#1c1c1e"
+   ],
+   "weave": true,
+   "thread": 0.0025,
+   "period": 0.2,
+   "rough": 0.6,
+   "sheen": 0.3
   },
   "plastic_white": {
    "kind": "plastic",
@@ -450,6 +513,11 @@
    "kind": "plain",
    "color": "#a9a8a5",
    "rough": 0.55
+  },
+  "chrome": {
+   "kind": "metal",
+   "color": "#d9dbdd",
+   "rough": 0.12
   }
  },
  "brief_gaps": [
@@ -466,5 +534,7 @@
  ],
  "drop_unceiled_lights": true,
  "route_clearance_penalty": 40,
- "closure_offsets": true
+ "closure_offsets": true,
+ "floor_close_m": 0.5,
+ "floor_exact_rooms": "RECEPTION"
 }

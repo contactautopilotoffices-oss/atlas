@@ -31,7 +31,7 @@ ap.add_argument("--preview-samples", type=int, default=32); ap.add_argument("--c
 ap.add_argument("--stills-samples", type=int, default=128); ap.add_argument("--stills-res", default="1920x1080")
 ap.add_argument("--stills-max", type=int, default=0, help="at most this many stills (0 = every camera)")
 ap.add_argument("--stills-kinds", default="entry,feature,reverse,detail"); ap.add_argument("--rooms", default="", help="regex: only rooms whose name matches (cameras, stills, bake)")
-ap.add_argument("--bake-res", type=int, default=2048); ap.add_argument("--bake-samples", type=int, default=256); ap.add_argument("--bake-texel", type=float, default=0.025)
+ap.add_argument("--bake-res", type=int, default=2048); ap.add_argument("--bake-samples", type=int, default=256); ap.add_argument("--bake-texel", type=float, default=0.025); ap.add_argument("--bake-texel-by", default=""); ap.add_argument("--bake-pad-px", type=int, default=0)
 ap.add_argument("--allow-placement-issues", action="store_true"); ap.add_argument("--no-nudge", action="store_true")
 ap.add_argument("--exposure-ev", type=float, default=None, help="light stage: use this exposure (and this daylight scale, see --daylight-scale) instead of measuring; for option renders that must match the main set")
 ap.add_argument("--daylight-scale", type=float, default=None); ap.add_argument("--window-stops", type=float, default=3.0)

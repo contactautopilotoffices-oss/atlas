@@ -210,18 +210,30 @@ class Furnisher:
             me = o.data.copy(); me.transform(o.matrix_world)
             bm = bmesh.new(); bm.from_mesh(me)
             uvl = bm.loops.layers.uv.active
+            parts = self.F.get("chair_parts") if (override and override == self.F.get("chair_material") and path.endswith("chair.glb")) else None
             for mi, mat in enumerate(o.data.materials):
                 mname = override or f"model_{mat.name}"
                 if not override and mname not in self.M.cache: self.M.cache[mname] = mat; mat.name = mname
                 faces = [f for f in bm.faces if f.material_index == mi]
-                if not faces: continue
-                vs = {}; verts = []; fl = []; uvs = []
-                for f in faces:
-                    idx = []
-                    for lp in f.loops:
-                        verts.append(tuple(lp.vert.co)); idx.append(len(verts) - 1); uvs.append(tuple(lp[uvl].uv) if uvl else (0, 0))
-                    fl.append(tuple(idx))
-                m.add(verts, fl, mname, None, True, uvs)
+                if parts:         # opt-in: parts of a one-material chair by position (star base, castors, gas lift in chrome)
+                    zs_ = [v.co.z for v in bm.verts]; zmin, zmax = min(zs_), max(zs_); H_ = max(1e-6, zmax - zmin)
+                    xs_ = [v.co.x for v in bm.verts]; ys_ = [v.co.y for v in bm.verts]; cx_, cy_ = (min(xs_) + max(xs_)) / 2, (min(ys_) + max(ys_)) / 2
+                    R_ = max(1e-6, (max(xs_) - min(xs_) + max(ys_) - min(ys_)) / 4)
+                    groups = {}
+                    for f in faces:          # rules in fractions of the chair's height and half-width
+                        c_ = f.calc_center_median(); z_ = (c_.z - zmin) / H_; r_ = math.hypot(c_.x - cx_, c_.y - cy_) / R_
+                        mt = next((pp["material"] for pp in parts if z_ < pp.get("z_below", 9) and r_ < pp.get("r_below", 9)), override)
+                        groups.setdefault(mt, []).append(f)
+                else: groups = {mname: faces}
+                for mname, faces in groups.items():
+                    if not faces: continue
+                    vs = {}; verts = []; fl = []; uvs = []
+                    for f in faces:
+                        idx = []
+                        for lp in f.loops:
+                            verts.append(tuple(lp.vert.co)); idx.append(len(verts) - 1); uvs.append(tuple(lp[uvl].uv) if uvl else (0, 0))
+                        fl.append(tuple(idx))
+                    m.add(verts, fl, mname, None, True, uvs)
             bm.free(); bpy.data.meshes.remove(me)
         for o in new: bpy.data.objects.remove(o, do_unlink=True)
         me = m.build("model", normals=False)
@@ -524,6 +536,14 @@ class Furnisher:
         stand = {"text": 0.012, "image": 0.005, "built": lg.get("standoff", 0.03) + lg.get("depth", 0.04) / 2}[mode]
         M_ = Matrix.Translation(w["point"] + n * (stand + (w.get("thickness", 0.0) if fwall else 0.0)) + Vector((0, 0, z))) @ RZ(ang)
         lo = self.R.put("LOGO", "tenantlogo", me, M_, props={"room": r["name"], "mode": mode})
+        if lg.get("downlights"):         # two downlights grazing the logo wall (as in the photo): fixtures in the ceiling 0.45 m off the wall
+            H_ = self.c.ceiling_z(r["name"])
+            def mkd():
+                m2 = self.mb(); m2.lathe(((0.056, 0.0), (0.060, -0.005), (0.078, -0.005), (0.082, 0.0)), Matrix(), "white_metal", 24)
+                m2.cyl(0.056, 0.008, T(0, 0, -0.008), "led_spot", 20); return m2.build("downlight")
+            for u in (-1, 1):
+                q = w["point"] + n * 0.45 + t * u * lg.get("downlight_spread", 0.9)
+                self.R.put("LIGHT", "downlight", self.c.proto("downlight", mkd), T(q.x, q.y, H_), props={"assumed": 1, "lamp": "spot", "lamp_z": -0.01, "room": r["name"], "aim_wall": 1})
         dg = bpy.context.evaluated_depsgraph_get(); pt = M_.translation + n * 0.05
         blocked = [d_ for d_ in (-0.6, 0.0, 0.6) if bpy.context.scene.ray_cast(dg, pt + t * d_, n, distance=2.0)[0]]
         lo["front_clear_2m"] = not blocked
@@ -549,9 +569,9 @@ class Furnisher:
         if mark:                       # the square "A" tile: a 40 mm deep block with a white chevron raised 3 mm on its face
             mx = x0 + ms / 2
             m.box(ms, dep, ms, T(mx, 0, -ms / 2), mark.get("material", "logo_mark"), 0.003)
-            for s_ in (-1, 1):
-                L_ = ms * 0.62; a_ = math.radians(62) * s_
-                m.box(ms * 0.11, 0.004, L_, T(mx + s_ * ms * 0.15, -dep / 2 - 0.005, -ms * 0.02) @ Matrix.Rotation(a_, 4, "Y"), mark.get("chevron", "logo"), 0.0)
+            for s_ in (-1, 1):          # an upward chevron (the 'A' of the mark), white, inside the tile
+                L_ = ms * 0.66; a_ = -0.40 * s_; bw = ms * 0.12          # box() grows up from its base: pivot at the foot, feet apart, tops meet
+                m.box(bw, 0.004, L_, T(mx + s_ * ms * 0.25, -dep / 2 - 0.005, -ms * 0.31) @ Matrix.Rotation(a_, 4, "Y"), mark.get("chevron", "logo"), 0.0)
         hl = lg.get("halo")
         if hl:                         # backlight: an emissive copy of the letters 4 mm behind their back face, hidden by them;
             bm2 = _bm.new(); bm2.from_mesh(tm2)          # it lights the wall round each letter (the halo), it is never seen itself

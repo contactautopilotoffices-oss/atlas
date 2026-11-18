@@ -272,9 +272,19 @@ def gen_texture(spec, n, seed):
         sx = stretch_noise(n, 96, 8, rng, 3); sy = stretch_noise(n, 8, 96, rng, 3).T.copy()
         streak = np.where(turn == 0, sy if spec.get("pattern") == "plank" else sx, sy)
         fine = tnoise(n, 128, rng, 2); blot = tnoise(n, 3, rng, 3)
-        v = 0.5 + 0.55 * (streak - 0.5) + 0.25 * (fine - 0.5) + 0.25 * (blot - 0.5) + tone[tj, ti]
+        if spec.get("streak_threshold") is not None:     # opt-in (Altruist): a dark ground with sparse light streaks, no blotches
+            th_ = spec["streak_threshold"]; sk = np.clip((streak - th_) / max(1e-3, 1 - th_), 0, 1) ** spec.get("streak_gamma", 1.5)
+            v = 0.18 + spec.get("streak_amp", 0.6) * sk + spec.get("fine_amp", 0.12) * (fine - 0.5) + spec.get("blot_amp", 0.04) * (blot - 0.5) + tone[tj, ti]
+        else:
+            v = 0.5 + 0.55 * (streak - 0.5) + 0.25 * (fine - 0.5) + 0.25 * (blot - 0.5) + tone[tj, ti]
         fx = ((xx + stag) % tw) / tw; fy = (yy % th) / th; seam = (np.minimum(np.minimum(fx, 1 - fx) * tw, np.minimum(fy, 1 - fy) * th) < 0.0015)
-        v = np.where(seam, v - 0.12, v)
+        v = np.where(seam, v - spec.get("seam_depth", 0.12), v)
+        return ramp_img(v, cols), P
+    if kind in ("fabric", "felt") and spec.get("weave"):     # opt-in: a woven fabric at true scale (threads ~1.5 mm, slubs, a soft mottle)
+        P = spec.get("period", 0.2); yy, xx = np.mgrid[0:n, 0:n] * (P / n); pt = spec.get("thread", 0.0015)
+        w = 0.5 + 0.5 * np.sin(2 * np.pi * xx / pt) * np.sin(2 * np.pi * yy / pt)
+        slub = stretch_noise(n, 64, 6, rng, 3); mott = tnoise(n, 4, rng, 3)
+        v = 0.5 + spec.get('weave_amp', 0.22) * (w - 0.5) + spec.get('slub_amp', 0.18) * (slub - 0.5) + spec.get('mottle_amp', 0.12) * (mott - 0.5)
         return ramp_img(v, cols), P
     if kind == "wood":
         pw = spec.get("plank_width", 0.19); P = spec.get("period", pw * 6); g = stretch_noise(n, 4, 48, rng, 4).T
@@ -343,7 +353,7 @@ class Materials:
         if s.get("coat"): setin(b, ["Coat Weight"], s["coat"])
         if s.get("sheen") or k in ("fabric", "felt"): setin(b, ["Sheen Weight"], s.get("sheen", 0.4))
         m["twin_kind"] = k
-        if k in ("carpet", "wood", "terrazzo", "stone", "tile", "ceiling_tile"):
+        if k in ("carpet", "wood", "terrazzo", "stone", "tile", "ceiling_tile") or (k in ("fabric", "felt") and s.get("weave")):
             self.image_base(m, nt, b, name, s)
         if k in ("paint", "fabric", "felt", "plain", "plastic", "metal", "carpet", "wood", "stone", "terrazzo", "tile", "ceiling_tile"):
             self.rough_vary(nt, b, s.get("rough", 0.5), s.get("vary", 0.18), s.get("vscale", 2.5))

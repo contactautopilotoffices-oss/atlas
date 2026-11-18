@@ -87,10 +87,21 @@ def unwrap(group):
         o.data.uv_layers.active = uv; o.select_set(True)
     vl.objects.active = group[0]
     bpy.ops.object.mode_set(mode="EDIT"); bpy.ops.mesh.select_all(action="SELECT")
+    pad = getattr(bpy.context.scene, "get", lambda k, d=None: d)("twin_lm_pad_px", 0)
     bpy.ops.uv.smart_project(angle_limit=math.radians(66), island_margin=0.004, area_weight=0.0, correct_aspect=True, scale_to_bounds=False)
-    try: bpy.ops.uv.pack_islands(margin=0.006, rotate=True)
+    try:
+        if pad: bpy.ops.uv.pack_islands(margin_method="FRACTION", margin=pad / bpy.context.scene["twin_lm_res"], rotate=True)     # opt-in: a fixed pixel gap between islands
+        else: bpy.ops.uv.pack_islands(margin=0.006, rotate=True)
     except Exception as e: print("pack_islands:", e)
-    bpy.ops.object.mode_set(mode="OBJECT")
+    nov = None
+    if pad:          # opt-in check: UV faces that overlap another island in this atlas (they would share lightmap texels)
+        try:
+            bpy.context.scene.tool_settings.use_uv_select_sync = False; bpy.ops.uv.select_all(action="DESELECT"); bpy.ops.uv.select_overlap(extend=False)
+            bpy.ops.object.mode_set(mode="OBJECT")
+            nov = sum(sum(1 for p in o.data.polygons if all(o.data.uv_layers["lightmap"].uv_select_vert[li].value if hasattr(o.data.uv_layers["lightmap"], "uv_select_vert") else o.data.uv_layers["lightmap"].vertex_selection[li].value for li in p.loop_indices)) for o in group)
+        except Exception as e: print("uv overlap check:", e)
+    if bpy.context.object and bpy.context.object.mode != "OBJECT": bpy.ops.object.mode_set(mode="OBJECT")
+    return nov
 
 def denoise(img_path, out_path, res, albedo=None, normal=None):
     """OpenImageDenoise through the compositor, on its own empty scene (5.x node-group compositor)."""
@@ -133,16 +144,26 @@ def bake(tenant, L, S, out, A):
     t0 = time.time(); sc = bpy.context.scene; meta = json.loads(sc.get("twin_meta", "{}"))
     TL.setup_cycles(sc, A.bake_samples, A.device, denoise=False)
     objs = pick_static(L, A, meta); cap = (A.bake_res * A.bake_texel) ** 2 * 0.5
-    objs = split_big(objs, cap)
-    cols = [o for o in objs if o.get("twin_layer") == "COLUMN"]; rest = [o for o in objs if o.get("twin_layer") != "COLUMN"]
-    groups = atlases(rest, A.bake_res, A.bake_texel) + atlases(cols, A.bake_res, A.bake_texel * 0.6)     # columns: their own, denser atlas
+    tf = {"COLUMN": 0.6}         # texel factor per layer: each factor gets its own atlases (columns denser by default)
+    if getattr(A, "bake_texel_by", ""):     # opt-in, e.g. WALL:0.6,SKIRTING:0.6,COLUMN:0.4 (denser walls and columns: no smears at edges)
+        tf.update({k: float(v) for k, v in (kv.split(":") for kv in A.bake_texel_by.split(","))})
+    fac = lambda o: tf.get(o.get("twin_layer"), 1.0)
+    if not getattr(A, "bake_texel_by", ""): objs = split_big(objs, cap)
+    else:          # factors read BEFORE splitting: split_big removes the big originals (their parts keep the layer)
+        byf = {}
+        for o in objs: byf.setdefault(fac(o), []).append(o)
+        objs = [p for f in sorted(byf) for p in split_big(byf[f], (A.bake_res * A.bake_texel * f) ** 2 * 0.5)]
+    groups = []
+    for f in sorted({fac(o) for o in objs}, reverse=True): groups += atlases([o for o in objs if fac(o) == f], A.bake_res, A.bake_texel * f)
+    for g in groups: g["texel"] = A.bake_texel * fac(g["objs"][0])
+    if getattr(A, "bake_pad_px", 0): sc["twin_lm_pad_px"] = A.bake_pad_px; sc["twin_lm_res"] = A.bake_res
     d = os.path.join(out, "export", "lightmaps"); os.makedirs(d, exist_ok=True)
     print(f"bake: {len(objs)} static objects in {len(groups)} atlas(es) of {A.bake_res}px, {A.bake_samples} samples", flush=True)
     sc.render.bake.use_pass_direct = True; sc.render.bake.use_pass_indirect = True; sc.render.bake.use_pass_color = False
     sc.render.bake.margin = 16; sc.render.bake.use_clear = True; sc.render.bake.target = "IMAGE_TEXTURES"
     info = {}
     for gi, g in enumerate(groups):
-        tg = time.time(); unwrap(g["objs"])
+        tg = time.time(); g["uv_overlap_faces"] = unwrap(g["objs"])
         name = f"{tenant}_lm{gi}"; img = bpy.data.images.new(name, A.bake_res, A.bake_res, alpha=False, float_buffer=True)
         mats = {m for o in g["objs"] for m in o.data.materials if m}
         nodes = []
@@ -186,8 +207,8 @@ def bake(tenant, L, S, out, A):
             try: o.data.uv_layers["UVMap"].active_render = True
             except Exception: pass
         info[name] = {"objects": [o.name for o in g["objs"]], "area_m2": round(g["area"], 1), "scale_k": round(kk, 4), "lightMapIntensity": round(math.pi / kk, 5),
-                      "denoised": "OIDN (compositor, albedo + normal guides)" if ok else "blur fallback", "texel_m": round(A.bake_texel * (0.6 if g["objs"][0].get("twin_layer") == "COLUMN" else 1), 4),
-                      "seconds": round(time.time() - tg, 1)}
+                      "denoised": "OIDN (compositor, albedo + normal guides)" if ok else "blur fallback", "texel_m": round(g["texel"], 4),
+                      "seconds": round(time.time() - tg, 1), **({"uv_overlap_faces": g["uv_overlap_faces"]} if g.get("uv_overlap_faces") is not None else {})}
         print(f"  atlas {name}: {len(g['objs'])} objects, {g['area']:.0f} m2, denoise {'OIDN' if ok else 'blur'}, {time.time() - tg:.0f} s", flush=True)
     json.dump({"atlases": info, "res": A.bake_res, "samples": A.bake_samples, "texel_m": A.bake_texel, "seconds": round(time.time() - t0, 1)},
               open(os.path.join(d, f"{tenant}_lightmaps.json"), "w"), indent=1)

@@ -28,6 +28,31 @@ class Shell:
             if b[0] <= x <= b[2] and b[1] <= y <= b[3] and in_poly(x, y, w["outer"]) and not any(in_poly(x, y, h) for h in w["holes"]): return True
         return False
 
+    def closed_floor_labels(self):
+        """Opt-in (floor_close_m): leftover 'Circulation' cells in a notch or pocket of a room (where the drawing's room
+        outline steps round a furniture block) take that room's finish, so a reception tile floor has no carpet patches.
+        Morphological closing of each room's cells by floor_close_m; only Circulation cells change."""
+        ras = self.ras; lab = ras.label.copy(); circ = len(ras.rooms) - 1; n = max(1, int(round(self.S["floor_close_m"] / ras.res)))
+        def shift_or(m, it, grow):
+            for _ in range(it):
+                o = m.copy()
+                if grow:
+                    o[1:, :] |= m[:-1, :]; o[:-1, :] |= m[1:, :]; o[:, 1:] |= m[:, :-1]; o[:, :-1] |= m[:, 1:]
+                else:
+                    o[1:, :] &= m[:-1, :]; o[:-1, :] &= m[1:, :]; o[:, 1:] &= m[:, :-1]; o[:, :-1] &= m[:, 1:]
+                m = o
+            return m
+        changed = 0
+        for k in range(circ):
+            ii, jj = np.nonzero(ras.label == k)
+            if not len(ii): continue
+            i0, i1, j0, j1 = max(0, ii.min() - n - 1), min(ras.ny, ii.max() + n + 2), max(0, jj.min() - n - 1), min(ras.nx, jj.max() + n + 2)
+            sub = ras.label[i0:i1, j0:j1] == k
+            cl = shift_or(shift_or(sub, n, True), n, False)
+            fill = cl & (lab[i0:i1, j0:j1] == circ); changed += int(fill.sum()); lab[i0:i1, j0:j1][fill] = k
+        self.c.meta["log"]["floor_close_cells"] = changed; print(f"floors: {changed * ras.res ** 2:.1f} m2 of leftover circulation cells given their room's finish", flush=True)
+        return lab
+
     # -------------------------------------------------------------- slab and floor finishes
     def slab_and_floors(self):
         L, ras = self.L, self.ras
@@ -39,8 +64,21 @@ class Shell:
         # finishes: the raster gives each cell one room, so neighbouring finishes never overlap and nothing is layered
         floors = self.S.get("floors", {}); aisle = self.S.get("aisle", {})
         amask = self.c.aisle_mask() if aisle else None
+        lab = self.closed_floor_labels() if self.S.get("floor_close_m") else ras.label
+        exact = []
+        if self.S.get("floor_exact_rooms"):      # opt-in: a finish zone drawn as a free polygon (the octagonal reception tile) is built from
+            import re as _re                     # its exact outline 3 mm proud; the cells under it take the surrounding finish
+            lab = lab.copy() if lab is ras.label else lab
+            for k, r in enumerate(ras.rooms):
+                if not r.get("poly") or not _re.search(self.S["floor_exact_rooms"], r["name"], _re.I): continue
+                cells = lab == k
+                if not cells.any(): continue
+                ring = np.zeros_like(cells); ring[1:, :] |= cells[:-1, :]; ring[:-1, :] |= cells[1:, :]; ring[:, 1:] |= cells[:, :-1]; ring[:, :-1] |= cells[:, 1:]
+                nb = lab[ring & ~cells]; nb = nb[nb >= 0]
+                if not len(nb): continue
+                lab[cells] = np.bincount(nb).argmax(); exact.append((k, r))
         for k, r in enumerate(ras.rooms):
-            cells = ras.label == k
+            cells = lab == k
             if not cells.any(): continue
             kind = room_kind(self.S, r["name"], r.get("kind")); mat = self.S.get("floor_by_kind", {}).get(kind) or floors.get(r.get("floor", "carpet"), "carpet")
             parts = [(mat, cells)]
@@ -57,6 +95,11 @@ class Shell:
                 mm = self.mb()
                 self.surface(mm, pc, 0.0, pm)
                 if not mm.empty(): self.R.put("FLOOR", f"{tok(pm)}_{r['slug']}", mm.build(f"floor_{r['slug']}"), props={"room": r["name"], "static": 1})
+        for k, r in exact:
+            kind = room_kind(self.S, r["name"], r.get("kind")); mat = self.S.get("floor_by_kind", {}).get(kind) or floors.get(r.get("floor", "carpet"), "carpet")
+            mm = self.mb(); mm.prism(r["poly"], 0.0, self.S.get("floor_exact_lift", 0.003), mat)
+            self.R.put("FLOOR", f"{tok(mat)}_{r['slug']}", mm.build(f"floor_{r['slug']}"), props={"room": r["name"], "static": 1, "exact_outline": 1})
+        if exact: print(f"floors: {len(exact)} finish zone(s) built from their exact outline: {[r['name'] for _, r in exact]}", flush=True)
         # the floor above: its underside is the soffit, seen wherever a room has an open ceiling
         m = self.mb()
         for f in L["floor"]:
