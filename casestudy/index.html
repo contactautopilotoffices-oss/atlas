@@ -156,6 +156,12 @@ svg .grid{stroke:var(--line);stroke-width:.5}
 .body > .cols.lg:has(+ .foot){flex:1 1 auto!important;align-content:center;position:relative;padding:6mm 0}
 .body > .cols.lg:has(+ .foot)::before,.body > .cols.lg:has(+ .foot)::after{content:"";position:absolute;left:0;right:0;border-top:1px solid var(--line)}
 .body > .cols.lg:has(+ .foot)::before{top:0} .body > .cols.lg:has(+ .foot)::after{bottom:0}
+/* points with their row of figures below them: the pair is centred as one
+   group between the headline and the foot box, so the figures stay with
+   their points and the gap is shared above and below */
+.body > .cols.lg:has(+ .kpis + .foot){margin-top:auto!important}
+.body > .cols.lg + .kpis:has(+ .foot){margin:6mm 0 auto!important}
+.body > .cols.lg + .kpis + .foot{margin-top:0;padding-top:0}
 /* the catchment's sector cards: long name lists, so the body grows less */
 .pts.catch .pt p{font-size:8.8pt;line-height:1.45}
 .pts.catch .pt h3{font-size:12.5pt}
