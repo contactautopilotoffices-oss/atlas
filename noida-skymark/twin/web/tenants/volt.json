@@ -1,0 +1,164 @@
+{
+ "id": "volt",
+ "name": "Volt",
+ "floor": 1,
+ "accent": "#dd8d36",
+ "layout": "../../volt/volt-floor1.layout.json",
+ "summary": "../../volt/summary.json",
+ "frame": {
+  "rot_deg": 0,
+  "dx": 0,
+  "dy": 0,
+  "source": "Volt's plan frame is the building frame"
+ },
+ "seats": {
+  "work": 116,
+  "all": 213,
+  "groups": {
+   "Work seats (desk + chair)": 116,
+   "Meeting room seats": 38,
+   "Cafeteria seats": 12,
+   "Lounge, collab and visitor seats": 41,
+   "Operator (Autopilot cabin, reception)": 6
+  }
+ },
+ "reception": "Reception",
+ "assumptions": {
+  "path": "../../volt/README.md",
+  "section": "What is assumed"
+ },
+ "seat_plan": "../../volt/volt_seat_plan.png",
+ "model": {
+  "use": "auto",
+  "index": "models/index.json",
+  "dev_build": {
+   "viewer": "../_build/volt/export/volt_viewer.json",
+   "cameras": "../_build/volt/volt_cameras.json"
+  }
+ },
+ "stills": [],
+ "options": [
+  {
+   "id": "carpet",
+   "label": "Carpet",
+   "part": "carpet",
+   "rooms": "*",
+   "choices": [
+    {
+     "id": "grey",
+     "label": "Graphite tile",
+     "swatch": "#7d7871",
+     "preset": "carpet-grey",
+     "material": "carpet"
+    },
+    {
+     "id": "blue",
+     "label": "Slate blue tile",
+     "swatch": "#8fa3c4",
+     "preset": "carpet-blue",
+     "material": "carpet_blue"
+    },
+    {
+     "id": "sand",
+     "label": "Sand tile",
+     "swatch": "#d8c6a8",
+     "preset": "carpet-sand",
+     "material": "carpet_sand"
+    }
+   ]
+  },
+  {
+   "id": "desks",
+   "label": "Desk tops",
+   "part": "deskTop",
+   "rooms": {
+    "kinds": [
+     "work",
+     "training"
+    ]
+   },
+   "choices": [
+    {
+     "id": "white",
+     "label": "White laminate",
+     "swatch": "#f3f1ec",
+     "preset": "white-laminate",
+     "material": "desk_white"
+    },
+    {
+     "id": "oak",
+     "label": "Oak veneer",
+     "swatch": "#c8a27c",
+     "preset": "oak",
+     "material": "oak"
+    },
+    {
+     "id": "walnut",
+     "label": "Walnut veneer",
+     "swatch": "#8a5f43",
+     "preset": "walnut",
+     "material": "walnut"
+    }
+   ]
+  },
+  {
+   "id": "chairs",
+   "label": "Chairs",
+   "part": "chair",
+   "rooms": "*",
+   "choices": [
+    {
+     "id": "black",
+     "label": "Black mesh",
+     "swatch": "#1d1d1f",
+     "preset": "black-mesh",
+     "material": "chair_black"
+    },
+    {
+     "id": "teal",
+     "label": "Teal fabric",
+     "swatch": "#2b6f78",
+     "preset": "teal-fabric",
+     "material": "chair_teal"
+    },
+    {
+     "id": "orange",
+     "label": "Orange fabric",
+     "swatch": "#d9822f",
+     "preset": "orange-fabric",
+     "material": "chair_orange"
+    }
+   ]
+  },
+  {
+   "id": "walls",
+   "label": "Wall paint",
+   "part": "wall",
+   "rooms": "*",
+   "choices": [
+    {
+     "id": "white",
+     "label": "Warm white",
+     "swatch": "#f2efea",
+     "preset": "warm-white",
+     "material": "paint"
+    },
+    {
+     "id": "sage",
+     "label": "Sage",
+     "swatch": "#c9d3c3",
+     "preset": "sage",
+     "material": "paint_sage"
+    },
+    {
+     "id": "clay",
+     "label": "Clay",
+     "swatch": "#d9b9a3",
+     "preset": "clay",
+     "material": "paint_clay"
+    }
+   ]
+  }
+ ],
+ "panos": []
+}

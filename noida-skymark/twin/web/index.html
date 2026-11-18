@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<meta name="robots" content="noindex">
+<title>F1 Skymark Twin</title>
+<script>
+  /* Public page. Only a TV opened with ?present waits for a phone to pair (same as the Volt page). */
+  try { if (sessionStorage.getItem("noida-skymark-auth") !== "1" && /[?&]present\b/.test(location.search)) window.__pairFirst = true; } catch (e) {}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="/config.js"></script>
+<script src="../../volt/remote-config.js"></script>
+<script type="importmap">
+{ "imports": { "three": "/engine/vendor/three/three.module.min.js", "three/addons/": "/engine/vendor/three/jsm/" } }
+</script>
+<style>
+:root{
+  --bg:#e9e5de; --ink:#1d1c1a; --sub:#5d5852; --mute:#9a948b; --card:rgba(252,250,247,.9); --line:rgba(30,28,25,.10);
+  --accent:#dd8d36; --r:16px; --shadow:0 10px 30px rgba(40,30,20,.14),0 2px 6px rgba(40,30,20,.08);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font:14px/1.4 Inter,system-ui,sans-serif}
+#c{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;outline:none}
+.glass{background:var(--card);backdrop-filter:blur(14px) saturate(1.2);-webkit-backdrop-filter:blur(14px) saturate(1.2);border:1px solid rgba(255,255,255,.6);box-shadow:var(--shadow);border-radius:var(--r)}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+.k{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--sub);font-weight:700}
+/* left panel: floors, then the tenant */
+#left{position:fixed;left:16px;top:16px;width:300px;max-height:calc(100vh - 110px);overflow:auto;z-index:6;padding:14px 14px 12px;scrollbar-width:thin}
+#left h1{margin:2px 0 10px;font-size:20px;letter-spacing:-.01em}
+.floor{border-top:1px solid var(--line);padding:9px 2px 8px}
+.floor:first-of-type{border-top:0}
+.floor .fh{display:flex;align-items:baseline;gap:10px;width:100%;text-align:left;padding:2px 4px;border-radius:8px}
+.floor .fh b{font-size:12px;color:var(--sub);width:18px;font-weight:800}
+.floor .fh span{font-weight:600}
+.floor .fh:hover{background:rgba(0,0,0,.05)}
+.floor.sel .fh{background:var(--ink);color:#fff} .floor.sel .fh b{color:#fff}
+.tn{display:flex;align-items:center;gap:8px;width:100%;text-align:left;margin:4px 0 0 26px;padding:6px 8px;border-radius:10px;background:rgba(0,0,0,.04);font-weight:600;width:calc(100% - 26px)}
+.tn i{width:9px;height:9px;border-radius:50%;flex:none}
+.tn small{margin-left:auto;font-weight:600;color:var(--sub);font-size:12px}
+.tn:hover{background:rgba(0,0,0,.08)}
+.tn.later{color:var(--mute);background:none;cursor:default}
+.avail{margin:3px 0 0 30px;color:var(--mute);font-size:12.5px;font-weight:600}
+/* tenant panel */
+#tp .big{display:flex;align-items:baseline;gap:8px;margin:4px 0}
+#tp .big b{font-size:42px;line-height:1;font-weight:800;letter-spacing:-.03em;color:var(--accent)}
+#tp table{width:100%;border-collapse:collapse;font-size:12.5px;margin:6px 0 8px}
+#tp td{padding:3px 0;border-top:1px solid var(--line)} #tp td:last-child{text-align:right;font-weight:700}
+#tp .rooms{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0 10px}
+#tp .rooms button{padding:5px 9px;border-radius:999px;background:rgba(0,0,0,.05);font-size:12px;font-weight:600}
+#tp .rooms button.on{background:var(--ink);color:#fff}
+details{border-top:1px solid var(--line);padding-top:8px;margin-top:6px}
+summary{cursor:pointer;font-weight:700;font-size:13px}
+.md{font-size:12.5px;color:#34312d} .md h3{font-size:13px;margin:10px 0 4px} .md ul{padding-left:18px;margin:4px 0} .md li{margin:2px 0} .md p{margin:6px 0} .md code{font-size:11.5px;background:rgba(0,0,0,.05);padding:0 3px;border-radius:4px}
+.row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:7px 11px;border-radius:999px;background:rgba(0,0,0,.06);font-size:12.5px;font-weight:600}
+.pill:hover{background:rgba(0,0,0,.1)} .pill.dark{background:var(--ink);color:#fff}
+/* right: room card + options */
+#right{position:fixed;right:16px;top:16px;width:290px;z-index:6;display:none;flex-direction:column;gap:10px}
+body.inside #right{display:flex}
+#card{padding:14px}
+#card:empty{display:none}
+#card h2{margin:2px 0 2px;font-size:18px;letter-spacing:-.01em}
+#card .meta{color:var(--sub);font-size:12.5px}
+.views{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-top:10px}
+.views button{padding:7px 4px;border-radius:10px;background:rgba(0,0,0,.05);font-size:11.5px;font-weight:700;line-height:1.15}
+.views button small{display:block;font-weight:600;color:var(--sub);font-size:10.5px}
+.views button.on{background:var(--ink);color:#fff} .views button.on small{color:#ddd}
+.views button.seen:not(.on){box-shadow:inset 0 0 0 1.5px var(--accent)}
+#opts{padding:12px 14px;display:none} #opts.show{display:block}
+#opts h4{margin:8px 0 5px;font-size:12px;color:var(--sub)}
+.sw{display:flex;gap:6px;flex-wrap:wrap}
+.sw button{display:flex;align-items:center;gap:6px;padding:4px 8px 4px 4px;border-radius:999px;background:rgba(0,0,0,.04);font-size:11.5px;font-weight:600}
+.sw button i{width:18px;height:18px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.15)}
+.sw button.on{background:var(--ink);color:#fff}
+.sw button:disabled{opacity:.4;cursor:not-allowed}
+/* floor plan minimap: where you are, where you're heading */
+#mm{position:fixed;left:16px;bottom:16px;width:300px;z-index:6;padding:0;overflow:hidden;display:flex;flex-direction:column}
+#mm[hidden]{display:none}
+#mm .mm-bar{display:flex;align-items:center;gap:8px;padding:7px 10px 6px;font-size:12px}
+#mm .mm-bar .k{font-size:10px}
+#mm .mm-here{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+#mm .mm-size{margin-left:auto;padding:3px 8px;border-radius:8px;background:rgba(0,0,0,.06);font-size:12px;font-weight:700}
+#mm .mm-next{display:block;padding:0 10px 7px;font-size:11.5px;color:#0f6f88;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#mm .mm-next[hidden]{display:none}
+#mm canvas{display:block;width:100%;height:190px;cursor:pointer;touch-action:none}
+#mm.big{width:min(600px,calc(100vw - 360px))} #mm.big canvas{height:min(400px,calc(100vh - 260px))}
+#mm .mm-chip{display:none}
+body.inside:not(.info) #left{max-height:calc(100vh - 290px)}
+/* dock */
+#dock{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;gap:3px;padding:5px;z-index:7;max-width:calc(100vw - 20px);overflow-x:auto;scrollbar-width:none}
+#dock button{padding:9px 12px;border-radius:11px;font-weight:600;font-size:13px;white-space:nowrap}
+#dock button:hover{background:rgba(0,0,0,.06)} #dock button.on{background:var(--ink);color:#fff}
+#dock button[hidden]{display:none}
+#dock button.go{background:var(--accent);color:#fff}
+#hint{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(70px + env(safe-area-inset-bottom));z-index:6;font-size:12px;color:#fff;background:rgba(20,20,22,.6);padding:6px 11px;border-radius:999px;pointer-events:none;opacity:0;transition:opacity .4s;white-space:nowrap}
+#hint.show{opacity:1}
+#tags{position:fixed;inset:0;pointer-events:none;z-index:4}
+.tag{position:absolute;transform:translate(-50%,-100%);pointer-events:auto;padding:6px 10px;border-radius:10px;background:rgba(252,250,247,.94);box-shadow:var(--shadow);font-weight:700;font-size:13px;white-space:nowrap;cursor:pointer}
+.tag small{display:block;font-weight:600;color:var(--sub);font-size:11px}
+.tag.grey{color:var(--mute);cursor:default}
+#load{position:fixed;right:16px;bottom:16px;z-index:9;padding:7px 12px;font-size:12px;font-weight:600;display:none}
+#load.show{display:block}
+#fps{position:fixed;left:8px;bottom:8px;z-index:9;font:11px ui-monospace,monospace;background:rgba(0,0,0,.6);color:#9f9;padding:3px 6px;border-radius:6px;display:none}
+/* phone joystick */
+#joy{position:fixed;left:22px;bottom:calc(84px + env(safe-area-inset-bottom));width:116px;height:116px;border-radius:50%;background:rgba(255,255,255,.28);border:1.5px solid rgba(255,255,255,.7);z-index:7;display:none;touch-action:none}
+#joy i{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:rgba(255,255,255,.92);box-shadow:var(--shadow)}
+body.walk.touch #joy{display:block}
+#gal{position:fixed;inset:0;z-index:28;background:rgba(18,18,20,.94);color:#fff;display:none;overflow:auto;padding:22px 22px 40px}
+#gal.show{display:block} #gal h3{margin:18px 0 8px;font-size:14px;font-weight:700;color:#ddd} #gal .gx{position:fixed;right:16px;top:12px;color:#fff;font-size:26px;z-index:29}
+#gal .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+#gal figure{margin:0;cursor:pointer} #gal img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:8px;background:#333;display:block} #gal figcaption{font-size:12px;color:#bbb;margin-top:4px}
+#lb{position:fixed;inset:0;z-index:31;background:rgba(10,10,12,.92);display:none;align-items:center;justify-content:center}
+#lb.show{display:flex} #lb img{max-width:96vw;max-height:88vh;border-radius:10px} #lb button{position:absolute;right:16px;top:14px;color:#fff;font-size:26px}
+/* presenter remote (from the Volt page) */
+#pair{position:fixed;inset:0;background:rgba(16,16,18,.72);backdrop-filter:blur(6px);z-index:40;display:none;align-items:center;justify-content:center;padding:20px}
+#pair.show{display:flex} body.pairgate #pair{background:#16171a}
+#pair .box{position:relative;background:#fbfaf7;color:#1d1c1a;border-radius:22px;padding:26px 30px 22px;max-width:520px;width:100%;text-align:center}
+#pair h2{margin:6px 0 14px;font-size:22px} #pair canvas{width:min(62vh,300px);height:auto;border-radius:12px;image-rendering:pixelated}
+#pair p{margin:12px 0 0;font-size:14px} #pair p.u{font-size:11.5px;color:#7a746c;word-break:break-all}
+#pairx{position:absolute;right:12px;top:10px;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,.06);font-size:20px} body.pairgate #pairx{display:none}
+#pairchip{position:fixed;left:16px;bottom:16px;z-index:8;display:none;padding:8px 13px;border-radius:999px;background:rgba(24,26,30,.86);color:#fff;font-size:12px;font-weight:600}
+#pairchip.ok:before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#35d07f;margin-right:7px}
+body.present #pairchip{display:block}
+#ptr{position:fixed;width:26px;height:26px;margin:-13px 0 0 -13px;border-radius:50%;background:radial-gradient(circle,#ff3b30 0 32%,rgba(255,59,48,.35) 34% 62%,rgba(255,59,48,0) 64%);z-index:35;pointer-events:none;opacity:0}
+#ptr.show{opacity:1}
+/* phone */
+@media (max-width:760px){
+  #left{left:10px;right:10px;top:10px;width:auto;max-height:46vh;padding:12px}
+  body:not(.inside) #left{top:auto;bottom:calc(66px + env(safe-area-inset-bottom));max-height:40vh;padding:10px 12px}
+  body:not(.inside) #left h1{font-size:16px;margin:0 0 4px}
+  .floor{padding:5px 2px} .tn{padding:5px 8px;margin-top:3px}
+  body.inside #left{max-height:none;padding:8px 12px}
+  body.inside #left .full{display:none} body.inside.info #left .full{display:block} body.inside.info #left{max-height:60vh}
+  #right{left:10px;right:10px;top:auto;bottom:calc(66px + env(safe-area-inset-bottom));width:auto}
+  #card{padding:10px 12px} #card h2{font-size:16px} .views{margin-top:6px}
+  #opts{max-height:30vh;overflow:auto}
+  body.inside #tp .row{display:none} body.inside.info #tp .row{display:flex}
+  body.walk #right{bottom:auto;top:84px} body.walk #card .views{display:none}
+  #hint{display:none}
+  body.walk.touch #joy{bottom:calc(76px + env(safe-area-inset-bottom))}
+  #mm{left:10px;bottom:calc(76px + env(safe-area-inset-bottom));width:auto;background:none;border:0;box-shadow:none;backdrop-filter:none;-webkit-backdrop-filter:none}
+  #mm .mm-bar,#mm canvas,#mm .mm-next{display:none}
+  #mm .mm-chip{display:inline-flex;align-items:center;gap:6px;padding:7px 11px;border-radius:999px;background:rgba(15,35,70,.88);color:#fff;font-size:12px;font-weight:700;box-shadow:var(--shadow)}
+  body:not(.walk) #mm{bottom:calc(230px + env(safe-area-inset-bottom))}
+  body.mmopen #mm{right:10px;background:var(--card);border-radius:16px;box-shadow:var(--shadow);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+  body.mmopen #mm .mm-bar,body.mmopen #mm canvas{display:flex} body.mmopen #mm canvas{display:block;height:34vh} body.mmopen #mm .mm-next:not([hidden]){display:block}
+  body.mmopen #mm .mm-chip{position:absolute;right:8px;top:6px;padding:4px 9px} body.mmopen #mm .mm-size{display:none}
+  body.mmopen.walk #joy{display:none}
+
+}
+</style>
+</head>
+<body>
+<canvas id="c" tabindex="0"></canvas>
+<div id="tags"></div>
+<aside id="left" class="glass">
+  <div id="fp">
+    <div class="k" id="place">F1 Skymark · Noida</div>
+    <h1>Choose a floor</h1>
+    <div id="floors"></div>
+  </div>
+  <div id="tp" hidden></div>
+</aside>
+<div id="right">
+  <section id="card" class="glass" aria-live="polite"></section>
+  <section id="opts" class="glass"></section>
+</div>
+<section id="mm" class="glass" hidden aria-label="Floor plan">
+  <div class="mm-bar"><span class="k">You are in</span><b class="mm-here"></b><button class="mm-size" title="Larger plan">⤢</button></div>
+  <span class="mm-next" hidden></span>
+  <canvas></canvas>
+  <button class="mm-chip">Plan</button>
+</section>
+<nav id="dock" class="glass">
+  <button id="b-back">Building</button>
+  <button id="b-enter" class="go" hidden>Enter</button>
+  <button id="b-prev" hidden>‹ Prev</button>
+  <button id="b-next" hidden>Next ›</button>
+  <button id="b-tour" hidden>Tour</button>
+  <button id="b-opts" hidden>Finishes</button>
+  <button id="b-lock" hidden>Mouse look</button>
+  <button id="b-present">Remote</button>
+</nav>
+<div id="hint"></div>
+<div id="joy"><i></i></div>
+<div id="load" class="glass">Loading…</div>
+<div id="fps"></div>
+<div id="gal" role="dialog" aria-label="Stills"><button class="gx" aria-label="Close">&times;</button><div id="galbody"></div></div>
+<div id="lb"><img alt=""><button aria-label="Close">&times;</button></div>
+<div id="pair"><div class="box">
+  <button id="pairx" aria-label="Close">&times;</button>
+  <div class="k">Presenter remote</div><h2>Scan with your phone</h2>
+  <canvas id="pairqr"></canvas>
+  <p id="pairnote"></p>
+  <p class="u">Or open <b id="pairurl"></b></p>
+</div></div>
+<button id="pairchip"></button>
+<div id="ptr"></div>
+<script type="module" src="./js/main.js"></script>
+</body>
+</html>

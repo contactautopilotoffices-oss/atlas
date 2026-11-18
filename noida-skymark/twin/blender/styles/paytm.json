@@ -1,0 +1,601 @@
+{
+ "extends": "volt.json",
+ "tenant": "paytm",
+ "label": "Paytm, from the design team's brief. Workstation hall = design option 'View 02' (navy open ceiling). The ceiling treatment is switchable: --option ceiling=navy_open|black_open|timber_baffle_aisle|perforated_metal_aisle|green_baffle. Finishes only; all geometry comes from the CAD layout.",
+ "light": {
+  "lamp_k": 3800,
+  "cove_k": 3000,
+  "wb_k": 4000,
+  "exposure": 0.5
+ },
+ "glass": {
+  "pane": "glass",
+  "frame": "black_metal",
+  "frost": "frost",
+  "top": 2.4,
+  "frost_band": {
+   "pattern": "stripes",
+   "z": 0.95,
+   "stripes": 5,
+   "stripe_h": 0.08,
+   "gap": 0.03
+  }
+ },
+ "walls": {
+  "paint": "paint_beige",
+  "skirting": "charcoal",
+  "column": "paint_beige",
+  "soffit": "soffit_navy",
+  "slab": "concrete",
+  "stair": "paint_beige"
+ },
+ "doors": {
+  "leaf": "oak_light",
+  "glass_leaf": "glass",
+  "fire_leaf": "charcoal",
+  "frame": "black_metal",
+  "handle": "steel"
+ },
+ "room_kinds": [
+  {
+   "match": "shaft|duct|lift|stair|janitor|void",
+   "kind": "core"
+  },
+  {
+   "match": "^reception$",
+   "kind": "reception_main"
+  },
+  {
+   "match": "reception|lobby|entry|waiting",
+   "kind": "reception"
+  },
+  {
+   "match": "board|meeting|conference|discussion|huddle",
+   "kind": "meeting"
+  },
+  {
+   "match": "cabin|manager|director|private",
+   "kind": "cabin"
+  },
+  {
+   "match": "work|open|hall|bay|desk|ws",
+   "kind": "work"
+  },
+  {
+   "match": "washroom|toilet|wc",
+   "kind": "wet"
+  },
+  {
+   "match": "pantry|cafe|break|lounge|collab",
+   "kind": "social"
+  },
+  {
+   "match": "ups|server|electrical|store",
+   "kind": "plant_room"
+  },
+  {
+   "match": "circulation|corridor|passage",
+   "kind": "circulation"
+  }
+ ],
+ "floor_by_kind": {
+  "work": "carpet_grey",
+  "meeting": "carpet_bluegrey",
+  "reception": "terrazzo",
+  "cabin": "carpet_grey",
+  "circulation": "carpet_grey",
+  "reception_main": "terrazzo"
+ },
+ "aisle": {
+  "kinds": [
+   "work"
+  ],
+  "material": "carpet_aisle",
+  "clear": 0.9,
+  "led": "led_profile_warm"
+ },
+ "ceilings": {
+  "default": {
+   "type": "grid",
+   "tile": "ceiling_tile",
+   "grid": "white_metal",
+   "ac_every": 4,
+   "ac": "white_metal"
+  },
+  "kinds": {
+   "meeting": {
+    "type": "open",
+    "soffit": "soffit_navy",
+    "duct": "soffit_navy",
+    "tray": "soffit_navy",
+    "sprinkler": "sprinkler_red",
+    "raft": "felt_grey",
+    "raft_inset": 0.6,
+    "raft_z": 2.8,
+    "pendant": "cylinder",
+    "pendant_z": 2.75,
+    "linear_pendant": true,
+    "pendant_length": 1.6
+   },
+   "reception": {
+    "type": "open",
+    "soffit": "soffit_charcoal",
+    "duct": "soffit_charcoal",
+    "tray": "soffit_charcoal",
+    "sprinkler": "sprinkler_red",
+    "pendant": "capsule",
+    "pendant_z": 2.7
+   },
+   "cabin": {
+    "type": "cove",
+    "board": "gypsum",
+    "raft": "gypsum",
+    "cove": "cove_led",
+    "inset": 0.5,
+    "raft_drop": 0.15
+   },
+   "circulation": {
+    "type": "plain",
+    "board": "gypsum"
+   },
+   "reception_main": {
+    "type": "open",
+    "soffit": "soffit_charcoal",
+    "duct": "soffit_charcoal",
+    "tray": "soffit_charcoal",
+    "sprinkler": "sprinkler_red",
+    "pendant": "capsule",
+    "pendant_z": 2.7
+   }
+  }
+ },
+ "options": {
+  "ceiling": {
+   "_default": "navy_open",
+   "navy_open": {
+    "ceilings": {
+     "kinds": {
+      "work": {
+       "type": "open",
+       "soffit": "soffit_navy",
+       "duct": "soffit_navy",
+       "tray": "soffit_navy",
+       "sprinkler": "sprinkler_red",
+       "pendant": "cylinder",
+       "pendant_z": 2.75
+      }
+     }
+    }
+   },
+   "black_open": {
+    "ceilings": {
+     "kinds": {
+      "work": {
+       "type": "open",
+       "soffit": "soffit_black",
+       "duct": "soffit_black",
+       "tray": "soffit_black",
+       "sprinkler": "sprinkler_red",
+       "pendant": "cylinder",
+       "pendant_z": 2.75
+      }
+     }
+    }
+   },
+   "timber_baffle_aisle": {
+    "ceilings": {
+     "kinds": {
+      "work": {
+       "type": "baffle",
+       "soffit": "soffit_navy",
+       "slat": "oak_light",
+       "pitch": 0.15,
+       "depth": 0.15,
+       "width": 0.03,
+       "height": 2.9,
+       "pendant_z": 2.75
+      }
+     }
+    }
+   },
+   "perforated_metal_aisle": {
+    "ceilings": {
+     "kinds": {
+      "work": {
+       "type": "grid",
+       "tile": "perforated_metal",
+       "grid": "black_metal",
+       "ac_every": 4,
+       "ac_linear": true
+      }
+     }
+    }
+   },
+   "green_baffle": {
+    "ceilings": {
+     "kinds": {
+      "work": {
+       "type": "baffle",
+       "soffit": "soffit_navy",
+       "slat": "felt_green",
+       "pitch": 0.2,
+       "depth": 0.2,
+       "width": 0.04,
+       "height": 2.9,
+       "pendant_z": 2.75
+      }
+     }
+    }
+   }
+  }
+ },
+ "furniture": {
+  "desk_top": "oak_light",
+  "desk_frame": "navy_metal",
+  "desk_screens": [
+   "screen_beige",
+   "screen_charcoal"
+  ],
+  "monitor": "screen_glass",
+  "table_top": "white_top",
+  "table_base": "white_metal",
+  "chair_material": "mesh_black",
+  "sofa": [
+   "fabric_cream",
+   "leather_tan"
+  ],
+  "tub": "leather_tan",
+  "cafe": [
+   "plastic_white",
+   "plastic_navy"
+  ],
+  "cafe_legs": "oak_light",
+  "planter": "planter_white",
+  "planter_panel": "oak_light",
+  "pot": "pot_black",
+  "desk_bank_light": "capsule",
+  "bank_light_z": 2.45,
+  "pendant_body": "black_metal",
+  "pendant_led": "led_line",
+  "clutter": true,
+  "reception_desk": {
+   "room": "^RECEPTION$",
+   "material": "cobalt_gloss",
+   "top": "white_top",
+   "height": 1.05
+  },
+  "ring_led": "led_ring"
+ },
+ "logo": [
+  {
+   "room": "^RECEPTION$",
+   "text": "paytm",
+   "material": "logo_backlit",
+   "height": 0.5,
+   "z": 1.75,
+   "wall": "feature"
+  }
+ ],
+ "feature_walls": [
+  {
+   "kind": "work",
+   "side": "auto",
+   "type": "fluted",
+   "material": "oak_light",
+   "pitch": 0.05,
+   "z0": 0.1,
+   "z1": 2.7,
+   "width": 4.0,
+   "max_rooms": 1,
+   "lights_every": 0.6
+  },
+  {
+   "kind": "work",
+   "side": "auto",
+   "type": "wave",
+   "material": "relief_white",
+   "cove": "cove_led",
+   "z0": 0.3,
+   "z1": 2.6,
+   "width": 5.0,
+   "max_rooms": 1
+  },
+  {
+   "kind": "meeting",
+   "side": "auto",
+   "type": "triangles",
+   "materials": [
+    "felt_teal",
+    "felt_charcoal",
+    "felt_yellow"
+   ],
+   "backing": "charcoal",
+   "cell": 0.4,
+   "z0": 0.1,
+   "z1": 2.5
+  },
+  {
+   "side": "door",
+   "type": "panel",
+   "material": "steel_brushed",
+   "z0": 0.0,
+   "z1": 2.8,
+   "width": 4.0,
+   "room": "^RECEPTION$",
+   "logo_wall": true
+  }
+ ],
+ "materials": {
+  "paint_beige": {
+   "kind": "paint",
+   "color": "#D9CBB3",
+   "rough": 0.85
+  },
+  "soffit_navy": {
+   "kind": "paint",
+   "color": "#1B2A4A",
+   "rough": 0.9
+  },
+  "soffit_black": {
+   "kind": "paint",
+   "color": "#151619",
+   "rough": 0.9
+  },
+  "soffit_charcoal": {
+   "kind": "paint",
+   "color": "#2a2b2e",
+   "rough": 0.9
+  },
+  "navy_metal": {
+   "kind": "plain",
+   "color": "#1B2A4A",
+   "rough": 0.4,
+   "coat": 0.2
+  },
+  "oak_light": {
+   "kind": "wood",
+   "colors": [
+    "#b89466",
+    "#cfae80",
+    "#e0c79f"
+   ],
+   "plank_width": 0.4,
+   "planks": false,
+   "rough": 0.45,
+   "coat": 0.1
+  },
+  "carpet_grey": {
+   "kind": "carpet",
+   "colors": [
+    "#3a3b3d",
+    "#45464a",
+    "#515256",
+    "#606165"
+   ],
+   "tile": [
+    0.6,
+    0.6
+   ],
+   "rough": 0.95
+  },
+  "carpet_aisle": {
+   "kind": "carpet",
+   "colors": [
+    "#222326",
+    "#2a2b2e",
+    "#333437",
+    "#3e3f43"
+   ],
+   "tile": [
+    0.6,
+    0.6
+   ],
+   "rough": 0.95
+  },
+  "carpet_bluegrey": {
+   "kind": "carpet",
+   "colors": [
+    "#3b4656",
+    "#46526a",
+    "#56627a",
+    "#6a7690"
+   ],
+   "tile": [
+    0.5,
+    0.5
+   ],
+   "tile_tone": 0.1,
+   "rough": 0.95
+  },
+  "terrazzo": {
+   "kind": "terrazzo",
+   "colors": [
+    "#e8e3da"
+   ],
+   "chips": [
+    "#8a8a88",
+    "#cfc8bb",
+    "#3c3c3c",
+    "#b78f6a",
+    "#6f8fa8"
+   ],
+   "period": 1.2,
+   "rough": 0.25,
+   "coat": 0.3
+  },
+  "screen_beige": {
+   "kind": "fabric",
+   "color": "#CDBB9E",
+   "rough": 0.9
+  },
+  "screen_charcoal": {
+   "kind": "fabric",
+   "color": "#3a3b3e",
+   "rough": 0.9
+  },
+  "mesh_black": {
+   "kind": "fabric",
+   "color": "#151516",
+   "rough": 0.7,
+   "sheen": 0.2
+  },
+  "white_top": {
+   "kind": "plastic",
+   "color": "#f3f2ee",
+   "rough": 0.35
+  },
+  "fabric_cream": {
+   "kind": "fabric",
+   "color": "#e8dfcc",
+   "rough": 0.9
+  },
+  "leather_tan": {
+   "kind": "plastic",
+   "color": "#a86c3c",
+   "rough": 0.5,
+   "coat": 0.2
+  },
+  "plastic_white": {
+   "kind": "plastic",
+   "color": "#f2f1ee",
+   "rough": 0.4
+  },
+  "plastic_navy": {
+   "kind": "plastic",
+   "color": "#1B2A4A",
+   "rough": 0.4
+  },
+  "pot_black": {
+   "kind": "plastic",
+   "color": "#1d1d1f",
+   "rough": 0.5
+  },
+  "felt_grey": {
+   "kind": "felt",
+   "color": "#8e9094",
+   "rough": 0.95
+  },
+  "felt_green": {
+   "kind": "felt",
+   "color": "#4f6b4a",
+   "rough": 0.95
+  },
+  "felt_teal": {
+   "kind": "felt",
+   "color": "#2c7f86",
+   "rough": 0.95
+  },
+  "felt_charcoal": {
+   "kind": "felt",
+   "color": "#3a3b3e",
+   "rough": 0.95
+  },
+  "felt_yellow": {
+   "kind": "felt",
+   "color": "#e3b33c",
+   "rough": 0.95
+  },
+  "relief_white": {
+   "kind": "paint",
+   "color": "#f2f0eb",
+   "rough": 0.8
+  },
+  "steel_brushed": {
+   "kind": "metal",
+   "color": "#b7b9bc",
+   "rough": 0.3
+  },
+  "perforated_metal": {
+   "kind": "metal",
+   "color": "#9fa2a6",
+   "rough": 0.45
+  },
+  "logo_backlit": {
+   "kind": "plain",
+   "color": "#f4f7ff",
+   "rough": 0.3,
+   "emit": 6.0
+  },
+  "cobalt_gloss": {
+   "kind": "plastic",
+   "color": "#1f45b5",
+   "rough": 0.1,
+   "coat": 1.0
+  },
+  "rug_tan": {
+   "kind": "fabric",
+   "color": "#b48a5e",
+   "rough": 0.95
+  },
+  "led_profile_warm": {
+   "kind": "emission",
+   "kelvin": 2700,
+   "strength": 12.0
+  },
+  "led_ring": {
+   "kind": "emission",
+   "kelvin": 3800,
+   "strength": 14.0
+  }
+ },
+ "parts": {
+  "panels": [
+   "screen_beige",
+   "screen_charcoal"
+  ],
+  "seating": [
+   "mesh_black"
+  ],
+  "floor": [
+   "carpet_grey",
+   "carpet_aisle",
+   "carpet_bluegrey"
+  ],
+  "surfaces": [
+   "oak_light"
+  ],
+  "walls": [
+   "paint_beige"
+  ],
+  "ceiling": [
+   "soffit_navy",
+   "soffit_black"
+  ],
+  "soft": [
+   "fabric_cream",
+   "leather_tan"
+  ],
+  "feature": [
+   "felt_teal",
+   "felt_charcoal",
+   "felt_yellow",
+   "oak_light"
+  ]
+ },
+ "brief_gaps": [
+  "Vertical slim wall lights in the oak flutes, roller blinds per wall and framed art: not modelled (flutes and facade blinds are).",
+  "Mesh cable tray down the central aisle with downlights: the open ceiling's tray runs along each room's long axis, not along the derived aisle.",
+  "Reception 'rounded-square ring-light rafts and black/brass pendants': approximated by capsule ring pendants at the CAD light positions on a charcoal open ceiling.",
+  "timber_baffle_aisle / perforated_metal_aisle: applied to the whole workstation room, not only over the aisle (the aisle is a floor mask, the ceiling is per room).",
+  "Tan rug and large planters in reception: rug_tan is defined; the CAD has no rug outline or planter blocks in RECEPTION, so none are placed.",
+  "Paytm logo: text mesh 'paytm' (backlit white) on the stainless feature wall; replace with the logo artwork (PNG with alpha) via logo.image when available."
+ ],
+ "facade": {
+  "layers": [
+   "AR-WINDOW",
+   "STR. GLAZING"
+  ],
+  "by_position": true,
+  "sill": 0.9,
+  "head": 2.25,
+  "blind": "blind",
+  "frame": "black_metal",
+  "blinds": true,
+  "blind_drops": [
+   0.35,
+   0.5,
+   0.6,
+   0.8
+  ]
+ }
+}

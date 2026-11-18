@@ -1,0 +1,38 @@
+{
+ "cameras": [
+  {
+   "room": "PANTRY",
+   "kind": "entry",
+   "frame": "plan",
+   "position": [
+    10.179,
+    30.341,
+    1.55
+   ],
+   "target": [
+    4.054,
+    29.203,
+    0.451
+   ],
+   "hfov_deg": 72,
+   "label": "Pantry: counter seating"
+  },
+  {
+   "room": "LOUNGE AREA",
+   "kind": "entry",
+   "frame": "plan",
+   "position": [
+    17.354,
+    15.292,
+    1.55
+   ],
+   "target": [
+    12.624,
+    12.889,
+    1.086
+   ],
+   "hfov_deg": 72,
+   "label": "Lounge area"
+  }
+ ]
+}

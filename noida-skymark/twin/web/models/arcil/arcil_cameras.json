@@ -1,0 +1,914 @@
+{
+ "frame": "glTF / three.js world of <tenant>.glb: x = plan east, y = up (0 = finished floor), z = -plan north; metres. position = the lens, target = a point on the view axis; hfov_deg = horizontal field of view for a 16:9 frame (three.js PerspectiveCamera.fov is vertical: vfov = 2 atan(tan(hfov/2) * h / w)). The stills use the same camera made level with lens shift; using lookAt(target) gives the same view with a 5-10 deg tilt.",
+ "tenant": "arcil",
+ "rooms": {
+  "WORKSTATION - 238 NOS": [
+   {
+    "kind": "entry",
+    "position": [
+     20.916,
+     1.55,
+     -25.416
+    ],
+    "target": [
+     27.571,
+     0.664,
+     -24.418
+    ],
+    "hfov_deg": 72,
+    "room": "WORKSTATION - 238 NOS",
+    "label": "Workstation - 238 Nos: entry",
+    "name": "arcil_CAM_workstation-238-nos_entry",
+    "still": "stills/arcil_CAM_workstation-238-nos_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     38.251,
+     1.55,
+     -25.767
+    ],
+    "target": [
+     34.138,
+     1.169,
+     -24.324
+    ],
+    "hfov_deg": 72,
+    "room": "WORKSTATION - 238 NOS",
+    "label": "Workstation - 238 Nos: feature",
+    "name": "arcil_CAM_workstation-238-nos_feature",
+    "still": "stills/arcil_CAM_workstation-238-nos_feature.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     56.076,
+     1.55,
+     -20.142
+    ],
+    "target": [
+     53.323,
+     1.278,
+     -21.576
+    ],
+    "hfov_deg": 72,
+    "room": "WORKSTATION - 238 NOS",
+    "label": "Workstation - 238 Nos: reverse",
+    "name": "arcil_CAM_workstation-238-nos_reverse",
+    "still": "stills/arcil_CAM_workstation-238-nos_reverse.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     36.352,
+     1.55,
+     -25.868
+    ],
+    "target": [
+     34.192,
+     0.75,
+     -22.785
+    ],
+    "hfov_deg": 45,
+    "room": "WORKSTATION - 238 NOS",
+    "label": "Workstation - 238 Nos: detail",
+    "name": "arcil_CAM_workstation-238-nos_detail",
+    "still": "stills/arcil_CAM_workstation-238-nos_detail.png"
+   }
+  ],
+  "PANTRY": [
+   {
+    "kind": "entry",
+    "position": [
+     12.869,
+     1.55,
+     -25.713
+    ],
+    "target": [
+     12.158,
+     1.18,
+     -29.88
+    ],
+    "hfov_deg": 72,
+    "room": "PANTRY",
+    "label": "Pantry: entry",
+    "name": "arcil_CAM_pantry_entry",
+    "still": "stills/arcil_CAM_pantry_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     13.776,
+     1.55,
+     -25.243
+    ],
+    "target": [
+     10.779,
+     0.836,
+     -29.758
+    ],
+    "hfov_deg": 78,
+    "room": "PANTRY",
+    "label": "Pantry: feature",
+    "name": "arcil_CAM_pantry_feature",
+    "still": "stills/arcil_CAM_pantry_feature.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     12.226,
+     1.55,
+     -26.642
+    ],
+    "target": [
+     12.546,
+     0.939,
+     -29.499
+    ],
+    "hfov_deg": 45,
+    "room": "PANTRY",
+    "label": "Pantry: detail",
+    "name": "arcil_CAM_pantry_detail",
+    "still": "stills/arcil_CAM_pantry_detail.png"
+   }
+  ],
+  "GENTS TOILET-01": [
+   {
+    "kind": "entry",
+    "position": [
+     5.551,
+     1.55,
+     -24.368
+    ],
+    "target": [
+     11.583,
+     0.693,
+     -26.809
+    ],
+    "hfov_deg": 72,
+    "room": "GENTS TOILET-01",
+    "label": "Gents Toilet-01: entry",
+    "name": "arcil_CAM_gents-toilet-01_entry",
+    "still": "stills/arcil_CAM_gents-toilet-01_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     11.302,
+     1.55,
+     -26.618
+    ],
+    "target": [
+     7.323,
+     0.749,
+     -24.425
+    ],
+    "hfov_deg": 72,
+    "room": "GENTS TOILET-01",
+    "label": "Gents Toilet-01: feature",
+    "name": "arcil_CAM_gents-toilet-01_feature",
+    "still": "stills/arcil_CAM_gents-toilet-01_feature.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     9.951,
+     1.55,
+     -24.593
+    ],
+    "target": [
+     6.25,
+     0.75,
+     -23.911
+    ],
+    "hfov_deg": 45,
+    "room": "GENTS TOILET-01",
+    "label": "Gents Toilet-01: detail",
+    "name": "arcil_CAM_gents-toilet-01_detail",
+    "still": "stills/arcil_CAM_gents-toilet-01_detail.png"
+   }
+  ],
+  "LADIES TOILET-01": [
+   {
+    "kind": "entry",
+    "position": [
+     5.576,
+     1.55,
+     -19.618
+    ],
+    "target": [
+     10.491,
+     0.538,
+     -22.587
+    ],
+    "hfov_deg": 72,
+    "room": "LADIES TOILET-01",
+    "label": "Ladies Toilet-01: entry",
+    "name": "arcil_CAM_ladies-toilet-01_entry",
+    "still": "stills/arcil_CAM_ladies-toilet-01_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     5.502,
+     1.55,
+     -20.618
+    ],
+    "target": [
+     10.491,
+     0.881,
+     -21.58
+    ],
+    "hfov_deg": 72,
+    "room": "LADIES TOILET-01",
+    "label": "Ladies Toilet-01: feature",
+    "name": "arcil_CAM_ladies-toilet-01_feature",
+    "still": "stills/arcil_CAM_ladies-toilet-01_feature.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     10.201,
+     1.55,
+     -21.317
+    ],
+    "target": [
+     4.978,
+     0.439,
+     -21.54
+    ],
+    "hfov_deg": 45,
+    "room": "LADIES TOILET-01",
+    "label": "Ladies Toilet-01: detail",
+    "name": "arcil_CAM_ladies-toilet-01_detail",
+    "still": "stills/arcil_CAM_ladies-toilet-01_detail.png"
+   }
+  ],
+  "TRAINING ROOM -01 24 + 1": [
+   {
+    "kind": "entry",
+    "position": [
+     20.314,
+     1.55,
+     -24.216
+    ],
+    "target": [
+     14.284,
+     0.518,
+     -19.206
+    ],
+    "hfov_deg": 72,
+    "room": "TRAINING ROOM -01 24 + 1",
+    "label": "Training Room -01 24 + 1: entry",
+    "name": "arcil_CAM_training-room-01-24-1_entry",
+    "still": "stills/arcil_CAM_training-room-01-24-1_entry.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     13.951,
+     1.55,
+     -23.968
+    ],
+    "target": [
+     21.159,
+     0.904,
+     -22.337
+    ],
+    "hfov_deg": 75,
+    "room": "TRAINING ROOM -01 24 + 1",
+    "label": "Training Room -01 24 + 1: reverse",
+    "name": "arcil_CAM_training-room-01-24-1_reverse",
+    "still": "stills/arcil_CAM_training-room-01-24-1_reverse.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     17.001,
+     1.55,
+     -23.642
+    ],
+    "target": [
+     17.872,
+     0.75,
+     -19.981
+    ],
+    "hfov_deg": 45,
+    "room": "TRAINING ROOM -01 24 + 1",
+    "label": "Training Room -01 24 + 1: detail",
+    "name": "arcil_CAM_training-room-01-24-1_detail",
+    "still": "stills/arcil_CAM_training-room-01-24-1_detail.png"
+   }
+  ],
+  "8 PAX MEETING RM 01": [
+   {
+    "kind": "entry",
+    "position": [
+     45.534,
+     1.55,
+     -26.813
+    ],
+    "target": [
+     44.295,
+     1.261,
+     -29.88
+    ],
+    "hfov_deg": 75,
+    "room": "8 PAX MEETING RM 01",
+    "label": "8 Pax Meeting Rm 01: entry",
+    "name": "arcil_CAM_8-pax-meeting-rm-01_entry",
+    "still": "stills/arcil_CAM_8-pax-meeting-rm-01_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     42.001,
+     1.55,
+     -29.493
+    ],
+    "target": [
+     45.771,
+     0.811,
+     -27.659
+    ],
+    "hfov_deg": 72,
+    "room": "8 PAX MEETING RM 01",
+    "label": "8 Pax Meeting Rm 01: feature",
+    "name": "arcil_CAM_8-pax-meeting-rm-01_feature",
+    "still": "stills/arcil_CAM_8-pax-meeting-rm-01_feature.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     43.352,
+     1.55,
+     -29.417
+    ],
+    "target": [
+     43.676,
+     0.85,
+     -26.141
+    ],
+    "hfov_deg": 45,
+    "room": "8 PAX MEETING RM 01",
+    "label": "8 Pax Meeting Rm 01: detail",
+    "name": "arcil_CAM_8-pax-meeting-rm-01_detail",
+    "still": "stills/arcil_CAM_8-pax-meeting-rm-01_detail.png"
+   }
+  ],
+  "16 PAX CONFERENCE ROOM": [
+   {
+    "kind": "entry",
+    "position": [
+     58.031,
+     1.55,
+     -27.413
+    ],
+    "target": [
+     53.51,
+     0.75,
+     -27.789
+    ],
+    "hfov_deg": 72,
+    "room": "16 PAX CONFERENCE ROOM",
+    "label": "16 Pax Conference Room: entry",
+    "name": "arcil_CAM_16-pax-conference-room_entry",
+    "still": "stills/arcil_CAM_16-pax-conference-room_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     50.751,
+     1.55,
+     -28.993
+    ],
+    "target": [
+     54.972,
+     0.936,
+     -27.002
+    ],
+    "hfov_deg": 72,
+    "room": "16 PAX CONFERENCE ROOM",
+    "label": "16 Pax Conference Room: feature",
+    "name": "arcil_CAM_16-pax-conference-room_feature",
+    "still": "stills/arcil_CAM_16-pax-conference-room_feature.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     56.027,
+     1.55,
+     -29.618
+    ],
+    "target": [
+     52.962,
+     0.75,
+     -27.433
+    ],
+    "hfov_deg": 45,
+    "room": "16 PAX CONFERENCE ROOM",
+    "label": "16 Pax Conference Room: detail",
+    "name": "arcil_CAM_16-pax-conference-room_detail",
+    "still": "stills/arcil_CAM_16-pax-conference-room_detail.png"
+   }
+  ],
+  "8 PAX MEETING RM 02": [
+   {
+    "kind": "entry",
+    "position": [
+     49.425,
+     1.55,
+     -26.813
+    ],
+    "target": [
+     45.938,
+     1.207,
+     -28.613
+    ],
+    "hfov_deg": 72,
+    "room": "8 PAX MEETING RM 02",
+    "label": "8 Pax Meeting Rm 02: entry",
+    "name": "arcil_CAM_8-pax-meeting-rm-02_entry",
+    "still": "stills/arcil_CAM_8-pax-meeting-rm-02_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     49.576,
+     1.55,
+     -28.317
+    ],
+    "target": [
+     45.938,
+     1.23,
+     -27.904
+    ],
+    "hfov_deg": 78,
+    "room": "8 PAX MEETING RM 02",
+    "label": "8 Pax Meeting Rm 02: feature",
+    "name": "arcil_CAM_8-pax-meeting-rm-02_feature",
+    "still": "stills/arcil_CAM_8-pax-meeting-rm-02_feature.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     46.652,
+     1.55,
+     -29.442
+    ],
+    "target": [
+     49.962,
+     1.05,
+     -27.581
+    ],
+    "hfov_deg": 78,
+    "room": "8 PAX MEETING RM 02",
+    "label": "8 Pax Meeting Rm 02: reverse",
+    "name": "arcil_CAM_8-pax-meeting-rm-02_reverse",
+    "still": "stills/arcil_CAM_8-pax-meeting-rm-02_reverse.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     47.501,
+     1.55,
+     -29.468
+    ],
+    "target": [
+     47.946,
+     0.841,
+     -26.161
+    ],
+    "hfov_deg": 45,
+    "room": "8 PAX MEETING RM 02",
+    "label": "8 Pax Meeting Rm 02: detail",
+    "name": "arcil_CAM_8-pax-meeting-rm-02_detail",
+    "still": "stills/arcil_CAM_8-pax-meeting-rm-02_detail.png"
+   }
+  ],
+  "RECEPTION AREA": [
+   {
+    "kind": "entry",
+    "position": [
+     51.719,
+     1.55,
+     -10.779
+    ],
+    "target": [
+     58.971,
+     0.0,
+     -5.811
+    ],
+    "hfov_deg": 72,
+    "room": "RECEPTION AREA",
+    "label": "Reception Area: entry",
+    "name": "arcil_CAM_reception-area_entry",
+    "still": "stills/arcil_CAM_reception-area_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     53.102,
+     1.55,
+     -9.993
+    ],
+    "target": [
+     57.783,
+     1.116,
+     -8.348
+    ],
+    "hfov_deg": 72,
+    "room": "RECEPTION AREA",
+    "label": "Reception Area: feature",
+    "name": "arcil_CAM_reception-area_feature",
+    "still": "stills/arcil_CAM_reception-area_feature.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     44.402,
+     1.55,
+     -3.868
+    ],
+    "target": [
+     46.153,
+     1.271,
+     -5.06
+    ],
+    "hfov_deg": 72,
+    "room": "RECEPTION AREA",
+    "label": "Reception Area: reverse",
+    "name": "arcil_CAM_reception-area_reverse",
+    "still": "stills/arcil_CAM_reception-area_reverse.png"
+   }
+  ],
+  "H. TOILET": [
+   {
+    "kind": "entry",
+    "position": [
+     46.962,
+     1.55,
+     -6.976
+    ],
+    "target": [
+     47.501,
+     1.216,
+     -9.453
+    ],
+    "hfov_deg": 75,
+    "room": "H. TOILET",
+    "label": "H. Toilet: entry",
+    "name": "arcil_CAM_h-toilet_entry",
+    "still": "stills/arcil_CAM_h-toilet_entry.png"
+   }
+  ],
+  "LADIES TOILET": [
+   {
+    "kind": "entry",
+    "position": [
+     47.791,
+     1.55,
+     -6.996
+    ],
+    "target": [
+     51.537,
+     0.887,
+     -6.654
+    ],
+    "hfov_deg": 80,
+    "room": "LADIES TOILET",
+    "label": "Ladies Toilet: entry",
+    "name": "arcil_CAM_ladies-toilet_entry",
+    "still": "stills/arcil_CAM_ladies-toilet_entry.png"
+   }
+  ],
+  "GENTS TOILET": [
+   {
+    "kind": "entry",
+    "position": [
+     48.477,
+     1.55,
+     -4.443
+    ],
+    "target": [
+     49.58,
+     1.317,
+     -5.165
+    ],
+    "hfov_deg": 78,
+    "room": "GENTS TOILET",
+    "label": "Gents Toilet: entry",
+    "name": "arcil_CAM_gents-toilet_entry",
+    "still": "stills/arcil_CAM_gents-toilet_entry.png"
+   }
+  ],
+  "CABIN-02": [
+   {
+    "kind": "entry",
+    "position": [
+     63.152,
+     1.55,
+     -16.667
+    ],
+    "target": [
+     59.236,
+     1.183,
+     -18.175
+    ],
+    "hfov_deg": 75,
+    "room": "CABIN-02",
+    "label": "Cabin-02: entry",
+    "name": "arcil_CAM_cabin-02_entry",
+    "still": "stills/arcil_CAM_cabin-02_entry.png"
+   }
+  ],
+  "CUBICAL- 03": [
+   {
+    "kind": "entry",
+    "position": [
+     59.757,
+     1.55,
+     -15.734
+    ],
+    "target": [
+     58.562,
+     1.243,
+     -13.733
+    ],
+    "hfov_deg": 72,
+    "room": "CUBICAL- 03",
+    "label": "Cubical- 03: entry",
+    "name": "arcil_CAM_cubical-03_entry",
+    "still": "stills/arcil_CAM_cubical-03_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     59.277,
+     1.55,
+     -11.917
+    ],
+    "target": [
+     58.82,
+     0.75,
+     -7.404
+    ],
+    "hfov_deg": 75,
+    "room": "CUBICAL- 03",
+    "label": "Cubical- 03: feature",
+    "name": "arcil_CAM_cubical-03_feature",
+    "still": "stills/arcil_CAM_cubical-03_feature.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     60.777,
+     1.55,
+     -7.443
+    ],
+    "target": [
+     58.104,
+     0.9,
+     -9.983
+    ],
+    "hfov_deg": 72,
+    "room": "CUBICAL- 03",
+    "label": "Cubical- 03: reverse",
+    "name": "arcil_CAM_cubical-03_reverse",
+    "still": "stills/arcil_CAM_cubical-03_reverse.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     59.826,
+     1.55,
+     -13.943
+    ],
+    "target": [
+     57.951,
+     0.069,
+     -7.234
+    ],
+    "hfov_deg": 45,
+    "room": "CUBICAL- 03",
+    "label": "Cubical- 03: detail",
+    "name": "arcil_CAM_cubical-03_detail",
+    "still": "stills/arcil_CAM_cubical-03_detail.png"
+   }
+  ],
+  "INTERVIEW ROOM 01": [
+   {
+    "kind": "entry",
+    "position": [
+     59.434,
+     1.55,
+     -13.268
+    ],
+    "target": [
+     56.709,
+     1.069,
+     -13.421
+    ],
+    "hfov_deg": 80,
+    "room": "INTERVIEW ROOM 01",
+    "label": "Interview Room 01: entry",
+    "name": "arcil_CAM_interview-room-01_entry",
+    "still": "stills/arcil_CAM_interview-room-01_entry.png"
+   }
+  ],
+  "CABIN-01": [
+   {
+    "kind": "entry",
+    "position": [
+     58.527,
+     1.55,
+     -15.734
+    ],
+    "target": [
+     58.012,
+     0.964,
+     -19.02
+    ],
+    "hfov_deg": 75,
+    "room": "CABIN-01",
+    "label": "Cabin-01: entry",
+    "name": "arcil_CAM_cabin-01_entry",
+    "still": "stills/arcil_CAM_cabin-01_entry.png"
+   }
+  ],
+  "INTERVIEW ROOM 02": [
+   {
+    "kind": "entry",
+    "position": [
+     58.86,
+     1.55,
+     -12.763
+    ],
+    "target": [
+     61.835,
+     1.024,
+     -12.998
+    ],
+    "hfov_deg": 75,
+    "room": "INTERVIEW ROOM 02",
+    "label": "Interview Room 02: entry",
+    "name": "arcil_CAM_interview-room-02_entry",
+    "still": "stills/arcil_CAM_interview-room-02_entry.png"
+   }
+  ],
+  "CABIN-03": [
+   {
+    "kind": "entry",
+    "position": [
+     62.333,
+     1.55,
+     -8.066
+    ],
+    "target": [
+     62.867,
+     0.975,
+     -11.282
+    ],
+    "hfov_deg": 72,
+    "room": "CABIN-03",
+    "label": "Cabin-03: entry",
+    "name": "arcil_CAM_cabin-03_entry",
+    "still": "stills/arcil_CAM_cabin-03_entry.png"
+   }
+  ],
+  "WORKSTATIONS (EAST POD)": [
+   {
+    "kind": "entry",
+    "position": [
+     56.426,
+     1.55,
+     -20.642
+    ],
+    "target": [
+     60.02,
+     0.845,
+     -24.615
+    ],
+    "hfov_deg": 78,
+    "room": "WORKSTATIONS (EAST POD)",
+    "label": "Workstations (East Pod): entry",
+    "name": "arcil_CAM_workstations-east-pod_entry",
+    "still": "stills/arcil_CAM_workstations-east-pod_entry.png"
+   }
+  ],
+  "Corridor 1": [
+   {
+    "kind": "entry",
+    "position": [
+     18.427,
+     1.55,
+     -30.243
+    ],
+    "target": [
+     23.46,
+     0.662,
+     -30.357
+    ],
+    "hfov_deg": 72,
+    "room": "Corridor 1",
+    "label": "Corridor 1: entry",
+    "name": "arcil_CAM_corridor-1_entry",
+    "still": "stills/arcil_CAM_corridor-1_entry.png"
+   }
+  ],
+  "Corridor 2": [
+   {
+    "kind": "entry",
+    "position": [
+     59.393,
+     1.55,
+     -25.288
+    ],
+    "target": [
+     54.021,
+     0.586,
+     -26.29
+    ],
+    "hfov_deg": 72,
+    "room": "Corridor 2",
+    "label": "Corridor 2: entry",
+    "name": "arcil_CAM_corridor-2_entry",
+    "still": "stills/arcil_CAM_corridor-2_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     57.626,
+     1.55,
+     -25.718
+    ],
+    "target": [
+     59.832,
+     1.26,
+     -25.748
+    ],
+    "hfov_deg": 78,
+    "room": "Corridor 2",
+    "label": "Corridor 2: feature",
+    "name": "arcil_CAM_corridor-2_feature",
+    "still": "stills/arcil_CAM_corridor-2_feature.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     43.576,
+     1.55,
+     -25.542
+    ],
+    "target": [
+     46.197,
+     1.196,
+     -26.131
+    ],
+    "hfov_deg": 75,
+    "room": "Corridor 2",
+    "label": "Corridor 2: reverse",
+    "name": "arcil_CAM_corridor-2_reverse",
+    "still": "stills/arcil_CAM_corridor-2_reverse.png"
+   }
+  ],
+  "Locker corridor": [
+   {
+    "kind": "entry",
+    "position": [
+     55.184,
+     1.55,
+     -18.259
+    ],
+    "target": [
+     56.523,
+     1.227,
+     -14.821
+    ],
+    "hfov_deg": 72,
+    "room": "Locker corridor",
+    "label": "Locker Corridor: entry",
+    "name": "arcil_CAM_locker-corridor_entry",
+    "still": "stills/arcil_CAM_locker-corridor_entry.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     55.352,
+     1.55,
+     -11.542
+    ],
+    "target": [
+     56.782,
+     0.916,
+     -16.14
+    ],
+    "hfov_deg": 72,
+    "room": "Locker corridor",
+    "label": "Locker Corridor: reverse",
+    "name": "arcil_CAM_locker-corridor_reverse",
+    "still": "stills/arcil_CAM_locker-corridor_reverse.png"
+   }
+  ]
+ }
+}

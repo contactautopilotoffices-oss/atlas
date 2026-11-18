@@ -1,0 +1,122 @@
+{
+ "paytm": {
+  "floor": 1,
+  "fit_to_volt_frame": {
+   "rot_deg": -0.04,
+   "dx": -25.281,
+   "dy": -6.147,
+   "matched": 30,
+   "of": 32,
+   "ref_cols": 36,
+   "resid_mean_m": 0.069,
+   "resid_max_m": 0.3,
+   "x_scale_vs_ref": 1.0008
+  },
+  "plan_origin_in": [
+   2997950,
+   -3380250
+  ],
+  "lift_label_offsets_m": [
+   0.036,
+   0.036,
+   0.047,
+   0.049
+  ],
+  "stair_core_offsets_m": [
+   0.044,
+   0.036
+  ],
+  "plate_iou_with_volt": 0.991,
+  "plate_area_m2": 1637.4,
+  "plate_bounds_volt_frame": [
+   -22.33,
+   -1.32,
+   38.9,
+   28.1
+  ],
+  "demise_area_m2": 974.3,
+  "demise_bounds_volt_frame": [
+   -22.33,
+   -1.32,
+   38.9,
+   28.05
+  ],
+  "overlap_with_volt_demise_m2": 158.8,
+  "overlap_share_of_tenant": 0.163,
+  "overlap_share_of_volt": 0.223
+ },
+ "arcil": {
+  "floor": 2,
+  "fit_to_volt_frame": {
+   "rot_deg": 0.171,
+   "dx": -26.213,
+   "dy": -2.225,
+   "matched": 33,
+   "of": 38,
+   "ref_cols": 36,
+   "resid_mean_m": 0.325,
+   "resid_max_m": 0.562,
+   "x_scale_vs_ref": 0.9884
+  },
+  "plan_origin_in": [
+   2921050,
+   -3343450
+  ],
+  "lift_label_offsets_m": [
+   0.423,
+   0.422,
+   0.549,
+   0.544
+  ],
+  "stair_core_offsets_m": [
+   0.161,
+   0.421
+  ],
+  "plate_iou_with_volt": 0.958,
+  "plate_area_m2": 1699.3,
+  "plate_bounds_volt_frame": [
+   -22.31,
+   -1.45,
+   39.71,
+   28.91
+  ],
+  "demise_area_m2": 1021.8,
+  "demise_bounds_volt_frame": [
+   -22.31,
+   -1.45,
+   39.71,
+   28.91
+  ],
+  "overlap_with_volt_demise_m2": 491.4,
+  "overlap_share_of_tenant": 0.481,
+  "overlap_share_of_volt": 0.691,
+  "occupied_area_m2": 651.4,
+  "occupied_bounds_volt_frame": [
+   -21.2,
+   -0.9,
+   28.11,
+   17.02
+  ]
+ },
+ "paytm_x_arcil": {
+  "overlap_m2": 499.3,
+  "note": "different floors"
+ },
+ "volt": {
+  "floor": 1,
+  "demise_area_m2": 710.9,
+  "demise_bounds": [
+   0.5,
+   1.27,
+   37.32,
+   27.97
+  ],
+  "plate_area_m2": 1644.9,
+  "plate_bounds": [
+   -22.3,
+   -1.23,
+   38.93,
+   28.62
+  ]
+ }
+}

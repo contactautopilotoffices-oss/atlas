@@ -1,0 +1,127 @@
+{
+ "tenant": "arcil",
+ "glb": "arcil.glb",
+ "lod_glb": "arcil_lod.glb",
+ "files": {
+  "arcil": {
+   "mb": 4.56,
+   "meshopt": {
+    "instanced_nodes_from": 1061,
+    "instanced_into": 27,
+    "draw_calls": 211,
+    "triangles": 595881,
+    "in_mb": 10.41,
+    "out_mb": 4.56,
+    "compressed_views": 854,
+    "saved_mb": 6.08,
+    "applied": true
+   },
+   "merged_groups": 21
+  },
+  "arcil_lod": {
+   "mb": 2.98,
+   "meshopt": {
+    "instanced_nodes_from": 667,
+    "instanced_into": 23,
+    "draw_calls": 127,
+    "triangles": 137444,
+    "in_mb": 6.65,
+    "out_mb": 2.98,
+    "compressed_views": 437,
+    "saved_mb": 3.8,
+    "applied": true
+   },
+   "merged_groups": 20
+  }
+ },
+ "frame": "the tenant's CAD plan frame, metres, glTF Y up: three (x, y, z) = plan (x east, height, -north). Not recentred, not rotated: apply the plate fit in the viewer.",
+ "decoder": "GLTFLoader.setMeshoptDecoder(MeshoptDecoder); repeated furniture comes as EXT_mesh_gpu_instancing (InstancedMesh); extras.instance_names lists the CAD blocks in instance order",
+ "renderer": {
+  "toneMapping": "AgXToneMapping",
+  "toneMappingExposure": 1.5911,
+  "exposure_ev": 0.67,
+  "outputColorSpace": "srgb",
+  "useLegacyLights": false
+ },
+ "lightmapped_meshes": {
+  "how": "texture = load(lightmap); texture.colorSpace = SRGBColorSpace; texture.flipY = false; texture.channel = 1; material.lightMap = texture; material.lightMapIntensity = lightMapIntensity (below, per node); material.envMapIntensity = 0; no direct lights on these meshes (the lightmap already holds sun, sky, lamps and bounce). If it looks blown, check lightMap.colorSpace is sRGB and that the environment / lights are not also lighting these meshes.",
+  "nodes": {
+   "arcil_FLOOR_arcil_lm4_1": {
+    "lightmap": "lightmaps/arcil_lm4.png",
+    "lightMapIntensity": 39.60121,
+    "uv": 1
+   },
+   "arcil_FLOOR_arcil_lm6_2": {
+    "lightmap": "lightmaps/arcil_lm6.png",
+    "lightMapIntensity": 30.40743,
+    "uv": 1
+   },
+   "arcil_FLOOR_arcil_lm1_3": {
+    "lightmap": "lightmaps/arcil_lm1.png",
+    "lightMapIntensity": 88.64375,
+    "uv": 1
+   },
+   "arcil_FLOOR_arcil_lm5_4": {
+    "lightmap": "lightmaps/arcil_lm5.png",
+    "lightMapIntensity": 74.96381,
+    "uv": 1
+   },
+   "arcil_FLOOR_arcil_lm2_5": {
+    "lightmap": "lightmaps/arcil_lm2.png",
+    "lightMapIntensity": 21.60104,
+    "uv": 1
+   },
+   "arcil_WALL_arcil_lm2_6": {
+    "lightmap": "lightmaps/arcil_lm2.png",
+    "lightMapIntensity": 21.60104,
+    "uv": 1
+   },
+   "arcil_WALL_arcil_lm5_7": {
+    "lightmap": "lightmaps/arcil_lm5.png",
+    "lightMapIntensity": 74.96381,
+    "uv": 1
+   },
+   "arcil_WALL_arcil_lm3_8": {
+    "lightmap": "lightmaps/arcil_lm3.png",
+    "lightMapIntensity": 22.80663,
+    "uv": 1
+   },
+   "arcil_WALL_arcil_lm4_9": {
+    "lightmap": "lightmaps/arcil_lm4.png",
+    "lightMapIntensity": 39.60121,
+    "uv": 1
+   },
+   "arcil_WALL_arcil_lm6_10": {
+    "lightmap": "lightmaps/arcil_lm6.png",
+    "lightMapIntensity": 30.40743,
+    "uv": 1
+   },
+   "arcil_WALL_arcil_lm0_11": {
+    "lightmap": "lightmaps/arcil_lm0.png",
+    "lightMapIntensity": 97.10662,
+    "uv": 1
+   },
+   "arcil_WALL_arcil_lm1_12": {
+    "lightmap": "lightmaps/arcil_lm1.png",
+    "lightMapIntensity": 88.64375,
+    "uv": 1
+   },
+   "arcil_WALL_arcil_lm7_13": {
+    "lightmap": "lightmaps/arcil_lm7.png",
+    "lightMapIntensity": 24.30058,
+    "uv": 1
+   }
+  }
+ },
+ "other_meshes": {
+  "environment": "RoomEnvironment through PMREMGenerator, scene.environmentIntensity = 0.6, no punctual lights; emissive materials as exported"
+ },
+ "glass": {
+  "facade_glass": "replace with the viewer's tuned transparent glass",
+  "partition_glass": "clear partition",
+  "partition_glass_frost": "frosted band"
+ },
+ "cameras": "arcil_cameras.json",
+ "collision_node": "arcil_COLLISION",
+ "placement_ok": false
+}

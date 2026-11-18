@@ -1,0 +1,329 @@
+seat_id,group,room,kind,at_desk,block,parent_block,x_in,y_in,instance,room_kind,desk_pair,x_m,y_m,place
+W1,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921610.4,-3342295.2,768,work,nested in desk block A$C62789d74,14.235,29.332,1/1
+W2,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921678.3,-3342294.9,770,work,nested in desk block A$C62789d74,15.959,29.34,1/1
+W3,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921718.4,-3342295.2,752,work,nested in desk block A$C62789d74,16.978,29.332,1/1
+W4,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921786.3,-3342294.9,754,work,nested in desk block A$C62789d74,18.702,29.34,1/1
+W5,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921826.4,-3342295.2,736,work,nested in desk block A$C62789d74,19.721,29.332,1/1
+W6,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921894.3,-3342294.9,738,work,nested in desk block A$C62789d74,21.445,29.34,1/1
+W7,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921934.4,-3342295.2,720,work,nested in desk block A$C62789d74,22.464,29.332,1/1
+W8,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922002.3,-3342294.9,722,work,nested in desk block A$C62789d74,24.188,29.34,1/1
+W9,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922042.4,-3342295.2,704,work,nested in desk block A$C62789d74,25.208,29.332,1/1
+W10,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922110.3,-3342294.9,706,work,nested in desk block A$C62789d74,26.931,29.34,1/1
+W11,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922150.4,-3342295.2,688,work,nested in desk block A$C62789d74,27.951,29.332,1/1
+W12,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922218.3,-3342294.9,690,work,nested in desk block A$C62789d74,29.675,29.34,1/1
+W13,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922258.4,-3342295.2,672,work,nested in desk block A$C62789d74,30.694,29.332,1/1
+W14,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922326.3,-3342294.9,674,work,nested in desk block A$C62789d74,32.418,29.34,1/1
+W15,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922378.4,-3342295.2,656,work,nested in desk block A$C62789d74,33.742,29.332,1/1
+W16,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922446.3,-3342294.9,658,work,nested in desk block A$C62789d74,35.466,29.34,1/1
+W17,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922486.4,-3342295.2,640,work,nested in desk block A$C62789d74,36.485,29.332,1/1
+W18,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922554.3,-3342294.9,642,work,nested in desk block A$C62789d74,38.209,29.34,1/1
+W19,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922594.4,-3342295.2,624,work,nested in desk block A$C62789d74,39.228,29.332,1/1
+W20,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922662.3,-3342294.9,626,work,nested in desk block A$C62789d74,40.952,29.34,1/1
+W21,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921610.4,-3342331.2,772,work,nested in desk block A$C62789d74,14.235,28.418,1/1
+W22,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921678.3,-3342330.9,774,work,nested in desk block A$C62789d74,15.959,28.425,1/1
+W23,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921718.4,-3342331.2,756,work,nested in desk block A$C62789d74,16.978,28.418,1/1
+W24,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921786.3,-3342330.9,758,work,nested in desk block A$C62789d74,18.702,28.425,1/1
+W25,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921826.4,-3342331.2,740,work,nested in desk block A$C62789d74,19.721,28.418,1/1
+W26,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921894.3,-3342330.9,742,work,nested in desk block A$C62789d74,21.445,28.425,1/1
+W27,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921934.4,-3342331.2,724,work,nested in desk block A$C62789d74,22.464,28.418,1/1
+W28,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922002.3,-3342330.9,726,work,nested in desk block A$C62789d74,24.188,28.425,1/1
+W29,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922042.4,-3342331.2,708,work,nested in desk block A$C62789d74,25.208,28.418,1/1
+W30,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922110.3,-3342330.9,710,work,nested in desk block A$C62789d74,26.931,28.425,1/1
+W31,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922150.4,-3342331.2,692,work,nested in desk block A$C62789d74,27.951,28.418,1/1
+W32,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922218.3,-3342330.9,694,work,nested in desk block A$C62789d74,29.675,28.425,1/1
+W33,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922258.4,-3342331.2,676,work,nested in desk block A$C62789d74,30.694,28.418,1/1
+W34,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922326.3,-3342330.9,678,work,nested in desk block A$C62789d74,32.418,28.425,1/1
+W35,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922378.4,-3342331.2,660,work,nested in desk block A$C62789d74,33.742,28.418,1/1
+W36,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922446.3,-3342330.9,662,work,nested in desk block A$C62789d74,35.466,28.425,1/1
+W37,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922486.4,-3342331.2,644,work,nested in desk block A$C62789d74,36.485,28.418,1/1
+W38,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922554.3,-3342330.9,646,work,nested in desk block A$C62789d74,38.209,28.425,1/1
+W39,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922594.4,-3342331.2,628,work,nested in desk block A$C62789d74,39.228,28.418,1/1
+W40,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922662.3,-3342330.9,630,work,nested in desk block A$C62789d74,40.952,28.425,1/1
+W41,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921610.4,-3342367.2,776,work,nested in desk block A$C62789d74,14.235,27.503,1/1
+W42,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921678.3,-3342366.9,778,work,nested in desk block A$C62789d74,15.959,27.511,1/1
+W43,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921718.4,-3342367.2,760,work,nested in desk block A$C62789d74,16.978,27.503,1/1
+W44,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921786.3,-3342366.9,762,work,nested in desk block A$C62789d74,18.702,27.511,1/1
+W45,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921826.4,-3342367.2,744,work,nested in desk block A$C62789d74,19.721,27.503,1/1
+W46,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921894.3,-3342366.9,746,work,nested in desk block A$C62789d74,21.445,27.511,1/1
+W47,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921934.4,-3342367.2,728,work,nested in desk block A$C62789d74,22.464,27.503,1/1
+W48,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922002.3,-3342366.9,730,work,nested in desk block A$C62789d74,24.188,27.511,1/1
+W49,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922042.4,-3342367.2,712,work,nested in desk block A$C62789d74,25.208,27.503,1/1
+W50,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922110.3,-3342366.9,714,work,nested in desk block A$C62789d74,26.931,27.511,1/1
+W51,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922150.4,-3342367.2,696,work,nested in desk block A$C62789d74,27.951,27.503,1/1
+W52,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922218.3,-3342366.9,698,work,nested in desk block A$C62789d74,29.675,27.511,1/1
+W53,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922258.4,-3342367.2,680,work,nested in desk block A$C62789d74,30.694,27.503,1/1
+W54,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922326.3,-3342366.9,682,work,nested in desk block A$C62789d74,32.418,27.511,1/1
+W55,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922378.4,-3342367.2,664,work,nested in desk block A$C62789d74,33.742,27.503,1/1
+W56,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922446.3,-3342366.9,666,work,nested in desk block A$C62789d74,35.466,27.511,1/1
+W57,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922486.4,-3342367.2,648,work,nested in desk block A$C62789d74,36.485,27.503,1/1
+W58,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922554.3,-3342366.9,650,work,nested in desk block A$C62789d74,38.209,27.511,1/1
+W59,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922594.4,-3342367.2,632,work,nested in desk block A$C62789d74,39.228,27.503,1/1
+W60,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922662.3,-3342366.9,634,work,nested in desk block A$C62789d74,40.952,27.511,1/1
+W61,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921610.4,-3342403.2,780,work,nested in desk block A$C62789d74,14.235,26.589,1/1
+W62,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921678.3,-3342402.9,782,work,nested in desk block A$C62789d74,15.959,26.596,1/1
+W63,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921718.4,-3342403.2,764,work,nested in desk block A$C62789d74,16.978,26.589,1/1
+W64,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921786.3,-3342402.9,766,work,nested in desk block A$C62789d74,18.702,26.596,1/1
+W65,Work seats (desk + chair),WORKSTATION - 238 NOS,supervisor chair,supervisor workstation,A$Ce658220c,WEGWG,2921825.9,-3342403.7,750,work,nested in desk block WEGWG,19.709,26.576,1/1
+W66,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921894.3,-3342402.9,748,work,nested in desk block A$C62789d74,21.445,26.596,1/1
+W67,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921934.4,-3342403.2,732,work,nested in desk block A$C62789d74,22.464,26.589,1/1
+W68,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922002.3,-3342402.9,734,work,nested in desk block A$C62789d74,24.188,26.596,1/1
+W69,Work seats (desk + chair),WORKSTATION - 238 NOS,supervisor chair,supervisor workstation,A$Ce658220c,WEGWG,2922041.9,-3342403.7,718,work,nested in desk block WEGWG,25.195,26.576,1/1
+W70,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922110.3,-3342402.9,716,work,nested in desk block A$C62789d74,26.931,26.596,1/1
+W71,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922150.4,-3342403.2,700,work,nested in desk block A$C62789d74,27.951,26.589,1/1
+W72,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922218.3,-3342402.9,702,work,nested in desk block A$C62789d74,29.675,26.596,1/1
+W73,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922258.4,-3342403.2,684,work,nested in desk block A$C62789d74,30.694,26.589,1/1
+W74,Work seats (desk + chair),WORKSTATION - 238 NOS,supervisor chair,supervisor workstation,A$Ce658220c,WEGWG,2922326.8,-3342402.4,686,work,nested in desk block WEGWG,32.43,26.61,1/1
+W75,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922378.4,-3342403.2,668,work,nested in desk block A$C62789d74,33.742,26.589,1/1
+W76,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922446.3,-3342402.9,670,work,nested in desk block A$C62789d74,35.466,26.596,1/1
+W77,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922486.4,-3342403.2,652,work,nested in desk block A$C62789d74,36.485,26.589,1/1
+W78,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922554.3,-3342402.9,654,work,nested in desk block A$C62789d74,38.209,26.596,1/1
+W79,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922594.4,-3342403.2,636,work,nested in desk block A$C62789d74,39.228,26.589,1/1
+W80,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922662.3,-3342402.9,638,work,nested in desk block A$C62789d74,40.952,26.596,1/1
+W81,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921920.2,-3342498.2,573,work,nested in desk block A$C62789d74,22.103,24.176,1/1
+W82,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921988.1,-3342497.9,575,work,nested in desk block A$C62789d74,23.827,24.183,1/1
+W83,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922028.2,-3342498.2,569,work,nested in desk block A$C62789d74,24.847,24.176,1/1
+W84,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922096.1,-3342497.9,571,work,nested in desk block A$C62789d74,26.57,24.183,1/1
+W85,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922136.2,-3342498.1,393,work,nested in desk block A$C62789d74,27.59,24.177,1/1
+W86,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922204.1,-3342497.8,395,work,nested in desk block A$C62789d74,29.314,24.185,1/1
+W87,Work seats (desk + chair),WORKSTATION - 238 NOS,supervisor chair,supervisor workstation,A$Ce658220c,WEGWG,2922243.7,-3342498.7,397,work,nested in desk block WEGWG,30.32,24.163,1/1
+W88,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922312.1,-3342497.9,391,work,nested in desk block A$C62789d74,32.057,24.183,1/1
+W89,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922352.2,-3342498.1,387,work,nested in desk block A$C62789d74,33.076,24.177,1/1
+W90,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922420.1,-3342497.8,389,work,nested in desk block A$C62789d74,34.8,24.185,1/1
+W91,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922460.2,-3342498.1,246,work,nested in desk block A$C62789d74,35.819,24.177,1/1
+W92,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922528.1,-3342497.8,248,work,nested in desk block A$C62789d74,37.543,24.185,1/1
+W93,Work seats (desk + chair),WORKSTATION - 238 NOS,supervisor chair,supervisor workstation,A$Ce658220c,WEGWG,2922568.1,-3342498.7,372,work,nested in desk block WEGWG,38.559,24.164,1/1
+W94,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922636.1,-3342497.8,284,work,nested in desk block A$C62789d74,40.286,24.185,1/1
+W95,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922676.2,-3342498.1,310,work,nested in desk block A$C62789d74,41.305,24.177,1/1
+W96,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922744.1,-3342497.8,320,work,nested in desk block A$C62789d74,43.029,24.185,1/1
+W97,Work seats (desk + chair),WORKSTATION - 238 NOS,supervisor chair,supervisor workstation,A$Ce658220c,WEGWG,2922783.1,-3342498.7,376,work,nested in desk block WEGWG,44.021,24.164,1/1
+W98,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922852.0,-3342497.9,338,work,nested in desk block A$C62789d74,45.772,24.184,1/1
+W99,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922892.2,-3342498.2,107,work,nested in desk block A$C62789d74,46.791,24.176,1/1
+W100,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922960.0,-3342497.9,488,work,nested in desk block A$C62789d74,48.515,24.184,1/1
+W101,Work seats (desk + chair),WORKSTATION - 238 NOS,supervisor chair,supervisor workstation,A$Ce658220c,WEGWG,2922999.6,-3342498.7,538,work,nested in desk block WEGWG,49.521,24.164,1/1
+W102,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923068.0,-3342497.9,510,work,nested in desk block A$C62789d74,51.257,24.184,1/1
+W103,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923108.1,-3342498.2,522,work,nested in desk block A$C62789d74,52.277,24.176,1/1
+W104,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923176.0,-3342497.9,534,work,nested in desk block A$C62789d74,54.0,24.184,1/1
+W105,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921920.2,-3342534.2,471,work,nested in desk block A$C62789d74,22.103,23.261,1/1
+W106,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921988.1,-3342533.9,473,work,nested in desk block A$C62789d74,23.827,23.269,1/1
+W107,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922028.2,-3342534.2,188,work,nested in desk block A$C62789d74,24.847,23.261,1/1
+W108,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922096.1,-3342533.9,190,work,nested in desk block A$C62789d74,26.57,23.269,1/1
+W109,Work seats (desk + chair),WORKSTATION - 238 NOS,supervisor chair,supervisor workstation,A$Ce658220c,WEGWG,2922135.7,-3342534.7,374,work,nested in desk block WEGWG,27.577,23.248,1/1
+W110,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922204.1,-3342533.9,202,work,nested in desk block A$C62789d74,29.314,23.269,1/1
+W111,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922244.2,-3342534.2,216,work,nested in desk block A$C62789d74,30.333,23.261,1/1
+W112,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922312.1,-3342533.9,218,work,nested in desk block A$C62789d74,32.057,23.269,1/1
+W113,Work seats (desk + chair),WORKSTATION - 238 NOS,supervisor chair,supervisor workstation,A$Ce658220c,WEGWG,2922352.1,-3342534.7,370,work,nested in desk block WEGWG,33.073,23.248,1/1
+W114,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922420.1,-3342533.9,230,work,nested in desk block A$C62789d74,34.8,23.269,1/1
+W115,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922460.2,-3342534.1,250,work,nested in desk block A$C62789d74,35.819,23.263,1/1
+W116,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922528.1,-3342533.8,252,work,nested in desk block A$C62789d74,37.543,23.27,1/1
+W117,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922568.2,-3342534.1,286,work,nested in desk block A$C62789d74,38.563,23.263,1/1
+W118,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922636.1,-3342533.8,288,work,nested in desk block A$C62789d74,40.286,23.27,1/1
+W119,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922676.2,-3342534.1,308,work,nested in desk block A$C62789d74,41.305,23.263,1/1
+W120,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922744.1,-3342533.8,318,work,nested in desk block A$C62789d74,43.029,23.27,1/1
+W121,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922784.2,-3342534.2,328,work,nested in desk block A$C62789d74,44.048,23.262,1/1
+W122,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922852.0,-3342533.9,336,work,nested in desk block A$C62789d74,45.772,23.269,1/1
+W123,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922892.2,-3342534.2,105,work,nested in desk block A$C62789d74,46.791,23.262,1/1
+W124,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922960.0,-3342533.9,486,work,nested in desk block A$C62789d74,48.515,23.269,1/1
+W125,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923000.1,-3342534.2,498,work,nested in desk block A$C62789d74,49.534,23.262,1/1
+W126,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923068.0,-3342533.9,508,work,nested in desk block A$C62789d74,51.257,23.269,1/1
+W127,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923108.1,-3342534.2,520,work,nested in desk block A$C62789d74,52.277,23.262,1/1
+W128,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923176.0,-3342533.9,532,work,nested in desk block A$C62789d74,54.0,23.269,1/1
+W129,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921920.2,-3342570.2,459,work,nested in desk block A$C62789d74,22.103,22.347,1/1
+W130,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921988.1,-3342569.9,461,work,nested in desk block A$C62789d74,23.827,22.354,1/1
+W131,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922028.2,-3342570.2,176,work,nested in desk block A$C62789d74,24.847,22.347,1/1
+W132,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922096.1,-3342569.9,178,work,nested in desk block A$C62789d74,26.57,22.354,1/1
+W133,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922136.2,-3342570.2,296,work,nested in desk block A$C62789d74,27.59,22.347,1/1
+W134,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922204.1,-3342569.9,298,work,nested in desk block A$C62789d74,29.314,22.355,1/1
+W135,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922244.2,-3342570.2,300,work,nested in desk block A$C62789d74,30.333,22.347,1/1
+W136,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922312.1,-3342569.9,302,work,nested in desk block A$C62789d74,32.057,22.355,1/1
+W137,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922352.2,-3342570.2,304,work,nested in desk block A$C62789d74,33.076,22.347,1/1
+W138,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922420.1,-3342569.9,306,work,nested in desk block A$C62789d74,34.8,22.355,1/1
+W139,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922460.2,-3342570.1,234,work,nested in desk block A$C62789d74,35.819,22.348,1/1
+W140,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922528.1,-3342569.8,236,work,nested in desk block A$C62789d74,37.543,22.356,1/1
+W141,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922568.2,-3342570.1,272,work,nested in desk block A$C62789d74,38.563,22.348,1/1
+W142,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922636.1,-3342569.8,274,work,nested in desk block A$C62789d74,40.286,22.356,1/1
+W143,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922676.2,-3342570.1,290,work,nested in desk block A$C62789d74,41.305,22.348,1/1
+W144,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922744.1,-3342569.8,312,work,nested in desk block A$C62789d74,43.029,22.356,1/1
+W145,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922784.2,-3342570.2,322,work,nested in desk block A$C62789d74,44.048,22.347,1/1
+W146,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922852.0,-3342569.9,330,work,nested in desk block A$C62789d74,45.772,22.355,1/1
+W147,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922892.2,-3342570.2,99,work,nested in desk block A$C62789d74,46.791,22.347,1/1
+W148,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922960.0,-3342569.9,480,work,nested in desk block A$C62789d74,48.515,22.355,1/1
+W149,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923000.1,-3342570.2,492,work,nested in desk block A$C62789d74,49.534,22.347,1/1
+W150,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923068.0,-3342569.9,502,work,nested in desk block A$C62789d74,51.257,22.355,1/1
+W151,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923108.1,-3342570.2,514,work,nested in desk block A$C62789d74,52.277,22.347,1/1
+W152,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923176.0,-3342569.9,526,work,nested in desk block A$C62789d74,54.0,22.355,1/1
+W153,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921920.2,-3342606.2,465,work,nested in desk block A$C62789d74,22.103,21.432,1/1
+W154,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921988.1,-3342605.9,469,work,nested in desk block A$C62789d74,23.827,21.44,1/1
+W155,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922028.2,-3342606.2,182,work,nested in desk block A$C62789d74,24.847,21.432,1/1
+W156,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922096.1,-3342605.9,186,work,nested in desk block A$C62789d74,26.57,21.44,1/1
+W157,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922136.2,-3342606.2,196,work,nested in desk block A$C62789d74,27.59,21.433,1/1
+W158,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922204.1,-3342605.9,200,work,nested in desk block A$C62789d74,29.314,21.44,1/1
+W159,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922244.2,-3342606.2,210,work,nested in desk block A$C62789d74,30.333,21.433,1/1
+W160,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922312.1,-3342605.9,214,work,nested in desk block A$C62789d74,32.057,21.44,1/1
+W161,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922352.2,-3342606.2,226,work,nested in desk block A$C62789d74,33.076,21.433,1/1
+W162,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922420.1,-3342605.9,228,work,nested in desk block A$C62789d74,34.8,21.44,1/1
+W163,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922460.2,-3342606.1,240,work,nested in desk block A$C62789d74,35.819,21.434,1/1
+W164,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922528.1,-3342605.8,244,work,nested in desk block A$C62789d74,37.543,21.441,1/1
+W165,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922568.2,-3342606.1,278,work,nested in desk block A$C62789d74,38.563,21.434,1/1
+W166,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922636.1,-3342605.8,282,work,nested in desk block A$C62789d74,40.286,21.441,1/1
+W167,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922676.2,-3342606.1,294,work,nested in desk block A$C62789d74,41.305,21.434,1/1
+W168,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922744.1,-3342605.8,316,work,nested in desk block A$C62789d74,43.029,21.441,1/1
+W169,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922784.2,-3342606.2,326,work,nested in desk block A$C62789d74,44.048,21.433,1/1
+W170,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922852.0,-3342605.9,334,work,nested in desk block A$C62789d74,45.772,21.44,1/1
+W171,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922892.2,-3342606.2,103,work,nested in desk block A$C62789d74,46.791,21.433,1/1
+W172,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922960.0,-3342605.9,484,work,nested in desk block A$C62789d74,48.515,21.44,1/1
+W173,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923000.1,-3342606.2,496,work,nested in desk block A$C62789d74,49.534,21.433,1/1
+W174,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923068.0,-3342605.9,506,work,nested in desk block A$C62789d74,51.257,21.44,1/1
+W175,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923108.1,-3342606.2,518,work,nested in desk block A$C62789d74,52.277,21.433,1/1
+W176,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923176.0,-3342605.9,530,work,nested in desk block A$C62789d74,54.0,21.44,1/1
+W177,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921920.2,-3342642.2,463,work,nested in desk block A$C62789d74,22.103,20.518,1/1
+W178,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921988.1,-3342641.9,467,work,nested in desk block A$C62789d74,23.827,20.525,1/1
+W179,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922028.2,-3342642.2,180,work,nested in desk block A$C62789d74,24.847,20.518,1/1
+W180,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922096.1,-3342641.9,184,work,nested in desk block A$C62789d74,26.57,20.525,1/1
+W181,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922136.2,-3342642.2,194,work,nested in desk block A$C62789d74,27.59,20.518,1/1
+W182,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922204.1,-3342641.9,198,work,nested in desk block A$C62789d74,29.314,20.526,1/1
+W183,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922244.2,-3342642.2,208,work,nested in desk block A$C62789d74,30.333,20.518,1/1
+W184,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922312.1,-3342641.9,212,work,nested in desk block A$C62789d74,32.057,20.526,1/1
+W185,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922352.2,-3342642.2,224,work,nested in desk block A$C62789d74,33.076,20.518,1/1
+W186,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922420.1,-3342641.9,344,work,nested in desk block A$C62789d74,34.8,20.526,1/1
+W187,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922460.2,-3342642.1,238,work,nested in desk block A$C62789d74,35.819,20.52,1/1
+W188,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922528.1,-3342641.8,242,work,nested in desk block A$C62789d74,37.543,20.527,1/1
+W189,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922568.2,-3342642.1,276,work,nested in desk block A$C62789d74,38.563,20.52,1/1
+W190,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922636.1,-3342641.8,280,work,nested in desk block A$C62789d74,40.286,20.527,1/1
+W191,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922676.2,-3342642.1,292,work,nested in desk block A$C62789d74,41.305,20.52,1/1
+W192,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922744.1,-3342641.8,314,work,nested in desk block A$C62789d74,43.029,20.527,1/1
+W193,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922784.2,-3342642.2,324,work,nested in desk block A$C62789d74,44.048,20.518,1/1
+W194,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922852.0,-3342641.9,332,work,nested in desk block A$C62789d74,45.772,20.526,1/1
+W195,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922892.2,-3342642.2,101,work,nested in desk block A$C62789d74,46.791,20.518,1/1
+W196,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922960.0,-3342641.9,482,work,nested in desk block A$C62789d74,48.515,20.526,1/1
+W197,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923000.1,-3342642.2,494,work,nested in desk block A$C62789d74,49.534,20.518,1/1
+W198,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923068.0,-3342641.9,504,work,nested in desk block A$C62789d74,51.257,20.526,1/1
+W199,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923108.1,-3342642.2,516,work,nested in desk block A$C62789d74,52.277,20.518,1/1
+W200,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923176.0,-3342641.9,528,work,nested in desk block A$C62789d74,54.0,20.526,1/1
+W201,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923288.5,-3342662.1,546,work,nested in desk block A$C62789d74,56.858,20.014,1/1
+W202,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923324.5,-3342662.1,540,work,nested in desk block A$C62789d74,57.772,20.014,1/1
+W203,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923360.5,-3342662.1,403,work,nested in desk block A$C62789d74,58.687,20.014,1/1
+W204,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923396.5,-3342662.1,401,work,nested in desk block A$C62789d74,59.601,20.014,1/1
+W205,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923432.5,-3342662.1,405,work,nested in desk block A$C62789d74,60.516,20.014,1/1
+W206,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923468.5,-3342662.1,407,work,nested in desk block A$C62789d74,61.43,20.014,1/1
+W207,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921920.2,-3342678.2,475,work,nested in desk block A$C62789d74,22.103,19.604,1/1
+W208,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921988.1,-3342677.9,477,work,nested in desk block A$C62789d74,23.827,19.611,1/1
+W209,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922028.2,-3342678.2,192,work,nested in desk block A$C62789d74,24.847,19.604,1/1
+W210,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922096.1,-3342677.9,431,work,nested in desk block A$C62789d74,26.57,19.611,1/1
+W211,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922136.2,-3342678.2,204,work,nested in desk block A$C62789d74,27.59,19.604,1/1
+W212,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922204.1,-3342677.9,206,work,nested in desk block A$C62789d74,29.314,19.612,1/1
+W213,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922244.2,-3342678.2,220,work,nested in desk block A$C62789d74,30.333,19.604,1/1
+W214,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922312.1,-3342677.9,222,work,nested in desk block A$C62789d74,32.057,19.612,1/1
+W215,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922352.2,-3342678.2,232,work,nested in desk block A$C62789d74,33.076,19.604,1/1
+W216,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922420.1,-3342677.9,346,work,nested in desk block A$C62789d74,34.8,19.611,1/1
+W217,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922460.2,-3342678.2,340,work,nested in desk block A$C62789d74,35.819,19.604,1/1
+W218,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922528.1,-3342677.9,342,work,nested in desk block A$C62789d74,37.543,19.612,1/1
+W219,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922568.2,-3342678.1,348,work,nested in desk block A$C62789d74,38.563,19.605,1/1
+W220,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922636.1,-3342677.8,350,work,nested in desk block A$C62789d74,40.286,19.613,1/1
+W221,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922676.2,-3342678.1,352,work,nested in desk block A$C62789d74,41.305,19.605,1/1
+W222,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922744.1,-3342677.8,354,work,nested in desk block A$C62789d74,43.029,19.613,1/1
+W223,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922784.2,-3342678.2,365,work,nested in desk block A$C62789d74,44.048,19.604,1/1
+W224,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922852.0,-3342677.9,367,work,nested in desk block A$C62789d74,45.772,19.612,1/1
+W225,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922892.2,-3342678.2,109,work,nested in desk block A$C62789d74,46.791,19.604,1/1
+W226,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2922960.0,-3342677.9,490,work,nested in desk block A$C62789d74,48.515,19.612,1/1
+W227,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923000.1,-3342678.2,500,work,nested in desk block A$C62789d74,49.534,19.604,1/1
+W228,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923068.0,-3342677.9,512,work,nested in desk block A$C62789d74,51.257,19.612,1/1
+W229,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923108.1,-3342678.2,524,work,nested in desk block A$C62789d74,52.277,19.604,1/1
+W230,Work seats (desk + chair),WORKSTATION - 238 NOS,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923176.0,-3342677.9,536,work,nested in desk block A$C62789d74,54.0,19.612,1/1
+W231,Work seats (desk + chair),WORKSTATIONS (EAST POD),task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923288.8,-3342513.9,550,work,nested in desk block A$C62789d74,56.865,23.776,1/1
+W232,Work seats (desk + chair),WORKSTATIONS (EAST POD),task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923324.8,-3342513.9,544,work,nested in desk block A$C62789d74,57.78,23.776,1/1
+W233,Work seats (desk + chair),WORKSTATIONS (EAST POD),task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923360.8,-3342513.9,425,work,nested in desk block A$C62789d74,58.694,23.776,1/1
+W234,Work seats (desk + chair),WORKSTATIONS (EAST POD),task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923396.8,-3342513.9,423,work,nested in desk block A$C62789d74,59.609,23.776,1/1
+W235,Work seats (desk + chair),WORKSTATIONS (EAST POD),task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923432.8,-3342513.9,427,work,nested in desk block A$C62789d74,60.523,23.776,1/1
+W236,Work seats (desk + chair),WORKSTATIONS (EAST POD),task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923468.8,-3342513.9,429,work,nested in desk block A$C62789d74,61.437,23.776,1/1
+W237,Work seats (desk + chair),WORKSTATIONS (EAST POD),supervisor chair,supervisor workstation,A$Ce658220c,WEGWG,2923288.0,-3342553.6,552,work,nested in desk block WEGWG,56.845,22.77,1/1
+W238,Work seats (desk + chair),WORKSTATIONS (EAST POD),task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923324.5,-3342554.1,554,work,nested in desk block A$C62789d74,57.772,22.757,1/1
+W239,Work seats (desk + chair),WORKSTATIONS (EAST POD),task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923360.5,-3342554.1,556,work,nested in desk block A$C62789d74,58.687,22.757,1/1
+W240,Work seats (desk + chair),WORKSTATIONS (EAST POD),task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923396.5,-3342554.1,409,work,nested in desk block A$C62789d74,59.601,22.757,1/1
+W241,Work seats (desk + chair),WORKSTATIONS (EAST POD),task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923432.5,-3342554.1,411,work,nested in desk block A$C62789d74,60.516,22.757,1/1
+W242,Work seats (desk + chair),WORKSTATIONS (EAST POD),task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923468.5,-3342554.1,419,work,nested in desk block A$C62789d74,61.43,22.757,1/1
+W243,Work seats (desk + chair),WORKSTATIONS (EAST POD),task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923288.8,-3342621.9,548,work,nested in desk block A$C62789d74,56.865,21.033,1/1
+W244,Work seats (desk + chair),WORKSTATIONS (EAST POD),task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923324.8,-3342621.9,542,work,nested in desk block A$C62789d74,57.78,21.033,1/1
+W245,Work seats (desk + chair),WORKSTATIONS (EAST POD),task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923360.8,-3342621.9,415,work,nested in desk block A$C62789d74,58.694,21.033,1/1
+W246,Work seats (desk + chair),WORKSTATIONS (EAST POD),task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923396.8,-3342621.9,413,work,nested in desk block A$C62789d74,59.609,21.033,1/1
+W247,Work seats (desk + chair),WORKSTATIONS (EAST POD),task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923432.8,-3342621.9,417,work,nested in desk block A$C62789d74,60.523,21.033,1/1
+W248,Work seats (desk + chair),WORKSTATIONS (EAST POD),task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2923468.8,-3342621.9,421,work,nested in desk block A$C62789d74,61.437,21.033,1/1
+W249,Work seats (desk + chair),TRAINING ROOM -01 24 + 1,task chair,3'x2' workstation,A$C136922d8,A$C62789d74,2921854.8,-3342662.1,457,training,nested in desk block A$C62789d74,20.443,20.012,1/1
+W250,Work seats (desk + chair),CABIN-02,director chair,,A$Cee30255b,A$C7e9a1dde,2923439.9,-3342730.2,1752,work,,60.704,18.282,1/1
+W251,Work seats (desk + chair),CABIN-01,director chair,,A$Cee30255b,A$C7e9a1dde,2923316.8,-3342730.3,1757,work,director desk 0.20 m away,57.578,18.281,1/1
+W252,Work seats (desk + chair),CABIN-03,director chair,,A$Cee30255b,A$C7e9a1dde,2923524.1,-3343035.3,1741,work,,62.841,10.533,1/1
+M1,Meeting room seats,8 PAX MEETING RM 01,meeting chair,,A$Cd2419d53,,2922707.7,-3342326.7,362,meeting,,42.107,28.532,1/1
+M2,Meeting room seats,8 PAX MEETING RM 01,meeting chair,,A$Cd2419d53,,2922737.5,-3342326.7,357,meeting,,42.863,28.532,1/1
+M3,Meeting room seats,8 PAX MEETING RM 01,meeting chair,,A$Cd2419d53,,2922767.3,-3342326.7,356,meeting,,43.619,28.532,1/1
+M4,Meeting room seats,8 PAX MEETING RM 01,meeting chair,,A$Cd2419d53,,2922797.1,-3342326.7,360,meeting,,44.376,28.532,1/1
+M5,Meeting room seats,8 PAX MEETING RM 01,meeting chair,,A$Cd2419d53,,2922707.7,-3342374.4,363,meeting,,42.106,27.321,1/1
+M6,Meeting room seats,8 PAX MEETING RM 01,meeting chair,,A$Cd2419d53,,2922737.5,-3342374.4,359,meeting,,42.862,27.321,1/1
+M7,Meeting room seats,8 PAX MEETING RM 01,meeting chair,,A$Cd2419d53,,2922767.3,-3342374.4,358,meeting,,43.618,27.321,1/1
+M8,Meeting room seats,8 PAX MEETING RM 01,meeting chair,,A$Cd2419d53,,2922797.0,-3342374.4,361,meeting,,44.375,27.321,1/1
+M9,Meeting room seats,16 PAX CONFERENCE ROOM,conference chair,,A$Cb2a790fe,,2923091.5,-3342316.6,264,meeting,,51.854,28.788,1/1
+M10,Meeting room seats,16 PAX CONFERENCE ROOM,conference chair,,A$Cb2a790fe,,2923119.9,-3342316.6,263,meeting,,52.576,28.788,1/1
+M11,Meeting room seats,16 PAX CONFERENCE ROOM,conference chair,,A$Cb2a790fe,,2923149.6,-3342316.6,262,meeting,,53.33,28.788,1/1
+M12,Meeting room seats,16 PAX CONFERENCE ROOM,conference chair,,A$Cb2a790fe,,2923178.1,-3342316.6,261,meeting,,54.053,28.788,1/1
+M13,Meeting room seats,16 PAX CONFERENCE ROOM,conference chair,,A$Cb2a790fe,,2923205.3,-3342316.6,260,meeting,,54.744,28.788,1/1
+M14,Meeting room seats,16 PAX CONFERENCE ROOM,conference chair,,A$Cb2a790fe,,2923232.5,-3342316.6,259,meeting,,55.436,28.788,1/1
+M15,Meeting room seats,16 PAX CONFERENCE ROOM,conference chair,,A$Cb2a790fe,,2923259.7,-3342316.6,268,meeting,,56.128,28.788,1/1
+M16,Meeting room seats,16 PAX CONFERENCE ROOM,conference chair,,A$Cb2a790fe,,2923287.0,-3342316.6,267,meeting,,56.819,28.788,1/1
+M17,Meeting room seats,16 PAX CONFERENCE ROOM,conference chair,,A$Cb2a790fe,,2923091.5,-3342384.5,258,meeting,,51.854,27.064,1/1
+M18,Meeting room seats,16 PAX CONFERENCE ROOM,conference chair,,A$Cb2a790fe,,2923119.9,-3342384.5,257,meeting,,52.576,27.064,1/1
+M19,Meeting room seats,16 PAX CONFERENCE ROOM,conference chair,,A$Cb2a790fe,,2923149.6,-3342384.5,256,meeting,,53.33,27.064,1/1
+M20,Meeting room seats,16 PAX CONFERENCE ROOM,conference chair,,A$Cb2a790fe,,2923178.1,-3342384.5,255,meeting,,54.053,27.064,1/1
+M21,Meeting room seats,16 PAX CONFERENCE ROOM,conference chair,,A$Cb2a790fe,,2923205.3,-3342384.5,254,meeting,,54.744,27.064,1/1
+M22,Meeting room seats,16 PAX CONFERENCE ROOM,conference chair,,A$Cb2a790fe,,2923232.5,-3342384.5,253,meeting,,55.436,27.064,1/1
+M23,Meeting room seats,16 PAX CONFERENCE ROOM,conference chair,,A$Cb2a790fe,,2923259.7,-3342384.5,266,meeting,,56.128,27.064,1/1
+M24,Meeting room seats,16 PAX CONFERENCE ROOM,conference chair,,A$Cb2a790fe,,2923287.0,-3342384.5,265,meeting,,56.819,27.064,1/1
+M25,Meeting room seats,8 PAX MEETING RM 02,meeting chair,,A$Cd2419d53,,2922873.1,-3342326.7,565,meeting,,46.308,28.532,1/1
+M26,Meeting room seats,8 PAX MEETING RM 02,meeting chair,,A$Cd2419d53,,2922902.9,-3342326.7,560,meeting,,47.064,28.532,1/1
+M27,Meeting room seats,8 PAX MEETING RM 02,meeting chair,,A$Cd2419d53,,2922932.7,-3342326.7,559,meeting,,47.821,28.532,1/1
+M28,Meeting room seats,8 PAX MEETING RM 02,meeting chair,,A$Cd2419d53,,2922962.5,-3342326.7,563,meeting,,48.577,28.532,1/1
+M29,Meeting room seats,8 PAX MEETING RM 02,meeting chair,,A$Cd2419d53,,2922873.1,-3342374.4,566,meeting,,46.307,27.321,1/1
+M30,Meeting room seats,8 PAX MEETING RM 02,meeting chair,,A$Cd2419d53,,2922902.9,-3342374.4,562,meeting,,47.063,27.321,1/1
+M31,Meeting room seats,8 PAX MEETING RM 02,meeting chair,,A$Cd2419d53,,2922932.7,-3342374.4,561,meeting,,47.819,27.321,1/1
+M32,Meeting room seats,8 PAX MEETING RM 02,meeting chair,,A$Cd2419d53,,2922962.4,-3342374.4,564,meeting,,48.576,27.321,1/1
+M33,Meeting room seats,INTERVIEW ROOM 02,interview chair,,A$Cba813c9e,,2923465.5,-3342950.4,1747,meeting,,61.354,12.69,1/1
+M34,Meeting room seats,INTERVIEW ROOM 02,interview chair,,A$Cba813c9e,,2923465.6,-3342999.1,1748,meeting,,61.356,11.453,1/1
+M35,Meeting room seats,INTERVIEW ROOM 01,interview chair,,A$Cba813c9e,,2923298.4,-3342930.6,1762,meeting,,57.11,13.194,1/1
+M36,Meeting room seats,INTERVIEW ROOM 01,interview chair,,A$Cba813c9e,,2923298.5,-3342979.3,1761,meeting,,57.113,11.957,1/1
+T1,Training room seats,TRAINING ROOM -01 24 + 1,training chair,,A$C92802071,,2921611.4,-3342539.5,437,training,,14.259,23.126,1/1
+T2,Training room seats,TRAINING ROOM -01 24 + 1,training chair,,A$C92802071,,2921671.4,-3342539.5,443,training,,15.783,23.126,1/1
+T3,Training room seats,TRAINING ROOM -01 24 + 1,training chair,,A$C92802071,,2921731.4,-3342539.5,449,training,,17.307,23.126,1/1
+T4,Training room seats,TRAINING ROOM -01 24 + 1,training chair,,A$C92802071,,2921791.4,-3342539.5,455,training,,18.831,23.126,1/1
+T5,Training room seats,TRAINING ROOM -01 24 + 1,training chair,,A$C92802071,,2921611.4,-3342567.7,436,training,,14.259,22.41,1/1
+T6,Training room seats,TRAINING ROOM -01 24 + 1,training chair,,A$C92802071,,2921671.4,-3342567.7,442,training,,15.783,22.41,1/1
+T7,Training room seats,TRAINING ROOM -01 24 + 1,training chair,,A$C92802071,,2921731.4,-3342567.7,448,training,,17.307,22.41,1/1
+T8,Training room seats,TRAINING ROOM -01 24 + 1,training chair,,A$C92802071,,2921791.4,-3342567.7,454,training,,18.831,22.41,1/1
+T9,Training room seats,TRAINING ROOM -01 24 + 1,training chair,,A$C92802071,,2921611.4,-3342595.9,435,training,,14.259,21.695,1/1
+T10,Training room seats,TRAINING ROOM -01 24 + 1,training chair,,A$C92802071,,2921671.4,-3342595.9,441,training,,15.783,21.695,1/1
+T11,Training room seats,TRAINING ROOM -01 24 + 1,training chair,,A$C92802071,,2921731.4,-3342595.9,447,training,,17.307,21.695,1/1
+T12,Training room seats,TRAINING ROOM -01 24 + 1,training chair,,A$C92802071,,2921791.4,-3342595.9,453,training,,18.831,21.695,1/1
+T13,Training room seats,TRAINING ROOM -01 24 + 1,training chair,,A$C92802071,,2921611.4,-3342624.3,434,training,,14.259,20.972,1/1
+T14,Training room seats,TRAINING ROOM -01 24 + 1,training chair,,A$C92802071,,2921671.4,-3342624.3,440,training,,15.783,20.972,1/1
+T15,Training room seats,TRAINING ROOM -01 24 + 1,training chair,,A$C92802071,,2921731.4,-3342624.3,446,training,,17.307,20.972,1/1
+T16,Training room seats,TRAINING ROOM -01 24 + 1,training chair,,A$C92802071,,2921791.4,-3342624.3,452,training,,18.831,20.972,1/1
+T17,Training room seats,TRAINING ROOM -01 24 + 1,training chair,,A$C92802071,,2921611.4,-3342652.5,433,training,,14.259,20.257,1/1
+T18,Training room seats,TRAINING ROOM -01 24 + 1,training chair,,A$C92802071,,2921671.4,-3342652.5,439,training,,15.783,20.257,1/1
+T19,Training room seats,TRAINING ROOM -01 24 + 1,training chair,,A$C92802071,,2921731.4,-3342652.5,445,training,,17.307,20.257,1/1
+T20,Training room seats,TRAINING ROOM -01 24 + 1,training chair,,A$C92802071,,2921791.4,-3342652.5,451,training,,18.831,20.257,1/1
+T21,Training room seats,TRAINING ROOM -01 24 + 1,training chair,,A$C92802071,,2921611.4,-3342680.7,432,training,,14.259,19.541,1/1
+T22,Training room seats,TRAINING ROOM -01 24 + 1,training chair,,A$C92802071,,2921671.4,-3342680.7,438,training,,15.783,19.541,1/1
+T23,Training room seats,TRAINING ROOM -01 24 + 1,training chair,,A$C92802071,,2921731.4,-3342680.7,444,training,,17.307,19.541,1/1
+T24,Training room seats,TRAINING ROOM -01 24 + 1,training chair,,A$C92802071,,2921791.4,-3342680.7,450,training,,18.831,19.541,1/1
+C1,Cafeteria seats,PANTRY,cafe stool,,A$C445ca927,,2921554.9,-3342302.0,620,cafe,,12.826,29.158,1/1
+C2,Cafeteria seats,PANTRY,cafe stool,,A$C445ca927,,2921518.4,-3342303.5,621,cafe,,11.898,29.121,1/1
+C3,Cafeteria seats,PANTRY,cafe stool,,A$C445ca927,,2921554.9,-3342326.0,612,cafe,,12.826,28.549,1/1
+C4,Cafeteria seats,PANTRY,cafe stool,,A$C445ca927,,2921554.9,-3342350.0,622,cafe,,12.826,27.939,1/1
+C5,Cafeteria seats,PANTRY,cafe stool,,A$C445ca927,,2921554.9,-3342374.0,783,cafe,,12.826,27.33,1/1
+C6,Cafeteria seats,PANTRY,cafe stool,,A$C445ca927,,2921554.9,-3342398.0,784,cafe,,12.826,26.72,1/1
+L1,"Lounge, collab and visitor seats",CABIN-02,visitor chair,,A$Cc5b0ed80,A$C7e9a1dde,2923434.4,-3342774.8,1750,work,,60.563,17.15,1/1
+L2,"Lounge, collab and visitor seats",CABIN-02,visitor chair,,A$Cc5b0ed80,A$C7e9a1dde,2923459.5,-3342774.8,1751,work,,61.201,17.15,1/1
+L3,"Lounge, collab and visitor seats",CABIN-01,visitor chair,,A$Cc5b0ed80,A$C7e9a1dde,2923297.4,-3342774.9,1756,work,,57.084,17.149,1/1
+L4,"Lounge, collab and visitor seats",CABIN-01,visitor chair,,A$Cc5b0ed80,A$C7e9a1dde,2923322.5,-3342774.9,1755,work,,57.722,17.149,1/1
+L5,"Lounge, collab and visitor seats",RECEPTION AREA,3-seat sofa,,A$C897f58da,,2923304.3,-3343075.3,379,reception,,57.259,9.518,1/3
+L6,"Lounge, collab and visitor seats",RECEPTION AREA,3-seat sofa,,A$C897f58da,,2923304.3,-3343075.3,379,reception,,57.259,9.518,2/3
+L7,"Lounge, collab and visitor seats",RECEPTION AREA,3-seat sofa,,A$C897f58da,,2923304.3,-3343075.3,379,reception,,57.259,9.518,3/3
+L8,"Lounge, collab and visitor seats",RECEPTION AREA,reception lounge chair,,A$Ca354571c,A$Cd4197eec,2923119.9,-3343101.4,173,reception,,52.576,8.856,1/1
+L9,"Lounge, collab and visitor seats",CABIN-03,visitor chair,,A$Cc5b0ed80,A$C7e9a1dde,2923518.5,-3343079.9,1739,work,,62.7,9.4,1/1
+L10,"Lounge, collab and visitor seats",CABIN-03,visitor chair,,A$Cc5b0ed80,A$C7e9a1dde,2923543.6,-3343079.9,1740,work,,63.339,9.4,1/1

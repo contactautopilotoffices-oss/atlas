@@ -1,0 +1,543 @@
+"""Furniture, fixtures, plants, stairs, logo and feature walls. One object per CAD block instance; identical blocks
+share one mesh (linked duplicates), so the GLB keeps them as instances. Positions and rotations are the CAD's.
+Nothing is moved except the vertical snap onto the floor, and the placement check's nudges of 20 mm or less."""
+import bpy, bmesh, math, os, random, re, fnmatch
+from mathutils import Vector, Matrix
+from mathutils.bvhtree import BVHTree
+from twin_lib import MB, tok, slug, room_kind, in_poly, HERE
+
+def T(x, y, z=0.0): return Matrix.Translation((x, y, z))
+def RZ(a): return Matrix.Rotation(a, 4, "Z")
+def RX(a): return Matrix.Rotation(a, 4, "X")
+
+SEAT_MAP = {"task chair": "chair", "meeting chair": "chair", "staff chair": "chair", "director chair": "chair", "visitor chair": "lounge",
+            "lounge armchair": "lounge", "lounge chair": "tub", "lounge tub chair": "tub", "cafe chair": "cafe", "cafe stool": "stool"}
+
+
+class Furnisher:
+    def __init__(self, ctx):
+        self.c = ctx; self.L = ctx.L; self.S = ctx.S; self.R = ctx.reg; self.M = ctx.mats; self.F = ctx.S.get("furniture", {})
+        self.rnd = random.Random(7)
+
+    def mb(self): return MB(self.M)
+    def f(self, key, default): return self.F.get(key, default)
+
+    # -------------------------------------------------------------- desks
+    def desks(self):
+        seats = [s for s in self.L["seats"] if SEAT_MAP.get(s["kind"], "chair") == "chair"]
+        screens = self.f("desk_screens", ["screen_white"]); rows = {}
+        for i, d in enumerate(self.L["desks"]):
+            cx, cy = d["c"]; a, w, dp, h = d["a"], round(d["w"], 2), round(d["d"], 2), d["h"]
+            ws = "workstation" in d["kind"] or d.get("workstation")
+            rot = a; scr = None
+            if ws:
+                nx, ny = -math.sin(a), math.cos(a); best, bd = None, 1.3
+                for s in seats:
+                    dd = math.hypot(s["x"] - cx, s["y"] - cy)
+                    if dd < bd: bd, best = dd, s
+                if best is not None and (best["x"] - cx) * nx + (best["y"] - cy) * ny < 0: rot = a + math.pi     # chair on the other long side
+                scr = screens[i % len(screens)]
+            var = (i * 7) % 3 if (ws and self.f("clutter", True)) else -1
+            key = ("desk", w, dp, round(h, 3), scr, var)
+            me = self.c.proto(key, lambda: self._desk(w, dp, h, scr, var))
+            o = self.R.put("DESK", d.get("block", d["kind"]), me, T(cx, cy, 0) @ RZ(rot), props={"cad_kind": d["kind"]})
+            if ws:
+                rr = self.c.ras.room_at(cx, cy); rows.setdefault(rr["name"] if rr else "", []).append(d)
+        self.rows = rows
+
+    def _desk(self, w, dp, h, scr, var):
+        m = self.mb(); top = self.f("desk_top", "oak"); fr = self.f("desk_frame", "white_metal")
+        m.box(w, dp, 0.025, T(0, 0, h - 0.025), top, 0.004)
+        for e in (-1, 1):
+            for sy in (-1, 1): m.box(0.045, 0.045, h - 0.025 - 0.008, T(e * (w / 2 - 0.04), sy * (dp * 0.42 - 0.02), 0.008), fr, 0.006)
+            m.box(0.045, dp * 0.84, 0.008, T(e * (w / 2 - 0.04), 0, 0.0), fr, 0.002)          # foot plate on the floor
+            m.box(0.045, dp * 0.84 - 0.1, 0.045, T(e * (w / 2 - 0.04), 0, h - 0.025 - 0.045), fr, 0.006)
+        m.box(w - 0.14, 0.04, 0.04, T(0, 0, h - 0.025 - 0.045), fr, 0.005)
+        if scr is None: return m.build("desk")
+        m.box(w - 0.06, 0.024, 0.38, T(0, -(dp / 2 - 0.012), h), scr, 0.006)                   # desk screen at the back edge
+        Mm = T(0, -(dp / 2 - 0.19), h)
+        m.box(0.2, 0.17, 0.008, Mm, "alu", 0.003); m.box(0.11, 0.02, 0.14, Mm @ T(0, -0.03, 0.008), "alu", 0.006)
+        m.box(0.56, 0.012, 0.33, Mm @ T(0, 0.004, 0.195), self.f("monitor", "screen_glass"), 0.004); m.box(0.565, 0.014, 0.345, Mm @ T(0, -0.008 - 0.004, 0.19), "plastic_black", 0.006)
+        m.box(0.42, 0.13, 0.014, Mm @ T(0, 0.27, 0), "plastic_black", 0.004); m.box(0.06, 0.1, 0.02, Mm @ T(0.3, 0.27, 0), "plastic_black", 0.008)
+        m.box(0.9 if w > 1.0 else 0.6, 0.12, 0.06, T(0, -(dp / 2 - 0.1), h - 0.025 - 0.13), fr, 0.004)   # cable tray under the top
+        if var == 1:                     # a mug
+            m.lathe(((0.0, 0.0), (0.034, 0.0), (0.039, 0.004), (0.0405, 0.09), (0.0375, 0.093), (0.0365, 0.012), (0.0, 0.010)), Mm @ T(-min(w / 2 - 0.12, 0.42), 0.18, 0), "mug_white", 20)
+        elif var == 2:                   # a notebook and pen
+            m.box(0.148, 0.21, 0.014, Mm @ T(-min(w / 2 - 0.12, 0.38), 0.24, 0) @ RZ(0.2), "cover_dark", 0.003)
+            m.cyl(0.0042, 0.14, Mm @ T(-min(w / 2 - 0.12, 0.38) + 0.02, 0.24, 0.0182) @ RZ(0.5) @ T(0, -0.07, 0) @ RX(-math.pi / 2), "plastic_black", 8)
+        return m.build("workstation")
+
+    # -------------------------------------------------------------- linear lights over desk rows / capsule rings over desk banks
+    def bank_lights(self):
+        kind = self.f("desk_bank_light", None)
+        if not kind: return
+        H = self.c.H
+        for room, ds in getattr(self, "rows", {}).items():
+            if len(ds) < 4: continue
+            along_y = sum(1 for d in ds if abs(math.sin(d["a"])) > 0.7) > len(ds) / 2
+            key = (lambda d: d["c"][0]) if along_y else (lambda d: d["c"][1]); other = (lambda d: d["c"][1]) if along_y else (lambda d: d["c"][0])
+            groups = []
+            for d in sorted(ds, key=key):
+                if groups and key(d) - key(groups[-1][-1]) < 0.9: groups[-1].append(d)
+                else: groups.append([d])
+            ceil = self.c.ceiling_z(room)
+            for g in groups:
+                if len(g) < 2: continue
+                k = sum(key(d) for d in g) / len(g); lo = min(other(d) for d in g) - 0.3; hi = max(other(d) for d in g) + 0.3; ln = round(hi - lo, 1); mid = (lo + hi) / 2
+                x, y, an = (k, mid, math.pi / 2) if along_y else (mid, k, 0.0)
+                z = self.f("bank_light_z", 2.4); drop = round(ceil - z, 3)
+                if kind == "capsule":           # a row of stadium rings, ~2.4 m apart, along the bank
+                    nseg = max(1, round(ln / self.f("capsule_pitch", 2.4))); seg = ln / nseg; rl = round(max(1.0, seg - 0.6), 2)
+                    me = self.c.proto(("bank", kind, rl, drop), lambda: self._bank(kind, rl, drop))
+                    for kk in range(nseg):
+                        u = -ln / 2 + (kk + 0.5) * seg
+                        self.R.put("LIGHT", "capsulering", me, T(x + math.cos(an) * u, y + math.sin(an) * u, z) @ RZ(an), props={"assumed": 1, "lamp": "none"})
+                else:
+                    me = self.c.proto(("bank", kind, ln, drop), lambda: self._bank(kind, ln, drop))
+                    self.R.put("LIGHT", f"{kind}bank", me, T(x, y, z) @ RZ(an), props={"assumed": 1, "lamp": "none"})
+
+    def _bank(self, kind, ln, drop):
+        m = self.mb()
+        if kind == "capsule":
+            R = 0.28; Ls = max(0.2, ln - 2 * R - 0.4); seg = 40; pts = []
+            for i in range(seg):
+                t = i / seg * 2 * math.pi; s = math.cos(t); c = math.sin(t)
+                x = (Ls / 2 + R * s) if abs(s) > 1e-9 else 0; pts.append((Ls / 2 * (1 if s >= 0 else -1) + R * s, R * c))
+            for i in range(seg):
+                (x0, y0), (x1, y1) = pts[i], pts[(i + 1) % seg]; ln_ = math.hypot(x1 - x0, y1 - y0); an = math.atan2(y1 - y0, x1 - x0)
+                M_ = T((x0 + x1) / 2, (y0 + y1) / 2, 0) @ RZ(an)
+                m.box(ln_ + 0.004, 0.035, 0.04, M_, self.f("pendant_body", "black_metal")); m.box(ln_ + 0.004, 0.022, 0.004, M_ @ T(0, 0, -0.004), self.f("ring_led", self.f("pendant_led", "led_line")))
+            for e in (-1, 1): m.rod((e * Ls / 2, 0, 0.05), (e * Ls / 2, 0, drop), 0.0015, 0.0015, "black_metal", None, 6)
+        else:
+            m.box(ln, 0.06, 0.07, Matrix(), self.f("pendant_body", "black_metal"), 0.006); m.box(ln - 0.04, 0.04, 0.004, T(0, 0, -0.004), self.f("pendant_led", "led_line"))
+            for u in (-ln / 2 + 0.3, ln / 2 - 0.3): m.rod((u, 0, 0.07), (u, 0, drop), 0.0015, 0.0015, "black_metal", None, 6)
+        return m.build("bank_light")
+
+    # -------------------------------------------------------------- tables and rugs
+    def tables(self):
+        stools = [s for s in self.L["seats"] if SEAT_MAP.get(s["kind"]) == "stool"]; hd = self.L["heights"]["high_desk"]
+        top = self.f("table_top", "oak"); base = self.f("table_base", "charcoal")
+        for t in self.L["tables"]:
+            h = t.get("h", 0.75)
+            if "poly" in t and any(min(math.hypot(s["x"] - px, s["y"] - py) for px, py in t["poly"]) < 0.9 for s in stools): h = hd
+            if "poly" in t and h < 0.5:
+                xs = [p[0] for p in t["poly"]]; ys = [p[1] for p in t["poly"]]
+                if (max(xs) - min(xs)) * (max(ys) - min(ys)) > 3.0 and any(min(xs) < s["x"] < max(xs) and min(ys) < s["y"] < max(ys) for s in self.L["seats"]):
+                    m = self.mb(); cx, cy = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
+                    m.prism([(x - cx, y - cy) for x, y in t["poly"]], 0.0, 0.004, self.f("rug", "rug"), bevel=0.0015)
+                    self.R.put("RUG", "rug", m.build("rug"), T(cx, cy, 0), props={"soft": 1}); continue
+            if "circle" in t:
+                x, y, r = t["circle"]; key = ("rtable", round(r, 2), round(h, 2))
+                def mk(r=r, h=h):
+                    m = self.mb(); m.lathe(((0.0, 0.0), (r - 0.006, 0.0), (r, 0.006), (r, 0.029), (r - 0.006, 0.035), (0.0, 0.035)), T(0, 0, h - 0.035), top, 48)
+                    m.cyl(0.035, h - 0.035 - 0.015, T(0, 0, 0.015), "black_metal", 16); m.cyl(r * 0.55, 0.015, Matrix(), "black_metal", 32); return m.build("table")
+                self.R.put("TABLE", "roundtable", self.c.proto(key, mk), T(x, y, 0)); continue
+            xs = [p[0] for p in t["poly"]]; ys = [p[1] for p in t["poly"]]; cx, cy = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
+            loc = [(round(x - cx, 3), round(y - cy, 3)) for x, y in t["poly"]]; w = max(xs) - min(xs); d = max(ys) - min(ys)
+            rd = self.F.get("reception_desk")
+            if rd and w * d >= rd.get("min_area_m2", 1.0) and re.search(rd.get("room", "^reception$"), t.get("room", ""), re.I) and t is max([q for q in self.L["tables"] if q.get("room") == t.get("room") and "poly" in q], key=lambda q: (max(p[0] for p in q["poly"]) - min(p[0] for p in q["poly"])) * (max(p[1] for p in q["poly"]) - min(p[1] for p in q["poly"]))):
+                # the reception desk: a faceted solid, its faces raked in at top and bottom (glossy cobalt in Paytm's brief)
+                hh = rd.get("height", 1.05); m = self.mb(); import bmesh as _bm
+                def inset(poly, k):
+                    return [(x * k, y * k) for x, y in poly]
+                rings = [(inset(loc, 0.88), 0.0), (inset(loc, 1.0), 0.35), (inset(loc, 1.0), hh - 0.2), (inset(loc, 0.94), hh)]
+                bm = _bm.new(); vs = [[bm.verts.new((x, y, z)) for x, y in ring] for ring, z in rings]
+                for a_, b_ in zip(vs, vs[1:]):
+                    for i in range(len(loc)): bm.faces.new((a_[i], a_[(i + 1) % len(loc)], b_[(i + 1) % len(loc)], b_[i]))
+                bm.faces.new(vs[-1]); bm.faces.new(list(reversed(vs[0]))); _bm.ops.recalc_face_normals(bm, faces=bm.faces)
+                m.add_bm(bm, rd.get("material", "cobalt_gloss")); bm.free()
+                m.prism([(x * 0.96, y * 0.96) for x, y in loc], hh, hh + 0.03, rd.get("top", "white_top"), bevel=0.004)
+                self.R.put("TABLE", "receptiondesk", m.build("reception_desk", normals=False), T(cx, cy, 0), props={"room": t.get("room", "")}); continue
+            def mk(loc=loc, h=h, w=w, d=d):
+                m = self.mb(); m.prism(loc, h - 0.04, h, top, bevel=0.006)
+                if max(w, d) > 1.6: m.box(w * 0.72 if w > d else min(w, 0.9) * 0.45, d * 0.72 if d >= w else min(d, 0.9) * 0.45, h - 0.04, Matrix(), base, 0.008)
+                else: m.cyl(0.04, h - 0.04 - 0.015, T(0, 0, 0.015), "black_metal", 16); m.cyl(min(w, d) * 0.3, 0.015, Matrix(), "black_metal", 32)
+                return m.build("table")
+            self.R.put("TABLE", t.get("block", "table"), self.c.proto(("table", tuple(loc), round(h, 3)), mk), T(cx, cy, 0), props={"room": t.get("room", "")})
+
+    # -------------------------------------------------------------- seats
+    def load_model(self, path, height, seat_band, override=None):
+        if not os.path.isabs(path): path = os.path.normpath(os.path.join(HERE, path))
+        before = set(bpy.data.objects); bpy.ops.import_scene.gltf(filepath=path)
+        new = [o for o in bpy.data.objects if o not in before]; meshes = [o for o in new if o.type == "MESH"]
+        m = MB(self.M); names = []
+        bpy.context.view_layer.update()
+        for o in meshes:
+            me = o.data.copy(); me.transform(o.matrix_world)
+            bm = bmesh.new(); bm.from_mesh(me)
+            uvl = bm.loops.layers.uv.active
+            for mi, mat in enumerate(o.data.materials):
+                mname = override or f"model_{mat.name}"
+                if not override and mname not in self.M.cache: self.M.cache[mname] = mat; mat.name = mname
+                faces = [f for f in bm.faces if f.material_index == mi]
+                if not faces: continue
+                vs = {}; verts = []; fl = []; uvs = []
+                for f in faces:
+                    idx = []
+                    for lp in f.loops:
+                        verts.append(tuple(lp.vert.co)); idx.append(len(verts) - 1); uvs.append(tuple(lp[uvl].uv) if uvl else (0, 0))
+                    fl.append(tuple(idx))
+                m.add(verts, fl, mname, None, True, uvs)
+            bm.free(); bpy.data.meshes.remove(me)
+        for o in new: bpy.data.objects.remove(o, do_unlink=True)
+        me = m.build("model", normals=False)
+        co = [v.co.copy() for v in me.vertices]
+        lo = Vector((min(v.x for v in co), min(v.y for v in co), min(v.z for v in co))); hi = Vector((max(v.x for v in co), max(v.y for v in co), max(v.z for v in co)))
+        k = height / (hi.z - lo.z); c = (lo + hi) / 2
+        me.transform(Matrix.Scale(k, 4) @ Matrix.Translation((-c.x, -c.y, -lo.z)))
+        top = [v.co for v in me.vertices if v.co.z > 0.86 * height]; seat = [v.co for v in me.vertices if seat_band[0] * height < v.co.z < seat_band[1] * height]
+        bk = sum(top, Vector()) / len(top); st = sum(seat, Vector()) / len(seat)
+        me.transform(Matrix.Rotation(-math.atan2(st.y - bk.y, st.x - bk.x), 4, "Z"))
+        for p in me.polygons: p.use_smooth = True
+        return me
+
+    def fit(self, base, ln, dp):
+        """The model's footprint scaled (the same in x and y, height kept) to the CAD block's footprint: the drawing says
+        how much floor the chair takes; the model only says what it looks like."""
+        me = base.copy(); xs = [v.co.x for v in me.vertices]; ys = [v.co.y for v in me.vertices]
+        k = min(dp / (max(xs) - min(xs)), ln / (max(ys) - min(ys)), 1.25); k = max(k, 0.6)
+        me.transform(Matrix.Diagonal((k, k, 1.0, 1.0))); me["fit_scale_xy"] = k; return me
+
+    def shell_mesh(self, mat, seat_h, w, depth, back_h, lean=12.0, thick=0.012, m=None, M=None):
+        nu, nv = 12, 26; R = 0.085; turn = math.radians(90 - lean); Ls = depth - R; La = R * turn; total = Ls + La + back_h
+        pts = []; x, z, n_steps = depth / 2, seat_h, 400; prev = 0.0; k = 0
+        for i in range(n_steps + 1):
+            s_ = total * i / n_steps
+            phi = math.pi if s_ < Ls else (math.pi - (s_ - Ls) / R if s_ < Ls + La else math.pi - turn)
+            if i: x += math.cos(phi) * (s_ - prev); z += math.sin(phi) * (s_ - prev)
+            prev = s_
+            if i == round(n_steps * k / nv): pts.append((x, z, phi, s_ / total)); k += 1
+        bm = bmesh.new(); grid = []
+        for (x, z, phi, v) in pts:
+            on_back = max(0.0, (v * total - Ls) / (La + back_h)); end = min(v, 1 - v) * total
+            hw = w / 2 * (1 - 0.16 * on_back) * (0.8 + 0.2 * math.sin(min(1.0, end / 0.07) * math.pi / 2)); nx, nz = math.sin(phi), -math.cos(phi)
+            dip = -0.012 * math.sin(min(1.0, v * total / 0.1) * math.pi / 2) + 0.012; row = []
+            for i in range(nu + 1):
+                u = -1 + 2 * i / nu; cup = (0.03 * u * u + 0.02 * u ** 4) * (1 + 0.8 * on_back)
+                row.append(bm.verts.new((x + nx * cup, u * hw, z + nz * cup - dip)))
+            grid.append(row)
+        for a_, b_ in zip(grid, grid[1:]):
+            for i in range(nu): bm.faces.new((a_[i], a_[i + 1], b_[i + 1], b_[i]))
+        bmesh.ops.recalc_face_normals(bm, faces=bm.faces); bmesh.ops.solidify(bm, geom=list(bm.faces), thickness=thick)
+        m.add_bm(bm, mat, M, smooth=True); bm.free()
+
+    def seats(self):
+        F = self.F; H = self.L["heights"]
+        chair = self.c.proto("chair_model", lambda: self.load_model(F.get("chair_model", "../../volt/blender/models/chair.glb"), F.get("chair_height", 1.02), (0.40, 0.52), F.get("chair_material")))
+        lounge = self.c.proto("lounge_model", lambda: self.load_model(F.get("lounge_model", "../../volt/blender/models/lounge.glb"), F.get("lounge_height", 0.82), (0.30, 0.50), F.get("lounge_material")))
+        cafe_mats = F.get("cafe", ["plastic_orange", "plastic_grey"]); sofas = F.get("sofa", ["sofa_grey", "sofa_teal"]); n_cafe = 0
+        smap = dict(SEAT_MAP); smap.update(F.get("seat_map", {}))
+        for s in self.L["seats"]:
+            k = s["kind"]; typ = "sofa" if "sofa" in k else smap.get(k, "chair")
+            a = s["face"] + self.rnd.uniform(-0.06, 0.06)      # a few degrees of turn, never a move
+            M0 = T(s["x"], s["y"], 0) @ RZ(a)
+            if typ in ("chair", "lounge"):
+                base = chair if typ == "chair" else lounge; me = base
+                if self.F.get("fit_models_to_cad", True) and s.get("len") and s.get("dep"):
+                    me = self.c.proto(("fit", typ, round(s["len"], 2), round(s["dep"], 2)), lambda base=base, s=s: self.fit(base, s["len"], s["dep"]))
+                self.R.put("SEAT", s.get("block", k), me, M0, props={"cad_kind": k, "seat_id": s.get("id", "")})
+            elif typ == "cafe":
+                n_cafe += 1; mat = cafe_mats[n_cafe % len(cafe_mats)]
+                def mk(mat=mat):
+                    m = self.mb(); self.shell_mesh(mat, 0.45, 0.46, 0.43, 0.34, m=m, M=Matrix())
+                    for sx in (-1, 1):
+                        for sy in (-1, 1): m.rod((sx * 0.13 - 0.02, sy * 0.13, 0.445), (sx * 0.21 - 0.02, sy * 0.2, 0.0), 0.017, 0.011, F.get("cafe_legs", "oak"))
+                    return m.build("cafe_chair")
+                self.R.put("SEAT", s.get("block", k), self.c.proto(("cafe", mat), mk), M0, props={"cad_kind": k})
+            elif typ == "stool":
+                def mk():
+                    m = self.mb(); self.shell_mesh(F.get("stool", "planter_white"), 0.74, 0.4, 0.37, 0.13, m=m, M=Matrix())
+                    for sx in (-1, 1):
+                        for sy in (-1, 1): m.rod((sx * 0.1 - 0.02, sy * 0.1, 0.735), (sx * 0.2 - 0.02, sy * 0.19, 0.0), 0.016, 0.011, F.get("cafe_legs", "oak"))
+                    for sy in (-1, 1): m.rod((-0.17, sy * 0.145, 0.27), (0.13, sy * 0.145, 0.27), 0.007, 0.007, "black_metal", None, 8)
+                    return m.build("stool")
+                self.R.put("SEAT", s.get("block", k), self.c.proto("stool", mk), M0, props={"cad_kind": k})
+            elif typ == "tub":
+                mat = F.get("tub", "sofa_teal")
+                def mk(mat=mat):
+                    m = self.mb(); m.lathe(((0.0, 0.03), (0.27, 0.03), (0.3, 0.045), (0.325, 0.2), (0.33, 0.37), (0.32, 0.41), (0.29, 0.435), (0.0, 0.44)), Matrix(), mat, 40)
+                    m.cyl(0.25, 0.03, Matrix(), "black_metal", 32)
+                    rr = 0.06; rm = 0.3; sec = [(-rr, 0.3)] + [(-rr * math.cos(math.radians(q)), 0.72 - rr + rr * math.sin(math.radians(q))) for q in range(0, 181, 30)] + [(rr, 0.3)]
+                    bm = bmesh.new(); rings = []; seg = 24; ha = math.radians(100)
+                    for i in range(seg + 1):
+                        t = i / seg; ang = math.pi - ha + 2 * ha * t; e = min(t, 1 - t) * seg; kk = min(1.0, 0.45 + 0.55 * math.sin(min(1.0, e / 3) * math.pi / 2))
+                        rings.append([bm.verts.new(((rm + dx * kk) * math.cos(ang), (rm + dx * kk) * math.sin(ang), 0.3 + (z - 0.3) * (0.75 + 0.25 * kk))) for dx, z in sec])
+                    mm = len(sec)
+                    for a_, b_ in zip(rings, rings[1:]):
+                        for j in range(mm): bm.faces.new((a_[j], a_[(j + 1) % mm], b_[(j + 1) % mm], b_[j]))
+                    bm.faces.new(rings[0]); bm.faces.new(rings[-1]); bmesh.ops.recalc_face_normals(bm, faces=bm.faces); m.add_bm(bm, mat, None, True); bm.free()
+                    return m.build("tub")
+                self.R.put("SEAT", s.get("block", k), self.c.proto(("tub", mat), mk), M0, props={"cad_kind": k})
+            else:      # sofa: length and depth from the CAD block
+                n = len(s.get("ids", [1])); ln = round(max(1.3, s.get("len", 1.6)), 2); dp = round(min(0.95, max(0.75, s.get("dep", 0.8))), 2)
+                mat = sofas[0] if n > 2 else sofas[min(1, len(sofas) - 1)]
+                def mk(ln=ln, dp=dp, n=n, mat=mat):
+                    m = self.mb(); m.box(dp, ln, 0.24, T(0, 0, 0.16), mat, 0.06); m.box(0.2, ln, 0.44, T(-dp / 2 + 0.1, 0, 0.3), mat, 0.07)
+                    for e in (-1, 1): m.box(dp, 0.18, 0.3, T(0, e * (ln / 2 - 0.09), 0.3), mat, 0.06)
+                    cw = (ln - 0.4) / n
+                    for i in range(n): m.box(dp - 0.26, cw - 0.02, 0.13, T(0.08, -ln / 2 + 0.2 + (i + 0.5) * cw, 0.4), mat, 0.05)
+                    for sx in (-1, 1):
+                        for sy in (-1, 1): m.cyl(0.02, 0.16, T(sx * (dp / 2 - 0.08), sy * (ln / 2 - 0.1), 0), "black_metal", 8)
+                    return m.build("sofa")
+                self.R.put("SEAT", s.get("block", k), self.c.proto(("sofa", ln, dp, n, mat), mk), M0, props={"cad_kind": k, "seat_id": s.get("id", "")})
+
+    # -------------------------------------------------------------- planters and plants (thin leaves, light passes through)
+    def leafy(self, m, x, y, z, n, spread, hgt, PR):
+        NS, NB = 3, 9
+        for i in range(n):
+            age = (i + PR.random()) / n; ang = PR.uniform(0, 6.283); r0 = spread * (0.1 + 0.6 * age) * PR.uniform(0.4, 1.0)
+            pos = Vector((x + math.cos(ang) * r0, y + math.sin(ang) * r0, z))
+            lp = hgt * PR.uniform(0.12, 0.6) * (0.8 + 0.3 * age); lb = hgt * PR.uniform(0.46, 0.72) * (0.7 + 0.3 * min(1.0, age * 2.5)); wb = lb * PR.uniform(0.26, 0.37) / 2
+            th0 = math.radians(3 + 46 * age * PR.uniform(0.5, 1.2)); bend = math.radians(PR.uniform(22, 70)) * (0.45 + 0.75 * age); fold = math.radians(PR.uniform(12, 34))
+            dx, dy = math.cos(ang), math.sin(ang); side0 = Vector((-dy, dx, 0)); total = lp + lb; prev_t = None; s_prev = 0.0; V = []; UV = []
+            for j in range(NS + NB + 1):
+                if j <= NS: lt = 0.0; s_ = lp * j / NS; w = 0.0022
+                else: lt = (j - NS) / NB; s_ = lp + lb * lt; w = max(0.0022 * (1 - lt), wb * math.sin(math.pi * lt ** 0.72) ** 0.85)
+                th = th0 + bend * (s_ / total) ** 1.6; tan = Vector((dx * math.sin(th), dy * math.sin(th), math.cos(th)))
+                if prev_t is not None: pos = pos + (prev_t + tan) * 0.5 * (s_ - s_prev)
+                prev_t, s_prev = tan, s_; up = tan.cross(side0).normalized()
+                for u in (-1.0, 0.0, 1.0):
+                    V.append(tuple(pos + side0 * (w * u * math.cos(fold)) + up * (w * abs(u) * math.sin(fold)))); UV.append((u * 0.5 + 0.5, lt))
+            F_ = []
+            for j in range(NS + NB):
+                for c in range(2): a_ = j * 3 + c; F_.append((a_, a_ + 1, a_ + 4, a_ + 3))
+            m.add(V, F_, self.f("leaf", "leaf"), None, True, UV)
+
+    def plants(self):
+        PH = self.L["heights"]["planter"]; PR = random.Random(23)
+        pl = self.f("planter", "planter_white"); pan = self.f("planter_panel", "oak")
+        for p in self.L["planters"]:
+            x, y = p["c"]; a, w, d = p.get("a", 0.0), round(p["w"], 2), round(p["d"], 2); var = len(self.R.count) % 2
+            def mk(w=w, d=d):
+                m = self.mb(); m.box(w, d, PH - 0.04, T(0, 0, 0.0), pl, 0.008); m.box(w * 0.5, d + 0.01, PH - 0.12, T(0, 0, 0.04), pan, 0.004)
+                rim = 0.03
+                for s_ in (-1, 1):
+                    m.box(w + 0.02, rim, 0.075, T(0, s_ * (d / 2 + 0.01 - rim / 2), PH - 0.04), "planter_top", 0.006)
+                    m.box(rim, d + 0.02 - 2 * rim - 0.004, 0.075, T(s_ * (w / 2 + 0.01 - rim / 2), 0, PH - 0.04), "planter_top", 0.006)
+                m.box(w - 0.03, d - 0.03, 0.04, T(0, 0, PH - 0.045), "soil")
+                nc = max(4, round(w / 0.21)); R_ = random.Random(int(w * 1000))
+                for i in range(nc):
+                    u = -w / 2 + w * (i + 0.5) / nc + R_.uniform(-0.03, 0.03)
+                    self.leafy(m, u, R_.uniform(-0.05, 0.05), PH - 0.005, R_.randint(20, 26), min(d, 0.3) * 0.5, R_.uniform(0.36, 0.46), R_)
+                return m.build("planter")
+            self.R.put("PLANTER", "planter", self.c.proto(("planter", w, d), mk), T(x, y, 0) @ RZ(a))
+        for i, p in enumerate(self.L["plants"]):
+            if p.get("in_box"): continue
+            var = i % 3
+            def mk(var=var):
+                m = self.mb(); R_ = random.Random(100 + var)
+                m.lathe(((0.0, 0.0), (0.125, 0.0), (0.132, 0.006), (0.168, 0.425), (0.172, 0.44), (0.166, 0.446), (0.156, 0.44), (0.153, 0.415), (0.0, 0.415)), Matrix(), self.f("pot", "pot"), 32)
+                m.cyl(0.152, 0.01, T(0, 0, 0.405), "soil", 24); self.leafy(m, 0, 0, 0.415, R_.randint(26, 32), 0.1, R_.uniform(0.6, 0.72), R_)
+                return m.build("pot_plant")
+            self.R.put("PLANT", "potplant", self.c.proto(("pot", var), mk), T(p["x"], p["y"], 0) @ RZ(i * 1.3))
+
+    # -------------------------------------------------------------- ceiling light fixtures (from the CAD's ceiling plan, or assumed)
+    def light_fixtures(self):
+        Lst = self.S.get("light", {}); F = self.F
+        for l in self.c.shell.lights:
+            typ = l["ceiling"]; k = l["kind"]; x, y, z = l["x"], l["y"], l["z"]; ceil = self.c.ceiling_z(l["room"])
+            if typ == "open" or (typ == "baffle" and z < ceil - 0.02):
+                style = self.c.shell.ceiling_spec({"name": l["room"]})[0].get("pendant", "cylinder"); drop = round(max(0.05, ceil - z), 3)
+                if style == "capsule":
+                    me = self.c.proto(("capsule1", drop), lambda: self._bank("capsule", 1.2, drop))
+                    self.R.put("LIGHT", "capsulering", me, T(x, y, z), props={"assumed": int(l["assumed"]), "lamp": "none", "room": l["room"]})
+                else:
+                    def mk(drop=drop):
+                        m = self.mb(); m.cyl(0.08, 0.28, Matrix(), F.get("pendant_body", "black_metal"), 24); m.cyl(0.07, 0.004, T(0, 0, 0.002), "led_spot_soft", 24)
+                        m.rod((0, 0, 0.28), (0, 0, drop), 0.0015, 0.0015, "black_metal", None, 6); return m.build("pendant")
+                    self.R.put("LIGHT", "cylinderpendant", self.c.proto(("pend", drop), mk), T(x, y, z), props={"assumed": int(l["assumed"]), "lamp": "spot", "lamp_z": 0.0, "room": l["room"]})
+            elif k == "panel600" and typ in ("grid", "plain"):
+                def mk():
+                    m = self.mb(); m.box(0.57, 0.57, 0.008, T(0, 0, -0.008), "led_panel", 0.0); return m.build("panel600")
+                self.R.put("LIGHT", "panel600", self.c.proto("panel600", mk), T(x, y, z), props={"assumed": int(l["assumed"]), "lamp": "none", "room": l["room"]})
+            else:
+                def mk():
+                    m = self.mb(); m.lathe(((0.056, 0.0), (0.060, -0.005), (0.078, -0.005), (0.082, 0.0)), Matrix(), "white_metal", 24)
+                    m.cyl(0.056, 0.008, T(0, 0, -0.008), "led_spot", 20); return m.build("downlight")
+                self.R.put("LIGHT", "downlight", self.c.proto("downlight", mk), T(x, y, z), props={"assumed": int(l["assumed"]), "lamp": "spot", "lamp_z": -0.01, "room": l["room"]})
+        for (r, spec, (cx, cy), zb, along_x) in self.c.extra_pendants:     # one slim linear pendant over a cove raft (meeting / board rooms)
+            ln = spec.get("pendant_length", 1.8); drop = 0.6; z = zb - drop
+            me = self.c.proto(("bank", "linear", ln, drop), lambda: self._bank("linear", ln, drop))
+            self.R.put("LIGHT", "linearpendant", me, T(cx, cy, z) @ RZ(0 if along_x else math.pi / 2), props={"assumed": 1, "lamp": "none", "room": r["name"]})
+
+    # -------------------------------------------------------------- washroom fixtures and stairs
+    def fixtures(self):
+        sh = self.c.shell
+        def wall_behind(x, y):
+            best = None
+            for k_ in range(16):
+                a_ = k_ * math.pi / 8; dx, dy = math.cos(a_), math.sin(a_)
+                for i in range(1, 30):
+                    if sh.in_wall(x + dx * i * 0.04, y + dy * i * 0.04):
+                        if best is None or i < best[0]: best = (i, a_)
+                        break
+            return (best[1], best[0] * 0.04) if best else (0.0, 0.6)
+        for f in self.L["fixtures"]:
+            x, y = f["c"]; a_, dw = wall_behind(x, y); rz = a_ - math.pi / 2; dw = round(dw, 2)
+            def mk(kind=f["kind"], dw=dw):
+                m = self.mb(); P = lambda t: T(0, t, 0)
+                if kind == "wc":
+                    m.box(0.38, 0.16, 0.40, P(dw - 0.09) @ T(0, 0, 0.40), "ceramic", 0.03); m.box(0.36, 0.52, 0.39, P(dw - 0.44), "ceramic", 0.08); m.box(0.37, 0.47, 0.025, P(dw - 0.46) @ T(0, 0, 0.39), "ceramic", 0.012)
+                elif kind == "urinal":
+                    m.box(0.36, 0.30, 0.64, P(dw - 0.15) @ T(0, 0, 0.42), "ceramic", 0.08)
+                else: m.box(0.05, 0.05, 0.13, P(dw - 0.03) @ T(0, 0, 0.5), "alu", 0.01)
+                return m.build(kind)
+            self.R.put("FIXTURE", f["kind"], self.c.proto(("fix", f["kind"], dw), mk), T(x, y, 0) @ RZ(rz), props={"wall_mounted": int(f["kind"] not in ("wc",))})
+        st = self.L.get("stairs")
+        if st and st.get("steps"):
+            m = self.mb()
+            for i, (sx0, sy0, sx1, sy1) in enumerate(st["steps"]):
+                m.box(sx1 - sx0, sy1 - sy0, min((i + 1) * st.get("riser", 0.156), self.c.Hs - 0.05), T((sx0 + sx1) / 2, (sy0 + sy1) / 2, 0), self.S.get("walls", {}).get("stair", "stone"), 0.006)
+            self.R.put("STAIR", "stairflight", m.build("stair"), props={"static": 1})
+
+    # -------------------------------------------------------------- walls: finding a flat wall in a room for a logo / feature finish
+    def find_wall(self, r, side="auto", z=1.6, avoid=()):
+        dg = bpy.context.evaluated_depsgraph_get(); sc = bpy.context.scene
+        x0, y0, x1, y1 = r["box"]; c = Vector(((x0 + x1) / 2, (y0 + y1) / 2, z))
+        dirs = {"E": 0, "N": 90, "W": 180, "S": 270}
+        cand = [dirs[side]] if side in dirs else list(range(0, 360, 30 if side == "door" else 45))
+        origins = [c]
+        if side == "door":       # the wall you face as you come in: looked for from 1 m inside each door of the room
+            origins = []
+            for d in self.L["doors"]:
+                op = d.get("_opening")
+                if not op: continue
+                for sgn in (-1, 1):
+                    q = Vector((op[0] - math.sin(op[2]) * sgn, op[1] + math.cos(op[2]) * sgn, z))
+                    if self.c.ras.room_at(q.x, q.y) is r: origins.append(q)
+            origins = origins or [c]
+        best = None
+        for c, deg in [(o_, d_) for o_ in origins for d_ in cand]:
+            d = Vector((math.cos(math.radians(deg)), math.sin(math.radians(deg)), 0))
+            hit, loc, nrm, _, ob, _ = sc.ray_cast(dg, c, d, distance=30)
+            if not hit or ob.get("twin_layer") not in ("WALL", "COLUMN", "SKIRTING") or nrm.dot(-d) < 0.85: continue
+            qb = loc - d * 0.2
+            if self.c.ras.room_at(qb.x, qb.y) is not r: continue          # a wall of this room, not one seen through a door
+            n2 = Vector((nrm.x, nrm.y, 0)).normalized(); t = Vector((-n2.y, n2.x, 0))
+            ext = []
+            for s in (-1, 1):
+                e = 0.0
+                while e < 12:
+                    p = loc + n2 * 0.3 + t * s * (e + 0.1)
+                    h2, l2, nn, _, o2, _ = sc.ray_cast(dg, p, -n2, distance=0.6)
+                    if not h2 or abs((l2 - loc).dot(n2)) > 0.02 or o2.get("twin_layer") not in ("WALL",): break
+                    e += 0.1
+                ext.append(e)
+            width = ext[0] + ext[1]; score = width - 0.1 * (loc - c).length if side != "door" else min(width, 4.0) + 0.5 * min((loc - c).length, 6.0)
+            mid = loc + t * (ext[1] - ext[0]) / 2
+            if any((Vector((mid.x, mid.y, 0)) - Vector((a.x, a.y, 0))).length < 1.5 for a in avoid): continue     # already used by another finish
+            fr = sc.ray_cast(dg, mid + n2 * 0.03, n2, distance=1.5)
+            if fr[0]: score -= 20                   # something (a column, a partition) stands right in front of this wall
+            if best is None or score > best[0]: best = (score, loc, n2, t, ext)
+        if not best: return None
+        _, loc, n2, t, ext = best; mid = loc + t * (ext[1] - ext[0]) / 2
+        return {"point": Vector((mid.x, mid.y, 0)), "normal": n2, "tangent": t, "width": ext[0] + ext[1]}
+
+    def logo(self):
+        lgs = self.S.get("logo")
+        if not lgs: return
+        for lg in (lgs if isinstance(lgs, list) else [lgs]): self._logo(lg)
+
+    def _logo(self, lg):
+        r = next((r for r in self.c.ras.rooms if r.get("box") and re.search(lg.get("room", "Reception"), r["name"], re.I)), None)
+        if not r: print("logo: no room matches", lg.get("room")); return
+        fwall = self.c.feature_wall_of.get(r["name"]) if lg.get("wall") == "feature" else None
+        w = fwall or self.find_wall(r, lg.get("wall", "auto") if lg.get("wall") != "feature" else "auto", lg.get("z", 1.6))
+        if not w: print("logo: no flat wall found in", r["name"]); return
+        n, t = w["normal"], w["tangent"]; ang = math.atan2(t.y, t.x); hgt = lg.get("height", 0.45); z = lg.get("z", 1.6)
+        img = lg.get("image"); p = img and (img if os.path.isabs(img) else os.path.join(HERE, img))
+        if p and os.path.exists(p):
+            im = bpy.data.images.load(p, check_existing=True); aspect = im.size[0] / max(1, im.size[1]); wd = min(hgt * aspect, w["width"] - 0.4)
+            self.M.S.setdefault("logo_image", {"kind": "image", "image": p, "emit": lg.get("emit", 0.0)})
+            m = self.mb(); m.add([(-wd / 2, 0, -hgt / 2), (wd / 2, 0, -hgt / 2), (wd / 2, 0, hgt / 2), (-wd / 2, 0, hgt / 2)], [(0, 1, 2, 3)], "logo_image", None, False, [(0, 0), (1, 0), (1, 1), (0, 1)])
+            me = m.build("logo")
+            mode = "image"
+        else:
+            cu = bpy.data.curves.new("logo_text", "FONT"); cu.body = lg.get("text", self.c.tenant.upper()); cu.size = hgt; cu.extrude = 0.006; cu.align_x = "CENTER"; cu.align_y = "CENTER"
+            tmp = bpy.data.objects.new("tmp", cu); bpy.context.scene.collection.objects.link(tmp); bpy.context.view_layer.update()
+            me = bpy.data.meshes.new_from_object(tmp.evaluated_get(bpy.context.evaluated_depsgraph_get())); bpy.data.objects.remove(tmp); bpy.data.curves.remove(cu)
+            me.transform(Matrix.Rotation(math.pi / 2, 4, "X")); me.materials.clear(); me.materials.append(self.M.get(lg.get("material", "logo")))
+            mode = "text"
+        M_ = Matrix.Translation(w["point"] + n * ((0.012 if mode == "text" else 0.005) + (w.get("thickness", 0.0) if fwall else 0.0)) + Vector((0, 0, z))) @ RZ(ang)
+        lo = self.R.put("LOGO", "tenantlogo", me, M_, props={"room": r["name"], "mode": mode})
+        dg = bpy.context.evaluated_depsgraph_get(); pt = M_.translation + n * 0.05
+        blocked = [d_ for d_ in (-0.6, 0.0, 0.6) if bpy.context.scene.ray_cast(dg, pt + t * d_, n, distance=2.0)[0]]
+        lo["front_clear_2m"] = not blocked
+        if blocked: print(f"logo in {r['name']}: something stands within 2 m in front of it (offsets {blocked})", flush=True)
+        self.c.meta["log"].setdefault("logo", []).append({"room": r["name"], "mode": mode, "at": [round(v, 2) for v in w["point"]][:2]})
+
+    def feature_walls(self):
+        for fw in self.S.get("feature_walls", []):
+            rooms = [r for r in self.c.ras.rooms if r.get("box") and ((fw.get("room") and re.search(fw["room"], r["name"], re.I)) or (fw.get("kind") and room_kind(self.S, r["name"]) == fw["kind"]))]
+            for ri, r in enumerate(rooms[:fw.get("max_rooms", 99)]):
+                w = self.find_wall(r, fw.get("side", "auto"), avoid=self.c.used_walls.setdefault(r["name"], []))
+                if w: self.c.used_walls[r["name"]].append(w["point"])
+                if not w: continue
+                n, t = w["normal"], w["tangent"]; ang = math.atan2(t.y, t.x); wd = min(w["width"] - 0.1, fw.get("width", 99)); z0, z1 = fw.get("z0", 0.1), min(fw.get("z1", 2.6), self.c.ceiling_z(r["name"]) - 0.02)
+                typ = fw.get("type", "panel"); mat = fw.get("material", "accent"); m = self.mb(); hh = z1 - z0
+                if isinstance(mat, list): mat = mat[ri % len(mat)]          # e.g. teal in one meeting room, violet in the next
+                if typ == "fluted":
+                    p = fw.get("pitch", 0.045); k = int(wd / p)
+                    for i in range(k): m.cyl(p * 0.48, hh, T(-wd / 2 + (i + 0.5) * p, p * 0.2, z0), mat, 10)
+                    m.box(wd, 0.012, hh, T(0, 0.006, z0), mat)
+                    if fw.get("lights_every"):           # slim vertical wall lights set into the flutes
+                        k_ = max(1, int(wd / fw["lights_every"]))
+                        for i in range(k_):
+                            u = -wd / 2 + (i + 0.5) * wd / k_; m.box(0.03, 0.025, hh * 0.8, T(u, p * 0.55, z0 + hh * 0.1), "black_metal", 0.003)
+                            m.box(0.012, 0.004, hh * 0.78, T(u, p * 0.55 + 0.0145, z0 + hh * 0.11), fw.get("light_material", "led_line"))
+                elif typ == "triangles":
+                    cols = fw.get("materials", [mat]); s = fw.get("cell", 0.35); rows = int(hh / (s * 0.866)); cn = int(wd / s) * 2
+                    R_ = random.Random(3)
+                    for j in range(rows):
+                        for i in range(cn):
+                            u = -wd / 2 + i * s / 2; zz = z0 + j * s * 0.866; up = (i + j) % 2 == 0
+                            vs = [(u, 0.012, zz), (u + s, 0.012, zz), (u + s / 2, 0.012, zz + s * 0.866)] if up else [(u, 0.012, zz + s * 0.866), (u + s / 2, 0.012, zz), (u + s, 0.012, zz + s * 0.866)]
+                            if u + s > wd / 2: continue
+                            m.add(vs, [(0, 2, 1) if up else (0, 1, 2)], R_.choice(cols))
+                    m.box(wd, 0.01, hh, T(0, 0.005, z0), fw.get("backing", "charcoal"))
+                elif typ == "lockers":
+                    k = int(wd / 0.45)
+                    for i in range(k): m.box(0.44, 0.5, hh, T(-wd / 2 + (i + 0.5) * 0.45, 0.25 + 0.002, z0), mat, 0.004); m.box(0.02, 0.03, 0.15, T(-wd / 2 + (i + 0.5) * 0.45 + 0.17, 0.515, z0 + hh * 0.5), "alu", 0.004)
+                elif typ == "wave":
+                    nu, nv = 60, 24; V = []; Fc = []
+                    for j in range(nv + 1):
+                        for i in range(nu + 1):
+                            u = -wd / 2 + wd * i / nu; zz = z0 + hh * j / nv; V.append((u, 0.03 + 0.025 * math.sin(u * 5 + zz * 2.5) * math.sin(zz * 3.1), zz))
+                    for j in range(nv):
+                        for i in range(nu): a_ = j * (nu + 1) + i; Fc.append((a_, a_ + 1, a_ + nu + 2, a_ + nu + 1))
+                    m.add(V, Fc, mat, None, True); m.box(wd, 0.03, 0.02, T(0, 0.04, z1 - 0.01), fw.get("cove", "cove_led"))
+                else:
+                    m.box(wd, fw.get("thickness", 0.018), hh, T(0, fw.get("thickness", 0.018) / 2 + 0.002, z0), mat, 0.003)
+                tt = -t        # right-handed frame: x along the wall, y out of the wall into the room
+                M_ = Matrix.Translation(w["point"]) @ Matrix(((tt.x, n.x, 0, 0), (tt.y, n.y, 0, 0), (0, 0, 1, 0), (0, 0, 0, 1)))
+                self.R.put("FEATURE", f"{typ}_{r['slug']}", m.build("feature"), M_, props={"room": r["name"], "wall_mounted": 1})
+                (self.c.feature_wall_of.__setitem__ if fw.get("logo_wall") else self.c.feature_wall_of.setdefault)(r["name"], dict(w, thickness=fw.get("thickness", 0.018) + 0.002 if typ == "panel" else 0.06, width=wd))
+
+    # -------------------------------------------------------------- snap every floor-standing object onto what is under it
+    def support_bvh(self):
+        verts, polys = [], []
+        for o in bpy.context.scene.objects:
+            if o.type != "MESH" or o.get("twin_layer") not in ("FLOOR", "RUG", "STAIR"): continue
+            mw = o.matrix_world; k = len(verts)
+            verts += [mw @ v.co for v in o.data.vertices]; polys += [[k + i for i in p.vertices] for p in o.data.polygons]
+        return BVHTree.FromPolygons(verts, polys), {o.name: o.get("twin_layer") for o in bpy.context.scene.objects}
+
+    def snap(self):
+        bvh, _ = self.support_bvh(); moved = []; nosupport = []
+        foot_cache = {}
+        for o in bpy.context.scene.objects:
+            if o.type != "MESH" or o.get("twin_layer") not in ("DESK", "SEAT", "TABLE", "PLANTER", "PLANT", "FIXTURE") or o.get("wall_mounted"): continue
+            me = o.data
+            if me.name not in foot_cache:
+                zs = [v.co.z for v in me.vertices]; zmin = min(zs); low = [v.co.copy() for v in me.vertices if v.co.z < zmin + 0.004]
+                step = max(1, len(low) // 16); foot_cache[me.name] = (zmin, low[::step][:24])
+            zmin, low = foot_cache[me.name]; mw = o.matrix_world; sup = []
+            for p in low:
+                w = mw @ p; hit = bvh.ray_cast(Vector((w.x, w.y, w.z + 0.3)), Vector((0, 0, -1)), 1.0)
+                if hit[0] is not None: sup.append(hit[0].z)
+            if not sup: nosupport.append(o.name); continue
+            target = max(sup) - zmin
+            dz = target - o.location.z
+            if abs(dz) > 1e-5: o.location.z = target; moved.append([o.name, round(dz, 4)])
+        self.c.log("snap", {"raised_or_lowered": len(moved), "no_support_below": nosupport})
+        print(f"snap: {len(moved)} objects set onto the surface below them; {len(nosupport)} have nothing under them (left as placed, reported)", flush=True)

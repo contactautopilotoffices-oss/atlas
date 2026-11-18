@@ -1,0 +1,13 @@
+{
+ "about": "What the Blender builder has delivered for the web viewer. One entry per tenant, paths relative to this folder. A tenant with no entry is shown as the placeholder built from its CAD layout, with views computed from the layout. Add an entry when the files are copied here, e.g. \"volt\": {\"viewer\": \"volt/volt_viewer.json\", \"cameras\": \"volt/volt_cameras.json\"}.",
+ "tenants": {
+  "paytm": {
+   "viewer": "paytm/paytm_viewer.json",
+   "cameras": "paytm/paytm_cameras.json"
+  },
+  "arcil": {
+   "viewer": "arcil/arcil_viewer.json",
+   "cameras": "arcil/arcil_cameras.json"
+  }
+ }
+}

@@ -1,0 +1,920 @@
+{
+ "frame": "glTF / three.js world of <tenant>.glb: x = plan east, y = up (0 = finished floor), z = -plan north; metres. position = the lens, target = a point on the view axis; hfov_deg = horizontal field of view for a 16:9 frame (three.js PerspectiveCamera.fov is vertical: vfov = 2 atan(tan(hfov/2) * h / w)). The stills use the same camera made level with lens shift; using lookAt(target) gives the same view with a 5-10 deg tilt.",
+ "tenant": "paytm",
+ "rooms": {
+  "WORKSTATION - 71 NOS (3'0\"X1'7\")": [
+   {
+    "kind": "entry",
+    "position": [
+     27.305,
+     1.55,
+     -6.891
+    ],
+    "target": [
+     32.853,
+     0.75,
+     -14.16
+    ],
+    "hfov_deg": 75,
+    "room": "WORKSTATION - 71 NOS (3'0\"X1'7\")",
+    "label": "Workstation - 71 Nos (3'0\"X1'7\"): entry",
+    "name": "paytm_CAM_workstation-71-nos-3-0-x1-7_entry",
+    "still": "stills/paytm_CAM_workstation-71-nos-3-0-x1-7_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     34.505,
+     1.55,
+     -10.767
+    ],
+    "target": [
+     34.917,
+     1.116,
+     -15.713
+    ],
+    "hfov_deg": 75,
+    "room": "WORKSTATION - 71 NOS (3'0\"X1'7\")",
+    "label": "Workstation - 71 Nos (3'0\"X1'7\"): feature",
+    "name": "paytm_CAM_workstation-71-nos-3-0-x1-7_feature",
+    "still": "stills/paytm_CAM_workstation-71-nos-3-0-x1-7_feature.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     30.379,
+     1.55,
+     -10.792
+    ],
+    "target": [
+     37.666,
+     0.0,
+     -11.07
+    ],
+    "hfov_deg": 45,
+    "room": "WORKSTATION - 71 NOS (3'0\"X1'7\")",
+    "label": "Workstation - 71 Nos (3'0\"X1'7\"): detail",
+    "name": "paytm_CAM_workstation-71-nos-3-0-x1-7_detail",
+    "still": "stills/paytm_CAM_workstation-71-nos-3-0-x1-7_detail.png"
+   }
+  ],
+  "PANTRY": [
+   {
+    "kind": "entry",
+    "position": [
+     10.179,
+     1.55,
+     -30.341
+    ],
+    "target": [
+     4.054,
+     0.451,
+     -29.203
+    ],
+    "hfov_deg": 72,
+    "room": "PANTRY",
+    "label": "Pantry: counter seating",
+    "name": "paytm_CAM_pantry_entry",
+    "still": "stills/paytm_CAM_pantry_entry.png"
+   }
+  ],
+  "WORKSTATION - 173 NOS (3'0\" X1'7\")": [
+   {
+    "kind": "entry",
+    "position": [
+     19.715,
+     1.55,
+     -17.057
+    ],
+    "target": [
+     20.589,
+     0.939,
+     -23.986
+    ],
+    "hfov_deg": 72,
+    "room": "WORKSTATION - 173 NOS (3'0\" X1'7\")",
+    "label": "Workstation - 173 Nos (3'0\" X1'7\"): entry",
+    "name": "paytm_CAM_workstation-173-nos-3-0-x1-7_entry",
+    "still": "stills/paytm_CAM_workstation-173-nos-3-0-x1-7_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     19.455,
+     1.55,
+     -20.191
+    ],
+    "target": [
+     18.755,
+     1.228,
+     -23.81
+    ],
+    "hfov_deg": 72,
+    "room": "WORKSTATION - 173 NOS (3'0\" X1'7\")",
+    "label": "Workstation - 173 Nos (3'0\" X1'7\"): feature",
+    "name": "paytm_CAM_workstation-173-nos-3-0-x1-7_feature",
+    "still": "stills/paytm_CAM_workstation-173-nos-3-0-x1-7_feature.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     19.979,
+     1.55,
+     -32.292
+    ],
+    "target": [
+     18.867,
+     1.036,
+     -26.526
+    ],
+    "hfov_deg": 72,
+    "room": "WORKSTATION - 173 NOS (3'0\" X1'7\")",
+    "label": "Workstation - 173 Nos (3'0\" X1'7\"): reverse",
+    "name": "paytm_CAM_workstation-173-nos-3-0-x1-7_reverse",
+    "still": "stills/paytm_CAM_workstation-173-nos-3-0-x1-7_reverse.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     19.83,
+     1.55,
+     -27.367
+    ],
+    "target": [
+     19.601,
+     -0.0,
+     -20.078
+    ],
+    "hfov_deg": 45,
+    "room": "WORKSTATION - 173 NOS (3'0\" X1'7\")",
+    "label": "Workstation - 173 Nos (3'0\" X1'7\"): detail",
+    "name": "paytm_CAM_workstation-173-nos-3-0-x1-7_detail",
+    "still": "stills/paytm_CAM_workstation-173-nos-3-0-x1-7_detail.png"
+   }
+  ],
+  "RECEPTION/ WAITING AREA": [
+   {
+    "kind": "entry",
+    "position": [
+     10.953,
+     1.55,
+     -14.091
+    ],
+    "target": [
+     4.425,
+     0.952,
+     -16.127
+    ],
+    "hfov_deg": 72,
+    "room": "RECEPTION/ WAITING AREA",
+    "label": "Reception/ Waiting Area: entry",
+    "name": "paytm_CAM_reception-waiting-area_entry",
+    "still": "stills/paytm_CAM_reception-waiting-area_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     9.83,
+     1.55,
+     -13.517
+    ],
+    "target": [
+     4.995,
+     0.581,
+     -16.127
+    ],
+    "hfov_deg": 72,
+    "room": "RECEPTION/ WAITING AREA",
+    "label": "Reception/ Waiting Area: feature",
+    "name": "paytm_CAM_reception-waiting-area_feature",
+    "still": "stills/paytm_CAM_reception-waiting-area_feature.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     7.129,
+     1.55,
+     -14.941
+    ],
+    "target": [
+     12.132,
+     0.301,
+     -9.927
+    ],
+    "hfov_deg": 72,
+    "room": "RECEPTION/ WAITING AREA",
+    "label": "Reception/ Waiting Area: reverse",
+    "name": "paytm_CAM_reception-waiting-area_reverse",
+    "still": "stills/paytm_CAM_reception-waiting-area_reverse.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     8.53,
+     1.55,
+     -14.316
+    ],
+    "target": [
+     4.226,
+     0.621,
+     -15.072
+    ],
+    "hfov_deg": 45,
+    "room": "RECEPTION/ WAITING AREA",
+    "label": "Reception/ Waiting Area: detail",
+    "name": "paytm_CAM_reception-waiting-area_detail",
+    "still": "stills/paytm_CAM_reception-waiting-area_detail.png"
+   }
+  ],
+  "LOUNGE AREA": [
+   {
+    "kind": "entry",
+    "position": [
+     17.354,
+     1.55,
+     -15.292
+    ],
+    "target": [
+     12.624,
+     1.086,
+     -12.889
+    ],
+    "hfov_deg": 72,
+    "room": "LOUNGE AREA",
+    "label": "Lounge area",
+    "name": "paytm_CAM_lounge-area_entry",
+    "still": "stills/paytm_CAM_lounge-area_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     17.354,
+     1.55,
+     -15.292
+    ],
+    "target": [
+     12.624,
+     1.086,
+     -12.889
+    ],
+    "hfov_deg": 72,
+    "room": "LOUNGE AREA",
+    "label": "Lounge Area: feature",
+    "name": "paytm_CAM_lounge-area_feature",
+    "still": "stills/paytm_CAM_lounge-area_feature.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     18.904,
+     1.55,
+     -7.692
+    ],
+    "target": [
+     19.093,
+     1.214,
+     -9.587
+    ],
+    "hfov_deg": 72,
+    "room": "LOUNGE AREA",
+    "label": "Lounge Area: reverse",
+    "name": "paytm_CAM_lounge-area_reverse",
+    "still": "stills/paytm_CAM_lounge-area_reverse.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     12.755,
+     1.55,
+     -15.316
+    ],
+    "target": [
+     14.348,
+     0.963,
+     -13.064
+    ],
+    "hfov_deg": 45,
+    "room": "LOUNGE AREA",
+    "label": "Lounge Area: detail",
+    "name": "paytm_CAM_lounge-area_detail",
+    "still": "stills/paytm_CAM_lounge-area_detail.png"
+   }
+  ],
+  "ENTRY": [
+   {
+    "kind": "entry",
+    "position": [
+     11.516,
+     1.55,
+     -11.99
+    ],
+    "target": [
+     4.051,
+     0.886,
+     -10.652
+    ],
+    "hfov_deg": 72,
+    "room": "ENTRY",
+    "label": "Entry: entry",
+    "name": "paytm_CAM_entry_entry",
+    "still": "stills/paytm_CAM_entry_entry.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     4.33,
+     1.55,
+     -7.966
+    ],
+    "target": [
+     10.213,
+     0.466,
+     -13.732
+    ],
+    "hfov_deg": 72,
+    "room": "ENTRY",
+    "label": "Entry: reverse",
+    "name": "paytm_CAM_entry_reverse",
+    "still": "stills/paytm_CAM_entry_reverse.png"
+   }
+  ],
+  "GENTS TOILET-01": [
+   {
+    "kind": "entry",
+    "position": [
+     9.08,
+     1.55,
+     -28.466
+    ],
+    "target": [
+     3.932,
+     0.794,
+     -31.006
+    ],
+    "hfov_deg": 78,
+    "room": "GENTS TOILET-01",
+    "label": "Gents Toilet-01: entry",
+    "name": "paytm_CAM_gents-toilet-01_entry",
+    "still": "stills/paytm_CAM_gents-toilet-01_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     10.179,
+     1.55,
+     -30.341
+    ],
+    "target": [
+     4.054,
+     0.451,
+     -29.203
+    ],
+    "hfov_deg": 72,
+    "room": "GENTS TOILET-01",
+    "label": "Gents Toilet-01: feature",
+    "name": "paytm_CAM_gents-toilet-01_feature",
+    "still": "stills/paytm_CAM_gents-toilet-01_feature.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     4.455,
+     1.55,
+     -28.517
+    ],
+    "target": [
+     10.633,
+     0.127,
+     -31.092
+    ],
+    "hfov_deg": 45,
+    "room": "GENTS TOILET-01",
+    "label": "Gents Toilet-01: detail",
+    "name": "paytm_CAM_gents-toilet-01_detail",
+    "still": "stills/paytm_CAM_gents-toilet-01_detail.png"
+   }
+  ],
+  "LADIES TOILET-01": [
+   {
+    "kind": "entry",
+    "position": [
+     4.504,
+     1.55,
+     -23.892
+    ],
+    "target": [
+     9.445,
+     0.801,
+     -26.72
+    ],
+    "hfov_deg": 72,
+    "room": "LADIES TOILET-01",
+    "label": "Ladies Toilet-01: entry",
+    "name": "paytm_CAM_ladies-toilet-01_entry",
+    "still": "stills/paytm_CAM_ladies-toilet-01_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     4.305,
+     1.55,
+     -25.191
+    ],
+    "target": [
+     9.445,
+     0.846,
+     -26.653
+    ],
+    "hfov_deg": 72,
+    "room": "LADIES TOILET-01",
+    "label": "Ladies Toilet-01: feature",
+    "name": "paytm_CAM_ladies-toilet-01_feature",
+    "still": "stills/paytm_CAM_ladies-toilet-01_feature.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     9.179,
+     1.55,
+     -24.892
+    ],
+    "target": [
+     5.637,
+     0.75,
+     -26.164
+    ],
+    "hfov_deg": 45,
+    "room": "LADIES TOILET-01",
+    "label": "Ladies Toilet-01: detail",
+    "name": "paytm_CAM_ladies-toilet-01_detail",
+    "still": "stills/paytm_CAM_ladies-toilet-01_detail.png"
+   }
+  ],
+  "6 SEATER MEETING ROOM 01": [
+   {
+    "kind": "entry",
+    "position": [
+     6.705,
+     1.55,
+     -20.142
+    ],
+    "target": [
+     5.183,
+     1.245,
+     -23.278
+    ],
+    "hfov_deg": 75,
+    "room": "6 SEATER MEETING ROOM 01",
+    "label": "6 Seater Meeting Room 01: entry",
+    "name": "paytm_CAM_6-seater-meeting-room-01_entry",
+    "still": "stills/paytm_CAM_6-seater-meeting-room-01_entry.png"
+   }
+  ],
+  "4 SEATER MEETING ROOM 02": [
+   {
+    "kind": "entry",
+    "position": [
+     7.08,
+     1.55,
+     -17.667
+    ],
+    "target": [
+     6.019,
+     1.283,
+     -18.745
+    ],
+    "hfov_deg": 78,
+    "room": "4 SEATER MEETING ROOM 02",
+    "label": "4 Seater Meeting Room 02: entry",
+    "name": "paytm_CAM_4-seater-meeting-room-02_entry",
+    "still": "stills/paytm_CAM_4-seater-meeting-room-02_entry.png"
+   }
+  ],
+  "6 SEATER MEETING ROOM 02": [
+   {
+    "kind": "entry",
+    "position": [
+     10.192,
+     1.55,
+     -19.224
+    ],
+    "target": [
+     10.813,
+     0.951,
+     -22.566
+    ],
+    "hfov_deg": 75,
+    "room": "6 SEATER MEETING ROOM 02",
+    "label": "6 Seater Meeting Room 02: entry",
+    "name": "paytm_CAM_6-seater-meeting-room-02_entry",
+    "still": "stills/paytm_CAM_6-seater-meeting-room-02_entry.png"
+   }
+  ],
+  "4 SEATER MEETING ROOM 01 (1)": [
+   {
+    "kind": "entry",
+    "position": [
+     10.191,
+     1.55,
+     -19.652
+    ],
+    "target": [
+     10.653,
+     1.261,
+     -16.383
+    ],
+    "hfov_deg": 75,
+    "room": "4 SEATER MEETING ROOM 01 (1)",
+    "label": "4 Seater Meeting Room 01 (1): entry",
+    "name": "paytm_CAM_4-seater-meeting-room-01-1_entry",
+    "still": "stills/paytm_CAM_4-seater-meeting-room-01-1_entry.png"
+   }
+  ],
+  "DRY PANTRY-01": [
+   {
+    "kind": "entry",
+    "position": [
+     17.205,
+     1.55,
+     -13.991
+    ],
+    "target": [
+     18.084,
+     1.272,
+     -12.683
+    ],
+    "hfov_deg": 78,
+    "room": "DRY PANTRY-01",
+    "label": "Dry Pantry-01: entry",
+    "name": "paytm_CAM_dry-pantry-01_entry",
+    "still": "stills/paytm_CAM_dry-pantry-01_entry.png"
+   }
+  ],
+  "DRY PANTRY-02": [
+   {
+    "kind": "entry",
+    "position": [
+     18.729,
+     1.55,
+     -5.442
+    ],
+    "target": [
+     18.901,
+     1.004,
+     -9.587
+    ],
+    "hfov_deg": 72,
+    "room": "DRY PANTRY-02",
+    "label": "Dry Pantry-02: entry",
+    "name": "paytm_CAM_dry-pantry-02_entry",
+    "still": "stills/paytm_CAM_dry-pantry-02_entry.png"
+   }
+  ],
+  "16 SEATER CONFERENCE ROOM": [
+   {
+    "kind": "entry",
+    "position": [
+     20.274,
+     1.55,
+     -13.35
+    ],
+    "target": [
+     21.99,
+     0.75,
+     -9.15
+    ],
+    "hfov_deg": 72,
+    "room": "16 SEATER CONFERENCE ROOM",
+    "label": "16 Seater Conference Room: entry",
+    "name": "paytm_CAM_16-seater-conference-room_entry",
+    "still": "stills/paytm_CAM_16-seater-conference-room_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     21.055,
+     1.55,
+     -5.417
+    ],
+    "target": [
+     23.707,
+     0.645,
+     -11.762
+    ],
+    "hfov_deg": 75,
+    "room": "16 SEATER CONFERENCE ROOM",
+    "label": "16 Seater Conference Room: feature",
+    "name": "paytm_CAM_16-seater-conference-room_feature",
+    "still": "stills/paytm_CAM_16-seater-conference-room_feature.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     22.404,
+     1.55,
+     -5.417
+    ],
+    "target": [
+     20.505,
+     0.807,
+     -10.728
+    ],
+    "hfov_deg": 75,
+    "room": "16 SEATER CONFERENCE ROOM",
+    "label": "16 Seater Conference Room: reverse",
+    "name": "paytm_CAM_16-seater-conference-room_reverse",
+    "still": "stills/paytm_CAM_16-seater-conference-room_reverse.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     23.08,
+     1.55,
+     -8.116
+    ],
+    "target": [
+     20.392,
+     0.668,
+     -11.277
+    ],
+    "hfov_deg": 45,
+    "room": "16 SEATER CONFERENCE ROOM",
+    "label": "16 Seater Conference Room: detail",
+    "name": "paytm_CAM_16-seater-conference-room_detail",
+    "still": "stills/paytm_CAM_16-seater-conference-room_detail.png"
+   }
+  ],
+  "4 SEATER MEETING ROOM 01 (2)": [
+   {
+    "kind": "entry",
+    "position": [
+     24.654,
+     1.55,
+     -5.567
+    ],
+    "target": [
+     24.748,
+     0.995,
+     -8.711
+    ],
+    "hfov_deg": 72,
+    "room": "4 SEATER MEETING ROOM 01 (2)",
+    "label": "4 Seater Meeting Room 01 (2): entry",
+    "name": "paytm_CAM_4-seater-meeting-room-01-2_entry",
+    "still": "stills/paytm_CAM_4-seater-meeting-room-01-2_entry.png"
+   }
+  ],
+  "4 SEATER MEETING ROOM 01 (3)": [
+   {
+    "kind": "entry",
+    "position": [
+     25.379,
+     1.55,
+     -9.167
+    ],
+    "target": [
+     24.382,
+     0.997,
+     -12.14
+    ],
+    "hfov_deg": 72,
+    "room": "4 SEATER MEETING ROOM 01 (3)",
+    "label": "4 Seater Meeting Room 01 (3): entry",
+    "name": "paytm_CAM_4-seater-meeting-room-01-3_entry",
+    "still": "stills/paytm_CAM_4-seater-meeting-room-01-3_entry.png"
+   }
+  ],
+  "LADIES WASHROOM": [
+   {
+    "kind": "entry",
+    "position": [
+     46.384,
+     1.55,
+     -11.134
+    ],
+    "target": [
+     50.13,
+     0.887,
+     -11.484
+    ],
+    "hfov_deg": 75,
+    "room": "LADIES WASHROOM",
+    "label": "Ladies Washroom: entry",
+    "name": "paytm_CAM_ladies-washroom_entry",
+    "still": "stills/paytm_CAM_ladies-washroom_entry.png"
+   }
+  ],
+  "GENTS WASHROOM": [
+   {
+    "kind": "entry",
+    "position": [
+     44.28,
+     1.55,
+     -9.735
+    ],
+    "target": [
+     48.173,
+     1.206,
+     -9.156
+    ],
+    "hfov_deg": 75,
+    "room": "GENTS WASHROOM",
+    "label": "Gents Washroom: entry",
+    "name": "paytm_CAM_gents-washroom_entry",
+    "still": "stills/paytm_CAM_gents-washroom_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     43.204,
+     1.55,
+     -7.667
+    ],
+    "target": [
+     44.745,
+     1.261,
+     -8.229
+    ],
+    "hfov_deg": 72,
+    "room": "GENTS WASHROOM",
+    "label": "Gents Washroom: feature",
+    "name": "paytm_CAM_gents-washroom_feature",
+    "still": "stills/paytm_CAM_gents-washroom_feature.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     46.505,
+     1.55,
+     -7.692
+    ],
+    "target": [
+     44.968,
+     1.188,
+     -9.052
+    ],
+    "hfov_deg": 72,
+    "room": "GENTS WASHROOM",
+    "label": "Gents Washroom: reverse",
+    "name": "paytm_CAM_gents-washroom_reverse",
+    "still": "stills/paytm_CAM_gents-washroom_reverse.png"
+   }
+  ],
+  "WET PANTRY": [
+   {
+    "kind": "entry",
+    "position": [
+     43.279,
+     1.55,
+     -13.167
+    ],
+    "target": [
+     41.763,
+     1.282,
+     -13.124
+    ],
+    "hfov_deg": 72,
+    "room": "WET PANTRY",
+    "label": "Wet Pantry: entry",
+    "name": "paytm_CAM_wet-pantry_entry",
+    "still": "stills/paytm_CAM_wet-pantry_entry.png"
+   }
+  ],
+  "COLLAB AREA": [
+   {
+    "kind": "entry",
+    "position": [
+     42.555,
+     1.55,
+     -7.917
+    ],
+    "target": [
+     41.45,
+     0.74,
+     -12.378
+    ],
+    "hfov_deg": 72,
+    "room": "COLLAB AREA",
+    "label": "Collab Area: entry",
+    "name": "paytm_CAM_collab-area_entry",
+    "still": "stills/paytm_CAM_collab-area_entry.png"
+   }
+  ],
+  "H. TOILET": [
+   {
+    "kind": "entry",
+    "position": [
+     45.554,
+     1.55,
+     -11.115
+    ],
+    "target": [
+     46.094,
+     1.216,
+     -13.592
+    ],
+    "hfov_deg": 75,
+    "room": "H. TOILET",
+    "label": "H. Toilet: entry",
+    "name": "paytm_CAM_h-toilet_entry",
+    "still": "stills/paytm_CAM_h-toilet_entry.png"
+   }
+  ],
+  "06 SEATER MEETING ROOM": [
+   {
+    "kind": "entry",
+    "position": [
+     62.13,
+     1.55,
+     -11.967
+    ],
+    "target": [
+     59.424,
+     1.178,
+     -12.792
+    ],
+    "hfov_deg": 78,
+    "room": "06 SEATER MEETING ROOM",
+    "label": "06 Seater Meeting Room: entry",
+    "name": "paytm_CAM_06-seater-meeting-room_entry",
+    "still": "stills/paytm_CAM_06-seater-meeting-room_entry.png"
+   }
+  ],
+  "AUTOPILOT CABIN": [
+   {
+    "kind": "entry",
+    "position": [
+     58.816,
+     1.55,
+     -11.608
+    ],
+    "target": [
+     56.62,
+     1.166,
+     -15.405
+    ],
+    "hfov_deg": 72,
+    "room": "AUTOPILOT CABIN",
+    "label": "Autopilot Cabin: entry",
+    "name": "paytm_CAM_autopilot-cabin_entry",
+    "still": "stills/paytm_CAM_autopilot-cabin_entry.png"
+   }
+  ],
+  "RECEPTION": [
+   {
+    "kind": "entry",
+    "position": [
+     55.697,
+     1.55,
+     -11.908
+    ],
+    "target": [
+     50.434,
+     1.073,
+     -13.335
+    ],
+    "hfov_deg": 72,
+    "room": "RECEPTION",
+    "label": "Reception: entry",
+    "name": "paytm_CAM_reception_entry",
+    "still": "stills/paytm_CAM_reception_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     54.729,
+     1.55,
+     -13.842
+    ],
+    "target": [
+     50.454,
+     0.906,
+     -11.469
+    ],
+    "hfov_deg": 75,
+    "room": "RECEPTION",
+    "label": "Reception: feature",
+    "name": "paytm_CAM_reception_feature",
+    "still": "stills/paytm_CAM_reception_feature.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     50.454,
+     1.55,
+     -15.392
+    ],
+    "target": [
+     58.193,
+     0.245,
+     -9.194
+    ],
+    "hfov_deg": 72,
+    "room": "RECEPTION",
+    "label": "Reception: reverse",
+    "name": "paytm_CAM_reception_reverse",
+    "still": "stills/paytm_CAM_reception_reverse.png"
+   }
+  ]
+ }
+}

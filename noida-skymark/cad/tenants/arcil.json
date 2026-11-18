@@ -1,0 +1,248 @@
+{
+ "extends": "_skymark.json",
+ "name": "ARCIL",
+ "dwg_name": "20260923_SKY MARK NOIDA_2nd floor_ARCIL.dwg",
+ "plan_label": "SECOND FLOOR PLAN",
+ "plan_window_in": [
+  2921050,
+  -3343450,
+  2923800,
+  -3342150
+ ],
+ "origin_in": [
+  2921050,
+  -3343450
+ ],
+ "operator_rooms": "AUTOPILOT",
+ "chairs": {
+  "A$Ce658220c": [
+   "supervisor chair",
+   "work"
+  ],
+  "A$C92802071": [
+   "training chair",
+   "training"
+  ],
+  "A$Cb2a790fe": [
+   "conference chair",
+   "meeting"
+  ],
+  "A$Cba813c9e": [
+   "interview chair",
+   "meeting"
+  ],
+  "A$Ca354571c": [
+   "reception lounge chair",
+   "lounge"
+  ]
+ },
+ "desks": {
+  "WEGWG": "supervisor workstation",
+  "CUBJ": "supervisor cubicle 5'x4'6\""
+ },
+ "lockers": {
+  "layer": "APO-AKJNFAFS",
+  "tiers_from_labels": true
+ },
+ "deck_claims": {
+  "about": "ARCIL design deck (as given in the brief). The CAD wins where they differ.",
+  "workstations": 238,
+  "supervisor_stations": 10,
+  "cabins": 3,
+  "meeting_conference_rooms": 3,
+  "interview_rooms": 2,
+  "training_room_seats": "24+1",
+  "lockers": 210
+ },
+ "layers": {
+  "room_barriers_extra": [
+   "RAILING",
+   "AR-WINCILL",
+   "A-FLDROP"
+  ],
+  "layers_note": "A-FLDROP (4 double polylines) is drawn where the 16 PAX conference room meets the server/UPS rooms; it is treated as a partition for room splitting."
+ },
+ "closures": [
+  {
+   "a": [
+    44.0,
+    4.72
+   ],
+   "b": [
+    44.0,
+    3.75
+   ],
+   "why": "wall between OCCUPIED SPACE and the east lift lobby stops 1 m short of the south wall: closes ARCIL's core off from the other tenant"
+  },
+  {
+   "a": [
+    48.35,
+    4.05
+   ],
+   "b": [
+    48.35,
+    6.12
+   ],
+   "why": "gents toilet (east core) entry has no door block"
+  },
+  {
+   "a": [
+    5.0,
+    23.3
+   ],
+   "b": [
+    10.75,
+    23.3
+   ],
+   "why": "west toilets: the back-to-back WC duct between GENTS and LADIES is drawn only as fixtures, not as a wall"
+  },
+  {
+   "a": [
+    12.55,
+    24.62
+   ],
+   "b": [
+    13.55,
+    24.62
+   ],
+   "why": "pantry entry from the west passage has no door block"
+  },
+  {
+   "a": [
+    50.1,
+    26.35
+   ],
+   "b": [
+    58.65,
+    26.35
+   ],
+   "why": "16 PAX conference room: the front partition is not on a wall or glass layer (only its door is drawn)"
+  },
+  {
+   "a": [
+    58.75,
+    26.37
+   ],
+   "b": [
+    63.5,
+    26.37
+   ],
+   "why": "server room / UPS-battery room front partition not drawn on a wall or glass layer"
+  },
+  {
+   "a": [
+    61.0,
+    26.37
+   ],
+   "b": [
+    61.0,
+    27.6
+   ],
+   "why": "partition between server room and UPS/battery room stops short of their front"
+  },
+  {
+   "a": [
+    56.3,
+    11.35
+   ],
+   "b": [
+    57.75,
+    11.35
+   ],
+   "virtual": true,
+   "why": "zone boundary, not a wall: separates the locker passage (circulation) from the reception lobby"
+  }
+ ],
+ "label_fixes": [
+  {
+   "at": [
+    43.02,
+    27.04
+   ],
+   "to": "8 PAX MEETING RM 01",
+   "why": "CAD labels both 8-pax rooms 'RM 02'; the west one is renamed RM 01"
+  },
+  {
+   "at": [
+    47.24,
+    27.13
+   ],
+   "to": "8 PAX MEETING RM 02"
+  },
+  {
+   "at": [
+    56.42,
+    17.72
+   ],
+   "move_to": [
+    57.8,
+    17.8
+   ],
+   "why": "CABIN-01 text sits in the locker passage; moved into the cabin"
+  },
+  {
+   "at": [
+    64.25,
+    9.65
+   ],
+   "move_to": [
+    62.3,
+    9.5
+   ],
+   "why": "CABIN-03 text sits outside the plate edge; moved into the cabin"
+  },
+  {
+   "at": [
+    10.97,
+    8.79
+   ],
+   "drop": true,
+   "why": "'RECEPTION' beside the west stair is the other tenant's reception, not an ARCIL room"
+  },
+  {
+   "at": [
+    6.89,
+    25.12
+   ],
+   "to": "GENTS TOILET-01",
+   "why": "CAD writes GENTS and TOILET-01 as two texts"
+  },
+  {
+   "at": [
+    7.28,
+    20.08
+   ],
+   "to": "LADIES TOILET-01",
+   "why": "CAD writes LADIES and TOILET-01 as two texts"
+  },
+  {
+   "at": [
+    51.71,
+    26.29
+   ],
+   "move_to": [
+    54.4,
+    28.0
+   ],
+   "why": "16 PAX CONFERENCE ROOM text sits on the room's front line; moved inside"
+  },
+  {
+   "at": [
+    44.6,
+    4.3
+   ],
+   "drop": true,
+   "why": "'ELECTRICAL PANEL' here marks a wall-mounted panel in the east lift lobby, not a room"
+  }
+ ],
+ "label_adds": [
+  {
+   "t": "WORKSTATIONS (EAST POD)",
+   "at": [
+    59.5,
+    22.8
+   ],
+   "why": "18 workstations east of the main hall have no label of their own (part of the 238)"
+  }
+ ]
+}
