@@ -20,9 +20,13 @@ gc, wn, cr, vw = J(f'{t}_greycard.json'), J(f'{t}_windows.json'), J(f'{t}_camera
 checks = []
 def chk(name, ok, detail): checks.append({'check': name, 'pass': bool(ok), 'detail': detail})
 if pl is not None:
-    iss = pl.get('issues') or pl.get('problems') or []
-    chk('Placement: nothing floating, sunk, inside a wall or another object; walkways >= 1.2 m', pl.get('ok'),
-        f"{len(iss)} issue(s)" + ('' if not iss else ': ' + '; '.join(str(i.get('what', i))[:110] for i in iss[:6])) + (f"; nudges applied: {len(pl.get('nudged', []))}" if pl.get('nudged') else ''))
+    ov = pl.get('overlaps', []); hard = [o for o in ov if any(k in o['layers'] for k in ('WALL', 'SKIRTING', 'COLUMN', 'GLASS', 'DOOR', 'STAIR', 'RAILING'))]
+    soft = [o for o in ov if o not in hard]; fl = pl.get('floating_or_sunk', []); nr = pl.get('narrow_routes', [])
+    chk('Nothing inside a wall, glass or door; nothing floating or sunk (hard rule)', not hard and not fl,
+        f"{len(hard)} into walls/glass/doors, {len(fl)} floating or sunk" + ('' if not hard else ': ' + '; '.join(f"{o['b'].split('_', 2)[-1]} {o['depth_m'] * 1000:.0f} mm into {o['a'].split('_', 2)[-1]}" for o in hard[:5])))
+    chk('Furniture not overlapping furniture', not soft, f"{len(soft)} pair(s)" + ('' if not soft else ': ' + '; '.join(f"{o['a'].split('_', 2)[-1]} / {o['b'].split('_', 2)[-1]} {o['depth_m'] * 1000:.0f} mm" for o in soft[:5])))
+    chk('Walkways >= 1.2 m on every route from the entrance to every door', not nr,
+        f"{len(nr)} stretch(es) under 1.2 m" + ('' if not nr else ' (CAD pinch points, for the designer): ' + '; '.join(f"{r['min_width_m']:.2f} m at ({r['at'][0]:.1f}, {r['at'][1]:.1f})" for r in nr[:8])))
 if cp is not None:
     chk('No two coplanar faces closer than 2 mm (flicker)', cp['ok'], f"{cp['n_hits']} overlapping pairs among {cp['faces_checked']:,} faces" + ('' if cp['ok'] else ': ' + '; '.join(f"{p['a']} / {p['b']} x{p['n']}" for p in cp['by_object_pair'][:5])))
 if A.gate != 'G2':

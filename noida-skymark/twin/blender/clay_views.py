@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import twin_lib as TL
 
 ap = argparse.ArgumentParser(); ap.add_argument('--tenant', required=True); ap.add_argument('--out', required=True)
-ap.add_argument('--cameras', default=''); ap.add_argument('--max', type=int, default=8); ap.add_argument('--res', default='1600x900')
+ap.add_argument('--cameras', default=''); ap.add_argument('--max', type=int, default=8); ap.add_argument('--res', default='1600x900'); ap.add_argument('--prefer', default='RECEPTION|workstation|MEETING|CAFETERIA|TRAINING|CONFERENCE|CABIN')
 A = ap.parse_args(TL.script_args())
 sc = bpy.context.scene; os.makedirs(os.path.join(A.out, 'review'), exist_ok=True)
 sc.render.engine = 'BLENDER_WORKBENCH'
@@ -45,7 +45,12 @@ cp = A.cameras or os.path.join(A.out, f'{A.tenant}_cameras_plan.json')
 if os.path.exists(cp):
     plan = json.load(open(cp)); plan = plan.get('cameras', plan) if isinstance(plan, dict) else plan
     pri = {'entry': 0, 'feature': 1, 'reverse': 2, 'detail': 3}
-    cams = sorted([c for c in plan if isinstance(c, dict) and 'position' in c], key=lambda c: (pri.get(c.get('kind'), 9), c.get('room', '')))
+    import re as _re
+    seen_rooms = set(); pool = sorted([c for c in plan if isinstance(c, dict) and 'position' in c], key=lambda c: (not _re.search(A.prefer, c.get('room', ''), _re.I), pri.get(c.get('kind'), 9), c.get('room', '')))
+    cams = []
+    for c in pool:
+        if c.get('room') in seen_rooms: continue
+        seen_rooms.add(c.get('room')); cams.append(c)
 else:
     cams = [o for o in sc.objects if o.type == 'CAMERA' and not o.name.startswith('clay')]
 n = 0

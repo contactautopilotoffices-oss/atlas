@@ -544,7 +544,7 @@ class Furnisher:
         tm.transform(Matrix.Rotation(math.pi / 2, 4, "X"))          # letters stand in the x-z plane, depth along -y (out of the wall)
         tm.materials.clear(); tm.materials.append(self.M.get(lg.get("material", "logo")))
         import bmesh as _bm
-        bm = _bm.new(); bm.from_mesh(tm); bpy.data.meshes.remove(tm)
+        bm = _bm.new(); bm.from_mesh(tm); tm2 = tm.copy(); bpy.data.meshes.remove(tm)
         m.add_bm(bm, lg.get("material", "logo")); bm.free()
         if mark:                       # the square "A" tile: a 40 mm deep block with a white chevron raised 3 mm on its face
             mx = x0 + ms / 2
@@ -553,9 +553,13 @@ class Furnisher:
                 L_ = ms * 0.62; a_ = math.radians(62) * s_
                 m.box(ms * 0.11, 0.004, L_, T(mx + s_ * ms * 0.15, -dep / 2 - 0.005, -ms * 0.02) @ Matrix.Rotation(a_, 4, "Y"), mark.get("chevron", "logo"), 0.0)
         hl = lg.get("halo")
-        if hl:                         # warm emissive plate 4 mm thick, set back behind the letters, a little larger than them
-            pad = hl.get("pad", 0.05)
-            m.box(total + 2 * pad, 0.004, hgt * 1.5 + 2 * pad, T(0, dep / 2 + lg.get("standoff", 0.03) - 0.008, -(hgt * 1.5 + 2 * pad) / 2 + hgt * 0.08), hl.get("material", "logo_halo"), 0.0)
+        if hl:                         # backlight: an emissive copy of the letters 4 mm behind their back face, hidden by them;
+            bm2 = _bm.new(); bm2.from_mesh(tm2)          # it lights the wall round each letter (the halo), it is never seen itself
+            _bm.ops.scale(bm2, vec=(1.0, 0.1, 1.0), verts=bm2.verts)
+            _bm.ops.translate(bm2, vec=(0, dep / 2 + 0.006, 0), verts=bm2.verts)
+            m.add_bm(bm2, hl.get("material", "logo_halo")); bm2.free()
+        try: bpy.data.meshes.remove(tm2)
+        except Exception: pass
         return m.build("logo_built"), total
 
     def feature_walls(self):

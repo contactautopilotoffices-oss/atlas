@@ -1,0 +1,41 @@
+{
+ "gate": "BUILD",
+ "pass": false,
+ "checks": [
+  {
+   "check": "Nothing inside a wall, glass or door; nothing floating or sunk (hard rule)",
+   "pass": true,
+   "detail": "0 into walls/glass/doors, 0 floating or sunk"
+  },
+  {
+   "check": "Furniture not overlapping furniture",
+   "pass": false,
+   "detail": "2 pair(s): CafeteriaChair3CafeteriaChair3468Level1_56 / CafeteriaChair3CafeteriaChair3468Level1_52 6 mm; CafeteriaChair3CafeteriaChair3469Level1_56 / CafeteriaChair3CafeteriaChair3469Level1_52 4 mm"
+  },
+  {
+   "check": "Walkways >= 1.2 m on every route from the entrance to every door",
+   "pass": false,
+   "detail": "5 stretch(es) under 1.2 m (CAD pinch points, for the designer): 1.05 m at (-43.9, 108.7); 0.85 m at (-38.9, 108.7); 0.85 m at (-42.0, 95.5); 1.15 m at (-8.2, 87.5); 1.05 m at (-42.4, 110.0)"
+  },
+  {
+   "check": "No two coplanar faces closer than 2 mm (flicker)",
+   "pass": false,
+   "detail": "212 overlapping pairs among 1,300,689 faces: rtp6-a_GLASS_STRUCTURALGLAZING_67 / rtp6-a_GLASS_STRUCTURALGLAZING_85 x5; rtp6-a_SKIRTING_skirting_2 / rtp6-a_WALL_wall_2 x5; rtp6-a_GLASS_PRGLASS_1 / rtp6-a_GLASS_PRGLASS_5 x4; rtp6-a_GLASS_PRGLASS_2 / rtp6-a_GLASS_PRGLASS_6 x4; rtp6-a_GLASS_PRGLASS_3 / rtp6-a_GLASS_PRGLASS_7 x4"
+  },
+  {
+   "check": "Light: exposure from grey cards; previews not blown or crushed",
+   "pass": true,
+   "detail": "{\"cards\": [{\"room\": \"Corridor 9\", \"at\": [24.22, 97.04, 0.8], \"card_linear\": 0.2247}, {\"room\": \"Open workstations 2\", \"at\": [-25.95, 103.89, 0.8], \"card_linear\": 0.2355}, {\"room\": \"Open workstations 4\", \"at\": [32.52, 104."
+  },
+  {
+   "check": "Cameras: every shown room has a ray-checked view",
+   "pass": true,
+   "detail": "36 rooms with views, 0 without"
+  },
+  {
+   "check": "Export: web model written (GLB, LOD GLB, viewer.json, lightmaps)",
+   "pass": true,
+   "detail": "camera near 0.1 m; files: 2"
+  }
+ ]
+}

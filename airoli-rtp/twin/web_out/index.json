@@ -1,0 +1,10 @@
+{
+ "rtp6-a": {
+  "viewer": "rtp6-a/rtp6-a_viewer.json",
+  "cameras": "rtp6-a/rtp6-a_cameras.json"
+ },
+ "rtp4-suite": {
+  "viewer": "rtp4-suite/rtp4-suite_viewer.json",
+  "cameras": "rtp4-suite/rtp4-suite_cameras.json"
+ }
+}
