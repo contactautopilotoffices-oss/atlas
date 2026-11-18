@@ -36,7 +36,7 @@ if C.get('open_zone_sizes_m'):
             zones.append([round(x0, 3), round(y0, 3), round(x1, 3), round(y1, 3)]); continue
         keep.append(l)
     wl = keep
-gl = geom.layer_lines(d, F, set(LY['glass_lines']))
+gl = geom.layer_lines(d, F, set(LY['glass_lines']), nested_ok_layers=set(LY.get('glass_blocks_on', [])), ins=ins_all, door_layers=set(LY['doors']))
 xl = geom.layer_lines(d, F, set(LY.get('room_barriers_extra', [])))   # railings bound rooms but are not walls
 cols = geom.columns(d, F, set(LY['column_lines']))
 doors = geom.doors(d, F, I, C, by_inst, ins_all)
@@ -49,6 +49,8 @@ if atr is not None: barriers.append(LineString(list(atr.exterior.coords)))
 auto_cl = geom.auto_closures(wl)
 closures = [geom.extend_ends(LineString([tuple(c['a']), tuple(c['b'])]), 0.15) for c in C.get('closures', []) + auto_cl]
 barriers += closures
+if C.get('offer_poly_closes') and C.get('offer_poly_m'):     # the unit outline is also a zone line (no wall), so the unit's open floor stays apart from the rest
+    barriers.append(LineString(C['offer_poly_m'] + [C['offer_poly_m'][0]]))
 faces = geom.free_space(barriers, doors, plate.bounds)
 faces = [f.intersection(plate) for f in faces]
 faces = [f if f.geom_type == 'Polygon' else max(getattr(f, 'geoms', []), key=lambda g: g.area) for f in faces if not f.is_empty]
@@ -68,10 +70,12 @@ for o in I:
     if o['name'] in DK0:
         x0, y0 = F.m(o['cx'] - o['w'] / 2, o['cy'] - o['h'] / 2); x1, y1 = F.m(o['cx'] + o['w'] / 2, o['cy'] + o['h'] / 2)
         desks_m.append((Polygon([(x0, y0), (x1, y0), (x1, y1), (x0, y1)]), DK0[o['name']]))
-seats_xy = [(*F.m(o['cx'], o['cy']), C['chairs'][o['name']][1]) for o in I if o['name'] in C['chairs']]
+desk_geo = geom.desk_shapes(d, F, C.get('desk_polys'))      # desks drawn as loose geometry (no block); [] for Skymark
+desks_m += [(P, nm) for P, nm, _ in desk_geo]
+seats_xy = [(*(F.m(*o['ip']) if o['name'] in C.get('chair_at_insert', []) else F.m(o['cx'], o['cy'])), C['chairs'][o['name']][1]) for o in I if o['name'] in C['chairs']]
 FURN = set(LY['workstations_furniture'])
 furn_xy = [F.m(o['cx'], o['cy']) for o in I if o['depth'] == 0 and o['L'] in FURN and o['name'] not in DK0 and o['name'] not in C['chairs']
-           and 0.3 < max(o['w'], o['h']) * IN < 3.5]
+           and 0.3 < max(o['w'], o['h']) * F.s < 3.5]
 rooms, not_demised, circulation, unplaced = roomplan.build(faces, labels, C, desks_m, seats_xy, furn_xy)
 geom.name_rooms.unplaced = unplaced
 
@@ -82,7 +86,7 @@ seats, n = [], 0
 for o in sorted(I, key=lambda o: (-o['cy'], o['cx'])):
     if o['name'] not in CH: continue
     kind, role = CH[o['name']][:2]; places = CH[o['name']][2] if len(CH[o['name']]) > 2 else 1
-    x, y = F.m(o['cx'], o['cy'])
+    x, y = F.m(*o['ip']) if o['name'] in C.get('chair_at_insert', []) else F.m(o['cx'], o['cy'])   # blocks whose exploded extent is unreliable
     rm = geom.room_of(rooms, x, y) or geom.room_of(circulation, x, y)
     at_desk = DK.get(o['parent'], '') if o['parent'] else ''
     pair = ''
@@ -92,11 +96,24 @@ for o in sorted(I, key=lambda o: (-o['cy'], o['cx'])):
         near = [t for t in near if t[0] < 1.0]
         if near:
             dist, q = min(near, key=lambda t: t[0]); pair = f"{DK[q['name']]} {dist:.2f} m away"
+        elif desk_geo:
+            dist, nm = min(((P.distance(Point(x, y)), nm) for P, nm, _ in desk_geo), key=lambda t: t[0])
+            if dist < C.get('desk_pair_m', 0.7): pair = f"{nm} {dist:.2f} m away"
     for s in range(places):
         n += 1
         seats.append(dict(n=n, room=rm['name'] if rm else 'UNASSIGNED', room_kind=rm['kind'] if rm else '', kind=kind, role=role,
                           at_desk=at_desk, desk_pair=pair, block=o['name'], parent_block=o['parent'] or '',
                           x_in=round(o['cx'], 1), y_in=round(o['cy'], 1), x_m=x, y_m=y, handle=o['id'], place=s + 1, places=places))
+# chairs whose role comes from the room they stand in ('by_room': one chair block used everywhere, as at RTP)
+BYROOM = {'meeting': 'meeting', 'training': 'training', 'cafe': 'cafe', 'reception': 'lounge', 'lounge': 'lounge'}
+for s in seats:
+    if s['role'] != 'by_room': continue
+    paired = bool(s['at_desk'] or s['desk_pair'])
+    if paired and s['room_kind'] == 'lounge': s['role'] = 'work'      # a desk + chair inside a booth is still a desk seat
+    elif s['room_kind'] in BYROOM: s['role'] = BYROOM[s['room_kind']]
+    elif re.search(C.get('cabin_rooms', '^$'), s['room'], re.I): s['role'] = 'cabin'
+    else: s['role'] = 'work' if paired else 'lounge'
+    s['kind'] = {'work': 'work chair', 'meeting': 'meeting chair', 'training': 'training chair', 'cafe': 'cafe chair', 'lounge': 'visitor / lounge chair', 'cabin': 'cabin chair'}[s['role']]
 opr = re.compile(C.get('operator_rooms', '^$'), re.I)
 for s in seats:
     if opr.search(s['room']): g = 'O'
@@ -104,6 +121,7 @@ for s in seats:
     elif s['role'] == 'meeting': g = 'M'
     elif s['role'] == 'training': g = 'T'
     elif s['role'] == 'cafe': g = 'C'          # by chair type only, so the room outlines can never move a seat between groups
+    elif s['role'] == 'cabin': g = 'K'         # RTP: chairs in a cabin (desk chair and visitors; no desk block tells them apart)
     else: g = 'L'
     s['grp'] = g
 
@@ -115,7 +133,8 @@ json.dump({'rooms': [{'name': r['name'], 'kind': r['kind'], 'enclosed': r['enclo
            'closures': [dict(c, source='tenant config') for c in C.get('closures', [])] + [dict(c, source='auto') for c in auto_cl],
            'doors': doors, 'plate': poly(plate), 'atrium': poly(atr) if atr is not None else None,
            'columns': [poly(c) for c in cols], 'unplaced_labels': geom.name_rooms.unplaced, 'zones': zones, 'labels': labels,
-           'wall_lines': [[list(c) for c in l.coords] for l in wl], 'glass_lines': [[list(c) for c in l.coords] for l in gl]},
+           'wall_lines': [[list(c) for c in l.coords] for l in wl], 'glass_lines': [[list(c) for c in l.coords] for l in gl],
+           **({'desk_shapes': [{'poly': poly(P), 'name': nm, 'source': src} for P, nm, src in desk_geo]} if desk_geo else {})},
           open(os.path.join(a.work, 'rooms.json'), 'w'))
 json.dump(seats, open(os.path.join(a.work, 'seats.json'), 'w'))
 c = collections.Counter(r['kind'] for r in rooms)

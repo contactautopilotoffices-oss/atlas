@@ -1,0 +1,213 @@
+seat_id,group,room,kind,at_desk,block,parent_block,x_in,y_in,instance,room_kind,desk_pair,x_m,y_m,place
+W1,Work seats (desk + chair),ADMIN ROOM,work chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5682650.9,5707477.8,412,work,nested in desk block A$C62789d74,9.651,82.478,1/1
+W2,Work seats (desk + chair),ADMIN ROOM,work chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5682650.9,5706563.8,408,work,nested in desk block A$C62789d74,9.651,81.564,1/1
+W3,Work seats (desk + chair),ADMIN ROOM,work chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5684041.4,5706556.4,414,work,nested in desk block A$C62789d74,11.041,81.556,1/1
+W4,Work seats (desk + chair),ADMIN ROOM,work chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5682650.9,5705649.8,410,work,nested in desk block A$C62789d74,9.651,80.65,1/1
+W5,Work seats (desk + chair),ADMIN ROOM,work chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5684041.4,5705642.4,416,work,nested in desk block A$C62789d74,11.041,80.642,1/1
+W6,Work seats (desk + chair),ADMIN ROOM,work chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5682650.9,5704735.8,420,work,nested in desk block A$C62789d74,9.651,79.736,1/1
+W7,Work seats (desk + chair),ADMIN ROOM,work chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5684041.4,5704728.4,424,work,nested in desk block A$C62789d74,11.041,79.728,1/1
+W8,Work seats (desk + chair),ADMIN ROOM,work chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5682650.9,5703821.8,418,work,nested in desk block A$C62789d74,9.651,78.822,1/1
+W9,Work seats (desk + chair),ADMIN ROOM,work chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5684041.4,5703814.4,422,work,nested in desk block A$C62789d74,11.041,78.814,1/1
+W10,Work seats (desk + chair),HR ROOM,work chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5686902.0,5707470.4,393,work,nested in desk block A$C62789d74,13.902,82.47,1/1
+W11,Work seats (desk + chair),HR ROOM,work chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5685839.4,5706563.8,395,work,nested in desk block A$C62789d74,12.839,81.564,1/1
+W12,Work seats (desk + chair),HR ROOM,work chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5686902.0,5706556.4,389,work,nested in desk block A$C62789d74,13.902,81.556,1/1
+W13,Work seats (desk + chair),HR ROOM,work chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5685839.4,5705649.8,397,work,nested in desk block A$C62789d74,12.839,80.65,1/1
+W14,Work seats (desk + chair),HR ROOM,work chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5686902.0,5705642.4,391,work,nested in desk block A$C62789d74,13.902,80.642,1/1
+W15,Work seats (desk + chair),HR ROOM,work chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5685839.4,5704735.8,405,work,nested in desk block A$C62789d74,12.839,79.736,1/1
+W16,Work seats (desk + chair),HR ROOM,work chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5686902.0,5704728.4,401,work,nested in desk block A$C62789d74,13.902,79.728,1/1
+W17,Work seats (desk + chair),HR ROOM,work chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5685839.4,5703821.8,403,work,nested in desk block A$C62789d74,12.839,78.822,1/1
+W18,Work seats (desk + chair),HR ROOM,work chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5686902.0,5703814.4,399,work,nested in desk block A$C62789d74,13.902,78.814,1/1
+M1,Meeting room seats,12 SEATER CONFERENCE ROOM_01,conference chair,,A$Ce16c1cc4,,5689305.5,5721095.2,331,meeting,,16.306,96.095,1/1
+M2,Meeting room seats,12 SEATER CONFERENCE ROOM_01,conference chair,,A$Ce16c1cc4,,5691000.0,5721095.2,337,meeting,,18.0,96.095,1/1
+M3,Meeting room seats,12 SEATER CONFERENCE ROOM_01,conference chair,,A$Ce16c1cc4,,5689305.5,5720412.4,330,meeting,,16.306,95.412,1/1
+M4,Meeting room seats,12 SEATER CONFERENCE ROOM_01,conference chair,,A$Ce16c1cc4,,5691000.0,5720412.4,336,meeting,,18.0,95.412,1/1
+M5,Meeting room seats,12 SEATER CONFERENCE ROOM_01,conference chair,,A$Ce16c1cc4,,5689305.5,5719729.6,329,meeting,,16.306,94.73,1/1
+M6,Meeting room seats,12 SEATER CONFERENCE ROOM_01,conference chair,,A$Ce16c1cc4,,5691000.0,5719729.6,335,meeting,,18.0,94.73,1/1
+M7,Meeting room seats,12 SEATER CONFERENCE ROOM_01,conference chair,,A$Ce16c1cc4,,5689305.5,5719046.8,328,meeting,,16.306,94.047,1/1
+M8,Meeting room seats,12 SEATER CONFERENCE ROOM_01,conference chair,,A$Ce16c1cc4,,5691000.0,5719046.8,334,meeting,,18.0,94.047,1/1
+M9,Meeting room seats,12 SEATER CONFERENCE ROOM_01,conference chair,,A$Ce16c1cc4,,5689305.5,5718364.0,327,meeting,,16.306,93.364,1/1
+M10,Meeting room seats,12 SEATER CONFERENCE ROOM_01,conference chair,,A$Ce16c1cc4,,5691000.0,5718364.0,333,meeting,,18.0,93.364,1/1
+M11,Meeting room seats,12 SEATER CONFERENCE ROOM_01,conference chair,,A$Ce16c1cc4,,5689305.5,5717681.2,326,meeting,,16.306,92.681,1/1
+M12,Meeting room seats,12 SEATER CONFERENCE ROOM_01,conference chair,,A$Ce16c1cc4,,5691000.0,5717681.2,332,meeting,,18.0,92.681,1/1
+M13,Meeting room seats,INTERVIEW CABIN_02,meeting chair,,A$Cba813c9e,A$Caf36b24f,5701576.3,5717172.9,311,meeting,,28.576,92.173,1/1
+M14,Meeting room seats,INTERVIEW CABIN_02,meeting chair,,A$Cba813c9e,A$Caf36b24f,5702845.5,5717175.0,312,meeting,,29.846,92.175,1/1
+M15,Meeting room seats,INTERVIEW CABIN_01,meeting chair,,A$Cba813c9e,A$Caf36b24f,5701576.3,5716047.7,315,meeting,,28.576,91.048,1/1
+M16,Meeting room seats,INTERVIEW CABIN_01,meeting chair,,A$Cba813c9e,A$Caf36b24f,5702845.5,5716049.8,316,meeting,,29.846,91.05,1/1
+M17,Meeting room seats,06 SEATER MEETING ROOM 01 (1),meeting chair,,A$Cd2419d53,,5689187.1,5714873.3,340,meeting,,16.187,89.873,1/1
+M18,Meeting room seats,06 SEATER MEETING ROOM 01 (1),meeting chair,,A$Cd2419d53,,5689931.5,5714873.3,341,meeting,,16.931,89.873,1/1
+M19,Meeting room seats,06 SEATER MEETING ROOM 01 (1),meeting chair,,A$Cd2419d53,,5690675.8,5714873.3,344,meeting,,17.676,89.873,1/1
+M20,Meeting room seats,06 SEATER MEETING ROOM 01 (1),meeting chair,,A$Cd2419d53,,5689186.0,5713665.9,342,meeting,,16.186,88.666,1/1
+M21,Meeting room seats,06 SEATER MEETING ROOM 01 (1),meeting chair,,A$Cd2419d53,,5689930.4,5713665.9,343,meeting,,16.93,88.666,1/1
+M22,Meeting room seats,06 SEATER MEETING ROOM 01 (1),meeting chair,,A$Cd2419d53,,5690674.7,5713665.9,345,meeting,,17.675,88.666,1/1
+M23,Meeting room seats,06 SEATER MEETING ROOM 01 (2),meeting chair,,A$Cd2419d53,,5689187.1,5711995.1,347,meeting,"3'x2' workstation (block, chair nested) 0.95 m away",16.187,86.995,1/1
+M24,Meeting room seats,06 SEATER MEETING ROOM 01 (2),meeting chair,,A$Cd2419d53,,5689931.5,5711995.1,348,meeting,,16.931,86.995,1/1
+M25,Meeting room seats,06 SEATER MEETING ROOM 01 (2),meeting chair,,A$Cd2419d53,,5690675.8,5711995.1,351,meeting,,17.676,86.995,1/1
+M26,Meeting room seats,06 SEATER MEETING ROOM 01 (2),meeting chair,,A$Cd2419d53,,5689186.0,5710787.7,349,meeting,"3'x2' workstation (block, chair nested) 0.97 m away",16.186,85.788,1/1
+M27,Meeting room seats,06 SEATER MEETING ROOM 01 (2),meeting chair,,A$Cd2419d53,,5689930.4,5710787.7,350,meeting,,16.93,85.788,1/1
+M28,Meeting room seats,06 SEATER MEETING ROOM 01 (2),meeting chair,,A$Cd2419d53,,5690674.7,5710787.7,352,meeting,,17.675,85.788,1/1
+T1,Training room seats,TRAINING ROOM_05,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5683139.9,5728442.6,261,training,nested in desk block STHGSERTHESRTHSDRTH,10.14,103.443,1/1
+T2,Training room seats,TRAINING ROOM_05,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5683889.9,5728442.6,263,training,nested in desk block STHGSERTHESRTHSDRTH,10.89,103.443,1/1
+T3,Training room seats,TRAINING ROOM_05,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5684639.9,5728442.6,265,training,nested in desk block STHGSERTHESRTHSDRTH,11.64,103.443,1/1
+T4,Training room seats,TRAINING ROOM_05,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5683139.9,5726928.6,253,training,nested in desk block STHGSERTHESRTHSDRTH,10.14,101.929,1/1
+T5,Training room seats,TRAINING ROOM_05,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5683889.9,5726928.6,255,training,nested in desk block STHGSERTHESRTHSDRTH,10.89,101.929,1/1
+T6,Training room seats,TRAINING ROOM_05,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5684639.9,5726928.6,257,training,nested in desk block STHGSERTHESRTHSDRTH,11.64,101.929,1/1
+T7,Training room seats,TRAINING ROOM_05,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5683139.9,5725414.6,245,training,nested in desk block STHGSERTHESRTHSDRTH,10.14,100.415,1/1
+T8,Training room seats,TRAINING ROOM_05,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5683889.9,5725414.6,247,training,nested in desk block STHGSERTHESRTHSDRTH,10.89,100.415,1/1
+T9,Training room seats,TRAINING ROOM_05,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5684639.9,5725414.6,249,training,nested in desk block STHGSERTHESRTHSDRTH,11.64,100.415,1/1
+T10,Training room seats,TRAINING ROOM_05,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5685389.9,5725414.6,251,training,nested in desk block STHGSERTHESRTHSDRTH,12.39,100.415,1/1
+T11,Training room seats,TRAINING ROOM_05,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5687339.2,5725414.6,323,training,nested in desk block STHGSERTHESRTHSDRTH,14.339,100.415,1/1
+T12,Training room seats,TRAINING ROOM_05,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5688089.2,5725414.6,325,training,nested in desk block STHGSERTHESRTHSDRTH,15.089,100.415,1/1
+T13,Training room seats,TRAINING ROOM_05,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5683139.9,5723900.6,237,training,nested in desk block STHGSERTHESRTHSDRTH,10.14,98.901,1/1
+T14,Training room seats,TRAINING ROOM_05,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5683889.9,5723900.6,239,training,nested in desk block STHGSERTHESRTHSDRTH,10.89,98.901,1/1
+T15,Training room seats,TRAINING ROOM_05,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5684639.9,5723900.6,241,training,nested in desk block STHGSERTHESRTHSDRTH,11.64,98.901,1/1
+T16,Training room seats,TRAINING ROOM_05,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5685389.9,5723900.6,243,training,nested in desk block STHGSERTHESRTHSDRTH,12.39,98.901,1/1
+T17,Training room seats,TRAINING ROOM_05,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5687339.2,5723900.6,319,training,nested in desk block STHGSERTHESRTHSDRTH,14.339,98.901,1/1
+T18,Training room seats,TRAINING ROOM_05,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5688089.2,5723900.6,321,training,nested in desk block STHGSERTHESRTHSDRTH,15.089,98.901,1/1
+T19,Training room seats,TRAINING ROOM_05,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5683613.3,5722219.7,259,training,nested in desk block STHGSERTHESRTHSDRTH,10.613,97.22,1/1
+T20,Training room seats,TRAINING ROOM_02,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5703213.2,5731439.7,95,training,nested in desk block STHGSERTHESRTHSDRTH,30.213,106.44,1/1
+T21,Training room seats,TRAINING ROOM_02,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5704727.2,5731439.7,99,training,nested in desk block STHGSERTHESRTHSDRTH,31.727,106.44,1/1
+T22,Training room seats,TRAINING ROOM_02,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5706241.2,5731439.7,103,training,nested in desk block STHGSERTHESRTHSDRTH,33.241,106.44,1/1
+T23,Training room seats,TRAINING ROOM_02,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5701083.7,5730687.9,81,training,nested in desk block STHGSERTHESRTHSDRTH,28.084,105.688,1/1
+T24,Training room seats,TRAINING ROOM_02,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5703213.2,5730689.7,93,training,nested in desk block STHGSERTHESRTHSDRTH,30.213,105.69,1/1
+T25,Training room seats,TRAINING ROOM_02,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5704727.2,5730689.7,97,training,nested in desk block STHGSERTHESRTHSDRTH,31.727,105.69,1/1
+T26,Training room seats,TRAINING ROOM_02,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5706241.2,5730689.7,101,training,nested in desk block STHGSERTHESRTHSDRTH,33.241,105.69,1/1
+T27,Training room seats,TRAINING ROOM_02,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5703213.2,5729939.7,60,training,nested in desk block STHGSERTHESRTHSDRTH,30.213,104.94,1/1
+T28,Training room seats,TRAINING ROOM_02,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5704727.2,5729939.7,70,training,nested in desk block STHGSERTHESRTHSDRTH,31.727,104.94,1/1
+T29,Training room seats,TRAINING ROOM_02,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5706241.2,5729939.7,83,training,nested in desk block STHGSERTHESRTHSDRTH,33.241,104.94,1/1
+T30,Training room seats,TRAINING ROOM_02,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5703213.2,5729189.7,62,training,nested in desk block STHGSERTHESRTHSDRTH,30.213,104.19,1/1
+T31,Training room seats,TRAINING ROOM_02,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5704727.2,5729189.7,72,training,nested in desk block STHGSERTHESRTHSDRTH,31.727,104.19,1/1
+T32,Training room seats,TRAINING ROOM_02,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5706241.2,5729189.7,85,training,nested in desk block STHGSERTHESRTHSDRTH,33.241,104.19,1/1
+T33,Training room seats,TRAINING ROOM_02,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5703213.2,5728439.7,64,training,nested in desk block STHGSERTHESRTHSDRTH,30.213,103.44,1/1
+T34,Training room seats,TRAINING ROOM_02,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5704727.2,5728439.7,74,training,nested in desk block STHGSERTHESRTHSDRTH,31.727,103.44,1/1
+T35,Training room seats,TRAINING ROOM_02,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5706241.2,5728439.7,87,training,nested in desk block STHGSERTHESRTHSDRTH,33.241,103.44,1/1
+T36,Training room seats,TRAINING ROOM_02,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5703213.2,5727689.7,66,training,nested in desk block STHGSERTHESRTHSDRTH,30.213,102.69,1/1
+T37,Training room seats,TRAINING ROOM_02,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5704727.2,5727689.7,76,training,nested in desk block STHGSERTHESRTHSDRTH,31.727,102.69,1/1
+T38,Training room seats,TRAINING ROOM_02,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5706241.2,5727689.7,89,training,nested in desk block STHGSERTHESRTHSDRTH,33.241,102.69,1/1
+T39,Training room seats,TRAINING ROOM_02,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5703213.2,5726939.7,68,training,nested in desk block STHGSERTHESRTHSDRTH,30.213,101.94,1/1
+T40,Training room seats,TRAINING ROOM_02,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5704727.2,5726939.7,78,training,nested in desk block STHGSERTHESRTHSDRTH,31.727,101.94,1/1
+T41,Training room seats,TRAINING ROOM_02,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5706241.2,5726939.7,91,training,nested in desk block STHGSERTHESRTHSDRTH,33.241,101.94,1/1
+T42,Training room seats,TRAINING ROOM_01,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5703213.2,5723561.4,113,training,nested in desk block STHGSERTHESRTHSDRTH,30.213,98.561,1/1
+T43,Training room seats,TRAINING ROOM_01,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5704727.2,5723561.4,123,training,nested in desk block STHGSERTHESRTHSDRTH,31.727,98.561,1/1
+T44,Training room seats,TRAINING ROOM_01,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5706241.2,5723561.4,136,training,nested in desk block STHGSERTHESRTHSDRTH,33.241,98.561,1/1
+T45,Training room seats,TRAINING ROOM_01,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5703213.2,5722811.4,111,training,nested in desk block STHGSERTHESRTHSDRTH,30.213,97.811,1/1
+T46,Training room seats,TRAINING ROOM_01,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5704727.2,5722811.4,121,training,nested in desk block STHGSERTHESRTHSDRTH,31.727,97.811,1/1
+T47,Training room seats,TRAINING ROOM_01,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5706241.2,5722811.4,134,training,nested in desk block STHGSERTHESRTHSDRTH,33.241,97.811,1/1
+T48,Training room seats,TRAINING ROOM_01,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5703213.2,5722061.4,109,training,nested in desk block STHGSERTHESRTHSDRTH,30.213,97.061,1/1
+T49,Training room seats,TRAINING ROOM_01,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5704727.2,5722061.4,119,training,nested in desk block STHGSERTHESRTHSDRTH,31.727,97.061,1/1
+T50,Training room seats,TRAINING ROOM_01,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5706241.2,5722061.4,132,training,nested in desk block STHGSERTHESRTHSDRTH,33.241,97.061,1/1
+T51,Training room seats,TRAINING ROOM_01,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5703213.2,5721311.4,107,training,nested in desk block STHGSERTHESRTHSDRTH,30.213,96.311,1/1
+T52,Training room seats,TRAINING ROOM_01,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5704727.2,5721311.4,117,training,nested in desk block STHGSERTHESRTHSDRTH,31.727,96.311,1/1
+T53,Training room seats,TRAINING ROOM_01,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5706241.2,5721311.4,130,training,nested in desk block STHGSERTHESRTHSDRTH,33.241,96.311,1/1
+T54,Training room seats,TRAINING ROOM_01,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5703213.2,5720561.4,105,training,nested in desk block STHGSERTHESRTHSDRTH,30.213,95.561,1/1
+T55,Training room seats,TRAINING ROOM_01,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5704727.2,5720561.4,115,training,nested in desk block STHGSERTHESRTHSDRTH,31.727,95.561,1/1
+T56,Training room seats,TRAINING ROOM_01,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5706241.2,5720561.4,128,training,nested in desk block STHGSERTHESRTHSDRTH,33.241,95.561,1/1
+T57,Training room seats,TRAINING ROOM_01,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5703213.2,5719811.4,138,training,nested in desk block STHGSERTHESRTHSDRTH,30.213,94.811,1/1
+T58,Training room seats,TRAINING ROOM_01,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5704727.2,5719811.4,142,training,nested in desk block STHGSERTHESRTHSDRTH,31.727,94.811,1/1
+T59,Training room seats,TRAINING ROOM_01,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5706241.2,5719811.4,146,training,nested in desk block STHGSERTHESRTHSDRTH,33.241,94.811,1/1
+T60,Training room seats,TRAINING ROOM_01,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5701091.1,5719542.3,126,training,nested in desk block STHGSERTHESRTHSDRTH,28.091,94.542,1/1
+T61,Training room seats,TRAINING ROOM_01,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5703213.2,5719061.4,140,training,nested in desk block STHGSERTHESRTHSDRTH,30.213,94.061,1/1
+T62,Training room seats,TRAINING ROOM_01,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5704727.2,5719061.4,144,training,nested in desk block STHGSERTHESRTHSDRTH,31.727,94.061,1/1
+T63,Training room seats,TRAINING ROOM_01,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5706241.2,5719061.4,148,training,nested in desk block STHGSERTHESRTHSDRTH,33.241,94.061,1/1
+T64,Training room seats,TRAINING ROOM_03,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5693653.2,5729504.5,183,training,nested in desk block STHGSERTHESRTHSDRTH,20.653,104.504,1/1
+T65,Training room seats,TRAINING ROOM_03,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5694403.2,5729504.5,185,training,nested in desk block STHGSERTHESRTHSDRTH,21.403,104.504,1/1
+T66,Training room seats,TRAINING ROOM_03,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5695153.2,5729504.5,187,training,nested in desk block STHGSERTHESRTHSDRTH,22.153,104.504,1/1
+T67,Training room seats,TRAINING ROOM_03,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5695903.2,5729504.5,189,training,nested in desk block STHGSERTHESRTHSDRTH,22.903,104.504,1/1
+T68,Training room seats,TRAINING ROOM_03,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5696653.2,5729504.5,191,training,nested in desk block STHGSERTHESRTHSDRTH,23.653,104.504,1/1
+T69,Training room seats,TRAINING ROOM_03,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5693653.2,5727990.5,170,training,nested in desk block STHGSERTHESRTHSDRTH,20.653,102.99,1/1
+T70,Training room seats,TRAINING ROOM_03,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5694403.2,5727990.5,172,training,nested in desk block STHGSERTHESRTHSDRTH,21.403,102.99,1/1
+T71,Training room seats,TRAINING ROOM_03,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5695153.2,5727990.5,174,training,nested in desk block STHGSERTHESRTHSDRTH,22.153,102.99,1/1
+T72,Training room seats,TRAINING ROOM_03,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5695903.2,5727990.5,176,training,nested in desk block STHGSERTHESRTHSDRTH,22.903,102.99,1/1
+T73,Training room seats,TRAINING ROOM_03,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5696653.2,5727990.5,178,training,nested in desk block STHGSERTHESRTHSDRTH,23.653,102.99,1/1
+T74,Training room seats,TRAINING ROOM_03,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5693653.2,5726476.5,160,training,nested in desk block STHGSERTHESRTHSDRTH,20.653,101.476,1/1
+T75,Training room seats,TRAINING ROOM_03,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5694403.2,5726476.5,162,training,nested in desk block STHGSERTHESRTHSDRTH,21.403,101.476,1/1
+T76,Training room seats,TRAINING ROOM_03,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5695153.2,5726476.5,164,training,nested in desk block STHGSERTHESRTHSDRTH,22.153,101.476,1/1
+T77,Training room seats,TRAINING ROOM_03,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5695903.2,5726476.5,166,training,nested in desk block STHGSERTHESRTHSDRTH,22.903,101.476,1/1
+T78,Training room seats,TRAINING ROOM_03,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5696653.2,5726476.5,168,training,nested in desk block STHGSERTHESRTHSDRTH,23.653,101.476,1/1
+T79,Training room seats,TRAINING ROOM_03,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5693653.2,5724962.5,150,training,nested in desk block STHGSERTHESRTHSDRTH,20.653,99.962,1/1
+T80,Training room seats,TRAINING ROOM_03,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5694403.2,5724962.5,152,training,nested in desk block STHGSERTHESRTHSDRTH,21.403,99.962,1/1
+T81,Training room seats,TRAINING ROOM_03,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5695153.2,5724962.5,154,training,nested in desk block STHGSERTHESRTHSDRTH,22.153,99.962,1/1
+T82,Training room seats,TRAINING ROOM_03,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5695903.2,5724962.5,156,training,nested in desk block STHGSERTHESRTHSDRTH,22.903,99.962,1/1
+T83,Training room seats,TRAINING ROOM_03,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5696653.2,5724962.5,158,training,nested in desk block STHGSERTHESRTHSDRTH,23.653,99.962,1/1
+T84,Training room seats,TRAINING ROOM_03,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5694126.6,5723281.6,181,training,nested in desk block STHGSERTHESRTHSDRTH,21.127,98.282,1/1
+T85,Training room seats,TRAINING ROOM_04,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5688914.2,5729504.5,227,training,nested in desk block STHGSERTHESRTHSDRTH,15.914,104.504,1/1
+T86,Training room seats,TRAINING ROOM_04,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5689664.2,5729504.5,229,training,nested in desk block STHGSERTHESRTHSDRTH,16.664,104.504,1/1
+T87,Training room seats,TRAINING ROOM_04,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5690414.2,5729504.5,231,training,nested in desk block STHGSERTHESRTHSDRTH,17.414,104.504,1/1
+T88,Training room seats,TRAINING ROOM_04,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5691164.2,5729504.5,233,training,nested in desk block STHGSERTHESRTHSDRTH,18.164,104.504,1/1
+T89,Training room seats,TRAINING ROOM_04,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5691914.2,5729504.5,235,training,nested in desk block STHGSERTHESRTHSDRTH,18.914,104.504,1/1
+T90,Training room seats,TRAINING ROOM_04,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5688914.2,5727990.5,214,training,nested in desk block STHGSERTHESRTHSDRTH,15.914,102.99,1/1
+T91,Training room seats,TRAINING ROOM_04,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5689664.2,5727990.5,216,training,nested in desk block STHGSERTHESRTHSDRTH,16.664,102.99,1/1
+T92,Training room seats,TRAINING ROOM_04,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5690414.2,5727990.5,218,training,nested in desk block STHGSERTHESRTHSDRTH,17.414,102.99,1/1
+T93,Training room seats,TRAINING ROOM_04,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5691164.2,5727990.5,220,training,nested in desk block STHGSERTHESRTHSDRTH,18.164,102.99,1/1
+T94,Training room seats,TRAINING ROOM_04,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5691914.2,5727990.5,222,training,nested in desk block STHGSERTHESRTHSDRTH,18.914,102.99,1/1
+T95,Training room seats,TRAINING ROOM_04,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5688914.2,5726476.5,204,training,nested in desk block STHGSERTHESRTHSDRTH,15.914,101.476,1/1
+T96,Training room seats,TRAINING ROOM_04,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5689664.2,5726476.5,206,training,nested in desk block STHGSERTHESRTHSDRTH,16.664,101.476,1/1
+T97,Training room seats,TRAINING ROOM_04,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5690414.2,5726476.5,208,training,nested in desk block STHGSERTHESRTHSDRTH,17.414,101.476,1/1
+T98,Training room seats,TRAINING ROOM_04,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5691164.2,5726476.5,210,training,nested in desk block STHGSERTHESRTHSDRTH,18.164,101.476,1/1
+T99,Training room seats,TRAINING ROOM_04,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5691914.2,5726476.5,212,training,nested in desk block STHGSERTHESRTHSDRTH,18.914,101.476,1/1
+T100,Training room seats,TRAINING ROOM_04,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5688914.2,5724962.5,194,training,nested in desk block STHGSERTHESRTHSDRTH,15.914,99.962,1/1
+T101,Training room seats,TRAINING ROOM_04,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5689664.2,5724962.5,196,training,nested in desk block STHGSERTHESRTHSDRTH,16.664,99.962,1/1
+T102,Training room seats,TRAINING ROOM_04,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5690414.2,5724962.5,198,training,nested in desk block STHGSERTHESRTHSDRTH,17.414,99.962,1/1
+T103,Training room seats,TRAINING ROOM_04,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5691164.2,5724962.5,200,training,nested in desk block STHGSERTHESRTHSDRTH,18.164,99.962,1/1
+T104,Training room seats,TRAINING ROOM_04,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5691914.2,5724962.5,202,training,nested in desk block STHGSERTHESRTHSDRTH,18.914,99.962,1/1
+T105,Training room seats,TRAINING ROOM_04,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5689387.6,5723281.6,225,training,nested in desk block STHGSERTHESRTHSDRTH,16.388,98.282,1/1
+T106,Training room seats,TRAINING ROOM_06,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5692769.3,5720275.0,309,training,nested in desk block STHGSERTHESRTHSDRTH,19.769,95.275,1/1
+T107,Training room seats,TRAINING ROOM_06,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5694283.3,5720275.0,296,training,nested in desk block STHGSERTHESRTHSDRTH,21.283,95.275,1/1
+T108,Training room seats,TRAINING ROOM_06,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5695797.3,5720275.0,286,training,nested in desk block STHGSERTHESRTHSDRTH,22.797,95.275,1/1
+T109,Training room seats,TRAINING ROOM_06,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5697311.3,5720275.0,276,training,nested in desk block STHGSERTHESRTHSDRTH,24.311,95.275,1/1
+T110,Training room seats,TRAINING ROOM_06,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5692769.3,5719525.0,307,training,nested in desk block STHGSERTHESRTHSDRTH,19.769,94.525,1/1
+T111,Training room seats,TRAINING ROOM_06,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5694283.3,5719525.0,294,training,nested in desk block STHGSERTHESRTHSDRTH,21.283,94.525,1/1
+T112,Training room seats,TRAINING ROOM_06,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5695797.3,5719525.0,284,training,nested in desk block STHGSERTHESRTHSDRTH,22.797,94.525,1/1
+T113,Training room seats,TRAINING ROOM_06,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5697311.3,5719525.0,274,training,nested in desk block STHGSERTHESRTHSDRTH,24.311,94.525,1/1
+T114,Training room seats,TRAINING ROOM_06,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5692769.3,5718775.0,305,training,nested in desk block STHGSERTHESRTHSDRTH,19.769,93.775,1/1
+T115,Training room seats,TRAINING ROOM_06,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5694283.3,5718775.0,292,training,nested in desk block STHGSERTHESRTHSDRTH,21.283,93.775,1/1
+T116,Training room seats,TRAINING ROOM_06,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5695797.3,5718775.0,282,training,nested in desk block STHGSERTHESRTHSDRTH,22.797,93.775,1/1
+T117,Training room seats,TRAINING ROOM_06,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5697311.3,5718775.0,272,training,nested in desk block STHGSERTHESRTHSDRTH,24.311,93.775,1/1
+T118,Training room seats,TRAINING ROOM_06,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5692769.3,5718025.0,303,training,nested in desk block STHGSERTHESRTHSDRTH,19.769,93.025,1/1
+T119,Training room seats,TRAINING ROOM_06,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5694283.3,5718025.0,290,training,nested in desk block STHGSERTHESRTHSDRTH,21.283,93.025,1/1
+T120,Training room seats,TRAINING ROOM_06,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5695797.3,5718025.0,280,training,nested in desk block STHGSERTHESRTHSDRTH,22.797,93.025,1/1
+T121,Training room seats,TRAINING ROOM_06,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5697311.3,5718025.0,270,training,nested in desk block STHGSERTHESRTHSDRTH,24.311,93.025,1/1
+T122,Training room seats,TRAINING ROOM_06,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5698992.2,5717748.5,299,training,nested in desk block STHGSERTHESRTHSDRTH,25.992,92.748,1/1
+T123,Training room seats,TRAINING ROOM_06,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5692769.3,5717275.0,301,training,nested in desk block STHGSERTHESRTHSDRTH,19.769,92.275,1/1
+T124,Training room seats,TRAINING ROOM_06,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5694283.3,5717275.0,288,training,nested in desk block STHGSERTHESRTHSDRTH,21.283,92.275,1/1
+T125,Training room seats,TRAINING ROOM_06,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5695797.3,5717275.0,278,training,nested in desk block STHGSERTHESRTHSDRTH,22.797,92.275,1/1
+T126,Training room seats,TRAINING ROOM_06,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5697311.3,5717275.0,268,training,nested in desk block STHGSERTHESRTHSDRTH,24.311,92.275,1/1
+T127,Training room seats,HR INDUCTION ROOM,training chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5684600.3,5711883.7,431,training,nested in desk block A$C62789d74,11.6,86.884,1/1
+T128,Training room seats,HR INDUCTION ROOM,training chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5685514.3,5711883.7,427,training,nested in desk block A$C62789d74,12.514,86.884,1/1
+T129,Training room seats,HR INDUCTION ROOM,training chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5686428.3,5711883.7,429,training,nested in desk block A$C62789d74,13.428,86.884,1/1
+T130,Training room seats,HR INDUCTION ROOM,training chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5687342.3,5711883.7,439,training,nested in desk block A$C62789d74,14.342,86.884,1/1
+T131,Training room seats,HR INDUCTION ROOM,training chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5688256.3,5711883.7,437,training,nested in desk block A$C62789d74,15.256,86.884,1/1
+T132,Training room seats,HR INDUCTION ROOM,training chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5685506.8,5710821.2,433,training,nested in desk block A$C62789d74,12.507,85.821,1/1
+T133,Training room seats,HR INDUCTION ROOM,training chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5686420.8,5710821.2,435,training,nested in desk block A$C62789d74,13.421,85.821,1/1
+T134,Training room seats,HR INDUCTION ROOM,training chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5687334.8,5710821.2,443,training,nested in desk block A$C62789d74,14.335,85.821,1/1
+T135,Training room seats,HR INDUCTION ROOM,training chair,"3'x2' workstation (block, chair nested)",A$C136922d8,A$C62789d74,5688248.8,5710821.2,441,training,nested in desk block A$C62789d74,15.249,85.821,1/1
+L1,"Lounge, collab and visitor seats",RECEPTION AND WAITING,receptionist chair,,*U104,A$C99a14c5c,5695390.3,5715888.5,367,reception,,22.39,90.888,1/1
+L2,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5692602.1,5714717.5,379,reception,,20.289,89.068,1/1
+L3,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5693113.8,5714717.5,378,reception,,20.801,89.068,1/1
+L4,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5693690.9,5714717.5,377,reception,,21.378,89.068,1/1
+L5,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5694257.3,5714717.5,376,reception,,21.944,89.068,1/1
+L6,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5695650.3,5714717.5,375,reception,,23.337,89.068,1/1
+L7,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5696200.5,5714717.5,386,reception,,23.887,89.068,1/1
+L8,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5696712.2,5714717.5,385,reception,,24.399,89.068,1/1
+L9,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5697222.8,5714717.5,384,reception,,24.91,89.068,1/1
+L10,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5692607.4,5713913.6,374,reception,,20.294,88.264,1/1
+L11,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5693119.0,5713913.6,373,reception,,20.806,88.264,1/1
+L12,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5693696.1,5713913.6,372,reception,,21.383,88.264,1/1
+L13,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5694262.5,5713913.6,371,reception,,21.949,88.264,1/1
+L14,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5695655.6,5713913.6,370,reception,,23.342,88.264,1/1
+L15,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5696205.7,5713913.6,383,reception,,23.893,88.264,1/1
+L16,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5696717.4,5713913.6,382,reception,,24.404,88.264,1/1
+L17,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5697228.0,5713913.6,381,reception,,24.915,88.264,1/1
+L18,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5692588.6,5713110.0,365,reception,,20.275,87.46,1/1
+L19,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5693100.3,5713110.0,364,reception,,20.787,87.46,1/1
+L20,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5693677.4,5713110.0,359,reception,,21.364,87.46,1/1
+L21,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5694243.7,5713110.0,358,reception,,21.931,87.46,1/1
+L22,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5695636.8,5713110.0,357,reception,,23.324,87.46,1/1
+L23,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5696186.9,5713110.0,380,reception,,23.874,87.46,1/1
+L24,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5692593.8,5712306.1,363,reception,,20.281,86.656,1/1
+L25,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5693105.5,5712306.1,362,reception,,20.792,86.656,1/1
+L26,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5693682.6,5712306.1,356,reception,,21.369,86.656,1/1
+L27,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5694249.0,5712306.1,355,reception,,21.936,86.656,1/1
+L28,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5692597.9,5711502.3,361,reception,,20.285,85.852,1/1
+L29,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5693109.6,5711502.3,360,reception,,20.796,85.852,1/1
+L30,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5693686.6,5711502.3,354,reception,,21.373,85.852,1/1
+L31,"Lounge, collab and visitor seats",RECEPTION AND WAITING,visitor / lounge chair,,A$C9bee9767,,5694253.0,5711502.3,353,reception,,21.94,85.852,1/1

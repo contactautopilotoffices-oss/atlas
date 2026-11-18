@@ -1,0 +1,137 @@
+{
+ "extends": "_rtp.json",
+ "name": "RTP 4th floor, fitted suite",
+ "dwg_name": "20261118_4TH FLOO.dwg",
+ "plan_label": "RTP 4th FLOOR, copy 2 (the fitted suite where the two wings meet); paper space: AREA : 6603 SQ.FT",
+ "cluster": {
+  "id": 22,
+  "tool": "airoli-rtp/tools/clusters.py",
+  "run": "19 Nov 2026"
+ },
+ "plan_window_in": [
+  5673000,
+  5625000,
+  5814500,
+  5739500
+ ],
+ "origin_in": [
+  5673000,
+  5625000
+ ],
+ "sheet_areas_sqft": {
+  "carpet": 6603,
+  "chargeable": 9905,
+  "source": "carpet: paper-space text 'AREA : 6603 SQ.FT'; chargeable 9,905 sq ft is quoted in airoli-rtp/PLAN.md and is not in the DWG text"
+ },
+ "chairs": {
+  "A$C136922d8": [
+   "task chair",
+   "by_room"
+  ],
+  "A$Cd2419d53": [
+   "meeting chair",
+   "by_room"
+  ],
+  "A$C9bee9767": [
+   "waiting / induction chair",
+   "by_room"
+  ],
+  "A$Ce16c1cc4": [
+   "conference chair",
+   "meeting"
+  ],
+  "A$Cba813c9e": [
+   "interview chair",
+   "by_room"
+  ],
+  "*U104": [
+   "receptionist chair",
+   "lounge"
+  ]
+ },
+ "desks": {
+  "A$C62789d74": "3'x2' workstation (block, chair nested)",
+  "STHGSERTHESRTHSDRTH": "training desk (block, chair nested)"
+ },
+ "chair_at_insert": [
+  "A$C9bee9767"
+ ],
+ "chair_at_insert_why": "A$C9bee9767 (30 chairs) is drawn with ellipse arcs that the DWG reader explodes 2.6 x 2.3 m wide; the insertion points are 0.57 m apart in rows, so each chair is placed at its insertion point",
+ "tables": {
+  "A$Caf36b24f": "interview desk (block, 2 chairs nested)",
+  "A$C99a14c5c": "reception desk (block, chair nested)"
+ },
+ "offer_poly_m": [
+  [
+   7.5,
+   77.9
+  ],
+  [
+   22.65,
+   77.9
+  ],
+  [
+   22.65,
+   82.35
+  ],
+  [
+   34.15,
+   93.85
+  ],
+  [
+   34.15,
+   108.5
+  ],
+  [
+   7.5,
+   108.5
+  ]
+ ],
+ "offer_poly_why": "the fitted suite as drawn: its partitions, the toilet-block wall to the south and the main lobby's glass line to the south-east; the rest of the 4th floor (units 402, 403 B, 404 and the main lobby) is not part of it",
+ "egress_why": "the suite has no stair of its own: walking routes use the suite plus the common MAIN LOBBY in front of lift core B and its stair (to x 41.5, y 76); the other tenants' units are not walked through",
+ "layers": {
+  "labels": [
+   "TEXT",
+   "W.D.TEXT",
+   "WALL",
+   "WS-ANNO-LABL",
+   "0",
+   "OUTER DIM 1"
+  ]
+ },
+ "offer_poly_closes": true,
+ "egress_poly_m": [
+  [
+   7.5,
+   77.9
+  ],
+  [
+   22.65,
+   77.9
+  ],
+  [
+   22.65,
+   76.0
+  ],
+  [
+   41.5,
+   76.0
+  ],
+  [
+   41.5,
+   94.5
+  ],
+  [
+   34.15,
+   94.5
+  ],
+  [
+   34.15,
+   108.5
+  ],
+  [
+   7.5,
+   108.5
+  ]
+ ]
+}

@@ -112,3 +112,29 @@ for Volt's file reads these unchanged. `extra_rooms` holds the washrooms (name +
 - Heights: no DWG has a section or ceiling level. Ceiling 2.85 m is assumed; the stair notes give 3.9 m
   floor to floor, the twin uses 4.1 m.
 - Lockers are one rectangle per column of lockers in plan; tiers come from the labels.
+
+## Reliable Tech Park (Airoli) additions, Nov 2026
+
+RTP drawings are in millimetres, hold two plans per DWG and draw half their desks as loose line work.
+Everything below is opt-in from the tenant json; Skymark tenants set none of it, and
+`cad/run.sh --tenant volt` still reproduces 116 work / 213 seats byte for byte (every output file identical).
+
+| Option (tenant json) | Effect |
+|---|---|
+| `unit_m` | metres per drawing unit (default 0.0254, inch). RTP: 0.001 |
+| `desk_polys` | desks drawn as loose closed polylines `{layers, verts, area_m2, name, from_lines}`; `from_lines` also polygonises loose lines |
+| chair role `by_room` | one chair block used everywhere: the room kind decides meeting / training / cafe / lounge; a chair at a desk is a work seat (also inside a booth) |
+| `cabin_rooms` | regex; chairs in those rooms form group K (cabin) |
+| `chair_at_insert` | chair blocks placed at their insertion point (when the reader explodes them wrongly) |
+| `door_from_arc_entity`, `door_arc_tol_m` | door opening from the threshold line, else the arc entity (mirrored blocks explode their arcs on the wrong side) |
+| `layers.glass_blocks_on` | glass lines nested in blocks inserted on these layers count as glass |
+| `not_demised_at` | `[{at, why}]`: the face holding this point is not part of the offer |
+| `offer_clip_m` / `offer_poly_m` / `offer_poly_closes` | the plan's own unit when the drawing does not wall it off; `offer_poly_closes` also uses the outline as a zone line |
+| `egress_poly_m` | the walk area for exits (the unit plus the common lobby it exits through) |
+| `legend`, `legend_map` | read the paper-space legend table and the rule per line |
+| `sheet_areas_sqft`, `exits`, `passage_label`, `true_north` | sheet areas; exit labels and NBC limits; passage label pattern; north rotation |
+
+New steps (run with `--steps`): `legend.py` (legend line by line), `egress.py` (entries, exits, walking
+distance from every seat to its two nearest exit stairs), `walkways.py` (passage labels measured, pinch
+points), `daylight.py` (work seats within 6 m of facade glass, by true facade), `g0_sheet.py` (the G0
+sign-off sheet: image, markdown and numbers). `run.sh --steps "..."` picks the steps; the default is unchanged.

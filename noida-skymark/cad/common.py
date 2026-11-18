@@ -51,11 +51,14 @@ def load_flat(a):
 
 
 class Frame:
-    """Drawing inches -> plan metres. origin = the plan window's lower-left corner (config 'origin_in')."""
+    """Drawing units -> plan metres. origin = the plan window's lower-left corner (config 'origin_in').
+    The '_in' keys are in drawing units: inches for Skymark (the default), or whatever 'unit_m' says
+    (0.001 for a millimetre drawing such as Reliable Tech Park)."""
     def __init__(self, cfg):
         self.ox, self.oy = cfg['origin_in']
-        self.win = cfg['plan_window_in']          # x0, y0, x1, y1 in drawing inches
-    def m(self, x, y): return (round((x - self.ox) * IN, 3), round((y - self.oy) * IN, 3))
+        self.win = cfg['plan_window_in']          # x0, y0, x1, y1 in drawing units
+        self.s = cfg.get('unit_m', IN)            # metres per drawing unit
+    def m(self, x, y): return (round((x - self.ox) * self.s, 3), round((y - self.oy) * self.s, 3))
     def inwin(self, p):
         x0, y0, x1, y1 = self.win
         return x0 < p[0] < x1 and y0 < p[1] < y1
@@ -65,3 +68,12 @@ def is_poly(r): return r['t'] not in ('INS', 'DIM', 'HATCH') and 'p' in r and r[
 
 
 def outname(a, suffix): return os.path.join(a.out, f"{a.tenant}{suffix}")
+
+
+def offer_clip(cfg):
+    """The plan's own unit, when the drawing does not wall it off from the rest of the floor:
+    'offer_clip_m' = [x0, y0, x1, y1] or 'offer_poly_m' = [[x, y], ...] in plan metres (tenant json). None = whole plate."""
+    from shapely.geometry import box, Polygon
+    if cfg.get('offer_poly_m'): return Polygon(cfg['offer_poly_m']).buffer(0)
+    if cfg.get('offer_clip_m'): return box(*cfg['offer_clip_m'])
+    return None

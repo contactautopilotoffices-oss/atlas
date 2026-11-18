@@ -1,0 +1,986 @@
+seat_id,group,room,x_m,y_m,exit_1,dist_1_m,exit_2,dist_2_m
+W1,W,Open workstations 7,61.99,110.094,S2,1.4,S5,36.6
+W2,W,Open workstations 7,63.19,110.094,S2,2.6,S5,36.1
+W3,W,Open workstations 7,64.39,110.094,S2,3.8,S5,35.6
+W4,W,Open workstations 7,65.59,110.094,S2,5.0,S5,35.1
+W5,W,Open workstations 7,66.79,110.094,S2,6.2,S5,34.6
+W6,W,Open workstations 7,67.99,110.094,S2,7.4,S5,34.1
+W7,W,Open workstations 7,69.19,110.094,S2,8.6,S5,33.6
+W8,W,Open workstations 7,61.99,108.801,S2,2.6,S5,35.4
+W9,W,Open workstations 7,63.19,108.801,S2,3.1,S5,34.9
+W10,W,Open workstations 7,64.39,108.801,S2,4.3,S5,34.4
+W11,W,Open workstations 7,65.59,108.801,S2,5.5,S5,33.9
+W12,W,Open workstations 7,66.79,108.801,S2,6.7,S5,33.4
+W13,W,Open workstations 7,67.99,108.801,S2,7.9,S5,32.9
+W14,W,Open workstations 7,61.99,107.144,S2,4.4,S5,33.6
+W15,W,Open workstations 7,63.19,107.144,S2,4.9,S5,33.1
+W16,W,Open workstations 7,64.39,107.144,S2,5.4,S5,32.6
+W17,W,Open workstations 7,65.59,107.144,S2,6.3,S5,32.1
+W18,W,Open workstations 1,107.334,104.086,S1,8.9,S5,29.8
+W19,W,Open workstations 1,111.592,104.086,S1,10.1,S3,29.1
+W20,W,Open workstations 1,115.85,104.086,S1,9.1,S3,24.7
+W21,W,Open workstations 1,120.108,104.086,S1,12.4,S3,21.3
+W22,W,Open workstations 1,124.366,104.086,S1,16.6,S3,19.6
+W23,W,Open workstations 1,108.873,103.194,S1,10.1,S5,29.5
+W24,W,Open workstations 1,113.131,103.194,S1,10.4,S3,27.1
+W25,W,Open workstations 1,117.389,103.194,S1,10.7,S3,22.9
+W26,W,Open workstations 1,121.647,103.194,S1,14.4,S3,19.7
+W27,W,Open workstations 1,125.905,103.194,S3,17.9,S1,18.6
+W28,W,Open workstations 1,107.311,102.271,S1,10.7,S5,28.0
+W29,W,Open workstations 1,111.569,102.271,S1,11.9,S3,27.3
+W30,W,Open workstations 1,115.827,102.271,S1,10.8,S3,24.2
+W31,W,Open workstations 1,120.085,102.271,S1,13.1,S3,19.8
+W32,W,Open workstations 1,124.343,102.271,S1,17.3,S3,17.8
+W33,W,Open workstations 1,109.366,102.182,S1,11.2,S5,29.0
+W34,W,Open workstations 1,113.624,102.182,S1,11.3,S3,26.2
+W35,W,Open workstations 1,117.882,102.182,S1,11.9,S3,21.9
+W36,W,Open workstations 1,122.14,102.182,S1,15.2,S3,18.5
+W37,W,Open workstations 1,126.398,102.182,S3,16.8,S1,19.4
+W38,W,Open workstations 1,107.909,101.382,S1,11.4,S5,27.4
+W39,W,Open workstations 1,112.167,101.382,S1,12.7,S3,26.1
+W40,W,Open workstations 1,116.425,101.382,S1,12.1,S3,23.2
+W41,W,Open workstations 1,120.683,101.382,S1,14.1,S3,18.8
+W42,W,Open workstations 1,124.941,101.382,S3,16.5,S1,18.3
+W43,W,Open workstations 1,109.97,101.308,S1,12.3,S3,28.2
+W44,W,Open workstations 1,114.228,101.308,S1,11.8,S3,25.2
+W45,W,Open workstations 1,118.486,101.308,S1,13.0,S3,21.0
+W46,W,Open workstations 1,122.744,101.308,S1,16.1,S3,17.5
+W47,W,Open workstations 1,127.002,101.308,S3,15.7,S1,20.3
+W48,W,Open workstations 1,108.387,100.382,S1,12.6,S5,26.8
+W49,W,Open workstations 1,112.645,100.382,S1,13.4,S3,25.1
+W50,W,Open workstations 1,116.903,100.382,S1,13.3,S3,22.1
+W51,W,Open workstations 1,121.161,100.382,S1,15.1,S3,17.9
+W52,W,Open workstations 1,125.419,100.382,S3,15.4,S1,19.1
+W53,W,Open workstations 1,109.951,99.478,S1,14.1,S3,26.8
+W54,W,Open workstations 1,114.209,99.478,S1,13.6,S3,23.4
+W55,W,Open workstations 1,118.467,99.478,S1,14.8,S3,20.2
+W56,W,Open workstations 1,122.725,99.478,S3,16.0,S1,16.9
+W57,W,Open workstations 1,126.983,99.478,S3,13.9,S1,21.1
+W58,W,Open workstations 1,107.915,99.396,S1,13.4,S5,25.6
+W59,W,Open workstations 1,112.173,99.396,S1,14.7,S3,25.3
+W60,W,Open workstations 1,116.431,99.396,S1,14.1,S3,22.3
+W61,W,Open workstations 1,120.689,99.396,S1,15.9,S3,17.9
+W62,W,Open workstations 1,124.947,99.396,S3,14.5,S1,19.2
+W63,W,Open workstations 1,109.362,98.575,S1,14.8,S5,26.0
+W64,W,Open workstations 1,113.62,98.575,S1,14.9,S3,23.6
+W65,W,Open workstations 1,117.878,98.575,S1,15.5,S3,20.4
+W66,W,Open workstations 1,122.136,98.575,S3,16.2,S1,17.3
+W67,W,Open workstations 1,126.394,98.575,S3,13.2,S1,20.9
+W68,W,Open workstations 1,107.334,98.493,S1,14.5,S5,24.5
+W69,W,Open workstations 1,111.592,98.493,S1,15.7,S3,24.7
+W70,W,Open workstations 1,115.85,98.493,S1,14.7,S3,21.6
+W71,W,Open workstations 1,120.108,98.493,S1,16.5,S3,18.2
+W72,W,Open workstations 1,124.366,98.493,S3,14.0,S1,18.9
+W73,W,Open workstations 1,108.873,97.602,S1,15.5,S5,25.2
+W74,W,Open workstations 1,113.131,97.602,S1,15.8,S3,23.3
+W75,W,Open workstations 1,117.389,97.602,S1,16.1,S3,20.3
+W76,W,Open workstations 1,121.647,97.602,S3,16.3,S1,17.9
+W77,W,Open workstations 1,125.905,97.602,S3,12.5,S1,20.8
+W78,W,Open workstations 1,107.311,96.679,S1,16.3,S5,23.2
+W79,W,Open workstations 1,111.569,96.679,S1,17.5,S3,24.0
+W80,W,Open workstations 1,115.827,96.679,S1,16.4,S3,20.6
+W81,W,Open workstations 1,120.085,96.679,S3,17.5,S1,18.3
+W82,W,Open workstations 1,124.343,96.679,S3,13.3,S1,20.0
+W83,W,Open workstations 1,109.366,96.589,S1,16.8,S5,25.1
+W84,W,Open workstations 1,113.624,96.589,S1,16.9,S3,21.9
+W85,W,Open workstations 1,122.14,96.589,S3,15.4,S1,19.3
+W86,W,Open workstations 1,126.398,96.589,S3,11.2,S1,21.7
+W87,W,Open workstations 1,107.909,95.789,S1,17.0,S5,23.4
+W88,W,Open workstations 1,112.167,95.789,S1,18.3,S3,23.0
+W89,W,Open workstations 1,120.683,95.789,S3,16.4,S1,19.5
+W90,W,Open workstations 1,124.941,95.789,S3,12.2,S1,21.2
+W91,W,Open workstations 1,104.68,92.711,S5,19.0,S1,21.4
+W92,W,Open workstations 1,108.859,92.711,S1,20.5,S5,23.2
+W93,W,Open workstations 1,113.037,92.711,S1,20.9,S3,20.9
+W94,W,Open workstations 1,117.216,92.711,S3,16.7,S1,21.0
+W95,W,Open workstations 1,121.394,92.711,S3,13.6,S1,22.7
+W96,W,Open workstations 1,125.572,92.711,S3,10.4,S1,24.5
+W97,W,Open workstations 1,106.219,91.819,S5,20.0,S1,21.6
+W98,W,Open workstations 1,110.397,91.819,S1,21.8,S3,23.2
+W99,W,Open workstations 1,114.576,91.819,S3,19.0,S1,21.1
+W100,W,Open workstations 1,118.754,91.819,S3,14.8,S1,22.5
+W101,W,Open workstations 1,122.933,91.819,S3,12.1,S1,24.2
+W102,W,Open workstations 1,127.111,91.819,S3,9.1,S1,26.0
+W103,W,Open workstations 1,104.657,90.896,S5,18.2,S1,23.2
+W104,W,Open workstations 1,108.835,90.896,S1,22.2,S5,22.2
+W105,W,Open workstations 1,113.014,90.896,S3,20.2,S1,22.7
+W106,W,Open workstations 1,117.192,90.896,S3,16.0,S1,22.8
+W107,W,Open workstations 1,121.371,90.896,S3,11.8,S1,24.5
+W108,W,Open workstations 1,125.549,90.896,S3,10.1,S1,26.3
+W109,W,Open workstations 1,106.712,90.807,S5,20.2,S1,22.3
+W110,W,Open workstations 1,110.89,90.807,S3,22.2,S1,23.1
+W111,W,Open workstations 1,115.069,90.807,S3,18.0,S1,22.0
+W112,W,Open workstations 1,119.247,90.807,S3,13.8,S1,23.7
+W113,W,Open workstations 1,123.426,90.807,S3,11.0,S1,25.4
+W114,W,Open workstations 1,127.604,90.807,S3,9.1,S1,27.1
+W115,W,Open workstations 1,105.255,90.007,S5,18.5,S1,23.7
+W116,W,Open workstations 1,109.434,90.007,S5,22.5,S1,23.2
+W117,W,Open workstations 1,113.612,90.007,S3,19.3,S1,23.3
+W118,W,Open workstations 1,117.79,90.007,S3,15.1,S1,23.9
+W119,W,Open workstations 1,121.969,90.007,S3,10.9,S1,25.6
+W120,W,Open workstations 1,126.147,90.007,S3,9.0,S1,27.3
+W121,W,Open workstations 1,107.316,89.933,S5,20.4,S1,23.1
+W122,W,Open workstations 1,111.495,89.933,S3,21.2,S1,24.3
+W123,W,Open workstations 1,115.673,89.933,S3,17.0,S1,23.2
+W124,W,Open workstations 1,119.852,89.933,S3,12.8,S1,25.0
+W125,W,Open workstations 1,124.03,89.933,S3,9.7,S1,26.6
+W126,W,Open workstations 1,128.208,89.933,S3,8.0,S1,28.4
+W127,W,Open workstations 1,105.733,89.007,S5,18.5,S1,24.6
+W128,W,Open workstations 1,109.911,89.007,S3,22.5,S5,22.7
+W129,W,Open workstations 1,114.09,89.007,S3,18.3,S1,24.0
+W130,W,Open workstations 1,118.268,89.007,S3,14.1,S1,25.1
+W131,W,Open workstations 1,122.447,89.007,S3,9.9,S1,26.8
+W132,W,Open workstations 1,126.625,89.007,S3,7.8,S1,28.5
+W133,W,Open workstations 1,107.297,88.103,S5,19.7,S3,24.6
+W134,W,Open workstations 1,111.476,88.103,S3,20.4,S5,23.9
+W135,W,Open workstations 1,115.654,88.103,S3,16.2,S1,25.0
+W136,W,Open workstations 1,119.832,88.103,S3,12.2,S1,26.7
+W137,W,Open workstations 1,124.011,88.103,S3,8.0,S1,28.4
+W138,W,Open workstations 1,128.189,88.103,S3,6.2,S1,30.2
+W139,W,Open workstations 1,105.261,88.021,S5,17.7,S1,25.7
+W140,W,Open workstations 1,109.439,88.021,S5,21.7,S3,22.6
+W141,W,Open workstations 1,113.618,88.021,S3,18.4,S1,25.3
+W142,W,Open workstations 1,117.796,88.021,S3,14.2,S1,25.9
+W143,W,Open workstations 1,121.974,88.021,S3,10.0,S1,27.6
+W144,W,Open workstations 1,126.153,88.021,S3,7.0,S1,29.3
+W145,W,Open workstations 1,106.709,87.2,S5,18.7,S3,24.9
+W146,W,Open workstations 1,110.887,87.2,S3,20.7,S5,22.9
+W147,W,Open workstations 1,115.065,87.2,S3,16.5,S1,25.6
+W148,W,Open workstations 1,119.244,87.2,S3,12.3,S1,27.3
+W149,W,Open workstations 1,123.422,87.2,S3,8.3,S1,29.0
+W150,W,Open workstations 1,127.601,87.2,S3,5.6,S1,30.7
+W151,W,Open workstations 1,104.68,87.118,S5,16.6,S3,26.8
+W152,W,Open workstations 1,108.859,87.118,S5,20.8,S3,22.6
+W153,W,Open workstations 1,113.037,87.118,S3,18.6,S5,24.8
+W154,W,Open workstations 1,117.216,87.118,S3,14.4,S1,26.6
+W155,W,Open workstations 1,121.394,87.118,S3,10.2,S1,28.3
+W156,W,Open workstations 1,125.572,87.118,S3,6.3,S1,30.1
+W157,W,Open workstations 1,106.219,86.227,S5,17.7,S3,25.1
+W158,W,Open workstations 1,110.397,86.227,S3,20.9,S5,21.9
+W159,W,Open workstations 1,114.576,86.227,S3,16.7,S5,26.1
+W160,W,Open workstations 1,118.754,86.227,S3,12.5,S1,28.1
+W161,W,Open workstations 1,122.933,86.227,S3,8.3,S1,29.8
+W162,W,Open workstations 1,127.111,86.227,S3,4.8,S1,31.6
+W163,W,Open workstations 1,104.657,85.304,S5,15.9,S3,26.1
+W164,W,Open workstations 1,108.835,85.304,S5,19.9,S3,22.1
+W165,W,Open workstations 1,113.014,85.304,S3,17.9,S5,24.1
+W166,W,Open workstations 1,117.192,85.304,S3,13.7,S5,28.3
+W167,W,Open workstations 1,121.371,85.304,S3,9.5,S1,30.1
+W168,W,Open workstations 1,125.549,85.304,S3,5.3,S1,31.9
+W169,W,Open workstations 1,106.712,85.214,S5,17.9,S3,24.1
+W170,W,Open workstations 1,110.89,85.214,S3,19.9,S5,22.1
+W171,W,Open workstations 1,115.069,85.214,S3,15.7,S5,26.3
+W172,W,Open workstations 1,119.247,85.214,S3,11.5,S1,29.3
+W173,W,Open workstations 1,123.426,85.214,S3,7.5,S1,31.0
+W174,W,Open workstations 1,127.604,85.214,S3,3.6,S1,32.7
+W175,W,Open workstations 1,105.255,84.414,S5,16.2,S3,25.1
+W176,W,Open workstations 1,109.434,84.414,S5,20.2,S3,21.1
+W177,W,Open workstations 1,113.612,84.414,S3,16.9,S5,24.4
+W178,W,Open workstations 1,117.79,84.414,S3,12.7,S5,28.6
+W179,W,Open workstations 1,121.969,84.414,S3,8.5,S1,31.2
+W180,W,Open workstations 1,126.147,84.414,S3,4.3,S1,32.9
+W181,W,Open workstations 1,107.316,84.341,S5,18.1,S3,23.1
+W182,W,Open workstations 1,111.495,84.341,S3,18.9,S5,22.3
+W183,W,Open workstations 1,119.852,84.341,S3,10.5,S1,30.6
+W184,W,Open workstations 1,124.03,84.341,S3,6.5,S1,32.2
+W185,W,Open workstations 1,128.208,84.341,S3,2.4,S1,34.0
+W186,W,Open workstations 1,105.733,83.414,S5,16.1,S3,24.3
+W187,W,Open workstations 1,109.911,83.414,S3,20.1,S5,20.3
+W188,W,Open workstations 1,118.268,83.414,S3,11.7,S5,28.7
+W189,W,Open workstations 1,122.447,83.414,S3,7.5,S1,32.4
+W190,W,Open workstations 1,126.625,83.414,S3,3.5,S1,34.1
+W191,W,Open workstations 1,107.297,82.51,S5,17.3,S3,22.4
+W192,W,Open workstations 1,111.476,82.51,S3,18.2,S5,21.5
+W193,W,Open workstations 1,119.832,82.51,S3,10.0,S5,29.7
+W194,W,Open workstations 1,124.011,82.51,S3,5.8,S5,33.9
+W195,W,Open workstations 1,128.189,82.51,S3,1.6,S1,35.8
+W196,W,Open workstations 1,105.261,82.428,S5,15.3,S3,24.4
+W197,W,Open workstations 1,109.439,82.428,S5,19.3,S3,20.4
+W198,W,Open workstations 1,106.709,81.608,S5,16.4,S3,23.3
+W199,W,Open workstations 1,110.887,81.608,S3,19.1,S5,20.6
+W200,W,Open workstations 3,82.606,111.617,S2,22.2,S1,27.9
+W201,W,Open workstations 3,88.054,111.615,S1,22.3,S2,27.8
+W202,W,Open workstations 3,84.153,110.711,S2,24.0,S1,26.6
+W203,W,Open workstations 3,86.494,110.711,S1,24.2,S2,26.4
+W204,W,Open workstations 3,82.606,109.807,S2,22.8,S1,28.5
+W205,W,Open workstations 3,88.054,109.805,S1,22.9,S2,28.4
+W206,W,Open workstations 3,83.634,108.218,S2,24.4,S1,28.2
+W207,W,Open workstations 3,87.025,108.22,S1,24.8,S2,27.8
+W208,W,Open workstations 3,84.73,108.142,S2,25.7,S1,27.0
+W209,W,Open workstations 3,85.93,108.142,S1,25.8,S2,26.9
+W210,W,Open workstations 3,82.075,107.314,S2,23.3,S5,27.7
+W211,W,Open workstations 3,88.573,107.314,S1,23.6,S5,27.5
+W212,W,Open workstations 3,84.73,106.485,S2,26.2,S1,27.7
+W213,W,Open workstations 3,85.93,106.485,S1,26.5,S2,27.4
+W214,W,Open workstations 3,87.025,106.409,S1,25.5,S5,27.4
+W215,W,Open workstations 3,83.634,106.407,S2,25.0,S5,27.5
+W216,W,Open workstations 2,80.402,104.086,S2,22.3,S5,23.8
+W217,W,Open workstations 2,84.66,104.086,S5,25.6,S2,26.7
+W218,W,Open workstations 2,88.918,104.086,S5,24.2,S1,24.5
+W219,W,Open workstations 2,93.176,104.086,S1,21.1,S5,23.9
+W220,W,Open workstations 2,97.434,104.086,S1,16.9,S5,25.7
+W221,W,Open workstations 2,101.692,104.086,S1,12.5,S5,27.5
+W222,W,Open workstations 2,81.941,103.194,S5,23.4,S2,24.3
+W223,W,Open workstations 2,86.199,103.194,S5,24.3,S1,27.7
+W224,W,Open workstations 2,90.457,103.194,S5,22.5,S1,23.3
+W225,W,Open workstations 2,94.715,103.194,S1,19.9,S5,23.6
+W226,W,Open workstations 2,98.973,103.194,S1,15.7,S5,25.3
+W227,W,Open workstations 2,103.231,103.194,S1,11.6,S5,27.1
+W228,W,Open workstations 2,80.379,102.271,S5,22.0,S2,23.0
+W229,W,Open workstations 2,84.637,102.271,S5,23.7,S2,27.2
+W230,W,Open workstations 2,88.895,102.271,S5,22.4,S1,25.2
+W231,W,Open workstations 2,93.153,102.271,S1,21.9,S5,22.1
+W232,W,Open workstations 2,97.411,102.271,S1,17.7,S5,23.9
+W233,W,Open workstations 2,101.669,102.271,S1,13.3,S5,25.7
+W234,W,Open workstations 2,82.434,102.182,S5,22.6,S2,25.1
+W235,W,Open workstations 2,86.692,102.182,S5,23.1,S1,27.5
+W236,W,Open workstations 2,90.95,102.182,S5,21.3,S1,24.1
+W237,W,Open workstations 2,95.208,102.182,S1,19.9,S5,22.7
+W238,W,Open workstations 2,99.466,102.182,S1,15.5,S5,24.6
+W239,W,Open workstations 2,103.724,102.182,S1,12.4,S5,26.3
+W240,W,Open workstations 2,80.977,101.382,S5,21.2,S2,24.1
+W241,W,Open workstations 2,85.235,101.382,S5,23.2,S2,28.3
+W242,W,Open workstations 2,89.493,101.382,S5,21.1,S1,25.5
+W243,W,Open workstations 2,93.751,101.382,S5,21.4,S1,21.7
+W244,W,Open workstations 2,98.009,101.382,S1,17.5,S5,23.1
+W245,W,Open workstations 2,102.267,101.382,S1,13.8,S5,24.9
+W246,W,Open workstations 2,83.038,101.308,S5,22.1,S2,26.1
+W247,W,Open workstations 2,87.296,101.308,S5,22.0,S1,27.3
+W248,W,Open workstations 2,91.554,101.308,S5,20.4,S1,23.9
+W249,W,Open workstations 2,95.812,101.308,S1,19.7,S5,22.2
+W250,W,Open workstations 2,100.07,101.308,S1,15.3,S5,24.0
+W251,W,Open workstations 2,104.328,101.308,S1,12.9,S5,25.8
+W252,W,Open workstations 2,81.455,100.382,S5,20.5,S2,25.1
+W253,W,Open workstations 2,85.713,100.382,S5,22.4,S1,29.3
+W254,W,Open workstations 2,89.971,100.382,S5,19.9,S1,25.9
+W255,W,Open workstations 2,94.229,100.382,S5,20.5,S1,21.7
+W256,W,Open workstations 2,98.487,100.382,S1,17.3,S5,22.3
+W257,W,Open workstations 2,102.745,100.382,S1,14.6,S5,24.1
+W258,W,Open workstations 2,83.019,99.478,S5,20.3,S2,26.8
+W259,W,Open workstations 2,87.277,99.478,S5,20.5,S1,28.2
+W260,W,Open workstations 2,91.535,99.478,S5,18.6,S1,24.6
+W261,W,Open workstations 2,95.793,99.478,S5,20.4,S1,20.4
+W262,W,Open workstations 2,100.051,99.478,S1,16.5,S5,22.2
+W263,W,Open workstations 2,104.309,99.478,S1,14.7,S5,24.0
+W264,W,Open workstations 2,80.983,99.396,S5,19.2,S2,24.9
+W265,W,Open workstations 2,85.241,99.396,S5,22.4,S2,29.3
+W266,W,Open workstations 2,89.499,99.396,S5,19.1,S1,26.7
+W267,W,Open workstations 2,93.757,99.396,S5,19.4,S1,22.5
+W268,W,Open workstations 2,98.015,99.396,S1,18.3,S5,21.1
+W269,W,Open workstations 2,102.273,99.396,S1,15.8,S5,22.9
+W270,W,Open workstations 2,82.43,98.575,S5,19.2,S2,26.6
+W271,W,Open workstations 2,86.688,98.575,S5,20.6,S1,29.5
+W272,W,Open workstations 2,90.946,98.575,S5,17.7,S1,25.6
+W273,W,Open workstations 2,95.204,98.575,S5,19.1,S1,21.4
+W274,W,Open workstations 2,99.462,98.575,S1,17.7,S5,21.0
+W275,W,Open workstations 2,103.72,98.575,S1,16.0,S5,22.7
+W276,W,Open workstations 2,80.383,98.357,S5,18.0,S2,24.7
+W277,W,Open workstations 2,84.641,98.357,S5,21.6,S2,29.1
+W278,W,Open workstations 2,88.899,98.357,S5,18.4,S1,27.7
+W279,W,Open workstations 2,93.157,98.357,S5,18.1,S1,23.5
+W280,W,Open workstations 2,97.415,98.357,S1,19.3,S5,19.9
+W281,W,Open workstations 2,101.673,98.357,S1,17.0,S5,21.7
+W282,W,Open workstations 2,81.83,97.536,S5,18.2,S2,26.4
+W283,W,Open workstations 2,86.088,97.536,S5,20.8,S1,30.7
+W284,W,Open workstations 2,90.346,97.536,S5,17.0,S1,26.6
+W285,W,Open workstations 2,94.604,97.536,S5,17.9,S1,22.4
+W286,W,Open workstations 2,98.862,97.536,S1,19.0,S5,19.7
+W287,W,Open workstations 2,103.12,97.536,S1,17.2,S5,21.5
+W288,W,Open workstations 8,47.123,112.408,S2,17.4,S4,32.8
+W289,W,Open workstations 8,46.216,110.86,S2,17.4,S4,30.7
+W290,W,Open workstations 8,48.027,110.86,S2,15.6,S4,31.5
+W291,W,Open workstations 8,41.934,110.243,S2,21.4,S4,28.4
+W292,W,Open workstations 8,46.294,109.765,S2,16.7,S4,29.6
+W293,W,Open workstations 8,47.951,109.765,S2,15.1,S4,30.3
+W294,W,Open workstations 8,43.472,109.351,S2,19.4,S4,28.1
+W295,W,Open workstations 8,46.219,108.669,S2,16.5,S4,28.5
+W296,W,Open workstations 8,48.029,108.669,S2,14.7,S4,29.3
+W297,W,Open workstations 8,41.91,108.428,S2,20.6,S4,26.6
+W298,W,Open workstations 8,43.965,108.339,S2,18.5,S4,27.2
+W299,W,Open workstations 8,42.508,107.539,S2,19.6,S4,25.9
+W300,W,Open workstations 8,44.57,107.465,S2,17.6,S4,26.7
+W301,W,Open workstations 8,47.123,107.11,S2,14.8,S4,27.4
+W302,W,Open workstations 8,42.986,106.539,S2,18.8,S4,25.0
+W303,W,Open workstations 8,44.55,105.635,S2,17.0,S4,24.9
+W304,W,Open workstations 8,42.514,105.553,S2,19.1,S4,23.9
+W305,W,Open workstations 8,43.962,104.732,S2,18.0,S4,23.6
+W306,W,Open workstations 8,41.934,104.65,S2,20.0,S4,22.8
+W307,W,Open workstations 8,43.472,103.759,S2,18.9,S4,22.5
+W308,W,Open workstations 8,41.91,102.836,S2,20.8,S4,21.0
+W309,W,Open workstations 8,43.965,102.746,S2,18.9,S4,21.6
+W310,W,Open workstations 8,42.508,101.946,S4,20.3,S2,20.6
+W311,W,Open workstations 8,44.57,101.873,S2,18.6,S4,21.1
+W312,W,Open workstations 8,42.986,100.946,S4,19.4,S2,20.6
+W313,W,Open workstations 8,44.55,100.042,S2,19.3,S4,20.1
+W314,W,Open workstations 8,42.514,99.96,S4,18.3,S2,21.4
+W315,W,Open workstations 8,43.962,99.14,S4,19.1,S2,20.4
+W316,W,Open workstations 8,41.914,98.921,S4,17.0,S2,22.4
+W317,W,Open workstations 8,43.362,98.1,S4,18.1,S2,21.4
+W318,W,Open workstations 4,74.915,104.086,S2,16.9,S5,25.2
+W319,W,Open workstations 4,76.454,103.194,S2,18.9,S5,23.5
+W320,W,Open workstations 4,74.892,102.271,S2,17.6,S5,23.4
+W321,W,Open workstations 4,76.947,102.182,S2,19.7,S5,22.4
+W322,W,Open workstations 4,75.49,101.382,S2,18.7,S5,22.1
+W323,W,Open workstations 4,77.552,101.308,S2,20.7,S5,21.3
+W324,W,Open workstations 4,75.968,100.382,S2,19.5,S5,21.0
+W325,W,Open workstations 4,77.532,99.478,S5,19.5,S2,21.4
+W326,W,Open workstations 4,75.496,99.396,S2,19.5,S5,20.1
+W327,W,Open workstations 4,76.944,98.575,S5,18.8,S2,21.2
+W328,W,Open workstations 4,74.915,98.493,S2,19.2,S5,19.6
+W329,W,Open workstations 4,76.454,97.602,S5,18.1,S2,21.2
+W330,W,Open workstations 4,74.892,96.679,S5,17.8,S2,20.2
+W331,W,Open workstations 4,76.947,96.589,S5,16.8,S2,22.0
+W332,W,Open workstations 4,75.49,95.789,S5,16.5,S2,21.4
+W333,W,Open workstations 6,48.732,104.086,S2,13.5,S4,26.0
+W334,W,Open workstations 6,52.99,104.086,S2,9.3,S4,30.2
+W335,W,Open workstations 6,57.248,104.086,S2,8.8,S5,32.7
+W336,W,Open workstations 6,61.506,104.086,S2,7.2,S5,30.7
+W337,W,Open workstations 6,65.764,104.086,S2,9.0,S5,29.0
+W338,W,Open workstations 6,70.022,104.086,S2,11.9,S5,27.3
+W339,W,Open workstations 6,50.271,103.194,S2,12.3,S4,27.1
+W340,W,Open workstations 6,54.529,103.194,S2,9.6,S4,31.3
+W341,W,Open workstations 6,58.787,103.194,S2,9.4,S5,31.1
+W342,W,Open workstations 6,63.045,103.194,S2,8.9,S5,29.1
+W343,W,Open workstations 6,67.303,103.194,S2,10.7,S5,27.3
+W344,W,Open workstations 6,71.561,103.194,S2,13.9,S5,25.6
+W345,W,Open workstations 6,48.709,102.271,S2,14.2,S4,25.2
+W346,W,Open workstations 6,52.967,102.271,S2,11.1,S4,29.4
+W347,W,Open workstations 6,57.225,102.271,S2,10.5,S5,31.7
+W348,W,Open workstations 6,61.483,102.271,S2,9.0,S5,29.2
+W349,W,Open workstations 6,65.741,102.271,S2,10.8,S5,27.2
+W350,W,Open workstations 6,69.999,102.271,S2,12.6,S5,25.5
+W351,W,Open workstations 6,50.764,102.182,S2,12.3,S4,27.1
+W352,W,Open workstations 6,55.022,102.182,S2,10.5,S4,31.3
+W353,W,Open workstations 6,59.28,102.182,S2,10.2,S5,29.9
+W354,W,Open workstations 6,63.538,102.182,S2,10.1,S5,27.9
+W355,W,Open workstations 6,67.796,102.182,S2,11.8,S5,26.2
+W356,W,Open workstations 6,72.054,102.182,S2,14.9,S5,24.3
+W357,W,Open workstations 6,49.307,101.382,S2,14.1,S4,25.4
+W358,W,Open workstations 6,53.565,101.382,S2,11.8,S4,29.6
+W359,W,Open workstations 6,57.823,101.382,S2,11.6,S5,30.7
+W360,W,Open workstations 6,62.081,101.382,S2,10.3,S5,27.9
+W361,W,Open workstations 6,66.339,101.382,S2,12.0,S5,26.0
+W362,W,Open workstations 6,70.597,101.382,S2,13.8,S5,24.2
+W363,W,Open workstations 6,51.368,101.308,S2,12.8,S4,27.4
+W364,W,Open workstations 6,55.626,101.308,S2,11.0,S4,31.6
+W365,W,Open workstations 6,59.884,101.308,S2,10.7,S5,28.8
+W366,W,Open workstations 6,64.142,101.308,S2,11.1,S5,26.9
+W367,W,Open workstations 6,68.4,101.308,S2,12.9,S5,25.1
+W368,W,Open workstations 6,72.658,101.308,S2,15.9,S5,23.3
+W369,W,Open workstations 6,49.785,100.382,S2,14.4,S4,25.4
+W370,W,Open workstations 6,54.043,100.382,S2,12.6,S4,29.8
+W371,W,Open workstations 6,58.301,100.382,S2,12.4,S5,29.7
+W372,W,Open workstations 6,62.559,100.382,S2,11.5,S5,26.8
+W373,W,Open workstations 6,66.817,100.382,S2,13.2,S5,24.8
+W374,W,Open workstations 6,71.075,100.382,S2,15.0,S5,23.0
+W375,W,Open workstations 6,51.349,99.478,S2,14.6,S4,26.7
+W376,W,Open workstations 6,55.607,99.478,S2,12.8,S4,30.9
+W377,W,Open workstations 6,59.865,99.478,S2,12.5,S5,27.7
+W378,W,Open workstations 6,64.123,99.478,S2,12.9,S5,25.3
+W379,W,Open workstations 6,68.381,99.478,S2,14.7,S5,23.3
+W380,W,Open workstations 6,72.639,99.478,S2,16.4,S5,21.6
+W381,W,Open workstations 6,49.313,99.396,S2,15.6,S4,24.6
+W382,W,Open workstations 6,53.571,99.396,S2,13.8,S4,28.8
+W383,W,Open workstations 6,57.829,99.396,S2,13.6,S5,29.9
+W384,W,Open workstations 6,62.087,99.396,S2,12.3,S5,25.9
+W385,W,Open workstations 6,66.345,99.396,S2,14.0,S5,24.0
+W386,W,Open workstations 6,70.603,99.396,S2,15.8,S5,22.2
+W387,W,Open workstations 6,50.76,98.575,S2,15.8,S4,25.6
+W388,W,Open workstations 6,55.018,98.575,S2,14.1,S4,29.8
+W389,W,Open workstations 6,59.276,98.575,S2,13.8,S5,27.9
+W390,W,Open workstations 6,63.534,98.575,S2,13.7,S5,24.5
+W391,W,Open workstations 6,67.792,98.575,S2,15.4,S5,22.6
+W392,W,Open workstations 6,72.05,98.575,S2,17.2,S5,20.7
+W393,W,Open workstations 6,48.732,98.493,S2,16.6,S4,23.6
+W394,W,Open workstations 6,52.99,98.493,S2,14.9,S4,27.8
+W395,W,Open workstations 6,57.248,98.493,S2,14.4,S5,29.9
+W396,W,Open workstations 6,61.506,98.493,S2,12.8,S5,25.7
+W397,W,Open workstations 6,65.764,98.493,S2,14.6,S5,23.4
+W398,W,Open workstations 6,70.022,98.493,S2,16.3,S5,21.7
+W399,W,Open workstations 6,50.271,97.602,S2,16.8,S4,24.9
+W400,W,Open workstations 6,54.529,97.602,S2,15.0,S4,29.1
+W401,W,Open workstations 6,58.787,97.602,S2,14.8,S5,28.2
+W402,W,Open workstations 6,63.045,97.602,S2,14.3,S5,23.9
+W403,W,Open workstations 6,67.303,97.602,S2,16.1,S5,21.9
+W404,W,Open workstations 6,71.561,97.602,S2,17.8,S5,20.2
+W405,W,Open workstations 6,48.709,96.679,S2,18.4,S4,22.9
+W406,W,Open workstations 6,52.967,96.679,S2,16.7,S4,27.1
+W407,W,Open workstations 6,57.225,96.679,S2,16.1,S5,29.4
+W408,W,Open workstations 6,61.483,96.679,S2,14.6,S5,25.0
+W409,W,Open workstations 6,65.741,96.679,S2,16.4,S5,21.8
+W410,W,Open workstations 6,69.999,96.679,S2,18.1,S5,19.9
+W411,W,Open workstations 6,50.764,96.589,S2,17.8,S4,24.8
+W412,W,Open workstations 6,59.28,96.589,S2,15.8,S5,27.1
+W413,W,Open workstations 6,63.538,96.589,S2,15.7,S5,22.9
+W414,W,Open workstations 6,72.054,96.589,S5,18.7,S2,19.2
+W415,W,Open workstations 6,49.307,95.789,S2,19.2,S4,23.6
+W416,W,Open workstations 6,57.823,95.789,S2,17.2,S5,28.4
+W417,W,Open workstations 6,62.081,95.789,S2,15.9,S5,24.0
+W418,W,Open workstations 6,70.597,95.789,S5,18.6,S2,19.4
+W419,W,Open workstations 5,47.759,92.724,S2,22.8,S4,23.2
+W420,W,Open workstations 5,52.061,92.724,S2,21.0,S4,27.6
+W421,W,Open workstations 5,56.363,92.724,S2,19.8,S5,28.5
+W422,W,Open workstations 5,60.665,92.724,S2,19.0,S5,24.1
+W423,W,Open workstations 5,64.967,92.724,S5,19.9,S2,20.1
+W424,W,Open workstations 5,69.269,92.724,S5,16.1,S2,21.9
+W425,W,Open workstations 5,73.573,92.724,S5,14.4,S2,23.6
+W426,W,Open workstations 5,49.297,91.833,S2,23.0,S4,25.1
+W427,W,Open workstations 5,53.599,91.833,S2,21.2,S4,29.3
+W428,W,Open workstations 5,57.901,91.833,S2,20.9,S5,26.6
+W429,W,Open workstations 5,62.203,91.833,S2,19.7,S5,22.4
+W430,W,Open workstations 5,66.505,91.833,S5,18.0,S2,21.5
+W431,W,Open workstations 5,70.807,91.833,S5,14.7,S2,23.3
+W432,W,Open workstations 5,75.111,91.833,S5,12.9,S2,25.1
+W433,W,Open workstations 5,47.735,90.91,S2,24.6,S4,24.8
+W434,W,Open workstations 5,52.037,90.91,S2,22.9,S4,28.2
+W435,W,Open workstations 5,56.339,90.91,S2,21.6,S5,27.8
+W436,W,Open workstations 5,60.641,90.91,S2,20.8,S5,23.4
+W437,W,Open workstations 5,64.943,90.91,S5,19.2,S2,21.9
+W438,W,Open workstations 5,69.245,90.91,S5,14.8,S2,23.7
+W439,W,Open workstations 5,73.55,90.91,S5,12.6,S2,25.4
+W440,W,Open workstations 5,49.79,90.821,S2,23.8,S4,26.0
+W441,W,Open workstations 5,54.092,90.821,S2,22.0,S5,30.0
+W442,W,Open workstations 5,58.394,90.821,S2,21.8,S5,25.8
+W443,W,Open workstations 5,62.696,90.821,S2,20.9,S5,21.4
+W444,W,Open workstations 5,66.998,90.821,S5,17.2,S2,22.7
+W445,W,Open workstations 5,71.3,90.821,S5,13.5,S2,24.5
+W446,W,Open workstations 5,75.605,90.821,S5,11.7,S2,26.2
+W447,W,Open workstations 5,48.334,90.02,S2,25.2,S4,25.8
+W448,W,Open workstations 5,52.636,90.02,S2,23.5,S4,29.1
+W449,W,Open workstations 5,56.938,90.02,S2,22.6,S5,26.8
+W450,W,Open workstations 5,61.24,90.02,S2,21.3,S5,22.4
+W451,W,Open workstations 5,65.542,90.02,S5,18.2,S2,22.9
+W452,W,Open workstations 5,69.844,90.02,S5,13.8,S2,24.7
+W453,W,Open workstations 5,74.148,90.02,S5,11.5,S2,26.5
+W454,W,Open workstations 5,50.395,89.947,S2,24.6,S4,27.0
+W455,W,Open workstations 5,54.697,89.947,S2,22.7,S5,29.0
+W456,W,Open workstations 5,58.999,89.947,S2,22.5,S5,24.8
+W457,W,Open workstations 5,63.301,89.947,S5,20.4,S2,22.2
+W458,W,Open workstations 5,67.603,89.947,S5,16.2,S2,23.9
+W459,W,Open workstations 5,71.905,89.947,S5,12.2,S2,25.8
+W460,W,Open workstations 5,76.209,89.947,S5,10.5,S2,27.5
+W461,W,Open workstations 5,48.811,89.02,S2,26.0,S4,27.0
+W462,W,Open workstations 5,53.113,89.02,S2,24.2,S4,30.1
+W463,W,Open workstations 5,57.415,89.02,S2,23.8,S5,26.0
+W464,W,Open workstations 5,61.717,89.02,S5,21.6,S2,22.3
+W465,W,Open workstations 5,66.019,89.02,S5,17.4,S2,24.1
+W466,W,Open workstations 5,70.321,89.02,S5,13.0,S2,25.9
+W467,W,Open workstations 5,74.626,89.02,S5,10.4,S2,27.6
+W468,W,Open workstations 5,50.376,88.117,S2,26.4,S4,28.7
+W469,W,Open workstations 5,54.678,88.117,S2,24.5,S5,28.2
+W470,W,Open workstations 5,58.98,88.117,S5,24.0,S2,24.3
+W471,W,Open workstations 5,63.282,88.117,S5,19.6,S2,24.0
+W472,W,Open workstations 5,67.584,88.117,S5,15.4,S2,25.7
+W473,W,Open workstations 5,71.886,88.117,S5,11.0,S2,27.6
+W474,W,Open workstations 5,76.19,88.117,S5,8.7,S2,29.3
+W475,W,Open workstations 5,48.339,88.035,S2,27.2,S4,27.8
+W476,W,Open workstations 5,52.641,88.035,S2,25.4,S4,30.1
+W477,W,Open workstations 5,56.943,88.035,S2,24.6,S5,26.0
+W478,W,Open workstations 5,61.245,88.035,S5,21.6,S2,23.3
+W479,W,Open workstations 5,65.547,88.035,S5,17.4,S2,24.9
+W480,W,Open workstations 5,69.849,88.035,S5,13.0,S2,26.7
+W481,W,Open workstations 5,74.153,88.035,S5,9.5,S2,28.5
+W482,W,Open workstations 5,49.787,87.214,S2,27.4,S4,29.2
+W483,W,Open workstations 5,54.089,87.214,S2,25.6,S5,28.5
+W484,W,Open workstations 5,58.391,87.214,S5,24.3,S2,25.4
+W485,W,Open workstations 5,62.693,87.214,S5,19.9,S2,24.5
+W486,W,Open workstations 5,66.995,87.214,S5,15.7,S2,26.3
+W487,W,Open workstations 5,71.297,87.214,S5,11.3,S2,28.1
+W488,W,Open workstations 5,75.601,87.214,S5,8.1,S2,29.8
+W489,W,Open workstations 5,47.759,87.132,S2,28.4,S4,28.6
+W490,W,Open workstations 5,52.061,87.132,S2,26.6,S5,30.4
+W491,W,Open workstations 5,56.363,87.132,S2,25.4,S5,26.2
+W492,W,Open workstations 5,60.665,87.132,S5,21.8,S2,24.6
+W493,W,Open workstations 5,64.967,87.132,S5,17.6,S2,25.7
+W494,W,Open workstations 5,69.269,87.132,S5,13.2,S2,27.5
+W495,W,Open workstations 5,73.573,87.132,S5,9.0,S2,29.2
+W496,W,Open workstations 5,49.297,86.24,S2,28.6,S4,30.0
+W497,W,Open workstations 5,53.599,86.24,S2,26.8,S5,28.7
+W498,W,Open workstations 5,57.901,86.24,S5,24.3,S2,26.5
+W499,W,Open workstations 5,62.203,86.24,S5,20.1,S2,25.3
+W500,W,Open workstations 5,66.505,86.24,S5,15.7,S2,27.1
+W501,W,Open workstations 5,70.807,86.24,S5,11.5,S2,28.9
+W502,W,Open workstations 5,75.111,86.24,S5,7.3,S2,30.7
+W503,W,Open workstations 5,47.735,85.317,S2,30.2,S4,30.4
+W504,W,Open workstations 5,52.037,85.317,S2,28.5,S5,29.9
+W505,W,Open workstations 5,56.339,85.317,S5,25.5,S2,27.2
+W506,W,Open workstations 5,60.641,85.317,S5,21.1,S2,26.4
+W507,W,Open workstations 5,64.943,85.317,S5,16.9,S2,27.5
+W508,W,Open workstations 5,69.245,85.317,S5,12.5,S2,29.3
+W509,W,Open workstations 5,73.55,85.317,S5,8.3,S2,31.0
+W510,W,Open workstations 5,49.79,85.228,S2,29.4,S4,31.2
+W511,W,Open workstations 5,54.092,85.228,S2,27.6,S5,27.7
+W512,W,Open workstations 5,58.394,85.228,S5,23.5,S2,27.4
+W513,W,Open workstations 5,62.696,85.228,S5,19.1,S2,26.5
+W514,W,Open workstations 5,66.998,85.228,S5,14.9,S2,28.3
+W515,W,Open workstations 5,71.3,85.228,S5,10.5,S2,30.1
+W516,W,Open workstations 5,75.605,85.228,S5,6.3,S2,31.8
+W517,W,Open workstations 5,48.334,84.428,S2,30.8,S4,31.4
+W518,W,Open workstations 5,56.938,84.428,S5,24.5,S2,28.2
+W519,W,Open workstations 5,61.24,84.428,S5,20.1,S2,26.9
+W520,W,Open workstations 5,69.844,84.428,S5,11.5,S2,30.3
+W521,W,Open workstations 5,74.148,84.428,S5,7.3,S2,32.1
+W522,W,Open workstations 5,50.395,84.354,S2,30.2,S5,31.0
+W523,W,Open workstations 5,58.999,84.354,S5,22.4,S2,28.1
+W524,W,Open workstations 5,63.301,84.354,S5,18.0,S2,27.8
+W525,W,Open workstations 5,71.905,84.354,S5,9.4,S2,31.4
+W526,W,Open workstations 5,76.209,84.354,S5,5.2,S2,33.1
+W527,W,Open workstations 5,48.811,83.428,S2,31.6,S5,32.3
+W528,W,Open workstations 5,57.415,83.428,S5,23.7,S2,29.4
+W529,W,Open workstations 5,61.717,83.428,S5,19.3,S2,27.9
+W530,W,Open workstations 5,70.321,83.428,S5,10.7,S2,31.5
+W531,W,Open workstations 5,74.626,83.428,S5,6.5,S2,33.2
+W532,W,Open workstations 5,50.376,82.524,S5,30.3,S2,32.0
+W533,W,Open workstations 5,58.98,82.524,S5,21.7,S2,29.9
+W534,W,Open workstations 5,63.282,82.524,S5,17.3,S2,29.6
+W535,W,Open workstations 5,71.886,82.524,S5,8.7,S2,33.2
+W536,W,Open workstations 5,76.19,82.524,S5,4.5,S2,34.9
+W537,W,Open workstations 5,48.339,82.442,S5,32.3,S2,32.8
+W538,W,Open workstations 5,56.943,82.442,S5,23.7,S2,30.2
+W539,W,Open workstations 5,61.245,82.442,S5,19.3,S2,28.9
+W540,W,Open workstations 5,69.849,82.442,S5,10.7,S2,32.3
+W541,W,Open workstations 5,74.153,82.442,S5,6.5,S2,34.1
+W542,W,Open workstations 5,49.787,81.621,S5,30.6,S2,33.0
+W543,W,Open workstations 5,58.391,81.621,S5,22.0,S2,31.0
+W544,W,Open workstations 5,62.693,81.621,S5,17.6,S2,30.1
+W545,W,Open workstations 5,71.297,81.621,S5,9.0,S2,33.7
+W546,W,Open workstations 5,75.601,81.621,S5,4.8,S2,35.4
+W547,W,Open workstations 9,20.776,55.992,S6,12.3,S7,22.6
+W548,W,Open workstations 9,18.964,55.976,S6,11.6,S8,22.1
+W549,W,Open workstations 9,24.706,55.978,S6,14.2,S7,18.6
+W550,W,Open workstations 9,23.667,55.378,S6,14.2,S7,19.8
+W551,W,Open workstations 9,21.681,55.372,S6,13.3,S7,21.8
+W552,W,Open workstations 9,11.54,54.943,S6,11.2,S8,19.5
+W553,W,Open workstations 9,22.667,54.9,S6,14.1,S7,21.0
+W554,W,Open workstations 9,15.29,54.803,S6,14.4,S8,21.1
+W555,W,Open workstations 9,25.506,54.521,S6,15.7,S7,18.6
+W556,W,Open workstations 9,10.34,54.436,S6,11.9,S8,19.4
+W557,W,Open workstations 9,19.887,54.414,S6,13.4,S8,21.1
+W558,W,Open workstations 9,14.09,54.296,S6,13.8,S8,20.0
+W559,W,Open workstations 9,20.86,53.924,S6,14.4,S8,20.9
+W560,W,Open workstations 9,24.467,53.921,S6,15.9,S7,19.6
+W561,W,Open workstations 9,21.763,53.336,S6,15.3,S8,20.7
+W562,W,Open workstations 9,23.593,53.316,S6,16.1,S7,20.9
+W563,W,Open workstations 9,9.39,53.192,S6,13.7,S8,18.5
+W564,W,Open workstations 9,11.579,53.192,S6,13.0,S8,17.7
+W565,W,Open workstations 9,12.215,53.192,S6,13.2,S8,18.0
+W566,W,Open workstations 9,14.404,53.192,S6,14.5,S8,19.0
+W567,W,Open workstations 9,15.04,53.192,S6,15.1,S8,19.1
+W568,W,Open workstations 9,17.229,53.192,S6,14.0,S8,18.9
+W569,W,Open workstations 9,9.39,51.992,S6,14.9,S8,17.3
+W570,W,Open workstations 9,11.579,51.992,S6,14.2,S8,16.5
+W571,W,Open workstations 9,12.215,51.992,S6,14.4,S8,16.8
+W572,W,Open workstations 9,14.404,51.992,S6,15.4,S8,17.8
+W573,W,Open workstations 9,15.04,51.992,S6,15.6,S8,17.9
+W574,W,Open workstations 9,17.229,51.992,S6,15.2,S8,17.7
+W575,W,Open workstations 9,20.776,51.869,S6,16.3,S8,18.8
+W576,W,Open workstations 9,18.964,51.853,S6,15.6,S8,18.1
+W577,W,Open workstations 9,24.706,51.855,S6,18.0,S8,20.5
+W578,W,Open workstations 9,23.667,51.255,S6,18.2,S8,19.5
+W579,W,Open workstations 9,21.681,51.249,S6,17.3,S8,18.7
+W580,W,Open workstations 9,9.39,50.792,S8,16.1,S6,16.1
+W581,W,Open workstations 9,11.072,50.792,S8,15.3,S6,15.4
+W582,W,Open workstations 9,15.04,50.792,S8,16.7,S6,16.8
+W583,W,Open workstations 9,17.229,50.792,S6,16.4,S8,16.5
+W584,W,Open workstations 9,22.667,50.777,S6,18.3,S8,18.5
+W585,W,Open workstations 9,25.506,50.398,S8,19.4,S6,19.7
+W586,W,Open workstations 9,19.887,50.291,S8,16.9,S6,17.6
+W587,W,Open workstations 9,20.86,49.801,S8,16.9,S6,18.4
+W588,W,Open workstations 9,24.467,49.798,S8,18.4,S6,19.9
+W589,W,Open workstations 9,9.39,49.592,S8,14.9,S6,17.3
+W590,W,Open workstations 9,11.579,49.592,S8,14.1,S6,16.6
+W591,W,Open workstations 9,12.215,49.592,S8,14.4,S6,16.8
+W592,W,Open workstations 9,14.404,49.592,S8,15.3,S6,17.9
+W593,W,Open workstations 9,15.04,49.592,S8,15.6,S6,18.0
+W594,W,Open workstations 9,17.229,49.592,S8,15.3,S6,17.6
+W595,W,Open workstations 9,21.763,49.213,S8,16.7,S6,19.3
+W596,W,Open workstations 9,23.593,49.193,S8,17.2,S6,20.3
+W597,W,Open workstations 9,9.39,48.392,S8,13.7,S6,18.5
+W598,W,Open workstations 9,11.579,48.392,S8,12.9,S6,17.8
+W599,W,Open workstations 9,12.215,48.392,S8,13.2,S6,18.0
+W600,W,Open workstations 9,14.404,48.392,S8,14.5,S6,19.1
+W601,W,Open workstations 9,15.04,48.392,S8,15.1,S6,19.2
+W602,W,Open workstations 9,17.229,48.392,S8,14.1,S6,18.8
+W603,W,Open workstations 9,20.776,47.746,S8,14.6,S6,20.5
+W604,W,Open workstations 9,18.964,47.73,S8,13.9,S6,19.8
+W605,W,Open workstations 9,24.706,47.732,S8,16.3,S6,22.2
+W606,W,Open workstations 9,15.29,47.268,S8,14.8,S6,20.4
+W607,W,Open workstations 9,23.667,47.132,S8,15.3,S6,22.4
+W608,W,Open workstations 9,21.681,47.126,S8,14.5,S6,21.5
+W609,W,Open workstations 9,11.54,47.118,S8,11.7,S6,19.0
+W610,W,Open workstations 9,14.09,46.76,S8,13.8,S6,20.5
+W611,W,Open workstations 9,22.667,46.654,S8,14.5,S6,22.3
+W612,W,Open workstations 9,10.34,46.61,S8,11.6,S6,19.7
+W613,W,Open workstations 9,25.506,46.275,S8,15.3,S6,23.9
+W614,W,Open workstations 9,19.887,46.168,S8,12.7,S6,21.8
+W615,W,Open workstations 9,20.86,45.678,S8,12.7,S6,22.6
+W616,W,Open workstations 9,24.467,45.675,S8,14.2,S6,24.1
+W617,W,Open workstations 9,21.763,45.09,S8,12.5,S6,23.5
+W618,W,Open workstations 9,23.593,45.07,S8,13.2,S6,24.3
+W619,W,Open workstations 9,20.776,43.625,S8,10.6,S6,24.5
+W620,W,Open workstations 9,18.964,43.609,S8,9.9,S6,23.8
+W621,W,Open workstations 9,24.706,43.611,S8,13.5,S6,26.2
+W622,W,Open workstations 9,23.667,43.011,S8,12.2,S6,26.4
+W623,W,Open workstations 9,21.681,43.005,S8,10.5,S6,25.5
+W624,W,Open workstations 9,22.667,42.533,S8,11.0,S9,25.6
+W625,W,Open workstations 9,25.506,42.154,S8,13.6,S9,26.3
+W626,W,Open workstations 9,19.887,42.047,S8,8.7,S9,24.0
+W627,W,Open workstations 9,20.86,41.557,S8,8.8,S9,23.8
+W628,W,Open workstations 9,24.467,41.554,S8,12.4,S9,25.3
+W629,W,Open workstations 9,21.763,40.969,S8,9.3,S9,23.6
+W630,W,Open workstations 9,23.593,40.949,S8,11.1,S9,24.3
+W631,W,Open workstations 9,20.776,39.502,S8,7.7,S9,21.7
+W632,W,Open workstations 9,18.964,39.486,S8,5.9,S9,21.0
+W633,W,Open workstations 9,24.706,39.488,S8,11.7,S9,23.4
+W634,W,Open workstations 9,23.667,38.888,S8,10.5,S9,22.4
+W635,W,Open workstations 9,21.681,38.882,S8,8.5,S9,21.6
+W636,W,Open workstations 9,22.667,38.41,S8,9.3,S9,21.6
+W637,W,Open workstations 9,25.506,38.031,S8,11.9,S9,22.3
+W638,W,Open workstations 9,19.887,37.924,S8,6.3,S9,19.8
+W639,W,Open workstations 9,20.86,37.434,S8,7.3,S9,19.8
+W640,W,Open workstations 9,24.467,37.431,S8,10.9,S9,21.3
+W641,W,Open workstations 9,21.763,36.846,S8,8.3,S9,19.6
+W642,W,Open workstations 9,23.593,36.826,S8,10.1,S9,20.3
+W643,W,Open workstations 9,20.775,34.905,S8,8.1,S9,17.1
+W644,W,Open workstations 9,18.963,34.889,S8,7.0,S9,16.4
+W645,W,Open workstations 9,24.705,34.891,S8,12.1,S9,18.8
+W646,W,Open workstations 9,23.666,34.291,S8,11.4,S9,17.8
+W647,W,Open workstations 9,21.68,34.285,S8,9.4,S9,17.0
+W648,W,Open workstations 9,22.666,33.813,S8,10.6,S9,17.0
+W649,W,Open workstations 9,25.505,33.434,S8,13.5,S9,17.7
+W650,W,Open workstations 9,19.886,33.327,S8,9.1,S9,15.2
+W651,W,Open workstations 9,20.859,32.838,S8,9.9,S9,15.2
+W652,W,Open workstations 9,24.466,32.834,S8,12.8,S9,16.7
+W653,W,Open workstations 9,21.762,32.249,S8,10.8,S9,15.0
+W654,W,Open workstations 9,23.593,32.23,S8,12.0,S9,15.7
+W655,W,Open workstations 9,33.762,31.009,S9,22.2,S8,22.7
+W656,W,Open workstations 9,37.015,30.954,S9,25.4,S8,26.0
+W657,W,Open workstations 9,40.406,30.816,S9,28.8,S8,29.4
+W658,W,Open workstations 9,21.587,29.959,S9,12.5,S8,13.1
+W659,W,Open workstations 9,25.848,29.959,S9,14.3,S8,15.4
+W660,W,Open workstations 9,29.869,29.959,S9,17.9,S8,19.4
+W661,W,Open workstations 9,32.856,29.461,S9,20.8,S8,22.6
+W662,W,Open workstations 9,34.666,29.461,S9,22.6,S8,24.4
+W663,W,Open workstations 9,36.109,29.406,S9,24.0,S8,25.8
+W664,W,Open workstations 9,37.919,29.406,S9,25.8,S8,27.6
+W665,W,Open workstations 9,39.5,29.268,S9,27.3,S8,29.3
+W666,W,Open workstations 9,41.311,29.268,S9,29.1,S8,31.1
+W667,W,Open workstations 9,20.025,29.036,S9,11.0,S8,13.3
+W668,W,Open workstations 9,24.286,29.036,S9,12.8,S8,15.1
+W669,W,Open workstations 9,28.307,29.036,S9,16.0,S8,18.1
+W670,W,Open workstations 9,32.933,28.365,S9,20.3,S8,23.1
+W671,W,Open workstations 9,34.591,28.365,S9,21.9,S8,24.7
+W672,W,Open workstations 9,36.187,28.31,S9,23.5,S8,26.3
+W673,W,Open workstations 9,37.844,28.31,S9,25.3,S8,28.1
+W674,W,Open workstations 9,39.578,28.173,S9,26.8,S8,29.8
+W675,W,Open workstations 9,41.235,28.173,S9,28.4,S8,31.4
+W676,W,Open workstations 9,21.603,28.146,S9,10.7,S8,14.9
+W677,W,Open workstations 9,25.864,28.146,S9,13.2,S8,16.7
+W678,W,Open workstations 9,29.885,28.146,S9,17.2,S8,20.2
+W679,W,Open workstations 9,19.536,28.062,S9,9.8,S8,14.1
+W680,W,Open workstations 9,23.796,28.062,S9,11.6,S8,15.8
+W681,W,Open workstations 9,27.817,28.062,S9,15.0,S8,18.0
+W682,W,Open workstations 9,32.858,27.27,S9,19.9,S8,23.5
+W683,W,Open workstations 9,34.668,27.27,S9,21.7,S8,25.3
+W684,W,Open workstations 9,20.983,27.241,S9,9.6,S8,15.5
+W685,W,Open workstations 9,25.244,27.241,S9,12.3,S8,17.3
+W686,W,Open workstations 9,29.265,27.241,S9,16.3,S8,19.9
+W687,W,Open workstations 9,36.111,27.215,S9,23.1,S8,26.7
+W688,W,Open workstations 9,37.922,27.215,S9,24.9,S8,28.5
+W689,W,Open workstations 9,18.947,27.159,S9,8.6,S8,14.8
+W690,W,Open workstations 9,23.208,27.159,S9,10.3,S8,16.6
+W691,W,Open workstations 9,27.229,27.159,S9,14.0,S8,18.2
+W692,W,Open workstations 9,39.502,27.077,S9,26.4,S8,30.2
+W693,W,Open workstations 9,41.313,27.077,S9,28.2,S8,32.0
+W694,W,Open workstations 9,20.511,26.256,S9,8.5,S8,16.3
+W695,W,Open workstations 9,24.772,26.256,S9,11.3,S8,18.0
+W696,W,Open workstations 9,28.793,26.256,S9,15.3,S8,19.7
+W697,W,Open workstations 9,33.762,25.71,S9,20.0,S8,25.0
+W698,W,Open workstations 9,37.015,25.655,S9,23.2,S8,28.2
+W699,W,Open workstations 9,40.406,25.518,S9,26.5,S8,31.6
+W700,W,Open workstations 9,18.928,25.329,S9,6.8,S8,16.6
+W701,W,Open workstations 9,23.189,25.329,S9,9.2,S8,18.4
+W702,W,Open workstations 9,27.209,25.329,S9,13.2,S8,20.0
+W703,W,Open workstations 9,20.989,25.256,S9,7.6,S8,17.5
+W704,W,Open workstations 9,25.25,25.256,S9,11.4,S8,19.3
+W705,W,Open workstations 9,29.271,25.256,S9,15.4,S8,21.0
+W706,W,Open workstations 9,19.532,24.455,S9,6.2,S8,17.7
+W707,W,Open workstations 9,23.793,24.455,S9,9.5,S8,19.4
+W708,W,Open workstations 9,27.814,24.455,S9,13.5,S8,21.1
+W709,W,Open workstations 9,21.587,24.366,S9,7.2,S8,18.7
+W710,W,Open workstations 9,25.848,24.366,S9,11.6,S8,20.5
+W711,W,Open workstations 9,29.869,24.366,S9,15.6,S8,22.2
+W712,W,Open workstations 9,20.025,23.443,S9,5.4,S8,18.9
+W713,W,Open workstations 9,24.286,23.443,S9,9.7,S8,20.7
+W714,W,Open workstations 9,28.307,23.443,S9,13.7,S8,22.3
+W715,W,Open workstations 9,21.564,22.551,S9,6.5,S8,20.5
+W716,W,Open workstations 9,25.825,22.551,S9,10.7,S8,22.3
+W717,W,Open workstations 9,29.845,22.551,S9,14.9,S8,24.0
+W718,W,Open workstations 9,19.536,22.47,S9,4.5,S8,19.7
+W719,W,Open workstations 9,23.796,22.47,S9,8.7,S8,21.4
+W720,W,Open workstations 9,27.817,22.47,S9,12.7,S8,23.1
+W721,W,Open workstations 9,20.983,21.649,S9,5.5,S8,21.1
+W722,W,Open workstations 9,25.244,21.649,S9,9.9,S8,22.9
+W723,W,Open workstations 9,29.265,21.649,S9,13.9,S8,24.6
+M1,M,CABIN (2),122.469,109.859,S1,15.7,S3,26.1
+M2,M,CABIN (2),122.927,109.135,S1,15.8,S3,25.2
+M3,M,CABIN (2),123.247,109.135,S1,16.2,S3,25.0
+M4,M,CABIN (2),122.927,108.429,S1,15.5,S3,24.6
+M5,M,CABIN (2),123.247,108.429,S1,15.9,S3,24.4
+M6,M,CABIN (2),122.927,107.685,S1,15.2,S3,23.8
+M7,M,CABIN (2),123.247,107.685,S1,15.6,S3,23.6
+M8,M,CABIN (2),122.469,106.95,S1,14.4,S3,23.1
+M9,M,CABIN (4),131.638,106.036,S3,18.9,S1,30.3
+M10,M,CABIN (4),131.89,105.201,S3,18.3,S1,29.7
+M11,M,CABIN (4),131.679,104.961,S3,17.8,S1,29.2
+M12,M,CABIN (4),132.448,104.709,S3,18.0,S1,29.3
+M13,M,CABIN (4),132.237,104.469,S3,17.6,S1,29.0
+M14,M,STORAGE (2),132.978,104.242,S3,17.7,S1,29.1
+M15,M,STORAGE (2),133.83,104.112,S3,17.9,S1,29.2
+M16,M,STORAGE (2),132.767,104.002,S3,17.4,S1,28.8
+M17,M,MEETING ROOM (2),134.97,102.664,S3,17.0,S1,29.7
+M18,M,MEETING ROOM (2),135.085,101.802,S3,16.2,S1,29.6
+M19,M,MEETING ROOM (2),134.84,101.596,S3,15.8,S1,29.2
+M20,M,MEETING ROOM (2),135.563,101.233,S3,15.8,S1,29.8
+M21,M,MEETING ROOM (2),135.318,101.027,S3,15.5,S1,29.5
+M22,M,MEETING ROOM (2),136.018,100.692,S3,15.4,S1,29.9
+M23,M,MEETING ROOM (2),135.773,100.486,S3,15.1,S1,29.6
+M24,M,MEETING ROOM (2),136.84,100.425,S3,15.5,S1,30.6
+M25,M,MEETING ROOM (2),135.892,98.363,S3,13.0,S1,30.6
+M26,M,MEETING ROOM (2),136.599,98.363,S3,13.2,S1,31.2
+M27,M,MEETING ROOM (2),137.318,98.363,S3,13.5,S1,32.0
+M28,M,MEETING ROOM (2),138.024,98.363,S3,14.0,S1,32.6
+M29,M,MEETING ROOM (2),135.173,95.856,S3,10.2,S1,30.8
+M30,M,MEETING ROOM (2),135.892,95.856,S3,11.0,S1,31.6
+M31,M,MEETING ROOM (2),136.599,95.856,S3,11.6,S1,32.2
+M32,M,MEETING ROOM (2),137.318,95.856,S3,12.4,S1,33.0
+M33,M,MEETING ROOM (2),138.024,95.856,S3,13.0,S1,33.6
+M34,M,STORAGE (3),133.016,98.363,S3,11.7,S1,27.6
+M35,M,STORAGE (3),133.722,98.363,S3,12.1,S1,28.4
+M36,M,STORAGE (3),134.466,98.363,S3,12.4,S1,29.2
+M37,M,STORAGE (3),135.173,98.363,S3,12.6,S1,29.8
+M38,M,STORAGE (3),133.016,95.856,S3,9.3,S1,28.6
+M39,M,STORAGE (3),133.722,95.856,S3,9.7,S1,29.4
+M40,M,STORAGE (3),134.466,95.856,S3,10.0,S1,30.2
+M41,M,MEETING ROOM 04 PAX (1),35.474,16.774,S9,22.2,S8,41.6
+M42,M,MEETING ROOM 04 PAX (1),34.479,16.768,S9,21.8,S8,41.2
+M43,M,MEETING ROOM 04 PAX (1),34.475,15.774,S9,20.8,S8,40.2
+M44,M,MEETING ROOM 04 PAX (1),35.478,15.768,S9,21.8,S8,41.2
+M45,M,MEETING ROOM 04 PAX (2),38.701,16.505,S9,25.5,S8,44.9
+M46,M,MEETING ROOM 04 PAX (2),37.705,16.499,S9,25.0,S8,44.4
+M47,M,MEETING ROOM 04 PAX (2),37.701,15.506,S9,24.1,S8,43.5
+M48,M,MEETING ROOM 04 PAX (2),38.705,15.499,S9,25.1,S8,44.5
+M49,M,MEETING ROOM 04 PAX (unlabelled),36.338,13.041,S9,22.9,S8,42.3
+M50,M,MEETING ROOM 04 PAX (unlabelled),35.343,13.035,S9,21.9,S8,41.3
+M51,M,MEETING ROOM 04 PAX (unlabelled),35.339,12.041,S9,22.9,S8,42.3
+T1,T,TRAINING ROOM (2),41.508,93.479,S4,25.5,S2,26.8
+T2,T,TRAINING ROOM (2),41.14,90.649,S4,27.0,S2,28.4
+T3,T,TRAINING ROOM (2),41.94,90.649,S4,26.2,S2,27.6
+T4,T,TRAINING ROOM (2),43.54,90.649,S4,25.2,S2,26.6
+T5,T,TRAINING ROOM (2),44.34,90.649,S4,24.9,S2,26.3
+T6,T,TRAINING ROOM (2),45.14,90.649,S4,24.6,S2,25.9
+T7,T,TRAINING ROOM (2),41.14,89.299,S4,27.6,S2,29.0
+T8,T,TRAINING ROOM (2),41.94,89.299,S4,27.3,S2,28.6
+T9,T,TRAINING ROOM (2),43.54,89.299,S4,26.6,S2,28.0
+T10,T,TRAINING ROOM (2),44.34,89.299,S4,26.3,S2,27.7
+T11,T,TRAINING ROOM (2),45.14,89.299,S4,26.0,S2,27.3
+T12,T,TRAINING ROOM (2),41.14,87.949,S4,29.0,S2,30.4
+T13,T,TRAINING ROOM (2),41.94,87.949,S4,28.7,S2,30.0
+T14,T,TRAINING ROOM (2),43.54,87.949,S4,28.0,S2,29.4
+T15,T,TRAINING ROOM (2),44.34,87.949,S4,27.7,S2,29.1
+T16,T,TRAINING ROOM (2),45.14,87.949,S4,27.4,S2,28.7
+T17,T,TRAINING ROOM (2),41.14,86.599,S4,30.2,S2,31.6
+T18,T,TRAINING ROOM (2),41.94,86.599,S4,29.9,S2,31.2
+T19,T,TRAINING ROOM (2),43.54,86.599,S4,29.2,S2,30.6
+T20,T,TRAINING ROOM (2),44.34,86.599,S4,28.9,S2,30.3
+T21,T,TRAINING ROOM (2),45.14,86.599,S4,28.6,S2,29.9
+T22,T,TRAINING ROOM (2),41.94,85.249,S4,31.3,S2,32.6
+T23,T,TRAINING ROOM (2),43.54,85.249,S4,30.6,S2,32.0
+T24,T,TRAINING ROOM (2),44.34,85.249,S4,30.3,S2,31.7
+T25,T,TRAINING ROOM (2),45.14,85.249,S4,30.0,S2,31.3
+T26,T,TRAINING ROOM (1),34.406,23.692,S9,22.2,S8,41.6
+T27,T,TRAINING ROOM (1),35.756,23.692,S9,22.8,S8,42.2
+T28,T,TRAINING ROOM (1),37.106,23.692,S9,23.6,S8,43.0
+T29,T,TRAINING ROOM (1),38.456,23.692,S9,25.0,S8,44.4
+T30,T,TRAINING ROOM (1),39.806,23.692,S9,26.2,S8,45.6
+T31,T,TRAINING ROOM (1),32.11,23.61,S9,21.3,S8,40.7
+T32,T,TRAINING ROOM (1),34.406,22.892,S9,21.4,S8,40.8
+T33,T,TRAINING ROOM (1),35.756,22.892,S9,22.0,S8,41.4
+T34,T,TRAINING ROOM (1),37.106,22.892,S9,23.2,S8,42.6
+T35,T,TRAINING ROOM (1),38.456,22.892,S9,24.6,S8,44.0
+T36,T,TRAINING ROOM (1),39.806,22.892,S9,25.8,S8,45.2
+T37,T,TRAINING ROOM (1),34.406,21.292,S9,19.8,S8,39.2
+T38,T,TRAINING ROOM (1),35.756,21.292,S9,21.2,S8,40.6
+T39,T,TRAINING ROOM (1),37.106,21.292,S9,22.6,S8,42.0
+T40,T,TRAINING ROOM (1),38.456,21.292,S9,24.0,S8,43.4
+T41,T,TRAINING ROOM (1),39.806,21.292,S9,25.2,S8,44.6
+T42,T,TRAINING ROOM (1),34.406,20.492,S9,19.4,S8,38.9
+T43,T,TRAINING ROOM (1),35.756,20.492,S9,20.8,S8,40.3
+T44,T,TRAINING ROOM (1),37.106,20.492,S9,22.2,S8,41.7
+T45,T,TRAINING ROOM (1),38.456,20.492,S9,23.6,S8,43.1
+T46,T,TRAINING ROOM (1),39.806,20.492,S9,24.8,S8,44.3
+T47,T,TRAINING ROOM (1),34.406,19.692,S9,19.1,S8,38.5
+T48,T,TRAINING ROOM (1),35.756,19.692,S9,20.5,S8,39.9
+T49,T,TRAINING ROOM (1),37.106,19.692,S9,21.9,S8,41.3
+T50,T,TRAINING ROOM (1),38.456,19.692,S9,23.3,S8,42.7
+T51,T,TRAINING ROOM (1),39.806,19.692,S9,24.5,S8,43.9
+C1,C,CAFETERIA (1),26.775,40.558,S7,16.4,,
+C2,C,CAFETERIA (1),27.35,40.558,S7,15.8,,
+C3,C,CAFETERIA (1),27.975,40.558,S7,15.4,,
+C4,C,CAFETERIA (1),28.55,40.558,S7,15.1,,
+C5,C,CAFETERIA (1),40.088,40.373,S7,23.1,,
+C6,C,CAFETERIA (1),40.663,40.373,S7,23.7,,
+C7,C,CAFETERIA (1),41.288,40.373,S7,24.3,,
+C8,C,CAFETERIA (1),41.863,40.373,S7,24.9,,
+C9,C,CAFETERIA (1),34.498,39.386,S7,18.0,,
+C10,C,CAFETERIA (1),36.029,39.386,S7,19.4,,
+C11,C,CAFETERIA (1),37.048,39.365,S7,20.6,,
+C12,C,CAFETERIA (1),38.579,39.365,S7,22.0,,
+C13,C,CAFETERIA (1),40.088,39.212,S7,23.6,,
+C14,C,CAFETERIA (1),40.663,39.212,S7,24.2,,
+C15,C,CAFETERIA (1),41.288,39.212,S7,24.8,,
+C16,C,CAFETERIA (1),41.863,39.212,S7,25.4,,
+C17,C,CAFETERIA (1),26.775,39.027,S7,17.3,,
+C18,C,CAFETERIA (1),27.35,39.027,S7,17.0,,
+C19,C,CAFETERIA (1),27.975,39.027,S7,16.8,,
+C20,C,CAFETERIA (1),28.55,39.027,S7,16.5,,
+C21,C,CAFETERIA (1),34.498,38.811,S7,18.1,,
+C22,C,CAFETERIA (1),36.029,38.811,S7,19.5,,
+C23,C,CAFETERIA (1),37.048,38.79,S7,20.8,,
+C24,C,CAFETERIA (1),38.579,38.79,S7,22.2,,
+C25,C,CAFETERIA (1),31.948,38.206,S7,17.1,,
+C26,C,CAFETERIA (1),33.479,38.206,S7,17.7,,
+C27,C,CAFETERIA (1),34.498,38.186,S7,18.5,,
+C28,C,CAFETERIA (1),36.029,38.186,S7,19.9,,
+C29,C,CAFETERIA (1),37.048,38.165,S7,21.1,,
+C30,C,CAFETERIA (1),38.579,38.165,S7,22.5,,
+C31,C,CAFETERIA (1),26.775,38.008,S7,18.3,,
+C32,C,CAFETERIA (1),27.35,38.008,S7,18.0,,
+C33,C,CAFETERIA (1),27.975,38.008,S7,17.8,,
+C34,C,CAFETERIA (1),28.55,38.008,S7,17.5,,
+C35,C,CAFETERIA (1),40.088,37.823,S7,24.1,,
+C36,C,CAFETERIA (1),40.663,37.823,S7,24.7,,
+C37,C,CAFETERIA (1),41.288,37.823,S7,25.3,,
+C38,C,CAFETERIA (1),41.863,37.823,S7,25.9,,
+C39,C,CAFETERIA (1),31.948,37.631,S7,17.7,,
+C40,C,CAFETERIA (1),33.479,37.631,S7,18.3,,
+C41,C,CAFETERIA (1),34.498,37.611,S7,18.7,,
+C42,C,CAFETERIA (1),36.029,37.611,S7,20.0,,
+C43,C,CAFETERIA (1),37.048,37.59,S7,21.3,,
+C44,C,CAFETERIA (1),38.579,37.59,S7,22.7,,
+C45,C,CAFETERIA (1),31.948,37.006,S7,18.3,,
+C46,C,CAFETERIA (1),33.479,37.006,S7,18.9,,
+C47,C,CAFETERIA (1),34.498,36.986,S7,19.5,,
+C48,C,CAFETERIA (1),36.029,36.986,S7,20.3,,
+C49,C,CAFETERIA (1),37.048,36.965,S7,21.5,,
+C50,C,CAFETERIA (1),38.579,36.965,S7,22.9,,
+C51,C,CAFETERIA (1),40.088,36.662,S7,24.6,,
+C52,C,CAFETERIA (1),40.663,36.662,S7,25.2,,
+C53,C,CAFETERIA (1),41.288,36.662,S7,25.8,,
+C54,C,CAFETERIA (1),41.863,36.662,S7,26.4,,
+C55,C,CAFETERIA (1),26.775,36.477,S7,19.9,,
+C56,C,CAFETERIA (1),27.35,36.477,S7,19.6,,
+C57,C,CAFETERIA (1),27.975,36.477,S7,19.4,,
+C58,C,CAFETERIA (1),28.55,36.477,S7,19.1,,
+C59,C,CAFETERIA (1),31.948,36.431,S7,18.9,,
+C60,C,CAFETERIA (1),33.479,36.431,S7,19.5,,
+C61,C,CAFETERIA (1),34.498,36.411,S7,19.9,,
+C62,C,CAFETERIA (1),36.029,36.411,S7,20.5,,
+C63,C,CAFETERIA (1),37.048,36.39,S7,21.8,,
+C64,C,CAFETERIA (1),38.579,36.39,S7,23.2,,
+C65,C,CAFETERIA (1),26.775,35.458,S7,20.9,,
+C66,C,CAFETERIA (1),27.35,35.458,S7,20.6,,
+C67,C,CAFETERIA (1),27.975,35.458,S7,20.4,,
+C68,C,CAFETERIA (1),28.55,35.458,S7,20.1,,
+C69,C,CAFETERIA (1),40.088,35.273,S7,25.2,,
+C70,C,CAFETERIA (1),40.663,35.273,S7,25.8,,
+C71,C,CAFETERIA (1),41.288,35.273,S7,26.4,,
+C72,C,CAFETERIA (1),41.863,35.273,S7,27.0,,
+C73,C,CAFETERIA (1),29.398,34.627,S7,20.6,,
+C74,C,CAFETERIA (1),30.929,34.627,S7,20.2,,
+C75,C,CAFETERIA (1),31.948,34.606,S7,20.7,,
+C76,C,CAFETERIA (1),33.479,34.606,S7,21.3,,
+C77,C,CAFETERIA (1),34.498,34.586,S7,21.9,,
+C78,C,CAFETERIA (1),36.029,34.586,S7,22.5,,
+C79,C,CAFETERIA (1),37.048,34.565,S7,23.0,,
+C80,C,CAFETERIA (1),38.579,34.565,S7,23.9,,
+C81,C,CAFETERIA (1),40.088,34.112,S7,25.7,,
+C82,C,CAFETERIA (1),40.663,34.112,S7,26.3,,
+C83,C,CAFETERIA (1),41.288,34.112,S7,26.9,,
+C84,C,CAFETERIA (1),41.863,34.112,S7,27.5,,
+C85,C,CAFETERIA (1),29.398,34.052,S7,21.2,,
+C86,C,CAFETERIA (1),30.929,34.052,S7,20.8,,
+C87,C,CAFETERIA (1),31.948,34.031,S7,21.3,,
+C88,C,CAFETERIA (1),33.479,34.031,S7,21.9,,
+C89,C,CAFETERIA (1),34.498,34.011,S7,22.3,,
+C90,C,CAFETERIA (1),36.029,34.011,S7,22.9,,
+C91,C,CAFETERIA (1),37.048,33.99,S7,23.6,,
+C92,C,CAFETERIA (1),38.579,33.99,S7,24.2,,
+C93,C,CAFETERIA (1),26.775,33.927,S7,22.5,,
+C94,C,CAFETERIA (1),27.35,33.927,S7,22.2,,
+C95,C,CAFETERIA (1),27.975,33.927,S7,22.0,,
+C96,C,CAFETERIA (1),28.55,33.927,S7,21.7,,
+C97,C,CAFETERIA (1),29.398,33.427,S7,21.8,,
+C98,C,CAFETERIA (1),30.929,33.427,S7,21.4,,
+C99,C,CAFETERIA (1),31.948,33.406,S7,21.9,,
+C100,C,CAFETERIA (1),33.479,33.406,S7,22.5,,
+C101,C,CAFETERIA (1),34.498,33.386,S7,23.1,,
+C102,C,CAFETERIA (1),36.029,33.386,S7,23.7,,
+C103,C,CAFETERIA (1),37.048,33.365,S7,24.2,,
+C104,C,CAFETERIA (1),38.579,33.365,S7,24.8,,
+C105,C,CAFETERIA (1),29.398,32.852,S7,22.4,,
+C106,C,CAFETERIA (1),30.929,32.852,S7,22.0,,
+C107,C,CAFETERIA (1),31.948,32.831,S7,22.5,,
+C108,C,CAFETERIA (1),33.479,32.831,S7,23.1,,
+C109,C,CAFETERIA (1),34.498,32.811,S7,23.5,,
+C110,C,CAFETERIA (1),36.029,32.811,S7,24.1,,
+C111,C,CAFETERIA (1),37.048,32.79,S7,24.8,,
+C112,C,CAFETERIA (1),38.579,32.79,S7,25.4,,
+C113,C,Circulation 7,91.841,86.879,S5,6.2,S1,32.5
+C114,C,Circulation 7,92.416,86.879,S5,6.4,S1,32.3
+C115,C,Circulation 7,93.041,86.879,S5,6.7,S1,32.0
+C116,C,Circulation 7,93.616,86.879,S5,6.9,S1,31.8
+C117,C,Circulation 7,91.841,85.718,S5,5.0,S1,33.7
+C118,C,Circulation 7,92.416,85.718,S5,5.2,S1,33.5
+C119,C,Circulation 7,93.041,85.718,S5,5.5,S1,33.2
+C120,C,Circulation 7,93.616,85.718,S5,5.7,S1,33.0
+L1,L,FIRE RESCUE BALCONY (3),52.132,111.822,S2,14.8,S4,34.2
+L2,L,FIRE RESCUE BALCONY (3),51.982,110.564,S2,13.4,S4,32.7
+L3,L,FIRE RESCUE BALCONY (3),52.732,110.564,S2,13.1,S4,33.1
+L4,L,FIRE RESCUE BALCONY (3),51.462,109.229,S2,12.4,S4,31.4
+L5,L,FIRE RESCUE BALCONY (3),52.719,108.629,S2,11.3,S4,31.9
+L6,L,RECEPTION & WAITING AREA,28.187,17.802,S9,12.7,S8,32.1
+L7,L,RECEPTION & WAITING AREA,25.503,14.803,S9,12.6,S8,32.0
+L8,L,RECEPTION & WAITING AREA,25.503,14.803,S9,12.6,S8,32.0
+L9,L,RECEPTION & WAITING AREA,27.903,14.803,S9,13.7,S8,33.1
+L10,L,RECEPTION & WAITING AREA,27.903,14.803,S9,13.7,S8,33.1
+L11,L,RECEPTION & WAITING AREA,30.298,14.803,S9,16.1,S8,35.5
+L12,L,RECEPTION & WAITING AREA,30.298,14.803,S9,16.1,S8,35.5
+L13,L,RECEPTION & WAITING AREA,25.503,12.868,S9,14.6,S8,34.0
+L14,L,RECEPTION & WAITING AREA,25.503,12.868,S9,14.6,S8,34.0
+L15,L,RECEPTION & WAITING AREA,27.903,12.868,S9,15.6,S8,35.0
+L16,L,RECEPTION & WAITING AREA,27.903,12.868,S9,15.6,S8,35.0
+L17,L,RECEPTION & WAITING AREA,30.298,12.868,S9,16.9,S8,36.3
+L18,L,RECEPTION & WAITING AREA,30.298,12.868,S9,16.9,S8,36.3
+L19,L,RECEPTION & WAITING AREA,25.503,10.865,S9,16.6,S8,36.0
+L20,L,RECEPTION & WAITING AREA,25.503,10.865,S9,16.6,S8,36.0
+L21,L,RECEPTION & WAITING AREA,27.903,10.865,S9,17.6,S8,37.0
+L22,L,RECEPTION & WAITING AREA,27.903,10.865,S9,17.6,S8,37.0
+L23,L,RECEPTION & WAITING AREA,30.298,10.865,S9,18.6,S8,38.0
+L24,L,RECEPTION & WAITING AREA,30.298,10.865,S9,18.6,S8,38.0
+L25,L,Circulation 7,34.803,98.126,S4,14.0,S2,30.0
+L26,L,Circulation 2,138.889,94.023,S3,13.3,S1,35.3
+K1,K,CABIN (2),125.021,109.028,S1,17.8,S3,24.3
+K2,K,CABIN (2),127.409,108.933,S1,20.1,S3,23.2
+K3,K,CABIN (2),128.827,108.333,S1,21.2,S3,22.0
+K4,K,CABIN (2),127.409,108.183,S1,19.7,S3,22.4
+K5,K,CABIN (2),124.421,107.77,S1,16.6,S3,23.2
+K6,K,CABIN (2),125.171,107.77,S1,17.4,S3,22.9
+K7,K,CABIN (1),51.462,108.479,S2,11.6,S4,30.6
+K8,K,CABIN (3),118.546,110.573,S1,13.9,S3,28.4
+K9,K,CABIN (3),118.546,109.912,S1,13.3,S3,27.8
+K10,K,CABIN (3),118.546,109.287,S1,12.7,S3,27.2
+K11,K,CABIN (3),117.547,107.9,S1,10.9,S3,26.2
+K12,K,CABIN (3),118.827,107.307,S1,10.8,S3,25.1
+K13,K,CABIN (5),45.714,82.272,S4,32.7,S2,34.1
+K14,K,CABIN (5),45.714,81.522,S4,33.5,S2,34.9

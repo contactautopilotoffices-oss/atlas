@@ -137,8 +137,8 @@ for s in S:
             rm = next((r for r in rooms_raw if r['name'] == s['room']), None)
             face = list(P(rm['poly']).centroid.coords[0]) if rm else [c[0], c[1] + 1]
     seats.append({"id": s['seat_id'], "group": s['grp'], "kind": s['kind'], "room": s['room'], "x": c[0], "y": c[1],
-                  "face": round(math.atan2(face[1] - c[1], face[0] - c[0]), 4), "len": round(max(o['w'], o['h']) * IN, 3),
-                  "dep": round(min(o['w'], o['h']) * IN, 3), "block": s['block'], "instance": s['handle'],
+                  "face": round(math.atan2(face[1] - c[1], face[0] - c[0]), 4), "len": round(max(o['w'], o['h']) * F.s, 3),
+                  "dep": round(min(o['w'], o['h']) * F.s, 3), "block": s['block'], "instance": s['handle'],
                   "desk_pair": s['desk_pair'] or None})
 sofas = collections.OrderedDict()
 for s in seats:
@@ -149,14 +149,14 @@ seat_objs = [s for s in seats if 'sofa' not in s['kind']] + list(sofas.values())
 plants, planters = [], []
 for o in I.values():
     c = F.m(o['cx'], o['cy'])
-    if o['name'] in C['blocks']['plants']: plants.append({"x": c[0], "y": c[1], "r": round(max(o['w'], o['h']) * IN / 2, 3), "in_box": o['parent'] in C['blocks']['planter_boxes']})
+    if o['name'] in C['blocks']['plants']: plants.append({"x": c[0], "y": c[1], "r": round(max(o['w'], o['h']) * F.s / 2, 3), "in_box": o['parent'] in C['blocks']['planter_boxes']})
     if o['name'] in C['blocks']['planter_boxes']:
-        w_, h_ = o['w'] * IN, o['h'] * IN
+        w_, h_ = o['w'] * F.s, o['h'] * F.s
         planters.append({"c": list(c), "w": round(max(w_, h_), 3), "d": round(min(w_, h_), 3), "a": 0.0 if w_ >= h_ else math.pi / 2})
 fixtures = []
 for o in I.values():
     k = C['blocks']['wc_mep'].get(o['name'])
-    if k: fixtures.append({"kind": k, "c": list(F.m(o['cx'], o['cy'])), "a": round(o['rot'] or 0, 4), "w": round(min(o['w'], o['h']) * IN, 3), "d": round(max(o['w'], o['h']) * IN, 3), "instance": o['id']})
+    if k: fixtures.append({"kind": k, "c": list(F.m(o['cx'], o['cy'])), "a": round(o['rot'] or 0, 4), "w": round(min(o['w'], o['h']) * F.s, 3), "d": round(max(o['w'], o['h']) * F.s, 3), "instance": o['id']})
 
 # ---------------- lights (from the drawing's ceiling plan; none are invented here)
 lights = []
@@ -172,7 +172,7 @@ for r in d:
         rec = {"c": list(rcp_m(ctr)), "kind": k, "block": r['name'], "instance": r['id']}
         if k == 'linear':
             w_, h_ = max(xs) - min(xs), max(ys) - min(ys)
-            rec['len'] = round(max(w_, h_) * IN, 3); rec['a'] = 0.0 if w_ >= h_ else round(math.pi / 2, 4)
+            rec['len'] = round(max(w_, h_) * F.s, 3); rec['a'] = 0.0 if w_ >= h_ else round(math.pi / 2, 4)
         lights.append(rec)
 for r in d:   # loose 2'x2' panels (Volt draws them as polylines) and loose downlight circles
     if r['L'] == "CD-2' x 2' led light" and not r['ch'] and is_poly(r) and len(r['p']) >= 4 and rcp_in(r['p'][0]):
@@ -252,8 +252,8 @@ for rm in rooms:
     for o in (tv if rm['kind'] in ('meeting', 'training') or re.search(r'CABIN', rm['name'], re.I) else []):
         q = F.m(o['cx'], o['cy'])
         if pg.buffer(0.35).contains(Point(q)):
-            fw = {"wall": side_of(pg, q), "at": list(q), "w": round(max(o['w'], o['h']) * IN, 3), "block": o['name'], "instance": o['id'],
-                  "what": "probable wall-mounted screen: unnamed block " + o['name'] + f", {max(o['w'], o['h']) * IN:.2f} x {min(o['w'], o['h']) * IN:.2f} m, drawn against a meeting-room wall"}
+            fw = {"wall": side_of(pg, q), "at": list(q), "w": round(max(o['w'], o['h']) * F.s, 3), "block": o['name'], "instance": o['id'],
+                  "what": "probable wall-mounted screen: unnamed block " + o['name'] + f", {max(o['w'], o['h']) * F.s:.2f} x {min(o['w'], o['h']) * F.s:.2f} m, drawn against a meeting-room wall"}
             break
     rm['feature_wall'] = fw
     rm['ceiling']['height_m'] = None; rm['ceiling']['height_note'] = 'not in the CAD (no section, no ceiling level); see heights.ceiling (assumed)'

@@ -128,6 +128,32 @@ def atrium(d, F, layer='RAILING'):
     return None
 
 
+# ---------------------------------------------------------------- desks drawn as loose geometry
+def desk_shapes(d, F, specs):
+    """Desks drawn as loose closed polylines (no block), e.g. Reliable Tech Park's 6th floor: the 4'x2'
+    straight desks and the 120-degree desks of the Y clusters. Each spec: {layers, verts, area_m2: [lo, hi],
+    name, from_lines?}. With from_lines the loose LINE work on those layers is also polygonised, because
+    the drafter drew half of the clusters with separate lines. A shape found both ways is counted once.
+    Returns [(Polygon in plan metres, name, source)]."""
+    out = []
+    for sp in specs or []:
+        lay = set(sp['layers']); lo, hi = sp['area_m2']; got = []
+        def ok(P, n):
+            return P.is_valid and lo <= P.area <= hi and (sp.get('verts') is None or n == sp['verts'] - 1)
+        for r in d:
+            if r['t'] != 'LwPolyline' or r['ch'] or r['L'] not in lay or not F.inwin(r['p'][0]) or len(r['p']) < 4: continue
+            P = Polygon([F.m(*q) for q in r['p']])
+            if ok(P, len(r['p']) - 1): got.append((P, sp['name'], 'closed polyline'))
+        if sp.get('from_lines'):
+            segs = [LineString([F.m(*q) for q in r['p']]) for r in d if r['t'] == 'Line' and not r['ch'] and r['L'] in lay and F.inwin(r['p'][0])]
+            for P in polygonize(unary_union(segs)):
+                P = P.simplify(0.01)
+                if ok(P, len(P.exterior.coords) - 1) and not any(g.centroid.distance(P.centroid) < 0.05 for g, _, _ in got):
+                    got.append((P, sp['name'], 'closed by loose lines'))
+        out += got
+    return out
+
+
 # ---------------------------------------------------------------- doors
 def doors(d, F, I, cfg, by_inst, ins_all):
     """One record per door block instance: leaf rectangle (Volt format: c, w, d, a) plus
@@ -161,10 +187,53 @@ def doors(d, F, I, cfg, by_inst, ins_all):
         pts = [F.m(*q) for r in by_inst[o['id']] for q in r['p']]
         leaf = LineString(ends)
         off = [q for q in pts if leaf.distance(Point(q)) > 0.05]
-        score = [sum(1 for q in off if abs(math.dist(E, q) - w) < 0.03) for E in ends]
+        arcs = [r for r in by_inst[o['id']] if r['t'] == 'Arc' and r.get('arc')] if cfg.get('door_from_arc_entity') else []
+        arcs = [r for r in arcs if 0.45 < math.dist(F.m(*r['p'][0]), F.m(r['arc'][0], r['arc'][1])) < 1.5]
+        if arcs:
+            # the threshold line: a straight line in the block, about one leaf long, square to the open leaf and
+            # starting at one leaf end (the hinge). Lines survive mirrored inserts; arcs in mirrored blocks
+            # come out of the reader on the wrong side of the hinge, so the line wins when there is one.
+            ux, uy = math.cos(rec['a']), math.sin(rec['a']); thr = None
+            for r in by_inst[o['id']]:
+                if r['t'] != 'Line': continue
+                a_, b_ = F.m(*r['p'][0]), F.m(*r['p'][1]); L_ = math.dist(a_, b_)
+                if not (0.55 < L_ < 1.45) or abs(((b_[0] - a_[0]) * ux + (b_[1] - a_[1]) * uy) / L_) > 0.2: continue
+                for E in ends:
+                    for P_, Q_ in ((a_, b_), (b_, a_)):
+                        if math.dist(P_, E) < 0.15 and (thr is None or L_ > thr[2]): thr = (E, Q_, L_)
+            if thr:
+                arcs = [dict(arcs[0], arc=[0, 0], _thr=thr)]
+        if arcs and arcs[0].get('_thr'):
+            E, Q_, _ = arcs[0]['_thr']
+            rec['hinge'] = [round(E[0], 3), round(E[1], 3)]; rec['swing_r_m'] = round(math.dist(E, Q_), 3); rec['swing_deg'] = 90.0
+            rec['opening'] = [round(E[0], 3), round(E[1], 3), round(Q_[0], 3), round(Q_[1], 3)]
+            T = max(ends, key=lambda X: math.dist(X, E)); vx, vy = T[0] - E[0], T[1] - E[1]; v1 = (Q_[0] - E[0], Q_[1] - E[1])
+            rec['swing'] = 'ccw' if v1[0] * vy - v1[1] * vx > 0 else 'cw'
+            rec['open_leaf_tip'] = [round(T[0], 3), round(T[1], 3)]; rec['how'] = 'threshold line'
+            out.append(rec); continue
+        if arcs:
+            # opt-in (RTP): read the swing straight from the arc entity. Its centre is the hinge; of its two
+            # ends, the one away from the open leaf is the closed leaf tip. A double door has two arcs, and
+            # its opening runs hinge to hinge.
+            hs = []
+            for r in arcs[:2]:
+                H = F.m(r['arc'][0], r['arc'][1]); e0, e1 = F.m(*r['p'][0]), F.m(*r['p'][-1])
+                leaf = LineString(ends)
+                A = e0 if leaf.distance(Point(e0)) > leaf.distance(Point(e1)) else e1
+                hs.append((H, A))
+            H, A = hs[0]
+            rec['hinge'] = [round(H[0], 3), round(H[1], 3)]; rec['swing_r_m'] = round(math.dist(H, A), 3); rec['swing_deg'] = 90.0
+            o2 = hs[1][0] if len(hs) == 2 and math.dist(hs[0][0], hs[1][0]) > 0.6 else A
+            rec['opening'] = [round(H[0], 3), round(H[1], 3), round(o2[0], 3), round(o2[1], 3)]
+            T = max(ends, key=lambda E: math.dist(E, H)); vx, vy = T[0] - H[0], T[1] - H[1]; v1 = (A[0] - H[0], A[1] - H[1])
+            rec['swing'] = 'ccw' if v1[0] * vy - v1[1] * vx > 0 else 'cw'
+            rec['open_leaf_tip'] = [round(T[0], 3), round(T[1], 3)]; rec['how'] = 'arc entity' + (' (double door)' if len(hs) == 2 else '')
+            out.append(rec); continue
+        tol = cfg.get('door_arc_tol_m', 0.03)       # RTP's glass doors: swing arc drawn 35 mm short of the leaf
+        score = [sum(1 for q in off if abs(math.dist(E, q) - w) < tol) for E in ends]
         if max(score) >= 3:
             H, T = (ends[0], ends[1]) if score[0] >= score[1] else (ends[1], ends[0])
-            on_arc = [q for q in off if abs(math.dist(H, q) - w) < 0.03]
+            on_arc = [q for q in off if abs(math.dist(H, q) - w) < tol]
             mx = sum(q[0] for q in on_arc) / len(on_arc); my = sum(q[1] for q in on_arc) / len(on_arc)
             vx, vy = T[0] - H[0], T[1] - H[1]
             cands = [(H[0] - vy, H[1] + vx), (H[0] + vy, H[1] - vx)]          # leaf turned +-90 deg about the hinge

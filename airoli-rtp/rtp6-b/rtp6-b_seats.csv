@@ -1,0 +1,986 @@
+seat_id,group,room,kind,at_desk,block,parent_block,x_in,y_in,instance,room_kind,desk_pair,x_m,y_m,place
+W1,Work seats (desk + chair),Open workstations 7,work chair,,WS CHAIR,,5661200.6,5955093.9,2260,work,4'x2' workstation 0.25 m away,61.99,110.094,1/1
+W2,Work seats (desk + chair),Open workstations 7,work chair,,WS CHAIR,,5662400.6,5955093.9,2259,work,4'x2' workstation 0.25 m away,63.19,110.094,1/1
+W3,Work seats (desk + chair),Open workstations 7,work chair,,WS CHAIR,,5663600.6,5955093.9,2261,work,4'x2' workstation 0.25 m away,64.39,110.094,1/1
+W4,Work seats (desk + chair),Open workstations 7,work chair,,WS CHAIR,,5664800.6,5955093.9,2262,work,4'x2' workstation 0.25 m away,65.59,110.094,1/1
+W5,Work seats (desk + chair),Open workstations 7,work chair,,WS CHAIR,,5666000.6,5955093.9,2264,work,4'x2' workstation 0.25 m away,66.79,110.094,1/1
+W6,Work seats (desk + chair),Open workstations 7,work chair,,WS CHAIR,,5667200.6,5955093.9,2263,work,4'x2' workstation 0.25 m away,67.99,110.094,1/1
+W7,Work seats (desk + chair),Open workstations 7,work chair,,WS CHAIR,,5668400.6,5955093.9,2265,work,4'x2' workstation 0.25 m away,69.19,110.094,1/1
+W8,Work seats (desk + chair),Open workstations 7,work chair,,WS CHAIR,,5661200.6,5953801.2,2267,work,4'x2' workstation 0.25 m away,61.99,108.801,1/1
+W9,Work seats (desk + chair),Open workstations 7,work chair,,WS CHAIR,,5662400.6,5953801.2,2266,work,4'x2' workstation 0.25 m away,63.19,108.801,1/1
+W10,Work seats (desk + chair),Open workstations 7,work chair,,WS CHAIR,,5663600.6,5953801.2,2268,work,4'x2' workstation 0.25 m away,64.39,108.801,1/1
+W11,Work seats (desk + chair),Open workstations 7,work chair,,WS CHAIR,,5664800.6,5953801.2,2269,work,4'x2' workstation 0.25 m away,65.59,108.801,1/1
+W12,Work seats (desk + chair),Open workstations 7,work chair,,WS CHAIR,,5666000.6,5953801.2,2271,work,4'x2' workstation 0.25 m away,66.79,108.801,1/1
+W13,Work seats (desk + chair),Open workstations 7,work chair,,WS CHAIR,,5667200.6,5953801.2,2270,work,4'x2' workstation 0.25 m away,67.99,108.801,1/1
+W14,Work seats (desk + chair),Open workstations 7,work chair,,WS CHAIR,,5661200.6,5952143.9,2273,work,4'x2' workstation 0.25 m away,61.99,107.144,1/1
+W15,Work seats (desk + chair),Open workstations 7,work chair,,WS CHAIR,,5662400.6,5952143.9,2272,work,4'x2' workstation 0.25 m away,63.19,107.144,1/1
+W16,Work seats (desk + chair),Open workstations 7,work chair,,WS CHAIR,,5663600.6,5952143.9,2274,work,4'x2' workstation 0.25 m away,64.39,107.144,1/1
+W17,Work seats (desk + chair),Open workstations 7,work chair,,WS CHAIR,,5664800.6,5952143.9,2275,work,4'x2' workstation 0.25 m away,65.59,107.144,1/1
+W18,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5706545.1,5949085.8,1978,work,120-degree workstation 0.31 m away,107.334,104.086,1/1
+W19,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5710803.1,5949085.8,1993,work,120-degree workstation 0.31 m away,111.592,104.086,1/1
+W20,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5715061.1,5949085.8,2006,work,120-degree workstation 0.31 m away,115.85,104.086,1/1
+W21,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5719319.1,5949085.8,2021,work,120-degree workstation 0.31 m away,120.108,104.086,1/1
+W22,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5723577.1,5949085.8,2036,work,120-degree workstation 0.31 m away,124.366,104.086,1/1
+W23,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5708083.7,5948194.2,1979,work,120-degree workstation 0.32 m away,108.873,103.194,1/1
+W24,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5712341.7,5948194.2,1994,work,120-degree workstation 0.32 m away,113.131,103.194,1/1
+W25,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5716599.7,5948194.2,2007,work,120-degree workstation 0.32 m away,117.389,103.194,1/1
+W26,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5720857.7,5948194.2,2022,work,120-degree workstation 0.32 m away,121.647,103.194,1/1
+W27,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5725115.7,5948194.2,2037,work,120-degree workstation 0.32 m away,125.905,103.194,1/1
+W28,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5706521.8,5947271.3,1985,work,120-degree workstation 0.33 m away,107.311,102.271,1/1
+W29,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5710779.8,5947271.3,2000,work,120-degree workstation 0.33 m away,111.569,102.271,1/1
+W30,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5715037.8,5947271.3,2013,work,120-degree workstation 0.33 m away,115.827,102.271,1/1
+W31,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5719295.8,5947271.3,2028,work,120-degree workstation 0.33 m away,120.085,102.271,1/1
+W32,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5723553.8,5947271.3,2043,work,120-degree workstation 0.33 m away,124.343,102.271,1/1
+W33,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5708576.7,5947181.9,1981,work,4'x2' workstation 0.26 m away,109.366,102.182,1/1
+W34,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5712834.7,5947181.9,1996,work,4'x2' workstation 0.26 m away,113.624,102.182,1/1
+W35,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5717092.7,5947181.9,2009,work,4'x2' workstation 0.26 m away,117.882,102.182,1/1
+W36,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5721350.7,5947181.9,2024,work,4'x2' workstation 0.26 m away,122.14,102.182,1/1
+W37,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5725608.7,5947181.9,2039,work,4'x2' workstation 0.26 m away,126.398,102.182,1/1
+W38,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5707119.9,5946381.7,1980,work,4'x2' workstation 0.25 m away,107.909,101.382,1/1
+W39,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5711377.9,5946381.7,1995,work,4'x2' workstation 0.25 m away,112.167,101.382,1/1
+W40,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5715635.9,5946381.7,2008,work,4'x2' workstation 0.25 m away,116.425,101.382,1/1
+W41,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5719893.9,5946381.7,2023,work,4'x2' workstation 0.25 m away,120.683,101.382,1/1
+W42,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5724151.9,5946381.7,2038,work,4'x2' workstation 0.25 m away,124.941,101.382,1/1
+W43,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5709181.2,5946308.2,1982,work,120-degree workstation 0.34 m away,109.97,101.308,1/1
+W44,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5713439.2,5946308.2,1997,work,120-degree workstation 0.34 m away,114.228,101.308,1/1
+W45,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5717697.2,5946308.2,2010,work,120-degree workstation 0.34 m away,118.486,101.308,1/1
+W46,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5721955.2,5946308.2,2025,work,120-degree workstation 0.34 m away,122.744,101.308,1/1
+W47,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5726213.2,5946308.2,2040,work,120-degree workstation 0.34 m away,127.002,101.308,1/1
+W48,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5707597.7,5945381.7,1983,work,4'x2' workstation 0.59 m away,108.387,100.382,1/1
+W49,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5711855.7,5945381.7,1998,work,4'x2' workstation 0.59 m away,112.645,100.382,1/1
+W50,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5716113.7,5945381.7,2011,work,4'x2' workstation 0.59 m away,116.903,100.382,1/1
+W51,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5720371.7,5945381.7,2026,work,4'x2' workstation 0.59 m away,121.161,100.382,1/1
+W52,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5724629.7,5945381.7,2041,work,4'x2' workstation 0.59 m away,125.419,100.382,1/1
+W53,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5709161.9,5944477.9,1984,work,4'x2' workstation 0.58 m away,109.951,99.478,1/1
+W54,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5713419.9,5944477.9,1999,work,4'x2' workstation 0.58 m away,114.209,99.478,1/1
+W55,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5717677.9,5944477.9,2012,work,4'x2' workstation 0.58 m away,118.467,99.478,1/1
+W56,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5721935.9,5944477.9,2027,work,4'x2' workstation 0.58 m away,122.725,99.478,1/1
+W57,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5726193.9,5944477.9,2042,work,4'x2' workstation 0.58 m away,126.983,99.478,1/1
+W58,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5707125.5,5944395.9,1973,work,4'x2' workstation 0.26 m away,107.915,99.396,1/1
+W59,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5711383.5,5944395.9,1988,work,4'x2' workstation 0.26 m away,112.173,99.396,1/1
+W60,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5715641.5,5944395.9,2003,work,4'x2' workstation 0.26 m away,116.431,99.396,1/1
+W61,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5719899.5,5944395.9,2016,work,4'x2' workstation 0.26 m away,120.689,99.396,1/1
+W62,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5724157.5,5944395.9,2031,work,4'x2' workstation 0.26 m away,124.947,99.396,1/1
+W63,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5708573.3,5943575.1,1974,work,4'x2' workstation 0.26 m away,109.362,98.575,1/1
+W64,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5712831.3,5943575.1,1989,work,4'x2' workstation 0.26 m away,113.62,98.575,1/1
+W65,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5717089.3,5943575.1,2004,work,4'x2' workstation 0.26 m away,117.878,98.575,1/1
+W66,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5721347.3,5943575.1,2017,work,4'x2' workstation 0.26 m away,122.136,98.575,1/1
+W67,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5725605.3,5943575.1,2032,work,4'x2' workstation 0.26 m away,126.394,98.575,1/1
+W68,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5706545.1,5943493.3,1971,work,120-degree workstation 0.31 m away,107.334,98.493,1/1
+W69,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5710803.1,5943493.3,1986,work,120-degree workstation 0.31 m away,111.592,98.493,1/1
+W70,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5715061.1,5943493.3,2001,work,120-degree workstation 0.31 m away,115.85,98.493,1/1
+W71,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5719319.1,5943493.3,2014,work,120-degree workstation 0.31 m away,120.108,98.493,1/1
+W72,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5723577.1,5943493.3,2029,work,120-degree workstation 0.31 m away,124.366,98.493,1/1
+W73,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5708083.7,5942601.6,1972,work,120-degree workstation 0.32 m away,108.873,97.602,1/1
+W74,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5712341.7,5942601.6,1987,work,120-degree workstation 0.32 m away,113.131,97.602,1/1
+W75,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5716599.7,5942601.6,2002,work,120-degree workstation 0.32 m away,117.389,97.602,1/1
+W76,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5720857.7,5942601.6,2015,work,120-degree workstation 0.32 m away,121.647,97.602,1/1
+W77,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5725115.7,5942601.6,2030,work,120-degree workstation 0.32 m away,125.905,97.602,1/1
+W78,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5706521.8,5941678.7,1977,work,120-degree workstation 0.33 m away,107.311,96.679,1/1
+W79,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5710779.8,5941678.7,1992,work,120-degree workstation 0.33 m away,111.569,96.679,1/1
+W80,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5715037.8,5941678.7,2005,work,120-degree workstation 0.33 m away,115.827,96.679,1/1
+W81,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5719295.8,5941678.7,2020,work,120-degree workstation 0.33 m away,120.085,96.679,1/1
+W82,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5723553.8,5941678.7,2035,work,120-degree workstation 0.33 m away,124.343,96.679,1/1
+W83,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5708576.7,5941589.3,1976,work,4'x2' workstation 0.26 m away,109.366,96.589,1/1
+W84,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5712834.7,5941589.3,1991,work,4'x2' workstation 0.26 m away,113.624,96.589,1/1
+W85,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5721350.7,5941589.3,2019,work,4'x2' workstation 0.26 m away,122.14,96.589,1/1
+W86,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5725608.7,5941589.3,2034,work,4'x2' workstation 0.26 m away,126.398,96.589,1/1
+W87,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5707119.9,5940789.2,1975,work,4'x2' workstation 0.26 m away,107.909,95.789,1/1
+W88,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5711377.9,5940789.2,1990,work,4'x2' workstation 0.26 m away,112.167,95.789,1/1
+W89,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5719893.9,5940789.2,2018,work,4'x2' workstation 0.26 m away,120.683,95.789,1/1
+W90,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5724151.9,5940789.2,2033,work,4'x2' workstation 0.26 m away,124.941,95.789,1/1
+W91,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5703891.5,5937710.9,2138,work,120-degree workstation 0.31 m away,104.68,92.711,1/1
+W92,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5708069.8,5937710.9,2120,work,120-degree workstation 0.31 m away,108.859,92.711,1/1
+W93,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5712248.2,5937710.9,2105,work,120-degree workstation 0.31 m away,113.037,92.711,1/1
+W94,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5716426.6,5937710.9,2051,work,120-degree workstation 0.31 m away,117.216,92.711,1/1
+W95,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5720605.0,5937710.9,2069,work,120-degree workstation 0.31 m away,121.394,92.711,1/1
+W96,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5724783.4,5937710.9,2087,work,120-degree workstation 0.31 m away,125.572,92.711,1/1
+W97,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5705430.0,5936819.3,2139,work,120-degree workstation 0.32 m away,106.219,91.819,1/1
+W98,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5709608.4,5936819.3,2121,work,120-degree workstation 0.32 m away,110.397,91.819,1/1
+W99,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5713786.8,5936819.3,2106,work,120-degree workstation 0.32 m away,114.576,91.819,1/1
+W100,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5717965.2,5936819.3,2052,work,120-degree workstation 0.32 m away,118.754,91.819,1/1
+W101,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5722143.6,5936819.3,2070,work,120-degree workstation 0.32 m away,122.933,91.819,1/1
+W102,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5726322.0,5936819.3,2088,work,120-degree workstation 0.32 m away,127.111,91.819,1/1
+W103,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5703868.1,5935896.3,2145,work,120-degree workstation 0.33 m away,104.657,90.896,1/1
+W104,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5708046.5,5935896.3,2127,work,120-degree workstation 0.33 m away,108.835,90.896,1/1
+W105,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5712224.9,5935896.3,2112,work,120-degree workstation 0.33 m away,113.014,90.896,1/1
+W106,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5716403.3,5935896.3,2058,work,120-degree workstation 0.33 m away,117.192,90.896,1/1
+W107,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5720581.7,5935896.3,2076,work,120-degree workstation 0.33 m away,121.371,90.896,1/1
+W108,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5724760.0,5935896.3,2094,work,120-degree workstation 0.33 m away,125.549,90.896,1/1
+W109,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5705923.1,5935807.0,2141,work,4'x2' workstation 0.26 m away,106.712,90.807,1/1
+W110,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5710101.4,5935807.0,2123,work,4'x2' workstation 0.26 m away,110.89,90.807,1/1
+W111,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5714279.8,5935807.0,2108,work,4'x2' workstation 0.26 m away,115.069,90.807,1/1
+W112,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5718458.2,5935807.0,2054,work,4'x2' workstation 0.26 m away,119.247,90.807,1/1
+W113,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5722636.6,5935807.0,2072,work,4'x2' workstation 0.26 m away,123.426,90.807,1/1
+W114,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5726815.0,5935807.0,2090,work,4'x2' workstation 0.26 m away,127.604,90.807,1/1
+W115,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5704466.2,5935006.8,2140,work,4'x2' workstation 0.25 m away,105.255,90.007,1/1
+W116,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5708644.6,5935006.8,2122,work,4'x2' workstation 0.25 m away,109.434,90.007,1/1
+W117,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5712823.0,5935006.8,2107,work,4'x2' workstation 0.25 m away,113.612,90.007,1/1
+W118,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5717001.4,5935006.8,2053,work,4'x2' workstation 0.25 m away,117.79,90.007,1/1
+W119,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5721179.8,5935006.8,2071,work,4'x2' workstation 0.25 m away,121.969,90.007,1/1
+W120,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5725358.2,5935006.8,2089,work,4'x2' workstation 0.25 m away,126.147,90.007,1/1
+W121,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5706527.5,5934933.3,2142,work,4'x2' workstation 0.59 m away,107.316,89.933,1/1
+W122,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5710705.9,5934933.3,2124,work,4'x2' workstation 0.59 m away,111.495,89.933,1/1
+W123,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5714884.3,5934933.3,2109,work,120-degree workstation 0.34 m away,115.673,89.933,1/1
+W124,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5719062.7,5934933.3,2055,work,4'x2' workstation 0.59 m away,119.852,89.933,1/1
+W125,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5723241.0,5934933.3,2073,work,120-degree workstation 0.34 m away,124.03,89.933,1/1
+W126,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5727419.4,5934933.3,2091,work,4'x2' workstation 0.59 m away,128.208,89.933,1/1
+W127,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5704944.0,5934006.8,2143,work,4'x2' workstation 0.59 m away,105.733,89.007,1/1
+W128,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5709122.4,5934006.8,2125,work,4'x2' workstation 0.59 m away,109.911,89.007,1/1
+W129,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5713300.8,5934006.8,2110,work,4'x2' workstation 0.59 m away,114.09,89.007,1/1
+W130,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5717479.2,5934006.8,2056,work,4'x2' workstation 0.59 m away,118.268,89.007,1/1
+W131,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5721657.6,5934006.8,2074,work,4'x2' workstation 0.59 m away,122.447,89.007,1/1
+W132,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5725836.0,5934006.8,2092,work,4'x2' workstation 0.59 m away,126.625,89.007,1/1
+W133,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5706508.2,5933103.0,2144,work,4'x2' workstation 0.58 m away,107.297,88.103,1/1
+W134,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5710686.6,5933103.0,2126,work,4'x2' workstation 0.58 m away,111.476,88.103,1/1
+W135,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5714865.0,5933103.0,2111,work,4'x2' workstation 0.58 m away,115.654,88.103,1/1
+W136,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5719043.4,5933103.0,2057,work,4'x2' workstation 0.58 m away,119.832,88.103,1/1
+W137,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5723221.8,5933103.0,2075,work,4'x2' workstation 0.58 m away,124.011,88.103,1/1
+W138,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5727400.1,5933103.0,2093,work,4'x2' workstation 0.58 m away,128.189,88.103,1/1
+W139,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5704471.9,5933021.0,2133,work,4'x2' workstation 0.26 m away,105.261,88.021,1/1
+W140,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5708650.2,5933021.0,2115,work,4'x2' workstation 0.26 m away,109.439,88.021,1/1
+W141,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5712828.6,5933021.0,2100,work,4'x2' workstation 0.26 m away,113.618,88.021,1/1
+W142,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5717007.0,5933021.0,2046,work,4'x2' workstation 0.26 m away,117.796,88.021,1/1
+W143,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5721185.4,5933021.0,2064,work,4'x2' workstation 0.26 m away,121.974,88.021,1/1
+W144,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5725363.8,5933021.0,2082,work,4'x2' workstation 0.26 m away,126.153,88.021,1/1
+W145,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5705919.6,5932200.2,2134,work,4'x2' workstation 0.26 m away,106.709,87.2,1/1
+W146,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5710098.0,5932200.2,2116,work,4'x2' workstation 0.26 m away,110.887,87.2,1/1
+W147,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5714276.4,5932200.2,2101,work,4'x2' workstation 0.26 m away,115.065,87.2,1/1
+W148,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5718454.8,5932200.2,2047,work,4'x2' workstation 0.26 m away,119.244,87.2,1/1
+W149,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5722633.1,5932200.2,2065,work,4'x2' workstation 0.26 m away,123.422,87.2,1/1
+W150,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5726811.5,5932200.2,2083,work,4'x2' workstation 0.26 m away,127.601,87.2,1/1
+W151,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5703891.5,5932118.4,2131,work,120-degree workstation 0.31 m away,104.68,87.118,1/1
+W152,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5708069.8,5932118.4,2113,work,120-degree workstation 0.31 m away,108.859,87.118,1/1
+W153,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5712248.2,5932118.4,2098,work,120-degree workstation 0.31 m away,113.037,87.118,1/1
+W154,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5716426.6,5932118.4,2044,work,120-degree workstation 0.31 m away,117.216,87.118,1/1
+W155,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5720605.0,5932118.4,2062,work,120-degree workstation 0.31 m away,121.394,87.118,1/1
+W156,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5724783.4,5932118.4,2080,work,120-degree workstation 0.31 m away,125.572,87.118,1/1
+W157,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5705430.0,5931226.7,2132,work,120-degree workstation 0.32 m away,106.219,86.227,1/1
+W158,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5709608.4,5931226.7,2114,work,120-degree workstation 0.32 m away,110.397,86.227,1/1
+W159,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5713786.8,5931226.7,2099,work,120-degree workstation 0.32 m away,114.576,86.227,1/1
+W160,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5717965.2,5931226.7,2045,work,120-degree workstation 0.32 m away,118.754,86.227,1/1
+W161,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5722143.6,5931226.7,2063,work,120-degree workstation 0.32 m away,122.933,86.227,1/1
+W162,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5726322.0,5931226.7,2081,work,120-degree workstation 0.32 m away,127.111,86.227,1/1
+W163,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5703868.1,5930303.8,2137,work,120-degree workstation 0.33 m away,104.657,85.304,1/1
+W164,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5708046.5,5930303.8,2119,work,120-degree workstation 0.33 m away,108.835,85.304,1/1
+W165,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5712224.9,5930303.8,2104,work,120-degree workstation 0.33 m away,113.014,85.304,1/1
+W166,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5716403.3,5930303.8,2050,work,120-degree workstation 0.33 m away,117.192,85.304,1/1
+W167,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5720581.7,5930303.8,2068,work,120-degree workstation 0.33 m away,121.371,85.304,1/1
+W168,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5724760.0,5930303.8,2086,work,120-degree workstation 0.33 m away,125.549,85.304,1/1
+W169,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5705923.1,5930214.4,2136,work,4'x2' workstation 0.26 m away,106.712,85.214,1/1
+W170,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5710101.4,5930214.4,2118,work,4'x2' workstation 0.26 m away,110.89,85.214,1/1
+W171,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5714279.8,5930214.4,2103,work,4'x2' workstation 0.26 m away,115.069,85.214,1/1
+W172,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5718458.2,5930214.4,2049,work,4'x2' workstation 0.26 m away,119.247,85.214,1/1
+W173,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5722636.6,5930214.4,2067,work,4'x2' workstation 0.26 m away,123.426,85.214,1/1
+W174,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5726815.0,5930214.4,2085,work,4'x2' workstation 0.26 m away,127.604,85.214,1/1
+W175,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5704466.2,5929414.2,2135,work,4'x2' workstation 0.26 m away,105.255,84.414,1/1
+W176,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5708644.6,5929414.2,2117,work,4'x2' workstation 0.25 m away,109.434,84.414,1/1
+W177,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5712823.0,5929414.2,2102,work,4'x2' workstation 0.26 m away,113.612,84.414,1/1
+W178,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5717001.4,5929414.2,2048,work,4'x2' workstation 0.26 m away,117.79,84.414,1/1
+W179,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5721179.8,5929414.2,2066,work,4'x2' workstation 0.26 m away,121.969,84.414,1/1
+W180,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5725358.2,5929414.2,2084,work,4'x2' workstation 0.26 m away,126.147,84.414,1/1
+W181,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5706527.5,5929340.7,2146,work,4'x2' workstation 0.59 m away,107.316,84.341,1/1
+W182,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5710705.9,5929340.7,2128,work,4'x2' workstation 0.59 m away,111.495,84.341,1/1
+W183,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5719062.7,5929340.7,2059,work,4'x2' workstation 0.59 m away,119.852,84.341,1/1
+W184,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5723241.0,5929340.7,2077,work,120-degree workstation 0.34 m away,124.03,84.341,1/1
+W185,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5727419.4,5929340.7,2095,work,4'x2' workstation 0.59 m away,128.208,84.341,1/1
+W186,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5704944.0,5928414.2,2147,work,120-degree workstation 0.34 m away,105.733,83.414,1/1
+W187,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5709122.4,5928414.2,2129,work,120-degree workstation 0.34 m away,109.911,83.414,1/1
+W188,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5717479.2,5928414.2,2060,work,120-degree workstation 0.34 m away,118.268,83.414,1/1
+W189,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5721657.6,5928414.2,2078,work,120-degree workstation 0.34 m away,122.447,83.414,1/1
+W190,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5725836.0,5928414.2,2096,work,120-degree workstation 0.34 m away,126.625,83.414,1/1
+W191,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5706508.2,5927510.4,2148,work,120-degree workstation 0.32 m away,107.297,82.51,1/1
+W192,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5710686.6,5927510.4,2130,work,120-degree workstation 0.32 m away,111.476,82.51,1/1
+W193,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5719043.4,5927510.4,2061,work,120-degree workstation 0.32 m away,119.832,82.51,1/1
+W194,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5723221.8,5927510.4,2079,work,120-degree workstation 0.32 m away,124.011,82.51,1/1
+W195,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5727400.1,5927510.4,2097,work,120-degree workstation 0.32 m away,128.189,82.51,1/1
+W196,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5704471.9,5927428.4,2151,work,4'x2' workstation 0.26 m away,105.261,82.428,1/1
+W197,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5708650.2,5927428.4,2149,work,4'x2' workstation 0.26 m away,109.439,82.428,1/1
+W198,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5705919.6,5926607.6,2152,work,4'x2' workstation 0.26 m away,106.709,81.608,1/1
+W199,Work seats (desk + chair),Open workstations 1,work chair,,WS CHAIR,,5710098.0,5926607.6,2150,work,4'x2' workstation 0.26 m away,110.887,81.608,1/1
+W200,Work seats (desk + chair),Open workstations 3,work chair,,WS CHAIR,,5681816.5,5956617.4,1863,work,120-degree workstation 0.33 m away,82.606,111.617,1/1
+W201,Work seats (desk + chair),Open workstations 3,work chair,,WS CHAIR,,5687264.8,5956615.1,1861,work,120-degree workstation 0.33 m away,88.054,111.615,1/1
+W202,Work seats (desk + chair),Open workstations 3,work chair,,WS CHAIR,,5683364.3,5955711.0,1864,work,120-degree workstation 0.32 m away,84.153,110.711,1/1
+W203,Work seats (desk + chair),Open workstations 3,work chair,,WS CHAIR,,5685705.5,5955711.0,1859,work,120-degree workstation 0.33 m away,86.494,110.711,1/1
+W204,Work seats (desk + chair),Open workstations 3,work chair,,WS CHAIR,,5681816.5,5954806.9,1862,work,120-degree workstation 0.33 m away,82.606,109.807,1/1
+W205,Work seats (desk + chair),Open workstations 3,work chair,,WS CHAIR,,5687264.8,5954804.6,1860,work,120-degree workstation 0.33 m away,88.054,109.805,1/1
+W206,Work seats (desk + chair),Open workstations 3,work chair,,WS CHAIR,,5682845.2,5953217.6,1856,work,120-degree workstation 0.33 m away,83.634,108.218,1/1
+W207,Work seats (desk + chair),Open workstations 3,work chair,,WS CHAIR,,5686236.1,5953219.9,1852,work,120-degree workstation 0.33 m away,87.025,108.22,1/1
+W208,Work seats (desk + chair),Open workstations 3,work chair,,WS CHAIR,,5683940.6,5953142.2,1857,work,4'x2' workstation 0.25 m away,84.73,108.142,1/1
+W209,Work seats (desk + chair),Open workstations 3,work chair,,WS CHAIR,,5685140.6,5953142.2,1850,work,4'x2' workstation 0.25 m away,85.93,108.142,1/1
+W210,Work seats (desk + chair),Open workstations 3,work chair,,WS CHAIR,,5681285.9,5952313.5,1854,work,120-degree workstation 0.33 m away,82.075,107.314,1/1
+W211,Work seats (desk + chair),Open workstations 3,work chair,,WS CHAIR,,5687784.0,5952313.5,1853,work,120-degree workstation 0.32 m away,88.573,107.314,1/1
+W212,Work seats (desk + chair),Open workstations 3,work chair,,WS CHAIR,,5683940.6,5951484.9,1858,work,4'x2' workstation 0.25 m away,84.73,106.485,1/1
+W213,Work seats (desk + chair),Open workstations 3,work chair,,WS CHAIR,,5685140.6,5951484.9,1851,work,4'x2' workstation 0.25 m away,85.93,106.485,1/1
+W214,Work seats (desk + chair),Open workstations 3,work chair,,WS CHAIR,,5686236.1,5951409.4,1849,work,120-degree workstation 0.33 m away,87.025,106.409,1/1
+W215,Work seats (desk + chair),Open workstations 3,work chair,,WS CHAIR,,5682845.2,5951407.2,1855,work,120-degree workstation 0.33 m away,83.634,106.407,1/1
+W216,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5679613.2,5949085.8,1901,work,120-degree workstation 0.31 m away,80.402,104.086,1/1
+W217,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5683871.2,5949085.8,1913,work,120-degree workstation 0.31 m away,84.66,104.086,1/1
+W218,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5688129.2,5949085.8,1923,work,120-degree workstation 0.31 m away,88.918,104.086,1/1
+W219,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5692387.2,5949085.8,1937,work,120-degree workstation 0.31 m away,93.176,104.086,1/1
+W220,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5696645.2,5949085.8,1949,work,120-degree workstation 0.31 m away,97.434,104.086,1/1
+W221,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5700903.2,5949085.8,1961,work,120-degree workstation 0.31 m away,101.692,104.086,1/1
+W222,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5681151.7,5948194.2,1902,work,120-degree workstation 0.32 m away,81.941,103.194,1/1
+W223,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5685409.7,5948194.2,1914,work,120-degree workstation 0.32 m away,86.199,103.194,1/1
+W224,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5689667.7,5948194.2,1924,work,120-degree workstation 0.32 m away,90.457,103.194,1/1
+W225,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5693925.7,5948194.2,1938,work,120-degree workstation 0.32 m away,94.715,103.194,1/1
+W226,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5698183.7,5948194.2,1950,work,120-degree workstation 0.32 m away,98.973,103.194,1/1
+W227,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5702441.7,5948194.2,1962,work,120-degree workstation 0.32 m away,103.231,103.194,1/1
+W228,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5679589.8,5947271.3,1908,work,120-degree workstation 0.33 m away,80.379,102.271,1/1
+W229,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5683847.8,5947271.3,1920,work,120-degree workstation 0.33 m away,84.637,102.271,1/1
+W230,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5688105.8,5947271.3,1930,work,120-degree workstation 0.33 m away,88.895,102.271,1/1
+W231,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5692363.8,5947271.3,1944,work,120-degree workstation 0.33 m away,93.153,102.271,1/1
+W232,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5696621.8,5947271.3,1956,work,120-degree workstation 0.33 m away,97.411,102.271,1/1
+W233,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5700879.8,5947271.3,1968,work,120-degree workstation 0.33 m away,101.669,102.271,1/1
+W234,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5681644.8,5947181.9,1904,work,4'x2' workstation 0.26 m away,82.434,102.182,1/1
+W235,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5685902.8,5947181.9,1916,work,4'x2' workstation 0.26 m away,86.692,102.182,1/1
+W236,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5690160.8,5947181.9,1926,work,4'x2' workstation 0.26 m away,90.95,102.182,1/1
+W237,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5694418.8,5947181.9,1940,work,4'x2' workstation 0.26 m away,95.208,102.182,1/1
+W238,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5698676.8,5947181.9,1952,work,4'x2' workstation 0.26 m away,99.466,102.182,1/1
+W239,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5702934.8,5947181.9,1964,work,4'x2' workstation 0.26 m away,103.724,102.182,1/1
+W240,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5680188.0,5946381.7,1903,work,4'x2' workstation 0.25 m away,80.977,101.382,1/1
+W241,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5684446.0,5946381.7,1915,work,4'x2' workstation 0.25 m away,85.235,101.382,1/1
+W242,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5688704.0,5946381.7,1925,work,4'x2' workstation 0.25 m away,89.493,101.382,1/1
+W243,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5692962.0,5946381.7,1939,work,4'x2' workstation 0.25 m away,93.751,101.382,1/1
+W244,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5697220.0,5946381.7,1951,work,4'x2' workstation 0.25 m away,98.009,101.382,1/1
+W245,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5701478.0,5946381.7,1963,work,4'x2' workstation 0.25 m away,102.267,101.382,1/1
+W246,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5682249.2,5946308.2,1905,work,120-degree workstation 0.34 m away,83.038,101.308,1/1
+W247,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5686507.2,5946308.2,1917,work,120-degree workstation 0.34 m away,87.296,101.308,1/1
+W248,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5690765.2,5946308.2,1927,work,120-degree workstation 0.34 m away,91.554,101.308,1/1
+W249,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5695023.2,5946308.2,1941,work,120-degree workstation 0.34 m away,95.812,101.308,1/1
+W250,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5699281.2,5946308.2,1953,work,120-degree workstation 0.34 m away,100.07,101.308,1/1
+W251,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5703539.2,5946308.2,1965,work,120-degree workstation 0.34 m away,104.328,101.308,1/1
+W252,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5680665.8,5945381.7,1906,work,4'x2' workstation 0.59 m away,81.455,100.382,1/1
+W253,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5684923.8,5945381.7,1918,work,4'x2' workstation 0.59 m away,85.713,100.382,1/1
+W254,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5689181.8,5945381.7,1928,work,4'x2' workstation 0.59 m away,89.971,100.382,1/1
+W255,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5693439.8,5945381.7,1942,work,4'x2' workstation 0.59 m away,94.229,100.382,1/1
+W256,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5697697.8,5945381.7,1954,work,4'x2' workstation 0.59 m away,98.487,100.382,1/1
+W257,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5701955.8,5945381.7,1966,work,4'x2' workstation 0.59 m away,102.745,100.382,1/1
+W258,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5682229.9,5944477.9,1907,work,4'x2' workstation 0.58 m away,83.019,99.478,1/1
+W259,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5686487.9,5944477.9,1919,work,4'x2' workstation 0.58 m away,87.277,99.478,1/1
+W260,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5690745.9,5944477.9,1929,work,4'x2' workstation 0.58 m away,91.535,99.478,1/1
+W261,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5695003.9,5944477.9,1943,work,4'x2' workstation 0.58 m away,95.793,99.478,1/1
+W262,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5699261.9,5944477.9,1955,work,4'x2' workstation 0.58 m away,100.051,99.478,1/1
+W263,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5703519.9,5944477.9,1967,work,4'x2' workstation 0.58 m away,104.309,99.478,1/1
+W264,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5680193.6,5944395.9,1899,work,4'x2' workstation 0.26 m away,80.983,99.396,1/1
+W265,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5684451.6,5944395.9,1911,work,4'x2' workstation 0.26 m away,85.241,99.396,1/1
+W266,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5688709.6,5944395.9,1921,work,4'x2' workstation 0.26 m away,89.499,99.396,1/1
+W267,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5692967.6,5944395.9,1935,work,4'x2' workstation 0.26 m away,93.757,99.396,1/1
+W268,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5697225.6,5944395.9,1947,work,4'x2' workstation 0.26 m away,98.015,99.396,1/1
+W269,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5701483.6,5944395.9,1959,work,4'x2' workstation 0.26 m away,102.273,99.396,1/1
+W270,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5681641.3,5943575.1,1900,work,4'x2' workstation 0.26 m away,82.43,98.575,1/1
+W271,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5685899.3,5943575.1,1912,work,4'x2' workstation 0.26 m away,86.688,98.575,1/1
+W272,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5690157.3,5943575.1,1922,work,4'x2' workstation 0.26 m away,90.946,98.575,1/1
+W273,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5694415.3,5943575.1,1936,work,4'x2' workstation 0.26 m away,95.204,98.575,1/1
+W274,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5698673.3,5943575.1,1948,work,4'x2' workstation 0.26 m away,99.462,98.575,1/1
+W275,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5702931.3,5943575.1,1960,work,4'x2' workstation 0.26 m away,103.72,98.575,1/1
+W276,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5679593.6,5943356.7,1909,work,4'x2' workstation 0.26 m away,80.383,98.357,1/1
+W277,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5683851.6,5943356.7,1931,work,4'x2' workstation 0.26 m away,84.641,98.357,1/1
+W278,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5688109.6,5943356.7,1933,work,4'x2' workstation 0.26 m away,88.899,98.357,1/1
+W279,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5692367.6,5943356.7,1945,work,4'x2' workstation 0.26 m away,93.157,98.357,1/1
+W280,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5696625.6,5943356.7,1957,work,4'x2' workstation 0.26 m away,97.415,98.357,1/1
+W281,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5700883.6,5943356.7,1969,work,4'x2' workstation 0.26 m away,101.673,98.357,1/1
+W282,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5681041.3,5942535.8,1910,work,4'x2' workstation 0.26 m away,81.83,97.536,1/1
+W283,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5685299.3,5942535.8,1932,work,4'x2' workstation 0.26 m away,86.088,97.536,1/1
+W284,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5689557.3,5942535.8,1934,work,4'x2' workstation 0.26 m away,90.346,97.536,1/1
+W285,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5693815.3,5942535.8,1946,work,4'x2' workstation 0.26 m away,94.604,97.536,1/1
+W286,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5698073.3,5942535.8,1958,work,4'x2' workstation 0.26 m away,98.862,97.536,1/1
+W287,Work seats (desk + chair),Open workstations 2,work chair,,WS CHAIR,,5702331.3,5942535.8,1970,work,4'x2' workstation 0.26 m away,103.12,97.536,1/1
+W288,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5646333.6,5957408.3,1616,work,120-degree workstation 0.32 m away,47.123,112.408,1/1
+W289,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5645427.3,5955860.4,1615,work,120-degree workstation 0.33 m away,46.216,110.86,1/1
+W290,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5647237.7,5955860.4,1612,work,120-degree workstation 0.33 m away,48.027,110.86,1/1
+W291,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5641144.6,5955242.9,1602,work,120-degree workstation 0.31 m away,41.934,110.243,1/1
+W292,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5645505.0,5954764.9,1613,work,4'x2' workstation 0.25 m away,46.294,109.765,1/1
+W293,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5647162.3,5954764.9,1614,work,4'x2' workstation 0.25 m away,47.951,109.765,1/1
+W294,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5642683.2,5954351.3,1603,work,120-degree workstation 0.32 m away,43.472,109.351,1/1
+W295,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5645429.5,5953669.5,1619,work,120-degree workstation 0.33 m away,46.219,108.669,1/1
+W296,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5647240.0,5953669.5,1618,work,120-degree workstation 0.33 m away,48.029,108.669,1/1
+W297,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5641121.2,5953428.3,1609,work,120-degree workstation 0.33 m away,41.91,108.428,1/1
+W298,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5643176.2,5953338.9,1605,work,4'x2' workstation 0.26 m away,43.965,108.339,1/1
+W299,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5641719.4,5952538.8,1604,work,4'x2' workstation 0.25 m away,42.508,107.539,1/1
+W300,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5643780.6,5952465.3,1606,work,4'x2' workstation 0.59 m away,44.57,107.465,1/1
+W301,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5646333.6,5952110.2,1617,work,120-degree workstation 0.33 m away,47.123,107.11,1/1
+W302,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5642197.2,5951538.8,1607,work,4'x2' workstation 0.59 m away,42.986,106.539,1/1
+W303,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5643761.3,5950635.0,1608,work,4'x2' workstation 0.58 m away,44.55,105.635,1/1
+W304,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5641725.0,5950553.0,1594,work,4'x2' workstation 0.26 m away,42.514,105.553,1/1
+W305,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5643172.7,5949732.2,1595,work,4'x2' workstation 0.26 m away,43.962,104.732,1/1
+W306,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5641144.6,5949650.4,1592,work,120-degree workstation 0.31 m away,41.934,104.65,1/1
+W307,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5642683.2,5948758.7,1593,work,120-degree workstation 0.32 m away,43.472,103.759,1/1
+W308,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5641121.2,5947835.8,1601,work,120-degree workstation 0.33 m away,41.91,102.836,1/1
+W309,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5643176.2,5947746.4,1597,work,4'x2' workstation 0.26 m away,43.965,102.746,1/1
+W310,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5641719.4,5946946.2,1596,work,4'x2' workstation 0.26 m away,42.508,101.946,1/1
+W311,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5643780.6,5946872.7,1598,work,4'x2' workstation 0.59 m away,44.57,101.873,1/1
+W312,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5642197.2,5945946.2,1599,work,120-degree workstation 0.34 m away,42.986,100.946,1/1
+W313,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5643761.3,5945042.4,1600,work,120-degree workstation 0.32 m away,44.55,100.042,1/1
+W314,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5641725.0,5944960.4,1590,work,4'x2' workstation 0.26 m away,42.514,99.96,1/1
+W315,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5643172.7,5944139.6,1591,work,4'x2' workstation 0.26 m away,43.962,99.14,1/1
+W316,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5641125.0,5943921.2,1610,work,4'x2' workstation 0.26 m away,41.914,98.921,1/1
+W317,Work seats (desk + chair),Open workstations 8,work chair,,WS CHAIR,,5642572.7,5943100.4,1611,work,4'x2' workstation 0.26 m away,43.362,98.1,1/1
+W318,Work seats (desk + chair),Open workstations 4,work chair,,WS CHAIR,,5674126.5,5949085.8,1642,work,120-degree workstation 0.31 m away,74.915,104.086,1/1
+W319,Work seats (desk + chair),Open workstations 4,work chair,,WS CHAIR,,5675665.1,5948194.2,1643,work,120-degree workstation 0.32 m away,76.454,103.194,1/1
+W320,Work seats (desk + chair),Open workstations 4,work chair,,WS CHAIR,,5674103.1,5947271.3,1649,work,120-degree workstation 0.33 m away,74.892,102.271,1/1
+W321,Work seats (desk + chair),Open workstations 4,work chair,,WS CHAIR,,5676158.1,5947181.9,1645,work,4'x2' workstation 0.26 m away,76.947,102.182,1/1
+W322,Work seats (desk + chair),Open workstations 4,work chair,,WS CHAIR,,5674701.3,5946381.7,1644,work,4'x2' workstation 0.25 m away,75.49,101.382,1/1
+W323,Work seats (desk + chair),Open workstations 4,work chair,,WS CHAIR,,5676762.5,5946308.2,1646,work,4'x2' workstation 0.59 m away,77.552,101.308,1/1
+W324,Work seats (desk + chair),Open workstations 4,work chair,,WS CHAIR,,5675179.1,5945381.7,1647,work,4'x2' workstation 0.59 m away,75.968,100.382,1/1
+W325,Work seats (desk + chair),Open workstations 4,work chair,,WS CHAIR,,5676743.2,5944477.9,1648,work,4'x2' workstation 0.58 m away,77.532,99.478,1/1
+W326,Work seats (desk + chair),Open workstations 4,work chair,,WS CHAIR,,5674706.9,5944395.9,1637,work,4'x2' workstation 0.26 m away,75.496,99.396,1/1
+W327,Work seats (desk + chair),Open workstations 4,work chair,,WS CHAIR,,5676154.6,5943575.1,1638,work,4'x2' workstation 0.26 m away,76.944,98.575,1/1
+W328,Work seats (desk + chair),Open workstations 4,work chair,,WS CHAIR,,5674126.5,5943493.3,1635,work,120-degree workstation 0.31 m away,74.915,98.493,1/1
+W329,Work seats (desk + chair),Open workstations 4,work chair,,WS CHAIR,,5675665.1,5942601.6,1636,work,120-degree workstation 0.32 m away,76.454,97.602,1/1
+W330,Work seats (desk + chair),Open workstations 4,work chair,,WS CHAIR,,5674103.1,5941678.7,1641,work,120-degree workstation 0.33 m away,74.892,96.679,1/1
+W331,Work seats (desk + chair),Open workstations 4,work chair,,WS CHAIR,,5676158.1,5941589.3,1640,work,4'x2' workstation 0.26 m away,76.947,96.589,1/1
+W332,Work seats (desk + chair),Open workstations 4,work chair,,WS CHAIR,,5674701.3,5940789.2,1639,work,4'x2' workstation 0.26 m away,75.49,95.789,1/1
+W333,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5647943.2,5949085.8,1627,work,120-degree workstation 0.31 m away,48.732,104.086,1/1
+W334,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5652201.2,5949085.8,1655,work,120-degree workstation 0.31 m away,52.99,104.086,1/1
+W335,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5656459.2,5949085.8,1670,work,120-degree workstation 0.31 m away,57.248,104.086,1/1
+W336,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5660717.2,5949085.8,1685,work,120-degree workstation 0.31 m away,61.506,104.086,1/1
+W337,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5664975.2,5949085.8,1698,work,120-degree workstation 0.31 m away,65.764,104.086,1/1
+W338,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5669233.2,5949085.8,1713,work,120-degree workstation 0.31 m away,70.022,104.086,1/1
+W339,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5649481.8,5948194.2,1628,work,120-degree workstation 0.32 m away,50.271,103.194,1/1
+W340,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5653739.8,5948194.2,1656,work,120-degree workstation 0.32 m away,54.529,103.194,1/1
+W341,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5657997.8,5948194.2,1671,work,120-degree workstation 0.32 m away,58.787,103.194,1/1
+W342,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5662255.8,5948194.2,1686,work,120-degree workstation 0.32 m away,63.045,103.194,1/1
+W343,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5666513.8,5948194.2,1699,work,120-degree workstation 0.32 m away,67.303,103.194,1/1
+W344,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5670771.8,5948194.2,1714,work,120-degree workstation 0.32 m away,71.561,103.194,1/1
+W345,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5647919.9,5947271.3,1634,work,120-degree workstation 0.33 m away,48.709,102.271,1/1
+W346,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5652177.9,5947271.3,1662,work,120-degree workstation 0.33 m away,52.967,102.271,1/1
+W347,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5656435.9,5947271.3,1677,work,120-degree workstation 0.33 m away,57.225,102.271,1/1
+W348,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5660693.9,5947271.3,1692,work,120-degree workstation 0.33 m away,61.483,102.271,1/1
+W349,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5664951.9,5947271.3,1705,work,120-degree workstation 0.33 m away,65.741,102.271,1/1
+W350,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5669209.9,5947271.3,1720,work,120-degree workstation 0.33 m away,69.999,102.271,1/1
+W351,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5649974.8,5947181.9,1630,work,4'x2' workstation 0.26 m away,50.764,102.182,1/1
+W352,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5654232.8,5947181.9,1658,work,4'x2' workstation 0.26 m away,55.022,102.182,1/1
+W353,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5658490.8,5947181.9,1673,work,4'x2' workstation 0.26 m away,59.28,102.182,1/1
+W354,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5662748.8,5947181.9,1688,work,4'x2' workstation 0.26 m away,63.538,102.182,1/1
+W355,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5667006.8,5947181.9,1701,work,4'x2' workstation 0.26 m away,67.796,102.182,1/1
+W356,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5671264.8,5947181.9,1716,work,4'x2' workstation 0.26 m away,72.054,102.182,1/1
+W357,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5648518.0,5946381.7,1629,work,4'x2' workstation 0.25 m away,49.307,101.382,1/1
+W358,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5652776.0,5946381.7,1657,work,4'x2' workstation 0.25 m away,53.565,101.382,1/1
+W359,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5657034.0,5946381.7,1672,work,4'x2' workstation 0.25 m away,57.823,101.382,1/1
+W360,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5661292.0,5946381.7,1687,work,4'x2' workstation 0.25 m away,62.081,101.382,1/1
+W361,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5665550.0,5946381.7,1700,work,4'x2' workstation 0.25 m away,66.339,101.382,1/1
+W362,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5669808.0,5946381.7,1715,work,4'x2' workstation 0.25 m away,70.597,101.382,1/1
+W363,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5650579.2,5946308.2,1631,work,120-degree workstation 0.34 m away,51.368,101.308,1/1
+W364,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5654837.2,5946308.2,1659,work,120-degree workstation 0.34 m away,55.626,101.308,1/1
+W365,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5659095.2,5946308.2,1674,work,120-degree workstation 0.34 m away,59.884,101.308,1/1
+W366,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5663353.2,5946308.2,1689,work,120-degree workstation 0.34 m away,64.142,101.308,1/1
+W367,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5667611.2,5946308.2,1702,work,120-degree workstation 0.34 m away,68.4,101.308,1/1
+W368,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5671869.2,5946308.2,1717,work,120-degree workstation 0.34 m away,72.658,101.308,1/1
+W369,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5648995.8,5945381.7,1632,work,4'x2' workstation 0.59 m away,49.785,100.382,1/1
+W370,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5653253.8,5945381.7,1660,work,4'x2' workstation 0.59 m away,54.043,100.382,1/1
+W371,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5657511.8,5945381.7,1675,work,4'x2' workstation 0.59 m away,58.301,100.382,1/1
+W372,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5661769.8,5945381.7,1690,work,4'x2' workstation 0.59 m away,62.559,100.382,1/1
+W373,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5666027.8,5945381.7,1703,work,4'x2' workstation 0.59 m away,66.817,100.382,1/1
+W374,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5670285.8,5945381.7,1718,work,4'x2' workstation 0.59 m away,71.075,100.382,1/1
+W375,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5650560.0,5944477.9,1633,work,4'x2' workstation 0.58 m away,51.349,99.478,1/1
+W376,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5654818.0,5944477.9,1661,work,4'x2' workstation 0.58 m away,55.607,99.478,1/1
+W377,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5659076.0,5944477.9,1676,work,4'x2' workstation 0.58 m away,59.865,99.478,1/1
+W378,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5663334.0,5944477.9,1691,work,4'x2' workstation 0.58 m away,64.123,99.478,1/1
+W379,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5667592.0,5944477.9,1704,work,4'x2' workstation 0.58 m away,68.381,99.478,1/1
+W380,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5671850.0,5944477.9,1719,work,4'x2' workstation 0.58 m away,72.639,99.478,1/1
+W381,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5648523.6,5944395.9,1622,work,4'x2' workstation 0.26 m away,49.313,99.396,1/1
+W382,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5652781.6,5944395.9,1652,work,4'x2' workstation 0.26 m away,53.571,99.396,1/1
+W383,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5657039.6,5944395.9,1665,work,4'x2' workstation 0.26 m away,57.829,99.396,1/1
+W384,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5661297.6,5944395.9,1680,work,4'x2' workstation 0.26 m away,62.087,99.396,1/1
+W385,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5665555.6,5944395.9,1695,work,4'x2' workstation 0.26 m away,66.345,99.396,1/1
+W386,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5669813.6,5944395.9,1708,work,4'x2' workstation 0.26 m away,70.603,99.396,1/1
+W387,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5649971.4,5943575.1,1623,work,4'x2' workstation 0.26 m away,50.76,98.575,1/1
+W388,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5654229.4,5943575.1,1653,work,4'x2' workstation 0.26 m away,55.018,98.575,1/1
+W389,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5658487.4,5943575.1,1666,work,4'x2' workstation 0.26 m away,59.276,98.575,1/1
+W390,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5662745.4,5943575.1,1681,work,4'x2' workstation 0.26 m away,63.534,98.575,1/1
+W391,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5667003.4,5943575.1,1696,work,4'x2' workstation 0.26 m away,67.792,98.575,1/1
+W392,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5671261.4,5943575.1,1709,work,4'x2' workstation 0.26 m away,72.05,98.575,1/1
+W393,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5647943.2,5943493.3,1620,work,120-degree workstation 0.31 m away,48.732,98.493,1/1
+W394,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5652201.2,5943493.3,1650,work,120-degree workstation 0.31 m away,52.99,98.493,1/1
+W395,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5656459.2,5943493.3,1663,work,120-degree workstation 0.31 m away,57.248,98.493,1/1
+W396,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5660717.2,5943493.3,1678,work,120-degree workstation 0.31 m away,61.506,98.493,1/1
+W397,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5664975.2,5943493.3,1693,work,120-degree workstation 0.31 m away,65.764,98.493,1/1
+W398,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5669233.2,5943493.3,1706,work,120-degree workstation 0.31 m away,70.022,98.493,1/1
+W399,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5649481.8,5942601.6,1621,work,120-degree workstation 0.32 m away,50.271,97.602,1/1
+W400,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5653739.8,5942601.6,1651,work,120-degree workstation 0.32 m away,54.529,97.602,1/1
+W401,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5657997.8,5942601.6,1664,work,120-degree workstation 0.32 m away,58.787,97.602,1/1
+W402,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5662255.8,5942601.6,1679,work,120-degree workstation 0.32 m away,63.045,97.602,1/1
+W403,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5666513.8,5942601.6,1694,work,120-degree workstation 0.32 m away,67.303,97.602,1/1
+W404,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5670771.8,5942601.6,1707,work,120-degree workstation 0.32 m away,71.561,97.602,1/1
+W405,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5647919.9,5941678.7,1626,work,120-degree workstation 0.33 m away,48.709,96.679,1/1
+W406,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5652177.9,5941678.7,1654,work,120-degree workstation 0.33 m away,52.967,96.679,1/1
+W407,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5656435.9,5941678.7,1669,work,120-degree workstation 0.33 m away,57.225,96.679,1/1
+W408,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5660693.9,5941678.7,1684,work,120-degree workstation 0.33 m away,61.483,96.679,1/1
+W409,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5664951.9,5941678.7,1697,work,120-degree workstation 0.33 m away,65.741,96.679,1/1
+W410,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5669209.9,5941678.7,1712,work,120-degree workstation 0.33 m away,69.999,96.679,1/1
+W411,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5649974.8,5941589.3,1625,work,4'x2' workstation 0.26 m away,50.764,96.589,1/1
+W412,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5658490.8,5941589.3,1668,work,4'x2' workstation 0.26 m away,59.28,96.589,1/1
+W413,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5662748.8,5941589.3,1683,work,4'x2' workstation 0.26 m away,63.538,96.589,1/1
+W414,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5671264.8,5941589.3,1711,work,4'x2' workstation 0.26 m away,72.054,96.589,1/1
+W415,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5648518.0,5940789.2,1624,work,4'x2' workstation 0.26 m away,49.307,95.789,1/1
+W416,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5657034.0,5940789.2,1667,work,4'x2' workstation 0.26 m away,57.823,95.789,1/1
+W417,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5661292.0,5940789.2,1682,work,4'x2' workstation 0.26 m away,62.081,95.789,1/1
+W418,Work seats (desk + chair),Open workstations 6,work chair,,WS CHAIR,,5669808.0,5940789.2,1710,work,4'x2' workstation 0.26 m away,70.597,95.789,1/1
+W419,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5646969.8,5937724.5,1728,work,120-degree workstation 0.31 m away,47.759,92.724,1/1
+W420,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5651271.8,5937724.5,1756,work,120-degree workstation 0.31 m away,52.061,92.724,1/1
+W421,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5655573.8,5937724.5,1771,work,120-degree workstation 0.31 m away,56.363,92.724,1/1
+W422,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5659875.8,5937724.5,1786,work,120-degree workstation 0.31 m away,60.665,92.724,1/1
+W423,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5664177.8,5937724.5,1799,work,120-degree workstation 0.31 m away,64.967,92.724,1/1
+W424,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5668479.8,5937724.5,1814,work,120-degree workstation 0.31 m away,69.269,92.724,1/1
+W425,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5672783.9,5937724.5,1743,work,120-degree workstation 0.31 m away,73.573,92.724,1/1
+W426,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5648508.4,5936832.9,1729,work,120-degree workstation 0.32 m away,49.297,91.833,1/1
+W427,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5652810.4,5936832.9,1757,work,120-degree workstation 0.32 m away,53.599,91.833,1/1
+W428,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5657112.4,5936832.9,1772,work,120-degree workstation 0.32 m away,57.901,91.833,1/1
+W429,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5661414.4,5936832.9,1787,work,120-degree workstation 0.32 m away,62.203,91.833,1/1
+W430,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5665716.4,5936832.9,1800,work,120-degree workstation 0.32 m away,66.505,91.833,1/1
+W431,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5670018.4,5936832.9,1815,work,120-degree workstation 0.32 m away,70.807,91.833,1/1
+W432,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5674322.5,5936832.9,1744,work,120-degree workstation 0.32 m away,75.111,91.833,1/1
+W433,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5646946.5,5935909.9,1735,work,120-degree workstation 0.33 m away,47.735,90.91,1/1
+W434,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5651248.5,5935909.9,1763,work,120-degree workstation 0.33 m away,52.037,90.91,1/1
+W435,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5655550.5,5935909.9,1778,work,120-degree workstation 0.33 m away,56.339,90.91,1/1
+W436,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5659852.5,5935909.9,1793,work,120-degree workstation 0.33 m away,60.641,90.91,1/1
+W437,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5664154.5,5935909.9,1806,work,120-degree workstation 0.33 m away,64.943,90.91,1/1
+W438,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5668456.5,5935909.9,1821,work,120-degree workstation 0.33 m away,69.245,90.91,1/1
+W439,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5672760.6,5935909.9,1750,work,120-degree workstation 0.33 m away,73.55,90.91,1/1
+W440,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5649001.4,5935820.5,1731,work,4'x2' workstation 0.26 m away,49.79,90.821,1/1
+W441,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5653303.4,5935820.5,1759,work,4'x2' workstation 0.26 m away,54.092,90.821,1/1
+W442,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5657605.4,5935820.5,1774,work,4'x2' workstation 0.26 m away,58.394,90.821,1/1
+W443,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5661907.4,5935820.5,1789,work,4'x2' workstation 0.26 m away,62.696,90.821,1/1
+W444,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5666209.4,5935820.5,1802,work,4'x2' workstation 0.26 m away,66.998,90.821,1/1
+W445,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5670511.4,5935820.5,1817,work,4'x2' workstation 0.26 m away,71.3,90.821,1/1
+W446,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5674815.5,5935820.5,1746,work,4'x2' workstation 0.26 m away,75.605,90.821,1/1
+W447,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5647544.6,5935020.4,1730,work,4'x2' workstation 0.25 m away,48.334,90.02,1/1
+W448,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5651846.6,5935020.4,1758,work,4'x2' workstation 0.25 m away,52.636,90.02,1/1
+W449,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5656148.6,5935020.4,1773,work,4'x2' workstation 0.25 m away,56.938,90.02,1/1
+W450,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5660450.6,5935020.4,1788,work,4'x2' workstation 0.25 m away,61.24,90.02,1/1
+W451,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5664752.6,5935020.4,1801,work,4'x2' workstation 0.25 m away,65.542,90.02,1/1
+W452,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5669054.6,5935020.4,1816,work,4'x2' workstation 0.25 m away,69.844,90.02,1/1
+W453,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5673358.7,5935020.4,1745,work,4'x2' workstation 0.25 m away,74.148,90.02,1/1
+W454,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5649605.8,5934946.9,1732,work,4'x2' workstation 0.59 m away,50.395,89.947,1/1
+W455,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5653907.8,5934946.9,1760,work,4'x2' workstation 0.59 m away,54.697,89.947,1/1
+W456,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5658209.8,5934946.9,1775,work,4'x2' workstation 0.59 m away,58.999,89.947,1/1
+W457,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5662511.8,5934946.9,1790,work,4'x2' workstation 0.59 m away,63.301,89.947,1/1
+W458,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5666813.8,5934946.9,1803,work,4'x2' workstation 0.59 m away,67.603,89.947,1/1
+W459,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5671115.8,5934946.9,1818,work,4'x2' workstation 0.59 m away,71.905,89.947,1/1
+W460,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5675420.0,5934946.9,1747,work,4'x2' workstation 0.59 m away,76.209,89.947,1/1
+W461,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5648022.4,5934020.4,1733,work,4'x2' workstation 0.59 m away,48.811,89.02,1/1
+W462,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5652324.4,5934020.4,1761,work,4'x2' workstation 0.59 m away,53.113,89.02,1/1
+W463,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5656626.4,5934020.4,1776,work,4'x2' workstation 0.59 m away,57.415,89.02,1/1
+W464,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5660928.4,5934020.4,1791,work,4'x2' workstation 0.59 m away,61.717,89.02,1/1
+W465,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5665230.4,5934020.4,1804,work,4'x2' workstation 0.59 m away,66.019,89.02,1/1
+W466,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5669532.4,5934020.4,1819,work,4'x2' workstation 0.59 m away,70.321,89.02,1/1
+W467,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5673836.5,5934020.4,1748,work,4'x2' workstation 0.59 m away,74.626,89.02,1/1
+W468,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5649586.6,5933116.6,1734,work,4'x2' workstation 0.58 m away,50.376,88.117,1/1
+W469,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5653888.6,5933116.6,1762,work,4'x2' workstation 0.58 m away,54.678,88.117,1/1
+W470,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5658190.6,5933116.6,1777,work,4'x2' workstation 0.58 m away,58.98,88.117,1/1
+W471,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5662492.6,5933116.6,1792,work,4'x2' workstation 0.58 m away,63.282,88.117,1/1
+W472,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5666794.6,5933116.6,1805,work,4'x2' workstation 0.58 m away,67.584,88.117,1/1
+W473,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5671096.6,5933116.6,1820,work,4'x2' workstation 0.58 m away,71.886,88.117,1/1
+W474,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5675400.7,5933116.6,1749,work,4'x2' workstation 0.58 m away,76.19,88.117,1/1
+W475,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5647550.2,5933034.5,1723,work,4'x2' workstation 0.26 m away,48.339,88.035,1/1
+W476,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5651852.2,5933034.5,1753,work,4'x2' workstation 0.26 m away,52.641,88.035,1/1
+W477,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5656154.2,5933034.5,1766,work,4'x2' workstation 0.26 m away,56.943,88.035,1/1
+W478,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5660456.2,5933034.5,1781,work,4'x2' workstation 0.26 m away,61.245,88.035,1/1
+W479,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5664758.2,5933034.5,1796,work,4'x2' workstation 0.26 m away,65.547,88.035,1/1
+W480,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5669060.2,5933034.5,1809,work,4'x2' workstation 0.26 m away,69.849,88.035,1/1
+W481,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5673364.3,5933034.5,1738,work,4'x2' workstation 0.26 m away,74.153,88.035,1/1
+W482,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5648998.0,5932213.7,1724,work,4'x2' workstation 0.26 m away,49.787,87.214,1/1
+W483,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5653300.0,5932213.7,1754,work,4'x2' workstation 0.26 m away,54.089,87.214,1/1
+W484,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5657602.0,5932213.7,1767,work,4'x2' workstation 0.26 m away,58.391,87.214,1/1
+W485,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5661904.0,5932213.7,1782,work,4'x2' workstation 0.26 m away,62.693,87.214,1/1
+W486,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5666206.0,5932213.7,1797,work,4'x2' workstation 0.26 m away,66.995,87.214,1/1
+W487,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5670508.0,5932213.7,1810,work,4'x2' workstation 0.26 m away,71.297,87.214,1/1
+W488,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5674812.1,5932213.7,1739,work,4'x2' workstation 0.26 m away,75.601,87.214,1/1
+W489,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5646969.8,5932131.9,1721,work,120-degree workstation 0.31 m away,47.759,87.132,1/1
+W490,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5651271.8,5932131.9,1751,work,120-degree workstation 0.31 m away,52.061,87.132,1/1
+W491,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5655573.8,5932131.9,1764,work,120-degree workstation 0.31 m away,56.363,87.132,1/1
+W492,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5659875.8,5932131.9,1779,work,120-degree workstation 0.31 m away,60.665,87.132,1/1
+W493,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5664177.8,5932131.9,1794,work,120-degree workstation 0.31 m away,64.967,87.132,1/1
+W494,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5668479.8,5932131.9,1807,work,120-degree workstation 0.31 m away,69.269,87.132,1/1
+W495,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5672783.9,5932131.9,1736,work,120-degree workstation 0.31 m away,73.573,87.132,1/1
+W496,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5648508.4,5931240.3,1722,work,120-degree workstation 0.32 m away,49.297,86.24,1/1
+W497,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5652810.4,5931240.3,1752,work,120-degree workstation 0.32 m away,53.599,86.24,1/1
+W498,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5657112.4,5931240.3,1765,work,120-degree workstation 0.32 m away,57.901,86.24,1/1
+W499,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5661414.4,5931240.3,1780,work,120-degree workstation 0.32 m away,62.203,86.24,1/1
+W500,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5665716.4,5931240.3,1795,work,120-degree workstation 0.32 m away,66.505,86.24,1/1
+W501,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5670018.4,5931240.3,1808,work,120-degree workstation 0.32 m away,70.807,86.24,1/1
+W502,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5674322.5,5931240.3,1737,work,120-degree workstation 0.32 m away,75.111,86.24,1/1
+W503,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5646946.5,5930317.3,1727,work,120-degree workstation 0.33 m away,47.735,85.317,1/1
+W504,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5651248.5,5930317.3,1755,work,120-degree workstation 0.33 m away,52.037,85.317,1/1
+W505,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5655550.5,5930317.3,1770,work,120-degree workstation 0.33 m away,56.339,85.317,1/1
+W506,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5659852.5,5930317.3,1785,work,120-degree workstation 0.33 m away,60.641,85.317,1/1
+W507,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5664154.5,5930317.3,1798,work,120-degree workstation 0.33 m away,64.943,85.317,1/1
+W508,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5668456.5,5930317.3,1813,work,120-degree workstation 0.33 m away,69.245,85.317,1/1
+W509,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5672760.6,5930317.3,1742,work,120-degree workstation 0.33 m away,73.55,85.317,1/1
+W510,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5649001.4,5930228.0,1726,work,4'x2' workstation 0.26 m away,49.79,85.228,1/1
+W511,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5653303.4,5930228.0,1827,work,4'x2' workstation 0.26 m away,54.092,85.228,1/1
+W512,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5657605.4,5930228.0,1769,work,4'x2' workstation 0.26 m away,58.394,85.228,1/1
+W513,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5661907.4,5930228.0,1784,work,4'x2' workstation 0.26 m away,62.696,85.228,1/1
+W514,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5666209.4,5930228.0,1848,work,4'x2' workstation 0.26 m away,66.998,85.228,1/1
+W515,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5670511.4,5930228.0,1812,work,4'x2' workstation 0.26 m away,71.3,85.228,1/1
+W516,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5674815.5,5930228.0,1741,work,4'x2' workstation 0.26 m away,75.605,85.228,1/1
+W517,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5647544.6,5929427.8,1725,work,4'x2' workstation 0.25 m away,48.334,84.428,1/1
+W518,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5656148.6,5929427.8,1768,work,4'x2' workstation 0.25 m away,56.938,84.428,1/1
+W519,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5660450.6,5929427.8,1783,work,4'x2' workstation 0.25 m away,61.24,84.428,1/1
+W520,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5669054.6,5929427.8,1811,work,4'x2' workstation 0.25 m away,69.844,84.428,1/1
+W521,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5673358.7,5929427.8,1740,work,4'x2' workstation 0.25 m away,74.148,84.428,1/1
+W522,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5649605.8,5929354.3,1824,work,4'x2' workstation 0.59 m away,50.395,84.354,1/1
+W523,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5658209.8,5929354.3,1830,work,4'x2' workstation 0.59 m away,58.999,84.354,1/1
+W524,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5662511.8,5929354.3,1835,work,4'x2' workstation 0.59 m away,63.301,84.354,1/1
+W525,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5671115.8,5929354.3,1840,work,4'x2' workstation 0.59 m away,71.905,84.354,1/1
+W526,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5675420.0,5929354.3,1845,work,4'x2' workstation 0.59 m away,76.209,84.354,1/1
+W527,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5648022.4,5928427.8,1825,work,4'x2' workstation 0.59 m away,48.811,83.428,1/1
+W528,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5656626.4,5928427.8,1831,work,4'x2' workstation 0.59 m away,57.415,83.428,1/1
+W529,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5660928.4,5928427.8,1836,work,4'x2' workstation 0.59 m away,61.717,83.428,1/1
+W530,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5669532.4,5928427.8,1841,work,4'x2' workstation 0.59 m away,70.321,83.428,1/1
+W531,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5673836.5,5928427.8,1846,work,4'x2' workstation 0.59 m away,74.626,83.428,1/1
+W532,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5649586.6,5927524.0,1826,work,4'x2' workstation 0.58 m away,50.376,82.524,1/1
+W533,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5658190.6,5927524.0,1832,work,4'x2' workstation 0.58 m away,58.98,82.524,1/1
+W534,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5662492.6,5927524.0,1837,work,4'x2' workstation 0.58 m away,63.282,82.524,1/1
+W535,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5671096.6,5927524.0,1842,work,4'x2' workstation 0.58 m away,71.886,82.524,1/1
+W536,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5675400.7,5927524.0,1847,work,4'x2' workstation 0.58 m away,76.19,82.524,1/1
+W537,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5647550.2,5927442.0,1822,work,4'x2' workstation 0.26 m away,48.339,82.442,1/1
+W538,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5656154.2,5927442.0,1828,work,4'x2' workstation 0.26 m away,56.943,82.442,1/1
+W539,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5660456.2,5927442.0,1833,work,4'x2' workstation 0.26 m away,61.245,82.442,1/1
+W540,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5669060.2,5927442.0,1838,work,4'x2' workstation 0.26 m away,69.849,82.442,1/1
+W541,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5673364.3,5927442.0,1843,work,4'x2' workstation 0.26 m away,74.153,82.442,1/1
+W542,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5648998.0,5926621.2,1823,work,4'x2' workstation 0.26 m away,49.787,81.621,1/1
+W543,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5657602.0,5926621.2,1829,work,4'x2' workstation 0.26 m away,58.391,81.621,1/1
+W544,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5661904.0,5926621.2,1834,work,4'x2' workstation 0.26 m away,62.693,81.621,1/1
+W545,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5670508.0,5926621.2,1839,work,4'x2' workstation 0.26 m away,71.297,81.621,1/1
+W546,Work seats (desk + chair),Open workstations 5,work chair,,WS CHAIR,,5674812.1,5926621.2,1844,work,4'x2' workstation 0.26 m away,75.601,81.621,1/1
+W547,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5619987.2,5900992.0,1478,work,120-degree workstation 0.33 m away,20.776,55.992,1/1
+W548,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5618174.9,5900975.8,1487,work,120-degree workstation 0.33 m away,18.964,55.976,1/1
+W549,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5623917.2,5900977.7,1488,work,4'x2' workstation 0.26 m away,24.706,55.978,1/1
+W550,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5622877.9,5900377.7,1481,work,4'x2' workstation 0.25 m away,23.667,55.378,1/1
+W551,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5620892.1,5900372.1,1479,work,4'x2' workstation 0.26 m away,21.681,55.372,1/1
+W552,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5610750.6,5899943.0,1388,work,nested in desk block A$C237876BF,11.54,54.943,1/1
+W553,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5621877.9,5899899.9,1485,work,120-degree workstation 0.34 m away,22.667,54.9,1/1
+W554,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5614500.6,5899802.9,1384,work,nested in desk block A$C237876BF,15.29,54.803,1/1
+W555,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5624717.3,5899520.9,1489,work,4'x2' workstation 0.26 m away,25.506,54.521,1/1
+W556,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5609550.6,5899435.7,1386,work,nested in desk block A$C237876BF,10.34,54.436,1/1
+W557,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5619097.9,5899413.9,1484,work,120-degree workstation 0.32 m away,19.887,54.414,1/1
+W558,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5613300.6,5899295.6,1382,work,nested in desk block A$C237876BF,14.09,54.296,1/1
+W559,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5620071.3,5898924.3,1480,work,4'x2' workstation 0.26 m away,20.86,53.924,1/1
+W560,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5623678.1,5898920.9,1482,work,4'x2' workstation 0.26 m away,24.467,53.921,1/1
+W561,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5620974.1,5898335.7,1486,work,120-degree workstation 0.32 m away,21.763,53.336,1/1
+W562,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5622804.4,5898316.4,1483,work,4'x2' workstation 0.59 m away,23.593,53.316,1/1
+W563,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5608600.6,5898191.6,1354,work,nested in desk block A$C237876BF,9.39,53.192,1/1
+W564,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5610790.2,5898191.6,1348,work,nested in desk block A$C237876BF,11.579,53.192,1/1
+W565,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5611425.6,5898191.6,1362,work,nested in desk block A$C237876BF,12.215,53.192,1/1
+W566,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5613615.2,5898191.6,1358,work,nested in desk block A$C237876BF,14.404,53.192,1/1
+W567,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5614250.6,5898191.6,1368,work,nested in desk block A$C237876BF,15.04,53.192,1/1
+W568,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5616440.2,5898191.6,1378,work,nested in desk block A$C237876BF,17.229,53.192,1/1
+W569,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5608600.6,5896991.6,1352,work,nested in desk block A$C237876BF,9.39,51.992,1/1
+W570,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5610790.2,5896991.6,1346,work,nested in desk block A$C237876BF,11.579,51.992,1/1
+W571,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5611425.6,5896991.6,1360,work,nested in desk block A$C237876BF,12.215,51.992,1/1
+W572,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5613615.2,5896991.6,1356,work,nested in desk block A$C237876BF,14.404,51.992,1/1
+W573,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5614250.6,5896991.6,1366,work,nested in desk block A$C237876BF,15.04,51.992,1/1
+W574,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5616440.2,5896991.6,1376,work,nested in desk block A$C237876BF,17.229,51.992,1/1
+W575,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5619987.2,5896869.0,1490,work,120-degree workstation 0.33 m away,20.776,51.869,1/1
+W576,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5618174.9,5896852.8,1499,work,120-degree workstation 0.33 m away,18.964,51.853,1/1
+W577,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5623917.2,5896854.7,1500,work,4'x2' workstation 0.26 m away,24.706,51.855,1/1
+W578,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5622877.9,5896254.7,1493,work,4'x2' workstation 0.25 m away,23.667,51.255,1/1
+W579,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5620892.1,5896249.1,1491,work,4'x2' workstation 0.26 m away,21.681,51.249,1/1
+W580,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5608600.6,5895791.6,1350,work,nested in desk block A$C237876BF,9.39,50.792,1/1
+W581,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5610282.9,5895791.6,1380,work,nested in desk block A$C237876BF,11.072,50.792,1/1
+W582,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5614250.6,5895791.6,1364,work,nested in desk block A$C237876BF,15.04,50.792,1/1
+W583,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5616440.2,5895791.6,1374,work,nested in desk block A$C237876BF,17.229,50.792,1/1
+W584,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5621877.9,5895776.9,1497,work,120-degree workstation 0.34 m away,22.667,50.777,1/1
+W585,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5624717.3,5895397.9,1501,work,4'x2' workstation 0.26 m away,25.506,50.398,1/1
+W586,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5619097.9,5895290.9,1496,work,120-degree workstation 0.32 m away,19.887,50.291,1/1
+W587,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5620071.3,5894801.3,1492,work,4'x2' workstation 0.26 m away,20.86,49.801,1/1
+W588,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5623678.1,5894797.9,1494,work,4'x2' workstation 0.26 m away,24.467,49.798,1/1
+W589,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5608600.6,5894591.6,1332,work,nested in desk block A$C237876BF,9.39,49.592,1/1
+W590,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5610790.2,5894591.6,1328,work,nested in desk block A$C237876BF,11.579,49.592,1/1
+W591,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5611425.6,5894591.6,1340,work,nested in desk block A$C237876BF,12.215,49.592,1/1
+W592,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5613615.2,5894591.6,1336,work,nested in desk block A$C237876BF,14.404,49.592,1/1
+W593,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5614250.6,5894591.6,1344,work,nested in desk block A$C237876BF,15.04,49.592,1/1
+W594,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5616440.2,5894591.6,1372,work,nested in desk block A$C237876BF,17.229,49.592,1/1
+W595,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5620974.1,5894212.7,1498,work,120-degree workstation 0.32 m away,21.763,49.213,1/1
+W596,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5622804.4,5894193.4,1495,work,4'x2' workstation 0.59 m away,23.593,49.193,1/1
+W597,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5608600.6,5893391.6,1330,work,nested in desk block A$C237876BF,9.39,48.392,1/1
+W598,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5610790.2,5893391.6,1326,work,nested in desk block A$C237876BF,11.579,48.392,1/1
+W599,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5611425.6,5893391.6,1338,work,nested in desk block A$C237876BF,12.215,48.392,1/1
+W600,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5613615.2,5893391.6,1334,work,nested in desk block A$C237876BF,14.404,48.392,1/1
+W601,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5614250.6,5893391.6,1342,work,nested in desk block A$C237876BF,15.04,48.392,1/1
+W602,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5616440.2,5893391.6,1370,work,nested in desk block A$C237876BF,17.229,48.392,1/1
+W603,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5619987.2,5892746.0,1502,work,120-degree workstation 0.33 m away,20.776,47.746,1/1
+W604,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5618174.9,5892729.8,1511,work,120-degree workstation 0.33 m away,18.964,47.73,1/1
+W605,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5623917.2,5892731.7,1512,work,4'x2' workstation 0.26 m away,24.706,47.732,1/1
+W606,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5614500.6,5892267.7,1392,work,nested in desk block A$C237876BF,15.29,47.268,1/1
+W607,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5622877.9,5892131.7,1505,work,4'x2' workstation 0.25 m away,23.667,47.132,1/1
+W608,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5620892.1,5892126.1,1503,work,4'x2' workstation 0.26 m away,21.681,47.126,1/1
+W609,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5610750.6,5892117.6,1396,work,nested in desk block A$C237876BF,11.54,47.118,1/1
+W610,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5613300.6,5891760.4,1390,work,nested in desk block A$C237876BF,14.09,46.76,1/1
+W611,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5621877.9,5891653.9,1509,work,120-degree workstation 0.34 m away,22.667,46.654,1/1
+W612,Work seats (desk + chair),Open workstations 9,work chair,"4'x2' workstation (block, chair nested)",WS CHAIR,A$C237876BF,5609550.6,5891610.3,1394,work,nested in desk block A$C237876BF,10.34,46.61,1/1
+W613,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5624717.3,5891274.9,1513,work,4'x2' workstation 0.26 m away,25.506,46.275,1/1
+W614,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5619097.9,5891167.9,1508,work,120-degree workstation 0.32 m away,19.887,46.168,1/1
+W615,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5620071.3,5890678.3,1504,work,4'x2' workstation 0.26 m away,20.86,45.678,1/1
+W616,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5623678.1,5890674.9,1506,work,4'x2' workstation 0.26 m away,24.467,45.675,1/1
+W617,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5620974.1,5890089.7,1510,work,120-degree workstation 0.32 m away,21.763,45.09,1/1
+W618,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5622804.4,5890070.4,1507,work,4'x2' workstation 0.59 m away,23.593,45.07,1/1
+W619,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5619987.2,5888625.0,1514,work,120-degree workstation 0.33 m away,20.776,43.625,1/1
+W620,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5618174.9,5888608.8,1523,work,120-degree workstation 0.33 m away,18.964,43.609,1/1
+W621,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5623917.2,5888610.7,1524,work,4'x2' workstation 0.26 m away,24.706,43.611,1/1
+W622,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5622877.9,5888010.7,1517,work,4'x2' workstation 0.25 m away,23.667,43.011,1/1
+W623,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5620892.1,5888005.1,1515,work,4'x2' workstation 0.26 m away,21.681,43.005,1/1
+W624,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5621877.9,5887532.9,1521,work,120-degree workstation 0.34 m away,22.667,42.533,1/1
+W625,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5624717.3,5887153.9,1525,work,4'x2' workstation 0.26 m away,25.506,42.154,1/1
+W626,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5619097.9,5887046.9,1520,work,120-degree workstation 0.32 m away,19.887,42.047,1/1
+W627,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5620071.3,5886557.3,1516,work,4'x2' workstation 0.26 m away,20.86,41.557,1/1
+W628,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5623678.1,5886553.9,1518,work,4'x2' workstation 0.26 m away,24.467,41.554,1/1
+W629,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5620974.1,5885968.7,1522,work,120-degree workstation 0.32 m away,21.763,40.969,1/1
+W630,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5622804.4,5885949.4,1519,work,4'x2' workstation 0.59 m away,23.593,40.949,1/1
+W631,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5619987.2,5884502.0,1526,work,120-degree workstation 0.33 m away,20.776,39.502,1/1
+W632,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5618174.9,5884485.8,1535,work,120-degree workstation 0.33 m away,18.964,39.486,1/1
+W633,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5623917.2,5884487.7,1536,work,4'x2' workstation 0.26 m away,24.706,39.488,1/1
+W634,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5622877.9,5883887.7,1529,work,4'x2' workstation 0.25 m away,23.667,38.888,1/1
+W635,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5620892.1,5883882.1,1527,work,4'x2' workstation 0.26 m away,21.681,38.882,1/1
+W636,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5621877.9,5883409.9,1533,work,120-degree workstation 0.34 m away,22.667,38.41,1/1
+W637,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5624717.3,5883030.9,1537,work,4'x2' workstation 0.26 m away,25.506,38.031,1/1
+W638,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5619097.9,5882923.9,1532,work,120-degree workstation 0.32 m away,19.887,37.924,1/1
+W639,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5620071.3,5882434.3,1528,work,4'x2' workstation 0.26 m away,20.86,37.434,1/1
+W640,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5623678.1,5882430.9,1530,work,4'x2' workstation 0.26 m away,24.467,37.431,1/1
+W641,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5620974.1,5881845.7,1534,work,120-degree workstation 0.32 m away,21.763,36.846,1/1
+W642,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5622804.4,5881826.4,1531,work,4'x2' workstation 0.59 m away,23.593,36.826,1/1
+W643,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5619986.4,5879905.3,1466,work,120-degree workstation 0.33 m away,20.775,34.905,1/1
+W644,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5618174.1,5879889.1,1475,work,120-degree workstation 0.33 m away,18.963,34.889,1/1
+W645,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5623916.3,5879891.0,1476,work,4'x2' workstation 0.26 m away,24.705,34.891,1/1
+W646,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5622877.1,5879291.0,1469,work,4'x2' workstation 0.25 m away,23.666,34.291,1/1
+W647,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5620891.3,5879285.4,1467,work,4'x2' workstation 0.26 m away,21.68,34.285,1/1
+W648,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5621877.1,5878813.2,1473,work,120-degree workstation 0.34 m away,22.666,33.813,1/1
+W649,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5624716.5,5878434.2,1477,work,4'x2' workstation 0.26 m away,25.505,33.434,1/1
+W650,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5619097.0,5878327.2,1472,work,120-degree workstation 0.32 m away,19.886,33.327,1/1
+W651,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5620070.5,5877837.6,1468,work,4'x2' workstation 0.26 m away,20.859,32.838,1/1
+W652,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5623677.3,5877834.2,1470,work,4'x2' workstation 0.26 m away,24.466,32.834,1/1
+W653,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5620973.3,5877249.0,1474,work,120-degree workstation 0.32 m away,21.762,32.249,1/1
+W654,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5622803.6,5877229.7,1471,work,120-degree workstation 0.34 m away,23.593,32.23,1/1
+W655,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5632972.9,5876008.6,1417,work,120-degree workstation 0.32 m away,33.762,31.009,1/1
+W656,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5636226.3,5875953.5,1409,work,120-degree workstation 0.32 m away,37.015,30.954,1/1
+W657,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5639617.5,5875815.8,1401,work,120-degree workstation 0.32 m away,40.406,30.816,1/1
+W658,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5620798.1,5874958.5,1449,work,120-degree workstation 0.33 m away,21.587,29.959,1/1
+W659,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5625058.9,5874958.5,1464,work,120-degree workstation 0.33 m away,25.848,29.959,1/1
+W660,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5629079.8,5874958.5,1434,work,120-degree workstation 0.33 m away,29.869,29.959,1/1
+W661,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5632066.6,5874460.8,1416,work,120-degree workstation 0.33 m away,32.856,29.461,1/1
+W662,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5633877.0,5874460.8,1413,work,120-degree workstation 0.33 m away,34.666,29.461,1/1
+W663,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5635319.9,5874405.7,1408,work,120-degree workstation 0.33 m away,36.109,29.406,1/1
+W664,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5637130.4,5874405.7,1405,work,120-degree workstation 0.33 m away,37.919,29.406,1/1
+W665,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5638711.1,5874268.0,1400,work,120-degree workstation 0.33 m away,39.5,29.268,1/1
+W666,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5640521.6,5874268.0,1397,work,120-degree workstation 0.33 m away,41.311,29.268,1/1
+W667,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5619236.2,5874035.6,1446,work,120-degree workstation 0.32 m away,20.025,29.036,1/1
+W668,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5623497.0,5874035.6,1461,work,120-degree workstation 0.32 m away,24.286,29.036,1/1
+W669,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5627517.9,5874035.6,1431,work,120-degree workstation 0.32 m away,28.307,29.036,1/1
+W670,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5632144.3,5873365.3,1414,work,4'x2' workstation 0.25 m away,32.933,28.365,1/1
+W671,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5633801.6,5873365.3,1415,work,4'x2' workstation 0.25 m away,34.591,28.365,1/1
+W672,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5635397.6,5873310.2,1406,work,4'x2' workstation 0.25 m away,36.187,28.31,1/1
+W673,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5637054.9,5873310.2,1407,work,4'x2' workstation 0.25 m away,37.844,28.31,1/1
+W674,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5638788.8,5873172.5,1398,work,4'x2' workstation 0.25 m away,39.578,28.173,1/1
+W675,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5640446.1,5873172.5,1399,work,4'x2' workstation 0.25 m away,41.235,28.173,1/1
+W676,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5620814.3,5873146.3,1436,work,120-degree workstation 0.33 m away,21.603,28.146,1/1
+W677,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5625075.1,5873146.3,1451,work,120-degree workstation 0.33 m away,25.864,28.146,1/1
+W678,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5629096.0,5873146.3,1421,work,120-degree workstation 0.33 m away,29.885,28.146,1/1
+W679,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5618746.6,5873062.2,1438,work,4'x2' workstation 0.26 m away,19.536,28.062,1/1
+W680,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5623007.5,5873062.2,1453,work,4'x2' workstation 0.26 m away,23.796,28.062,1/1
+W681,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5627028.3,5873062.2,1423,work,4'x2' workstation 0.26 m away,27.817,28.062,1/1
+W682,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5632068.8,5872269.8,1420,work,120-degree workstation 0.33 m away,32.858,27.27,1/1
+W683,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5633879.3,5872269.8,1419,work,120-degree workstation 0.33 m away,34.668,27.27,1/1
+W684,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5620194.4,5872241.3,1437,work,4'x2' workstation 0.26 m away,20.983,27.241,1/1
+W685,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5624455.2,5872241.3,1452,work,4'x2' workstation 0.26 m away,25.244,27.241,1/1
+W686,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5628476.1,5872241.3,1422,work,4'x2' workstation 0.26 m away,29.265,27.241,1/1
+W687,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5635322.2,5872214.7,1412,work,120-degree workstation 0.33 m away,36.111,27.215,1/1
+W688,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5637132.7,5872214.7,1411,work,120-degree workstation 0.33 m away,37.922,27.215,1/1
+W689,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5618158.0,5872159.3,1448,work,120-degree workstation 0.32 m away,18.947,27.159,1/1
+W690,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5622418.8,5872159.3,1463,work,120-degree workstation 0.32 m away,23.208,27.159,1/1
+W691,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5626439.7,5872159.3,1433,work,120-degree workstation 0.32 m away,27.229,27.159,1/1
+W692,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5638713.4,5872077.0,1404,work,120-degree workstation 0.33 m away,39.502,27.077,1/1
+W693,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5640523.8,5872077.0,1403,work,120-degree workstation 0.33 m away,41.313,27.077,1/1
+W694,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5619722.2,5871255.5,1447,work,120-degree workstation 0.34 m away,20.511,26.256,1/1
+W695,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5623983.0,5871255.5,1462,work,120-degree workstation 0.34 m away,24.772,26.256,1/1
+W696,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5628003.9,5871255.5,1432,work,120-degree workstation 0.34 m away,28.793,26.256,1/1
+W697,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5632972.9,5870710.5,1418,work,120-degree workstation 0.33 m away,33.762,25.71,1/1
+W698,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5636226.3,5870655.4,1410,work,120-degree workstation 0.33 m away,37.015,25.655,1/1
+W699,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5639617.5,5870517.7,1402,work,120-degree workstation 0.33 m away,40.406,25.518,1/1
+W700,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5618138.7,5870329.0,1445,work,120-degree workstation 0.34 m away,18.928,25.329,1/1
+W701,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5622399.6,5870329.0,1460,work,4'x2' workstation 0.59 m away,23.189,25.329,1/1
+W702,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5626420.4,5870329.0,1430,work,4'x2' workstation 0.59 m away,27.209,25.329,1/1
+W703,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5620200.0,5870255.5,1443,work,4'x2' workstation 0.26 m away,20.989,25.256,1/1
+W704,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5624460.8,5870255.5,1458,work,4'x2' workstation 0.26 m away,25.25,25.256,1/1
+W705,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5628481.7,5870255.5,1428,work,4'x2' workstation 0.26 m away,29.271,25.256,1/1
+W706,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5618743.2,5869455.4,1444,work,4'x2' workstation 0.26 m away,19.532,24.455,1/1
+W707,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5623004.0,5869455.4,1459,work,4'x2' workstation 0.26 m away,23.793,24.455,1/1
+W708,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5627024.9,5869455.4,1429,work,4'x2' workstation 0.26 m away,27.814,24.455,1/1
+W709,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5620798.1,5869366.0,1450,work,120-degree workstation 0.33 m away,21.587,24.366,1/1
+W710,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5625058.9,5869366.0,1465,work,120-degree workstation 0.33 m away,25.848,24.366,1/1
+W711,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5629079.8,5869366.0,1435,work,120-degree workstation 0.33 m away,29.869,24.366,1/1
+W712,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5619236.2,5868443.0,1440,work,120-degree workstation 0.32 m away,20.025,23.443,1/1
+W713,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5623497.0,5868443.0,1455,work,120-degree workstation 0.32 m away,24.286,23.443,1/1
+W714,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5627517.9,5868443.0,1425,work,120-degree workstation 0.32 m away,28.307,23.443,1/1
+W715,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5620774.8,5867551.4,1439,work,120-degree workstation 0.31 m away,21.564,22.551,1/1
+W716,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5625035.6,5867551.4,1454,work,120-degree workstation 0.31 m away,25.825,22.551,1/1
+W717,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5629056.5,5867551.4,1424,work,120-degree workstation 0.31 m away,29.845,22.551,1/1
+W718,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5618746.6,5867469.6,1442,work,4'x2' workstation 0.26 m away,19.536,22.47,1/1
+W719,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5623007.5,5867469.6,1457,work,4'x2' workstation 0.26 m away,23.796,22.47,1/1
+W720,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5627028.3,5867469.6,1427,work,4'x2' workstation 0.26 m away,27.817,22.47,1/1
+W721,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5620194.4,5866648.8,1441,work,4'x2' workstation 0.26 m away,20.983,21.649,1/1
+W722,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5624455.2,5866648.8,1456,work,4'x2' workstation 0.26 m away,25.244,21.649,1/1
+W723,Work seats (desk + chair),Open workstations 9,work chair,,WS CHAIR,,5628476.1,5866648.8,1426,work,4'x2' workstation 0.26 m away,29.265,21.649,1/1
+M1,Meeting room seats,CABIN (2),meeting chair,,A$C225A0E04,gfg g,5721679.6,5954858.6,2191,work,,122.469,109.859,1/1
+M2,Meeting room seats,CABIN (2),meeting chair,,A$C225A0E04,gfg g,5722138.4,5954135.2,2187,work,,122.927,109.135,1/1
+M3,Meeting room seats,CABIN (2),meeting chair,,A$C225A0E04,gfg g,5722458.3,5954135.2,2190,work,,123.247,109.135,1/1
+M4,Meeting room seats,CABIN (2),meeting chair,,A$C225A0E04,gfg g,5722138.4,5953428.6,2186,work,,122.927,108.429,1/1
+M5,Meeting room seats,CABIN (2),meeting chair,,A$C225A0E04,gfg g,5722458.3,5953428.6,2189,work,,123.247,108.429,1/1
+M6,Meeting room seats,CABIN (2),meeting chair,,A$C225A0E04,gfg g,5722138.4,5952684.9,2185,work,,122.927,107.685,1/1
+M7,Meeting room seats,CABIN (2),meeting chair,,A$C225A0E04,gfg g,5722458.3,5952684.9,2188,work,,123.247,107.685,1/1
+M8,Meeting room seats,CABIN (2),meeting chair,,A$C225A0E04,gfg g,5721679.6,5951949.5,2192,work,,122.469,106.95,1/1
+M9,Meeting room seats,CABIN (4),meeting chair,,A$C225A0E04,gfg g,5730848.8,5951035.7,2203,work,,131.638,106.036,1/1
+M10,Meeting room seats,CABIN (4),meeting chair,,A$C225A0E04,gfg g,5731101.4,5950201.2,2196,work,,131.89,105.201,1/1
+M11,Meeting room seats,CABIN (4),meeting chair,,A$C225A0E04,gfg g,5730889.8,5949961.3,2199,work,,131.679,104.961,1/1
+M12,Meeting room seats,CABIN (4),meeting chair,,A$C225A0E04,gfg g,5731659.2,5949709.4,2197,work,,132.448,104.709,1/1
+M13,Meeting room seats,CABIN (4),meeting chair,,A$C225A0E04,gfg g,5731447.7,5949469.5,2200,work,,132.237,104.469,1/1
+M14,Meeting room seats,STORAGE (2),meeting chair,,A$C225A0E04,gfg g,5732189.2,5949242.1,2198,service,,132.978,104.242,1/1
+M15,Meeting room seats,STORAGE (2),meeting chair,,A$C225A0E04,gfg g,5733040.6,5949111.6,2202,service,,133.83,104.112,1/1
+M16,Meeting room seats,STORAGE (2),meeting chair,,A$C225A0E04,gfg g,5731977.7,5949002.2,2201,service,,132.767,104.002,1/1
+M17,Meeting room seats,MEETING ROOM (2),meeting chair,,A$C225A0E04,gfg g,5734180.7,5947663.8,2212,meeting,,134.97,102.664,1/1
+M18,Meeting room seats,MEETING ROOM (2),meeting chair,,A$C225A0E04,gfg g,5734295.7,5946802.2,2205,meeting,,135.085,101.802,1/1
+M19,Meeting room seats,MEETING ROOM (2),meeting chair,,A$C225A0E04,gfg g,5734050.8,5946596.4,2208,meeting,,134.84,101.596,1/1
+M20,Meeting room seats,MEETING ROOM (2),meeting chair,,A$C225A0E04,gfg g,5734774.2,5946232.9,2206,meeting,,135.563,101.233,1/1
+M21,Meeting room seats,MEETING ROOM (2),meeting chair,,A$C225A0E04,gfg g,5734529.3,5946027.1,2209,meeting,,135.318,101.027,1/1
+M22,Meeting room seats,MEETING ROOM (2),meeting chair,,A$C225A0E04,gfg g,5735228.8,5945691.9,2207,meeting,,136.018,100.692,1/1
+M23,Meeting room seats,MEETING ROOM (2),meeting chair,,A$C225A0E04,gfg g,5734983.9,5945486.1,2210,meeting,,135.773,100.486,1/1
+M24,Meeting room seats,MEETING ROOM (2),meeting chair,,A$C225A0E04,gfg g,5736050.5,5945425.0,2211,meeting,,136.84,100.425,1/1
+M25,Meeting room seats,MEETING ROOM (2),meeting chair,,A$C225A0E04,dfs,5735102.9,5943363.3,2227,meeting,,135.892,98.363,1/1
+M26,Meeting room seats,MEETING ROOM (2),meeting chair,,A$C225A0E04,dfs,5735809.5,5943363.3,2228,meeting,,136.599,98.363,1/1
+M27,Meeting room seats,MEETING ROOM (2),meeting chair,,A$C225A0E04,dfs,5736528.6,5943363.3,2229,meeting,,137.318,98.363,1/1
+M28,Meeting room seats,MEETING ROOM (2),meeting chair,,A$C225A0E04,dfs,5737235.2,5943363.3,2230,meeting,,138.024,98.363,1/1
+M29,Meeting room seats,MEETING ROOM (2),meeting chair,,A$C225A0E04,dfs,5734383.8,5940856.0,2218,meeting,,135.173,95.856,1/1
+M30,Meeting room seats,MEETING ROOM (2),meeting chair,,A$C225A0E04,dfs,5735102.9,5940856.0,2219,meeting,,135.892,95.856,1/1
+M31,Meeting room seats,MEETING ROOM (2),meeting chair,,A$C225A0E04,dfs,5735809.5,5940856.0,2220,meeting,,136.599,95.856,1/1
+M32,Meeting room seats,MEETING ROOM (2),meeting chair,,A$C225A0E04,dfs,5736528.6,5940856.0,2221,meeting,,137.318,95.856,1/1
+M33,Meeting room seats,MEETING ROOM (2),meeting chair,,A$C225A0E04,dfs,5737235.2,5940856.0,2222,meeting,,138.024,95.856,1/1
+M34,Meeting room seats,STORAGE (3),meeting chair,,A$C225A0E04,dfs,5732226.8,5943363.3,2225,service,,133.016,98.363,1/1
+M35,Meeting room seats,STORAGE (3),meeting chair,,A$C225A0E04,dfs,5732933.5,5943363.3,2224,service,,133.722,98.363,1/1
+M36,Meeting room seats,STORAGE (3),meeting chair,,A$C225A0E04,dfs,5733677.2,5943363.3,2223,service,,134.466,98.363,1/1
+M37,Meeting room seats,STORAGE (3),meeting chair,,A$C225A0E04,dfs,5734383.8,5943363.3,2226,service,,135.173,98.363,1/1
+M38,Meeting room seats,STORAGE (3),meeting chair,,A$C225A0E04,dfs,5732226.8,5940856.0,2217,service,,133.016,95.856,1/1
+M39,Meeting room seats,STORAGE (3),meeting chair,,A$C225A0E04,dfs,5732933.5,5940856.0,2216,service,,133.722,95.856,1/1
+M40,Meeting room seats,STORAGE (3),meeting chair,,A$C225A0E04,dfs,5733677.2,5940856.0,2215,service,,134.466,95.856,1/1
+M41,Meeting room seats,MEETING ROOM 04 PAX (1),meeting chair,,WS CHAIR,CIRCLE 4 SEATER,5634685.2,5861774.0,961,meeting,,35.474,16.774,1/1
+M42,Meeting room seats,MEETING ROOM 04 PAX (1),meeting chair,,WS CHAIR,CIRCLE 4 SEATER,5633689.7,5861767.8,963,meeting,,34.479,16.768,1/1
+M43,Meeting room seats,MEETING ROOM 04 PAX (1),meeting chair,,WS CHAIR,CIRCLE 4 SEATER,5633685.5,5860774.3,962,meeting,,34.475,15.774,1/1
+M44,Meeting room seats,MEETING ROOM 04 PAX (1),meeting chair,,WS CHAIR,CIRCLE 4 SEATER,5634689.5,5860768.1,960,meeting,,35.478,15.768,1/1
+M45,Meeting room seats,MEETING ROOM 04 PAX (2),meeting chair,,WS CHAIR,CIRCLE 4 SEATER,5637911.8,5861505.3,985,meeting,,38.701,16.505,1/1
+M46,Meeting room seats,MEETING ROOM 04 PAX (2),meeting chair,,WS CHAIR,CIRCLE 4 SEATER,5636916.4,5861499.2,987,meeting,,37.705,16.499,1/1
+M47,Meeting room seats,MEETING ROOM 04 PAX (2),meeting chair,,WS CHAIR,CIRCLE 4 SEATER,5636912.2,5860505.7,986,meeting,,37.701,15.506,1/1
+M48,Meeting room seats,MEETING ROOM 04 PAX (2),meeting chair,,WS CHAIR,CIRCLE 4 SEATER,5637916.1,5860499.5,984,meeting,,38.705,15.499,1/1
+M49,Meeting room seats,MEETING ROOM 04 PAX (unlabelled),meeting chair,,WS CHAIR,,5635549.2,5858040.8,995,meeting,,36.338,13.041,1/1
+M50,Meeting room seats,MEETING ROOM 04 PAX (unlabelled),meeting chair,,WS CHAIR,,5634553.7,5858034.7,997,meeting,,35.343,13.035,1/1
+M51,Meeting room seats,MEETING ROOM 04 PAX (unlabelled),meeting chair,,WS CHAIR,,5634549.5,5857041.1,996,meeting,,35.339,12.041,1/1
+T1,Training room seats,TRAINING ROOM (2),training chair,,WS CHAIR,,5640719.2,5938479.0,1575,training,,41.508,93.479,1/1
+T2,Training room seats,TRAINING ROOM (2),training chair,,WS CHAIR,,5640350.7,5935649.3,1554,training,,41.14,90.649,1/1
+T3,Training room seats,TRAINING ROOM (2),training chair,,WS CHAIR,,5641150.7,5935649.3,1555,training,,41.94,90.649,1/1
+T4,Training room seats,TRAINING ROOM (2),training chair,,WS CHAIR,,5642750.7,5935649.3,1553,training,,43.54,90.649,1/1
+T5,Training room seats,TRAINING ROOM (2),training chair,,WS CHAIR,,5643550.7,5935649.3,1552,training,,44.34,90.649,1/1
+T6,Training room seats,TRAINING ROOM (2),training chair,,WS CHAIR,,5644350.7,5935649.3,1551,training,,45.14,90.649,1/1
+T7,Training room seats,TRAINING ROOM (2),training chair,,WS CHAIR,,5640350.7,5934299.3,1559,training,,41.14,89.299,1/1
+T8,Training room seats,TRAINING ROOM (2),training chair,,WS CHAIR,,5641150.7,5934299.3,1560,training,,41.94,89.299,1/1
+T9,Training room seats,TRAINING ROOM (2),training chair,,WS CHAIR,,5642750.7,5934299.3,1558,training,,43.54,89.299,1/1
+T10,Training room seats,TRAINING ROOM (2),training chair,,WS CHAIR,,5643550.7,5934299.3,1557,training,,44.34,89.299,1/1
+T11,Training room seats,TRAINING ROOM (2),training chair,,WS CHAIR,,5644350.7,5934299.3,1556,training,,45.14,89.299,1/1
+T12,Training room seats,TRAINING ROOM (2),training chair,,WS CHAIR,,5640350.7,5932949.3,1564,training,,41.14,87.949,1/1
+T13,Training room seats,TRAINING ROOM (2),training chair,,WS CHAIR,,5641150.7,5932949.3,1565,training,,41.94,87.949,1/1
+T14,Training room seats,TRAINING ROOM (2),training chair,,WS CHAIR,,5642750.7,5932949.3,1563,training,,43.54,87.949,1/1
+T15,Training room seats,TRAINING ROOM (2),training chair,,WS CHAIR,,5643550.7,5932949.3,1562,training,,44.34,87.949,1/1
+T16,Training room seats,TRAINING ROOM (2),training chair,,WS CHAIR,,5644350.7,5932949.3,1561,training,,45.14,87.949,1/1
+T17,Training room seats,TRAINING ROOM (2),training chair,,WS CHAIR,,5640350.7,5931599.3,1569,training,,41.14,86.599,1/1
+T18,Training room seats,TRAINING ROOM (2),training chair,,WS CHAIR,,5641150.7,5931599.3,1570,training,,41.94,86.599,1/1
+T19,Training room seats,TRAINING ROOM (2),training chair,,WS CHAIR,,5642750.7,5931599.3,1568,training,,43.54,86.599,1/1
+T20,Training room seats,TRAINING ROOM (2),training chair,,WS CHAIR,,5643550.7,5931599.3,1567,training,,44.34,86.599,1/1
+T21,Training room seats,TRAINING ROOM (2),training chair,,WS CHAIR,,5644350.7,5931599.3,1566,training,,45.14,86.599,1/1
+T22,Training room seats,TRAINING ROOM (2),training chair,,WS CHAIR,,5641150.7,5930249.3,1574,training,,41.94,85.249,1/1
+T23,Training room seats,TRAINING ROOM (2),training chair,,WS CHAIR,,5642750.7,5930249.3,1573,training,,43.54,85.249,1/1
+T24,Training room seats,TRAINING ROOM (2),training chair,,WS CHAIR,,5643550.7,5930249.3,1572,training,,44.34,85.249,1/1
+T25,Training room seats,TRAINING ROOM (2),training chair,,WS CHAIR,,5644350.7,5930249.3,1571,training,,45.14,85.249,1/1
+T26,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5633616.8,5868691.6,1024,training,,34.406,23.692,1/1
+T27,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5634966.8,5868691.6,1029,training,,35.756,23.692,1/1
+T28,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5636316.8,5868691.6,1034,training,,37.106,23.692,1/1
+T29,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5637666.8,5868691.6,1039,training,,38.456,23.692,1/1
+T30,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5639016.8,5868691.6,1044,training,,39.806,23.692,1/1
+T31,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5631321.4,5868609.9,1538,training,,32.11,23.61,1/1
+T32,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5633616.8,5867891.6,1025,training,,34.406,22.892,1/1
+T33,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5634966.8,5867891.6,1030,training,,35.756,22.892,1/1
+T34,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5636316.8,5867891.6,1035,training,,37.106,22.892,1/1
+T35,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5637666.8,5867891.6,1040,training,,38.456,22.892,1/1
+T36,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5639016.8,5867891.6,1046,training,,39.806,22.892,1/1
+T37,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5633616.8,5866291.6,1023,training,,34.406,21.292,1/1
+T38,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5634966.8,5866291.6,1028,training,,35.756,21.292,1/1
+T39,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5636316.8,5866291.6,1033,training,,37.106,21.292,1/1
+T40,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5637666.8,5866291.6,1038,training,,38.456,21.292,1/1
+T41,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5639016.8,5866291.6,1043,training,,39.806,21.292,1/1
+T42,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5633616.8,5865491.6,1022,training,,34.406,20.492,1/1
+T43,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5634966.8,5865491.6,1027,training,,35.756,20.492,1/1
+T44,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5636316.8,5865491.6,1032,training,,37.106,20.492,1/1
+T45,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5637666.8,5865491.6,1037,training,,38.456,20.492,1/1
+T46,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5639016.8,5865491.6,1042,training,,39.806,20.492,1/1
+T47,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5633616.8,5864691.6,1021,training,,34.406,19.692,1/1
+T48,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5634966.8,5864691.6,1026,training,,35.756,19.692,1/1
+T49,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5636316.8,5864691.6,1031,training,,37.106,19.692,1/1
+T50,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5637666.8,5864691.6,1036,training,,38.456,19.692,1/1
+T51,Training room seats,TRAINING ROOM (1),training chair,,WS CHAIR,,5639016.8,5864691.6,1041,training,,39.806,19.692,1/1
+C1,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5625985.7,5885558.1,1242,cafe,,26.775,40.558,1/1
+C2,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5626560.7,5885558.1,1243,cafe,,27.35,40.558,1/1
+C3,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5627185.7,5885558.1,1248,cafe,,27.975,40.558,1/1
+C4,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5627760.7,5885558.1,1249,cafe,,28.55,40.558,1/1
+C5,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5639298.7,5885373.4,1285,cafe,,40.088,40.373,1/1
+C6,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5639873.7,5885373.4,1284,cafe,,40.663,40.373,1/1
+C7,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5640498.7,5885373.4,1279,cafe,,41.288,40.373,1/1
+C8,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5641073.7,5885373.4,1278,cafe,,41.863,40.373,1/1
+C9,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5633709.1,5884385.7,1225,cafe,,34.498,39.386,1/1
+C10,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5635240.0,5884385.7,1227,cafe,,36.029,39.386,1/1
+C11,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5636258.9,5884365.2,1237,cafe,,37.048,39.365,1/1
+C12,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5637789.9,5884365.2,1239,cafe,,38.579,39.365,1/1
+C13,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5639298.7,5884211.9,1287,cafe,,40.088,39.212,1/1
+C14,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5639873.7,5884211.9,1286,cafe,,40.663,39.212,1/1
+C15,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5640498.7,5884211.9,1281,cafe,,41.288,39.212,1/1
+C16,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5641073.7,5884211.9,1280,cafe,,41.863,39.212,1/1
+C17,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5625985.7,5884027.2,1244,cafe,,26.775,39.027,1/1
+C18,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5626560.7,5884027.2,1245,cafe,,27.35,39.027,1/1
+C19,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5627185.7,5884027.2,1250,cafe,,27.975,39.027,1/1
+C20,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5627760.7,5884027.2,1251,cafe,,28.55,39.027,1/1
+C21,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5633709.1,5883810.7,1224,cafe,,34.498,38.811,1/1
+C22,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5635240.0,5883810.7,1226,cafe,,36.029,38.811,1/1
+C23,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5636258.9,5883790.2,1236,cafe,,37.048,38.79,1/1
+C24,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5637789.9,5883790.2,1238,cafe,,38.579,38.79,1/1
+C25,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5631159.2,5883206.3,1321,cafe,,31.948,38.206,1/1
+C26,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5632690.2,5883206.3,1323,cafe,,33.479,38.206,1/1
+C27,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5633709.1,5883185.7,1219,cafe,,34.498,38.186,1/1
+C28,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5635240.0,5883185.7,1221,cafe,,36.029,38.186,1/1
+C29,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5636258.9,5883165.2,1231,cafe,,37.048,38.165,1/1
+C30,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5637789.9,5883165.2,1233,cafe,,38.579,38.165,1/1
+C31,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5625985.7,5883008.1,1254,cafe,,26.775,38.008,1/1
+C32,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5626560.7,5883008.1,1255,cafe,,27.35,38.008,1/1
+C33,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5627185.7,5883008.1,1260,cafe,,27.975,38.008,1/1
+C34,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5627760.7,5883008.1,1261,cafe,,28.55,38.008,1/1
+C35,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5639298.7,5882823.4,1297,cafe,,40.088,37.823,1/1
+C36,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5639873.7,5882823.4,1296,cafe,,40.663,37.823,1/1
+C37,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5640498.7,5882823.4,1291,cafe,,41.288,37.823,1/1
+C38,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5641073.7,5882823.4,1290,cafe,,41.863,37.823,1/1
+C39,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5631159.2,5882631.3,1320,cafe,,31.948,37.631,1/1
+C40,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5632690.2,5882631.3,1322,cafe,,33.479,37.631,1/1
+C41,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5633709.1,5882610.7,1218,cafe,,34.498,37.611,1/1
+C42,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5635240.0,5882610.7,1220,cafe,,36.029,37.611,1/1
+C43,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5636258.9,5882590.2,1230,cafe,,37.048,37.59,1/1
+C44,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5637789.9,5882590.2,1232,cafe,,38.579,37.59,1/1
+C45,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5631159.2,5882006.3,1315,cafe,,31.948,37.006,1/1
+C46,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5632690.2,5882006.3,1317,cafe,,33.479,37.006,1/1
+C47,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5633709.1,5881985.7,1207,cafe,,34.498,36.986,1/1
+C48,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5635240.0,5881985.7,1209,cafe,,36.029,36.986,1/1
+C49,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5636258.9,5881965.2,1213,cafe,,37.048,36.965,1/1
+C50,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5637789.9,5881965.2,1215,cafe,,38.579,36.965,1/1
+C51,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5639298.7,5881661.9,1299,cafe,,40.088,36.662,1/1
+C52,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5639873.7,5881661.9,1298,cafe,,40.663,36.662,1/1
+C53,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5640498.7,5881661.9,1293,cafe,,41.288,36.662,1/1
+C54,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5641073.7,5881661.9,1292,cafe,,41.863,36.662,1/1
+C55,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5625985.7,5881477.2,1256,cafe,,26.775,36.477,1/1
+C56,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5626560.7,5881477.2,1257,cafe,,27.35,36.477,1/1
+C57,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5627185.7,5881477.2,1262,cafe,,27.975,36.477,1/1
+C58,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5627760.7,5881477.2,1263,cafe,,28.55,36.477,1/1
+C59,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5631159.2,5881431.3,1314,cafe,,31.948,36.431,1/1
+C60,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5632690.2,5881431.3,1316,cafe,,33.479,36.431,1/1
+C61,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5633709.1,5881410.7,1206,cafe,,34.498,36.411,1/1
+C62,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5635240.0,5881410.7,1208,cafe,,36.029,36.411,1/1
+C63,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5636258.9,5881390.2,1212,cafe,,37.048,36.39,1/1
+C64,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5637789.9,5881390.2,1214,cafe,,38.579,36.39,1/1
+C65,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5625985.7,5880458.1,1266,cafe,,26.775,35.458,1/1
+C66,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5626560.7,5880458.1,1267,cafe,,27.35,35.458,1/1
+C67,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5627185.7,5880458.1,1272,cafe,,27.975,35.458,1/1
+C68,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5627760.7,5880458.1,1273,cafe,,28.55,35.458,1/1
+C69,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5639298.7,5880273.4,1309,cafe,,40.088,35.273,1/1
+C70,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5639873.7,5880273.4,1308,cafe,,40.663,35.273,1/1
+C71,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5640498.7,5880273.4,1303,cafe,,41.288,35.273,1/1
+C72,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5641073.7,5880273.4,1302,cafe,,41.863,35.273,1/1
+C73,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5628609.3,5879626.8,1165,cafe,,29.398,34.627,1/1
+C74,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5630140.3,5879626.8,1167,cafe,,30.929,34.627,1/1
+C75,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5631159.2,5879606.3,1177,cafe,,31.948,34.606,1/1
+C76,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5632690.2,5879606.3,1179,cafe,,33.479,34.606,1/1
+C77,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5633709.1,5879585.7,1189,cafe,,34.498,34.586,1/1
+C78,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5635240.0,5879585.7,1191,cafe,,36.029,34.586,1/1
+C79,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5636258.9,5879565.2,1201,cafe,,37.048,34.565,1/1
+C80,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5637789.9,5879565.2,1203,cafe,,38.579,34.565,1/1
+C81,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5639298.7,5879111.9,1311,cafe,,40.088,34.112,1/1
+C82,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5639873.7,5879111.9,1310,cafe,,40.663,34.112,1/1
+C83,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5640498.7,5879111.9,1305,cafe,,41.288,34.112,1/1
+C84,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5641073.7,5879111.9,1304,cafe,,41.863,34.112,1/1
+C85,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5628609.3,5879051.8,1164,cafe,,29.398,34.052,1/1
+C86,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5630140.3,5879051.8,1166,cafe,,30.929,34.052,1/1
+C87,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5631159.2,5879031.3,1176,cafe,,31.948,34.031,1/1
+C88,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5632690.2,5879031.3,1178,cafe,,33.479,34.031,1/1
+C89,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5633709.1,5879010.7,1188,cafe,,34.498,34.011,1/1
+C90,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5635240.0,5879010.7,1190,cafe,,36.029,34.011,1/1
+C91,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5636258.9,5878990.2,1200,cafe,,37.048,33.99,1/1
+C92,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5637789.9,5878990.2,1202,cafe,,38.579,33.99,1/1
+C93,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5625985.7,5878927.2,1268,cafe,,26.775,33.927,1/1
+C94,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5626560.7,5878927.2,1269,cafe,,27.35,33.927,1/1
+C95,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5627185.7,5878927.2,1274,cafe,,27.975,33.927,1/1
+C96,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5627760.7,5878927.2,1275,cafe,,28.55,33.927,1/1
+C97,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5628609.3,5878426.8,1159,cafe,,29.398,33.427,1/1
+C98,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5630140.3,5878426.8,1161,cafe,,30.929,33.427,1/1
+C99,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5631159.2,5878406.3,1171,cafe,,31.948,33.406,1/1
+C100,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5632690.2,5878406.3,1173,cafe,,33.479,33.406,1/1
+C101,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5633709.1,5878385.7,1183,cafe,,34.498,33.386,1/1
+C102,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5635240.0,5878385.7,1185,cafe,,36.029,33.386,1/1
+C103,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5636258.9,5878365.2,1195,cafe,,37.048,33.365,1/1
+C104,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5637789.9,5878365.2,1197,cafe,,38.579,33.365,1/1
+C105,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5628609.3,5877851.8,1158,cafe,,29.398,32.852,1/1
+C106,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5630140.3,5877851.8,1160,cafe,,30.929,32.852,1/1
+C107,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5631159.2,5877831.3,1170,cafe,,31.948,32.831,1/1
+C108,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5632690.2,5877831.3,1172,cafe,,33.479,32.831,1/1
+C109,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5633709.1,5877810.7,1182,cafe,,34.498,32.811,1/1
+C110,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5635240.0,5877810.7,1184,cafe,,36.029,32.811,1/1
+C111,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5636258.9,5877790.2,1194,cafe,,37.048,32.79,1/1
+C112,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5637789.9,5877790.2,1196,cafe,,38.579,32.79,1/1
+C113,Cafeteria seats,Circulation 7,cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5691052.4,5931879.3,2162,circulation,,91.841,86.879,1/1
+C114,Cafeteria seats,Circulation 7,cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5691627.4,5931879.3,2161,circulation,,92.416,86.879,1/1
+C115,Cafeteria seats,Circulation 7,cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5692252.4,5931879.3,2156,circulation,,93.041,86.879,1/1
+C116,Cafeteria seats,Circulation 7,cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5692827.4,5931879.3,2155,circulation,,93.616,86.879,1/1
+C117,Cafeteria seats,Circulation 7,cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5691052.4,5930717.8,2164,circulation,,91.841,85.718,1/1
+C118,Cafeteria seats,Circulation 7,cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5691627.4,5930717.8,2163,circulation,,92.416,85.718,1/1
+C119,Cafeteria seats,Circulation 7,cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5692252.4,5930717.8,2158,circulation,,93.041,85.718,1/1
+C120,Cafeteria seats,Circulation 7,cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5692827.4,5930717.8,2157,circulation,,93.616,85.718,1/1
+L1,"Lounge, collab and visitor seats",FIRE RESCUE BALCONY (3),visitor / lounge chair,,WS CHAIR,1500 X 750,5651343.2,5956821.7,1580,core,,52.132,111.822,1/1
+L2,"Lounge, collab and visitor seats",FIRE RESCUE BALCONY (3),visitor / lounge chair,,WS CHAIR,1500 X 750,5651193.2,5955564.4,1581,core,,51.982,110.564,1/1
+L3,"Lounge, collab and visitor seats",FIRE RESCUE BALCONY (3),visitor / lounge chair,,WS CHAIR,1500 X 750,5651943.2,5955564.4,1582,core,,52.732,110.564,1/1
+L4,"Lounge, collab and visitor seats",FIRE RESCUE BALCONY (3),visitor / lounge chair,,WS CHAIR,1500 X 750,5650672.6,5954228.7,1586,core,,51.462,109.229,1/1
+L5,"Lounge, collab and visitor seats",FIRE RESCUE BALCONY (3),visitor / lounge chair,,WS CHAIR,1500 X 750,5651929.9,5953628.7,1584,core,,52.719,108.629,1/1
+L6,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,receptionist chair,,Ch,A$C4C3625EB,5627397.7,5862801.8,1000,reception,,28.187,17.802,1/1
+L7,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5624714.1,5859802.7,1001,reception,,25.503,14.803,1/2
+L8,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5624714.1,5859802.7,1001,reception,,25.503,14.803,2/2
+L9,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5627114.4,5859802.7,1008,reception,,27.903,14.803,1/2
+L10,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5627114.4,5859802.7,1008,reception,,27.903,14.803,2/2
+L11,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5629508.5,5859802.7,1016,reception,,30.298,14.803,1/2
+L12,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5629508.5,5859802.7,1016,reception,,30.298,14.803,2/2
+L13,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5624714.1,5857868.3,1009,reception,,25.503,12.868,1/2
+L14,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5624714.1,5857868.3,1009,reception,,25.503,12.868,2/2
+L15,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5627114.4,5857868.3,1011,reception,,27.903,12.868,1/2
+L16,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5627114.4,5857868.3,1011,reception,,27.903,12.868,2/2
+L17,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5629508.5,5857868.3,1018,reception,,30.298,12.868,1/2
+L18,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5629508.5,5857868.3,1018,reception,,30.298,12.868,2/2
+L19,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5624714.1,5855864.9,1012,reception,,25.503,10.865,1/2
+L20,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5624714.1,5855864.9,1012,reception,,25.503,10.865,2/2
+L21,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5627114.4,5855864.9,1014,reception,,27.903,10.865,1/2
+L22,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5627114.4,5855864.9,1014,reception,,27.903,10.865,2/2
+L23,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5629508.5,5855864.9,1020,reception,,30.298,10.865,1/2
+L24,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5629508.5,5855864.9,1020,reception,,30.298,10.865,2/2
+L25,"Lounge, collab and visitor seats",Circulation 7,receptionist chair,,Ch,A$C52DD72D6,5634013.7,5943125.5,2251,circulation,,34.803,98.126,1/1
+L26,"Lounge, collab and visitor seats",Circulation 2,receptionist chair,,Ch,dsf,5738099.6,5939022.7,2232,circulation,,138.889,94.023,1/1
+K1,Cabin seats (desk chair and visitors),CABIN (2),cabin chair,,WS CHAIR,1500 X 750,5724231.6,5954027.7,2177,work,,125.021,109.028,1/1
+K2,Cabin seats (desk chair and visitors),CABIN (2),cabin chair,,WS CHAIR,SD,5726619.9,5953933.3,2183,work,,127.409,108.933,1/1
+K3,Cabin seats (desk chair and visitors),CABIN (2),cabin chair,,WS CHAIR,SD,5728038.2,5953333.3,2181,work,,128.827,108.333,1/1
+K4,Cabin seats (desk chair and visitors),CABIN (2),cabin chair,,WS CHAIR,SD,5726619.9,5953183.3,2182,work,,127.409,108.183,1/1
+K5,Cabin seats (desk chair and visitors),CABIN (2),cabin chair,,WS CHAIR,1500 X 750,5723631.6,5952770.4,2179,work,,124.421,107.77,1/1
+K6,Cabin seats (desk chair and visitors),CABIN (2),cabin chair,,WS CHAIR,1500 X 750,5724381.6,5952770.4,2178,work,,125.171,107.77,1/1
+K7,Cabin seats (desk chair and visitors),CABIN (1),cabin chair,,WS CHAIR,1500 X 750,5650672.6,5953478.7,1585,work,,51.462,108.479,1/1
+K8,Cabin seats (desk chair and visitors),CABIN (3),cabin chair,,WS CHAIR,,5717756.6,5955572.5,2172,work,,118.546,110.573,1/1
+K9,Cabin seats (desk chair and visitors),CABIN (3),cabin chair,,WS CHAIR,,5717756.6,5954912.0,2171,work,,118.546,109.912,1/1
+K10,Cabin seats (desk chair and visitors),CABIN (3),cabin chair,,WS CHAIR,,5717756.6,5954287.0,2173,work,,118.546,109.287,1/1
+K11,Cabin seats (desk chair and visitors),CABIN (3),cabin chair,,WS CHAIR,,5716757.6,5952900.1,2175,work,,117.547,107.9,1/1
+K12,Cabin seats (desk chair and visitors),CABIN (3),cabin chair,,WS CHAIR,,5718037.7,5952306.6,2174,work,,118.827,107.307,1/1
+K13,Cabin seats (desk chair and visitors),CABIN (5),cabin chair,,WS CHAIR,,5644924.6,5927271.8,1577,work,,45.714,82.272,1/1
+K14,Cabin seats (desk chair and visitors),CABIN (5),cabin chair,,WS CHAIR,,5644924.6,5926521.8,1578,work,,45.714,81.522,1/1

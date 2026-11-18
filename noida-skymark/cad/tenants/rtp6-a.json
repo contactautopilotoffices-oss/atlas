@@ -1,0 +1,271 @@
+{
+ "extends": "_rtp.json",
+ "name": "RTP 6th floor, Option A (Units 601 & 602)",
+ "dwg_name": "20261118_6TH FLOOR.dwg",
+ "plan_label": "6TH FLOOR PLAN, Option 01, Details for Unit 601 & 602 (Team One Arteq, 03.10.2020)",
+ "cluster": {
+  "id": 3,
+  "tool": "airoli-rtp/tools/clusters.py",
+  "run": "19 Nov 2026"
+ },
+ "plan_window_in": [
+  5296000,
+  5845000,
+  5439500,
+  5968500
+ ],
+ "origin_in": [
+  5296000,
+  5845000
+ ],
+ "paper_sheet": "*Paper_Space247",
+ "sheet_areas_sqft": {
+  "carpet": 23659,
+  "chargeable": 35488,
+  "source": "model-space text on the sheet: 'Carpet Area :- 23,659 Sqft.', 'Chargeable Area :- 35,488 Sqft.'"
+ },
+ "chairs": {
+  "WS CHAIR": [
+   "WS chair",
+   "by_room"
+  ],
+  "Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1": [
+   "cafe chair",
+   "cafe"
+  ],
+  "Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1": [
+   "cafe chair",
+   "cafe"
+  ],
+  "Sofa Two Seater - Sofa Two Seater_1-102-Level 1": [
+   "2-seat sofa",
+   "lounge",
+   2
+  ],
+  "Ch": [
+   "receptionist chair",
+   "lounge"
+  ],
+  "A$C225A0E04": [
+   "meeting chair",
+   "meeting"
+  ]
+ },
+ "desks": {
+  "WS 1050 X 600": "1050x600 workstation (block, chair nested)",
+  "A$C237876BF": "4'x2' workstation (block, chair nested)"
+ },
+ "desk_polys": [
+  {
+   "layers": [
+    "I-FURN"
+   ],
+   "verts": 5,
+   "area_m2": [
+    0.6,
+    0.72
+   ],
+   "name": "4'x2' workstation",
+   "workstation": true,
+   "from_lines": true
+  },
+  {
+   "layers": [
+    "I-FURN"
+   ],
+   "verts": 7,
+   "area_m2": [
+    0.88,
+    0.98
+   ],
+   "name": "120-degree workstation",
+   "workstation": true,
+   "from_lines": true
+  }
+ ],
+ "tables": {
+  "1500 X 750": "1500x750 table",
+  "CIRCLE 4 SEATER": "round 4-seat table",
+  "Cafeteria Table Rectangular4_ 0 - Cafeteria Table Rectangular-467-Level 1": "cafe table"
+ },
+ "closures": [
+  {
+   "a": [
+    41.7,
+    84.0
+   ],
+   "b": [
+    41.7,
+    114.5
+   ],
+   "virtual": true,
+   "why": "unit line: Units 601 & 602 end at the east face of lift core B (the stair box to the facade); the east arm (603, 604) is open floor on this sheet with no wall drawn between"
+  }
+ ],
+ "not_demised_at": [
+  {
+   "at": [
+    90.0,
+    100.0
+   ],
+   "why": "east arm (Office 603 and Office 604 on this sheet): not part of Units 601 & 602, left empty in Option A"
+  }
+ ],
+ "label_adds": [
+  {
+   "t": "MEETING ROOM 04 PAX (unlabelled)",
+   "at": [
+    35.6,
+    12.3
+   ],
+   "why": "third round 4-seat table room beside the two labelled MEETING ROOM 04 PAX rooms; no label of its own in the CAD"
+  },
+  {
+   "t": "TRAINING-STYLE ROOM (unlabelled)",
+   "at": [
+    34.5,
+    80.0
+   ],
+   "why": "20 chairs in rows at 450 mm-deep tables (10 x 2400 + 9 x 1600 mm) beside the lift lobby; no room label in the CAD (the nearest text is CONSOLE)"
+  }
+ ],
+ "label_fixes": [
+  {
+   "at": [
+    33.9,
+    40.7
+   ],
+   "move_to": [
+    35.0,
+    37.0
+   ],
+   "why": "the dining hall's CAFETERIA label sits on the servery counter line; moved into the dining area it names"
+  },
+  {
+   "at": [
+    27.4,
+    79.0
+   ],
+   "move_to": [
+    28.4,
+    79.6
+   ],
+   "why": "TELEPHONE BOOTH label sits on the booth's west wall; moved inside the booth"
+  },
+  {
+   "at": [
+    42.4,
+    77.9
+   ],
+   "move_to": [
+    40.7,
+    78.7
+   ],
+   "why": "the second CABIN label sits on the facade line beside its room (3 chairs); moved inside the room"
+  }
+ ],
+ "legend": {
+  "sheet": "*Paper_Space247",
+  "layers": [
+   "Workstation"
+  ],
+  "about": "paper-space LEGEND table on the Option 01 sheet (Team One Arteq, 03.10.2020): DESCRIPTION / REQ / PROV"
+ },
+ "legend_map": [
+  {
+   "item": "RECEPTION",
+   "how": "labels",
+   "rx": "RECEPTION"
+  },
+  {
+   "item": "02/04 MEETING",
+   "how": "rooms_by_seats",
+   "kind": "meeting",
+   "seats": [
+    2,
+    5
+   ]
+  },
+  {
+   "item": "06/08 MEETING",
+   "how": "rooms_by_seats",
+   "kind": "meeting",
+   "seats": [
+    6,
+    9
+   ]
+  },
+  {
+   "item": "BOARD ROOM",
+   "how": "labels",
+   "rx": "BOARD ROOM"
+  },
+  {
+   "item": "^CABINS",
+   "how": "labels",
+   "rx": "^CABIN$"
+  },
+  {
+   "item": "CEO CABIN",
+   "how": "labels",
+   "rx": "CEO|DIRECTOR|MD CABIN"
+  },
+  {
+   "item": "WORKSTATION",
+   "how": "work_seats"
+  },
+  {
+   "item": "TELEPHONE BOOTH",
+   "how": "labels",
+   "rx": "TELEPHONE|PHONE BOOTH"
+  },
+  {
+   "item": "^REPRO",
+   "how": "labels",
+   "rx": "^REPRO|PRINTER"
+  },
+  {
+   "item": "TRAINING ROOM",
+   "how": "labels",
+   "rx": "^TRAINING ROOM$|TRAINING-STYLE"
+  },
+  {
+   "item": "UPS",
+   "how": "labels",
+   "rx": "UPS"
+  },
+  {
+   "item": "SERVER",
+   "how": "labels",
+   "rx": "SERVER|HUB ROOM"
+  },
+  {
+   "item": "STORE ROOM",
+   "how": "labels",
+   "rx": "^STORE"
+  },
+  {
+   "item": "CAFETERIA",
+   "how": "labels",
+   "rx": "^CAFETERIA$",
+   "merge_m": 12.0,
+   "note": "labels within 12 m of each other count as one cafeteria"
+  },
+  {
+   "item": "GENTS WASH",
+   "how": "labels",
+   "rx": "GENTS"
+  },
+  {
+   "item": "LADIES WASH",
+   "how": "labels",
+   "rx": "LADIES"
+  }
+ ],
+ "offer_clip_m": [
+  0,
+  0,
+  44.0,
+  120
+ ]
+}

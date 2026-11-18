@@ -1,0 +1,234 @@
+{
+ "extends": "_rtp.json",
+ "name": "RTP 6th floor, Option B (whole floor)",
+ "dwg_name": "20261118_6TH FLOOR.dwg",
+ "plan_label": "second fit on the same sheet: north-arm west end as in A, inner north arm open, east arm fitted; no title, legend or area statement",
+ "cluster": {
+  "id": 50,
+  "tool": "airoli-rtp/tools/clusters.py",
+  "run": "19 Nov 2026"
+ },
+ "plan_window_in": [
+  5599211,
+  5845000,
+  5742711,
+  5968500
+ ],
+ "origin_in": [
+  5599211,
+  5845000
+ ],
+ "paper_sheet": "*Paper_Space247",
+ "chairs": {
+  "WS CHAIR": [
+   "WS chair",
+   "by_room"
+  ],
+  "Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1": [
+   "cafe chair",
+   "cafe"
+  ],
+  "Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1": [
+   "cafe chair",
+   "cafe"
+  ],
+  "Sofa Two Seater - Sofa Two Seater_1-102-Level 1": [
+   "2-seat sofa",
+   "lounge",
+   2
+  ],
+  "Ch": [
+   "receptionist chair",
+   "lounge"
+  ],
+  "A$C225A0E04": [
+   "meeting chair",
+   "meeting"
+  ]
+ },
+ "desks": {
+  "WS 1050 X 600": "1050x600 workstation (block, chair nested)",
+  "A$C237876BF": "4'x2' workstation (block, chair nested)"
+ },
+ "desk_polys": [
+  {
+   "layers": [
+    "I-FURN"
+   ],
+   "verts": 5,
+   "area_m2": [
+    0.6,
+    0.72
+   ],
+   "name": "4'x2' workstation",
+   "workstation": true,
+   "from_lines": true
+  },
+  {
+   "layers": [
+    "I-FURN"
+   ],
+   "verts": 7,
+   "area_m2": [
+    0.88,
+    0.98
+   ],
+   "name": "120-degree workstation",
+   "workstation": true,
+   "from_lines": true
+  }
+ ],
+ "tables": {
+  "1500 X 750": "1500x750 table",
+  "CIRCLE 4 SEATER": "round 4-seat table",
+  "SD": "table",
+  "gfg g": "meeting table",
+  "dfs": "board table",
+  "Cafeteria Table Rectangular4_ 0 - Cafeteria Table Rectangular-467-Level 1": "cafe table"
+ },
+ "legend": {
+  "sheet": "*Paper_Space247",
+  "layers": [
+   "Workstation"
+  ],
+  "about": "paper-space LEGEND table on the Option 01 sheet (Team One Arteq, 03.10.2020): DESCRIPTION / REQ / PROV",
+  "note": "Option B has no legend of its own; it is compared with the Option A legend (same floor, same brief) for reference only"
+ },
+ "legend_map": [
+  {
+   "item": "RECEPTION",
+   "how": "labels",
+   "rx": "RECEPTION"
+  },
+  {
+   "item": "02/04 MEETING",
+   "how": "rooms_by_seats",
+   "kind": "meeting",
+   "seats": [
+    2,
+    5
+   ]
+  },
+  {
+   "item": "06/08 MEETING",
+   "how": "rooms_by_seats",
+   "kind": "meeting",
+   "seats": [
+    6,
+    9
+   ]
+  },
+  {
+   "item": "BOARD ROOM",
+   "how": "labels",
+   "rx": "BOARD ROOM"
+  },
+  {
+   "item": "^CABINS",
+   "how": "labels",
+   "rx": "^CABIN$"
+  },
+  {
+   "item": "CEO CABIN",
+   "how": "labels",
+   "rx": "CEO|DIRECTOR|MD CABIN"
+  },
+  {
+   "item": "WORKSTATION",
+   "how": "work_seats"
+  },
+  {
+   "item": "TELEPHONE BOOTH",
+   "how": "labels",
+   "rx": "TELEPHONE|PHONE BOOTH"
+  },
+  {
+   "item": "^REPRO",
+   "how": "labels",
+   "rx": "^REPRO|PRINTER"
+  },
+  {
+   "item": "TRAINING ROOM",
+   "how": "labels",
+   "rx": "^TRAINING ROOM$|TRAINING-STYLE"
+  },
+  {
+   "item": "UPS",
+   "how": "labels",
+   "rx": "UPS"
+  },
+  {
+   "item": "SERVER",
+   "how": "labels",
+   "rx": "SERVER|HUB ROOM"
+  },
+  {
+   "item": "STORE ROOM",
+   "how": "labels",
+   "rx": "^STORE"
+  },
+  {
+   "item": "CAFETERIA",
+   "how": "labels",
+   "rx": "^CAFETERIA$",
+   "merge_m": 12.0,
+   "note": "labels within 12 m of each other count as one cafeteria"
+  },
+  {
+   "item": "GENTS WASH",
+   "how": "labels",
+   "rx": "GENTS"
+  },
+  {
+   "item": "LADIES WASH",
+   "how": "labels",
+   "rx": "LADIES"
+  }
+ ],
+ "frame_note": "origin = Option A origin + 303,211 mm in x (the two copies sit side by side; their sheet frames match to the millimetre), so plan coordinates are the same in A and B",
+ "label_fixes": [
+  {
+   "at": [
+    33.9,
+    40.7
+   ],
+   "move_to": [
+    35.0,
+    37.0
+   ],
+   "why": "the dining hall's CAFETERIA label sits on the servery counter line; moved into the dining area it names"
+  },
+  {
+   "at": [
+    27.4,
+    79.0
+   ],
+   "move_to": [
+    28.4,
+    79.6
+   ],
+   "why": "TELEPHONE BOOTH label sits on the booth's west wall; moved inside the booth"
+  },
+  {
+   "at": [
+    42.4,
+    77.9
+   ],
+   "move_to": [
+    40.7,
+    78.7
+   ],
+   "why": "the second CABIN label sits on the facade line beside its room (3 chairs); moved inside the room"
+  }
+ ],
+ "label_adds": [
+  {
+   "t": "MEETING ROOM 04 PAX (unlabelled)",
+   "at": [
+    35.6,
+    12.3
+   ],
+   "why": "third round 4-seat table room beside the two labelled MEETING ROOM 04 PAX rooms; no label of its own in the CAD"
+  }
+ ]
+}

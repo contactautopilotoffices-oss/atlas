@@ -68,3 +68,6 @@ noida-skymark/twin/assets/
 **/*.blend1
 **/*.raw.glb
 **/*.exr
+
+# Reliable Tech Park: CAD intermediates (flattened DWG, ~11 MB per plan) stay local; rebuild with airoli-rtp/G0_RUN.md
+airoli-rtp/*/cad_data/

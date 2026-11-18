@@ -85,6 +85,9 @@ def build(faces, labels, C, desks, seats_xy, furn_xy):
         L = per[i]; named = [l for l in L if not circ.search(l['t'])]
         has_desk = [dp for dp, _ in desks if f.contains(dp.centroid)]
         has_seat = any(f.contains(Point(x, y)) for x, y, _ in seats_xy)
+        hand = next((nd for nd in C.get('not_demised_at', []) if f.contains(Point(*nd['at']))), None)
+        if hand:                 # tenant config: this face is not part of the offer (each listed with its reason)
+            not_dem.append({'poly': f, 'why': hand['why']}); continue
         if any(kind(l['t']) == 'occupied' for l in named):
             not_dem.append({'poly': f, 'why': 'labelled ' + ', '.join(l['t'] for l in named if kind(l['t']) == 'occupied') + ' on this plan (another tenant)'}); continue
         if f.area > 150 and not has_desk and not has_seat and not named:

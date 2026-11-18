@@ -20,9 +20,9 @@ R = json.load(open(os.path.join(a.work, 'rooms.json')))
 I = json.load(open(os.path.join(a.work, 'inst.json')))
 d = load_flat(a)['rec']
 NAMES = {'W': 'Work seats (desk + chair)', 'M': 'Meeting room seats', 'T': 'Training room seats', 'C': 'Cafeteria seats',
-         'L': 'Lounge, collab and visitor seats', 'O': 'Operator (Autopilot cabin, reception)'}
+         'L': 'Lounge, collab and visitor seats', 'O': 'Operator (Autopilot cabin, reception)', 'K': 'Cabin seats (desk chair and visitors)'}
 order = {r['name']: i for i, r in enumerate(sorted(R['rooms'], key=lambda r: (-r['poly'][0][1], r['poly'][0][0])))}
-S.sort(key=lambda r: ('WMTCLO'.index(r['grp']), order.get(r['room'], 999), -round(r['y_in'] / 6), r['x_in']))
+S.sort(key=lambda r: ('WMTCLOK'.index(r['grp']), order.get(r['room'], 999), -round(r['y_in'] / 6), r['x_in']))
 cnt = collections.Counter()
 for r in S: cnt[r['grp']] += 1; r['seat_id'] = f"{r['grp']}{cnt[r['grp']]}"
 json.dump(S, open(os.path.join(a.work, 'seats.json'), 'w'))
@@ -33,7 +33,7 @@ with open(outname(a, '_seats.csv'), 'w', newline='') as f:
                             r['room_kind'], r['desk_pair'], r['x_m'], r['y_m'], f"{r['place']}/{r['places']}"])
 by = collections.defaultdict(collections.Counter)
 for r in S: by[r['grp']][r['room']] += 1
-summary = {NAMES[g]: {'total': sum(by[g].values()), 'rooms': dict(by[g])} for g in 'WMTCLO' if by[g]}
+summary = {NAMES[g]: {'total': sum(by[g].values()), 'rooms': dict(by[g])} for g in 'WMTCLOK' if by[g]}
 
 # ------------------------------------------------------------- inventory the deck is checked against
 DK = C['desks']
@@ -104,7 +104,7 @@ elif a.tenant == 'volt':
     line('Work seats (live Volt pipeline)', claims.get('work_seats'), cnt['W'], 'generic pipeline re-run on the Volt DWG')
     line('All seats (live Volt pipeline)', claims.get('all_seats'), len(S), 'generic pipeline re-run on the Volt DWG')
 meta = {'tenant': C['name'], 'floor': a.floor, 'dwg': C.get('dwg_name'), 'work_seats': cnt['W'], 'all_seats': len(S),
-        'seats_by_group': {NAMES[g]: cnt[g] for g in 'WMTCLO' if cnt[g]}, 'deck_vs_cad': cmp_, 'inventory': inv,
+        'seats_by_group': {NAMES[g]: cnt[g] for g in 'WMTCLOK' if cnt[g]}, 'deck_vs_cad': cmp_, 'inventory': inv,
         'unplaced_room_labels': [l['t'] for l in R.get('unplaced_labels', [])],
         'method': 'One row per chair block instance (sofas: one per place). Room = the CAD room polygon containing the chair (rooms are the spaces closed by wall, glass and column lines with doors closed, named by the CAD text inside). Work seat = a work chair not in an operator room; desk pairing (chair nested in a desk block, or a desk block within 1.0 m) is reported per seat in desk_pair.'}
 summary['_proof'] = meta

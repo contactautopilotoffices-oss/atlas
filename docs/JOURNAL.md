@@ -1,5 +1,32 @@
 # Atlas — Development Journal
 
+## 2026-11-19 — Atlas: Reliable Tech Park (Airoli) G0 CAD read for three offers
+
+**The two Reliable Tech Park drawings were read into seat counts, room areas, entries, exits with walking distances, walkway widths and daylight, for the 6th-floor Option A, the 6th-floor Option B and the 4th-floor suite, each with a plain-English sign-off sheet.**
+
+- **Why:** a large occupier is being shown three offers in Reliable Tech Park, B Wing. The build is gated so that mistakes found late on Skymark (furniture in walkways, flicker, broken chairs) are caught on paper first. G0 proves what the drawings actually contain before any 2D plan or 3D model is made.
+- **Structural decisions:**
+  - The Skymark CAD pipeline was extended, not copied. Every new behaviour is switched on from the plan's own settings file (millimetre drawings, two plans in one drawing, desks drawn as loose lines, the paper-space legend, a unit outline where the drawing does not wall the unit off). Skymark is untouched: Volt's run gives exactly the same files as before (116 work seats, 213 in all).
+  - Five new steps were added: the legend reader, exits and walking distances, walkway widths, daylight by true facade, and the sign-off sheet. The alternative, a one-off script for this building, would have had to be rewritten for the next one.
+  - Walking distances follow the drawn walls and doors on a fine grid, so a missing door shows up as a missing route instead of being hidden by straight-line distances.
+  - Option B uses the same plan coordinates as Option A (the two copies on the sheet line up exactly), so the two can be compared room by room.
+  - The flattened drawings and the sheet images stay on this Mac (not in git), as agreed for client drawings.
+- **What works now:**
+  - 6th floor, Option A: 429 work seats, exactly the sheet legend's 429 provided (against 450 required); 670 seats in all. Exits: 5 stairs; worst walk to the nearest exit 33 m. 25 % of desks within 6 m of a window.
+  - 6th floor, Option B (whole floor): 723 work seats, 985 in all; 9 exit stairs; worst walk 34 m.
+  - 4th floor suite: 18 work seats, 135 training seats, 212 in all; its area matches the sheet's 6,603 sq ft within 2.2 % when partitions are counted.
+  - Each offer has a sign-off sheet (`airoli-rtp/<plan>/<plan>_G0.md` and an image) listing every difference from the drawing's own claims.
+- **Left undone:**
+  - G1 (the 2D plan) and G2 (the clay model) were not started: they wait for the founder's sign-off of G0.
+  - The 6th-floor area check fails: the sheet's carpet figure is exactly its chargeable figure divided by 1.5, so it looks like a commercial conversion, not a measured area. It cannot be matched without the landlord's own area method.
+  - A few room outlines are still open-plan zones (some repro, store and Option B east-arm rooms); their labels are listed on the sheets. Seat totals do not depend on them.
+  - The sheet's own north arrow (in paper space) was not read; north comes from the building-footprint fit.
+- **Open questions for the founder:**
+  - The 6th-floor drawing shows the cafeteria and its lift lobby with no door to the work floor; is a door missing, or is the cafeteria meant to be reached from the lifts only?
+  - The 4th-floor suite reaches only one exit stair without crossing other tenants' space. Is there a common corridor to a second stair that the drawing does not show?
+  - Option B's "Call centre, 60 seats" area has no chairs drawn. Should it be shown as 60 seats?
+  - Which area basis should the client see: the sheet's carpet, the measured free floor, or the landlord's chargeable area?
+
 ## 2026-11-18 — Atlas: F1 Skymark twin gets Paytm and ARCIL floors
 
 **Paytm (1st floor) and ARCIL (2nd floor) were added to the F1 Skymark digital twin next to Volt, each proven from its own CAD drawing, built and lit in Blender on the Mac, and walkable in a new building viewer.**

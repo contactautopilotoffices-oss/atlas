@@ -1,0 +1,17 @@
+legend line,required,provided (sheet),in the CAD,CAD = provided,CAD evidence
+RECEPTION AND WAITING AREA,1,1,1,True,"CAD labels: RECEPTION & WAITING AREA (28, 16)"
+02/04 MEETING ROOM,2,4,3,False,"meeting rooms with 2-5 chairs: MEETING ROOM 04 PAX (1) (4), MEETING ROOM 04 PAX (unlabelled) (3), MEETING ROOM 04 PAX (2) (4)"
+06/08 MEETING ROOM,2,4,4,True,"meeting rooms with 6-9 chairs: MEETING ROOM (1) (7), MEETING ROOM (2) (7), MEETING ROOM (3) (7), MEETING ROOM (4) (7)"
+BOARD ROOM,1,1,0,False,CAD labels: none
+CABINS,6,2,2,True,"CAD labels: CABIN (41, 79), CABIN (15, 106)"
+CEO CABIN,1,1,0,False,CAD labels: none
+WORKSTATION 4' X2',450,429,429,True,"work seats (chair at a desk): 202 120-degree workstation, 189 4'x2' workstation, 36 4'x2' workstation (block, chair nested), 2 1050x600 workstation (block, chair nested)"
+TELEPHONE BOOTH,0,1,1,True,"CAD labels: TELEPHONE BOOTH (28, 80)"
+REPRO,1,2,6,False,"CAD labels: PRINTER (13, 80), REPRO AREA (13, 82), REPRO (27, 56), REPRO (16, 79), REPRO (17, 67), REPRO (17, 31)"
+TRAINING ROOM,1,1,2,False,"CAD labels: TRAINING ROOM (33, 22), TRAINING-STYLE ROOM (unlabelled) (34, 80)"
+UPS & ELECTRICAL ROOM,1,1,1,True,"CAD labels: UPS & ELECTRICAL ROOM (15, 42)"
+SERVER ROOM,1,1,1,True,"CAD labels: SERVER ROOM (15, 60)"
+STORE ROOM,1,3,3,True,"CAD labels: STORE ROOM (28, 20), STORE ROOM (38, 53), STORE ROOM (18, 13)"
+CAFETERIA,1,1,1,True,"CAD labels: CAFETERIA (28, 43). labels within 12 m of each other count as one cafeteria"
+GENTS WASH ROOM,1,3,3,True,"CAD labels: GENTS TOILET (14, 77), GENTS TOILET (15, 27), GENTS TOILET (15, 24)"
+LADIES WASHROOM,1,2,3,False,"CAD labels: LADIES TOILET (14, 37), LADIES TOILET (14, 64), LADIES TOILET (15, 21)"

@@ -62,7 +62,7 @@ for l in seen:
         p1, p2 = F.m(*r['p1']), F.m(*r['p2'])
         if (Point(p1).distance(l) < 0.05 and Point(p2).distance(l) < 0.05): match = r; break
     if match:
-        item('walls', f"wall from ({c0[0]:.2f},{c0[1]:.2f}) length", abs(match['meas'] * IN - l.length) < 0.01 or 'info', f"{l.length*1000:.0f} mm",
+        item('walls', f"wall from ({c0[0]:.2f},{c0[1]:.2f}) length", abs(match['meas'] * F.s - l.length) < 0.01 or 'info', f"{l.length*1000:.0f} mm",
              f"dimension {match['meas']*25.4:.0f} mm", 'dimension spans part or all of this wall')
     else:
         item('walls', f"wall from ({c0[0]:.2f},{c0[1]:.2f}) to ({c1[0]:.2f},{c1[1]:.2f})", 'info', f"{l.length*1000:.0f} mm", 'no dimension in the CAD spans this wall',

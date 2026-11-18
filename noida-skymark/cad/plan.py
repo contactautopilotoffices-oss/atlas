@@ -14,8 +14,8 @@ R = json.load(open(os.path.join(a.work, 'rooms.json'))); S = json.load(open(os.p
 summ = json.load(open(outname(a, '_summary.json'))) if os.path.exists(outname(a, '_summary.json')) else None
 KC = {'work': '#f6d9c9', 'meeting': '#cfdcf7', 'training': '#dcd0f2', 'cafe': '#cdebd8', 'lounge': '#f7e7c4', 'reception': '#ecdff0',
       'wc': '#d5ecef', 'core': '#dcdcdc', 'service': '#e6e1d6', 'operator': '#e9e9e9', 'occupied': '#f1f1f1', 'circulation': '#fafafa', 'other': '#f7f7f4'}
-GC = {'W': '#d6452b', 'M': '#2b62d6', 'T': '#7a3fc4', 'C': '#1f9a55', 'L': '#d68a1f', 'O': '#8a8a8a'}
-GN = {'W': 'work (desk + chair)', 'M': 'meeting', 'T': 'training', 'C': 'cafe / pantry', 'L': 'lounge, collab, visitor', 'O': 'operator (not the tenant)'}
+GC = {'W': '#d6452b', 'M': '#2b62d6', 'T': '#7a3fc4', 'C': '#1f9a55', 'L': '#d68a1f', 'O': '#8a8a8a', 'K': '#a0522d'}
+GN = {'W': 'work (desk + chair)', 'M': 'meeting', 'T': 'training', 'C': 'cafe / pantry', 'L': 'lounge, collab, visitor', 'O': 'operator (not the tenant)', 'K': 'cabin (desk chair + visitors)'}
 pl = R['plate']; xs = [p[0] for p in pl]; ys = [p[1] for p in pl]
 x0, x1, y0, y1 = min(xs) - 1, max(xs) + 1, min(ys) - 1, max(ys) + 1
 WALL = set(C['layers']['walls']) | set(C['layers']['column_lines']); GL = set(C['layers']['glass'])
@@ -59,10 +59,10 @@ for rm in R['rooms']:
             bbox=dict(fc='white', ec='none', alpha=.6, pad=.6))
 ax.set_xlim(x0, x1); ax.set_ylim(y0, y1); ax.set_aspect('equal'); ax.axis('off')
 cnt = collections.Counter(s['grp'] for s in S)
-L = [(f"{C['name'].upper()}  |  FLOOR {a.floor}  |  SKYMARK F-1, NOIDA", 15, 'bold', '#111'),
+L = [(f"{C['name'].upper()}  |  FLOOR {a.floor}  |  {C.get('site_label', 'SKYMARK F-1, NOIDA')}", 15, 'bold', '#111'),
      ("Seats and rooms read from the drawing itself", 10, 'normal', '#444'), (C.get('dwg_name', ''), 8, 'normal', '#666'), ("", 6, 'normal', 'k'),
      (f"{cnt['W']} work seats", 26, 'bold', GC['W']), (f"{len(S)} seats of every kind", 13, 'bold', '#111'), ("", 6, 'normal', 'k')]
-for g in 'WMTCLO':
+for g in 'WMTCLOK':
     if cnt[g]: L.append((f"{cnt[g]:>4}  {GN[g]}", 11, 'bold', GC[g]))
 L.append(("", 6, 'normal', 'k'))
 byroom = collections.Counter(s['room'] for s in S if s['grp'] == 'W')

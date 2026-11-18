@@ -1,0 +1,214 @@
+{
+ "about": "Reliable Tech Park, B Wing, Airoli (Navi Mumbai): layer and block mapping shared by the 4th and 6th floor drawings (millimetres, AutoCAD 2018). Base-building layers (walls, WINDOW, STRUCTURAL GLAZING, duct, STAIR, ELE) are the landlord's; the fit-out layers differ per sheet (6th: Team One Arteq 2020, I-FURN / PR-* / WS CHAIR; 4th: WS-* standard). Plan files extend this one.",
+ "extends": "_skymark.json",
+ "building": "Reliable Tech Park, B Wing, Thane-Belapur Road, MIDC Airoli, Navi Mumbai 400708",
+ "unit_m": 0.001,
+ "true_north": {
+  "plan_north_bearing_deg": 91.0,
+  "rotate_cw_deg": 91.0,
+  "meaning": "the CAD's up (+y) points 91 deg clockwise of true north (true east, near enough); rotate the plan 91 deg clockwise to put true north up",
+  "source": "airoli-rtp/review/north_fit.json: CAD outline fitted to OSM way 1072909784, IoU 0.913"
+ },
+ "layers": {
+  "walls": [
+   "walls",
+   "WALL",
+   "PARTITION",
+   "PR-FULL HT",
+   "WS-WALL-PRTN",
+   "duct",
+   "ELE",
+   "OUTER DIM",
+   "OUTER DIM 1",
+   "Column"
+  ],
+  "wall_lines": [
+   "walls",
+   "WALL",
+   "PARTITION",
+   "PR-FULL HT",
+   "WS-WALL-PRTN",
+   "duct",
+   "ELE",
+   "OUTER DIM",
+   "OUTER DIM 1",
+   "Column"
+  ],
+  "wall_blocks_on": [
+   "PR-FULL HT"
+  ],
+  "glass": [
+   "WINDOW",
+   "STRUCTURAL GLAZING",
+   "PR- GLASS",
+   "PR-LINE",
+   "WS-GLAZ-GLAS",
+   "WS-DOOR-GLAZ"
+  ],
+  "glass_lines": [
+   "WINDOW",
+   "STRUCTURAL GLAZING",
+   "PR- GLASS",
+   "PR-LINE",
+   "WS-GLAZ-GLAS",
+   "WS-DOOR-GLAZ"
+  ],
+  "glass_blocks_on": [
+   "PR- GLASS"
+  ],
+  "facade_glass": [
+   "STRUCTURAL GLAZING",
+   "WINDOW"
+  ],
+  "doors": [
+   "DOOR",
+   "DR-GLASS",
+   "WS-DOOR-GLAZ",
+   "WS-DOOR"
+  ],
+  "columns": [
+   "Column",
+   "Structural Column",
+   "column-hatch"
+  ],
+  "column_lines": [
+   "Column",
+   "Structural Column"
+  ],
+  "stairs": [
+   "STAIR",
+   "RAILING"
+  ],
+  "lifts_core": [
+   "ELE",
+   "duct"
+  ],
+  "workstations_furniture": [
+   "I-FURN",
+   "FURN-TOA",
+   "WS-FURN",
+   "FURNITURE m",
+   "FURN",
+   "BREAKOUT"
+  ],
+  "wc_mep": [
+   "FIXT",
+   "SAN-FIX"
+  ],
+  "planters": [
+   "plants"
+  ],
+  "plate": [
+   "STRUCTURAL GLAZING",
+   "A.C.P.CLADDING",
+   "A.C.P. CLADDING",
+   "RCC  FINS",
+   "WINDOW",
+   "walls",
+   "RAILING",
+   "STRUCTURAL ASSEMBLY"
+  ],
+  "labels": [
+   "TEXT",
+   "W.D.TEXT",
+   "WALL",
+   "WS-ANNO-LABL",
+   "0"
+  ],
+  "room_barriers_extra": [
+   "RAILING"
+  ]
+ },
+ "labels": {
+  "ignore": "PASSAGE$|^E\\.?D\\.?$|^F\\.?D\\.?$|^S\\.?D\\.?$|^F\\.H\\.S$|^FIRE EXIT$|^U ?P$|^DN$|^C\\d+[A-C]?$|^\\d+$|WORKING SLAB|^CONSOLE$|^COUNTER$|FULL HEIGHT STORAGE|BENMERI COUNTER|FLOOR PLAN|CARPET AREA|CHARGEABLE|DETAILS FOR|^SW\\d|^RTP|LIFT CORE|^CORE \\d|^TOILET BLOCK$",
+  "circulation": "PASSAGE"
+ },
+ "room_kinds": [
+  [
+   "occupied",
+   "OCCUPIED|^UNIT NO|^OFFICE-60[34]$"
+  ],
+  [
+   "core",
+   "LIFT|STAIR|SHAFT|\\bDUCT\\b|^LOBBY$|SERVICE LOBBY|FIRE RESCUE BALCONY|^VOID$|MAIN LOBBY"
+  ],
+  [
+   "wc",
+   "TOILET|WASHROOM"
+  ],
+  [
+   "service",
+   "SERVER|UPS|STORE|STORAGE|REPRO|PRINTER|OUTDOOR UNIT|HUB ROOM|LOCKER|UMBRELLA|IT ROOM|POT WASH"
+  ],
+  [
+   "meeting",
+   "MEETING|CONFERENCE|INTERVIEW|BOARD ROOM|SEATER"
+  ],
+  [
+   "training",
+   "TRAINING|INDUCTION"
+  ],
+  [
+   "cafe",
+   "CAFE|PANTRY|KITCHEN"
+  ],
+  [
+   "reception",
+   "RECEPTION|WAITING"
+  ],
+  [
+   "lounge",
+   "LOUNGE|COLLAB|PHONE|BOOTH|LANDSCAPE"
+  ],
+  [
+   "work",
+   "WORKSTATION|OFFICE|CALL CENT|CABIN|ADMIN|HR ROOM"
+  ]
+ ],
+ "blocks": {
+  "doors": [
+   "D-750",
+   "DOOR_SNGL",
+   "Glass Door",
+   "double door"
+  ],
+  "lights": {},
+  "wc_mep": {
+   "wc": "wc",
+   "456": "wash basin",
+   "A$C5DA27531": "urinal"
+  },
+  "plants": [
+   "A$C39337867"
+  ],
+  "planter_boxes": [],
+  "wall_displays": []
+ },
+ "heights": {
+  "ceiling": 2.85,
+  "wall": 2.85,
+  "desk": 0.75,
+  "high_desk": 1.05,
+  "coffee": 0.42,
+  "screen": 0.4,
+  "planter": 1.05,
+  "source": "assumed: standard fit-out heights, not in the 2D drawing"
+ },
+ "exits": {
+  "stair_layer": "STAIR",
+  "labels": "^E\\.?D\\.?$|^F\\.?D\\.?$|^FIRE EXIT$|FIRE RESCUE BALCONY",
+  "label_meaning": {
+   "E.D.": "exit door to a staircase",
+   "F.D.": "fire door (fire-rated door to a staircase or balcony)",
+   "FIRE EXIT": "fire exit door",
+   "FIRE RESCUE BALCONY": "fire-fighter rescue balcony"
+  },
+  "nbc_travel_m": 45.0,
+  "nbc_note": "NBC 2016 Part 4, Table 5: business occupancy (Group E), travel distance to an exit 45 m with sprinklers in the whole building (30 m without). To be confirmed with a fire consultant."
+ },
+ "passage_label": "(\\d{3,4})\\s*MM\\s*WIDE\\s*PASSAGE",
+ "site_label": "RELIABLE TECH PARK, AIROLI",
+ "cabin_rooms": "CABIN",
+ "door_arc_tol_m": 0.06,
+ "door_from_arc_entity": true
+}
