@@ -1,0 +1,1568 @@
+{
+ "name": "Reliable Tech Park, MIDC Airoli: exterior",
+ "frame": "rtp_local metres (x east, y north from the Maps pin 19.1692159 N 73.0017703 E, z up). GLBs are glTF Y-up: three (x, y, z) = rtp_local (x, z, -y). Not recentred.",
+ "files": {
+  "rtp_building": {
+   "file": "rtp_building.glb",
+   "mb": 2.06,
+   "meshopt": {
+    "instanced_nodes_from": 0,
+    "instanced_into": 0,
+    "draw_calls": 0,
+    "triangles": 0,
+    "in_mb": 6.2,
+    "out_mb": 2.06,
+    "compressed_views": 430,
+    "saved_mb": 4.2,
+    "applied": true
+   }
+  },
+  "rtp_context": {
+   "file": "rtp_context.glb",
+   "mb": 8.27,
+   "meshopt": {
+    "instanced_nodes_from": 3756,
+    "instanced_into": 29,
+    "draw_calls": 238,
+    "triangles": 600752,
+    "in_mb": 23.24,
+    "out_mb": 8.27,
+    "compressed_views": 1073,
+    "saved_mb": 15.29,
+    "applied": true
+   }
+  },
+  "rtp_terrain": {
+   "file": "rtp_terrain.glb",
+   "mb": 1.06,
+   "meshopt": {
+    "instanced_nodes_from": 0,
+    "instanced_into": 0,
+    "draw_calls": 1,
+    "triangles": 50264,
+    "in_mb": 4.58,
+    "out_mb": 1.06,
+    "compressed_views": 5,
+    "saved_mb": 3.52,
+    "applied": true
+   }
+  }
+ },
+ "decoder": "GLTFLoader.setMeshoptDecoder(MeshoptDecoder); repeated props arrive as EXT_mesh_gpu_instancing (InstancedMesh)",
+ "floors": [
+  {
+   "level": 0,
+   "node": "rtp_L00",
+   "ffl_m": 0.6,
+   "ffl_three_y": 0.6,
+   "height_m": 3.6,
+   "children": [
+    "rtp_L00_slab",
+    "rtp_L00_acp",
+    "rtp_L00_glass",
+    "rtp_L00_solid",
+    "rtp_L00_mullions",
+    "rtp_L00_fins",
+    "rtp_L00_interior",
+    "rtp_L00_railing"
+   ],
+   "materials": {
+    "glass": "facade_glass",
+    "slab": "rtp_slab",
+    "acp": "rtp_acp",
+    "interior": "rtp_interior_L00"
+   },
+   "offered": false
+  },
+  {
+   "level": 1,
+   "node": "rtp_L01",
+   "ffl_m": 4.2,
+   "ffl_three_y": 4.2,
+   "height_m": 3.6,
+   "children": [
+    "rtp_L01_slab",
+    "rtp_L01_acp",
+    "rtp_L01_glass",
+    "rtp_L01_solid",
+    "rtp_L01_mullions",
+    "rtp_L01_fins",
+    "rtp_L01_interior",
+    "rtp_L01_railing"
+   ],
+   "materials": {
+    "glass": "facade_glass",
+    "slab": "rtp_slab",
+    "acp": "rtp_acp",
+    "interior": "rtp_interior_L01"
+   },
+   "offered": false
+  },
+  {
+   "level": 2,
+   "node": "rtp_L02",
+   "ffl_m": 7.8,
+   "ffl_three_y": 7.8,
+   "height_m": 3.6,
+   "children": [
+    "rtp_L02_slab",
+    "rtp_L02_acp",
+    "rtp_L02_glass",
+    "rtp_L02_solid",
+    "rtp_L02_mullions",
+    "rtp_L02_fins",
+    "rtp_L02_interior",
+    "rtp_L02_railing"
+   ],
+   "materials": {
+    "glass": "facade_glass",
+    "slab": "rtp_slab",
+    "acp": "rtp_acp",
+    "interior": "rtp_interior_L02"
+   },
+   "offered": false
+  },
+  {
+   "level": 3,
+   "node": "rtp_L03",
+   "ffl_m": 11.4,
+   "ffl_three_y": 11.4,
+   "height_m": 3.6,
+   "children": [
+    "rtp_L03_slab",
+    "rtp_L03_acp",
+    "rtp_L03_glass",
+    "rtp_L03_solid",
+    "rtp_L03_mullions",
+    "rtp_L03_fins",
+    "rtp_L03_interior",
+    "rtp_L03_railing"
+   ],
+   "materials": {
+    "glass": "facade_glass",
+    "slab": "rtp_slab",
+    "acp": "rtp_acp",
+    "interior": "rtp_interior_L03"
+   },
+   "offered": false
+  },
+  {
+   "level": 4,
+   "node": "rtp_L04",
+   "ffl_m": 15.0,
+   "ffl_three_y": 15.0,
+   "height_m": 3.6,
+   "children": [
+    "rtp_L04_slab",
+    "rtp_L04_acp",
+    "rtp_L04_glass",
+    "rtp_L04_solid",
+    "rtp_L04_mullions",
+    "rtp_L04_fins",
+    "rtp_L04_interior",
+    "rtp_L04_railing"
+   ],
+   "materials": {
+    "glass": "facade_glass_L04",
+    "slab": "rtp_slab_L04",
+    "acp": "rtp_acp_L04",
+    "interior": "rtp_interior_L04"
+   },
+   "offered": true
+  },
+  {
+   "level": 5,
+   "node": "rtp_L05",
+   "ffl_m": 18.6,
+   "ffl_three_y": 18.6,
+   "height_m": 3.6,
+   "children": [
+    "rtp_L05_slab",
+    "rtp_L05_acp",
+    "rtp_L05_glass",
+    "rtp_L05_solid",
+    "rtp_L05_mullions",
+    "rtp_L05_fins",
+    "rtp_L05_interior",
+    "rtp_L05_railing"
+   ],
+   "materials": {
+    "glass": "facade_glass",
+    "slab": "rtp_slab",
+    "acp": "rtp_acp",
+    "interior": "rtp_interior_L05"
+   },
+   "offered": false
+  },
+  {
+   "level": 6,
+   "node": "rtp_L06",
+   "ffl_m": 22.2,
+   "ffl_three_y": 22.2,
+   "height_m": 3.6,
+   "children": [
+    "rtp_L06_slab",
+    "rtp_L06_acp",
+    "rtp_L06_glass",
+    "rtp_L06_solid",
+    "rtp_L06_mullions",
+    "rtp_L06_fins",
+    "rtp_L06_interior",
+    "rtp_L06_railing"
+   ],
+   "materials": {
+    "glass": "facade_glass_L06",
+    "slab": "rtp_slab_L06",
+    "acp": "rtp_acp_L06",
+    "interior": "rtp_interior_L06"
+   },
+   "offered": true
+  },
+  {
+   "level": 7,
+   "node": "rtp_L07",
+   "ffl_m": 25.8,
+   "ffl_three_y": 25.8,
+   "height_m": 3.6,
+   "children": [
+    "rtp_L07_slab",
+    "rtp_L07_acp",
+    "rtp_L07_glass",
+    "rtp_L07_solid",
+    "rtp_L07_mullions",
+    "rtp_L07_fins",
+    "rtp_L07_interior",
+    "rtp_L07_railing"
+   ],
+   "materials": {
+    "glass": "facade_glass",
+    "slab": "rtp_slab",
+    "acp": "rtp_acp",
+    "interior": "rtp_interior_L07"
+   },
+   "offered": false
+  },
+  {
+   "level": 8,
+   "node": "rtp_L08",
+   "ffl_m": 29.4,
+   "ffl_three_y": 29.4,
+   "height_m": 3.6,
+   "children": [
+    "rtp_L08_slab",
+    "rtp_L08_acp",
+    "rtp_L08_glass",
+    "rtp_L08_solid",
+    "rtp_L08_mullions",
+    "rtp_L08_fins",
+    "rtp_L08_interior",
+    "rtp_L08_railing"
+   ],
+   "materials": {
+    "glass": "facade_glass",
+    "slab": "rtp_slab",
+    "acp": "rtp_acp",
+    "interior": "rtp_interior_L08"
+   },
+   "offered": false
+  },
+  {
+   "level": 9,
+   "node": "rtp_L09",
+   "ffl_m": 33.0,
+   "ffl_three_y": 33.0,
+   "height_m": 3.6,
+   "children": [
+    "rtp_L09_slab",
+    "rtp_L09_acp",
+    "rtp_L09_glass",
+    "rtp_L09_solid",
+    "rtp_L09_mullions",
+    "rtp_L09_fins",
+    "rtp_L09_interior",
+    "rtp_L09_railing"
+   ],
+   "materials": {
+    "glass": "facade_glass",
+    "slab": "rtp_slab",
+    "acp": "rtp_acp",
+    "interior": "rtp_interior_L09"
+   },
+   "offered": false
+  },
+  {
+   "level": "roof",
+   "node": "rtp_ROOF",
+   "ffl_m": 36.6,
+   "ffl_three_y": 36.6,
+   "height_m": null,
+   "children": [
+    "rtp_ROOF_slab",
+    "rtp_ROOF_acp",
+    "rtp_ROOF_glass",
+    "rtp_ROOF_solid",
+    "rtp_ROOF_mullions",
+    "rtp_ROOF_fins",
+    "rtp_ROOF_interior",
+    "rtp_ROOF_railing"
+   ],
+   "materials": {
+    "roof": "rtp_roof"
+   },
+   "offered": false
+  }
+ ],
+ "floor_reveal": {
+  "how": "each rtp_Lnn node holds that floor (slab, ACP band, glass, mullions, fins, interior backdrop). Slide it out along its outward axis, hide every node above it, and load the interior GLB at ffl_three_y.",
+  "offered_floors": [
+   "rtp_L04",
+   "rtp_L06"
+  ],
+  "tint": "rtp_L04 / rtp_L06 have their own glass, slab, ACP and interior materials, so they can glow as coloured bands"
+ },
+ "states": {
+  "morning": {
+   "time_ist": "09:30",
+   "date": "2026-11-19",
+   "sun_azimuth_deg": 129.84,
+   "sun_elevation_deg": 32.62,
+   "dir_to_sun_rtp_local": [
+    0.64673,
+    -0.53959,
+    0.53907
+   ],
+   "dir_to_sun_three": [
+    0.647,
+    0.539,
+    0.54
+   ],
+   "sun_up": true,
+   "sunmap_channel": "r",
+   "env_map": "env/rtp_env_day.hdr",
+   "emissive_intensity": {
+    "rtp_interior_Lnn": {
+     "L00": 0.25,
+     "L01": 0.25,
+     "L02": 0.25,
+     "L03": 0.25,
+     "L04": 0.25,
+     "L05": 0.25,
+     "L06": 0.25,
+     "L07": 0.25,
+     "L08": 0.25,
+     "L09": 0.25
+    },
+    "sign_red": 0.4,
+    "sign_white": 0.3,
+    "prop_lamp_led": 0.0,
+    "ctx_house_wall_a|ctx_house_wall_b|ctx_block_wall": 0.0,
+    "ctxB_glass_curtain|ctxB_glass_curtain_b|ctxB_punched": 0.0
+   },
+   "facade_uplights": null,
+   "fog": {
+    "color": "#c9d3dc",
+    "density": 0.0003
+   }
+  },
+  "midday": {
+   "time_ist": "13:00",
+   "date": "2026-11-19",
+   "sun_azimuth_deg": 193.61,
+   "sun_elevation_deg": 50.33,
+   "dir_to_sun_rtp_local": [
+    -0.15025,
+    -0.62042,
+    0.76974
+   ],
+   "dir_to_sun_three": [
+    -0.15,
+    0.77,
+    0.62
+   ],
+   "sun_up": true,
+   "sunmap_channel": "b",
+   "env_map": "env/rtp_env_day.hdr",
+   "emissive_intensity": {
+    "rtp_interior_Lnn": {
+     "L00": 0.25,
+     "L01": 0.25,
+     "L02": 0.25,
+     "L03": 0.25,
+     "L04": 0.25,
+     "L05": 0.25,
+     "L06": 0.25,
+     "L07": 0.25,
+     "L08": 0.25,
+     "L09": 0.25
+    },
+    "sign_red": 0.4,
+    "sign_white": 0.3,
+    "prop_lamp_led": 0.0,
+    "ctx_house_wall_a|ctx_house_wall_b|ctx_block_wall": 0.0,
+    "ctxB_glass_curtain|ctxB_glass_curtain_b|ctxB_punched": 0.0
+   },
+   "facade_uplights": null,
+   "fog": {
+    "color": "#d3dbe2",
+    "density": 0.00022
+   }
+  },
+  "golden": {
+   "time_ist": "17:45",
+   "date": "2026-11-19",
+   "sun_azimuth_deg": 248.44,
+   "sun_elevation_deg": 2.48,
+   "dir_to_sun_rtp_local": [
+    -0.92914,
+    -0.36719,
+    0.04322
+   ],
+   "dir_to_sun_three": [
+    -0.929,
+    0.043,
+    0.367
+   ],
+   "sun_up": true,
+   "sunmap_channel": "g",
+   "env_map": "env/rtp_env_day.hdr",
+   "emissive_intensity": {
+    "rtp_interior_Lnn": {
+     "L00": 0.25,
+     "L01": 0.25,
+     "L02": 0.25,
+     "L03": 0.25,
+     "L04": 0.25,
+     "L05": 0.25,
+     "L06": 0.25,
+     "L07": 0.25,
+     "L08": 0.25,
+     "L09": 0.25
+    },
+    "sign_red": 0.4,
+    "sign_white": 0.3,
+    "prop_lamp_led": 0.0,
+    "ctx_house_wall_a|ctx_house_wall_b|ctx_block_wall": 0.0,
+    "ctxB_glass_curtain|ctxB_glass_curtain_b|ctxB_punched": 0.0
+   },
+   "facade_uplights": null,
+   "fog": {
+    "color": "#e8c9a6",
+    "density": 0.00045
+   }
+  },
+  "blue_hour": {
+   "time_ist": "18:15",
+   "date": "2026-11-19",
+   "sun_azimuth_deg": 250.85,
+   "sun_elevation_deg": -4.43,
+   "dir_to_sun_rtp_local": [
+    -0.94183,
+    -0.32707,
+    -0.07733
+   ],
+   "dir_to_sun_three": [
+    -0.942,
+    -0.077,
+    0.327
+   ],
+   "sun_up": false,
+   "sunmap_channel": null,
+   "env_map": "env/rtp_env_night.hdr",
+   "emissive_intensity": {
+    "rtp_interior_Lnn": {
+     "L00": 3.2,
+     "L01": 3.2,
+     "L02": 2.72,
+     "L03": 3.2,
+     "L04": 3.2,
+     "L05": 2.24,
+     "L06": 3.2,
+     "L07": 2.88,
+     "L08": 1.92,
+     "L09": 2.56
+    },
+    "sign_red": 14.0,
+    "sign_white": 9.0,
+    "prop_lamp_led": 30.0,
+    "ctx_house_wall_a|ctx_house_wall_b|ctx_block_wall": 1.6,
+    "ctxB_glass_curtain|ctxB_glass_curtain_b|ctxB_punched": 0.65
+   },
+   "facade_uplights": {
+    "colours": [
+     "#ff40bf",
+     "#8c47ff"
+    ],
+    "spacing_m": 9.0,
+    "note": "alternating pink / violet spots at the RTP base aimed up the facade"
+   },
+   "fog": {
+    "color": "#4a5670",
+    "density": 0.00035
+   }
+  },
+  "night": {
+   "time_ist": "20:30",
+   "date": "2026-11-19",
+   "sun_azimuth_deg": 259.15,
+   "sun_elevation_deg": -35.24,
+   "dir_to_sun_rtp_local": [
+    -0.80213,
+    -0.15374,
+    -0.57702
+   ],
+   "dir_to_sun_three": [
+    -0.802,
+    -0.577,
+    0.154
+   ],
+   "sun_up": false,
+   "sunmap_channel": null,
+   "env_map": "env/rtp_env_night.hdr",
+   "emissive_intensity": {
+    "rtp_interior_Lnn": {
+     "L00": 3.2,
+     "L01": 3.2,
+     "L02": 2.72,
+     "L03": 3.2,
+     "L04": 3.2,
+     "L05": 2.24,
+     "L06": 3.2,
+     "L07": 2.88,
+     "L08": 1.92,
+     "L09": 2.56
+    },
+    "sign_red": 14.0,
+    "sign_white": 9.0,
+    "prop_lamp_led": 30.0,
+    "ctx_house_wall_a|ctx_house_wall_b|ctx_block_wall": 1.6,
+    "ctxB_glass_curtain|ctxB_glass_curtain_b|ctxB_punched": 0.65
+   },
+   "facade_uplights": {
+    "colours": [
+     "#ff40bf",
+     "#8c47ff"
+    ],
+    "spacing_m": 9.0,
+    "note": "alternating pink / violet spots at the RTP base aimed up the facade"
+   },
+   "fog": {
+    "color": "#2a2430",
+    "density": 0.0003
+   }
+  }
+ },
+ "lightmaps": {
+  "how": "Lightmapped nodes (listed below) carry a 2nd UV (TEXCOORD_1). Three maps per atlas: day (lightMap, sRGB, channel 1, lightMapIntensity per node: the existing Skymark path, B = 0.35 AO + midday sun x N.L); ao (aoMap, channel 1: sun-independent, use with a live directional light for any time of day); sun (RGB = morning / golden / midday sun visibility, soft 2-degree edge: multiply the directional light by the state's channel).",
+  "bake": {
+   "rtp_facade": {
+    "objects": 34,
+    "res": 2048,
+    "samples": 64,
+    "k": 0.7728,
+    "lightMapIntensity": 4.06529,
+    "coverage": 0.987,
+    "seconds": 554.9
+   },
+   "rtp_slabs": {
+    "objects": 11,
+    "res": 2048,
+    "samples": 64,
+    "k": 0.8927,
+    "lightMapIntensity": 3.51935,
+    "coverage": 1.0,
+    "seconds": 397.5
+   },
+   "ctx_classB": {
+    "objects": 6,
+    "res": 2048,
+    "samples": 64,
+    "k": 0.8846,
+    "lightMapIntensity": 3.55139,
+    "coverage": 1.0,
+    "seconds": 238.0
+   },
+   "ground_ao": {
+    "objects": 15,
+    "res": 4096,
+    "texel_m": 0.273,
+    "seconds": 122.3
+   },
+   "total_seconds": 1313.0
+  },
+  "nodes": {
+   "rtp_L00_slab": {
+    "lightmap": "lightmaps/rtp_slabs_day.jpg",
+    "lightMapIntensity": 3.51935,
+    "aomap": "lightmaps/rtp_slabs_ao.jpg",
+    "sunmap": "lightmaps/rtp_slabs_sun.png",
+    "uv": 1
+   },
+   "rtp_L00_acp": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L00_solid": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L00_fins": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L00_lobby": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L01_slab": {
+    "lightmap": "lightmaps/rtp_slabs_day.jpg",
+    "lightMapIntensity": 3.51935,
+    "aomap": "lightmaps/rtp_slabs_ao.jpg",
+    "sunmap": "lightmaps/rtp_slabs_sun.png",
+    "uv": 1
+   },
+   "rtp_L01_acp": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L01_solid": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L01_fins": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L02_slab": {
+    "lightmap": "lightmaps/rtp_slabs_day.jpg",
+    "lightMapIntensity": 3.51935,
+    "aomap": "lightmaps/rtp_slabs_ao.jpg",
+    "sunmap": "lightmaps/rtp_slabs_sun.png",
+    "uv": 1
+   },
+   "rtp_L02_acp": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L02_solid": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L02_fins": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L03_slab": {
+    "lightmap": "lightmaps/rtp_slabs_day.jpg",
+    "lightMapIntensity": 3.51935,
+    "aomap": "lightmaps/rtp_slabs_ao.jpg",
+    "sunmap": "lightmaps/rtp_slabs_sun.png",
+    "uv": 1
+   },
+   "rtp_L03_acp": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L03_solid": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L03_fins": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L04_slab": {
+    "lightmap": "lightmaps/rtp_slabs_day.jpg",
+    "lightMapIntensity": 3.51935,
+    "aomap": "lightmaps/rtp_slabs_ao.jpg",
+    "sunmap": "lightmaps/rtp_slabs_sun.png",
+    "uv": 1
+   },
+   "rtp_L04_acp": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L04_solid": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L04_fins": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L05_slab": {
+    "lightmap": "lightmaps/rtp_slabs_day.jpg",
+    "lightMapIntensity": 3.51935,
+    "aomap": "lightmaps/rtp_slabs_ao.jpg",
+    "sunmap": "lightmaps/rtp_slabs_sun.png",
+    "uv": 1
+   },
+   "rtp_L05_acp": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L05_solid": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L05_fins": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L06_slab": {
+    "lightmap": "lightmaps/rtp_slabs_day.jpg",
+    "lightMapIntensity": 3.51935,
+    "aomap": "lightmaps/rtp_slabs_ao.jpg",
+    "sunmap": "lightmaps/rtp_slabs_sun.png",
+    "uv": 1
+   },
+   "rtp_L06_acp": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L06_solid": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L06_fins": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L07_slab": {
+    "lightmap": "lightmaps/rtp_slabs_day.jpg",
+    "lightMapIntensity": 3.51935,
+    "aomap": "lightmaps/rtp_slabs_ao.jpg",
+    "sunmap": "lightmaps/rtp_slabs_sun.png",
+    "uv": 1
+   },
+   "rtp_L07_acp": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L07_solid": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L07_fins": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L08_slab": {
+    "lightmap": "lightmaps/rtp_slabs_day.jpg",
+    "lightMapIntensity": 3.51935,
+    "aomap": "lightmaps/rtp_slabs_ao.jpg",
+    "sunmap": "lightmaps/rtp_slabs_sun.png",
+    "uv": 1
+   },
+   "rtp_L08_acp": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L08_solid": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L08_fins": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L09_slab": {
+    "lightmap": "lightmaps/rtp_slabs_day.jpg",
+    "lightMapIntensity": 3.51935,
+    "aomap": "lightmaps/rtp_slabs_ao.jpg",
+    "sunmap": "lightmaps/rtp_slabs_sun.png",
+    "uv": 1
+   },
+   "rtp_L09_acp": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L09_solid": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_L09_fins": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_ROOF_slab": {
+    "lightmap": "lightmaps/rtp_slabs_day.jpg",
+    "lightMapIntensity": 3.51935,
+    "aomap": "lightmaps/rtp_slabs_ao.jpg",
+    "sunmap": "lightmaps/rtp_slabs_sun.png",
+    "uv": 1
+   },
+   "rtp_ROOF_acp": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_ROOF_plant": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "rtp_ROOF_dome": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "aomap": "lightmaps/rtp_facade_ao.jpg",
+    "sunmap": "lightmaps/rtp_facade_sun.png",
+    "uv": 1
+   },
+   "ctxB_Empire_Tower_eb3653": {
+    "lightmap": "lightmaps/ctx_classB_day.jpg",
+    "lightMapIntensity": 3.55139,
+    "aomap": "lightmaps/ctx_classB_ao.jpg",
+    "sunmap": "lightmaps/ctx_classB_sun.png",
+    "uv": 1
+   },
+   "ctxB_Liberty_Tower_f26036": {
+    "lightmap": "lightmaps/ctx_classB_day.jpg",
+    "lightMapIntensity": 3.55139,
+    "aomap": "lightmaps/ctx_classB_ao.jpg",
+    "sunmap": "lightmaps/ctx_classB_sun.png",
+    "uv": 1
+   },
+   "ctxB_Sutherland_(assumed_posi_499c7e": {
+    "lightmap": "lightmaps/ctx_classB_day.jpg",
+    "lightMapIntensity": 3.55139,
+    "aomap": "lightmaps/ctx_classB_ao.jpg",
+    "sunmap": "lightmaps/ctx_classB_sun.png",
+    "uv": 1
+   },
+   "ctxB_Lumina_CloudInfra_DC_(as_8ef9a3": {
+    "lightmap": "lightmaps/ctx_classB_day.jpg",
+    "lightMapIntensity": 3.55139,
+    "aomap": "lightmaps/ctx_classB_ao.jpg",
+    "sunmap": "lightmaps/ctx_classB_sun.png",
+    "uv": 1
+   },
+   "ctxB_Gramercy_Techpark_(assum_cd149c": {
+    "lightmap": "lightmaps/ctx_classB_day.jpg",
+    "lightMapIntensity": 3.55139,
+    "aomap": "lightmaps/ctx_classB_ao.jpg",
+    "sunmap": "lightmaps/ctx_classB_sun.png",
+    "uv": 1
+   },
+   "ctxB_Liberty_Tower_annexe_771da5": {
+    "lightmap": "lightmaps/ctx_classB_day.jpg",
+    "lightMapIntensity": 3.55139,
+    "aomap": "lightmaps/ctx_classB_ao.jpg",
+    "sunmap": "lightmaps/ctx_classB_sun.png",
+    "uv": 1
+   }
+  },
+  "ground_ao": {
+   "ctx_ground_ground_court_paving": {
+    "aomap": "lightmaps/ground_ao.jpg",
+    "uv": 1
+   },
+   "ctx_ground_ground_lawn": {
+    "aomap": "lightmaps/ground_ao.jpg",
+    "uv": 1
+   },
+   "ctx_ground_ground_mud": {
+    "aomap": "lightmaps/ground_ao.jpg",
+    "uv": 1
+   },
+   "ctx_ground_water": {
+    "aomap": "lightmaps/ground_ao.jpg",
+    "uv": 1
+   },
+   "ctx_ground_ground_gravel": {
+    "aomap": "lightmaps/ground_ao.jpg",
+    "uv": 1
+   },
+   "ctx_ground_ground_compound": {
+    "aomap": "lightmaps/ground_ao.jpg",
+    "uv": 1
+   },
+   "ctx_ground_ground_dirt": {
+    "aomap": "lightmaps/ground_ao.jpg",
+    "uv": 1
+   },
+   "ctx_ground_ground_industrial": {
+    "aomap": "lightmaps/ground_ao.jpg",
+    "uv": 1
+   },
+   "ctx_ground_ground_construction": {
+    "aomap": "lightmaps/ground_ao.jpg",
+    "uv": 1
+   },
+   "ctx_ground_ground_forest": {
+    "aomap": "lightmaps/ground_ao.jpg",
+    "uv": 1
+   },
+   "ctx_ground_ground_crop": {
+    "aomap": "lightmaps/ground_ao.jpg",
+    "uv": 1
+   },
+   "ctx_road_asphalt": {
+    "aomap": "lightmaps/ground_ao.jpg",
+    "uv": 1
+   },
+   "ctx_footpath": {
+    "aomap": "lightmaps/ground_ao.jpg",
+    "uv": 1
+   },
+   "ctx_median": {
+    "aomap": "lightmaps/ground_ao.jpg",
+    "uv": 1
+   },
+   "ctx_rail_bed": {
+    "aomap": "lightmaps/ground_ao.jpg",
+    "uv": 1
+   }
+  },
+  "class_c_and_terrain": "vertex colour COLOR_0 = paint tint x ground-contact AO (multiply; GLTFLoader enables vertexColors)"
+ },
+ "lightmapped_meshes": {
+  "how": "compat with the Skymark viewer: texture.colorSpace = SRGBColorSpace; flipY = false; channel = 1; material.lightMap = texture; lightMapIntensity per node",
+  "nodes": {
+   "rtp_L00_slab": {
+    "lightmap": "lightmaps/rtp_slabs_day.jpg",
+    "lightMapIntensity": 3.51935,
+    "uv": 1
+   },
+   "rtp_L00_acp": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L00_solid": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L00_fins": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L00_lobby": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L01_slab": {
+    "lightmap": "lightmaps/rtp_slabs_day.jpg",
+    "lightMapIntensity": 3.51935,
+    "uv": 1
+   },
+   "rtp_L01_acp": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L01_solid": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L01_fins": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L02_slab": {
+    "lightmap": "lightmaps/rtp_slabs_day.jpg",
+    "lightMapIntensity": 3.51935,
+    "uv": 1
+   },
+   "rtp_L02_acp": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L02_solid": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L02_fins": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L03_slab": {
+    "lightmap": "lightmaps/rtp_slabs_day.jpg",
+    "lightMapIntensity": 3.51935,
+    "uv": 1
+   },
+   "rtp_L03_acp": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L03_solid": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L03_fins": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L04_slab": {
+    "lightmap": "lightmaps/rtp_slabs_day.jpg",
+    "lightMapIntensity": 3.51935,
+    "uv": 1
+   },
+   "rtp_L04_acp": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L04_solid": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L04_fins": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L05_slab": {
+    "lightmap": "lightmaps/rtp_slabs_day.jpg",
+    "lightMapIntensity": 3.51935,
+    "uv": 1
+   },
+   "rtp_L05_acp": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L05_solid": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L05_fins": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L06_slab": {
+    "lightmap": "lightmaps/rtp_slabs_day.jpg",
+    "lightMapIntensity": 3.51935,
+    "uv": 1
+   },
+   "rtp_L06_acp": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L06_solid": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L06_fins": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L07_slab": {
+    "lightmap": "lightmaps/rtp_slabs_day.jpg",
+    "lightMapIntensity": 3.51935,
+    "uv": 1
+   },
+   "rtp_L07_acp": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L07_solid": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L07_fins": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L08_slab": {
+    "lightmap": "lightmaps/rtp_slabs_day.jpg",
+    "lightMapIntensity": 3.51935,
+    "uv": 1
+   },
+   "rtp_L08_acp": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L08_solid": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L08_fins": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L09_slab": {
+    "lightmap": "lightmaps/rtp_slabs_day.jpg",
+    "lightMapIntensity": 3.51935,
+    "uv": 1
+   },
+   "rtp_L09_acp": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L09_solid": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_L09_fins": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_ROOF_slab": {
+    "lightmap": "lightmaps/rtp_slabs_day.jpg",
+    "lightMapIntensity": 3.51935,
+    "uv": 1
+   },
+   "rtp_ROOF_acp": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_ROOF_plant": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "rtp_ROOF_dome": {
+    "lightmap": "lightmaps/rtp_facade_day.jpg",
+    "lightMapIntensity": 4.06529,
+    "uv": 1
+   },
+   "ctxB_Empire_Tower_eb3653": {
+    "lightmap": "lightmaps/ctx_classB_day.jpg",
+    "lightMapIntensity": 3.55139,
+    "uv": 1
+   },
+   "ctxB_Liberty_Tower_f26036": {
+    "lightmap": "lightmaps/ctx_classB_day.jpg",
+    "lightMapIntensity": 3.55139,
+    "uv": 1
+   },
+   "ctxB_Sutherland_(assumed_posi_499c7e": {
+    "lightmap": "lightmaps/ctx_classB_day.jpg",
+    "lightMapIntensity": 3.55139,
+    "uv": 1
+   },
+   "ctxB_Lumina_CloudInfra_DC_(as_8ef9a3": {
+    "lightmap": "lightmaps/ctx_classB_day.jpg",
+    "lightMapIntensity": 3.55139,
+    "uv": 1
+   },
+   "ctxB_Gramercy_Techpark_(assum_cd149c": {
+    "lightmap": "lightmaps/ctx_classB_day.jpg",
+    "lightMapIntensity": 3.55139,
+    "uv": 1
+   },
+   "ctxB_Liberty_Tower_annexe_771da5": {
+    "lightmap": "lightmaps/ctx_classB_day.jpg",
+    "lightMapIntensity": 3.55139,
+    "uv": 1
+   }
+  }
+ },
+ "renderer": {
+  "toneMapping": "AgXToneMapping",
+  "toneMappingExposure": 1.0,
+  "outputColorSpace": "srgb",
+  "camera_near": 0.5,
+  "camera_far": 9000,
+  "logarithmicDepthBuffer": true,
+  "note": "road markings sit 12 mm above the asphalt: material road_marking carries polygonOffset in extras"
+ },
+ "glass": {
+  "materials": "facade_glass, facade_glass_L04, facade_glass_L06, rail_glass",
+  "recipe": "MeshPhysicalMaterial: color #6d9a98, metalness 0.0, roughness 0.03, transmission 0 (opaque reflective curtain wall), envMap = the state's rtp_env_*.hdr through PMREM, envMapIntensity 1.0, reflectivity high; the interior backdrop (rtp_interior_Lnn, emissive) sits 0.9 m behind the glass"
+ },
+ "env_maps": {
+  "day": {
+   "file": "env/rtp_env_day.hdr",
+   "state": "morning",
+   "seconds": 18.3,
+   "samples": 64,
+   "size": [
+    2048,
+    1024
+   ],
+   "position_rtp_local": [
+    -14.51991081237793,
+    37.791961669921875,
+    12.0
+   ],
+   "position_three": [
+    -14.52,
+    12.0,
+    -37.79
+   ],
+   "mapping": "equirectangular, linear Radiance HDR; image centre = east (+x rtp_local = +x three), right of centre = south: three.js EquirectangularReflectionMapping without rotation"
+  },
+  "night": {
+   "file": "env/rtp_env_night.hdr",
+   "state": "night",
+   "seconds": 32.8,
+   "samples": 64,
+   "size": [
+    2048,
+    1024
+   ],
+   "position_rtp_local": [
+    -14.51991081237793,
+    37.791961669921875,
+    12.0
+   ],
+   "position_three": [
+    -14.52,
+    12.0,
+    -37.79
+   ],
+   "mapping": "equirectangular, linear Radiance HDR; image centre = east (+x rtp_local = +x three), right of centre = south: three.js EquirectangularReflectionMapping without rotation"
+  }
+ },
+ "stills": {
+  "morning_court": {
+   "file": "stills/rtp_morning_court.jpg",
+   "master_png": "airoli-rtp/exterior/stills/rtp_morning_court.png",
+   "version": "v5: 192 samples, corrected sun azimuth, calibrated sun lamp, 160 m haze lid",
+   "camera_three": {
+    "position": [
+     -36.52,
+     1.65,
+     -32.792
+    ],
+    "target": [
+     13.48,
+     15.0,
+     -80.792
+    ],
+    "lens_mm_36": 20.0
+   },
+   "blown_frac": 0.0099,
+   "crushed_frac": 0.027,
+   "seconds": 113.8
+  },
+  "morning_road": {
+   "file": "stills/rtp_morning_road.jpg",
+   "master_png": "airoli-rtp/exterior/stills/rtp_morning_road.png",
+   "version": "v5: 192 samples, corrected sun azimuth, calibrated sun lamp, 160 m haze lid",
+   "camera_three": {
+    "position": [
+     -258.0,
+     1.7,
+     96.0
+    ],
+    "target": [
+     10.0,
+     18.0,
+     -55.0
+    ],
+    "lens_mm_36": 50.0
+   },
+   "blown_frac": 0.0001,
+   "crushed_frac": 0.0,
+   "seconds": 94.2
+  },
+  "morning_orbit": {
+   "file": "stills/rtp_morning_orbit.jpg",
+   "master_png": "airoli-rtp/exterior/stills/rtp_morning_orbit.png",
+   "version": "v5: 192 samples, corrected sun azimuth, calibrated sun lamp, 160 m haze lid",
+   "camera_three": {
+    "position": [
+     -235.0,
+     150.0,
+     205.0
+    ],
+    "target": [
+     8.0,
+     14.0,
+     -52.0
+    ],
+    "lens_mm_36": 40.0
+   },
+   "blown_frac": 0.0003,
+   "crushed_frac": 0.0,
+   "seconds": 104.9
+  },
+  "golden_court": {
+   "file": "stills/rtp_golden_court.jpg",
+   "master_png": "airoli-rtp/exterior/stills/rtp_golden_court.png",
+   "version": "v4: 192 samples, corrected sun azimuth, calibrated sun lamp",
+   "camera_three": {
+    "position": [
+     -36.52,
+     1.65,
+     -32.792
+    ],
+    "target": [
+     13.48,
+     15.0,
+     -80.792
+    ],
+    "lens_mm_36": 20.0
+   },
+   "blown_frac": 0.0,
+   "crushed_frac": 0.0202,
+   "seconds": 122.4
+  },
+  "golden_road": {
+   "file": "stills/rtp_golden_road.jpg",
+   "master_png": "airoli-rtp/exterior/stills/rtp_golden_road.png",
+   "version": "v4: 192 samples, corrected sun azimuth, calibrated sun lamp",
+   "camera_three": {
+    "position": [
+     -258.0,
+     1.7,
+     96.0
+    ],
+    "target": [
+     10.0,
+     18.0,
+     -55.0
+    ],
+    "lens_mm_36": 50.0
+   },
+   "blown_frac": 0.0005,
+   "crushed_frac": 0.0,
+   "seconds": 108.8
+  },
+  "golden_orbit": {
+   "file": "stills/rtp_golden_orbit.jpg",
+   "master_png": "airoli-rtp/exterior/stills/rtp_golden_orbit.png",
+   "version": "v4: 192 samples, corrected sun azimuth, calibrated sun lamp",
+   "camera_three": {
+    "position": [
+     -235.0,
+     150.0,
+     205.0
+    ],
+    "target": [
+     8.0,
+     14.0,
+     -52.0
+    ],
+    "lens_mm_36": 40.0
+   },
+   "blown_frac": 0.0,
+   "crushed_frac": 0.0,
+   "seconds": 112.5
+  },
+  "night_court": {
+   "file": "stills/rtp_night_court.jpg",
+   "master_png": "airoli-rtp/exterior/stills/rtp_night_court.png",
+   "version": "v3: 256 samples, 30 kW pink/violet uplights",
+   "camera_three": {
+    "position": [
+     -36.52,
+     1.65,
+     -32.792
+    ],
+    "target": [
+     13.48,
+     15.0,
+     -80.792
+    ],
+    "lens_mm_36": 20.0
+   },
+   "blown_frac": 0.0008,
+   "crushed_frac": 0.0523,
+   "seconds": 235.6
+  },
+  "night_road": {
+   "file": "stills/rtp_night_road.jpg",
+   "master_png": "airoli-rtp/exterior/stills/rtp_night_road.png",
+   "version": "v3: 256 samples, 30 kW pink/violet uplights",
+   "camera_three": {
+    "position": [
+     -258.0,
+     1.7,
+     96.0
+    ],
+    "target": [
+     10.0,
+     18.0,
+     -55.0
+    ],
+    "lens_mm_36": 50.0
+   },
+   "blown_frac": 0.0,
+   "crushed_frac": 0.0339,
+   "seconds": 183.5
+  },
+  "night_orbit": {
+   "file": "stills/rtp_night_orbit.jpg",
+   "master_png": "airoli-rtp/exterior/stills/rtp_night_orbit.png",
+   "version": "v3: 256 samples, 30 kW pink/violet uplights",
+   "camera_three": {
+    "position": [
+     -235.0,
+     150.0,
+     205.0
+    ],
+    "target": [
+     8.0,
+     14.0,
+     -52.0
+    ],
+    "lens_mm_36": 40.0
+   },
+   "blown_frac": 0.0003,
+   "crushed_frac": 0.0295,
+   "seconds": 224.3
+  }
+ },
+ "cameras": {
+  "court": {
+   "position_three": [
+    -36.52,
+    1.65,
+    -32.792
+   ],
+   "target_three": [
+    13.48,
+    15.0,
+    -80.792
+   ],
+   "lens_mm_36": 20.0,
+   "hfov_deg": 84.0
+  },
+  "road": {
+   "position_three": [
+    -258.0,
+    1.7,
+    96.0
+   ],
+   "target_three": [
+    10.0,
+    18.0,
+    -55.0
+   ],
+   "lens_mm_36": 50.0,
+   "hfov_deg": 39.6
+  },
+  "orbit": {
+   "position_three": [
+    -235.0,
+    150.0,
+    205.0
+   ],
+   "target_three": [
+    8.0,
+    14.0,
+    -52.0
+   ],
+   "lens_mm_36": 40.0,
+   "hfov_deg": 48.5
+  }
+ },
+ "assumptions": "see airoli-rtp/exterior/NOTES.md and _build/prep/assumptions.json"
+}

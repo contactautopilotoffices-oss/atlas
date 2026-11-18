@@ -1,0 +1,51 @@
+{
+ "id": "rtp6-b",
+ "name": "6th floor \u00b7 Option B",
+ "floor": 6,
+ "floor_label": "6th floor",
+ "accent": "#6a4ce0",
+ "client": "Altruist",
+ "area_sqft": null,
+ "layout": "../../rtp6-b/rtp6-b-floor6.twin.layout.json",
+ "summary": "../../rtp6-b/rtp6-b_summary.json",
+ "frame": {
+  "rot_deg": 0,
+  "dx": 0,
+  "dy": 0,
+  "source": "layout already in rtp_local (review/frames.json)"
+ },
+ "seats": {
+  "work": 723,
+  "all": 985,
+  "groups": {
+   "Work seats (desk + chair)": 723,
+   "Meeting room seats": 51,
+   "Training room seats": 51,
+   "Cafeteria seats": 120,
+   "Lounge, collab and visitor seats": 26,
+   "Cabin seats (desk chair and visitors)": 14
+  }
+ },
+ "reception": "RECEPTION",
+ "assumptions": {
+  "path": "../../rtp6-b/rtp6-b_assumptions.md"
+ },
+ "seat_plan": "../../rtp6-b/rtp6-b_seat_plan.png",
+ "blueprint": {
+  "img": "blueprints/rtp6-b.png",
+  "meta": "blueprints/rtp6-b.json"
+ },
+ "model": {
+  "use": "auto",
+  "index": "models/index.json",
+  "dev_build": {}
+ },
+ "stills": [],
+ "measured_sqft": 60611,
+ "highlights": [
+  "60-seat call centre",
+  "board room",
+  "locker room",
+  "whole floor"
+ ]
+}

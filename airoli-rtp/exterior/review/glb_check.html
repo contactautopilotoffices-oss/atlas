@@ -1,0 +1,43 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>RTP exterior GLB check</title>
+<style>html,body{margin:0;height:100%;background:#9fb3c4;font:13px system-ui}#log{position:fixed;left:8px;top:8px;background:#000a;color:#fff;padding:8px;white-space:pre;max-width:46vw;max-height:90vh;overflow:auto}</style>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.169.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.169.0/examples/jsm/"}}</script>
+</head><body><div id="log">loading…</div>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { MeshoptDecoder } from 'three/addons/libs/meshopt_decoder.module.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+const log = (s) => { document.getElementById('log').textContent += '\n' + s; window.__log = (window.__log || '') + s + '\n'; };
+const base = '../../twin/web/models/exterior/';
+const R = new THREE.WebGLRenderer({ antialias: true, logarithmicDepthBuffer: true, preserveDrawingBuffer: true }); R.setSize(innerWidth, innerHeight); R.toneMapping = THREE.AgXToneMapping; document.body.appendChild(R.domElement);
+const S = new THREE.Scene(); S.background = new THREE.Color('#9fb3c4'); S.fog = new THREE.FogExp2('#c9d3dc', 0.0006);
+const C = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 0.5, 9000); C.position.set(-235, 150, 205);
+const ctl = new OrbitControls(C, R.domElement); ctl.target.set(8, 14, -52); ctl.update();
+const man = await (await fetch(base + 'exterior_viewer.json')).json();
+const st = man.states.morning; const sun = new THREE.DirectionalLight('#fff4e0', 3.0); sun.position.set(...st.dir_to_sun_three.map(v => v * 1000)); S.add(sun);
+S.add(new THREE.HemisphereLight('#cfe0ff', '#6b6150', 1.2));
+const L = new GLTFLoader(); L.setMeshoptDecoder(MeshoptDecoder); const TL = new THREE.TextureLoader();
+window.__stats = {};
+for (const f of ['rtp_terrain.glb', 'rtp_context.glb', 'rtp_building.glb']) {
+  const t0 = performance.now();
+  try {
+    const g = await L.loadAsync(base + f); S.add(g.scene);
+    let meshes = 0, inst = 0, tris = 0, lm = 0;
+    g.scene.traverse(o => { if (o.isMesh) { meshes++; if (o.isInstancedMesh) inst++; const n = o.geometry.index ? o.geometry.index.count / 3 : o.geometry.attributes.position.count / 3; tris += n * (o.count || 1);
+      const node = man.lightmapped_meshes.nodes[o.name] || man.lightmapped_meshes.nodes[o.parent && o.parent.name];
+      if (node && o.geometry.attributes.uv1) { lm++; const tx = TL.load(base + node.lightmap); tx.colorSpace = THREE.SRGBColorSpace; tx.flipY = false; tx.channel = 1;
+        o.material = new THREE.MeshBasicMaterial({ map: o.material.map, color: o.material.color, lightMap: tx, lightMapIntensity: node.lightMapIntensity }); } } });
+    const names = f === 'rtp_building.glb' ? g.scene.children.map(c => c.name).join(',') : '';
+    window.__stats[f] = { meshes, inst, tris: Math.round(tris), lightmapped: lm, ms: Math.round(performance.now() - t0) };
+    log(`${f}: ${meshes} meshes, ${inst} instanced, ${Math.round(tris)} tris, ${lm} lightmapped, ${Math.round(performance.now() - t0)} ms ${names}`);
+  } catch (e) { log(`${f}: FAILED ${e}`); window.__stats[f] = { error: String(e) }; }
+}
+let frames = 0, t1 = performance.now();
+window.__probe = () => { R.setSize(960, 540); C.aspect = 960 / 540; C.updateProjectionMatrix(); R.render(S, C);
+  const c2 = document.createElement('canvas'); c2.width = 96; c2.height = 54; const x = c2.getContext('2d'); x.drawImage(R.domElement, 0, 0, 96, 54);
+  const d = x.getImageData(0, 0, 96, 54).data; let n = 0, m = [0, 0, 0]; const bg = [159, 179, 196];
+  for (let i = 0; i < d.length; i += 4) { if (Math.abs(d[i] - bg[0]) + Math.abs(d[i + 1] - bg[1]) + Math.abs(d[i + 2] - bg[2]) > 30) n++; m[0] += d[i]; m[1] += d[i + 1]; m[2] += d[i + 2]; }
+  const k = d.length / 4; return { nonBackgroundFrac: +(n / k).toFixed(3), meanRGB: m.map(v => Math.round(v / k)), calls: R.info.render.calls, tris: R.info.render.triangles }; };
+R.setAnimationLoop(() => { if (R.domElement.width !== innerWidth * devicePixelRatio || R.domElement.height !== innerHeight * devicePixelRatio) { R.setPixelRatio(devicePixelRatio); R.setSize(innerWidth, innerHeight); C.aspect = innerWidth / innerHeight; C.updateProjectionMatrix(); } R.render(S, C); frames++; if (frames === 120) { const fps = 120000 / (performance.now() - t1); log(`fps ~${fps.toFixed(0)} (draw calls ${R.info.render.calls}, tris ${R.info.render.triangles})`); window.__fps = fps; window.__calls = R.info.render.calls; } });
+</script></body></html>

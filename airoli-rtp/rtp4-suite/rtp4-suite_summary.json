@@ -1,0 +1,84 @@
+{
+ "Work seats (desk + chair)": {
+  "total": 18,
+  "rooms": {
+   "ADMIN ROOM": 9,
+   "HR ROOM": 9
+  }
+ },
+ "Meeting room seats": {
+  "total": 28,
+  "rooms": {
+   "12 SEATER CONFERENCE ROOM_01": 12,
+   "INTERVIEW CABIN_02": 2,
+   "INTERVIEW CABIN_01": 2,
+   "06 SEATER MEETING ROOM 01 (1)": 6,
+   "06 SEATER MEETING ROOM 01 (2)": 6
+  }
+ },
+ "Training room seats": {
+  "total": 135,
+  "rooms": {
+   "TRAINING ROOM_05": 19,
+   "TRAINING ROOM_02": 22,
+   "TRAINING ROOM_01": 22,
+   "TRAINING ROOM_03": 21,
+   "TRAINING ROOM_04": 21,
+   "TRAINING ROOM_06": 21,
+   "HR INDUCTION ROOM": 9
+  }
+ },
+ "Lounge, collab and visitor seats": {
+  "total": 31,
+  "rooms": {
+   "RECEPTION AND WAITING": 31
+  }
+ },
+ "_proof": {
+  "tenant": "RTP 4th floor, fitted suite",
+  "floor": 4,
+  "dwg": "20261118_4TH FLOO.dwg",
+  "work_seats": 18,
+  "all_seats": 212,
+  "seats_by_group": {
+   "Work seats (desk + chair)": 18,
+   "Meeting room seats": 28,
+   "Training room seats": 135,
+   "Lounge, collab and visitor seats": 31
+  },
+  "deck_vs_cad": [],
+  "inventory": {
+   "desk_blocks": {
+    "training desk (block, chair nested)": 126,
+    "3'x2' workstation (block, chair nested)": 27
+   },
+   "desk_block_duplicates": {
+    "A$C62789d74": 0,
+    "STHGSERTHESRTHSDRTH": 0
+   },
+   "work_seats_paired_with_desk": 18,
+   "work_seats_without_desk_nearby": 0,
+   "room_kinds": {
+    "core": 55,
+    "training": 7,
+    "service": 3,
+    "reception": 1,
+    "work": 2,
+    "other": 10,
+    "meeting": 5
+   },
+   "chairs_by_kind": {
+    "work chair": 18,
+    "conference chair": 12,
+    "meeting chair": 16,
+    "training chair": 135,
+    "receptionist chair": 1,
+    "visitor / lounge chair": 30
+   }
+  },
+  "unplaced_room_labels": [
+   "store room"
+  ],
+  "method": "One row per chair block instance (sofas: one per place). Room = the CAD room polygon containing the chair (rooms are the spaces closed by wall, glass and column lines with doors closed, named by the CAD text inside). Work seat = a work chair not in an operator room; desk pairing (chair nested in a desk block, or a desk block within 1.0 m) is reported per seat in desk_pair."
+ }
+}

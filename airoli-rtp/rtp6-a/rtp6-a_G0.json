@@ -1,0 +1,1240 @@
+{
+ "plan": "RTP 6th floor, Option A (Units 601 & 602)",
+ "dwg": "20261118_6TH FLOOR.dwg",
+ "sheet": "6TH FLOOR PLAN, Option 01, Details for Unit 601 & 602 (Team One Arteq, 03.10.2020)",
+ "seats": {
+  "work": 429,
+  "all": 670,
+  "by_group": {
+   "Work (desk + chair)": 429,
+   "Meeting": 39,
+   "Training": 51,
+   "Cafeteria": 112,
+   "Reception, lounge, visitor": 31,
+   "Cabin (desk chair + visitors)": 8
+  },
+  "by_room": {
+   "Work (desk + chair)": {
+    "Open workstations 2": 177,
+    "Open workstations 4": 106,
+    "Open workstations 1": 86,
+    "Open workstations 3": 58,
+    "TELEPHONE BOOTH": 2
+   },
+   "Meeting": {
+    "MEETING ROOM (3)": 7,
+    "MEETING ROOM (1)": 7,
+    "MEETING ROOM (2)": 7,
+    "MEETING ROOM (4)": 7,
+    "MEETING ROOM 04 PAX (1)": 4,
+    "MEETING ROOM 04 PAX (2)": 4,
+    "MEETING ROOM 04 PAX (unlabelled)": 3
+   },
+   "Training": {
+    "TRAINING ROOM": 26,
+    "TRAINING-STYLE ROOM (unlabelled)": 25
+   },
+   "Cafeteria": {
+    "CAFETERIA (1)": 112
+   },
+   "Reception, lounge, visitor": {
+    "RECEPTION & WAITING AREA": 19,
+    "Circulation 5": 9,
+    "Circulation 3": 2,
+    "Shaft or duct 85 (unlabelled)": 1
+   },
+   "Cabin (desk chair + visitors)": {
+    "CABIN (1)": 5,
+    "CABIN (2)": 3
+   }
+  }
+ },
+ "legend": {
+  "sheet": "*Paper_Space247",
+  "source": "paper-space LEGEND table on the Option 01 sheet (Team One Arteq, 03.10.2020): DESCRIPTION / REQ / PROV",
+  "rows": [
+   {
+    "item": "RECEPTION AND WAITING AREA",
+    "y": 55.583,
+    "req": 1,
+    "prov": 1,
+    "cad": 1,
+    "matches_provided": true,
+    "meets_required": true,
+    "cad_evidence": "CAD labels: RECEPTION & WAITING AREA (28, 16)"
+   },
+   {
+    "item": "02/04 MEETING ROOM",
+    "y": 55.245,
+    "req": 2,
+    "prov": 4,
+    "cad": 3,
+    "matches_provided": false,
+    "meets_required": true,
+    "cad_evidence": "meeting rooms with 2-5 chairs: MEETING ROOM 04 PAX (1) (4), MEETING ROOM 04 PAX (unlabelled) (3), MEETING ROOM 04 PAX (2) (4)"
+   },
+   {
+    "item": "06/08 MEETING ROOM",
+    "y": 54.908,
+    "req": 2,
+    "prov": 4,
+    "cad": 4,
+    "matches_provided": true,
+    "meets_required": true,
+    "cad_evidence": "meeting rooms with 6-9 chairs: MEETING ROOM (1) (7), MEETING ROOM (2) (7), MEETING ROOM (3) (7), MEETING ROOM (4) (7)"
+   },
+   {
+    "item": "BOARD ROOM",
+    "y": 54.57,
+    "req": 1,
+    "prov": 1,
+    "cad": 0,
+    "matches_provided": false,
+    "meets_required": false,
+    "cad_evidence": "CAD labels: none"
+   },
+   {
+    "item": "CABINS",
+    "y": 54.232,
+    "req": 6,
+    "prov": 2,
+    "cad": 2,
+    "matches_provided": true,
+    "meets_required": false,
+    "cad_evidence": "CAD labels: CABIN (41, 79), CABIN (15, 106)"
+   },
+   {
+    "item": "CEO CABIN",
+    "y": 53.894,
+    "req": 1,
+    "prov": 1,
+    "cad": 0,
+    "matches_provided": false,
+    "meets_required": false,
+    "cad_evidence": "CAD labels: none"
+   },
+   {
+    "item": "WORKSTATION 4' X2'",
+    "y": 53.556,
+    "req": 450,
+    "prov": 429,
+    "cad": 429,
+    "matches_provided": true,
+    "meets_required": false,
+    "cad_evidence": "work seats (chair at a desk): 237 120-degree workstation, 154 4'x2' workstation, 36 4'x2' workstation (block, chair nested), 2 1050x600 workstation (block, chair nested)"
+   },
+   {
+    "item": "TELEPHONE BOOTH",
+    "y": 53.218,
+    "req": 0,
+    "prov": 1,
+    "cad": 1,
+    "matches_provided": true,
+    "meets_required": true,
+    "cad_evidence": "CAD labels: TELEPHONE BOOTH (28, 80)"
+   },
+   {
+    "item": "REPRO",
+    "y": 52.88,
+    "req": 1,
+    "prov": 2,
+    "cad": 6,
+    "matches_provided": false,
+    "meets_required": true,
+    "cad_evidence": "CAD labels: PRINTER (13, 80), REPRO AREA (13, 82), REPRO (27, 56), REPRO (16, 79), REPRO (17, 67), REPRO (17, 31)"
+   },
+   {
+    "item": "TRAINING ROOM",
+    "y": 52.542,
+    "req": 1,
+    "prov": 1,
+    "cad": 2,
+    "matches_provided": false,
+    "meets_required": true,
+    "cad_evidence": "CAD labels: TRAINING ROOM (33, 22), TRAINING-STYLE ROOM (unlabelled) (34, 80)"
+   },
+   {
+    "item": "UPS & ELECTRICAL ROOM",
+    "y": 52.204,
+    "req": 1,
+    "prov": 1,
+    "cad": 1,
+    "matches_provided": true,
+    "meets_required": true,
+    "cad_evidence": "CAD labels: UPS & ELECTRICAL ROOM (15, 42)"
+   },
+   {
+    "item": "SERVER ROOM",
+    "y": 51.866,
+    "req": 1,
+    "prov": 1,
+    "cad": 1,
+    "matches_provided": true,
+    "meets_required": true,
+    "cad_evidence": "CAD labels: SERVER ROOM (15, 60)"
+   },
+   {
+    "item": "STORE ROOM",
+    "y": 51.528,
+    "req": 1,
+    "prov": 3,
+    "cad": 3,
+    "matches_provided": true,
+    "meets_required": true,
+    "cad_evidence": "CAD labels: STORE ROOM (28, 20), STORE ROOM (38, 53), STORE ROOM (18, 13)"
+   },
+   {
+    "item": "CAFETERIA",
+    "y": 51.19,
+    "req": 1,
+    "prov": 1,
+    "cad": 1,
+    "matches_provided": true,
+    "meets_required": true,
+    "cad_evidence": "CAD labels: CAFETERIA (28, 43). labels within 12 m of each other count as one cafeteria"
+   },
+   {
+    "item": "GENTS WASH ROOM",
+    "y": 50.852,
+    "req": 1,
+    "prov": 3,
+    "cad": 3,
+    "matches_provided": true,
+    "meets_required": true,
+    "cad_evidence": "CAD labels: GENTS TOILET (14, 77), GENTS TOILET (15, 27), GENTS TOILET (15, 24)"
+   },
+   {
+    "item": "LADIES WASHROOM",
+    "y": 50.514,
+    "req": 1,
+    "prov": 2,
+    "cad": 3,
+    "matches_provided": false,
+    "meets_required": true,
+    "cad_evidence": "CAD labels: LADIES TOILET (14, 37), LADIES TOILET (14, 64), LADIES TOILET (15, 21)"
+   }
+  ],
+  "sheet_text": {
+   "OPTION": [
+    "OPTION :- 01"
+   ],
+   "DATE": [
+    "DATE :-",
+    "DATE :- 03.10.2020"
+   ],
+   "PROPOSED": [
+    "PROPOSED INTERIOR LAYOUT FOR 6TH FLOOR 601 & 602 RELIABLE TECH PARK,AIROLI."
+   ],
+   "CLIENT": [
+    "CLIENT:"
+   ],
+   "SCALE": [
+    "SCALE :-"
+   ]
+  },
+  "borrowed": false,
+  "note": ""
+ },
+ "areas": {
+  "by_kind_m2": {
+   "work": 1078.0,
+   "circulation": 960.7,
+   "core": 229.5,
+   "cafe": 215.5,
+   "service": 178.7,
+   "training": 96.2,
+   "meeting": 79.1,
+   "wc": 61.6,
+   "reception": 41.6,
+   "other": 35.4,
+   "cabin": 25.1,
+   "lounge": 6.9
+  },
+  "measured_carpet_m2": 2778.9,
+  "measured_carpet_sqft": 29911,
+  "core_in_offer_m2": 229.5,
+  "offer_gross_m2": 3199.2,
+  "offer_gross_sqft": 34435,
+  "sheet_carpet_sqft": 23659,
+  "sheet_chargeable_sqft": 35488,
+  "diff_vs_sheet_carpet_pct": 26.4,
+  "carpet_incl_partitions_m2": 2969.7,
+  "carpet_incl_partitions_sqft": 31965,
+  "incl_partitions_vs_sheet_carpet_pct": 35.1,
+  "gross_vs_sheet_carpet_pct": 45.5,
+  "gross_vs_sheet_chargeable_pct": -3.0,
+  "sheet_chargeable_over_carpet": 1.5,
+  "definition": "measured carpet = every closed room, open-plan zone and circulation polygon inside the offer, except lift wells, stairs, shafts, lift lobbies and fire-rescue balconies (kind \"core\"); inner partitions and columns are not counted (the polygons are the free floor between them). Gross = the plate outline inside the offer.",
+  "pass_free_floor": false,
+  "pass_incl_partitions": false
+ },
+ "area_check_pass": false,
+ "area_check_pass_incl_partitions": false,
+ "egress": {
+  "exits": [
+   {
+    "id": "S1",
+    "kind": "staircase",
+    "doors": [],
+    "c": [
+     112.72,
+     109.31
+    ],
+    "bbox": [
+     110.77,
+     107.5,
+     114.39,
+     111.1
+    ],
+    "door_labels": [
+     "E.D. (109.5, 109.0)",
+     "F.D. (110.1, 111.6)"
+    ],
+    "lines": 24,
+    "reachable": false,
+    "touches_offer": false
+   },
+   {
+    "id": "S2",
+    "kind": "staircase",
+    "doors": [],
+    "c": [
+     57.94,
+     109.31
+    ],
+    "bbox": [
+     56.27,
+     107.5,
+     59.89,
+     111.1
+    ],
+    "door_labels": [
+     "F.D. (60.3, 111.7)",
+     "E.D. (60.7, 109.0)"
+    ],
+    "lines": 24,
+    "reachable": false,
+    "touches_offer": false
+   },
+   {
+    "id": "S3",
+    "kind": "staircase",
+    "doors": [],
+    "c": [
+     131.77,
+     86.49
+    ],
+    "bbox": [
+     130.15,
+     84.54,
+     133.4,
+     88.16
+    ],
+    "door_labels": [
+     "F.D. (130.4, 83.1)",
+     "E.D. (133.7, 87.9)"
+    ],
+    "lines": 24,
+    "reachable": false,
+    "touches_offer": false
+   },
+   {
+    "id": "S4",
+    "kind": "staircase",
+    "doors": [],
+    "c": [
+     39.54,
+     83.85
+    ],
+    "bbox": [
+     37.24,
+     81.89,
+     41.5,
+     86.14
+    ],
+    "door_labels": [
+     "F.D. (39.4, 87.4)",
+     "E.D. (35.5, 83.7)"
+    ],
+    "lines": 27,
+    "reachable": true,
+    "touches_offer": true
+   },
+   {
+    "id": "S5",
+    "kind": "staircase",
+    "doors": [],
+    "c": [
+     85.32,
+     83.82
+    ],
+    "bbox": [
+     83.66,
+     81.89,
+     86.9,
+     85.51
+    ],
+    "door_labels": [
+     "E.D (80.4, 82.2)",
+     "E.D (89.8, 82.3)",
+     "F.D. (84.0, 87.5)",
+     "E.D. (86.1, 87.5)"
+    ],
+    "lines": 24,
+    "reachable": false,
+    "touches_offer": false
+   },
+   {
+    "id": "S6",
+    "kind": "staircase",
+    "doors": [
+     {
+      "at": [
+       13.8,
+       65.6
+      ],
+      "block": "D-750",
+      "width_m": 0.68
+     },
+     {
+      "at": [
+       13.6,
+       65.6
+      ],
+      "block": "D-750",
+      "width_m": 0.68
+     }
+    ],
+    "c": [
+     14.1,
+     69.45
+    ],
+    "bbox": [
+     12.29,
+     67.5,
+     15.89,
+     71.13
+    ],
+    "door_labels": [
+     "E.D. (14.4, 73.1)",
+     "F.D. (13.4, 73.1)"
+    ],
+    "lines": 24,
+    "reachable": true,
+    "touches_offer": true
+   },
+   {
+    "id": "S7",
+    "kind": "staircase",
+    "doors": [],
+    "c": [
+     39.56,
+     50.77
+    ],
+    "bbox": [
+     37.88,
+     49.11,
+     41.5,
+     52.36
+    ],
+    "door_labels": [
+     "E.D (40.7, 46.0)",
+     "E.D (40.8, 55.4)",
+     "E.D. (35.5, 51.7)",
+     "F.D. (35.5, 49.6)"
+    ],
+    "lines": 25,
+    "reachable": true,
+    "touches_offer": true
+   },
+   {
+    "id": "S8",
+    "kind": "staircase",
+    "doors": [
+     {
+      "at": [
+       13.8,
+       35.7
+      ],
+      "block": "D-750",
+      "width_m": 0.68
+     },
+     {
+      "at": [
+       13.6,
+       35.7
+      ],
+      "block": "D-750",
+      "width_m": 0.68
+     }
+    ],
+    "c": [
+     14.08,
+     31.89
+    ],
+    "bbox": [
+     12.29,
+     30.21,
+     15.89,
+     33.84
+    ],
+    "door_labels": [
+     "F.D. (13.6, 28.2)",
+     "E.D. (14.6, 28.2)"
+    ],
+    "lines": 24,
+    "reachable": true,
+    "touches_offer": true
+   },
+   {
+    "id": "S9",
+    "kind": "staircase",
+    "doors": [
+     {
+      "at": [
+       15.5,
+       19.4
+      ],
+      "block": "D-750",
+      "width_m": 0.816
+     }
+    ],
+    "c": [
+     16.82,
+     17.07
+    ],
+    "bbox": [
+     14.87,
+     15.44,
+     18.5,
+     18.69
+    ],
+    "door_labels": [
+     "F.D. (13.2, 18.0)",
+     "E.D. (18.2, 14.8)"
+    ],
+    "lines": 24,
+    "reachable": true,
+    "touches_offer": true
+   }
+  ],
+  "fire_exit_doors": [
+   "FIRE EXIT (25.4, 86.2)"
+  ],
+  "fire_rescue_balconies": [
+   "(10.5, 30.0)",
+   "(10.6, 68.6)"
+  ],
+  "stats": {
+   "seats": 670,
+   "seats_with_one_exit_only_by_room": {
+    "CAFETERIA (1)": 112
+   },
+   "exits_used": [
+    "S4",
+    "S6",
+    "S7",
+    "S8",
+    "S9"
+   ],
+   "seats_with_two_exits": 558,
+   "seats_with_no_exit": 0,
+   "nearest_exit_m": {
+    "max": 33.4,
+    "median": 18.0
+   },
+   "second_exit_m": {
+    "max": 50.5,
+    "median": 25.8
+   },
+   "seats_over_45_m_to_nearest": 0,
+   "seats_over_30_m_to_nearest": 4,
+   "farthest_seat": {
+    "seat_id": "K2",
+    "group": "K",
+    "room": "CABIN (1)",
+    "x_m": 13.552,
+    "y_m": 108.651,
+    "exit_1": "S4",
+    "dist_1_m": 33.4,
+    "exit_2": "S6",
+    "dist_2_m": 50.5
+   },
+   "limit_m": 45.0,
+   "limit_unsprinklered_m": 30.0,
+   "limit_note": "NBC 2016 Part 4, Table 5: business occupancy (Group E), travel distance to an exit 45 m with sprinklers in the whole building (30 m without). To be confirmed with a fire consultant."
+  }
+ },
+ "entries": {
+  "lift_banks": [
+   {
+    "lifts": 2,
+    "at": [
+     31.4,
+     84.1
+    ],
+    "lobby_label": "LOBBY (31.2, 89.4)",
+    "reachable": true,
+    "walk_to_reception_m": 86.3,
+    "doors_on_route": [
+     {
+      "at": [
+       27.7,
+       85.6
+      ],
+      "block": "Glass Door",
+      "width_m": 1.167
+     },
+     {
+      "at": [
+       25.6,
+       82.1
+      ],
+      "block": "Glass Door",
+      "width_m": 0.875
+     },
+     {
+      "at": [
+       25.6,
+       81.9
+      ],
+      "block": "Glass Door",
+      "width_m": 0.875
+     }
+    ],
+    "front_door": {
+     "at": [
+      27.7,
+      85.6
+     ],
+     "block": "Glass Door",
+     "width_m": 1.167
+    }
+   },
+   {
+    "lifts": 2,
+    "at": [
+     38.6,
+     91.4
+    ],
+    "lobby_label": "LOBBY (31.2, 89.4)",
+    "reachable": true,
+    "walk_to_reception_m": 86.3,
+    "doors_on_route": [
+     {
+      "at": [
+       27.7,
+       85.6
+      ],
+      "block": "Glass Door",
+      "width_m": 1.167
+     },
+     {
+      "at": [
+       25.6,
+       82.1
+      ],
+      "block": "Glass Door",
+      "width_m": 0.875
+     },
+     {
+      "at": [
+       25.6,
+       81.9
+      ],
+      "block": "Glass Door",
+      "width_m": 0.875
+     }
+    ],
+    "front_door": {
+     "at": [
+      27.7,
+      85.6
+     ],
+     "block": "Glass Door",
+     "width_m": 1.167
+    }
+   },
+   {
+    "lifts": 2,
+    "at": [
+     33.0,
+     50.9
+    ],
+    "lobby_label": "LOBBY (29.4, 50.8)",
+    "reachable": true
+   },
+   {
+    "lifts": 3,
+    "at": [
+     20.8,
+     13.3
+    ],
+    "lobby_label": null,
+    "reachable": true,
+    "walk_to_reception_m": 13.5,
+    "doors_on_route": [],
+    "front_door": null
+   },
+   {
+    "lifts": 3,
+    "at": [
+     134.6,
+     91.2
+    ],
+    "lobby_label": null,
+    "reachable": false
+   },
+   {
+    "lifts": 2,
+    "at": [
+     84.7,
+     89.7
+    ],
+    "lobby_label": "LOBBY (83.7, 93.5)",
+    "reachable": false
+   }
+  ],
+  "reception": {
+   "name": "RECEPTION & WAITING AREA",
+   "at": [
+    28.1,
+    15.7
+   ],
+   "area_m2": 41.61
+  }
+ },
+ "walkways": {
+  "labels": [
+   {
+    "label": "1500 MM WIDE PASSAGE",
+    "at": [
+     20.5,
+     76.9
+    ],
+    "label_m": 1.5,
+    "measured_m": 2.94,
+    "desk_to_desk_m": 3.31,
+    "samples_m": [
+     2.62,
+     2.79,
+     3.11,
+     3.4,
+     2.94
+    ],
+    "diff_mm": 1441,
+    "ok": false,
+    "at_least_label": true
+   },
+   {
+    "label": "1500 MM WIDE PASSAGE",
+    "at": [
+     31.4,
+     76.9
+    ],
+    "label_m": 1.5,
+    "measured_m": 1.91,
+    "desk_to_desk_m": 2.52,
+    "samples_m": [
+     1.63,
+     1.74,
+     1.91,
+     2.43,
+     2.57
+    ],
+    "diff_mm": 407,
+    "ok": false,
+    "at_least_label": true
+   },
+   {
+    "label": "1200 MM WIDE PASSAGE",
+    "at": [
+     20.8,
+     57.1
+    ],
+    "label_m": 1.2,
+    "measured_m": 1.79,
+    "desk_to_desk_m": 2.59,
+    "samples_m": [
+     1.71,
+     1.77,
+     2.11,
+     2.01,
+     1.79
+    ],
+    "diff_mm": 587,
+    "ok": false,
+    "at_least_label": true
+   },
+   {
+    "label": "1200 MM WIDE PASSAGE",
+    "at": [
+     22.4,
+     31.1
+    ],
+    "label_m": 1.2,
+    "measured_m": 2.48,
+    "desk_to_desk_m": 2.63,
+    "samples_m": [
+     1.96,
+     2.49,
+     2.27,
+     2.48,
+     2.53
+    ],
+    "diff_mm": 1282,
+    "ok": false,
+    "at_least_label": true
+   },
+   {
+    "label": "1200 MM WIDE PASSAGE",
+    "at": [
+     17.8,
+     20.4
+    ],
+    "label_m": 1.2,
+    "measured_m": 1.95,
+    "desk_to_desk_m": 1.95,
+    "samples_m": [
+     2.18,
+     1.95,
+     1.95,
+     1.95,
+     1.83
+    ],
+    "diff_mm": 750,
+    "ok": false,
+    "at_least_label": true
+   },
+   {
+    "label": "1200 MM WIDE PASSAGE",
+    "at": [
+     31.0,
+     26.0
+    ],
+    "label_m": 1.2,
+    "measured_m": 3.23,
+    "desk_to_desk_m": 3.77,
+    "samples_m": [
+     3.31,
+     3.23,
+     2.32,
+     null,
+     null
+    ],
+    "diff_mm": 2026,
+    "ok": false,
+    "at_least_label": true
+   },
+   {
+    "label": "1200 MM WIDE PASSAGE",
+    "at": [
+     17.8,
+     39.7
+    ],
+    "label_m": 1.2,
+    "measured_m": 0.98,
+    "desk_to_desk_m": 2.06,
+    "samples_m": [
+     1.41,
+     0.54,
+     null,
+     null,
+     null
+    ],
+    "diff_mm": -224,
+    "ok": false,
+    "at_least_label": false
+   },
+   {
+    "label": "1200 MM WIDE PASSAGE",
+    "at": [
+     17.9,
+     63.6
+    ],
+    "label_m": 1.2,
+    "measured_m": 2.33,
+    "desk_to_desk_m": 2.4,
+    "samples_m": [
+     2.33,
+     2.38,
+     null,
+     0.38,
+     null
+    ],
+    "diff_mm": 1131,
+    "ok": false,
+    "at_least_label": true
+   },
+   {
+    "label": "1200 MM WIDE PASSAGE",
+    "at": [
+     29.6,
+     59.5
+    ],
+    "label_m": 1.2,
+    "measured_m": 1.92,
+    "desk_to_desk_m": 2.26,
+    "samples_m": [
+     3.67,
+     2.32,
+     1.92,
+     1.43,
+     1.31
+    ],
+    "diff_mm": 725,
+    "ok": false,
+    "at_least_label": true
+   },
+   {
+    "label": "1200 MM WIDE PASSAGE",
+    "at": [
+     29.7,
+     69.2
+    ],
+    "label_m": 1.2,
+    "measured_m": 2.2,
+    "desk_to_desk_m": 2.42,
+    "samples_m": [
+     2.47,
+     2.64,
+     1.92,
+     0.63,
+     null
+    ],
+    "diff_mm": 999,
+    "ok": false,
+    "at_least_label": true
+   },
+   {
+    "label": "1350 MM WIDE PASSAGE",
+    "at": [
+     26.6,
+     79.5
+    ],
+    "label_m": 1.35,
+    "measured_m": 1.35,
+    "desk_to_desk_m": 1.35,
+    "samples_m": [
+     1.71,
+     0.24,
+     1.0,
+     0.66,
+     2.7
+    ],
+    "diff_mm": 2,
+    "ok": true,
+    "at_least_label": true
+   },
+   {
+    "label": "1350 MM WIDE PASSAGE",
+    "at": [
+     18.1,
+     79.6
+    ],
+    "label_m": 1.35,
+    "measured_m": 0.99,
+    "desk_to_desk_m": 3.14,
+    "samples_m": [
+     1.84,
+     0.1,
+     null,
+     0.99,
+     0.97
+    ],
+    "diff_mm": -360,
+    "ok": false,
+    "at_least_label": false
+   },
+   {
+    "label": "1700 MM WIDE PASSAGE",
+    "at": [
+     19.6,
+     87.0
+    ],
+    "label_m": 1.7,
+    "measured_m": 2.49,
+    "desk_to_desk_m": 3.05,
+    "samples_m": [
+     1.8,
+     1.98,
+     2.49,
+     2.77,
+     2.5
+    ],
+    "diff_mm": 792,
+    "ok": false,
+    "at_least_label": true
+   },
+   {
+    "label": "1700 MM WIDE PASSAGE",
+    "at": [
+     12.3,
+     87.0
+    ],
+    "label_m": 1.7,
+    "measured_m": 2.51,
+    "desk_to_desk_m": 4.87,
+    "samples_m": [
+     2.51,
+     2.37,
+     2.37,
+     3.25,
+     2.93
+    ],
+    "diff_mm": 810,
+    "ok": false,
+    "at_least_label": true
+   }
+  ],
+  "labels_checked": 14,
+  "labels_at_least_as_wide": 12,
+  "scan": {
+   "points": 502,
+   "under_1_2_m": [
+    {
+     "at": [
+      41.6,
+      69.5
+     ],
+     "width_m": 0.8,
+     "in": "Circulation 3"
+    },
+    {
+     "at": [
+      42.1,
+      55.9
+     ],
+     "width_m": 0.85,
+     "in": "Circulation 4"
+    },
+    {
+     "at": [
+      42.1,
+      54.9
+     ],
+     "width_m": 0.85,
+     "in": "Circulation 4"
+    },
+    {
+     "at": [
+      12.5,
+      84.4
+     ],
+     "width_m": 0.8,
+     "in": "Circulation 5"
+    },
+    {
+     "at": [
+      11.8,
+      83.7
+     ],
+     "width_m": 0.87,
+     "in": "Circulation 5"
+    },
+    {
+     "at": [
+      11.7,
+      87.9
+     ],
+     "width_m": 1.14,
+     "in": "Circulation 5"
+    },
+    {
+     "at": [
+      16.6,
+      21.2
+     ],
+     "width_m": 1.17,
+     "in": "Circulation 7"
+    },
+    {
+     "at": [
+      20.1,
+      18.0
+     ],
+     "width_m": 1.2,
+     "in": "Circulation 7"
+    },
+    {
+     "at": [
+      12.0,
+      100.4
+     ],
+     "width_m": 0.59,
+     "in": "Circulation 25"
+    },
+    {
+     "at": [
+      38.7,
+      32.1
+     ],
+     "width_m": 0.7,
+     "in": "Circulation 28"
+    },
+    {
+     "at": [
+      37.7,
+      32.1
+     ],
+     "width_m": 0.7,
+     "in": "Circulation 28"
+    },
+    {
+     "at": [
+      36.7,
+      32.1
+     ],
+     "width_m": 0.7,
+     "in": "Circulation 28"
+    },
+    {
+     "at": [
+      35.7,
+      32.1
+     ],
+     "width_m": 0.7,
+     "in": "Circulation 28"
+    },
+    {
+     "at": [
+      34.7,
+      32.1
+     ],
+     "width_m": 0.7,
+     "in": "Circulation 28"
+    },
+    {
+     "at": [
+      33.7,
+      32.1
+     ],
+     "width_m": 0.7,
+     "in": "Circulation 28"
+    },
+    {
+     "at": [
+      32.7,
+      32.1
+     ],
+     "width_m": 0.7,
+     "in": "Circulation 28"
+    },
+    {
+     "at": [
+      31.7,
+      32.1
+     ],
+     "width_m": 0.7,
+     "in": "Circulation 28"
+    },
+    {
+     "at": [
+      30.7,
+      32.1
+     ],
+     "width_m": 0.7,
+     "in": "Circulation 28"
+    },
+    {
+     "at": [
+      29.7,
+      32.1
+     ],
+     "width_m": 0.7,
+     "in": "Circulation 28"
+    },
+    {
+     "at": [
+      42.0,
+      46.8
+     ],
+     "width_m": 1.0,
+     "in": "Circulation 34"
+    },
+    {
+     "at": [
+      42.1,
+      45.8
+     ],
+     "width_m": 0.85,
+     "in": "Circulation 34"
+    }
+   ],
+   "n_under_1_2_m": 21
+  }
+ },
+ "daylight": {
+  "work_seats": 429,
+  "within_6_m": 108,
+  "share_within_6_m": 0.252,
+  "within_6_m_by_facade": {
+   "E": 12,
+   "N": 50,
+   "S": 46
+  },
+  "nearest_facade_all_work_seats": {
+   "E": 31,
+   "N": 210,
+   "SW": 8,
+   "S": 125,
+   "NW": 25,
+   "NE": 30
+  },
+  "median_dist_m": 9.13,
+  "max_dist_m": 16.51,
+  "glazed_length_m_by_facade": {
+   "N": 71.0,
+   "NE": 4.5,
+   "NW": 16.0,
+   "E": 31.5,
+   "SW": 14.5,
+   "S": 57.5,
+   "SE": 1.0,
+   "W": 14.0
+  },
+  "true_north": {
+   "plan_north_bearing_deg": 91.0,
+   "rotate_cw_deg": 91.0,
+   "meaning": "the CAD's up (+y) points 91 deg clockwise of true north (true east, near enough); rotate the plan 91 deg clockwise to put true north up",
+   "source": "airoli-rtp/review/north_fit.json: CAD outline fitted to OSM way 1072909784, IoU 0.913"
+  },
+  "method": "distance from each work seat to the nearest facade glass line on the plate edge; facade direction = outward normal of the plate edge there, turned to true bearings by the north fit"
+ },
+ "flags": [
+  "Legend '02/04 MEETING ROOM': sheet says 4 provided (2 required); the CAD shows 3. meeting rooms with 2-5 chairs: MEETING ROOM 04 PAX (1) (4), MEETING ROOM 04 PAX (unlabelled) (3), MEETING ROOM 04 PAX (2) (4)",
+  "Legend 'BOARD ROOM': sheet says 1 provided (1 required); the CAD shows 0. CAD labels: none",
+  "Legend 'CEO CABIN': sheet says 1 provided (1 required); the CAD shows 0. CAD labels: none",
+  "Legend 'REPRO': sheet says 2 provided (1 required); the CAD shows 6. CAD labels: PRINTER (13, 80), REPRO AREA (13, 82), REPRO (27, 56), REPRO (16, 79), REPRO (17, 67), REPRO (17, 31)",
+  "Legend 'TRAINING ROOM': sheet says 1 provided (1 required); the CAD shows 2. CAD labels: TRAINING ROOM (33, 22), TRAINING-STYLE ROOM (unlabelled) (34, 80)",
+  "Legend 'LADIES WASHROOM': sheet says 2 provided (1 required); the CAD shows 3. CAD labels: LADIES TOILET (14, 37), LADIES TOILET (14, 64), LADIES TOILET (15, 21)",
+  "Area: the rooms measure 29,911 sq ft of free floor (+26.4 %) and 31,965 sq ft with the inner partitions (+35.1 %) against the sheet's 23,659 sq ft carpet: outside the 3 % rule on both counts. The sheet's chargeable 35,488 sq ft is -3.0 % from that gross area. The sheet's chargeable area is exactly 1.500 x its carpet area, so the sheet's carpet figure looks like chargeable / 1.5 (a 50 % loading), not a measured area.",
+  "Exits: 112 seats in CAFETERIA (1) reach only one exit stair on the drawn walls and doors (a second route was not found). Check for a door missing from the drawing.",
+  "Entry: the lift bank at (33, 51) (2 lifts, LOBBY (29.4, 50.8)) has no walking route to the reception on the drawn doors.",
+  "Walkway: '1200 MM WIDE PASSAGE' at (18, 40) measures 0.98 m between chairs at their desks (median of 5 points; 2.06 m desk to desk).",
+  "Walkway: '1350 MM WIDE PASSAGE' at (18, 80) measures 0.99 m between chairs at their desks (median of 5 points; 3.14 m desk to desk).",
+  "Capacity: 'MEETING ROOM 04 PAX (unlabelled)' says 4; 3 chairs are drawn in it.",
+  "Label not placed in a room: 'REPRO' at (27, 56) - closed-room label in an open area: needs a closure.",
+  "Label not placed in a room: 'REPRO' at (16, 79) - closed-room label in an open area: needs a closure."
+ ],
+ "hand_fixes": [
+  "Closing line [41.7, 84.0] to [41.7, 114.5] (zone line, no wall): unit line: Units 601 & 602 end at the east face of lift core B (the stair box to the facade); the east arm (603, 604) is open floor on this sheet with no wall drawn between",
+  "Not part of the offer: the space at [90.0, 100.0]: east arm (Office 603 and Office 604 on this sheet): not part of Units 601 & 602, left empty in Option A",
+  "Label moved near [33.9, 40.7]: the dining hall's CAFETERIA label sits on the servery counter line; moved into the dining area it names",
+  "Label moved near [27.4, 79.0]: TELEPHONE BOOTH label sits on the booth's west wall; moved inside the booth",
+  "Label moved near [42.4, 77.9]: the second CABIN label sits on the facade line beside its room (3 chairs); moved inside the room",
+  "Label added 'MEETING ROOM 04 PAX (unlabelled)' at [35.6, 12.3]: third round 4-seat table room beside the two labelled MEETING ROOM 04 PAX rooms; no label of its own in the CAD",
+  "Label added 'TRAINING-STYLE ROOM (unlabelled)' at [34.5, 80.0]: 20 chairs in rows at 450 mm-deep tables (10 x 2400 + 9 x 1600 mm) beside the lift lobby; no room label in the CAD (the nearest text is CONSOLE)"
+ ],
+ "assumptions": [
+  "True north: the drawing is turned 91 degrees clockwise to put north up (airoli-rtp/review/north_fit.json: CAD outline fitted to OSM way 1072909784, IoU 0.913). The sheet's own north arrow sits in paper space and was not read.",
+  "Heights are not in the drawing (no section, no ceiling level): ceiling 2.85 m and full-height partitions are assumed; the floor-to-floor height is unknown and needs the landlord's section.",
+  "Carpet area is measured as the free floor between walls (see the area note). The landlord's own method (for example, whether toilets, the lift lobby or wall thickness count) is not known.",
+  "Walking distances follow the drawn walls and doors on a 0.2 m grid, with furniture ignored (people use the aisles), so they are slightly short for seats deep in a cluster. Every door is taken as usable; door direction and fire rating are not checked.",
+  "Exit stairs are the staircases drawn on the STAIR layer and entered by their E.D. / F.D. doors. Travel limits are NBC 2016 business occupancy: 45 m with sprinklers, 30 m without; a fire consultant must confirm which applies.",
+  "Walkway width = the clear gap between desks, tables and partitions with the chairs where they are drawn (lounge seats ignored), measured at the CAD's own passage labels.",
+  "Daylight: distance from each work seat to the nearest facade glass line; the facade glass type, sill height and shading are not in the drawing.",
+  "Seats are counted from chair blocks, one per chair (two per two-seat sofa). A work seat is a chair at a desk; the room a chair stands in decides meeting, training, cafeteria and lounge.",
+  "489 short openings without a door block (toilet entries, lift doorways, bays) were closed automatically where two wall ends face each other 0.55 to 1.15 m apart, for room outlines only; walking routes may pass through them."
+ ]
+}

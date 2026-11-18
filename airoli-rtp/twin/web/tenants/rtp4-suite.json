@@ -1,0 +1,48 @@
+{
+ "id": "rtp4-suite",
+ "name": "4th floor suite",
+ "floor": 4,
+ "floor_label": "4th floor",
+ "accent": "#2f8fe6",
+ "client": "Altruist",
+ "area_sqft": 6603,
+ "layout": "../../rtp4-suite/rtp4-suite-floor4.twin.layout.json",
+ "summary": "../../rtp4-suite/rtp4-suite_summary.json",
+ "frame": {
+  "rot_deg": 0,
+  "dx": 0,
+  "dy": 0,
+  "source": "layout already in rtp_local (review/frames.json)"
+ },
+ "seats": {
+  "work": 18,
+  "all": 212,
+  "groups": {
+   "Work seats (desk + chair)": 18,
+   "Meeting room seats": 28,
+   "Training room seats": 135,
+   "Lounge, collab and visitor seats": 31
+  }
+ },
+ "reception": "RECEPTION",
+ "assumptions": {
+  "path": "../../rtp4-suite/rtp4-suite_assumptions.md"
+ },
+ "seat_plan": "../../rtp4-suite/rtp4-suite_seat_plan.png",
+ "blueprint": {
+  "img": "blueprints/rtp4-suite.png",
+  "meta": "blueprints/rtp4-suite.json"
+ },
+ "model": {
+  "use": "auto",
+  "index": "models/index.json",
+  "dev_build": {}
+ },
+ "stills": [],
+ "measured_sqft": 6142,
+ "highlights": [
+  "6 training rooms",
+  "12-seat conference room",
+  "HR induction room"
+ ]
+}

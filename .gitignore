@@ -68,3 +68,12 @@ noida-skymark/twin/assets/
 **/*.blend1
 **/*.raw.glb
 **/*.exr
+
+# Reliable Tech Park twin (Altruist): the page's own images ship with it (logo, DWG blueprints, exterior lightmaps,
+# renders, G0 sheets and seat plans). Raw drawing previews in airoli-rtp/review and Blender masters stay local.
+!airoli-rtp/twin/web/**/*.png
+!airoli-rtp/twin/web/**/*.jpg
+!airoli-rtp/brand/*.png
+!airoli-rtp/brand/*.jpg
+!airoli-rtp/rtp*/*.png
+airoli-rtp/exterior/stills/*.hdr

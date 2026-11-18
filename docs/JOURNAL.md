@@ -1,5 +1,47 @@
 # Atlas — Development Journal
 
+## 2026-11-19 — Atlas: Reliable Tech Park (Airoli) twin for Altruist
+
+**A new client-ready 3D twin of Reliable Tech Park, Airoli, for Altruist: the real building and its surroundings, the 4th-floor suite and both 6th-floor layouts. Everything comes from the design team's drawings, lit by the real sun and published at a new link.**
+
+- **Why:** Altruist is weighing office space at Reliable Tech Park, and the design team drew three fits: a 4th-floor suite and two 6th-floor layouts. The founder wanted them shown as one premium, walkable experience instead of drawings. It also had to fix what made earlier twins look weak: a cartoon-like outside, flickering floors, and checks that only ran inside Blender.
+- **Structural decisions:**
+  - **One shared coordinate system for every floor and the city** (metres from the Google Maps pin, true north). The 4th and 6th floor drawings are lined up on their 185 structural columns, within about 1 cm. True north comes from fitting the drawing to the real building outline in OpenStreetMap (91 % overlap). The alternative, keeping each drawing in its own coordinates, is what made floors drift and flicker before.
+  - **Gated build.** CAD read, then clay model, then look, lighting, bake and web. There were automated checks at each step and a sign-off sheet per plan. Tonight the founder was asleep, so the checks stood in for sign-off and every sheet is kept for review.
+  - **Split of work.** One session read the drawings and built the interiors; a separate worker built the exterior in Blender; this session planned, reviewed and assembled the page. A multi-agent review found 35 real defects in the new page before it shipped, and all were fixed.
+  - **The viewer is a copy of the F1 Skymark viewer** (walk, tour, section cut, floor-plan minimap, presenter remote), not a new one, so nothing proven on Skymark was lost.
+  - **The CAD view is the Volt style the founder liked:** the drawing's own lines, white on blue, with "you are here" and live coordinates.
+  - **Lighting uses the building's AO bake plus the live sun**, not a single baked daytime, so one bake serves morning, golden hour and night.
+- **What works now:**
+  - A new page at `/airoli-rtp/twin/web/` with Altruist branding.
+  - The building and its surroundings out to 500 m (terrain out to 3 km):
+    - every floor a separate piece, glass bands and silver cladding, the rounded terraced ends, the dome and the RELIABLE sign;
+    - the court with palms and parking, real roads, neighbouring buildings and the power substation.
+  - A light slider from sunrise to night. At night the floors glow, the pink and violet uplights from the photos come on, and the city's windows and street lamps light up.
+  - The 4th and 6th floors glow on the facade as the offered floors.
+  - Nine finished renders of the building: morning, golden hour and night, each from the court, the road and above.
+  - **Seat proofs from the drawings:**
+    - 4th-floor suite: 212 seats, training-led (135 training seats, 18 work seats).
+    - 6th floor, option A: 429 work seats, 670 in all. This matches the drawing's own legend of 429 desks provided (450 were required).
+    - 6th floor, option B: 723 work seats, 985 in all.
+  - A comparison card for the two 6th-floor layouts.
+  - Every plan can be walked: in its Blender bake where delivered, otherwise in a version built straight from its CAD layout.
+- **Left undone:**
+  - Plans whose Blender bake was not finished by morning are shown in the CAD-built version; the morning note says which.
+  - The floor count (ground plus 9) and the 3.6 m floor-to-floor height are assumptions: the photos and terrain data cannot settle them.
+  - Some building details are estimated from photos: the roof drum and dome positions, the lobby chamfer and the neighbours' facades.
+  - Cars in the city are simple shapes.
+  - 0.022 m² of tiny overlapping surfaces remain in the surrounding city (none on Reliable Tech Park).
+  - The old Volt, Skymark and landlord pages are untouched.
+  - The NotebookLM push: `add_source` is known to be broken (see CLAUDE.md).
+- **Open questions for the founder:**
+  - Can the landlord supply a section or elevation drawing (the floor count and floor-to-floor height)?
+  - **6th floor, option A:** the measured floor is about 26 % larger than the sheet's 23,659 sq ft carpet. Is the sheet using a different carpet definition?
+  - **6th floor, option A, exits:** 112 seats (mostly the cafeteria) have only one exit route. Does the fire consultant need to see this?
+  - **6th floor, option A, walkways:** five desk-cluster corners sit 0.85–1.15 m from the service walls, below the 1.2 m walkway rule. Should the designer adjust them?
+  - Can Altruist's logo and the RELIABLE sign be shown in client material?
+  - Which floors are actually available today? The drawings date from 2020 and name earlier tenants.
+
 ## 2026-11-18 — Atlas: F1 Skymark twin gets Paytm and ARCIL floors
 
 **Paytm (1st floor) and ARCIL (2nd floor) were added to the F1 Skymark digital twin next to Volt, each proven from its own CAD drawing, built and lit in Blender on the Mac, and walkable in a new building viewer.**

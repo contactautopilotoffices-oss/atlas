@@ -1,0 +1,10 @@
+{
+ "rotation_deg_ccw_cad_to_true": 269.0,
+ "plan_north_bearing_deg": 91.0,
+ "iou": 0.913,
+ "footprint_id": "osm-way-1072909784",
+ "footprint_area_m2": 5863,
+ "cad_area_m2": 6334,
+ "footprint_height": null,
+ "note": "Rotate the CAD plan by rotation_deg (counter-clockwise) to put true north up."
+}

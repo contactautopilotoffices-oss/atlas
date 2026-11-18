@@ -1,0 +1,25 @@
+{
+ "rotation_deg_ccw_cad_to_true": 269.0,
+ "plan_north_bearing_deg": 91.0,
+ "iou": 0.913,
+ "footprint_id": "osm-way-1072909784",
+ "footprint_area_m2": 5863,
+ "cad_area_m2": 6334,
+ "footprint_height": null,
+ "note": "Rotate the CAD plan by rotation_deg (counter-clockwise) to put true north up.",
+ "cad_m_to_rtp_local": {
+  "matrix_2x3": [
+   [
+    -0.017452406437283498,
+    0.9998476951563913,
+    -5584.601888298021
+   ],
+   [
+    -0.9998476951563913,
+    -0.017452406437283498,
+    5894.640517611889
+   ]
+  ],
+  "use": "CAD coordinates in METRES (mm/1000) -> rtp_local (x east, y north, metres from the Maps pin 19.1692159 N 73.0017703 E): [x', y'] = M[:, :2] @ [x, y] + M[:, 2]"
+ }
+}
