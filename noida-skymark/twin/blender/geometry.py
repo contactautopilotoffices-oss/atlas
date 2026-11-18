@@ -266,8 +266,13 @@ class Shell:
                         if u1 - u0 > 0.2:
                             inside = in_poly(x0 + ux * (u0 + u1) / 2 + nx * 0.3, y0 + uy * (u0 + u1) / 2 + ny * 0.3, ring)
                             s = -1 if inside else 1; cx, cy = x0 + ux * (u0 + u1) / 2 + nx * s * 0.1, y0 + uy * (u0 + u1) / 2 + ny * s * 0.1
-                            m = self.mb(); m.box(u1 - u0 + 0.2, 0.2, self.Hs + 0.3 + 0.3, Matrix(), self.mat("walls", "paint", "paint"))
-                            self.R.put("WALL", "closure", m.build("closure"), T(cx, cy, -0.3) @ RZ(an), props={"static": 1, "assumed": 1})
+                            if self.S.get("closure_offsets"):      # opt-in: no face shared with the slabs or the next closure (2 mm coplanar rule)
+                                kk = len(added) % 2; dz = 0.004 + 0.003 * kk; th = 0.2 - 0.006 * kk
+                                m = self.mb(); m.box(u1 - u0 + 0.2, th, self.Hs + 0.6 - 2 * dz, Matrix(), self.mat("walls", "paint", "paint"))
+                                self.R.put("WALL", "closure", m.build("closure"), T(cx, cy, -0.3 + dz) @ RZ(an), props={"static": 1, "assumed": 1})
+                            else:
+                                m = self.mb(); m.box(u1 - u0 + 0.2, 0.2, self.Hs + 0.3 + 0.3, Matrix(), self.mat("walls", "paint", "paint"))
+                                self.R.put("WALL", "closure", m.build("closure"), T(cx, cy, -0.3) @ RZ(an), props={"static": 1, "assumed": 1})
                             added.append([round(x0 + ux * u0, 2), round(y0 + uy * u0, 2), round(x0 + ux * u1, 2), round(y0 + uy * u1, 2)])
                         k = j + 1
                     else: k += 1

@@ -297,7 +297,7 @@ ftf = sorted({s['rise_total_mm'] for s in stairs_all if 'rise_total_mm' in s})
 H['source'] = "assumed: standard fit-out heights, not in the 2D drawing (no section, no ceiling level note)"
 bb = floor.bounds
 out = {
-    "about": f"{C['name']}, floor {a.floor}, Skymark F-1, Noida. Read from {C.get('dwg_name')} by noida-skymark/cad (generic pipeline). Metres; x east, y north (plan up). Origin = drawing point {C['origin_in']} inches.",
+    "about": f"{C['name']}, floor {a.floor}, {C.get('site_about', 'Skymark F-1, Noida')}. Read from {C.get('dwg_name')} by noida-skymark/cad (generic pipeline). Metres; x east, y north (plan up). Origin = drawing point {C['origin_in']} {C.get('units_word', 'inches')}.",
     "heights": H, "bounds": [round(v, 3) for v in bb],
     "floor": [poly_json(g) for g in parts(floor)],
     "atrium": ring(atrium) if atrium is not None else None,
@@ -306,9 +306,9 @@ out = {
     "doors": R['doors'], "lights": lights, "labels": labels, "zones": R['zones'],
     "skirting": [poly_json(g) for w_ in walls for g in parts(w_.buffer(0.009, join_style=2))],
     "plate": ring(plate), "lifts": lifts,
-    "storeys": {"count": "G+4", "floor_to_floor": 4.1, "volt_level": a.floor, "level": a.floor,
+    "storeys": {"count": C.get('storeys', {}).get('count', "G+4"), "floor_to_floor": C.get('storeys', {}).get('floor_to_floor', 4.1), "volt_level": a.floor, "level": a.floor,
                 "cad_floor_to_floor_m": (ftf[0] / 1000 if len(ftf) == 1 else [v / 1000 for v in ftf]) if ftf else None,
-                "source": "G+4 and 4.1 m floor to floor from the Skymark reconstruction (facade_parameters.json). The CAD's stair notes give RISER-3900 (a 3.9 m rise per floor); kept as cad_floor_to_floor_m, not applied."},
+                "source": C.get('storeys', {}).get('source', "G+4 and 4.1 m floor to floor from the Skymark reconstruction (facade_parameters.json). The CAD's stair notes give RISER-3900 (a 3.9 m rise per floor); kept as cad_floor_to_floor_m, not applied.")},
     "stairs": stairs, "stairs_all": stairs_all,
     "extra_rooms": [{"name": r["name"], "box": r["box"]} for r in rooms if r["kind"] == "wc"],
     "fixtures": fixtures, "fixtures_about": "Plumbing fixtures from the CAD's MEP- Plumb- Fixtures blocks, one per block instance; rotation kept.",

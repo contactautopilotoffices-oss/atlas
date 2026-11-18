@@ -17,6 +17,7 @@ SEAT_MAP = {"task chair": "chair", "meeting chair": "chair", "staff chair": "cha
 class Furnisher:
     def __init__(self, ctx):
         self.c = ctx; self.L = ctx.L; self.S = ctx.S; self.R = ctx.reg; self.M = ctx.mats; self.F = ctx.S.get("furniture", {})
+        SEAT_MAP.update(self.F.get("seat_kind_map", {}))      # opt-in: which model a CAD chair kind gets (RTP's stacking visitor chairs)
         self.rnd = random.Random(7)
 
     def mb(self): return MB(self.M)
@@ -51,7 +52,13 @@ class Furnisher:
         seats = [s for s in self.L["seats"] if SEAT_MAP.get(s["kind"], "chair") == "chair"]
         screens = self.f("desk_screens", ["screen_white"]); side = self.f("desk_side_screen", None)
         for i, d in enumerate(self.L.get("desk_polys", [])):
-            P = [tuple(p) for p in d["poly"]]; n = len(P); h = d.get("h", 0.75)
+            P = [tuple(p) for p in d["poly"]]
+            Q = []                         # merge nearly collinear edges, so two screens never overlap on one straight edge
+            for k in range(len(P)):
+                a0, b0, c0 = P[k - 1], P[k], P[(k + 1) % len(P)]
+                cr = (b0[0] - a0[0]) * (c0[1] - b0[1]) - (b0[1] - a0[1]) * (c0[0] - b0[0])
+                if abs(cr) > 1e-4 * math.dist(a0, b0) * math.dist(b0, c0) * 50: Q.append(b0)
+            P = Q if len(Q) >= 3 else P; n = len(P); h = d.get("h", 0.75)
             cx = sum(p[0] for p in P) / n; cy = sum(p[1] for p in P) / n
             ch = min(seats, key=lambda s: math.hypot(s["x"] - cx, s["y"] - cy), default=None)
             # local frame: x along the direction from the chair to the desk centroid, so identical desks get identical keys
@@ -371,6 +378,15 @@ class Furnisher:
     # -------------------------------------------------------------- ceiling light fixtures (from the CAD's ceiling plan, or assumed)
     def light_fixtures(self):
         Lst = self.S.get("light", {}); F = self.F
+        dropped = []
+        if self.S.get("drop_unceiled_lights"):      # opt-in: an assumed light with no ceiling surface right above it is left out
+            dg = bpy.context.evaluated_depsgraph_get(); sc = bpy.context.scene; keep = []
+            for l in self.c.shell.lights:
+                if l.get("assumed") and l["ceiling"] in ("grid", "plain", "cove"):
+                    hit = sc.ray_cast(dg, Vector((l["x"], l["y"], l["z"] - 0.05)), Vector((0, 0, 1)), distance=0.1)
+                    if not hit[0]: dropped.append([round(l["x"], 2), round(l["y"], 2), l["room"]]); continue
+                keep.append(l)
+            self.c.shell.lights = keep; self.c.log("assumed_lights_dropped_no_ceiling", dropped)
         for l in self.c.shell.lights:
             typ = l["ceiling"]; k = l["kind"]; x, y, z = l["x"], l["y"], l["z"]; ceil = self.c.ceiling_z(l["room"])
             if typ == "open" or (typ == "baffle" and z < ceil - 0.02):

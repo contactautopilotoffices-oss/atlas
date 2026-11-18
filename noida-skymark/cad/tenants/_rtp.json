@@ -223,5 +223,12 @@
    "FURN-TOA"
   ],
   "storeys": "about 8 floors plus roof drums (photos; not confirmed)"
+ },
+ "site_about": "Reliable Tech Park, B Wing, MIDC Airoli, Navi Mumbai",
+ "units_word": "mm",
+ "storeys": {
+  "count": "about 8 floors plus roof drums (photos; not confirmed)",
+  "floor_to_floor": 3.6,
+  "source": "assumed (user instruction, 19 Nov 2026): 3.6 m floor to floor; not in the drawings (no section)"
  }
 }

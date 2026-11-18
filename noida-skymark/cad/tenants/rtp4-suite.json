@@ -149,6 +149,8 @@
   "level": 4,
   "table_blocks": [
    "A$Ce8a8cead"
-  ]
+  ],
+  "drop_plants": true,
+  "drop_plants_why": "the CAD pot plants stand in the 1.2 m walkways; left out of the model"
  }
 }

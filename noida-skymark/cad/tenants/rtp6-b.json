@@ -250,6 +250,8 @@
    "Corner Table - Corner Table 1_ 6_ X 1_ 6_ X 1_ 4__1-208-Level 1",
    "R",
    "AR-FURN-SNOOKER"
-  ]
+  ],
+  "drop_plants": true,
+  "drop_plants_why": "the CAD pot plants stand in the 1.2 m walkways; left out of the model"
  }
 }

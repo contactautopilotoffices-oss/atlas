@@ -27,6 +27,7 @@ from twin_lib import Raster, norm_layout, load_style, pip, script_args
 FURN = {"DESK", "SEAT", "TABLE", "PLANTER", "PLANT", "FIXTURE", "FEATURE"}
 BARRIER = {"WALL", "GLASS", "RAILING", "COLUMN", "DOOR", "STAIR", "SKIRTING"}
 TOL = 0.002; NUDGE_MAX = 0.020; MIN_ROUTE = 1.2
+ROUTE_IGNORE = set()
 
 
 def world_geom(o, cache):
@@ -81,6 +82,7 @@ def obstacle_raster(L, ras, res=0.05, furniture=True, objs=None):
     if furniture:
         for o in (objs or bpy.context.scene.objects):
             if o.type != "MESH" or o.get("twin_layer") not in FURN or o.get("wall_mounted"): continue
+            if o.get("twin_layer") in ROUTE_IGNORE: continue     # style 'route_ignore_layers' (opt-in): e.g. chairs, which people move
             if o.get("twin_layer") == "FEATURE": continue
             fp = footprint(o); fps.append((o.name, fp)); poly(fp)
     return {"O": O, "X": X, "Y": Y, "res": res, "x0": ras.x0, "y0": ras.y0, "floor": fl, "fps": fps}
@@ -208,7 +210,8 @@ def parse_width(t):
     if not m: return None
     return round((int(m.group(1)) * 12 + int(m.group(2) or 0)) * 0.0254, 3)
 
-def routes(L, ras, meta, R):
+def routes(L, ras, meta, R, S_=None):
+    S_ = S_ or {}
     O, res, x0, y0 = R["O"], R["res"], R["x0"], R["y0"]; D = dist_map(O, res); ny, nx = O.shape
     def cell(x, y): return int((y - y0) / res), int((x - x0) / res)
     def free_near(i, j, rad=12):
@@ -235,6 +238,9 @@ def routes(L, ras, meta, R):
     st = free_near(*cell(entry["opening"][0], entry["opening"][1]))
     if st is None: return [], [], {"routes": 0, "error": "entry not on free floor"}
     # widest-path Dijkstra on a 2-cell (10 cm) lattice: stepping costs more where clearance is under 0.9 m
+    # (style 'route_clearance_penalty', default 6; RTP uses 40 so a route does not cut round a wall end, where the
+    # clearance measured on the route is a few cm although the opening is wide)
+    PEN = S_.get("route_clearance_penalty", 6)
     s = 2; INF = 1e18; dist = {}; prev = {}; pq = [(0.0, st)]; dist[st] = 0.0
     while pq:
         dcur, (i, j) = heapq.heappop(pq)
@@ -243,12 +249,13 @@ def routes(L, ras, meta, R):
             a, b = i + di, j + dj
             if not (0 <= a < ny and 0 <= b < nx) or Of[a, b] or Of[(i + a) // 2, (j + b) // 2]: continue
             c = math.hypot(di, dj) * res; cl = D[a, b]
-            nd = dcur + c * (1 + 6 * max(0.0, (0.9 - cl) / 0.9))
+            nd = dcur + c * (1 + PEN * max(0.0, (0.9 - cl) / 0.9))
             if nd < dist.get((a, b), INF): dist[(a, b)] = nd; prev[(a, b)] = (i, j); heapq.heappush(pq, (nd, (a, b)))
     door_cells = []
     for d in doors:
         ox, oy = d["opening"][0], d["opening"][1]; door_cells.append((ox, oy))
     narrow, unreached, paths = [], [], 0; seen = set(); allpath = []
+    EXEMPT = re.compile(S_.get("route_exempt_rooms"), re.I) if S_.get("route_exempt_rooms") else None; exempt_n = [0]
     def near_door(x, y): return any(math.hypot(x - dx, y - dy) < 0.75 for dx, dy in door_cells)
     for d in doors:
         if d is entry: continue
@@ -266,6 +273,9 @@ def routes(L, ras, meta, R):
         for (i, j) in path:
             x, y = x0 + (j + 0.5) * res, y0 + (i + 0.5) * res; wdt = 2 * float(D[i, j]) - res        # clear width between the obstacles' faces
             bad = wdt < MIN_ROUTE and not near_door(x, y)
+            if bad and EXEMPT is not None:                   # style 'route_exempt_rooms' (opt-in): e.g. inside a toilet, not a walkway
+                rr_ = ras.room_at(x, y)
+                if rr_ and EXEMPT.search(rr_["name"]): exempt_n[0] += 1; bad = False
             if bad: run.append((x, y, wdt, i, j))
             if (not bad or (i, j) == path[-1]) and run:
                 if len(run) * s * res >= 0.15:
@@ -308,10 +318,12 @@ def routes(L, ras, meta, R):
                 i, j = cell(xa + (xb - xa) * t, ya + (yb - ya) * t)
                 if 0 <= i < ny and 0 <= j < nx: mn = min(mn, 2 * float(D[i, j]) - res)
         passages.append({"label": c.get("name", "circulation") if isinstance(c, dict) else "circulation", "path": pts, "measured_clear_m": round(mn, 2), "ok": mn >= (c.get("min_width", MIN_ROUTE) if isinstance(c, dict) else MIN_ROUTE)})
-    return narrow, passages, {"routes": paths, "entry_door": entry["name"], "unreachable_doors": unreached}
+    return narrow, passages, {"routes": paths, "entry_door": entry["name"], "unreachable_doors": unreached,
+                              **({"exempt_rooms": S_.get("route_exempt_rooms"), "exempt_cells_under_1_2_m": exempt_n[0]} if EXEMPT is not None else {})}
 
 
 def run(tenant, L, S, out, nudge=True, ras=None):
+    global ROUTE_IGNORE; ROUTE_IGNORE = set(S.get("route_ignore_layers", []))
     t0 = time.time(); bpy.context.view_layer.update()
     objs = [o for o in bpy.context.scene.objects if o.type == "MESH" and o.get("twin_layer")]
     meta = json.loads(bpy.context.scene.get("twin_meta", "{}"))
@@ -319,7 +331,7 @@ def run(tenant, L, S, out, nudge=True, ras=None):
     ov, nudged = overlaps(objs, nudge); bpy.context.view_layer.update()
     fl = floating(objs)
     R = obstacle_raster(L, ras, 0.05, True, objs)
-    narrow, passages, rinfo = routes(L, ras, meta, R)
+    narrow, passages, rinfo = routes(L, ras, meta, R, S)
     rep = {"tenant": tenant, "checked_objects": len(objs), "tolerance_m": TOL, "nudge_max_m": NUDGE_MAX, "min_route_width_m": MIN_ROUTE,
            "overlaps": ov, "floating_or_sunk": fl, "narrow_routes": narrow, "labelled_passages": passages, "routing": rinfo, "nudged": nudged,
            "summary": {"overlaps": len(ov), "floating_or_sunk": len(fl), "narrow_routes": len(narrow),

@@ -209,6 +209,13 @@
    "top": "white_top",
    "height": 1.05,
    "min_area_m2": 0.6
+  },
+  "seat_kind_map": {
+   "visitor / lounge chair": "cafe",
+   "waiting / induction chair": "cafe",
+   "training chair": "chair",
+   "cabin chair": "chair",
+   "work chair": "chair"
   }
  },
  "logo": [
@@ -451,5 +458,12 @@
   "two downlights over the logo: the reception's plain ceiling gets assumed downlights on a 2 m grid instead"
  ],
  "camera_skip": "Shaft|LIFT|Duct|Outdoor|Unlabelled|Circulation|STORE|BALCONY|SLAB",
- "weld_max_faces": 4000
+ "weld_max_faces": 4000,
+ "route_exempt_rooms": "TOILET|TOIELT|WASHROOM",
+ "route_ignore_layers": [
+  "SEAT"
+ ],
+ "drop_unceiled_lights": true,
+ "route_clearance_penalty": 40,
+ "closure_offsets": true
 }

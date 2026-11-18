@@ -16,6 +16,13 @@
   "tables_added": 3,
   "chairs_turned_to_desk_or_table": 49
  },
+ "fit_to_walls": {
+  "desks_cut_back_from_walls": 50,
+  "tables_cut_back_from_walls": 5,
+  "plants_left_out": 0,
+  "chairs_moved_clear": 29,
+  "chairs_spread_to_0_6m": 65
+ },
  "frame": {
   "rotation_deg": -91.0,
   "plate_bounds_rtp_local": [

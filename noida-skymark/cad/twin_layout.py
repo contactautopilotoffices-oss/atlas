@@ -54,8 +54,29 @@ def clip_polys(items):
             if p.geom_type == 'Polygon' and p.area > 0.004:
                 out.append({'outer': ring(p), 'holes': [[[round(x, 3), round(y, 3)] for x, y in list(h.coords)[:-1]] for h in p.interiors]})
     return out
-L['walls'] = clip_polys(L['walls']); L['skirting'] = clip_polys(L.get('skirting', []))
+L['walls'] = clip_polys(L['walls'])
+_cut0 = cut
+cut = cut.buffer(-0.004); L['skirting'] = clip_polys(L.get('skirting', [])); cut = _cut0     # skirting ends 4 mm short of the wall ends at the cut (no shared end face)
 L['glass'] = [g for g in L['glass'] if inside((g[0] + g[2]) / 2, (g[1] + g[3]) / 2, 0.6)]
+# glass: the drawing often draws one pane as two or three parallel lines (frame, pane, frame) and runs glazing
+# lines inside walls; the model wants one pane per run, never inside a wall: drop a line that lies inside a wall,
+# and a line parallel to a longer one, less than 60 mm from it and overlapping it by more than half
+_W0 = unary_union([mk(w['outer'], w.get('holes')) for w in L['walls']]).buffer(-0.005)
+gl = sorted(L['glass'], key=lambda g: -math.hypot(g[2] - g[0], g[3] - g[1])); keep = []; ng = collections.Counter()
+for g in gl:
+    ls_ = LineString([g[:2], g[2:4]])
+    if ls_.length < 0.05 or _W0.contains(ls_.interpolate(0.5, normalized=True)): ng['glass_inside_walls_dropped'] += 1; continue
+    a1 = math.atan2(g[3] - g[1], g[2] - g[0]); dup = False
+    for h in keep:
+        a2 = math.atan2(h[3] - h[1], h[2] - h[0]); da = abs((a1 - a2 + math.pi / 2) % math.pi - math.pi / 2)
+        if da > 0.035: continue
+        lh = LineString([h[:2], h[2:4]])
+        if ls_.distance(lh) < 0.06 and ls_.buffer(0.06, cap_style=2).intersection(lh).length > 0.5 * ls_.length: dup = True; break
+    if dup: ng['glass_parallel_duplicates_dropped'] += 1; continue
+    keep.append(g)
+L['glass'] = keep
+# columns 3 mm smaller all round, so a column face never lies on a wall face
+L['columns'] = [ring(mk(c).buffer(-0.003, join_style=2)) for c in L['columns'] if mk(c).buffer(-0.003).area > 0.01]
 L['columns'] = [c for c in L['columns'] if inside(*mk(c).centroid.coords[0], 0.2)]
 rooms = []
 for r in L['rooms']:
@@ -88,6 +109,7 @@ sh['stairs'] = L['stairs_all']
 if isinstance(sh.get('lifts'), dict):
     sh['lifts']['labels'] = [p for p in sh['lifts'].get('labels', []) if inside(*p)]
     sh['lifts']['shafts'] = [s for s in sh['lifts'].get('shafts', []) if inside(*mk(s['poly']).centroid.coords[0])] if sh['lifts'].get('shafts') and isinstance(sh['lifts']['shafts'][0], dict) and 'poly' in sh['lifts']['shafts'][0] else sh['lifts'].get('shafts', [])
+rep['glass'] = dict(ng)
 rep['offer'] = {'area_m2': round(cut.area, 1), 'how': 'egress_poly_m' if C.get('egress_poly_m') else ('offer outline' if offer_clip(C) is not None else 'plate minus not demised'),
                 'rooms': len(rooms), 'walls': len(L['walls']), 'glass': len(L['glass']), 'doors': len(L['doors']), 'seats': len(L['seats'])}
 
@@ -143,6 +165,101 @@ for r in d:
     tables.append({'poly': ring(g.minimum_rotated_rectangle), 'h': L['heights']['desk'], 'room': rr['name'] if rr else '', 'block': f"{r['L']} outline"})
 L['tables'] = [t for t in L['tables'] if inside(*(mk(t['poly']).centroid.coords[0] if 'poly' in t else t['circle'][:2]))] + tables
 rep['furniture'] = {'desks_from_blocks': len(have), 'desks_from_drawn_rectangles': nrect, 'desk_polys_120deg': len(dp), 'tables': len(L['tables']), 'tables_added': len(tables)}
+# fit the furniture clear of the walls (the CAD draws desks, tables and basins on the wall line; the model's walls are
+# 70 mm thick round that line, plus 9 mm skirting) and clear of each other (desk outlines touch edge to edge): every
+# desk and table is cut back from the walls by 12 mm and inset by 4 mm; basins and chairs are pushed out (<= 15 cm).
+Wall = unary_union([mk(w['outer'], w.get('holes')) for w in L['walls']] + [mk(c) for c in L['columns']] + [cut.exterior.buffer(0.2)]).buffer(0.02, join_style=2)     # + the plate edge, where the builder may add an assumed closing wall
+fit = collections.Counter()
+def fitpoly(g):
+    g2 = g.difference(Wall).buffer(-0.004, join_style=2)
+    g2 = max(g2.geoms, key=lambda q: q.area) if hasattr(g2, 'geoms') else g2
+    return g2 if (not g2.is_empty and g2.area > 0.6 * g.area) else None
+def rectpoly(o):
+    ca, sa = math.cos(o['a']), math.sin(o['a']); w, h = o['w'] / 2, o['d'] / 2; cx, cy = o['c']
+    return Polygon([(cx + ca * u - sa * v, cy + sa * u + ca * v) for u, v in ((-w, -h), (w, -h), (w, h), (-w, h))])
+def shrink_rect(c, w, d, a, step=0.005, maxfrac=0.4):
+    """Shrink a rectangle side by side, in its own frame, until it clears the walls (the side nearest the clash first)."""
+    ca, sa = math.cos(a), math.sin(a); u0, u1, v0, v1 = -w / 2, w / 2, -d / 2, d / 2
+    def poly():
+        return Polygon([(c[0] + ca * u - sa * v, c[1] + sa * u + ca * v) for u, v in ((u0, v0), (u1, v0), (u1, v1), (u0, v1))]).buffer(-0.004, join_style=2)
+    for _ in range(400):
+        g = poly()
+        if not g.intersects(Wall): break
+        x_ = g.intersection(Wall).centroid; du, dv = x_.x - c[0], x_.y - c[1]; lu, lv = du * ca + dv * sa, -du * sa + dv * ca
+        side = min((abs(lu - u0), 'u0'), (abs(u1 - lu), 'u1'), (abs(lv - v0), 'v0'), (abs(v1 - lv), 'v1'))[1]
+        if side == 'u0': u0 += step
+        elif side == 'u1': u1 -= step
+        elif side == 'v0': v0 += step
+        else: v1 -= step
+        if (u1 - u0) < (1 - maxfrac) * w or (v1 - v0) < (1 - maxfrac) * d: return None
+    uc, vc = (u0 + u1) / 2, (v0 + v1) / 2
+    return [round(c[0] + ca * uc - sa * vc, 4), round(c[1] + sa * uc + ca * vc, 4)], round(u1 - u0 - 0.008, 4), round(v1 - v0 - 0.008, 4)
+for o in L['desks']:
+    r_ = shrink_rect(o['c'], o['w'], o['d'], o['a'])
+    if r_ is None: fit['desk_kept_as_drawn'] += 1; continue
+    if abs(r_[1] - o['w'] + 0.008) > 0.002 or abs(r_[2] - o['d'] + 0.008) > 0.002: fit['desks_cut_back_from_walls'] += 1
+    o['c'], o['w'], o['d'] = r_
+for q in dp:
+    g2 = fitpoly(mk(q['poly']))
+    if g2 is not None: q['poly'] = ring(g2.simplify(0.002))
+for t in L['tables']:
+    if 'poly' not in t: continue
+    g = mk(t['poly'])
+    if g.area / g.minimum_rotated_rectangle.area > 0.95:          # rectangular tables shrink side by side like desks
+        c_, w_, d_, an = mrr(g); r_ = shrink_rect(c_, w_, d_, an)
+        if r_ is None: fit['table_kept_as_drawn'] += 1; continue
+        ca, sa = math.cos(an), math.sin(an); (cx, cy), w2, d2 = r_[0], r_[1] / 2, r_[2] / 2
+        if abs(r_[1] - w_ + 0.008) > 0.002 or abs(r_[2] - d_ + 0.008) > 0.002: fit['tables_cut_back_from_walls'] += 1
+        t['poly'] = [[round(cx + ca * u - sa * v, 4), round(cy + sa * u + ca * v, 4)] for u, v in ((-w2, -d2), (w2, -d2), (w2, d2), (-w2, d2))]
+    else:
+        g2 = fitpoly(g)
+        if g2 is not None: t['poly'] = ring(g2.simplify(0.002)); fit['tables_cut_back_from_walls'] += 1
+def push(geom_at, obstacles, step=0.005, lim=0.15):
+    """Move a footprint (function of an offset) out of the obstacles, in 5 mm steps away from the nearest obstacle."""
+    dx = dy = 0.0
+    for _ in range(int(lim / step)):
+        g = geom_at(dx, dy); bad = [o for o in obstacles if o.intersects(g)]
+        if not bad: return dx, dy, True
+        o = min(bad, key=lambda o: o.distance(g.centroid)); p = o.boundary.interpolate(o.boundary.project(g.centroid))
+        vx, vy = g.centroid.x - p.x, g.centroid.y - p.y; n = math.hypot(vx, vy) or 1.0
+        if o.contains(g.centroid): vx, vy = -vx, -vy
+        dx += vx / n * step; dy += vy / n * step
+    return dx, dy, False
+for f in L['fixtures']:
+    if not all(k in f for k in ('w', 'd', 'a')): continue
+    base = rectpoly(f)
+    dx, dy, ok = push(lambda dx, dy: Polygon([(x + dx, y + dy) for x, y in base.exterior.coords]), [Wall])
+    if dx or dy: f['c'] = [round(f['c'][0] + dx, 3), round(f['c'][1] + dy, 3)]; fit['fixtures_moved_off_walls' if ok else 'fixtures_dropped_inside_walls'] += 1
+    if not ok: f['_drop'] = True
+    elif ok:          # the fixture models stand a little deeper than the CAD block: keep 35 mm clear of the wall face
+        g = Polygon([(x + 0, y + 0) for x, y in rectpoly(f).exterior.coords]); dd = g.distance(Wall); need = 0.09 if f.get('kind') == 'urinal' else 0.035
+        if dd < need:
+            o_ = Wall; p_ = o_.boundary.interpolate(o_.boundary.project(g.centroid)); vx, vy = g.centroid.x - p_.x, g.centroid.y - p_.y; n_ = math.hypot(vx, vy) or 1
+            f['c'] = [round(f['c'][0] + vx / n_ * (need - dd), 3), round(f['c'][1] + vy / n_ * (need - dd), 3)]; fit['fixtures_given_clearance'] += 1
+L['fixtures'] = [f for f in L['fixtures'] if not f.get('_drop')]
+if TW.get('drop_plants'): fit['plants_left_out'] = len(L['plants']); L['plants'] = []     # decor pots that stand in walkways (tenant json says why)       # a basin / urinal block whose drawn extent sits in the wall: left out of the model (logged)
+TabG = [mk(t['poly']) if 'poly' in t else Point(t['circle'][:2]).buffer(t['circle'][2]) for t in L['tables']]
+for s in L['seats']:
+    r_ = 0.28 if s['group'] in ('M', 'C', 'T') else 0.24
+    dx, dy, ok = push(lambda dx, dy: Point(s['x'] + dx, s['y'] + dy).buffer(r_), [Wall] + [g for g in TabG if g.distance(Point(s['x'], s['y'])) < 1.0], lim=0.4)
+    if dx or dy: s['x'] = round(s['x'] + dx, 3); s['y'] = round(s['y'] + dy, 3); fit['chairs_moved_clear' if ok else 'chairs_still_touching'] += 1
+    if not ok:         # boxed in (wall behind, table in front): the table gives way by 30 mm instead
+        cp = Point(s['x'], s['y']).buffer(r_)
+        for t, g in zip(L['tables'], TabG):
+            if 'poly' in t and g.intersects(cp):
+                g2 = g.difference(cp.buffer(0.01)).buffer(-0.002)
+                g2 = max(g2.geoms, key=lambda q: q.area) if hasattr(g2, 'geoms') else g2
+                if not g2.is_empty and g2.area > 0.7 * g.area: t['poly'] = ring(g2.minimum_rotated_rectangle.intersection(g2.buffer(0.001)).simplify(0.002)); fit['tables_trimmed_for_a_chair'] += 1
+# chairs drawn closer than the chair model is wide (rows of stacking chairs at 0.57 m): spread each pair apart to 0.6 m (<= 25 mm each)
+P_ = [s for s in L['seats'] if 'sofa' not in s['kind']]
+for _ in range(3):
+    for i in range(len(P_)):
+        for j in range(i + 1, len(P_)):
+            a_, b_ = P_[i], P_[j]; dd = math.hypot(a_['x'] - b_['x'], a_['y'] - b_['y'])
+            if 0.01 < dd < 0.64 and a_['room'] == b_['room'] and a_['group'] not in ('W',):
+                k = min(0.03, (0.64 - dd) / 2) / dd; ux, uy = (a_['x'] - b_['x']) * k, (a_['y'] - b_['y']) * k
+                a_['x'] = round(a_['x'] + ux, 4); a_['y'] = round(a_['y'] + uy, 4); b_['x'] = round(b_['x'] - ux, 4); b_['y'] = round(b_['y'] - uy, 4); fit['chairs_spread_to_0_6m'] += 1
+rep['fit_to_walls'] = dict(fit)
 # chairs face their desk (work seats) or the nearest table
 deskc = [(Point(o['c']), mk([[o['c'][0] + math.cos(o['a']) * u - math.sin(o['a']) * v, o['c'][1] + math.sin(o['a']) * u + math.cos(o['a']) * v] for u, v in ((-o['w'] / 2, -o['d'] / 2), (o['w'] / 2, -o['d'] / 2), (o['w'] / 2, o['d'] / 2), (-o['w'] / 2, o['d'] / 2))])) for o in L['desks']]
 deskc += [(mk(q['poly']).centroid, mk(q['poly'])) for q in dp]
