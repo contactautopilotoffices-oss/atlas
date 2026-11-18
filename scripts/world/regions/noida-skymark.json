@@ -1,0 +1,11 @@
+{
+ "about": "Sector 6, Noida, round Skymark F-1: the 1 km Overture and Copernicus extract scripts/skymark/context.py uses.",
+ "lng0": 77.318977, "lat0": 28.591317, "ky": 110950.0,
+ "clip": [77.3097, 28.5826, 77.3287, 28.5996],
+ "bundle": "examples/skymark.bundle.json",
+ "deck_floors": {"skymark-f1": 5}, "floor_h": 3.9, "ground_h": 4.5,
+ "metro": {"L1": ["Blue Line", "elevated", "#2a6fd0", "Blue Line"]},
+ "station_line": "L1",
+ "towers": false, "max_h": 38,
+ "towers_note": "Sector 6 is low and mid-rise industrial and office plots; no estimated towers, nothing over 38 m"
+}

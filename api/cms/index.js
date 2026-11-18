@@ -511,7 +511,7 @@ const normAccess = (v) => clip(v, 60).trim().toUpperCase().replace(/[\s_]+/g, "-
    an id that names a folder or page that already exists could never be
    reached: /chennai would open the Chennai study, never the atlas. */
 const RESERVED = new Set(["2d-to-3d", "admin", "andheri", "api", "assets", "atlas", "broker", "chennai", "clients", "config", "data",
-  "digitide", "docs", "engine", "evidence", "examples", "glb-3d", "godseye", "guide", "index", "indore", "media", "noida",
+  "digitide", "docs", "engine", "evidence", "examples", "glb-3d", "godseye", "guide", "index", "indore", "media", "noida", "noida-skymark",
   "node-modules", "recon", "references", "scripts", "supabase", "whitefield", "login", "logout", "static", "public", "favicon"]);
 const atlasUrl = (slug) => `/${slug}`;
 

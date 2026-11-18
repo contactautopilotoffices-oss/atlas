@@ -75,6 +75,7 @@
     "digitide-noida": { kind: "study", scripts: ["/noida/data.js"], props: "NOI_OPTIONS", id: "id", name: "name", facts: "NOI_FACTS",
       factGroups: { market: "Office market", talent: "Talent", transit: "Transit" },
       locked: ["id", "n", "pick", "micro", "precision", "photo", "thumb"], features: FEATURES["digitide-noida"] },
+    "noida-skymark": { kind: "study", scripts: [], props: null, features: [] },
     digitide: { kind: "study", scripts: [], props: null, features: [] },
     godseye: { kind: "tool", scripts: [], props: null, features: [] }
   };

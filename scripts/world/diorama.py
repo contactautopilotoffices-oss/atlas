@@ -34,6 +34,7 @@ the footpath at eye height, verticals kept straight) and station.
 import sys, os, json, math, random
 import numpy as np
 import bpy, bmesh
+from mathutils import Matrix
 import shapely
 from shapely.geometry import Polygon, MultiPolygon, LineString, Point, box
 from shapely.ops import unary_union
@@ -44,7 +45,7 @@ bpy.ops.wm.read_factory_settings(use_empty=True)
 FAST = "--fast" in A
 os.makedirs(OUT, exist_ok=True)
 S = json.load(open(SCENE)); WJ = json.load(open(WORLD))
-BUNDLE = json.load(open("examples/flipkart-andheri.bundle.json"))
+BUNDLE = json.load(open(S.get("bundle", "examples/flipkart-andheri.bundle.json")))
 BO = next(o for o in BUNDLE["options"] if o["id"] == OID)
 FACT = {f["k"]: f["v"] for f in BO["facts"]}
 SO = next(o for o in S["options"] if o["id"] == OID)
@@ -186,8 +187,11 @@ def mat(name, col="#808080", rough=0.8, metal=0.0, tex=None, rtex=None, glass=Fa
 
 WALL_STYLES = ["res_cream", "res_peach", "res_grey", "res_ochre"]
 MOD = {"res_cream": (6, 12), "res_peach": (6, 12), "res_grey": (6, 12), "res_ochre": (6, 12), "res_tower": (6, 12), "com_ribbon": (8, 16), "com_glass": (6, 16),
-       "shop": (6, 4.5), "chawl": (4, 3), "opt_glass": (6, 16.4), "opt_plaster": (6, 16.4)}
-for k in MOD: mat("wall_" + k, tex=k + ".jpg", rtex=k + "_r.jpg", glass=k in ("com_glass", "opt_glass", "com_ribbon", "opt_plaster", "res_tower"))
+       "shop": (6, 4.5), "chawl": (4, 3), "opt_glass": (6, 16.4), "opt_plaster": (6, 16.4), "glass723": (6, 4.1), "retail723": (7.2, 5.6),
+       "cw_teal": (6, 4.1), "cw_blue": (6, 4.1), "cw_grey": (6, 4.1), "cw_silver": (6, 4.1), "ribbon_red": (6, 4.1), "ribbon_white": (6, 4.1)}
+for k in MOD: mat("wall_" + k, tex=k + ".jpg", rtex=k + "_r.jpg", glass=k in ("com_glass", "opt_glass", "com_ribbon", "opt_plaster", "res_tower", "glass723", "retail723") or k.startswith(("cw_", "ribbon_")))
+mat("fin_723", "#3d4752", 0.45, 0.35); mat("pier_723", "#32373d", 0.5, 0.3); mat("band_723", "#c8cbcd", 0.55, 0.15); mat("frame_723", "#d9dcde", 0.35, 0.7)
+mat("acp_grey", "#b8bcbf", 0.4, 0.55); mat("acp_red", "#ad322c", 0.42, 0.35); mat("acp_white", "#e7e7e3", 0.45, 0.25); mat("fin_white", "#ecebe7", 0.5, 0.1)
 mat("roof", tex="roof.jpg", rough=0.9); mat("roof_tin", "#8f8f8a", 0.45, 0.6); mat("roof_tarp", "#2f63a8", 0.6); mat("roof_tin_rust", "#7a5b45", 0.7, 0.3)
 mat("parapet", "#cfc8b8", 0.9); mat("ground", "#a29c8f", 0.95, tex="roof.jpg"); mat("asphalt", tex="asphalt.jpg", rough=0.85); mat("pavers", tex="pavers.jpg", rough=0.9)
 mat("kerb", "#bdb8ab", 0.85); mat("grass", tex="grass.jpg", rough=0.95); mat("water", "#3d5257", 0.05, 0.1); mat("marking", "#efefe8", 0.6)
@@ -196,6 +200,198 @@ mat("station_roof", "#d9dde0", 0.3, 0.85); mat("station_glass", "#8fb4c4", 0.05,
 mat("sign_text", "#ffffff", 0.4, emit="#ffffff", ek=0.6); mat("rail", "#6f6a64", 0.4, 0.9); mat("tank", "#1d1f22", 0.5)
 mat("mullion", "#c4c9cc", 0.3, 0.9); mat("slab_edge", "#e6e3dc", 0.6); mat("glass_lobby", "#6e8a96", 0.03, 0.6); mat("canopy", "#2b2e31", 0.4, 0.6)
 mat("opt_name", "#f2f0ea", 0.3, 0.6, emit="#fff4de", ek=0.4); mat("wire", "#3a3a3a", 0.5, 0.8); mat("ballast", "#7d7568", 0.95)
+
+# --- ground kept clear for the metro: the map's footprints include Line 1's stations and viaduct as plain
+# buildings, which extrude into tall solid blocks right where the station structure has to stand ---
+def _metro_clear():
+    zs = []
+    for key in ("L1",):
+        lines = [LineString(l) for l in S["metro"].get(key, {}).get("lines", [])]
+        zs += [l.buffer(5.5, cap_style=2) for l in lines]
+        for s in S["stations"]:
+            if s["line"] != key or not lines: continue
+            pt = Point(s["x"], s["y"]); l = min(lines, key=lambda l: l.distance(pt))
+            if l.distance(pt) > 80: continue
+            t0 = l.project(pt)
+            seg = LineString([l.interpolate(max(0, t0 - 75)), l.interpolate(min(l.length, t0 + 75))])
+            zs.append(seg.buffer(17, cap_style=2))
+            for e in (-52, 52):                       # the stairs down to each footpath
+                q = l.interpolate(min(l.length, max(0, t0 + e))); zs.append(q.buffer(22))
+    return unary_union(zs) if zs else Polygon()
+METRO_CLEAR = _metro_clear()
+# where the eye must not stand: inside the Line 1 station or its stairs, or under a Line 3 entrance canopy
+KEEP_OUT = unary_union([METRO_CLEAR] + [Point(s["x"], s["y"]).buffer(30) for s in S["stations"] if s["line"] == "L3"])
+def blocks_metro(p):
+    if METRO_CLEAR.is_empty: return False
+    i = p.intersection(METRO_CLEAR).area
+    return i > 40 or i > 0.25 * p.area
+
+def generic_option(ob, q, ring, GH, FH, floors, H, glassy, style):
+    """An option building in the house style: lobby glass, a facade texture, slab edges, mullions, a crown."""
+    walls(ob, ring, 0, GH, "glass_lobby", 3, GH)
+    walls(ob, ring, GH, H, "wall_" + style, *MOD[style], v0=GH)
+    # slab edges at every floor, and chajjas on plaster buildings
+    for k in range(floors):
+        z = GH + k * FH if k else GH
+        out = q.buffer(0.28 if glassy else 0.6, join_style="mitre")
+        walls(ob, [L(x, y) for x, y in out.exterior.coords], z - 0.42, z, "slab_edge", 2, 2)
+        flat(ob, lpoly(out.difference(q)), z, "slab_edge", 2); flat(ob, lpoly(out.difference(q)), z - 0.42, "slab_edge", 2, up=False)
+    # mullions: fins every 1.5 m along each face
+    if glassy:
+        r = ring[:-1] if ring[0] == ring[-1] else ring
+        if not Polygon(r).exterior.is_ccw: r = r[::-1]
+        for i in range(len(r)):
+            (ax, ay), (bx_, by) = r[i], r[(i + 1) % len(r)]; d = math.hypot(bx_ - ax, by - ay); ang = math.atan2(by - ay, bx_ - ax)
+            nx, ny = math.sin(ang), -math.cos(ang)
+            for s_ in np.arange(0.75, d, 1.5):
+                px, py = ax + (bx_ - ax) * s_ / d + nx * 0.16, ay + (by - ay) * s_ / d + ny * 0.16
+                boxm(ob, px, py, GH, H + 2.2, 0.1, 0.32, ang, "mullion", top=True)
+    # crown, roof and plant
+    inner = q.buffer(-0.3)
+    walls(ob, ring, H, H + 2.4, "wall_" + style if glassy else "parapet", *MOD[style], v0=GH)
+    walls(ob, [L(x, y) for x, y in inner.exterior.coords], H, H + 2.4, "parapet", 2, 2, outward=False)
+    flat(ob, lpoly(q.difference(inner)), H + 2.4, "slab_edge", 2); flat(ob, lpoly(inner), H + 0.1, "roof", 5)
+    c = inner.representative_point(); a_ = math.sqrt(inner.area)
+    boxm(ob, *L(c.x, c.y), H, H + 4.5, a_ * 0.35, a_ * 0.3, 0.0, "concrete")
+    for k in range(4): boxm(ob, *L(c.x + (k - 1.5) * 3.2, c.y - a_ * 0.25), H, H + 1.6, 2.2, 1.6, 0.0, "metal")
+
+def _faces(ring):
+    """The footprint's faces, counter-clockwise, each as (A, B, length, angle, outward normal)."""
+    r = ring[:-1] if ring[0] == ring[-1] else ring
+    if not Polygon(r).exterior.is_ccw: r = r[::-1]
+    out = []
+    for i in range(len(r)):
+        (ax, ay), (bx_, by) = r[i], r[(i + 1) % len(r)]; d = math.hypot(bx_ - ax, by - ay)
+        if d < 2: continue
+        ang = math.atan2(by - ay, bx_ - ax); out.append(((ax, ay), (bx_, by), d, ang, (math.sin(ang), -math.cos(ang))))
+    return out
+
+def _at(A, B, d, s_, n, off):
+    return (A[0] + (B[0] - A[0]) * s_ / d + n[0] * off, A[1] + (B[1] - A[1]) * s_ / d + n[1] * off)
+
+FIN_STEP, FIN_D, FIN_W = 0.62, 0.38, 0.08
+def house_of_wadhwa(ob, q, ring, GH, FH, floors, H):
+    """House of Wadhwa 723 Avenue, after the developer's image: a dark glass tower wrapped in dense full-height
+    vertical fins, solid piers that break each face, a light grey end band, slim floor lines, an open crown of
+    blades above the roof, and a lit glass retail ground floor. The front face gets its own pieces below."""
+    walls(ob, ring, 0, GH, "wall_retail723", *MOD["retail723"])
+    walls(ob, ring, GH, H, "wall_glass723", *MOD["glass723"], v0=GH)
+    # floor lines: a slim transom at every slab
+    for k in range(floors):
+        z = GH + k * FH
+        out = q.buffer(0.14, join_style="mitre")
+        walls(ob, [L(x, y) for x, y in out.exterior.coords], z - 0.1, z + 0.1, "fin_723", 2, 2)
+        flat(ob, lpoly(out.difference(q)), z + 0.1, "fin_723", 2)
+    # the podium's dark head band over the retail glass, projecting like a fascia
+    out = q.buffer(1.2, join_style="mitre")
+    walls(ob, [L(x, y) for x, y in out.exterior.coords], GH - 0.9, GH + 0.15, "pier_723", 2, 2)
+    flat(ob, lpoly(out.difference(q)), GH + 0.15, "pier_723", 2); flat(ob, lpoly(out.difference(q)), GH - 0.9, "pier_723", 2, up=False)
+    F = _faces(ring)
+    for i, (A, B, d, ang, n) in enumerate(F):
+        # where the solid piers and the light band break the fins on this face
+        breaks = [(0.71 * d, 0.71 * d + 3.6, "band_723")] if i % 2 == 0 else [(0.31 * d, 0.31 * d + 2.4, "pier_723"), (d - 3.2, d, "band_723")]
+        for b0, b1, m in breaks:
+            c0 = _at(A, B, d, (b0 + b1) / 2, n, 0.22)
+            boxm(ob, *c0, GH, H + 0.4, b1 - b0, 0.45, ang, m)
+        s_ = 0.4
+        while s_ < d - 0.3:
+            if not any(b0 - 0.2 <= s_ <= b1 + 0.2 for b0, b1, _ in breaks):
+                boxm(ob, *_at(A, B, d, s_, n, FIN_D / 2), GH, H + 0.4, FIN_W, FIN_D, ang, "fin_723")
+            s_ += FIN_STEP
+        # the crown: an open screen of thin blades standing above the roof line
+        s_ = 0.3
+        while s_ < d - 0.2:
+            boxm(ob, *_at(A, B, d, s_, n, 0.2), H, H + 6.0, 0.07, 0.12, ang, "frame_723")
+            s_ += 1.2
+        boxm(ob, *_at(A, B, d, d / 2, n, 0.2), H + 5.85, H + 6.05, d, 0.22, ang, "frame_723")
+    # the roof and its plant
+    inner = q.buffer(-0.3)
+    flat(ob, lpoly(q), H + 0.05, "roof", 5)
+    walls(ob, ring, H, H + 1.1, "pier_723", 2, 2)
+    c = inner.representative_point(); a_ = math.sqrt(inner.area)
+    boxm(ob, *L(c.x, c.y), H, H + 3.0, a_ * 0.45, a_ * 0.4, 0.0, "pier_723")
+
+def house_of_wadhwa_front(ob, A, B, r, GH, FH, H):
+    """The pieces only the front face has: the projecting two-storey frame box low on the left, and the framed
+    notch at the top left corner."""
+    d = math.hypot(B[0] - A[0], B[1] - A[1]); ang = math.atan2(B[1] - A[1], B[0] - A[0]); n = (math.sin(ang), -math.cos(ang))
+    zb = GH + 2 * FH; w = min(9.0, d * 0.32); c = _at(A, B, d, 0.6 + w / 2, n, 0.8)
+    for z0, z1 in ((zb - 0.35, zb + 0.35), (zb + 2 * FH - 0.35, zb + 2 * FH + 0.35)):
+        boxm(ob, *c, z0, z1, w + 0.6, 1.6, ang, "frame_723", bottom=True)
+    for e in (-1, 1):
+        boxm(ob, *_at(A, B, d, 0.6 + w / 2 + e * (w / 2), n, 0.8), zb, zb + 2 * FH, 0.6, 1.6, ang, "frame_723")
+    boxm(ob, *_at(A, B, d, 0.6 + w / 2, n, 1.3), zb + 0.35, zb + 2 * FH - 0.35, w - 0.6, 0.06, ang, "wall_glass723")
+    # top left: two floors set back behind a white frame
+    zn = H - 2 * FH; wn = min(5.0, d * 0.2)
+    boxm(ob, *_at(A, B, d, wn / 2, n, 0.3), H - 0.3, H + 0.3, wn + 0.4, 0.8, ang, "frame_723", bottom=True)
+    boxm(ob, *_at(A, B, d, wn + 0.2, n, 0.3), zn, H, 0.4, 0.8, ang, "frame_723")
+
+# --- the other six options, after what their developers, brokers and RERA filings say (see the PR notes):
+#     a curtain-wall or ribbon-window skin, and the structural pieces each one is known for ---
+SPECS = {
+    # Atul Corporate Avenue, Chakala: a glass-fronted G+8 block of wings round a full-height atrium, rooftop sundecks
+    "corporate-avenue": dict(skin="cw_teal", mull=1.5, bands=("acp_grey", 0.45, 0.4), corners="acp_grey", crown="acp_grey", roofdeck=True, skylight=True),
+    # Bsafal Privilon (Morphogenesis): a 14-storey slab with a kinetic facade of sunbreakers, double-height lobby, landscaped roof deck
+    "privilon": dict(skin="cw_grey", lobby2=True, fins=dict(step=1.1, d0=0.3, d1=1.4, w=0.16, mat="fin_white"), crown="fin_white", roofgarden=True),
+    # Silver Landmark (1998, Uttam C. Jain): ACP and glass, the building people know as the red one by the highway
+    "landmark": dict(skin="ribbon_red", corners="acp_red", crown="acp_red"),
+    # Rustomjee Central Park (Sanjay Puri): a full glass curtain wall in performance glazing, an 18 ft sheltered driveway
+    "rustomjee-central-park": dict(skin="cw_silver", mull=1.25, crown="acp_grey", porte=True),
+    # Vaman Techno Centre (2007): a mid-rise block; facade not documented, so a typical ribbon of blue glass in white ACP
+    "vaman-techno-centre": dict(skin="ribbon_white", corners="acp_white", crown="acp_white"),
+    # Hiranandani Fulcrum (2013): a glass-fronted G+9 of two wings, double glazed, a cafeteria on the terrace
+    "fulcrum": dict(skin="cw_blue", mull=1.5, bands=("acp_grey", 0.35, 0.3), crown="acp_grey", roofdeck=True),
+}
+
+def facade_spec(ob, q, ring, GH, FH, floors, H, sp):
+    lob = GH + (FH if sp.get("lobby2") else 0)
+    walls(ob, ring, 0, lob, "glass_lobby", 3, lob)
+    walls(ob, ring, lob, H, "wall_" + sp["skin"], 6, FH, v0=GH)
+    if sp.get("bands"):   # an ACP band at every slab
+        m, d_, h_ = sp["bands"]; out = q.buffer(d_, join_style="mitre"); oring = [L(x, y) for x, y in out.exterior.coords]
+        for k in range(1 if sp.get("lobby2") else 0, floors):
+            z = GH + k * FH; walls(ob, oring, z - h_, z, m, 2, 2); flat(ob, lpoly(out.difference(q)), z, m, 2); flat(ob, lpoly(out.difference(q)), z - h_, m, 2, up=False)
+    F = _faces(ring)
+    for i, (A, B, d, ang, n) in enumerate(F):
+        if sp.get("mull"):
+            s_ = sp["mull"] / 2
+            while s_ < d:
+                boxm(ob, *_at(A, B, d, s_, n, 0.11), lob, H + 0.3, 0.08, 0.22, ang, "mullion"); s_ += sp["mull"]
+        if sp.get("fins"):   # sunbreakers whose depth rises and falls across each face: the kinetic read
+            f = sp["fins"]; s_ = f["step"] / 2
+            while s_ < d - 0.2:
+                t = s_ / d; dep = f["d0"] + (f["d1"] - f["d0"]) * (0.5 + 0.5 * math.sin(math.tau * (t * 1.3 + i * 0.3)))
+                boxm(ob, *_at(A, B, d, s_, n, dep / 2), lob, H + 1.6, f["w"], dep, ang, f["mat"]); s_ += f["step"]
+    if sp.get("corners"):   # solid cladding at the corners, full height
+        r = ring[:-1] if ring[0] == ring[-1] else ring
+        for k in range(len(r)):
+            a0 = math.atan2(r[k][1] - r[k - 1][1], r[k][0] - r[k - 1][0])
+            boxm(ob, r[k][0], r[k][1], 0, H + 1.4, 1.3, 1.3, a0, sp["corners"])
+    # parapet, roof and plant
+    cm = sp.get("crown", "parapet"); inner = q.buffer(-0.3)
+    walls(ob, ring, H, H + 1.4, cm, 2, 2); walls(ob, [L(x, y) for x, y in inner.exterior.coords], H, H + 1.4, cm, 2, 2, outward=False)
+    flat(ob, lpoly(q.difference(inner)), H + 1.4, cm, 2); flat(ob, lpoly(inner), H + 0.1, "roof", 5)
+    c = inner.representative_point(); a_ = math.sqrt(inner.area)
+    if sp.get("skylight"):   # the atrium's glass roof
+        boxm(ob, *L(c.x, c.y), H, H + 1.3, a_ * 0.32, a_ * 0.22, 0.0, "glass_lobby")
+    else:
+        boxm(ob, *L(c.x, c.y), H, H + 3.4, a_ * 0.3, a_ * 0.25, 0.0, "concrete")
+    if sp.get("roofdeck"):   # a shaded sundeck: slender posts and a slatted pergola over part of the roof
+        px0, py0 = L(c.x + a_ * 0.22, c.y + a_ * 0.18)
+        for ix in range(4):
+            for iy in range(3): cyl(ob, px0 + (ix - 1.5) * 3.2, py0 + (iy - 1) * 3.2, H + 0.1, H + 3.2, 0.09, 0.09, 0, "metal", 8)
+        for k in range(14): boxm(ob, px0 + (k - 6.5) * 0.8, py0, H + 3.2, H + 3.45, 0.12, 7.6, 0.0, "fin_white")
+    if sp.get("roofgarden"):   # the landscaped roof terrace: lawn, planters, shade
+        g = inner.buffer(-2.0)
+        if not g.is_empty: flat(ob, lpoly(g), H + 0.35, "grass", 4)
+        for k in range(5): boxm(ob, *L(c.x + (k - 2) * a_ * 0.15, c.y - a_ * 0.28), H + 0.1, H + 1.0, 2.4, 1.0, 0.0, "concrete")
+
+def porte_cochere(ob, A, B, GH):
+    """An 18 ft (5.5 m) sheltered driveway: a deep slab on two round columns in front of the entrance."""
+    d = math.hypot(B[0] - A[0], B[1] - A[1]); ang = math.atan2(B[1] - A[1], B[0] - A[0]); n = (math.sin(ang), -math.cos(ang))
+    w = min(16.0, d * 0.55); c = _at(A, B, d, d / 2, n, 5.0)
+    boxm(ob, *c, 5.5, 6.2, w, 10.0, ang, "acp_grey", bottom=True)
+    for e in (-1, 1): cyl(ob, *_at(A, B, d, d / 2 + e * w * 0.38, n, 8.6), 0, 5.5, 0.45, 0.45, 0, "concrete", 18)
 
 # -------------------------------------------------------------- the build ----
 def build():
@@ -207,6 +403,7 @@ def build():
     for b in S["buildings"]:
         p = Polygon(b["p"])
         if not p.is_valid: p = p.buffer(0)
+        if b.get("opt") != OID and blocks_metro(p): continue   # the map draws the station and viaduct as a building; we build the real thing there
         if SLAB.contains(p.centroid): bpolys.append((b, p.intersection(SLAB)))
     built = unary_union([p for _, p in bpolys]) if bpolys else Polygon()
 
@@ -280,34 +477,17 @@ def build():
     ob = MB([]); q = Polygon(OPTB["p"]).simplify(0.2); ring = [L(x, y) for x, y in q.exterior.coords]
     floors = 1 + int(''.join(ch for ch in FACT.get("Total floors", "G+9").split("+")[-1] if ch.isdigit()) or 9)
     grade = FACT.get("Grade", "B"); glassy = grade.startswith("A") or grade == "B+"
-    FH, GH = 4.1, 5.6; H = GH + (floors - 1) * FH
+    FH, GH = S.get("floor_h", 4.1), S.get("ground_h", 5.6); H = GH + (floors - 1) * FH
+    EXT = A[A.index("--exterior") + 1] if "--exterior" in A else None   # a building modelled on its own (scripts/skymark/blender/exterior.py)
     style = "opt_glass" if glassy else "opt_plaster"
-    walls(ob, ring, 0, GH, "glass_lobby", 3, GH)
-    walls(ob, ring, GH, H, "wall_" + style, *MOD[style], v0=GH)
-    # slab edges at every floor, and chajjas on plaster buildings
-    for k in range(floors):
-        z = GH + k * FH if k else GH
-        out = q.buffer(0.28 if glassy else 0.6, join_style="mitre")
-        walls(ob, [L(x, y) for x, y in out.exterior.coords], z - 0.42, z, "slab_edge", 2, 2)
-        flat(ob, lpoly(out.difference(q)), z, "slab_edge", 2); flat(ob, lpoly(out.difference(q)), z - 0.42, "slab_edge", 2, up=False)
-    # mullions: fins every 1.5 m along each face
-    if glassy:
-        r = ring[:-1] if ring[0] == ring[-1] else ring
-        if not Polygon(r).exterior.is_ccw: r = r[::-1]
-        for i in range(len(r)):
-            (ax, ay), (bx_, by) = r[i], r[(i + 1) % len(r)]; d = math.hypot(bx_ - ax, by - ay); ang = math.atan2(by - ay, bx_ - ax)
-            nx, ny = math.sin(ang), -math.cos(ang)
-            for s_ in np.arange(0.75, d, 1.5):
-                px, py = ax + (bx_ - ax) * s_ / d + nx * 0.16, ay + (by - ay) * s_ / d + ny * 0.16
-                boxm(ob, px, py, GH, H + 2.2, 0.1, 0.32, ang, "mullion", top=True)
-    # crown, roof and plant
-    inner = q.buffer(-0.3)
-    walls(ob, ring, H, H + 2.4, "wall_" + style if glassy else "parapet", *MOD[style], v0=GH)
-    walls(ob, [L(x, y) for x, y in inner.exterior.coords], H, H + 2.4, "parapet", 2, 2, outward=False)
-    flat(ob, lpoly(q.difference(inner)), H + 2.4, "slab_edge", 2); flat(ob, lpoly(inner), H + 0.1, "roof", 5)
-    c = inner.representative_point(); a_ = math.sqrt(inner.area)
-    boxm(ob, *L(c.x, c.y), H, H + 4.5, a_ * 0.35, a_ * 0.3, 0.0, "concrete")
-    for k in range(4): boxm(ob, *L(c.x + (k - 1.5) * 3.2, c.y - a_ * 0.25), H, H + 1.6, 2.2, 1.6, 0.0, "metal")
+    if EXT:
+        pass   # placed after the entrance is found, below
+    elif OID == "723-avenue":
+        house_of_wadhwa(ob, q, ring, GH, FH, floors, H)
+    elif OID in SPECS:
+        facade_spec(ob, q, ring, GH, FH, floors, H, SPECS[OID])
+    else:
+        generic_option(ob, q, ring, GH, FH, floors, H, glassy, style)
     # entrance: the face nearest a road gets a canopy and the name
     roads = unary_union([ROAD["major"], ROAD["minor"]])
     r = ring[:-1] if ring[0] == ring[-1] else ring
@@ -320,18 +500,37 @@ def build():
         if best is None or dist < best[0]: best = (dist, (ax, ay), (bx_, by), d)
     _, (ax, ay), (bx_, by), d = best; ang = math.atan2(by - ay, bx_ - ax); nx, ny = math.sin(ang), -math.cos(ang)
     mx, my = (ax + bx_) / 2, (ay + by) / 2; cw = min(14, d * 0.6)
-    boxm(ob, mx + nx * 3.2, my + ny * 3.2, GH - 0.1, GH + 0.45, cw, 6.4, ang, "canopy", bottom=True)
-    for sgn in (-1, 1): cyl(ob, mx + nx * 6.0 + math.cos(ang) * sgn * cw * 0.42, my + ny * 6.0 + math.sin(ang) * sgn * cw * 0.42, 0, GH, 0.18, 0.18, 0, "metal", 12)
-    ob.build("opt_" + OID, MATS)
-    tm = text_mesh(BO["name"].upper(), 1.1, 0.08, "opt_name")
-    tm.data.materials.append(MATS["opt_name"])
-    tm.rotation_euler = (math.pi / 2, 0, ang); tm.location = (mx + nx * 6.45, my + ny * 6.45, GH + 0.18)
+    if OID == "723-avenue":
+        house_of_wadhwa_front(ob, (ax, ay), (bx_, by), r, GH, FH, H)
+    if EXT: pass
+    elif SPECS.get(OID, {}).get("porte"): porte_cochere(ob, (ax, ay), (bx_, by), GH)
+    else:
+      boxm(ob, mx + nx * 3.2, my + ny * 3.2, GH - 0.1, GH + 0.45, cw, 6.4, ang, "canopy", bottom=True)
+      for sgn in (-1, 1): cyl(ob, mx + nx * 6.0 + math.cos(ang) * sgn * cw * 0.42, my + ny * 6.0 + math.sin(ang) * sgn * cw * 0.42, 0, GH, 0.18, 0.18, 0, "metal", 12)
+    if EXT:
+        # the modelled building, in its own frame (x along the footprint's long axis, y across), moved onto the footprint
+        fr = json.load(open(EXT + ".frame.json")); before = set(bpy.data.objects)
+        bpy.ops.import_scene.gltf(filepath=EXT)
+        Mx = Matrix.Translation((fr["C"][0] - OX, fr["C"][1] - OY, 0)) @ Matrix.Rotation(fr["phi"], 4, "Z")
+        for o in set(bpy.data.objects) - before:
+            if o.parent is None: o.matrix_world = Mx @ o.matrix_world
+            o.name = "opt_" + OID + "_" + o.name
+    else:
+        ob.build("opt_" + OID, MATS)
+        tm = text_mesh(BO["name"].upper(), 1.1, 0.08, "opt_name")
+        tm.data.materials.append(MATS["opt_name"])
+        tm.rotation_euler = (math.pi / 2, 0, ang); tm.location = (mx + nx * 6.45, my + ny * 6.45, GH + 0.18)
+    if OID == "723-avenue":   # the brand on the crown, high on the front face
+        for txt, size, dz in (("WADHWA", 2.2, 2.2), ("HOUSE OF", 0.85, 4.7)):
+            t2 = text_mesh(txt, size, 0.08, "sign_723_" + txt.replace(" ", "_")); t2.data.materials.append(MATS["sign_text"])
+            sx, sy = ax + (bx_ - ax) * 0.3, ay + (by - ay) * 0.3
+            t2.rotation_euler = (math.pi / 2, 0, ang); t2.location = (sx + nx * 0.6, sy + ny * 0.6, H + dz)
     entrance = (mx + nx * 0.5, my + ny * 0.5); walk0 = (mx + nx * 16, my + ny * 16)
     back = max(38.0, H * 0.62); street_cam = None
     for side in (0.35, -0.35, 0.6, -0.6, 0.0, 0.9, -0.9):
         for kk in (1.0, 0.8, 1.25, 0.65, 1.5):
             c_ = (mx + nx * back * kk + math.cos(ang) * back * side, my + ny * back * kk + math.sin(ang) * back * side)
-            if not built.buffer(1.5).contains(Point(c_[0] + OX, c_[1] + OY)) and not built.intersects(LineString([(c_[0] + OX, c_[1] + OY), (mx + nx * 8 + OX, my + ny * 8 + OY)])):
+            if not built.buffer(1.5).contains(Point(c_[0] + OX, c_[1] + OY)) and not KEEP_OUT.contains(Point(c_[0] + OX, c_[1] + OY)) and not built.intersects(LineString([(c_[0] + OX, c_[1] + OY), (mx + nx * 8 + OX, my + ny * 8 + OY)])):
                 street_cam = c_; break
         if street_cam: break
     if not street_cam:   # no clear spot in front: search all round for open ground with a clear view of the face
@@ -341,14 +540,15 @@ def build():
             for t in np.linspace(0, math.tau, 48, endpoint=False):
                 c_ = (fx_ + math.cos(t) * rad, fy_ + math.sin(t) * rad)
                 if (math.cos(t) * nx + math.sin(t) * ny) < 0.2: continue   # stay in front of the face
-                if not built.buffer(1.5).contains(Point(c_)) and not others.intersects(LineString([c_, (fx_, fy_)])):
+                if not built.buffer(1.5).contains(Point(c_)) and not KEEP_OUT.contains(Point(c_)) and not others.intersects(LineString([c_, (fx_, fy_)])):
                     street_cam = (c_[0] - OX, c_[1] - OY); break
             if street_cam: break
     street_cam = street_cam or (mx + nx * back, my + ny * back)
     # make sure the walk starts on open ground (footpath or road)
-    for k in range(1, 12):
-        if not built.contains(Point(walk0[0] + OX, walk0[1] + OY)): break
-        walk0 = (mx + nx * (16 + k * 4), my + ny * (16 + k * 4))
+    # and not under the station's stairs or viaduct, where the eye would sit inside the structure
+    def _open(w): q = Point(w[0] + OX, w[1] + OY); return not built.contains(q) and not KEEP_OUT.contains(q)
+    cands = [(mx + nx * d - ny * t, my + ny * d + nx * t) for d in range(16, 64, 4) for t in (0, -8, 8, -16, 16)]
+    walk0 = next((w for w in cands if _open(w)), walk0)
 
     # --- the metro ---
     mt = MB([]); stn = MB([]); STATIONS = []
@@ -394,32 +594,63 @@ def build():
             a0, a1 = l.interpolate(max(0, t0 - 60)), l.interpolate(min(l.length, t0 + 60)); ang = math.atan2(a1.y - a0.y, a1.x - a0.x)
             px, py = L(p.x, p.y); ca, sa = math.cos(ang), math.sin(ang); nx2, ny2 = -sa, ca
             STATIONS.append({"name": s["name"], "line": key, "x": round(px, 1), "y": round(py, 1), "ang": round(ang, 3)})
-            for k in np.arange(-60, 61, 15):          # columns
-                for sg in (-1, 1): cyl(stn, px + ca * k + nx2 * sg * 9.5, py + sa * k + ny2 * sg * 9.5, 0, ZD - 2.3, 0.6, 0.6, 0, "concrete", 16)
-            boxm(stn, px, py, ZD - 9.0, ZD - 8.4, 96, 23, ang, "concrete", bottom=True)        # concourse slab
-            boxm(stn, px, py, ZD - 3.6, ZD - 2.4, 100, 24, ang, "concrete", bottom=True)      # concourse roof / platform underside
-            for sg in (-1, 1):                                                                 # concourse walls: glass band over cladding
-                boxm(stn, px + nx2 * sg * 11.6, py + ny2 * sg * 11.6, ZD - 8.4, ZD - 6.8, 96, 0.3, ang, "metal")
-                boxm(stn, px + nx2 * sg * 11.6, py + ny2 * sg * 11.6, ZD - 6.8, ZD - 3.6, 96, 0.12, ang, "station_glass")
-                boxm(stn, px + nx2 * sg * 11.7, py + ny2 * sg * 11.7, ZD - 5.4, ZD - 3.7, 22, 0.25, ang, "sign_l1")   # name board
-                boxm(stn, px + nx2 * sg * 12.0, py + ny2 * sg * 12.0, ZD + 0.05, ZD + 2.6, 138, 0.1, ang, "station_glass")  # platform screens
-            # platforms either side of the tracks
-            for sg in (-1, 1): boxm(stn, px + nx2 * sg * 7.6, py + ny2 * sg * 7.6, ZD - 0.6, ZD + 1.1, 136, 5.6, ang, "concrete")
-            # barrel roof
-            prof = [(n, ZD + 7.8 + 3.2 * math.cos(n / 13.5 * math.pi / 2)) for n in np.linspace(-13.5, 13.5, 19)]
-            pr2 = prof + [(n, z + 0.35) for n, z in prof[::-1]]
-            line2 = [(px - ca * 72, py - sa * 72), (px + ca * 72, py + sa * 72)]
+            # --- a Line 1 station as Mumbai builds it, not a block ---
+            R = lambda k, n: (px + ca * k + nx2 * n, py + sa * k + ny2 * n)   # station frame: k along the line, n across it
+            ZC0, ZC1 = ZD - 9.0, ZD - 3.0                                     # concourse floor and ceiling
+            # portal frames: twin round columns with a deep crosshead, every 15 m, carrying the concourse
+            for k in np.arange(-60, 61, 15):
+                for sg in (-1, 1): cyl(stn, *R(k, sg * 9.2), 0, ZC0, 0.75, 0.75, 0, "concrete", 20)
+                boxm(stn, *R(k, 0), ZC0 - 1.6, ZC0, 1.8, 21.0, ang, "concrete", bottom=True)
+            boxm(stn, px, py, ZC0, ZC0 + 0.45, 98, 23.6, ang, "concrete", bottom=True)            # concourse floor slab
+            boxm(stn, px, py, ZC1, ZC1 + 0.6, 100, 24.4, ang, "concrete", bottom=True)            # platform slab over it
+            boxm(stn, px, py, ZC0 + 0.45, ZC0 + 0.5, 97, 22.8, ang, "pavers")                     # concourse floor finish (seen through the glass)
+            for sg in (-1, 1):
+                n = sg * 11.6
+                boxm(stn, *R(0, n), ZC0 + 0.45, ZC0 + 1.4, 98, 0.35, ang, "metal")                 # ACP base band
+                boxm(stn, *R(0, sg * 11.5), ZC0 + 1.4, ZC1 - 0.1, 97, 0.06, ang, "station_glass")  # glazing
+                for k in np.arange(-48, 48.1, 1.5):                                               # mullions
+                    boxm(stn, *R(k, n + sg * 0.08), ZC0 + 1.4, ZC1 - 0.1, 0.09, 0.22, ang, "metal")
+                boxm(stn, *R(0, n + sg * 0.1), ZC1 - 0.45, ZC1, 99, 0.5, ang, "metal")            # head fascia
+                boxm(stn, *R(0, sg * 11.85), ZD - 5.2, ZD - 3.7, 26, 0.18, ang, "sign_l1")        # name board
+            # platforms: side platforms, open to the air behind louvres and a parapet
+            for sg in (-1, 1):
+                boxm(stn, *R(0, sg * 7.6), ZD - 0.6, ZD + 1.1, 136, 5.6, ang, "concrete")
+                boxm(stn, *R(0, sg * 7.6), ZD + 1.1, ZD + 1.14, 136, 5.4, ang, "pavers")
+                boxm(stn, *R(0, sg * 10.35), ZD + 1.14, ZD + 1.24, 136, 0.5, ang, "sign_l1")      # yellow-line edge stand-in: platform edge band
+                boxm(stn, *R(0, sg * 11.9), ZD + 1.1, ZD + 2.2, 138, 0.25, ang, "concrete")       # parapet
+                for k in np.arange(-68, 68.1, 0.9):                                               # vertical louvres above it
+                    boxm(stn, *R(k, sg * 12.0), ZD + 2.2, ZD + 6.6, 0.08, 0.32, ang, "metal")
+                boxm(stn, *R(0, sg * 12.0), ZD + 6.6, ZD + 6.85, 138, 0.4, ang, "metal")
+            # the roof: a shallow arch on exposed steel ribs, with overhanging eaves and a fascia
+            HALF = 14.2
+            prof = [(n, ZD + 8.0 + 2.6 * math.cos(n / HALF * math.pi / 2)) for n in np.linspace(-HALF, HALF, 21)]
+            pr2 = prof + [(n, z + 0.18) for n, z in prof[::-1]]
+            line2 = [(px - ca * 74, py - sa * 74), (px + ca * 74, py + sa * 74)]
             sweep(stn, line2, pr2, "station_roof", 6)
-            for k in np.arange(-66, 67, 12):          # roof posts on the platforms
-                for sg in (-1, 1): cyl(stn, px + ca * k + nx2 * sg * 11.2, py + sa * k + ny2 * sg * 11.2, ZD + 1.1, ZD + 7.9, 0.22, 0.22, 0, "metal", 10)
-            for sg in (-1, 1):                         # stair towers down to the footpath
+            for sg in (-1, 1):   # eaves fascia and gutter
+                sweep(stn, line2, [(sg * HALF - 0.3, ZD + 7.7), (sg * HALF + 0.35, ZD + 7.7), (sg * HALF + 0.35, ZD + 8.3), (sg * HALF - 0.3, ZD + 8.3)], "metal", 6)
+            for k in np.arange(-72, 72.1, 6):   # ribs: a curved steel I-section under the roof skin, on posts
+                rib = [(n, z - 0.05) for n, z in prof]; ribb = [(n, z - 0.75) for n, z in prof[::-1]]
+                sweep(stn, [R(k - 0.12, 0), R(k + 0.12, 0)], rib + ribb, "metal", 2)
+                for sg in (-1, 1): cyl(stn, *R(k, sg * 11.3), ZD + 1.1, ZD + 7.9, 0.2, 0.2, 0, "metal", 10)
+            for sg in (-1, 1):   # a purlin line each side, and the ridge
+                for nn in (sg * 5.0, sg * 10.0):
+                    zz = ZD + 8.0 + 2.6 * math.cos(nn / HALF * math.pi / 2) - 0.85
+                    boxm(stn, *R(0, nn), zz, zz + 0.2, 146, 0.2, ang, "metal")
+            # stairs and escalators down to the footpath, each under its own canopy
+            for sg in (-1, 1):
                 for e in (-1, 1):
                     bx2, by2 = px + ca * e * 52 + nx2 * sg * 16, py + sa * e * 52 + ny2 * sg * 16
                     for st_ in range(14):
-                        z0 = st_ * (ZD - 8.4) / 14; ox = (st_ - 7) * 1.6
-                        boxm(stn, bx2 + ca * ox, by2 + sa * ox, z0, z0 + (ZD - 8.4) / 14, 1.6, 3.2, ang, "concrete")
-                    boxm(stn, bx2, by2, ZD - 8.4, ZD - 8.0, 24, 3.8, ang, "station_roof")
-                    boxm(stn, bx2 + nx2 * -sg * 2.5, by2 + ny2 * -sg * 2.5, ZD - 9.0, ZD - 8.4, 6, 5, ang, "concrete")
+                        z0 = st_ * (ZC0) / 14; ox = (st_ - 7) * 1.6
+                        boxm(stn, bx2 + ca * ox, by2 + sa * ox, z0, z0 + ZC0 / 14, 1.6, 3.2, ang, "concrete")
+                    for side in (-1, 1):   # handrail walls in glass with a steel top rail
+                        sweep(stn, [(bx2 + ca * -11.2 + nx2 * side * 1.65, by2 + sa * -11.2 + ny2 * side * 1.65), (bx2 + ca * 11.2 + nx2 * side * 1.65, by2 + sa * 11.2 + ny2 * side * 1.65)],
+                              [(-0.03, 0.9), (0.03, 0.9), (0.03, 1.0), (-0.03, 1.0)], "metal", 4)
+                    boxm(stn, bx2, by2, ZC0 + 3.0, ZC0 + 3.25, 24, 4.4, ang, "station_roof")        # canopy
+                    for k in (-11, -3.5, 3.5, 11):
+                        for side in (-1, 1): cyl(stn, bx2 + ca * k + nx2 * side * 2.0, by2 + sa * k + ny2 * side * 2.0, 0, ZC0 + 3.0, 0.1, 0.1, 0, "metal", 8)
+                    boxm(stn, bx2 + nx2 * -sg * 2.5, by2 + ny2 * -sg * 2.5, ZC0, ZC0 + 0.45, 6, 5, ang, "concrete")   # landing to the concourse
             for sg in (-1, 1):
                 t = text_mesh(s["name"].upper(), 1.15, 0.05, f"sign_{s['name']}_{sg}")
                 t.data.materials.append(MATS["sign_text"])
@@ -451,11 +682,11 @@ def protos():
         # it then read as leaves, not as a solid blob
         rr = random.Random(name); uv = bm.loops.layers.uv.new("UVMap")
         for (x, y, z, rx, rz) in crowns:
-            for _ in range(int(14 + rx * 7)):
+            for _ in range(int(30 + rx * 14)):   # dense enough that the crown reads as foliage, not a few cards
                 u, v_, w_ = rr.uniform(-1, 1), rr.uniform(-1, 1), rr.uniform(-1, 1)
                 if u * u + v_ * v_ + w_ * w_ > 1: continue
                 cx_, cy_, cz_ = x + u * rx * 0.8, y + v_ * rx * 0.8, z + w_ * rz * 0.75
-                s_ = rr.uniform(1.6, 2.6) * (rx + rz) / 6
+                s_ = rr.uniform(1.2, 2.1) * (rx + rz) / 6
                 for k in range(2):   # two crossed cards per tuft
                     a = rr.uniform(0, math.pi) + k * math.pi / 2; tl = rr.uniform(-0.5, 0.5)
                     ex, ey, ez = math.cos(a) * s_, math.sin(a) * s_, 0.0
@@ -497,17 +728,61 @@ def protos():
     mb.build("proto_palm", MATS)
     mb = MB([]); cyl(mb, 0, 0, 0, 9.0, 0.09, 0.09, 0, "metal", 8); boxm(mb, 1.0, 0, 8.8, 8.95, 2.2, 0.08, 0, "metal"); boxm(mb, 2.0, 0, 8.6, 8.9, 0.8, 0.3, 0, "lamp_head")
     mat("lamp_head", "#e6e2d6", 0.4, emit="#fff0d0", ek=0.0); mb.build("proto_lamp", MATS)
-    mat("car_body", "#d8d8d6", 0.25, 0.6); mat("car_glass", "#22282d", 0.05, 0.5); mat("tyre", "#1b1b1b", 0.9)
-    mat("auto_body", "#2d7d3a", 0.4, 0.2); mat("auto_top", "#f0c22e", 0.5); mat("bus_body", "#b8322a", 0.4, 0.3)
-    def vehicle(name, L_, W_, H_, body, top, cabin=(0.55, 0.75, 0.42), wheels=0.32):
-        mb = MB([]); boxm(mb, 0, 0, wheels, H_ * 0.55, L_, W_, 0, body)
-        boxm(mb, -L_ * 0.05, 0, H_ * 0.55, H_, L_ * cabin[0], W_ * 0.92, 0, top)
-        for sx in (-1, 1):
-            for sy in (-1, 1): cyl(mb, sx * L_ * 0.32, sy * W_ * 0.5, wheels - 0.001, wheels + 0.001, wheels, wheels, 0, "tyre", 10)
-        return mb.build(name, MATS)
-    vehicle("proto_car", 4.3, 1.75, 1.5, "car_body", "car_glass")
-    vehicle("proto_auto", 2.7, 1.35, 1.75, "auto_body", "auto_top", (0.8, 0.9, 0.5), 0.22)
-    vehicle("proto_bus", 11.5, 2.5, 3.2, "bus_body", "bus_body", (0.98, 0.98, 0.5), 0.5)
+    mat("car_body", "#ffffff", 0.22, 0.55); mat("car_glass", "#1a2026", 0.04, 0.6); mat("tyre", "#161616", 0.9); mat("hub", "#b9bcbf", 0.3, 0.9)
+    mat("auto_body", "#2f7d36", 0.4, 0.15); mat("auto_top", "#f2c230", 0.55); mat("bus_body", "#b52a22", 0.35, 0.25)
+    mat("lamp_front", "#fff6e0", 0.2, emit="#fff6e0", ek=0.6); mat("lamp_rear", "#a01010", 0.3, emit="#ff2010", ek=0.4); mat("trim", "#202224", 0.5, 0.3)
+    def xprof(mb, prof, y0, y1, m, ox=0.0):
+        """Extrude a side profile [(x, z)] across the width (y0..y1), capped both sides."""
+        P = [(x + ox, z) for x, z in prof]; n = len(P)
+        for k in range(n):
+            a_, b_ = P[k], P[(k + 1) % n]
+            mb.quad((a_[0], y0, a_[1]), (b_[0], y0, b_[1]), (b_[0], y1, b_[1]), (a_[0], y1, a_[1]), [(0, 0), (1, 0), (1, 1), (0, 1)], m)
+        mb.poly([(x, y0, z) for x, z in P[::-1]], [(0, 0)] * n, m); mb.poly([(x, y1, z) for x, z in P], [(0, 0)] * n, m)
+    def wheel(mb, x, yc, r, w):
+        ring = [(x + r * math.cos(t), r + r * math.sin(t)) for t in np.linspace(0, math.tau, 16, endpoint=False)]
+        xprof(mb, ring, yc - w / 2, yc + w / 2, "tyre")
+        hub = [(x + r * 0.55 * math.cos(t), r + r * 0.55 * math.sin(t)) for t in np.linspace(0, math.tau, 12, endpoint=False)]
+        sg = 1 if yc > 0 else -1
+        xprof(mb, hub, yc + sg * w / 2, yc + sg * (w / 2 + 0.012), "hub")
+    # a saloon car, 4.4 m: low body to the beltline, a glass cabin set in from the sides, a body-colour roof
+    mb = MB([]); W2 = 0.88
+    xprof(mb, [(-2.2, 0.32), (2.2, 0.32), (2.24, 0.55), (2.12, 0.78), (1.25, 0.9), (-1.7, 0.95), (-2.18, 0.86), (-2.24, 0.55)], -W2, W2, "car_body")
+    xprof(mb, [(1.22, 0.9), (0.42, 1.36), (-0.92, 1.4), (-1.66, 0.96)], -W2 + 0.07, W2 - 0.07, "car_glass")
+    xprof(mb, [(0.46, 1.36), (-0.9, 1.4), (-0.9, 1.44), (0.44, 1.4)], -W2 + 0.09, W2 - 0.09, "car_body")
+    for sx in (1.38, -1.38):
+        for sy in (-W2 + 0.12, W2 - 0.12): wheel(mb, sx, sy, 0.32, 0.22)
+    for sy in (-0.62, 0.62):
+        xprof(mb, [(2.2, 0.62), (2.25, 0.62), (2.22, 0.74), (2.15, 0.74)], sy - 0.14, sy + 0.14, "lamp_front")
+        xprof(mb, [(-2.25, 0.7), (-2.2, 0.7), (-2.2, 0.82), (-2.22, 0.82)], sy - 0.15, sy + 0.15, "lamp_rear")
+    xprof(mb, [(2.21, 0.36), (2.27, 0.36), (2.27, 0.5), (2.23, 0.5)], -0.8, 0.8, "trim"); mb.build("proto_car", MATS)
+    # the auto rickshaw: green tub, yellow canvas hood, one wheel in front, two behind
+    mb = MB([]); W3 = 0.68
+    xprof(mb, [(-1.25, 0.28), (0.9, 0.28), (1.35, 0.55), (1.3, 1.0), (0.95, 1.05), (-1.25, 0.95)], -W3, W3, "auto_body")
+    xprof(mb, [(1.05, 1.05), (0.95, 1.72), (-1.05, 1.8), (-1.3, 1.45), (-1.25, 0.95)], -W3 - 0.04, W3 + 0.04, "auto_top")
+    xprof(mb, [(1.25, 1.0), (1.32, 1.0), (1.0, 1.62), (0.93, 1.62)], -W3 + 0.04, W3 - 0.04, "car_glass")   # windscreen
+    wheel(mb, 1.05, 0.0, 0.22, 0.12)
+    for sy in (-W3 + 0.08, W3 - 0.08): wheel(mb, -0.85, sy, 0.22, 0.14)
+    mb.build("proto_auto", MATS)
+    # a BEST bus, 11.5 m: red body, a dark window band, white roof
+    mb = MB([]); W4 = 1.25
+    xprof(mb, [(-5.75, 0.45), (5.75, 0.45), (5.85, 1.2), (5.8, 3.0), (5.6, 3.2), (-5.7, 3.2), (-5.8, 3.0), (-5.85, 1.2)], -W4, W4, "bus_body")
+    for sy in (-W4 - 0.01, W4 + 0.01):
+        boxm(mb, -0.2, sy, 1.75, 2.75, 10.6, 0.02, 0, "car_glass")
+    boxm(mb, 5.84, 0, 1.45, 2.85, 0.02, 2.2, 0, "car_glass")
+    boxm(mb, 0, 0, 3.2, 3.32, 11.2, 2.3, 0, "concrete")
+    for sx in (3.6, -3.4):
+        for sy in (-W4 + 0.15, W4 - 0.15): wheel(mb, sx, sy, 0.5, 0.3)
+    mb.build("proto_bus", MATS)
+    # a person, 1.7 m, walking: trousers, shirt (the page tints it per person), arms, head, hair
+    mat("person_trousers", "#2b3240", 0.85); mat("person_shirt", "#ffffff", 0.8); mat("person_skin", "#8a5a3c", 0.6); mat("person_hair", "#15110e", 0.7)
+    mb = MB([])
+    for sy in (-0.1, 0.1): boxm(mb, 0, sy, 0, 0.86, 0.15, 0.13, 0, "person_trousers")
+    boxm(mb, 0, 0, 0.86, 1.42, 0.24, 0.4, 0, "person_shirt"); boxm(mb, 0, 0, 1.36, 1.46, 0.2, 0.3, 0, "person_shirt")
+    for sy in (-0.25, 0.25): boxm(mb, 0, sy, 0.84, 1.4, 0.1, 0.09, 0, "person_shirt")
+    cyl(mb, 0, 0, 1.46, 1.52, 0.05, 0.05, 0, "person_skin", 8)
+    cyl(mb, 0, 0, 1.52, 1.71, 0.095, 0.085, 0, "person_skin", 12)
+    cyl(mb, -0.01, 0, 1.66, 1.73, 0.1, 0.09, 0, "person_hair", 12)
+    mb.build("proto_person", MATS)
     # one Line 1 car, 20 m: a rounded body, the window band and the blue stripe
     mat("train_body", "#eef1f4", 0.25, 0.5); mat("train_win", "#1e2832", 0.05, 0.6); mat("train_stripe", "#1c5fa8", 0.35)
     mb = MB([]); prof = [(-1.45, 0.4), (1.45, 0.4), (1.5, 2.6), (1.3, 3.6), (0.0, 3.9), (-1.3, 3.6), (-1.5, 2.6)]
@@ -541,7 +816,7 @@ def page_data(info):
             ls = LineString(line).intersection(SLAB.buffer(-1))
             for l in (ls.geoms if hasattr(ls, "geoms") else [ls]):
                 if l.geom_type == "LineString" and l.length > 60: metro.setdefault(key, []).append({"z": ZD, "p": [[round(a, 1), round(b, 1)] for a, b in (L(x, y) for x, y in l.coords)]})
-    blds = [[[round(a, 1), round(b, 1)] for a, b in (L(x, y) for x, y in Polygon(b["p"]).exterior.coords)] for b in S["buildings"] if SLAB.contains(Polygon(b["p"]).centroid) and Polygon(b["p"]).area > 20]
+    blds = [[[round(a, 1), round(b, 1)] for a, b in (L(x, y) for x, y in Polygon(b["p"]).exterior.coords)] for b in S["buildings"] if SLAB.contains(Polygon(b["p"]).centroid) and Polygon(b["p"]).area > 20 and (b.get("opt") == OID or not blocks_metro(Polygon(b["p"]).buffer(0)))]
     routes = [{"kind": r["kind"], "name": r["name"], "m": r["m"], "min": r.get("min"), "path": [[round(a, 1), round(b, 1)] for a, b in (L(x, y) for x, y in r["path"])]} for r in SO["routes"]]
     return {"id": OID, "name": BO["name"], "origin": [round(OX, 2), round(OY, 2)], "slab": [[round(a, 1), round(b, 1)] for a, b in SL.exterior.coords],
             "building": {"foot": [[round(a, 1), round(b, 1)] for a, b in (L(x, y) for x, y in OPTB["p"])], "h": round(info["H"], 1), "floors": info["floors"], "glassy": info["glassy"],
@@ -628,9 +903,9 @@ def render(kind, data, info):
         a = st["ang"] + math.pi / 2
         camera(sc, (st["x"] + math.cos(a) * 70 + math.cos(st["ang"]) * 50, st["y"] + math.sin(a) * 70 + math.sin(st["ang"]) * 50, 22), (st["x"], st["y"], 10), 28)
         size = (1600, 1000)
-    sc.render.engine = "CYCLES"; sc.cycles.device = "CPU"; sc.cycles.samples = 16 if FAST else 64; sc.cycles.use_denoising = True
+    sc.render.engine = "CYCLES"; sc.cycles.device = "CPU"; sc.cycles.samples = int(sys.argv[sys.argv.index("--samples") + 1]) if "--samples" in sys.argv else 16 if FAST else 64; sc.cycles.use_denoising = True
     sc.cycles.max_bounces = 6; sc.cycles.transparent_max_bounces = 8
-    sc.render.resolution_x, sc.render.resolution_y = size; sc.render.resolution_percentage = 40 if FAST else 100
+    sc.render.resolution_x, sc.render.resolution_y = size; sc.render.resolution_percentage = int(sys.argv[sys.argv.index("--pct") + 1]) if "--pct" in sys.argv else 40 if FAST else 100
     sc.view_settings.view_transform = "AgX"; sc.view_settings.look = "AgX - Medium High Contrast"; sc.view_settings.exposure = -0.3
     sc.render.film_transparent = kind == "hero"
     sc.render.image_settings.file_format = "PNG"; sc.render.image_settings.color_mode = "RGBA"

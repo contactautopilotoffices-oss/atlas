@@ -1,0 +1,645 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Autopilot Offices for Landlords</title>
+<meta name="description" content="Autopilot Offices designs, builds and manages enterprise workspaces end to end. One lease, one tenant, rent every month.">
+<link rel="icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sen:wght@400;600;700;800&family=Montserrat:wght@400;500;600;700&display=swap">
+<style>
+@font-face{font-family:'Instrument Serif';font-style:italic;font-weight:400;font-display:swap;src:url(assets/fonts/instrument-serif-italic.woff2) format('woff2')}
+:root{--paper:#ece7dc;--paper2:#f6f1e6;--ink:#2b2721;--soft:#5c554b;--faint:#8a8276;--line:rgba(43,39,33,.14);--brick:#b4562d;--brick2:#b4562d;--sage:#6f8b5e;--night:#2b2721;
+--h:'Sen',Montserrat,Arial,sans-serif;--b:'Montserrat',Arial,sans-serif;--it:'Instrument Serif',Georgia,serif}
+*{box-sizing:border-box;-webkit-hyphens:none;hyphens:none}
+html{scroll-behavior:smooth;overflow-x:clip}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--b);-webkit-font-smoothing:antialiased;overflow-x:clip}
+body:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;background-image:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27160%27 height=%27160%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.9%27 numOctaves=%272%27/%3E%3CfeColorMatrix values=%270 0 0 0 .17 0 0 0 0 .15 0 0 0 0 .13 0 0 0 .09 0%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23n)%27/%3E%3C/svg%3E")}
+img{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+.wrap{width:min(1120px,100% - 32px);margin:0 auto}
+section{padding:clamp(64px,9vw,120px) 0}
+.k{font-family:var(--b);font-size:13px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--brick);display:flex;align-items:center;gap:12px;margin:0 0 18px}
+.k:before{content:"";width:28px;height:1.5px;background:currentColor}
+h1,h2,h3{font-family:var(--h);font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.04}
+h2{font-size:clamp(34px,5.2vw,68px);max-width:18ch}
+h2 em,h1 em{font-family:var(--it);font-weight:400;font-style:italic;color:var(--brick);letter-spacing:0}
+.lede{font-size:clamp(17px,1.6vw,20px);line-height:1.65;color:var(--soft);max-width:56ch;margin:18px 0 0}
+.rv{opacity:0;transform:translateY(26px);transition:opacity .8s ease,transform .8s cubic-bezier(.2,.8,.2,1)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
+
+/* top bar */
+.top{position:fixed;inset:0 0 auto;z-index:50;display:flex;align-items:center;justify-content:center;padding:16px max(16px,4vw);padding-top:max(16px,env(safe-area-inset-top));transition:background .3s,box-shadow .3s}
+.top.s{background:rgba(236,231,220,.86);backdrop-filter:blur(10px);box-shadow:0 1px 0 var(--line)}
+.top img{height:24px;width:auto}
+.top .dk,.top.s .wt{display:none}
+.top.s .dk{display:block}
+.btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--b);font-weight:600;font-size:15px;padding:15px 24px;border-radius:999px;background:var(--ink);color:#fff;border:1.5px solid var(--ink);transition:transform .2s,background .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn.sm{padding:10px 18px;font-size:13.5px;background:var(--brick);border-color:var(--brick)}
+.btn.ghost{background:transparent;color:var(--ink)}
+
+/* hero */
+.hero{min-height:100svh;display:grid;align-content:center;position:relative;overflow:hidden;padding-top:110px;background:var(--night);color:#f6f1e6;isolation:isolate}
+.hero-bg{position:absolute;inset:0;z-index:-1}
+.hero-bg video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.hero-bg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;z-index:0;transition:opacity 1.8s ease;animation:kb 16s ease-in-out infinite alternate}
+.hero-bg img:nth-child(2){animation-name:kb2}.hero-bg img:nth-child(3){animation-delay:-8s}.hero-bg img:nth-child(4){animation-name:kb2;animation-delay:-8s}
+.hero-bg img.prev{opacity:1;z-index:1;transition:none}
+.hero-bg img.on{opacity:1;z-index:2}
+@keyframes kb{from{transform:scale(1.02) translate(0,0)}to{transform:scale(1.14) translate(-2.5%,-1.5%)}}
+@keyframes kb2{from{transform:scale(1.14) translate(2%,0)}to{transform:scale(1.03) translate(0,1.5%)}}
+@media (prefers-reduced-motion:reduce){.hero-bg img{animation:none}}
+.hero-bg:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(24,21,18,.8) 0%,rgba(24,21,18,.5) 55%,rgba(24,21,18,.2) 100%),linear-gradient(0deg,rgba(24,21,18,.75) 0%,transparent 40%)}
+.hero h1{font-size:clamp(42px,7.4vw,108px);line-height:1}
+.type{display:block;color:var(--brick2);white-space:nowrap;min-height:1em}
+.flip{display:inline-block;perspective:800px}
+.flip b{display:inline-block;font-weight:inherit;transform-origin:50% 50% -.35em;backface-visibility:hidden}
+.flip b.out{animation:fout .42s cubic-bezier(.5,0,.75,0) forwards}
+.flip b.in{animation:fin .55s cubic-bezier(.2,.8,.2,1)}
+@keyframes fout{to{transform:rotateX(90deg);opacity:0}}
+@keyframes fin{from{transform:rotateX(-90deg);opacity:0}}
+@keyframes blink{50%{opacity:0}}
+.hero .lede{max-width:48ch;color:rgba(246,241,230,.86);font-size:clamp(17px,1.7vw,21px)}
+.hero .btn{background:var(--brick);border-color:var(--brick)}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.ticker{margin-top:clamp(40px,7vh,72px);overflow:hidden;border-top:1px solid rgba(246,241,230,.18);border-bottom:1px solid rgba(246,241,230,.18);mask:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.ticker ul{display:flex;width:max-content;margin:0;padding:0;list-style:none;animation:mq 38s linear infinite}
+.ticker li{display:flex;align-items:baseline;gap:12px;padding:20px 36px;border-right:1px solid rgba(246,241,230,.18);white-space:nowrap}
+.ticker b{font-family:var(--h);font-weight:800;font-size:clamp(30px,3.4vw,42px);color:var(--brick2)}
+.ticker span{font-size:15px;color:rgba(246,241,230,.8)}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* design build manage */
+.dbm{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
+.dbm article{border-radius:22px;overflow:hidden;background:#fff;display:flex;flex-direction:column;box-shadow:0 20px 40px -28px rgba(43,39,33,.4)}
+.dbm .im{aspect-ratio:4/3;overflow:hidden}
+.dbm .im img{width:100%;height:100%;object-fit:cover;transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
+.dbm article:hover img{transform:scale(1.07)}
+.dbm .tx{padding:22px 24px 26px}
+.dbm .n{font-family:var(--h);font-weight:700;font-size:13px;letter-spacing:.14em;color:var(--brick)}
+.dbm h3{font-size:clamp(32px,3.2vw,42px);margin:6px 0 10px}
+.dbm p{margin:0;font-size:16.5px;line-height:1.55;color:var(--soft)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
+.tags span{font-size:12px;padding:6px 11px;border-radius:999px;border:1px solid var(--line);background:var(--paper2)}
+
+/* market */
+.mkt{background:var(--night);color:#f3ece0}
+.mkt .k{color:var(--brick2)} .mkt h2 em{color:var(--brick2)}
+.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,64px);margin-top:44px;align-items:center}
+.ring{display:flex;gap:28px;align-items:center}
+.ring svg{width:min(220px,42vw);flex:none;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:14}
+.ring .bg{stroke:rgba(243,236,224,.12)}
+.ring .fg{stroke:var(--brick2);stroke-linecap:round;stroke-dasharray:0 999;transition:stroke-dasharray 1.8s cubic-bezier(.2,.8,.2,1)}
+.big{font-family:var(--h);font-weight:800;font-size:clamp(56px,7vw,92px);line-height:.9;color:var(--brick2)}
+.mkt p{color:rgba(243,236,224,.75);line-height:1.6;margin:10px 0 0;font-size:17px}
+.src{font-size:11.5px!important;color:rgba(243,236,224,.45)!important;margin-top:10px!important}
+.bars{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:end;height:280px}
+.bar{display:flex;flex-direction:column;justify-content:flex-end;height:100%}
+.bar i{display:block;position:relative;overflow:hidden;border-radius:14px 14px 4px 4px;background:rgba(243,236,224,.16);height:0;transition:height 1.6s cubic-bezier(.2,.8,.2,1)}
+.bar.now i{background:var(--brick)}
+/* number pinned to the bar's base so it stays put while the bar grows */
+.bar b{position:absolute;left:18px;bottom:12px;font-family:var(--h);font-weight:800;font-size:clamp(44px,5vw,64px);line-height:1;color:#f6f1e6}
+.bar>span{font-size:14px;color:rgba(243,236,224,.65);margin-top:10px}
+.stats{display:grid;grid-template-columns:1fr 1fr;margin-top:clamp(28px,4vw,48px);border-top:1px solid rgba(243,236,224,.14);border-bottom:1px solid rgba(243,236,224,.14)}
+.stat{padding:clamp(24px,4vw,48px) clamp(0px,3vw,40px) clamp(24px,4vw,44px) 0}
+.stat+.stat{border-left:1px solid rgba(243,236,224,.14);padding-left:clamp(20px,3vw,40px)}
+.stat .big{font-family:var(--h);font-weight:800;font-size:clamp(76px,11vw,168px);line-height:.95;color:var(--brick2);letter-spacing:-.02em}
+.stat p{max-width:40ch}
+.stat p.src{max-width:none}
+#market h2{max-width:20ch}
+.mkt .src{font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:rgba(243,236,224,.6);margin-top:22px}
+.take2{display:grid;grid-template-columns:auto auto 1fr;gap:clamp(16px,3vw,40px);align-items:center;padding:clamp(22px,3vw,34px) 0;border-bottom:1px solid rgba(243,236,224,.14)}
+.take2 small{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--brick2);font-weight:700}
+.take2 .jump{display:flex;align-items:baseline;gap:10px;font-family:var(--h);font-weight:800;font-size:clamp(30px,3.4vw,44px);white-space:nowrap}
+.take2 .jump b:last-child{color:var(--brick2)} .take2 .jump i{font-style:normal;color:var(--brick2);font-weight:400}
+.take2 p{margin:0;font-family:var(--h);font-weight:600;font-size:clamp(17px,1.6vw,21px);line-height:1.4;color:#f6f1e6}
+.take2 .src{margin-top:8px}
+@media (max-width:900px){.stats{grid-template-columns:1fr}.stat+.stat{border-left:0;border-top:1px solid rgba(243,236,224,.14);padding-left:0}.take2{grid-template-columns:1fr}}
+.take{margin-top:44px;padding:22px 26px;border-radius:18px;border:1px solid rgba(180,86,45,.3);font-family:var(--h);font-size:clamp(18px,2vw,23px);line-height:1.4;font-weight:600}
+.take small{display:block;font-family:var(--b);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--brick2);margin-bottom:8px;font-weight:600}
+
+/* logos */
+.logos{padding-bottom:clamp(40px,6vw,80px)}
+.lrow{overflow:hidden;mask:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);margin-top:18px}
+.lrow ul{display:flex;gap:16px;width:max-content;margin:0;padding:6px 0 18px;list-style:none;animation:mq 46s linear infinite}
+.lrow.rev ul{animation-direction:reverse;animation-duration:52s}
+.lrow:hover ul{animation-play-state:paused}
+.lrow li{width:190px;height:96px;flex:none;background:#fff;border-radius:16px;display:flex;align-items:center;justify-content:center;padding:18px 26px;box-shadow:0 12px 24px -18px rgba(43,39,33,.35)}
+.lrow img{max-height:52px;width:auto;object-fit:contain}
+
+/* atlas */
+.atl{display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(28px,5vw,64px);align-items:center}
+.atl ul{list-style:none;padding:0;margin:24px 0 0;display:grid;gap:10px}
+.atl li{display:flex;gap:12px;align-items:center;font-weight:500}
+.atl li:before{content:"";width:9px;height:9px;border-radius:50%;background:var(--brick)}
+.note{margin-top:22px;padding:16px 18px;border-left:2px solid var(--brick);background:rgba(255,255,255,.4);border-radius:0 12px 12px 0;font-size:14.5px;line-height:1.55;color:var(--soft)}
+.note b{display:block;color:var(--ink);font-size:13px;margin-bottom:4px}
+.screen{position:relative;border-radius:22px;overflow:hidden;background:#0b0f16;margin-top:clamp(28px,4vw,44px);box-shadow:0 30px 60px -30px rgba(43,39,33,.6)}
+.screen .bar2{height:38px;background:#2b2721;display:flex;align-items:center;gap:6px;padding:0 14px;font-size:12.5px;color:rgba(255,255,255,.55)}
+.screen .bar2 i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.2)}
+.screen .bar2 span{margin-left:10px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.screen .bar2 a{color:var(--brick2);font-weight:600}
+.frame{position:relative;height:min(78vh,720px)}
+.frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+/* the map would trap page scrolling, so it only takes input after a click */
+.frame .shield{position:absolute;inset:0;border:0;background:linear-gradient(0deg,rgba(11,15,22,.55),transparent 40%);display:flex;align-items:flex-end;justify-content:center;padding-bottom:26px;cursor:pointer;font:inherit}
+.frame .shield span{background:var(--brick);color:#fff;font-weight:600;font-size:15px;padding:13px 22px;border-radius:999px}
+.frame.live .shield{display:none}
+
+/* proof */
+.proof{background:var(--paper2)}
+.film{overflow:hidden;margin-top:36px;mask:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent)}
+.film ul{display:flex;gap:14px;width:max-content;list-style:none;margin:0;padding:0;animation:mq 60s linear infinite}
+.film:hover ul{animation-play-state:paused}
+.film li{width:clamp(240px,30vw,380px);flex:none}
+.film .im{aspect-ratio:4/3;border-radius:18px;overflow:hidden}
+.film img{width:100%;height:100%;object-fit:cover;animation:drift 14s ease-in-out infinite alternate}
+.film li:nth-child(even) img{animation-delay:-7s}
+@keyframes drift{from{transform:scale(1.02) translateX(0)}to{transform:scale(1.14) translateX(-3%)}}
+.film figcaption{padding:10px 4px 0;font-size:13.5px;font-weight:600}
+.film figcaption span{color:var(--faint);font-weight:500;font-size:12.5px}
+.film figcaption span:before{content:" · "}
+.story{display:grid;grid-template-columns:1.1fr 1fr;gap:clamp(28px,5vw,64px);margin-top:clamp(40px,6vw,72px);align-items:center}
+.tower{position:relative;background:#fff;border-radius:22px;padding:26px;box-shadow:0 20px 40px -28px rgba(43,39,33,.4)}
+.tower .floors{display:grid;gap:14px}
+.fl small{display:block;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:6px}
+.fl .row{display:flex;gap:6px;height:118px}
+.tn{position:relative;border-radius:10px;overflow:hidden;background:repeating-linear-gradient(90deg,rgba(43,39,33,.06) 0 22px,rgba(43,39,33,.1) 22px 24px);display:flex;align-items:center;justify-content:center}
+.tn .fill{position:absolute;inset:0;width:0;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.tn .lg{position:relative;background:#fff;border-radius:10px;padding:8px 10px;width:min(110px,82%);height:52px;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 20px -10px rgba(0,0,0,.45);transform:scale(0);transition:transform .5s cubic-bezier(.34,1.7,.6,1)}
+.tn .lg img{max-width:100%;max-height:100%;object-fit:contain}
+.tn.on .lg{transform:scale(1)}
+.seq{list-style:none;padding:0;margin:20px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:8px 14px}
+.seq li{display:flex;gap:10px;align-items:baseline;font-size:14px;opacity:.35;transition:opacity .4s}
+.seq li.on{opacity:1}
+.seq i{font-style:normal;font-family:var(--h);font-weight:800;color:var(--brick);font-size:13px}
+.seq b{font-family:var(--h)}
+.seq span{color:var(--faint);font-size:12.5px}
+.scrub{margin-top:22px}
+.scrub input{width:100%;accent-color:var(--brick)}
+.scrub .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+.scrub b{font-family:var(--h);font-size:26px;font-weight:800}
+.scrub b span{font-size:inherit;color:var(--brick)}
+.scrub span{font-size:13px;color:var(--faint)}
+.occ{font-family:var(--h);font-weight:800;font-size:clamp(64px,8vw,110px);line-height:.9;color:var(--brick)}
+.occ small{display:block;font-family:var(--b);font-weight:500;font-size:15px;color:var(--soft);margin-top:6px}
+.facts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:24px}
+.facts div{border-top:1px solid var(--line);padding-top:10px}
+.facts dt{font-size:11.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.facts dd{margin:4px 0 0;font-weight:600;font-size:15px}
+.facts .w{grid-column:1/-1}
+
+/* deal */
+.deal{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:40px;counter-reset:d}
+.deal div{border-radius:18px;background:rgba(255,255,255,.55);border:1px solid var(--line);padding:22px;transition:transform .3s,background .3s}
+.deal div:hover{transform:translateY(-4px);background:#fff}
+.deal b{display:block;font-family:var(--h);font-size:24px;margin:10px 0 8px}
+.deal i{font-style:normal;font-family:var(--h);font-weight:700;color:var(--brick);font-size:13px;letter-spacing:.12em}
+.deal p{margin:0;font-size:16px;line-height:1.55;color:var(--soft)}
+.short{margin-top:16px;border-radius:18px;background:var(--brick);color:#fff;padding:24px 28px;font-family:var(--h);font-weight:700;font-size:clamp(20px,2.4vw,28px)}
+.short small{display:block;font-family:var(--b);font-weight:600;font-size:11px;letter-spacing:.16em;text-transform:uppercase;opacity:.75;margin-bottom:6px}
+
+/* ifm */
+.ifm{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:40px}
+.ifm div{border-radius:18px;background:var(--night);color:#f3ece0;padding:22px 20px;min-height:250px;position:relative;overflow:hidden}
+.ifm div:before{content:"";position:absolute;left:0;right:0;bottom:0;height:0;background:var(--brick);transition:height .45s cubic-bezier(.2,.8,.2,1);z-index:0}
+.ifm div:hover:before{height:100%}
+.ifm div>*{position:relative;z-index:1}
+.ifm i{font-style:normal;font-family:var(--h);font-weight:700;color:var(--brick2);font-size:13px;letter-spacing:.12em}
+.ifm div:hover i{color:#fff}
+.ifm b{display:block;font-family:var(--h);font-size:23px;margin:10px 0 14px}
+.ifm ul{list-style:none;padding:0;margin:0;display:grid;gap:8px;font-size:15px;color:rgba(243,236,224,.78)}
+.ifm div:hover ul{color:#fff}
+
+/* walk */
+.walk{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,5vw,64px);align-items:center}
+.walk .ph{border-radius:22px;overflow:hidden;aspect-ratio:4/5;position:relative}
+.walk .ph img{width:100%;height:100%;object-fit:cover;animation:drift 16s ease-in-out infinite alternate}
+.walk dl{display:grid;gap:0;margin:26px 0 0}
+.walk dl div{display:flex;justify-content:space-between;gap:16px;border-top:1px solid var(--line);padding:12px 0;font-size:15px}
+.walk dt{color:var(--faint)} .walk dd{margin:0;font-weight:600;text-align:right}
+footer{background:var(--night);color:rgba(243,236,224,.7);padding:40px 0;font-size:13.5px}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+footer img{height:18px;filter:brightness(0) invert(1);opacity:.9}
+
+@media (max-width:900px){
+ .dbm,.mgrid,.atl,.story,.walk{grid-template-columns:1fr}
+ .dbm article{min-height:340px}
+ .deal{grid-template-columns:1fr 1fr}
+ .ifm{grid-template-columns:1fr 1fr}
+ .ifm div{min-height:0}
+}
+@media (max-width:520px){
+ .hero-bg:after{background:linear-gradient(180deg,rgba(24,21,18,.72) 0%,rgba(24,21,18,.6) 55%,rgba(24,21,18,.85) 100%)}
+ .deal,.ifm{grid-template-columns:1fr}
+ .ring{flex-direction:column;align-items:flex-start}
+ .lrow li{width:150px;height:80px;padding:14px 18px}
+ .btn{width:100%;justify-content:center}
+ .top .btn{width:auto}
+}
+
+.sites{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+.sites div{border-top:2px solid var(--brick);padding-top:12px;display:grid;gap:2px}
+.sites b{font-family:var(--h);font-size:20px}
+.sites span{font-size:13.5px;color:var(--soft)}
+.sites em{font-style:normal;font-family:var(--h);font-weight:800;color:var(--brick);font-size:18px;margin-top:4px}
+.sky{margin:0 0 22px}
+.sky .im{border-radius:18px;overflow:hidden;aspect-ratio:16/9}
+.sky img{width:100%;height:100%;object-fit:cover;animation:drift 18s ease-in-out infinite alternate}
+.sky figcaption{padding:10px 4px 0;font-size:13px;font-weight:600;color:var(--soft)}
+.voice{background:var(--night);color:#f3ece0}
+.voice .k{color:var(--brick2)} .voice h2 em{color:var(--brick2)} .voice .lede{color:rgba(243,236,224,.72)}
+.vgrid{display:grid;grid-template-columns:1fr 1.4fr;gap:clamp(28px,5vw,64px);align-items:center}
+.vplayer{position:relative;border-radius:22px;overflow:hidden;aspect-ratio:16/9;background:#000;box-shadow:0 30px 60px -30px rgba(0,0,0,.7)}
+.vplayer video{width:100%;height:100%;object-fit:cover;display:block}
+.vplay{position:absolute;inset:0;margin:auto;width:76px;height:76px;border-radius:50%;border:0;background:var(--brick);color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 0 0 0 rgba(180,86,45,.6);animation:ring 2.2s ease-out infinite}
+.vplay svg{margin-left:4px}
+.vplayer.on .vplay{display:none}
+@keyframes ring{0%{box-shadow:0 0 0 0 rgba(180,86,45,.55)}100%{box-shadow:0 0 0 26px rgba(180,86,45,0)}}
+@media (max-width:900px){.vgrid{grid-template-columns:1fr}.sites{grid-template-columns:1fr}}
+
+/* atlas poster (Noida study opens in a new tab) */
+.frame.poster{display:block;height:min(70vh,640px);color:#f6f1e6}
+.frame.poster img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.4s cubic-bezier(.2,.8,.2,1)}
+.frame.poster:hover img{transform:scale(1.04)}
+.frame.poster:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(24,21,18,.85),rgba(24,21,18,.1) 60%)}
+.frame.poster .cap{position:absolute;left:clamp(20px,4vw,48px);right:clamp(20px,4vw,48px);bottom:clamp(20px,4vw,44px);z-index:1;display:grid;gap:8px;max-width:620px}
+.frame.poster small{font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--brick)}
+.frame.poster b{font-family:var(--h);font-weight:800;font-size:clamp(32px,4.4vw,58px);line-height:1}
+.frame.poster span{font-size:clamp(16px,1.5vw,19px);line-height:1.5;color:rgba(246,241,230,.86);font-weight:500}
+.frame.poster em{font-style:normal;justify-self:start;margin-top:10px;background:var(--brick);color:#fff;font-weight:700;font-size:16px;padding:14px 24px;border-radius:999px}
+
+/* full-scale type: bigger and heavier */
+body{font-weight:500}
+.wrap{width:min(1240px,100% - 32px)}
+.top img{height:30px}
+.k{font-size:14px;font-weight:700}
+h2{font-size:clamp(40px,6vw,84px)}
+.lede{font-size:clamp(19px,1.8vw,23px);font-weight:500}
+.hero h1{font-size:clamp(44px,8.6vw,132px)}
+.hero .lede{font-size:clamp(19px,1.9vw,24px)}
+.btn{font-size:16px;font-weight:700}
+.ticker b{font-size:clamp(34px,3.8vw,50px)}
+.ticker span{font-size:16px;font-weight:500}
+.dbm .n,.deal i,.ifm i,.seq i{font-size:14px;font-weight:800}
+.dbm h3{font-size:clamp(36px,3.6vw,48px)}
+.dbm p{font-size:18px}
+.tags span{font-size:13.5px;font-weight:600}
+.mkt p{font-size:19px}
+.src{font-size:13px!important}
+.bar>span{font-size:16px;font-weight:600}
+.take{font-size:clamp(20px,2.2vw,26px)}
+.take small,.short small{font-size:12.5px;font-weight:700}
+.atl li{font-size:18px;font-weight:600}
+.note{font-size:16px}.note b{font-size:14px}
+.film figcaption{font-size:15.5px;font-weight:700}.film figcaption span{font-size:14px}
+.fl small,.facts dt{font-size:13px;font-weight:700}
+.seq li{font-size:16px}.seq span{font-size:14px}
+.scrub b{font-size:30px}.scrub span{font-size:14.5px}
+.occ small{font-size:17px}
+.facts dd{font-size:17px}
+.deal b{font-size:clamp(24px,2.2vw,30px)}
+.deal p{font-size:17.5px}
+.short{font-size:clamp(22px,2.8vw,34px)}
+.ifm b{font-size:clamp(22px,2vw,27px)}
+.ifm ul{font-size:16.5px;font-weight:500}
+.walk dl div{font-size:17px}
+.sites b{font-size:23px}.sites span{font-size:15.5px}.sites em{font-size:21px}
+.sky figcaption{font-size:15px}
+footer{font-size:15px}
+
+.hero .wrap{min-width:0}
+/* expertise: four disciplines */
+.dbm.four{grid-template-columns:repeat(4,1fr)}
+.dbm.four h3{font-size:clamp(30px,2.5vw,40px);white-space:nowrap}
+@media (max-width:1100px){.dbm.four{grid-template-columns:1fr 1fr}}
+/* ATLAS in one fold */
+#atlas.one{min-height:100vh;display:grid;align-content:center;padding:clamp(76px,9vh,96px) 0 clamp(24px,4vh,48px)}
+.atl1{display:grid;grid-template-columns:1fr 1.1fr;gap:clamp(20px,4vw,56px);align-items:end}
+.atl1 .lede{margin:0}
+.atl2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:clamp(22px,3vw,34px)}
+.live{border-radius:22px;overflow:hidden;background:#0b0f16;box-shadow:0 30px 60px -30px rgba(43,39,33,.6)}
+.lframe{position:relative;aspect-ratio:16/10;overflow:hidden;background:#0b0f16}
+.lframe iframe{position:absolute;left:0;top:0;width:1440px;height:900px;border:0;display:block;background:#0b0f16;transform-origin:0 0}
+.lgo{position:absolute;inset:0;width:100%;padding:0;border:0;cursor:pointer;background:#0b0f16;font:inherit;transition:opacity .5s}
+.lgo img{width:100%;height:100%;object-fit:contain;display:block;transition:filter .4s}
+.lgo:hover img{filter:brightness(.82)}
+.lgo em{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);font-style:normal;font-weight:700;font-size:15px;color:#fff;background:var(--brick);padding:11px 20px;border-radius:999px;box-shadow:0 10px 26px -8px rgba(0,0,0,.6);white-space:nowrap}
+.lhead{padding:18px clamp(16px,2vw,22px) 14px;color:#f6f1e6}
+.lhead small{display:inline-block;font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:#fff;font-weight:700;background:var(--brick);padding:4px 10px;border-radius:999px}
+.lhead b{display:block;font-family:var(--h);font-size:clamp(20px,1.8vw,26px);margin:8px 0 2px}
+.lhead i{display:block;font-style:normal;font-size:14.5px;line-height:1.45;color:rgba(246,241,230,.75);min-height:2.9em}
+.live.on .lgo{opacity:0;pointer-events:none}
+.lbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px clamp(16px,2vw,22px);color:rgba(246,241,230,.75);font-size:14px}
+.lbar b{color:#f6f1e6}
+.lbar a{color:#fff;font-weight:700;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.35)}
+@media (max-width:900px){.atl1,.atl2{grid-template-columns:1fr}#atlas.one{min-height:0}}
+/* proof: sites open their galleries */
+.sites .site{font:inherit;color:inherit;text-align:left;background:none;border:0;border-top:2px solid var(--brick);padding:12px 0 0;cursor:pointer;display:grid;gap:2px;width:100%}
+.sites .site em{color:var(--brick);font-size:16px}
+.sites .site:hover b{color:var(--brick)}
+.tg{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.tg button{font:inherit;font-weight:700;font-size:13.5px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:9px 14px;cursor:pointer}
+.tg button:hover{background:var(--brick);color:#fff;border-color:var(--brick)}
+.tg button small{font-weight:600;opacity:.7;margin-left:4px}
+/* care: outcomes first */
+.outc{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:34px}
+.outc div{border-radius:18px;background:var(--brick);color:#fff;padding:22px 24px}
+.outc b{display:block;font-family:var(--h);font-weight:800;font-size:clamp(34px,4vw,52px);line-height:1}
+.outc span{display:block;margin-top:8px;font-size:15px;opacity:.9}
+.ifm .gain{margin:0 0 14px;font-family:var(--h);font-weight:600;font-size:16.5px;line-height:1.35;color:#f6f1e6}
+@media (max-width:700px){.outc{grid-template-columns:1fr}}
+/* gallery viewer */
+#gal{position:fixed;inset:0;z-index:100;background:rgba(20,18,15,.94);display:none;align-items:center;justify-content:center;padding:24px 70px}
+#gal.show{display:flex}
+#gal figure{margin:0;max-width:min(1200px,100%);display:flex;flex-direction:column;align-items:center}
+#gal img{max-width:100%;max-height:calc(100vh - 150px);border-radius:12px;box-shadow:0 30px 70px rgba(0,0,0,.5)}
+#gal figcaption{color:#f3ece0;margin-top:14px;text-align:center;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;justify-content:center}
+#gal figcaption b{font-family:var(--h);font-size:18px} #gal figcaption span{opacity:.75} #gal figcaption small{opacity:.55}
+#gal button{position:absolute;border:0;background:rgba(255,255,255,.12);color:#fff;border-radius:999px;width:48px;height:48px;font-size:30px;line-height:1;cursor:pointer}
+#gal button:hover{background:var(--brick)}
+#gal .gx{top:18px;right:18px;font-size:26px} #gal .gp{left:14px;top:50%;transform:translateY(-50%)} #gal .gn{right:14px;top:50%;transform:translateY(-50%)}
+@media (max-width:700px){#gal{padding:20px 10px}#gal .gp,#gal .gn{top:auto;bottom:16px;transform:none}}
+</style>
+</head>
+<body>
+
+<header class="top" id="top">
+  <img class="wt" src="assets/autopilot-wordmark.png" alt="Autopilot Offices"><img class="dk" src="assets/autopilot-logo.png" alt="Autopilot Offices">
+</header>
+
+<section class="hero">
+  <div class="hero-bg" id="heroBg">
+    <video id="heroVid" autoplay muted loop playsinline preload="auto" poster="assets/video/autopilot-reel-poster.jpg">
+      <source src="assets/video/autopilot-reel.webm" type="video/webm">
+      <source src="assets/video/autopilot-reel.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="wrap">
+    <h1 id="h1">Your Asset, <span class="type">Our <span class="flip"><b id="flipw">Leasing</b></span> Expertise</span></h1>
+    <p class="lede">Autopilot Offices designs, builds and manages enterprise workspaces end to end. One partner takes your floor from shell to fully occupied, and stays accountable for it every day after.</p>
+    <div class="cta"><a class="btn" href="#deal">See the deal</a></div>
+  </div>
+  <div class="ticker" aria-label="Autopilot in numbers"><ul id="tick"></ul></div>
+</section>
+
+<section id="what">
+  <div class="wrap">
+    <p class="k rv">Expertise</p>
+    <h2 class="rv">Four disciplines. <em>One accountable partner.</em></h2>
+    <div class="dbm four">
+      <article class="rv"><div class="im"><img src="assets/sites/skymark-facade.jpg" alt="" loading="lazy"></div><div class="tx"><span class="n">01</span><h3>We Lease</h3><p>We sign the lease and bring the occupiers. You deal with one tenant, while enterprise names fill the floor.</p><div class="tags"><span>Single tenancy</span><span>Enterprise occupiers</span><span>In-house sales</span><span>ATLAS</span></div></div></article>
+      <article class="rv"><div class="im"><img src="assets/sites/rupa-boardroom.jpg" alt="" loading="lazy"></div><div class="tx"><span class="n">02</span><h3>We Design</h3><p>We plan the floor for the company that will sign. A floor planned around a real occupier leases faster and stays leased longer.</p><div class="tags"><span>Brief</span><span>Layouts</span><span>MEP coordination</span><span>BOQ</span></div></div></article>
+      <article class="rv"><div class="im"><img src="assets/sites/skymark-floor.jpg" alt="" loading="lazy"></div><div class="tx"><span class="n">03</span><h3>We Build</h3><p>We turn your empty floor into a finished office. The contractors, the deadlines and the handover are our problem, not yours.</p><div class="tags"><span>Civil</span><span>Interiors</span><span>Electrical</span><span>HVAC</span><span>Fire</span><span>ELV</span></div></div></article>
+      <article class="rv"><div class="im"><img src="assets/sites/skymark-lobby.jpg" alt="" loading="lazy"></div><div class="tx"><span class="n">04</span><h3>We Manage</h3><p>We run the property every day, to enterprise standards. Problems are proactively fixed, and your asset is maintained, not worn down.</p><div class="tags"><span>SLAs</span><span>24x7 monitoring</span><span>Predictive maintenance</span><span>IT + security</span></div></div></article>
+    </div>
+  </div>
+</section>
+
+<section class="mkt" id="market">
+  <div class="wrap">
+    <p class="k rv">The market</p>
+    <h2 class="rv">Your next occupier will want <em>a managed office.</em></h2>
+    <div class="stats">
+      <div class="stat rv"><div class="big"><span data-count="67">0</span>%</div><p>of surveyed occupiers expect flexible space in their portfolio within two years</p><p class="src">Source: CBRE India Office Occupier Survey 2026</p></div>
+      <div class="stat rv"><div class="big"><span data-count="32.9" data-dec="1">0</span>%</div><p>of Delhi NCR office leasing in Q1 2026 went to flex operators, the largest occupier segment, ahead of tech and BFSI</p><p class="src">Source: JLL India Office Market, Q1 2026</p></div>
+    </div>
+    <div class="take2 rv"><small>Takeaway</small><div class="jump"><b>24%</b><i>→</i><b>39%</b></div><div><p>Noida's share of Delhi NCR office leasing rose from 24% to 39% in a year. The region's demand is moving to Noida, and a growing part of it wants managed space.</p><p class="src">H1 2025 vs H1 2026 · Source: Knight Frank India Real Estate H1 2026</p></div></div>
+  </div>
+</section>
+
+<section class="logos" id="trust">
+  <div class="wrap">
+    <p class="k rv">Enterprises on Autopilot</p>
+    <h2 class="rv">The occupiers who already <em>trust us.</em></h2>
+    <p class="lede rv">BFSI, media, logistics, consumer tech, education and healthcare. These are the tenants a managed floor attracts.</p>
+  </div>
+  <div class="lrow"><ul id="l1"></ul></div>
+  <div class="lrow rev"><ul id="l2"></ul></div>
+</section>
+
+<section id="atlas" class="one">
+  <div class="wrap">
+    <div class="atl1">
+      <div>
+        <p class="k rv">ATLAS · Location intelligence</p>
+        <h2 class="rv">Our CRE <em>marketing edge.</em></h2>
+      </div>
+      <p class="lede rv">ATLAS shows enterprise occupiers your building and everything around it in high-resolution 3D: metro, talent, amenities and a side-by-side shortlist. They decide with more confidence and less back-and-forth.</p>
+    </div>
+    <div class="atl2">
+      <div class="live rv" data-src="https://atlas.autopilotoffices.com/noida-skymark/volt/">
+        <div class="lhead"><small>3D · The building</small><b>F1 Skymark in 3D</b><i>Turn the building, pick a floor and walk through the fitted Volt floor.</i></div>
+        <div class="lframe">
+          <iframe title="F1 Skymark in 3D" allow="fullscreen; xr-spatial-tracking" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+          <button class="lgo" type="button" aria-label="Walk through F1 Skymark here"><img src="assets/atlas-skymark.webp" alt="F1 Skymark in 3D, as it looks live" loading="lazy"><em>Walk through F1 Skymark</em></button>
+        </div>
+        <div class="lbar"><span><b>F1 Skymark in 3D</b> · live</span><a href="https://atlas.autopilotoffices.com/noida-skymark/volt/" target="_blank" rel="noopener">Open full screen ↗</a></div>
+      </div>
+      <div class="live rv" data-src="https://atlas.autopilotoffices.com/noida-skymark/">
+        <div class="lhead"><small>2D · The location map</small><b>F1 Skymark ATLAS</b><i>The F1 pin on the map, with the metro, employers, coworking and amenities around it.</i></div>
+        <div class="lframe">
+          <iframe title="F1 Skymark ATLAS" allow="fullscreen; xr-spatial-tracking" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+          <button class="lgo" type="button" aria-label="Explore F1 Skymark ATLAS here"><img src="assets/atlas/real-2d.webp" alt="F1 Skymark ATLAS, as it looks live" loading="lazy"><em>Explore F1 Skymark ATLAS</em></button>
+        </div>
+        <div class="lbar"><span><b>F1 Skymark ATLAS</b> · live</span><a href="https://atlas.autopilotoffices.com/noida-skymark/" target="_blank" rel="noopener">Open full screen ↗</a></div>
+      </div>
+    </div>
+</div>
+  </div>
+</section>
+
+<section class="proof" id="proof">
+  <div class="wrap">
+    <p class="k rv">Proof</p>
+    <h2 class="rv">Workspaces that <em>speak for themselves.</em></h2>
+  </div>
+  <div class="film"><ul id="film"></ul></div>
+  <div class="wrap sites">
+    <button class="rv site" data-g="ssplaza"><b>SS Plaza</b><span>Bengaluru · Digitide</span><em>View photos →</em></button>
+    <button class="rv site" data-g="rupa"><b>Rupa Solitaire</b><span>Navi Mumbai · Foundever</span><em>View photos →</em></button>
+    <button class="rv site" data-g="skymark"><b>F1 Skymark</b><span>Noida · ARCIL</span><em>View photos →</em></button>
+  </div>
+  <div class="wrap story">
+    <div class="tower rv">
+      <div class="floors" id="floors"></div>
+      <ol class="seq" id="seq"></ol>
+      <div class="scrub"><div class="row"><b>Move-in <span id="mo">0</span> of 4</b><span>Drag to replay</span></div><input type="range" id="scrub" min="0" max="4" step=".01" value="0" aria-label="Occupier move-ins at F1 Skymark"></div>
+    </div>
+    <div class="rv">
+      <figure class="sky"><div class="im"><img src="assets/sites/skymark-exterior.jpg" alt="F1 Skymark, Sector 6, Noida" loading="lazy"></div><figcaption>F1 Skymark, Sector 6, Noida</figcaption></figure>
+      <p class="k">Success story</p>
+      <div class="occ"><span id="occ">0</span>+<small>seats filled across two floors</small></div>
+      <h3 style="font-size:clamp(24px,2.6vw,32px);margin-top:18px">F1 Skymark, Noida. Empty to fully occupied in six months.</h3>
+      <p class="lede">Autopilot took 60,000 sq. ft. across two floors in Sector 6, Noida, and leased it to four enterprise occupiers inside half a year.</p>
+      <dl class="facts"><div><dt>Location</dt><dd>Sector 6, Noida</dd></div><div><dt>Taken by Autopilot</dt><dd>60,000 sq. ft.</dd></div><div class="w"><dt>Occupiers, in order of move-in</dt><dd>Altruist · ARCIL · Volt · Paytm</dd></div></dl>
+      <div class="tg" id="tg"></div>
+    </div>
+  </div>
+</section>
+
+<section class="voice" id="voice">
+  <div class="wrap vgrid">
+    <div class="rv">
+      <p class="k">From the occupier</p>
+      <h2>Hear it from <em>the tenant.</em></h2>
+      <p class="lede">Phanindranath Karkala, MD and CEO of ARCIL, on moving into F1 Skymark with Autopilot.</p>
+    </div>
+    <div class="vplayer rv">
+      <video id="ceo" controls playsinline preload="none" poster="assets/video/arcil-ceo-poster.jpg"><source src="assets/video/arcil-ceo.mp4" type="video/mp4"></video>
+      <button class="vplay" id="ceoPlay" aria-label="Play the ARCIL testimonial"><svg viewBox="0 0 24 24" width="26" height="26" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<section id="deal">
+  <div class="wrap">
+    <p class="k rv">How it works for you</p>
+    <h2 class="rv">One lease. One tenant. <em>Rent from day one.</em></h2>
+    <div class="deal">
+      <div class="rv"><i>01</i><b>Lease</b><p>Autopilot signs as your single tenant on a long-term lease.</p></div>
+      <div class="rv"><i>02</i><b>Fit-out</b><p>The floor is fitted out to enterprise standard, and the upgrades stay with your building.</p></div>
+      <div class="rv"><i>03</i><b>Rent</b><p>Fixed monthly rent, whether the floor is full or not.</p></div>
+      <div class="rv"><i>04</i><b>Your involvement</b><p>Sign once, receive rent monthly. Everything else is ours.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="ifm" style="padding-top:0">
+  <div class="wrap">
+    <p class="k rv">How we care for the property</p>
+    <h2 class="rv">Your building, looked after <em>like it is ours.</em></h2>
+    <div class="outc rv">
+      <div><b>5 lakh+</b><span>sq. ft. we manage today</span></div>
+      <div><b>90%+</b><span>of clients stay with us</span></div>
+      <div><b>24x7</b><span>security and monitoring</span></div>
+    </div>
+    <div class="ifm">
+      <div class="rv"><i>01</i><b>Hard services</b><p class="gain">Equipment that lasts longer and fails less.</p><ul><li>HVAC AMC</li><li>Electrical systems</li><li>Fire &amp; life safety</li><li>Plumbing</li></ul></div>
+      <div class="rv"><i>02</i><b>Soft services</b><p class="gain">A floor that looks new on every visit.</p><ul><li>Housekeeping</li><li>Washroom hygiene</li><li>Pantry</li><li>Pest control</li><li>Garbage disposal</li></ul></div>
+      <div class="rv"><i>03</i><b>Security</b><p class="gain">Every entry known, every incident handled.</p><ul><li>24x7 manned security</li><li>CCTV room</li><li>Access control</li><li>Emergency SOPs</li></ul></div>
+      <div class="rv"><i>04</i><b>Workplace admin</b><p class="gain">Tenants who feel looked after, and stay.</p><ul><li>Front office</li><li>Meeting rooms</li><li>Mailroom</li><li>BMS</li><li>Vendor coordination</li></ul></div>
+      <div class="rv"><i>05</i><b>Compliance</b><p class="gain">No statutory surprises. Every certificate on time.</p><ul><li>Statutory tracking</li><li>PM reports</li><li>Safety audits</li><li>Documentation</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="walk" class="proof">
+  <div class="wrap walk">
+    <div class="ph rv"><img src="assets/sites/skymark-facade.jpg" alt="F1 Skymark, Sector 6, Noida" loading="lazy"></div>
+    <div>
+      <p class="k rv">Walkthrough</p>
+      <h2 class="rv">See it <em>for yourself.</em></h2>
+      <p class="lede rv">Walk through F1 Skymark in Sector 6, Noida. See the finish, the operations desk and the occupiers, and ask them what it is like to be on Autopilot.</p>
+      <dl class="rv"><div><dt>Property</dt><dd>F1 Skymark, Sector 6, Noida</dd></div><div><dt>Duration</dt><dd>About 45 minutes</dd></div></dl>
+    </div>
+  </div>
+</section>
+
+<div id="gal" role="dialog" aria-modal="true" aria-label="Photo gallery"><button class="gx" id="gx" aria-label="Close">&times;</button><button class="gp" id="gp" aria-label="Previous">&#8249;</button><figure><img id="gi" alt=""><figcaption><b id="gt"></b><span id="gc"></span><small id="gn"></small></figcaption></figure><button class="gn" id="gnx" aria-label="Next">&#8250;</button></div>
+
+<footer><div class="wrap"><img src="assets/autopilot-logo.png" alt="Autopilot Offices"><span>Mumbai · Delhi · Noida · Kolkata · Indore · Bengaluru</span><span>Design · Build · Manage</span></div></footer>
+
+<script>
+(()=>{
+const R=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const top=document.getElementById('top');addEventListener('scroll',()=>top.classList.toggle('s',scrollY>40),{passive:true});
+
+// headline: keep it on one line on wide screens, let it wrap on phones
+const h1=document.getElementById('h1');
+const FW=['Leasing','Design','Build','Manage'],fw=document.getElementById('flipw');
+function fitH(){h1.style.fontSize='';const sp=h1.querySelector('.type'),now=fw.textContent,max=h1.clientWidth;let wd=0;for(const w of FW){fw.textContent=w;wd=Math.max(wd,sp.scrollWidth)}fw.textContent=now;   // sized for the widest word      // the second line never runs off the screen
+  if(wd>max)h1.style.fontSize=parseFloat(getComputedStyle(h1).fontSize)*max/wd*.98+'px'}
+fitH();addEventListener('resize',fitH);
+// ATLAS: each box shows a real screenshot of the live page; a click loads the live page in its place.
+// The live page is laid out at desktop size (1440 x 900) and scaled down to fit, so it looks exactly like the real thing.
+document.querySelectorAll('.live').forEach(L=>{const f=L.querySelector('iframe'),fr=L.querySelector('.lframe');
+  const fit=()=>{f.style.transform='scale('+(fr.clientWidth/1440)+')'};fit();addEventListener('resize',fit);
+  L.querySelector('.lgo').addEventListener('click',()=>{if(!f.src)f.src=L.dataset.src;L.classList.add('on');f.focus()})});
+// Leasing flips to Design, Build, Manage and back to Leasing
+let fi=0;setInterval(()=>{if(document.hidden)return;fi=(fi+1)%FW.length;
+  if(R){fw.textContent=FW[fi];return}
+  fw.className='out';fw.addEventListener('animationend',()=>{fw.textContent=FW[fi];fw.className='in'},{once:true})},2600);document.fonts&&document.fonts.ready.then(fitH);
+
+// hero video: respect reduced motion, pause when off screen
+const hv=document.getElementById('heroVid');
+if(R){hv.removeAttribute('autoplay');hv.pause()}else{hv.play().catch(()=>{});
+  new IntersectionObserver(([e])=>{e.isIntersecting?hv.play().catch(()=>{}):hv.pause()}).observe(hv)}
+
+// ticker
+const stats=[['10','years of workspace expertise'],['15,000+','seats delivered for enterprise'],['5 lakh+','sq. ft. managed'],['15+','workspaces across key markets'],['6+','cities across India'],['90%+','client retention']];
+document.getElementById('tick').innerHTML=[...stats,...stats].map(([b,s])=>`<li><b>${b.replace(' ','&nbsp;')}</b><span>${s}</span></li>`).join('');
+
+// logos
+const L=['digitide','mahindra-finance','tv9','allcargo','zepto','alldigi','bajaj-finance','invesco','arcil','mygate','3i-infotech','uniacco','foundever','altruist','fcb-kinnect','lightyears','safegold','melento','geebee','volt','vfs','radicalminds','royal-sundaram','saffronstays','yangpoo'];
+const li=a=>[...a,...a].map(n=>`<li><img src="assets/logos/${n}.png" alt="${n.replace(/-/g,' ')}" loading="lazy"></li>`).join('');
+document.getElementById('l1').innerHTML=li(L.slice(0,13));document.getElementById('l2').innerHTML=li(L.slice(13));
+
+// film strip
+const F=[['skymark-lobby','Reception','F1 Skymark, Noida'],['ssplaza-floor','Open workstations','SS Plaza, Bengaluru'],['rupa-boardroom','Boardroom','Rupa Solitaire, Navi Mumbai'],['skymark-conference','Conference room','F1 Skymark, Noida'],['ssplaza-discussion','Cafeteria','SS Plaza, Bengaluru'],['rupa-rows','Workstations','Rupa Solitaire, Navi Mumbai'],['skymark-meeting','Meeting room','F1 Skymark, Noida'],['ssplaza-lounge','Manager cabin','SS Plaza, Bengaluru'],['rupa-atrium','Building atrium','Rupa Solitaire, Navi Mumbai'],['ssplaza-reception','Corridor','SS Plaza, Bengaluru']];
+document.getElementById('film').innerHTML=[...F,...F].map(([f,a,b])=>`<li><div class="im"><img src="assets/sites/${f}.jpg" alt="${a}" loading="lazy"></div><figcaption>${a}<span>${b}</span></figcaption></li>`).join('');
+
+// testimonial
+const ceo=document.getElementById('ceo'),cp=document.getElementById('ceoPlay');
+cp.addEventListener('click',()=>{ceo.parentElement.classList.add('on');ceo.play()});
+ceo.addEventListener('play',()=>{ceo.parentElement.classList.add('on');hv.pause()});
+
+// tower
+// move-in order: name, logo, seats, seat label, floor, colour
+const T=[['Altruist','altruist.png',100,'100',2,'#b4562d'],['ARCIL','arcil.png',250,'250+',2,'#b4562d'],['Volt','volt.png',100,'100+',1,'#b4562d'],['Paytm','paytm.svg',400,'400+',1,'#b4562d']];
+const floors=document.getElementById('floors');
+floors.innerHTML=[2,1].map(f=>`<div class="fl"><small>${f===2?'2nd':'1st'} floor</small><div class="row">${T.map((t,k)=>t[4]===f?`<div class="tn" data-k="${k}" style="flex:${Math.max(t[2],180)}"><div class="fill" style="background:${t[5]}"></div><div class="lg"><img src="assets/logos/${t[1]}" alt="${t[0]}"></div></div>`:'').join('')}</div></div>`).join('');
+document.getElementById('seq').innerHTML=T.map((t,k)=>`<li><i>0${k+1}</i><b>${t[0]}</b><span>${t[3]} seats · ${t[4]===2?'2nd':'1st'} floor</span></li>`).join('');
+const tns=[...floors.querySelectorAll('.tn')].sort((a,b)=>a.dataset.k-b.dataset.k),seq=[...document.querySelectorAll('#seq li')];
+const occEl=document.getElementById('occ'),mo=document.getElementById('mo'),sc=document.getElementById('scrub');
+function setM(m){let seats=0,n=0;
+  T.forEach((t,k)=>{const p=Math.max(0,Math.min(1,m-k)),on=p>=.6;seats+=t[2]*p;n+=on;
+    tns[k].querySelector('.fill').style.width=(p*100)+'%';tns[k].classList.toggle('on',on);seq[k].classList.toggle('on',on)});
+  mo.textContent=n;occEl.textContent=Math.round(seats)}
+sc.addEventListener('input',()=>setM(+sc.value));setM(0);
+let played=false;
+function play(){if(played)return;played=true;if(R){sc.value=4;setM(4);return}let t0=null;
+  const step=ts=>{t0??=ts;const m=Math.min(4,(ts-t0)/5200*4);sc.value=m;setM(m);if(m<4&&!sc.matches(':active'))requestAnimationFrame(step)};requestAnimationFrame(step)}
+
+
+// photo galleries: the three sites and the F1 Skymark occupiers
+const G={
+  ssplaza:{t:'SS Plaza, Bengaluru',p:[['ssplaza-floor','Open workstations'],['ssplaza-reception','Corridor'],['ssplaza-discussion','Cafeteria'],['ssplaza-lounge','Manager cabin'],['ssplaza-boardroom','Boardroom']]},
+  rupa:{t:'Rupa Solitaire, Navi Mumbai',p:[['rupa-boardroom','Boardroom'],['rupa-rows','Workstations'],['rupa-floor','Workspace'],['rupa-atrium','Building atrium']]},
+  skymark:{t:'F1 Skymark, Noida',p:[['skymark-exterior','The building'],['skymark-facade','Facade'],['skymark-lobby','Reception'],['skymark-floor','Workspace'],['skymark-conference','Conference room'],['skymark-meeting','Meeting room']]},
+  arcil:{t:'ARCIL at F1 Skymark',p:[['skymark-lobby','Reception'],['skymark-floor','Workspace'],['skymark-conference','Conference room'],['skymark-meeting','Meeting room']]},
+  volt:{t:'Volt at F1 Skymark',sub:'Renders',p:[['volt-open-workstations','Open workstations'],['volt-sales-office','Sales office'],['volt-18-seater-conference-room','18-seat conference room'],['volt-control-room-command-centre','Control room'],['volt-cafeteria','Cafeteria'],['volt-lounge-area-north','Lounge'],['volt-collab-area-01','Collab area'],['volt-calling-room','Calling room'],['volt-finance-room','Finance room']]},
+  altruist:{t:'Altruist at F1 Skymark',p:[['altruist-reception','Reception'],['altruist-reception-corridor','Reception and corridor'],['altruist-workstations','Workstations'],['altruist-workstations-2','Workstations'],['altruist-cabin','Cabin']]},
+  paytm:{t:'Paytm at F1 Skymark',sub:'Renders',p:[['paytm-reception','Reception'],['paytm-reception-lounge','Reception lounge'],['paytm-workstations','Open workstations'],['paytm-workstations-baffles','Workstations, wood baffle ceiling'],['paytm-workstations-perforated','Workstations, perforated ceiling'],['paytm-workstations-green','Workstations, green ceiling'],['paytm-meeting-room','Meeting room'],['paytm-meeting-room-lounge','Meeting room, lounge chairs']]},
+};
+const gal=document.getElementById('gal'),gi=document.getElementById('gi');let gk=null,gx=0;
+function gshow(){const g=G[gk],[f,c]=g.p[gx];gi.src='assets/sites/'+f+'.jpg';gi.alt=c;document.getElementById('gt').textContent=g.t+(g.sub?' · '+g.sub:'');document.getElementById('gc').textContent=c;document.getElementById('gn').textContent=(gx+1)+' / '+g.p.length;
+  const n=g.p[(gx+1)%g.p.length];new Image().src='assets/sites/'+n[0]+'.jpg'}
+function gopen(k){if(!G[k]||!G[k].p.length)return;gk=k;gx=0;gshow();gal.classList.add('show');document.body.style.overflow='hidden'}
+function gclose(){gal.classList.remove('show');document.body.style.overflow=''}
+const gstep=d=>{const L=G[gk].p.length;gx=(gx+d+L)%L;gshow()};
+document.getElementById('gx').onclick=gclose;document.getElementById('gp').onclick=()=>gstep(-1);document.getElementById('gnx').onclick=()=>gstep(1);
+gal.addEventListener('click',e=>{if(e.target===gal)gclose()});
+addEventListener('keydown',e=>{if(!gal.classList.contains('show'))return;if(e.key==='Escape')gclose();if(e.key==='ArrowRight')gstep(1);if(e.key==='ArrowLeft')gstep(-1)});
+document.querySelectorAll('[data-g]').forEach(b=>b.addEventListener('click',()=>gopen(b.dataset.g)));
+// success story: one gallery per occupier that has photos
+document.getElementById('tg').innerHTML=[['altruist','Altruist'],['arcil','ARCIL'],['volt','Volt'],['paytm','Paytm']].filter(([k])=>G[k].p.length).map(([k,n])=>`<button data-o="${k}">${n} photos${G[k].sub?' <small>('+G[k].sub.toLowerCase()+')</small>':''} →</button>`).join('');
+document.querySelectorAll('[data-o]').forEach(b=>b.addEventListener('click',()=>gopen(b.dataset.o)));
+
+// counters + reveals
+const count=e=>{const to=+e.dataset.count,d=+(e.dataset.dec||0),fx=v=>v.toFixed(d);if(R){e.textContent=fx(to);return}let t0=null;const st=ts=>{t0??=ts;const p=Math.min(1,(ts-t0)/1400);e.textContent=fx(to*(1-Math.pow(1-p,3)));if(p<1)requestAnimationFrame(st)};requestAnimationFrame(st)};
+function fire(t){t.classList.add('in');
+  t.querySelectorAll('[data-count]').forEach(count);
+  if(t.classList.contains('tower'))play();}
+const io=new IntersectionObserver(es=>es.forEach(x=>{if(x.isIntersecting){io.unobserve(x.target);fire(x.target)}}),{threshold:.2});
+document.querySelectorAll('.rv').forEach(e=>io.observe(e));
+const sweep=()=>document.querySelectorAll('.rv:not(.in)').forEach(e=>{const r=e.getBoundingClientRect();if(r.top<innerHeight*.9&&r.bottom>0)io.takeRecords(),io.unobserve(e),fire(e)});
+addEventListener('scroll',sweep,{passive:true});setTimeout(sweep,300);
+})();
+</script>
+</body>
+</html>

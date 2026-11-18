@@ -94,6 +94,7 @@ const SEED_LINKS = [
   ["invesco-andheri", "Invesco · Andheri", "client", "/", "INVDEMOACC", "Mumbai"],
   ["basilic-fly", "Whitefield · Bengaluru", "client", "/", "FLYDEMOACC", "Bengaluru"],
   ["digitide-noida", "Noida office study (Digitide)", "study", "/noida/", "DIGDEMOACC", "Noida"],
+  ["noida-skymark", "F1 Skymark · Sector 6 Noida", "study", "/noida-skymark/", "SKYMARK-AP", "Noida"],
   ["digitide", "Digitide group command centre", "study", "/digitide/", "DIGITIDE-GRP", "Multi-city"],
   ["indore", "Indore office study", "study", "/indore/", "INDORE-AP", "Indore"],
   ["chennai", "Chennai office study", "study", "/chennai/", "CHENNAI-AP", "Chennai"],

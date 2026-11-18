@@ -20,15 +20,25 @@ from shapely.geometry import Point, Polygon, MultiPolygon, LineString
 from shapely.ops import unary_union
 
 D, OUT = sys.argv[1], sys.argv[2]
-LNG0, LAT0 = 72.867, 19.111
-KX, KY = math.cos(math.radians(LAT0)) * 111320.0, 110540.0
+# --region FILE: another place (scripts/world/regions/*.json). Without it, Andheri East as before.
+RG = json.load(open(sys.argv[sys.argv.index("--region") + 1])) if "--region" in sys.argv else {}
+if "--region" in sys.argv: i = sys.argv.index("--region"); del sys.argv[i:i + 2]
+LNG0, LAT0 = RG.get("lng0", 72.867), RG.get("lat0", 19.111)
+KX, KY = math.cos(math.radians(LAT0)) * 111320.0, RG.get("ky", 110540.0)
 def P(lng, lat): return ((lng - LNG0) * KX, (lat - LAT0) * KY)
 def proj(g): return shapely.transform(g, lambda c: np.c_[(c[:, 0] - LNG0) * KX, (c[:, 1] - LAT0) * KY])
 def rows(n): return pq.read_table(f"{D}/{n}.parquet").to_pylist()
 def h01(s): return int(hashlib.md5(s.encode()).hexdigest()[:8], 16) / 0xffffffff
-CLIP = proj(shapely.box(72.840, 19.0955, 72.894, 19.1265))
+CLIP = proj(shapely.box(*RG.get("clip", [72.840, 19.0955, 72.894, 19.1265])))
 
 # ---- the surface model and the ground under it -----------------------------
+if not os.path.exists(f"{D}/dsm.npy"):   # a Copernicus GeoTIFF only: read it once into the array and transform this script uses
+    import rasterio
+    from rasterio.windows import from_bounds
+    bx = RG.get("clip", [72.840, 19.0955, 72.894, 19.1265])
+    with rasterio.open(f"{D}/dsm.tif") as r_:   # only the region (a full 1 degree tile is too big for the window statistics below)
+        w_ = from_bounds(bx[0] - 0.01, bx[1] - 0.01, bx[2] + 0.01, bx[3] + 0.01, r_.transform).round_offsets().round_lengths()
+        np.save(f"{D}/dsm.npy", r_.read(1, window=w_).astype(np.float32)); t_ = r_.window_transform(w_); json.dump([t_.a, t_.b, t_.c, t_.d, t_.e, t_.f], open(f"{D}/dsm_t.json", "w"))
 dsm = np.load(f"{D}/dsm.npy"); T = json.load(open(f"{D}/dsm_t.json"))  # a,b,c,d,e,f (affine)
 def cell(lng, lat):
     c = int((lng - T[2]) / T[0]); r = int((lat - T[5]) / T[4]); return r, c
@@ -39,8 +49,9 @@ def sample(arr, lng, lat):
     r, c = cell(lng, lat); r = min(max(r, 0), arr.shape[0] - 1); c = min(max(c, 0), arr.shape[1] - 1); return float(arr[r, c])
 
 # ---- the seven options (deck floors) and their pins --------------------------
-OPTS = json.load(open("examples/flipkart-andheri.bundle.json"))["options"]
-DECK_FLOORS = {"723-avenue": 16, "corporate-avenue": 9, "vaman-techno-centre": 8, "privilon": 16, "landmark": 7, "rustomjee-central-park": 10, "fulcrum": 10}
+OPTS = json.load(open(RG.get("bundle", "examples/flipkart-andheri.bundle.json")))["options"]
+DECK_FLOORS = RG.get("deck_floors", {"723-avenue": 16, "corporate-avenue": 9, "vaman-techno-centre": 8, "privilon": 16, "landmark": 7, "rustomjee-central-park": 10, "fulcrum": 10})
+FLOOR_H = RG.get("floor_h", 4.1)
 
 # ---- buildings ---------------------------------------------------------------
 B = []
@@ -81,7 +92,7 @@ for o in OPTS:
 
 for b in B:
     a = b["g"].area; j = h01(b["id"])
-    if b.get("opt"): h = DECK_FLOORS[b["opt"]] * 4.1 + 2.5
+    if b.get("opt"): h = DECK_FLOORS[b["opt"]] * FLOOR_H + 2.5
     elif b["h"]: h = b["h"]
     elif b["nf"]: h = b["nf"] * 3.2 + 1
     else:
@@ -94,8 +105,8 @@ for b in B:
         elif a < 400: h = 10 + j * 12 + ex * 0.9
         elif a < 1500: h = 14 + j * 20 + ex * 1.5
         else: h = 18 + j * 26 + ex * 1.5
-        if a > 450 and j2 > 0.975 - min(0.035, ex / 400): h = 50 + (j2 - 0.94) * 700 + ex
-        h = min(h, 115)
+        if RG.get("towers", True) and a > 450 and j2 > 0.975 - min(0.035, ex / 400): h = 50 + (j2 - 0.94) * 700 + ex
+        h = min(h, RG.get("max_h", 115))
     b["H"] = round(max(3.0, h), 1)
 H = np.array([b["H"] for b in B]); print("height pctl", np.percentile(H, [10, 50, 90, 99]).round(1), "max", H.max())
 
@@ -135,11 +146,10 @@ def lines_of(geoms):
         for l in (g.geoms if hasattr(g, "geoms") else [g]):
             if l.geom_type == "LineString" and l.length > 20: out.append([[round(a, 1), round(b, 1)] for a, b in l.simplify(1.5).coords])
     return out
-METRO = {
-    "L1": {"name": "Metro Line 1", "kind": "elevated", "color": "#1d6fa5", "lines": lines_of(metro.get("Mumbai Metro Line 1", []))},
-    "L7": {"name": "Metro Line 7", "kind": "elevated", "color": "#d23c3c", "lines": lines_of(metro.get("Line 7", []))},
-    "L3": {"name": "Metro Line 3", "kind": "underground", "color": "#1d8a8a", "lines": lines_of(metro.get("Mumbai Metro Line 3", []))},
-}
+METRO_DEF = RG.get("metro", {"L1": ["Metro Line 1", "elevated", "#1d6fa5", "Mumbai Metro Line 1"], "L7": ["Metro Line 7", "elevated", "#d23c3c", "Line 7"],
+                               "L3": ["Metro Line 3", "underground", "#1d8a8a", "Mumbai Metro Line 3"]})
+METRO = {k: {"name": n, "kind": kd, "color": c, "lines": lines_of(metro.get(src, []))} for k, (n, kd, c, src) in METRO_DEF.items()}
+for k in ("L1", "L7", "L3"): METRO.setdefault(k, {"name": "", "kind": "elevated", "color": "#888", "lines": []})
 # Keep one of each pair of parallel tracks on a viaduct (one deck carries both).
 for k in ("L1", "L7"):
     ls = sorted(METRO[k]["lines"], key=lambda l: -LineString(l).length); keep = []
@@ -153,6 +163,7 @@ for x in rows("infrastructure"):
     nm = (x["names"] or {}).get("primary") or ""; g = proj(shapely.from_wkb(x["geometry"]))
     if not CLIP.intersects(g) or not nm: continue
     c = g.centroid
+    if RG: STATIONS.append({"name": nm, "line": RG.get("station_line", "L1"), "x": round(c.x, 1), "y": round(c.y, 1)}); continue
     line = "L3" if nm in ("SEEPZ", "MIDC - Andheri", "Sahar Road", "Chhatrapati Shivaji Maharaj International Airport - T2") or (nm == "Marol Naka" and x["geometry"] and g.geom_type == "Point") \
         else "L7" if nm in ("Gundavali", "Airport Colony Station") else "L1"
     STATIONS.append({"name": nm.replace("Chakala - J.B. Nagar", "Chakala (J B Nagar)").replace("MIDC - Andheri", "MIDC Andheri").replace("Andheri L1", "Andheri")
@@ -207,6 +218,8 @@ def rings(g):
         out.append([[[round(a, 1), round(b, 1)] for a, b in p.exterior.coords[:-1]]] + [[[round(a, 1), round(b, 1)] for a, b in r.coords[:-1]] for r in p.interiors])
     return out
 scene = {
+    **({"floor_h": RG["floor_h"], "ground_h": RG["ground_h"]} if "ground_h" in RG else {}),
+    **({"bundle": RG["bundle"]} if "bundle" in RG else {}),
     "origin": [LNG0, LAT0], "k": [KX, KY], "bounds": [round(v, 1) for v in CLIP.bounds],
     "source": "Overture Maps 2026-10-21 (OpenStreetMap, Microsoft, Google footprints); heights from Copernicus GLO-30; options from the deck",
     "buildings": [{"p": [[round(a, 1), round(b, 1)] for a, b in b["g"].exterior.coords[:-1]], "h": b["H"], "c": b["cls"], **({"opt": b["opt"]} if b.get("opt") else {}),

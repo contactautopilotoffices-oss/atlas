@@ -15,6 +15,17 @@ trim-*.ps1
 *.mov
 *.MOV
 
+# F1 Skymark twin: the audit preview and the stills from Blender commit with the page
+!noida-skymark/**/*.png
+!noida-skymark/**/*.jpg
+*.blend1
+
+# Landlord page (/landlord/, a copy of the f1-skymark-landlord repo): its photos, logos and its two
+# short videos (hero reel and ARCIL CEO, about 9 MB) ship with the page, which plays them on iPhone too
+!landlord/**/*.jpg
+!landlord/**/*.png
+!landlord/**/*.mp4
+
 
 # OS / editor
 .DS_Store
@@ -41,3 +52,10 @@ media/indore/backdrop-*.webp
 .cms-dev-store.json
 media/_cms-dev/
 /docs-out/
+
+# Copernicus surface model tile, fetched by noida-skymark/reconstruction/fetch_context.py
+.dsm_*.tif
+
+# Facade textures painted at build time by scripts/world/textures.py
+noida-skymark/reconstruction/.tex/
+__pycache__/
