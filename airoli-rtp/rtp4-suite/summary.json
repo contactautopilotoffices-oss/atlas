@@ -12,8 +12,8 @@
    "12 SEATER CONFERENCE ROOM_01": 12,
    "INTERVIEW CABIN_02": 2,
    "INTERVIEW CABIN_01": 2,
-   "06 SEATER MEETING ROOM 01 (1)": 6,
-   "06 SEATER MEETING ROOM 01 (2)": 6
+   "06 SEATER MEETING ROOM 01 (2)": 6,
+   "06 SEATER MEETING ROOM 01 (1)": 6
   }
  },
  "Training room seats": {
@@ -59,7 +59,7 @@
    "work_seats_paired_with_desk": 18,
    "work_seats_without_desk_nearby": 0,
    "room_kinds": {
-    "core": 55,
+    "core": 54,
     "training": 7,
     "service": 3,
     "reception": 1,

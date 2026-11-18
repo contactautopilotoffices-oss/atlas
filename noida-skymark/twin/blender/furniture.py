@@ -98,7 +98,7 @@ class Furnisher:
             m.box(0.045, dp * 0.84 - 0.1, 0.045, T(e * (w / 2 - 0.04), 0, h - 0.025 - 0.045), fr, 0.006)
         m.box(w - 0.14, 0.04, 0.04, T(0, 0, h - 0.025 - 0.045), fr, 0.005)
         if scr is None: return m.build("desk")
-        m.box(w - 0.06, 0.024, 0.38, T(0, -(dp / 2 - 0.012), h), scr, 0.006)                   # desk screen at the back edge
+        m.box(w - 0.06, 0.024, 0.38, T(0, -(dp / 2 - 0.012 - self.f("screen_inset", 0.0)), h), scr, 0.006)                   # desk screen at the back edge
         Mm = T(0, -(dp / 2 - 0.19), h)
         m.box(0.2, 0.17, 0.008, Mm, "alu", 0.003); m.box(0.11, 0.02, 0.14, Mm @ T(0, -0.03, 0.008), "alu", 0.006)
         m.box(0.56, 0.012, 0.33, Mm @ T(0, 0.004, 0.195), self.f("monitor", "screen_glass"), 0.004); m.box(0.565, 0.014, 0.345, Mm @ T(0, -0.008 - 0.004, 0.19), "plastic_black", 0.006)
@@ -387,6 +387,11 @@ class Furnisher:
                     if not hit[0]: dropped.append([round(l["x"], 2), round(l["y"], 2), l["room"]]); continue
                 keep.append(l)
             self.c.shell.lights = keep; self.c.log("assumed_lights_dropped_no_ceiling", dropped)
+            keep, dup = [], 0                    # and no two lights on one spot (two rooms' assumed grids meeting at a shared edge)
+            for l in self.c.shell.lights:
+                if any(abs(l["x"] - q["x"]) < 0.6 and abs(l["y"] - q["y"]) < 0.6 and abs(l["z"] - q["z"]) < 0.05 for q in keep): dup += 1; continue
+                keep.append(l)
+            self.c.shell.lights = keep; self.c.log("duplicate_lights_dropped", dup)
         for l in self.c.shell.lights:
             typ = l["ceiling"]; k = l["kind"]; x, y, z = l["x"], l["y"], l["z"]; ceil = self.c.ceiling_z(l["room"])
             if typ == "open" or (typ == "baffle" and z < ceil - 0.02):
@@ -546,7 +551,7 @@ class Furnisher:
             m.box(ms, dep, ms, T(mx, 0, -ms / 2), mark.get("material", "logo_mark"), 0.003)
             for s_ in (-1, 1):
                 L_ = ms * 0.62; a_ = math.radians(62) * s_
-                m.box(ms * 0.11, 0.004, L_, T(mx + s_ * ms * 0.15, -dep / 2 - 0.002, -ms * 0.02) @ Matrix.Rotation(a_, 4, "Y"), mark.get("chevron", "logo"), 0.0)
+                m.box(ms * 0.11, 0.004, L_, T(mx + s_ * ms * 0.15, -dep / 2 - 0.005, -ms * 0.02) @ Matrix.Rotation(a_, 4, "Y"), mark.get("chevron", "logo"), 0.0)
         hl = lg.get("halo")
         if hl:                         # warm emissive plate 4 mm thick, set back behind the letters, a little larger than them
             pad = hl.get("pad", 0.05)

@@ -936,14 +936,14 @@ C109,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Cha
 C110,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5635240.0,5877810.7,1184,cafe,,36.029,32.811,1/1
 C111,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5636258.9,5877790.2,1194,cafe,,37.048,32.79,1/1
 C112,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5637789.9,5877790.2,1196,cafe,,38.579,32.79,1/1
-C113,Cafeteria seats,Circulation 7,cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5691052.4,5931879.3,2162,circulation,,91.841,86.879,1/1
-C114,Cafeteria seats,Circulation 7,cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5691627.4,5931879.3,2161,circulation,,92.416,86.879,1/1
-C115,Cafeteria seats,Circulation 7,cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5692252.4,5931879.3,2156,circulation,,93.041,86.879,1/1
-C116,Cafeteria seats,Circulation 7,cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5692827.4,5931879.3,2155,circulation,,93.616,86.879,1/1
-C117,Cafeteria seats,Circulation 7,cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5691052.4,5930717.8,2164,circulation,,91.841,85.718,1/1
-C118,Cafeteria seats,Circulation 7,cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5691627.4,5930717.8,2163,circulation,,92.416,85.718,1/1
-C119,Cafeteria seats,Circulation 7,cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5692252.4,5930717.8,2158,circulation,,93.041,85.718,1/1
-C120,Cafeteria seats,Circulation 7,cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5692827.4,5930717.8,2157,circulation,,93.616,85.718,1/1
+C113,Cafeteria seats,Circulation 10,cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5691052.4,5931879.3,2162,circulation,,91.841,86.879,1/1
+C114,Cafeteria seats,Circulation 10,cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5691627.4,5931879.3,2161,circulation,,92.416,86.879,1/1
+C115,Cafeteria seats,Circulation 10,cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5692252.4,5931879.3,2156,circulation,,93.041,86.879,1/1
+C116,Cafeteria seats,Circulation 10,cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5692827.4,5931879.3,2155,circulation,,93.616,86.879,1/1
+C117,Cafeteria seats,Circulation 10,cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5691052.4,5930717.8,2164,circulation,,91.841,85.718,1/1
+C118,Cafeteria seats,Circulation 10,cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5691627.4,5930717.8,2163,circulation,,92.416,85.718,1/1
+C119,Cafeteria seats,Circulation 10,cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5692252.4,5930717.8,2158,circulation,,93.041,85.718,1/1
+C120,Cafeteria seats,Circulation 10,cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5692827.4,5930717.8,2157,circulation,,93.616,85.718,1/1
 L1,"Lounge, collab and visitor seats",FIRE RESCUE BALCONY (3),visitor / lounge chair,,WS CHAIR,1500 X 750,5651343.2,5956821.7,1580,core,,52.132,111.822,1/1
 L2,"Lounge, collab and visitor seats",FIRE RESCUE BALCONY (3),visitor / lounge chair,,WS CHAIR,1500 X 750,5651193.2,5955564.4,1581,core,,51.982,110.564,1/1
 L3,"Lounge, collab and visitor seats",FIRE RESCUE BALCONY (3),visitor / lounge chair,,WS CHAIR,1500 X 750,5651943.2,5955564.4,1582,core,,52.732,110.564,1/1
@@ -968,8 +968,8 @@ L21,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sof
 L22,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5627114.4,5855864.9,1014,reception,,27.903,10.865,2/2
 L23,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5629508.5,5855864.9,1020,reception,,30.298,10.865,1/2
 L24,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5629508.5,5855864.9,1020,reception,,30.298,10.865,2/2
-L25,"Lounge, collab and visitor seats",Circulation 7,receptionist chair,,Ch,A$C52DD72D6,5634013.7,5943125.5,2251,circulation,,34.803,98.126,1/1
-L26,"Lounge, collab and visitor seats",Circulation 2,receptionist chair,,Ch,dsf,5738099.6,5939022.7,2232,circulation,,138.889,94.023,1/1
+L25,"Lounge, collab and visitor seats",Circulation 10,receptionist chair,,Ch,A$C52DD72D6,5634013.7,5943125.5,2251,circulation,,34.803,98.126,1/1
+L26,"Lounge, collab and visitor seats",Circulation 5,receptionist chair,,Ch,dsf,5738099.6,5939022.7,2232,circulation,,138.889,94.023,1/1
 K1,Cabin seats (desk chair and visitors),CABIN (2),cabin chair,,WS CHAIR,1500 X 750,5724231.6,5954027.7,2177,work,,125.021,109.028,1/1
 K2,Cabin seats (desk chair and visitors),CABIN (2),cabin chair,,WS CHAIR,SD,5726619.9,5953933.3,2183,work,,127.409,108.933,1/1
 K3,Cabin seats (desk chair and visitors),CABIN (2),cabin chair,,WS CHAIR,SD,5728038.2,5953333.3,2181,work,,128.827,108.333,1/1

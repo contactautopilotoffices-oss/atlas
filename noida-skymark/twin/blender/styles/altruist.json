@@ -216,7 +216,8 @@
    "training chair": "chair",
    "cabin chair": "chair",
    "work chair": "chair"
-  }
+  },
+  "screen_inset": 0.003
  },
  "logo": [
   {

@@ -17,7 +17,6 @@
    "PR-FULL HT",
    "WS-WALL-PRTN",
    "duct",
-   "ELE",
    "OUTER DIM",
    "OUTER DIM 1",
    "Column"
@@ -29,7 +28,6 @@
    "PR-FULL HT",
    "WS-WALL-PRTN",
    "duct",
-   "ELE",
    "OUTER DIM",
    "OUTER DIM 1",
    "Column"
@@ -116,8 +114,13 @@
    "0"
   ],
   "room_barriers_extra": [
-   "RAILING"
-  ]
+   "RAILING",
+   "ELE"
+  ],
+  "facade_lines_not_walls": [
+   "ELE"
+  ],
+  "facade_lines_why": "ELE is the facade elevation line drawn 0.36 m inside the curtain-wall glass: it closes rooms along the facade (partitions stop at it) but is not built as a wall"
  },
  "labels": {
   "ignore": "PASSAGE$|^E\\.?D\\.?$|^F\\.?D\\.?$|^S\\.?D\\.?$|^F\\.H\\.S$|^FIRE EXIT$|^U ?P$|^DN$|^C\\d+[A-C]?$|^\\d+$|WORKING SLAB|^CONSOLE$|^COUNTER$|FULL HEIGHT STORAGE|BENMERI COUNTER|FLOOR PLAN|CARPET AREA|CHARGEABLE|DETAILS FOR|^SW\\d|^RTP|LIFT CORE|^CORE \\d|^TOILET BLOCK$",

@@ -21,7 +21,7 @@ Source: `20261118_6TH FLOOR.dwg` (read-only; not copied into git). Floor 6.
 
 ## Mapping (category -> layers)
 
-- **walls**: `walls`, `WALL`, `PARTITION`, `PR-FULL HT`, `duct`, `ELE`, `OUTER DIM`, `Column`
+- **walls**: `walls`, `WALL`, `PARTITION`, `PR-FULL HT`, `duct`, `OUTER DIM`, `Column`
 - **glass**: `WINDOW`, `STRUCTURAL GLAZING`, `PR- GLASS`, `PR-LINE`
 - **doors**: `DOOR`, `DR-GLASS`
 - **columns**: `Column`, `Structural Column`, `column-hatch`
@@ -31,7 +31,7 @@ Source: `20261118_6TH FLOOR.dwg` (read-only; not copied into git). Floor 6.
 - **workstations / furniture**: `I-FURN`, `FURN-TOA`, `FURNITURE m`, `FURN`, `BREAKOUT`
 - **planters**: `plants`
 - **annotation**: `TEXT`, `Defpoints`, `HATCH`
-- **room boundary only** (closes rooms, not built as walls): `RAILING`
+- **room boundary only** (closes rooms, not built as walls): `RAILING`, `ELE`
 - **chairs, workstations, tables, doors, lighting, WC/MEP**: by block name (table below), whatever layer the block sits on.
 
 ## Layers (58)
@@ -58,7 +58,7 @@ Counts are entities after exploding blocks (nested entities count on their own l
 | `DOOR` | doors | 787 | 449 | Line 448, LwPolyline 172, INS 63, Circle 43, Arc 43, Ellipse 18 |
 | `DR-GLASS` | doors | 43 | 25 | INS 43 |
 | `duct` | walls | 506 | 253 | Line 502, Arc 4 |
-| `ELE` | walls | 140 | 72 | Line 83, Arc 53, Spline 4 |
+| `ELE` | lifts / core | 140 | 72 | Line 83, Arc 53, Spline 4 |
 | `Expansion Joint` | unmapped (not used) | 6 | 3 | Line 6 |
 | `FIXT` | WC / MEP fixtures | 1664 | 960 | Ellipse 1612, INS 52 |
 | `FURN` | workstations / furniture | 47 | 28 | Line 27, Arc 18, LwPolyline 2 |

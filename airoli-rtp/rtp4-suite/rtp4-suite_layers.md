@@ -21,7 +21,7 @@ Source: `20261118_4TH FLOO.dwg` (read-only; not copied into git). Floor 4.
 
 ## Mapping (category -> layers)
 
-- **walls**: `walls`, `WALL`, `WS-WALL-PRTN`, `duct`, `ELE`, `OUTER DIM`, `OUTER DIM 1`, `Column`
+- **walls**: `walls`, `WALL`, `WS-WALL-PRTN`, `duct`, `OUTER DIM`, `OUTER DIM 1`, `Column`
 - **glass**: `WINDOW`, `STRUCTURAL GLAZING`, `WS-DOOR-GLAZ`
 - **doors**: `DOOR`, `WS-DOOR-GLAZ`
 - **columns**: `Column`, `Structural Column`, `column-hatch`
@@ -29,7 +29,7 @@ Source: `20261118_4TH FLOO.dwg` (read-only; not copied into git). Floor 4.
 - **lifts / core**: `ELE`, `duct`
 - **workstations / furniture**: `WS-FURN`
 - **annotation**: `WS-ANNO-LABL`, `WS-ANNO-TEXT`, `TEXT`, `Defpoints`, `DIM`, `HATCH`
-- **room boundary only** (closes rooms, not built as walls): `RAILING`
+- **room boundary only** (closes rooms, not built as walls): `RAILING`, `ELE`
 - **chairs, workstations, tables, doors, lighting, WC/MEP**: by block name (table below), whatever layer the block sits on.
 
 ## Layers (52)
@@ -52,7 +52,7 @@ Counts are entities after exploding blocks (nested entities count on their own l
 | `DOOR` | doors | 578 | 292 | Line 489, INS 51, Ellipse 38 |
 | `Door No.` | unmapped (not used) | 0 | 0 |  |
 | `duct` | walls | 816 | 408 | Line 656, LwPolyline 148, Arc 12 |
-| `ELE` | walls | 276 | 138 | LwPolyline 132, Arc 60, Line 60, Spline 24 |
+| `ELE` | lifts / core | 276 | 138 | LwPolyline 132, Arc 60, Line 60, Spline 24 |
 | `Expansion Joint` | unmapped (not used) | 40 | 20 | LwPolyline 30, Line 10 |
 | `HAA` | unmapped (not used) | 0 | 0 |  |
 | `HACH1` | unmapped (not used) | 0 | 0 |  |

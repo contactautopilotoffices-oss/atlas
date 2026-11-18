@@ -33,18 +33,18 @@ M13,Meeting room seats,INTERVIEW CABIN_02,meeting chair,,A$Cba813c9e,A$Caf36b24f
 M14,Meeting room seats,INTERVIEW CABIN_02,meeting chair,,A$Cba813c9e,A$Caf36b24f,5702845.5,5717175.0,312,meeting,,29.846,92.175,1/1
 M15,Meeting room seats,INTERVIEW CABIN_01,meeting chair,,A$Cba813c9e,A$Caf36b24f,5701576.3,5716047.7,315,meeting,,28.576,91.048,1/1
 M16,Meeting room seats,INTERVIEW CABIN_01,meeting chair,,A$Cba813c9e,A$Caf36b24f,5702845.5,5716049.8,316,meeting,,29.846,91.05,1/1
-M17,Meeting room seats,06 SEATER MEETING ROOM 01 (1),meeting chair,,A$Cd2419d53,,5689187.1,5714873.3,340,meeting,,16.187,89.873,1/1
-M18,Meeting room seats,06 SEATER MEETING ROOM 01 (1),meeting chair,,A$Cd2419d53,,5689931.5,5714873.3,341,meeting,,16.931,89.873,1/1
-M19,Meeting room seats,06 SEATER MEETING ROOM 01 (1),meeting chair,,A$Cd2419d53,,5690675.8,5714873.3,344,meeting,,17.676,89.873,1/1
-M20,Meeting room seats,06 SEATER MEETING ROOM 01 (1),meeting chair,,A$Cd2419d53,,5689186.0,5713665.9,342,meeting,,16.186,88.666,1/1
-M21,Meeting room seats,06 SEATER MEETING ROOM 01 (1),meeting chair,,A$Cd2419d53,,5689930.4,5713665.9,343,meeting,,16.93,88.666,1/1
-M22,Meeting room seats,06 SEATER MEETING ROOM 01 (1),meeting chair,,A$Cd2419d53,,5690674.7,5713665.9,345,meeting,,17.675,88.666,1/1
-M23,Meeting room seats,06 SEATER MEETING ROOM 01 (2),meeting chair,,A$Cd2419d53,,5689187.1,5711995.1,347,meeting,"3'x2' workstation (block, chair nested) 0.95 m away",16.187,86.995,1/1
-M24,Meeting room seats,06 SEATER MEETING ROOM 01 (2),meeting chair,,A$Cd2419d53,,5689931.5,5711995.1,348,meeting,,16.931,86.995,1/1
-M25,Meeting room seats,06 SEATER MEETING ROOM 01 (2),meeting chair,,A$Cd2419d53,,5690675.8,5711995.1,351,meeting,,17.676,86.995,1/1
-M26,Meeting room seats,06 SEATER MEETING ROOM 01 (2),meeting chair,,A$Cd2419d53,,5689186.0,5710787.7,349,meeting,"3'x2' workstation (block, chair nested) 0.97 m away",16.186,85.788,1/1
-M27,Meeting room seats,06 SEATER MEETING ROOM 01 (2),meeting chair,,A$Cd2419d53,,5689930.4,5710787.7,350,meeting,,16.93,85.788,1/1
-M28,Meeting room seats,06 SEATER MEETING ROOM 01 (2),meeting chair,,A$Cd2419d53,,5690674.7,5710787.7,352,meeting,,17.675,85.788,1/1
+M17,Meeting room seats,06 SEATER MEETING ROOM 01 (2),meeting chair,,A$Cd2419d53,,5689187.1,5714873.3,340,meeting,,16.187,89.873,1/1
+M18,Meeting room seats,06 SEATER MEETING ROOM 01 (2),meeting chair,,A$Cd2419d53,,5689931.5,5714873.3,341,meeting,,16.931,89.873,1/1
+M19,Meeting room seats,06 SEATER MEETING ROOM 01 (2),meeting chair,,A$Cd2419d53,,5690675.8,5714873.3,344,meeting,,17.676,89.873,1/1
+M20,Meeting room seats,06 SEATER MEETING ROOM 01 (2),meeting chair,,A$Cd2419d53,,5689186.0,5713665.9,342,meeting,,16.186,88.666,1/1
+M21,Meeting room seats,06 SEATER MEETING ROOM 01 (2),meeting chair,,A$Cd2419d53,,5689930.4,5713665.9,343,meeting,,16.93,88.666,1/1
+M22,Meeting room seats,06 SEATER MEETING ROOM 01 (2),meeting chair,,A$Cd2419d53,,5690674.7,5713665.9,345,meeting,,17.675,88.666,1/1
+M23,Meeting room seats,06 SEATER MEETING ROOM 01 (1),meeting chair,,A$Cd2419d53,,5689187.1,5711995.1,347,meeting,"3'x2' workstation (block, chair nested) 0.95 m away",16.187,86.995,1/1
+M24,Meeting room seats,06 SEATER MEETING ROOM 01 (1),meeting chair,,A$Cd2419d53,,5689931.5,5711995.1,348,meeting,,16.931,86.995,1/1
+M25,Meeting room seats,06 SEATER MEETING ROOM 01 (1),meeting chair,,A$Cd2419d53,,5690675.8,5711995.1,351,meeting,,17.676,86.995,1/1
+M26,Meeting room seats,06 SEATER MEETING ROOM 01 (1),meeting chair,,A$Cd2419d53,,5689186.0,5710787.7,349,meeting,"3'x2' workstation (block, chair nested) 0.97 m away",16.186,85.788,1/1
+M27,Meeting room seats,06 SEATER MEETING ROOM 01 (1),meeting chair,,A$Cd2419d53,,5689930.4,5710787.7,350,meeting,,16.93,85.788,1/1
+M28,Meeting room seats,06 SEATER MEETING ROOM 01 (1),meeting chair,,A$Cd2419d53,,5690674.7,5710787.7,352,meeting,,17.675,85.788,1/1
 T1,Training room seats,TRAINING ROOM_05,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5683139.9,5728442.6,261,training,nested in desk block STHGSERTHESRTHSDRTH,10.14,103.443,1/1
 T2,Training room seats,TRAINING ROOM_05,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5683889.9,5728442.6,263,training,nested in desk block STHGSERTHESRTHSDRTH,10.89,103.443,1/1
 T3,Training room seats,TRAINING ROOM_05,training chair,"training desk (block, chair nested)",A$C136922d8,STHGSERTHESRTHSDRTH,5684639.9,5728442.6,265,training,nested in desk block STHGSERTHESRTHSDRTH,11.64,103.443,1/1

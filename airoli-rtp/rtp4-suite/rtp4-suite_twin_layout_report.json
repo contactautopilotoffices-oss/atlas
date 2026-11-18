@@ -1,10 +1,14 @@
 {
+ "glass": {
+  "glass_parallel_duplicates_dropped": 5,
+  "glass_inside_walls_dropped": 1
+ },
  "offer": {
   "area_m2": 875.2,
   "how": "egress_poly_m",
   "rooms": 33,
-  "walls": 9,
-  "glass": 33,
+  "walls": 16,
+  "glass": 27,
   "doors": 16,
   "seats": 212
  },
@@ -17,7 +21,7 @@
   "chairs_turned_to_desk_or_table": 49
  },
  "fit_to_walls": {
-  "desks_cut_back_from_walls": 50,
+  "desks_cut_back_from_walls": 45,
   "tables_cut_back_from_walls": 5,
   "plants_left_out": 0,
   "chairs_moved_clear": 29,

@@ -630,7 +630,7 @@ C109,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Cha
 C110,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5332029.3,5877810.7,258,cafe,,36.029,32.811,1/1
 C111,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-469-Level 1,4,5333048.2,5877790.2,268,cafe,,37.048,32.79,1/1
 C112,Cafeteria seats,CAFETERIA (1),cafe chair,,Cafeteria Chair 3 - Cafeteria Chair 3-468-Level 1,4,5334579.2,5877790.2,270,cafe,,38.579,32.79,1/1
-L1,"Lounge, collab and visitor seats",Shaft or duct 85 (unlabelled),visitor / lounge chair,,WS CHAIR,,5336814.9,5915187.8,828,core,,40.815,70.188,1/1
+L1,"Lounge, collab and visitor seats",Shaft or duct 82 (unlabelled),visitor / lounge chair,,WS CHAIR,,5336814.9,5915187.8,828,core,,40.815,70.188,1/1
 L2,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,receptionist chair,,Ch,A$C4C3625EB,5324187.0,5862801.8,48,reception,,28.187,17.802,1/1
 L3,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5321503.4,5859802.7,49,reception,,25.503,14.803,1/2
 L4,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5321503.4,5859802.7,49,reception,,25.503,14.803,2/2
@@ -650,17 +650,17 @@ L17,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sof
 L18,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5323903.7,5855864.9,62,reception,,27.904,10.865,2/2
 L19,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5326297.8,5855864.9,68,reception,,30.298,10.865,1/2
 L20,"Lounge, collab and visitor seats",RECEPTION & WAITING AREA,2-seat sofa,,Sofa Two Seater - Sofa Two Seater_1-102-Level 1,,5326297.8,5855864.9,68,reception,,30.298,10.865,2/2
-L21,"Lounge, collab and visitor seats",Circulation 5,visitor / lounge chair,,WS CHAIR,,5308080.2,5930350.3,833,circulation,,12.08,85.35,1/1
-L22,"Lounge, collab and visitor seats",Circulation 5,visitor / lounge chair,,WS CHAIR,,5308830.2,5930350.3,834,circulation,,12.83,85.35,1/1
-L23,"Lounge, collab and visitor seats",Circulation 5,visitor / lounge chair,,WS CHAIR,,5309630.2,5930350.3,831,circulation,,13.63,85.35,1/1
-L24,"Lounge, collab and visitor seats",Circulation 5,visitor / lounge chair,,WS CHAIR,,5310380.2,5930350.3,830,circulation,,14.38,85.35,1/1
-L25,"Lounge, collab and visitor seats",Circulation 5,visitor / lounge chair,,WS CHAIR,,5312380.2,5930350.3,836,circulation,,16.38,85.35,1/1
-L26,"Lounge, collab and visitor seats",Circulation 5,visitor / lounge chair,,WS CHAIR,,5313130.2,5930350.3,837,circulation,,17.13,85.35,1/1
-L27,"Lounge, collab and visitor seats",Circulation 5,visitor / lounge chair,,WS CHAIR,,5308230.2,5929043.0,832,circulation,,12.23,84.043,1/1
-L28,"Lounge, collab and visitor seats",Circulation 5,visitor / lounge chair,,WS CHAIR,,5310230.2,5929043.0,829,circulation,,14.23,84.043,1/1
-L29,"Lounge, collab and visitor seats",Circulation 5,visitor / lounge chair,,WS CHAIR,,5312530.2,5929043.0,835,circulation,,16.53,84.043,1/1
-L30,"Lounge, collab and visitor seats",Circulation 3,visitor / lounge chair,,WS CHAIR,,5337564.9,5915187.8,827,circulation,,41.565,70.188,1/1
-L31,"Lounge, collab and visitor seats",Circulation 3,visitor / lounge chair,,WS CHAIR,,5337414.9,5913880.5,826,circulation,,41.415,68.88,1/1
+L21,"Lounge, collab and visitor seats",Circulation 9,visitor / lounge chair,,WS CHAIR,,5308080.2,5930350.3,833,circulation,,12.08,85.35,1/1
+L22,"Lounge, collab and visitor seats",Circulation 9,visitor / lounge chair,,WS CHAIR,,5308830.2,5930350.3,834,circulation,,12.83,85.35,1/1
+L23,"Lounge, collab and visitor seats",Circulation 9,visitor / lounge chair,,WS CHAIR,,5309630.2,5930350.3,831,circulation,,13.63,85.35,1/1
+L24,"Lounge, collab and visitor seats",Circulation 9,visitor / lounge chair,,WS CHAIR,,5310380.2,5930350.3,830,circulation,,14.38,85.35,1/1
+L25,"Lounge, collab and visitor seats",Circulation 9,visitor / lounge chair,,WS CHAIR,,5312380.2,5930350.3,836,circulation,,16.38,85.35,1/1
+L26,"Lounge, collab and visitor seats",Circulation 9,visitor / lounge chair,,WS CHAIR,,5313130.2,5930350.3,837,circulation,,17.13,85.35,1/1
+L27,"Lounge, collab and visitor seats",Circulation 9,visitor / lounge chair,,WS CHAIR,,5308230.2,5929043.0,832,circulation,,12.23,84.043,1/1
+L28,"Lounge, collab and visitor seats",Circulation 9,visitor / lounge chair,,WS CHAIR,,5310230.2,5929043.0,829,circulation,,14.23,84.043,1/1
+L29,"Lounge, collab and visitor seats",Circulation 9,visitor / lounge chair,,WS CHAIR,,5312530.2,5929043.0,835,circulation,,16.53,84.043,1/1
+L30,"Lounge, collab and visitor seats",Circulation 7,visitor / lounge chair,,WS CHAIR,,5337564.9,5915187.8,827,circulation,,41.565,70.188,1/1
+L31,"Lounge, collab and visitor seats",Circulation 7,visitor / lounge chair,,WS CHAIR,,5337414.9,5913880.5,826,circulation,,41.415,68.88,1/1
 K1,Cabin seats (desk chair and visitors),CABIN (1),cabin chair,,WS CHAIR,,5310959.5,5953670.6,951,work,,14.959,108.671,1/1
 K2,Cabin seats (desk chair and visitors),CABIN (1),cabin chair,,WS CHAIR,,5309551.9,5953650.8,952,work,,13.552,108.651,1/1
 K3,Cabin seats (desk chair and visitors),CABIN (1),cabin chair,,WS CHAIR,,5310513.8,5951633.0,950,work,,14.514,106.633,1/1

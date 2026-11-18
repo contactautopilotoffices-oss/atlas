@@ -41,13 +41,13 @@
    },
    "Cafeteria": {
     "CAFETERIA (1)": 112,
-    "Circulation 7": 8
+    "Circulation 10": 8
    },
    "Reception, lounge, visitor": {
     "RECEPTION & WAITING AREA": 19,
     "FIRE RESCUE BALCONY (3)": 5,
-    "Circulation 7": 1,
-    "Circulation 2": 1
+    "Circulation 10": 1,
+    "Circulation 5": 1
    },
    "Cabin (desk chair + visitors)": {
     "CABIN (2)": 6,
@@ -245,10 +245,10 @@
  },
  "areas": {
   "by_kind_m2": {
-   "circulation": 2820.6,
-   "work": 1878.1,
-   "core": 363.6,
-   "service": 249.8,
+   "circulation": 2849.8,
+   "work": 1878.2,
+   "core": 359.4,
+   "service": 215.9,
    "cafe": 215.5,
    "training": 97.8,
    "wc": 96.6,
@@ -258,16 +258,16 @@
    "reception": 41.6,
    "lounge": 8.9
   },
-  "measured_carpet_m2": 5631.0,
-  "measured_carpet_sqft": 60611,
-  "core_in_offer_m2": 363.6,
+  "measured_carpet_m2": 5626.4,
+  "measured_carpet_sqft": 60562,
+  "core_in_offer_m2": 359.4,
   "offer_gross_m2": 6318.3,
   "offer_gross_sqft": 68010,
   "sheet_carpet_sqft": null,
   "sheet_chargeable_sqft": null,
   "diff_vs_sheet_carpet_pct": null,
-  "carpet_incl_partitions_m2": 5954.7,
-  "carpet_incl_partitions_sqft": 64096,
+  "carpet_incl_partitions_m2": 5958.9,
+  "carpet_incl_partitions_sqft": 64141,
   "incl_partitions_vs_sheet_carpet_pct": null,
   "gross_vs_sheet_carpet_pct": null,
   "gross_vs_sheet_chargeable_pct": null,
@@ -1063,55 +1063,79 @@
   "labels_checked": 19,
   "labels_at_least_as_wide": 18,
   "scan": {
-   "points": 1186,
+   "points": 1179,
    "under_1_2_m": [
     {
      "at": [
-      114.1,
-      107.5
+      11.2,
+      64.1
      ],
-     "width_m": 0.64,
-     "in": "Circulation 2"
+     "width_m": 1.15,
+     "in": "Circulation 3"
     },
     {
      "at": [
-      120.9,
-      110.6
+      11.2,
+      63.1
      ],
-     "width_m": 1.14,
-     "in": "Circulation 2"
+     "width_m": 1.06,
+     "in": "Circulation 3"
     },
     {
      "at": [
-      137.4,
-      101.9
+      11.3,
+      38.8
      ],
-     "width_m": 0.85,
-     "in": "Circulation 2"
+     "width_m": 1.03,
+     "in": "Circulation 4"
+    },
+    {
+     "at": [
+      11.3,
+      37.8
+     ],
+     "width_m": 1.11,
+     "in": "Circulation 4"
+    },
+    {
+     "at": [
+      11.3,
+      36.8
+     ],
+     "width_m": 1.1,
+     "in": "Circulation 4"
+    },
+    {
+     "at": [
+      11.3,
+      35.8
+     ],
+     "width_m": 1.08,
+     "in": "Circulation 4"
+    },
+    {
+     "at": [
+      137.5,
+      102.0
+     ],
+     "width_m": 1.06,
+     "in": "Circulation 5"
     },
     {
      "at": [
       120.5,
       81.8
      ],
-     "width_m": 0.8,
-     "in": "Circulation 6"
-    },
-    {
-     "at": [
-      11.6,
-      79.4
-     ],
-     "width_m": 1.08,
-     "in": "Circulation 7"
+     "width_m": 1.19,
+     "in": "Circulation 9"
     },
     {
      "at": [
       11.6,
       78.4
      ],
-     "width_m": 0.9,
-     "in": "Circulation 7"
+     "width_m": 1.03,
+     "in": "Circulation 10"
     },
     {
      "at": [
@@ -1119,7 +1143,7 @@
       77.4
      ],
      "width_m": 1.09,
-     "in": "Circulation 7"
+     "in": "Circulation 10"
     },
     {
      "at": [
@@ -1127,7 +1151,7 @@
       76.4
      ],
      "width_m": 1.17,
-     "in": "Circulation 7"
+     "in": "Circulation 10"
     },
     {
      "at": [
@@ -1135,15 +1159,15 @@
       74.4
      ],
      "width_m": 0.86,
-     "in": "Circulation 7"
+     "in": "Circulation 10"
     },
     {
      "at": [
-      11.6,
-      83.0
+      11.7,
+      83.2
      ],
-     "width_m": 0.84,
-     "in": "Circulation 7"
+     "width_m": 1.17,
+     "in": "Circulation 10"
     },
     {
      "at": [
@@ -1151,31 +1175,39 @@
       105.6
      ],
      "width_m": 1.1,
-     "in": "Circulation 7"
+     "in": "Circulation 10"
+    },
+    {
+     "at": [
+      36.5,
+      85.6
+     ],
+     "width_m": 1.2,
+     "in": "Circulation 10"
     },
     {
      "at": [
       42.0,
       79.7
      ],
-     "width_m": 1.17,
-     "in": "Circulation 7"
+     "width_m": 1.19,
+     "in": "Circulation 10"
     },
     {
      "at": [
       42.1,
-      56.1
+      56.0
      ],
-     "width_m": 0.85,
-     "in": "Circulation 7"
+     "width_m": 1.1,
+     "in": "Circulation 10"
     },
     {
      "at": [
       42.1,
-      55.1
+      55.0
      ],
-     "width_m": 0.85,
-     "in": "Circulation 7"
+     "width_m": 1.1,
+     "in": "Circulation 10"
     },
     {
      "at": [
@@ -1183,7 +1215,7 @@
       110.7
      ],
      "width_m": 0.71,
-     "in": "Circulation 10"
+     "in": "Circulation 13"
     },
     {
      "at": [
@@ -1191,7 +1223,7 @@
       110.5
      ],
      "width_m": 1.15,
-     "in": "Circulation 11"
+     "in": "Circulation 14"
     },
     {
      "at": [
@@ -1199,7 +1231,7 @@
       109.0
      ],
      "width_m": 0.76,
-     "in": "Circulation 12"
+     "in": "Circulation 15"
     },
     {
      "at": [
@@ -1207,7 +1239,7 @@
       109.0
      ],
      "width_m": 1.11,
-     "in": "Circulation 12"
+     "in": "Circulation 15"
     },
     {
      "at": [
@@ -1215,15 +1247,15 @@
       83.5
      ],
      "width_m": 1.08,
-     "in": "Circulation 13"
+     "in": "Circulation 16"
     },
     {
      "at": [
       50.3,
       112.6
      ],
-     "width_m": 0.86,
-     "in": "Circulation 21"
+     "width_m": 1.11,
+     "in": "Circulation 24"
     },
     {
      "at": [
@@ -1231,7 +1263,7 @@
       21.2
      ],
      "width_m": 1.17,
-     "in": "Circulation 23"
+     "in": "Circulation 26"
     },
     {
      "at": [
@@ -1239,7 +1271,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 35"
+     "in": "Circulation 38"
     },
     {
      "at": [
@@ -1247,7 +1279,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 35"
+     "in": "Circulation 38"
     },
     {
      "at": [
@@ -1255,7 +1287,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 35"
+     "in": "Circulation 38"
     },
     {
      "at": [
@@ -1263,7 +1295,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 35"
+     "in": "Circulation 38"
     },
     {
      "at": [
@@ -1271,7 +1303,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 35"
+     "in": "Circulation 38"
     },
     {
      "at": [
@@ -1279,7 +1311,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 35"
+     "in": "Circulation 38"
     },
     {
      "at": [
@@ -1287,7 +1319,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 35"
+     "in": "Circulation 38"
     },
     {
      "at": [
@@ -1295,7 +1327,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 35"
+     "in": "Circulation 38"
     },
     {
      "at": [
@@ -1303,7 +1335,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 35"
+     "in": "Circulation 38"
     },
     {
      "at": [
@@ -1311,34 +1343,10 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 35"
-    },
-    {
-     "at": [
-      42.0,
-      46.8
-     ],
-     "width_m": 1.0,
-     "in": "Circulation 40"
-    },
-    {
-     "at": [
-      42.1,
-      45.8
-     ],
-     "width_m": 0.85,
-     "in": "Circulation 40"
-    },
-    {
-     "at": [
-      89.3,
-      81.3
-     ],
-     "width_m": 1.06,
-     "in": "Circulation 41"
+     "in": "Circulation 38"
     }
    ],
-   "n_under_1_2_m": 34
+   "n_under_1_2_m": 35
   }
  },
  "daylight": {
@@ -1401,6 +1409,8 @@
   "Walkway: '1200 MM WIDE PASSAGE' at (18, 40) measures 0.98 m between chairs at their desks (median of 5 points; 2.06 m desk to desk).",
   "Capacity: 'CALL CENTER 60 SEAT' says 60; 0 chairs are drawn in it (the room outline is an open-plan zone, so nearby chairs may fall outside it).",
   "Capacity: 'MEETING ROOM 04 PAX (unlabelled)' says 4; 3 chairs are drawn in it.",
+  "Label not placed in a room: 'SPACE FOR OUTDOOR UNIT' at (12, 42) - closed-room label in an open area: needs a closure.",
+  "Label not placed in a room: 'SPACE FOR OUTDOOR UNIT' at (12, 60) - closed-room label in an open area: needs a closure.",
   "Label not placed in a room: 'REPRO' at (27, 56) - closed-room label in an open area: needs a closure.",
   "Label not placed in a room: 'CABIN' at (52, 111).",
   "Label not placed in a room: 'ELE & UPS' at (79, 110) - closed-room label in an open area: needs a closure.",
@@ -1433,6 +1443,6 @@
   "Walkway width = the clear gap between desks, tables and partitions with the chairs where they are drawn (lounge seats ignored), measured at the CAD's own passage labels.",
   "Daylight: distance from each work seat to the nearest facade glass line; the facade glass type, sill height and shading are not in the drawing.",
   "Seats are counted from chair blocks, one per chair (two per two-seat sofa). A work seat is a chair at a desk; the room a chair stands in decides meeting, training, cafeteria and lounge.",
-  "466 short openings without a door block (toilet entries, lift doorways, bays) were closed automatically where two wall ends face each other 0.55 to 1.15 m apart, for room outlines only; walking routes may pass through them."
+  "460 short openings without a door block (toilet entries, lift doorways, bays) were closed automatically where two wall ends face each other 0.55 to 1.15 m apart, for room outlines only; walking routes may pass through them."
  ]
 }

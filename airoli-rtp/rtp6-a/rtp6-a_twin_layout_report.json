@@ -1,14 +1,14 @@
 {
  "glass": {
-  "glass_parallel_duplicates_dropped": 21,
-  "glass_inside_walls_dropped": 37
+  "glass_parallel_duplicates_dropped": 22,
+  "glass_inside_walls_dropped": 14
  },
  "offer": {
-  "area_m2": 3198.5,
+  "area_m2": 3197.8,
   "how": "offer outline",
-  "rooms": 119,
-  "walls": 31,
-  "glass": 177,
+  "rooms": 117,
+  "walls": 40,
+  "glass": 199,
   "doors": 46,
   "seats": 661
  },
@@ -21,8 +21,8 @@
   "chairs_turned_to_desk_or_table": 632
  },
  "fit_to_walls": {
-  "desks_cut_back_from_walls": 11,
-  "tables_cut_back_from_walls": 24,
+  "desks_cut_back_from_walls": 9,
+  "tables_cut_back_from_walls": 23,
   "fixtures_given_clearance": 19,
   "fixtures_dropped_inside_walls": 12,
   "fixtures_moved_off_walls": 7,
@@ -30,7 +30,7 @@
   "chairs_moved_clear": 120,
   "chairs_still_touching": 3,
   "tables_trimmed_for_a_chair": 3,
-  "chairs_spread_to_0_6m": 259
+  "chairs_spread_to_0_6m": 217
  },
  "frame": {
   "rotation_deg": -91.004,

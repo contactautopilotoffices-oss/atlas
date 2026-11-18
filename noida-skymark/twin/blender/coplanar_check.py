@@ -8,7 +8,9 @@ Every face of every mesh object (chairs and plants skipped: separate catalogue m
 parallel (either facing; the web materials are double-sided) and less than `--gap` apart are a hit when their
 outlines, projected on that plane, overlap by more than 1 cm2 (faces that only touch along an edge are fine).
 Faces of one object that lie in one plane and touch are fine (that is one surface); faces of one object that
-overlap each other are reported too.
+overlap each other are reported too. Only SAME-FACING pairs fail (both seen from one side: that is z-fighting, the
+ARCIL flicker); opposite-facing coincident faces are two parts touching (a desk foot on the floor, a panel flush
+with the ceiling), hidden inside the contact, and are listed as information.
 
 Writes <out>/<t>_coplanar.json: {ok, hits (first 200), n_hits, faces_checked, by_object_pair}.
 """
@@ -19,10 +21,11 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import twin_lib as TL
 
 ap = argparse.ArgumentParser(); ap.add_argument('--tenant', required=True); ap.add_argument('--out', required=True)
-ap.add_argument('--min-area', type=float, default=0.0005); ap.add_argument('--skip-layers', default='SEAT,PLANT,CONTEXT'); ap.add_argument('--gap', type=float, default=0.002)
+ap.add_argument('--min-area', type=float, default=0.0005); ap.add_argument('--skip-layers', default='SEAT,PLANT,CONTEXT'); ap.add_argument('--floor-z', type=float, default=0.0); ap.add_argument('--ceiling-z', type=float, default=None); ap.add_argument('--gap', type=float, default=0.002)
 A = ap.parse_args(TL.script_args())
 dg = bpy.context.evaluated_depsgraph_get()
 faces = []          # (obj_name, normal (unit, canonical sign), offset, triangle verts world)
+hidden = [0]
 for inst in dg.object_instances:
     ob = inst.object
     if ob.type != 'MESH' or ob.get('twin_layer') in A.skip_layers.split(',') or ob.name.startswith('tmp'): continue
@@ -34,11 +37,14 @@ for inst in dg.object_instances:
         if ar < A.min_area: continue
         n = n.normalized()
         s = 1 if (n.z > 1e-6 or (abs(n.z) <= 1e-6 and (n.y > 1e-6 or (abs(n.y) <= 1e-6 and n.x > 0)))) else -1
+        zc = sum(p.z for p in vs) / 3; up = n.z
+        if abs(up) > 0.999 and ((up < 0 and zc <= A.floor_z + 0.001) or (A.ceiling_z is not None and up > 0 and zc >= A.ceiling_z - 0.001)):
+            hidden[0] += 1; continue           # a face resting on the floor (facing down) or above the ceiling plane (facing up): never seen
         n = n * s; off = n.dot(vs[0])
-        faces.append((name, (n.x, n.y, n.z), off, vs))
+        faces.append((name, (n.x, n.y, n.z), off, vs, s))
 print('faces checked', len(faces), flush=True)
-G = collections.defaultdict(lambda: collections.defaultdict(list))     # normal (0.5 deg bins) -> (object, plane offset to 0.1 mm) -> triangles
-for i, (nm, n, off, vs) in enumerate(faces): G[(round(n[0] / 0.0087), round(n[1] / 0.0087), round(n[2] / 0.0087))][(nm, round(off, 4))].append(i)
+G = collections.defaultdict(lambda: collections.defaultdict(list))     # normal (0.5 deg bins) -> (object, plane offset to 0.1 mm, facing) -> triangles
+for i, (nm, n, off, vs, sg) in enumerate(faces): G[(round(n[0] / 0.0087), round(n[1] / 0.0087), round(n[2] / 0.0087))][(nm, round(off, 4), sg)].append(i)
 def proj(vs, n):
     n = Vector(n); u = n.orthogonal().normalized(); v = n.cross(u)
     P = [(p.dot(u), p.dot(v)) for p in vs]
@@ -58,7 +64,7 @@ def clip_area(P, Q):
                 t = sc / (sc - sd); out.append((c[0] + t * (d[0] - c[0]), c[1] + t * (d[1] - c[1])))
     if len(out) < 3: return 0.0
     return abs(sum(out[i][0] * out[(i + 1) % len(out)][1] - out[(i + 1) % len(out)][0] * out[i][1] for i in range(len(out)))) / 2
-hits = []; pairs = collections.Counter(); CELL = 0.5; layer_pairs = collections.Counter(); samples = collections.defaultdict(list)
+hits = []; pairs = collections.Counter(); CELL = 0.5; layer_pairs = collections.Counter(); samples = collections.defaultdict(list); contacts = collections.Counter()
 for gk, clusters in G.items():
     if len(clusters) < 2: continue
     n0 = faces[next(iter(clusters.values()))[0]][1]
@@ -72,8 +78,9 @@ for gk, clusters in G.items():
         ka = keys[a_]
         for b_ in range(a_ + 1, len(keys)):
             kb = keys[b_]
-            if kb[1] - ka[1] >= A.gap: break
+            if kb[1] - ka[1] >= A.gap - 1e-5: break      # exactly 2 mm (the T-grid's designed step) passes
             if ka[0] == kb[0] and abs(kb[1] - ka[1]) < 1e-5: continue
+            same = ka[2] == kb[2]      # same facing: both faces seen from one side = z-fighting. Opposite facing = two parts touching (contact)
             ba, bb = BB[ka], BB[kb]
             if ba[2] <= bb[0] or bb[2] <= ba[0] or ba[3] <= bb[1] or bb[3] <= ba[1]: continue
             grid = collections.defaultdict(list)
@@ -93,6 +100,8 @@ for gk, clusters in G.items():
                                 found += ov
                                 if where is None: where = faces[i][3]
                 if found > 1e-3: break
+            if found > 1e-4 and not same:
+                contacts[('/'.join(sorted(x.split('_')[1] if x.count('_') >= 2 else x for x in (ka[0], kb[0]))))] += 1; continue
             if found > 1e-4:
                 pairs[(ka[0].split('.')[0], kb[0].split('.')[0])] += 1
                 lp = '/'.join(sorted(x.split('_')[1] if x.count('_') >= 2 else x for x in (ka[0], kb[0]))); layer_pairs[lp] += 1
@@ -101,7 +110,8 @@ for gk, clusters in G.items():
                                                  'at': [round(sum(p.x for p in where) / 3, 2), round(sum(p.y for p in where) / 3, 2), round(sum(p.z for p in where) / 3, 3)]})
 n_hits = sum(pairs.values())
 rep = {'ok': n_hits == 0, 'n_hits': n_hits, 'faces_checked': len(faces), 'gap_m': A.gap, 'min_area_m2': A.min_area,
-       'by_layer_pair': dict(layer_pairs.most_common()), 'samples_by_layer_pair': samples,
+       'hidden_faces_skipped': hidden[0], 'hidden_rule': 'faces facing down at the finished floor, and faces facing up at or above the ceiling plane, are never seen (they rest on the floor or sit above the ceiling) and are not checked',
+       'by_layer_pair': dict(layer_pairs.most_common()), 'contacts_opposite_facing_info': dict(contacts.most_common()), 'samples_by_layer_pair': samples,
        'by_object_pair': [{'a': a_, 'b': b_, 'n': v} for (a_, b_), v in pairs.most_common(60)], 'hits': hits,
        'method': __doc__.split('\n\n')[1].replace('\n', ' ')}
 json.dump(rep, open(os.path.join(A.out, f'{A.tenant}_coplanar.json'), 'w'), indent=1)

@@ -18,8 +18,8 @@
    },
    "Meeting": {
     "12 SEATER CONFERENCE ROOM_01": 12,
-    "06 SEATER MEETING ROOM 01 (1)": 6,
     "06 SEATER MEETING ROOM 01 (2)": 6,
+    "06 SEATER MEETING ROOM 01 (1)": 6,
     "INTERVIEW CABIN_02": 2,
     "INTERVIEW CABIN_01": 2
    },
@@ -41,7 +41,7 @@
  "areas": {
   "by_kind_m2": {
    "training": 246.9,
-   "circulation": 105.8,
+   "circulation": 105.9,
    "service": 66.7,
    "meeting": 40.1,
    "other": 37.5,
@@ -49,8 +49,8 @@
    "work": 29.9,
    "cabin": 11.4
   },
-  "measured_carpet_m2": 570.6,
-  "measured_carpet_sqft": 6142,
+  "measured_carpet_m2": 570.7,
+  "measured_carpet_sqft": 6143,
   "core_in_offer_m2": 0,
   "offer_gross_m2": 600.1,
   "offer_gross_sqft": 6460,
@@ -444,8 +444,8 @@
     "12 SEATER CONFERENCE ROOM_01": 12,
     "INTERVIEW CABIN_02": 2,
     "INTERVIEW CABIN_01": 2,
-    "06 SEATER MEETING ROOM 01 (1)": 6,
     "06 SEATER MEETING ROOM 01 (2)": 6,
+    "06 SEATER MEETING ROOM 01 (1)": 6,
     "TRAINING ROOM_05": 19,
     "TRAINING ROOM_02": 22,
     "TRAINING ROOM_01": 22,
@@ -660,7 +660,7 @@
   "method": "distance from each work seat to the nearest facade glass line on the plate edge; facade direction = outward normal of the plate edge there, turned to true bearings by the north fit"
  },
  "flags": [
-  "Area: the rooms measure 6,142 sq ft of free floor (-7.0 %) and 6,460 sq ft with the inner partitions (-2.2 %) against the sheet's 6,603 sq ft carpet: within 3 % only when the partitions are counted. The gross area inside the offer (6,460 sq ft, facade line to facade line) is -2.2 % from it. The sheet's chargeable area is exactly 1.500 x its carpet area, so the sheet's carpet figure looks like chargeable / 1.5 (a 50 % loading), not a measured area.",
+  "Area: the rooms measure 6,143 sq ft of free floor (-7.0 %) and 6,460 sq ft with the inner partitions (-2.2 %) against the sheet's 6,603 sq ft carpet: within 3 % only when the partitions are counted. The gross area inside the offer (6,460 sq ft, facade line to facade line) is -2.2 % from it. The sheet's chargeable area is exactly 1.500 x its carpet area, so the sheet's carpet figure looks like chargeable / 1.5 (a 50 % loading), not a measured area.",
   "Exits: 212 of 212 seats reach only one exit stair (S4) on the drawn walls and doors inside the walk area (the suite has no stair of its own: walking routes use the suite plus the common MAIN LOBBY in front of lift core B and its stair (to x 41.5, y 76); the other tenants' units are not walked through). A second exit route is not drawn.",
   "Label not placed in a room: 'store room' at (26, 105) - closed-room label in an open area: needs a closure."
  ],
@@ -677,6 +677,6 @@
   "Walkway width = the clear gap between desks, tables and partitions with the chairs where they are drawn (lounge seats ignored), measured at the CAD's own passage labels.",
   "Daylight: distance from each work seat to the nearest facade glass line; the facade glass type, sill height and shading are not in the drawing.",
   "Seats are counted from chair blocks, one per chair (two per two-seat sofa). A work seat is a chair at a desk; the room a chair stands in decides meeting, training, cafeteria and lounge.",
-  "548 short openings without a door block (toilet entries, lift doorways, bays) were closed automatically where two wall ends face each other 0.55 to 1.15 m apart, for room outlines only; walking routes may pass through them."
+  "544 short openings without a door block (toilet entries, lift doorways, bays) were closed automatically where two wall ends face each other 0.55 to 1.15 m apart, for room outlines only; walking routes may pass through them."
  ]
 }

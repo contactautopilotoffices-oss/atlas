@@ -435,6 +435,13 @@ def export(tenant, L, S, out, A):
            "other_meshes": {"environment": "RoomEnvironment through PMREMGenerator, scene.environmentIntensity = 0.6, no punctual lights; emissive materials as exported"},
            "glass": {"facade_glass": "replace with the viewer's tuned transparent glass", "partition_glass": "clear partition", "partition_glass_frost": "frosted band"},
            "cameras": f"{tenant}_cameras.json", "collision_node": colname, "placement_ok": bool(rep.get("ok"))}
+    if L.get("frame"):          # a layout already in a shared site frame (RTP: rtp_local): say so, and give the plan's site fit
+        fr = L["frame"]; st = L.get("storeys", {})
+        man["frame"] = (f"{fr.get('name', 'site')} frame, metres, glTF Y up: three (x, y, z) = (x east, height above this floor's finished floor level, -north). "
+                        f"Already north up and placed: no turn, no shift. Put the model at y = {st.get('ffl_m')} m (finished floor level above ground).")
+        man["site_fit"] = L.get("site_fit"); man["cad_m_to_site"] = fr.get("cad_m_to_rtp_local"); man["frame_about"] = fr
+        man["ffl_m"] = st.get("ffl_m"); man["floor_to_floor_m"] = st.get("floor_to_floor"); man["level"] = st.get("level")
+        man["placement"] = {k: rep.get("summary", {}).get(k) for k in ("overlaps", "floating_or_sunk", "narrow_routes")}
     json.dump(man, open(os.path.join(d, f"{tenant}_viewer.json"), "w"), indent=1)
     print(f"export: {res} ({time.time() - t0:.0f} s)", flush=True)
     publish(tenant, out, d)

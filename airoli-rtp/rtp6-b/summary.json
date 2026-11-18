@@ -37,7 +37,7 @@
   "total": 120,
   "rooms": {
    "CAFETERIA (1)": 112,
-   "Circulation 7": 8
+   "Circulation 10": 8
   }
  },
  "Lounge, collab and visitor seats": {
@@ -45,8 +45,8 @@
   "rooms": {
    "FIRE RESCUE BALCONY (3)": 5,
    "RECEPTION & WAITING AREA": 19,
-   "Circulation 7": 1,
-   "Circulation 2": 1
+   "Circulation 10": 1,
+   "Circulation 5": 1
   }
  },
  "Cabin seats (desk chair and visitors)": {
@@ -85,7 +85,7 @@
    "room_kinds": {
     "service": 21,
     "work": 15,
-    "core": 110,
+    "core": 108,
     "reception": 1,
     "wc": 10,
     "meeting": 6,
@@ -106,6 +106,8 @@
    }
   },
   "unplaced_room_labels": [
+   "SPACE FOR OUTDOOR UNIT",
+   "SPACE FOR OUTDOOR UNIT",
    "REPRO",
    "CABIN",
    "ELE & UPS",

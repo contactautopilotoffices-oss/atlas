@@ -6,10 +6,10 @@ Image: `rtp6-b_G0.png` (true north up). Numbers: `rtp6-b_G0.json`.
 ## Headline
 
 - **723 work seats, 985 seats in all.** Work (desk + chair) 723, Meeting 51, Training 51, Cafeteria 120, Reception, lounge, visitor 26, Cabin (desk chair + visitors) 14.
-- **Area:** measured carpet 5,631 m2 (60,611 sq ft) of free floor, 64,096 sq ft with the inner partitions; the sheet states no area for this plan.
+- **Area:** measured carpet 5,626 m2 (60,562 sq ft) of free floor, 64,141 sq ft with the inner partitions; the sheet states no area for this plan.
 - **Exits:** 9 exit stairs reached; 873 of 985 seats have two. Nearest exit: median 17 m, worst 34 m.
 - **Daylight:** 23 % of work seats within 6 m of a window.
-- **Flags:** 35 differences or open points (below).
+- **Flags:** 37 differences or open points (below).
 
 ## Seats
 
@@ -18,8 +18,8 @@ Image: `rtp6-b_G0.png` (true north up). Numbers: `rtp6-b_G0.json`.
 | Work (desk + chair) | 723 | Open workstations 1 182, Open workstations 9 177, Open workstations 5 128, Open workstations 6 86, Open workstations 2 72, Open workstations 8 30, Open workstations 7 17, Open workstations 3 16, Open workstations 4 15 |
 | Meeting | 51 | MEETING ROOM (2) 17, CABIN (2) 8, STORAGE (3) 7, CABIN (4) 5, MEETING ROOM 04 PAX (1) 4, MEETING ROOM 04 PAX (2) 4, STORAGE (2) 3, MEETING ROOM 04 PAX (unlabelled) 3 |
 | Training | 51 | TRAINING ROOM (1) 26, TRAINING ROOM (2) 25 |
-| Cafeteria | 120 | CAFETERIA (1) 112, Circulation 7 8 |
-| Reception, lounge, visitor | 26 | RECEPTION & WAITING AREA 19, FIRE RESCUE BALCONY (3) 5, Circulation 7 1, Circulation 2 1 |
+| Cafeteria | 120 | CAFETERIA (1) 112, Circulation 10 8 |
+| Reception, lounge, visitor | 26 | RECEPTION & WAITING AREA 19, FIRE RESCUE BALCONY (3) 5, Circulation 10 1, Circulation 5 1 |
 | Cabin (desk chair + visitors) | 14 | CABIN (2) 6, CABIN (3) 5, CABIN (5) 2, CABIN (1) 1 |
 
 ## The sheet legend, line by line
@@ -51,10 +51,10 @@ measured carpet = every closed room, open-plan zone and circulation polygon insi
 
 | Use | m2 | sq ft |
 |---|---:|---:|
-| circulation | 2,821 | 30,361 |
-| work | 1,878 | 20,216 |
-| core | 364 | 3,914 |
-| service | 250 | 2,689 |
+| circulation | 2,850 | 30,675 |
+| work | 1,878 | 20,217 |
+| core | 359 | 3,869 |
+| service | 216 | 2,324 |
 | cafe | 216 | 2,320 |
 | training | 98 | 1,053 |
 | wc | 97 | 1,040 |
@@ -63,8 +63,8 @@ measured carpet = every closed room, open-plan zone and circulation polygon insi
 | meeting | 63 | 682 |
 | reception | 42 | 448 |
 | lounge | 9 | 96 |
-| **Measured carpet, free floor (all but core)** | **5,631** | **60,611** |
-| Measured carpet with inner partitions (gross less cores) | 5,955 | 64,096 |
+| **Measured carpet, free floor (all but core)** | **5,626** | **60,562** |
+| Measured carpet with inner partitions (gross less cores) | 5,959 | 64,141 |
 | Gross plate inside the offer | 6,318 | 68,010 |
 
 
@@ -127,7 +127,7 @@ clear width = shortest chord through the point between walls, glass, columns, de
 | 1500 MM WIDE PASSAGE | (108, 105) | 1.50 | 3.09 | 3.5 | yes |
 | 1500 MM WIDE PASSAGE | (119, 105) | 1.50 | 2.8 | 3.4 | yes |
 
-Pinch points under 1.2 m found on circulation centrelines (door openings excluded): 34 of 1186 sample points: 0.64 m at (114, 108); 1.14 m at (121, 111); 0.85 m at (137, 102); 0.80 m at (120, 82); 1.08 m at (12, 79); 0.90 m at (12, 78); 1.09 m at (11, 77); 1.17 m at (11, 76); 0.86 m at (11, 74); 0.84 m at (12, 83); 1.10 m at (41, 106); 1.17 m at (42, 80). Most are strips along the facade or beside a column, not walking routes; they are listed for the G1 check.
+Pinch points under 1.2 m found on circulation centrelines (door openings excluded): 35 of 1179 sample points: 1.15 m at (11, 64); 1.06 m at (11, 63); 1.03 m at (11, 39); 1.11 m at (11, 38); 1.10 m at (11, 37); 1.08 m at (11, 36); 1.06 m at (138, 102); 1.19 m at (120, 82); 1.03 m at (12, 78); 1.09 m at (11, 77); 1.17 m at (11, 76); 0.86 m at (11, 74). Most are strips along the facade or beside a column, not walking routes; they are listed for the G1 check.
 
 ## Daylight by true facade
 
@@ -158,22 +158,24 @@ distance from each work seat to the nearest facade glass line on the plate edge;
 17. Walkway: '1200 MM WIDE PASSAGE' at (18, 40) measures 0.98 m between chairs at their desks (median of 5 points; 2.06 m desk to desk).
 18. Capacity: 'CALL CENTER 60 SEAT' says 60; 0 chairs are drawn in it (the room outline is an open-plan zone, so nearby chairs may fall outside it).
 19. Capacity: 'MEETING ROOM 04 PAX (unlabelled)' says 4; 3 chairs are drawn in it.
-20. Label not placed in a room: 'REPRO' at (27, 56) - closed-room label in an open area: needs a closure.
-21. Label not placed in a room: 'CABIN' at (52, 111).
-22. Label not placed in a room: 'ELE & UPS' at (79, 110) - closed-room label in an open area: needs a closure.
-23. Label not placed in a room: 'HUB ROOM' at (74, 110) - closed-room label in an open area: needs a closure.
-24. Label not placed in a room: 'STORAGE' at (81, 109) - closed-room label in an open area: needs a closure.
-25. Label not placed in a room: 'STORE ROOM' at (82, 87) - closed-room label in an open area: needs a closure.
-26. Label not placed in a room: 'REPRO' at (81, 84) - closed-room label in an open area: needs a closure.
-27. Label not placed in a room: 'REPRO' at (78, 83) - closed-room label in an open area: needs a closure.
-28. Label not placed in a room: 'DRY LANDSCAPE' at (109, 107).
-29. Label not placed in a room: 'STORAGE' at (130, 104) - closed-room label in an open area: needs a closure.
-30. Label not placed in a room: 'MEETING ROOM' at (122, 111).
-31. Label not placed in a room: 'STORAGE' at (130, 98) - closed-room label in an open area: needs a closure.
-32. Label not placed in a room: 'MEETING ROOM' at (132, 107) - closed-room label in an open area: needs a closure.
-33. Label not placed in a room: 'MEETING ROOM' at (137, 100) - closed-room label in an open area: needs a closure.
-34. Label not placed in a room: 'BOARD ROOM' at (135, 97).
-35. Label not placed in a room: 'UMBRELLA ROOM' at (39, 95) - closed-room label in an open area: needs a closure.
+20. Label not placed in a room: 'SPACE FOR OUTDOOR UNIT' at (12, 42) - closed-room label in an open area: needs a closure.
+21. Label not placed in a room: 'SPACE FOR OUTDOOR UNIT' at (12, 60) - closed-room label in an open area: needs a closure.
+22. Label not placed in a room: 'REPRO' at (27, 56) - closed-room label in an open area: needs a closure.
+23. Label not placed in a room: 'CABIN' at (52, 111).
+24. Label not placed in a room: 'ELE & UPS' at (79, 110) - closed-room label in an open area: needs a closure.
+25. Label not placed in a room: 'HUB ROOM' at (74, 110) - closed-room label in an open area: needs a closure.
+26. Label not placed in a room: 'STORAGE' at (81, 109) - closed-room label in an open area: needs a closure.
+27. Label not placed in a room: 'STORE ROOM' at (82, 87) - closed-room label in an open area: needs a closure.
+28. Label not placed in a room: 'REPRO' at (81, 84) - closed-room label in an open area: needs a closure.
+29. Label not placed in a room: 'REPRO' at (78, 83) - closed-room label in an open area: needs a closure.
+30. Label not placed in a room: 'DRY LANDSCAPE' at (109, 107).
+31. Label not placed in a room: 'STORAGE' at (130, 104) - closed-room label in an open area: needs a closure.
+32. Label not placed in a room: 'MEETING ROOM' at (122, 111).
+33. Label not placed in a room: 'STORAGE' at (130, 98) - closed-room label in an open area: needs a closure.
+34. Label not placed in a room: 'MEETING ROOM' at (132, 107) - closed-room label in an open area: needs a closure.
+35. Label not placed in a room: 'MEETING ROOM' at (137, 100) - closed-room label in an open area: needs a closure.
+36. Label not placed in a room: 'BOARD ROOM' at (135, 97).
+37. Label not placed in a room: 'UMBRELLA ROOM' at (39, 95) - closed-room label in an open area: needs a closure.
 
 ## Hand fixes (each one is in the plan file with its reason)
 
@@ -181,7 +183,7 @@ distance from each work seat to the nearest facade glass line on the plate edge;
 - Label moved near [27.4, 79.0]: TELEPHONE BOOTH label sits on the booth's west wall; moved inside the booth
 - Label moved near [42.4, 77.9]: the second CABIN label sits on the facade line beside its room (3 chairs); moved inside the room
 - Label added 'MEETING ROOM 04 PAX (unlabelled)' at [35.6, 12.3]: third round 4-seat table room beside the two labelled MEETING ROOM 04 PAX rooms; no label of its own in the CAD
-- 466 automatic closures of short door-less openings (room outlines only).
+- 460 automatic closures of short door-less openings (room outlines only).
 
 ## Assumptions
 
@@ -193,7 +195,7 @@ distance from each work seat to the nearest facade glass line on the plate edge;
 - Walkway width = the clear gap between desks, tables and partitions with the chairs where they are drawn (lounge seats ignored), measured at the CAD's own passage labels.
 - Daylight: distance from each work seat to the nearest facade glass line; the facade glass type, sill height and shading are not in the drawing.
 - Seats are counted from chair blocks, one per chair (two per two-seat sofa). A work seat is a chair at a desk; the room a chair stands in decides meeting, training, cafeteria and lounge.
-- 466 short openings without a door block (toilet entries, lift doorways, bays) were closed automatically where two wall ends face each other 0.55 to 1.15 m apart, for room outlines only; walking routes may pass through them.
+- 460 short openings without a door block (toilet entries, lift doorways, bays) were closed automatically where two wall ends face each other 0.55 to 1.15 m apart, for room outlines only; walking routes may pass through them.
 
 ## Sign-off
 

@@ -110,6 +110,10 @@ if isinstance(sh.get('lifts'), dict):
     sh['lifts']['labels'] = [p for p in sh['lifts'].get('labels', []) if inside(*p)]
     sh['lifts']['shafts'] = [s for s in sh['lifts'].get('shafts', []) if inside(*mk(s['poly']).centroid.coords[0])] if sh['lifts'].get('shafts') and isinstance(sh['lifts']['shafts'][0], dict) and 'poly' in sh['lifts']['shafts'][0] else sh['lifts'].get('shafts', [])
 rep['glass'] = dict(ng)
+# skirting: one 9 mm band outside the merged walls and columns (never a face within 2 mm of another wall's face)
+_WM = unary_union([mk(w['outer'], w.get('holes')) for w in L['walls']] + [mk(c) for c in L['columns']])
+_band = _WM.buffer(0.009, join_style=2).difference(_WM.buffer(0.0005, join_style=2)).intersection(cut.buffer(-0.004))
+L['skirting'] = [{'outer': ring(p), 'holes': [[[round(x, 3), round(y, 3)] for x, y in list(h.coords)[:-1]] for h in p.interiors]} for p in getattr(_band, 'geoms', [_band]) if p.geom_type == 'Polygon' and p.area > 0.0005]
 rep['offer'] = {'area_m2': round(cut.area, 1), 'how': 'egress_poly_m' if C.get('egress_poly_m') else ('offer outline' if offer_clip(C) is not None else 'plate minus not demised'),
                 'rooms': len(rooms), 'walls': len(L['walls']), 'glass': len(L['glass']), 'doors': len(L['doors']), 'seats': len(L['seats'])}
 
@@ -258,6 +262,8 @@ for _ in range(3):
             a_, b_ = P_[i], P_[j]; dd = math.hypot(a_['x'] - b_['x'], a_['y'] - b_['y'])
             if 0.01 < dd < 0.64 and a_['room'] == b_['room'] and a_['group'] not in ('W',):
                 k = min(0.03, (0.64 - dd) / 2) / dd; ux, uy = (a_['x'] - b_['x']) * k, (a_['y'] - b_['y']) * k
+                ra = 0.28 if a_['group'] in ('M', 'C', 'T') else 0.24
+                if Point(a_['x'] + ux, a_['y'] + uy).buffer(ra).intersects(Wall) or Point(b_['x'] - ux, b_['y'] - uy).buffer(ra).intersects(Wall): continue
                 a_['x'] = round(a_['x'] + ux, 4); a_['y'] = round(a_['y'] + uy, 4); b_['x'] = round(b_['x'] - ux, 4); b_['y'] = round(b_['y'] - uy, 4); fit['chairs_spread_to_0_6m'] += 1
 rep['fit_to_walls'] = dict(fit)
 # chairs face their desk (work seats) or the nearest table
