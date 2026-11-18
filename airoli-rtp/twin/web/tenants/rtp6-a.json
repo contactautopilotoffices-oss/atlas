@@ -40,7 +40,28 @@
   "index": "models/index.json",
   "dev_build": {}
  },
- "stills": [],
+ "stills": [
+  {
+   "camera": "rtp6-a_CAM_open-workstations-2_entry",
+   "src": "models/rtp6-a/stills/rtp6-a_open-workstations-2_entry.jpg",
+   "option": null
+  },
+  {
+   "camera": "rtp6-a_CAM_open-workstations-2_feature",
+   "src": "models/rtp6-a/stills/rtp6-a_open-workstations-2_feature.jpg",
+   "option": null
+  },
+  {
+   "camera": "rtp6-a_CAM_training-room_entry",
+   "src": "models/rtp6-a/stills/rtp6-a_training-room_entry.jpg",
+   "option": null
+  },
+  {
+   "camera": "rtp6-a_CAM_cafeteria-1_entry",
+   "src": "models/rtp6-a/stills/rtp6-a_cafeteria-1_entry.jpg",
+   "option": null
+  }
+ ],
  "highlights": [
   "4 x 6-8 seat meeting rooms",
   "112-seat cafeteria",

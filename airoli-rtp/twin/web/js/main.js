@@ -532,7 +532,7 @@ function showTenantPanel(t) {
     </div>
     <div class="row"><button class="pill" id="b-floors">All floors</button><button class="pill" id="b-stills" hidden>Stills</button></div>`;
   $('#b-floors').onclick = () => toBuildingView();
-  const st = stillsOf(t); if (st.count) { $('#b-stills').hidden = false; $('#b-stills').textContent = `Stills (${st.count})`; $('#b-stills').onclick = () => openGallery(t); }
+  const st = stillsOf(t); if (st.count) { $('#b-stills').hidden = false; $('#b-stills').textContent = `Photoreal renders (${st.count})`; $('#b-stills').onclick = () => openGallery(t); }
   if (PHONE()) { $('#b-info').style.display = ''; $('#b-info').onclick = () => document.body.classList.toggle('info'); }
   renderRoomsList();
 }
