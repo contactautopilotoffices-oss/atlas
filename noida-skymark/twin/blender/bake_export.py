@@ -158,6 +158,11 @@ def read_exr(p):
 
 def bake(tenant, L, S, out, A):
     t0 = time.time(); sc = bpy.context.scene; meta = json.loads(sc.get("twin_meta", "{}"))
+    ss = (S.get("light", {}) if isinstance(S, dict) else {}).get("bake_sun_scale")
+    if ss:              # opt-in: a softer sun for the web light (hard sun stripes read as faults in a lightmap); stills keep the full sun
+        for o in sc.objects:
+            if o.type == "LIGHT" and o.data.type == "SUN": o.data.energy *= ss
+        print(f"bake: sun scaled by {ss}", flush=True)
     TL.setup_cycles(sc, A.bake_samples, A.device, denoise=False)
     objs = pick_static(L, A, meta); cap = (A.bake_res * A.bake_texel) ** 2 * 0.5
     tf = {"COLUMN": 0.6}         # texel factor per layer: each factor gets its own atlases (columns denser by default)
@@ -289,6 +294,8 @@ def _decimate(me, target):
     sc = bpy.context.scene; tmp = bpy.data.objects.new("_dec", me); sc.collection.objects.link(tmp)
     md = tmp.modifiers.new("d", "DECIMATE"); md.ratio = max(0.02, target / tris)
     new = bpy.data.meshes.new_from_object(tmp.evaluated_get(bpy.context.evaluated_depsgraph_get())); bpy.data.objects.remove(tmp)
+    try: new.set_sharp_from_angle(angle=math.radians(WEB.get("chair_sharp_deg", 40)))      # smooth faces, hard edges: no streaky highlights
+    except Exception as e: print("sharp from angle:", e)
     if me.get("proto_key"): new["proto_key"] = me["proto_key"]
     return new
 
@@ -299,6 +306,8 @@ def _decimate(me, ratio):
     sc = bpy.context.scene; tmp = bpy.data.objects.new("_dec", me); sc.collection.objects.link(tmp)
     md = tmp.modifiers.new("d", "DECIMATE"); md.decimate_type = "COLLAPSE"; md.ratio = ratio; md.use_collapse_triangulate = True
     new = bpy.data.meshes.new_from_object(tmp.evaluated_get(bpy.context.evaluated_depsgraph_get())); bpy.data.objects.remove(tmp)
+    try: new.set_sharp_from_angle(angle=math.radians(WEB.get("chair_sharp_deg", 40)))      # smooth faces, hard edges: no streaky highlights
+    except Exception as e: print("sharp from angle:", e)
     if me.get("proto_key"): new["proto_key"] = me["proto_key"]
     return new
 
@@ -389,6 +398,8 @@ def _web_materials(objs):
                 for l in list(b.inputs["Roughness"].links): nt.links.remove(l)
                 b.inputs["Roughness"].default_value = ov.get("rough", 0.5)
                 if "metal" in ov: b.inputs["Metallic"].default_value = ov["metal"]
+                if ov.get("emit"):
+                    b.inputs["Emission Color"].default_value = (*TL.lin(ov["color"]), 1); b.inputs["Emission Strength"].default_value = ov["emit"]
             if k == "leaf":
                 for l in list(b.inputs["Base Color"].links): nt.links.remove(l)
                 b.inputs["Base Color"].default_value = (*TL.lin("#3d6e2e"), 1); b.inputs["Roughness"].default_value = 0.5
@@ -446,6 +457,7 @@ def prep_web(tenant, lod=False):
     for o in objs:
         L_ = o.get("twin_layer")
         if L_ in ARCH_ORDER: groups.setdefault((o.get("lightmap", ""), "ARCH" if L_ != "FLOOR" else "FLOOR", L_ if not o.get("lightmap") else "lm"), []).append(o)
+        elif L_ == "CONTEXT" and WEB.get("drop_context"): bpy.data.objects.remove(o)       # the viewer shows the real exterior
         elif L_ in ("GLASS", "BLIND", "RAILING", "DOOR", "SERVICES", "FEATURE", "LOGO", "CONTEXT"): groups.setdefault(("", L_, L_), []).append(o)
     n = 0
     for (lmf, grp, sub), os_ in groups.items():
@@ -496,7 +508,9 @@ def export(tenant, L, S, out, A):
            "frame": "the tenant's CAD plan frame, metres, glTF Y up: three (x, y, z) = plan (x east, height, -north). Not recentred, not rotated: apply the plate fit in the viewer.",
            "decoder": "GLTFLoader.setMeshoptDecoder(MeshoptDecoder); repeated furniture comes as EXT_mesh_gpu_instancing (InstancedMesh); extras.instance_names lists the CAD blocks in instance order",
            "camera": {"near": 0.1, "far": 2000, "note": "near >= 0.1 m keeps depth precision for the floor-level layers (finishes 3-4 mm apart)"},
-           "renderer": {"toneMapping": "AgXToneMapping", "toneMappingExposure": round(2 ** ev, 4), "exposure_ev": ev, "outputColorSpace": "srgb", "useLegacyLights": False},
+           "renderer": ({"toneMapping": WEB.get("tone_mapping", "NeutralToneMapping"), "toneMappingExposure": round(2 ** WEB["exposure_ev"], 4), "exposure_ev": WEB["exposure_ev"],
+                         "exposure_note": WEB.get("exposure_note", ""), "stills_exposure_ev": ev, "outputColorSpace": "srgb", "useLegacyLights": False} if "exposure_ev" in WEB else
+                        {"toneMapping": "AgXToneMapping", "toneMappingExposure": round(2 ** ev, 4), "exposure_ev": ev, "outputColorSpace": "srgb", "useLegacyLights": False}),
            "lightmapped_meshes": {"how": "texture = load(lightmap); texture.colorSpace = SRGBColorSpace; texture.flipY = false; texture.channel = 1; material.lightMap = texture; "
                                          "material.lightMapIntensity = lightMapIntensity (below, per node); material.envMapIntensity = 0; no direct lights on these meshes "
                                          "(the lightmap already holds sun, sky, lamps and bounce). If it looks blown, check lightMap.colorSpace is sRGB and that the "

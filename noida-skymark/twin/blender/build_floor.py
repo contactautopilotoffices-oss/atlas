@@ -140,7 +140,7 @@ def stage_geometry():
     step("desks", fu.desks); step("desk polygons", fu.desk_polys); step("tables", fu.tables); step("seats", fu.seats); step("plants", fu.plants)
     step("fixtures and stair", fu.fixtures); step("ceiling fixtures", fu.light_fixtures); step("bank lights", fu.bank_lights)
     bpy.context.view_layer.update()
-    step("feature walls", fu.feature_walls); step("logo", fu.logo)
+    step("feature walls", fu.feature_walls); step("logo", fu.logo); step("props", fu.asset_props)
     step("context (ground, neighbours)", sh.context)
     bpy.context.view_layer.update(); step("snap", fu.snap)
     c.meta.update({"tenant": TEN, "H": c.H, "Hs": c.Hs, "portals": sh.portals, "ceilings": sh.ceiling_of, "lights": sh.lights,

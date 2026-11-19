@@ -355,10 +355,12 @@ class Materials:
         m["twin_kind"] = k
         if k in ("carpet", "wood", "terrazzo", "stone", "tile", "ceiling_tile") or (k in ("fabric", "felt") and s.get("weave")):
             self.image_base(m, nt, b, name, s)
-        if k in ("paint", "fabric", "felt", "plain", "plastic", "metal", "carpet", "wood", "stone", "terrazzo", "tile", "ceiling_tile"):
+        if s.get("maps"):          # opt-in: scanned normal / roughness maps (CC0), tiled at their real size; replaces the noise bump
+            self.real_maps(nt, b, s["maps"])
+        elif k in ("paint", "fabric", "felt", "plain", "plastic", "metal", "carpet", "wood", "stone", "terrazzo", "tile", "ceiling_tile"):
             self.rough_vary(nt, b, s.get("rough", 0.5), s.get("vary", 0.18), s.get("vscale", 2.5))
             bump_amt = {"carpet": 0.5, "fabric": 0.35, "felt": 0.5, "paint": 0.08, "wood": 0.08, "stone": 0.05}.get(k, 0.0)
-            if bump_amt: self.bump(nt, b, s.get("bump", bump_amt), s.get("bump_scale", 700 if k in ("carpet", "felt", "fabric") else 250))
+            if bump_amt and not s.get("maps"): self.bump(nt, b, s.get("bump", bump_amt), s.get("bump_scale", 700 if k in ("carpet", "felt", "fabric") else 250))
         if k == "glass":
             setin(b, ["Roughness"], s.get("rough", 0.0)); setin(b, ["Transmission Weight"], 1.0); setin(b, ["IOR"], s.get("ior", 1.5))
             lp = N(nt, "ShaderNodeLightPath", (0, 300)); tr = N(nt, "ShaderNodeBsdfTransparent", (0, 150)); mx = N(nt, "ShaderNodeMixShader", (250, 200))
@@ -431,6 +433,21 @@ class Materials:
         lo, hi = (rough * (1 - vary), min(1.0, rough * (1 + vary))) if rough > 0.06 else (rough, rough + 0.035)
         mr.inputs["To Min"].default_value = lo; mr.inputs["To Max"].default_value = hi
         nt.links.new(mx.outputs[0], mr.inputs["Value"]); nt.links.new(mr.outputs[0], b.inputs["Roughness"])
+    def real_maps(self, nt, b, mp_):
+        P = mp_.get("size_m", 0.5); uv = N(nt, "ShaderNodeUVMap", (-1100, -600)); uv.uv_map = "UVMap"
+        mp = N(nt, "ShaderNodeMapping", (-950, -600)); mp.inputs["Scale"].default_value = (1 / P, 1 / P, 1); nt.links.new(uv.outputs[0], mp.inputs["Vector"])
+        def tex(path, non_color=True):
+            path = path if os.path.isabs(path) else os.path.join(HERE, path)
+            t = N(nt, "ShaderNodeTexImage", (-760, -600)); t.image = bpy.data.images.load(path, check_existing=True)
+            if non_color: t.image.colorspace_settings.name = "Non-Color"
+            nt.links.new(mp.outputs["Vector"], t.inputs["Vector"]); return t
+        if mp_.get("normal"):
+            nm = N(nt, "ShaderNodeNormalMap", (-400, -600)); nm.inputs["Strength"].default_value = mp_.get("normal_strength", 1.0)
+            nt.links.new(tex(mp_["normal"]).outputs["Color"], nm.inputs["Color"]); nt.links.new(nm.outputs["Normal"], b.inputs["Normal"])
+        if mp_.get("rough"):
+            mr = N(nt, "ShaderNodeMath", (-400, -800)); mr.operation = "MULTIPLY_ADD"; mr.inputs[1].default_value = mp_.get("rough_gain", 1.0); mr.inputs[2].default_value = mp_.get("rough_bias", 0.0)
+            nt.links.new(tex(mp_["rough"]).outputs["Color"], mr.inputs[0]); nt.links.new(mr.outputs[0], b.inputs["Roughness"])
+
     def bump(self, nt, b, strength, scale):
         g = N(nt, "ShaderNodeNewGeometry", (-900, -900)); n = N(nt, "ShaderNodeTexNoise", (-720, -900)); n.inputs["Scale"].default_value = scale
         nt.links.new(g.outputs["Position"], n.inputs["Vector"])

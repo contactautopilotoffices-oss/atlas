@@ -9,7 +9,8 @@
   "downlight_w": 18,
   "grey_target": 0.18,
   "portals": true,
-  "ceiling_fill_w_m2": 2.0
+  "ceiling_fill_w_m2": 2.0,
+  "bake_sun_scale": 0.45
  },
  "heights": {
   "ceiling": 3.05,
@@ -238,10 +239,11 @@
    {
     "room": "^RECEPTION",
     "kind": "visitor / lounge chair",
-    "type": "beam"
+    "type": "visitor"
    }
   ],
-  "beam_width": 0.42
+  "beam_width": 0.42,
+  "sofa_model": "assets/cc0/sofa_02/sofa_02_1k.gltf"
  },
  "logo": [
   {
@@ -359,7 +361,15 @@
    "blot_amp": 0.03,
    "seam_depth": 0.035,
    "rough": 0.95,
-   "sheen": 0.08
+   "sheen": 0.08,
+   "maps": {
+    "normal": "assets/cc0/Carpet012/Carpet012_1K-JPG_NormalGL.jpg",
+    "rough": "assets/cc0/Carpet012/Carpet012_1K-JPG_Roughness.jpg",
+    "size_m": 0.5,
+    "normal_strength": 0.6,
+    "rough_gain": 0.4,
+    "rough_bias": 0.55
+   }
   },
   "tile_darkgrey": {
    "kind": "tile",
@@ -605,13 +615,55 @@
   "chair_ratio": 0.3,
   "materials": {
    "logo_marble": {
-    "color": "#efefed",
-    "rough": 0.32
+    "color": "#f4f4f2",
+    "rough": 0.3,
+    "emit": 0.35
    },
    "paint_white": {
     "color": "#f2f1ee",
     "rough": 0.9
+   },
+   "mesh_black": {
+    "color": "#2d2e31",
+    "rough": 0.62
    }
+  },
+  "exposure_ev": 0.15,
+  "tone_mapping": "NeutralToneMapping",
+  "exposure_note": "web path (NeutralToneMapping): an 18 % card at desk height reads about sRGB 118; derived from the floor lightmap irradiance (median 0.72 at the floor, ~1.1 at desk height), 2026-11-19",
+  "drop_context": true,
+  "chair_sharp_deg": 40
+ },
+ "props": [
+  {
+   "name": "plant",
+   "model": "assets/cc0/potted_plant_02/potted_plant_02_1k.gltf",
+   "room": "^RECEPTION|CONFERENCE|^TRAINING|MEETING",
+   "place": "corners",
+   "per_room": 2,
+   "clear": 0.8,
+   "inset": 0.45,
+   "radius": 0.4
+  },
+  {
+   "name": "plant_tall",
+   "model": "assets/cc0/potted_plant_01/potted_plant_01_1k.gltf",
+   "room": "^RECEPTION|Open workstations|CAFETERIA",
+   "place": "corners",
+   "per_room": 2,
+   "clear": 0.9,
+   "inset": 0.5,
+   "radius": 0.35
+  },
+  {
+   "name": "extinguisher",
+   "model": "assets/cc0/korean_fire_extinguisher_01/korean_fire_extinguisher_01_1k.gltf",
+   "room": "^RECEPTION|^TRAINING|Open workstations|CAFETERIA",
+   "place": "by_door",
+   "per_room": 1,
+   "clear": 0.5,
+   "radius": 0.15,
+   "layer": "FIXTURE"
   }
- }
+ ]
 }

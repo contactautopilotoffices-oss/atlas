@@ -260,8 +260,11 @@ class Furnisher:
         me = m.build("model", normals=False)
         co = [v.co.copy() for v in me.vertices]
         lo = Vector((min(v.x for v in co), min(v.y for v in co), min(v.z for v in co))); hi = Vector((max(v.x for v in co), max(v.y for v in co), max(v.z for v in co)))
-        k = height / (hi.z - lo.z); c = (lo + hi) / 2
+        k = (height / (hi.z - lo.z)) if height else 1.0; c = (lo + hi) / 2
         me.transform(Matrix.Scale(k, 4) @ Matrix.Translation((-c.x, -c.y, -lo.z)))
+        if seat_band is None:              # a prop (plant, extinguisher, clock): real size kept, centred on its foot
+            for p in me.polygons: p.use_smooth = True
+            return me
         top = [v.co for v in me.vertices if v.co.z > 0.86 * height]; seat = [v.co for v in me.vertices if seat_band[0] * height < v.co.z < seat_band[1] * height]
         bk = sum(top, Vector()) / len(top); st = sum(seat, Vector()) / len(seat)
         me.transform(Matrix.Rotation(-math.atan2(st.y - bk.y, st.x - bk.x), 4, "Z"))
@@ -308,6 +311,9 @@ class Furnisher:
             k = s["kind"]; typ = "sofa" if "sofa" in k else smap.get(k, "chair")
             for rule in F.get("seat_kind_by_room", []):      # opt-in: a chair kind gets another model in some rooms (reception benches)
                 if re.search(rule["room"], s.get("room") or "", re.I) and (not rule.get("kind") or rule["kind"] == k): typ = rule["type"]
+            if typ == "sofarow":
+                if s.get("_sofa_done"): continue
+                self._sofa_row(s, k); continue
             a = s["face"] + self.rnd.uniform(-0.06, 0.06)      # a few degrees of turn, never a move
             if typ == "beam": a = s["face"]                    # beam seating is one rigid row
             M0 = T(s["x"], s["y"], 0) @ RZ(a)
@@ -338,6 +344,14 @@ class Furnisher:
                     m.cyl(0.022, 0.29, T(-0.03, 0, 0.0), "chrome", 14); m.box(0.36, 0.05, 0.012, T(-0.03, 0, 0.0), fr, 0.004)
                     return m.build("beam_seat")
                 self.R.put("SEAT", s.get("block", k), self.c.proto(("beam", mat, wb), mk), M0, props={"cad_kind": k, "seat_id": s.get("id", "")})
+            elif typ == "visitor":      # opt-in: an upholstered shell visitor chair (fabric shell, black steel legs), one per drawn chair
+                mat = F.get("visitor_fabric", "fabric_grey")
+                def mk(mat=mat):
+                    m = self.mb(); self.shell_mesh(mat, 0.46, 0.5, 0.46, 0.38, thick=0.03, m=m, M=Matrix())
+                    for sx in (-1, 1):
+                        for sy in (-1, 1): m.rod((sx * 0.13 - 0.02, sy * 0.14, 0.455), (sx * 0.2 - 0.02, sy * 0.2, 0.0), 0.011, 0.009, F.get("visitor_legs", "black_metal"))
+                    return m.build("visitor_chair")
+                self.R.put("SEAT", s.get("block", k), self.c.proto(("visitor", mat), mk), M0, props={"cad_kind": k, "seat_id": s.get("id", "")})
             elif typ == "stool":
                 def mk():
                     m = self.mb(); self.shell_mesh(F.get("stool", "planter_white"), 0.74, 0.4, 0.37, 0.13, m=m, M=Matrix())
@@ -396,6 +410,70 @@ class Furnisher:
             for j in range(NS + NB):
                 for c in range(2): a_ = j * 3 + c; F_.append((a_, a_ + 1, a_ + 4, a_ + 3))
             m.add(V, F_, self.f("leaf", "leaf"), None, True, UV)
+
+    def _sofa_row(self, s, k):
+        """Opt-in (seat type 'sofarow'): drawn visitor chairs in a row (same facing, side by side) become 2- and 3-seat
+        sofas from a real model, centred on the seats they replace; one sofa seat per drawn chair."""
+        F = self.F; room = s.get("room"); a = s["face"]; ux, uy = -math.sin(a), math.cos(a)
+        row = [q for q in self.L["seats"] if q.get("room") == room and q["kind"] == k and not q.get("_sofa_done") and abs(((q["face"] - a + math.pi) % (2 * math.pi)) - math.pi) < 0.2
+               and abs((q["x"] - s["x"]) * math.cos(a) + (q["y"] - s["y"]) * math.sin(a)) < 0.15]
+        row.sort(key=lambda q: (q["x"] - s["x"]) * ux + (q["y"] - s["y"]) * uy)
+        runs = [[row[0]]]
+        for q in row[1:]:
+            p = runs[-1][-1]
+            if math.hypot(q["x"] - p["x"], q["y"] - p["y"]) < 0.75: runs[-1].append(q)
+            else: runs.append([q])
+        path = F.get("sofa_model", "assets/cc0/sofa_02/sofa_02_1k.gltf")
+        base = self.c.proto(("sofa_model", path), lambda: self.load_model(path, F.get("sofa_height", 0.8), (0.3, 0.55)))
+        for run in runs:
+            chunks = []; i = 0; n = len(run)
+            while i < n:
+                take = 3 if n - i >= 3 and n - i != 4 else 2 if n - i >= 2 else 1; chunks.append(run[i:i + take]); i += take
+            for ch in chunks:
+                for q in ch: q["_sofa_done"] = True
+                cx = sum(q["x"] for q in ch) / len(ch); cy = sum(q["y"] for q in ch) / len(ch)
+                pitch = (math.hypot(ch[-1]["x"] - ch[0]["x"], ch[-1]["y"] - ch[0]["y"]) / (len(ch) - 1)) if len(ch) > 1 else 0.6
+                ln = round(min(len(ch) * pitch, len(ch) * 0.62) - 0.04, 2); dp = F.get("sofa_depth", 0.72)
+                me = self.c.proto(("sofa_fit", path, ln, dp), lambda ln=ln, dp=dp: self._fit_xy(base, dp, ln))
+                self.R.put("SEAT", s.get("block", k), me, T(cx, cy, 0) @ RZ(a), props={"cad_kind": k, "seats": len(ch), "asset": os.path.basename(path)})
+
+    def _fit_xy(self, base, dx, dy):
+        me = base.copy(); xs = [v.co.x for v in me.vertices]; ys = [v.co.y for v in me.vertices]
+        me.transform(Matrix.Diagonal((dx / (max(xs) - min(xs)), dy / (max(ys) - min(ys)), 1.0, 1.0))); return me
+
+    def asset_props(self):
+        """Opt-in (style 'props'): real CC0 props placed by rule. Each rule: model, room regex, place = corners | by_door | wall,
+        count per room, clearance from furniture and doors. A spot is used only if the floor there is the room's and nothing
+        (desk, table, seat, wall) is within the clearance; skipped spots are logged."""
+        dg = bpy.context.evaluated_depsgraph_get(); sc = bpy.context.scene; log = []
+        busy = [(q["x"], q["y"]) for q in self.L["seats"]] + [((min(p[0] for p in t["poly"]) + max(p[0] for p in t["poly"])) / 2, (min(p[1] for p in t["poly"]) + max(p[1] for p in t["poly"])) / 2) for t in self.L["tables"] + self.L["desks"] if t.get("poly")]
+        doors = [d["_opening"] for d in self.L["doors"] if d.get("_opening")]
+        for rule in self.S.get("props", []):
+            path = rule["model"]; me = self.c.proto(("prop", path), lambda path=path: self.load_model(path, rule.get("height"), None))
+            for r in self.c.ras.rooms:
+                if not r.get("box") or not re.search(rule["room"], r["name"], re.I): continue
+                x0, y0, x1, y1 = r["box"]; ins = rule.get("inset", 0.45); cand = []
+                if rule.get("place", "corners") == "corners":
+                    cand = [(x0 + ins, y0 + ins), (x1 - ins, y0 + ins), (x0 + ins, y1 - ins), (x1 - ins, y1 - ins)]
+                elif rule["place"] == "by_door":
+                    for op in doors:
+                        if self.c.ras.room_at(op[0] + 0.6 * math.cos(op[2] + math.pi / 2), op[1] + 0.6 * math.sin(op[2] + math.pi / 2)) is r or self.c.ras.room_at(op[0] - 0.6 * math.cos(op[2] + math.pi / 2), op[1] - 0.6 * math.sin(op[2] + math.pi / 2)) is r:
+                            for sg in (-1, 1):
+                                for side in (-1, 1):
+                                    q = (op[0] + math.cos(op[2]) * sg * (op[3] / 2 + 0.35) + side * 0.3 * math.cos(op[2] + math.pi / 2), op[1] + math.sin(op[2]) * sg * (op[3] / 2 + 0.35) + side * 0.3 * math.sin(op[2] + math.pi / 2))
+                                    cand.append(q)
+                n = 0
+                for (x, y) in cand:
+                    if n >= rule.get("per_room", 2): break
+                    if self.c.ras.room_at(x, y) is not r: continue
+                    if any(math.hypot(x - bx, y - by) < rule.get("clear", 0.8) for bx, by in busy): continue
+                    if any(math.hypot(x - op[0], y - op[1]) < rule.get("door_clear", 0.6) + op[3] / 2 for op in doors) and rule.get("place") != "by_door": continue
+                    hits = [sc.ray_cast(dg, Vector((x, y, 0.4)), Vector((math.cos(t_), math.sin(t_), 0)), distance=rule.get("radius", 0.3))[0] for t_ in [i * math.pi / 4 for i in range(8)]]
+                    if any(hits): continue
+                    self.R.put(rule.get("layer", "PLANT"), rule.get("name", "prop"), me, T(x, y, 0) @ RZ(random.Random(int(x * 97 + y * 13)).uniform(0, 6.283)), props={"room": r["name"], "assumed": 1, "asset": os.path.basename(path)})
+                    busy.append((x, y)); n += 1
+                log.append({"rule": rule.get("name"), "room": r["name"], "placed": n})
+        self.c.meta["log"]["props"] = log; print("props:", sum(l["placed"] for l in log), "placed", flush=True)
 
     def plants(self):
         PH = self.L["heights"]["planter"]; PR = random.Random(23)
@@ -657,7 +735,7 @@ class Furnisher:
             mx = x0 + ms / 2
             m.box(ms, dep, ms, T(mx, 0, -ms / 2), mark.get("material", "logo_mark"), 0.003)
             for s_ in (-1, 1):          # an upward chevron (the 'A' of the mark), white, inside the tile
-                L_ = ms * 0.66; a_ = -0.40 * s_; bw = ms * 0.12          # box() grows up from its base: pivot at the foot, feet apart, tops meet
+                L_ = ms * 0.66; a_ = -0.40 * s_; bw = ms * 0.19          # box() grows up from its base: pivot at the foot, feet apart, tops meet
                 m.box(bw, 0.004, L_, T(mx + s_ * ms * 0.25, -dep / 2 - 0.005, -ms * 0.31) @ Matrix.Rotation(a_, 4, "Y"), mark.get("chevron", "logo"), 0.0)
         hl = lg.get("halo")
         if hl:                         # backlight: an emissive copy of the letters 4 mm behind their back face, hidden by them;
@@ -720,8 +798,10 @@ class Furnisher:
                         q = max(tb, key=lambda q: (max(p_[0] for p_ in q["poly"]) - min(p_[0] for p_ in q["poly"])) * (max(p_[1] for p_ in q["poly"]) - min(p_[1] for p_ in q["poly"])))
                         tc = Vector((sum(p_[0] for p_ in q["poly"]) / len(q["poly"]), sum(p_[1] for p_ in q["poly"]) / len(q["poly"]), 0))
                         pref = (tc - Vector((w["point"].x, w["point"].y, 0))).dot(t)
+                    wb_on = bool(fw.get("whiteboard") and wd > sw + 2.2)
                     for off in [pref + d_ for d_ in (0.0, 0.25, -0.25, 0.5, -0.5, 1.0, -1.0, 1.5, -1.5)]:
-                        if abs(off) + span / 2 > wd / 2: continue
+                        left, right = off - (sw / 2 + 0.25 + 1.82 if wb_on else sw / 2), off + sw / 2     # local x is -t: the whiteboard (local +x) lies on the -t side
+                        if max(abs(left), abs(right)) > wd / 2 - 0.05: continue
                         q = w["point"] + t * off
                         if all(math.hypot(op[0] - q.x, op[1] - q.y) > span / 2 + 0.6 for op in ops): ok_at = off; break
                     if ok_at is None: print(f"screen in {r['name']}: every spot on that wall is within 1 m of a door; left out", flush=True); continue
@@ -733,7 +813,7 @@ class Furnisher:
                         cw = min(fw.get("credenza_w", 1.8), wd - 0.2); cd_ = fw.get("credenza_d", 0.4)
                         m.box(cw, cd_, 0.6, T(0, cd_ / 2 + 0.003, 0.0), fw.get("credenza_material", "white_top"), 0.004)
                         m.box(cw + 0.02, cd_ + 0.01, 0.025, T(0, cd_ / 2 + 0.008, 0.6), fw.get("credenza_top", "oak"), 0.003)
-                    if fw.get("whiteboard") and wd > sw + 2.2:
+                    if wb_on:
                         u = sw / 2 + 0.25 + 0.9
                         m.box(1.82, 0.025, 1.22, T(u, 0.0145, 0.9), "white_metal", 0.003); m.box(1.78, 0.004, 1.18, T(u, 0.029, 0.92), fw.get("board_material", "whiteboard"), 0.0)
                 else:
