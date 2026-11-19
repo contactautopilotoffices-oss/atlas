@@ -4,34 +4,34 @@
  "lod_glb": "rtp4-suite_lod.glb",
  "files": {
   "rtp4-suite": {
-   "mb": 4.52,
+   "mb": 5.0,
    "meshopt": {
     "instanced_nodes_from": 660,
-    "instanced_into": 17,
-    "draw_calls": 106,
-    "triangles": 512932,
-    "in_mb": 13.59,
-    "out_mb": 4.52,
-    "compressed_views": 424,
-    "saved_mb": 9.2,
+    "instanced_into": 16,
+    "draw_calls": 113,
+    "triangles": 535532,
+    "in_mb": 14.88,
+    "out_mb": 5,
+    "compressed_views": 454,
+    "saved_mb": 10.02,
     "applied": true
    },
-   "merged_groups": 19
+   "merged_groups": 20
   },
   "rtp4-suite_lod": {
-   "mb": 3.64,
+   "mb": 3.9,
    "meshopt": {
     "instanced_nodes_from": 366,
-    "instanced_into": 14,
-    "draw_calls": 59,
-    "triangles": 328758,
-    "in_mb": 11.83,
-    "out_mb": 3.64,
-    "compressed_views": 221,
-    "saved_mb": 8.26,
+    "instanced_into": 13,
+    "draw_calls": 64,
+    "triangles": 348206,
+    "in_mb": 12.91,
+    "out_mb": 3.9,
+    "compressed_views": 244,
+    "saved_mb": 9.08,
     "applied": true
    },
-   "merged_groups": 19
+   "merged_groups": 20
   }
  },
  "frame": "rtp_local frame, metres, glTF Y up: three (x, y, z) = (x east, height above this floor's finished floor level, -north). Already north up and placed: no turn, no shift. Put the model at y = 15.0 m (finished floor level above ground).",
@@ -43,8 +43,8 @@
  },
  "renderer": {
   "toneMapping": "AgXToneMapping",
-  "toneMappingExposure": 0.732,
-  "exposure_ev": -0.45,
+  "toneMappingExposure": 0.551,
+  "exposure_ev": -0.86,
   "outputColorSpace": "srgb",
   "useLegacyLights": false
  },
@@ -53,67 +53,67 @@
   "nodes": {
    "rtp4-suite_FLOOR_rtp4-suite_lm2_1": {
     "lightmap": "lightmaps/rtp4-suite_lm2.png",
-    "lightMapIntensity": 107.17991,
+    "lightMapIntensity": 92.07375,
     "uv": 1
    },
    "rtp4-suite_FLOOR_rtp4-suite_lm1_2": {
     "lightmap": "lightmaps/rtp4-suite_lm1.png",
-    "lightMapIntensity": 106.38513,
+    "lightMapIntensity": 89.74942,
     "uv": 1
    },
    "rtp4-suite_FLOOR_rtp4-suite_lm0_3": {
     "lightmap": "lightmaps/rtp4-suite_lm0.png",
-    "lightMapIntensity": 103.54306,
+    "lightMapIntensity": 80.506,
     "uv": 1
    },
    "rtp4-suite_WALL_rtp4-suite_lm5_4": {
     "lightmap": "lightmaps/rtp4-suite_lm5.png",
-    "lightMapIntensity": 18.18557,
+    "lightMapIntensity": 10.59422,
     "uv": 1
    },
    "rtp4-suite_WALL_rtp4-suite_lm9_5": {
     "lightmap": "lightmaps/rtp4-suite_lm9.png",
-    "lightMapIntensity": 3.14159,
+    "lightMapIntensity": 8.05946,
     "uv": 1
    },
    "rtp4-suite_WALL_rtp4-suite_lm7_6": {
     "lightmap": "lightmaps/rtp4-suite_lm7.png",
-    "lightMapIntensity": 18.055,
+    "lightMapIntensity": 8.26103,
     "uv": 1
    },
    "rtp4-suite_WALL_rtp4-suite_lm6_7": {
     "lightmap": "lightmaps/rtp4-suite_lm6.png",
-    "lightMapIntensity": 10.50805,
+    "lightMapIntensity": 5.82753,
     "uv": 1
    },
    "rtp4-suite_WALL_rtp4-suite_lm4_8": {
     "lightmap": "lightmaps/rtp4-suite_lm4.png",
-    "lightMapIntensity": 18.13878,
+    "lightMapIntensity": 10.06454,
     "uv": 1
    },
    "rtp4-suite_WALL_rtp4-suite_lm3_9": {
     "lightmap": "lightmaps/rtp4-suite_lm3.png",
-    "lightMapIntensity": 13.94224,
+    "lightMapIntensity": 8.13943,
     "uv": 1
    },
    "rtp4-suite_WALL_rtp4-suite_lm8_10": {
     "lightmap": "lightmaps/rtp4-suite_lm8.png",
-    "lightMapIntensity": 28.48005,
+    "lightMapIntensity": 27.64203,
     "uv": 1
    },
    "rtp4-suite_WALL_rtp4-suite_lm2_13": {
     "lightmap": "lightmaps/rtp4-suite_lm2.png",
-    "lightMapIntensity": 107.17991,
+    "lightMapIntensity": 92.07375,
     "uv": 1
    },
    "rtp4-suite_WALL_rtp4-suite_lm1_14": {
     "lightmap": "lightmaps/rtp4-suite_lm1.png",
-    "lightMapIntensity": 106.38513,
+    "lightMapIntensity": 89.74942,
     "uv": 1
    },
    "rtp4-suite_WALL_rtp4-suite_lm0_16": {
     "lightmap": "lightmaps/rtp4-suite_lm0.png",
-    "lightMapIntensity": 103.54306,
+    "lightMapIntensity": 80.506,
     "uv": 1
    }
   }

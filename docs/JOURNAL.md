@@ -1,5 +1,26 @@
 # Atlas — Development Journal
 
+## 2026-11-19 — Atlas: Reliable Tech Park twins, second pass: Altruist's real logo, bright ceilings, real city views, web lightmaps fixed
+
+**After the advisor's review, the two Altruist models now carry the real wordmark and reception desk, bright ceilings, furnished meeting and training rooms and the real Airoli outside the windows; the blotchy and black patches in the web models are fixed.**
+
+- **Why:** the first stills still read as computer graphics in the places a client looks first: a generic logo font, an all-blue desk, charcoal ceilings, cafeteria chairs in reception, bare meeting rooms and white blocks outside the windows. In the web viewer the carpet looked camouflaged, the columns smeared, and on the 4th floor some walls rendered black.
+- **Structural decisions:**
+  - The logo is built from Altruist's own wordmark, traced from their logo file, not typed in a font. The reception desk copies the Noida photo: white body, narrower royal-blue front, warm light at the plinth.
+  - The ceilings were dark because of light, not paint. With a near-black carpet nothing bounces light up to them. An even, invisible fill from below now lights them, the way bright desks and people do in a real office. It is in both the stills and the web lighting, so the two match.
+  - Furniture the drawing does not show (wall screens, a whiteboard, an olive acoustic panel, beam seating in reception) is added as typical fit-out and listed on the assumptions page. Screens are kept at least 1 m from doors; where that is impossible they are left out.
+  - The stills borrow the exterior team's real Airoli model for the window views. The web model does not, to keep it light.
+  - Web lightmaps: each light map was scaled by its brightest 0.5 % (sun patches), which pushed ordinary floors into the darkest few shades and caused the blotches. They are now scaled by the brightest 2 %, and the full-precision maps are kept so this can be retuned without a 35-minute re-bake. A second fault made some maps come out completely black; the bake now detects that, retries, and stops with an error instead of publishing black walls.
+- **What works now:** both web models are re-published with corrected lighting, with no black maps and every map using its full tonal range. The 6th floor has 8 reviewed stills with the real logo, bright ceilings and the real city. The 4th floor has 5: logo wall, conference room (two views), training room with screen and whiteboard, and the 6-seater meeting room. The sign-off sheets now include a lightmap check.
+- **Left undone:**
+  - The 4th-floor reception reverse view is held back. It still does not show the arrival with the marble corridor.
+  - Life details (fire extinguishers, signage, plants) are not added.
+  - A few hair-thin edges in the traced wordmark, and some light shared at the edges of three re-packed maps, are logged but not chased.
+  - Option B is still not built.
+- **Open questions for the founder:**
+  - Is the typical fit-out added to meeting and training rooms (screens, whiteboard, olive panel) acceptable to show the client, given that it is not in the drawing?
+  - Should the 4th-floor reception be shown with beam seating, sofas, or left open?
+
 ## 2026-11-19 — Atlas: Reliable Tech Park 3D twins for Altruist (6th floor Option A and 4th-floor suite), with photo-quality stills
 
 **Two of the three Reliable Tech Park offers are now walkable 3D models in Altruist's own look, with 14 photo-quality hero images, built overnight from the drawings without a human sign-off.**

@@ -10,11 +10,18 @@
     "rtp4-suite_FLOOR_carpetcharcoaladminroom_1"
    ],
    "area_m2": 838.7,
-   "scale_k": 0.0303,
-   "lightMapIntensity": 103.54306,
+   "scale_k": 0.039,
+   "lightMapIntensity": 80.506,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.04,
-   "seconds": 87.4
+   "seconds": 90.8,
+   "levels_8bit": 255,
+   "median_code": 35.0,
+   "clip_pct": 98.0,
+   "samples": 128,
+   "lit_frac": 0.649,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 47.0
   },
   "rtp4-suite_lm1": {
    "objects": [
@@ -48,11 +55,18 @@
     "rtp4-suite_FLOOR_carpetcharcoalcorridor1_1"
    ],
    "area_m2": 838.8,
-   "scale_k": 0.0295,
-   "lightMapIntensity": 106.38513,
+   "scale_k": 0.035,
+   "lightMapIntensity": 89.74942,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.04,
-   "seconds": 79.9
+   "seconds": 87.4,
+   "levels_8bit": 255,
+   "median_code": 50.0,
+   "clip_pct": 98.0,
+   "samples": 128,
+   "lit_frac": 0.846,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 54.0
   },
   "rtp4-suite_lm2": {
    "objects": [
@@ -104,11 +118,18 @@
     "rtp4-suite_FLOOR_tilegreyshaftorduct24unlabelled_1"
    ],
    "area_m2": 137.6,
-   "scale_k": 0.0293,
-   "lightMapIntensity": 107.17991,
+   "scale_k": 0.0341,
+   "lightMapIntensity": 92.07375,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.04,
-   "seconds": 65.6
+   "seconds": 74.6,
+   "levels_8bit": 255,
+   "median_code": 35.0,
+   "clip_pct": 98.0,
+   "samples": 128,
+   "lit_frac": 0.609,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 45.0
   },
   "rtp4-suite_lm3": {
    "objects": [
@@ -119,11 +140,18 @@
     "rtp4-suite_SKIRTING_skirting_3"
    ],
    "area_m2": 411.0,
-   "scale_k": 0.2253,
-   "lightMapIntensity": 13.94224,
+   "scale_k": 0.386,
+   "lightMapIntensity": 8.13943,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 11.3
+   "seconds": 11.7,
+   "levels_8bit": 255,
+   "median_code": 118.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.806,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 134.0
   },
   "rtp4-suite_lm4": {
    "objects": [
@@ -132,11 +160,18 @@
     "rtp4-suite_WALL_closure_6"
    ],
    "area_m2": 410.9,
-   "scale_k": 0.1732,
-   "lightMapIntensity": 18.13878,
+   "scale_k": 0.3121,
+   "lightMapIntensity": 10.06454,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 14.9
+   "seconds": 15.5,
+   "levels_8bit": 255,
+   "median_code": 145.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.9,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 153.0
   },
   "rtp4-suite_lm5": {
    "objects": [
@@ -146,11 +181,18 @@
     "rtp4-suite_SKIRTING_skirting_19"
    ],
    "area_m2": 411.0,
-   "scale_k": 0.1728,
-   "lightMapIntensity": 18.18557,
+   "scale_k": 0.2965,
+   "lightMapIntensity": 10.59422,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 11.0
+   "seconds": 11.4,
+   "levels_8bit": 255,
+   "median_code": 109.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.838,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 118.0
   },
   "rtp4-suite_lm6": {
    "objects": [
@@ -160,11 +202,18 @@
     "rtp4-suite_SKIRTING_skirting_34"
    ],
    "area_m2": 411.0,
-   "scale_k": 0.299,
-   "lightMapIntensity": 10.50805,
+   "scale_k": 0.5391,
+   "lightMapIntensity": 5.82753,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 10.7
+   "seconds": 11.3,
+   "levels_8bit": 255,
+   "median_code": 112.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.815,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 131.0
   },
   "rtp4-suite_lm7": {
    "objects": [
@@ -174,11 +223,18 @@
     "rtp4-suite_WALL_wall_16"
    ],
    "area_m2": 410.8,
-   "scale_k": 0.174,
-   "lightMapIntensity": 18.055,
+   "scale_k": 0.3803,
+   "lightMapIntensity": 8.26103,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 13.0
+   "seconds": 13.7,
+   "levels_8bit": 255,
+   "median_code": 108.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.826,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 122.0
   },
   "rtp4-suite_lm8": {
    "objects": [
@@ -190,11 +246,18 @@
     "rtp4-suite_WALL_doorheader_11"
    ],
    "area_m2": 411.0,
-   "scale_k": 0.1103,
-   "lightMapIntensity": 28.48005,
+   "scale_k": 0.1137,
+   "lightMapIntensity": 27.64203,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 21.9
+   "seconds": 23.0,
+   "levels_8bit": 255,
+   "median_code": 97.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.889,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 102.0
   },
   "rtp4-suite_lm9": {
    "objects": [
@@ -254,15 +317,23 @@
     "rtp4-suite_SKIRTING_skirting_8"
    ],
    "area_m2": 337.4,
-   "scale_k": 1.0,
-   "lightMapIntensity": 3.14159,
+   "scale_k": 0.3898,
+   "lightMapIntensity": 8.05946,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 62.2
+   "seconds": 66.4,
+   "levels_8bit": 255,
+   "median_code": 95.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "rebaked": true,
+   "lit_frac": 0.741,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 122.0
   }
  },
  "res": 1024,
  "samples": 64,
  "texel_m": 0.04,
- "seconds": 377.9
+ "seconds": 405.9
 }

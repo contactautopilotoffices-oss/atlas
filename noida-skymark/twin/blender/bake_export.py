@@ -93,6 +93,28 @@ def unwrap(group):
         if pad: bpy.ops.uv.pack_islands(margin_method="FRACTION", margin=pad / bpy.context.scene["twin_lm_res"], rotate=True)     # opt-in: a fixed pixel gap between islands
         else: bpy.ops.uv.pack_islands(margin=0.006, rotate=True)
     except Exception as e: print("pack_islands:", e)
+    bpy.ops.object.mode_set(mode="OBJECT")
+    def bounds():
+        lo, hi = 1e9, -1e9
+        for o in group:
+            uv = np.empty(len(o.data.loops) * 2, np.float32); o.data.uv_layers["lightmap"].data.foreach_get("uv", uv)
+            if len(uv): lo = min(lo, float(uv.min())); hi = max(hi, float(uv.max()))
+        return lo, hi
+    lo, hi = bounds()
+    if pad and (hi > 1.0005 or lo < -0.0005):       # the fixed-pixel margin overflows the atlas with many small islands, and that layout
+        # bakes black (Blender 5.2): re-pack with scaled margins instead
+        print(f"  unwrap: islands overflow the atlas ({lo:.3f}..{hi:.3f}), re-packing with scaled margins", flush=True)
+        bpy.ops.object.mode_set(mode="EDIT"); bpy.ops.mesh.select_all(action="SELECT"); bpy.ops.uv.select_all(action="SELECT")
+        try: bpy.ops.uv.pack_islands(margin_method="SCALED", margin=max(0.006, pad / bpy.context.scene["twin_lm_res"]), rotate=True)
+        except Exception as e: print("pack_islands:", e)
+        bpy.ops.object.mode_set(mode="OBJECT"); lo, hi = bounds()
+    if hi > 1.0005 or lo < -0.0005:                   # scale the whole layout into the atlas (the pixel gap shrinks by the same factor)
+        k = 1.0 / max(hi - min(lo, 0.0), 1e-6)
+        for o in group:
+            uv = np.empty(len(o.data.loops) * 2, np.float32); L_ = o.data.uv_layers["lightmap"].data; L_.foreach_get("uv", uv)
+            L_.foreach_set("uv", (uv - min(lo, 0.0)) * k)
+        lo, hi = bounds(); print(f"  unwrap: layout scaled into the atlas ({lo:.3f}..{hi:.3f})", flush=True)
+    if hi > 1.001 or lo < -0.001: raise RuntimeError(f"lightmap UVs outside the atlas: {lo}..{hi}")
     nov = None          # UV overlaps are counted after the bake by uv_overlap_check.py (texel raster per atlas)
     if bpy.context.object and bpy.context.object.mode != "OBJECT": bpy.ops.object.mode_set(mode="OBJECT")
     return nov
@@ -168,7 +190,13 @@ def bake(tenant, L, S, out, A):
         bpy.context.view_layer.objects.active = g["objs"][0]
         sb = {k: int(v) for k, v in (kv.split(":") for kv in getattr(A, "bake_samples_by", "").split(",") if ":" in kv)}
         g["samples"] = max([sb.get(o.get("twin_layer"), A.bake_samples) for o in g["objs"]] + [A.bake_samples]); sc.cycles.samples = g["samples"]
-        bpy.ops.object.bake(type="DIFFUSE", pass_filter={"DIRECT", "INDIRECT"}, margin=16, use_clear=True)
+        for attempt in range(3):           # a GPU short of memory can return an all-black bake without an error: check and retry
+            bpy.ops.object.bake(type="DIFFUSE", pass_filter={"DIRECT", "INDIRECT"}, margin=16, use_clear=True)
+            px = np.empty(len(img.pixels), np.float32); img.pixels.foreach_get(px)
+            if float(px.reshape(-1, 4)[:, :3].max()) > 0: break
+            print(f"  atlas {name}: bake came back all black (attempt {attempt + 1}), retrying", flush=True); import gc; gc.collect(); time.sleep(5)
+        else:
+            raise RuntimeError(f"atlas {name}: bake is all black after 3 attempts (GPU memory?). Stop other Blender jobs and re-run.")
         sc.cycles.samples = A.bake_samples
         raw = os.path.join(d, f"_{name}.exr"); img.filepath_raw = raw; img.file_format = "OPEN_EXR"; img.save()
         # guides for the denoiser: albedo (diffuse colour) and world normal, 1-4 samples each

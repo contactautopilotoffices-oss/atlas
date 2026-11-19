@@ -617,6 +617,9 @@ class Furnisher:
         tm = bpy.data.meshes.new("logo_word"); import bmesh as _bm; bm = _bm.new()
         for o in objs:
             o.data.transform(Matrix.Scale(sc_, 4) @ o.matrix_world @ Matrix.Translation((0, 0, 0))); o.matrix_world = Matrix()
+            for sp in o.data.splines:          # the importer stacks paths a little apart in depth: put every point on one plane
+                for bp in sp.bezier_points: bp.co.z = 0.0; bp.handle_left.z = 0.0; bp.handle_right.z = 0.0
+                for pp in sp.points: pp.co.z = 0.0
             o.data.dimensions = "2D"; o.data.fill_mode = "BOTH"; o.data.extrude = dep / 2; o.data.resolution_u = 6
         bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
         for o in objs:

@@ -7,11 +7,18 @@
     "rtp6-a_FLOOR_tilegreygentstoilet2_1"
    ],
    "area_m2": 838.4,
-   "scale_k": 0.0353,
-   "lightMapIntensity": 88.87819,
+   "scale_k": 0.0494,
+   "lightMapIntensity": 63.58787,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.04,
-   "seconds": 115.5
+   "seconds": 116.0,
+   "levels_8bit": 255,
+   "median_code": 44.0,
+   "clip_pct": 98.0,
+   "samples": 128,
+   "lit_frac": 0.681,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 60.0
   },
   "rtp6-a_lm1": {
    "objects": [
@@ -20,11 +27,18 @@
     "rtp6-a_FLOOR_carpetcharcoalunlabelledspace39_1"
    ],
    "area_m2": 838.5,
-   "scale_k": 0.0291,
-   "lightMapIntensity": 108.04757,
+   "scale_k": 0.0387,
+   "lightMapIntensity": 81.22208,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.04,
-   "seconds": 11.7
+   "seconds": 108.3,
+   "levels_8bit": 255,
+   "median_code": 30.0,
+   "clip_pct": 98.0,
+   "samples": 128,
+   "lit_frac": 0.573,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 50.0
   },
   "rtp6-a_lm2": {
    "objects": [
@@ -35,11 +49,18 @@
     "rtp6-a_FLOOR_carpetcharcoalcorridor16_1"
    ],
    "area_m2": 838.6,
-   "scale_k": 0.2626,
-   "lightMapIntensity": 11.96379,
+   "scale_k": 0.3803,
+   "lightMapIntensity": 8.26061,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.04,
-   "seconds": 19.4
+   "seconds": 147.0,
+   "levels_8bit": 255,
+   "median_code": 150.0,
+   "clip_pct": 98.0,
+   "samples": 128,
+   "lit_frac": 0.974,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 152.0
   },
   "rtp6-a_lm3": {
    "objects": [
@@ -50,11 +71,18 @@
     "rtp6-a_FLOOR_carpetcharcoalcorridor7_1"
    ],
    "area_m2": 838.6,
-   "scale_k": 0.0297,
-   "lightMapIntensity": 105.65185,
+   "scale_k": 0.0319,
+   "lightMapIntensity": 98.47604,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.04,
-   "seconds": 19.5
+   "seconds": 159.4,
+   "levels_8bit": 255,
+   "median_code": 46.0,
+   "clip_pct": 98.0,
+   "samples": 128,
+   "lit_frac": 0.927,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 47.0
   },
   "rtp6-a_lm4": {
    "objects": [
@@ -66,11 +94,18 @@
     "rtp6-a_FLOOR_tilegreyspaceforoutdoorunit1_1"
    ],
    "area_m2": 838.6,
-   "scale_k": 0.03,
-   "lightMapIntensity": 104.82717,
+   "scale_k": 0.0362,
+   "lightMapIntensity": 86.68488,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.04,
-   "seconds": 16.2
+   "seconds": 147.7,
+   "levels_8bit": 255,
+   "median_code": 47.0,
+   "clip_pct": 98.0,
+   "samples": 128,
+   "lit_frac": 0.833,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 50.0
   },
   "rtp6-a_lm5": {
    "objects": [
@@ -84,11 +119,18 @@
     "rtp6-a_CEILING_corridor7board_1"
    ],
    "area_m2": 837.9,
-   "scale_k": 0.03,
-   "lightMapIntensity": 104.78016,
+   "scale_k": 0.0358,
+   "lightMapIntensity": 87.76205,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.04,
-   "seconds": 22.4
+   "seconds": 225.9,
+   "levels_8bit": 255,
+   "median_code": 48.0,
+   "clip_pct": 98.0,
+   "samples": 128,
+   "lit_frac": 0.87,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 50.0
   },
   "rtp6-a_lm6": {
    "objects": [
@@ -153,11 +195,18 @@
     "rtp6-a_CEILING_corridor16board_1"
    ],
    "area_m2": 838.8,
-   "scale_k": 0.0304,
-   "lightMapIntensity": 103.49279,
+   "scale_k": 0.0403,
+   "lightMapIntensity": 78.00084,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.04,
-   "seconds": 109.8
+   "seconds": 128.9,
+   "levels_8bit": 255,
+   "median_code": 44.0,
+   "clip_pct": 98.0,
+   "samples": 128,
+   "lit_frac": 0.763,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 50.0
   },
   "rtp6-a_lm7": {
    "objects": [
@@ -376,11 +425,18 @@
     "rtp6-a_FLOOR_carpetcharcoalcorridor14_1"
    ],
    "area_m2": 609.2,
-   "scale_k": 0.0301,
-   "lightMapIntensity": 104.21104,
+   "scale_k": 0.0479,
+   "lightMapIntensity": 65.58653,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.04,
-   "seconds": 381.1
+   "seconds": 408.5,
+   "levels_8bit": 255,
+   "median_code": 31.0,
+   "clip_pct": 98.0,
+   "samples": 128,
+   "lit_frac": 0.561,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 48.0
   },
   "rtp6-a_lm8": {
    "objects": [
@@ -390,11 +446,18 @@
     "rtp6-a_SKIRTING_skirting_41"
    ],
    "area_m2": 411.0,
-   "scale_k": 0.1843,
-   "lightMapIntensity": 17.04594,
+   "scale_k": 0.3531,
+   "lightMapIntensity": 8.89594,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 16.4
+   "seconds": 11.7,
+   "levels_8bit": 255,
+   "median_code": 79.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.694,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 106.0
   },
   "rtp6-a_lm9": {
    "objects": [
@@ -403,11 +466,18 @@
     "rtp6-a_SKIRTING_skirting_72"
    ],
    "area_m2": 411.0,
-   "scale_k": 0.3183,
-   "lightMapIntensity": 9.86968,
+   "scale_k": 0.4785,
+   "lightMapIntensity": 6.56539,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 13.9
+   "seconds": 11.2,
+   "levels_8bit": 255,
+   "median_code": 118.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.8,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 134.0
   },
   "rtp6-a_lm10": {
    "objects": [
@@ -416,11 +486,18 @@
     "rtp6-a_SKIRTING_skirting_25"
    ],
    "area_m2": 411.0,
-   "scale_k": 0.1705,
-   "lightMapIntensity": 18.43043,
+   "scale_k": 0.3851,
+   "lightMapIntensity": 8.15713,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 15.3
+   "seconds": 13.7,
+   "levels_8bit": 255,
+   "median_code": 99.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.804,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 114.0
   },
   "rtp6-a_lm11": {
    "objects": [
@@ -429,11 +506,18 @@
     "rtp6-a_WALL_doorheader_28"
    ],
    "area_m2": 411.0,
-   "scale_k": 0.3348,
-   "lightMapIntensity": 9.38248,
+   "scale_k": 0.4421,
+   "lightMapIntensity": 7.10569,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 14.6
+   "seconds": 18.5,
+   "levels_8bit": 255,
+   "median_code": 145.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.887,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 152.0
   },
   "rtp6-a_lm12": {
    "objects": [
@@ -443,11 +527,18 @@
     "rtp6-a_SKIRTING_skirting_100"
    ],
    "area_m2": 411.0,
-   "scale_k": 0.3789,
-   "lightMapIntensity": 8.29209,
+   "scale_k": 0.6021,
+   "lightMapIntensity": 5.21764,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 17.4
+   "seconds": 13.9,
+   "levels_8bit": 255,
+   "median_code": 111.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.839,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 129.0
   },
   "rtp6-a_lm13": {
    "objects": [
@@ -457,11 +548,18 @@
     "rtp6-a_SKIRTING_skirting_101"
    ],
    "area_m2": 411.0,
-   "scale_k": 0.1244,
-   "lightMapIntensity": 25.25597,
+   "scale_k": 0.2464,
+   "lightMapIntensity": 12.75228,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 16.4
+   "seconds": 10.7,
+   "levels_8bit": 255,
+   "median_code": 54.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.642,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 86.0
   },
   "rtp6-a_lm14": {
    "objects": [
@@ -471,11 +569,18 @@
     "rtp6-a_SKIRTING_skirting_110"
    ],
    "area_m2": 411.0,
-   "scale_k": 0.4413,
-   "lightMapIntensity": 7.1189,
+   "scale_k": 0.6591,
+   "lightMapIntensity": 4.76685,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 14.4
+   "seconds": 8.7,
+   "levels_8bit": 249,
+   "median_code": 128.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.781,
+   "levels_8bit_lit": 228,
+   "median_code_lit": 143.0
   },
   "rtp6-a_lm15": {
    "objects": [
@@ -485,11 +590,18 @@
     "rtp6-a_SKIRTING_skirting_3"
    ],
    "area_m2": 411.0,
-   "scale_k": 0.2811,
-   "lightMapIntensity": 11.17644,
+   "scale_k": 0.5109,
+   "lightMapIntensity": 6.14868,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 16.5
+   "seconds": 15.0,
+   "levels_8bit": 255,
+   "median_code": 115.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.838,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 134.0
   },
   "rtp6-a_lm16": {
    "objects": [
@@ -499,11 +611,18 @@
     "rtp6-a_SKIRTING_skirting_77"
    ],
    "area_m2": 411.0,
-   "scale_k": 0.1377,
-   "lightMapIntensity": 22.8191,
+   "scale_k": 0.1674,
+   "lightMapIntensity": 18.7651,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 19.5
+   "seconds": 17.2,
+   "levels_8bit": 255,
+   "median_code": 80.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.778,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 95.0
   },
   "rtp6-a_lm17": {
    "objects": [
@@ -512,11 +631,18 @@
     "rtp6-a_SKIRTING_skirting_11"
    ],
    "area_m2": 411.0,
-   "scale_k": 0.1724,
-   "lightMapIntensity": 18.22268,
+   "scale_k": 0.3013,
+   "lightMapIntensity": 10.42566,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 16.0
+   "seconds": 12.1,
+   "levels_8bit": 255,
+   "median_code": 68.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.735,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 95.0
   },
   "rtp6-a_lm18": {
    "objects": [
@@ -526,11 +652,18 @@
     "rtp6-a_SKIRTING_skirting_90"
    ],
    "area_m2": 411.0,
-   "scale_k": 0.4937,
-   "lightMapIntensity": 6.36369,
+   "scale_k": 0.7777,
+   "lightMapIntensity": 4.03973,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 19.3
+   "seconds": 13.8,
+   "levels_8bit": 255,
+   "median_code": 125.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.786,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 142.0
   },
   "rtp6-a_lm19": {
    "objects": [
@@ -541,11 +674,18 @@
     "rtp6-a_SKIRTING_skirting_65"
    ],
    "area_m2": 411.0,
-   "scale_k": 0.1068,
-   "lightMapIntensity": 29.40603,
+   "scale_k": 0.1645,
+   "lightMapIntensity": 19.09444,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 21.2
+   "seconds": 16.3,
+   "levels_8bit": 255,
+   "median_code": 49.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.629,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 82.0
   },
   "rtp6-a_lm20": {
    "objects": [
@@ -556,11 +696,18 @@
     "rtp6-a_SKIRTING_skirting_98"
    ],
    "area_m2": 411.0,
-   "scale_k": 0.3377,
-   "lightMapIntensity": 9.30382,
+   "scale_k": 0.5887,
+   "lightMapIntensity": 5.33625,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 19.5
+   "seconds": 18.6,
+   "levels_8bit": 255,
+   "median_code": 134.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.853,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 147.0
   },
   "rtp6-a_lm21": {
    "objects": [
@@ -572,11 +719,18 @@
     "rtp6-a_SKIRTING_skirting_57"
    ],
    "area_m2": 411.0,
-   "scale_k": 0.1904,
-   "lightMapIntensity": 16.49941,
+   "scale_k": 0.3509,
+   "lightMapIntensity": 8.95265,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 22.4
+   "seconds": 17.8,
+   "levels_8bit": 255,
+   "median_code": 93.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.79,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 116.0
   },
   "rtp6-a_lm22": {
    "objects": [
@@ -589,11 +743,18 @@
     "rtp6-a_SKIRTING_skirting_112"
    ],
    "area_m2": 411.0,
-   "scale_k": 0.1499,
-   "lightMapIntensity": 20.96029,
+   "scale_k": 0.2448,
+   "lightMapIntensity": 12.83328,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 20.8
+   "seconds": 15.8,
+   "levels_8bit": 255,
+   "median_code": 77.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.722,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 107.0
   },
   "rtp6-a_lm23": {
    "objects": [
@@ -607,11 +768,18 @@
     "rtp6-a_SKIRTING_skirting_24"
    ],
    "area_m2": 411.0,
-   "scale_k": 0.1498,
-   "lightMapIntensity": 20.9776,
+   "scale_k": 0.3937,
+   "lightMapIntensity": 7.98012,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 18.7
+   "seconds": 17.6,
+   "levels_8bit": 255,
+   "median_code": 83.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.733,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 112.0
   },
   "rtp6-a_lm24": {
    "objects": [
@@ -629,11 +797,18 @@
     "rtp6-a_SKIRTING_skirting_85"
    ],
    "area_m2": 411.0,
-   "scale_k": 0.1663,
-   "lightMapIntensity": 18.89567,
+   "scale_k": 0.3014,
+   "lightMapIntensity": 10.42491,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 25.8
+   "seconds": 24.7,
+   "levels_8bit": 255,
+   "median_code": 80.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.748,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 105.0
   },
   "rtp6-a_lm25": {
    "objects": [
@@ -667,11 +842,19 @@
     "rtp6-a_WALL_wall_40"
    ],
    "area_m2": 411.0,
-   "scale_k": 0.193,
-   "lightMapIntensity": 16.27379,
+   "scale_k": 0.2939,
+   "lightMapIntensity": 10.69036,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 54.5
+   "seconds": 49.6,
+   "levels_8bit": 255,
+   "median_code": 85.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "rebaked": true,
+   "lit_frac": 0.76,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 107.0
   },
   "rtp6-a_lm26": {
    "objects": [
@@ -861,11 +1044,19 @@
     "rtp6-a_SKIRTING_skirting_53"
    ],
    "area_m2": 257.5,
-   "scale_k": 0.2822,
-   "lightMapIntensity": 11.13125,
+   "scale_k": 0.5734,
+   "lightMapIntensity": 5.47898,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.028,
-   "seconds": 329.1
+   "seconds": 316.5,
+   "levels_8bit": 255,
+   "median_code": 91.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "rebaked": true,
+   "lit_frac": 0.687,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 139.0
   },
   "rtp6-a_lm27": {
    "objects": [
@@ -878,11 +1069,18 @@
     "rtp6-a_COLUMN_column_14"
    ],
    "area_m2": 168.7,
-   "scale_k": 0.2782,
-   "lightMapIntensity": 11.29393,
+   "scale_k": 1.3256,
+   "lightMapIntensity": 2.36993,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.018,
-   "seconds": 19.4
+   "seconds": 36.4,
+   "levels_8bit": 255,
+   "median_code": 0.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.178,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 74.0
   },
   "rtp6-a_lm28": {
    "objects": [
@@ -897,11 +1095,18 @@
     "rtp6-a_COLUMN_column_9"
    ],
    "area_m2": 166.7,
-   "scale_k": 0.353,
-   "lightMapIntensity": 8.9007,
+   "scale_k": 1.945,
+   "lightMapIntensity": 1.61519,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.018,
-   "seconds": 23.0
+   "seconds": 31.1,
+   "levels_8bit": 255,
+   "median_code": 1.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.207,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 84.0
   },
   "rtp6-a_lm29": {
    "objects": [
@@ -919,11 +1124,18 @@
     "rtp6-a_COLUMN_column_24"
    ],
    "area_m2": 169.3,
-   "scale_k": 0.3526,
-   "lightMapIntensity": 8.90896,
+   "scale_k": 1.3415,
+   "lightMapIntensity": 2.34181,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.018,
-   "seconds": 28.6
+   "seconds": 31.4,
+   "levels_8bit": 255,
+   "median_code": 0.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.193,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 85.0
   },
   "rtp6-a_lm30": {
    "objects": [
@@ -940,15 +1152,22 @@
     "rtp6-a_COLUMN_column_36"
    ],
    "area_m2": 101.9,
-   "scale_k": 0.2125,
-   "lightMapIntensity": 14.78077,
+   "scale_k": 0.4495,
+   "lightMapIntensity": 6.9885,
    "denoised": "OIDN (compositor, albedo + normal guides)",
    "texel_m": 0.018,
-   "seconds": 27.0
+   "seconds": 27.6,
+   "levels_8bit": 255,
+   "median_code": 5.0,
+   "clip_pct": 98.0,
+   "samples": 64,
+   "lit_frac": 0.439,
+   "levels_8bit_lit": 231,
+   "median_code_lit": 114.0
   }
  },
  "res": 1024,
  "samples": 64,
  "texel_m": 0.04,
- "seconds": 1485.6
+ "seconds": 2191.9
 }

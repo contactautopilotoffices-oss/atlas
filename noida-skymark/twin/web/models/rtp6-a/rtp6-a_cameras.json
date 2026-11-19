@@ -1,0 +1,1266 @@
+{
+ "frame": "glTF / three.js world of <tenant>.glb: x = plan east, y = up (0 = finished floor), z = -plan north; metres. position = the lens, target = a point on the view axis; hfov_deg = horizontal field of view for a 16:9 frame (three.js PerspectiveCamera.fov is vertical: vfov = 2 atan(tan(hfov/2) * h / w)). The stills use the same camera made level with lens shift; using lookAt(target) gives the same view with a 5-10 deg tilt.",
+ "tenant": "rtp6-a",
+ "rooms": {
+  "Open workstations 1": [
+   {
+    "kind": "entry",
+    "position": [
+     11.858,
+     1.55,
+     -87.143
+    ],
+    "target": [
+     5.587,
+     0.794,
+     -93.087
+    ],
+    "hfov_deg": 72,
+    "room": "Open workstations 1",
+    "label": "Open Workstations 1: entry",
+    "name": "rtp6-a_CAM_open-workstations-1_entry",
+    "still": "stills/rtp6-a_CAM_open-workstations-1_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     4.021,
+     1.55,
+     -87.739
+    ],
+    "target": [
+     0.607,
+     0.834,
+     -91.975
+    ],
+    "hfov_deg": 72,
+    "room": "Open workstations 1",
+    "label": "Open Workstations 1: feature",
+    "name": "rtp6-a_CAM_open-workstations-1_feature",
+    "still": "stills/rtp6-a_CAM_open-workstations-1_feature.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     -8.404,
+     1.55,
+     -95.364
+    ],
+    "target": [
+     -6.246,
+     1.209,
+     -93.933
+    ],
+    "hfov_deg": 72,
+    "room": "Open workstations 1",
+    "label": "Open Workstations 1: reverse",
+    "name": "rtp6-a_CAM_open-workstations-1_reverse",
+    "still": "stills/rtp6-a_CAM_open-workstations-1_reverse.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     3.571,
+     1.55,
+     -89.139
+    ],
+    "target": [
+     0.419,
+     0.759,
+     -91.119
+    ],
+    "hfov_deg": 45,
+    "room": "Open workstations 1",
+    "label": "Open Workstations 1: detail",
+    "name": "rtp6-a_CAM_open-workstations-1_detail",
+    "still": "stills/rtp6-a_CAM_open-workstations-1_detail.png"
+   }
+  ],
+  "Open workstations 2": [
+   {
+    "kind": "entry",
+    "position": [
+     -37.033,
+     1.55,
+     -108.642
+    ],
+    "target": [
+     -32.4,
+     0.756,
+     -104.78
+    ],
+    "hfov_deg": 72,
+    "room": "Open workstations 2",
+    "label": "Open Workstations 2: entry",
+    "name": "rtp6-a_CAM_open-workstations-2_entry",
+    "still": "stills/rtp6-a_CAM_open-workstations-2_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     -28.904,
+     1.55,
+     -100.514
+    ],
+    "target": [
+     -26.194,
+     1.273,
+     -102.142
+    ],
+    "hfov_deg": 72,
+    "room": "Open workstations 2",
+    "label": "Open Workstations 2: feature",
+    "name": "rtp6-a_CAM_open-workstations-2_feature",
+    "still": "stills/rtp6-a_CAM_open-workstations-2_feature.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     -7.604,
+     1.55,
+     -100.314
+    ],
+    "target": [
+     -10.808,
+     1.2,
+     -102.717
+    ],
+    "hfov_deg": 72,
+    "room": "Open workstations 2",
+    "label": "Open Workstations 2: reverse",
+    "name": "rtp6-a_CAM_open-workstations-2_reverse",
+    "still": "stills/rtp6-a_CAM_open-workstations-2_reverse.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     -24.354,
+     1.55,
+     -102.464
+    ],
+    "target": [
+     -26.98,
+     0.97,
+     -103.205
+    ],
+    "hfov_deg": 45,
+    "room": "Open workstations 2",
+    "label": "Open Workstations 2: detail",
+    "name": "rtp6-a_CAM_open-workstations-2_detail",
+    "still": "stills/rtp6-a_CAM_open-workstations-2_detail.png"
+   }
+  ],
+  "Open workstations 3": [
+   {
+    "kind": "entry",
+    "position": [
+     11.446,
+     1.55,
+     -104.389
+    ],
+    "target": [
+     5.168,
+     0.964,
+     -102.051
+    ],
+    "hfov_deg": 72,
+    "room": "Open workstations 3",
+    "label": "Open Workstations 3: entry",
+    "name": "rtp6-a_CAM_open-workstations-3_entry",
+    "still": "stills/rtp6-a_CAM_open-workstations-3_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     2.221,
+     1.55,
+     -106.964
+    ],
+    "target": [
+     1.582,
+     0.678,
+     -97.023
+    ],
+    "hfov_deg": 72,
+    "room": "Open workstations 3",
+    "label": "Open Workstations 3: feature",
+    "name": "rtp6-a_CAM_open-workstations-3_feature",
+    "still": "stills/rtp6-a_CAM_open-workstations-3_feature.png"
+   }
+  ],
+  "Open workstations 4": [
+   {
+    "kind": "entry",
+    "position": [
+     22.746,
+     1.55,
+     -110.489
+    ],
+    "target": [
+     25.315,
+     0.885,
+     -107.726
+    ],
+    "hfov_deg": 72,
+    "room": "Open workstations 4",
+    "label": "Open Workstations 4: entry",
+    "name": "rtp6-a_CAM_open-workstations-4_entry",
+    "still": "stills/rtp6-a_CAM_open-workstations-4_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     36.346,
+     1.55,
+     -108.764
+    ],
+    "target": [
+     33.567,
+     1.139,
+     -104.974
+    ],
+    "hfov_deg": 72,
+    "room": "Open workstations 4",
+    "label": "Open Workstations 4: feature",
+    "name": "rtp6-a_CAM_open-workstations-4_feature",
+    "still": "stills/rtp6-a_CAM_open-workstations-4_feature.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     31.321,
+     1.55,
+     -106.964
+    ],
+    "target": [
+     33.335,
+     0.75,
+     -103.785
+    ],
+    "hfov_deg": 45,
+    "room": "Open workstations 4",
+    "label": "Open Workstations 4: detail",
+    "name": "rtp6-a_CAM_open-workstations-4_detail",
+    "still": "stills/rtp6-a_CAM_open-workstations-4_detail.png"
+   }
+  ],
+  "LOBBY (1)": [
+   {
+    "kind": "entry",
+    "position": [
+     24.096,
+     1.55,
+     -92.489
+    ],
+    "target": [
+     25.686,
+     -0.0,
+     -101.135
+    ],
+    "hfov_deg": 72,
+    "room": "LOBBY (1)",
+    "label": "Lobby (1): entry",
+    "name": "rtp6-a_CAM_lobby-1_entry",
+    "still": "stills/rtp6-a_CAM_lobby-1_entry.png"
+   }
+  ],
+  "RECEPTION & WAITING AREA": [
+   {
+    "kind": "entry",
+    "position": [
+     -52.604,
+     1.55,
+     -95.864
+    ],
+    "target": [
+     -46.451,
+     0.678,
+     -103.698
+    ],
+    "hfov_deg": 72,
+    "room": "RECEPTION & WAITING AREA",
+    "label": "Reception & Waiting Area: entry",
+    "name": "rtp6-a_CAM_reception-waiting-area_entry",
+    "still": "stills/rtp6-a_CAM_reception-waiting-area_entry.png"
+   }
+  ],
+  "REPRO (1)": [
+   {
+    "kind": "entry",
+    "position": [
+     -7.529,
+     1.55,
+     -98.614
+    ],
+    "target": [
+     -9.496,
+     1.199,
+     -98.919
+    ],
+    "hfov_deg": 72,
+    "room": "REPRO (1)",
+    "label": "Repro (1): entry",
+    "name": "rtp6-a_CAM_repro-1_entry",
+    "still": "stills/rtp6-a_CAM_repro-1_entry.png"
+   }
+  ],
+  "REPRO (2)": [
+   {
+    "kind": "entry",
+    "position": [
+     15.496,
+     1.55,
+     -107.639
+    ],
+    "target": [
+     15.24,
+     1.326,
+     -110.182
+    ],
+    "hfov_deg": 75,
+    "room": "REPRO (2)",
+    "label": "Repro (2): entry",
+    "name": "rtp6-a_CAM_repro-2_entry",
+    "still": "stills/rtp6-a_CAM_repro-2_entry.png"
+   }
+  ],
+  "CABIN (1)": [
+   {
+    "kind": "entry",
+    "position": [
+     43.446,
+     1.55,
+     -109.414
+    ],
+    "target": [
+     42.323,
+     1.399,
+     -109.197
+    ],
+    "hfov_deg": 75,
+    "room": "CABIN (1)",
+    "label": "Cabin (1): entry",
+    "name": "rtp6-a_CAM_cabin-1_entry",
+    "still": "stills/rtp6-a_CAM_cabin-1_entry.png"
+   }
+  ],
+  "TRAINING ROOM": [
+   {
+    "kind": "entry",
+    "position": [
+     -42.029,
+     1.55,
+     -85.539
+    ],
+    "target": [
+     -45.433,
+     0.818,
+     -93.177
+    ],
+    "hfov_deg": 72,
+    "room": "TRAINING ROOM",
+    "label": "Training Room: entry",
+    "name": "rtp6-a_CAM_training-room_entry",
+    "still": "stills/rtp6-a_CAM_training-room_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     -43.679,
+     1.55,
+     -85.714
+    ],
+    "target": [
+     -42.287,
+     0.739,
+     -94.876
+    ],
+    "hfov_deg": 72,
+    "room": "TRAINING ROOM",
+    "label": "Training Room: feature",
+    "name": "rtp6-a_CAM_training-room_feature",
+    "still": "stills/rtp6-a_CAM_training-room_feature.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     -41.104,
+     1.55,
+     -84.889
+    ],
+    "target": [
+     -45.917,
+     0.855,
+     -91.213
+    ],
+    "hfov_deg": 72,
+    "room": "TRAINING ROOM",
+    "label": "Training Room: reverse",
+    "name": "rtp6-a_CAM_training-room_reverse",
+    "still": "stills/rtp6-a_CAM_training-room_reverse.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     -42.804,
+     1.55,
+     -87.364
+    ],
+    "target": [
+     -43.246,
+     0.75,
+     -91.102
+    ],
+    "hfov_deg": 45,
+    "room": "TRAINING ROOM",
+    "label": "Training Room: detail",
+    "name": "rtp6-a_CAM_training-room_detail",
+    "still": "stills/rtp6-a_CAM_training-room_detail.png"
+   }
+  ],
+  "UPS & ELECTRICAL ROOM": [
+   {
+    "kind": "entry",
+    "position": [
+     -19.738,
+     1.55,
+     -112.874
+    ],
+    "target": [
+     -22.385,
+     0.939,
+     -109.061
+    ],
+    "hfov_deg": 78,
+    "room": "UPS & ELECTRICAL ROOM",
+    "label": "Ups & Electrical Room: entry",
+    "name": "rtp6-a_CAM_ups-electrical-room_entry",
+    "still": "stills/rtp6-a_CAM_ups-electrical-room_entry.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     -24.854,
+     1.55,
+     -113.364
+    ],
+    "target": [
+     -21.505,
+     0.586,
+     -109.046
+    ],
+    "hfov_deg": 72,
+    "room": "UPS & ELECTRICAL ROOM",
+    "label": "Ups & Electrical Room: reverse",
+    "name": "rtp6-a_CAM_ups-electrical-room_reverse",
+    "still": "stills/rtp6-a_CAM_ups-electrical-room_reverse.png"
+   }
+  ],
+  "LADIES TOILET (1)": [
+   {
+    "kind": "entry",
+    "position": [
+     -27.729,
+     1.55,
+     -113.228
+    ],
+    "target": [
+     -26.414,
+     1.272,
+     -110.332
+    ],
+    "hfov_deg": 75,
+    "room": "LADIES TOILET (1)",
+    "label": "Ladies Toilet (1): entry",
+    "name": "rtp6-a_CAM_ladies-toilet-1_entry",
+    "still": "stills/rtp6-a_CAM_ladies-toilet-1_entry.png"
+   }
+  ],
+  "GENTS TOILET (1)": [
+   {
+    "kind": "entry",
+    "position": [
+     -37.033,
+     1.55,
+     -108.642
+    ],
+    "target": [
+     -36.913,
+     1.249,
+     -110.923
+    ],
+    "hfov_deg": 75,
+    "room": "GENTS TOILET (1)",
+    "label": "Gents Toilet (1): entry",
+    "name": "rtp6-a_CAM_gents-toilet-1_entry",
+    "still": "stills/rtp6-a_CAM_gents-toilet-1_entry.png"
+   }
+  ],
+  "GENTS TOILET (2)": [
+   {
+    "kind": "entry",
+    "position": [
+     -42.234,
+     1.55,
+     -109.804
+    ],
+    "target": [
+     -38.359,
+     1.205,
+     -110.534
+    ],
+    "hfov_deg": 75,
+    "room": "GENTS TOILET (2)",
+    "label": "Gents Toilet (2): entry",
+    "name": "rtp6-a_CAM_gents-toilet-2_entry",
+    "still": "stills/rtp6-a_CAM_gents-toilet-2_entry.png"
+   }
+  ],
+  "LADIES TOILET (2)": [
+   {
+    "kind": "entry",
+    "position": [
+     -44.061,
+     1.55,
+     -113.327
+    ],
+    "target": [
+     -44.875,
+     0.0,
+     -104.574
+    ],
+    "hfov_deg": 75,
+    "room": "LADIES TOILET (2)",
+    "label": "Ladies Toilet (2): entry",
+    "name": "rtp6-a_CAM_ladies-toilet-2_entry",
+    "still": "stills/rtp6-a_CAM_ladies-toilet-2_entry.png"
+   }
+  ],
+  "SERVER ROOM": [
+   {
+    "kind": "entry",
+    "position": [
+     -7.501,
+     1.55,
+     -112.959
+    ],
+    "target": [
+     -5.003,
+     0.906,
+     -108.757
+    ],
+    "hfov_deg": 75,
+    "room": "SERVER ROOM",
+    "label": "Server Room: entry",
+    "name": "rtp6-a_CAM_server-room_entry",
+    "still": "stills/rtp6-a_CAM_server-room_entry.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     -2.504,
+     1.55,
+     -113.064
+    ],
+    "target": [
+     -10.078,
+     0.245,
+     -106.666
+    ],
+    "hfov_deg": 72,
+    "room": "SERVER ROOM",
+    "label": "Server Room: reverse",
+    "name": "rtp6-a_CAM_server-room_reverse",
+    "still": "stills/rtp6-a_CAM_server-room_reverse.png"
+   }
+  ],
+  "PRINTER": [
+   {
+    "kind": "entry",
+    "position": [
+     15.946,
+     1.55,
+     -110.439
+    ],
+    "target": [
+     14.85,
+     1.225,
+     -112.649
+    ],
+    "hfov_deg": 72,
+    "room": "PRINTER",
+    "label": "Printer: entry",
+    "name": "rtp6-a_CAM_printer_entry",
+    "still": "stills/rtp6-a_CAM_printer_entry.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     9.696,
+     1.55,
+     -114.564
+    ],
+    "target": [
+     11.34,
+     1.39,
+     -113.771
+    ],
+    "hfov_deg": 75,
+    "room": "PRINTER",
+    "label": "Printer: reverse",
+    "name": "rtp6-a_CAM_printer_reverse",
+    "still": "stills/rtp6-a_CAM_printer_reverse.png"
+   }
+  ],
+  "GENTS TOILET (3)": [
+   {
+    "kind": "entry",
+    "position": [
+     11.245,
+     1.55,
+     -109.314
+    ],
+    "target": [
+     12.022,
+     1.221,
+     -111.009
+    ],
+    "hfov_deg": 75,
+    "room": "GENTS TOILET (3)",
+    "label": "Gents Toilet (3): entry",
+    "name": "rtp6-a_CAM_gents-toilet-3_entry",
+    "still": "stills/rtp6-a_CAM_gents-toilet-3_entry.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     13.921,
+     1.55,
+     -108.264
+    ],
+    "target": [
+     12.0,
+     1.146,
+     -109.509
+    ],
+    "hfov_deg": 72,
+    "room": "GENTS TOILET (3)",
+    "label": "Gents Toilet (3): reverse",
+    "name": "rtp6-a_CAM_gents-toilet-3_reverse",
+    "still": "stills/rtp6-a_CAM_gents-toilet-3_reverse.png"
+   }
+  ],
+  "LADIES TOILET (3)": [
+   {
+    "kind": "entry",
+    "position": [
+     0.265,
+     1.55,
+     -112.437
+    ],
+    "target": [
+     -1.035,
+     1.045,
+     -109.887
+    ],
+    "hfov_deg": 72,
+    "room": "LADIES TOILET (3)",
+    "label": "Ladies Toilet (3): entry",
+    "name": "rtp6-a_CAM_ladies-toilet-3_entry",
+    "still": "stills/rtp6-a_CAM_ladies-toilet-3_entry.png"
+   }
+  ],
+  "REPRO AREA": [
+   {
+    "kind": "entry",
+    "position": [
+     16.826,
+     1.55,
+     -110.78
+    ],
+    "target": [
+     18.064,
+     1.058,
+     -113.277
+    ],
+    "hfov_deg": 72,
+    "room": "REPRO AREA",
+    "label": "Repro Area: entry",
+    "name": "rtp6-a_CAM_repro-area_entry",
+    "still": "stills/rtp6-a_CAM_repro-area_entry.png"
+   }
+  ],
+  "MEETING ROOM 04 PAX (1)": [
+   {
+    "kind": "entry",
+    "position": [
+     -50.38,
+     1.55,
+     -92.655
+    ],
+    "target": [
+     -46.895,
+     1.203,
+     -90.766
+    ],
+    "hfov_deg": 78,
+    "room": "MEETING ROOM 04 PAX (1)",
+    "label": "Meeting Room 04 Pax (1): entry",
+    "name": "rtp6-a_CAM_meeting-room-04-pax-1_entry",
+    "still": "stills/rtp6-a_CAM_meeting-room-04-pax-1_entry.png"
+   }
+  ],
+  "MEETING ROOM 04 PAX (2)": [
+   {
+    "kind": "entry",
+    "position": [
+     -50.578,
+     1.55,
+     -89.01
+    ],
+    "target": [
+     -46.937,
+     0.897,
+     -88.348
+    ],
+    "hfov_deg": 75,
+    "room": "MEETING ROOM 04 PAX (2)",
+    "label": "Meeting Room 04 Pax (2): entry",
+    "name": "rtp6-a_CAM_meeting-room-04-pax-2_entry",
+    "still": "stills/rtp6-a_CAM_meeting-room-04-pax-2_entry.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     -47.479,
+     1.55,
+     -86.389
+    ],
+    "target": [
+     -48.706,
+     1.214,
+     -90.032
+    ],
+    "hfov_deg": 72,
+    "room": "MEETING ROOM 04 PAX (2)",
+    "label": "Meeting Room 04 Pax (2): reverse",
+    "name": "rtp6-a_CAM_meeting-room-04-pax-2_reverse",
+    "still": "stills/rtp6-a_CAM_meeting-room-04-pax-2_reverse.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     -48.129,
+     1.55,
+     -87.164
+    ],
+    "target": [
+     -49.762,
+     0.845,
+     -90.051
+    ],
+    "hfov_deg": 45,
+    "room": "MEETING ROOM 04 PAX (2)",
+    "label": "Meeting Room 04 Pax (2): detail",
+    "name": "rtp6-a_CAM_meeting-room-04-pax-2_detail",
+    "still": "stills/rtp6-a_CAM_meeting-room-04-pax-2_detail.png"
+   }
+  ],
+  "REPRO (3)": [
+   {
+    "kind": "entry",
+    "position": [
+     -34.204,
+     1.55,
+     -109.439
+    ],
+    "target": [
+     -32.758,
+     1.284,
+     -109.87
+    ],
+    "hfov_deg": 78,
+    "room": "REPRO (3)",
+    "label": "Repro (3): entry",
+    "name": "rtp6-a_CAM_repro-3_entry",
+    "still": "stills/rtp6-a_CAM_repro-3_entry.png"
+   }
+  ],
+  "REPRO (4)": [
+   {
+    "kind": "entry",
+    "position": [
+     3.596,
+     1.55,
+     -109.239
+    ],
+    "target": [
+     2.382,
+     1.302,
+     -108.533
+    ],
+    "hfov_deg": 72,
+    "room": "REPRO (4)",
+    "label": "Repro (4): entry",
+    "name": "rtp6-a_CAM_repro-4_entry",
+    "still": "stills/rtp6-a_CAM_repro-4_entry.png"
+   }
+  ],
+  "CAFETERIA (1)": [
+   {
+    "kind": "entry",
+    "position": [
+     -31.754,
+     1.55,
+     -84.289
+    ],
+    "target": [
+     -26.122,
+     0.851,
+     -89.962
+    ],
+    "hfov_deg": 72,
+    "room": "CAFETERIA (1)",
+    "label": "Cafeteria (1): entry",
+    "name": "rtp6-a_CAM_cafeteria-1_entry",
+    "still": "stills/rtp6-a_CAM_cafeteria-1_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     -27.779,
+     1.55,
+     -96.589
+    ],
+    "target": [
+     -27.415,
+     0.222,
+     -89.068
+    ],
+    "hfov_deg": 72,
+    "room": "CAFETERIA (1)",
+    "label": "Cafeteria (1): feature",
+    "name": "rtp6-a_CAM_cafeteria-1_feature",
+    "still": "stills/rtp6-a_CAM_cafeteria-1_feature.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     -29.604,
+     1.55,
+     -89.764
+    ],
+    "target": [
+     -28.188,
+     0.75,
+     -93.251
+    ],
+    "hfov_deg": 45,
+    "room": "CAFETERIA (1)",
+    "label": "Cafeteria (1): detail",
+    "name": "rtp6-a_CAM_cafeteria-1_detail",
+    "still": "stills/rtp6-a_CAM_cafeteria-1_detail.png"
+   }
+  ],
+  "PANTRY": [
+   {
+    "kind": "entry",
+    "position": [
+     -16.229,
+     1.55,
+     -86.039
+    ],
+    "target": [
+     -16.384,
+     1.463,
+     -87.023
+    ],
+    "hfov_deg": 72,
+    "room": "PANTRY",
+    "label": "Pantry: entry",
+    "name": "rtp6-a_CAM_pantry_entry",
+    "still": "stills/rtp6-a_CAM_pantry_entry.png"
+   }
+  ],
+  "LOBBY (2)": [
+   {
+    "kind": "entry",
+    "position": [
+     -11.204,
+     1.55,
+     -94.439
+    ],
+    "target": [
+     -17.671,
+     0.483,
+     -99.319
+    ],
+    "hfov_deg": 72,
+    "room": "LOBBY (2)",
+    "label": "Lobby (2): entry",
+    "name": "rtp6-a_CAM_lobby-2_entry",
+    "still": "stills/rtp6-a_CAM_lobby-2_entry.png"
+   }
+  ],
+  "CAFETERIA (2)": [
+   {
+    "kind": "entry",
+    "position": [
+     -19.954,
+     1.55,
+     -99.364
+    ],
+    "target": [
+     -20.348,
+     1.376,
+     -98.461
+    ],
+    "hfov_deg": 75,
+    "room": "CAFETERIA (2)",
+    "label": "Cafeteria (2): entry",
+    "name": "rtp6-a_CAM_cafeteria-2_entry",
+    "still": "stills/rtp6-a_CAM_cafeteria-2_entry.png"
+   }
+  ],
+  "POT WASH AREA": [
+   {
+    "kind": "entry",
+    "position": [
+     -22.529,
+     1.55,
+     -83.639
+    ],
+    "target": [
+     -22.342,
+     1.427,
+     -85.031
+    ],
+    "hfov_deg": 72,
+    "room": "POT WASH AREA",
+    "label": "Pot Wash Area: entry",
+    "name": "rtp6-a_CAM_pot-wash-area_entry",
+    "still": "stills/rtp6-a_CAM_pot-wash-area_entry.png"
+   }
+  ],
+  "KITCHEN": [
+   {
+    "kind": "entry",
+    "position": [
+     -22.529,
+     1.55,
+     -89.864
+    ],
+    "target": [
+     -22.172,
+     0.907,
+     -94.733
+    ],
+    "hfov_deg": 72,
+    "room": "KITCHEN",
+    "label": "Kitchen: entry",
+    "name": "rtp6-a_CAM_kitchen_entry",
+    "still": "stills/rtp6-a_CAM_kitchen_entry.png"
+   }
+  ],
+  "TELEPHONE BOOTH": [
+   {
+    "kind": "entry",
+    "position": [
+     11.851,
+     1.55,
+     -96.816
+    ],
+    "target": [
+     14.28,
+     1.333,
+     -96.297
+    ],
+    "hfov_deg": 80,
+    "room": "TELEPHONE BOOTH",
+    "label": "Telephone Booth: entry",
+    "name": "rtp6-a_CAM_telephone-booth_entry",
+    "still": "stills/rtp6-a_CAM_telephone-booth_entry.png"
+   }
+  ],
+  "CABIN (2)": [
+   {
+    "kind": "entry",
+    "position": [
+     11.486,
+     1.55,
+     -85.356
+    ],
+    "target": [
+     14.85,
+     0.92,
+     -84.148
+    ],
+    "hfov_deg": 72,
+    "room": "CABIN (2)",
+    "label": "Cabin (2): entry",
+    "name": "rtp6-a_CAM_cabin-2_entry",
+    "still": "stills/rtp6-a_CAM_cabin-2_entry.png"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     11.346,
+     1.55,
+     -84.264
+    ],
+    "target": [
+     16.133,
+     0.886,
+     -85.849
+    ],
+    "hfov_deg": 75,
+    "room": "CABIN (2)",
+    "label": "Cabin (2): feature",
+    "name": "rtp6-a_CAM_cabin-2_feature",
+    "still": "stills/rtp6-a_CAM_cabin-2_feature.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     15.196,
+     1.55,
+     -83.339
+    ],
+    "target": [
+     11.426,
+     0.752,
+     -85.846
+    ],
+    "hfov_deg": 72,
+    "room": "CABIN (2)",
+    "label": "Cabin (2): reverse",
+    "name": "rtp6-a_CAM_cabin-2_reverse",
+    "still": "stills/rtp6-a_CAM_cabin-2_reverse.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     11.296,
+     1.55,
+     -83.064
+    ],
+    "target": [
+     15.363,
+     0.503,
+     -85.842
+    ],
+    "hfov_deg": 45,
+    "room": "CABIN (2)",
+    "label": "Cabin (2): detail",
+    "name": "rtp6-a_CAM_cabin-2_detail",
+    "still": "stills/rtp6-a_CAM_cabin-2_detail.png"
+   }
+  ],
+  "MEETING ROOM (1)": [
+   {
+    "kind": "entry",
+    "position": [
+     17.886,
+     1.55,
+     -98.869
+    ],
+    "target": [
+     17.745,
+     1.191,
+     -102.975
+    ],
+    "hfov_deg": 75,
+    "room": "MEETING ROOM (1)",
+    "label": "Meeting Room (1): entry",
+    "name": "rtp6-a_CAM_meeting-room-1_entry",
+    "still": "stills/rtp6-a_CAM_meeting-room-1_entry.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     21.121,
+     1.55,
+     -102.589
+    ],
+    "target": [
+     17.499,
+     1.168,
+     -100.152
+    ],
+    "hfov_deg": 75,
+    "room": "MEETING ROOM (1)",
+    "label": "Meeting Room (1): reverse",
+    "name": "rtp6-a_CAM_meeting-room-1_reverse",
+    "still": "stills/rtp6-a_CAM_meeting-room-1_reverse.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     17.746,
+     1.55,
+     -99.614
+    ],
+    "target": [
+     21.617,
+     0.47,
+     -102.907
+    ],
+    "hfov_deg": 45,
+    "room": "MEETING ROOM (1)",
+    "label": "Meeting Room (1): detail",
+    "name": "rtp6-a_CAM_meeting-room-1_detail",
+    "still": "stills/rtp6-a_CAM_meeting-room-1_detail.png"
+   }
+  ],
+  "MEETING ROOM (2)": [
+   {
+    "kind": "entry",
+    "position": [
+     16.791,
+     1.55,
+     -98.887
+    ],
+    "target": [
+     15.828,
+     1.18,
+     -103.009
+    ],
+    "hfov_deg": 78,
+    "room": "MEETING ROOM (2)",
+    "label": "Meeting Room (2): entry",
+    "name": "rtp6-a_CAM_meeting-room-2_entry",
+    "still": "stills/rtp6-a_CAM_meeting-room-2_entry.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     13.571,
+     1.55,
+     -102.714
+    ],
+    "target": [
+     17.223,
+     0.964,
+     -100.171
+    ],
+    "hfov_deg": 75,
+    "room": "MEETING ROOM (2)",
+    "label": "Meeting Room (2): reverse",
+    "name": "rtp6-a_CAM_meeting-room-2_reverse",
+    "still": "stills/rtp6-a_CAM_meeting-room-2_reverse.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     16.746,
+     1.55,
+     -100.014
+    ],
+    "target": [
+     13.354,
+     0.582,
+     -103.052
+    ],
+    "hfov_deg": 45,
+    "room": "MEETING ROOM (2)",
+    "label": "Meeting Room (2): detail",
+    "name": "rtp6-a_CAM_meeting-room-2_detail",
+    "still": "stills/rtp6-a_CAM_meeting-room-2_detail.png"
+   }
+  ],
+  "MEETING ROOM (3)": [
+   {
+    "kind": "entry",
+    "position": [
+     18.033,
+     1.55,
+     -107.243
+    ],
+    "target": [
+     18.259,
+     1.19,
+     -103.136
+    ],
+    "hfov_deg": 78,
+    "room": "MEETING ROOM (3)",
+    "label": "Meeting Room (3): entry",
+    "name": "rtp6-a_CAM_meeting-room-3_entry",
+    "still": "stills/rtp6-a_CAM_meeting-room-3_entry.png"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     21.246,
+     1.55,
+     -103.389
+    ],
+    "target": [
+     17.601,
+     0.963,
+     -105.956
+    ],
+    "hfov_deg": 78,
+    "room": "MEETING ROOM (3)",
+    "label": "Meeting Room (3): reverse",
+    "name": "rtp6-a_CAM_meeting-room-3_reverse",
+    "still": "stills/rtp6-a_CAM_meeting-room-3_reverse.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     17.771,
+     1.55,
+     -103.439
+    ],
+    "target": [
+     21.696,
+     0.577,
+     -105.799
+    ],
+    "hfov_deg": 45,
+    "room": "MEETING ROOM (3)",
+    "label": "Meeting Room (3): detail",
+    "name": "rtp6-a_CAM_meeting-room-3_detail",
+    "still": "stills/rtp6-a_CAM_meeting-room-3_detail.png"
+   }
+  ],
+  "MEETING ROOM (4)": [
+   {
+    "kind": "entry",
+    "position": [
+     16.938,
+     1.55,
+     -107.262
+    ],
+    "target": [
+     17.078,
+     1.191,
+     -103.157
+    ],
+    "hfov_deg": 75,
+    "room": "MEETING ROOM (4)",
+    "label": "Meeting Room (4): entry",
+    "name": "rtp6-a_CAM_meeting-room-4_entry",
+    "still": "stills/rtp6-a_CAM_meeting-room-4_entry.png"
+   },
+   {
+    "kind": "detail",
+    "position": [
+     13.746,
+     1.55,
+     -103.489
+    ],
+    "target": [
+     17.322,
+     0.638,
+     -105.856
+    ],
+    "hfov_deg": 45,
+    "room": "MEETING ROOM (4)",
+    "label": "Meeting Room (4): detail",
+    "name": "rtp6-a_CAM_meeting-room-4_detail",
+    "still": "stills/rtp6-a_CAM_meeting-room-4_detail.png"
+   }
+  ]
+ }
+}

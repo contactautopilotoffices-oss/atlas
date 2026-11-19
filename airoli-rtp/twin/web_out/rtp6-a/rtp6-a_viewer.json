@@ -4,31 +4,31 @@
  "lod_glb": "rtp6-a_lod.glb",
  "files": {
   "rtp6-a": {
-   "mb": 29.71,
+   "mb": 29.96,
    "meshopt": {
     "instanced_nodes_from": 2075,
     "instanced_into": 51,
-    "draw_calls": 422,
-    "triangles": 2542916,
-    "in_mb": 98.93,
-    "out_mb": 29.71,
-    "compressed_views": 1677,
-    "saved_mb": 69.68,
+    "draw_calls": 426,
+    "triangles": 2561444,
+    "in_mb": 99.99,
+    "out_mb": 29.96,
+    "compressed_views": 1693,
+    "saved_mb": 70.49,
     "applied": true
    },
    "merged_groups": 45
   },
   "rtp6-a_lod": {
-   "mb": 25.92,
+   "mb": 26.17,
    "meshopt": {
     "instanced_nodes_from": 1138,
     "instanced_into": 48,
-    "draw_calls": 170,
-    "triangles": 1868236,
-    "in_mb": 89.66,
-    "out_mb": 25.92,
-    "compressed_views": 584,
-    "saved_mb": 63.96,
+    "draw_calls": 172,
+    "triangles": 1887228,
+    "in_mb": 90.72,
+    "out_mb": 26.17,
+    "compressed_views": 593,
+    "saved_mb": 64.77,
     "applied": true
    },
    "merged_groups": 45
@@ -43,8 +43,8 @@
  },
  "renderer": {
   "toneMapping": "AgXToneMapping",
-  "toneMappingExposure": 0.7631,
-  "exposure_ev": -0.39,
+  "toneMappingExposure": 0.5783,
+  "exposure_ev": -0.79,
   "outputColorSpace": "srgb",
   "useLegacyLights": false
  },
@@ -53,192 +53,192 @@
   "nodes": {
    "rtp6-a_FLOOR_rtp6-a_lm4_1": {
     "lightmap": "lightmaps/rtp6-a_lm4.png",
-    "lightMapIntensity": 104.82717,
+    "lightMapIntensity": 86.68488,
     "uv": 1
    },
    "rtp6-a_FLOOR_rtp6-a_lm7_2": {
     "lightmap": "lightmaps/rtp6-a_lm7.png",
-    "lightMapIntensity": 104.21104,
+    "lightMapIntensity": 65.58653,
     "uv": 1
    },
    "rtp6-a_FLOOR_rtp6-a_lm2_3": {
     "lightmap": "lightmaps/rtp6-a_lm2.png",
-    "lightMapIntensity": 11.96379,
+    "lightMapIntensity": 8.26061,
     "uv": 1
    },
    "rtp6-a_FLOOR_rtp6-a_lm5_4": {
     "lightmap": "lightmaps/rtp6-a_lm5.png",
-    "lightMapIntensity": 104.78016,
+    "lightMapIntensity": 87.76205,
     "uv": 1
    },
    "rtp6-a_FLOOR_rtp6-a_lm6_5": {
     "lightmap": "lightmaps/rtp6-a_lm6.png",
-    "lightMapIntensity": 103.49279,
+    "lightMapIntensity": 78.00084,
     "uv": 1
    },
    "rtp6-a_FLOOR_rtp6-a_lm3_6": {
     "lightmap": "lightmaps/rtp6-a_lm3.png",
-    "lightMapIntensity": 105.65185,
+    "lightMapIntensity": 98.47604,
     "uv": 1
    },
    "rtp6-a_FLOOR_rtp6-a_lm0_7": {
     "lightmap": "lightmaps/rtp6-a_lm0.png",
-    "lightMapIntensity": 88.87819,
+    "lightMapIntensity": 63.58787,
     "uv": 1
    },
    "rtp6-a_FLOOR_rtp6-a_lm1_8": {
     "lightmap": "lightmaps/rtp6-a_lm1.png",
-    "lightMapIntensity": 108.04757,
+    "lightMapIntensity": 81.22208,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm11_9": {
     "lightmap": "lightmaps/rtp6-a_lm11.png",
-    "lightMapIntensity": 9.38248,
+    "lightMapIntensity": 7.10569,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm21_10": {
     "lightmap": "lightmaps/rtp6-a_lm21.png",
-    "lightMapIntensity": 16.49941,
+    "lightMapIntensity": 8.95265,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm17_11": {
     "lightmap": "lightmaps/rtp6-a_lm17.png",
-    "lightMapIntensity": 18.22268,
+    "lightMapIntensity": 10.42566,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm24_12": {
     "lightmap": "lightmaps/rtp6-a_lm24.png",
-    "lightMapIntensity": 18.89567,
+    "lightMapIntensity": 10.42491,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm12_13": {
     "lightmap": "lightmaps/rtp6-a_lm12.png",
-    "lightMapIntensity": 8.29209,
+    "lightMapIntensity": 5.21764,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm10_14": {
     "lightmap": "lightmaps/rtp6-a_lm10.png",
-    "lightMapIntensity": 18.43043,
+    "lightMapIntensity": 8.15713,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm20_15": {
     "lightmap": "lightmaps/rtp6-a_lm20.png",
-    "lightMapIntensity": 9.30382,
+    "lightMapIntensity": 5.33625,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm9_16": {
     "lightmap": "lightmaps/rtp6-a_lm9.png",
-    "lightMapIntensity": 9.86968,
+    "lightMapIntensity": 6.56539,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm19_17": {
     "lightmap": "lightmaps/rtp6-a_lm19.png",
-    "lightMapIntensity": 29.40603,
+    "lightMapIntensity": 19.09444,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm18_18": {
     "lightmap": "lightmaps/rtp6-a_lm18.png",
-    "lightMapIntensity": 6.36369,
+    "lightMapIntensity": 4.03973,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm23_19": {
     "lightmap": "lightmaps/rtp6-a_lm23.png",
-    "lightMapIntensity": 20.9776,
+    "lightMapIntensity": 7.98012,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm25_20": {
     "lightmap": "lightmaps/rtp6-a_lm25.png",
-    "lightMapIntensity": 16.27379,
+    "lightMapIntensity": 10.69036,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm26_21": {
     "lightmap": "lightmaps/rtp6-a_lm26.png",
-    "lightMapIntensity": 11.13125,
+    "lightMapIntensity": 5.47898,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm16_22": {
     "lightmap": "lightmaps/rtp6-a_lm16.png",
-    "lightMapIntensity": 22.8191,
+    "lightMapIntensity": 18.7651,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm22_23": {
     "lightmap": "lightmaps/rtp6-a_lm22.png",
-    "lightMapIntensity": 20.96029,
+    "lightMapIntensity": 12.83328,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm15_24": {
     "lightmap": "lightmaps/rtp6-a_lm15.png",
-    "lightMapIntensity": 11.17644,
+    "lightMapIntensity": 6.14868,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm13_25": {
     "lightmap": "lightmaps/rtp6-a_lm13.png",
-    "lightMapIntensity": 25.25597,
+    "lightMapIntensity": 12.75228,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm14_26": {
     "lightmap": "lightmaps/rtp6-a_lm14.png",
-    "lightMapIntensity": 7.1189,
+    "lightMapIntensity": 4.76685,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm8_27": {
     "lightmap": "lightmaps/rtp6-a_lm8.png",
-    "lightMapIntensity": 17.04594,
+    "lightMapIntensity": 8.89594,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm30_28": {
     "lightmap": "lightmaps/rtp6-a_lm30.png",
-    "lightMapIntensity": 14.78077,
+    "lightMapIntensity": 6.9885,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm28_29": {
     "lightmap": "lightmaps/rtp6-a_lm28.png",
-    "lightMapIntensity": 8.9007,
+    "lightMapIntensity": 1.61519,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm27_30": {
     "lightmap": "lightmaps/rtp6-a_lm27.png",
-    "lightMapIntensity": 11.29393,
+    "lightMapIntensity": 2.36993,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm29_31": {
     "lightmap": "lightmaps/rtp6-a_lm29.png",
-    "lightMapIntensity": 8.90896,
+    "lightMapIntensity": 2.34181,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm7_34": {
     "lightmap": "lightmaps/rtp6-a_lm7.png",
-    "lightMapIntensity": 104.21104,
+    "lightMapIntensity": 65.58653,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm4_35": {
     "lightmap": "lightmaps/rtp6-a_lm4.png",
-    "lightMapIntensity": 104.82717,
+    "lightMapIntensity": 86.68488,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm3_37": {
     "lightmap": "lightmaps/rtp6-a_lm3.png",
-    "lightMapIntensity": 105.65185,
+    "lightMapIntensity": 98.47604,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm5_38": {
     "lightmap": "lightmaps/rtp6-a_lm5.png",
-    "lightMapIntensity": 104.78016,
+    "lightMapIntensity": 87.76205,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm6_39": {
     "lightmap": "lightmaps/rtp6-a_lm6.png",
-    "lightMapIntensity": 103.49279,
+    "lightMapIntensity": 78.00084,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm1_40": {
     "lightmap": "lightmaps/rtp6-a_lm1.png",
-    "lightMapIntensity": 108.04757,
+    "lightMapIntensity": 81.22208,
     "uv": 1
    },
    "rtp6-a_WALL_rtp6-a_lm0_41": {
     "lightmap": "lightmaps/rtp6-a_lm0.png",
-    "lightMapIntensity": 88.87819,
+    "lightMapIntensity": 63.58787,
     "uv": 1
    }
   }

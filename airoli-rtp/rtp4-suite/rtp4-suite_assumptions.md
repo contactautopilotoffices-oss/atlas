@@ -19,7 +19,10 @@ The model is built from the fit-out drawing `20261118_4TH FLOO.dwg` (RTP 4th FLO
 - Light fittings, AC diffusers and their layout are assumed (the drawing has no ceiling plan): LED panels on a 1.8 m grid, downlights at reception, a diffuser every fourth tile.
 - Daylight is a clear-sky sun for Airoli; the glass is clear; there are no blinds.
 - The reception tile area is built to the outline the drawing gives it (an octagon on the 6th floor), inside the corridor carpet; the drawing does not say whether the tile runs wall to wall.
-- Two downlights over the logo wall and the backlit halo of the logo letters are assumed from the Noida photos.
+- Two downlights over the logo wall and the backlit halo of the logo letters are assumed from the Noida photos. The logo is Altruist's own wordmark (traced from their logo file), 2.3 m wide.
+- The reception desk follows the Noida photo (white body, narrower royal-blue front, warm light at the plinth); its size and place are the drawing's.
+- Not in the drawing, added as typical fit-out: a wall display on the end wall of meeting and conference rooms, an olive acoustic panel in the conference rooms, a display and whiteboard at the front of training rooms (left out where every spot is within 1 m of a door). Visitor chairs in reception are shown as upholstered beam seating, one seat per drawn chair.
+- Ceilings get the light that bright desks, walls and people bounce up in a real office (the dark carpet bounces little): an even fill from below, unseen itself.
 - The view out of the windows shows the neighbouring buildings as plain white blocks (from OpenStreetMap heights), not as photographs.
 - Not built yet: airport benches (grey perforated metal) along the lobby glass: not built (no CAD block; the CAD's lobby seats are sofas).
 - Not built yet: smoke detectors and sprinkler heads in the grid ceilings: not built.
