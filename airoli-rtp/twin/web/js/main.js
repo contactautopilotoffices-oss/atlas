@@ -14,6 +14,7 @@ import { Tenant } from './tenant.js';
 import { inRings, polyLen, polySmooth } from './nav.js';
 import { md } from './md.js';
 import { createMinimap } from './minimap.js';
+import { buildOverview, KIND_COLOR, KIND_NAME } from './overview.js';
 import { createPresenter } from '../../../../noida-skymark/volt/present.js';
 
 const $ = (s) => document.querySelector(s);
@@ -186,6 +187,7 @@ async function loadTenant(id) {
       }
       if (!viewer) { t.buildPlaceholder(); t.modelSource = 'placeholder (from the CAD layout)'; }
       t.setupViews(cams && cams.data);
+      try { t.ov = buildOverview(t, { blueprint: t.bpBounds ? { img: m.blueprint.img, bounds: t.bpBounds } : null }); } catch (e) { console.warn('[rtp] overview', e); }
       LV[m.floor].g.add(t.group);                                    // lifts and hides with its level
       t.group.updateMatrixWorld(true); shadowsDirty = true;
       try { const sm = await fetchJSON(m.summary); if (sm._proof) t.proof = sm._proof; t.summary = sm; } catch (e) { }
@@ -262,6 +264,15 @@ function tickWalls(dt) { if (wallS === wallTo) return; wallS += (wallTo - wallS)
 // ------------------------------------------------------------------ floor picker
 // a training-led suite (4th: 135 training seats, 18 work) is shown by all its seats, not by its few desks
 const leadAll = (m) => m.seats.all && m.seats.all > 2 * (m.seats.work || 0);
+// the CAD numbers each open hall ("Open Workstations 1..7"); to a visitor they are one thing: open workstations
+const OPEN_RX = /^open\s*work\s*stations?\b/i;
+const plainLabel = (r) => OPEN_RX.test(r.label) ? 'Open workstations' : r.label;
+function mergedRooms(t) {
+  const out = [], open = t.tourRooms.filter(r => OPEN_RX.test(r.label));
+  for (const r of t.tourRooms) { if (OPEN_RX.test(r.label)) { if (r === open[0]) out.push({ label: 'Open workstations', kind: 'work', seats: open.reduce((n, q) => n + (q.seats || 0), 0), area: open.reduce((n, q) => n + q.area, 0), rooms: open, go: open.slice().sort((a, b) => (b.seats || 0) - (a.seats || 0))[0] }); continue; }
+    out.push({ label: r.label, kind: r.kind, seats: r.seats, area: r.area, rooms: [r], go: r }); }
+  return out;
+}
 const seatsTxt = (m) => leadAll(m) ? `${m.seats.all} seats · ${m.seats.work || 0} work` : m.seats.work ? `${m.seats.work} work seats` : m.seats.all ? `${m.seats.all} seats` : 'seat count to follow';
 const floorsEl = $('#floors');
 function renderFloors() {
@@ -285,6 +296,8 @@ renderFloors();
 const sectionOrbit = (lv) => ({ target: V(CX, ZL(lv) + .6, -CY), az: orbit.az, polar: PHONE() ? .62 : .78, dist: SPAN * (PHONE() ? 2.3 : 1.25) });
 let navToken = 0;
 async function toBuildingView() {
+  if (OV.on) { OV.on = false; if (S.tenant) ovApply(S.tenant); $('#ovp').hidden = true; }
+  { const l = $('#left'); if (l && l.classList.contains('folded')) l.querySelector(':scope > .fold').click(); }   // back at the building: the floor list returns
   const my = ++navToken; stopTour(); exitWalk(); setInside(false);
   if (S.mode !== 'orbit' && S.mode !== 'section' && S.level !== null) {    // inside: rise out to the section first
     setWalls(.42); for (const t of Object.values(T)) t.setCeiling(false); LV[S.level].g.userData.lid.visible = false;
@@ -318,7 +331,7 @@ async function chooseFloor(lv, then) {
   if (my !== navToken) return;
   sectionTags(f); showFloorPanel(f);
   if (then) return then();
-  if (ts.length === 1 && !f.options) return land(ts[0]);
+  if (ts.length === 1 && !f.options) return showOverview(ts[0]);
 }
 function swapOption(id) {                               // a floor with options (6th: A / B) shows one plan at a time
   const m = MAN[id], f = B.floors.find(x => x.level === m.floor); if (!f || !f.options || (f.tenants || []).includes(id)) return false;
@@ -328,14 +341,74 @@ function swapOption(id) {                               // a floor with options 
 }
 async function chooseTenant(id) {
   const m = MAN[id]; if (!m || m.missing) return;
-  if (swapOption(id) && S.level === m.floor && S.mode !== 'orbit') { S.mode = 'section'; return chooseFloor(m.floor, async () => land(await loadTenant(id))); }
-  if (S.level === m.floor && S.mode === 'section') { const t = await loadTenant(id); return land(t); }
-  return chooseFloor(m.floor, async () => land(await loadTenant(id)));
+  if (swapOption(id) && S.level === m.floor && S.mode !== 'orbit') { S.mode = 'section'; return chooseFloor(m.floor, async () => showOverview(await loadTenant(id))); }
+  if (S.level === m.floor && S.mode === 'section') { const t = await loadTenant(id); return showOverview(t); }
+  return chooseFloor(m.floor, async () => showOverview(await loadTenant(id)));
 }
 // from the section, down into the tenant's reception entry view (walls rise as the camera comes down)
-async function land(t) {
-  const my = ++navToken; clearTags(); S.tenant = t; S.seen = {};
-  const room = t.tourRooms[0]; if (!room) { console.warn('[twin] no rooms with views for', t.id); return; }
+// ------------------------------------------------------------------ folding boxes: every panel collapses to a small title pill
+function addFold(el) {
+  if (!el || el.querySelector(':scope > .fold')) return; const id = el.id, key = 'rtp.fold.' + id;
+  const b = document.createElement('button'); b.className = 'fold'; b.setAttribute('aria-label', 'Fold this box');
+  const set = (f) => { el.classList.toggle('folded', f); b.textContent = f ? '+' : '–'; try { localStorage.setItem(key, f ? '1' : '0'); } catch (e) { } };
+  b.onclick = (e) => { e.stopPropagation(); set(!el.classList.contains('folded')); };
+  el.addEventListener('click', (e) => { if (el.classList.contains('folded') && e.target !== b) { set(false); } });
+  el.prepend(b); let f = false; try { f = localStorage.getItem(key) === '1'; } catch (e) { } set(f);
+}
+for (const id of ['#left', '#mm', '#todbox']) addFold($(id));
+// the room card and the overview panel re-render their contents: keep their fold button
+new MutationObserver(() => addFold($('#card'))).observe($('#card'), { childList: true });
+// ------------------------------------------------------------------ the whole floor, for presenting (js/overview.js)
+// One view of the entire plate: rooms tinted by use and named, the DWG's own lines on the floor (toggle), and the way in
+// (lifts -> front door -> reception) drawn as a route. Choosing a floor opens here; any room label walks you into it.
+const OV = { on: false, show: { zones: true, cad: false, route: true, labels: true } };
+function ovBounds(t) { const xs = [], ys = []; for (const p of t.region[0]) { xs.push(p[0]); ys.push(p[1]); } return [Math.min(...xs), Math.min(...ys), Math.max(...xs), Math.max(...ys)]; }
+function ovOverhead(t, hide) {          // ceilings, panels, grilles and soffit: anything whose underside is above 2.4 m
+  if (!t || !t.group) return; const bb = new THREE.Box3(), inv = new THREE.Matrix4().copy(t.group.matrixWorld).invert();
+  t.group.traverse(o => { if (!o.isMesh || o.parent === (t.ov && t.ov.group) || (t.ov && t.ov.group && o.parent && o.parent.parent === t.ov.group)) return;
+    if (o.userData.overhead === undefined) { o.geometry.computeBoundingBox(); bb.copy(o.geometry.boundingBox).applyMatrix4(o.matrixWorld).applyMatrix4(inv); o.userData.overhead = bb.min.y > 2.4; }
+    if (o.userData.overhead) o.visible = !hide;
+    // a bake merges ceilings into the wall meshes: hide them by material (tiles, LED panels, downlights, grilles, soffit)
+    for (const m of [].concat(o.material)) if (/^(ceiling_tile|led_panel|led_spot|led_warm|soffit_paint|cover_dark|context_block)$/.test(m.name || '')) m.visible = !hide; });
+}
+function ovApply(t) { document.body.classList.toggle('ov', OV.on && !!t); ovOverhead(t, OV.on); const o = t && t.ov; if (!o) return; o.group.visible = OV.on; for (const k of ['zones', 'cad', 'route']) o.parts[k].visible = OV.on && OV.show[k]; ovTags(t); renderOvPanel(t); }
+function ovTags(t) {
+  clearTags(); if (!OV.on || !t) return; const o = t.ov;
+  if (OV.show.route && o) for (const p of o.pins) addTag(() => W(t, p.p[0], p.p[1], 1.6), p.label, null);
+  if (OV.show.labels) for (const r of t.tourRooms.slice().sort((a, b) => (b.seats || 0) - (a.seats || 0) || b.area - a.area)) { if (r.kind === 'wc' || r.kind === 'core') continue; const c = r.c;
+    addTag(() => W(t, c[0], c[1], 1.2), `${plainLabel(r)}<small>${r.seats ? r.seats + ' seats · ' : ''}${Math.round(r.area)} m²</small>`, () => land(t, r), false, 'small'); }
+}
+function renderOvPanel(t) {
+  const el = $('#ovp'); if (!el) return; el.hidden = !OV.on || !t; if (el.hidden) return; const m = t.man, cnt = (t.ov && t.ov.counts) || {};
+  const rows = Object.entries(cnt).filter(([k, v]) => v.rooms && k !== 'core').sort((a, b) => b[1].area - a[1].area);
+  el.innerHTML = `<div class="k">${m.name} · the whole floor</div>
+    <div class="ovstat"><b>${m.seats.work || m.seats.all}</b><span>${m.seats.work ? 'work seats' : 'seats'}</span><b>${m.seats.all}</b><span>in all</span></div>
+    ${t.ov && t.ov.route ? `<div class="ovroute"><i></i>Lifts → front door → ${t.tourRooms[0].label}: <b>${Math.round(t.ov.route.len)} m</b></div>` : ''}
+    <div class="ovleg">${rows.map(([k, v]) => `<div><i style="background:${KIND_COLOR[k]}"></i>${KIND_NAME[k] || k}<small>${v.rooms} ${v.rooms > 1 ? 'rooms' : 'room'}${v.seats ? ' · ' + v.seats + ' seats' : ''} · ${Math.round(v.area * 10.764).toLocaleString('en-IN')} sq ft</small></div>`).join('')}</div>
+    <div class="ovtog">${[['zones', 'Zones'], ['cad', 'CAD on floor'], ['route', 'Way in'], ['labels', 'Room names']].map(([k, n]) => `<button data-k="${k}" class="${OV.show[k] ? 'on' : ''}">${n}</button>`).join('')}</div>
+    <div class="row"><button class="pill dark" id="ov-walk">Walk in from reception</button><button class="pill" id="ov-replay">Replay the way in</button></div>
+    <div class="k" style="margin-top:12px">Rooms · tap to walk in</div><div class="ovrooms">${mergedRooms(t).filter(e => e.kind !== 'wc' && e.kind !== 'core').sort((a, b) => (b.seats || 0) - (a.seats || 0) || b.area - a.area).map(e => `<button data-l="${e.label}">${e.label}<small style="color:${KIND_COLOR[e.kind] || '#cbd5e1'}">${e.seats ? e.seats + ' ' + (e.kind === 'work' ? 'work' : 'seats') : Math.round(e.area) + ' m²'}</small></button>`).join('')}</div>`;
+  el.querySelectorAll('.ovtog button').forEach(b => b.onclick = () => { OV.show[b.dataset.k] = !OV.show[b.dataset.k]; if (b.dataset.k === 'cad') setWalls(OV.show.cad ? .18 : .42); ovApply(t); if (b.dataset.k === 'route' && OV.show.route) t.ov.replay(); });
+  $('#ov-walk').onclick = () => land(t); $('#ov-replay').onclick = () => { OV.show.route = true; t.ov.replay(); ovApply(t); };
+  const ms = mergedRooms(t); el.querySelectorAll('.ovrooms button').forEach(b => b.onclick = () => { const e = ms.find(x => x.label === b.dataset.l); if (e) land(t, e.go); }); addFold(el);
+}
+async function showOverview(t) {
+  if (!t) return; const my = ++navToken; stopTour(); exitWalk(); setInside(false); closeOptions();
+  const lv = t.man.floor; S.tenant = t; S.level = lv; S.mode = 'section'; OV.on = true; orbit.auto = false;
+  for (const o of Object.values(T)) o.setCeiling(false); setWalls(OV.show.cad ? .18 : .42); setFacadeCut(lv, .3); liftAbove(lv); insideLevel(lv); applyExposure(null); fitSun(ZL(lv));
+  renderFloors(); showFloorPanel(B.floors.find(f => f.level === lv)); updateDock();
+  const [x0, y0, x1, y1] = ovBounds(t), c = W(t, (x0 + x1) / 2, (y0 + y1) / 2, 0);
+  // north up, seen nearly from above (a slight tilt keeps the walls readable), fitted into the space between the panels
+  const vf = BASE_FOV() * Math.PI / 180, free = PHONE() ? .96 : Math.max(.5, (innerWidth - 420) / innerWidth), hf = 2 * Math.atan(Math.tan(vf / 2) * camera.aspect * free);
+  const dist = Math.max(25, 1.08 * Math.max((x1 - x0) / (2 * Math.tan(hf / 2)), (y1 - y0) * (PHONE() ? 1.25 : 1) / (2 * Math.tan(vf / 2))) + 6);
+  await glideOrbit({ target: c, az: 0, polar: PHONE() ? .2 : .32, dist }, DUR(2.2));
+  if (my !== navToken) return;
+  { const l = $('#left'); if (l && !l.classList.contains('folded')) l.querySelector(':scope > .fold').click(); }   // the floor list folds away: the plate is the subject
+  if (t.ov) t.ov.replay(); ovApply(t); hint('Tap a room to walk into it · toggle CAD lines, zones and the way in');
+}
+async function land(t, roomArg) {
+  const my = ++navToken; OV.on = false; ovApply(t); ovOverhead(t, false); clearTags(); S.tenant = t; S.seen = {};
+  const room = roomArg || t.tourRooms[0]; if (!room) { console.warn('[twin] no rooms with views for', t.id); return; }
   const v = room.views[0], to = viewPose(t, v), from = pose();
   const back = V(Math.sin(to.yaw), 0, Math.cos(to.yaw));                              // behind the view direction
   const c1 = V(to.p.x, from.p.y * .5 + to.p.y * .5, to.p.z).addScaledVector(back, 5), c2 = to.p.clone().add(V(0, 2.6, 0));   // comes down over the room, settles at eye height
@@ -372,7 +445,7 @@ function arriveRoom(room, vi) {
 function renderCard() {
   const r = S.room, t = S.tenant; if (!r || !t) return;
   const v = r.views[S.view] || {};
-  $('#card').innerHTML = `<div class="k">${t.man.name} · floor ${t.man.floor}</div><h2>${r.label}</h2>
+  $('#card').innerHTML = `<div class="k">${t.man.name} · floor ${t.man.floor}</div><h2>${plainLabel(r)}</h2>
     <div class="meta">${r.seats ? r.seats + ' seats · ' : ''}${Math.round(r.area)} m²${v.source === 'fallback' ? ' · view from layout' : ''}</div>
     <div class="views">${r.views.map((x, i) => `<button data-i="${i}" class="${i === S.view ? 'on' : ''} ${S.seen[r.name] && S.seen[r.name].has(i) ? 'seen' : ''}">${i + 1}<small>${KINDS[x.kind] || x.kind}</small></button>`).join('')}</div>`;
   $('#card').querySelectorAll('.views button').forEach(b => b.onclick = () => goView(+b.dataset.i));
@@ -571,12 +644,13 @@ $('#gal .gx').onclick = () => $('#gal').classList.remove('show');
       $('#gal').classList.add('show'); }; } }
 function renderRoomsList() {
   const t = S.tenant, el = $('#rooms'); if (!t || !el) return;
-  el.innerHTML = t.tourRooms.map((r, i) => `<button data-i="${i}" class="${r === S.room ? 'on' : ''}">${r.label}</button>`).join('');
-  el.querySelectorAll('button').forEach(b => b.onclick = () => goRoom(t.tourRooms[+b.dataset.i]));
+  const ms = mergedRooms(t); el.innerHTML = ms.map((e, i) => `<button data-i="${i}" class="${e.rooms.includes(S.room) ? 'on' : ''}">${e.label}${e.rooms.length > 1 ? ` <small>${e.seats} seats</small>` : ''}</button>`).join('');
+  el.querySelectorAll('button').forEach(b => b.onclick = () => goRoom(ms[+b.dataset.i].go));
 }
 function setInside(on) { document.body.classList.toggle('inside', on); if (!on) { closeOptions(); document.body.classList.remove('walk'); } updateDock(); }
 function updateDock() {
   const inside = !!S.tenant && ['view', 'walk', 'tour'].includes(S.mode);
+  $('#b-whole').hidden = !S.tenant || OV.on;
   $('#b-enter').hidden = !inside; $('#b-enter').textContent = S.mode === 'walk' ? 'Stop walking' : 'Enter'; $('#b-enter').classList.toggle('go', S.mode !== 'walk');
   for (const id of ['#b-prev', '#b-next', '#b-tour', '#b-opts']) $(id).hidden = !inside;
   $('#b-tour').classList.toggle('on', S.mode === 'tour'); $('#b-tour').textContent = S.mode === 'tour' ? 'Stop tour' : 'Tour';
@@ -585,12 +659,21 @@ function updateDock() {
   if (S.mode === 'orbit' || S.mode === 'section') { /* nothing else */ }
 }
 $('#b-back').onclick = () => toBuildingView();
+$('#b-whole').onclick = () => { if (S.tenant) showOverview(S.tenant); };
 $('#b-enter').onclick = () => { if (S.mode === 'walk') exitWalk(); else enterWalk(); };
 $('#b-next').onclick = () => step(1); $('#b-prev').onclick = () => step(-1);
 $('#b-tour').onclick = () => { if (S.mode === 'tour') stopTour(); else startTour(); };
 $('#b-opts').onclick = () => { if ($('#opts').classList.contains('show')) closeOptions(); else openOptions(S.room); };
 $('#b-lock').onclick = () => { canvas.requestPointerLock && canvas.requestPointerLock(); };
-$('#lb button').onclick = () => $('#lb').classList.remove('show');
+// lightbox over the gallery: full screen, previous / next (buttons, arrow keys, swipe), caption and count
+const LB = { list: [], i: 0 };
+function lbShow(i) { const n = LB.list.length; if (!n) return; LB.i = (i + n) % n; const f = LB.list[LB.i]; $('#lb img').src = f.dataset.src;
+  $('#lb .cap').innerHTML = `${(f.querySelector('figcaption') || {}).textContent || ''}<small>${LB.i + 1} / ${n}</small>`; $('#lb').classList.add('show'); }
+document.addEventListener('click', (e) => { const f = e.target.closest && e.target.closest('#galbody figure'); if (!f) return; e.stopImmediatePropagation(); LB.list = [...document.querySelectorAll('#galbody figure')]; lbShow(LB.list.indexOf(f)); }, true);
+$('#lb .x').onclick = () => $('#lb').classList.remove('show');
+$('#lb .p').onclick = (e) => { e.stopPropagation(); lbShow(LB.i - 1); }; $('#lb .n').onclick = (e) => { e.stopPropagation(); lbShow(LB.i + 1); };
+addEventListener('keydown', (e) => { if (!$('#lb').classList.contains('show')) return; if (e.code === 'ArrowRight') lbShow(LB.i + 1); if (e.code === 'ArrowLeft') lbShow(LB.i - 1); });
+{ let x0 = null; $('#lb').addEventListener('touchstart', e => { x0 = e.touches[0].clientX; }, { passive: true }); $('#lb').addEventListener('touchend', e => { if (x0 === null) return; const d = e.changedTouches[0].clientX - x0; if (Math.abs(d) > 40) lbShow(LB.i + (d < 0 ? 1 : -1)); x0 = null; }); }
 let hintT = 0; function hint(s) { const h = $('#hint'); h.textContent = s; h.classList.add('show'); clearTimeout(hintT); hintT = setTimeout(() => h.classList.remove('show'), 5000); }
 
 const tagsEl = $('#tags'); let tags = [];
@@ -602,13 +685,20 @@ function sectionTags(f) {
     addTag(() => W(t, p[0], p[1], 2.2), `${m.name}<small>${seatsTxt(m)} · enter at reception</small>`, () => land(t)); }
   if (!(f.tenants || []).length) addTag(() => V(CX, ZL(f.level) + 1.5, -CY), `${f.name}<small>${f.status === 'lobby' ? f.note : f.status === 'other' ? 'Not part of this offer' : (f.pending || []).length ? '3D model in preparation' : 'Available'}</small>`, null, true);
 }
-function addTag(pos, html, onclick, grey) { if (!html) return; const d = document.createElement('div'); d.className = 'tag' + (grey ? ' grey' : ''); d.innerHTML = html; if (onclick) d.onclick = onclick; tagsEl.appendChild(d); tags.push({ d, pos }); }
+function addTag(pos, html, onclick, grey, cls) { if (!html) return; const d = document.createElement('div'); d.className = 'tag' + (grey ? ' grey' : '') + (cls ? ' ' + cls : ''); d.innerHTML = html; if (onclick) d.onclick = onclick; tagsEl.appendChild(d); tags.push({ d, pos }); }
 const pv = new THREE.Vector3();
-function placeTags() { for (const g of tags) { const p = g.pos(); if (!p) continue; pv.copy(p).project(camera); const vis = pv.z < 1; g.d.style.display = vis ? '' : 'none'; g.d.style.left = (pv.x * .5 + .5) * innerWidth + 'px'; g.d.style.top = (-pv.y * .5 + .5) * innerHeight + 'px'; } }
+function placeTags() { const placed = [];
+  for (const g of tags) { const p = g.pos(); if (!p) continue; pv.copy(p).project(camera); const vis = pv.z < 1; const x = (pv.x * .5 + .5) * innerWidth, y = (-pv.y * .5 + .5) * innerHeight;
+    g.d.style.left = x + 'px'; g.d.style.top = y + 'px';
+    let show = vis; if (show && g.d.classList.contains('small')) { const w = g.w || (g.w = g.d.offsetWidth || 120), h = g.h || (g.h = g.d.offsetHeight || 30), r = [x - w / 2, y - h, x + w / 2, y];
+      if (placed.some(q => q[0] < r[2] + 4 && r[0] < q[2] + 4 && q[1] < r[3] + 3 && r[1] < q[3] + 3)) show = false; else placed.push(r); }
+    else if (show) { const w = g.d.offsetWidth || 120, h = g.d.offsetHeight || 34; placed.push([x - w / 2, y - h, x + w / 2, y]); }
+    g.d.style.display = show ? '' : 'none'; } }
 
 // ------------------------------------------------------------------ the room card never covers the subject: shift the frame
 function frameShift() {
   const W0 = innerWidth, H0 = innerHeight; const inside = document.body.classList.contains('inside');
+  if (!inside && OV.on && !PHONE()) { const ox = 175; camera.setViewOffset(W0 + 2 * ox, H0, 2 * ox, 0, W0, H0); return; }   // the plate centres left of the floor panel
   if (!inside) { if (PHONE()) { const oy = Math.round(H0 * .2); camera.setViewOffset(W0, H0 + 2 * oy, 0, 2 * oy, W0, H0); } else camera.clearViewOffset(); return; }
   if (PHONE()) { const oy = S.mode === 'walk' ? 0 : 60; camera.setViewOffset(W0, H0 + 2 * oy, 0, 2 * oy, W0, H0); }
   else { const ox = 150; camera.setViewOffset(W0 + 2 * ox, H0, 2 * ox, 0, W0, H0); }
@@ -676,7 +766,7 @@ function frame() {
     setPose(orbitPose(orbit));
   }
   if (walk.on) tickWalk(dt);
-  tickLevels(dt); tickWalls(dt);
+  tickLevels(dt); tickWalls(dt); if (S.tenant && S.tenant.ov) S.tenant.ov.tick(dt);
   frameShift(); placeTags(); drawPlan();
   if (shadowsDirty && renderer.shadowMap.enabled) { renderer.shadowMap.needsUpdate = true; shadowsDirty = false; }
   renderer.render(scene, camera);

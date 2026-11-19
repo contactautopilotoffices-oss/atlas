@@ -122,7 +122,7 @@ export function createMinimap({ root, onPickRoom, onPickView }) {
       ctx.fillStyle = '#ff9f2e'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(0, 0, 6.5, 0, 7); ctx.fill(); ctx.stroke();
       ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.moveTo(13, 0); ctx.lineTo(7, -4.5); ctx.lineTo(7, 4.5); ctx.closePath(); ctx.fill(); ctx.restore(); }
     ctx.textAlign = 'left';
-    root.querySelector('.mm-here').textContent = st.room ? st.room.label : 'Passage';
+    root.querySelector('.mm-here').textContent = st.room ? st.room.label.replace(/^open\s*work\s*stations?\b.*/i, 'Open workstations') : 'Passage';
     const xy = root.querySelector('.mm-xy'); if (xy) { const ft = (m) => { const i = Math.round(Math.abs(m) / .0254); return `${m < 0 ? '−' : ''}${Math.floor(i / 12)}′${i % 12}″`; }; xy.textContent = `X ${P.x.toFixed(1)} m (${ft(P.x)}) · Y ${P.y.toFixed(1)} m (${ft(P.y)})`; }
     const nx = root.querySelector('.mm-next'); nx.textContent = st.headingText || ''; nx.hidden = !st.headingText;
   }
