@@ -38,33 +38,7 @@
   "index": "models/index.json",
   "dev_build": {}
  },
- "stills": [
-  {
-   "camera": "rtp4-suite_CAM_reception-and-waiting_logo",
-   "src": "models/rtp4-suite/stills/rtp4-suite_reception-and-waiting_logo.jpg",
-   "option": null
-  },
-  {
-   "camera": "rtp4-suite_CAM_reception-and-waiting_reverse_hero",
-   "src": "models/rtp4-suite/stills/rtp4-suite_reception-and-waiting_reverse_hero.jpg",
-   "option": null
-  },
-  {
-   "camera": "rtp4-suite_CAM_12-seater-conference-room-01_entry",
-   "src": "models/rtp4-suite/stills/rtp4-suite_12-seater-conference-room-01_entry.jpg",
-   "option": null
-  },
-  {
-   "camera": "rtp4-suite_CAM_12-seater-conference-room-01_feature",
-   "src": "models/rtp4-suite/stills/rtp4-suite_12-seater-conference-room-01_feature.jpg",
-   "option": null
-  },
-  {
-   "camera": "rtp4-suite_CAM_training-room-05_entry",
-   "src": "models/rtp4-suite/stills/rtp4-suite_training-room-05_entry.jpg",
-   "option": null
-  }
- ],
+ "stills": [],
  "measured_sqft": 6142,
  "highlights": [
   "6 training rooms",
