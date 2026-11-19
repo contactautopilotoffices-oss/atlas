@@ -3,14 +3,14 @@
  "tenant": "altruist",
  "label": "Altruist (client) as its future office in Reliable Tech Park, Airoli, matched to five photos of its current Noida office (airoli-rtp/brand/): charcoal 600x1200 reception wall with the built, backlit logo; white reception desk with a royal-blue front; dark grey 600 tiles at reception, polished beige marble in the lobby; charcoal streaked carpet in the work halls; white desks, royal-blue fabric screens, kraft side screens, black mesh chairs; white walls, black skirting and columns; full-height glass in thin black frames with a frosted stripe band 0.9-1.8 m; 600 grid ceilings with 600 LED panels and square AC diffusers; olive fabric wall in cabins.",
  "light": {
-  "lamp_k": 4000,
+  "lamp_k": 4500,
   "cove_k": 3000,
-  "wb_k": 4200,
+  "wb_k": 4500,
   "downlight_w": 18,
   "grey_target": 0.18,
   "portals": true,
   "ceiling_fill_w_m2": 2.0,
-  "bake_sun_scale": 0.45
+  "bake_sun_scale": 0.3
  },
  "heights": {
   "ceiling": 3.05,
@@ -243,7 +243,8 @@
    }
   ],
   "beam_width": 0.42,
-  "sofa_model": "assets/cc0/sofa_02/sofa_02_1k.gltf"
+  "sofa_model": "assets/cc0/sofa_02/sofa_02_1k.gltf",
+  "fit_shrink": 0.92
  },
  "logo": [
   {
@@ -343,23 +344,23 @@
   "carpet_charcoal": {
    "kind": "carpet",
    "colors": [
-    "#2e3135",
-    "#3a3d42",
-    "#4a4d52",
-    "#8d9095"
+    "#323336",
+    "#3c3d40",
+    "#4a4b4e",
+    "#86888c"
    ],
    "tile": [
     0.6,
     0.6
    ],
    "tiles_per_texture": 4,
-   "tile_tone": 0.02,
+   "tile_tone": 0.06,
    "streak_threshold": 0.62,
-   "streak_amp": 0.55,
+   "streak_amp": 0.38,
    "streak_gamma": 1.6,
    "fine_amp": 0.1,
    "blot_amp": 0.03,
-   "seam_depth": 0.035,
+   "seam_depth": 0.09,
    "rough": 0.95,
    "sheen": 0.08,
    "maps": {
@@ -612,7 +613,7 @@
  "floor_exact_rooms": "RECEPTION",
  "ceiling_grid_align": "walls",
  "web": {
-  "chair_ratio": 0.3,
+  "chair_ratio": 0.5,
   "materials": {
    "logo_marble": {
     "color": "#f4f4f2",
@@ -624,15 +625,15 @@
     "rough": 0.9
    },
    "mesh_black": {
-    "color": "#2d2e31",
-    "rough": 0.62
+    "color": "#3b3c40",
+    "rough": 0.85
    }
   },
   "exposure_ev": 0.15,
   "tone_mapping": "NeutralToneMapping",
   "exposure_note": "web path (NeutralToneMapping): an 18 % card at desk height reads about sRGB 118; derived from the floor lightmap irradiance (median 0.72 at the floor, ~1.1 at desk height), 2026-11-19",
   "drop_context": true,
-  "chair_sharp_deg": 40
+  "chair_sharp_deg": 30
  },
  "props": [
   {
@@ -654,16 +655,6 @@
    "clear": 0.9,
    "inset": 0.5,
    "radius": 0.35
-  },
-  {
-   "name": "extinguisher",
-   "model": "assets/cc0/korean_fire_extinguisher_01/korean_fire_extinguisher_01_1k.gltf",
-   "room": "^RECEPTION|^TRAINING|Open workstations|CAFETERIA",
-   "place": "by_door",
-   "per_room": 1,
-   "clear": 0.5,
-   "radius": 0.15,
-   "layer": "FIXTURE"
   }
  ]
 }

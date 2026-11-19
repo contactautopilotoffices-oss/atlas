@@ -275,7 +275,7 @@ class Furnisher:
         """The model's footprint scaled (the same in x and y, height kept) to the CAD block's footprint: the drawing says
         how much floor the chair takes; the model only says what it looks like."""
         me = base.copy(); xs = [v.co.x for v in me.vertices]; ys = [v.co.y for v in me.vertices]
-        k = min(dp / (max(xs) - min(xs)), ln / (max(ys) - min(ys)), 1.25); k = max(k, 0.6)
+        k = min(dp / (max(xs) - min(xs)), ln / (max(ys) - min(ys)), 1.25) * self.F.get("fit_shrink", 1.0); k = max(k, 0.6)
         me.transform(Matrix.Diagonal((k, k, 1.0, 1.0))); me["fit_scale_xy"] = k; return me
 
     def shell_mesh(self, mat, seat_h, w, depth, back_h, lean=12.0, thick=0.012, m=None, M=None):
@@ -798,6 +798,11 @@ class Furnisher:
                         q = max(tb, key=lambda q: (max(p_[0] for p_ in q["poly"]) - min(p_[0] for p_ in q["poly"])) * (max(p_[1] for p_ in q["poly"]) - min(p_[1] for p_ in q["poly"])))
                         tc = Vector((sum(p_[0] for p_ in q["poly"]) / len(q["poly"]), sum(p_[1] for p_ in q["poly"]) / len(q["poly"]), 0))
                         pref = (tc - Vector((w["point"].x, w["point"].y, 0))).dot(t)
+                    else:                  # a training room: centred on the block of desks
+                        dc = [((min(p_[0] for p_ in d_["poly"]) + max(p_[0] for p_ in d_["poly"])) / 2, (min(p_[1] for p_ in d_["poly"]) + max(p_[1] for p_ in d_["poly"])) / 2) for d_ in self.L["desks"] if d_.get("poly")]
+                        dc = [c_ for c_ in dc if self.c.ras.room_at(*c_) is r]
+                        if dc:
+                            tc = Vector((sum(c_[0] for c_ in dc) / len(dc), sum(c_[1] for c_ in dc) / len(dc), 0)); pref = (tc - Vector((w["point"].x, w["point"].y, 0))).dot(t)
                     wb_on = bool(fw.get("whiteboard") and wd > sw + 2.2)
                     for off in [pref + d_ for d_ in (0.0, 0.25, -0.25, 0.5, -0.5, 1.0, -1.0, 1.5, -1.5)]:
                         left, right = off - (sw / 2 + 0.25 + 1.82 if wb_on else sw / 2), off + sw / 2     # local x is -t: the whiteboard (local +x) lies on the -t side

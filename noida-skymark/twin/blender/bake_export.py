@@ -442,6 +442,7 @@ def prep_web(tenant, lod=False):
             elif (k.startswith("('fit', 'chair'") or k == "'chair_model'") and WEB.get("chair_ratio"): done[me.name] = _decimate(me, WEB["chair_ratio"])     # opt-in: the real chair, lighter
             elif k.startswith("('fit', 'chair'") or k == "'chair_model'": done[me.name] = _fit_to(proxies.setdefault("chair", _web_chair()), me)
             elif k.startswith("('fit', 'lounge'") or k == "'lounge_model'": done[me.name] = _fit_to(proxies.setdefault("lounge", _web_chair(True)), me)
+            elif k.startswith("('visitor'") or k.startswith("('sofa"): done[me.name] = me          # light curved shells: kept whole (dissolve facets them)
             else: done[me.name] = _simplify(me)
         o.data = done[me.name]; o["twin_kind"] = o["twin_layer"]; o["twin_layer"] = "FURNITURE"
     lights_done = {}
