@@ -1,30 +1,30 @@
 {
-  "about": "Continuous female narration, Lily / ElevenLabs. Property showcase leads directly to the CAD layout before the interior zoom.",
+  "about": "Continuous Indian-English female narration, Lisa / ElevenLabs. Welcome is anchored to the facade reveal; the complete station route leads directly to the CAD layout.",
   "vo": [
     {
-      "file": "continuous-v2/female-voice.mp3",
+      "file": "continuous-v3/lisa-voice.mp3",
       "t": 0,
       "duration_s": 91,
-      "beat": "continuous_female_cad",
-      "text": "Your next workplace begins with the people it brings together and the space that supports their day. As we move from the Mumbai skyline into Airoli, the bigger picture becomes a place you can explore. Welcome to Reliable Tech Park. With Autopilot, you can follow the journey from the city around you to the detail of your proposed office, building a clearer picture as you move closer. It is a way to bring your team, your requirements and the property into the same conversation, before you step inside. You can explore the approach and decide which part of the workplace deserves a closer look, connecting what you see with the brief you have already shared. As the building comes into view, take in the glass facade and the space between its two arms. Then look beyond the first impression to the everyday journey your people would make. Here, you can explore the property alongside its surroundings, follow the connection from the station and inspect the walking route to the gate. The location information stays available for a closer look, so you can judge what matters to your team. And as we approach the entrance, the focus moves naturally from the journey here to the workplace inside. Now open your CAD layout and explore the proposed workplace, team by team, against your requirements.",
+      "beat": "continuous_indian_female_cad",
+      "text": "Every working day begins with a journey. Below us, Mumbai is already in motion, and across the water, the energy of Navi Mumbai comes into view. A bustling city of neighbourhoods, workplaces and people moving towards their next opportunity. Here in Airoli, that energy meets the practical questions behind your next office: how your team arrives, where they come together, and how the space supports the way they work. As we move closer, the city gives way to the property, and the bigger picture becomes a place you can explore. A workplace shaped around your people, and a clearer view of the possibilities ahead. Welcome to Reliable Tech Park. Glass catching the light, a courtyard at its heart, and your next workplace coming into focus. Brought into view by Autopilot. Local buses and shared rickshaws give your team more options for the last mile to the office. Airoli station is one point three kilometres from the gate, about a seventeen-minute walk. Follow the blue line along that connection, from the station to the property, and consider how the journey fits into your team's day. A clearer view of the journey, before you step inside. Now open your CAD layout and explore the proposed workplace, team by team, against your requirements.",
       "status": "ok"
     }
   ],
   "bed": "music.mp3",
-  "captions": "continuous-v2/captions.srt",
+  "captions": "continuous-v3/captions.srt",
   "dropped": [],
   "voice": {
-    "id": "pFZP5JQG7iQjIQuC4Bku",
-    "name": "Lily — Velvety Actress",
+    "id": "CQeA7YDuX8jSli58KbVp",
+    "name": "Lisa - Warm Indian English",
     "model": "eleven_multilingual_v2",
-    "settings": {
-      "stability": 0.62,
-      "similarity_boost": 0.75,
-      "style": 0,
-      "use_speaker_boost": true,
-      "speed": 1.06
-    },
     "gender": "female",
-    "accent": "British"
+    "accent": "Indian English",
+    "settings": {
+      "stability": 0.55,
+      "similarity_boost": 0.75,
+      "style": 0.12,
+      "use_speaker_boost": true,
+      "speed": 1.16
+    }
   }
 }

@@ -97,5 +97,13 @@ airoli-rtp/film/narration-v2/*.mp3
 airoli-rtp/film/narration-v2/*take*.json
 airoli-rtp/film/narration-v2/*transcript*.json
 airoli-rtp/film/narration-v2/*.log
+airoli-rtp/film/narration-v3/*.wav
+airoli-rtp/film/narration-v3/*.mp3
+airoli-rtp/film/narration-v3/*take*.json
+airoli-rtp/film/narration-v3/*timeline*.json
+airoli-rtp/film/narration-v3/*captions*.srt
+airoli-rtp/film/narration-v3/*measurements*.json
+airoli-rtp/film/narration-v3/*transcript*.json
+airoli-rtp/film/narration-v3/*.log
 airoli-rtp/interior-semantic/source/
 airoli-rtp/interior-semantic/captures/checkpoint1/

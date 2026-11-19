@@ -1,7 +1,7 @@
 // Lines on the world: the station walk (route.json, Google Maps figure), the rail line and platforms (route.json, OSM),
-// the five-minute ring (estimate, labelled), and the arrival line (gate from route.json; lifts and waiting area from the
-// 6th-floor CAD layout). Lines sit on the ground or float in the lift core; they never draw over the CAD (the floor plan
-// is not drawn here at all) and never over the facade (depth tested).
+// the five-minute ring (estimate, labelled), and the existing gate-to-entrance approach.
+// Lines sit above the terrain and remain depth tested against the facade. The CAD
+// floor plan is opened separately after the exterior arrival.
 import * as THREE from 'three';
 import { U, W } from './core.js';
 
@@ -92,11 +92,23 @@ function polyFill(rings, h, color, opacity) {
   return grp;
 }
 
-export function buildOverlays({ route, layoutLifts, heightAt }) {
+export function buildOverlays({ route, heightAt }) {
   const root = new THREE.Group(); root.name = 'overlays';
   const groundH = (x, y, lift) => Math.max(heightAt ? heightAt(x, y) : 0, Math.hypot(x, y) < 560 ? 0 : -50) + (Math.hypot(x, y) < 560 ? lift : lift + 1.2);
   // the station walk: drawn from the platform to the gate (the morning arrival)
-  const walkPts = route.route.map(([x, y]) => W(x, y, groundH(x, y, .45)));
+  // Sample the ground along every segment. Interpolating only the sparse
+  // endpoint heights can bury a stretch of the route beneath terrain.
+  const walkPts = [];
+  for (let i = 0; i < route.route.length - 1; i++) {
+    const [ax, ay] = route.route[i], [bx, by] = route.route[i + 1];
+    const n = Math.max(1, Math.ceil(Math.hypot(bx - ax, by - ay) / 3));
+    for (let j = 0; j < n; j++) {
+      const x = ax + (bx - ax) * j / n, y = ay + (by - ay) * j / n;
+      walkPts.push(W(x, y, groundH(x, y, .7)));
+    }
+  }
+  const [ex, ey] = route.route.at(-1);
+  walkPts.push(W(ex, ey, groundH(ex, ey, .7)));
   const walk = ribbon(walkPts, { width: 6.5, minPx: 3.6, halo: 2.6, dash: 26, fromEnd: true }); walk.name = 'walk'; root.add(walk);
   // rail and platforms (OSM via route.json): quiet ink, not the accent
   const rail = new THREE.Group(); rail.name = 'rail';
@@ -107,14 +119,11 @@ export function buildOverlays({ route, layoutLifts, heightAt }) {
   const ringC = [15.5, 82.8], ringR = Math.round(1300 / 17 * 5 / 10) * 10;
   const ringPts = []; for (let i = 0; i <= 160; i++) { const a = i / 160 * Math.PI * 2, x = ringC[0] + Math.cos(a) * ringR, y = ringC[1] + Math.sin(a) * ringR; ringPts.push(W(x, y, groundH(x, y, .5))); }
   const ring = ribbon(ringPts, { width: 1.4, minPx: 1.4, halo: 1, core: INK.clone().multiplyScalar(.55), step: 6 }); ring.name = 'ring'; ring.userData.r = ringR; ring.userData.c = ringC; root.add(ring);
-  // arrival: gate -> court drive -> entrance -> lobby -> lift core -> rise -> level 6 passage -> waiting area door
-  const L6 = 22.2 + .06;
-  const lifts = layoutLifts || [[25.13, 86.75], [27.91, 86.71]];
-  const lx = (lifts[0][0] + lifts[1][0]) / 2, ly = Math.max(lifts[0][1], lifts[1][1]) + 1.6;
+  // The guided arrival ends at the entrance, then hands directly to the CAD.
+  // Keep the existing gate/court approach, without a partial interior ascent.
   const arrivalPts = [
-    W(-3.9, -3.8, .4), W(3.5, 8, .4), W(7.5, 30, .4), W(8.6, 56, .4), W(9, 76, .4), W(15.5, 82.8, .4), W(lx - 3.5, ly, .4), W(lx, ly, .4),
-    W(lx, ly, L6), W(lx, ly + 1.2, L6), W(lx, 91.2, L6)];
-  const arrival = ribbon(arrivalPts, { width: 2.2, minPx: 3, halo: 2.6, dash: 9, step: 1.2 }); arrival.name = 'arrival'; arrival.userData.riseAt = [lx, ly]; root.add(arrival);
+    W(-3.9, -3.8, .7), W(3.5, 8, .7), W(7.5, 30, .7), W(8.6, 56, .7), W(9, 76, .7), W(15.5, 82.8, .7)];
+  const arrival = ribbon(arrivalPts, { width: 2.2, minPx: 3, halo: 2.6, dash: 9, step: 1.2 }); arrival.name = 'arrival'; root.add(arrival);
   const all = [walk, ring, arrival, ...rail.children.filter(c => c.isMesh)];
   return {
     root, walk, rail, ring, arrival,

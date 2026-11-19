@@ -1,0 +1,96 @@
+{
+  "voice": {
+    "id": "CQeA7YDuX8jSli58KbVp",
+    "name": "Lisa - Warm Indian English",
+    "model": "eleven_multilingual_v2",
+    "gender": "female",
+    "accent": "Indian English",
+    "settings": {
+      "stability": 0.55,
+      "similarity_boost": 0.75,
+      "style": 0.12,
+      "use_speaker_boost": true,
+      "speed": 1.16
+    }
+  },
+  "direction": "Warm, confident Indian-English female narrator. One connected take per output, conversational forward momentum, natural punctuation, no inserted break tags. Welcome begins with the facade reveal. Do not clone or pitch-shift a voice.",
+  "film": [
+    {
+      "id": "opening",
+      "start": 2,
+      "end": 44.8,
+      "text": "Every working day begins with a journey. Below us, Mumbai is already in motion, and across the water, the energy of Navi Mumbai comes into view. A bustling city of neighbourhoods, workplaces and people moving towards their next opportunity. Here in Airoli, that energy meets the practical questions behind your next office: how your team arrives, where they come together, and how the space supports the way they work. As we move closer, the city gives way to the property, and the bigger picture becomes a place you can explore. A workplace shaped around your people, and a clearer view of the possibilities ahead. With the city as our context, we can now look closer."
+    },
+    {
+      "id": "property",
+      "start": 45,
+      "end": 54.8,
+      "text": "Welcome to Reliable Tech Park. Glass catching the light, a courtyard at its heart, and your next workplace coming into focus.",
+      "anchor": "Welcome"
+    },
+    {
+      "id": "connection",
+      "start": 55,
+      "end": 78.5,
+      "text": "Local buses and shared rickshaws give your team more options for the last mile to the office. Airoli station is one point three kilometres from the gate, about a seventeen-minute walk. Follow the blue line along that connection, from the station to the property, and consider how the journey fits into your team's day."
+    },
+    {
+      "id": "arrival",
+      "start": 79,
+      "end": 92.5,
+      "text": "From the property, we can move directly to the CAD layout, where your proposed workplace becomes a working conversation about the brief and the spaces your team needs."
+    },
+    {
+      "id": "floor",
+      "start": 93,
+      "end": 120,
+      "text": "Inside offices six oh three and six oh four, the drawing becomes a working conversation about your brief. Explore the processes across the floor, choose a team, and see its seats, dimensions and area together. For Tata Capital, the plan shows two hundred and sixteen seats against the same requirement, making the relationship between the brief and the drawing clear."
+    },
+    {
+      "id": "support",
+      "start": 120,
+      "end": 134,
+      "text": "There is room to discuss what comes next, with twenty one growth seats identified in the plan. Alongside the teams, you can inspect the meeting spaces and supporting rooms that complete the workplace."
+    },
+    {
+      "id": "training",
+      "start": 134,
+      "end": 145.7,
+      "text": "The fourth floor brings another part of the journey into view, from reception and interviews to induction and training, helping you consider how new colleagues would enter the organisation."
+    },
+    {
+      "id": "close",
+      "start": 145.7,
+      "end": 166,
+      "text": "Now return to the CAD layout and explore the spaces that matter to your team. With Autopilot, each selection keeps your requirements and the drawing in the same conversation, so you can move from an overall impression to a specific decision. Let's explore your next workplace together."
+    }
+  ],
+  "experience": [
+    {
+      "id": "opening",
+      "start": 2,
+      "end": 41.35,
+      "text": "Every working day begins with a journey. Below us, Mumbai is already in motion, and across the water, the energy of Navi Mumbai comes into view. A bustling city of neighbourhoods, workplaces and people moving towards their next opportunity. Here in Airoli, that energy meets the practical questions behind your next office: how your team arrives, where they come together, and how the space supports the way they work. As we move closer, the city gives way to the property, and the bigger picture becomes a place you can explore. A workplace shaped around your people, and a clearer view of the possibilities ahead."
+    },
+    {
+      "id": "property",
+      "start": 41.6,
+      "end": 54.8,
+      "text": "Welcome to Reliable Tech Park. Glass catching the light, a courtyard at its heart, and your next workplace coming into focus. Brought into view by Autopilot.",
+      "anchor": "Welcome"
+    },
+    {
+      "id": "connection",
+      "start": 55,
+      "end": 81.8,
+      "text": "Local buses and shared rickshaws give your team more options for the last mile to the office. Airoli station is one point three kilometres from the gate, about a seventeen-minute walk. Follow the blue line along that connection, from the station to the property, and consider how the journey fits into your team's day. A clearer view of the journey, before you step inside."
+    },
+    {
+      "id": "arrival",
+      "start": 82,
+      "end": 90.5,
+      "text": "Now open your CAD layout and explore the proposed workplace, team by team, against your requirements."
+    }
+  ],
+  "take": "indian-female-take2"
+}

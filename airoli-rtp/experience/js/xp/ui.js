@@ -63,7 +63,7 @@ export function createLabels(container) {
         if (o.a < .01) { if (o.el.style.display !== 'none') o.el.style.display = 'none'; continue; }
         v.copy(o.world); v.project(camera);
         if (v.z > 1 || v.z < -1 || Math.abs(v.x) > 1.15 || Math.abs(v.y) > 1.15) { o.el.style.display = 'none'; continue; }
-        o.el.style.display = '';
+        o.el.style.display = 'block';
         const x = (v.x * .5 + .5) * w, y = (-v.y * .5 + .5) * h;
         o.el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`; o.el.style.opacity = o.a.toFixed(3);
       }

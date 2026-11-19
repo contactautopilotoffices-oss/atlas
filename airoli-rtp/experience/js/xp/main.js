@@ -60,7 +60,11 @@ const [shots, loc, route, geo, man, ctxData, layout] = await Promise.all([
 const plate = await fetchJSON('../twin/web/plate.json').catch(() => null);
 const PATH = buildPath(shots); let TT = timedText(shots);
 initHud(); fillPanel(loc);
-const setCredit = (with2026) => { const a = geo.attribution || {}; $('#credit').textContent = (with2026 && a.on_screen_with_2026_plates) || a.on_screen || 'Imagery: Sentinel-2 cloudless 2016 by EOX (s2maps.eu), contains modified Copernicus Sentinel data 2016'; };
+const setCredit = (with2026) => {
+  const a = geo.attribution || {};
+  $('#credit').textContent = 'EOX / Copernicus imagery · Copernicus DEM · © OpenStreetMap contributors';
+  $('#credit-full').textContent = (with2026 && a.on_screen_with_2026_plates) || a.on_screen || 'Imagery: Sentinel-2 cloudless 2016 by EOX (s2maps.eu), contains modified Copernicus Sentinel data 2016';
+};
 setCredit(false);
 
 // ------------------------------------------------------------------ the world (loaded behind the Enter screen)
@@ -91,7 +95,16 @@ const site = new THREE.Group(); site.name = 'site'; site.add(twin.building, twin
 if (ground.userData.twinPlate) site.add(siteUnderlay(ground.userData.twinPlate));
 const traffic = makeTraffic(twin.context, ctxData); if (traffic) site.add(traffic.group);
 const interior = await loadSemanticInterior(layout); interior.visible = false; site.add(interior);
-const OV = buildOverlays({ route, layoutLifts: layout && layout.lifts && layout.lifts.slice(2, 4), heightAt: ground.userData.heightAt });
+// The 6.4 km twin terrain has its own flattened site and transition heights.
+// Drape the route on that rendered surface, rather than the coarser DEM lookup.
+twin.terrain.updateMatrixWorld(true);
+const overlayRay = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0, -1, 0));
+const overlayHeightAt = (x, y) => {
+  overlayRay.ray.origin.copy(W(x, y, 1000));
+  const hit = overlayRay.intersectObject(twin.terrain, true)[0];
+  return hit ? hit.point.y : ground.userData.heightAt(x, y);
+};
+const OV = buildOverlays({ route, heightAt: overlayHeightAt });
 scene.add(OV.root); for (const k of ['walk', 'rail', 'ring', 'arrival']) OV.show(k, false);
 const heightAt = ground.userData.heightAt;
 const controls = createControls(camera, renderer.domElement, { outer: plate && plate.outer, boxes: twin.boxes, footprints: footprintsFrom(ctxData), heightAt });
@@ -104,7 +117,7 @@ const LBL = Object.fromEntries((geo.labels || []).map(l => [l.key, l]));
 for (const k of ['mumbai', 'thane', 'thane_creek', 'navi_mumbai', 'airoli']) if (LBL[k]) labels.add('geo_' + k, LBL[k].text, W(LBL[k].x_m, LBL[k].y_m, Math.max(0, heightAt(LBL[k].x_m, LBL[k].y_m)) + 30), { kind: 'place' });
 const PTS = Object.fromEntries((loc.points || []).map(p => [p.id, p]));
 const st = PTS.airoli_station, dg = PTS.digha_gaon_station;
-if (st) labels.add('stn_airoli', 'Airoli station', W(st.x, st.y, 14), { kind: 'station', sub: 'Trans-Harbour line · 17 min walk' });
+if (st) labels.add('stn_airoli', 'Airoli station', W(st.x, st.y, 14), { kind: 'station', sub: '1.3 km · 17 min walk to the gate' });
 if (dg) labels.add('stn_digha', 'Digha Gaon station', W(dg.x, dg.y, 14), { kind: 'station', sub: `Trans-Harbour line · ${dg.walk_min} min walk` });
 labels.add('rtp', 'Reliable Tech Park · B Wing', W(5, 50, 52), { kind: 'site' });
 const NEAR_KINDS = /food|cafe|bus|atm|bank|hospital/;
@@ -194,12 +207,12 @@ const S = { mode: CAPTURE ? 'capture' : 'enter', t: 0, playing: false, speed: +Q
 const cover = (t) => lerp(.62, .36, sstep(14, 56, t));
 function timelineState(t) {
   // overlays and building states as pure functions of the timeline time (so a capture at t is exactly the run at t)
-  const showRing = t > 56 && t < 64.6, showRail = t > 63.5 && t < 82.5, showWalk = t > 71.5 && t < 90, showArr = t > 82 && t < 99;
+  const showRing = t > 56 && t < 64.6, showRail = t > 63.5 && t < 82.5, showWalk = t > 68.5 && t <= CAD_HANDOFF_AT, showArr = t > 82 && t <= CAD_HANDOFF_AT;
   OV.show('ring', showRing, { reveal: sstep(56.3, 58.6, t), opacity: Math.min(1, (64.6 - t) / .6) });
   OV.show('rail', showRail, { reveal: 1, opacity: Math.min(sstep(63.5, 65.5, t), (82.5 - t) / 1) });
-  OV.show('walk', showWalk, { reveal: sstep(74.6, 81.2, t), opacity: Math.min(1, (90 - t) / 1.5) });
-  OV.show('arrival', showArr, { reveal: clamp((t - 82.5) / (95 - 82.5), 0, 1), opacity: Math.min(1, (99 - t) / .8) });
-  labels.set('stn_airoli', t > 64.8 && t < 81.5 ? 1 : 0); labels.set('stn_digha', t > 66 && t < 72 ? 1 : 0);
+  OV.show('walk', showWalk, { reveal: sstep(69, 75.5, t), opacity: 1 });
+  OV.show('arrival', showArr, { reveal: sstep(82.5, 88.5, t), opacity: 1 });
+  labels.set('stn_airoli', t > 64.8 && t < 82.5 ? 1 : 0); labels.set('stn_digha', t > 66 && t < 72 ? 1 : 0);
   labels.setKind('poi', t > 57.6 && t < 63.8 ? 1 : 0); labels.set('ring', 0);
   for (const it of [['MUMBAI', 'geo_mumbai'], ['THANE CREEK', 'geo_thane_creek'], ['NAVI MUMBAI', 'geo_navi_mumbai'], ['AIROLI', 'geo_airoli']]) {
     const tx = TT.raw && TT.raw[it[0]]; labels.set(it[1], tx && t > tx.t0 && t < tx.t1 ? 1 : 0); }
@@ -455,7 +468,7 @@ async function setupCapture() {
 }
 
 // a handle for the automated checks (read only use)
-window.__XP__ = { THREE, scene, camera, renderer, OV, twin, ground, interior, labels, U, GLASS, sky, post, S, PATH, TOD, applyTod, setCam };
+window.__XP__ = { THREE, scene, camera, renderer, OV, twin, ground, interior, labels, U, GLASS, sky, post, S, PATH, TOD, applyTod, setCam, timelineState };
 const DBG = Q.get('dbg') || '';
 if (/noao/.test(DBG)) scene.traverse(o => { if (o.isMesh) for (const m of [].concat(o.material)) if (m.aoMap) { m.aoMap = null; m.needsUpdate = true; } });
 if (/noclouds/.test(DBG)) sky.enabled = false;
