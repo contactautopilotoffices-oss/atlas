@@ -240,6 +240,9 @@ function insideLevel(lv) {
     const u = L.g.userData, hasT = Object.values(T).some(t => t.man.floor === i && t.group.parent);
     L.g.visible = lv === null || i === lv || (i < lv && S.mode === 'section') || (L.liftTo === 1 && L.lift < .97);
     u.shell.visible = lv !== null && i === lv; u.lid.visible = inside && i === lv;
+    // a delivered Blender floor brings its own curtain wall: our simplified facade (dark mullions, spandrel) stays hidden
+    const glbHere = Object.values(T).some(t => t.man.floor === i && t.kind === 'glb' && t.group.parent);
+    for (const c of u.shell.children) if (c !== u.lid && !(c.isMesh && c.geometry.type === 'ExtrudeGeometry')) c.visible = !glbHere;
     u.hints.visible = lv === null || i < lv || (i === lv && !hasT && !inside) || i > lv;
   });
   if (TW) { TW.setCut(lv === null ? 1e4 : ZL(lv) - .06); TW.high.visible = lv !== null && S.mode === 'section'; }
@@ -429,6 +432,8 @@ function applyExposure(t) {
   // unbaked meshes (instanced furniture) get a dim room environment; the sun and sky lights are turned well down
   const glb = t && t.kind === 'glb' && S.mode !== 'orbit' && S.mode !== 'section';
   const out = S.mode === 'orbit' || S.mode === 'section', ex = (TOD && TOD.exposure) || 1.15;
+  // inside a Blender floor: Neutral tone mapping (three's AgX has no 'Medium High Contrast' look, so AgX reads grey); outside: AgX
+  const tm = glb ? (THREE[t.toneMapping] || THREE.NeutralToneMapping) : THREE.AgXToneMapping; if (renderer.toneMapping !== tm) renderer.toneMapping = tm;
   renderer.toneMappingExposure = glb ? 2 ** (t.exposureEV || 0) : (out ? ex : .92);
   // inside a floor the offices are lit as by day (placeholder floors have no bake): the slider is for the outside
   hemi.intensity = glb ? .12 : out ? (hemi.userData.base ?? .85) : .85; sun.intensity = glb ? .35 : out ? (sun.userData.base ?? 2.1) : 1.6;
@@ -494,7 +499,9 @@ async function routeGlide(t, to, planTo, { inRoom }) {
 // ------------------------------------------------------------------ walk (WASD / joystick + look)
 const walk = { on: false, x: 0, y: 0, A: 0, pitch: 0, keys: {}, joy: [0, 0], lock: false, h: 1.6 };
 function enterWalk() {
-  const t = S.tenant; if (!t) return; stopTour(); cancelAnim();
+  const t = S.tenant; if (!t) return;
+  if (!['view', 'walk', 'tour'].includes(S.mode)) { land(t).then(() => { if (S.mode === 'view') enterWalk(); }); return; }   // from the building or the whole floor: glide in first
+  stopTour(); cancelAnim();
   const [x, y] = toPlan(t, camera.position);
   const [fx, fy] = t.grid.nearestFree(x, y, .32, 2);
   Object.assign(walk, { on: true, x: fx, y: fy, A: headOf(t, camera.rotation.y), pitch: camera.rotation.x });
