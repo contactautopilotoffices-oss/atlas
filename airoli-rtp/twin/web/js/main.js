@@ -181,7 +181,7 @@ async function loadTenant(id) {
       const want = Q.get('model') || m.model.use || 'auto';
       let viewer = want !== 'placeholder' && viewList.length ? await firstOK(viewList) : null;
       if (viewer && want !== 'placeholder') {
-        try { await t.loadGLB(await loader(), viewer.data, viewer.url.replace(/[^/]*$/, '')); t.modelSource = viewer.url; }
+        try { await t.loadGLB(await loader(), viewer.data, viewer.url.replace(/[^/]*$/, '')); t.modelSource = viewer.url; settleFloors(t); }
         catch (e) { console.warn('[twin] GLB failed, using the placeholder', e); t.group.clear(); viewer = null; }
       }
       if (!viewer) { t.buildPlaceholder(); t.modelSource = 'placeholder (from the CAD layout)'; }
@@ -194,6 +194,16 @@ async function loadTenant(id) {
     return t;
   })();
   return t.ready;
+}
+// Floor finishes from neighbouring zones can overlap at exactly the same height in a bake (RTP 6th A: reception tile under
+// the next zone's carpet at 22.2000 m): a coplanar fight that reads as camouflage blotches. A polygon offset does nothing
+// under the logarithmic depth buffer (the shader writes its own depth), so the finishes are lifted apart by a few
+// millimetres in a fixed order (stone over tile over vinyl over carpet): one always wins, nothing visibly floats.
+const FLOOR_LIFT = [[/marble|stone|terrazzo/, .008], [/tile/, .006], [/vinyl|wood|plank/, .004], [/carpet|rug/, .002]];
+function settleFloors(t) {
+  t.group.traverse(o => { if (!o.isMesh || !/^floor_/i.test(o.name) || o.userData.lifted) return;
+    const m = [].concat(o.material)[0], hit = FLOOR_LIFT.find(([rx]) => rx.test((m && m.name) || ''));
+    if (hit) { o.position.y += hit[1]; o.userData.lifted = true; o.updateMatrix(); } });
 }
 const section = (text, head) => { if (!head) return text; const i = text.indexOf(head); if (i < 0) return text; const rest = text.slice(i); const lv = (text.slice(0, i).match(/(#+)\s*$/) || ['', '###'])[1]; const j = rest.slice(head.length).search(new RegExp(`\\n#{1,${lv.length}}\\s`)); return '## ' + (j < 0 ? rest : rest.slice(0, head.length + j)); };
 function unloadLevel(lv) { for (const id of Object.keys(T)) if (MAN[id].floor === lv) { T[id].ready.then(t => t.dispose()); delete T[id]; } shadowsDirty = true; }

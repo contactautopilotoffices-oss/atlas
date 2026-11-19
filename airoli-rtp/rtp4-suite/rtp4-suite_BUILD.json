@@ -1,0 +1,46 @@
+{
+ "gate": "BUILD",
+ "pass": false,
+ "checks": [
+  {
+   "check": "Nothing inside a wall, glass or door; nothing floating or sunk (hard rule)",
+   "pass": true,
+   "detail": "0 into walls/glass/doors, 0 floating or sunk"
+  },
+  {
+   "check": "Furniture not overlapping furniture",
+   "pass": true,
+   "detail": "0 pair(s)"
+  },
+  {
+   "check": "Walkways >= 1.2 m on every route from the entrance to every door",
+   "pass": false,
+   "detail": "7 stretch(es) under 1.2 m (CAD pinch points, for the designer): 1.05 m at (36.9, 95.7); 1.05 m at (35.6, 95.7); 1.05 m at (32.7, 95.7); 1.15 m at (37.3, 97.9); 1.05 m at (37.4, 102.6); 1.05 m at (37.4, 106.4); 1.05 m at (35.5, 95.7)"
+  },
+  {
+   "check": "No two coplanar faces closer than 2 mm (flicker)",
+   "pass": false,
+   "detail": "62 overlapping pairs among 301,111 faces: rtp4-suite_LOGO_tenantlogo_1 / rtp4-suite_LOGO_tenantlogo_1 x14; rtp4-suite_WALL_wall_3 / rtp4-suite_SKIRTING_skirting_5 x2; rtp4-suite_DOOR_DOORSNGLleaf_4 / rtp4-suite_DOOR_DOORSNGLleaf_4 x2; rtp4-suite_DOOR_DOORSNGLleaf_3 / rtp4-suite_DOOR_DOORSNGLleaf_3 x2; rtp4-suite_DOOR_DOORSNGLleaf_5 / rtp4-suite_DOOR_DOORSNGLleaf_5 x2"
+  },
+  {
+   "check": "Light: exposure from grey cards; previews not blown or crushed",
+   "pass": true,
+   "detail": "{\"cards\": [{\"room\": \"Corridor 3\", \"at\": [31.79, 98.71, 0.8], \"card_linear\": 0.1389}, {\"room\": \"IT ROOM AND IT STORE ROOM\", \"at\": [32.39, 110.56, 0.8], \"card_linear\": 0.412}, {\"room\": \"TRAINING ROOM_05\", \"at\": [40.46, 110"
+  },
+  {
+   "check": "Cameras: every shown room has a ray-checked view",
+   "pass": true,
+   "detail": "15 rooms with views, 0 without"
+  },
+  {
+   "check": "Lightmaps: every atlas uses >= 100 8-bit levels on its lit texels, median lit texel >= code 25 (no posterised darks, no black atlas)",
+   "pass": true,
+   "detail": "10 atlases, key p98.0; median lit codes 45-153; levels 231-231"
+  },
+  {
+   "check": "Export: web model written (GLB, LOD GLB, viewer.json, lightmaps)",
+   "pass": true,
+   "detail": "camera near 0.1 m; files: 2"
+  }
+ ]
+}

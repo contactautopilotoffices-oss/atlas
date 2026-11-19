@@ -6,7 +6,7 @@ Image: `rtp4-suite_G0.png` (true north up). Numbers: `rtp4-suite_G0.json`.
 ## Headline
 
 - **18 work seats, 212 seats in all.** Work (desk + chair) 18, Meeting 28, Training 135, Reception, lounge, visitor 31.
-- **Area:** measured carpet 571 m2 (6,142 sq ft) of free floor, 6,460 sq ft with the inner partitions, against the sheet's 6,603 sq ft: -7.0 % / -2.2 %: pass only with partitions on the 3 % rule.
+- **Area:** measured carpet 571 m2 (6,143 sq ft) of free floor, 6,460 sq ft with the inner partitions, against the sheet's 6,603 sq ft: -7.0 % / -2.2 %: pass only with partitions on the 3 % rule.
 - **Exits:** 1 exit stairs reached; 0 of 212 seats have two. Nearest exit: median 28 m, worst 40 m.
 - **Daylight:** 100 % of work seats within 6 m of a window.
 - **Flags:** 3 differences or open points (below).
@@ -16,7 +16,7 @@ Image: `rtp4-suite_G0.png` (true north up). Numbers: `rtp4-suite_G0.json`.
 | Group | Seats | Where |
 |---|---:|---|
 | Work (desk + chair) | 18 | ADMIN ROOM 9, HR ROOM 9 |
-| Meeting | 28 | 12 SEATER CONFERENCE ROOM_01 12, 06 SEATER MEETING ROOM 01 (1) 6, 06 SEATER MEETING ROOM 01 (2) 6, INTERVIEW CABIN_02 2, INTERVIEW CABIN_01 2 |
+| Meeting | 28 | 12 SEATER CONFERENCE ROOM_01 12, 06 SEATER MEETING ROOM 01 (2) 6, 06 SEATER MEETING ROOM 01 (1) 6, INTERVIEW CABIN_02 2, INTERVIEW CABIN_01 2 |
 | Training | 135 | TRAINING ROOM_02 22, TRAINING ROOM_01 22, TRAINING ROOM_03 21, TRAINING ROOM_04 21, TRAINING ROOM_06 21, TRAINING ROOM_05 19, HR INDUCTION ROOM 9 |
 | Reception, lounge, visitor | 31 | RECEPTION AND WAITING 31 |
 
@@ -27,14 +27,14 @@ measured carpet = every closed room, open-plan zone and circulation polygon insi
 | Use | m2 | sq ft |
 |---|---:|---:|
 | training | 247 | 2,658 |
-| circulation | 106 | 1,139 |
+| circulation | 106 | 1,140 |
 | service | 67 | 718 |
 | meeting | 40 | 432 |
 | other | 38 | 404 |
 | reception | 32 | 347 |
 | work | 30 | 322 |
 | cabin | 11 | 123 |
-| **Measured carpet, free floor (all but core)** | **571** | **6,142** |
+| **Measured carpet, free floor (all but core)** | **571** | **6,143** |
 | Measured carpet with inner partitions (gross less cores) | 600 | 6,460 |
 | Gross plate inside the offer | 600 | 6,460 |
 
@@ -62,7 +62,7 @@ Walkable floor: the offer (plate minus `not_demised`, minus lift wells and shaft
 | S8 | (12, 27) | F.D. (9.0, 23.8), F.D. (9.0, 23.8), E.D. (12.6, 23.3), F.D. (9.0, 23.8), F.D. (9.0, 23.8), E.D. (12.6, 23.3) | no |
 | S9 | (14, 12) | F.D. (10.7, 12.8), E.D. (15.7, 10.1), F.D. (10.7, 12.8), E.D. (15.7, 10.1) | no |
 
-- Seats with two exits: **0 of 212**; with one only: 212 (ADMIN ROOM 9, HR ROOM 9, 12 SEATER CONFERENCE ROOM_01 12, INTERVIEW CABIN_02 2, INTERVIEW CABIN_01 2, 06 SEATER MEETING ROOM 01 (1) 6, 06 SEATER MEETING ROOM 01 (2) 6, TRAINING ROOM_05 19, TRAINING ROOM_02 22, TRAINING ROOM_01 22, TRAINING ROOM_03 21, TRAINING ROOM_04 21, TRAINING ROOM_06 21, HR INDUCTION ROOM 9, RECEPTION AND WAITING 31); with none: 0.
+- Seats with two exits: **0 of 212**; with one only: 212 (ADMIN ROOM 9, HR ROOM 9, 12 SEATER CONFERENCE ROOM_01 12, INTERVIEW CABIN_02 2, INTERVIEW CABIN_01 2, 06 SEATER MEETING ROOM 01 (2) 6, 06 SEATER MEETING ROOM 01 (1) 6, TRAINING ROOM_05 19, TRAINING ROOM_02 22, TRAINING ROOM_01 22, TRAINING ROOM_03 21, TRAINING ROOM_04 21, TRAINING ROOM_06 21, HR INDUCTION ROOM 9, RECEPTION AND WAITING 31); with none: 0.
 - Walk to the nearest exit: median 27.5 m, worst 39.5 m. To the second exit: median 0.0 m, worst 0.0 m.
 - Farthest seat: T1 in TRAINING ROOM_05, 39.5 m to S4 and None m to None.
 - NBC 2016 Part 4, Table 5: business occupancy (Group E), travel distance to an exit 45 m with sprinklers in the whole building (30 m without). To be confirmed with a fire consultant.
@@ -88,7 +88,7 @@ distance from each work seat to the nearest facade glass line on the plate edge;
 
 ## Flags and differences
 
-1. Area: the rooms measure 6,142 sq ft of free floor (-7.0 %) and 6,460 sq ft with the inner partitions (-2.2 %) against the sheet's 6,603 sq ft carpet: within 3 % only when the partitions are counted. The gross area inside the offer (6,460 sq ft, facade line to facade line) is -2.2 % from it. The sheet's chargeable area is exactly 1.500 x its carpet area, so the sheet's carpet figure looks like chargeable / 1.5 (a 50 % loading), not a measured area.
+1. Area: the rooms measure 6,143 sq ft of free floor (-7.0 %) and 6,460 sq ft with the inner partitions (-2.2 %) against the sheet's 6,603 sq ft carpet: within 3 % only when the partitions are counted. The gross area inside the offer (6,460 sq ft, facade line to facade line) is -2.2 % from it. The sheet's chargeable area is exactly 1.500 x its carpet area, so the sheet's carpet figure looks like chargeable / 1.5 (a 50 % loading), not a measured area.
 2. Exits: 212 of 212 seats reach only one exit stair (S4) on the drawn walls and doors inside the walk area (the suite has no stair of its own: walking routes use the suite plus the common MAIN LOBBY in front of lift core B and its stair (to x 41.5, y 76); the other tenants' units are not walked through). A second exit route is not drawn.
 3. Label not placed in a room: 'store room' at (26, 105) - closed-room label in an open area: needs a closure.
 
@@ -96,7 +96,7 @@ distance from each work seat to the nearest facade glass line on the plate edge;
 
 - Offer outline: the fitted suite as drawn: its partitions, the toilet-block wall to the south and the main lobby's glass line to the south-east; the rest of the 4th floor (units 402, 403 B, 404 and the main lobby) is not part of it
 - Chair position: A$C9bee9767 (30 chairs) is drawn with ellipse arcs that the DWG reader explodes 2.6 x 2.3 m wide; the insertion points are 0.57 m apart in rows, so each chair is placed at its insertion point
-- 548 automatic closures of short door-less openings (room outlines only).
+- 544 automatic closures of short door-less openings (room outlines only).
 
 ## Assumptions
 
@@ -108,7 +108,7 @@ distance from each work seat to the nearest facade glass line on the plate edge;
 - Walkway width = the clear gap between desks, tables and partitions with the chairs where they are drawn (lounge seats ignored), measured at the CAD's own passage labels.
 - Daylight: distance from each work seat to the nearest facade glass line; the facade glass type, sill height and shading are not in the drawing.
 - Seats are counted from chair blocks, one per chair (two per two-seat sofa). A work seat is a chair at a desk; the room a chair stands in decides meeting, training, cafeteria and lounge.
-- 548 short openings without a door block (toilet entries, lift doorways, bays) were closed automatically where two wall ends face each other 0.55 to 1.15 m apart, for room outlines only; walking routes may pass through them.
+- 544 short openings without a door block (toilet entries, lift doorways, bays) were closed automatically where two wall ends face each other 0.55 to 1.15 m apart, for room outlines only; walking routes may pass through them.
 
 ## Sign-off
 

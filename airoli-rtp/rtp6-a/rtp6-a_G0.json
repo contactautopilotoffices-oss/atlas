@@ -39,9 +39,9 @@
    },
    "Reception, lounge, visitor": {
     "RECEPTION & WAITING AREA": 19,
-    "Circulation 5": 9,
-    "Circulation 3": 2,
-    "Shaft or duct 85 (unlabelled)": 1
+    "Circulation 9": 9,
+    "Circulation 7": 2,
+    "Shaft or duct 82 (unlabelled)": 1
    },
    "Cabin (desk chair + visitors)": {
     "CABIN (1)": 5,
@@ -237,11 +237,11 @@
  },
  "areas": {
   "by_kind_m2": {
-   "work": 1078.0,
-   "circulation": 960.7,
-   "core": 229.5,
+   "work": 1078.1,
+   "circulation": 989.3,
+   "core": 227.4,
    "cafe": 215.5,
-   "service": 178.7,
+   "service": 144.8,
    "training": 96.2,
    "meeting": 79.1,
    "wc": 61.6,
@@ -250,17 +250,17 @@
    "cabin": 25.1,
    "lounge": 6.9
   },
-  "measured_carpet_m2": 2778.9,
-  "measured_carpet_sqft": 29911,
-  "core_in_offer_m2": 229.5,
-  "offer_gross_m2": 3199.2,
-  "offer_gross_sqft": 34435,
+  "measured_carpet_m2": 2773.7,
+  "measured_carpet_sqft": 29856,
+  "core_in_offer_m2": 227.4,
+  "offer_gross_m2": 3198.6,
+  "offer_gross_sqft": 34430,
   "sheet_carpet_sqft": 23659,
   "sheet_chargeable_sqft": 35488,
-  "diff_vs_sheet_carpet_pct": 26.4,
-  "carpet_incl_partitions_m2": 2969.7,
-  "carpet_incl_partitions_sqft": 31965,
-  "incl_partitions_vs_sheet_carpet_pct": 35.1,
+  "diff_vs_sheet_carpet_pct": 26.2,
+  "carpet_incl_partitions_m2": 2971.2,
+  "carpet_incl_partitions_sqft": 31982,
+  "incl_partitions_vs_sheet_carpet_pct": 35.2,
   "gross_vs_sheet_carpet_pct": 45.5,
   "gross_vs_sheet_chargeable_pct": -3.0,
   "sheet_chargeable_over_carpet": 1.5,
@@ -990,31 +990,79 @@
   "labels_checked": 14,
   "labels_at_least_as_wide": 12,
   "scan": {
-   "points": 502,
+   "points": 510,
    "under_1_2_m": [
+    {
+     "at": [
+      11.2,
+      64.2
+     ],
+     "width_m": 1.15,
+     "in": "Circulation 3"
+    },
+    {
+     "at": [
+      11.2,
+      63.2
+     ],
+     "width_m": 1.04,
+     "in": "Circulation 3"
+    },
+    {
+     "at": [
+      11.3,
+      38.8
+     ],
+     "width_m": 1.03,
+     "in": "Circulation 4"
+    },
+    {
+     "at": [
+      11.3,
+      37.8
+     ],
+     "width_m": 1.11,
+     "in": "Circulation 4"
+    },
+    {
+     "at": [
+      11.3,
+      36.8
+     ],
+     "width_m": 1.1,
+     "in": "Circulation 4"
+    },
+    {
+     "at": [
+      11.3,
+      35.8
+     ],
+     "width_m": 1.08,
+     "in": "Circulation 4"
+    },
     {
      "at": [
       41.6,
       69.5
      ],
      "width_m": 0.8,
-     "in": "Circulation 3"
+     "in": "Circulation 7"
     },
     {
      "at": [
       42.1,
-      55.9
+      56.1
      ],
-     "width_m": 0.85,
-     "in": "Circulation 4"
+     "width_m": 1.1,
+     "in": "Circulation 8"
     },
     {
      "at": [
       42.1,
-      54.9
+      55.1
      ],
-     "width_m": 0.85,
-     "in": "Circulation 4"
+     "width_m": 1.1,
+     "in": "Circulation 8"
     },
     {
      "at": [
@@ -1022,23 +1070,15 @@
       84.4
      ],
      "width_m": 0.8,
-     "in": "Circulation 5"
+     "in": "Circulation 9"
     },
     {
      "at": [
       11.8,
       83.7
      ],
-     "width_m": 0.87,
-     "in": "Circulation 5"
-    },
-    {
-     "at": [
-      11.7,
-      87.9
-     ],
-     "width_m": 1.14,
-     "in": "Circulation 5"
+     "width_m": 1.04,
+     "in": "Circulation 9"
     },
     {
      "at": [
@@ -1046,7 +1086,7 @@
       21.2
      ],
      "width_m": 1.17,
-     "in": "Circulation 7"
+     "in": "Circulation 11"
     },
     {
      "at": [
@@ -1054,15 +1094,15 @@
       18.0
      ],
      "width_m": 1.2,
-     "in": "Circulation 7"
+     "in": "Circulation 11"
     },
     {
      "at": [
       12.0,
       100.4
      ],
-     "width_m": 0.59,
-     "in": "Circulation 25"
+     "width_m": 0.91,
+     "in": "Circulation 29"
     },
     {
      "at": [
@@ -1070,7 +1110,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 28"
+     "in": "Circulation 31"
     },
     {
      "at": [
@@ -1078,7 +1118,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 28"
+     "in": "Circulation 31"
     },
     {
      "at": [
@@ -1086,7 +1126,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 28"
+     "in": "Circulation 31"
     },
     {
      "at": [
@@ -1094,7 +1134,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 28"
+     "in": "Circulation 31"
     },
     {
      "at": [
@@ -1102,7 +1142,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 28"
+     "in": "Circulation 31"
     },
     {
      "at": [
@@ -1110,7 +1150,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 28"
+     "in": "Circulation 31"
     },
     {
      "at": [
@@ -1118,7 +1158,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 28"
+     "in": "Circulation 31"
     },
     {
      "at": [
@@ -1126,7 +1166,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 28"
+     "in": "Circulation 31"
     },
     {
      "at": [
@@ -1134,7 +1174,7 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 28"
+     "in": "Circulation 31"
     },
     {
      "at": [
@@ -1142,26 +1182,10 @@
       32.1
      ],
      "width_m": 0.7,
-     "in": "Circulation 28"
-    },
-    {
-     "at": [
-      42.0,
-      46.8
-     ],
-     "width_m": 1.0,
-     "in": "Circulation 34"
-    },
-    {
-     "at": [
-      42.1,
-      45.8
-     ],
-     "width_m": 0.85,
-     "in": "Circulation 34"
+     "in": "Circulation 31"
     }
    ],
-   "n_under_1_2_m": 21
+   "n_under_1_2_m": 24
   }
  },
  "daylight": {
@@ -1208,12 +1232,14 @@
   "Legend 'REPRO': sheet says 2 provided (1 required); the CAD shows 6. CAD labels: PRINTER (13, 80), REPRO AREA (13, 82), REPRO (27, 56), REPRO (16, 79), REPRO (17, 67), REPRO (17, 31)",
   "Legend 'TRAINING ROOM': sheet says 1 provided (1 required); the CAD shows 2. CAD labels: TRAINING ROOM (33, 22), TRAINING-STYLE ROOM (unlabelled) (34, 80)",
   "Legend 'LADIES WASHROOM': sheet says 2 provided (1 required); the CAD shows 3. CAD labels: LADIES TOILET (14, 37), LADIES TOILET (14, 64), LADIES TOILET (15, 21)",
-  "Area: the rooms measure 29,911 sq ft of free floor (+26.4 %) and 31,965 sq ft with the inner partitions (+35.1 %) against the sheet's 23,659 sq ft carpet: outside the 3 % rule on both counts. The sheet's chargeable 35,488 sq ft is -3.0 % from that gross area. The sheet's chargeable area is exactly 1.500 x its carpet area, so the sheet's carpet figure looks like chargeable / 1.5 (a 50 % loading), not a measured area.",
+  "Area: the rooms measure 29,856 sq ft of free floor (+26.2 %) and 31,982 sq ft with the inner partitions (+35.2 %) against the sheet's 23,659 sq ft carpet: outside the 3 % rule on both counts. The sheet's chargeable 35,488 sq ft is -3.0 % from that gross area. The sheet's chargeable area is exactly 1.500 x its carpet area, so the sheet's carpet figure looks like chargeable / 1.5 (a 50 % loading), not a measured area.",
   "Exits: 112 seats in CAFETERIA (1) reach only one exit stair on the drawn walls and doors (a second route was not found). Check for a door missing from the drawing.",
   "Entry: the lift bank at (33, 51) (2 lifts, LOBBY (29.4, 50.8)) has no walking route to the reception on the drawn doors.",
   "Walkway: '1200 MM WIDE PASSAGE' at (18, 40) measures 0.98 m between chairs at their desks (median of 5 points; 2.06 m desk to desk).",
   "Walkway: '1350 MM WIDE PASSAGE' at (18, 80) measures 0.99 m between chairs at their desks (median of 5 points; 3.14 m desk to desk).",
   "Capacity: 'MEETING ROOM 04 PAX (unlabelled)' says 4; 3 chairs are drawn in it.",
+  "Label not placed in a room: 'SPACE FOR OUTDOOR UNIT' at (12, 42) - closed-room label in an open area: needs a closure.",
+  "Label not placed in a room: 'SPACE FOR OUTDOOR UNIT' at (12, 60) - closed-room label in an open area: needs a closure.",
   "Label not placed in a room: 'REPRO' at (27, 56) - closed-room label in an open area: needs a closure.",
   "Label not placed in a room: 'REPRO' at (16, 79) - closed-room label in an open area: needs a closure."
  ],
@@ -1235,6 +1261,6 @@
   "Walkway width = the clear gap between desks, tables and partitions with the chairs where they are drawn (lounge seats ignored), measured at the CAD's own passage labels.",
   "Daylight: distance from each work seat to the nearest facade glass line; the facade glass type, sill height and shading are not in the drawing.",
   "Seats are counted from chair blocks, one per chair (two per two-seat sofa). A work seat is a chair at a desk; the room a chair stands in decides meeting, training, cafeteria and lounge.",
-  "489 short openings without a door block (toilet entries, lift doorways, bays) were closed automatically where two wall ends face each other 0.55 to 1.15 m apart, for room outlines only; walking routes may pass through them."
+  "484 short openings without a door block (toilet entries, lift doorways, bays) were closed automatically where two wall ends face each other 0.55 to 1.15 m apart, for room outlines only; walking routes may pass through them."
  ]
 }

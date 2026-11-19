@@ -6,3 +6,11 @@ airoli-rtp/tools/
 airoli-rtp/brand/altruist-*.jpg
 airoli-rtp/rtp*/*_G0.*
 airoli-rtp/twin/web/README.md
+airoli-rtp/rtp*/*_G2.*
+airoli-rtp/rtp*/*_BUILD.*
+airoli-rtp/rtp*/*.csv
+airoli-rtp/rtp*/*_report.json
+airoli-rtp/rtp*/*.layout.json
+!airoli-rtp/rtp*/*.twin.layout.json
+airoli-rtp/rtp*/*_egress.*
+airoli-rtp/rtp*/*_layers.md

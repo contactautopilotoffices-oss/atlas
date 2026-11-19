@@ -50,7 +50,7 @@ export function buildLevels(plate, { levels = 5, ftf = 4.1, base = 0, accent = '
   for (let lv = 0; lv < levels; lv++) {
     const z = base + lv * ftf, g = new THREE.Group(); g.name = 'level' + lv; g.userData = { level: lv, z };
     const shell = new THREE.Group(); shell.name = 'shell'; shell.visible = false; g.add(shell);
-    const slab = new THREE.Mesh((() => { const s = new THREE.ExtrudeGeometry(shapeOf(plate), { depth: .35, bevelEnabled: false }); s.rotateX(-Math.PI / 2); s.translate(0, z - .35, 0); return s; })(), mats.slab);
+    const slab = new THREE.Mesh((() => { const s = new THREE.ExtrudeGeometry(shapeOf(plate), { depth: .35, bevelEnabled: false }); s.rotateX(-Math.PI / 2); s.translate(0, z - .36, 0); return s; })(), mats.slab);   // top 10 mm under the finished floor: never coplanar with a delivered floor
     slab.receiveShadow = true; shell.add(slab);
     const fac = new THREE.Group(); fac.name = 'facade'; shell.add(fac);
     const glass = [], mull = [], edge = [];
