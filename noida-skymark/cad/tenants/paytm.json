@@ -1,0 +1,328 @@
+{
+ "extends": "_skymark.json",
+ "name": "Paytm",
+ "dwg_name": "20261105_SKY MARK NOIDA_1ST_PAYTM.dwg",
+ "plan_label": "FIRST FLOOR PLAN",
+ "plan_window_in": [
+  2997950,
+  -3380250,
+  3000700,
+  -3378900
+ ],
+ "origin_in": [
+  2997950,
+  -3380250
+ ],
+ "chairs": {
+  "A$C344e7bdb": [
+   "lounge chair",
+   "lounge"
+  ],
+  "A$C0894983f": [
+   "lounge chair",
+   "lounge"
+  ],
+  "A$C0c49554c": [
+   "lounge chair",
+   "lounge"
+  ],
+  "*U180": [
+   "reception lounge chair",
+   "lounge"
+  ]
+ },
+ "desks": {
+  "RTHEDRTHEDRTHDRTHDRH": "3'x1'7\" workstation"
+ },
+ "deck_claims": {
+  "about": "No deck number given for Paytm. The CAD's own labels are compared instead (WORKSTATION 173 NOS, WORKSTATION 71 NOS, CARPET AREA 6720 SQFT).",
+  "workstations_label": 244,
+  "carpet_area_sqft_label": 6720
+ },
+ "label_fixes": [
+  {
+   "at": [
+    4.1,
+    18.55
+   ],
+   "move_to": [
+    5.8,
+    17.4
+   ],
+   "why": "label sits on the room's top edge; moved inside (4-seater meeting room 02, west)"
+  },
+  {
+   "at": [
+    7.82,
+    18.55
+   ],
+   "move_to": [
+    9.1,
+    17.4
+   ],
+   "why": "label sits on the room's top edge; moved inside"
+  },
+  {
+   "at": [
+    7.74,
+    20.29
+   ],
+   "move_to": [
+    5.8,
+    21.7
+   ],
+   "why": "right-aligned text: its insertion point is at the room's bottom-right corner; moved into the room it names"
+  },
+  {
+   "at": [
+    10.87,
+    20.29
+   ],
+   "move_to": [
+    9.1,
+    21.7
+   ],
+   "why": "right-aligned text at the room's bottom-right corner; moved inside"
+  },
+  {
+   "at": [
+    23.48,
+    12.84
+   ],
+   "to": "16 SEATER CONFERENCE ROOM",
+   "move_to": [
+    21.7,
+    9.5
+   ],
+   "why": "the conference room's own text sits on its top edge, next to LOUNGE AREA; moved inside so the room is not called LOUNGE AREA"
+  },
+  {
+   "at": [
+    24.17,
+    13.49
+   ],
+   "move_to": [
+    25.1,
+    14.0
+   ],
+   "why": "LOUNGE AREA names the sofa area north-east of the conference room, not the room itself"
+  },
+  {
+   "at": [
+    15.32,
+    13.05
+   ],
+   "drop": true,
+   "why": "'DB PANEL' marks a wall-mounted distribution board in the passage, not a room"
+  },
+  {
+   "at": [
+    41.67,
+    8.51
+   ],
+   "drop": true,
+   "why": "'SHAFT' text sits in the collab area; the shaft it names is the small duct beside the janitor's closet"
+  },
+  {
+   "at": [
+    6.0,
+    29.3
+   ],
+   "to": "GENTS TOILET-01",
+   "why": "CAD writes GENTS and TOILET-01 as two texts"
+  },
+  {
+   "at": [
+    6.4,
+    24.3
+   ],
+   "to": "LADIES TOILET-01",
+   "why": "CAD writes LADIES and TOILET-01 as two texts"
+  },
+  {
+   "at": [
+    44.0,
+    9.7
+   ],
+   "drop": true,
+   "why": "'ELECTRICAL PANEL' marks a wall-mounted panel in the service passage, not a room"
+  },
+  {
+   "at": [
+    43.68,
+    13.39
+   ],
+   "move_to": [
+    42.6,
+    13.1
+   ],
+   "why": "right-aligned WET PANTRY text: its insertion point is just outside the pantry's open front"
+  }
+ ],
+ "closures": [
+  {
+   "a": [
+    8.25,
+    13.15
+   ],
+   "b": [
+    12.4,
+    13.15
+   ],
+   "virtual": true,
+   "why": "zone boundary, not a wall: reception/waiting area vs the entry lobby"
+  },
+  {
+   "a": [
+    10.8,
+    16.2
+   ],
+   "b": [
+    12.6,
+    16.2
+   ],
+   "virtual": true,
+   "why": "zone boundary, not a wall: reception/waiting area vs the north corridor"
+  },
+  {
+   "a": [
+    12.5,
+    9.95
+   ],
+   "b": [
+    12.5,
+    12.4
+   ],
+   "why": "lift 1 doorway (no door block for lift doors)"
+  },
+  {
+   "a": [
+    16.8,
+    14.0
+   ],
+   "b": [
+    18.25,
+    14.0
+   ],
+   "virtual": true,
+   "why": "dry pantry-01 alcove: open counter front"
+  },
+  {
+   "a": [
+    50.45,
+    13.9
+   ],
+   "b": [
+    50.45,
+    15.6
+   ],
+   "virtual": true,
+   "why": "zone boundary, not a wall: Autopilot reception lobby vs the wet-pantry passage"
+  },
+  {
+   "a": [
+    4.05,
+    27.45
+   ],
+   "b": [
+    9.55,
+    27.45
+   ],
+   "why": "west toilets: the back-to-back WC duct between GENTS and LADIES is drawn only as fixtures, not as a wall"
+  },
+  {
+   "a": [
+    12.5,
+    13.15
+   ],
+   "b": [
+    12.5,
+    15.85
+   ],
+   "virtual": true,
+   "why": "zone boundary, not a wall: reception/waiting area vs the 5' passage running east"
+  },
+  {
+   "a": [
+    41.0,
+    7.45
+   ],
+   "b": [
+    41.0,
+    12.3
+   ],
+   "virtual": true,
+   "why": "zone boundary, not a wall: collab area vs the ENTITY-02 workstation hall"
+  },
+  {
+   "a": [
+    41.0,
+    12.3
+   ],
+   "b": [
+    41.8,
+    12.3
+   ],
+   "virtual": true,
+   "why": "zone boundary: collab area top, between the hall edge and the wet-pantry wall"
+  },
+  {
+   "a": [
+    43.0,
+    9.0
+   ],
+   "b": [
+    43.0,
+    7.45
+   ],
+   "virtual": true,
+   "why": "zone boundary: collab area vs the service passage (partition stops 1.5 m short of the facade)"
+  },
+  {
+   "a": [
+    43.0,
+    9.0
+   ],
+   "b": [
+    44.75,
+    9.0
+   ],
+   "virtual": true,
+   "why": "zone boundary: janitor's closet (south) vs the service passage"
+  },
+  {
+   "a": [
+    43.6,
+    13.0
+   ],
+   "b": [
+    43.6,
+    13.95
+   ],
+   "virtual": true,
+   "why": "wet pantry: open counter front"
+  },
+  {
+   "a": [
+    17.95,
+    7.6
+   ],
+   "b": [
+    19.65,
+    7.6
+   ],
+   "virtual": true,
+   "why": "zone boundary: dry pantry-02 alcove at the south end of the 4'8\" passage"
+  }
+ ],
+ "label_adds": [
+  {
+   "t": "STAIRS (EAST)",
+   "at": [
+    57.5,
+    9.0
+   ],
+   "why": "the east stair has no STAIRS note on this plan (only UP / DN)"
+  }
+ ]
+}

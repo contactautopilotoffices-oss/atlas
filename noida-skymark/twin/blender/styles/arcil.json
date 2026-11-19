@@ -1,0 +1,778 @@
+{
+ "extends": "volt.json",
+ "tenant": "arcil",
+ "label": "ARCIL, from the design team's brief: soft white walls, natural oak joinery, dark grey frames and carpet, brand indigo / azure / violet. Finishes only; all geometry comes from the CAD layout.",
+ "light": {
+  "lamp_k": 4000,
+  "cove_k": 3000,
+  "wb_k": 4100,
+  "exposure": 0.5
+ },
+ "glass": {
+  "pane": "glass",
+  "frame": "frame_dark",
+  "frost": "frost",
+  "top": 2.4,
+  "frost_band": {
+   "pattern": "diamond",
+   "z": 0.9,
+   "height": 0.45,
+   "cell": 0.3
+  }
+ },
+ "facade": {
+  "layers": [
+   "AR-WINDOW",
+   "STR. GLAZING"
+  ],
+  "by_position": true,
+  "sill": 0.9,
+  "head": 2.25,
+  "blind": "blind",
+  "frame": "frame_dark",
+  "blinds": true
+ },
+ "walls": {
+  "paint": "paint",
+  "skirting": "frame_dark",
+  "column": "paint",
+  "soffit": "soffit_paint",
+  "slab": "concrete",
+  "stair": "paint"
+ },
+ "doors": {
+  "leaf": "oak",
+  "glass_leaf": "glass",
+  "fire_leaf": "frame_dark",
+  "frame": "frame_dark",
+  "handle": "steel"
+ },
+ "room_kinds": [
+  {
+   "match": "shaft|duct|lift|stair|janitor|void|occupied|electrical",
+   "kind": "core"
+  },
+  {
+   "match": "16 pax|board",
+   "kind": "board"
+  },
+  {
+   "match": "interview",
+   "kind": "interview"
+  },
+  {
+   "match": "training",
+   "kind": "training"
+  },
+  {
+   "match": "supervisor",
+   "kind": "supervisor"
+  },
+  {
+   "match": "locker|arrival|corridor|passage|lobby",
+   "kind": "corridor"
+  },
+  {
+   "match": "reception|entry",
+   "kind": "reception"
+  },
+  {
+   "match": "meeting|conference|discussion",
+   "kind": "meeting"
+  },
+  {
+   "match": "cabin|private|manager|director|cubical",
+   "kind": "cabin"
+  },
+  {
+   "match": "work|open|bay|desk|ws",
+   "kind": "work"
+  },
+  {
+   "match": "washroom|toilet|wc",
+   "kind": "wet"
+  },
+  {
+   "match": "pantry|cafe|break",
+   "kind": "social"
+  },
+  {
+   "match": "ups|server|electrical|store",
+   "kind": "plant_room"
+  },
+  {
+   "match": "circulation",
+   "kind": "circulation"
+  }
+ ],
+ "floor_by_kind": {
+  "work": "carpet_plank",
+  "supervisor": "carpet_plank",
+  "meeting": "carpet_plank",
+  "board": "carpet_plank",
+  "cabin": "carpet_plank",
+  "interview": "carpet_plank",
+  "training": "carpet_plank",
+  "corridor": "carpet_plank"
+ },
+ "aisle": {
+  "kinds": [
+   "work",
+   "supervisor"
+  ],
+  "material": "carpet_aisle",
+  "clear": 0.9
+ },
+ "ceilings": {
+  "default": {
+   "type": "grid",
+   "tile": "ceiling_tile",
+   "grid": "white_metal",
+   "accent": "accent_azure",
+   "accent_fraction": 0.05,
+   "ac_every": 4,
+   "ac": "white_metal",
+   "ac_linear": true
+  },
+  "kinds": {
+   "work": {
+    "type": "grid",
+    "accent": "accent_azure",
+    "accent_fraction": 0.05,
+    "ac_every": 4,
+    "ac_linear": true,
+    "perimeter_band": {
+     "width": 0.9,
+     "drop": 0.15,
+     "board": "gypsum",
+     "cove": "cove_led"
+    }
+   },
+   "supervisor": {
+    "type": "grid",
+    "accent": "accent_azure",
+    "accent_fraction": 0.04,
+    "ac_every": 4,
+    "ac_linear": true
+   },
+   "board": {
+    "type": "cove",
+    "board": "gypsum",
+    "raft": "oak_slat",
+    "cove": "cove_led",
+    "inset": 0.6,
+    "raft_drop": 0.2,
+    "pendant": "linear",
+    "pendant_length": 2.2
+   },
+   "meeting": {
+    "type": "cove",
+    "board": "gypsum",
+    "raft": "gypsum",
+    "cove": "cove_led",
+    "inset": 0.5,
+    "raft_drop": 0.15,
+    "pendant": "linear",
+    "pendant_length": 1.4
+   },
+   "cabin": {
+    "type": "cove",
+    "board": "gypsum",
+    "raft": "gypsum",
+    "cove": "cove_led",
+    "inset": 0.5,
+    "raft_drop": 0.15
+   },
+   "interview": {
+    "type": "cove",
+    "board": "gypsum",
+    "raft": "gypsum",
+    "cove": "cove_led",
+    "inset": 0.45,
+    "raft_drop": 0.12
+   },
+   "training": {
+    "type": "grid",
+    "accent": null,
+    "ac_every": 4,
+    "ac_linear": true,
+    "perimeter_band": {
+     "width": 0.6,
+     "drop": 0.15,
+     "board": "gypsum",
+     "cove": "cove_led"
+    }
+   },
+   "corridor": {
+    "type": "plain",
+    "board": "gypsum",
+    "assumed_kind": "downlight",
+    "assumed_grid": 1.5
+   },
+   "reception": {
+    "type": "cove",
+    "board": "gypsum",
+    "raft": "gypsum",
+    "cove": "cove_led",
+    "inset": 0.7,
+    "raft_drop": 0.18
+   }
+  }
+ },
+ "furniture": {
+  "desk_top": "white_top",
+  "desk_frame": "white_metal",
+  "desk_screens": [
+   "screen_azure",
+   "screen_lightgrey"
+  ],
+  "monitor": "screen_glass",
+  "table_top": "white_top",
+  "table_base": "frame_dark",
+  "chair_material": "mesh_black",
+  "lounge_material": null,
+  "sofa": [
+   "fabric_indigo",
+   "fabric_grey"
+  ],
+  "tub": "fabric_azure",
+  "cafe": [
+   "plastic_white",
+   "plastic_azure"
+  ],
+  "cafe_legs": "oak",
+  "planter": "planter_white",
+  "planter_panel": "oak",
+  "pot": "pot_white",
+  "desk_bank_light": null,
+  "clutter": true
+ },
+ "logo": [
+  {
+   "room": "^reception",
+   "text": "Arcil",
+   "material": "logo_indigo",
+   "height": 0.45,
+   "z": 1.65,
+   "wall": "door"
+  },
+  {
+   "room": "interview room 01",
+   "text": "Arcil",
+   "material": "logo_indigo",
+   "height": 0.3,
+   "z": 1.7,
+   "wall": "auto"
+  },
+  {
+   "room": "locker corridor",
+   "text": "Arcil",
+   "material": "logo_azure",
+   "height": 0.45,
+   "z": 1.7,
+   "wall": "feature"
+  }
+ ],
+ "feature_walls": [
+  {
+   "kind": "board",
+   "side": "auto",
+   "type": "panel",
+   "material": "fabric_blue_wall",
+   "z0": 0.1,
+   "z1": 2.6,
+   "width": 3.2
+  },
+  {
+   "kind": "meeting",
+   "side": "auto",
+   "type": "panel",
+   "material": [
+    "backlit_teal",
+    "backlit_violet"
+   ],
+   "z0": 0.9,
+   "z1": 2.3,
+   "width": 2.0
+  },
+  {
+   "kind": "meeting",
+   "side": "auto",
+   "type": "fluted",
+   "material": "oak",
+   "pitch": 0.06,
+   "z0": 0.1,
+   "z1": 2.6,
+   "width": 1.0
+  },
+  {
+   "kind": "cabin",
+   "side": "auto",
+   "type": "panel",
+   "material": "paint_soft_teal",
+   "z0": 0.1,
+   "z1": 2.7
+  },
+  {
+   "kind": "cabin",
+   "side": "auto",
+   "type": "panel",
+   "material": "whiteboard",
+   "z0": 0.9,
+   "z1": 2.1,
+   "width": 1.8
+  },
+  {
+   "kind": "interview",
+   "side": "auto",
+   "type": "panel",
+   "material": "graphic_skyline",
+   "z0": 0.1,
+   "z1": 2.6
+  },
+  {
+   "kind": "training",
+   "side": "auto",
+   "type": "panel",
+   "material": "graphic_icons",
+   "z0": 0.1,
+   "z1": 2.6
+  },
+  {
+   "room": "locker corridor",
+   "side": "auto",
+   "type": "lockers",
+   "material": "locker_blue",
+   "z0": 0.0,
+   "z1": 2.4,
+   "max_rooms": 1
+  },
+  {
+   "room": "locker corridor",
+   "side": "auto",
+   "type": "panel",
+   "material": "brand_wall_indigo",
+   "z0": 0.1,
+   "z1": 2.6,
+   "max_rooms": 1,
+   "width": 4.0,
+   "logo_wall": true
+  }
+ ],
+ "materials": {
+  "paint": {
+   "kind": "paint",
+   "color": "#F0EBDF",
+   "rough": 0.85
+  },
+  "soffit_paint": {
+   "kind": "paint",
+   "color": "#E9E4D8",
+   "rough": 0.9
+  },
+  "oak": {
+   "kind": "wood",
+   "colors": [
+    "#9c7a47",
+    "#B8935A",
+    "#cfae7c"
+   ],
+   "plank_width": 0.4,
+   "planks": false,
+   "rough": 0.45,
+   "coat": 0.1
+  },
+  "oak_slat": {
+   "kind": "wood",
+   "colors": [
+    "#9c7a47",
+    "#B8935A",
+    "#cfae7c"
+   ],
+   "plank_width": 0.08,
+   "planks": true,
+   "rough": 0.5
+  },
+  "frame_dark": {
+   "kind": "metal",
+   "color": "#34353A",
+   "rough": 0.45
+  },
+  "carpet_plank": {
+   "kind": "carpet",
+   "pattern": "plank",
+   "plank": [
+    0.25,
+    1.0
+   ],
+   "colors": [
+    "#26272b",
+    "#303136",
+    "#3a3b40",
+    "#4a4b50"
+   ],
+   "rough": 0.95
+  },
+  "carpet_aisle": {
+   "kind": "carpet",
+   "pattern": "plank",
+   "plank": [
+    0.25,
+    1.0
+   ],
+   "colors": [
+    "#18191c",
+    "#202125",
+    "#2a2b2f",
+    "#36373b"
+   ],
+   "rough": 0.95
+  },
+  "white_top": {
+   "kind": "plastic",
+   "color": "#f3f2ee",
+   "rough": 0.35,
+   "coat": 0.1
+  },
+  "screen_azure": {
+   "kind": "fabric",
+   "color": "#2F8FD8",
+   "rough": 0.9
+  },
+  "screen_lightgrey": {
+   "kind": "fabric",
+   "color": "#c9c9c6",
+   "rough": 0.9
+  },
+  "screen_azure_indigo": {
+   "kind": "fabric",
+   "color": "#2F8FD8",
+   "rough": 0.9
+  },
+  "mesh_black": {
+   "kind": "fabric",
+   "color": "#151516",
+   "rough": 0.7,
+   "sheen": 0.2
+  },
+  "fabric_indigo": {
+   "kind": "fabric",
+   "color": "#2E3A8C",
+   "rough": 0.9
+  },
+  "fabric_grey": {
+   "kind": "fabric",
+   "color": "#8d8e93",
+   "rough": 0.9
+  },
+  "fabric_azure": {
+   "kind": "fabric",
+   "color": "#2F8FD8",
+   "rough": 0.9
+  },
+  "fabric_blue_wall": {
+   "kind": "felt",
+   "color": "#2E4FA3",
+   "rough": 0.95
+  },
+  "plastic_white": {
+   "kind": "plastic",
+   "color": "#f2f1ee",
+   "rough": 0.4
+  },
+  "plastic_azure": {
+   "kind": "plastic",
+   "color": "#2F8FD8",
+   "rough": 0.4
+  },
+  "pot_white": {
+   "kind": "plastic",
+   "color": "#eceae5",
+   "rough": 0.5
+  },
+  "accent_azure": {
+   "kind": "paint",
+   "color": "#2F8FD8",
+   "rough": 0.8
+  },
+  "backlit_teal": {
+   "kind": "emission",
+   "color": "#2F8F8A",
+   "strength": 3.0
+  },
+  "backlit_violet": {
+   "kind": "emission",
+   "color": "#6B4FA0",
+   "strength": 3.0
+  },
+  "paint_soft_teal": {
+   "kind": "paint",
+   "color": "#8CC3BE",
+   "rough": 0.85
+  },
+  "whiteboard": {
+   "kind": "plastic",
+   "color": "#f7f7f5",
+   "rough": 0.08,
+   "coat": 0.8
+  },
+  "graphic_skyline": {
+   "kind": "image",
+   "image": "styles/graphics/arcil_skyline.png",
+   "color": "#2E3A8C"
+  },
+  "graphic_icons": {
+   "kind": "image",
+   "image": "styles/graphics/arcil_icons.png",
+   "color": "#2F8FD8"
+  },
+  "locker_blue": {
+   "kind": "plastic",
+   "color": "#2E4FA3",
+   "rough": 0.45
+  },
+  "logo_indigo": {
+   "kind": "plain",
+   "color": "#2E3A8C",
+   "rough": 0.35
+  },
+  "logo_white": {
+   "kind": "plain",
+   "color": "#f4f2ec",
+   "rough": 0.35,
+   "emit": 0.3
+  },
+  "logo_azure": {
+   "kind": "plain",
+   "color": "#2F8FD8",
+   "rough": 0.35,
+   "emit": 0.0
+  },
+  "brand_wall_indigo": {
+   "kind": "paint",
+   "color": "#2E3A8C",
+   "rough": 0.6
+  }
+ },
+ "parts": {
+  "panels": [
+   "screen_azure",
+   "screen_lightgrey",
+   "accent_azure"
+  ],
+  "seating": [
+   "mesh_black"
+  ],
+  "floor": [
+   "carpet_plank",
+   "carpet_aisle"
+  ],
+  "surfaces": [
+   "white_top",
+   "oak"
+  ],
+  "walls": [
+   "paint"
+  ],
+  "soft": [
+   "fabric_indigo",
+   "fabric_grey",
+   "fabric_azure"
+  ],
+  "feature": [
+   "backlit_teal",
+   "backlit_violet",
+   "fabric_blue_wall",
+   "paint_soft_teal"
+  ]
+ },
+ "brief_gaps": [
+  "Boardroom arched glass wall: geometry comes from the CAD; if the CAD glass is a polyline arc it is built as straight runs, otherwise not.",
+  "Training room tiered benches and supervisor L-desks with pedestals: built from the CAD desk blocks as plain desks; tiers / pedestals need block names mapped in furniture.seat_map / a desk kind.",
+  "Supervisor screens 'azure with an indigo stripe': screen_azure_indigo is defined but desk screens are one list for the floor; per-room screens are not wired yet.",
+  "Graphic walls (skyline, icon graphics) need the PNGs in styles/graphics/ (arcil_skyline.png, arcil_icons.png); without them the panel shows the material's flat colour.",
+  "Logos: no ARCIL logo file was given, so the text-mesh fallback 'ARCIL' is used."
+ ],
+ "options": {
+  "accent": {
+   "_default": "alternate",
+   "alternate": {},
+   "teal": {
+    "feature_walls": [
+     {
+      "kind": "board",
+      "side": "auto",
+      "type": "panel",
+      "material": "fabric_blue_wall",
+      "z0": 0.1,
+      "z1": 2.6,
+      "width": 3.2
+     },
+     {
+      "kind": "meeting",
+      "side": "auto",
+      "type": "panel",
+      "material": "backlit_teal",
+      "z0": 0.9,
+      "z1": 2.3,
+      "width": 2.0
+     },
+     {
+      "kind": "meeting",
+      "side": "auto",
+      "type": "fluted",
+      "material": "oak",
+      "pitch": 0.06,
+      "z0": 0.1,
+      "z1": 2.6,
+      "width": 1.0
+     },
+     {
+      "kind": "cabin",
+      "side": "auto",
+      "type": "panel",
+      "material": "paint_soft_teal",
+      "z0": 0.1,
+      "z1": 2.7
+     },
+     {
+      "kind": "cabin",
+      "side": "auto",
+      "type": "panel",
+      "material": "whiteboard",
+      "z0": 0.9,
+      "z1": 2.1,
+      "width": 1.8
+     },
+     {
+      "kind": "interview",
+      "side": "auto",
+      "type": "panel",
+      "material": "graphic_skyline",
+      "z0": 0.1,
+      "z1": 2.6
+     },
+     {
+      "kind": "training",
+      "side": "auto",
+      "type": "panel",
+      "material": "graphic_icons",
+      "z0": 0.1,
+      "z1": 2.6
+     },
+     {
+      "room": "locker corridor",
+      "side": "auto",
+      "type": "lockers",
+      "material": "locker_blue",
+      "z0": 0.0,
+      "z1": 2.4,
+      "max_rooms": 1
+     },
+     {
+      "room": "locker corridor",
+      "side": "auto",
+      "type": "panel",
+      "material": "brand_wall_indigo",
+      "z0": 0.1,
+      "z1": 2.6,
+      "max_rooms": 1,
+      "width": 4.0,
+      "logo_wall": true
+     }
+    ]
+   },
+   "violet": {
+    "feature_walls": [
+     {
+      "kind": "board",
+      "side": "auto",
+      "type": "panel",
+      "material": "fabric_blue_wall",
+      "z0": 0.1,
+      "z1": 2.6,
+      "width": 3.2
+     },
+     {
+      "kind": "meeting",
+      "side": "auto",
+      "type": "panel",
+      "material": "backlit_violet",
+      "z0": 0.9,
+      "z1": 2.3,
+      "width": 2.0
+     },
+     {
+      "kind": "meeting",
+      "side": "auto",
+      "type": "fluted",
+      "material": "oak",
+      "pitch": 0.06,
+      "z0": 0.1,
+      "z1": 2.6,
+      "width": 1.0
+     },
+     {
+      "kind": "cabin",
+      "side": "auto",
+      "type": "panel",
+      "material": "paint_soft_teal",
+      "z0": 0.1,
+      "z1": 2.7
+     },
+     {
+      "kind": "cabin",
+      "side": "auto",
+      "type": "panel",
+      "material": "whiteboard",
+      "z0": 0.9,
+      "z1": 2.1,
+      "width": 1.8
+     },
+     {
+      "kind": "interview",
+      "side": "auto",
+      "type": "panel",
+      "material": "graphic_skyline",
+      "z0": 0.1,
+      "z1": 2.6
+     },
+     {
+      "kind": "training",
+      "side": "auto",
+      "type": "panel",
+      "material": "graphic_icons",
+      "z0": 0.1,
+      "z1": 2.6
+     },
+     {
+      "room": "locker corridor",
+      "side": "auto",
+      "type": "lockers",
+      "material": "locker_blue",
+      "z0": 0.0,
+      "z1": 2.4,
+      "max_rooms": 1
+     },
+     {
+      "room": "locker corridor",
+      "side": "auto",
+      "type": "panel",
+      "material": "brand_wall_indigo",
+      "z0": 0.1,
+      "z1": 2.6,
+      "max_rooms": 1,
+      "width": 4.0,
+      "logo_wall": true
+     }
+    ]
+   }
+  }
+ },
+ "camera_skip": "core|service|plant_room|shaft|duct|lift|stair|void|janitor|electrical|ups|server|occupied|unlabelled|circulation",
+ "graphics_needed": [
+  "styles/graphics/arcil_skyline.png: Arcil logo + skyline wall graphic for the interview rooms (about 3:1, >= 3000 px wide, PNG)",
+  "styles/graphics/arcil_icons.png: Arcil icon-graphic pattern for the training room walls (about 3:1, >= 3000 px wide, PNG)",
+  "Arcil logo artwork (PNG with alpha, or SVG) for reception, the locker-corridor brand wall and the interview room; the text mesh 'Arcil' stands in for now"
+ ]
+}

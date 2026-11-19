@@ -1,0 +1,180 @@
+{
+ "Work seats (desk + chair)": {
+  "total": 252,
+  "rooms": {
+   "WORKSTATION - 238 NOS": 230,
+   "WORKSTATIONS (EAST POD)": 18,
+   "TRAINING ROOM -01 24 + 1": 1,
+   "CABIN-02": 1,
+   "CABIN-01": 1,
+   "CABIN-03": 1
+  }
+ },
+ "Meeting room seats": {
+  "total": 36,
+  "rooms": {
+   "8 PAX MEETING RM 01": 8,
+   "16 PAX CONFERENCE ROOM": 16,
+   "8 PAX MEETING RM 02": 8,
+   "INTERVIEW ROOM 02": 2,
+   "INTERVIEW ROOM 01": 2
+  }
+ },
+ "Training room seats": {
+  "total": 24,
+  "rooms": {
+   "TRAINING ROOM -01 24 + 1": 24
+  }
+ },
+ "Cafeteria seats": {
+  "total": 6,
+  "rooms": {
+   "PANTRY": 6
+  }
+ },
+ "Lounge, collab and visitor seats": {
+  "total": 10,
+  "rooms": {
+   "CABIN-02": 2,
+   "CABIN-01": 2,
+   "RECEPTION AREA": 4,
+   "CABIN-03": 2
+  }
+ },
+ "_proof": {
+  "tenant": "ARCIL",
+  "floor": 2,
+  "dwg": "20260923_SKY MARK NOIDA_2nd floor_ARCIL.dwg",
+  "work_seats": 252,
+  "all_seats": 328,
+  "seats_by_group": {
+   "Work seats (desk + chair)": 252,
+   "Meeting room seats": 36,
+   "Training room seats": 24,
+   "Cafeteria seats": 6,
+   "Lounge, collab and visitor seats": 10
+  },
+  "deck_vs_cad": [
+   {
+    "item": "Workstations",
+    "deck": 238,
+    "cad": 238,
+    "match": true,
+    "cad_evidence": "239 3'x2' workstation blocks (A$C62789d74, each with a nested task chair, none drawn twice); 1 of them is the trainer's desk inside the training room, leaving 238 open-plan workstations. Plan label: WORKSTATION - 238 NOS. Sheet tables: 239 on the two furniture layouts, 238 on the RCP sheet."
+   },
+   {
+    "item": "Supervisor stations",
+    "deck": 10,
+    "cad": 10,
+    "match": true,
+    "cad_evidence": "10 WEGWG blocks (supervisor workstation, nested supervisor chair, 'SUPERVISOR' text). Separately 6 CUBJ supervisor cubicles (5'x4'6\") with no chair block."
+   },
+   {
+    "item": "Cabins",
+    "deck": 3,
+    "cad": 3,
+    "match": true,
+    "cad_evidence": "labels CABIN-03, CABIN-01, CABIN-02; 3 cabin furniture sets (director desk + chair + 2 visitor chairs)"
+   },
+   {
+    "item": "Meeting / conference rooms",
+    "deck": 3,
+    "cad": 3,
+    "match": true,
+    "cad_evidence": "labels 16 PAX CONFERENCE ROOM, 8 PAX MEETING RM 01, 8 PAX MEETING RM 02 (both 8-pax rooms are labelled 'RM 02' in the CAD)"
+   },
+   {
+    "item": "Interview rooms",
+    "deck": 2,
+    "cad": 2,
+    "match": true,
+    "cad_evidence": "INTERVIEW ROOM 02, INTERVIEW ROOM 01"
+   },
+   {
+    "item": "Training room seats",
+    "deck": "24+1",
+    "cad": "24+1",
+    "match": true,
+    "cad_evidence": "24 training chairs (A$C92802071) + 1 trainer desk chair inside the TRAINING ROOM polygon"
+   },
+   {
+    "item": "Lockers",
+    "deck": 210,
+    "cad": 204,
+    "match": false,
+    "cad_evidence": "labels 150 + 54; plan shows 34 locker columns (25 + 9) x 6 tiers"
+   }
+  ],
+  "inventory": {
+   "desk_blocks": {
+    "3'x2' workstation": 239,
+    "supervisor workstation": 10,
+    "director desk": 3,
+    "supervisor cubicle 5'x4'6\"": 6
+   },
+   "desk_block_duplicates": {
+    "A$C62789d74": 0,
+    "A$Cb4d34924": 0,
+    "WEGWG": 0,
+    "CUBJ": 0
+   },
+   "work_seats_paired_with_desk": 250,
+   "work_seats_without_desk_nearby": 2,
+   "room_kinds": {
+    "core": 19,
+    "work": 6,
+    "cafe": 1,
+    "other": 1,
+    "wc": 5,
+    "service": 4,
+    "training": 1,
+    "meeting": 5,
+    "reception": 1
+   },
+   "chairs_by_kind": {
+    "task chair": 239,
+    "supervisor chair": 10,
+    "director chair": 3,
+    "meeting chair": 16,
+    "conference chair": 16,
+    "interview chair": 4,
+    "training chair": 24,
+    "cafe stool": 6,
+    "visitor chair": 6,
+    "3-seat sofa": 3,
+    "reception lounge chair": 1
+   },
+   "lockers": {
+    "units_in_plan": 34,
+    "runs": [
+     {
+      "x_m": 54.6,
+      "units_in_plan": 25,
+      "unit_size_m": [
+       0.431,
+       0.305
+      ],
+      "label": "Lockers 150nos",
+      "label_count": 150,
+      "tiers_implied": 6.0
+     },
+     {
+      "x_m": 56.4,
+      "units_in_plan": 9,
+      "unit_size_m": [
+       0.431,
+       0.305
+      ],
+      "label": "Lockers 54nos",
+      "label_count": 54,
+      "tiers_implied": 6.0
+     }
+    ],
+    "lockers_by_labels": 204,
+    "note": "Locker units are drawn once in plan (one rectangle per column of lockers). Tiers are not in a 2D plan; the label counts divided by the drawn units give 6 tiers in every run."
+   }
+  },
+  "unplaced_room_labels": [],
+  "method": "One row per chair block instance (sofas: one per place). Room = the CAD room polygon containing the chair (rooms are the spaces closed by wall, glass and column lines with doors closed, named by the CAD text inside). Work seat = a work chair not in an operator room; desk pairing (chair nested in a desk block, or a desk block within 1.0 m) is reported per seat in desk_pair."
+ }
+}

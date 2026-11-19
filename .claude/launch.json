@@ -4,8 +4,19 @@
     {
       "name": "atlas-dev",
       "runtimeExecutable": "python3",
-      "runtimeArgs": ["serve.py"],
+      "runtimeArgs": [
+        "serve.py"
+      ],
       "port": 8080
+    },
+    {
+      "name": "twin-web",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "noida-skymark/twin/web/tools/serve_nocache.py",
+        "8137"
+      ],
+      "port": 8137
     }
   ]
 }

@@ -1,0 +1,532 @@
+{
+ "tenant": "volt",
+ "label": "Volt, as rendered by noida-skymark/volt/blender/volt_render.py (deck mood board): charcoal carpet tiles, oak, warm white paint, orange and white desk screens, black frames, 600 grid ceiling with LED panels where the CAD shows them",
+ "light": {
+  "lamp_k": 4000,
+  "cove_k": 3000,
+  "wb_k": 4150,
+  "sun_az": 100,
+  "sun_el": 26,
+  "sun": 22.0,
+  "sky": 0.35,
+  "exposure": 0.6,
+  "downlight_w": 22,
+  "grey_target": 0.18,
+  "portals": true
+ },
+ "heights": {
+  "slab": 0.3
+ },
+ "facade": {
+  "layers": [
+   "AR-WINDOW"
+  ],
+  "sill": 0.9,
+  "head": 2.25,
+  "blind": "blind",
+  "frame": "black_metal",
+  "blinds": true
+ },
+ "glass": {
+  "pane": "glass",
+  "frame": "black_metal",
+  "frost": "frost",
+  "top": 2.4,
+  "rail": "steel",
+  "frost_band": {
+   "pattern": "stripes",
+   "z": 0.95,
+   "stripes": 7,
+   "stripe_h": 0.056,
+   "gap": 0.022
+  }
+ },
+ "walls": {
+  "paint": "paint",
+  "skirting": "charcoal",
+  "column": "charcoal",
+  "soffit": "soffit_paint",
+  "slab": "concrete",
+  "stair": "paint"
+ },
+ "floors": {
+  "carpet": "carpet",
+  "wood": "oak_floor",
+  "stone": "stone",
+  "tile": "tile",
+  "vinyl": "vinyl"
+ },
+ "doors": {
+  "leaf": "oak",
+  "glass_leaf": "glass",
+  "fire_leaf": "charcoal",
+  "frame": "black_metal",
+  "handle": "alu"
+ },
+ "room_kinds": [
+  {
+   "match": "workstation|calling|sales|control|staff|finance",
+   "kind": "work"
+  },
+  {
+   "match": "conference|meeting",
+   "kind": "meeting"
+  },
+  {
+   "match": "cabin",
+   "kind": "cabin"
+  },
+  {
+   "match": "reception|entry|lobby",
+   "kind": "reception"
+  },
+  {
+   "match": "lounge|collab|cafeteria|pantry",
+   "kind": "social"
+  },
+  {
+   "match": "phone",
+   "kind": "booth"
+  },
+  {
+   "match": "washroom",
+   "kind": "wet"
+  },
+  {
+   "match": "ups|server",
+   "kind": "plant_room"
+  },
+  {
+   "match": "circulation",
+   "kind": "circulation"
+  }
+ ],
+ "ceilings": {
+  "default": {
+   "type": "grid",
+   "tile": "ceiling_tile",
+   "grid": "white_metal",
+   "ac_every": 4,
+   "ac": "white_metal"
+  },
+  "kinds": {
+   "reception": {
+    "type": "cove",
+    "board": "gypsum",
+    "raft": "gypsum",
+    "cove": "cove_led",
+    "inset": 0.7,
+    "raft_drop": 0.18
+   },
+   "cabin": {
+    "type": "cove",
+    "board": "gypsum",
+    "raft": "gypsum",
+    "cove": "cove_led",
+    "inset": 0.55,
+    "raft_drop": 0.15
+   },
+   "wet": {
+    "type": "plain",
+    "board": "gypsum"
+   },
+   "booth": {
+    "type": "plain",
+    "board": "gypsum"
+   },
+   "plant_room": {
+    "type": "plain",
+    "board": "gypsum"
+   },
+   "circulation": {
+    "type": "plain",
+    "board": "gypsum"
+   }
+  },
+  "rooms": {}
+ },
+ "no_light_rooms": "UPS|Server",
+ "furniture": {
+  "desk_top": "oak",
+  "desk_frame": "white_metal",
+  "desk_screens": [
+   "screen_orange",
+   "screen_white"
+  ],
+  "monitor": "screen_glass",
+  "table_top": "oak",
+  "table_base": "charcoal",
+  "rug": "rug",
+  "chair_model": "../../volt/blender/models/chair.glb",
+  "lounge_model": "../../volt/blender/models/lounge.glb",
+  "sofa": [
+   "sofa_grey",
+   "sofa_teal"
+  ],
+  "tub": "sofa_teal",
+  "cafe": [
+   "plastic_orange",
+   "plastic_grey"
+  ],
+  "cafe_legs": "oak",
+  "stool": "planter_white",
+  "planter": "planter_white",
+  "planter_panel": "oak",
+  "pot": "pot",
+  "leaf": "leaf",
+  "desk_bank_light": "linear",
+  "bank_light_z": 2.32,
+  "pendant_body": "black_metal",
+  "pendant_led": "led_line",
+  "clutter": true
+ },
+ "logo": {
+  "room": "^Reception$",
+  "text": "VOLT",
+  "material": "logo",
+  "height": 0.42,
+  "z": 1.65,
+  "wall": "auto"
+ },
+ "feature_walls": [],
+ "materials": {
+  "carpet": {
+   "kind": "carpet",
+   "colors": [
+    "#141414",
+    "#201f1f",
+    "#2e2d2c",
+    "#44423f"
+   ],
+   "tile": [
+    0.6,
+    0.6
+   ],
+   "rough": 0.95,
+   "sheen": 0.08
+  },
+  "oak": {
+   "kind": "wood",
+   "colors": [
+    "#c7a983",
+    "#d8bf9b",
+    "#e6d2b3"
+   ],
+   "plank_width": 0.4,
+   "planks": false,
+   "rough": 0.42,
+   "coat": 0.15
+  },
+  "oak_floor": {
+   "kind": "wood",
+   "colors": [
+    "#bd9e78",
+    "#d2b790",
+    "#e2ccab"
+   ],
+   "plank_width": 0.19,
+   "rough": 0.35,
+   "coat": 0.3
+  },
+  "paint": {
+   "kind": "paint",
+   "color": "#efece7",
+   "rough": 0.85
+  },
+  "soffit_paint": {
+   "kind": "paint",
+   "color": "#d9d6d0",
+   "rough": 0.9
+  },
+  "concrete": {
+   "kind": "plain",
+   "color": "#8d8a84",
+   "rough": 0.9
+  },
+  "charcoal": {
+   "kind": "paint",
+   "color": "#3a3a3b",
+   "rough": 0.7
+  },
+  "accent": {
+   "kind": "paint",
+   "color": "#dd8d36",
+   "rough": 0.8
+  },
+  "gypsum": {
+   "kind": "paint",
+   "color": "#e9e6e0",
+   "rough": 0.95,
+   "vary": 0.05
+  },
+  "ceiling_tile": {
+   "kind": "ceiling_tile",
+   "colors": [
+    "#e6e3dd",
+    "#eceae5"
+   ],
+   "tile": [
+    0.6,
+    0.6
+   ],
+   "joint": 0.0,
+   "rough": 0.95
+  },
+  "screen_orange": {
+   "kind": "fabric",
+   "color": "#dd8d36",
+   "rough": 0.9
+  },
+  "screen_white": {
+   "kind": "fabric",
+   "color": "#f1efea",
+   "rough": 0.9
+  },
+  "sofa_grey": {
+   "kind": "fabric",
+   "color": "#a69687",
+   "rough": 0.9
+  },
+  "sofa_teal": {
+   "kind": "fabric",
+   "color": "#286e7a",
+   "rough": 0.9
+  },
+  "blind": {
+   "kind": "fabric",
+   "color": "#d8cfc0",
+   "rough": 0.95
+  },
+  "rug": {
+   "kind": "fabric",
+   "color": "#8f8a82",
+   "rough": 0.95
+  },
+  "white_metal": {
+   "kind": "plain",
+   "color": "#f1f0ed",
+   "rough": 0.42,
+   "coat": 0.3
+  },
+  "black_metal": {
+   "kind": "metal",
+   "color": "#1c1c1d",
+   "rough": 0.38
+  },
+  "steel": {
+   "kind": "metal",
+   "color": "#b9bcbf",
+   "rough": 0.25
+  },
+  "alu": {
+   "kind": "metal",
+   "color": "#c9cbce",
+   "rough": 0.3
+  },
+  "screen_glass": {
+   "kind": "screen",
+   "glow": "#22384a",
+   "strength": 0.25
+  },
+  "plastic_black": {
+   "kind": "plastic",
+   "color": "#18181a",
+   "rough": 0.5
+  },
+  "plastic_orange": {
+   "kind": "plastic",
+   "color": "#dd8d36",
+   "rough": 0.45
+  },
+  "plastic_grey": {
+   "kind": "plastic",
+   "color": "#b4b2ad",
+   "rough": 0.45
+  },
+  "planter_white": {
+   "kind": "plastic",
+   "color": "#f3f2ef",
+   "rough": 0.5
+  },
+  "planter_top": {
+   "kind": "plastic",
+   "color": "#333334",
+   "rough": 0.7
+  },
+  "pot": {
+   "kind": "plastic",
+   "color": "#3a3a3a",
+   "rough": 0.6
+  },
+  "soil": {
+   "kind": "plain",
+   "color": "#2a2018",
+   "rough": 1.0
+  },
+  "leaf": {
+   "kind": "leaf",
+   "color": "#3f7a2f",
+   "dark": "#12361a"
+  },
+  "stone": {
+   "kind": "stone",
+   "colors": [
+    "#cfc9bf",
+    "#d7d2c9",
+    "#e0dbd2"
+   ],
+   "tile": [
+    0.8,
+    0.8
+   ],
+   "rough": 0.25
+  },
+  "tile": {
+   "kind": "tile",
+   "colors": [
+    "#e8e6e2",
+    "#eeece8"
+   ],
+   "tile": [
+    0.6,
+    0.6
+   ],
+   "joint": 0.002,
+   "joint_color": "#bdb9b2",
+   "rough": 0.2
+  },
+  "vinyl": {
+   "kind": "plain",
+   "color": "#b7b3ac",
+   "rough": 0.55
+  },
+  "ceramic": {
+   "kind": "plastic",
+   "color": "#eeece6",
+   "rough": 0.15,
+   "coat": 0.5
+  },
+  "mug_white": {
+   "kind": "plastic",
+   "color": "#eeece6",
+   "rough": 0.18,
+   "coat": 0.5
+  },
+  "cover_dark": {
+   "kind": "plastic",
+   "color": "#222b4a",
+   "rough": 0.6
+  },
+  "glass": {
+   "kind": "glass",
+   "color": "#eef5f4",
+   "alpha": 0.2
+  },
+  "frost": {
+   "kind": "frost",
+   "color": "#f6f6f4",
+   "alpha": 0.75
+  },
+  "logo": {
+   "kind": "plain",
+   "color": "#dd8d36",
+   "rough": 0.35,
+   "emit": 0.0
+  },
+  "led_panel": {
+   "kind": "emission",
+   "kelvin": 4000,
+   "strength": 12.0
+  },
+  "led_spot": {
+   "kind": "emission",
+   "kelvin": 4000,
+   "strength": 60.0
+  },
+  "led_spot_soft": {
+   "kind": "emission",
+   "kelvin": 3500,
+   "strength": 30.0
+  },
+  "led_line": {
+   "kind": "emission",
+   "kelvin": 4000,
+   "strength": 150.0
+  },
+  "cove_led": {
+   "kind": "emission",
+   "kelvin": 3000,
+   "strength": 40.0
+  },
+  "sprinkler_red": {
+   "kind": "plain",
+   "color": "#b3261e",
+   "rough": 0.4
+  },
+  "ground": {
+   "kind": "plain",
+   "color": "#8f8b83",
+   "rough": 0.9
+  },
+  "grey_card": {
+   "kind": "plain",
+   "color": "#767676",
+   "rough": 1.0,
+   "vary": 0
+  },
+  "context_block": {
+   "kind": "plain",
+   "color": "#b9b4ab",
+   "rough": 0.85
+  },
+  "facade_glass": {
+   "kind": "glass",
+   "color": "#e3ece6",
+   "rough": 0.02,
+   "ior": 1.52,
+   "alpha": 0.18,
+   "tint": "#dfe9e3"
+  },
+  "partition_glass": {
+   "kind": "glass",
+   "color": "#eef5f4",
+   "rough": 0.0,
+   "ior": 1.5,
+   "alpha": 0.2
+  },
+  "partition_glass_frost": {
+   "kind": "frost",
+   "color": "#f6f6f4",
+   "alpha": 0.75
+  }
+ },
+ "parts": {
+  "panels": [
+   "screen_orange",
+   "screen_white",
+   "accent"
+  ],
+  "seating": [
+   "model_*chair*",
+   "model_Material*"
+  ],
+  "floor": [
+   "carpet"
+  ],
+  "surfaces": [
+   "oak"
+  ],
+  "walls": [
+   "paint"
+  ],
+  "soft": [
+   "sofa_grey",
+   "sofa_teal"
+  ],
+  "cafe": [
+   "plastic_orange",
+   "plastic_grey"
+  ]
+ },
+ "camera_skip": "core|service|plant_room|shaft|duct|lift|stair|void|janitor|electrical|ups|server|occupied|unlabelled|circulation"
+}

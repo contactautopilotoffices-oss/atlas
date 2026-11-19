@@ -1,0 +1,281 @@
+{
+ "generated": "checks.py",
+ "checks": {
+  "footprints_within_1m": {
+   "pass": true,
+   "rtp_max_hausdorff_m": 0.0,
+   "rtp_floors": {
+    "rtp_L00": {
+     "hausdorff_m": 0.0
+    },
+    "rtp_L01": {
+     "hausdorff_m": 0.0
+    },
+    "rtp_L02": {
+     "hausdorff_m": 0.0
+    },
+    "rtp_L03": {
+     "hausdorff_m": 0.0
+    },
+    "rtp_L04": {
+     "hausdorff_m": 0.0
+    },
+    "rtp_L05": {
+     "hausdorff_m": 0.0
+    },
+    "rtp_L06": {
+     "hausdorff_m": 0.0
+    },
+    "rtp_L07": {
+     "hausdorff_m": 0.0
+    },
+    "rtp_L08": {
+     "hausdorff_m": 0.0
+    },
+    "rtp_L09": {
+     "hausdorff_m": 0.0
+    },
+    "rtp_ROOF": {
+     "hausdorff_m": 0.0
+    }
+   },
+   "context": {
+    "base_vertices": 16459,
+    "max_dev_m": 0.764,
+    "p99_dev_m": 0.022,
+    "vertices_over_1m": 0,
+    "buildings_in": 1965
+   },
+   "rtp_vs_overture": {
+    "hausdorff_m": 4.09,
+    "iou": 0.913,
+    "note": "informational: the CAD outline (true geometry) against the coarser OSM/Overture footprint traced from imagery"
+   }
+  },
+  "no_coplanar_overlaps_2mm": {
+   "pass": false,
+   "triangles": 318913,
+   "pairs_tested": 790630,
+   "overlapping_triangle_pairs": 7,
+   "by_object_pair": [
+    {
+     "a": "ctxC_tile_-1_1",
+     "b": "ctxC_tile_-1_1",
+     "tri_pairs": 1,
+     "area_m2": 0.009,
+     "example_xyz": [
+      -60.07,
+      423.36,
+      3.6
+     ]
+    },
+    {
+     "a": "ctx_footpath",
+     "b": "ctx_footpath",
+     "tri_pairs": 3,
+     "area_m2": 0.008,
+     "example_xyz": [
+      -96.53,
+      -39.28,
+      0.15
+     ]
+    },
+    {
+     "a": "ctxC_tile_0_1",
+     "b": "ctxC_tile_0_1",
+     "tri_pairs": 1,
+     "area_m2": 0.003,
+     "example_xyz": [
+      22.76,
+      431.82,
+      6.4
+     ]
+    },
+    {
+     "a": "ctx_ground_ground_compound",
+     "b": "ctx_ground_ground_compound",
+     "tri_pairs": 2,
+     "area_m2": 0.002,
+     "example_xyz": [
+      317.17,
+      314.31,
+      0.05
+     ]
+    }
+   ],
+   "back_to_back_pairs": 667,
+   "back_to_back_note": "opposite-facing coincident faces (party walls of adjacent Overture houses); both sit inside the combined volume, so they cannot flicker from outside",
+   "back_to_back_examples": [
+    [
+     "ctxC_tile_-1_1",
+     "ctxC_tile_-1_1"
+    ],
+    [
+     "ctxC_tile_0_-1",
+     "ctxC_tile_0_-1"
+    ],
+    [
+     "ctxC_tile_0_0",
+     "ctxC_tile_0_0"
+    ],
+    [
+     "ctxC_tile_0_1",
+     "ctxC_tile_0_1"
+    ],
+    [
+     "ctxC_tile_1_-1",
+     "ctxC_tile_1_-1"
+    ],
+    [
+     "ctxC_tile_1_0",
+     "ctxC_tile_1_0"
+    ],
+    [
+     "ctxC_tile_1_1",
+     "ctxC_tile_1_1"
+    ],
+    [
+     "ctx_footpath",
+     "ctx_footpath"
+    ],
+    [
+     "ctx_ground_ground_compound",
+     "ctx_ground_ground_compound"
+    ],
+    [
+     "ctx_kerbs",
+     "ctx_kerbs"
+    ]
+   ],
+   "method": "triangles bucketed by normal (0.005) and plane offset (2 mm); same-facing in-plane overlap > 2 cm2 between any two triangles is flagged"
+  },
+  "no_untextured_or_default_materials": {
+   "pass": true,
+   "default_materials": [],
+   "objects_with_empty_slots": [],
+   "untextured_buildings_or_ground_within_300m": [],
+   "untextured_by_design": [
+    "facade_glass",
+    "facade_glass_L04",
+    "facade_glass_L06",
+    "prop_bus_band",
+    "prop_bus_body",
+    "prop_car_glass",
+    "prop_car_paint_0",
+    "prop_car_paint_1",
+    "prop_car_paint_2",
+    "prop_car_paint_3",
+    "prop_car_paint_4",
+    "prop_car_paint_5",
+    "prop_car_paint_6",
+    "prop_car_paint_7",
+    "prop_conductor",
+    "prop_insulator",
+    "prop_lamp_led",
+    "prop_lattice_steel",
+    "prop_metal_grey",
+    "prop_tank_black",
+    "prop_tank_white",
+    "prop_transformer",
+    "prop_tyre",
+    "rail_glass",
+    "road_marking",
+    "rtp_dome",
+    "rtp_mullion",
+    "rtp_plant_grey",
+    "rtp_steel",
+    "sign_red",
+    "sign_white"
+   ],
+   "note": "materials without an image are glass, metals, paint (cars), emissive signs and the white dome: deliberate PBR, not default grey"
+  },
+  "stills_blown_crushed": {
+   "pass": true,
+   "rule": "blown = luminance >= 0.98, crushed <= 0.03; pass if blown <= 1 % and crushed <= 5 % (25 % for night)",
+   "stills": {
+    "morning_court": {
+     "blown_frac": 0.0099,
+     "crushed_frac": 0.027,
+     "median": 0.446,
+     "pass": true,
+     "seconds": 113.8
+    },
+    "morning_road": {
+     "blown_frac": 0.0001,
+     "crushed_frac": 0.0,
+     "median": 0.813,
+     "pass": true,
+     "seconds": 94.2
+    },
+    "morning_orbit": {
+     "blown_frac": 0.0003,
+     "crushed_frac": 0.0,
+     "median": 0.777,
+     "pass": true,
+     "seconds": 104.9
+    },
+    "golden_court": {
+     "blown_frac": 0.0,
+     "crushed_frac": 0.0202,
+     "median": 0.517,
+     "pass": true,
+     "seconds": 122.4
+    },
+    "golden_road": {
+     "blown_frac": 0.0005,
+     "crushed_frac": 0.0,
+     "median": 0.656,
+     "pass": true,
+     "seconds": 108.8
+    },
+    "golden_orbit": {
+     "blown_frac": 0.0,
+     "crushed_frac": 0.0,
+     "median": 0.61,
+     "pass": true,
+     "seconds": 112.5
+    },
+    "night_court": {
+     "blown_frac": 0.0008,
+     "crushed_frac": 0.0523,
+     "median": 0.194,
+     "pass": true,
+     "seconds": 235.6
+    },
+    "night_road": {
+     "blown_frac": 0.0,
+     "crushed_frac": 0.0339,
+     "median": 0.188,
+     "pass": true,
+     "seconds": 183.5
+    },
+    "night_orbit": {
+     "blown_frac": 0.0003,
+     "crushed_frac": 0.0295,
+     "median": 0.101,
+     "pass": true,
+     "seconds": 224.3
+    }
+   }
+  },
+  "photo_match_sheet": {
+   "pass": null,
+   "file": "review/photo_match.png",
+   "matches": [
+    "Blue-green reflective curtain wall in continuous horizontal ribbons, one per floor",
+    "Silver-grey ACP band at every slab edge (0.6-0.9 m)",
+    "Rounded ends stacked as terraces stepping back near the top",
+    "Central grey vertical spine with ribbed elements on the long facade",
+    "Large round drums on the roof at the rounded ends, one with a white dome",
+    "Red illuminated RELIABLE sign with a white R logo on a rooftop drum",
+    "Chamfered inner corner (main lobby) facing a SW court with palms and parking",
+    "Night: pink / violet uplighting, office floors glow, red sign"
+   ],
+   "does_not_match": [
+    "no overlay against a real photo (none in the repo)",
+    "floor count unconfirmed",
+    "roof element positions from photos"
+   ]
+  }
+ }
+}

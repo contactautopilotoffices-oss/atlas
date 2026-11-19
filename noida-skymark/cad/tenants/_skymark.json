@@ -1,0 +1,300 @@
+{
+ "about": "Layer and block mapping shared by the Skymark fit-out drawings (Worksquare drafting standard: WS-*, AR-*, APO-*). Tenant files extend this and add their own blocks.",
+ "layers": {
+  "walls": [
+   "AR WALL",
+   "AR-WALL",
+   "WS-WALL",
+   "WS-WALL-PRTN",
+   "L-WALL",
+   "APO- BLOCK WALL",
+   "I- Partition- Jaali Stall",
+   "WALL HATCH",
+   "ELE-DEEP",
+   "e4",
+   "e7"
+  ],
+  "wall_lines": [
+   "AR WALL",
+   "AR-WALL",
+   "WS-WALL-PRTN",
+   "WS-WALL",
+   "L-WALL",
+   "I- Partition- Jaali Stall",
+   "APO- BLOCK WALL"
+  ],
+  "wall_blocks_on": [
+   "WS-WALL-PRTN"
+  ],
+  "glass": [
+   "WS-GLAZ-GLAS",
+   "STR. GLAZING",
+   "AR-WINDOW",
+   "AR-WINCILL"
+  ],
+  "glass_lines": [
+   "WS-GLAZ-GLAS",
+   "STR. GLAZING",
+   "AR-WINDOW"
+  ],
+  "doors": [
+   "WS-DOOR",
+   "WS-DOOR-FIRE",
+   "WS-DOOR-GLAZ",
+   "DOOR",
+   "I- Door",
+   "TEXT DW"
+  ],
+  "columns": [
+   "column",
+   "RCC COLUMN",
+   "COL",
+   "col hat"
+  ],
+  "column_lines": [
+   "column",
+   "RCC COLUMN",
+   "COL"
+  ],
+  "stairs": [
+   "STAIR",
+   "RAILING",
+   "TEXT LVL",
+   "HIDDEN LINE"
+  ],
+  "lifts_core": [
+   "AR-TEXT",
+   "ELE-DEEP",
+   "STONE",
+   "HATCH"
+  ],
+  "ceiling": [
+   "APO-MODULAR-GRID CEILING",
+   "APO- Gypsum celing",
+   "ACP LAYER",
+   "A-FLDROP"
+  ],
+  "lighting": [
+   "CD-2' x 2' led light",
+   "AE-LITE-CLNG",
+   "WS-FIXT",
+   "AR-LIGHT"
+  ],
+  "workstations_furniture": [
+   "WS-FURN",
+   "APO- FURN",
+   "I-FURN",
+   "I-FURN-PNLS",
+   "I- Furn- Modular Offsite",
+   "PDF_Furniture",
+   "PDF_XD-Furniture",
+   "PDF4_Geometry",
+   "WS-FURN-PATT",
+   "CP-INT-FURNITURE",
+   "CP-INT-CHAIRS",
+   "APO- FURDIM",
+   "PDF_0"
+  ],
+  "storage_lockers": [
+   "APO-AKJNFAFS"
+  ],
+  "wc_mep": [
+   "MEP- Plumb- Fixtures",
+   "cad-block.com"
+  ],
+  "planters": [
+   "WS-TREE",
+   "APO- PLANTERS"
+  ],
+  "annotation": [
+   "WS-ANNO-LABL",
+   "WS-ANNO-TEXT",
+   "WS-ANNO-DIMS",
+   "TEXT",
+   "AR-TEXT",
+   "Defpoints",
+   "Dim-INT",
+   "LEADER",
+   "DIM",
+   "APO- DIMLINE",
+   "APO- FLOORING",
+   "FORMAT-A1",
+   "FORMAT-A1-TEXT",
+   "CD-Format",
+   "prodima",
+   "hiiden layer",
+   "HATCH",
+   "PDF_XD-Hatch"
+  ],
+  "plate": [
+   "AR WALL",
+   "AR-WALL",
+   "AR-WINDOW",
+   "AR-WINCILL",
+   "STR. GLAZING",
+   "column",
+   "RCC COLUMN",
+   "L-WALL",
+   "WS-WALL"
+  ],
+  "labels": [
+   "WS-ANNO-LABL",
+   "WS-FURN",
+   "AR-TEXT",
+   "TEXT",
+   "TEXT LVL"
+  ],
+  "room_barriers_extra": [
+   "RAILING",
+   "AR-WINCILL"
+  ]
+ },
+ "labels": {
+  "ignore": "PARTITION|^LOGO$|FLOOR PLAN|CARPET AREA|DISHWASHER|^COUNTER$|^UP$|^DN$|RAILING|HIGH|^FHC$|ENTITY-0|^HIGH DESK$|^MICROWAVE$|^FRIDGE$|LOCKERS|^STEP UP$|SHAFT SIZE|^STORAGE$|^UTILITY$|AS PER|^LADIES$|^GENTS$|SUPERVISOR WORKSTATIONS|^SUPERVISOR$",
+  "circulation": "PASSAGE"
+ },
+ "room_kinds": [
+  [
+   "operator",
+   "AUTOPILOT"
+  ],
+  [
+   "occupied",
+   "OCCUPIED"
+  ],
+  [
+   "core",
+   "LIFT|STAIR|SHAFT|DUCK|JANITOR|ELECTRICAL|DB PANEL|^VOID$|ATRIUM"
+  ],
+  [
+   "wc",
+   "TOILET|WASHROOM"
+  ],
+  [
+   "service",
+   "SERVER|UPS|BATTERY|STORAGE|UTILITY"
+  ],
+  [
+   "meeting",
+   "MEETING|CONFERENCE|INTERVIEW|SEATER$"
+  ],
+  [
+   "training",
+   "TRAINING"
+  ],
+  [
+   "cafe",
+   "CAFE|PANTRY"
+  ],
+  [
+   "reception",
+   "RECEPTION|ENTRY|WAITING"
+  ],
+  [
+   "lounge",
+   "LOUNGE|COLLAB|PHONE|PH-"
+  ],
+  [
+   "work",
+   "WORKSTATION|OFFICE|CALLING|FINANCE|STAFF|CONTROL|CABIN|CUBIC|SUPERVISOR|HIGH DESK"
+  ]
+ ],
+ "blocks": {
+  "doors": [
+   "DOOR_SNGL",
+   "*U59",
+   "*U45",
+   "Door",
+   "DOOR"
+  ],
+  "lights": {
+   "BLCK_LITE_EW WALL": "downlight",
+   "2' X 2' LED LIGHT": "panel600",
+   "LINEAR LIGHT": "linear",
+   "LINEAR LIGHT1": "linear",
+   "li": "linear",
+   "L": "linear"
+  },
+  "wc_mep": {
+   "FLS-WHT-5953PPSM PLAN": "wc",
+   "URS-WHT-13253O PLAN": "urinal",
+   "health fauscet 1": "health faucet",
+   "Dishwasher 606x622_top_cad-block.com": "dishwasher"
+  },
+  "plants": [
+   "A$C4730a6c7",
+   "A$Cfc5399e0",
+   "A$C64875517",
+   "A$Cf5303b1e",
+   "A$Cfde1c821"
+  ],
+  "planter_boxes": [
+   "A$Ca79927ab"
+  ],
+  "wall_displays": [
+   "A$Cd484c6a2"
+  ]
+ },
+ "chairs": {
+  "A$C136922d8": [
+   "task chair",
+   "work"
+  ],
+  "A$Cd2419d53": [
+   "meeting chair",
+   "meeting"
+  ],
+  "A$Caa80c39f": [
+   "cafe chair",
+   "cafe"
+  ],
+  "A$C445ca927": [
+   "cafe stool",
+   "cafe"
+  ],
+  "A$Cc5b0ed80": [
+   "visitor chair",
+   "lounge"
+  ],
+  "A$Cee30255b": [
+   "director chair",
+   "work"
+  ],
+  "Staff Chair - Staff Chair_1-171-Level 1": [
+   "staff chair",
+   "work"
+  ],
+  "A$Cd18c31fc": [
+   "lounge armchair",
+   "lounge"
+  ],
+  "A$C897f58da": [
+   "3-seat sofa",
+   "lounge",
+   3
+  ],
+  "A$C9b980f9b": [
+   "lounge chair",
+   "lounge"
+  ]
+ },
+ "desks": {
+  "A$C779abbf3": "4'x2' workstation",
+  "WS-3'X2'": "3'x2' workstation",
+  "A$C62789d74": "3'x2' workstation",
+  "A$Cb4d34924": "director desk",
+  "5555 FT TABLE": "staff table",
+  "A$C20bf05e1": "table"
+ },
+ "operator_rooms": "AUTOPILOT|^RECEPTION( \\(\\d\\))?$",
+ "heights": {
+  "ceiling": 2.85,
+  "wall": 2.85,
+  "desk": 0.75,
+  "high_desk": 1.05,
+  "coffee": 0.42,
+  "screen": 0.4,
+  "planter": 1.05,
+  "source": "assumed: standard fit-out heights, not in the 2D drawing"
+ }
+}

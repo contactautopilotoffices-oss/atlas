@@ -1,0 +1,76 @@
+{
+ "id": "rtp6-a",
+ "name": "6th floor \u00b7 Option A",
+ "floor": 6,
+ "floor_label": "6th floor",
+ "accent": "#1d3fd1",
+ "client": "Altruist",
+ "area_sqft": 23659,
+ "layout": "../../rtp6-a/rtp6-a-floor6.twin.layout.json",
+ "summary": "../../rtp6-a/rtp6-a_summary.json",
+ "frame": {
+  "rot_deg": 0,
+  "dx": 0,
+  "dy": 0,
+  "source": "layout already in rtp_local (review/frames.json)"
+ },
+ "seats": {
+  "work": 429,
+  "all": 670,
+  "groups": {
+   "Work seats (desk + chair)": 429,
+   "Meeting room seats": 39,
+   "Training room seats": 51,
+   "Cafeteria seats": 112,
+   "Lounge, collab and visitor seats": 31,
+   "Cabin seats (desk chair and visitors)": 8
+  }
+ },
+ "reception": "RECEPTION",
+ "assumptions": {
+  "path": "../../rtp6-a/rtp6-a_assumptions.md"
+ },
+ "seat_plan": "../../rtp6-a/rtp6-a_seat_plan.png",
+ "blueprint": {
+  "img": "blueprints/rtp6-a.png",
+  "meta": "blueprints/rtp6-a.json"
+ },
+ "model": {
+  "use": "auto",
+  "index": "models/index.json",
+  "dev_build": {}
+ },
+ "stills": [
+  {
+   "camera": "rtp6-a_CAM_open-workstations-2_entry",
+   "src": "models/rtp6-a/stills/rtp6-a_open-workstations-2_entry.jpg",
+   "option": null
+  },
+  {
+   "camera": "rtp6-a_CAM_open-workstations-2_feature",
+   "src": "models/rtp6-a/stills/rtp6-a_open-workstations-2_feature.jpg",
+   "option": null
+  },
+  {
+   "camera": "rtp6-a_CAM_meeting-room-1_inside",
+   "src": "models/rtp6-a/stills/rtp6-a_meeting-room-1_inside.jpg",
+   "option": null
+  },
+  {
+   "camera": "rtp6-a_CAM_training-room_entry",
+   "src": "models/rtp6-a/stills/rtp6-a_training-room_entry.jpg",
+   "option": null
+  },
+  {
+   "camera": "rtp6-a_CAM_cafeteria-1_entry",
+   "src": "models/rtp6-a/stills/rtp6-a_cafeteria-1_entry.jpg",
+   "option": null
+  }
+ ],
+ "highlights": [
+  "4 x 6-8 seat meeting rooms",
+  "112-seat cafeteria",
+  "2 training rooms"
+ ],
+ "measured_sqft": 29911
+}

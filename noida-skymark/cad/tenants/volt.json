@@ -1,0 +1,104 @@
+{
+ "extends": "_skymark.json",
+ "name": "Volt",
+ "dwg_name": "20260915_SKY MARK NOIDA_1ST_VOLT_ENERGY_R16.dwg",
+ "plan_label": "FIRST FLOOR PLAN",
+ "plan_window_in": [
+  2995050,
+  -3366500,
+  2997800,
+  -3365150
+ ],
+ "inst_window_in": [
+  2996000,
+  -3366400,
+  2997800,
+  -3365200
+ ],
+ "origin_in": [
+  2996150,
+  -3366400
+ ],
+ "rcp_offset_in": [
+  108.8966,
+  -2522.2322
+ ],
+ "open_zone_sizes_m": [
+  [
+   17.6,
+   7.11
+  ],
+  [
+   7.03,
+   6.91
+  ]
+ ],
+ "chairs": {
+  "A$Cd18c31fc": [
+   "lounge armchair",
+   "lounge"
+  ],
+  "*U52": [
+   "lounge tub chair",
+   "lounge"
+  ],
+  "*U53": [
+   "lounge tub chair",
+   "lounge"
+  ],
+  "*U54": [
+   "lounge tub chair",
+   "lounge"
+  ],
+  "*U55": [
+   "2-seat sofa",
+   "lounge",
+   2
+  ],
+  "*U22": [
+   "lounge chair",
+   "lounge"
+  ]
+ },
+ "deck_claims": {
+  "about": "Volt verification run: the live Volt pipeline counted 116 work seats and 213 seats in all.",
+  "work_seats": 116,
+  "all_seats": 213
+ },
+ "closures": [
+  {
+   "a": [
+    17.55,
+    2.75
+   ],
+   "b": [
+    17.55,
+    1.55
+   ],
+   "why": "OCCUPIED area vs Volt's service passage: partition stops 1.2 m short of the south wall"
+  },
+  {
+   "a": [
+    16.3,
+    6.52
+   ],
+   "b": [
+    16.3,
+    9.62
+   ],
+   "virtual": true,
+   "why": "zone boundary: OCCUPIED area vs Volt's entry (no wall drawn between them)"
+  },
+  {
+   "a": [
+    21.75,
+    6.9
+   ],
+   "b": [
+    21.75,
+    7.75
+   ],
+   "why": "wet pantry: gap between its east wall and the ladies washroom wall"
+  }
+ ]
+}

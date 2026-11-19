@@ -1,0 +1,227 @@
+{
+ "morning_court": {
+  "file": "stills/rtp_morning_court.png",
+  "seconds": 113.8,
+  "samples": 192,
+  "engine": "CYCLES",
+  "exposure_ev": -2.0399999618530273,
+  "blown_frac": 0.0099,
+  "crushed_frac": 0.027,
+  "median": 0.446,
+  "camera": {
+   "position": [
+    -36.51991271972656,
+    32.791961669921875,
+    1.649999976158142
+   ],
+   "target": [
+    13.4800891076348,
+    80.79195998574411,
+    15.0
+   ],
+   "lens_mm": 20.0,
+   "shift_y": 0.11999999731779099
+  },
+  "version": "v5: 192 samples, corrected sun azimuth, calibrated sun lamp, 160 m haze lid"
+ },
+ "morning_road": {
+  "file": "stills/rtp_morning_road.png",
+  "seconds": 94.2,
+  "samples": 192,
+  "engine": "CYCLES",
+  "exposure_ev": -2.0399999618530273,
+  "blown_frac": 0.0001,
+  "crushed_frac": 0.0,
+  "median": 0.813,
+  "camera": {
+   "position": [
+    -258.0,
+    -96.0,
+    1.7000000476837158
+   ],
+   "target": [
+    10.0,
+    55.0,
+    18.0
+   ],
+   "lens_mm": 50.0,
+   "shift_y": 0.07999999821186066
+  },
+  "version": "v5: 192 samples, corrected sun azimuth, calibrated sun lamp, 160 m haze lid"
+ },
+ "morning_orbit": {
+  "file": "stills/rtp_morning_orbit.png",
+  "seconds": 104.9,
+  "samples": 192,
+  "engine": "CYCLES",
+  "exposure_ev": -2.0399999618530273,
+  "blown_frac": 0.0003,
+  "crushed_frac": 0.0,
+  "median": 0.777,
+  "camera": {
+   "position": [
+    -235.0,
+    -205.0,
+    150.0
+   ],
+   "target": [
+    8.0,
+    52.0,
+    14.0
+   ],
+   "lens_mm": 40.0,
+   "shift_y": 0.0
+  },
+  "version": "v5: 192 samples, corrected sun azimuth, calibrated sun lamp, 160 m haze lid"
+ },
+ "golden_court": {
+  "file": "stills/rtp_golden_court.png",
+  "seconds": 122.4,
+  "samples": 192,
+  "engine": "CYCLES",
+  "exposure_ev": 1.059999942779541,
+  "blown_frac": 0.0,
+  "crushed_frac": 0.0202,
+  "median": 0.517,
+  "camera": {
+   "position": [
+    -36.51991271972656,
+    32.791961669921875,
+    1.649999976158142
+   ],
+   "target": [
+    13.4800891076348,
+    80.79195998574411,
+    15.0
+   ],
+   "lens_mm": 20.0,
+   "shift_y": 0.11999999731779099
+  },
+  "version": "v4: 192 samples, corrected sun azimuth, calibrated sun lamp"
+ },
+ "golden_road": {
+  "file": "stills/rtp_golden_road.png",
+  "seconds": 108.8,
+  "samples": 192,
+  "engine": "CYCLES",
+  "exposure_ev": 1.059999942779541,
+  "blown_frac": 0.0005,
+  "crushed_frac": 0.0,
+  "median": 0.656,
+  "camera": {
+   "position": [
+    -258.0,
+    -96.0,
+    1.7000000476837158
+   ],
+   "target": [
+    10.0,
+    55.0,
+    18.0
+   ],
+   "lens_mm": 50.0,
+   "shift_y": 0.07999999821186066
+  },
+  "version": "v4: 192 samples, corrected sun azimuth, calibrated sun lamp"
+ },
+ "golden_orbit": {
+  "file": "stills/rtp_golden_orbit.png",
+  "seconds": 112.5,
+  "samples": 192,
+  "engine": "CYCLES",
+  "exposure_ev": 1.059999942779541,
+  "blown_frac": 0.0,
+  "crushed_frac": 0.0,
+  "median": 0.61,
+  "camera": {
+   "position": [
+    -235.0,
+    -205.0,
+    150.0
+   ],
+   "target": [
+    8.0,
+    52.0,
+    14.0
+   ],
+   "lens_mm": 40.0,
+   "shift_y": 0.0
+  },
+  "version": "v4: 192 samples, corrected sun azimuth, calibrated sun lamp"
+ },
+ "night_court": {
+  "file": "stills/rtp_night_court.png",
+  "seconds": 235.6,
+  "samples": 256,
+  "engine": "CYCLES",
+  "exposure_ev": 2.190000057220459,
+  "blown_frac": 0.0008,
+  "crushed_frac": 0.0523,
+  "median": 0.194,
+  "camera": {
+   "position": [
+    -36.51991271972656,
+    32.791961669921875,
+    1.649999976158142
+   ],
+   "target": [
+    13.4800891076348,
+    80.79195998574411,
+    15.0
+   ],
+   "lens_mm": 20.0,
+   "shift_y": 0.11999999731779099
+  },
+  "version": "v3: 256 samples, 30 kW pink/violet uplights"
+ },
+ "night_road": {
+  "file": "stills/rtp_night_road.png",
+  "seconds": 183.5,
+  "samples": 256,
+  "engine": "CYCLES",
+  "exposure_ev": 2.190000057220459,
+  "blown_frac": 0.0,
+  "crushed_frac": 0.0339,
+  "median": 0.188,
+  "camera": {
+   "position": [
+    -258.0,
+    -96.0,
+    1.7000000476837158
+   ],
+   "target": [
+    10.0,
+    55.0,
+    18.0
+   ],
+   "lens_mm": 50.0,
+   "shift_y": 0.07999999821186066
+  },
+  "version": "v3: 256 samples, 30 kW pink/violet uplights"
+ },
+ "night_orbit": {
+  "file": "stills/rtp_night_orbit.png",
+  "seconds": 224.3,
+  "samples": 256,
+  "engine": "CYCLES",
+  "exposure_ev": 2.190000057220459,
+  "blown_frac": 0.0003,
+  "crushed_frac": 0.0295,
+  "median": 0.101,
+  "camera": {
+   "position": [
+    -235.0,
+    -205.0,
+    150.0
+   ],
+   "target": [
+    8.0,
+    52.0,
+    14.0
+   ],
+   "lens_mm": 40.0,
+   "shift_y": 0.0
+  },
+  "version": "v3: 256 samples, 30 kW pink/violet uplights"
+ }
+}

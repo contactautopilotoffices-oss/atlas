@@ -1,0 +1,8 @@
+# Reliable Tech Park twin: internal briefs, tools, reviews and gate sheets are not part of the public page
+airoli-rtp/*.md
+airoli-rtp/exterior/
+airoli-rtp/review/
+airoli-rtp/tools/
+airoli-rtp/brand/altruist-*.jpg
+airoli-rtp/rtp*/*_G0.*
+airoli-rtp/twin/web/README.md

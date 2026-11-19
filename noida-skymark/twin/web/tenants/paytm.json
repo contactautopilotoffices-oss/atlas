@@ -1,0 +1,209 @@
+{
+ "id": "paytm",
+ "name": "Paytm",
+ "floor": 1,
+ "accent": "#00baf2",
+ "layout": "../../paytm/paytm-floor1.layout.json",
+ "summary": "../../paytm/paytm_summary.json",
+ "frame": {
+  "rot_deg": -0.04,
+  "dx": -25.281,
+  "dy": -6.147,
+  "source": "cad/plate_fit.json (columns, 30 of 32 matched)"
+ },
+ "seats": {
+  "work": 244,
+  "all": 313,
+  "groups": {
+   "Work seats (desk + chair)": 244,
+   "Meeting room seats": 50,
+   "Lounge, collab and visitor seats": 15,
+   "Operator (Autopilot cabin, reception)": 4
+  }
+ },
+ "reception": "RECEPTION/ WAITING AREA",
+ "shared_with": "volt",
+ "assumptions": {
+  "path": "../../paytm/paytm_assumptions.md"
+ },
+ "seat_plan": "../../paytm/paytm_seat_plan.png",
+ "model": {
+  "use": "auto",
+  "index": "models/index.json",
+  "dev_build": {
+   "viewer": "../_build/paytm/export/paytm_viewer.json",
+   "cameras": "../_build/paytm/paytm_cameras.json"
+  }
+ },
+ "stills": [
+  {
+   "camera": "paytm_CAM_06-seater-meeting-room_entry",
+   "src": "models/paytm/stills/paytm_CAM_06-seater-meeting-room_entry.jpg",
+   "option": null
+  },
+  {
+   "camera": "paytm_CAM_16-seater-conference-room_entry",
+   "src": "models/paytm/stills/paytm_CAM_16-seater-conference-room_entry.jpg",
+   "option": null
+  },
+  {
+   "camera": "paytm_CAM_gents-washroom_entry",
+   "src": "models/paytm/stills/paytm_CAM_gents-washroom_entry.jpg",
+   "option": null
+  },
+  {
+   "camera": "paytm_CAM_pantry_entry",
+   "src": "models/paytm/stills/paytm_CAM_pantry_entry.jpg",
+   "option": null
+  },
+  {
+   "camera": "paytm_CAM_reception_entry",
+   "src": "models/paytm/stills/paytm_CAM_reception_entry.jpg",
+   "option": null
+  },
+  {
+   "camera": "paytm_CAM_reception_feature",
+   "src": "models/paytm/stills/paytm_CAM_reception_feature.jpg",
+   "option": null
+  },
+  {
+   "camera": "paytm_CAM_workstation-173-nos-3-0-x1-7_entry",
+   "src": "models/paytm/stills/paytm_CAM_workstation-173-nos-3-0-x1-7_entry.jpg",
+   "option": null
+  },
+  {
+   "camera": "paytm_CAM_workstation-173-nos-3-0-x1-7_feature",
+   "src": "models/paytm/stills/paytm_CAM_workstation-173-nos-3-0-x1-7_feature.jpg",
+   "option": null
+  },
+  {
+   "camera": "paytm_CAM_workstation-173-nos-3-0-x1-7_reverse",
+   "src": "models/paytm/stills/paytm_CAM_workstation-173-nos-3-0-x1-7_reverse.jpg",
+   "option": null
+  }
+ ],
+ "options": [
+  {
+   "id": "carpet",
+   "label": "Carpet",
+   "part": "carpet",
+   "rooms": "*",
+   "choices": [
+    {
+     "id": "grey",
+     "label": "Graphite tile",
+     "swatch": "#7d7871",
+     "preset": "carpet-grey",
+     "material": "carpet"
+    },
+    {
+     "id": "blue",
+     "label": "Slate blue tile",
+     "swatch": "#8fa3c4",
+     "preset": "carpet-blue",
+     "material": "carpet_blue"
+    },
+    {
+     "id": "sand",
+     "label": "Sand tile",
+     "swatch": "#d8c6a8",
+     "preset": "carpet-sand",
+     "material": "carpet_sand"
+    }
+   ]
+  },
+  {
+   "id": "desks",
+   "label": "Desk tops",
+   "part": "deskTop",
+   "rooms": {
+    "kinds": [
+     "work",
+     "training"
+    ]
+   },
+   "choices": [
+    {
+     "id": "white",
+     "label": "White laminate",
+     "swatch": "#f3f1ec",
+     "preset": "white-laminate",
+     "material": "desk_white"
+    },
+    {
+     "id": "oak",
+     "label": "Oak veneer",
+     "swatch": "#c8a27c",
+     "preset": "oak",
+     "material": "oak"
+    },
+    {
+     "id": "walnut",
+     "label": "Walnut veneer",
+     "swatch": "#8a5f43",
+     "preset": "walnut",
+     "material": "walnut"
+    }
+   ]
+  },
+  {
+   "id": "chairs",
+   "label": "Chairs",
+   "part": "chair",
+   "rooms": "*",
+   "choices": [
+    {
+     "id": "black",
+     "label": "Black mesh",
+     "swatch": "#1d1d1f",
+     "preset": "black-mesh",
+     "material": "chair_black"
+    },
+    {
+     "id": "teal",
+     "label": "Teal fabric",
+     "swatch": "#2b6f78",
+     "preset": "teal-fabric",
+     "material": "chair_teal"
+    },
+    {
+     "id": "orange",
+     "label": "Orange fabric",
+     "swatch": "#d9822f",
+     "preset": "orange-fabric",
+     "material": "chair_orange"
+    }
+   ]
+  },
+  {
+   "id": "walls",
+   "label": "Wall paint",
+   "part": "wall",
+   "rooms": "*",
+   "choices": [
+    {
+     "id": "white",
+     "label": "Warm white",
+     "swatch": "#f2efea",
+     "preset": "warm-white",
+     "material": "paint"
+    },
+    {
+     "id": "sage",
+     "label": "Sage",
+     "swatch": "#c9d3c3",
+     "preset": "sage",
+     "material": "paint_sage"
+    },
+    {
+     "id": "clay",
+     "label": "Clay",
+     "swatch": "#d9b9a3",
+     "preset": "clay",
+     "material": "paint_clay"
+    }
+   ]
+  }
+ ],
+ "panos": []
+}

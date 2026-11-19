@@ -1,0 +1,152 @@
+{
+ "tenant": "paytm",
+ "glb": "paytm.glb",
+ "lod_glb": "paytm_lod.glb",
+ "files": {
+  "paytm": {
+   "mb": 5.02,
+   "meshopt": {
+    "instanced_nodes_from": 1135,
+    "instanced_into": 28,
+    "draw_calls": 286,
+    "triangles": 680133,
+    "in_mb": 10.96,
+    "out_mb": 5.02,
+    "compressed_views": 1161,
+    "saved_mb": 6.23,
+    "applied": true
+   },
+   "merged_groups": 27
+  },
+  "paytm_lod": {
+   "mb": 2.7,
+   "meshopt": {
+    "instanced_nodes_from": 605,
+    "instanced_into": 19,
+    "draw_calls": 158,
+    "triangles": 120572,
+    "in_mb": 5.65,
+    "out_mb": 2.7,
+    "compressed_views": 537,
+    "saved_mb": 3.1,
+    "applied": true
+   },
+   "merged_groups": 25
+  }
+ },
+ "frame": "the tenant's CAD plan frame, metres, glTF Y up: three (x, y, z) = plan (x east, height, -north). Not recentred, not rotated: apply the plate fit in the viewer.",
+ "decoder": "GLTFLoader.setMeshoptDecoder(MeshoptDecoder); repeated furniture comes as EXT_mesh_gpu_instancing (InstancedMesh); extras.instance_names lists the CAD blocks in instance order",
+ "camera": {
+  "near": 0.1,
+  "far": 2000,
+  "note": "near >= 0.1 m keeps depth precision for the floor-level layers (finishes 3-4 mm apart)"
+ },
+ "renderer": {
+  "toneMapping": "AgXToneMapping",
+  "toneMappingExposure": 2.3784,
+  "exposure_ev": 1.25,
+  "outputColorSpace": "srgb",
+  "useLegacyLights": false
+ },
+ "lightmapped_meshes": {
+  "how": "texture = load(lightmap); texture.colorSpace = SRGBColorSpace; texture.flipY = false; texture.channel = 1; material.lightMap = texture; material.lightMapIntensity = lightMapIntensity (below, per node); material.envMapIntensity = 0; no direct lights on these meshes (the lightmap already holds sun, sky, lamps and bounce). If it looks blown, check lightMap.colorSpace is sRGB and that the environment / lights are not also lighting these meshes.",
+  "nodes": {
+   "paytm_WALL_paytm_lm9_1": {
+    "lightmap": "lightmaps/paytm_lm9.png",
+    "lightMapIntensity": 15.13002,
+    "uv": 1
+   },
+   "paytm_WALL_paytm_lm7_2": {
+    "lightmap": "lightmaps/paytm_lm7.png",
+    "lightMapIntensity": 20.37822,
+    "uv": 1
+   },
+   "paytm_WALL_paytm_lm2_3": {
+    "lightmap": "lightmaps/paytm_lm2.png",
+    "lightMapIntensity": 22.18566,
+    "uv": 1
+   },
+   "paytm_WALL_paytm_lm1_4": {
+    "lightmap": "lightmaps/paytm_lm1.png",
+    "lightMapIntensity": 17.66727,
+    "uv": 1
+   },
+   "paytm_WALL_paytm_lm6_5": {
+    "lightmap": "lightmaps/paytm_lm6.png",
+    "lightMapIntensity": 20.43065,
+    "uv": 1
+   },
+   "paytm_WALL_paytm_lm4_6": {
+    "lightmap": "lightmaps/paytm_lm4.png",
+    "lightMapIntensity": 18.22481,
+    "uv": 1
+   },
+   "paytm_WALL_paytm_lm5_7": {
+    "lightmap": "lightmaps/paytm_lm5.png",
+    "lightMapIntensity": 17.94486,
+    "uv": 1
+   },
+   "paytm_WALL_paytm_lm8_8": {
+    "lightmap": "lightmaps/paytm_lm8.png",
+    "lightMapIntensity": 17.58006,
+    "uv": 1
+   },
+   "paytm_FLOOR_paytm_lm9_9": {
+    "lightmap": "lightmaps/paytm_lm9.png",
+    "lightMapIntensity": 15.13002,
+    "uv": 1
+   },
+   "paytm_FLOOR_paytm_lm5_10": {
+    "lightmap": "lightmaps/paytm_lm5.png",
+    "lightMapIntensity": 17.94486,
+    "uv": 1
+   },
+   "paytm_FLOOR_paytm_lm3_11": {
+    "lightmap": "lightmaps/paytm_lm3.png",
+    "lightMapIntensity": 25.81335,
+    "uv": 1
+   },
+   "paytm_FLOOR_paytm_lm8_12": {
+    "lightmap": "lightmaps/paytm_lm8.png",
+    "lightMapIntensity": 17.58006,
+    "uv": 1
+   },
+   "paytm_FLOOR_paytm_lm7_13": {
+    "lightmap": "lightmaps/paytm_lm7.png",
+    "lightMapIntensity": 20.37822,
+    "uv": 1
+   },
+   "paytm_FLOOR_paytm_lm0_14": {
+    "lightmap": "lightmaps/paytm_lm0.png",
+    "lightMapIntensity": 11.82315,
+    "uv": 1
+   },
+   "paytm_WALL_paytm_lm0_15": {
+    "lightmap": "lightmaps/paytm_lm0.png",
+    "lightMapIntensity": 11.82315,
+    "uv": 1
+   },
+   "paytm_WALL_paytm_lm3_16": {
+    "lightmap": "lightmaps/paytm_lm3.png",
+    "lightMapIntensity": 25.81335,
+    "uv": 1
+   },
+   "paytm_WALL_paytm_lm10_17": {
+    "lightmap": "lightmaps/paytm_lm10.png",
+    "lightMapIntensity": 14.73674,
+    "uv": 1
+   }
+  }
+ },
+ "other_meshes": {
+  "environment": "RoomEnvironment through PMREMGenerator, scene.environmentIntensity = 0.6, no punctual lights; emissive materials as exported"
+ },
+ "glass": {
+  "facade_glass": "replace with the viewer's tuned transparent glass",
+  "partition_glass": "clear partition",
+  "partition_glass_frost": "frosted band"
+ },
+ "cameras": "paytm_cameras.json",
+ "collision_node": "paytm_COLLISION",
+ "placement_ok": false
+}

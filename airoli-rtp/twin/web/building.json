@@ -1,0 +1,73 @@
+{
+ "name": "Reliable Tech Park",
+ "place": "MIDC Airoli, Navi Mumbai",
+ "client": "Altruist",
+ "levels": 10,
+ "floor_to_floor": 3.6,
+ "ffl0": 0.6,
+ "accent": "#2f8fe6",
+ "plate": "plate.json",
+ "context": "context_overture.json",
+ "about": "rtp_local frame (x east, y north, m from the Maps pin 19.1692159 N 73.0017703 E). Floor-to-floor 3.6 m and ground FFL +0.6 m are assumptions (user: 10-11 ft ceilings); 10 levels (G+9) assumed from photos and the surface model.",
+ "floors": [
+  {
+   "level": 9,
+   "name": "Ninth floor",
+   "status": "other"
+  },
+  {
+   "level": 8,
+   "name": "Eighth floor",
+   "status": "other"
+  },
+  {
+   "level": 7,
+   "name": "Seventh floor",
+   "status": "other"
+  },
+  {
+   "level": 6,
+   "name": "Sixth floor",
+   "tenants": [
+    "rtp6-a"
+   ],
+   "options": [
+    "rtp6-a",
+    "rtp6-b"
+   ]
+  },
+  {
+   "level": 5,
+   "name": "Fifth floor",
+   "status": "other"
+  },
+  {
+   "level": 4,
+   "name": "Fourth floor",
+   "tenants": [
+    "rtp4-suite"
+   ]
+  },
+  {
+   "level": 3,
+   "name": "Third floor",
+   "status": "other"
+  },
+  {
+   "level": 2,
+   "name": "Second floor",
+   "status": "other"
+  },
+  {
+   "level": 1,
+   "name": "First floor",
+   "status": "other"
+  },
+  {
+   "level": 0,
+   "name": "Ground floor",
+   "status": "lobby",
+   "note": "Entrance lobby, lift cores A, B and C"
+  }
+ ]
+}

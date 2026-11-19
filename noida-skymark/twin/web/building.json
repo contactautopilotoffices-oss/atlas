@@ -1,0 +1,50 @@
+{
+ "name": "F1 Skymark",
+ "place": "Noida",
+ "levels": 5,
+ "floor_to_floor": 4.1,
+ "plate": {
+  "layout": "../../volt/volt-floor1.layout.json",
+  "key": "plate",
+  "frame": "volt"
+ },
+ "floors": [
+  {
+   "level": 4,
+   "name": "Fourth floor",
+   "status": "available"
+  },
+  {
+   "level": 3,
+   "name": "Third floor",
+   "status": "available"
+  },
+  {
+   "level": 2,
+   "name": "Second floor",
+   "tenants": [
+    "arcil"
+   ],
+   "later": [
+    {
+     "name": "Altruist",
+     "note": "fit-out drawing to follow"
+    }
+   ]
+  },
+  {
+   "level": 1,
+   "name": "First floor",
+   "tenants": [
+    "volt",
+    "paytm"
+   ]
+  },
+  {
+   "level": 0,
+   "name": "Ground floor",
+   "status": "lobby",
+   "note": "Entrance, lobby and lifts"
+  }
+ ]
+}

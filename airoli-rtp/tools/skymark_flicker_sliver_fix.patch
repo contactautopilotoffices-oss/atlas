@@ -1,0 +1,187 @@
+diff --git a/noida-skymark/twin/blender/bake_export.py b/noida-skymark/twin/blender/bake_export.py
+index d0c89ea..b127a9b 100644
+--- a/noida-skymark/twin/blender/bake_export.py
++++ b/noida-skymark/twin/blender/bake_export.py
+@@ -425,6 +425,7 @@ def export(tenant, L, S, out, A):
+     man = {"tenant": tenant, "glb": f"{tenant}.glb", "lod_glb": f"{tenant}_lod.glb", "files": res,
+            "frame": "the tenant's CAD plan frame, metres, glTF Y up: three (x, y, z) = plan (x east, height, -north). Not recentred, not rotated: apply the plate fit in the viewer.",
+            "decoder": "GLTFLoader.setMeshoptDecoder(MeshoptDecoder); repeated furniture comes as EXT_mesh_gpu_instancing (InstancedMesh); extras.instance_names lists the CAD blocks in instance order",
++           "camera": {"near": 0.1, "far": 2000, "note": "near >= 0.1 m keeps depth precision for the floor-level layers (finishes 3-4 mm apart)"},
+            "renderer": {"toneMapping": "AgXToneMapping", "toneMappingExposure": round(2 ** ev, 4), "exposure_ev": ev, "outputColorSpace": "srgb", "useLegacyLights": False},
+            "lightmapped_meshes": {"how": "texture = load(lightmap); texture.colorSpace = SRGBColorSpace; texture.flipY = false; texture.channel = 1; material.lightMap = texture; "
+                                          "material.lightMapIntensity = lightMapIntensity (below, per node); material.envMapIntensity = 0; no direct lights on these meshes "
+diff --git a/noida-skymark/twin/blender/furniture.py b/noida-skymark/twin/blender/furniture.py
+index 8b0e201..71bf545 100644
+--- a/noida-skymark/twin/blender/furniture.py
++++ b/noida-skymark/twin/blender/furniture.py
+@@ -357,6 +357,7 @@ class Furnisher:
+                 self.R.put("LIGHT", "downlight", self.c.proto("downlight", mk), T(x, y, z), props={"assumed": int(l["assumed"]), "lamp": "spot", "lamp_z": -0.01, "room": l["room"]})
+         for (r, spec, (cx, cy), zb, along_x) in self.c.extra_pendants:     # one slim linear pendant over a cove raft (meeting / board rooms)
+             ln = spec.get("pendant_length", 1.8); drop = 0.6; z = zb - drop
++            if self.c.shell.ceiling_of.get(r["name"], {}).get("type") in ("open", "baffle"): drop = round(self.c.Hs - 0.003 - z, 3)     # hung from the soffit
+             me = self.c.proto(("bank", "linear", ln, drop), lambda: self._bank("linear", ln, drop))
+             self.R.put("LIGHT", "linearpendant", me, T(cx, cy, z) @ RZ(0 if along_x else math.pi / 2), props={"assumed": 1, "lamp": "none", "room": r["name"]})
+ 
+diff --git a/noida-skymark/twin/blender/geometry.py b/noida-skymark/twin/blender/geometry.py
+index 510df2b..4e74a36 100644
+--- a/noida-skymark/twin/blender/geometry.py
++++ b/noida-skymark/twin/blender/geometry.py
+@@ -55,7 +55,7 @@ class Shell:
+                 if not lm_.empty(): self.R.put("FLOOR", f"ledprofile_{r['slug']}", lm_.build("led_profile", normals=False), props={"room": r["name"]})
+             for pm, pc in parts:
+                 mm = self.mb()
+-                for (x0, y0, x1, y1) in ras.rects(pc): mm.quad(x0, y0, x1, y1, 0.0, pm)
++                self.surface(mm, pc, 0.0, pm)
+                 if not mm.empty(): self.R.put("FLOOR", f"{tok(pm)}_{r['slug']}", mm.build(f"floor_{r['slug']}"), props={"room": r["name"], "static": 1})
+         # the floor above: its underside is the soffit, seen wherever a room has an open ceiling
+         m = self.mb()
+@@ -116,6 +116,19 @@ class Shell:
+                 i = j + 1
+         self.runs, self.cuts = runs, cuts; self.SILL, self.HEAD, self.GB, self.GT = SILL, HEAD, GB, GT
+ 
++    def surface(self, m, cells, z, mat, down=False, step=4):
++        """A flat surface over a cell mask as ONE connected mesh (shared vertices, 10 cm grid, coplanar faces dissolved
++        afterwards in _weld): one UV island per region for the lightmap, no slivers, no T-junction cracks."""
++        ras = self.ras; sub = cells[step // 2::step, step // 2::step]; d = ras.res * step
++        idx = {}; V = []; F = []
++        def vid(i, j):
++            if (i, j) not in idx: idx[(i, j)] = len(V); V.append((ras.x0 + j * d, ras.y0 + i * d, z))
++            return idx[(i, j)]
++        for (i, j) in np.argwhere(sub):
++            q = (vid(i, j), vid(i, j + 1), vid(i + 1, j + 1), vid(i + 1, j))
++            F.append(tuple(reversed(q)) if down else q)
++        if F: m.add(V, F, mat); m.weld = True
++
+     def _near_edge(self, x, y, tol):
+         for f in self.L["floor"]:
+             r = f["outer"]
+@@ -402,7 +415,7 @@ class Shell:
+         for k, r in enumerate(ras.rooms):
+             cells = ras.label == k
+             if not cells.any(): continue
+-            rects = ras.rects(cells); spec, kind = self.ceiling_spec(r); typ = spec.get("type", "plain"); H = spec.get("height", self.H)
++            rects = ras.rects(cells); self._cells = cells; spec, kind = self.ceiling_spec(r); typ = spec.get("type", "plain"); H = spec.get("height", self.H)
+             self.ceiling_of[r["name"]] = {"type": typ, "height": H, "kind": kind}
+             xs = [p for rc in rects for p in (rc[0], rc[2])]; ys = [p for rc in rects for p in (rc[1], rc[3])]; bb = (min(xs), min(ys), max(xs), max(ys))
+             ls = list(lights_by_room.get(r["name"], []))
+@@ -421,7 +434,7 @@ class Shell:
+ 
+     def ceil_plain(self, r, rects, bb, spec, H, ls, rnd):
+         m = self.mb()
+-        for (x0, y0, x1, y1) in rects: m.quad(x0, y0, x1, y1, H, spec.get("board", "gypsum"), down=True)
++        self.surface(m, self._cells, H, spec.get("board", "gypsum"), down=True)
+         self.R.put("CEILING", f"{r['slug']}_board", m.build("ceil"), props={"room": r["name"], "static": 1})
+         for l in ls: self._mount(r, l["c"][0], l["c"][1], l, "plain", H, l.get("assumed"))
+ 
+@@ -430,7 +443,7 @@ class Shell:
+         panels = [l for l in ls if l.get("kind") == "panel600"]
+         ox = (panels[0]["c"][0] - t / 2) % t if panels else bb[0] % t; oy = (panels[0]["c"][1] - t / 2) % t if panels else bb[1] % t
+         m = self.mb()
+-        for (x0, y0, x1, y1) in rects: m.quad(x0, y0, x1, y1, H, spec.get("tile", "ceiling_tile"), down=True)
++        self.surface(m, self._cells, H, spec.get("tile", "ceiling_tile"), down=True)
+         self.R.put("CEILING", f"{r['slug']}_tiles", m.build("tiles"), props={"room": r["name"], "static": 1})
+         # T-grid: main runners along x (14 mm deep), cross tees along y (12 mm deep): their undersides are 2 mm apart
+         g = self.mb(); gm = spec.get("grid", "white_metal")
+@@ -500,7 +513,7 @@ class Shell:
+ 
+     def ceil_open(self, r, rects, bb, spec, H, ls, rnd):
+         Hs = self.Hs; m = self.mb(); sof = spec.get("soffit", "soffit_paint")
+-        for (x0, y0, x1, y1) in rects: m.quad(x0, y0, x1, y1, Hs - 0.003, sof, down=True)
++        self.surface(m, self._cells, Hs - 0.003, sof, down=True)
+         self.R.put("CEILING", f"{r['slug']}_soffitpaint", m.build("soffit"), props={"room": r["name"], "static": 1})
+         along_x = (bb[2] - bb[0]) >= (bb[3] - bb[1]); L_ = (bb[2] - bb[0]) if along_x else (bb[3] - bb[1]); W_ = (bb[3] - bb[1]) if along_x else (bb[2] - bb[0])
+         cx, cy = (bb[0] + bb[2]) / 2, (bb[1] + bb[3]) / 2; rot = 0.0 if along_x else math.pi / 2; M0 = T(cx, cy, 0) @ RZ(rot)
+@@ -540,7 +553,7 @@ class Shell:
+ 
+     def ceil_cove(self, r, rects, bb, spec, H, ls, rnd):
+         m = self.mb(); board = spec.get("board", "gypsum")
+-        for (x0, y0, x1, y1) in rects: m.quad(x0, y0, x1, y1, H, board, down=True)
++        self.surface(m, self._cells, H, board, down=True)
+         self.R.put("CEILING", f"{r['slug']}_board", m.build("ceil"), props={"room": r["name"], "static": 1})
+         inset = spec.get("inset", 0.6); drop = spec.get("raft_drop", 0.2); big = [rc for rc in rects if rc[2] - rc[0] > 2 * inset + 0.4 and rc[3] - rc[1] > 2 * inset + 0.4]
+         raft = None
+@@ -565,7 +578,7 @@ class Shell:
+ 
+     def ceil_baffle(self, r, rects, bb, spec, H, ls, rnd):
+         Hs = self.Hs; m = self.mb()
+-        for (x0, y0, x1, y1) in rects: m.quad(x0, y0, x1, y1, Hs - 0.003, spec.get("soffit", "soffit_paint"), down=True)
++        self.surface(m, self._cells, Hs - 0.003, spec.get("soffit", "soffit_paint"), down=True)
+         self.R.put("CEILING", f"{r['slug']}_soffitpaint", m.build("soffit"), props={"room": r["name"], "static": 1})
+         b = self.mb(); pitch = spec.get("pitch", 0.15); dep = spec.get("depth", 0.15); wd = spec.get("width", 0.03); mat = spec.get("slat", "oak")
+         along_x = (bb[2] - bb[0]) >= (bb[3] - bb[1])
+diff --git a/noida-skymark/twin/blender/make_cameras.py b/noida-skymark/twin/blender/make_cameras.py
+index 69fde94..9d3500e 100644
+--- a/noida-skymark/twin/blender/make_cameras.py
++++ b/noida-skymark/twin/blender/make_cameras.py
+@@ -141,7 +141,8 @@ def run(tenant, L, S, out, A):
+             ox, oy, oa, w = d["opening"]; nx_, ny_ = -math.sin(oa), math.cos(oa)
+             for s in (-1, 1):
+                 if inroom(ox + nx_ * 0.6 * s, oy + ny_ * 0.6 * s): rdoors.append((Vector((ox, oy, 0)), Vector((nx_ * s, ny_ * s, 0)), Vector((math.cos(oa), math.sin(oa), 0))))
+-        free = lambda x, y, need_f=0.5: D(Ds, x, y) >= 0.3 and D(Df, x, y) >= need_f
++        need = [0.8]          # 0.8 m clear of furniture; relaxed to 0.6 only if no view passes at 0.8
++        free = lambda x, y, need_f=None: D(Ds, x, y) >= 0.3 and D(Df, x, y) >= (need[0] if need_f is None else need_f)
+         def pts_entry():
+             ps = []
+             for dp, dn, dt in rdoors:
+@@ -211,7 +212,8 @@ def run(tenant, L, S, out, A):
+             if e3 and (e is None or (not e3["fails"] and e["fails"]) or (bool(e3["fails"]) == bool(e["fails"]) and e3["s"] > e["s"])): e = e3
+         if e: chosen["entry"] = e
+         if not small and area > 12:
+-            if subj is not None or centroid is not None:
++          for need[0] in (0.8, 0.6):
++            if (subj is not None or centroid is not None) and "feature" not in chosen:
+                 tgt = subj if subj is not None else centroid
+                 fc = []
+                 for (i, j) in np.argwhere(cells)[::9]:
+@@ -219,7 +221,7 @@ def run(tenant, L, S, out, A):
+                     if 3.0 <= math.hypot(x - tgt.x, y - tgt.y) <= 5.0 and free(x, y): fc.append((Vector((x, y, EYE)), "3-5 m from the subject"))
+                 f_ = search("feature", fc[:: max(1, len(fc) // 25)], lambda p: (tgt, sk or "furniture centroid"), sweep=(-10, 0, 10))
+                 if f_ and not f_["fails"]: chosen["feature"] = f_
+-            if rdoors:
++            if rdoors and "reverse" not in chosen:
+                 dp = rdoors[0][0]; rc = []
+                 for (i, j) in np.argwhere(cells)[::9]:
+                     x, y = ras.x0 + (j + .5) * ras.res, ras.y0 + (i + .5) * ras.res
+@@ -227,13 +229,15 @@ def run(tenant, L, S, out, A):
+                 rc.sort(reverse=True)
+                 rv = search("reverse", [(Vector((x, y, EYE)), "far end") for _, x, y in rc[:12]], lambda p: (Vector((dp.x, dp.y, 1.2)), "the door"), sweep=(-20, -10, 0, 10, 20))
+                 if rv and not rv["fails"]: chosen["reverse"] = rv
+-            if centroid is not None:
++            if centroid is not None and "detail" not in chosen and need[0] == 0.8:
+                 dc = []
+                 for (i, j) in np.argwhere(cells)[::9]:
+                     x, y = ras.x0 + (j + .5) * ras.res, ras.y0 + (i + .5) * ras.res
+                     if 1.2 <= math.hypot(x - centroid.x, y - centroid.y) <= 2.4 and D(Ds, x, y) >= 0.3 and D(Df, x, y) >= 0.35: dc.append((Vector((x, y, EYE)), "close to the furniture"))
+                 dt_ = search("detail", dc[:: max(1, len(dc) // 20)], lambda p: (centroid, "furniture"), sweep=(-10, 0, 10), hfovs=(45,), pitches=(12,))
+                 if dt_ and not dt_["fails"] and dt_["m"]["furniture_seen"] >= 2 and dt_["m"]["in_room"] >= 0.7: chosen["detail"] = dt_
++          need[0] = 0.8
++        for k_, c_ in chosen.items(): c_.setdefault("clearance_m", round(D(Df, c_["p"].x, c_["p"].y), 2))
+         # hand overrides win
+         for ov in overrides:
+             if ov.get("room") != r["name"]: continue
+@@ -258,7 +262,7 @@ def run(tenant, L, S, out, A):
+             plan.append({"name": name, "room": r["name"], "room_slug": r["slug"], "kind": kind, "label": label, "position": [round(v, 3) for v in p], "target": [round(v, 3) for v in tgt],
+                          "hfov_deg": hf, "vfov_deg": round(vf, 2), "lens_mm": round(cam.data.lens, 2), "shift_y": round(cam.data.shift_y, 4), "pitch_deg": pitch,
+                          "checks": c["m"], "failed": c["fails"], "fallback": bool(c["fails"]), "from": c["from"], "aim": c["aim"]})
+-            rep["views"][kind] = {"failed": c["fails"], "from": c["from"], "aim": c["aim"], **c["m"]}
++            rep["views"][kind] = {"failed": c["fails"], "from": c["from"], "aim": c["aim"], "furniture_clearance_m": c.get("clearance_m"), **c["m"]}
+         if not rep["views"]: rep["error"] = "NO VIEW"
+         report[r["name"]] = rep
+     # ---- outputs
+diff --git a/noida-skymark/twin/blender/twin_lib.py b/noida-skymark/twin/blender/twin_lib.py
+index d31be4f..78581a7 100644
+--- a/noida-skymark/twin/blender/twin_lib.py
++++ b/noida-skymark/twin/blender/twin_lib.py
+@@ -485,6 +485,12 @@ class MB:
+     def empty(self): return not self.f
+     def build(self, name, normals=True):
+         me = bpy.data.meshes.new(name); me.from_pydata(self.v, [], self.f); me.validate(clean_customdata=False); me.update()
++        if getattr(self, "weld", False):        # grid surfaces: dissolve the coplanar grid into a few big faces
++            for nm in self.names: me.materials.append(self.mats.get(nm))
++            if len(me.polygons) == len(self.fm): me.polygons.foreach_set("material_index", self.fm)
++            bm = bmesh.new(); bm.from_mesh(me)
++            bmesh.ops.dissolve_limit(bm, angle_limit=0.0017, use_dissolve_boundaries=False, verts=bm.verts[:], edges=bm.edges[:], delimit={"MATERIAL"})
++            bm.to_mesh(me); bm.free(); box_uv(me); return me
+         for nm in self.names: me.materials.append(self.mats.get(nm))
+         if len(me.polygons) == len(self.fm):
+             me.polygons.foreach_set("material_index", self.fm); me.polygons.foreach_set("use_smooth", self.smooth)

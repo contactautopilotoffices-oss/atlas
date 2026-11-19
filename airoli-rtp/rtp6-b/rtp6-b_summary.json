@@ -1,0 +1,128 @@
+{
+ "Work seats (desk + chair)": {
+  "total": 723,
+  "rooms": {
+   "Open workstations 7": 17,
+   "Open workstations 1": 182,
+   "Open workstations 3": 16,
+   "Open workstations 2": 72,
+   "Open workstations 8": 30,
+   "Open workstations 4": 15,
+   "Open workstations 6": 86,
+   "Open workstations 5": 128,
+   "Open workstations 9": 177
+  }
+ },
+ "Meeting room seats": {
+  "total": 51,
+  "rooms": {
+   "CABIN (2)": 8,
+   "CABIN (4)": 5,
+   "STORAGE (2)": 3,
+   "MEETING ROOM (2)": 17,
+   "STORAGE (3)": 7,
+   "MEETING ROOM 04 PAX (1)": 4,
+   "MEETING ROOM 04 PAX (2)": 4,
+   "MEETING ROOM 04 PAX (unlabelled)": 3
+  }
+ },
+ "Training room seats": {
+  "total": 51,
+  "rooms": {
+   "TRAINING ROOM (2)": 25,
+   "TRAINING ROOM (1)": 26
+  }
+ },
+ "Cafeteria seats": {
+  "total": 120,
+  "rooms": {
+   "CAFETERIA (1)": 112,
+   "Circulation 7": 8
+  }
+ },
+ "Lounge, collab and visitor seats": {
+  "total": 26,
+  "rooms": {
+   "FIRE RESCUE BALCONY (3)": 5,
+   "RECEPTION & WAITING AREA": 19,
+   "Circulation 7": 1,
+   "Circulation 2": 1
+  }
+ },
+ "Cabin seats (desk chair and visitors)": {
+  "total": 14,
+  "rooms": {
+   "CABIN (2)": 6,
+   "CABIN (1)": 1,
+   "CABIN (3)": 5,
+   "CABIN (5)": 2
+  }
+ },
+ "_proof": {
+  "tenant": "RTP 6th floor, Option B (whole floor)",
+  "floor": 6,
+  "dwg": "20261118_6TH FLOOR.dwg",
+  "work_seats": 723,
+  "all_seats": 985,
+  "seats_by_group": {
+   "Work seats (desk + chair)": 723,
+   "Meeting room seats": 51,
+   "Training room seats": 51,
+   "Cafeteria seats": 120,
+   "Lounge, collab and visitor seats": 26,
+   "Cabin seats (desk chair and visitors)": 14
+  },
+  "deck_vs_cad": [],
+  "inventory": {
+   "desk_blocks": {
+    "4'x2' workstation (block, chair nested)": 36
+   },
+   "desk_block_duplicates": {
+    "A$C237876BF": 0
+   },
+   "work_seats_paired_with_desk": 723,
+   "work_seats_without_desk_nearby": 0,
+   "room_kinds": {
+    "service": 21,
+    "work": 15,
+    "core": 110,
+    "reception": 1,
+    "wc": 10,
+    "meeting": 6,
+    "lounge": 1,
+    "training": 2,
+    "other": 7,
+    "cafe": 4
+   },
+   "chairs_by_kind": {
+    "work chair": 723,
+    "meeting chair": 51,
+    "training chair": 51,
+    "cafe chair": 120,
+    "visitor / lounge chair": 5,
+    "receptionist chair": 3,
+    "2-seat sofa": 18,
+    "cabin chair": 14
+   }
+  },
+  "unplaced_room_labels": [
+   "REPRO",
+   "CABIN",
+   "ELE & UPS",
+   "HUB ROOM",
+   "STORAGE",
+   "STORE ROOM",
+   "REPRO",
+   "REPRO",
+   "DRY LANDSCAPE",
+   "STORAGE",
+   "MEETING ROOM",
+   "STORAGE",
+   "MEETING ROOM",
+   "MEETING ROOM",
+   "BOARD ROOM",
+   "UMBRELLA ROOM"
+  ],
+  "method": "One row per chair block instance (sofas: one per place). Room = the CAD room polygon containing the chair (rooms are the spaces closed by wall, glass and column lines with doors closed, named by the CAD text inside). Work seat = a work chair not in an operator room; desk pairing (chair nested in a desk block, or a desk block within 1.0 m) is reported per seat in desk_pair."
+ }
+}

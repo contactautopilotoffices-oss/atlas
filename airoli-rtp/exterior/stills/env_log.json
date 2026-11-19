@@ -1,0 +1,44 @@
+{
+ "day": {
+  "file": "rtp_env_day.hdr",
+  "state": "morning",
+  "seconds": 18.3,
+  "samples": 64,
+  "size": [
+   2048,
+   1024
+  ],
+  "position_rtp_local": [
+   -14.51991081237793,
+   37.791961669921875,
+   12.0
+  ],
+  "position_three": [
+   -14.52,
+   12.0,
+   -37.79
+  ],
+  "mapping": "equirectangular, linear Radiance HDR; image centre = east (+x rtp_local = +x three), right of centre = south: three.js EquirectangularReflectionMapping without rotation"
+ },
+ "night": {
+  "file": "rtp_env_night.hdr",
+  "state": "night",
+  "seconds": 32.8,
+  "samples": 64,
+  "size": [
+   2048,
+   1024
+  ],
+  "position_rtp_local": [
+   -14.51991081237793,
+   37.791961669921875,
+   12.0
+  ],
+  "position_three": [
+   -14.52,
+   12.0,
+   -37.79
+  ],
+  "mapping": "equirectangular, linear Radiance HDR; image centre = east (+x rtp_local = +x three), right of centre = south: three.js EquirectangularReflectionMapping without rotation"
+ }
+}

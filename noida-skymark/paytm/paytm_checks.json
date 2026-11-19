@@ -1,0 +1,1206 @@
+{
+ "tenant": "Paytm",
+ "floor": 1,
+ "dwg": "20261105_SKY MARK NOIDA_1ST_PAYTM.dwg",
+ "units": "inch (INSUNITS=1); plan metres = inches x 0.0254",
+ "counts": {
+  "pass": 61,
+  "info": 69,
+  "fail": 8,
+  "assumed": 1
+ },
+ "failed": [
+  {
+   "group": "columns",
+   "item": "column at (50.29, 22.57) m",
+   "result": "fail",
+   "value": "838 x 1016 mm",
+   "expected": "a size shared with other columns",
+   "note": "single-off size: may be a column drawn partly, or a boxed pipe on the column layer"
+  },
+  {
+   "group": "columns",
+   "item": "column at (41.76, 7.92) m",
+   "result": "fail",
+   "value": "411 x 610 mm",
+   "expected": "a size shared with other columns",
+   "note": "single-off size: may be a column drawn partly, or a boxed pipe on the column layer"
+  },
+  {
+   "group": "columns",
+   "item": "column at (7.8, 12.98) m",
+   "result": "fail",
+   "value": "305 x 914 mm",
+   "expected": "a size shared with other columns",
+   "note": "single-off size: may be a column drawn partly, or a boxed pipe on the column layer"
+  },
+  {
+   "group": "columns",
+   "item": "column at (3.8, 22.62) m",
+   "result": "fail",
+   "value": "782 x 914 mm",
+   "expected": "a size shared with other columns",
+   "note": "single-off size: may be a column drawn partly, or a boxed pipe on the column layer"
+  },
+  {
+   "group": "columns",
+   "item": "column at (4.12, 13.25) m",
+   "result": "fail",
+   "value": "660 x 843 mm",
+   "expected": "a size shared with other columns",
+   "note": "single-off size: may be a column drawn partly, or a boxed pipe on the column layer"
+  },
+  {
+   "group": "columns",
+   "item": "column at (62.49, 7.15) m",
+   "result": "fail",
+   "value": "457 x 610 mm",
+   "expected": "a size shared with other columns",
+   "note": "single-off size: may be a column drawn partly, or a boxed pipe on the column layer"
+  },
+  {
+   "group": "columns",
+   "item": "column at (60.63, 15.76) m",
+   "result": "fail",
+   "value": "467 x 762 mm",
+   "expected": "a size shared with other columns",
+   "note": "single-off size: may be a column drawn partly, or a boxed pipe on the column layer"
+  },
+  {
+   "group": "rooms",
+   "item": "label 'CARPET AREA 6720 SQFT' vs CAD demise",
+   "result": "fail",
+   "value": "10488 sqft",
+   "expected": "6720 sqft",
+   "note": "The label is a carpet-area figure; the demise polygon read here includes core, toilets and walls, so it is not the same measure. See plate_fit.md."
+  }
+ ],
+ "items": [
+  {
+   "group": "units",
+   "item": "DWG INSUNITS",
+   "result": "pass",
+   "value": "1 (inch)",
+   "expected": "1 = inch",
+   "note": "Drawing unit is the inch, not mm. Coordinates are converted with 0.0254 m/inch. Annotations on the plan are in mm (LIFT 2025X2025, STAIRS WIDTH=1500) and feet-inches (passage widths); both are checked against geometry below."
+  },
+  {
+   "group": "units",
+   "item": "dimension entities inside the plan",
+   "result": "pass",
+   "value": 125,
+   "expected": ">0",
+   "note": "125 dimensions in the plan window; 125 in the whole file (the rest sit far from any geometry: orphaned dimensions of deleted sheets)."
+  },
+  {
+   "group": "units",
+   "item": "dimension DIM reads 132\\X",
+   "result": "info",
+   "value": "131.91 in = 3350 mm",
+   "expected": "inch values",
+   "note": "measurement held by the dimension entity, in drawing units"
+  },
+  {
+   "group": "units",
+   "item": "dimension DIM reads 132\\X",
+   "result": "info",
+   "value": "131.92 in = 3351 mm",
+   "expected": "inch values",
+   "note": "measurement held by the dimension entity, in drawing units"
+  },
+  {
+   "group": "units",
+   "item": "dimension DIM reads 75\\X",
+   "result": "info",
+   "value": "74.99 in = 1905 mm",
+   "expected": "inch values",
+   "note": "measurement held by the dimension entity, in drawing units"
+  },
+  {
+   "group": "units",
+   "item": "dimension DIM reads 96\\X",
+   "result": "info",
+   "value": "96.00 in = 2439 mm",
+   "expected": "inch values",
+   "note": "measurement held by the dimension entity, in drawing units"
+  },
+  {
+   "group": "units",
+   "item": "dimension DIM reads 56\\X",
+   "result": "info",
+   "value": "56.01 in = 1423 mm",
+   "expected": "inch values",
+   "note": "measurement held by the dimension entity, in drawing units"
+  },
+  {
+   "group": "units",
+   "item": "dimension DIM reads 6\\X",
+   "result": "info",
+   "value": "6.00 in = 152 mm",
+   "expected": "inch values",
+   "note": "measurement held by the dimension entity, in drawing units"
+  },
+  {
+   "group": "units",
+   "item": "dimension DIM reads 6\\X",
+   "result": "info",
+   "value": "6.00 in = 152 mm",
+   "expected": "inch values",
+   "note": "measurement held by the dimension entity, in drawing units"
+  },
+  {
+   "group": "units",
+   "item": "dimension DIM reads 66\\X",
+   "result": "info",
+   "value": "66.00 in = 1676 mm",
+   "expected": "inch values",
+   "note": "measurement held by the dimension entity, in drawing units"
+  },
+  {
+   "group": "units",
+   "item": "dimension DIM reads 3\\X",
+   "result": "info",
+   "value": "3.00 in = 76 mm",
+   "expected": "inch values",
+   "note": "measurement held by the dimension entity, in drawing units"
+  },
+  {
+   "group": "units",
+   "item": "dimension DIM reads 36\\X",
+   "result": "info",
+   "value": "36.00 in = 914 mm",
+   "expected": "inch values",
+   "note": "measurement held by the dimension entity, in drawing units"
+  },
+  {
+   "group": "units",
+   "item": "dimension DIM reads 36\\X",
+   "result": "info",
+   "value": "36.00 in = 914 mm",
+   "expected": "inch values",
+   "note": "measurement held by the dimension entity, in drawing units"
+  },
+  {
+   "group": "units",
+   "item": "dimension DIM reads 36\\X",
+   "result": "info",
+   "value": "36.00 in = 914 mm",
+   "expected": "inch values",
+   "note": "measurement held by the dimension entity, in drawing units"
+  },
+  {
+   "group": "units",
+   "item": "LIFT 2025X2025 (1) shaft vs its label 2025x2025 mm",
+   "result": "info",
+   "value": "1958 x 2190 mm (clear opening of the face read from walls)",
+   "expected": "2025 x 2025 mm",
+   "note": "A lift label of 2025 mm and a shaft of about 2 m only agree if the drawing unit is the inch. Faces include the lift wall reveals, so a few hundred mm either way is expected."
+  },
+  {
+   "group": "units",
+   "item": "LIFT 2025X2025 (2) shaft vs its label 2025x2025 mm",
+   "result": "info",
+   "value": "2057 x 2057 mm (clear opening of the face read from walls)",
+   "expected": "2025 x 2025 mm",
+   "note": "A lift label of 2025 mm and a shaft of about 2 m only agree if the drawing unit is the inch. Faces include the lift wall reveals, so a few hundred mm either way is expected."
+  },
+  {
+   "group": "units",
+   "item": "LIFT 2025X2025 (3) shaft vs its label 2025x2025 mm",
+   "result": "info",
+   "value": "2057 x 2129 mm (clear opening of the face read from walls)",
+   "expected": "2025 x 2025 mm",
+   "note": "A lift label of 2025 mm and a shaft of about 2 m only agree if the drawing unit is the inch. Faces include the lift wall reveals, so a few hundred mm either way is expected."
+  },
+  {
+   "group": "units",
+   "item": "LIFT 2025X2025 (4) shaft vs its label 2025x2025 mm",
+   "result": "info",
+   "value": "2057 x 2129 mm (clear opening of the face read from walls)",
+   "expected": "2025 x 2025 mm",
+   "note": "A lift label of 2025 mm and a shaft of about 2 m only agree if the drawing unit is the inch. Faces include the lift wall reveals, so a few hundred mm either way is expected."
+  },
+  {
+   "group": "columns",
+   "item": "column at (60.51, 33.9) m",
+   "result": "pass",
+   "value": "609 x 610 mm",
+   "expected": "a size shared with other columns",
+   "note": ""
+  },
+  {
+   "group": "columns",
+   "item": "column at (50.29, 22.57) m",
+   "result": "fail",
+   "value": "838 x 1016 mm",
+   "expected": "a size shared with other columns",
+   "note": "single-off size: may be a column drawn partly, or a boxed pipe on the column layer"
+  },
+  {
+   "group": "columns",
+   "item": "column at (41.48, 22.87) m",
+   "result": "pass",
+   "value": "609 x 914 mm",
+   "expected": "a size shared with other columns",
+   "note": ""
+  },
+  {
+   "group": "columns",
+   "item": "column at (14.91, 22.87) m",
+   "result": "pass",
+   "value": "610 x 914 mm",
+   "expected": "a size shared with other columns",
+   "note": ""
+  },
+  {
+   "group": "columns",
+   "item": "column at (32.57, 12.76) m",
+   "result": "pass",
+   "value": "610 x 762 mm",
+   "expected": "a size shared with other columns",
+   "note": ""
+  },
+  {
+   "group": "columns",
+   "item": "column at (41.76, 7.92) m",
+   "result": "fail",
+   "value": "411 x 610 mm",
+   "expected": "a size shared with other columns",
+   "note": "single-off size: may be a column drawn partly, or a boxed pipe on the column layer"
+  },
+  {
+   "group": "columns",
+   "item": "column at (50.09, 12.73) m",
+   "result": "pass",
+   "value": "610 x 915 mm",
+   "expected": "a size shared with other columns",
+   "note": ""
+  },
+  {
+   "group": "columns",
+   "item": "column at (50.47, 10.33) m",
+   "result": "pass",
+   "value": "305 x 610 mm",
+   "expected": "a size shared with other columns",
+   "note": ""
+  },
+  {
+   "group": "columns",
+   "item": "column at (54.68, 10.33) m",
+   "result": "pass",
+   "value": "305 x 610 mm",
+   "expected": "a size shared with other columns",
+   "note": ""
+  },
+  {
+   "group": "columns",
+   "item": "column at (50.47, 7.97) m",
+   "result": "pass",
+   "value": "305 x 609 mm",
+   "expected": "a size shared with other columns",
+   "note": ""
+  },
+  {
+   "group": "columns",
+   "item": "column at (54.68, 7.97) m",
+   "result": "pass",
+   "value": "305 x 610 mm",
+   "expected": "a size shared with other columns",
+   "note": ""
+  },
+  {
+   "group": "columns",
+   "item": "column at (4.09, 7.48) m",
+   "result": "pass",
+   "value": "305 x 609 mm",
+   "expected": "a size shared with other columns",
+   "note": ""
+  },
+  {
+   "group": "columns",
+   "item": "column at (12.47, 7.48) m",
+   "result": "pass",
+   "value": "305 x 609 mm",
+   "expected": "a size shared with other columns",
+   "note": ""
+  },
+  {
+   "group": "columns",
+   "item": "column at (14.76, 7.7) m",
+   "result": "pass",
+   "value": "610 x 610 mm",
+   "expected": "a size shared with other columns",
+   "note": ""
+  },
+  {
+   "group": "columns",
+   "item": "column at (7.95, 7.48) m",
+   "result": "pass",
+   "value": "305 x 609 mm",
+   "expected": "a size shared with other columns",
+   "note": ""
+  },
+  {
+   "group": "columns",
+   "item": "column at (7.8, 12.98) m",
+   "result": "fail",
+   "value": "305 x 914 mm",
+   "expected": "a size shared with other columns",
+   "note": "single-off size: may be a column drawn partly, or a boxed pipe on the column layer"
+  },
+  {
+   "group": "columns",
+   "item": "column at (12.4, 12.59) m",
+   "result": "pass",
+   "value": "457 x 950 mm",
+   "expected": "a size shared with other columns",
+   "note": ""
+  },
+  {
+   "group": "columns",
+   "item": "column at (14.46, 12.59) m",
+   "result": "pass",
+   "value": "458 x 950 mm",
+   "expected": "a size shared with other columns",
+   "note": ""
+  },
+  {
+   "group": "columns",
+   "item": "column at (60.64, 27.32) m",
+   "result": "pass",
+   "value": "458 x 762 mm",
+   "expected": "a size shared with other columns",
+   "note": ""
+  },
+  {
+   "group": "columns",
+   "item": "column at (3.8, 22.62) m",
+   "result": "fail",
+   "value": "782 x 914 mm",
+   "expected": "a size shared with other columns",
+   "note": "single-off size: may be a column drawn partly, or a boxed pipe on the column layer"
+  },
+  {
+   "group": "columns",
+   "item": "column at (3.79, 28.02) m",
+   "result": "pass",
+   "value": "458 x 762 mm",
+   "expected": "a size shared with other columns",
+   "note": ""
+  },
+  {
+   "group": "columns",
+   "item": "column at (4.12, 13.25) m",
+   "result": "fail",
+   "value": "660 x 843 mm",
+   "expected": "a size shared with other columns",
+   "note": "single-off size: may be a column drawn partly, or a boxed pipe on the column layer"
+  },
+  {
+   "group": "columns",
+   "item": "column at (60.56, 7.0) m",
+   "result": "pass",
+   "value": "305 x 610 mm",
+   "expected": "a size shared with other columns",
+   "note": ""
+  },
+  {
+   "group": "columns",
+   "item": "column at (60.71, 11.35) m",
+   "result": "pass",
+   "value": "305 x 610 mm",
+   "expected": "a size shared with other columns",
+   "note": ""
+  },
+  {
+   "group": "columns",
+   "item": "column at (62.49, 7.15) m",
+   "result": "fail",
+   "value": "457 x 610 mm",
+   "expected": "a size shared with other columns",
+   "note": "single-off size: may be a column drawn partly, or a boxed pipe on the column layer"
+  },
+  {
+   "group": "columns",
+   "item": "column at (60.63, 15.76) m",
+   "result": "fail",
+   "value": "467 x 762 mm",
+   "expected": "a size shared with other columns",
+   "note": "single-off size: may be a column drawn partly, or a boxed pipe on the column layer"
+  },
+  {
+   "group": "columns",
+   "item": "column at (41.46, 12.76) m",
+   "result": "pass",
+   "value": "610 x 762 mm",
+   "expected": "a size shared with other columns",
+   "note": ""
+  },
+  {
+   "group": "columns",
+   "item": "column at (23.72, 22.87) m",
+   "result": "pass",
+   "value": "610 x 914 mm",
+   "expected": "a size shared with other columns",
+   "note": ""
+  },
+  {
+   "group": "columns",
+   "item": "column at (32.52, 22.87) m",
+   "result": "pass",
+   "value": "609 x 914 mm",
+   "expected": "a size shared with other columns",
+   "note": ""
+  },
+  {
+   "group": "columns",
+   "item": "column at (23.53, 12.76) m",
+   "result": "pass",
+   "value": "610 x 762 mm",
+   "expected": "a size shared with other columns",
+   "note": ""
+  },
+  {
+   "group": "columns",
+   "item": "column at (23.53, 7.63) m",
+   "result": "pass",
+   "value": "610 x 610 mm",
+   "expected": "a size shared with other columns",
+   "note": ""
+  },
+  {
+   "group": "columns",
+   "item": "column at (32.57, 7.63) m",
+   "result": "pass",
+   "value": "610 x 610 mm",
+   "expected": "a size shared with other columns",
+   "note": ""
+  },
+  {
+   "group": "columns",
+   "item": "column size families",
+   "result": "info",
+   "value": {
+    "300x600": 9,
+    "600x925": 5,
+    "600x600": 4,
+    "600x750": 3,
+    "450x950": 2,
+    "450x750": 2,
+    "850x1025": 1,
+    "400x600": 1,
+    "300x925": 1,
+    "775x925": 1,
+    "650x850": 1,
+    "450x600": 1,
+    "475x750": 1
+   },
+   "expected": "",
+   "note": "mm, rounded to 25 mm"
+  },
+  {
+   "group": "walls",
+   "item": "wall from (25.98,15.78) to (25.98,15.78)",
+   "result": "info",
+   "value": "36532 mm",
+   "expected": "no dimension in the CAD spans this wall",
+   "note": "read from geometry only"
+  },
+  {
+   "group": "walls",
+   "item": "wall from (26.06,15.86) to (26.06,15.86)",
+   "result": "info",
+   "value": "27088 mm",
+   "expected": "no dimension in the CAD spans this wall",
+   "note": "read from geometry only"
+  },
+  {
+   "group": "walls",
+   "item": "wall from (12.57,31.81) length",
+   "result": "info",
+   "value": "19608 mm",
+   "expected": "dimension 76 mm",
+   "note": "dimension spans part or all of this wall"
+  },
+  {
+   "group": "walls",
+   "item": "wall from (23.75,5.39) length",
+   "result": "info",
+   "value": "18948 mm",
+   "expected": "dimension 887 mm",
+   "note": "dimension spans part or all of this wall"
+  },
+  {
+   "group": "walls",
+   "item": "wall from (19.28,15.78) length",
+   "result": "info",
+   "value": "17102 mm",
+   "expected": "dimension 6782 mm",
+   "note": "dimension spans part or all of this wall"
+  },
+  {
+   "group": "walls",
+   "item": "wall from (4.02,23.48) to (4.02,23.48)",
+   "result": "info",
+   "value": "13910 mm",
+   "expected": "no dimension in the CAD spans this wall",
+   "note": "read from geometry only"
+  },
+  {
+   "group": "walls",
+   "item": "wall from (10.74,16.54) to (10.82,16.54)",
+   "result": "info",
+   "value": "13683 mm",
+   "expected": "no dimension in the CAD spans this wall",
+   "note": "read from geometry only"
+  },
+  {
+   "group": "walls",
+   "item": "wall from (15.07,4.85) to (15.30,4.85)",
+   "result": "info",
+   "value": "11733 mm",
+   "expected": "no dimension in the CAD spans this wall",
+   "note": "read from geometry only"
+  },
+  {
+   "group": "walls",
+   "item": "wall from (44.78,10.36) to (44.78,10.36)",
+   "result": "info",
+   "value": "11082 mm",
+   "expected": "no dimension in the CAD spans this wall",
+   "note": "read from geometry only"
+  },
+  {
+   "group": "walls",
+   "item": "wall from (50.16,15.44) to (50.16,15.44)",
+   "result": "info",
+   "value": "10922 mm",
+   "expected": "no dimension in the CAD spans this wall",
+   "note": "read from geometry only"
+  },
+  {
+   "group": "walls",
+   "item": "wall from (61.02,15.53) to (61.35,15.76)",
+   "result": "info",
+   "value": "10373 mm",
+   "expected": "no dimension in the CAD spans this wall",
+   "note": "read from geometry only"
+  },
+  {
+   "group": "walls",
+   "item": "wall from (3.79,12.75) to (3.79,22.17)",
+   "result": "info",
+   "value": "9418 mm",
+   "expected": "no dimension in the CAD spans this wall",
+   "note": "read from geometry only"
+  },
+  {
+   "group": "doors",
+   "item": "door at (55.03, 10.69)",
+   "result": "pass",
+   "value": "1150 mm leaf",
+   "expected": "750-1300 mm single leaf",
+   "note": "door, block Door, swing cw"
+  },
+  {
+   "group": "doors",
+   "item": "door at (10.26, 27.20)",
+   "result": "pass",
+   "value": "918 mm leaf",
+   "expected": "750-1300 mm single leaf",
+   "note": "door, block DOOR_SNGL, swing cw"
+  },
+  {
+   "group": "doors",
+   "item": "door at (10.26, 27.65)",
+   "result": "pass",
+   "value": "918 mm leaf",
+   "expected": "750-1300 mm single leaf",
+   "note": "door, block DOOR_SNGL, swing ccw"
+  },
+  {
+   "group": "doors",
+   "item": "door at (43.77, 16.01)",
+   "result": "pass",
+   "value": "985 mm leaf",
+   "expected": "750-1300 mm single leaf",
+   "note": "glass door, block DOOR_SNGL, swing ccw"
+  },
+  {
+   "group": "doors",
+   "item": "door at (45.34, 10.19)",
+   "result": "pass",
+   "value": "918 mm leaf",
+   "expected": "750-1300 mm single leaf",
+   "note": "fire door, block DOOR_SNGL, swing ccw"
+  },
+  {
+   "group": "doors",
+   "item": "door at (47.44, 10.68)",
+   "result": "pass",
+   "value": "917 mm leaf",
+   "expected": "750-1300 mm single leaf",
+   "note": "fire door, block DOOR_SNGL, swing cw"
+  },
+  {
+   "group": "doors",
+   "item": "door at (11.95, 13.32)",
+   "result": "pass",
+   "value": "869 mm leaf",
+   "expected": "750-1300 mm single leaf",
+   "note": "glass door, block DOOR_SNGL, swing cw"
+  },
+  {
+   "group": "doors",
+   "item": "door at (42.99, 15.02)",
+   "result": "pass",
+   "value": "985 mm leaf",
+   "expected": "750-1300 mm single leaf",
+   "note": "glass door, block DOOR_SNGL, swing cw"
+  },
+  {
+   "group": "doors",
+   "item": "door at (57.01, 11.49)",
+   "result": "pass",
+   "value": "831 mm leaf",
+   "expected": "750-1300 mm single leaf",
+   "note": "glass door, block DOOR_SNGL, swing cw"
+  },
+  {
+   "group": "doors",
+   "item": "door at (59.83, 11.49)",
+   "result": "pass",
+   "value": "831 mm leaf",
+   "expected": "750-1300 mm single leaf",
+   "note": "glass door, block DOOR_SNGL, swing cw"
+  },
+  {
+   "group": "doors",
+   "item": "door at (45.09, 12.17)",
+   "result": "pass",
+   "value": "918 mm leaf",
+   "expected": "750-1300 mm single leaf",
+   "note": "fire door, block DOOR_SNGL, swing ccw"
+  },
+  {
+   "group": "doors",
+   "item": "door at (20.13, 16.27)",
+   "result": "pass",
+   "value": "831 mm leaf",
+   "expected": "750-1300 mm single leaf",
+   "note": "glass door, block DOOR_SNGL, swing cw"
+  },
+  {
+   "group": "doors",
+   "item": "door at (12.99, 21.23)",
+   "result": "pass",
+   "value": "832 mm leaf",
+   "expected": "750-1300 mm single leaf",
+   "note": "glass door, block DOOR_SNGL, swing cw"
+  },
+  {
+   "group": "doors",
+   "item": "door at (10.61, 18.34)",
+   "result": "pass",
+   "value": "831 mm leaf",
+   "expected": "750-1300 mm single leaf",
+   "note": "glass door, block DOOR_SNGL, swing ccw"
+  },
+  {
+   "group": "doors",
+   "item": "door at (7.29, 18.34)",
+   "result": "pass",
+   "value": "831 mm leaf",
+   "expected": "750-1300 mm single leaf",
+   "note": "glass door, block DOOR_SNGL, swing ccw"
+  },
+  {
+   "group": "doors",
+   "item": "door at (20.10, 13.48)",
+   "result": "pass",
+   "value": "853 mm leaf",
+   "expected": "750-1300 mm single leaf",
+   "note": "glass door, block DOOR_SNGL, swing ccw"
+  },
+  {
+   "group": "doors",
+   "item": "door at (24.25, 15.64)",
+   "result": "pass",
+   "value": "831 mm leaf",
+   "expected": "750-1300 mm single leaf",
+   "note": "glass door, block DOOR_SNGL, swing ccw"
+  },
+  {
+   "group": "doors",
+   "item": "door at (26.00, 8.61)",
+   "result": "pass",
+   "value": "831 mm leaf",
+   "expected": "750-1300 mm single leaf",
+   "note": "glass door, block DOOR_SNGL, swing cw"
+  },
+  {
+   "group": "doors",
+   "item": "door at (26.00, 12.04)",
+   "result": "pass",
+   "value": "831 mm leaf",
+   "expected": "750-1300 mm single leaf",
+   "note": "glass door, block DOOR_SNGL, swing cw"
+  },
+  {
+   "group": "doors",
+   "item": "door at (12.33, 32.30)",
+   "result": "pass",
+   "value": "832 mm leaf",
+   "expected": "750-1300 mm single leaf",
+   "note": "glass door, block DOOR_SNGL, swing cw"
+  },
+  {
+   "group": "doors",
+   "item": "door at (10.61, 20.54)",
+   "result": "pass",
+   "value": "831 mm leaf",
+   "expected": "750-1300 mm single leaf",
+   "note": "glass door, block DOOR_SNGL, swing cw"
+  },
+  {
+   "group": "doors",
+   "item": "door at (7.29, 20.54)",
+   "result": "pass",
+   "value": "831 mm leaf",
+   "expected": "750-1300 mm single leaf",
+   "note": "glass door, block DOOR_SNGL, swing cw"
+  },
+  {
+   "group": "doors",
+   "item": "door at (10.22, 13.32)",
+   "result": "pass",
+   "value": "869 mm leaf",
+   "expected": "750-1300 mm single leaf",
+   "note": "glass door, block DOOR_SNGL, swing ccw"
+  },
+  {
+   "group": "doors",
+   "item": "door at (18.72, 12.20)",
+   "result": "pass",
+   "value": "1119 mm leaf",
+   "expected": "750-1300 mm single leaf",
+   "note": "fire door, block DOOR_SNGL, swing ccw"
+  },
+  {
+   "group": "doors",
+   "item": "door at (18.72, 9.61)",
+   "result": "pass",
+   "value": "1119 mm leaf",
+   "expected": "750-1300 mm single leaf",
+   "note": "fire door, block DOOR_SNGL, swing ccw"
+  },
+  {
+   "group": "rooms",
+   "item": "STAIRS WIDTH=1500 TRADE-300 RISER-3900/ 25 area",
+   "result": "info",
+   "value": "6.26 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "WORKSTATION - 71 NOS (3'0\"X1'7\") area",
+   "result": "info",
+   "value": "114.1 m2",
+   "expected": "",
+   "note": "open area share (nearest label), ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "PANTRY area",
+   "result": "info",
+   "value": "5.93 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: gypsum"
+  },
+  {
+   "group": "rooms",
+   "item": "WORKSTATION - 173 NOS (3'0\" X1'7\") area",
+   "result": "info",
+   "value": "241.83 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "RECEPTION/ WAITING AREA area",
+   "result": "info",
+   "value": "25.23 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: gypsum"
+  },
+  {
+   "group": "rooms",
+   "item": "LOUNGE AREA area",
+   "result": "info",
+   "value": "35.92 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: gypsum"
+  },
+  {
+   "group": "rooms",
+   "item": "LIFT 2025X2025 (1) area",
+   "result": "info",
+   "value": "4.29 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "ENTRY area",
+   "result": "info",
+   "value": "43.38 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "LIFT 2025X2025 (2) area",
+   "result": "info",
+   "value": "4.23 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "Shaft or duct 1 (unlabelled) area",
+   "result": "info",
+   "value": "1.4 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "GENTS TOILET-01 area",
+   "result": "info",
+   "value": "37.09 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "LADIES TOILET-01 area",
+   "result": "info",
+   "value": "26.09 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "6 SEATER MEETING ROOM 01 area",
+   "result": "pass",
+   "value": "10.37 m2 (1.7 m2/seat for 6)",
+   "expected": ">= 1.4 m2 per seat",
+   "note": ""
+  },
+  {
+   "group": "rooms",
+   "item": "4 SEATER MEETING ROOM 02 area",
+   "result": "pass",
+   "value": "8.14 m2 (2.0 m2/seat for 4)",
+   "expected": ">= 1.4 m2 per seat",
+   "note": ""
+  },
+  {
+   "group": "rooms",
+   "item": "Shaft or duct 2 (unlabelled) area",
+   "result": "info",
+   "value": "1.54 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "Shaft or duct 3 (unlabelled) area",
+   "result": "info",
+   "value": "1.96 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "Shaft or duct 4 (unlabelled) area",
+   "result": "info",
+   "value": "1.54 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "Shaft or duct 5 (unlabelled) area",
+   "result": "info",
+   "value": "1.69 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "Shaft or duct 6 (unlabelled) area",
+   "result": "info",
+   "value": "2.17 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "6 SEATER MEETING ROOM 02 area",
+   "result": "pass",
+   "value": "10.36 m2 (1.7 m2/seat for 6)",
+   "expected": ">= 1.4 m2 per seat",
+   "note": ""
+  },
+  {
+   "group": "rooms",
+   "item": "4 SEATER MEETING ROOM 01 (1) area",
+   "result": "pass",
+   "value": "8.12 m2 (2.0 m2/seat for 4)",
+   "expected": ">= 1.4 m2 per seat",
+   "note": ""
+  },
+  {
+   "group": "rooms",
+   "item": "DRY PANTRY-01 area",
+   "result": "info",
+   "value": "1.8 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: gypsum"
+  },
+  {
+   "group": "rooms",
+   "item": "SERVER ROOM area",
+   "result": "info",
+   "value": "8.32 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "UPS/ BATTERY ROOM area",
+   "result": "info",
+   "value": "6.48 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "DRY PANTRY-02 area",
+   "result": "info",
+   "value": "3.77 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: gypsum"
+  },
+  {
+   "group": "rooms",
+   "item": "Shaft or duct 7 (unlabelled) area",
+   "result": "info",
+   "value": "2.03 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "16 SEATER CONFERENCE ROOM area",
+   "result": "pass",
+   "value": "33.53 m2 (2.1 m2/seat for 16)",
+   "expected": ">= 1.4 m2 per seat",
+   "note": ""
+  },
+  {
+   "group": "rooms",
+   "item": "4 SEATER MEETING ROOM 01 (2) area",
+   "result": "pass",
+   "value": "8.68 m2 (2.2 m2/seat for 4)",
+   "expected": ">= 1.4 m2 per seat",
+   "note": ""
+  },
+  {
+   "group": "rooms",
+   "item": "4 SEATER MEETING ROOM 01 (3) area",
+   "result": "pass",
+   "value": "8.68 m2 (2.2 m2/seat for 4)",
+   "expected": ">= 1.4 m2 per seat",
+   "note": ""
+  },
+  {
+   "group": "rooms",
+   "item": "JANITOR'S CLOSET area",
+   "result": "info",
+   "value": "22.82 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "LADIES WASHROOM area",
+   "result": "info",
+   "value": "6.11 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "GENTS WASHROOM area",
+   "result": "info",
+   "value": "14.28 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "STAIRS (EAST) area",
+   "result": "info",
+   "value": "22.27 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "Shaft or duct 8 (unlabelled) area",
+   "result": "info",
+   "value": "1.86 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "WET PANTRY area",
+   "result": "info",
+   "value": "2.72 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "COLLAB AREA area",
+   "result": "info",
+   "value": "8.7 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: gypsum"
+  },
+  {
+   "group": "rooms",
+   "item": "H. TOILET area",
+   "result": "info",
+   "value": "3.81 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "06 SEATER MEETING ROOM area",
+   "result": "pass",
+   "value": "11.58 m2 (1.9 m2/seat for 6)",
+   "expected": ">= 1.4 m2 per seat",
+   "note": ""
+  },
+  {
+   "group": "rooms",
+   "item": "AUTOPILOT CABIN area",
+   "result": "info",
+   "value": "11.5 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "RECEPTION area",
+   "result": "info",
+   "value": "28.93 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "LIFT 2025X2025 (3) area",
+   "result": "info",
+   "value": "4.35 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "LIFT 2025X2025 (4) area",
+   "result": "info",
+   "value": "4.35 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "Shaft or duct 9 (unlabelled) area",
+   "result": "info",
+   "value": "2.49 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "VOID area",
+   "result": "info",
+   "value": "3.45 m2",
+   "expected": "",
+   "note": "enclosed, ceiling: open / not drawn"
+  },
+  {
+   "group": "rooms",
+   "item": "tenant floor (demise) area",
+   "result": "info",
+   "value": "974.3 m2 = 10488 sqft",
+   "expected": "",
+   "note": "plate minus atrium minus OCCUPIED / unfitted areas; includes core and toilets inside it"
+  },
+  {
+   "group": "rooms",
+   "item": "label 'CARPET AREA 6720 SQFT' vs CAD demise",
+   "result": "fail",
+   "value": "10488 sqft",
+   "expected": "6720 sqft",
+   "note": "The label is a carpet-area figure; the demise polygon read here includes core, toilets and walls, so it is not the same measure. See plate_fit.md."
+  },
+  {
+   "group": "plate",
+   "item": "plate extents",
+   "result": "info",
+   "value": "61.25 x 29.40 m, area 1637 m2",
+   "expected": "",
+   "note": "bounds [2.94, 4.85, 64.17, 34.28]"
+  },
+  {
+   "group": "plate",
+   "item": "plate size vs Volt first floor (same building)",
+   "result": "pass",
+   "value": "61.25 x 29.40 m",
+   "expected": "61.23 x 29.86 m (Volt)",
+   "note": "within 0.5 m on each side"
+  },
+  {
+   "group": "heights",
+   "item": "section / elevation in the DWG",
+   "result": "info",
+   "value": "none",
+   "expected": "",
+   "note": "No section, elevation or level marks in model or paper space; no ceiling height note."
+  },
+  {
+   "group": "heights",
+   "item": "floor-to-floor (stair note)",
+   "result": "info",
+   "value": "[3900] mm",
+   "expected": "4100 mm used by the twin",
+   "note": "STAIRS ... RISER-3900/25 and /24: a 3.9 m rise per floor. The building twin uses 4.1 m (photo reconstruction). Not a section: it is the stair designer's note."
+  },
+  {
+   "group": "heights",
+   "item": "floor-to-ceiling",
+   "result": "assumed",
+   "value": "2.85 m",
+   "expected": "",
+   "note": "assumed (standard fit-out height); the DWG has no section or RCP level"
+  }
+ ]
+}
