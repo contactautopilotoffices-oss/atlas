@@ -77,7 +77,7 @@ export class Tenant {
     this.exclude = exclude || null;                 // rings (in this frame) of a neighbour that draws the shared strip
     const drawn = (x, y) => !this.exclude || !inRings(this.exclude, x, y);
     this.drawn = drawn;
-    this.rooms = L.rooms.map(r => ({ ...r, kind: kindOf(r), label: nice(r.name), slug: slug(r.name), rings: roomRings(r) }))
+    this.rooms = L.rooms.map(r => ({ ...r, kind: kindOf(r), label: (this.man.room_labels && this.man.room_labels[r.name]) || nice(r.name), slug: slug(r.name), rings: roomRings(r) }))
       .map(r => ({ ...r, area: r.area_m2 || area(r.rings[0]), c: centroid(r.rings[0]) }));
     this.buildGrid();
     return this;

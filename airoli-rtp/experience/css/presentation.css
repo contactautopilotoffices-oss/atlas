@@ -1,0 +1,63 @@
+/* Presentation layer. CAD and site geometry stay in their source modules. */
+:root{--ink-2:rgba(244,241,236,.76);--ink-3:rgba(244,241,236,.60)}
+#enter{isolation:isolate;background:#080e13}
+#enter::before{content:"";position:absolute;inset:0;background:url('../../twin/web/models/exterior/stills/rtp_golden_orbit.jpg') center/cover;opacity:.23;z-index:-1}
+.enter-in{max-width:900px;padding:40px 24px;text-align:center}
+.enter-place{font-size:13px;letter-spacing:.2em;margin-top:38px}
+.enter-title{font:400 clamp(42px,5.4vw,80px)/1.03 var(--serif);letter-spacing:-.025em;margin:24px 0 0;color:#fff}
+.enter-hair{margin:30px 0 18px}
+#enter-btn{font-size:14px;letter-spacing:.2em;min-height:56px}
+.enter-sound{font-size:12px;letter-spacing:.12em;margin-top:23px}
+#enter-note{font-size:14px;line-height:1.5;max-width:440px}
+.enter-plan{display:block;margin-top:20px;font-size:14px;color:var(--ink-2);text-decoration:underline;text-underline-offset:5px;padding:10px}
+#hud .lockup-sm{top:calc(var(--bar) + 24px)}
+.t-btn{font-size:13px;letter-spacing:.12em;min-height:44px;display:inline-flex;align-items:center}
+.t-chip,.t-clock,.src{font-size:11px;letter-spacing:.1em}
+#run-controls{position:fixed;right:var(--m);top:calc(var(--bar) + 20px);z-index:8;display:none;align-items:center;gap:6px;background:#101820d9;border:1px solid #ffffff24;border-radius:28px;padding:3px 10px}
+#run-controls button{min-height:40px;padding:0 12px;font-size:14px;color:#f4f1ec}
+#tour-time{font-size:13px;min-width:44px;text-align:center;font-variant-numeric:tabular-nums;color:#e1e6ea;border-left:1px solid #ffffff28;padding-left:10px}
+#chapters{position:fixed;left:50%;bottom:calc(var(--bar) + 16px);transform:translateX(-50%);z-index:8;display:none;gap:6px;white-space:nowrap;max-width:calc(100vw - 32px);overflow:auto;background:#101820dd;border:1px solid #ffffff24;border-radius:28px;padding:3px 10px}
+#chapters button{min-height:40px;padding:0 12px;font-size:13px;color:#c7cfd5;border-radius:22px}
+#chapters button.current{background:#f4f1ec;color:#131b22}
+body[data-mode=run] #run-controls,body[data-mode=run] #chapters{display:flex}
+#skip{bottom:calc(var(--bar) + 88px)}
+#caption{bottom:calc(var(--bar) + 76px)}
+#handoff{gap:22px}
+#ho-interior{font-size:18px;letter-spacing:.06em}
+#interior-panel{position:fixed;z-index:6;top:32px;right:32px;width:300px;padding:26px;background:#101820ed;border:1px solid #ffffff2b;border-radius:16px;box-shadow:0 16px 48px #0003;color:#f4f1ec}
+#interior-panel[hidden]{display:none}
+.eyebrow{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:#b2c1cc}
+#interior-panel h2{font:400 34px/1.05 var(--serif);margin:14px 0 14px}
+#interior-panel p{font-size:14px;line-height:1.5;color:#c3ccd2}
+#interior-panel label[for]{display:block;font-size:12px;margin:18px 0 8px;color:#c3ccd2}
+#process-zone{width:100%;height:44px;padding:0 12px;color:#f4f1ec;background:#22303b;border:1px solid #59646e;border-radius:7px;font:inherit}
+#process-zone option{background:#17222c}
+.interior-actions{display:flex;gap:8px;margin:12px 0}
+.interior-actions button{flex:1;min-height:44px;background:#263744;border:1px solid #57616b;border-radius:7px;font-size:13px}
+.switch-row{display:flex;align-items:center;gap:10px;min-height:40px;font-size:14px}
+.switch-row input{accent-color:#f5c400;width:17px;height:17px}
+#interior-panel .source-note{font-size:12px;border-top:1px solid #ffffff20;padding-top:14px;margin-top:14px;color:#adb9c2}
+#interior-panel a{font-size:13px;text-decoration:underline;text-underline-offset:4px;display:inline-block;padding:8px 0}
+#panel{background:#0c151eee;padding:52px 30px 120px}
+#why-list p{font-size:16px}
+#why-list li::before{font-size:12px}
+#hint{color:#e0e6eb;font-size:11px;background:#0d1823a6;padding:10px 18px;border-radius:24px;letter-spacing:.10em}
+#modes{padding:8px 14px;background:#0c151edb;border:1px solid #ffffff25;border-radius:14px;gap:2px}
+#modes button{font-size:13px;letter-spacing:.1em;min-height:44px}
+#credit{font-size:10px;color:#e0e6eb;background:#0b141caa;padding:3px 6px;border-radius:3px}
+@media(max-width:900px){#interior-panel{width:250px;top:18px;right:18px;padding:18px}#interior-panel h2{font-size:29px}#hint{display:none}}
+@media(max-width:760px){
+ .enter-place{font-size:11px;letter-spacing:.14em}.enter-title{font-size:43px}.enter-sound{font-size:11px}
+ #run-controls{top:16px;right:12px}#run-controls button{font-size:12px;padding:0 8px}#hud .lockup-sm{top:22px;left:16px}.lockup-sm .lk-al{height:15px}.lockup-sm .lk-ap{height:10px}.lockup-sm .lk-x{margin:0 8px}
+ #chapters{bottom:20px;max-width:calc(100vw - 24px);border-radius:12px;justify-content:flex-start}#chapters button{font-size:12px;padding:0 9px}
+ #caption{bottom:80px;font-size:14px}#skip{bottom:130px}#stack{bottom:140px;max-width:calc(100vw - 32px)}.t-display{font-size:34px}
+ #interior-panel{top:16px;left:16px;right:16px;width:auto;padding:16px;max-height:39vh;overflow:auto}#interior-panel h2{font-size:24px}#interior-panel h2 br{display:none}#interior-panel>p:not(.source-note){display:none}
+ #interior-panel label[for]{margin-top:8px}.interior-actions{margin:8px 0}.switch-row{display:inline-flex;margin-right:14px;font-size:12px}.source-note{margin:6px 0!important;padding-top:6px!important}
+ #modes{left:16px;right:16px;bottom:72px;gap:0 12px;justify-content:center}#modes button{font-size:11px}#tod{bottom:154px}#floors{bottom:25px}#credit{max-width:95vw;font-size:8px}#handoff{width:calc(100vw - 40px)}#ho-interior{font-size:15px}
+}
+.light-presets{display:flex;justify-content:center;gap:6px;margin-bottom:6px}.light-presets button{font-size:12px;padding:6px 12px;min-height:36px;border:1px solid #ffffff30;border-radius:6px;background:#101820b0;color:#f4f1ec}.light-presets button:hover{background:#263744}
+.render-link{min-height:44px;margin-top:4px;width:100%;font-size:14px;text-align:left;text-decoration:underline;text-underline-offset:4px;color:#f5c400}
+#render-gallery[hidden]{display:none}#render-gallery{position:fixed;inset:0;background:#11191f;z-index:45;display:flex;flex-direction:column;padding:40px 48px 24px;gap:18px}#gallery-image{flex:1;min-height:0;width:100%;object-fit:contain}#gallery-close{position:absolute;right:28px;top:18px;min-height:44px;padding:0 18px;background:#23313b;border:1px solid #74808b;border-radius:6px;font-size:14px}.gallery-foot{display:flex;justify-content:space-between;align-items:center;gap:16px}.gallery-foot strong{font-size:20px;font-weight:500}.gallery-foot p{font-size:13px;color:#b7c2cc;margin:6px 0}.gallery-foot button{font-size:14px;min-height:44px;padding:0 16px;border:1px solid #71808d;border-radius:6px;margin-left:8px;background:#23313b}@media(max-width:760px){#render-gallery{padding:66px 16px 24px}.gallery-foot{display:block}.gallery-foot strong{font-size:17px}.gallery-foot button{margin:8px 8px 0 0;font-size:12px}}
+
+/* Autopilot remains visible throughout presenter-controlled exploration. */
+.lockup-lg .lk-ap{height:32px}.lockup-lg .lk-al{height:27px}.lockup-sm .lk-ap{height:18px}.lockup-sm .lk-al{height:19px}#experience-brand{display:none;position:fixed;z-index:7;top:26px;left:32px;padding:12px 16px;background:#101820df;border:1px solid #ffffff26;border-radius:8px}#experience-brand img{width:176px;height:auto;display:block}body[data-mode=explore] #experience-brand{display:block}@media(max-width:760px){#experience-brand{top:auto;left:16px;bottom:218px;padding:9px 11px}#experience-brand img{width:124px}.lockup-lg .lk-ap{height:22px}.lockup-sm .lk-ap{height:13px}}

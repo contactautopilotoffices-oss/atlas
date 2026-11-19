@@ -1,0 +1,3171 @@
+{
+  "source": "frozen source tessellation, connected components",
+  "doors": 97,
+  "header_parts": 76,
+  "frame_components": 97,
+  "joined_frame_and_leaf_doors": [
+    "D005",
+    "D006",
+    "D007",
+    "D008",
+    "D009",
+    "D010",
+    "D012",
+    "D015",
+    "D019",
+    "D020",
+    "D021",
+    "D022",
+    "D023",
+    "D024",
+    "D025",
+    "D045",
+    "D046",
+    "D047",
+    "D048",
+    "D088",
+    "D089"
+  ],
+  "intentional_no_header": [
+    "D074",
+    "D075",
+    "D076",
+    "D077",
+    "D078",
+    "D079",
+    "D080",
+    "D081",
+    "D082",
+    "D083",
+    "D084",
+    "D085",
+    "D086",
+    "D087",
+    "D090",
+    "D091",
+    "D092",
+    "D093",
+    "D095",
+    "D096",
+    "D097"
+  ],
+  "header_mismatches": [],
+  "frame_mismatches": [],
+  "rows": [
+    {
+      "id": "D001",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 1.166,
+          "source": "default"
+        },
+        "frame_outside_width_m": {
+          "value": 1.166,
+          "source": "default"
+        },
+        "clear_width_m": {
+          "value": null,
+          "source": "default"
+        },
+        "leaf_width_m": {
+          "value": 1.121,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D002",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 1.0,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 1.0,
+          "source": "default"
+        },
+        "clear_width_m": {
+          "value": null,
+          "source": "default"
+        },
+        "leaf_width_m": {
+          "value": 0.841,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D003",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.886,
+          "source": "default"
+        },
+        "frame_outside_width_m": {
+          "value": 0.886,
+          "source": "default"
+        },
+        "clear_width_m": {
+          "value": null,
+          "source": "default"
+        },
+        "leaf_width_m": {
+          "value": 0.841,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D004",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.931,
+          "source": "default"
+        },
+        "frame_outside_width_m": {
+          "value": 0.931,
+          "source": "default"
+        },
+        "clear_width_m": {
+          "value": null,
+          "source": "default"
+        },
+        "leaf_width_m": {
+          "value": 0.841,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D005",
+      "kind": "solid_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": true,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.85,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.75,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.65,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.681,
+          "source": "cad"
+        },
+        "nominal_width_m": {
+          "value": {
+            "by_block_name_m": 0.75,
+            "insert_scale": [
+              1.0,
+              1.0
+            ]
+          },
+          "source": "cad"
+        }
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D006",
+      "kind": "solid_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": true,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.75,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.75,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.65,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.681,
+          "source": "cad"
+        },
+        "nominal_width_m": {
+          "value": {
+            "by_block_name_m": 0.75,
+            "insert_scale": [
+              1.0,
+              1.0
+            ]
+          },
+          "source": "cad"
+        }
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D007",
+      "kind": "solid_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": true,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.85,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.75,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.65,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.681,
+          "source": "cad"
+        },
+        "nominal_width_m": {
+          "value": {
+            "by_block_name_m": 0.75,
+            "insert_scale": [
+              1.0,
+              1.0
+            ]
+          },
+          "source": "cad"
+        }
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D008",
+      "kind": "solid_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": true,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.85,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.75,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.65,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.681,
+          "source": "cad"
+        },
+        "nominal_width_m": {
+          "value": {
+            "by_block_name_m": 0.75,
+            "insert_scale": [
+              1.0,
+              1.0
+            ]
+          },
+          "source": "cad"
+        }
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D009",
+      "kind": "solid_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": true,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.75,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.75,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.65,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.681,
+          "source": "cad"
+        },
+        "nominal_width_m": {
+          "value": {
+            "by_block_name_m": 0.75,
+            "insert_scale": [
+              1.0,
+              1.0
+            ]
+          },
+          "source": "cad"
+        }
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D010",
+      "kind": "solid_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": true,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.852,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.75,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.65,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.681,
+          "source": "cad"
+        },
+        "nominal_width_m": {
+          "value": {
+            "by_block_name_m": 0.75,
+            "insert_scale": [
+              1.0,
+              1.0
+            ]
+          },
+          "source": "cad"
+        }
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D011",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.931,
+          "source": "default"
+        },
+        "frame_outside_width_m": {
+          "value": 0.931,
+          "source": "default"
+        },
+        "clear_width_m": {
+          "value": null,
+          "source": "default"
+        },
+        "leaf_width_m": {
+          "value": 0.841,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D012",
+      "kind": "solid_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "lintel_masonry",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": true,
+      "widths": {
+        "opening_width_m": {
+          "value": 1.8,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 1.8,
+          "source": "default"
+        },
+        "clear_width_m": {
+          "value": null,
+          "source": "default"
+        },
+        "leaf_width_m": {
+          "value": 0.86,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D013",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.931,
+          "source": "default"
+        },
+        "frame_outside_width_m": {
+          "value": 0.931,
+          "source": "default"
+        },
+        "clear_width_m": {
+          "value": null,
+          "source": "default"
+        },
+        "leaf_width_m": {
+          "value": 0.841,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D014",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.931,
+          "source": "default"
+        },
+        "frame_outside_width_m": {
+          "value": 0.931,
+          "source": "default"
+        },
+        "clear_width_m": {
+          "value": null,
+          "source": "default"
+        },
+        "leaf_width_m": {
+          "value": 0.841,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D015",
+      "kind": "solid_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": true,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.599,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.599,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.519,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.544,
+          "source": "cad"
+        },
+        "nominal_width_m": {
+          "value": {
+            "by_block_name_m": 0.75,
+            "insert_scale": [
+              0.7988955721081558,
+              0.7988955721081558
+            ]
+          },
+          "source": "cad"
+        }
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D016",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.931,
+          "source": "default"
+        },
+        "frame_outside_width_m": {
+          "value": 0.931,
+          "source": "default"
+        },
+        "clear_width_m": {
+          "value": null,
+          "source": "default"
+        },
+        "leaf_width_m": {
+          "value": 0.841,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D017",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.931,
+          "source": "default"
+        },
+        "frame_outside_width_m": {
+          "value": 0.931,
+          "source": "default"
+        },
+        "clear_width_m": {
+          "value": null,
+          "source": "default"
+        },
+        "leaf_width_m": {
+          "value": 0.841,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D018",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 1.132,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 1.132,
+          "source": "default"
+        },
+        "clear_width_m": {
+          "value": null,
+          "source": "default"
+        },
+        "leaf_width_m": {
+          "value": 0.841,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D019",
+      "kind": "solid_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": true,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.6,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.6,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.52,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.545,
+          "source": "cad"
+        },
+        "nominal_width_m": {
+          "value": {
+            "by_block_name_m": 0.75,
+            "insert_scale": [
+              0.8,
+              0.8
+            ]
+          },
+          "source": "cad"
+        }
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D020",
+      "kind": "solid_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": true,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.6,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.6,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.52,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.545,
+          "source": "cad"
+        },
+        "nominal_width_m": {
+          "value": {
+            "by_block_name_m": 0.75,
+            "insert_scale": [
+              -0.8,
+              0.8
+            ]
+          },
+          "source": "cad"
+        }
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D021",
+      "kind": "solid_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": true,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.6,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.6,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.52,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.545,
+          "source": "cad"
+        },
+        "nominal_width_m": {
+          "value": {
+            "by_block_name_m": 0.75,
+            "insert_scale": [
+              0.8,
+              0.8
+            ]
+          },
+          "source": "cad"
+        }
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D022",
+      "kind": "solid_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": true,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.599,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.599,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.519,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.544,
+          "source": "cad"
+        },
+        "nominal_width_m": {
+          "value": {
+            "by_block_name_m": 0.75,
+            "insert_scale": [
+              -0.7988955721081558,
+              0.7988955721081558
+            ]
+          },
+          "source": "cad"
+        }
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D023",
+      "kind": "solid_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": true,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.599,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.599,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.519,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.544,
+          "source": "cad"
+        },
+        "nominal_width_m": {
+          "value": {
+            "by_block_name_m": 0.75,
+            "insert_scale": [
+              -0.7988955721081558,
+              0.7988955721081558
+            ]
+          },
+          "source": "cad"
+        }
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D024",
+      "kind": "solid_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "lintel_masonry",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": true,
+      "widths": {
+        "opening_width_m": {
+          "value": 1.028,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 1.028,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.94,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.956,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D025",
+      "kind": "solid_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "lintel_masonry",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": true,
+      "widths": {
+        "opening_width_m": {
+          "value": 1.028,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 1.028,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.94,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.956,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D026",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 1.2,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 1.2,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 1.101,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 1.119,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D027",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D028",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 1.074,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D029",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D030",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D031",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D032",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 1.375,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 1.2,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 1.101,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 1.119,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D033",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D034",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.9,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.9,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.802,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.819,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D035",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D036",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D037",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 1.074,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D038",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 1.2,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 1.2,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 1.101,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 1.119,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D039",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D040",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 1.074,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D041",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 1.2,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 1.2,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 1.101,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 1.119,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D042",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D043",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D044",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.9,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.9,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.802,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.819,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D045",
+      "kind": "solid_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "lintel_masonry",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": true,
+      "widths": {
+        "opening_width_m": {
+          "value": 1.028,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 1.028,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.94,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.956,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D046",
+      "kind": "solid_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "lintel_masonry",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": true,
+      "widths": {
+        "opening_width_m": {
+          "value": 1.028,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 1.028,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.94,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.956,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D047",
+      "kind": "solid_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "lintel_masonry",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": true,
+      "widths": {
+        "opening_width_m": {
+          "value": 1.028,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 1.028,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.94,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.956,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D048",
+      "kind": "solid_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "lintel_masonry",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": true,
+      "widths": {
+        "opening_width_m": {
+          "value": 1.028,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 1.028,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.94,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.956,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D049",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D050",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D051",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D052",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D053",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D054",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D055",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D056",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D057",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D058",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D059",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D060",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D061",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D062",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D063",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D064",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D065",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.899,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.801,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.818,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D066",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.9,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.9,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.802,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.819,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D067",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.9,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.9,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.802,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.819,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D068",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.906,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.906,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.807,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.825,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D069",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.906,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.906,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.807,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.825,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D070",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.936,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.936,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.774,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.819,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D071",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.949,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.949,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.761,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.819,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D072",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.913,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.913,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.792,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.819,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D073",
+      "kind": "glass_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "glass_transom",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.9,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.9,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.802,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.819,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D074",
+      "kind": "cubicle_door",
+      "header_expected": false,
+      "header_parts": 0,
+      "header_kind": "none_open_above",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.739,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.717,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D075",
+      "kind": "cubicle_door",
+      "header_expected": false,
+      "header_parts": 0,
+      "header_kind": "none_open_above",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.739,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.717,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D076",
+      "kind": "cubicle_door",
+      "header_expected": false,
+      "header_parts": 0,
+      "header_kind": "none_open_above",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.739,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.717,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D077",
+      "kind": "cubicle_door",
+      "header_expected": false,
+      "header_parts": 0,
+      "header_kind": "none_open_above",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.739,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.717,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D078",
+      "kind": "cubicle_door",
+      "header_expected": false,
+      "header_parts": 0,
+      "header_kind": "none_open_above",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.739,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.717,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D079",
+      "kind": "cubicle_door",
+      "header_expected": false,
+      "header_parts": 0,
+      "header_kind": "none_open_above",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.739,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.717,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D080",
+      "kind": "cubicle_door",
+      "header_expected": false,
+      "header_parts": 0,
+      "header_kind": "none_open_above",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.739,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.717,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D081",
+      "kind": "cubicle_door",
+      "header_expected": false,
+      "header_parts": 0,
+      "header_kind": "none_open_above",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.739,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.717,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D082",
+      "kind": "cubicle_door",
+      "header_expected": false,
+      "header_parts": 0,
+      "header_kind": "none_open_above",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.739,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.717,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D083",
+      "kind": "cubicle_door",
+      "header_expected": false,
+      "header_parts": 0,
+      "header_kind": "none_open_above",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.739,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.717,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D084",
+      "kind": "cubicle_door",
+      "header_expected": false,
+      "header_parts": 0,
+      "header_kind": "none_open_above",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.739,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.717,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D085",
+      "kind": "cubicle_door",
+      "header_expected": false,
+      "header_parts": 0,
+      "header_kind": "none_open_above",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.739,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.717,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D086",
+      "kind": "cubicle_door",
+      "header_expected": false,
+      "header_parts": 0,
+      "header_kind": "none_open_above",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.739,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.717,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D087",
+      "kind": "cubicle_door",
+      "header_expected": false,
+      "header_parts": 0,
+      "header_kind": "none_open_above",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.739,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.717,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D088",
+      "kind": "solid_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "lintel_masonry",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": true,
+      "widths": {
+        "opening_width_m": {
+          "value": 1.028,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 1.028,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.94,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.956,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D089",
+      "kind": "solid_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "pop_bulkhead",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": true,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.631,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.631,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.596,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.596,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D090",
+      "kind": "cubicle_door",
+      "header_expected": false,
+      "header_parts": 0,
+      "header_kind": "none_open_above",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.739,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.717,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D091",
+      "kind": "cubicle_door",
+      "header_expected": false,
+      "header_parts": 0,
+      "header_kind": "none_open_above",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.739,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.717,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D092",
+      "kind": "cubicle_door",
+      "header_expected": false,
+      "header_parts": 0,
+      "header_kind": "none_open_above",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.739,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.717,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D093",
+      "kind": "cubicle_door",
+      "header_expected": false,
+      "header_parts": 0,
+      "header_kind": "none_open_above",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.739,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.717,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D094",
+      "kind": "cubicle_door",
+      "header_expected": true,
+      "header_parts": 1,
+      "header_kind": "lintel_masonry",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 1.051,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 1.051,
+          "source": "default"
+        },
+        "clear_width_m": {
+          "value": null,
+          "source": "default"
+        },
+        "leaf_width_m": {
+          "value": 0.717,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D095",
+      "kind": "cubicle_door",
+      "header_expected": false,
+      "header_parts": 0,
+      "header_kind": "none_open_above",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.739,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.717,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D096",
+      "kind": "cubicle_door",
+      "header_expected": false,
+      "header_parts": 0,
+      "header_kind": "none_open_above",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 0.839,
+          "source": "cad"
+        },
+        "clear_width_m": {
+          "value": 0.739,
+          "source": "cad"
+        },
+        "leaf_width_m": {
+          "value": 0.717,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    },
+    {
+      "id": "D097",
+      "kind": "cubicle_door",
+      "header_expected": false,
+      "header_parts": 0,
+      "header_kind": "none_open_above",
+      "frame_expected": true,
+      "frame_components": 1,
+      "frame_joined_with_leaf_by_material": false,
+      "widths": {
+        "opening_width_m": {
+          "value": 1.709,
+          "source": "cad"
+        },
+        "frame_outside_width_m": {
+          "value": 1.709,
+          "source": "default"
+        },
+        "clear_width_m": {
+          "value": null,
+          "source": "default"
+        },
+        "leaf_width_m": {
+          "value": 0.717,
+          "source": "cad"
+        },
+        "nominal_width_m": null
+      },
+      "header_mismatch": false,
+      "frame_mismatch": false
+    }
+  ]
+}

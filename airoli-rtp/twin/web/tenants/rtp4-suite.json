@@ -21,7 +21,16 @@
    "Work seats (desk + chair)": 18,
    "Meeting room seats": 28,
    "Training room seats": 135,
-   "Lounge, collab and visitor seats": 31
+   "Lounge, collab and visitor seats": 31,
+   "Training rooms 20 pax": "6 \u00b7 sheet 6",
+   "Conference 12 pax": "1 \u00b7 sheet 2 (4th & 6th)",
+   "Meeting rooms 6 pax": "2 \u00b7 sheet 3 (4th & 6th)",
+   "HR room": "1 \u00b7 sheet 1",
+   "HR induction room": "1 \u00b7 sheet 1",
+   "IT room": "1 \u00b7 sheet 1",
+   "Admin room": "1 \u00b7 sheet 1",
+   "Interview cabins": "2 \u00b7 sheet 1 \u26a0",
+   "Corporate cabins": "0 here, 3 on 6th \u00b7 sheet 4 on 4th \u26a0"
   }
  },
  "reception": "RECEPTION",

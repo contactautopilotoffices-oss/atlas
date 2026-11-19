@@ -1,0 +1,73 @@
+{
+ "id": "rtp6-c",
+ "name": "6th floor \u00b7 Offices 603 & 604",
+ "floor": 6,
+ "floor_label": "6th floor",
+ "accent": "#0ea5e9",
+ "client": "Altruist",
+ "area_sqft": null,
+ "layout": "../../rtp6-c/rtp6-c-floor6.twin.layout.json",
+ "summary": "../../rtp6-c/rtp6-c_summary.json",
+ "frame": {
+  "rot_deg": 0,
+  "dx": 0,
+  "dy": 0,
+  "source": "layout already in rtp_local (review/frames.json)"
+ },
+ "seats": {
+  "work": 1400,
+  "all": 1487,
+  "groups": {
+   "Corporate (20 desks + 3 cabins)": "23 \u00b7 sheet 19 \u26a0",
+   "IDFC": "259 \u00b7 sheet 259",
+   "Tata Capital": "216 \u00b7 sheet 216",
+   "One Assist": "56 \u00b7 sheet 56",
+   "Rocket Learning": "50 \u00b7 sheet 50",
+   "HDFC": "40 \u00b7 sheet 40",
+   "BOB": "89 \u00b7 sheet 89",
+   "Akzonobel": "60 \u00b7 sheet 62 \u26a0",
+   "Heaps": "50 \u00b7 sheet 50",
+   "Airtel": "41 \u00b7 sheet 41",
+   "Hinduja Hospital": "41 \u00b7 sheet 41",
+   "VI": "8 \u00b7 sheet 8",
+   "BPCL": "160 \u00b7 sheet 160",
+   "Edelweiss": "74 \u00b7 sheet 74",
+   "Hamilton": "38 \u00b7 sheet 38",
+   "Tru Home Finance": "78 \u00b7 sheet 78",
+   "Chola MS": "69 \u00b7 sheet 69",
+   "ICICI": "3 \u00b7 sheet 3",
+   "Krsnaa Diagnostics": "13 \u00b7 sheet 13",
+   "Arka Fincap": "8 \u00b7 sheet 8",
+   "Aditya Birla": "3 \u00b7 sheet 3",
+   "Growth seats": "21 \u00b7 sheet 21",
+   "Total work seats": "1400 \u00b7 sheet rows add to 1398",
+   "Meeting rooms 4 pax": "15 \u00b7 sheet 15",
+   "Meeting rooms 4/6 pax": "3 \u00b7 sheet 3 (4th & 6th)",
+   "Conference 12 pax": "1 \u00b7 sheet 2 (4th & 6th)",
+   "Server room": "1 \u00b7 sheet 1"
+  }
+ },
+ "reception": "RECEPTION",
+ "assumptions": {
+  "path": "../../rtp6-c/rtp6-c_assumptions.md"
+ },
+ "seat_plan": "../../rtp6-c/rtp6-c_seat_plan.png",
+ "model": {
+  "use": "auto",
+  "index": "models/index.json",
+  "dev_build": {}
+ },
+ "stills": [],
+ "highlights": [
+  "the sheet's 22 processes, counted desk by desk",
+  "15 four-seat meeting rooms",
+  "12-seat conference room"
+ ],
+ "measured_sqft": 58362,
+ "sheet_note": "Model vs 'Reliable Tech Park 4th & 6th floor' break-up sheet (19 Nov 2026). The sheet's TOTAL cell says 1,379; its rows add to 1,398.",
+ "room_labels": {
+  "Open workstations 1": "Corporate",
+  "Open workstations 2": "Krsnaa Diagnostics",
+  "Open workstations 3": "BOB"
+ }
+}

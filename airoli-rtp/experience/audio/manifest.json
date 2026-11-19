@@ -1,0 +1,30 @@
+{
+  "about": "Continuous female narration, Lily / ElevenLabs. Property showcase leads directly to the CAD layout before the interior zoom.",
+  "vo": [
+    {
+      "file": "continuous-v2/female-voice.mp3",
+      "t": 0,
+      "duration_s": 91,
+      "beat": "continuous_female_cad",
+      "text": "Your next workplace begins with the people it brings together and the space that supports their day. As we move from the Mumbai skyline into Airoli, the bigger picture becomes a place you can explore. Welcome to Reliable Tech Park. With Autopilot, you can follow the journey from the city around you to the detail of your proposed office, building a clearer picture as you move closer. It is a way to bring your team, your requirements and the property into the same conversation, before you step inside. You can explore the approach and decide which part of the workplace deserves a closer look, connecting what you see with the brief you have already shared. As the building comes into view, take in the glass facade and the space between its two arms. Then look beyond the first impression to the everyday journey your people would make. Here, you can explore the property alongside its surroundings, follow the connection from the station and inspect the walking route to the gate. The location information stays available for a closer look, so you can judge what matters to your team. And as we approach the entrance, the focus moves naturally from the journey here to the workplace inside. Now open your CAD layout and explore the proposed workplace, team by team, against your requirements.",
+      "status": "ok"
+    }
+  ],
+  "bed": "music.mp3",
+  "captions": "continuous-v2/captions.srt",
+  "dropped": [],
+  "voice": {
+    "id": "pFZP5JQG7iQjIQuC4Bku",
+    "name": "Lily — Velvety Actress",
+    "model": "eleven_multilingual_v2",
+    "settings": {
+      "stability": 0.62,
+      "similarity_boost": 0.75,
+      "style": 0,
+      "use_speaker_boost": true,
+      "speed": 1.06
+    },
+    "gender": "female",
+    "accent": "British"
+  }
+}

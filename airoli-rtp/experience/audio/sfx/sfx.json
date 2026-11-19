@@ -1,0 +1,76 @@
+{
+ "source": "ElevenLabs /v1/sound-generation",
+ "normalised_to": "-20 LUFS integrated, -2 dBTP; ui_tick peak -6 dBTP (set each cue level in the mix)",
+ "files": [
+  {
+   "file": "sfx/wind_rush_clouds.mp3",
+   "seconds": 10.0,
+   "prompt": "High-altitude wind rushing softly through thin clouds, smooth airy texture, gentle and cinematic, no rumble, no gusts slamming, fades in and out",
+   "loudness": {
+    "before_lufs": -37.2,
+    "gain_db": 17.2,
+    "after_lufs": -20.2,
+    "after_tp": -8.8,
+    "mode": "gain+limiter"
+   }
+  },
+  {
+   "file": "sfx/whoosh_soft.mp3",
+   "seconds": 2.48,
+   "prompt": "A soft filtered air whoosh passing through a cloud layer, gentle and premium, smooth, no impact, no hit",
+   "loudness": {
+    "before_lufs": -15.0,
+    "gain_db": -5.0,
+    "after_lufs": -20.2,
+    "after_tp": -5.7,
+    "mode": "gain+limiter"
+   }
+  },
+  {
+   "file": "sfx/glass_shimmer.mp3",
+   "seconds": 3.0,
+   "prompt": "A delicate glass shimmer, one soft crystalline glint like sunlight catching a window, high and airy, short gentle reverb tail",
+   "loudness": {
+    "before_lufs": -11.7,
+    "gain_db": -8.0,
+    "after_lufs": -20.0,
+    "after_tp": -13.4,
+    "mode": "gain+limiter"
+   }
+  },
+  {
+   "file": "sfx/ui_tick.mp3",
+   "seconds": 0.48,
+   "prompt": "A single very soft minimal interface tick, quiet clean click, close and dry, no reverb",
+   "loudness": {
+    "after_lufs": -31.0,
+    "after_tp": -6.3,
+    "mode": "peak -6 dBTP"
+   }
+  },
+  {
+   "file": "sfx/arrival_chime.mp3",
+   "seconds": 2.48,
+   "prompt": "An elegant modern lift arrival chime, one soft warm two-note bell ding, refined office building, gentle decay",
+   "loudness": {
+    "before_lufs": -18.8,
+    "gain_db": -0.9,
+    "after_lufs": -20.0,
+    "after_tp": -9.4,
+    "mode": "gain+limiter"
+   }
+  },
+  {
+   "file": "sfx/low_swell.mp3",
+   "seconds": 2.0,
+   "prompt": "A low warm sub swell that blooms and fades, soft cinematic opening, no hit, no riser",
+   "loudness": {
+    "before_lufs": -13.7,
+    "gain_db": -6.0,
+    "after_lufs": -20.0,
+    "after_tp": -7.6,
+    "mode": "gain+limiter"
+   }
+  }
+ ]
+}
