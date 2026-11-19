@@ -6,715 +6,523 @@
    {
     "kind": "entry",
     "position": [
-     44.061,
-     1.55,
-     -109.53
+     38.585,
+     1.5,
+     -112.631
     ],
     "target": [
-     36.955,
-     0.296,
-     -109.228
+     42.828,
+     1.5,
+     -108.388
     ],
-    "hfov_deg": 72,
+    "hfov_deg": 80,
     "room": "TRAINING ROOM_05",
     "label": "Training Room_05: entry",
-    "name": "rtp4-suite_CAM_training-room-05_entry",
-    "still": "stills/rtp4-suite_CAM_training-room-05_entry.png"
+    "name": "rtp4-suite_WEB_training-room-05_entry"
    },
    {
     "kind": "feature",
     "position": [
-     44.136,
-     1.55,
-     -108.255
+     37.614,
+     1.5,
+     -108.746
     ],
     "target": [
-     38.625,
-     0.75,
-     -110.816
+     43.157,
+     1.5,
+     -111.042
     ],
-    "hfov_deg": 72,
+    "hfov_deg": 80,
     "room": "TRAINING ROOM_05",
     "label": "Training Room_05: feature",
-    "name": "rtp4-suite_CAM_training-room-05_feature",
-    "still": "stills/rtp4-suite_CAM_training-room-05_feature.png"
-   },
-   {
-    "kind": "reverse",
-    "position": [
-     44.661,
-     1.55,
-     -110.855
-    ],
-    "target": [
-     36.942,
-     0.127,
-     -108.492
-    ],
-    "hfov_deg": 72,
-    "room": "TRAINING ROOM_05",
-    "label": "Training Room_05: reverse",
-    "name": "rtp4-suite_CAM_training-room-05_reverse",
-    "still": "stills/rtp4-suite_CAM_training-room-05_reverse.png"
-   },
-   {
-    "kind": "detail",
-    "position": [
-     42.561,
-     1.55,
-     -109.605
-    ],
-    "target": [
-     38.958,
-     0.736,
-     -110.907
-    ],
-    "hfov_deg": 45,
-    "room": "TRAINING ROOM_05",
-    "label": "Training Room_05: detail",
-    "name": "rtp4-suite_CAM_training-room-05_detail",
-    "still": "stills/rtp4-suite_CAM_training-room-05_detail.png"
+    "name": "rtp4-suite_WEB_training-room-05_feature"
    }
   ],
   "RECEPTION AND WAITING": [
    {
     "kind": "entry",
     "position": [
-     28.607,
-     1.55,
-     -104.363
+     26.63997459411621,
+     1.5,
+     -100.0920639038086
     ],
     "target": [
-     28.982,
-     0.678,
-     -94.408
+     31.839181900024414,
+     1.6,
+     -100.00130462646484
     ],
-    "hfov_deg": 75,
+    "hfov_deg": 70,
     "room": "RECEPTION AND WAITING",
-    "label": "Reception And Waiting: entry",
-    "name": "rtp4-suite_CAM_reception-and-waiting_entry",
-    "still": "stills/rtp4-suite_CAM_reception-and-waiting_entry.png"
+    "label": "Reception And Waiting: logo wall",
+    "name": "rtp4-suite_CAM_reception-and-waiting_logo"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     30.558,
+     1.5,
+     -99.2
+    ],
+    "target": [
+     36.101,
+     1.5,
+     -101.496
+    ],
+    "hfov_deg": 80,
+    "room": "RECEPTION AND WAITING",
+    "label": "Reception And Waiting: feature",
+    "name": "rtp4-suite_WEB_reception-and-waiting_feature"
+   },
+   {
+    "kind": "reverse",
+    "position": [
+     27.72,
+     1.5,
+     -102.849
+    ],
+    "target": [
+     25.424,
+     1.5,
+     -108.392
+    ],
+    "hfov_deg": 80,
+    "room": "RECEPTION AND WAITING",
+    "label": "Reception And Waiting: reverse",
+    "name": "rtp4-suite_WEB_reception-and-waiting_reverse"
    }
   ],
   "ADMIN ROOM": [
    {
     "kind": "entry",
     "position": [
-     23.101,
-     1.55,
-     -111.862
+     22.794,
+     1.5,
+     -112.547
     ],
     "target": [
-     19.33,
-     0.848,
-     -113.14
+     17.251,
+     1.5,
+     -110.251
     ],
-    "hfov_deg": 72,
+    "hfov_deg": 80,
     "room": "ADMIN ROOM",
     "label": "Admin Room: entry",
-    "name": "rtp4-suite_CAM_admin-room_entry",
-    "still": "stills/rtp4-suite_CAM_admin-room_entry.png"
+    "name": "rtp4-suite_WEB_admin-room_entry"
    },
    {
-    "kind": "detail",
+    "kind": "feature",
     "position": [
-     19.161,
-     1.55,
-     -112.655
+     21.084,
+     1.5,
+     -112.547
     ],
     "target": [
-     23.643,
-     0.587,
-     -111.995
+     25.327,
+     1.5,
+     -116.789
     ],
-    "hfov_deg": 45,
+    "hfov_deg": 80,
     "room": "ADMIN ROOM",
-    "label": "Admin Room: detail",
-    "name": "rtp4-suite_CAM_admin-room_detail",
-    "still": "stills/rtp4-suite_CAM_admin-room_detail.png"
-   }
-  ],
-  "TOIELT BLOCK": [
-   {
-    "kind": "entry",
-    "position": [
-     23.086,
-     1.55,
-     -100.355
-    ],
-    "target": [
-     18.64,
-     0.794,
-     -107.761
-    ],
-    "hfov_deg": 72,
-    "room": "TOIELT BLOCK",
-    "label": "Toielt Block: entry",
-    "name": "rtp4-suite_CAM_toielt-block_entry",
-    "still": "stills/rtp4-suite_CAM_toielt-block_entry.png"
+    "label": "Admin Room: feature",
+    "name": "rtp4-suite_WEB_admin-room_feature"
    }
   ],
   "HR ROOM": [
    {
     "kind": "entry",
     "position": [
-     23.075,
-     1.55,
-     -110.342
+     22.754,
+     1.5,
+     -110.391
     ],
     "target": [
-     20.262,
-     0.933,
-     -108.262
+     17.211,
+     1.5,
+     -108.095
     ],
-    "hfov_deg": 78,
+    "hfov_deg": 80,
     "room": "HR ROOM",
     "label": "Hr Room: entry",
-    "name": "rtp4-suite_CAM_hr-room_entry",
-    "still": "stills/rtp4-suite_CAM_hr-room_entry.png"
+    "name": "rtp4-suite_WEB_hr-room_entry"
    },
    {
-    "kind": "detail",
+    "kind": "feature",
     "position": [
-     22.361,
-     1.55,
-     -109.605
+     19.548,
+     1.5,
+     -109.59
     ],
     "target": [
-     18.667,
-     0.762,
-     -109.31
+     23.79,
+     1.5,
+     -105.347
     ],
-    "hfov_deg": 45,
+    "hfov_deg": 80,
     "room": "HR ROOM",
-    "label": "Hr Room: detail",
-    "name": "rtp4-suite_CAM_hr-room_detail",
-    "still": "stills/rtp4-suite_CAM_hr-room_detail.png"
+    "label": "Hr Room: feature",
+    "name": "rtp4-suite_WEB_hr-room_feature"
    }
   ],
   "TRAINING ROOM_04": [
    {
     "kind": "entry",
     "position": [
-     37.487,
-     1.55,
-     -103.012
+     45.01,
+     1.5,
+     -102.926
     ],
     "target": [
-     46.068,
-     0.417,
-     -102.406
+     40.767,
+     1.5,
+     -107.168
     ],
-    "hfov_deg": 75,
+    "hfov_deg": 80,
     "room": "TRAINING ROOM_04",
     "label": "Training Room_04: entry",
-    "name": "rtp4-suite_CAM_training-room-04_entry",
-    "still": "stills/rtp4-suite_CAM_training-room-04_entry.png"
+    "name": "rtp4-suite_WEB_training-room-04_entry"
    },
    {
     "kind": "feature",
     "position": [
-     45.686,
-     1.55,
-     -102.855
+     38.708,
+     1.5,
+     -103.766
     ],
     "target": [
-     39.125,
-     0.869,
-     -107.042
+     44.251,
+     1.5,
+     -106.062
     ],
-    "hfov_deg": 72,
+    "hfov_deg": 80,
     "room": "TRAINING ROOM_04",
     "label": "Training Room_04: feature",
-    "name": "rtp4-suite_CAM_training-room-04_feature",
-    "still": "stills/rtp4-suite_CAM_training-room-04_feature.png"
-   },
-   {
-    "kind": "reverse",
-    "position": [
-     45.586,
-     1.55,
-     -103.905
-    ],
-    "target": [
-     38.167,
-     0.884,
-     -105.636
-    ],
-    "hfov_deg": 72,
-    "room": "TRAINING ROOM_04",
-    "label": "Training Room_04: reverse",
-    "name": "rtp4-suite_CAM_training-room-04_reverse",
-    "still": "stills/rtp4-suite_CAM_training-room-04_reverse.png"
-   },
-   {
-    "kind": "detail",
-    "position": [
-     42.311,
-     1.55,
-     -102.855
-    ],
-    "target": [
-     41.175,
-     0.75,
-     -106.444
-    ],
-    "hfov_deg": 45,
-    "room": "TRAINING ROOM_04",
-    "label": "Training Room_04: detail",
-    "name": "rtp4-suite_CAM_training-room-04_detail",
-    "still": "stills/rtp4-suite_CAM_training-room-04_detail.png"
+    "name": "rtp4-suite_WEB_training-room-04_feature"
    }
   ],
   "06 SEATER MEETING ROOM 01 (1)": [
    {
     "kind": "entry",
     "position": [
-     25.706,
-     1.55,
-     -103.213
+     27.023,
+     1.5,
+     -104.4
     ],
     "target": [
-     25.62,
-     1.217,
-     -107.014
+     24.727,
+     1.5,
+     -109.943
     ],
-    "hfov_deg": 75,
+    "hfov_deg": 80,
     "room": "06 SEATER MEETING ROOM 01 (1)",
     "label": "06 Seater Meeting Room 01 (1): entry",
-    "name": "rtp4-suite_CAM_06-seater-meeting-room-01-1_entry",
-    "still": "stills/rtp4-suite_CAM_06-seater-meeting-room-01-1_entry.png"
+    "name": "rtp4-suite_WEB_06-seater-meeting-room-01-1_entry"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     25.773,
+     1.5,
+     -104.65
+    ],
+    "target": [
+     31.773,
+     1.5,
+     -104.65
+    ],
+    "hfov_deg": 80,
+    "room": "06 SEATER MEETING ROOM 01 (1)",
+    "label": "06 Seater Meeting Room 01 (1): feature",
+    "name": "rtp4-suite_WEB_06-seater-meeting-room-01-1_feature"
    }
   ],
   "12 SEATER CONFERENCE ROOM_01": [
    {
     "kind": "entry",
     "position": [
-     31.486,
-     1.55,
-     -104.312
+     31.741,
+     1.5,
+     -105.463
     ],
     "target": [
-     36.589,
-     0.503,
-     -107.349
+     37.741,
+     1.5,
+     -105.463
     ],
-    "hfov_deg": 78,
+    "hfov_deg": 80,
     "room": "12 SEATER CONFERENCE ROOM_01",
     "label": "12 Seater Conference Room_01: entry",
-    "name": "rtp4-suite_CAM_12-seater-conference-room-01_entry",
-    "still": "stills/rtp4-suite_CAM_12-seater-conference-room-01_entry.png"
+    "name": "rtp4-suite_WEB_12-seater-conference-room-01_entry"
    },
    {
     "kind": "feature",
     "position": [
-     31.311,
-     1.55,
-     -106.605
+     32.41,
+     1.5,
+     -104.458
     ],
     "target": [
-     36.714,
-     1.015,
-     -103.739
+     30.114,
+     1.5,
+     -110.002
     ],
-    "hfov_deg": 72,
+    "hfov_deg": 80,
     "room": "12 SEATER CONFERENCE ROOM_01",
     "label": "12 Seater Conference Room_01: feature",
-    "name": "rtp4-suite_CAM_12-seater-conference-room-01_feature",
-    "still": "stills/rtp4-suite_CAM_12-seater-conference-room-01_feature.png"
-   },
-   {
-    "kind": "reverse",
-    "position": [
-     31.986,
-     1.55,
-     -107.18
-    ],
-    "target": [
-     32.697,
-     1.086,
-     -103.727
-    ],
-    "hfov_deg": 78,
-    "room": "12 SEATER CONFERENCE ROOM_01",
-    "label": "12 Seater Conference Room_01: reverse",
-    "name": "rtp4-suite_CAM_12-seater-conference-room-01_reverse",
-    "still": "stills/rtp4-suite_CAM_12-seater-conference-room-01_reverse.png"
-   },
-   {
-    "kind": "detail",
-    "position": [
-     36.361,
-     1.55,
-     -107.055
-    ],
-    "target": [
-     33.13,
-     0.75,
-     -105.125
-    ],
-    "hfov_deg": 45,
-    "room": "12 SEATER CONFERENCE ROOM_01",
-    "label": "12 Seater Conference Room_01: detail",
-    "name": "rtp4-suite_CAM_12-seater-conference-room-01_detail",
-    "still": "stills/rtp4-suite_CAM_12-seater-conference-room-01_detail.png"
+    "name": "rtp4-suite_WEB_12-seater-conference-room-01_feature"
    }
   ],
   "06 SEATER MEETING ROOM 01 (2)": [
    {
     "kind": "entry",
     "position": [
-     28.586,
-     1.55,
-     -103.163
+     28.65,
+     1.5,
+     -104.6
     ],
     "target": [
-     28.502,
-     1.217,
-     -106.964
+     32.893,
+     1.5,
+     -108.842
     ],
-    "hfov_deg": 75,
+    "hfov_deg": 80,
     "room": "06 SEATER MEETING ROOM 01 (2)",
     "label": "06 Seater Meeting Room 01 (2): entry",
-    "name": "rtp4-suite_CAM_06-seater-meeting-room-01-2_entry",
-    "still": "stills/rtp4-suite_CAM_06-seater-meeting-room-01-2_entry.png"
+    "name": "rtp4-suite_WEB_06-seater-meeting-room-01-2_entry"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     30.15,
+     1.5,
+     -104.35
+    ],
+    "target": [
+     24.607,
+     1.5,
+     -106.646
+    ],
+    "hfov_deg": 80,
+    "room": "06 SEATER MEETING ROOM 01 (2)",
+    "label": "06 Seater Meeting Room 01 (2): feature",
+    "name": "rtp4-suite_WEB_06-seater-meeting-room-01-2_feature"
    }
   ],
   "TRAINING ROOM_02": [
    {
     "kind": "entry",
     "position": [
-     43.911,
-     1.55,
-     -93.955
+     41.366,
+     1.5,
+     -89.253
     ],
     "target": [
-     42.666,
-     0.891,
-     -89.109
+     45.609,
+     1.5,
+     -93.496
     ],
-    "hfov_deg": 72,
+    "hfov_deg": 80,
     "room": "TRAINING ROOM_02",
     "label": "Training Room_02: entry",
-    "name": "rtp4-suite_CAM_training-room-02_entry",
-    "still": "stills/rtp4-suite_CAM_training-room-02_entry.png"
+    "name": "rtp4-suite_WEB_training-room-02_entry"
    },
    {
     "kind": "feature",
     "position": [
-     40.886,
-     1.55,
-     -94.505
+     45.496,
+     1.5,
+     -93.842
     ],
     "target": [
-     44.795,
-     0.963,
-     -89.055
+     43.2,
+     1.5,
+     -88.299
     ],
-    "hfov_deg": 72,
+    "hfov_deg": 80,
     "room": "TRAINING ROOM_02",
     "label": "Training Room_02: feature",
-    "name": "rtp4-suite_CAM_training-room-02_feature",
-    "still": "stills/rtp4-suite_CAM_training-room-02_feature.png"
-   },
-   {
-    "kind": "reverse",
-    "position": [
-     40.811,
-     1.55,
-     -89.005
-    ],
-    "target": [
-     43.019,
-     0.734,
-     -94.799
-    ],
-    "hfov_deg": 72,
-    "room": "TRAINING ROOM_02",
-    "label": "Training Room_02: reverse",
-    "name": "rtp4-suite_CAM_training-room-02_reverse",
-    "still": "stills/rtp4-suite_CAM_training-room-02_reverse.png"
-   },
-   {
-    "kind": "detail",
-    "position": [
-     44.961,
-     1.55,
-     -93.505
-    ],
-    "target": [
-     43.463,
-     0.859,
-     -90.62
-    ],
-    "hfov_deg": 45,
-    "room": "TRAINING ROOM_02",
-    "label": "Training Room_02: detail",
-    "name": "rtp4-suite_CAM_training-room-02_detail",
-    "still": "stills/rtp4-suite_CAM_training-room-02_detail.png"
+    "name": "rtp4-suite_WEB_training-room-02_feature"
    }
   ],
   "TRAINING ROOM_01": [
    {
     "kind": "entry",
     "position": [
-     39.67,
-     1.55,
-     -94.297
+     39.298,
+     1.5,
+     -89.369
     ],
     "target": [
-     33.776,
-     0.847,
-     -88.834
+     35.055,
+     1.5,
+     -93.612
     ],
-    "hfov_deg": 72,
+    "hfov_deg": 80,
     "room": "TRAINING ROOM_01",
     "label": "Training Room_01: entry",
-    "name": "rtp4-suite_CAM_training-room-01_entry",
-    "still": "stills/rtp4-suite_CAM_training-room-01_entry.png"
+    "name": "rtp4-suite_WEB_training-room-01_entry"
    },
    {
     "kind": "feature",
     "position": [
-     39.611,
-     1.55,
-     -89.005
+     34.757,
+     1.5,
+     -93.91
     ],
     "target": [
-     34.844,
-     0.787,
-     -92.295
+     38.999,
+     1.5,
+     -89.667
     ],
-    "hfov_deg": 72,
+    "hfov_deg": 80,
     "room": "TRAINING ROOM_01",
     "label": "Training Room_01: feature",
-    "name": "rtp4-suite_CAM_training-room-01_feature",
-    "still": "stills/rtp4-suite_CAM_training-room-01_feature.png"
-   },
-   {
-    "kind": "reverse",
-    "position": [
-     39.611,
-     1.55,
-     -89.08
-    ],
-    "target": [
-     39.712,
-     0.435,
-     -97.553
-    ],
-    "hfov_deg": 72,
-    "room": "TRAINING ROOM_01",
-    "label": "Training Room_01: reverse",
-    "name": "rtp4-suite_CAM_training-room-01_reverse",
-    "still": "stills/rtp4-suite_CAM_training-room-01_reverse.png"
-   },
-   {
-    "kind": "detail",
-    "position": [
-     36.011,
-     1.55,
-     -93.655
-    ],
-    "target": [
-     36.96,
-     0.75,
-     -90.013
-    ],
-    "hfov_deg": 45,
-    "room": "TRAINING ROOM_01",
-    "label": "Training Room_01: detail",
-    "name": "rtp4-suite_CAM_training-room-01_detail",
-    "still": "stills/rtp4-suite_CAM_training-room-01_detail.png"
+    "name": "rtp4-suite_WEB_training-room-01_feature"
    }
   ],
   "INTERVIEW CABIN_02": [
    {
     "kind": "entry",
     "position": [
-     33.089,
-     1.55,
-     -95.6
+     33.009,
+     1.5,
+     -94.375
     ],
     "target": [
-     32.252,
-     1.232,
-     -92.058
+     30.713,
+     1.5,
+     -88.831
     ],
-    "hfov_deg": 75,
+    "hfov_deg": 80,
     "room": "INTERVIEW CABIN_02",
     "label": "Interview Cabin_02: entry",
-    "name": "rtp4-suite_CAM_interview-cabin-02_entry",
-    "still": "stills/rtp4-suite_CAM_interview-cabin-02_entry.png"
+    "name": "rtp4-suite_WEB_interview-cabin-02_entry"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     32.759,
+     1.5,
+     -92.625
+    ],
+    "target": [
+     28.516,
+     1.5,
+     -96.867
+    ],
+    "hfov_deg": 80,
+    "room": "INTERVIEW CABIN_02",
+    "label": "Interview Cabin_02: feature",
+    "name": "rtp4-suite_WEB_interview-cabin-02_feature"
    }
   ],
   "INTERVIEW CABIN_01": [
    {
     "kind": "entry",
     "position": [
-     30.229,
-     1.55,
-     -95.65
+     30.399,
+     1.5,
+     -94.41
     ],
     "target": [
-     29.807,
-     1.307,
-     -92.901
+     30.399,
+     1.5,
+     -88.41
     ],
     "hfov_deg": 80,
     "room": "INTERVIEW CABIN_01",
     "label": "Interview Cabin_01: entry",
-    "name": "rtp4-suite_CAM_interview-cabin-01_entry",
-    "still": "stills/rtp4-suite_CAM_interview-cabin-01_entry.png"
+    "name": "rtp4-suite_WEB_interview-cabin-01_entry"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     30.149,
+     1.5,
+     -93.41
+    ],
+    "target": [
+     35.692,
+     1.5,
+     -95.706
+    ],
+    "hfov_deg": 80,
+    "room": "INTERVIEW CABIN_01",
+    "label": "Interview Cabin_01: feature",
+    "name": "rtp4-suite_WEB_interview-cabin-01_feature"
    }
   ],
   "TRAINING ROOM_03": [
    {
     "kind": "entry",
     "position": [
-     37.404,
-     1.55,
-     -98.274
+     39.092,
+     1.5,
+     -100.838
     ],
     "target": [
-     46.683,
-     0.325,
-     -97.619
+     44.635,
+     1.5,
+     -98.541
     ],
-    "hfov_deg": 75,
+    "hfov_deg": 80,
     "room": "TRAINING ROOM_03",
     "label": "Training Room_03: entry",
-    "name": "rtp4-suite_CAM_training-room-03_entry",
-    "still": "stills/rtp4-suite_CAM_training-room-03_entry.png"
+    "name": "rtp4-suite_WEB_training-room-03_entry"
    },
    {
     "kind": "feature",
     "position": [
-     46.236,
-     1.55,
-     -98.33
+     44.796,
+     1.5,
+     -98.205
     ],
     "target": [
-     40.335,
-     0.974,
-     -101.253
+     40.554,
+     1.5,
+     -102.447
     ],
-    "hfov_deg": 72,
+    "hfov_deg": 80,
     "room": "TRAINING ROOM_03",
     "label": "Training Room_03: feature",
-    "name": "rtp4-suite_CAM_training-room-03_feature",
-    "still": "stills/rtp4-suite_CAM_training-room-03_feature.png"
-   },
-   {
-    "kind": "reverse",
-    "position": [
-     45.811,
-     1.55,
-     -101.855
-    ],
-    "target": [
-     39.805,
-     0.911,
-     -97.696
-    ],
-    "hfov_deg": 72,
-    "room": "TRAINING ROOM_03",
-    "label": "Training Room_03: reverse",
-    "name": "rtp4-suite_CAM_training-room-03_reverse",
-    "still": "stills/rtp4-suite_CAM_training-room-03_reverse.png"
-   },
-   {
-    "kind": "detail",
-    "position": [
-     42.436,
-     1.55,
-     -98.13
-    ],
-    "target": [
-     40.994,
-     0.75,
-     -101.607
-    ],
-    "hfov_deg": 45,
-    "room": "TRAINING ROOM_03",
-    "label": "Training Room_03: detail",
-    "name": "rtp4-suite_CAM_training-room-03_detail",
-    "still": "stills/rtp4-suite_CAM_training-room-03_detail.png"
+    "name": "rtp4-suite_WEB_training-room-03_feature"
    }
   ],
   "TRAINING ROOM_06": [
    {
     "kind": "entry",
     "position": [
-     36.037,
-     1.55,
-     -95.702
+     34.241,
+     1.5,
+     -97.33
     ],
     "target": [
-     36.59,
-     0.519,
-     -103.513
+     34.241,
+     1.5,
+     -103.33
     ],
     "hfov_deg": 80,
     "room": "TRAINING ROOM_06",
     "label": "Training Room_06: entry",
-    "name": "rtp4-suite_CAM_training-room-06_entry",
-    "still": "stills/rtp4-suite_CAM_training-room-06_entry.png"
+    "name": "rtp4-suite_WEB_training-room-06_entry"
    },
    {
     "kind": "feature",
     "position": [
-     36.136,
-     1.55,
-     -96.705
+     35.903,
+     1.5,
+     -102.316
     ],
     "target": [
-     32.104,
-     0.906,
-     -102.87
+     31.66,
+     1.5,
+     -98.074
     ],
-    "hfov_deg": 72,
+    "hfov_deg": 80,
     "room": "TRAINING ROOM_06",
     "label": "Training Room_06: feature",
-    "name": "rtp4-suite_CAM_training-room-06_feature",
-    "still": "stills/rtp4-suite_CAM_training-room-06_feature.png"
-   },
-   {
-    "kind": "reverse",
-    "position": [
-     33.811,
-     1.55,
-     -96.755
-    ],
-    "target": [
-     36.6,
-     1.179,
-     -97.174
-    ],
-    "hfov_deg": 72,
-    "room": "TRAINING ROOM_06",
-    "label": "Training Room_06: reverse",
-    "name": "rtp4-suite_CAM_training-room-06_reverse",
-    "still": "stills/rtp4-suite_CAM_training-room-06_reverse.png"
-   },
-   {
-    "kind": "detail",
-    "position": [
-     36.161,
-     1.55,
-     -100.78
-    ],
-    "target": [
-     32.715,
-     0.75,
-     -99.265
-    ],
-    "hfov_deg": 45,
-    "room": "TRAINING ROOM_06",
-    "label": "Training Room_06: detail",
-    "name": "rtp4-suite_CAM_training-room-06_detail",
-    "still": "stills/rtp4-suite_CAM_training-room-06_detail.png"
+    "name": "rtp4-suite_WEB_training-room-06_feature"
    }
   ]
- }
+ },
+ "about_views": "web views: level, inside the room, clear of walls/doors/furniture by 0.45 m (web_cams.py)"
 }

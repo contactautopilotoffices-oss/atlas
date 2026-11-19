@@ -4,16 +4,16 @@
  "lod_glb": "rtp4-suite_lod.glb",
  "files": {
   "rtp4-suite": {
-   "mb": 14.51,
+   "mb": 11.71,
    "meshopt": {
-    "instanced_nodes_from": 691,
-    "instanced_into": 18,
-    "draw_calls": 111,
-    "triangles": 1314427,
-    "in_mb": 29.51,
-    "out_mb": 14.51,
-    "compressed_views": 457,
-    "saved_mb": 15.14,
+    "instanced_nodes_from": 685,
+    "instanced_into": 17,
+    "draw_calls": 108,
+    "triangles": 1728255,
+    "in_mb": 26.79,
+    "out_mb": 11.71,
+    "compressed_views": 445,
+    "saved_mb": 15.22,
     "applied": true
    },
    "merged_groups": 16
@@ -21,13 +21,13 @@
   "rtp4-suite_lod": {
    "mb": 2.82,
    "meshopt": {
-    "instanced_nodes_from": 375,
-    "instanced_into": 15,
-    "draw_calls": 59,
-    "triangles": 300216,
-    "in_mb": 9.84,
+    "instanced_nodes_from": 369,
+    "instanced_into": 14,
+    "draw_calls": 58,
+    "triangles": 300144,
+    "in_mb": 9.83,
     "out_mb": 2.82,
-    "compressed_views": 215,
+    "compressed_views": 213,
     "saved_mb": 7.09,
     "applied": true
    },
@@ -46,7 +46,7 @@
   "toneMappingExposure": 1.1096,
   "exposure_ev": 0.15,
   "exposure_note": "web path (NeutralToneMapping): an 18 % card at desk height reads about sRGB 118; derived from the floor lightmap irradiance (median 0.72 at the floor, ~1.1 at desk height), 2026-11-19",
-  "stills_exposure_ev": -0.86,
+  "stills_exposure_ev": -0.84,
   "outputColorSpace": "srgb",
   "useLegacyLights": false
  },
@@ -55,52 +55,52 @@
   "nodes": {
    "rtp4-suite_FLOOR_rtp4-suite_lm0_1": {
     "lightmap": "lightmaps/rtp4-suite_lm0.png",
-    "lightMapIntensity": 6.13889,
+    "lightMapIntensity": 5.94564,
     "uv": 1
    },
    "rtp4-suite_WALL_rtp4-suite_lm5_2": {
     "lightmap": "lightmaps/rtp4-suite_lm5.png",
-    "lightMapIntensity": 7.69802,
+    "lightMapIntensity": 6.60357,
     "uv": 1
    },
    "rtp4-suite_WALL_rtp4-suite_lm9_3": {
     "lightmap": "lightmaps/rtp4-suite_lm9.png",
-    "lightMapIntensity": 6.51113,
+    "lightMapIntensity": 6.06543,
     "uv": 1
    },
    "rtp4-suite_WALL_rtp4-suite_lm7_4": {
     "lightmap": "lightmaps/rtp4-suite_lm7.png",
-    "lightMapIntensity": 7.62941,
+    "lightMapIntensity": 7.13127,
     "uv": 1
    },
    "rtp4-suite_WALL_rtp4-suite_lm6_5": {
     "lightmap": "lightmaps/rtp4-suite_lm6.png",
-    "lightMapIntensity": 6.51964,
+    "lightMapIntensity": 6.40769,
     "uv": 1
    },
    "rtp4-suite_WALL_rtp4-suite_lm4_6": {
     "lightmap": "lightmaps/rtp4-suite_lm4.png",
-    "lightMapIntensity": 7.89177,
+    "lightMapIntensity": 6.7958,
     "uv": 1
    },
    "rtp4-suite_WALL_rtp4-suite_lm3_7": {
     "lightmap": "lightmaps/rtp4-suite_lm3.png",
-    "lightMapIntensity": 7.22933,
+    "lightMapIntensity": 6.98193,
     "uv": 1
    },
    "rtp4-suite_WALL_rtp4-suite_lm8_8": {
     "lightmap": "lightmaps/rtp4-suite_lm8.png",
-    "lightMapIntensity": 14.50898,
+    "lightMapIntensity": 11.79229,
     "uv": 1
    },
    "rtp4-suite_WALL_rtp4-suite_lm1_11": {
     "lightmap": "lightmaps/rtp4-suite_lm1.png",
-    "lightMapIntensity": 94.79795,
+    "lightMapIntensity": 99.23945,
     "uv": 1
    },
    "rtp4-suite_WALL_rtp4-suite_lm2_12": {
     "lightmap": "lightmaps/rtp4-suite_lm2.png",
-    "lightMapIntensity": 102.0732,
+    "lightMapIntensity": 112.10181,
     "uv": 1
    }
   }

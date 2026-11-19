@@ -1,5 +1,25 @@
 # Atlas — Development Journal
 
+## 2026-11-19 — Atlas: 4th-floor suite web model rebuilt to an approval checklist, and redeployed
+
+**The 4th-floor suite's walkable web model was rebuilt to fix what the founder saw in the live viewer, checked by an independent approver, and redeployed on the founder's instruction.**
+
+- **Why:** the founder found dull lighting, smeared materials, box chairs, an off-centre TV and ceiling lights straddling the grid in the live viewer, and asked for an approver before anything is published.
+- **Structural decisions:**
+  - An approval gate now exists. A checklist (`noida-skymark/twin/blender/APPROVAL_CHECKLIST.md`), a local review server and a headless-Chrome capture (`noida-skymark/twin/review/`) photograph every room view of the web model. A fresh reviewer agent judges the shots against the checklist and the client's photos.
+  - Everything repeated snaps to one module: ceiling panels and diffusers sit in whole tiles of a grid square to the walls; screens centre on their table or desk block.
+  - Real assets replace code-made primitives: free CC0 plants, sofa and chair models and scanned carpet detail (sources in `assets/cc0/SOURCES.md`).
+  - Web cameras are generated for the web: level, from a clear spot inside each room, looking across it, because the web viewer has no lens shift and the Blender cameras pointed down.
+  - Web light: neutral tone mapping and 4500 K lamps, with brightness derived from the baked floor light so a grey card reads mid-grey; a softer sun in the bake.
+- **What works now:** the 4th-floor suite web model shows bright grid ceilings with panels in their tiles, real chairs, screens and whiteboards on axis, the Altruist logo wall, plants and the real city through the windows. It is live after this deploy.
+- **Left undone:**
+  - The approver failed two earlier rounds (all views). This last round was not put through it again; the founder chose to publish after a final self-check of 21 views.
+  - The reception has only its logo view in the web tour, because its dense chair cluster leaves no clear standing spot for a second view.
+  - The 6th floor option A and option B were not rebuilt in the new pipeline; option A online is still the earlier build.
+  - The city model outside the windows belongs to the exterior work and still looks blocky.
+  - The web model is 11.7 MB and not yet tested on phones.
+- **Open questions for the founder:** should the 6th floor go through the same rebuild next, and should the approver gate be required again for it?
+
 ## 2026-11-19 — Atlas: Reliable Tech Park twins, second pass: Altruist's real logo, bright ceilings, real city views, web lightmaps fixed
 
 **After the advisor's review, the two Altruist models now carry the real wordmark and reception desk, bright ceilings, furnished meeting and training rooms and the real Airoli outside the windows; the blotchy and black patches in the web models are fixed.**

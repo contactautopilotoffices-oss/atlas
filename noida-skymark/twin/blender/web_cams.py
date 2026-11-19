@@ -10,7 +10,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import twin_lib as TL
 ap = argparse.ArgumentParser(); ap.add_argument('--tenant', required=True); ap.add_argument('--out', required=True); ap.add_argument('--layout', required=True)
 ap.add_argument('--hero', default=''); ap.add_argument('--hfov', type=float, default=80); ap.add_argument('--eye', type=float, default=1.5)
-ap.add_argument('--skip', default='SHAFT|DUCT|LIFT|TOIL|TOIELT|WASH|STORE|ELEC|UPS|SERVER|JANITOR|PANTRY STORE|STAIR|Shaft or duct')
+ap.add_argument('--skip', default=r'SHAFT|\bDUCTS?\b|LIFT|TOIL|TOIELT|WASH|STORE|ELEC|UPS|SERVER|JANITOR|PANTRY STORE|STAIR|Shaft or duct')
 A = ap.parse_args(TL.script_args()); sc = bpy.context.scene; dg = bpy.context.evaluated_depsgraph_get(); L = json.load(open(A.layout))
 old = os.path.join(A.out, f'{A.tenant}_cameras.json'); prev = json.load(open(old)) if os.path.exists(old) else {}
 def inpoly(x, y, P):
@@ -26,14 +26,14 @@ def edist(x, y, P):
         t = max(0, min(1, ((x - x1) * dx + (y - y1) * dy) / l2)); d = min(d, math.hypot(x - x1 - t * dx, y - y1 - t * dy))
     return d
 FURN = ('TABLE', 'DESK', 'SEAT', 'FEATURE', 'LOGO', 'PLANT')
-def views(r, clear=0.45, tol=0.35, near_min=1.0):
+def views(r, clear=0.45, tol=0.35, near_min=2.0):
     P = r['poly']; xs = [p[0] for p in P]; ys = [p[1] for p in P]; area = abs(sum(P[i][0] * P[(i + 1) % len(P)][1] - P[(i + 1) % len(P)][0] * P[i][1] for i in range(len(P)))) / 2
     st = max(0.25, math.sqrt(area) / 14); cands = []
     x = min(xs) + st / 2
     while x < max(xs):
         y = min(ys) + st / 2
         while y < max(ys):
-            if inpoly(x, y, P) and edist(x, y, P) >= min(0.5, clear + 0.05):
+            if inpoly(x, y, P) and edist(x, y, P) >= min(0.5, clear + 0.05) and area >= 4:
                 o = Vector((x, y, A.eye))
                 near = [sc.ray_cast(dg, Vector((x, y, h)), Vector((math.cos(t), math.sin(t), 0)), distance=clear)[0] for h in ((1.0, A.eye) if clear < 0.45 else (0.5, 1.0, A.eye)) for t in [i * math.pi / 4 for i in range(8)]]
                 if not any(near):           # nothing within 0.45 m: not in a door leaf, wall, plant or chair
@@ -57,6 +57,8 @@ def views(r, clear=0.45, tol=0.35, near_min=1.0):
         x += st
     cands.sort(key=lambda c: -c[0]); out = []
     for c in cands:
+        if c[5] < 2.5: continue                              # a view that mostly sees a wall within 2.5 m is no view
+        if out and c[5] < 0.6 * out[0][5]: continue          # a second view must see at least 60 % as deep as the best one
         if all(abs(((c[2] - u[2] + math.pi) % (2 * math.pi)) - math.pi) > math.radians(100) or math.hypot(c[1][0] - u[1][0], c[1][1] - u[1][1]) > 2.5 for u in out): out.append(c)
         if len(out) == 2: break
     return out, len(cands)
@@ -64,9 +66,10 @@ rooms = {}; log = {}
 hero = json.load(open(A.hero))['cameras'] if A.hero and os.path.exists(A.hero) else []
 for r in L['rooms']:
     if re.search(A.skip, r['name'], re.I) or not r.get('poly'): continue
-    if prev and r['name'] not in prev.get('rooms', {}): continue
     vs, n = views(r)
-    if not vs: vs, n = views(r, clear=0.3, tol=0.8, near_min=0.8)          # a crowded room (a seating cluster): looser clearance, chairs below eye level
+    for kw in (dict(clear=0.3, tol=0.8, near_min=1.5), dict(clear=0.25, tol=0.9, near_min=1.1)):      # crowded or small rooms: looser, step by step
+        if vs: break
+        vs, n = views(r, **kw)
     lst = []
     for c in hero:
         if c.get('room') == r['name'] and c['name'].endswith('_logo'):
