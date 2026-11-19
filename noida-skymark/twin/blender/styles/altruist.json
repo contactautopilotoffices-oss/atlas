@@ -8,7 +8,8 @@
   "wb_k": 4200,
   "downlight_w": 18,
   "grey_target": 0.18,
-  "portals": true
+  "portals": true,
+  "ceiling_fill_w_m2": 2.0
  },
  "heights": {
   "ceiling": 3.05,
@@ -208,7 +209,11 @@
    "material": "royal_blue",
    "top": "white_top",
    "height": 1.05,
-   "min_area_m2": 0.6
+   "min_area_m2": 0.6,
+   "front_block": true,
+   "body": "white_top",
+   "led": "led_warm",
+   "front_frac": 0.62
   },
   "seat_kind_map": {
    "visitor / lounge chair": "cafe",
@@ -228,7 +233,15 @@
     "r_below": 0.12,
     "material": "chrome"
    }
-  ]
+  ],
+  "seat_kind_by_room": [
+   {
+    "room": "^RECEPTION",
+    "kind": "visitor / lounge chair",
+    "type": "beam"
+   }
+  ],
+  "beam_width": 0.42
  },
  "logo": [
   {
@@ -236,7 +249,7 @@
    "text": "altruist",
    "material": "logo_marble",
    "height": 0.3,
-   "z": 1.85,
+   "z": 1.71,
    "wall": "feature",
    "depth": 0.04,
    "standoff": 0.03,
@@ -248,14 +261,16 @@
     "material": "logo_halo",
     "pad": 0.05
    },
-   "downlights": true
+   "downlights": true,
+   "word_svg": "styles/brand/altruist_word.svg",
+   "width": 2.3
   },
   {
    "room": "^LOBBY$|^LOBBY \\(|^MAIN LOBBY",
    "text": "altruist",
    "material": "logo_marble",
    "height": 0.26,
-   "z": 1.85,
+   "z": 1.73,
    "wall": "auto",
    "depth": 0.04,
    "standoff": 0.03,
@@ -267,7 +282,9 @@
     "material": "logo_halo",
     "pad": 0.05
    },
-   "downlights": true
+   "downlights": true,
+   "word_svg": "styles/brand/altruist_word.svg",
+   "width": 2.0
   }
  ],
  "feature_walls": [
@@ -279,7 +296,37 @@
    "z0": 0.0,
    "z1": 3.05,
    "width": 4.2,
-   "logo_wall": true
+   "logo_wall": true,
+   "fallback_auto": true
+  },
+  {
+   "room": "CONFERENCE|MEETING ROOM",
+   "side": "table_end",
+   "type": "screen",
+   "material": "tv_screen",
+   "credenza": false,
+   "fallback_auto": true,
+   "screen_z": 1.1
+  },
+  {
+   "room": "CONFERENCE",
+   "side": "auto",
+   "type": "panel",
+   "material": "fabric_olive",
+   "z0": 0.1,
+   "z1": 2.7
+  },
+  {
+   "room": "^TRAINING",
+   "side": "facing",
+   "type": "screen",
+   "material": "tv_screen",
+   "credenza": false,
+   "whiteboard": true,
+   "screen_w": 1.9,
+   "screen_h": 1.08,
+   "screen_z": 1.1,
+   "fallback_auto": true
   },
   {
    "kind": "cabin",
@@ -518,6 +565,22 @@
    "kind": "metal",
    "color": "#d9dbdd",
    "rough": 0.12
+  },
+  "led_warm": {
+   "kind": "emission",
+   "kelvin": 3000,
+   "strength": 6.0
+  },
+  "tv_screen": {
+   "kind": "screen",
+   "glow": "#16222b",
+   "strength": 0.12
+  },
+  "whiteboard": {
+   "kind": "plastic",
+   "color": "#f7f7f5",
+   "rough": 0.12,
+   "coat": 0.6
   }
  },
  "brief_gaps": [

@@ -166,7 +166,10 @@ def bake(tenant, L, S, out, A):
         for o in sc.objects: o.select_set(False)
         for o in g["objs"]: o.select_set(True)
         bpy.context.view_layer.objects.active = g["objs"][0]
+        sb = {k: int(v) for k, v in (kv.split(":") for kv in getattr(A, "bake_samples_by", "").split(",") if ":" in kv)}
+        g["samples"] = max([sb.get(o.get("twin_layer"), A.bake_samples) for o in g["objs"]] + [A.bake_samples]); sc.cycles.samples = g["samples"]
         bpy.ops.object.bake(type="DIFFUSE", pass_filter={"DIRECT", "INDIRECT"}, margin=16, use_clear=True)
+        sc.cycles.samples = A.bake_samples
         raw = os.path.join(d, f"_{name}.exr"); img.filepath_raw = raw; img.file_format = "OPEN_EXR"; img.save()
         # guides for the denoiser: albedo (diffuse colour) and world normal, 1-4 samples each
         keep_s = sc.cycles.samples; sc.cycles.samples = 4
@@ -188,11 +191,16 @@ def bake(tenant, L, S, out, A):
         if not ok:
             k = np.array([1, 4, 6, 4, 1], np.float32) / 16
             for ax in (0, 1): a = sum(np.roll(a, s - 2, axis=ax) * k[s] for s in range(5))
-        p995 = float(np.percentile(a[a.sum(2) > 0], 99.5)) if (a.sum(2) > 0).any() else 1.0; kk = 1.0 / max(p995, 1e-6)
+        clip = getattr(A, "lm_clip_pct", 99.5) or 99.5          # opt-in lower percentile: a few hot texels (sun patches) no longer push the rest into the bottom codes
+        p995 = float(np.percentile(a[a.sum(2) > 0], clip)) if (a.sum(2) > 0).any() else 1.0; kk = 1.0 / max(p995, 1e-6)
+        if getattr(A, "lm_keep_float", False): TL_write_exr(os.path.join(d, f"_{name}_float.exr"), a)     # keep the denoised float atlas: re-normalise later without a re-bake
         png = os.path.join(d, f"{name}.png")
         # the PNG is sRGB-encoded (so 8 bits hold the darks); the viewer marks it SRGBColorSpace and three decodes it
         enc = np.clip(a * kk, 0, 1); enc = np.where(enc <= 0.0031308, enc * 12.92, 1.055 * np.power(enc, 1 / 2.4) - 0.055)
         TL.write_png(png, enc)      # same row order as Blender's own image files
+        q = np.round(enc * 255).astype(np.uint8); used = q[(a.sum(2) > 0)]; g_ = used[:, 1] if used.ndim == 2 else used
+        levels = int(len(np.unique(g_[g_ > 0]))); med = float(np.median(g_)) if len(g_) else 0.0
+        g["lm_levels"] = levels; g["lm_median_code"] = round(med, 1); g["lm_clip_pct"] = clip
         for f_ in (raw, den, alb, nrm):
             if os.path.exists(f_): os.remove(f_)
         for o in g["objs"]:
@@ -202,7 +210,7 @@ def bake(tenant, L, S, out, A):
             except Exception: pass
         info[name] = {"objects": [o.name for o in g["objs"]], "area_m2": round(g["area"], 1), "scale_k": round(kk, 4), "lightMapIntensity": round(math.pi / kk, 5),
                       "denoised": "OIDN (compositor, albedo + normal guides)" if ok else "blur fallback", "texel_m": round(g["texel"], 4),
-                      "seconds": round(time.time() - tg, 1), **({"uv_overlap_faces": g["uv_overlap_faces"]} if g.get("uv_overlap_faces") is not None else {})}
+                      "seconds": round(time.time() - tg, 1), "levels_8bit": g.get("lm_levels"), "median_code": g.get("lm_median_code"), "clip_pct": g.get("lm_clip_pct"), "samples": g.get("samples"), **({"uv_overlap_faces": g["uv_overlap_faces"]} if g.get("uv_overlap_faces") is not None else {})}
         print(f"  atlas {name}: {len(g['objs'])} objects, {g['area']:.0f} m2, denoise {'OIDN' if ok else 'blur'}, {time.time() - tg:.0f} s", flush=True)
     json.dump({"atlases": info, "res": A.bake_res, "samples": A.bake_samples, "texel_m": A.bake_texel, "seconds": round(time.time() - t0, 1)},
               open(os.path.join(d, f"{tenant}_lightmaps.json"), "w"), indent=1)

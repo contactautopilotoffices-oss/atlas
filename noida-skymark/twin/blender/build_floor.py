@@ -31,7 +31,7 @@ ap.add_argument("--preview-samples", type=int, default=32); ap.add_argument("--c
 ap.add_argument("--stills-samples", type=int, default=128); ap.add_argument("--stills-res", default="1920x1080")
 ap.add_argument("--stills-max", type=int, default=0, help="at most this many stills (0 = every camera)")
 ap.add_argument("--stills-kinds", default="entry,feature,reverse,detail"); ap.add_argument("--rooms", default="", help="regex: only rooms whose name matches (cameras, stills, bake)")
-ap.add_argument("--bake-res", type=int, default=2048); ap.add_argument("--bake-samples", type=int, default=256); ap.add_argument("--bake-texel", type=float, default=0.025); ap.add_argument("--bake-texel-by", default=""); ap.add_argument("--bake-pad-px", type=int, default=0)
+ap.add_argument("--bake-res", type=int, default=2048); ap.add_argument("--bake-samples", type=int, default=256); ap.add_argument("--bake-texel", type=float, default=0.025); ap.add_argument("--bake-texel-by", default=""); ap.add_argument("--bake-pad-px", type=int, default=0); ap.add_argument("--bake-samples-by", default=""); ap.add_argument("--stills-context", default=""); ap.add_argument("--stills-context-collections", default=""); ap.add_argument("--stills-meter", action="store_true"); ap.add_argument("--stills-meter-target", type=float, default=0.30); ap.add_argument("--stills-meter-range", type=float, default=1.0); ap.add_argument("--lm-clip-pct", type=float, default=99.5); ap.add_argument("--lm-keep-float", action="store_true")
 ap.add_argument("--allow-placement-issues", action="store_true"); ap.add_argument("--no-nudge", action="store_true")
 ap.add_argument("--exposure-ev", type=float, default=None, help="light stage: use this exposure (and this daylight scale, see --daylight-scale) instead of measuring; for option renders that must match the main set")
 ap.add_argument("--daylight-scale", type=float, default=None); ap.add_argument("--window-stops", type=float, default=3.0)
@@ -194,6 +194,26 @@ def stage_light():
             pl = bpy.data.lights.new("Portal", "AREA"); pl.shape = "RECTANGLE"; pl.size = ln; pl.size_y = z1 - z0; pl.cycles.is_portal = True
             po = link(bpy.data.objects.new("Portal", pl)); np_ += 1
             po.matrix_world = Matrix(((ca, 0, -ix, cx - ix * 0.1), (sa, 0, -iy, cy - iy * 0.1), (0, 1, 0, (z0 + z1) / 2), (0, 0, 0, 1)))
+    if lt.get("ceiling_fill_w_m2"):
+        # opt-in: the light a real ceiling gets from bright desks, walls and people, which a near-black carpet does not
+        # bounce: one up-facing area light per ceilinged room (0.7 m below it, unseen by the camera and in reflections)
+        nf = 0; dens = lt["ceiling_fill_w_m2"]; ceil = M.get("ceilings", {})
+        for r in LAYOUT["rooms"]:
+            cinfo = ceil.get(r["name"]) or {}
+            if cinfo.get("type") not in ("grid", "plain") or not r.get("poly"): continue
+            P = r["poly"]; xs = [q[0] for q in P]; ys = [q[1] for q in P]; x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
+            nx_, ny_ = max(1, min(8, int((x1 - x0) / 4))), max(1, min(8, int((y1 - y0) / 4))); dx, dy = (x1 - x0) / nx_, (y1 - y0) / ny_
+            for i in range(nx_):
+                for j in range(ny_):
+                    cx, cy = x0 + (i + 0.5) * dx, y0 + (j + 0.5) * dy
+                    if not TL.in_poly(cx, cy, P): continue
+                    ld = bpy.data.lights.new("CeilFill", "AREA"); ld.shape = "RECTANGLE"; ld.size = dx * 0.9; ld.size_y = dy * 0.9
+                    ld.energy = dens * dx * dy; ld.color = light_col(lamp_k_ := lt.get("lamp_k", 4000), wb, 0.9)
+                    try: ld.cycles.cast_shadow = True
+                    except Exception: pass
+                    fo = link(bpy.data.objects.new("CeilFill", ld)); fo.location = (cx, cy, cinfo.get("height", 3.05) - 0.7); fo.rotation_euler = (math.pi, 0, 0)
+                    fo.visible_camera = False; fo.visible_glossy = False; fo.visible_transmission = False; fo["twin_layer"] = "LIGHT_RIG"; nf += 1
+        print(f"ceiling fill: {nf} up-facing area lights at {dens} W/m2", flush=True)
     nl = 0; lamp_k = lt.get("lamp_k", 4000)
     for o in list(sc.objects):
         if o.get("twin_layer") == "LIGHT" and o.get("lamp") == "spot":

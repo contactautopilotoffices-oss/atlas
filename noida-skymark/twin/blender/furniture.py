@@ -182,6 +182,27 @@ class Furnisher:
             if rd and w * d >= rd.get("min_area_m2", 1.0) and re.search(rd.get("room", "^reception$"), t.get("room", ""), re.I) and t is max([q for q in self.L["tables"] if q.get("room") == t.get("room") and "poly" in q], key=lambda q: (max(p[0] for p in q["poly"]) - min(p[0] for p in q["poly"])) * (max(p[1] for p in q["poly"]) - min(p[1] for p in q["poly"]))):
                 # the reception desk: a faceted solid, its faces raked in at top and bottom (glossy cobalt in Paytm's brief)
                 hh = rd.get("height", 1.05); m = self.mb(); import bmesh as _bm
+                if rd.get("front_block"):
+                    # opt-in (Altruist): a white body and top, a narrower royal-blue front block 50 mm proud of the visitor
+                    # face, and a warm LED strip in a recessed plinth; the visitor face looks to the middle of the room
+                    rr = next((q for q in self.c.ras.rooms if q["name"] == t.get("room")), None); bx = rr and rr.get("box")
+                    rc = Vector(((bx[0] + bx[2]) / 2, (bx[1] + bx[3]) / 2)) if bx else Vector((cx, cy))
+                    along_x = w >= d; L_, D_ = (w, d) if along_x else (d, w)
+                    v = (1 if (rc.y - cy) >= 0 else -1) if along_x else (1 if (rc.x - cx) >= 0 else -1)     # world side of the visitor face
+                    staff = [q for q in self.L["seats"] if "reception" in q["kind"] and math.hypot(q["x"] - cx, q["y"] - cy) < 2.0]
+                    if staff:          # the receptionist's chair says which side is the staff side: the visitor face is the other one
+                        q = staff[0]; v = -1 if ((q["y"] - cy) if along_x else (q["x"] - cx)) > 0 else 1
+                    sgn = v if along_x else -v          # local +y turns to world -x when the desk runs north-south
+                    R_ = Matrix.Rotation(0 if along_x else math.pi / 2, 4, "Z") @ Matrix.Scale(1, 4)      # local x along the desk, +y to the visitor side (sign below)
+                    F_ = Matrix.Scale(sgn, 4, Vector((0, 1, 0)))
+                    pl = rd.get("plinth", 0.08)
+                    kd = rd.get("knee_frac", 0.3) * D_          # the staff side is open below the top (the receptionist's chair goes in there)
+                    m.box(L_ - 0.1, D_ - kd - 0.1, pl, R_ @ F_ @ T(0, kd / 2, 0), rd.get("plinth_material", "black_paint"), 0.0)
+                    m.box(L_, D_ - kd, hh - pl, R_ @ F_ @ T(0, kd / 2, pl), rd.get("body", "white_top"), 0.004)
+                    m.box(L_ * rd.get("front_frac", 0.62), 0.05, hh - pl - 0.06, R_ @ F_ @ T(0, D_ / 2 + 0.025, pl + 0.03), rd.get("material", "royal_blue"), 0.004)
+                    m.box(L_ - 0.12, 0.012, 0.012, R_ @ F_ @ T(0, D_ / 2 - 0.044, 0.03), rd.get("led", "led_warm"), 0.0)
+                    m.box(L_ + 0.02, D_ + 0.02, 0.03, R_ @ F_ @ T(0, 0, hh), rd.get("top", "white_top"), 0.004)
+                    self.R.put("TABLE", "receptiondesk", m.build("reception_desk"), T(cx, cy, 0), props={"room": t.get("room", "")}); continue
                 def inset(poly, k):
                     return [(x * k, y * k) for x, y in poly]
                 rings = [(inset(loc, 0.88), 0.0), (inset(loc, 1.0), 0.35), (inset(loc, 1.0), hh - 0.2), (inset(loc, 0.94), hh)]
@@ -285,7 +306,10 @@ class Furnisher:
         smap = dict(SEAT_MAP); smap.update(F.get("seat_map", {}))
         for s in self.L["seats"]:
             k = s["kind"]; typ = "sofa" if "sofa" in k else smap.get(k, "chair")
+            for rule in F.get("seat_kind_by_room", []):      # opt-in: a chair kind gets another model in some rooms (reception benches)
+                if re.search(rule["room"], s.get("room") or "", re.I) and (not rule.get("kind") or rule["kind"] == k): typ = rule["type"]
             a = s["face"] + self.rnd.uniform(-0.06, 0.06)      # a few degrees of turn, never a move
+            if typ == "beam": a = s["face"]                    # beam seating is one rigid row
             M0 = T(s["x"], s["y"], 0) @ RZ(a)
             if typ in ("chair", "lounge"):
                 base = chair if typ == "chair" else lounge; me = base
@@ -300,6 +324,20 @@ class Furnisher:
                         for sy in (-1, 1): m.rod((sx * 0.13 - 0.02, sy * 0.13, 0.445), (sx * 0.21 - 0.02, sy * 0.2, 0.0), 0.017, 0.011, F.get("cafe_legs", "oak"))
                     return m.build("cafe_chair")
                 self.R.put("SEAT", s.get("block", k), self.c.proto(("cafe", mat), mk), M0, props={"cad_kind": k})
+            elif typ == "beam":          # airport-style beam seating: upholstered seat and back on a black steel beam, one unit per CAD seat
+                mat = F.get("beam_fabric", "fabric_grey"); wb = F.get("beam_width", 0.56)
+                def mk(mat=mat, wb=wb):
+                    m = self.mb(); fr = "black_metal"; cw = wb - 0.06
+                    m.box(0.43, cw, 0.10, T(0.0, 0, 0.37), mat, 0.04)                                                      # seat cushion
+                    m.box(0.09, cw, 0.46, T(-0.22, 0, 0.45) @ Matrix.Rotation(math.radians(-10), 4, "Y"), mat, 0.04)       # back cushion
+                    m.box(0.42, cw - 0.04, 0.02, T(0.0, 0, 0.345), fr, 0.004)                                               # seat pan
+                    for e in (-1, 1):
+                        m.box(0.32, 0.022, 0.022, T(0.0, e * (wb / 2 - 0.016), 0.63), "chrome", 0.006)                    # arm
+                        m.rod((0.13, e * (wb / 2 - 0.016), 0.63), (0.13, e * (wb / 2 - 0.016), 0.33), 0.009, 0.009, "chrome", None, 10)
+                    m.box(0.06, wb - 0.02, 0.05, T(-0.03, 0, 0.29), fr, 0.006)                                              # beam
+                    m.cyl(0.022, 0.29, T(-0.03, 0, 0.0), "chrome", 14); m.box(0.36, 0.05, 0.012, T(-0.03, 0, 0.0), fr, 0.004)
+                    return m.build("beam_seat")
+                self.R.put("SEAT", s.get("block", k), self.c.proto(("beam", mat, wb), mk), M0, props={"cad_kind": k, "seat_id": s.get("id", "")})
             elif typ == "stool":
                 def mk():
                     m = self.mb(); self.shell_mesh(F.get("stool", "planter_white"), 0.74, 0.4, 0.37, 0.13, m=m, M=Matrix())
@@ -467,6 +505,20 @@ class Furnisher:
         x0, y0, x1, y1 = r["box"]; c = Vector(((x0 + x1) / 2, (y0 + y1) / 2, z))
         dirs = {"E": 0, "N": 90, "W": 180, "S": 270}
         cand = [dirs[side]] if side in dirs else list(range(0, 360, 30 if side == "door" else 45))
+        if side in ("table_end", "facing"):      # opt-in: the end wall of the room's biggest table, or the wall its chairs face (the front of a training room)
+            ang = None
+            if side == "table_end":
+                tb = [q for q in self.L["tables"] if q.get("room") == r["name"] and "poly" in q]
+                if tb:
+                    q = max(tb, key=lambda q: (max(p[0] for p in q["poly"]) - min(p[0] for p in q["poly"])) * (max(p[1] for p in q["poly"]) - min(p[1] for p in q["poly"])))
+                    w_ = max(p[0] for p in q["poly"]) - min(p[0] for p in q["poly"]); d_ = max(p[1] for p in q["poly"]) - min(p[1] for p in q["poly"])
+                    ang = 0 if w_ >= d_ else 90; cand = [ang, ang + 180]
+            else:
+                fs = [s_["face"] for s_ in self.L["seats"] if s_.get("room") == r["name"]]
+                if fs:
+                    cx_ = sum(math.cos(f) for f in fs); cy_ = sum(math.sin(f) for f in fs)
+                    if math.hypot(cx_, cy_) > 0.5 * len(fs): cand = [round(math.degrees(math.atan2(cy_, cx_)) / 5) * 5]
+            if side == "table_end" and ang is None: cand = list(range(0, 360, 45))
         origins = [c]
         if side == "door":       # the wall you face as you come in: looked for from 1 m inside each door of the room
             origins = []
@@ -550,15 +602,47 @@ class Furnisher:
         if blocked: print(f"logo in {r['name']}: something stands within 2 m in front of it (offsets {blocked})", flush=True)
         self.c.meta["log"].setdefault("logo", []).append({"room": r["name"], "mode": mode, "at": [round(v, 2) for v in w["point"]][:2]})
 
-    def _logo_built(self, lg, hgt):
-        dep = lg.get("depth", 0.04); m = self.mb(); parts = []
-        cu = bpy.data.curves.new("logo_text", "FONT"); cu.body = lg.get("text", self.c.tenant); cu.size = hgt * 1.3; cu.extrude = dep / 2; cu.align_x = "LEFT"; cu.align_y = "CENTER"
-        if lg.get("font") and os.path.exists(lg["font"]): cu.font = bpy.data.fonts.load(lg["font"], check_existing=True)
-        try: cu.body_format[0].use_bold = True
+    def _svg_word(self, svg, lg, dep, mark):
+        """The client's own wordmark: an SVG (traced outline) imported as curves, scaled so mark + gap + word span
+        lg['width'] (the mark tile is as tall as the word), extruded to `dep`, centred on z = 0 in the x-y plane
+        (turned upright by the caller). Returns (mesh, word height)."""
+        import addon_utils
+        try: addon_utils.enable("io_curve_svg", default_set=False)
         except Exception: pass
-        tmp = bpy.data.objects.new("tmp", cu); bpy.context.scene.collection.objects.link(tmp); bpy.context.view_layer.update()
-        tm = bpy.data.meshes.new_from_object(tmp.evaluated_get(bpy.context.evaluated_depsgraph_get())); bpy.data.objects.remove(tmp); bpy.data.curves.remove(cu)
-        xs = [v.co.x for v in tm.vertices] or [0, 1]; tw = max(xs) - min(xs); mark = lg.get("mark")
+        before = set(bpy.data.objects); bpy.ops.import_curve.svg(filepath=svg)
+        objs = [o for o in bpy.data.objects if o not in before and o.type == "CURVE"]
+        pts = [o.matrix_world @ p.co for o in objs for sp in o.data.splines for p in sp.bezier_points]
+        x0, x1 = min(p.x for p in pts), max(p.x for p in pts); y0, y1 = min(p.y for p in pts), max(p.y for p in pts)
+        aspect = (x1 - x0) / max(1e-9, y1 - y0); H = lg.get("width", 2.3) / ((1.05 + 0.18 if mark else 0.0) + aspect); sc_ = H / (y1 - y0)
+        tm = bpy.data.meshes.new("logo_word"); import bmesh as _bm; bm = _bm.new()
+        for o in objs:
+            o.data.transform(Matrix.Scale(sc_, 4) @ o.matrix_world @ Matrix.Translation((0, 0, 0))); o.matrix_world = Matrix()
+            o.data.dimensions = "2D"; o.data.fill_mode = "BOTH"; o.data.extrude = dep / 2; o.data.resolution_u = 6
+        bpy.context.view_layer.update(); dg = bpy.context.evaluated_depsgraph_get()
+        for o in objs:
+            me = bpy.data.meshes.new_from_object(o.evaluated_get(dg)); bm.from_mesh(me); bpy.data.meshes.remove(me)
+        cx, cy = (x0 + x1) / 2 * sc_, (y0 + y1) / 2 * sc_
+        _bm.ops.translate(bm, vec=(-cx, -cy, 0), verts=bm.verts); bm.to_mesh(tm); bm.free()
+        cols = {c for o in objs for c in o.users_collection}
+        for o in objs: d_ = o.data; bpy.data.objects.remove(o); bpy.data.curves.remove(d_)
+        for c in cols:
+            if c != bpy.context.scene.collection and not c.objects: bpy.data.collections.remove(c)
+        print(f"logo: wordmark from {os.path.basename(svg)}, {aspect:.2f}:1, word height {H:.3f} m, {len(tm.polygons)} faces", flush=True)
+        return tm, H
+
+    def _logo_built(self, lg, hgt):
+        dep = lg.get("depth", 0.04); m = self.mb(); parts = []; mark = lg.get("mark")
+        svg = lg.get("word_svg"); svg = svg and (svg if os.path.isabs(svg) else os.path.join(HERE, svg))
+        if svg and os.path.exists(svg):
+            tm, hgt = self._svg_word(svg, lg, dep, mark)
+        else:
+            cu = bpy.data.curves.new("logo_text", "FONT"); cu.body = lg.get("text", self.c.tenant); cu.size = hgt * 1.3; cu.extrude = dep / 2; cu.align_x = "LEFT"; cu.align_y = "CENTER"
+            if lg.get("font") and os.path.exists(lg["font"]): cu.font = bpy.data.fonts.load(lg["font"], check_existing=True)
+            try: cu.body_format[0].use_bold = True
+            except Exception: pass
+            tmp = bpy.data.objects.new("tmp", cu); bpy.context.scene.collection.objects.link(tmp); bpy.context.view_layer.update()
+            tm = bpy.data.meshes.new_from_object(tmp.evaluated_get(bpy.context.evaluated_depsgraph_get())); bpy.data.objects.remove(tmp); bpy.data.curves.remove(cu)
+        xs = [v.co.x for v in tm.vertices] or [0, 1]; tw = max(xs) - min(xs)
         ms = hgt * 1.05 if mark else 0.0; gap = hgt * 0.18 if mark else 0.0; total = ms + gap + tw; x0 = -total / 2
         tm.transform(Matrix.Translation((x0 + ms + gap - min(xs), 0, 0)))
         tm.transform(Matrix.Rotation(math.pi / 2, 4, "X"))          # letters stand in the x-z plane, depth along -y (out of the wall)
@@ -587,6 +671,8 @@ class Furnisher:
             rooms = [r for r in self.c.ras.rooms if r.get("box") and ((fw.get("room") and re.search(fw["room"], r["name"], re.I)) or (fw.get("kind") and room_kind(self.S, r["name"]) == fw["kind"]))]
             for ri, r in enumerate(rooms[:fw.get("max_rooms", 99)]):
                 w = self.find_wall(r, fw.get("side", "auto"), avoid=self.c.used_walls.setdefault(r["name"], []))
+                if not w and fw.get("fallback_auto") and fw.get("side", "auto") != "auto":       # opt-in: no wall on that side, take the best other one
+                    w = self.find_wall(r, "auto", avoid=self.c.used_walls[r["name"]]); print(f"feature wall in {r['name']}: no {fw.get('side')} wall, used the best other wall" if w else f"feature wall in {r['name']}: no flat wall", flush=True)
                 if w: self.c.used_walls[r["name"]].append(w["point"])
                 if not w: continue
                 n, t = w["normal"], w["tangent"]; ang = math.atan2(t.y, t.x); wd = min(w["width"] - 0.1, fw.get("width", 99)); z0, z1 = fw.get("z0", 0.1), min(fw.get("z1", 2.6), self.c.ceiling_z(r["name"]) - 0.02)
@@ -622,6 +708,25 @@ class Furnisher:
                     for j in range(nv):
                         for i in range(nu): a_ = j * (nu + 1) + i; Fc.append((a_, a_ + 1, a_ + nu + 2, a_ + nu + 1))
                     m.add(V, Fc, mat, None, True); m.box(wd, 0.03, 0.02, T(0, 0.04, z1 - 0.01), fw.get("cove", "cove_led"))
+                elif typ == "screen":      # opt-in: a wall display with a low credenza under it, and an optional whiteboard beside it
+                    sw, sh_ = fw.get("screen_w", 1.65), fw.get("screen_h", 0.95)
+                    span = sw + (2.2 if fw.get("whiteboard") and wd > sw + 2.2 else 0.0); ops = [d_["_opening"] for d_ in self.L["doors"] if d_.get("_opening")]
+                    ok_at = None
+                    for off in (0.0, 0.5, -0.5, 1.0, -1.0, 1.5, -1.5, 2.0, -2.0):
+                        if abs(off) + span / 2 > wd / 2: continue
+                        q = w["point"] + t * off
+                        if all(math.hypot(op[0] - q.x, op[1] - q.y) > span / 2 + 1.0 for op in ops): ok_at = off; break
+                    if ok_at is None: print(f"screen in {r['name']}: every spot on that wall is within 1 m of a door; left out", flush=True); continue
+                    w = dict(w, point=w["point"] + t * ok_at)
+                    m.box(sw + 0.02, 0.04, sh_ + 0.02, T(0, 0.022, fw.get("screen_z", 1.0)), "black_metal", 0.004)
+                    m.box(sw, 0.004, sh_, T(0, 0.044, fw.get("screen_z", 1.0) + 0.01), fw.get("screen_material", "tv_screen"), 0.0)
+                    if fw.get("credenza", True) and wd > 1.6:
+                        cw = min(fw.get("credenza_w", 1.8), wd - 0.2); cd_ = fw.get("credenza_d", 0.4)
+                        m.box(cw, cd_, 0.6, T(0, cd_ / 2 + 0.003, 0.0), fw.get("credenza_material", "white_top"), 0.004)
+                        m.box(cw + 0.02, cd_ + 0.01, 0.025, T(0, cd_ / 2 + 0.008, 0.6), fw.get("credenza_top", "oak"), 0.003)
+                    if fw.get("whiteboard") and wd > sw + 2.2:
+                        u = sw / 2 + 0.25 + 0.9
+                        m.box(1.82, 0.025, 1.22, T(u, 0.0145, 0.9), "white_metal", 0.003); m.box(1.78, 0.004, 1.18, T(u, 0.029, 0.92), fw.get("board_material", "whiteboard"), 0.0)
                 else:
                     m.box(wd, fw.get("thickness", 0.018), hh, T(0, fw.get("thickness", 0.018) / 2 + 0.002, z0), mat, 0.003)
                 tt = -t        # right-handed frame: x along the wall, y out of the wall into the room

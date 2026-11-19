@@ -60,11 +60,46 @@ def run(tenant, L, S, out, A):
     if os.path.exists(prev):
         try: done = [x for x in json.load(open(prev))["stills"] if os.path.exists(os.path.join(d, x["png"]))]
         except Exception: done = []
+    if getattr(A, "stills_context", ""):
+        # opt-in: the exterior worker's real Airoli (ground, roads, buildings, trees) seen through the windows, for stills only.
+        # The plain context blocks are hidden; the exterior is in rtp_local with z from the ground, so it drops by this floor's FFL.
+        st_ = L.get("storeys", {}); ffl = st_.get("ffl_m", 0.0) or 0.0
+        pat = getattr(A, "stills_context_collections", "") or r"^ctx_|^terrain$"
+        with bpy.data.libraries.load(A.stills_context, link=True) as (src, dst):
+            dst.collections = [c for c in src.collections if re.search(pat, c)]
+        nlink = 0
+        for c in dst.collections:
+            if c is None or any(p_.name in ("ctx_props",) for p_ in []): continue
+            e = bpy.data.objects.new("ctx_" + c.name, None); e.instance_type = "COLLECTION"; e.instance_collection = c
+            e.location = (0, 0, -ffl); sc.collection.objects.link(e); nlink += 1
+        for o in sc.objects:
+            if o.get("twin_layer") == "CONTEXT": o.hide_render = True
+        print(f"stills: linked {nlink} exterior collections from {os.path.basename(A.stills_context)} at z -{ffl} m; plain context hidden", flush=True)
+    base_ev = sc.get("twin_exposure_ev", 0.0)
+    def meter(cam):
+        """Exposure for this view: a 192x108 pre-render, median of the frame without the windows (anything above 4x the
+        median), set so that median reads A.stills_meter_target, within +-A.stills_meter_range EV of the floor's grey card."""
+        import OpenImageIO as oiio
+        keep = (sc.render.resolution_x, sc.render.resolution_y, sc.cycles.samples, sc.cycles.use_denoising)
+        sc.render.resolution_x, sc.render.resolution_y = 192, 108; sc.cycles.samples = 24; sc.cycles.use_denoising = True
+        TL.colour_management(sc, 0.0); sc.camera = cam; bpy.ops.render.render()
+        ims = sc.render.image_settings; fmt = (ims.file_format, ims.color_depth)
+        ims.file_format = "OPEN_EXR"; ims.color_depth = "32"; tmp = os.path.join(d, "_meter.exr"); bpy.data.images["Render Result"].save_render(tmp)
+        ims.file_format, ims.color_depth = fmt
+        sc.render.resolution_x, sc.render.resolution_y, sc.cycles.samples, sc.cycles.use_denoising = keep
+        i_ = oiio.ImageInput.open(tmp); a = np.asarray(i_.read_image(format=oiio.FLOAT))[..., :3]; i_.close(); os.remove(tmp)
+        lum = (a * [0.2126, 0.7152, 0.0722]).sum(-1).ravel(); med = float(np.median(lum)); lum = lum[lum < med * 4]
+        med = max(float(np.median(lum)), 1e-6); ev = math.log2(A.stills_meter_target / med)
+        # the 0 EV render here is scene-linear before the view transform's exposure; colour_management(ev) applies 2**ev
+        return max(base_ev - A.stills_meter_range, min(base_ev + A.stills_meter_range, ev)), med
     for i, cam in enumerate(cams):
         png = os.path.join(d, cam.name + ".png")
         if os.path.exists(png): print("skip (exists):", png); continue
         done = [x for x in done if x["camera"] != cam.name]
-        sc.camera = cam; tc = time.time(); bpy.ops.render.render()
+        tc = time.time(); ev_used = base_ev
+        if getattr(A, "stills_meter", False):
+            ev_used, med = meter(cam); print(f"  {cam.name}: metered EV {ev_used:+.2f} (floor grey card {base_ev:+.2f}, frame median {med:.4f})", flush=True)
+        TL.colour_management(sc, ev_used); sc.camera = cam; bpy.ops.render.render()
         rr = bpy.data.images["Render Result"]
         ims = sc.render.image_settings
         try: ims.media_type = "IMAGE"
@@ -80,7 +115,7 @@ def run(tenant, L, S, out, A):
         try: masks = crypto_masks(exr, S.get("parts", {}), os.path.join(d, cam.name))
         except Exception as e: print("masks failed:", e)
         st = TL.exposure_stats(TL.read_png(png)); dt = round(time.time() - tc, 1)
-        done.append({"camera": cam.name, "room": cam.get("room"), "kind": cam.get("kind"), "png": os.path.basename(png), "exr": os.path.basename(exr), "masks": masks, "stats": st, "seconds": dt})
+        done.append({"camera": cam.name, "room": cam.get("room"), "kind": cam.get("kind"), "png": os.path.basename(png), "exposure_ev": round(ev_used, 3), "exr": os.path.basename(exr), "masks": masks, "stats": st, "seconds": dt})
         print(f"[{i + 1}/{len(cams)}] {cam.name}: {dt} s, masks {list(masks)}, {st}", flush=True)
         rv = os.path.join(out, "review"); os.makedirs(rv, exist_ok=True)
         import shutil; shutil.copy(png, os.path.join(rv, "still_" + os.path.basename(png)))

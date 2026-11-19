@@ -34,6 +34,11 @@ if A.gate != 'G2':
     if cr is not None:
         nv = sum(1 for r in cr.values() if isinstance(r, dict) and r.get('views')); nf = sum(1 for r in cr.values() if isinstance(r, dict) and r.get('error'))
         chk('Cameras: every shown room has a ray-checked view', nf == 0, f"{nv} rooms with views, {nf} without")
+    lmj = J(f'export/lightmaps/{t}_lightmaps.json')
+    if lmj and any('levels_8bit' in v for v in lmj['atlases'].values()):
+        bad = [k for k, v in lmj['atlases'].items() if (v.get('levels_8bit') or 0) < 100 or (v.get('median_code') or 0) < 25]
+        chk('Lightmaps: every atlas uses >= 100 8-bit levels and its median texel is >= code 25 (no posterised darks)', not bad,
+            f"{len(lmj['atlases'])} atlases, clip p{next(iter(lmj['atlases'].values())).get('clip_pct')}; median codes {min(v.get('median_code') or 0 for v in lmj['atlases'].values()):.0f}-{max(v.get('median_code') or 0 for v in lmj['atlases'].values()):.0f}" + (f"; low: {', '.join(bad[:6])}" if bad else ''))
     if vw is not None: chk('Export: web model written (GLB, LOD GLB, viewer.json, lightmaps)', True, f"camera near {vw.get('camera', {}).get('near')} m; files: {len(vw.get('files', []))}")
 ok = all(c['pass'] for c in checks) and bool(checks)
 clays = sorted(glob.glob(os.path.join(O, 'review', 'clay_*.png')))
