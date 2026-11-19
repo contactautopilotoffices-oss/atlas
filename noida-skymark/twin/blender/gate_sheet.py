@@ -27,6 +27,9 @@ if pl is not None:
     chk('Furniture not overlapping furniture', not soft, f"{len(soft)} pair(s)" + ('' if not soft else ': ' + '; '.join(f"{o['a'].split('_', 2)[-1]} / {o['b'].split('_', 2)[-1]} {o['depth_m'] * 1000:.0f} mm" for o in soft[:5])))
     chk('Walkways >= 1.2 m on every route from the entrance to every door', not nr,
         f"{len(nr)} stretch(es) under 1.2 m" + ('' if not nr else ' (CAD pinch points, for the designer): ' + '; '.join(f"{r['min_width_m']:.2f} m at ({r['at'][0]:.1f}, {r['at'][1]:.1f})" for r in nr[:8])))
+fo = J(f'{t}_floor_overlap.json')
+if fo is not None:
+    chk('Floor finishes: each point of the floor has exactly one finish (overlap <= 0.01 m2)', fo['ok'], f"{fo['overlap_m2']} m2 overlapping among {fo['finishes']} finish meshes" + ('' if fo['ok'] else ': ' + '; '.join(f"{p['a'].split('_', 2)[-1]} / {p['b'].split('_', 2)[-1]} {p['m2']} m2" for p in fo['pairs'][:4])))
 if cp is not None:
     chk('No two coplanar faces closer than 2 mm (flicker)', cp['ok'], f"{cp['n_hits']} overlapping pairs among {cp['faces_checked']:,} faces" + ('' if cp['ok'] else ': ' + '; '.join(f"{p['a']} / {p['b']} x{p['n']}" for p in cp['by_object_pair'][:5])))
 if A.gate != 'G2':

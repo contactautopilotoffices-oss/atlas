@@ -64,7 +64,7 @@ class Shell:
         # finishes: the raster gives each cell one room, so neighbouring finishes never overlap and nothing is layered
         floors = self.S.get("floors", {}); aisle = self.S.get("aisle", {})
         amask = self.c.aisle_mask() if aisle else None
-        lab = self.closed_floor_labels() if self.S.get("floor_close_m") else ras.label
+        lab = self.closed_floor_labels() if self.S.get("floor_close_m") else ras.label; built = []
         exact = []
         if self.S.get("floor_exact_rooms"):      # opt-in: a finish zone drawn as a free polygon (the octagonal reception tile) is built from
             import re as _re                     # its exact outline 3 mm proud; the cells under it take the surrounding finish
@@ -94,11 +94,34 @@ class Shell:
             for pm, pc in parts:
                 mm = self.mb()
                 self.surface(mm, pc, 0.0, pm)
-                if not mm.empty(): self.R.put("FLOOR", f"{tok(pm)}_{r['slug']}", mm.build(f"floor_{r['slug']}"), props={"room": r["name"], "static": 1})
+                if not mm.empty(): built.append(self.R.put("FLOOR", f"{tok(pm)}_{r['slug']}", mm.build(f"floor_{r['slug']}"), props={"room": r["name"], "static": 1}))
         for k, r in exact:
             kind = room_kind(self.S, r["name"], r.get("kind")); mat = self.S.get("floor_by_kind", {}).get(kind) or floors.get(r.get("floor", "carpet"), "carpet")
-            mm = self.mb(); mm.prism(r["poly"], 0.0, self.S.get("floor_exact_lift", 0.003), mat)
+            P = [tuple(q) for q in r["poly"]]
+            # the finishes around it are cut along its outline and their faces inside it deleted, so every point of the floor
+            # has exactly one finish (no finish lies on another: the web materials are double-sided and would z-fight)
+            import bmesh as _bm
+            from mathutils.geometry import tessellate_polygon as _tess
+            xs = [q[0] for q in P]; ys = [q[1] for q in P]; bx = (min(xs) - 0.2, min(ys) - 0.2, max(xs) + 0.2, max(ys) + 0.2); ncut = 0
+            for o in built:
+                if o is None: continue
+                bb = [o.matrix_world @ Vector(c) for c in o.bound_box]
+                if max(c.x for c in bb) < bx[0] or min(c.x for c in bb) > bx[2] or max(c.y for c in bb) < bx[1] or min(c.y for c in bb) > bx[3]: continue
+                Mi = o.matrix_world.inverted(); bm = _bm.new(); bm.from_mesh(o.data)
+                for i in range(len(P)):
+                    a_, b_ = Vector((*P[i], 0.0)), Vector((*P[(i + 1) % len(P)], 0.0)); nrm = (b_ - a_).cross(Vector((0, 0, 1))).normalized()
+                    near = [f for f in bm.faces if any(bx[0] <= (o.matrix_world @ v.co).x <= bx[2] and bx[1] <= (o.matrix_world @ v.co).y <= bx[3] for v in f.verts)]
+                    if not near: continue
+                    geom = list({e for f in near for e in f.edges}) + near + list({v for f in near for v in f.verts})
+                    _bm.ops.bisect_plane(bm, geom=geom, plane_co=Mi @ a_, plane_no=(Mi.to_3x3() @ nrm).normalized(), dist=1e-5)
+                kill = [f for f in bm.faces if in_poly(*(o.matrix_world @ f.calc_center_median()).xy, P)]
+                if kill: _bm.ops.delete(bm, geom=kill, context="FACES"); ncut += len(kill)
+                bm.to_mesh(o.data); bm.free(); o.data.update()
+            tris = _tess([[Vector((x, y, 0.0)) for x, y in P]])
+            up = lambda t: (P[t[1]][0] - P[t[0]][0]) * (P[t[2]][1] - P[t[0]][1]) - (P[t[1]][1] - P[t[0]][1]) * (P[t[2]][0] - P[t[0]][0]) > 0
+            mm = self.mb(); mm.add([(x, y, 0.0) for x, y in P], [tuple(t) if up(t) else tuple(reversed(t)) for t in tris], mat)
             self.R.put("FLOOR", f"{tok(mat)}_{r['slug']}", mm.build(f"floor_{r['slug']}"), props={"room": r["name"], "static": 1, "exact_outline": 1})
+            print(f"floors: {r['name']} built to its outline; {ncut} faces of the finishes around it removed inside it", flush=True)
         if exact: print(f"floors: {len(exact)} finish zone(s) built from their exact outline: {[r['name'] for _, r in exact]}", flush=True)
         # the floor above: its underside is the soffit, seen wherever a room has an open ceiling
         m = self.mb()

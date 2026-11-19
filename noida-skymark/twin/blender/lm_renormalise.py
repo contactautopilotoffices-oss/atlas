@@ -6,12 +6,21 @@ import bpy, json, math, os, sys, argparse
 import numpy as np
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import twin_lib as TL, bake_export as BE
-ap = argparse.ArgumentParser(); ap.add_argument('--tenant', required=True); ap.add_argument('--out', required=True); ap.add_argument('--clip', type=float, default=98.0)
+ap = argparse.ArgumentParser(); ap.add_argument('--tenant', required=True); ap.add_argument('--out', required=True); ap.add_argument('--clip', type=float, default=98.0); ap.add_argument('--smooth-layers', default='', help='e.g. FLOOR: island-masked gaussian on atlases holding these layers'); ap.add_argument('--sigma', type=float, default=2.5)
 A = ap.parse_args(TL.script_args()); d = os.path.join(A.out, 'export', 'lightmaps'); mf = os.path.join(d, f'{A.tenant}_lightmaps.json'); man = json.load(open(mf))
 for name, info in man['atlases'].items():
     fp = os.path.join(d, f'_{name}_float.exr')
     if not os.path.exists(fp): print('no float atlas for', name); continue
     a = BE.read_exr(fp)[..., :3]; used = a.sum(2) > 0
+    lays = {o.get('twin_layer') for o in bpy.data.objects if o.get('lightmap') == f'{name}.png'}
+    if A.smooth_layers and lays & set(A.smooth_layers.split(',')):
+        # bake noise on a dark carpet comes out of OIDN as soft blotches: an island-masked gaussian (empty texels do not bleed in)
+        def g1(x, ax):
+            r = int(3 * A.sigma); k = np.exp(-0.5 * (np.arange(-r, r + 1) / A.sigma) ** 2); k /= k.sum(); out = np.zeros_like(x)
+            for i, w in enumerate(k): out += w * np.roll(x, i - r, axis=ax)
+            return out
+        m = used.astype(np.float32); num = g1(g1(a * m[..., None], 0), 1); den = g1(g1(m, 0), 1)[..., None]
+        a = np.where(used[..., None], num / np.maximum(den, 1e-6), 0.0).astype(np.float32); info['smoothed_sigma_px'] = A.sigma
     p = float(np.percentile(a[used], A.clip)) if used.any() else 1.0; kk = 1.0 / max(p, 1e-6)
     enc = np.clip(a * kk, 0, 1); enc = np.where(enc <= 0.0031308, enc * 12.92, 1.055 * np.power(enc, 1 / 2.4) - 0.055)
     TL.write_png(os.path.join(d, f'{name}.png'), enc)
