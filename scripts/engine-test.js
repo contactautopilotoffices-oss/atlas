@@ -129,6 +129,9 @@ async function cases() {
 const EXPECT = {
   /* The Metro view: selecting a building draws the walk to its station. */
   flipkartAndheri: async (page) => {
+    // The tab bar can render before the map's asynchronous load event adds its layers.
+    await page.waitForFunction(() => ["stn-route-walk", "stn-route-straight", "stn-route-label"]
+      .every(id => window.__atlasMap && window.__atlasMap._layers[id]), null, { timeout: 5000 }).catch(() => {});
     const r = await page.evaluate(() => ({ layers: ["stn-route-walk", "stn-route-straight", "stn-route-label"].filter(id => window.__atlasMap && window.__atlasMap._layers[id]).length }));
     const out = [];
     if (r.layers !== 3) out.push("the walk-to-station layers are missing: " + r.layers + " of 3");
