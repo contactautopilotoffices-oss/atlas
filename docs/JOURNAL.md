@@ -4,7 +4,7 @@
 
 **Two of the three Reliable Tech Park offers are now walkable 3D models in Altruist's own look, with 14 photo-quality hero images, built overnight from the drawings without a human sign-off.**
 
-- **Why:** Altruist is being shown these offers. A plan drawing does not sell a space; a model that looks like their Noida office does. When he woke, the founder said the first build "doesn't look like a real office", so the second half of the night went on making it look real (carpet, fabric, logo, lighting) and on a set of still images good enough to send.
+- **Why:** Altruist is being shown these offers. A plan drawing does not sell a space; a model that looks like their Noida office does. When the founder woke, they said the first build "doesn't look like a real office", so the second half of the night went on making it look real (carpet, fabric, logo, lighting) and on a set of still images good enough to send.
 - **Structural decisions:**
   - Altruist has one style file built from five photos of their Noida office: charcoal streaked carpet, white desks with royal-blue screens, black mesh chairs on chrome bases, glass with a frosted band, and the built, backlit Altruist logo. Every change to the builder is switched on from that file, so the Skymark floors (Volt, Paytm, ARCIL) build exactly as before.
   - The models follow the drawing. Desks and walls stay where they are drawn, even where a walkway is narrower than 1.2 m. Those places are listed for the designer instead of being "fixed" in the model (the advisor's decision, option A). Nothing may sit inside a wall or float: that stays a hard fail, and both models pass it.
