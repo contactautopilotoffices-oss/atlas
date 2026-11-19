@@ -71,8 +71,9 @@ what it fixes, and fixes the worst one to three first.
   (six rows) reads airy rather than full.
 - Getting there (page 12): rows may open up to 10 mm under a foot box now,
   but four short rows a table still leave a narrow band above the box.
-- The buildings side by side (page 11): the parameter table is small print
-  (eleven rows of prose); the right column now runs the table's height.
+- The buildings side by side (page 11): the table now runs the page width at
+  body size with its boxes in a row at the foot; with a two-line source, the
+  boxes sit close to it.
 - Side columns of a table page (pages 5, 9, 11, 34, 38): the boxes now
   spread evenly down the table's height; with only two short boxes (levers)
   the space between them is wide.
