@@ -502,7 +502,67 @@ class Shell:
         self.log("assumed_light_rooms", assumed_rooms)
 
     def _mount(self, r, x, y, l, typ, z, assumed):
-        self.lights.append({"x": x, "y": y, "kind": l.get("kind", "downlight"), "room": r["name"], "assumed": bool(assumed), "ceiling": typ, "z": z})
+        self.lights.append({"x": x, "y": y, "kind": l.get("kind", "downlight"), "room": r["name"], "assumed": bool(assumed), "ceiling": typ, "z": z, "rot": l.get("rot", 0.0)})
+
+    def grid_angle(self):
+        """The walls' direction: the plan's turn to north, folded into -45..45 degrees (RTP: -1.004)."""
+        rot = (self.L.get("frame") or {}).get("rotation_deg", 0.0) or 0.0
+        return math.radians(((rot + 45.0) % 90.0) - 45.0)
+
+    def ceil_grid_walls(self, r, rects, bb, spec, H, ls, rnd):
+        """Opt-in (style ceiling_grid_align = walls): a 600 grid square to the walls, set out from the room centre;
+        every 600 panel and AC grille sits in a whole tile (snapped to its centre, one per tile); T-bars only where the
+        room is (sampled every 0.15 m along each line)."""
+        t = spec.get("tile_size", 0.6); a = self.grid_angle(); ca, sa = math.cos(a), math.sin(a); ras = self.ras
+        cx, cy = (bb[0] + bb[2]) / 2, (bb[1] + bb[3]) / 2
+        to_uv = lambda x, y: ((x - cx) * ca + (y - cy) * sa, -(x - cx) * sa + (y - cy) * ca)
+        to_xy = lambda u, v: (cx + u * ca - v * sa, cy + u * sa + v * ca)
+        inside = lambda u, v: ras.room_at(*to_xy(u, v)) is r
+        corners = [to_uv(x, y) for x, y in ((bb[0], bb[1]), (bb[2], bb[1]), (bb[0], bb[3]), (bb[2], bb[3]))]
+        u0, u1 = min(c[0] for c in corners), max(c[0] for c in corners); v0, v1 = min(c[1] for c in corners), max(c[1] for c in corners)
+        m = self.mb(); self.surface(m, self._cells, H, spec.get("tile", "ceiling_tile"), down=True)
+        self.R.put("CEILING", f"{r['slug']}_tiles", m.build("tiles"), props={"room": r["name"], "static": 1})
+        g = self.mb(); gm = spec.get("grid", "white_metal"); st = 0.15; R_ = Matrix.Rotation(a, 4, "Z")
+        def runs(fixed, lo, hi, along_u):
+            k = lo; cur = None
+            while k < hi:
+                mid = (fixed, k + st / 2) if not along_u else (k + st / 2, fixed)
+                ok = inside(*mid) if along_u else inside(mid[1], mid[0])
+                if ok and cur is None: cur = k
+                if not ok and cur is not None: yield cur, k; cur = None
+                k += st
+            if cur is not None: yield cur, hi
+        kv = math.floor(v0 / t)
+        while kv * t <= v1:                 # main runners along u (14 mm deep)
+            for p, q in runs(kv * t, u0, u1, True):
+                x, y = to_xy((p + q) / 2, kv * t); g.box(q - p, 0.024, 0.014, T(x, y, H - 0.014) @ R_, gm)
+            kv += 1
+        ku = math.floor(u0 / t)
+        while ku * t <= u1:                 # cross tees along v (12 mm deep)
+            for p, q in runs(ku * t, v0, v1, False):
+                x, y = to_xy(ku * t, (p + q) / 2); g.box(0.024, q - p, 0.012, T(x, y, H - 0.012) @ R_, gm)
+            ku += 1
+        if not g.empty(): self.R.put("CEILING", f"{r['slug']}_tgrid", g.build("tgrid", normals=False), props={"room": r["name"]})
+        def whole(i, j):                    # the tile lies wholly in the room (centre and 4 corners inset 2 cm)
+            uc, vc = (i + 0.5) * t, (j + 0.5) * t; h = t / 2 - 0.02
+            return all(inside(uc + du, vc + dv) for du, dv in ((0, 0), (-h, -h), (h, -h), (-h, h), (h, h)))
+        used = set(); keep = []
+        for l in ls:
+            if l.get("kind") != "panel600": keep.append(l); continue
+            u, v = to_uv(*l["c"]); i, j = math.floor(u / t), math.floor(v / t)
+            if (i, j) in used or not whole(i, j): continue
+            used.add((i, j)); x, y = to_xy((i + 0.5) * t, (j + 0.5) * t); keep.append(dict(l, c=[x, y], rot=a))
+        every = spec.get("ac_every", 0); acs = []
+        if every:
+            for i in range(math.floor(u0 / t), math.ceil(u1 / t)):
+                for j in range(math.floor(v0 / t), math.ceil(v1 / t)):
+                    if i % every == 1 and j % every == 2 and (i, j) not in used and whole(i, j): acs.append((i, j))
+        if acs:
+            me = self.c.proto("ac_grille", lambda: self._ac_grille(spec))
+            for (i, j) in acs:
+                x, y = to_xy((i + 0.5) * t, (j + 0.5) * t); self.R.put("HVAC", "acgrille", me, T(x, y, H - 0.004) @ R_, props={"assumed": 1})
+        for l in keep: self._mount(r, l["c"][0], l["c"][1], l, "grid", H, l.get("assumed"))
+        self.c.meta["log"].setdefault("grid_panels", {})[r["name"]] = {"panels": len(used), "dropped": sum(1 for l in ls if l.get("kind") == "panel600") - len(used), "ac": len(acs)}
 
     def ceil_plain(self, r, rects, bb, spec, H, ls, rnd):
         m = self.mb()
@@ -511,6 +571,7 @@ class Shell:
         for l in ls: self._mount(r, l["c"][0], l["c"][1], l, "plain", H, l.get("assumed"))
 
     def ceil_grid(self, r, rects, bb, spec, H, ls, rnd):
+        if self.S.get("ceiling_grid_align") == "walls": return self.ceil_grid_walls(r, rects, bb, spec, H, ls, rnd)
         t = spec.get("tile_size", 0.6)
         panels = [l for l in ls if l.get("kind") == "panel600"]
         ox = (panels[0]["c"][0] - t / 2) % t if panels else bb[0] % t; oy = (panels[0]["c"][1] - t / 2) % t if panels else bb[1] % t

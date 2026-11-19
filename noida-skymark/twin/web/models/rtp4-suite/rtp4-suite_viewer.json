@@ -4,34 +4,34 @@
  "lod_glb": "rtp4-suite_lod.glb",
  "files": {
   "rtp4-suite": {
-   "mb": 5.0,
+   "mb": 4.89,
    "meshopt": {
-    "instanced_nodes_from": 660,
+    "instanced_nodes_from": 682,
     "instanced_into": 16,
-    "draw_calls": 113,
-    "triangles": 535532,
-    "in_mb": 14.88,
-    "out_mb": 5,
-    "compressed_views": 454,
-    "saved_mb": 10.02,
+    "draw_calls": 108,
+    "triangles": 1063702,
+    "in_mb": 14.46,
+    "out_mb": 4.89,
+    "compressed_views": 445,
+    "saved_mb": 9.7,
     "applied": true
    },
-   "merged_groups": 20
+   "merged_groups": 17
   },
   "rtp4-suite_lod": {
-   "mb": 3.9,
+   "mb": 3.2,
    "meshopt": {
     "instanced_nodes_from": 366,
     "instanced_into": 13,
-    "draw_calls": 64,
-    "triangles": 348206,
-    "in_mb": 12.91,
-    "out_mb": 3.9,
-    "compressed_views": 244,
-    "saved_mb": 9.08,
+    "draw_calls": 59,
+    "triangles": 314166,
+    "in_mb": 10.78,
+    "out_mb": 3.2,
+    "compressed_views": 219,
+    "saved_mb": 7.65,
     "applied": true
    },
-   "merged_groups": 20
+   "merged_groups": 17
   }
  },
  "frame": "rtp_local frame, metres, glTF Y up: three (x, y, z) = (x east, height above this floor's finished floor level, -north). Already north up and placed: no turn, no shift. Put the model at y = 15.0 m (finished floor level above ground).",
@@ -43,77 +43,62 @@
  },
  "renderer": {
   "toneMapping": "AgXToneMapping",
-  "toneMappingExposure": 0.551,
-  "exposure_ev": -0.86,
+  "toneMappingExposure": 0.5212,
+  "exposure_ev": -0.94,
   "outputColorSpace": "srgb",
   "useLegacyLights": false
  },
  "lightmapped_meshes": {
   "how": "texture = load(lightmap); texture.colorSpace = SRGBColorSpace; texture.flipY = false; texture.channel = 1; material.lightMap = texture; material.lightMapIntensity = lightMapIntensity (below, per node); material.envMapIntensity = 0; no direct lights on these meshes (the lightmap already holds sun, sky, lamps and bounce). If it looks blown, check lightMap.colorSpace is sRGB and that the environment / lights are not also lighting these meshes.",
   "nodes": {
-   "rtp4-suite_FLOOR_rtp4-suite_lm2_1": {
-    "lightmap": "lightmaps/rtp4-suite_lm2.png",
-    "lightMapIntensity": 92.07375,
-    "uv": 1
-   },
-   "rtp4-suite_FLOOR_rtp4-suite_lm1_2": {
-    "lightmap": "lightmaps/rtp4-suite_lm1.png",
-    "lightMapIntensity": 89.74942,
-    "uv": 1
-   },
-   "rtp4-suite_FLOOR_rtp4-suite_lm0_3": {
+   "rtp4-suite_FLOOR_rtp4-suite_lm0_1": {
     "lightmap": "lightmaps/rtp4-suite_lm0.png",
-    "lightMapIntensity": 80.506,
+    "lightMapIntensity": 12.4346,
     "uv": 1
    },
-   "rtp4-suite_WALL_rtp4-suite_lm5_4": {
+   "rtp4-suite_WALL_rtp4-suite_lm5_2": {
     "lightmap": "lightmaps/rtp4-suite_lm5.png",
-    "lightMapIntensity": 10.59422,
+    "lightMapIntensity": 9.52675,
     "uv": 1
    },
-   "rtp4-suite_WALL_rtp4-suite_lm9_5": {
+   "rtp4-suite_WALL_rtp4-suite_lm9_3": {
     "lightmap": "lightmaps/rtp4-suite_lm9.png",
-    "lightMapIntensity": 8.05946,
+    "lightMapIntensity": 7.85014,
     "uv": 1
    },
-   "rtp4-suite_WALL_rtp4-suite_lm7_6": {
+   "rtp4-suite_WALL_rtp4-suite_lm7_4": {
     "lightmap": "lightmaps/rtp4-suite_lm7.png",
-    "lightMapIntensity": 8.26103,
+    "lightMapIntensity": 7.76794,
     "uv": 1
    },
-   "rtp4-suite_WALL_rtp4-suite_lm6_7": {
+   "rtp4-suite_WALL_rtp4-suite_lm6_5": {
     "lightmap": "lightmaps/rtp4-suite_lm6.png",
-    "lightMapIntensity": 5.82753,
+    "lightMapIntensity": 6.54884,
     "uv": 1
    },
-   "rtp4-suite_WALL_rtp4-suite_lm4_8": {
+   "rtp4-suite_WALL_rtp4-suite_lm4_6": {
     "lightmap": "lightmaps/rtp4-suite_lm4.png",
-    "lightMapIntensity": 10.06454,
+    "lightMapIntensity": 10.61269,
     "uv": 1
    },
-   "rtp4-suite_WALL_rtp4-suite_lm3_9": {
+   "rtp4-suite_WALL_rtp4-suite_lm3_7": {
     "lightmap": "lightmaps/rtp4-suite_lm3.png",
-    "lightMapIntensity": 8.13943,
+    "lightMapIntensity": 8.23277,
     "uv": 1
    },
-   "rtp4-suite_WALL_rtp4-suite_lm8_10": {
+   "rtp4-suite_WALL_rtp4-suite_lm8_8": {
     "lightmap": "lightmaps/rtp4-suite_lm8.png",
-    "lightMapIntensity": 27.64203,
+    "lightMapIntensity": 25.99056,
     "uv": 1
    },
-   "rtp4-suite_WALL_rtp4-suite_lm2_13": {
-    "lightmap": "lightmaps/rtp4-suite_lm2.png",
-    "lightMapIntensity": 92.07375,
-    "uv": 1
-   },
-   "rtp4-suite_WALL_rtp4-suite_lm1_14": {
+   "rtp4-suite_WALL_rtp4-suite_lm1_11": {
     "lightmap": "lightmaps/rtp4-suite_lm1.png",
-    "lightMapIntensity": 89.74942,
+    "lightMapIntensity": 94.71517,
     "uv": 1
    },
-   "rtp4-suite_WALL_rtp4-suite_lm0_16": {
-    "lightmap": "lightmaps/rtp4-suite_lm0.png",
-    "lightMapIntensity": 80.506,
+   "rtp4-suite_WALL_rtp4-suite_lm2_12": {
+    "lightmap": "lightmaps/rtp4-suite_lm2.png",
+    "lightMapIntensity": 99.00988,
     "uv": 1
    }
   }

@@ -292,6 +292,16 @@ def _decimate(me, target):
     if me.get("proto_key"): new["proto_key"] = me["proto_key"]
     return new
 
+WEB = {}          # the style's "web" block, set by export(): opt-in web-only choices (chair decimation, material overrides)
+
+def _decimate(me, ratio):
+    """Web furniture from the real model: collapse decimation to `ratio` of the triangles (shape kept, UVs kept)."""
+    sc = bpy.context.scene; tmp = bpy.data.objects.new("_dec", me); sc.collection.objects.link(tmp)
+    md = tmp.modifiers.new("d", "DECIMATE"); md.decimate_type = "COLLAPSE"; md.ratio = ratio; md.use_collapse_triangulate = True
+    new = bpy.data.meshes.new_from_object(tmp.evaluated_get(bpy.context.evaluated_depsgraph_get())); bpy.data.objects.remove(tmp)
+    if me.get("proto_key"): new["proto_key"] = me["proto_key"]
+    return new
+
 def _simplify(me):
     """Web furniture: planar dissolve only (merges the bevel strips into flat faces, never moves a vertex, so no spikes)."""
     sc = bpy.context.scene; tmp = bpy.data.objects.new("_dis", me); sc.collection.objects.link(tmp)
@@ -372,6 +382,13 @@ def _web_materials(objs):
                 if nm in b.inputs: b.inputs[nm].default_value = 0.0
             out = next((n for n in nt.nodes if n.type == "OUTPUT_MATERIAL"), None)
             k = m.get("twin_kind", "")
+            ov = WEB.get("materials", {}).get(m.name.split(".")[0])
+            if ov:          # opt-in: a web-only plain finish (a texture that reads well in Cycles can stretch on the web's box UVs)
+                for l in list(b.inputs["Base Color"].links): nt.links.remove(l)
+                b.inputs["Base Color"].default_value = (*TL.lin(ov["color"]), 1)
+                for l in list(b.inputs["Roughness"].links): nt.links.remove(l)
+                b.inputs["Roughness"].default_value = ov.get("rough", 0.5)
+                if "metal" in ov: b.inputs["Metallic"].default_value = ov["metal"]
             if k == "leaf":
                 for l in list(b.inputs["Base Color"].links): nt.links.remove(l)
                 b.inputs["Base Color"].default_value = (*TL.lin("#3d6e2e"), 1); b.inputs["Roughness"].default_value = 0.5
@@ -411,6 +428,7 @@ def prep_web(tenant, lod=False):
         if me.name not in done:
             k = me.get("proto_key", "")
             if lod: done[me.name] = _box_mesh(me)
+            elif (k.startswith("('fit', 'chair'") or k == "'chair_model'") and WEB.get("chair_ratio"): done[me.name] = _decimate(me, WEB["chair_ratio"])     # opt-in: the real chair, lighter
             elif k.startswith("('fit', 'chair'") or k == "'chair_model'": done[me.name] = _fit_to(proxies.setdefault("chair", _web_chair()), me)
             elif k.startswith("('fit', 'lounge'") or k == "'lounge_model'": done[me.name] = _fit_to(proxies.setdefault("lounge", _web_chair(True)), me)
             else: done[me.name] = _simplify(me)
@@ -442,6 +460,7 @@ def prep_web(tenant, lod=False):
 def export(tenant, L, S, out, A):
     import subprocess, shutil
     sc = bpy.context.scene; t0 = time.time(); src = bpy.data.filepath
+    global WEB; WEB = S.get("web", {}) if isinstance(S, dict) else {}
     pj = os.path.join(out, f"{tenant}_placement.json")
     rep = json.load(open(pj)) if os.path.exists(pj) else {"ok": False, "summary": "no placement report"}
     if not rep.get("ok") and not A.allow_placement_issues:

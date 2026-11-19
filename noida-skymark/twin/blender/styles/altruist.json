@@ -599,5 +599,19 @@
  "route_clearance_penalty": 40,
  "closure_offsets": true,
  "floor_close_m": 0.5,
- "floor_exact_rooms": "RECEPTION"
+ "floor_exact_rooms": "RECEPTION",
+ "ceiling_grid_align": "walls",
+ "web": {
+  "chair_ratio": 0.3,
+  "materials": {
+   "logo_marble": {
+    "color": "#efefed",
+    "rough": 0.32
+   },
+   "paint_white": {
+    "color": "#f2f1ee",
+    "rough": 0.9
+   }
+  }
+ }
 }

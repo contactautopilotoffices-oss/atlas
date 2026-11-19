@@ -457,7 +457,7 @@ class Furnisher:
             elif k == "panel600" and typ in ("grid", "plain"):
                 def mk():
                     m = self.mb(); m.box(0.57, 0.57, 0.008, T(0, 0, -0.008), "led_panel", 0.0); return m.build("panel600")
-                self.R.put("LIGHT", "panel600", self.c.proto("panel600", mk), T(x, y, z), props={"assumed": int(l["assumed"]), "lamp": "none", "room": l["room"]})
+                self.R.put("LIGHT", "panel600", self.c.proto("panel600", mk), T(x, y, z) @ RZ(l.get("rot", 0.0)), props={"assumed": int(l["assumed"]), "lamp": "none", "room": l["room"]})
             else:
                 def mk():
                     m = self.mb(); m.lathe(((0.056, 0.0), (0.060, -0.005), (0.078, -0.005), (0.082, 0.0)), Matrix(), "white_metal", 24)
@@ -714,12 +714,18 @@ class Furnisher:
                 elif typ == "screen":      # opt-in: a wall display with a low credenza under it, and an optional whiteboard beside it
                     sw, sh_ = fw.get("screen_w", 1.65), fw.get("screen_h", 0.95)
                     span = sw + (2.2 if fw.get("whiteboard") and wd > sw + 2.2 else 0.0); ops = [d_["_opening"] for d_ in self.L["doors"] if d_.get("_opening")]
-                    ok_at = None
-                    for off in (0.0, 0.5, -0.5, 1.0, -1.0, 1.5, -1.5, 2.0, -2.0):
+                    ok_at = None; pref = 0.0
+                    tb = [q for q in self.L["tables"] if q.get("room") == r["name"] and "poly" in q]
+                    if tb:                 # centred on the room's main table (as a screen is hung), not on the wall segment
+                        q = max(tb, key=lambda q: (max(p_[0] for p_ in q["poly"]) - min(p_[0] for p_ in q["poly"])) * (max(p_[1] for p_ in q["poly"]) - min(p_[1] for p_ in q["poly"])))
+                        tc = Vector((sum(p_[0] for p_ in q["poly"]) / len(q["poly"]), sum(p_[1] for p_ in q["poly"]) / len(q["poly"]), 0))
+                        pref = (tc - Vector((w["point"].x, w["point"].y, 0))).dot(t)
+                    for off in [pref + d_ for d_ in (0.0, 0.25, -0.25, 0.5, -0.5, 1.0, -1.0, 1.5, -1.5)]:
                         if abs(off) + span / 2 > wd / 2: continue
                         q = w["point"] + t * off
-                        if all(math.hypot(op[0] - q.x, op[1] - q.y) > span / 2 + 1.0 for op in ops): ok_at = off; break
+                        if all(math.hypot(op[0] - q.x, op[1] - q.y) > span / 2 + 0.6 for op in ops): ok_at = off; break
                     if ok_at is None: print(f"screen in {r['name']}: every spot on that wall is within 1 m of a door; left out", flush=True); continue
+                    if abs(ok_at - pref) > 0.05: print(f"screen in {r['name']}: {ok_at - pref:+.2f} m off the table axis to clear a door", flush=True)
                     w = dict(w, point=w["point"] + t * ok_at)
                     m.box(sw + 0.02, 0.04, sh_ + 0.02, T(0, 0.022, fw.get("screen_z", 1.0)), "black_metal", 0.004)
                     m.box(sw, 0.004, sh_, T(0, 0.044, fw.get("screen_z", 1.0) + 0.01), fw.get("screen_material", "tv_screen"), 0.0)
