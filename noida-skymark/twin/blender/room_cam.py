@@ -62,7 +62,7 @@ for r in L['rooms']:
     if not best: print('room_cam: no inside view for', r['name'], flush=True); continue
     s_, o, yaw, furn, md = best; t = o + Vector((math.cos(yaw), math.sin(yaw), 0)) * 3 + Vector((0, 0, -0.35))
     out.append({'name': f'{A.tenant}_CAM_{slug}_inside', 'room': r['name'], 'room_slug': slug, 'kind': 'hero', 'label': f"{r['name'].title()}: inside",
-                'position': [round(v, 3) for v in o], 'target': [round(v, 3) for v in t], 'hfov_deg': A.hfov, 'shift_y': -0.08, 'pitch_deg': 0,
+                'position': [round(v, 3) for v in o], 'target': [round(v, 3) for v in t], 'hfov_deg': A.hfov, 'shift_y': -0.08, 'pitch_deg': 12,
                 'checks': {'furniture_rays': furn, 'mean_depth_m': round(md, 2)}, 'from': 'inside, corner', 'aim': 'across the table'})
     print('room_cam:', r['name'], out[-1]['position'], round(math.degrees(yaw)), 'furniture', furn, 'depth', round(md, 2), flush=True)
 dst = A.merge or os.path.join(A.out, f'{A.tenant}_room_cameras_plan.json')

@@ -1,5 +1,31 @@
 # Atlas — Development Journal
 
+## 2026-11-19 — Atlas: Reliable Tech Park 3D twins for Altruist (6th floor Option A and 4th-floor suite), with photo-quality stills
+
+**Two of the three Reliable Tech Park offers are now walkable 3D models in Altruist's own look, with 14 photo-quality hero images, built overnight from the drawings without a human sign-off.**
+
+- **Why:** Altruist is being shown these offers. A plan drawing does not sell a space; a model that looks like their Noida office does. When he woke, the founder said the first build "doesn't look like a real office", so the second half of the night went on making it look real (carpet, fabric, logo, lighting) and on a set of still images good enough to send.
+- **Structural decisions:**
+  - Altruist has one style file built from five photos of their Noida office: charcoal streaked carpet, white desks with royal-blue screens, black mesh chairs on chrome bases, glass with a frosted band, and the built, backlit Altruist logo. Every change to the builder is switched on from that file, so the Skymark floors (Volt, Paytm, ARCIL) build exactly as before.
+  - The models follow the drawing. Desks and walls stay where they are drawn, even where a walkway is narrower than 1.2 m. Those places are listed for the designer instead of being "fixed" in the model (the advisor's decision, option A). Nothing may sit inside a wall or float: that stays a hard fail, and both models pass it.
+  - Heights come from the client team: 3.05 m clear ceiling, 3.35 m soffit, 3.6 m floor to floor. The drawings have no section.
+  - Lightmap smears on walls and columns were caused by too little resolution: walls had about 4 cm of light detail per pixel. Walls now get 2.8 cm, columns 1.8 cm in their own maps, with wider gaps between the pieces. A new independent check confirms that no two surfaces share light pixels. The alternative, one big 2048 px map per floor, would have doubled the bake time for the same result.
+  - A reception area drawn as a free shape (the 6th floor's octagon of tiles inside the corridor carpet) is now built from its exact outline, not from a 10 cm grid. On the grid its edge looked like a staircase.
+  - Every still was looked at before it was sent. Out of 21 renders, 7 were rejected and re-shot or dropped: the logo mark came out as an "X", there was a stray carpet patch, and some cameras stood in a doorway, looked at a bare wall or looked out at the plain white blocks that stand in for neighbouring buildings.
+- **What works now:**
+  - 6th floor, Option A: a web model with 36 room views, 31 lightmaps and a placement check with nothing inside walls or floating. Eight stills: logo wall, reception reverse view, the two main workstation views, cafeteria, training room, meeting room and a cabin.
+  - 4th-floor suite: the same, with 15 room views and six stills: logo wall, reception, conference room (two views), training room and a 6-seater meeting room.
+  - Everything is in the main Atlas folder under `airoli-rtp/twin/web/models/<plan>/`. The sign-off sheets (`<plan>_BUILD.md`) and the assumptions page are in `airoli-rtp/<plan>/`.
+- **Left undone:**
+  - 6th floor, Option B was not built. It was last in the order, and the advisor said to stop after the 4th-floor suite.
+  - The automated build sheets still say FAIL, for known, accepted reasons: walkway pinch points that are in the drawing (5 on the 6th floor, 7 on the 4th), two cafeteria chair pairs that touch by 4–6 mm because the drawing puts them 0.57 m apart, and small coplanar slivers along skirtings and glass (212 and 47) that were not chased tonight.
+  - Window views show neighbouring buildings as plain white blocks. They read as CG, so views that look straight out were avoided.
+  - The 4th-floor suite still reaches only one exit stair. The drawing shows no second route.
+- **Open questions for the founder:**
+  - Do the five 6th-floor walkway pinch points (0.85–1.15 m) go back to the designer, or are they accepted as drawn?
+  - Does the reception tile cover only the drawn octagon, or run wall to wall?
+  - Should Option B be built next, and in the same Altruist look?
+
 ## 2026-11-19 — Atlas: Reliable Tech Park (Airoli) G0 CAD read for three offers
 
 **The two Reliable Tech Park drawings were read into seat counts, room areas, entries, exits with walking distances, walkway widths and daylight, for the 6th-floor Option A, the 6th-floor Option B and the 4th-floor suite, each with a plain-English sign-off sheet.**

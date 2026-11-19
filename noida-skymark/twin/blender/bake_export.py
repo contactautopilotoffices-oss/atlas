@@ -93,13 +93,7 @@ def unwrap(group):
         if pad: bpy.ops.uv.pack_islands(margin_method="FRACTION", margin=pad / bpy.context.scene["twin_lm_res"], rotate=True)     # opt-in: a fixed pixel gap between islands
         else: bpy.ops.uv.pack_islands(margin=0.006, rotate=True)
     except Exception as e: print("pack_islands:", e)
-    nov = None
-    if pad:          # opt-in check: UV faces that overlap another island in this atlas (they would share lightmap texels)
-        try:
-            bpy.context.scene.tool_settings.use_uv_select_sync = False; bpy.ops.uv.select_all(action="DESELECT"); bpy.ops.uv.select_overlap(extend=False)
-            bpy.ops.object.mode_set(mode="OBJECT")
-            nov = sum(sum(1 for p in o.data.polygons if all(o.data.uv_layers["lightmap"].uv_select_vert[li].value if hasattr(o.data.uv_layers["lightmap"], "uv_select_vert") else o.data.uv_layers["lightmap"].vertex_selection[li].value for li in p.loop_indices)) for o in group)
-        except Exception as e: print("uv overlap check:", e)
+    nov = None          # UV overlaps are counted after the bake by uv_overlap_check.py (texel raster per atlas)
     if bpy.context.object and bpy.context.object.mode != "OBJECT": bpy.ops.object.mode_set(mode="OBJECT")
     return nov
 

@@ -20,12 +20,12 @@
   {
    "check": "No two coplanar faces closer than 2 mm (flicker)",
    "pass": false,
-   "detail": "212 overlapping pairs among 1,300,689 faces: rtp6-a_GLASS_STRUCTURALGLAZING_67 / rtp6-a_GLASS_STRUCTURALGLAZING_85 x5; rtp6-a_SKIRTING_skirting_2 / rtp6-a_WALL_wall_2 x5; rtp6-a_GLASS_PRGLASS_1 / rtp6-a_GLASS_PRGLASS_5 x4; rtp6-a_GLASS_PRGLASS_2 / rtp6-a_GLASS_PRGLASS_6 x4; rtp6-a_GLASS_PRGLASS_3 / rtp6-a_GLASS_PRGLASS_7 x4"
+   "detail": "212 overlapping pairs among 1,299,746 faces: rtp6-a_GLASS_STRUCTURALGLAZING_67 / rtp6-a_GLASS_STRUCTURALGLAZING_85 x5; rtp6-a_SKIRTING_skirting_2 / rtp6-a_WALL_wall_2 x5; rtp6-a_GLASS_PRGLASS_1 / rtp6-a_GLASS_PRGLASS_5 x4; rtp6-a_GLASS_PRGLASS_2 / rtp6-a_GLASS_PRGLASS_6 x4; rtp6-a_GLASS_PRGLASS_3 / rtp6-a_GLASS_PRGLASS_7 x4"
   },
   {
    "check": "Light: exposure from grey cards; previews not blown or crushed",
    "pass": true,
-   "detail": "{\"cards\": [{\"room\": \"Corridor 9\", \"at\": [24.22, 97.04, 0.8], \"card_linear\": 0.2247}, {\"room\": \"Open workstations 2\", \"at\": [-25.95, 103.89, 0.8], \"card_linear\": 0.2355}, {\"room\": \"Open workstations 4\", \"at\": [32.52, 104."
+   "detail": "{\"cards\": [{\"room\": \"Corridor 9\", \"at\": [24.22, 97.04, 0.8], \"card_linear\": 0.2269}, {\"room\": \"Open workstations 2\", \"at\": [-25.95, 103.89, 0.8], \"card_linear\": 0.2367}, {\"room\": \"Open workstations 4\", \"at\": [32.52, 104."
   },
   {
    "check": "Cameras: every shown room has a ray-checked view",

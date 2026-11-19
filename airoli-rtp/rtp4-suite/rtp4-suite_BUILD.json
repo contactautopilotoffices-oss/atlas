@@ -20,12 +20,12 @@
   {
    "check": "No two coplanar faces closer than 2 mm (flicker)",
    "pass": false,
-   "detail": "47 overlapping pairs among 292,842 faces: rtp4-suite_WALL_wall_3 / rtp4-suite_SKIRTING_skirting_5 x2; rtp4-suite_DOOR_DOORSNGLleaf_4 / rtp4-suite_DOOR_DOORSNGLleaf_4 x2; rtp4-suite_DOOR_DOORSNGLleaf_3 / rtp4-suite_DOOR_DOORSNGLleaf_3 x2; rtp4-suite_DOOR_DOORSNGLleaf_5 / rtp4-suite_DOOR_DOORSNGLleaf_5 x2; rtp4-suite_DOOR_DOORSNGLleaf_16 / rtp4-suite_DOOR_DOORSNGLleaf_16 x2"
+   "detail": "47 overlapping pairs among 299,213 faces: rtp4-suite_WALL_wall_3 / rtp4-suite_SKIRTING_skirting_5 x2; rtp4-suite_DOOR_DOORSNGLleaf_4 / rtp4-suite_DOOR_DOORSNGLleaf_4 x2; rtp4-suite_DOOR_DOORSNGLleaf_3 / rtp4-suite_DOOR_DOORSNGLleaf_3 x2; rtp4-suite_DOOR_DOORSNGLleaf_5 / rtp4-suite_DOOR_DOORSNGLleaf_5 x2; rtp4-suite_DOOR_DOORSNGLleaf_16 / rtp4-suite_DOOR_DOORSNGLleaf_16 x2"
   },
   {
    "check": "Light: exposure from grey cards; previews not blown or crushed",
    "pass": true,
-   "detail": "{\"cards\": [{\"room\": \"Corridor 3\", \"at\": [31.89, 99.56, 0.8], \"card_linear\": 0.0928}, {\"room\": \"IT ROOM AND IT STORE ROOM\", \"at\": [32.39, 110.56, 0.8], \"card_linear\": 0.3128}, {\"room\": \"TRAINING ROOM_05\", \"at\": [41.01, 10"
+   "detail": "{\"cards\": [{\"room\": \"Corridor 3\", \"at\": [31.89, 99.56, 0.8], \"card_linear\": 0.1061}, {\"room\": \"IT ROOM AND IT STORE ROOM\", \"at\": [32.39, 110.56, 0.8], \"card_linear\": 0.3173}, {\"room\": \"TRAINING ROOM_05\", \"at\": [40.46, 11"
   },
   {
    "check": "Cameras: every shown room has a ray-checked view",

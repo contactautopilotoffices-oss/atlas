@@ -29,6 +29,9 @@ L = [f"# {C['name']}: what is assumed", '',
      "- Finishes are matched to five photos of Altruist's current Noida office, not to a design for this space: charcoal 600 x 1200 reception wall with the built, backlit Altruist logo; white reception desk with a royal-blue front; dark grey 600 tiles at reception and polished beige marble in the lobbies; charcoal streaked carpet in the work halls; white desks, royal-blue fabric screens, kraft side screens, black mesh chairs; white walls with black skirting and columns; glass partitions in thin black frames with a frosted stripe band from 0.9 to 1.8 m; 600 grid ceilings with 600 LED panels and square AC diffusers; an olive fabric wall in the cabins.",
      "- Light fittings, AC diffusers and their layout are assumed (the drawing has no ceiling plan): LED panels on a 1.8 m grid, downlights at reception, a diffuser every fourth tile.",
      "- Daylight is a clear-sky sun for Airoli; the glass is clear; there are no blinds.",
+     "- The reception tile area is built to the outline the drawing gives it (an octagon on the 6th floor), inside the corridor carpet; the drawing does not say whether the tile runs wall to wall.",
+     "- Two downlights over the logo wall and the backlit halo of the logo letters are assumed from the Noida photos.",
+     "- The view out of the windows shows the neighbouring buildings as plain white blocks (from OpenStreetMap heights), not as photographs.",
      ] + [f"- Not built yet: {g}." for g in ST.get('brief_gaps', [])] + ['',
      '## What the model changes from the drawing (all small, all logged)', '']
 fw = TR.get('fit_to_walls', {})
@@ -44,7 +47,9 @@ L += ["- Every desk and table is inset by 4 mm so outlines that touch in the dra
       "- The cut edge of the offer and any gap in the facade line are closed by a plain wall (marked as assumed in the model).", '']
 nr = PL.get('narrow_routes', [])
 if nr:
+    ws = [r['min_width_m'] for r in nr]
     L += ['## For the designer: walkways under 1.2 m (from the drawing)', '',
+          f"**Walkways: {len(nr)} CAD pinch points ({min(ws):.2f}–{max(ws):.2f} m), from the drawing.**", '',
           f"The model keeps the drawing's desks and walls where they are. On the routes from the entrance to every door, these {len(nr)} stretches are narrower than 1.2 m "
           "(measured on the model, between desks, tables, walls and fixed furniture; chairs are moved by people and are not counted; the model's walls are 35 mm thicker on each face than the drawn lines, "
           "so the drawn clear width is 35 to 70 mm more):", '']
