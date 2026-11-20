@@ -269,8 +269,17 @@ function alignSides(deck) {
     if (!(main.tagName === "TABLE" || main.querySelector(":scope > table"))) return;
     var last = side.lastElementChild, gap = main.getBoundingClientRect().bottom - last.getBoundingClientRect().bottom;
     if (gap < 4) return;
-    /* the free height is shared between the boxes, so no one gap opens in the middle */
-    var boxes = Array.prototype.slice.call(side.children, 1), each = gap / boxes.length, page = cols.closest(".page");
+    var page = cols.closest(".page");
+    /* two boxes: the first grows down to meet the second, so the column reads
+       as two panels with no hole between them */
+    if (side.children.length === 2) {
+      var first = side.firstElementChild, h0 = first.style.minHeight;
+      first.style.minHeight = (first.getBoundingClientRect().height + gap) + "px";
+      if (page.scrollHeight > page.clientHeight + 1) first.style.minHeight = h0;
+      return;
+    }
+    /* more boxes: the free height is shared between them, so no one gap opens in the middle */
+    var boxes = Array.prototype.slice.call(side.children, 1), each = gap / boxes.length;
     var was = boxes.map(function (el) { return el.style.marginTop; });
     boxes.forEach(function (el) { el.style.marginTop = (parseFloat(getComputedStyle(el).marginTop) + each) + "px"; });
     if (page.scrollHeight > page.clientHeight + 1) boxes.forEach(function (el, i) { el.style.marginTop = was[i]; });
