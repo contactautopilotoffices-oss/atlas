@@ -25,6 +25,11 @@ total and unmarked room capacities remain unknown. They are never presented as 0
 The tab retains the user-requested “Client requirement” label, matching the other
 floors; this label does not turn the CAD figures into a separate verified brief.
 
+On 20 November 2026, the user confirmed the server room as **122 sq ft**. That
+figure takes precedence over the automatic enclosure calculation of 123 sq ft.
+The original CAD area, boundary and dimensions remain recorded; the displayed
+area is labelled as user-confirmed. The importer preserves this correction.
+
 The third floor is registered with a plan-only field in `building.json`. It does
 not add a tenant manifest or claim a new 3D interior. Existing fourth/sixth-floor
 data, cinematic entry and CAD handoff remain in place.

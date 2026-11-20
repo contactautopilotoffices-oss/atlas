@@ -26,7 +26,13 @@ for (const item of items) {
   if (item.outline_verified) {
     assert(item.d?.startsWith('M') && item.area_m2 > 0 && item.area_sqft > 0);
     assert(item.dims_m.every(n => n > 0));
-    assert.match(item.area_basis, /CAD enclosure/);
+    if (item.area_confirmation) {
+      assert.equal(item.source_handle, '853FAD');
+      assert.equal(item.area_sqft, 122);
+      assert.equal(item.area_m2, 11.33);
+      assert.equal(item.cad_area_sqft, 123);
+      assert.match(item.area_basis, /User-confirmed/);
+    } else assert.match(item.area_basis, /CAD enclosure/);
   } else {
     assert.equal(item.d, null, 'An open enclosure uses a marker, never a guessed polygon.');
     assert.equal(item.area_sqft, null);

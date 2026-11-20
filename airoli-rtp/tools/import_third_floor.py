@@ -141,12 +141,21 @@ for label in labels:
     item = make_item(label)
     (zones if label['h'] in primary_handles else others).append(item)
 
+# User confirmation takes precedence over the automatically enclosed CAD area.
+# Keep the original measurement and geometry for traceability and regeneration.
+server = next(item for item in others if item['source_handle'] == '853FAD')
+server['cad_area_m2'] = server['area_m2']
+server['cad_area_sqft'] = server['area_sqft']
+server.update(area_sqft=122, area_m2=round(122 / 10.7639104, 2),
+              area_basis='User-confirmed area · 20 Nov 2026',
+              area_confirmation={'source': 'User', 'date': '2026-11-20', 'sqft': 122})
+
 result = {'id': 'rtp3', 'level': 3, 'title': '3rd floor · fit-out', 'dwg': dwg.name,
           'bounds': [2.5, .5, 43.5, 75.5], 'plate': '', 'plate_sqft': None,
           'cad': {k: ''.join(v) for k, v in cad.items()}, 'zones': zones, 'others': others,
           'totals': {'work_seats': None, 'all_seats': None},
           'card_summary': f'CAD fit-out · {len(zones)} labelled spaces',
-          'source_note': 'Seats shown are the drawing’s marked figures. Areas follow closed CAD enclosures; location markers identify spaces without a verified enclosure. No client brief is supplied for this floor.',
+          'source_note': 'Seats shown are the drawing’s marked figures. Areas follow closed CAD enclosures unless a user-confirmed figure is identified in the details; location markers identify spaces without a verified enclosure. No client brief is supplied for this floor.',
           'source': {'sha256': hashlib.sha256(dwg.read_bytes()).hexdigest(),
                      'drawing_units': 'millimetres', 'metres_per_drawing_unit': .001,
                      'origin_m': origin, 'fitout_window_m': list(window.bounds),
