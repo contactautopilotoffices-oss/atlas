@@ -1,0 +1,7 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Autopilot outro</title>
+<script src="assets/gsap.min.js"></script>
+<style>*{box-sizing:border-box;margin:0}html,body{width:720px;height:960px;overflow:hidden;background:#f7f2ea}#root{width:100%;height:100%;display:flex;align-items:center;justify-content:center}.lockup{display:flex;flex-direction:column;align-items:center;gap:24px}img{width:430px;height:auto}.rule{width:64px;height:3px;background:#a3502c}</style></head>
+<body><div id="root" data-composition-id="main" data-start="0" data-duration="2" data-width="720" data-height="960">
+<div id="brand" class="clip" data-start="0" data-duration="2" data-track-index="0" data-track-kind="graphics"><div class="lockup"><img src="assets/autopilot.png" alt="Autopilot"><div class="rule"></div></div></div></div>
+<script>const tl=gsap.timeline({paused:true});tl.fromTo('.lockup',{opacity:0,scale:.9},{opacity:1,scale:1,duration:.35,ease:'power3.out'},0);tl.fromTo('.rule',{scaleX:0},{scaleX:1,duration:.3,ease:'power2.out'},.15);tl.to('.lockup',{scale:1.12,opacity:0,duration:.3,ease:'power2.in'},1.65);window.__timelines=window.__timelines||{};window.__timelines.main=tl;</script></body></html>

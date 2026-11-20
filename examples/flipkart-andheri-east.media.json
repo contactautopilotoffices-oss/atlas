@@ -1,0 +1,34 @@
+{
+  "723-avenue": [
+    {
+      "type": "video",
+      "src": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/atlas-cms/flipkart-andheri-east/visits/965eec5b4e99/723-avenue-walkthrough.mp4",
+      "poster": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/atlas-cms/flipkart-andheri-east/visits/8988519a0519/723-avenue-poster.jpg",
+      "caption": "723 Avenue \u00b7 Lobby, 13th-floor wings and outdoor views"
+    },
+    {
+      "src": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/atlas-cms/flipkart-andheri-east/visits/5d5c0d96c20d/723-avenue-frontal-elevation.jpg",
+      "caption": "723 Avenue \u00b7 Frontal elevation"
+    },
+    {
+      "src": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/atlas-cms/flipkart-andheri-east/visits/a01df91407a3/723-avenue-top-view.jpg",
+      "caption": "723 Avenue \u00b7 Top view"
+    }
+  ],
+  "corporate-avenue": [
+    {
+      "type": "video",
+      "src": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/atlas-cms/flipkart-andheri-east/visits/48025384448b/corporate-avenue-walkthrough.mp4",
+      "poster": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/atlas-cms/flipkart-andheri-east/visits/a62baa551ff9/corporate-avenue-poster.jpg",
+      "caption": "Corporate Avenue \u00b7 Furnished workspace walkthroughs"
+    }
+  ],
+  "privilon": [
+    {
+      "type": "video",
+      "src": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/atlas-cms/flipkart-andheri-east/visits/b34bb773c2b8/privilon-walkthrough.mp4",
+      "poster": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/atlas-cms/flipkart-andheri-east/visits/4d671f976cba/privilon-poster.jpg",
+      "caption": "Privilon \u00b7 Left wing, right wing and balcony view"
+    }
+  ]
+}

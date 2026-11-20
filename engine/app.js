@@ -2576,12 +2576,15 @@ function renderOption(o) {
       : `<p class="note">Turn on Distances in the map bar to draw them. Micro-market rent, vacancy and supply are on <a href="#" data-tab="markets">Micro-markets</a>${o.geoSrc ? `; the pin's source is ${cite(o.geoSrc, host(o.geoSrc))}` : ""}.</p>`}`;
   checkImgDate(o);
 }
-/* Photographs of the option itself, from the bundle: gallery is a list of
-   image addresses, or {src, caption}. Shown as a strip above the satellite
-   view; a click opens the full-screen viewer. */
+/* Property media: existing image addresses/{src, caption}, plus explicit
+   {type: "video", src, poster, caption}. Videos load only their metadata. */
 function galleryHTML(o) {
   const g = (Array.isArray(o.gallery) ? o.gallery : []).map(x => typeof x === "string" ? { src: x } : x).filter(x => x && x.src);
   if (!g.length) return "";
+  const videos = g.filter(x => x.type === "video"), photos = g.filter(x => x.type !== "video");
+  if (videos.length) return `<h3>${esc(say("option.gallery", "Property gallery"))} <span class="note">${g.length}</span></h3>
+    <div class="gal-videos">${videos.map(x => `<figure><video controls muted playsinline preload="metadata"${x.poster ? ` poster="${esc(x.poster)}"` : ""} aria-label="${esc(x.caption || o.name + " walkthrough")}"><source src="${esc(x.src)}" type="video/mp4">Your browser cannot play this video. <a href="${esc(x.src)}">Open walkthrough</a>.</video><figcaption>${esc(x.caption || o.name + " walkthrough")}</figcaption></figure>`).join("")}</div>
+    ${photos.length ? `<div class="gal">${photos.map(x => `<img src="${esc(x.src)}" alt="${esc(x.caption || o.name)}" loading="lazy" onerror="this.remove()">`).join("")}</div>` : ""}`;
   return `<h3>${esc(say("option.photos", "Photos"))} <span class="note">${g.length}</span></h3>
     <div class="gal">${g.map(x => `<img src="${esc(x.src)}" alt="${esc(x.caption || o.name)}" loading="lazy" onerror="this.remove()">`).join("")}</div>`;
 }
