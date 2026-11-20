@@ -1,0 +1,847 @@
+{
+ "checks": {
+  "wall exists in 3D": {
+   "pass": 512,
+   "fail": 0
+  },
+  "wall exists in IFC": {
+   "pass": 512,
+   "fail": 0
+  },
+  "IFC class matches wall type": {
+   "pass": 512,
+   "fail": 0
+  },
+  "CAD handles carried into IFC": {
+   "pass": 512,
+   "fail": 0
+  },
+  "curtain wall z range (3D = spec, mullions centred on the edges)": {
+   "pass": 43,
+   "fail": 0
+  },
+  "band z range (3D = spec)": {
+   "pass": 647,
+   "fail": 0
+  },
+  "material / layer set in IFC": {
+   "pass": 380,
+   "fail": 0
+  },
+  "IfcMaterialLayerSet sums to drawn thickness": {
+   "pass": 216,
+   "fail": 0
+  },
+  "banded wall is an IfcElementAssembly": {
+   "pass": 89,
+   "fail": 0
+  },
+  "band material in IFC": {
+   "pass": 267,
+   "fail": 0
+  },
+  "thickness in 3D = drawn line spacing": {
+   "pass": 466,
+   "fail": 0
+  },
+  "3D centre line on CAD centre line": {
+   "pass": 466,
+   "fail": 0
+  },
+  "3D length = drawn length": {
+   "pass": 466,
+   "fail": 0
+  },
+  "door exists in IFC (IfcDoor)": {
+   "pass": 97,
+   "fail": 0
+  },
+  "hosted door fills an opening cut in its host wall": {
+   "pass": 58,
+   "fail": 0
+  },
+  "header piece above door (3D = spec)": {
+   "pass": 76,
+   "fail": 0
+  },
+  "header has its own IFC element": {
+   "pass": 76,
+   "fail": 0
+  },
+  "door leaf/frame top at the specified head or header": {
+   "pass": 97,
+   "fail": 0
+  },
+  "header as specified (none above cubicle door)": {
+   "pass": 21,
+   "fail": 0
+  },
+  "semantic.json header matches the header mesh (present, same material)": {
+   "pass": 76,
+   "fail": 0
+  },
+  "door exported with a named Frame mesh and a named Leaf mesh": {
+   "pass": 97,
+   "fail": 0
+  },
+  "semantic.json header matches the header mesh (none above, no mesh)": {
+   "pass": 21,
+   "fail": 0
+  },
+  "every exported mesh has a material": {
+   "pass": 1292,
+   "fail": 0
+  },
+  "gap door leaves its flanking host whole (no volume lost)": {
+   "pass": 58,
+   "fail": 0
+  },
+  "column exists in IFC (IfcColumn)": {
+   "pass": 71,
+   "fail": 0
+  },
+  "column height (3D = spec)": {
+   "pass": 71,
+   "fail": 0
+  }
+ },
+ "total_pass": 7199,
+ "total_fail": 0,
+ "failures": [],
+ "ifc_counts": {
+  "IfcColumn": 71,
+  "IfcCovering": 25,
+  "IfcCurtainWall": 43,
+  "IfcDoor": 97,
+  "IfcPlate": 32,
+  "IfcRailing": 10,
+  "IfcSlab": 1,
+  "IfcWall": 591,
+  "IfcWindow": 66,
+  "IfcElementAssembly": 89,
+  "IfcOpeningElement": 124,
+  "IfcBuilding": 1,
+  "IfcBuildingStorey": 1,
+  "IfcSite": 1
+ },
+ "ifc_layer_sets": 216,
+ "ifc_element_assemblies": 89,
+ "ifc_rel_fills": 58,
+ "tolerances_m": {
+  "z": 0.002,
+  "thickness": 0.002,
+  "axis": 0.005
+ },
+ "door_cuts": [
+  {
+   "wall": "W0304",
+   "doors": [
+    "D001"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 2.5009,
+   "expected_m3": 2.5009,
+   "3d_m3": 2.5009,
+   "ok": true
+  },
+  {
+   "wall": "W0269",
+   "doors": [
+    "D002"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 1.5915,
+   "expected_m3": 1.5915,
+   "3d_m3": 1.5915,
+   "ok": true
+  },
+  {
+   "wall": "W0287",
+   "doors": [
+    "D005"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.1349,
+   "expected_m3": 0.1349,
+   "3d_m3": 0.1349,
+   "ok": true
+  },
+  {
+   "wall": "W0285",
+   "doors": [
+    "D006",
+    "D007"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.1331,
+   "expected_m3": 0.1331,
+   "3d_m3": 0.1331,
+   "ok": true
+  },
+  {
+   "wall": "W0290",
+   "doors": [
+    "D008"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.2734,
+   "expected_m3": 0.2734,
+   "3d_m3": 0.2734,
+   "ok": true
+  },
+  {
+   "wall": "W0288",
+   "doors": [
+    "D009",
+    "D010"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.2573,
+   "expected_m3": 0.2573,
+   "3d_m3": 0.2572,
+   "ok": true
+  },
+  {
+   "wall": "W0197",
+   "doors": [
+    "D012"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.7493,
+   "expected_m3": 0.7493,
+   "3d_m3": 0.7493,
+   "ok": true
+  },
+  {
+   "wall": "W0309",
+   "doors": [
+    "D013"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.1723,
+   "expected_m3": 0.1723,
+   "3d_m3": 0.1723,
+   "ok": true
+  },
+  {
+   "wall": "W0271",
+   "doors": [
+    "D014"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.3054,
+   "expected_m3": 0.3054,
+   "3d_m3": 0.3054,
+   "ok": true
+  },
+  {
+   "wall": "W0310",
+   "doors": [
+    "D016"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.0689,
+   "expected_m3": 0.0689,
+   "3d_m3": 0.0689,
+   "ok": true
+  },
+  {
+   "wall": "W0272",
+   "doors": [
+    "D018"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.5577,
+   "expected_m3": 0.5577,
+   "3d_m3": 0.5582,
+   "ok": true
+  },
+  {
+   "wall": "W0317",
+   "doors": [
+    "D024"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 1.9596,
+   "expected_m3": 1.9596,
+   "3d_m3": 1.9595,
+   "ok": true
+  },
+  {
+   "wall": "W0318",
+   "doors": [
+    "D025"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.5327,
+   "expected_m3": 0.5327,
+   "3d_m3": 0.5326,
+   "ok": true
+  },
+  {
+   "wall": "W0334",
+   "doors": [
+    "D026"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 1.4195,
+   "expected_m3": 1.4195,
+   "3d_m3": 1.4195,
+   "ok": true
+  },
+  {
+   "wall": "W0332",
+   "doors": [
+    "D027"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.3791,
+   "expected_m3": 0.3791,
+   "3d_m3": 0.3791,
+   "ok": true
+  },
+  {
+   "wall": "W0331",
+   "doors": [
+    "D028"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.3791,
+   "expected_m3": 0.3791,
+   "3d_m3": 0.3791,
+   "ok": true
+  },
+  {
+   "wall": "W0329",
+   "doors": [
+    "D029"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.3791,
+   "expected_m3": 0.3791,
+   "3d_m3": 0.3791,
+   "ok": true
+  },
+  {
+   "wall": "W0327",
+   "doors": [
+    "D030"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.4932,
+   "expected_m3": 0.4932,
+   "3d_m3": 0.4932,
+   "ok": true
+  },
+  {
+   "wall": "W0362",
+   "doors": [
+    "D031"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.7214,
+   "expected_m3": 0.7214,
+   "3d_m3": 0.7214,
+   "ok": true
+  },
+  {
+   "wall": "W0339",
+   "doors": [
+    "D032"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.0761,
+   "expected_m3": 0.0761,
+   "3d_m3": 0.0761,
+   "ok": true
+  },
+  {
+   "wall": "W0368",
+   "doors": [
+    "D033"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.3132,
+   "expected_m3": 0.3132,
+   "3d_m3": 0.3132,
+   "ok": true
+  },
+  {
+   "wall": "W0376",
+   "doors": [
+    "D034"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.0423,
+   "expected_m3": 0.0423,
+   "3d_m3": 0.0423,
+   "ok": true
+  },
+  {
+   "wall": "W0347",
+   "doors": [
+    "D035"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.3079,
+   "expected_m3": 0.3079,
+   "3d_m3": 0.3079,
+   "ok": true
+  },
+  {
+   "wall": "W0337",
+   "doors": [
+    "D036",
+    "D037"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.3261,
+   "expected_m3": 0.3261,
+   "3d_m3": 0.3261,
+   "ok": true
+  },
+  {
+   "wall": "W0383",
+   "doors": [
+    "D038"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 1.1054,
+   "expected_m3": 1.1054,
+   "3d_m3": 1.1054,
+   "ok": true
+  },
+  {
+   "wall": "W0341",
+   "doors": [
+    "D039"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.3565,
+   "expected_m3": 0.3565,
+   "3d_m3": 0.3565,
+   "ok": true
+  },
+  {
+   "wall": "W0349",
+   "doors": [
+    "D040"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.3242,
+   "expected_m3": 0.3242,
+   "3d_m3": 0.3242,
+   "ok": true
+  },
+  {
+   "wall": "W0352",
+   "doors": [
+    "D041"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 3.1019,
+   "expected_m3": 3.1019,
+   "3d_m3": 3.1019,
+   "ok": true
+  },
+  {
+   "wall": "W0389",
+   "doors": [
+    "D042"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 2.7111,
+   "expected_m3": 2.7111,
+   "3d_m3": 2.7093,
+   "ok": true
+  },
+  {
+   "wall": "W0442",
+   "doors": [
+    "D043"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.7407,
+   "expected_m3": 0.7407,
+   "3d_m3": 0.7407,
+   "ok": true
+  },
+  {
+   "wall": "W0321",
+   "doors": [
+    "D045",
+    "D046"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 3.0714,
+   "expected_m3": 3.0714,
+   "3d_m3": 3.0713,
+   "ok": true
+  },
+  {
+   "wall": "W0398",
+   "doors": [
+    "D047"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.5024,
+   "expected_m3": 0.5024,
+   "3d_m3": 0.5024,
+   "ok": true
+  },
+  {
+   "wall": "W0402",
+   "doors": [
+    "D048"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.5024,
+   "expected_m3": 0.5024,
+   "3d_m3": 0.5024,
+   "ok": true
+  },
+  {
+   "wall": "W0409",
+   "doors": [
+    "D049"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.1581,
+   "expected_m3": 0.1581,
+   "3d_m3": 0.1581,
+   "ok": true
+  },
+  {
+   "wall": "W0412",
+   "doors": [
+    "D050"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 1.9249,
+   "expected_m3": 1.9249,
+   "3d_m3": 1.9249,
+   "ok": true
+  },
+  {
+   "wall": "W0411",
+   "doors": [
+    "D051"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 1.4733,
+   "expected_m3": 1.4733,
+   "3d_m3": 1.4733,
+   "ok": true
+  },
+  {
+   "wall": "W0366",
+   "doors": [
+    "D052"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.3132,
+   "expected_m3": 0.3132,
+   "3d_m3": 0.3132,
+   "ok": true
+  },
+  {
+   "wall": "W0364",
+   "doors": [
+    "D053"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.3132,
+   "expected_m3": 0.3132,
+   "3d_m3": 0.3132,
+   "ok": true
+  },
+  {
+   "wall": "W0344",
+   "doors": [
+    "D054"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 1.3061,
+   "expected_m3": 1.3061,
+   "3d_m3": 1.3061,
+   "ok": true
+  },
+  {
+   "wall": "W0427",
+   "doors": [
+    "D055"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.3132,
+   "expected_m3": 0.3132,
+   "3d_m3": 0.3132,
+   "ok": true
+  },
+  {
+   "wall": "W0425",
+   "doors": [
+    "D056"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.3132,
+   "expected_m3": 0.3132,
+   "3d_m3": 0.3132,
+   "ok": true
+  },
+  {
+   "wall": "W0423",
+   "doors": [
+    "D057"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.3132,
+   "expected_m3": 0.3132,
+   "3d_m3": 0.3132,
+   "ok": true
+  },
+  {
+   "wall": "W0420",
+   "doors": [
+    "D058"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.6871,
+   "expected_m3": 0.6871,
+   "3d_m3": 0.6871,
+   "ok": true
+  },
+  {
+   "wall": "W0421",
+   "doors": [
+    "D059"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.2832,
+   "expected_m3": 0.2832,
+   "3d_m3": 0.2832,
+   "ok": true
+  },
+  {
+   "wall": "W0350",
+   "doors": [
+    "D060"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.1372,
+   "expected_m3": 0.1372,
+   "3d_m3": 0.1372,
+   "ok": true
+  },
+  {
+   "wall": "W0351",
+   "doors": [
+    "D061"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 1.9499,
+   "expected_m3": 1.9499,
+   "3d_m3": 1.9499,
+   "ok": true
+  },
+  {
+   "wall": "W0374",
+   "doors": [
+    "D062"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 1.2503,
+   "expected_m3": 1.2503,
+   "3d_m3": 1.2503,
+   "ok": true
+  },
+  {
+   "wall": "W0436",
+   "doors": [
+    "D063"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 2.5843,
+   "expected_m3": 2.5843,
+   "3d_m3": 2.5843,
+   "ok": true
+  },
+  {
+   "wall": "W0392",
+   "doors": [
+    "D064"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.0437,
+   "expected_m3": 0.0437,
+   "3d_m3": 0.0437,
+   "ok": true
+  },
+  {
+   "wall": "W0446",
+   "doors": [
+    "D065"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.3112,
+   "expected_m3": 0.3112,
+   "3d_m3": 0.3112,
+   "ok": true
+  },
+  {
+   "wall": "W0449",
+   "doors": [
+    "D073"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.7954,
+   "expected_m3": 0.7954,
+   "3d_m3": 0.7954,
+   "ok": true
+  },
+  {
+   "wall": "W0406",
+   "doors": [
+    "D088"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 2.1563,
+   "expected_m3": 2.1563,
+   "3d_m3": 2.1562,
+   "ok": true
+  },
+  {
+   "wall": "W0046",
+   "doors": [
+    "D094"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.3128,
+   "expected_m3": 0.3128,
+   "3d_m3": 0.3126,
+   "ok": true
+  },
+  {
+   "wall": "W0485",
+   "doors": [
+    "D097"
+   ],
+   "relations": [
+    "gap"
+   ],
+   "full_m3": 0.0569,
+   "expected_m3": 0.0569,
+   "3d_m3": 0.0566,
+   "ok": true
+  }
+ ],
+ "not_verified": [
+  "exact clear-opening, frame and leaf dimensions: the checks prove the model equals the specification, not that the specification equals the built door; widths marked default (Q-D7) are not drawing facts",
+  "heights, bands, build-ups and headers are verified as built to the default set, not against the designer"
+ ]
+}

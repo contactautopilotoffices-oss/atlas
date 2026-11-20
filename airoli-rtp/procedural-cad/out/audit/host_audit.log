@@ -1,0 +1,6 @@
+ 58  same host
+ 21  host lost
+ 18  unhosted before and now
+ 15  earlier host was wrong: it is not in line with the drawn door swing
+  6  earlier host was wrong: the earlier opening covered the whole wall and the cut destroyed it
+{"doors": 97, "hosted": 58, "host_relation": {"gap": 58, "none": 39}, "true_wall_voids": 0, "gap_doors": 58, "freestanding_unhosted": 39, "unhosted_by_reason": {"Glass Door block on DR-GLASS: no wall piece ends at its drawn swing": 4, "D-750: no wall piece ends at its drawn swing": 6, "DOOR_SNGL: no wall piece ends at its drawn swing": 8, "cubicle door: the drawn gap is in the cubicle side, where the only drawn pieces are 20 x 79 mm stubs (too short to be read as walls)": 20, "A$C03859404: no wall piece ends at its drawn swing": 1}, "headers_by_kind": {"pop_bulkhead": 35, "lintel_masonry": 9, "glass_transom": 32, "none_open_above": 21}, "header_pieces_built": 76, "frames_by_source": {"default": 11, "cad": 86}, "closed_side_by_tie_break": [], "unresolved_associations": 39, "before_after": {"same host": 58, "unhosted before and now": 18, "earlier host was wrong: it is not in line with the 

@@ -1,0 +1,585 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://autopilotoffices.example/procedural-cad/wall-assembly.schema.json",
+  "title": "Wall and opening assembly model (one floor)",
+  "description": "The middle file between the drawing and every 3D/BIM/2D output. Each attribute records where its value came from (source) and how sure we are (confidence). See SCHEMA.md.",
+  "type": "object",
+  "required": [
+    "drawing",
+    "frame",
+    "levels",
+    "walls",
+    "openings",
+    "columns",
+    "slab",
+    "ceiling"
+  ],
+  "$defs": {
+    "source": {
+      "enum": [
+        "cad",
+        "designer",
+        "client",
+        "default"
+      ],
+      "description": "cad = read from the drawing (handles/layer given); designer = answered by the designer; client = stated by the client or founder; default = assumed and marked (see 'q' for the question that would settle it)"
+    },
+    "attr": {
+      "type": "object",
+      "required": [
+        "value",
+        "source",
+        "confidence"
+      ],
+      "properties": {
+        "value": {},
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "rule": {
+          "type": "string",
+          "description": "id of the rule in rules.json that produced the value"
+        },
+        "why": {
+          "type": "string"
+        },
+        "handles": {
+          "type": "array",
+          "items": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "description": "drawing entity handles the value was read from"
+        },
+        "layer": {
+          "type": "string"
+        },
+        "q": {
+          "description": "question id(s) in ASK_DESIGNER.md that would replace a default",
+          "type": [
+            "string",
+            "array",
+            "null"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "source": {
+                "const": "default"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "value",
+              "source",
+              "confidence"
+            ]
+          }
+        }
+      ]
+    },
+    "xy": {
+      "type": "array",
+      "items": {
+        "type": "number"
+      },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "polyline": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/xy"
+      },
+      "minItems": 2
+    },
+    "wall_type": {
+      "enum": [
+        "glass_partition",
+        "full_height_glass",
+        "pop_gypsum",
+        "mixed",
+        "brick_block",
+        "rcc",
+        "curtain_wall",
+        "acp",
+        "window_glazing",
+        "panel_partial_height",
+        "railing",
+        "unknown"
+      ]
+    },
+    "band": {
+      "type": "object",
+      "required": [
+        "material",
+        "z0_m",
+        "z1_m"
+      ],
+      "properties": {
+        "material": {
+          "type": "string"
+        },
+        "z0_m": {
+          "type": "number"
+        },
+        "z1_m": {
+          "type": "number"
+        },
+        "label": {
+          "type": "string"
+        }
+      }
+    },
+    "wall": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "axis",
+        "thickness_m",
+        "height_m",
+        "bands",
+        "base_z_m",
+        "cad"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^W[0-9]{4}$"
+        },
+        "type": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/attr"
+            },
+            {
+              "properties": {
+                "value": {
+                  "$ref": "#/$defs/wall_type"
+                }
+              }
+            }
+          ]
+        },
+        "axis": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/attr"
+            },
+            {
+              "properties": {
+                "value": {
+                  "$ref": "#/$defs/polyline"
+                }
+              }
+            }
+          ]
+        },
+        "curved": {
+          "type": "boolean"
+        },
+        "length_m": {
+          "$ref": "#/$defs/attr"
+        },
+        "thickness_m": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/attr"
+            },
+            {
+              "properties": {
+                "value": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            }
+          ]
+        },
+        "height_m": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/attr"
+            },
+            {
+              "properties": {
+                "value": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            }
+          ]
+        },
+        "base_z_m": {
+          "$ref": "#/$defs/attr"
+        },
+        "bands": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/attr"
+            },
+            {
+              "properties": {
+                "value": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/$defs/band"
+                  },
+                  "minItems": 1
+                }
+              }
+            }
+          ]
+        },
+        "cad": {
+          "type": "object",
+          "required": [
+            "layers",
+            "face_handles",
+            "spacing_mm"
+          ],
+          "properties": {
+            "layers": {
+              "type": "array"
+            },
+            "face_handles": {
+              "type": "array"
+            },
+            "spacing_mm": {
+              "type": "number"
+            },
+            "hatch_lines_between_faces": {
+              "type": "integer"
+            },
+            "hatch_fills": {
+              "type": "array"
+            },
+            "texts_near": {
+              "type": "array"
+            }
+          }
+        },
+        "questions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "opening_kind": {
+      "enum": [
+        "glass_door",
+        "solid_door",
+        "double_door",
+        "cubicle_door",
+        "window",
+        "arch",
+        "arch_window",
+        "opening"
+      ]
+    },
+    "header": {
+      "type": "object",
+      "required": [
+        "kind",
+        "z0_m",
+        "z1_m"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "pop_bulkhead",
+            "glass_transom",
+            "full_height",
+            "lintel_masonry",
+            "none_open_above"
+          ]
+        },
+        "z0_m": {
+          "type": "number"
+        },
+        "z1_m": {
+          "type": "number"
+        },
+        "material": {
+          "type": "string"
+        },
+        "detail": {
+          "type": "string"
+        }
+      }
+    },
+    "opening": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "host",
+        "line",
+        "width_m",
+        "head_m",
+        "header",
+        "frame",
+        "cad",
+        "opening_width_m",
+        "frame_outside_width_m",
+        "clear_width_m",
+        "leaf_width_m"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^D[0-9]{3}$"
+        },
+        "kind": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/attr"
+            },
+            {
+              "properties": {
+                "value": {
+                  "$ref": "#/$defs/opening_kind"
+                }
+              }
+            }
+          ]
+        },
+        "leaves": {
+          "$ref": "#/$defs/attr"
+        },
+        "host": {
+          "$ref": "#/$defs/attr"
+        },
+        "line": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/attr"
+            },
+            {
+              "properties": {
+                "value": {
+                  "$ref": "#/$defs/polyline"
+                }
+              }
+            }
+          ]
+        },
+        "width_m": {
+          "$ref": "#/$defs/attr",
+          "description": "the modelled opening width = opening_width_m"
+        },
+        "head_m": {
+          "$ref": "#/$defs/attr"
+        },
+        "sill_m": {
+          "$ref": "#/$defs/attr"
+        },
+        "header": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/attr"
+            },
+            {
+              "properties": {
+                "value": {
+                  "$ref": "#/$defs/header"
+                }
+              }
+            }
+          ],
+          "description": "what sits above the opening: every door has one"
+        },
+        "frame": {
+          "$ref": "#/$defs/attr"
+        },
+        "leaf": {
+          "$ref": "#/$defs/attr"
+        },
+        "arch": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/attr"
+                },
+                {
+                  "properties": {
+                    "value": {
+                      "type": "object",
+                      "required": [
+                        "spring_m",
+                        "radius_m"
+                      ],
+                      "properties": {
+                        "spring_m": {
+                          "type": "number"
+                        },
+                        "radius_m": {
+                          "type": "number"
+                        },
+                        "with_window": {
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "cad": {
+          "type": "object",
+          "required": [
+            "block",
+            "layer",
+            "insert_handle"
+          ]
+        },
+        "opening_width_m": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/attr"
+            }
+          ],
+          "description": "structural (rough) opening: the gap between wall ends, or the jambs' outer faces; this is what is modelled and cut"
+        },
+        "frame_outside_width_m": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/attr"
+            }
+          ],
+          "description": "outside of the door frame"
+        },
+        "clear_width_m": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/attr"
+            }
+          ],
+          "description": "clear passage width between the frame/stops (null when not drawn)"
+        },
+        "leaf_width_m": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/attr"
+            }
+          ],
+          "description": "door leaf width, from the swing radius (null when no swing is drawn)"
+        },
+        "nominal_width_m": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/attr"
+            }
+          ],
+          "description": "nominal size read from the block name (evidence only)"
+        }
+      }
+    },
+    "column": {
+      "type": "object",
+      "required": [
+        "id",
+        "poly",
+        "type",
+        "height_m"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "poly": {
+          "$ref": "#/$defs/attr"
+        },
+        "type": {
+          "$ref": "#/$defs/attr"
+        },
+        "height_m": {
+          "$ref": "#/$defs/attr"
+        }
+      }
+    }
+  },
+  "properties": {
+    "drawing": {
+      "type": "string"
+    },
+    "frame": {
+      "type": "object",
+      "required": [
+        "cad_m_to_rtp_local",
+        "origin_m"
+      ]
+    },
+    "levels": {
+      "type": "object",
+      "required": [
+        "false_ceiling_m",
+        "soffit_m",
+        "floor_to_floor_m"
+      ],
+      "additionalProperties": {
+        "$ref": "#/$defs/attr"
+      }
+    },
+    "walls": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/wall"
+      }
+    },
+    "openings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/opening"
+      }
+    },
+    "columns": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/column"
+      }
+    },
+    "slab": {
+      "type": "object",
+      "required": [
+        "poly"
+      ],
+      "properties": {
+        "poly": {
+          "$ref": "#/$defs/attr"
+        }
+      }
+    },
+    "ceiling": {
+      "type": "object",
+      "required": [
+        "poly",
+        "z_m"
+      ]
+    }
+  }
+}

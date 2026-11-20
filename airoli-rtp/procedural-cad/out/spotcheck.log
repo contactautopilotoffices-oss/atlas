@@ -1,0 +1,7 @@
+dims 4 / 26 on model faces
+passage 5'6" PASSAGE  WIDE 1.676 -> model 1.682 6 mm ['glass_partition', 'glass_partition']
+passage 5'6" PASSAGE  WIDE 1.676 -> model None None mm None
+passage 5'6" PASSAGE  WIDE 1.676 -> model None None mm None
+passage 6' PASSAGE  WIDE 1.829 -> model 2.517 688 mm ['glass_partition', 'glass_partition']
+passage 6' PASSAGE  WIDE 1.829 -> model 1.8 -29 mm ['pop_gypsum', 'pop_gypsum']
+D- doors 12 [('D005', 0.75, 0.85, 'cad', 0.681), ('D006', 0.75, 0.75, 'cad', 0.681), ('D007', 0.75, 0.85, 'cad', 0.681), ('D008', 0.75, 0.85, 'cad', 0.681), ('D009', 0.75, 0.75, 'cad', 0.681), ('D010', 0.75, 0.852, 'cad', 0.681), ('D015', 0.75, 0.599, 'cad', 0.544), ('D019', 0.75, 0.6, 'cad', 0.545), ('D020', 0.75, 0.6, 'cad', 0.545), ('D021', 0.75, 0.6, 'cad', 0.545), ('D022', 0.75, 0.599, 'cad', 0.544), ('D023', 0.75, 0.599, 'cad', 0.544)]

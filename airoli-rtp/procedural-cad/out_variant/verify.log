@@ -1,0 +1,27 @@
+  512 pass    0 fail  wall exists in 3D
+  512 pass    0 fail  wall exists in IFC
+  512 pass    0 fail  IFC class matches wall type
+  512 pass    0 fail  CAD handles carried into IFC
+   43 pass    0 fail  curtain wall z range (3D = spec, mullions centred on the edges)
+  647 pass    0 fail  band z range (3D = spec)
+  380 pass    0 fail  material / layer set in IFC
+  216 pass    0 fail  IfcMaterialLayerSet sums to drawn thickness
+   89 pass    0 fail  banded wall is an IfcElementAssembly
+  267 pass    0 fail  band material in IFC
+  466 pass    0 fail  thickness in 3D = drawn line spacing
+  466 pass    0 fail  3D centre line on CAD centre line
+  466 pass    0 fail  3D length = drawn length
+   97 pass    0 fail  door exists in IFC (IfcDoor)
+   58 pass    0 fail  hosted door fills an opening cut in its host wall
+   76 pass    0 fail  header piece above door (3D = spec)
+   76 pass    0 fail  header has its own IFC element
+   97 pass    0 fail  door leaf/frame top at the specified head or header
+   21 pass    0 fail  header as specified (none above cubicle door)
+   76 pass    0 fail  semantic.json header matches the header mesh (present, same material)
+   97 pass    0 fail  door exported with a named Frame mesh and a named Leaf mesh
+   21 pass    0 fail  semantic.json header matches the header mesh (none above, no mesh)
+ 1292 pass    0 fail  every exported mesh has a material
+   58 pass    0 fail  gap door leaves its flanking host whole (no volume lost)
+   71 pass    0 fail  column exists in IFC (IfcColumn)
+   71 pass    0 fail  column height (3D = spec)
+TOTAL 7199 pass 0 fail

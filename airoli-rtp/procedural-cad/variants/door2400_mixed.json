@@ -1,0 +1,4 @@
+{
+  "why": "Demonstration of regeneration: change two rules and re-run. (1) door head 2.10 m -> 2.40 m for every door; (2) turn on the example rule O1, which makes every dry-wall partition next to a meeting or conference room a POP + glass + POP wall (POP 0-0.9 m, glass 0.9-2.4 m, POP 2.4 m to soffit). Neither change comes from the drawing or the designer: it only shows that one edit rebuilds the model, IFC, DXF, JSON and trace page.",
+  "set": {"defaults.door_head_m": 2.4, "overrides.0.enabled": true}
+}
