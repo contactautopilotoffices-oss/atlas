@@ -3,7 +3,8 @@
 const NS = 'http://www.w3.org/2000/svg';
 const $ = (s) => document.querySelector(s);
 const el = (t, a = {}, p) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
-const fmt = (n) => Number(n).toLocaleString('en-IN');
+const fmt = n => n == null || !Number.isFinite(Number(n)) ? '—' : Number(n).toLocaleString('en-IN');
+const esc = value => String(value ?? '—').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const ftin = (m) => { let i = Math.round(m / .0254), f = Math.floor(i / 12); i -= f * 12; return `${f}'${i}"`; };
 const size = (d) => d ? `${ftin(d[0])} × ${ftin(d[1])}` : '';
 const cache = {};
@@ -63,10 +64,11 @@ export async function openPlan(id, onBack) {
   const zg = el('g', { id: 'zoneg' }, root);
   for (const z of P.zones) {
     const g = el('g', { class: 'z', 'data-id': z.id }, zg);
-    el('path', { class: 'f', d: z.d, fill: z.color, 'fill-opacity': .42, stroke: z.color, 'stroke-width': 1.6, 'vector-effect': 'non-scaling-stroke', 'stroke-linejoin': 'round' }, g);
+    const shape = z.d ? {d:z.d,'stroke-linejoin':'round'} : {cx:z.label[0],cy:-z.label[1],r:.6};
+    el(z.d ? 'path' : 'circle', { class: 'f', ...shape, fill: z.color, 'fill-opacity': .42, stroke: z.color, 'stroke-width': 1.6, 'vector-effect': 'non-scaling-stroke' }, g);
     g.addEventListener('click', (e) => { if (P.moved || mode !== 'req') return; e.stopPropagation(); select(z.id, false); });
-    g.addEventListener('mouseenter', () => { if (!sel && mode === 'req') g.querySelector('path').setAttribute('fill-opacity', .6); });
-    g.addEventListener('mouseleave', () => { if (!sel && mode === 'req') g.querySelector('path').setAttribute('fill-opacity', .42); });
+    g.addEventListener('mouseenter', () => { if (!sel && mode === 'req') g.querySelector('.f').setAttribute('fill-opacity', .6); });
+    g.addEventListener('mouseleave', () => { if (!sel && mode === 'req') g.querySelector('.f').setAttribute('fill-opacity', .42); });
     P.items[z.id] = { z, g };
   }
   const C = P.cad, cg = el('g', { 'pointer-events': 'none', fill: 'none', 'vector-effect': 'non-scaling-stroke', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, root);
@@ -113,27 +115,30 @@ function paint() {
   }
 }
 function sidebar() {
-  const row = (z) => `<button class="row" data-id="${z.id}"><i style="background:${z.color}"></i><span>${z.name}</span><em>${z.seats || '–'}</em><small>${z.kind === 'inv' && !z.dims_m ? (z.cad_sqft ? fmt(z.cad_sqft) + ' sq ft' : '–') : fmt(z.area_sqft) + ' sq ft'}</small></button>`;
+  const row = (z) => `<button class="row" data-id="${z.id}"><i style="background:${z.color}"></i><span>${esc(z.name)}</span><em>${z.seats || '–'}</em><small>${z.kind === 'inv' && !z.dims_m ? (z.cad_sqft ? fmt(z.cad_sqft) + ' sq ft' : '–') : (z.area_sqft == null ? '—' : fmt(z.area_sqft) + ' sq ft')}</small></button>`;
   if (mode === 'req') $('#list').innerHTML = P.zones.slice().sort((a, b) => b.seats - a.seats).map(row).join('');
   else { const by = {}; for (const k of Object.keys(INV)) by[INV[k][0]] = []; for (const it of P.inv) by[it.group].push(it);
     $('#list').innerHTML = Object.entries(by).filter(([, l]) => l.length).map(([g, l]) => `<div class="grp k">${g} · ${l.length}</div>` + l.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })).map(row).join('')).join('') || '<div class="grp">No supporting spaces in this drawing.</div>'; }
   $('#list').querySelectorAll('.row').forEach(b => b.onclick = () => select(b.dataset.id, true));
-  $('#foot').textContent = mode === 'req' ? 'Seats: one chair block per seat in the drawing. Sizes: overall width × depth of the zone outline.' : 'Every supporting space in the drawing, with its overall width × depth and area.';
+  $('#foot').textContent = P.source_note || (mode === 'req' ? 'Seats: one chair block per seat in the drawing. Sizes: overall width × depth of the zone outline.' : 'Every supporting space in the drawing, with its overall width × depth and area.');
 }
 function select(id, zoom) {
   if (sel === id) id = null; sel = id; paint();
   $('#list').querySelectorAll('.row').forEach(b => b.classList.toggle('cur', b.dataset.id === id));
   const s = $('#sel'); if (!id) { s.classList.remove('on'); return; }
   const z = P.items[id].z; s.classList.add('on');
-  const perSeat = z.seats ? Math.round(z.area_sqft / z.seats) : null, sz = z.dims_m ? `${size(z.dims_m)} (${z.dims_m[0]} × ${z.dims_m[1]} m)` : 'outline not closed in the drawing';
+  const perSeat = z.seats && z.area_sqft != null ? Math.round(z.area_sqft / z.seats) : null, sz = z.dims_m ? `${size(z.dims_m)} (${z.dims_m[0]} × ${z.dims_m[1]} m)` : 'outline not closed in the drawing';
+  const area = z.area_sqft == null ? 'Not verified' : `${fmt(z.area_sqft)} sq ft (${z.area_m2} m²)`;
   const rows = z.kind === 'process'
     ? [['Seats drawn (CAD)', z.seats], ['Brief: required', z.sheet_required], ['Brief: achieved', z.sheet_achieved], ['Desk size (brief)', z.desk], ['Width × depth', sz], ['Area', `${fmt(z.area_sqft)} sq ft (${z.area_m2} m²)`], ['Area per seat', perSeat ? `${perSeat} sq ft` : '–']]
     : z.kind === 'inv' ? [['Type', z.group], ['Seats drawn (CAD)', z.seats || '–'], ['Width × depth', sz], ['Area', z.dims_m ? `${fmt(z.area_sqft)} sq ft` + (z.approx ? ' (approx.)' : '') : (z.cad_sqft ? `${fmt(z.cad_sqft)} sq ft (per the drawing's label)` : '–')]]
-    : [['Room type', z.group], ['Seats drawn (CAD)', z.seats || '–'], ['Width × depth', sz], ['Area', `${fmt(z.area_sqft)} sq ft (${z.area_m2} m²)`], ...(z.brief ? [['On the brief', z.brief]] : [])];
-  const note = z.kind === 'process' && z.seats !== z.sheet_achieved ? `<div class="note">The drawing shows ${z.seats} seats; the brief says ${z.sheet_achieved} achieved.</div>` : '';
-  s.innerHTML = `<h3><i style="background:${z.color}"></i>${z.name}</h3>
-    <div class="big"><div><b>${z.seats || '–'}</b><span>Seats</span></div><div><b>${fmt(z.area_sqft)}</b><span>Sq ft</span></div></div>
-    <table>${rows.map(([a, b]) => `<tr><td>${a}</td><td>${b}</td></tr>`).join('')}</table>${note}`;
+    : [['Room type', z.group], [z.seat_basis || 'Seats drawn (CAD)', z.seats || '–'], ['Width × depth', sz], ['Area', area], ...(z.brief ? [['On the brief', z.brief]] : [])];
+  if (z.cad_label) rows.push(['Drawing label', z.cad_label]);
+  if (z.area_basis) rows.push(['Area basis', z.area_basis]);
+  const note = z.note ? `<div class="note">${esc(z.note)}</div>` : z.kind === 'process' && z.sheet_achieved != null && z.seats !== z.sheet_achieved ? `<div class="note">The drawing shows ${z.seats} seats; the brief says ${z.sheet_achieved} achieved.</div>` : '';
+  s.innerHTML = `<h3><i style="background:${z.color}"></i>${esc(z.name)}</h3>
+    <div class="big"><div><b>${z.seats || '–'}</b><span>${z.seat_basis ? 'Seats marked' : 'Seats'}</span></div><div><b>${fmt(z.area_sqft)}</b><span>Sq ft</span></div></div>
+    <table>${rows.map(([a, b]) => `<tr><td>${esc(a)}</td><td>${esc(b)}</td></tr>`).join('')}</table>${note}`;
   const r = $('#list').querySelector(`[data-id="${id}"]`); if (r) r.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   if (zoom) { const bb = P.items[id].g.getBBox(); const f = fitBox([bb.x, -(bb.y + bb.height), bb.x + bb.width, -bb.y], 2.2); f.s = clampS(Math.max(f.s, P.s0 / 6)); Object.assign(goal, f); kick(); }
 }

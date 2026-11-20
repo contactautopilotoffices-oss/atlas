@@ -47,7 +47,8 @@
   {
    "level": 3,
    "name": "Third floor",
-   "status": "other"
+   "status": "other",
+   "plan": "rtp3"
   },
   {
    "level": 2,
