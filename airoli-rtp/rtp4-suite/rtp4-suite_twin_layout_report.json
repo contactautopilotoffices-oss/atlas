@@ -1,0 +1,40 @@
+{
+ "glass": {
+  "glass_parallel_duplicates_dropped": 5,
+  "glass_inside_walls_dropped": 1
+ },
+ "offer": {
+  "area_m2": 875.2,
+  "how": "egress_poly_m",
+  "rooms": 33,
+  "walls": 16,
+  "glass": 27,
+  "doors": 16,
+  "seats": 212
+ },
+ "furniture": {
+  "desks_from_blocks": 153,
+  "desks_from_drawn_rectangles": 0,
+  "desk_polys_120deg": 0,
+  "tables": 6,
+  "tables_added": 3,
+  "chairs_turned_to_desk_or_table": 49
+ },
+ "fit_to_walls": {
+  "desks_cut_back_from_walls": 45,
+  "tables_cut_back_from_walls": 5,
+  "plants_left_out": 0,
+  "chairs_moved_clear": 29,
+  "chairs_spread_to_0_6m": 65
+ },
+ "frame": {
+  "rotation_deg": -91.0,
+  "plate_bounds_rtp_local": [
+   15.8,
+   81.2,
+   47.6,
+   114.7
+  ],
+  "ffl_m": 15.0
+ }
+}

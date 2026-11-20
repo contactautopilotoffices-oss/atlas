@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Autopilot · Reliable Tech Park</title>
+<meta name="description" content="Reliable Tech Park, B Wing, MIDC Airoli: the entry experience for Altruist, by Autopilot. Draft for the approver review.">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="data:,">
+<link rel="preload" href="assets/fonts/Urbanist.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="css/xp.css">
+<link rel="stylesheet" href="css/presentation.css">
+<script type="importmap">
+{ "imports": { "three": "/engine/vendor/three/three.module.min.js", "three/addons/": "/engine/vendor/three/jsm/" } }
+</script>
+</head>
+<body data-mode="enter">
+<canvas id="c" aria-label="Reliable Tech Park, the building and its city in 3D"></canvas>
+<img id="still" alt="" aria-hidden="true">
+<div id="labels" aria-hidden="true"></div>
+<div id="experience-brand"><img src="assets/brand/autopilot-wordmark-white.png" alt="Autopilot"></div>
+<div id="letterbox" aria-hidden="true"><i class="lb-top"></i><i class="lb-bot"></i></div>
+
+<!-- the run: label stack bottom-left, captions bottom-centre, skip bottom-right -->
+<div id="hud">
+  <div class="lockup lockup-sm" aria-label="Altruist and Autopilot">
+    <img src="assets/brand/altruist-lockup-dark.svg" alt="Altruist" class="lk-al"><span class="lk-x">×</span><img src="assets/brand/autopilot-wordmark-white.png" alt="Autopilot" class="lk-ap">
+  </div>
+  <div id="stack">
+    <div id="s-place" class="t-place"></div>
+    <div id="s-display" class="t-display"></div>
+    <div id="s-data" class="t-data"></div>
+    <div id="s-chip" class="t-chip"></div>
+    <div id="s-clock" class="t-clock"></div>
+  </div>
+  <div id="counter" class="t-counter" aria-hidden="true"></div>
+  <p id="caption" aria-live="polite"></p>
+  <button id="skip" class="t-btn ghost" type="button">Skip <kbd>Esc</kbd></button>
+</div>
+
+<!-- the hand-off: the letterbox opens and the floors are theirs -->
+<div id="handoff" role="dialog" aria-label="Your floors">
+  <button id="ho-interior" class="t-btn primary" type="button">Open the CAD layout</button>
+  <a id="ho-floors" class="t-btn primary" href="../demo/index.html?floor=rtp6-c">Explore your floors</a>
+  <div class="ho-row"><button id="ho-site" class="t-btn ghost" type="button">Explore the site</button><button id="ho-replay" class="t-btn ghost" type="button">Replay</button></div>
+</div>
+
+<!-- explore: the client drives -->
+<div id="explore">
+  <nav id="modes" aria-label="Views">
+    <button type="button" data-k="overview" class="on">The property</button>
+    <button type="button" data-k="location">Connectivity</button>
+    <button type="button" data-k="nearby">Neighbourhood</button>
+    <button type="button" data-k="arrival">Arrival</button>
+    <button type="button" data-k="interior">CAD layout</button>
+  </nav>
+  <div id="tod">
+    <input id="tod-r" type="range" min="6.8" max="21" step=".05" value="9.5" aria-label="Time of day">
+    <div class="light-presets"><button type="button" data-hour="9.5">Daylight</button><button type="button" data-hour="18.5">Evening</button></div>
+    <div class="tod-ticks"><span>Sunrise</span><span id="tod-l">09:30 IST</span><span>Night</span></div>
+  </div>
+  <a id="floors" class="t-btn primary" href="../demo/index.html?floor=rtp6-c">Explore your floors</a>
+  <p id="hint">Drag to turn · scroll or pinch to move in · right-drag to slide</p>
+  <aside id="panel" aria-label="Why Reliable Tech Park">
+    <button id="panel-close" type="button" aria-label="Close">×</button>
+    <h3 class="t-display-sm">Why Reliable Tech Park</h3>
+    <ol id="why-list"></ol>
+    <div id="commute"></div>
+  </aside>
+</div>
+<section id="interior-panel" aria-label="Interior controls" hidden>
+  <div class="eyebrow">Offices 603 &amp; 604 · Floor 6</div>
+  <h2>Your workplace,<br>in perspective.</h2>
+  <p>Explore the layout. See how every space connects.</p>
+  <label for="process-zone">Find your team</label><select id="process-zone"><option value="">Whole floor</option></select>
+  <div class="interior-actions"><button id="interior-fit" type="button">Whole floor</button><button id="interior-top" type="button">Plan view</button></div>
+  <label class="switch-row"><input id="ceiling-toggle" type="checkbox"> Show ceiling</label>
+  <label class="switch-row"><input id="review-toggle" type="checkbox"> Show review markers</label>
+  <p class="source-note">CAD geometry retained. Heights and finishes include documented assumptions.</p>
+  <button id="rendered-view" class="render-link" type="button">See the rendered interior</button>
+  <a href="../demo/index.html?floor=rtp6-c">Open the detailed 2D plan</a>
+</section>
+<section id="render-gallery" hidden role="dialog" aria-modal="true" aria-label="CAD interior render">
+<button id="gallery-close" type="button" aria-label="Close rendered view">Close</button>
+<img id="gallery-image" src="../interior-semantic/captures/presentation/interior_axon.png" alt="Rendered view of the CAD-derived Offices 603 and 604">
+<div class="gallery-foot"><div><strong>The actual layout, brought into view.</strong><p>Visualization only · finishes, lighting and heights include assumptions.</p></div><div><button data-render="interior_axon.png" type="button">Whole floor</button><button data-render="interior_header_detail.png" type="button">Glazing &amp; headers</button></div></div>
+</section>
+<div id="run-controls" aria-label="Tour controls"><button id="pause-tour" type="button" aria-label="Pause tour">Pause</button><button id="sound-toggle" type="button" aria-pressed="true">Sound on</button><span id="tour-time">0:00</span></div>
+<nav id="chapters" aria-label="Tour chapters"><button data-time="0">Above the clouds</button><button data-time="14">Mumbai</button><button data-time="30">Airoli</button><button data-time="41">The property</button><button data-time="82">Arrival</button></nav>
+<p id="credit"></p>
+<details id="credit-details"><summary>Map credits</summary><p id="credit-full"></p></details>
+
+<!-- the Enter screen: black, the two marks, one line, the honest load bar -->
+<section id="enter">
+  <div class="enter-in">
+    <div class="lockup lockup-lg">
+      <img src="assets/brand/altruist-lockup-dark.svg" alt="Altruist" class="lk-al"><span class="lk-x">×</span><img src="assets/brand/autopilot-wordmark-white.png" alt="Autopilot" class="lk-ap">
+    </div>
+    <p class="enter-place">Reliable Tech Park · Airoli</p>
+    <h1 class="enter-title">A place to see.<br>A workplace to imagine.</h1>
+    <i class="enter-hair"></i>
+    <button id="enter-btn" type="button" disabled>
+      <span>Enter the experience</span>
+      <i id="enter-bar"><i></i></i>
+    </button>
+    <p class="enter-sound"><svg width="14" height="10" viewBox="0 0 14 10" aria-hidden="true"><path d="M1 3.5h2.2L6 1v8L3.2 6.5H1z" fill="none" stroke="currentColor" stroke-width="1"/><path d="M8.5 3c.8.6.8 3.4 0 4M10.6 1.6c1.7 1.4 1.7 5.4 0 6.8" fill="none" stroke="currentColor" stroke-width="1"/></svg>best with sound</p>
+    <p id="enter-note" role="status">Preparing your journey…</p>
+    <a class="enter-plan" href="../demo/index.html?floor=rtp6-c">Go straight to the floor plans</a>
+  </div>
+</section>
+<div id="fade" aria-hidden="true"></div>
+<script>
+window.addEventListener('error', function(e) { if(document.body.dataset.mode!=='enter') return; var n=document.getElementById('enter-note'); n.textContent='The 3D scene could not load. You can still open the floor plans below.'; document.getElementById('enter-btn').disabled=true; });
+window.addEventListener('unhandledrejection', function() { if(document.body.dataset.mode==='enter') document.getElementById('enter-note').textContent='The scene could not finish loading. Refresh to retry, or open the floor plans below.'; });
+</script>
+<script type="module" src="js/xp/main.js?v=demo-20261120"></script>
+</body>
+</html>

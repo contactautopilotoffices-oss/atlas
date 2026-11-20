@@ -51,6 +51,28 @@ button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
 #lede{font-size:12.5px;color:var(--sub);margin:-4px 0 8px}
 #cmp table.cmp{width:100%;border-collapse:collapse;font-size:12.5px} #cmp th{text-align:right;font-weight:700;padding:3px 0} #cmp th i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}
 #cmp td{padding:4px 0;border-top:1px solid var(--line)} #cmp td:not(:first-child){text-align:right;font-weight:700}
+/* whole floor (overview) panel: dark, like Volt's room list */
+#ovp{position:fixed;right:16px;top:16px;width:330px;max-height:calc(100vh - 110px);overflow:auto;z-index:6;padding:14px 14px 12px;scrollbar-width:thin}
+.glass.dark{background:rgba(18,21,28,.92);color:#eef1f6;border-color:rgba(255,255,255,.08)} .glass.dark .k{color:#9aa4b5}
+#ovp .ovstat{display:flex;align-items:baseline;gap:6px;margin:6px 0 8px} #ovp .ovstat b{font-size:30px;font-weight:800;color:#5aa9ff;letter-spacing:-.02em} #ovp .ovstat b+span+b{font-size:18px;color:#eef1f6;margin-left:8px} #ovp .ovstat span{color:#b8c0ce;font-size:12.5px}
+#ovp .ovroute{font-size:12.5px;color:#ffd2a3;margin:0 0 10px;display:flex;gap:7px;align-items:center} #ovp .ovroute i{width:18px;height:4px;border-radius:3px;background:#ff8a1f;flex:none}
+#ovp .ovleg{display:flex;flex-wrap:wrap;gap:4px 10px;margin:0 0 8px;font-size:12px} #ovp .ovleg div{display:flex;align-items:center;gap:6px;width:100%} #ovp .ovleg i{width:9px;height:9px;border-radius:3px;flex:none} #ovp .ovleg small{margin-left:auto;color:#9aa4b5}
+#ovp .ovtog{display:flex;flex-wrap:wrap;gap:5px;margin:4px 0 8px} #ovp .ovtog button{padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.08);font-size:12px;font-weight:600;color:#d7dce5} #ovp .ovtog button.on{background:#5aa9ff;color:#06142b}
+#ovp .ovrooms{border-top:1px solid rgba(255,255,255,.08);margin-top:6px} #ovp .ovrooms button{display:flex;width:100%;align-items:center;gap:8px;padding:8px 2px;border-bottom:1px solid rgba(255,255,255,.06);text-align:left;font-weight:600;font-size:13px;color:#eef1f6}
+#ovp .ovrooms button small{margin-left:auto;font-weight:700} #ovp .ovrooms button:hover{background:rgba(255,255,255,.04)} #ovp .ovrooms button::after{content:"→";color:#6b7486;margin-left:6px}
+#ovp .pill{background:rgba(255,255,255,.1);color:#eef1f6} #ovp .pill.dark{background:#ff8a1f;color:#1b1206}
+body.ov #todbox{right:362px}
+@media (max-width:1100px){ body.ov #todbox{display:none} #ovp{top:auto;bottom:84px;max-height:46vh;width:min(360px,calc(100vw - 32px))} }
+#todbox .row1{gap:8px} #todl{white-space:nowrap}
+.tag.small{padding:4px 8px;font-size:11.5px;border-radius:8px} .tag.small small{font-size:10px}
+/* every box folds away, so nothing blocks the view */
+.fold{position:absolute;right:8px;top:8px;width:24px;height:24px;border-radius:7px;background:rgba(0,0,0,.06);font-size:15px;line-height:24px;text-align:center;font-weight:700;z-index:2;color:inherit}
+.glass.dark .fold{background:rgba(255,255,255,.1)}
+.glass.folded{width:auto!important;min-width:0!important;max-height:none!important;padding:8px 40px 8px 12px!important;overflow:hidden!important}
+.glass.folded>*:not(.fold){display:none!important}
+.glass.folded::before{content:attr(data-title);font-weight:700;font-size:12.5px;white-space:nowrap}
+#mm .mm-bar{padding-right:38px} #todbox .row1{padding-right:30px} #card{position:relative;padding-right:40px}
+#left,#ovp,#mm,#todbox{position:fixed}
 /* time of day */
 #todbox{position:fixed;right:16px;top:16px;z-index:6;padding:10px 14px 9px;width:270px}
 body.inside #todbox{display:none}
@@ -104,7 +126,8 @@ body.inside #right{display:flex}
 #mm canvas{display:block;width:100%;height:190px;cursor:pointer;touch-action:none}
 #mm.big{width:min(600px,calc(100vw - 360px))} #mm.big canvas{height:min(400px,calc(100vh - 260px))}
 #mm .mm-chip{display:none}
-body.inside:not(.info) #left{max-height:calc(100vh - 290px)}
+body.inside:not(.info) #left{max-height:calc(100vh - 340px)}
+#mm canvas{height:170px}
 /* dock */
 #dock{position:fixed;left:50%;bottom:calc(14px + env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;gap:3px;padding:5px;z-index:7;max-width:calc(100vw - 20px);overflow-x:auto;scrollbar-width:none}
 #dock button{padding:9px 12px;border-radius:11px;font-weight:600;font-size:13px;white-space:nowrap}
@@ -124,12 +147,16 @@ body.inside:not(.info) #left{max-height:calc(100vh - 290px)}
 #joy{position:fixed;left:22px;bottom:calc(84px + env(safe-area-inset-bottom));width:116px;height:116px;border-radius:50%;background:rgba(255,255,255,.28);border:1.5px solid rgba(255,255,255,.7);z-index:7;display:none;touch-action:none}
 #joy i{position:absolute;left:50%;top:50%;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:rgba(255,255,255,.92);box-shadow:var(--shadow)}
 body.walk.touch #joy{display:block}
-#gal{position:fixed;inset:0;z-index:28;background:rgba(18,18,20,.94);color:#fff;display:none;overflow:auto;padding:22px 22px 40px}
+#gal{position:fixed;inset:0;z-index:28;background:#0c0e12;color:#fff;display:none;overflow:auto;padding:28px clamp(16px,4vw,56px) 56px}
 #gal.show{display:block} #gal h3{margin:18px 0 8px;font-size:14px;font-weight:700;color:#ddd} #gal .gx{position:fixed;right:16px;top:12px;color:#fff;font-size:26px;z-index:29}
-#gal .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
-#gal figure{margin:0;cursor:pointer} #gal img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:8px;background:#333;display:block} #gal figcaption{font-size:12px;color:#bbb;margin-top:4px}
-#lb{position:fixed;inset:0;z-index:31;background:rgba(10,10,12,.92);display:none;align-items:center;justify-content:center}
-#lb.show{display:flex} #lb img{max-width:96vw;max-height:88vh;border-radius:10px} #lb button{position:absolute;right:16px;top:14px;color:#fff;font-size:26px}
+#gal .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,460px),1fr));gap:18px}
+#gal h3{font-size:20px!important;margin:30px 0 12px!important;color:#fff!important;letter-spacing:-.01em}
+#gal figure{margin:0;cursor:zoom-in;overflow:hidden;border-radius:14px;background:#1a1d24;position:relative} #gal img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;transition:transform .5s ease} #gal figure:hover img{transform:scale(1.035)}
+#gal figcaption{position:absolute;left:0;right:0;bottom:0;padding:28px 16px 12px;font-size:14px;font-weight:600;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.72))}
+#lb{position:fixed;inset:0;z-index:31;background:#07080a;display:none;align-items:center;justify-content:center}
+#lb .nav{position:absolute;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;font-size:26px} #lb .nav.p{left:18px} #lb .nav.n{right:18px} #lb .nav:hover{background:rgba(255,255,255,.22)}
+#lb .cap{position:absolute;bottom:18px;left:0;right:0;text-align:center;color:#e7e9ee;font-size:14px;font-weight:600} #lb .cap small{color:#8d95a3;margin-left:8px}
+#lb.show{display:flex} #lb img{max-width:100vw;max-height:calc(100vh - 70px);border-radius:6px;object-fit:contain} #lb button{position:absolute;right:16px;top:14px;color:#fff;font-size:26px}
 /* presenter remote (from the Volt page) */
 #pair{position:fixed;inset:0;background:rgba(16,16,18,.72);backdrop-filter:blur(6px);z-index:40;display:none;align-items:center;justify-content:center;padding:20px}
 #pair.show{display:flex} body.pairgate #pair{background:#16171a}
@@ -174,12 +201,12 @@ body.present #pairchip{display:block}
 <body>
 <canvas id="c" tabindex="0"></canvas>
 <div id="tags"></div>
-<aside id="left" class="glass">
+<aside id="left" class="glass" data-title="Floors and seats">
   <div id="fp">
     <div id="brand"><img src="../../brand/altruist.png" alt="Altruist"><span class="for">Proposed office<br>for Altruist</span></div>
     <div class="k" id="place">Reliable Tech Park · Airoli, Navi Mumbai</div>
     <h1>Choose a floor</h1>
-    <div id="lede">Two floors on offer, drawn from the design team's CAD: the 4th-floor suite, and the 6th floor in two layouts.</div>
+    <div id="lede">Two floors on offer, drawn from the design team's CAD: the 4th-floor suite and the 6th-floor continuous plate (Offices 603 &amp; 604).</div>
     <div class="row" style="margin:0 0 6px"><button class="pill" id="b-renders" hidden>Renders of the building</button></div>
     <div id="floors"></div>
     <div id="cmp" hidden></div>
@@ -187,10 +214,10 @@ body.present #pairchip{display:block}
   <div id="tp" hidden></div>
 </aside>
 <div id="right">
-  <section id="card" class="glass" aria-live="polite"></section>
+  <section id="card" class="glass" aria-live="polite" data-title="Room"></section>
   <section id="opts" class="glass"></section>
 </div>
-<section id="mm" class="glass" hidden aria-label="Floor plan">
+<section id="mm" class="glass" hidden aria-label="Floor plan" data-title="CAD plan · you are here">
   <div class="mm-bar"><span class="k">You are in</span><b class="mm-here"></b><button class="mm-size mm-cad" title="The DWG itself, or the simplified plan">CAD</button><button class="mm-size" title="Larger plan">⤢</button></div>
   <span class="mm-xy"></span>
   <span class="mm-next" hidden></span>
@@ -199,6 +226,7 @@ body.present #pairchip{display:block}
 </section>
 <nav id="dock" class="glass">
   <button id="b-back">Building</button>
+  <button id="b-whole" hidden>Whole floor</button>
   <button id="b-enter" class="go" hidden>Enter</button>
   <button id="b-prev" hidden>‹ Prev</button>
   <button id="b-next" hidden>Next ›</button>
@@ -207,15 +235,16 @@ body.present #pairchip{display:block}
   <button id="b-lock" hidden>Mouse look</button>
   <button id="b-present">Remote</button>
 </nav>
-<section id="todbox" class="glass" aria-label="Time of day"><div class="row1"><span class="k">Light</span><span id="todl">Morning</span></div>
+<section id="todbox" class="glass" aria-label="Time of day" data-title="Light"><div class="row1"><span class="k">Light</span><span id="todl">Morning</span></div>
   <input id="tod" type="range" min="6.4" max="21.5" step="0.05" value="10.5" aria-label="Time of day">
   <div class="ticks"><span>Sunrise</span><span>Noon</span><span>Golden</span><span>Night</span></div></section>
+<section id="ovp" class="glass dark" hidden aria-label="Whole floor" data-title="Whole floor"></section>
 <div id="hint"></div>
 <div id="joy"><i></i></div>
 <div id="load" class="glass">Loading…</div>
 <div id="fps"></div>
 <div id="gal" role="dialog" aria-label="Stills"><button class="gx" aria-label="Close">&times;</button><div id="galbody"></div></div>
-<div id="lb"><img alt=""><button aria-label="Close">&times;</button></div>
+<div id="lb"><img alt=""><button class="x" aria-label="Close">&times;</button><button class="nav p" aria-label="Previous">‹</button><button class="nav n" aria-label="Next">›</button><div class="cap"></div></div>
 <div id="pair"><div class="box">
   <button id="pairx" aria-label="Close">&times;</button>
   <div class="k">Presenter remote</div><h2>Scan with your phone</h2>

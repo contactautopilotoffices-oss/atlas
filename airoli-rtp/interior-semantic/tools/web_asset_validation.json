@@ -1,0 +1,19 @@
+{
+  "bytes": 4770420,
+  "meshes": 63,
+  "element_attributes": 63,
+  "missing_element_attribute": 0,
+  "source_hash_match": true,
+  "current_cad_hash_match": true,
+  "ceiling_nodes": 1,
+  "element_ids": 682,
+  "review_dimension_doors": 13,
+  "three_loader": {
+    "loaded": true,
+    "meshes": 63,
+    "element_attributes": 63
+  },
+  "door_frames": 97,
+  "door_headers": 76,
+  "expected_part_mismatches": 0
+}

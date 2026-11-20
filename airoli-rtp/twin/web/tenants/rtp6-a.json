@@ -42,6 +42,16 @@
  },
  "stills": [
   {
+   "camera": "rtp6-a_CAM_reception-waiting-area_logo",
+   "src": "models/rtp6-a/stills/rtp6-a_reception-waiting-area_logo.jpg",
+   "option": null
+  },
+  {
+   "camera": "rtp6-a_CAM_reception-waiting-area_reverse_hero",
+   "src": "models/rtp6-a/stills/rtp6-a_reception-waiting-area_reverse_hero.jpg",
+   "option": null
+  },
+  {
    "camera": "rtp6-a_CAM_open-workstations-2_entry",
    "src": "models/rtp6-a/stills/rtp6-a_open-workstations-2_entry.jpg",
    "option": null
@@ -64,6 +74,11 @@
   {
    "camera": "rtp6-a_CAM_cafeteria-1_entry",
    "src": "models/rtp6-a/stills/rtp6-a_cafeteria-1_entry.jpg",
+   "option": null
+  },
+  {
+   "camera": "rtp6-a_CAM_cabin-1_desk",
+   "src": "models/rtp6-a/stills/rtp6-a_cabin-1_desk.jpg",
    "option": null
   }
  ],

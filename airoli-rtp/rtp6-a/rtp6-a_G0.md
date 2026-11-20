@@ -6,10 +6,10 @@ Image: `rtp6-a_G0.png` (true north up). Numbers: `rtp6-a_G0.json`.
 ## Headline
 
 - **429 work seats, 670 seats in all.** Work (desk + chair) 429, Meeting 39, Training 51, Cafeteria 112, Reception, lounge, visitor 31, Cabin (desk chair + visitors) 8.
-- **Area:** measured carpet 2,779 m2 (29,911 sq ft) of free floor, 31,965 sq ft with the inner partitions, against the sheet's 23,659 sq ft: +26.4 % / +35.1 %: fail on the 3 % rule.
+- **Area:** measured carpet 2,774 m2 (29,856 sq ft) of free floor, 31,982 sq ft with the inner partitions, against the sheet's 23,659 sq ft: +26.2 % / +35.2 %: fail on the 3 % rule.
 - **Exits:** 5 exit stairs reached; 558 of 670 seats have two. Nearest exit: median 18 m, worst 33 m.
 - **Daylight:** 25 % of work seats within 6 m of a window.
-- **Flags:** 14 differences or open points (below).
+- **Flags:** 16 differences or open points (below).
 
 ## Seats
 
@@ -19,7 +19,7 @@ Image: `rtp6-a_G0.png` (true north up). Numbers: `rtp6-a_G0.json`.
 | Meeting | 39 | MEETING ROOM (3) 7, MEETING ROOM (1) 7, MEETING ROOM (2) 7, MEETING ROOM (4) 7, MEETING ROOM 04 PAX (1) 4, MEETING ROOM 04 PAX (2) 4, MEETING ROOM 04 PAX (unlabelled) 3 |
 | Training | 51 | TRAINING ROOM 26, TRAINING-STYLE ROOM (unlabelled) 25 |
 | Cafeteria | 112 | CAFETERIA (1) 112 |
-| Reception, lounge, visitor | 31 | RECEPTION & WAITING AREA 19, Circulation 5 9, Circulation 3 2, Shaft or duct 85 (unlabelled) 1 |
+| Reception, lounge, visitor | 31 | RECEPTION & WAITING AREA 19, Circulation 9 9, Circulation 7 2, Shaft or duct 82 (unlabelled) 1 |
 | Cabin (desk chair + visitors) | 8 | CABIN (1) 5, CABIN (2) 3 |
 
 ## The sheet legend, line by line
@@ -49,11 +49,11 @@ measured carpet = every closed room, open-plan zone and circulation polygon insi
 
 | Use | m2 | sq ft |
 |---|---:|---:|
-| work | 1,078 | 11,603 |
-| circulation | 961 | 10,341 |
-| core | 230 | 2,470 |
+| work | 1,078 | 11,605 |
+| circulation | 989 | 10,649 |
+| core | 227 | 2,448 |
 | cafe | 216 | 2,320 |
-| service | 179 | 1,924 |
+| service | 145 | 1,559 |
 | training | 96 | 1,035 |
 | meeting | 79 | 851 |
 | wc | 62 | 663 |
@@ -61,11 +61,11 @@ measured carpet = every closed room, open-plan zone and circulation polygon insi
 | other | 35 | 381 |
 | cabin | 25 | 270 |
 | lounge | 7 | 74 |
-| **Measured carpet, free floor (all but core)** | **2,779** | **29,911** |
-| Measured carpet with inner partitions (gross less cores) | 2,970 | 31,965 |
-| Gross plate inside the offer | 3,199 | 34,435 |
+| **Measured carpet, free floor (all but core)** | **2,774** | **29,856** |
+| Measured carpet with inner partitions (gross less cores) | 2,971 | 31,982 |
+| Gross plate inside the offer | 3,199 | 34,430 |
 
-Sheet: carpet 23,659 sq ft, chargeable 35,488 sq ft (chargeable / carpet = 1.5). Source: model-space text on the sheet: 'Carpet Area :- 23,659 Sqft.', 'Chargeable Area :- 35,488 Sqft.'. Free floor vs sheet carpet: **+26.4 %** (fail against the 3 % rule); with the inner partitions (31,965 sq ft): **+35.1 %** (fail); gross inside the offer: +45.5 %. Gross vs chargeable: -3.0 %.
+Sheet: carpet 23,659 sq ft, chargeable 35,488 sq ft (chargeable / carpet = 1.5). Source: model-space text on the sheet: 'Carpet Area :- 23,659 Sqft.', 'Chargeable Area :- 35,488 Sqft.'. Free floor vs sheet carpet: **+26.2 %** (fail against the 3 % rule); with the inner partitions (31,982 sq ft): **+35.2 %** (fail); gross inside the offer: +45.5 %. Gross vs chargeable: -3.0 %.
 
 ## Entries
 
@@ -119,7 +119,7 @@ clear width = shortest chord through the point between walls, glass, columns, de
 | 1700 MM WIDE PASSAGE | (20, 87) | 1.70 | 2.49 | 3.05 | yes |
 | 1700 MM WIDE PASSAGE | (12, 87) | 1.70 | 2.51 | 4.87 | yes |
 
-Pinch points under 1.2 m found on circulation centrelines (door openings excluded): 21 of 502 sample points: 0.80 m at (42, 70); 0.85 m at (42, 56); 0.85 m at (42, 55); 0.80 m at (12, 84); 0.87 m at (12, 84); 1.14 m at (12, 88); 1.17 m at (17, 21); 1.20 m at (20, 18); 0.59 m at (12, 100); 0.70 m at (39, 32); 0.70 m at (38, 32); 0.70 m at (37, 32). Most are strips along the facade or beside a column, not walking routes; they are listed for the G1 check.
+Pinch points under 1.2 m found on circulation centrelines (door openings excluded): 24 of 510 sample points: 1.15 m at (11, 64); 1.04 m at (11, 63); 1.03 m at (11, 39); 1.11 m at (11, 38); 1.10 m at (11, 37); 1.08 m at (11, 36); 0.80 m at (42, 70); 1.10 m at (42, 56); 1.10 m at (42, 55); 0.80 m at (12, 84); 1.04 m at (12, 84); 1.17 m at (17, 21). Most are strips along the facade or beside a column, not walking routes; they are listed for the G1 check.
 
 ## Daylight by true facade
 
@@ -137,14 +137,16 @@ distance from each work seat to the nearest facade glass line on the plate edge;
 4. Legend 'REPRO': sheet says 2 provided (1 required); the CAD shows 6. CAD labels: PRINTER (13, 80), REPRO AREA (13, 82), REPRO (27, 56), REPRO (16, 79), REPRO (17, 67), REPRO (17, 31)
 5. Legend 'TRAINING ROOM': sheet says 1 provided (1 required); the CAD shows 2. CAD labels: TRAINING ROOM (33, 22), TRAINING-STYLE ROOM (unlabelled) (34, 80)
 6. Legend 'LADIES WASHROOM': sheet says 2 provided (1 required); the CAD shows 3. CAD labels: LADIES TOILET (14, 37), LADIES TOILET (14, 64), LADIES TOILET (15, 21)
-7. Area: the rooms measure 29,911 sq ft of free floor (+26.4 %) and 31,965 sq ft with the inner partitions (+35.1 %) against the sheet's 23,659 sq ft carpet: outside the 3 % rule on both counts. The sheet's chargeable 35,488 sq ft is -3.0 % from that gross area. The sheet's chargeable area is exactly 1.500 x its carpet area, so the sheet's carpet figure looks like chargeable / 1.5 (a 50 % loading), not a measured area.
+7. Area: the rooms measure 29,856 sq ft of free floor (+26.2 %) and 31,982 sq ft with the inner partitions (+35.2 %) against the sheet's 23,659 sq ft carpet: outside the 3 % rule on both counts. The sheet's chargeable 35,488 sq ft is -3.0 % from that gross area. The sheet's chargeable area is exactly 1.500 x its carpet area, so the sheet's carpet figure looks like chargeable / 1.5 (a 50 % loading), not a measured area.
 8. Exits: 112 seats in CAFETERIA (1) reach only one exit stair on the drawn walls and doors (a second route was not found). Check for a door missing from the drawing.
 9. Entry: the lift bank at (33, 51) (2 lifts, LOBBY (29.4, 50.8)) has no walking route to the reception on the drawn doors.
 10. Walkway: '1200 MM WIDE PASSAGE' at (18, 40) measures 0.98 m between chairs at their desks (median of 5 points; 2.06 m desk to desk).
 11. Walkway: '1350 MM WIDE PASSAGE' at (18, 80) measures 0.99 m between chairs at their desks (median of 5 points; 3.14 m desk to desk).
 12. Capacity: 'MEETING ROOM 04 PAX (unlabelled)' says 4; 3 chairs are drawn in it.
-13. Label not placed in a room: 'REPRO' at (27, 56) - closed-room label in an open area: needs a closure.
-14. Label not placed in a room: 'REPRO' at (16, 79) - closed-room label in an open area: needs a closure.
+13. Label not placed in a room: 'SPACE FOR OUTDOOR UNIT' at (12, 42) - closed-room label in an open area: needs a closure.
+14. Label not placed in a room: 'SPACE FOR OUTDOOR UNIT' at (12, 60) - closed-room label in an open area: needs a closure.
+15. Label not placed in a room: 'REPRO' at (27, 56) - closed-room label in an open area: needs a closure.
+16. Label not placed in a room: 'REPRO' at (16, 79) - closed-room label in an open area: needs a closure.
 
 ## Hand fixes (each one is in the plan file with its reason)
 
@@ -155,7 +157,7 @@ distance from each work seat to the nearest facade glass line on the plate edge;
 - Label moved near [42.4, 77.9]: the second CABIN label sits on the facade line beside its room (3 chairs); moved inside the room
 - Label added 'MEETING ROOM 04 PAX (unlabelled)' at [35.6, 12.3]: third round 4-seat table room beside the two labelled MEETING ROOM 04 PAX rooms; no label of its own in the CAD
 - Label added 'TRAINING-STYLE ROOM (unlabelled)' at [34.5, 80.0]: 20 chairs in rows at 450 mm-deep tables (10 x 2400 + 9 x 1600 mm) beside the lift lobby; no room label in the CAD (the nearest text is CONSOLE)
-- 489 automatic closures of short door-less openings (room outlines only).
+- 484 automatic closures of short door-less openings (room outlines only).
 
 ## Assumptions
 
@@ -167,7 +169,7 @@ distance from each work seat to the nearest facade glass line on the plate edge;
 - Walkway width = the clear gap between desks, tables and partitions with the chairs where they are drawn (lounge seats ignored), measured at the CAD's own passage labels.
 - Daylight: distance from each work seat to the nearest facade glass line; the facade glass type, sill height and shading are not in the drawing.
 - Seats are counted from chair blocks, one per chair (two per two-seat sofa). A work seat is a chair at a desk; the room a chair stands in decides meeting, training, cafeteria and lounge.
-- 489 short openings without a door block (toilet entries, lift doorways, bays) were closed automatically where two wall ends face each other 0.55 to 1.15 m apart, for room outlines only; walking routes may pass through them.
+- 484 short openings without a door block (toilet entries, lift doorways, bays) were closed automatically where two wall ends face each other 0.55 to 1.15 m apart, for room outlines only; walking routes may pass through them.
 
 ## Sign-off
 

@@ -1,0 +1,21 @@
+{
+  "descent": "assets/descent.mp4",
+  "orbit": "assets/twin_orbit_golden.mp4",
+  "location": "assets/location_film.mp4",
+  "court": "assets/twin_court_push_golden.mp4",
+  "rise": "assets/twin_rise_6th.mp4",
+  "open6": "assets/tool_open6.mp4",
+  "processes": "assets/tool_processes.mp4",
+  "support": "assets/tool_support_rooms.mp4",
+  "suite4": "assets/tool_suite4.mp4",
+  "night": "assets/twin_night_hold.mp4",
+  "interior": "assets/interior_axon.png",
+  "detail": "assets/interior_header_detail.png",
+  "mix": "assets/film_audio_v2.wav",
+  "altruist": "assets/altruist-lockup-dark.svg",
+  "autopilot": "assets/autopilot-wordmark-white.png",
+  "tata": "assets/tool_tata.mp4",
+  "growth": "assets/tool_growth.mp4",
+  "brand_reference": "../brand/autopilot-supplied.jpeg",
+  "narration_script": "narration-v2/script.json"
+}

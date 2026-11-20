@@ -37,10 +37,10 @@
  "Lounge, collab and visitor seats": {
   "total": 31,
   "rooms": {
-   "Shaft or duct 85 (unlabelled)": 1,
+   "Shaft or duct 82 (unlabelled)": 1,
    "RECEPTION & WAITING AREA": 19,
-   "Circulation 5": 9,
-   "Circulation 3": 2
+   "Circulation 9": 9,
+   "Circulation 7": 2
   }
  },
  "Cabin seats (desk chair and visitors)": {
@@ -78,8 +78,8 @@
    "work_seats_without_desk_nearby": 0,
    "room_kinds": {
     "service": 14,
-    "core": 110,
     "work": 6,
+    "core": 107,
     "reception": 1,
     "training": 2,
     "wc": 6,
@@ -100,6 +100,8 @@
    }
   },
   "unplaced_room_labels": [
+   "SPACE FOR OUTDOOR UNIT",
+   "SPACE FOR OUTDOOR UNIT",
    "REPRO",
    "REPRO"
   ],

@@ -29,11 +29,7 @@
    "level": 6,
    "name": "Sixth floor",
    "tenants": [
-    "rtp6-a"
-   ],
-   "options": [
-    "rtp6-a",
-    "rtp6-b"
+    "rtp6-c"
    ]
   },
   {

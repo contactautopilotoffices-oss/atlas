@@ -1,0 +1,1536 @@
+{
+ "about": "Altruist x Autopilot entry experience, Reliable Tech Park, B Wing, MIDC Airoli. Beat list for the build; the reasoning and the full script are in SCRIPT.md. Draft for the approver review, written overnight 19 to 20 Nov 2026; not published.",
+ "frames": {
+  "rtp_local": "metres, x east, y north from the Maps pin 19.1692159 N 73.0017703 E; pos/look_at = [x, y, h above ground]; three.js position = (x, h, -y)",
+  "latlng": "WGS84 degrees and altitude above sea level in metres; convert at the pin with 105,186 m per degree of longitude and 110,694 m per degree of latitude; heading clockwise from true north, pitch negative = looking down",
+  "levels": "level n floor = 0.6 + 3.6 n m (building.json; floor-to-floor and G+9 are logged assumptions); level 6 = 22.2 m, seated eye 23.4 m"
+ },
+ "fields": {
+  "camera": "from, to, ease; optional via (waypoints with t), lens_mm, notes",
+  "text": "on-screen overlays with t0/t1, style (see style.type), source, status",
+  "vo": "voice-over lines with timing, word count and words per second (wps); status VERIFY means do not voice until confirmed",
+  "sfx": "sound cues (t in seconds, level in dB under full scale of the mix)"
+ },
+ "total_s": 113,
+ "sun": {
+  "source": "twin/web/js/tod.js sunAt (NOAA approximation) for the demo date 20 Nov 2026",
+  "sunrise_ist": "06:48",
+  "sunrise_az_deg": 110.4,
+  "held_state": {
+   "time_ist": "09:30",
+   "az_deg": 129.8,
+   "el_deg": 32.4,
+   "baked": "exterior_viewer.json states.morning (19 Nov: az 129.84, el 32.62)"
+  }
+ },
+ "style": {
+  "colour": {
+   "black": "#000000",
+   "ink": "#F4F1EC",
+   "ink_2": "rgba(244,241,236,.56)",
+   "hair": "rgba(244,241,236,.14)",
+   "accent": "#1776F2",
+   "accent_glow": "rgba(111,174,255,.35)",
+   "paper": "#E9E5DE",
+   "accent_source": "brand/altruist.png, most common non-black colour RGB 23,118,242"
+  },
+  "type": {
+   "display": "Cormorant Garamond 300, clamp(40px,5.2vw,76px)",
+   "place_label": "Inter 300 13px uppercase 0.42em",
+   "data_line": "Inter 400 15px tabular 0.04em",
+   "source_chip": "Inter 500 10px uppercase 0.2em 50%",
+   "clock": "Inter 400 10px uppercase 0.24em 56%",
+   "button": "Inter 400 12px uppercase 0.32em",
+   "lockup": "logos at one optical height, 32px on Enter, 20px during the run"
+  },
+  "letterbox": "2.39:1 while the experience drives; retracts over 1.2 s at the hand-off",
+  "text_motion": "in: opacity + 8px rise, 900 ms, cubic-bezier(.2,.7,.1,1); out: 600 ms; never more than two text elements at once"
+ },
+ "beats": [
+  {
+   "id": "b00_enter",
+   "title": "Enter screen",
+   "t0": 0,
+   "t1": 0,
+   "waits_for_click": true,
+   "camera": {
+    "from": {
+     "frame": "latlng",
+     "lat": 19.018,
+     "lng": 72.772,
+     "alt_m": 3300,
+     "heading_deg": 62,
+     "pitch_deg": -4,
+     "lens_mm": 35
+    },
+    "to": {
+     "frame": "latlng",
+     "lat": 19.018,
+     "lng": 72.772,
+     "alt_m": 3300,
+     "heading_deg": 62,
+     "pitch_deg": -4,
+     "lens_mm": 35
+    },
+    "ease": "hold",
+    "notes": "The B01 first frame renders behind black so the reveal is instant."
+   },
+   "text": [
+    {
+     "t0": null,
+     "t1": null,
+     "content": "ALTRUIST × AUTOPILOT (logo lockup, Altruist first)",
+     "style": "lockup",
+     "where": "centre",
+     "status": "ok",
+     "source": "brand/altruist_word.svg, altruist_mark.svg; landlord/assets/autopilot-wordmark.png"
+    },
+    {
+     "t0": null,
+     "t1": null,
+     "content": "RELIABLE TECH PARK · AIROLI",
+     "style": "place_label",
+     "where": "centre",
+     "status": "ok",
+     "source": "Maps pin"
+    },
+    {
+     "t0": null,
+     "t1": null,
+     "content": "ENTER THE EXPERIENCE (underline = real load progress)",
+     "style": "button",
+     "where": "centre",
+     "status": "ok"
+    },
+    {
+     "t0": null,
+     "t1": null,
+     "content": "best with sound",
+     "style": "source_chip",
+     "where": "centre",
+     "status": "ok"
+    }
+   ],
+   "vo": [],
+   "sfx": [
+    {
+     "t": "click",
+     "cue": "low warm swell, sub, 1.2 s",
+     "level_db": -20
+    }
+   ]
+  },
+  {
+   "id": "b01_clouds",
+   "title": "Above the clouds at first light",
+   "t0": 0,
+   "t1": 8,
+   "clock_ist": "06:52",
+   "camera": {
+    "from": {
+     "frame": "latlng",
+     "lat": 19.018,
+     "lng": 72.772,
+     "alt_m": 3300,
+     "heading_deg": 62,
+     "pitch_deg": -4,
+     "lens_mm": 35
+    },
+    "to": {
+     "frame": "latlng",
+     "lat": 19.026,
+     "lng": 72.79,
+     "alt_m": 3000,
+     "heading_deg": 60,
+     "pitch_deg": -10,
+     "lens_mm": 35
+    },
+    "ease": "linear-drift",
+    "notes": "About 250 m/s. Real sun for 20 Nov 2026 at 06:52 IST (az about 110 deg) ahead-right. Cloud deck is art, 2,200-2,600 m."
+   },
+   "text": [
+    {
+     "t0": 4.0,
+     "t1": 8.0,
+     "content": "06:52 IST · REAL SUN",
+     "style": "clock",
+     "where": "bottom-left",
+     "status": "ok",
+     "source": "tod.js sunAt, 19.1692 N 73.0018 E"
+    }
+   ],
+   "vo": [
+    {
+     "t0": 3.0,
+     "t1": 5.5,
+     "line": "Mumbai, at first light.",
+     "words": 4,
+     "wps": 1.6,
+     "sources": [
+      "none"
+     ],
+     "status": "ok"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 0,
+     "cue": "high-altitude wind",
+     "level_db": -26
+    },
+    {
+     "t": 0,
+     "cue": "music: held pad enters",
+     "level_db": -22
+    }
+   ]
+  },
+  {
+   "id": "b02_coast",
+   "title": "Break through to the Mumbai coast",
+   "t0": 8,
+   "t1": 17,
+   "clock_ist": "07:05",
+   "camera": {
+    "from": {
+     "frame": "latlng",
+     "lat": 19.026,
+     "lng": 72.79,
+     "alt_m": 3000,
+     "heading_deg": 60,
+     "pitch_deg": -10,
+     "lens_mm": 35
+    },
+    "to": {
+     "frame": "latlng",
+     "lat": 19.05,
+     "lng": 72.838,
+     "alt_m": 2000,
+     "heading_deg": 55,
+     "pitch_deg": -26,
+     "lens_mm": 35
+    },
+    "ease": "easeInOutSine",
+    "via": [
+     {
+      "frame": "latlng",
+      "lat": 19.036,
+      "lng": 72.812,
+      "alt_m": 2400,
+      "heading_deg": 57,
+      "pitch_deg": -18,
+      "lens_mm": 35,
+      "t": 11.5
+     }
+    ],
+    "notes": "Through the cloud deck at 10.5-12.5 s; motion blur on. Ground: Sentinel-2 on GLO-30, OSM coastline."
+   },
+   "text": [
+    {
+     "t0": 12.6,
+     "t1": 16.6,
+     "content": "MUMBAI",
+     "style": "place_label",
+     "where": "bottom-left",
+     "status": "VERIFY label position",
+     "source": "OSM place"
+    }
+   ],
+   "vo": [
+    {
+     "t0": 12.0,
+     "t1": 16.0,
+     "line": "Below, the city your teams already know.",
+     "words": 7,
+     "wps": 1.75,
+     "sources": [
+      "founder-approved VO brief (Autopilot runs Altruist's Mumbai workplace)"
+     ],
+     "status": "ok"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 10.5,
+     "cue": "filtered whoosh through cloud",
+     "level_db": -26
+    },
+    {
+     "t": 11.0,
+     "cue": "music: first piano motif",
+     "level_db": -22
+    },
+    {
+     "t": 12.5,
+     "cue": "wind drops",
+     "level_db": -26
+    }
+   ]
+  },
+  {
+   "id": "b03_creek",
+   "title": "Glide over Thane Creek to Navi Mumbai",
+   "t0": 17,
+   "t1": 28,
+   "clock_ist": "07:20",
+   "camera": {
+    "from": {
+     "frame": "latlng",
+     "lat": 19.05,
+     "lng": 72.838,
+     "alt_m": 2000,
+     "heading_deg": 55,
+     "pitch_deg": -26,
+     "lens_mm": 35
+    },
+    "to": {
+     "frame": "latlng",
+     "lat": 19.15,
+     "lng": 72.972,
+     "alt_m": 750,
+     "heading_deg": 58,
+     "pitch_deg": -24,
+     "lens_mm": 35
+    },
+    "ease": "easeInOutCubic",
+    "via": [
+     {
+      "frame": "latlng",
+      "lat": 19.1,
+      "lng": 72.905,
+      "alt_m": 1700,
+      "heading_deg": 57,
+      "pitch_deg": -24,
+      "lens_mm": 35,
+      "t": 22.5
+     }
+    ],
+    "notes": "Sun glitter path on the creek to the right of the heading. Cloud shadows cross the city."
+   },
+   "text": [
+    {
+     "t0": 19.8,
+     "t1": 23.8,
+     "content": "THANE CREEK",
+     "style": "place_label",
+     "where": "on-water",
+     "status": "VERIFY label position",
+     "source": "OSM water"
+    },
+    {
+     "t0": 24.0,
+     "t1": 27.6,
+     "content": "NAVI MUMBAI",
+     "style": "place_label",
+     "where": "bottom-left",
+     "status": "VERIFY label position",
+     "source": "OSM place"
+    }
+   ],
+   "vo": [
+    {
+     "t0": 19.5,
+     "t1": 23.0,
+     "line": "Across Thane Creek, to Navi Mumbai.",
+     "words": 6,
+     "wps": 1.71,
+     "sources": [
+      "none"
+     ],
+     "status": "ok"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 17,
+     "cue": "water shimmer bed",
+     "level_db": -26
+    },
+    {
+     "t": 20,
+     "cue": "far birds (flamingos only if season verified)",
+     "level_db": -30
+    }
+   ]
+  },
+  {
+   "id": "b04_airoli",
+   "title": "Airoli",
+   "t0": 28,
+   "t1": 34,
+   "clock_ist": "07:45",
+   "camera": {
+    "from": {
+     "frame": "latlng",
+     "lat": 19.15,
+     "lng": 72.972,
+     "alt_m": 750,
+     "heading_deg": 58,
+     "pitch_deg": -24,
+     "lens_mm": 35
+    },
+    "to": {
+     "frame": "latlng",
+     "lat": 19.16,
+     "lng": 72.99,
+     "alt_m": 450,
+     "heading_deg": 50,
+     "pitch_deg": -30,
+     "lens_mm": 35
+    },
+    "ease": "easeOutSine"
+   },
+   "text": [
+    {
+     "t0": 29.2,
+     "t1": 33.6,
+     "content": "AIROLI",
+     "style": "place_label",
+     "where": "bottom-left",
+     "status": "VERIFY label position",
+     "source": "OSM place"
+    }
+   ],
+   "vo": [
+    {
+     "t0": 28.8,
+     "t1": 32.3,
+     "line": "Airoli. On Thane–Belapur Road.",
+     "words": 5,
+     "wps": 1.43,
+     "sources": [
+      "route.json roads: OSM primary 'Thane Belapur Road', 261 m from the gate (computed)"
+     ],
+     "status": "ok"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 28,
+     "cue": "distant city hum rises",
+     "level_db": -26
+    }
+   ]
+  },
+  {
+   "id": "b05_descent",
+   "title": "Descend onto Reliable Tech Park",
+   "t0": 34,
+   "t1": 42,
+   "clock_ist": "08:30",
+   "camera": {
+    "from": {
+     "frame": "rtp_local",
+     "pos": [
+      -1238,
+      -1020,
+      450
+     ],
+     "look_at": [
+      -200,
+      -300,
+      0
+     ],
+     "lens_mm": 40
+    },
+    "to": {
+     "frame": "rtp_local",
+     "pos": [
+      -235,
+      -205,
+      150
+     ],
+     "look_at": [
+      8,
+      52,
+      14
+     ],
+     "lens_mm": 40
+    },
+    "ease": "easeOutQuart",
+    "notes": "Ends exactly on exterior_viewer.json cameras.orbit (three [-235,150,205] -> [8,14,-52], hfov 48.5 deg). Passes over Airoli station (OSM node rtp_local -249,-1182)."
+   },
+   "text": [
+    {
+     "t0": 36.0,
+     "t1": 41.8,
+     "content": "Reliable Tech Park",
+     "style": "display",
+     "where": "bottom-left",
+     "status": "ok"
+    },
+    {
+     "t0": 36.4,
+     "t1": 41.8,
+     "content": "MIDC AIROLI · NAVI MUMBAI",
+     "style": "place_label",
+     "where": "bottom-left",
+     "status": "ok",
+     "source": "Maps pin 19.1692159 N 73.0017703 E"
+    }
+   ],
+   "vo": [
+    {
+     "t0": 35.0,
+     "t1": 39.0,
+     "line": "And here, in MIDC Airoli: Reliable Tech Park.",
+     "words": 8,
+     "wps": 2.0,
+     "sources": [
+      "Maps pin address (EXTERIOR_PLAN.md)"
+     ],
+     "status": "ok"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 34,
+     "cue": "music resolves",
+     "level_db": -26
+    },
+    {
+     "t": 36,
+     "cue": "near city ambience",
+     "level_db": -26
+    }
+   ]
+  },
+  {
+   "id": "b06_hero",
+   "title": "Hero move: glass catching the sun",
+   "t0": 42,
+   "t1": 56,
+   "clock_ist": "09:30",
+   "camera": {
+    "from": {
+     "frame": "rtp_local",
+     "pos": [
+      -235,
+      -205,
+      150
+     ],
+     "look_at": [
+      8,
+      52,
+      14
+     ],
+     "lens_mm": 40
+    },
+    "to": {
+     "frame": "rtp_local",
+     "pos": [
+      32,
+      -50,
+      5
+     ],
+     "look_at": [
+      31,
+      -8,
+      26
+     ],
+     "lens_mm": 28
+    },
+    "ease": "easeInOutSine",
+    "via": [
+     {
+      "frame": "rtp_local",
+      "pos": [
+       -235,
+       -205,
+       150
+      ],
+      "look_at": [
+       8,
+       52,
+       14
+      ],
+      "lens_mm": 40,
+      "t": 43.5,
+      "hold": "crossfade to stills/rtp_morning_orbit.jpg 42.0-43.5 s"
+     },
+     {
+      "frame": "rtp_local",
+      "pos": [
+       -150,
+       -120,
+       60
+      ],
+      "look_at": [
+       10,
+       30,
+       20
+      ],
+      "lens_mm": 35,
+      "t": 47.0
+     },
+     {
+      "frame": "rtp_local",
+      "pos": [
+       -25,
+       -55,
+       6
+      ],
+      "look_at": [
+       22,
+       -10,
+       26
+      ],
+      "lens_mm": 28,
+      "t": 51.0
+     }
+    ],
+    "notes": "Sun az 129.8, el 32.4 (09:30). Glint seen from low: camera 5-6 m up, 35-45 m off the rounded south end, looking up about 32 deg; highlight slides from the S- to the SSE-facing glass at levels 7-9. RELIABLE sign only if the landlord allows it."
+   },
+   "text": [],
+   "vo": [
+    {
+     "t0": 45.5,
+     "t1": 52.0,
+     "line": "A curtain of blue-green glass, rounded at both ends, catching the morning sun.",
+     "words": 14,
+     "wps": 2.15,
+     "sources": [
+      "EXTERIOR_PLAN.md section 1 (facade from public photos)",
+      "tod.js real sun"
+     ],
+     "status": "ok"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 46,
+     "cue": "music: main motif",
+     "level_db": -20
+    },
+    {
+     "t": 51,
+     "cue": "one soft glint chime, synced to the glint peak",
+     "level_db": -28
+    }
+   ]
+  },
+  {
+   "id": "b07_amenities",
+   "title": "Food and amenities",
+   "t0": 56,
+   "t1": 64,
+   "clock_ist": "09:30",
+   "camera": {
+    "from": {
+     "frame": "rtp_local",
+     "pos": [
+      32,
+      -50,
+      5
+     ],
+     "look_at": [
+      31,
+      -8,
+      26
+     ],
+     "lens_mm": 28
+    },
+    "to": {
+     "frame": "rtp_local",
+     "pos": [
+      -160,
+      -230,
+      240
+     ],
+     "look_at": [
+      5,
+      60,
+      0
+     ],
+     "lens_mm": 35
+    },
+    "ease": "easeInOutCubic"
+   },
+   "overlays": {
+    "walk_ring": {
+     "centre_rtp_local": [
+      15.5,
+      82.8
+     ],
+     "radius_m": 380,
+     "basis": "1,300 m / 17 min = 76.5 m/min (route.json, Google Maps) x 5 min; straight line",
+     "status": "estimate"
+    },
+    "pins": {
+     "source": "location-research file (name, category, walk minutes, source per pin)",
+     "max": 6,
+     "status": "VERIFY"
+    },
+    "campus": [
+     {
+      "name": "green court",
+      "rtp_local": [
+       -15,
+       63
+      ],
+      "source": "context_overture.json green 'recreation/playground'",
+      "status": "ok"
+     },
+     {
+      "name": "cafeteria",
+      "rtp_local": [
+       39,
+       167
+      ],
+      "source": "unnamed footprint (Microsoft ML Buildings); label only in demo code",
+      "status": "VERIFY"
+     }
+    ]
+   },
+   "text": [
+    {
+     "t0": 57.5,
+     "t1": 63.6,
+     "content": "5 MIN WALK · ≈ 380 M STRAIGHT LINE (EST.)",
+     "style": "data_line",
+     "where": "on-ring",
+     "status": "estimate",
+     "source": "derived from route.json walking pace"
+    }
+   ],
+   "vo": [
+    {
+     "t0": 57.0,
+     "t1": 63.0,
+     "line": "Within a five-minute walk: {n} places to eat, {n} banks, and a pharmacy.",
+     "words": 14,
+     "wps": 2.33,
+     "sources": [
+      "location research"
+     ],
+     "status": "VERIFY (line A, target)"
+    },
+    {
+     "t0": 57.0,
+     "t1": 63.0,
+     "line": "Between the two arms, a green court. And just behind, the campus cafeteria.",
+     "words": 13,
+     "wps": 2.17,
+     "sources": [
+      "context_overture.json",
+      "cafeteria unverified"
+     ],
+     "status": "VERIFY (line B)"
+    },
+    {
+     "t0": 57.0,
+     "t1": 62.0,
+     "line": "Between the two arms, a green court, open to the sky.",
+     "words": 11,
+     "wps": 2.2,
+     "sources": [
+      "context_overture.json green polygon"
+     ],
+     "status": "ok (line C, default)"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 57.5,
+     "cue": "soft tick per verified pin",
+     "level_db": -30
+    },
+    {
+     "t": 56,
+     "cue": "birds in the court",
+     "level_db": -30
+    }
+   ]
+  },
+  {
+   "id": "b08a_rail",
+   "title": "Getting there: the rail line",
+   "t0": 64,
+   "t1": 72,
+   "clock_ist": "09:30",
+   "camera": {
+    "from": {
+     "frame": "rtp_local",
+     "pos": [
+      -160,
+      -230,
+      240
+     ],
+     "look_at": [
+      5,
+      60,
+      0
+     ],
+     "lens_mm": 35
+    },
+    "to": {
+     "frame": "rtp_local",
+     "pos": [
+      -1100,
+      -2600,
+      1700
+     ],
+     "look_at": [
+      -350,
+      -300,
+      0
+     ],
+     "lens_mm": 35
+    },
+    "ease": "easeInOutSine"
+   },
+   "overlays": {
+    "rail": {
+     "source": "route.json rail + platforms (OSM)",
+     "status": "ok"
+    },
+    "stations": [
+     {
+      "name": "Airoli",
+      "rtp_local": [
+       -249,
+       -1182
+      ],
+      "straight_m": 1208
+     },
+     {
+      "name": "Digha Gaon",
+      "rtp_local": [
+       -772,
+       1278
+      ],
+      "straight_m": 1493,
+      "status": "VERIFY passenger status"
+     },
+     {
+      "name": "Rabale",
+      "rtp_local": [
+       106,
+       -3603
+      ],
+      "straight_m": 3604
+     },
+     {
+      "name": "Thane",
+      "rtp_local": [
+       -2734,
+       1909
+      ],
+      "straight_m": 3335
+     }
+    ],
+    "stations_source": "experience/data/raw/osm_rail_stations.json (Overpass, 19 Nov 2026 18:13 UTC)",
+    "stations_status": "VERIFY",
+    "commute_rings": {
+     "source": "location research (OSRM or official)",
+     "label_rule": "drive-time rings must read WITHOUT TRAFFIC · OSRM",
+     "status": "VERIFY"
+    }
+   },
+   "text": [
+    {
+     "t0": 66.0,
+     "t1": 71.6,
+     "content": "TRANS-HARBOUR LINE",
+     "style": "place_label",
+     "where": "on-line",
+     "status": "VERIFY",
+     "source": "OSM route relations 8414240, 11511942"
+    }
+   ],
+   "vo": [
+    {
+     "t0": 65.0,
+     "t1": 71.0,
+     "line": "Airoli station is on the Trans-Harbour line, from Thane to Vashi and Panvel.",
+     "words": 14,
+     "wps": 2.33,
+     "sources": [
+      "OSM route relations 8414240, 11511942"
+     ],
+     "status": "VERIFY"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 66,
+     "cue": "far local-train horn and wheels",
+     "level_db": -28
+    }
+   ]
+  },
+  {
+   "id": "b08b_walk",
+   "title": "Getting there: the walk drawn from platform to gate",
+   "t0": 72,
+   "t1": 82,
+   "clock_ist": "09:30",
+   "camera": {
+    "from": {
+     "frame": "rtp_local",
+     "pos": [
+      -1100,
+      -2600,
+      1700
+     ],
+     "look_at": [
+      -350,
+      -300,
+      0
+     ],
+     "lens_mm": 35
+    },
+    "to": {
+     "frame": "rtp_local",
+     "pos": [
+      -170,
+      -250,
+      130
+     ],
+     "look_at": [
+      -20,
+      -20,
+      0
+     ],
+     "lens_mm": 35
+    },
+    "ease": "easeInOutCubic",
+    "via": [
+     {
+      "frame": "rtp_local",
+      "pos": [
+       -1000,
+       -1800,
+       1700
+      ],
+      "look_at": [
+       -150,
+       -650,
+       0
+      ],
+      "lens_mm": 28,
+      "t": 76.5
+     },
+     {
+      "frame": "rtp_local",
+      "pos": [
+       -1000,
+       -1800,
+       1700
+      ],
+      "look_at": [
+       -150,
+       -650,
+       0
+      ],
+      "lens_mm": 28,
+      "t": 77.5
+     }
+    ],
+    "notes": "Hold the complete station-to-gate route in frame through 77.5 s, then approach the gate after the line has finished."
+   },
+   "overlays": {
+    "route": {
+     "source": "route.json route (OSM path 1,282 m)",
+     "direction": "reversed: platform end [-231.4,-1035.4] to gate [-3.9,-3.8]",
+     "draw_t0": 69,
+     "draw_t1": 75.5,
+     "width_m": 10,
+     "status": "ok"
+    }
+   },
+   "text": [
+    {
+     "t0": 73,
+     "t1": 82,
+     "content": "1.3 KM · 17 MIN WALK",
+     "style": "data_line",
+     "where": "bottom-left",
+     "status": "ok",
+     "source": "Google Maps walking route (founder, 19 Nov 2026) via route.json"
+    },
+    {
+     "t0": 73.2,
+     "t1": 82,
+     "content": "GOOGLE MAPS WALKING ROUTE · 19 NOV 2026",
+     "style": "source_chip",
+     "where": "bottom-left",
+     "status": "ok"
+    }
+   ],
+   "vo": [
+    {
+     "t0": 75.0,
+     "t1": 81.0,
+     "line": "From the platform to the gate: one point three kilometres. A seventeen-minute walk.",
+     "words": 14,
+     "wps": 2.33,
+     "sources": [
+      "route.json label_km 1.3",
+      "route.json label_min 17",
+      "Google Maps walking route, founder, 19 Nov 2026"
+     ],
+     "status": "ok"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 75,
+     "cue": "soft rising tone riding the line's head",
+     "level_db": -28
+    },
+    {
+     "t": 81,
+     "cue": "quiet click as the figure lands",
+     "level_db": -30
+    }
+   ]
+  },
+  {
+   "id": "b09_arrival",
+   "title": "Arrival: gate, entrance, lobby, lifts, level 6",
+   "t0": 82,
+   "t1": 97,
+   "clock_ist": "09:30",
+   "camera": {
+    "from": {
+     "frame": "rtp_local",
+     "pos": [
+      -170,
+      -250,
+      130
+     ],
+     "look_at": [
+      -20,
+      -20,
+      0
+     ],
+     "lens_mm": 35
+    },
+    "to": {
+     "frame": "rtp_local",
+     "pos": [
+      8,
+      74,
+      23.4
+     ],
+     "look_at": [
+      17,
+      79,
+      23.4
+     ],
+     "lens_mm": 28
+    },
+    "ease": "easeInOutSine",
+    "via": [
+     {
+      "frame": "rtp_local",
+      "pos": [
+       -45,
+       30,
+       20
+      ],
+      "look_at": [
+       9,
+       76,
+       3
+      ],
+      "lens_mm": 32,
+      "t": 87.0
+     },
+     {
+      "frame": "rtp_local",
+      "pos": [
+       -18,
+       58,
+       7
+      ],
+      "look_at": [
+       16,
+       83,
+       4
+      ],
+      "lens_mm": 28,
+      "t": 90.0
+     },
+     {
+      "frame": "rtp_local",
+      "pos": [
+       -6,
+       63,
+       6
+      ],
+      "look_at": [
+       15,
+       82,
+       6
+      ],
+      "lens_mm": 28,
+      "t": 90.5
+     },
+     {
+      "frame": "rtp_local",
+      "pos": [
+       -6,
+       63,
+       24
+      ],
+      "look_at": [
+       15,
+       82,
+       23
+      ],
+      "lens_mm": 28,
+      "t": 95.0
+     }
+    ],
+    "notes": "90-95 s: vertical rise outside the inner corner while floors tick 1-6; level 4 pulses as it passes; level-6 band glows at 94 s."
+   },
+   "overlays": {
+    "arrow": {
+     "colour": "#1776F2 core, #6FAEFF halo, additive, travelling dash 1.2 s",
+     "path_outside_rtp_local": [
+      [
+       -3.9,
+       -3.8
+      ],
+      [
+       2,
+       10
+      ],
+      [
+       5,
+       45
+      ],
+      [
+       6,
+       68
+      ],
+      [
+       9,
+       76
+      ],
+      [
+       15.5,
+       82.8
+      ],
+      [
+       25.1,
+       86.8
+      ]
+     ],
+     "path_outside_status": "indicative inside the campus: court layout, entrance and lobby position are logged assumptions (exterior/NOTES.md)",
+     "rise": {
+      "at_rtp_local": [
+       25.1,
+       86.8
+      ],
+      "h0": 0.6,
+      "h1": 22.2,
+      "render": "vertical light seen through the glass at half strength, never drawn over the facade"
+     },
+     "path_level6_rtp_local": [
+      [
+       25.1,
+       86.7
+      ],
+      [
+       25.85,
+       90.79
+      ],
+      [
+       26.5,
+       95.0
+      ]
+     ],
+     "level6_rules": "0.9 m wide, only inside passage polygons, render order below all CAD linework, stops at the waiting-area door and fades",
+     "sources": "rtp6-c-floor6.twin.layout.json lifts, labels 'RECEPTION MAIN PASSAGE', room 'WAITING AREA'"
+    },
+    "level6_band": {
+     "colour": "#1776F2",
+     "opacity": 0.7,
+     "on_t": 94.0,
+     "desks_behind_glass": "1,400 desk instances from the layout (plan_rtp6-c.json totals.work_seats)"
+    }
+   },
+   "text": [
+    {
+     "t0": 90.5,
+     "t1": 95.0,
+     "content": "1 2 3 4 5 6 (floor counter)",
+     "style": "place_label",
+     "where": "right-edge",
+     "status": "ok",
+     "source": "building.json levels"
+    },
+    {
+     "t0": 94.2,
+     "t1": 96.8,
+     "content": "LEVEL 6 · OFFICES 603 & 604",
+     "style": "place_label",
+     "where": "bottom-left",
+     "status": "ok",
+     "source": "plan_rtp6-c.json title"
+    },
+    {
+     "t0": 94.4,
+     "t1": 96.8,
+     "content": "ONE CONTINUOUS FLOOR · EAST ARM ≈ 130 M",
+     "style": "data_line",
+     "where": "bottom-left",
+     "status": "ok",
+     "source": "rtp6-c_summary.json _proof.tenant; plate.json y -15.5 to 115.2"
+    }
+   ],
+   "vo": [
+    {
+     "t0": 83.0,
+     "t1": 87.0,
+     "line": "Through the gate, into the lobby, and up.",
+     "words": 8,
+     "wps": 2.0,
+     "sources": [
+      "none"
+     ],
+     "status": "ok"
+    },
+    {
+     "t0": 93.0,
+     "t1": 96.8,
+     "line": "The sixth floor. One floor, end to end.",
+     "words": 8,
+     "wps": 2.11,
+     "sources": [
+      "rtp6-c_summary.json: Offices 603 & 604 (continuous plate)"
+     ],
+     "status": "ok"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 87,
+     "cue": "footsteps on stone",
+     "level_db": -30
+    },
+    {
+     "t": 90,
+     "cue": "lift hum",
+     "level_db": -30
+    },
+    {
+     "t": 94,
+     "cue": "lift ding at level 6",
+     "level_db": -24
+    }
+   ]
+  },
+  {
+   "id": "b10_view",
+   "title": "The magic moment: standing on your floor, looking out",
+   "t0": 97,
+   "t1": 107,
+   "clock_ist": "09:30",
+   "camera": {
+    "from": {
+     "frame": "rtp_local",
+     "pos": [
+      8,
+      74,
+      23.4
+     ],
+     "look_at": [
+      17,
+      79,
+      23.4
+     ],
+     "lens_mm": 28
+    },
+    "to": {
+     "frame": "rtp_local",
+     "pos": [
+      17.5,
+      77.5,
+      23.4
+     ],
+     "look_at": [
+      -240,
+      -15,
+      12
+     ],
+     "lens_mm": 24
+    },
+    "ease": "easeInOutSine",
+    "via": [
+     {
+      "frame": "rtp_local",
+      "pos": [
+       14.6,
+       77.0,
+       23.4
+      ],
+      "look_at": [
+       20,
+       78.5,
+       23.4
+      ],
+      "lens_mm": 26,
+      "t": 97.9,
+      "glass": "hide the pane for the last 0.3 s; exposure +1.5 EV over 0.5 s"
+     },
+     {
+      "frame": "rtp_local",
+      "pos": [
+       19,
+       78,
+       23.4
+      ],
+      "look_at": [
+       40,
+       90,
+       23
+      ],
+      "lens_mm": 24,
+      "t": 98.4,
+      "note": "inside the IDFC hall, looking at the east windows' morning light"
+     },
+     {
+      "frame": "rtp_local",
+      "pos": [
+       19,
+       78,
+       23.4
+      ],
+      "look_at": [
+       40,
+       90,
+       23
+      ],
+      "lens_mm": 24,
+      "t": 100.5,
+      "note": "hold on the light across the desks"
+     }
+    ],
+    "notes": "Slow turn from about az 60 to az 250 (WSW) between 100.5 and 105 s. Eye height = level-6 FFL 22.2 + 1.2 m seated (assumed floor-to-floor). Interior from rtp6-c-floor6.twin.layout.json; sun patches reach about 4.7 m in from the east glass.",
+    "alt": {
+     "id": "b10alt",
+     "to": {
+      "frame": "rtp_local",
+      "pos": [
+       41.5,
+       68.9,
+       23.6
+      ],
+      "look_at": [
+       2500,
+       300,
+       60
+      ],
+      "lens_mm": 24
+     },
+     "note": "east view from the level-6 dry-landscape lounge towards the Parsik hills; judges pick the higher score"
+    }
+   },
+   "text": [
+    {
+     "t0": 103.0,
+     "t1": 107.0,
+     "content": "LEVEL 6 · FACING WEST-SOUTH-WEST · 09:30 IST",
+     "style": "place_label",
+     "where": "bottom-left",
+     "status": "ok",
+     "source": "true north solved from the OSM footprint fit; tod.js real sun"
+    }
+   ],
+   "vo": [
+    {
+     "t0": 99.0,
+     "t1": 101.5,
+     "line": "Morning light, across the floor.",
+     "words": 5,
+     "wps": 2.0,
+     "sources": [
+      "tod.js real sun, 09:30"
+     ],
+     "status": "ok"
+    },
+    {
+     "t0": 103.3,
+     "t1": 105.8,
+     "line": "And this is your view.",
+     "words": 5,
+     "wps": 2.0,
+     "sources": [
+      "none"
+     ],
+     "status": "ok"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 97,
+     "cue": "air hush through the glass; city becomes muffled",
+     "level_db": -26
+    },
+    {
+     "t": 98,
+     "cue": "interior room tone, faint lived-in murmur",
+     "level_db": -32
+    },
+    {
+     "t": 103,
+     "cue": "music holds one sustained note",
+     "level_db": -22
+    }
+   ]
+  },
+  {
+   "id": "b11_handoff",
+   "title": "Hand-off: explore your floors",
+   "t0": 107,
+   "t1": 113,
+   "waits_for_click": true,
+   "clock_ist": "09:30",
+   "camera": {
+    "from": {
+     "frame": "rtp_local",
+     "pos": [
+      17.5,
+      77.5,
+      23.4
+     ],
+     "look_at": [
+      -240,
+      -15,
+      12
+     ],
+     "lens_mm": 24
+    },
+    "to": {
+     "frame": "rtp_local",
+     "pos": [
+      17.5,
+      77.5,
+      23.4
+     ],
+     "look_at": [
+      -240,
+      -21,
+      12
+     ],
+     "lens_mm": 24
+    },
+    "ease": "linear-drift",
+    "notes": "0.2 deg per second drift. Letterbox retracts 107.0-108.2 s. No auto-advance."
+   },
+   "handoff": {
+    "href": "/airoli-rtp/demo/",
+    "preload_from": "b08a_rail",
+    "transition": "600 ms crossfade to #E9E5DE, then navigate"
+   },
+   "text": [
+    {
+     "t0": 108.4,
+     "t1": null,
+     "content": "EXPLORE YOUR FLOORS",
+     "style": "button",
+     "where": "bottom-centre",
+     "status": "ok"
+    },
+    {
+     "t0": 108.8,
+     "t1": null,
+     "content": "Replay",
+     "style": "source_chip",
+     "where": "bottom-centre",
+     "status": "ok"
+    }
+   ],
+   "vo": [
+    {
+     "t0": 108.0,
+     "t1": 111.0,
+     "line": "The floors are yours to explore.",
+     "words": 6,
+     "wps": 2.0,
+     "sources": [
+      "none"
+     ],
+     "status": "ok"
+    }
+   ],
+   "sfx": [
+    {
+     "t": 112,
+     "cue": "music tail ends; room tone only",
+     "level_db": -34
+    }
+   ]
+  }
+ ],
+ "chapters_in_tool": [
+  {
+   "id": "c1_sixth_floor",
+   "trigger": "6th floor plan opens in the tool (Client requirement view)",
+   "line": "Your sixth floor holds all twenty-two of your processes. Over thirteen hundred desks, each one counted from the drawings. And twenty-one growth seats, kept free.",
+   "sources": [
+    "plan_rtp6-c.json zones (22)",
+    "totals.work_seats 1,400 (CAD); sheet rows 1,398; sheet TOTAL 1,379; tool card 1,350 hard-coded: say 'over thirteen hundred'",
+    "zone growth-seats (21, sheet_required 0)"
+   ]
+  },
+  {
+   "id": "c2_process_click",
+   "trigger": "a process is clicked in the tool",
+   "template": "{name}. {seats} seats, {against|exactly as briefed|n short of the req in your brief}. {area_sqft} square feet.",
+   "sources": [
+    "plan_rtp6-c.json zones: seats, sheet_required, area_sqft"
+   ],
+   "clips": 22
+  },
+  {
+   "id": "c3_support_rooms",
+   "trigger": "Inventory view on the 6th floor",
+   "line": "Around your processes: fifteen four-seat meeting rooms, a six-seat room, and a twelve-seat conference room. A server room, an electrical and UPS room, and lockers for three hundred and thirty-six. Two fire-rescue balconies are part of the floor.",
+   "sources": [
+    "plan_rtp6-c.json others"
+   ]
+  },
+  {
+   "id": "c4_training_path",
+   "trigger": "4th floor plan opens in the tool",
+   "line": "On the fourth floor, the path a new joiner takes. Reception. Interview cabins. An HR induction room. Then six training rooms, a hundred and twenty-six seats in all. With a twelve-seat conference room and two six-seat meeting rooms, for the people who run it.",
+   "sources": [
+    "plan_rtp4-suite.json zones: 6 training rooms 19+21+22+22+21+21 = 126"
+   ]
+  },
+  {
+   "id": "c5_ethos_close",
+   "trigger": "presenter, at the end",
+   "line": "We don't hand you a floor and walk away. We design it, we build it, and we run it. The same team already runs Altruist's workplaces in Mumbai and Indore. Because for us, it has always been: pehle vyavhaar, phir vyapaar.",
+   "status": [
+    "FOUNDER CONFIRM the ethos sentence",
+    "BD CONFIRM the cities",
+    "BD CONFIRM 'pehle vyavhaar, phir vyapaar'"
+   ],
+   "sources": [
+    "founder-approved VO brief"
+   ]
+  }
+ ],
+ "capture_shots": [
+  "b01@6",
+  "b02@14",
+  "b03@25",
+  "b05@42",
+  "b06@51",
+  "b08b@81",
+  "b09@94",
+  "b10@106",
+  "b10alt"
+ ],
+ "narration_override": {
+  "manifest": "audio/manifest.json",
+  "script": "../film/narration-v2/script.json",
+  "note": "The camera and evidence overlays remain on their original timings. The audio manifest overrides the legacy per-beat vo text."
+ }
+}

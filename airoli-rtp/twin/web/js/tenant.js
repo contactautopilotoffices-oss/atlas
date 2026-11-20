@@ -77,7 +77,7 @@ export class Tenant {
     this.exclude = exclude || null;                 // rings (in this frame) of a neighbour that draws the shared strip
     const drawn = (x, y) => !this.exclude || !inRings(this.exclude, x, y);
     this.drawn = drawn;
-    this.rooms = L.rooms.map(r => ({ ...r, kind: kindOf(r), label: nice(r.name), slug: slug(r.name), rings: roomRings(r) }))
+    this.rooms = L.rooms.map(r => ({ ...r, kind: kindOf(r), label: (this.man.room_labels && this.man.room_labels[r.name]) || nice(r.name), slug: slug(r.name), rings: roomRings(r) }))
       .map(r => ({ ...r, area: r.area_m2 || area(r.rings[0]), c: centroid(r.rings[0]) }));
     this.buildGrid();
     return this;
@@ -136,7 +136,11 @@ export class Tenant {
   // ---------------------------------------------------------------- rooms the viewer visits, with their views
   setupViews(blenderCams) {
     const L = this.L, byRoom = {};
-    for (const c of (blenderCams && blenderCams.cameras) || []) (byRoom[c.room] = byRoom[c.room] || []).push({ ...c, source: 'blender' });
+    // two shapes: {cameras: [...]} (Skymark) or {rooms: {name: [...]}} (the RTP builder); hfov_deg is the same as fov_h_deg
+    // the rooms-shape file is in glTF / three axes (x, height, -north): back to plan axes (x, north, height)
+    const toPlanP = (p) => p && [p[0], -p[2], p[1]];
+    const flat = blenderCams ? (blenderCams.cameras || Object.entries(blenderCams.rooms || {}).flatMap(([k, vs]) => vs.map(v => ({ room: k, ...v, position: toPlanP(v.position), target: toPlanP(v.target) })))) : [];
+    for (const c of flat) (byRoom[c.room] = byRoom[c.room] || []).push({ ...c, fov_h_deg: c.fov_h_deg || c.hfov_deg, source: 'blender' });
     const ORDER = ['entry', 'feature', 'reverse', 'detail'];
     const list = [];
     for (const r of this.rooms) {
@@ -283,7 +287,9 @@ export class Tenant {
     this.ceilingMeshes = []; this.wallMeshes = [];
     root.children.forEach(n => { const lay = (n.userData && n.userData.twin_layer) || (n.name.split('_')[1] || '').toUpperCase();
       if (CEIL.has(lay)) this.ceilingMeshes.push(n); else if (WALL.has(lay)) this.wallMeshes.push(n); });
-    this.exposureEV = viewer.exposure_ev || (viewer.renderer && viewer.renderer.exposure_ev) || 0;
+    // the web path's own exposure wins (renderer.exposure_ev, for the viewer's tone mapping); the stills' EV is separate
+    this.exposureEV = (viewer.renderer && typeof viewer.renderer.exposure_ev === 'number') ? viewer.renderer.exposure_ev : (viewer.exposure_ev || 0);
+    this.toneMapping = (viewer.renderer && viewer.renderer.toneMapping) || 'NeutralToneMapping';
     return this;
   }
   setCeiling(on) { if (this.kind === 'glb') this.ceilingMeshes.forEach(m => m.visible = on); else if (this.ceiling) this.ceiling.visible = on; }

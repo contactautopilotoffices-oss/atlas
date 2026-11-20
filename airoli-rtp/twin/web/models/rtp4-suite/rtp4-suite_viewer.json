@@ -1,0 +1,179 @@
+{
+ "tenant": "rtp4-suite",
+ "glb": "rtp4-suite.glb",
+ "lod_glb": "rtp4-suite_lod.glb",
+ "files": {
+  "rtp4-suite": {
+   "mb": 11.71,
+   "meshopt": {
+    "instanced_nodes_from": 685,
+    "instanced_into": 17,
+    "draw_calls": 108,
+    "triangles": 1728255,
+    "in_mb": 26.79,
+    "out_mb": 11.71,
+    "compressed_views": 445,
+    "saved_mb": 15.22,
+    "applied": true
+   },
+   "merged_groups": 16
+  },
+  "rtp4-suite_lod": {
+   "mb": 2.82,
+   "meshopt": {
+    "instanced_nodes_from": 369,
+    "instanced_into": 14,
+    "draw_calls": 58,
+    "triangles": 300144,
+    "in_mb": 9.83,
+    "out_mb": 2.82,
+    "compressed_views": 213,
+    "saved_mb": 7.09,
+    "applied": true
+   },
+   "merged_groups": 16
+  }
+ },
+ "frame": "rtp_local frame, metres, glTF Y up: three (x, y, z) = (x east, height above this floor's finished floor level, -north). Already north up and placed: no turn, no shift. Put the model at y = 15.0 m (finished floor level above ground).",
+ "decoder": "GLTFLoader.setMeshoptDecoder(MeshoptDecoder); repeated furniture comes as EXT_mesh_gpu_instancing (InstancedMesh); extras.instance_names lists the CAD blocks in instance order",
+ "camera": {
+  "near": 0.1,
+  "far": 2000,
+  "note": "near >= 0.1 m keeps depth precision for the floor-level layers (finishes 3-4 mm apart)"
+ },
+ "renderer": {
+  "toneMapping": "NeutralToneMapping",
+  "toneMappingExposure": 1.1096,
+  "exposure_ev": 0.15,
+  "exposure_note": "web path (NeutralToneMapping): an 18 % card at desk height reads about sRGB 118; derived from the floor lightmap irradiance (median 0.72 at the floor, ~1.1 at desk height), 2026-11-19",
+  "stills_exposure_ev": -0.84,
+  "outputColorSpace": "srgb",
+  "useLegacyLights": false
+ },
+ "lightmapped_meshes": {
+  "how": "texture = load(lightmap); texture.colorSpace = SRGBColorSpace; texture.flipY = false; texture.channel = 1; material.lightMap = texture; material.lightMapIntensity = lightMapIntensity (below, per node); material.envMapIntensity = 0; no direct lights on these meshes (the lightmap already holds sun, sky, lamps and bounce). If it looks blown, check lightMap.colorSpace is sRGB and that the environment / lights are not also lighting these meshes.",
+  "nodes": {
+   "rtp4-suite_FLOOR_rtp4-suite_lm0_1": {
+    "lightmap": "lightmaps/rtp4-suite_lm0.png",
+    "lightMapIntensity": 5.94564,
+    "uv": 1
+   },
+   "rtp4-suite_WALL_rtp4-suite_lm5_2": {
+    "lightmap": "lightmaps/rtp4-suite_lm5.png",
+    "lightMapIntensity": 6.60357,
+    "uv": 1
+   },
+   "rtp4-suite_WALL_rtp4-suite_lm9_3": {
+    "lightmap": "lightmaps/rtp4-suite_lm9.png",
+    "lightMapIntensity": 6.06543,
+    "uv": 1
+   },
+   "rtp4-suite_WALL_rtp4-suite_lm7_4": {
+    "lightmap": "lightmaps/rtp4-suite_lm7.png",
+    "lightMapIntensity": 7.13127,
+    "uv": 1
+   },
+   "rtp4-suite_WALL_rtp4-suite_lm6_5": {
+    "lightmap": "lightmaps/rtp4-suite_lm6.png",
+    "lightMapIntensity": 6.40769,
+    "uv": 1
+   },
+   "rtp4-suite_WALL_rtp4-suite_lm4_6": {
+    "lightmap": "lightmaps/rtp4-suite_lm4.png",
+    "lightMapIntensity": 6.7958,
+    "uv": 1
+   },
+   "rtp4-suite_WALL_rtp4-suite_lm3_7": {
+    "lightmap": "lightmaps/rtp4-suite_lm3.png",
+    "lightMapIntensity": 6.98193,
+    "uv": 1
+   },
+   "rtp4-suite_WALL_rtp4-suite_lm8_8": {
+    "lightmap": "lightmaps/rtp4-suite_lm8.png",
+    "lightMapIntensity": 11.79229,
+    "uv": 1
+   },
+   "rtp4-suite_WALL_rtp4-suite_lm1_11": {
+    "lightmap": "lightmaps/rtp4-suite_lm1.png",
+    "lightMapIntensity": 99.23945,
+    "uv": 1
+   },
+   "rtp4-suite_WALL_rtp4-suite_lm2_12": {
+    "lightmap": "lightmaps/rtp4-suite_lm2.png",
+    "lightMapIntensity": 112.10181,
+    "uv": 1
+   }
+  }
+ },
+ "other_meshes": {
+  "environment": "RoomEnvironment through PMREMGenerator, scene.environmentIntensity = 0.6, no punctual lights; emissive materials as exported"
+ },
+ "glass": {
+  "facade_glass": "replace with the viewer's tuned transparent glass",
+  "partition_glass": "clear partition",
+  "partition_glass_frost": "frosted band"
+ },
+ "cameras": "rtp4-suite_cameras.json",
+ "collision_node": "rtp4-suite_COLLISION",
+ "placement_ok": false,
+ "site_fit": {
+  "rot_deg": 0.0,
+  "plate_centroid": [
+   0.0,
+   0.0
+  ],
+  "footprint_centroid": [
+   0.0,
+   0.0
+  ],
+  "dx": 0.0,
+  "dy": 0.0,
+  "frame": "rtp_local",
+  "note": "the layout is already in rtp_local (x east, y north, metres from the Maps pin): no turn, no shift"
+ },
+ "cad_m_to_site": [
+  [
+   -0.017453212466258507,
+   0.9998476810867788,
+   -5584.597174416712
+  ],
+  [
+   -0.9998476810867784,
+   -0.01745321246625854,
+   5894.64598187275
+  ]
+ ],
+ "frame_about": {
+  "name": "rtp_local",
+  "about": "rtp_local: x east, y north, metres from the Maps pin 19.1692159 N 73.0017703 E; z up from ground",
+  "cad_m_to_rtp_local": [
+   [
+    -0.017453212466258507,
+    0.9998476810867788,
+    -5584.597174416712
+   ],
+   [
+    -0.9998476810867784,
+    -0.01745321246625854,
+    5894.64598187275
+   ]
+  ],
+  "plan_key": "rtp4-suite",
+  "rotation_deg": -91.0,
+  "columns_matched": 193,
+  "median_residual_m": 0.0,
+  "cad_plan_origin_m": [
+   5673.0,
+   5625.0
+  ],
+  "how": "rtp_local = M @ [x_plan + origin_x, y_plan + origin_y, 1], metres; the G0 proofs keep the CAD plan frame"
+ },
+ "ffl_m": 15.0,
+ "floor_to_floor_m": 3.6,
+ "level": 4,
+ "placement": {
+  "overlaps": 0,
+  "floating_or_sunk": 0,
+  "narrow_routes": 7
+ }
+}

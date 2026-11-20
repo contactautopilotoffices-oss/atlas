@@ -1,0 +1,88 @@
+{
+  "voice": {
+    "id": "pFZP5JQG7iQjIQuC4Bku",
+    "name": "Lily — Velvety Actress",
+    "model": "eleven_multilingual_v2",
+    "settings": {
+      "stability": 0.62,
+      "similarity_boost": 0.75,
+      "style": 0,
+      "use_speaker_boost": true,
+      "speed": 1.06
+    },
+    "gender": "female",
+    "accent": "British"
+  },
+  "direction": "Warm, mature female voice; confident, rounded tone with forward momentum. Generate each complete script as one take, with natural punctuation and no inserted break tags. No location roll-call. No voice cloning or pitch shifting.",
+  "film": [
+    {
+      "id": "opening",
+      "start": 2,
+      "end": 54.5,
+      "text": "Your next workplace begins with a bigger picture: the people it brings together, the way they arrive, and the space that supports their day. As we move from the Mumbai skyline into Airoli, that picture becomes something you can explore. A location becomes a property, and a property becomes a place for your team. Welcome to Reliable Tech Park. With Autopilot, you can follow that journey all the way from the city around you to the detail of your proposed office. See the building in its surroundings, take in the glass facade and the courtyard, and start to imagine how your people would move through it. Every view brings you closer to the decisions that matter inside. You can pause at the scale that matters to you, return to the approach, or move ahead to the floor. The presentation gives you a shared starting point for the questions your people and decision makers will want to explore."
+    },
+    {
+      "id": "connection",
+      "start": 55,
+      "end": 78.5,
+      "text": "Now consider the journey your team will make each day. Here, the experience connects the station, the walking route and the property entrance in one view. You can follow the approach and inspect the location information for yourself, so the conversation moves naturally from where the office is to how your people would reach it."
+    },
+    {
+      "id": "arrival",
+      "start": 79,
+      "end": 92.5,
+      "text": "From the property, we can move directly to the CAD layout, where your proposed workplace becomes a working conversation about the brief and the spaces your team needs."
+    },
+    {
+      "id": "floor",
+      "start": 93,
+      "end": 120,
+      "text": "Inside offices six oh three and six oh four, the drawing becomes a working conversation about your brief. Explore the processes across the floor, choose a team, and see its seats, dimensions and area together. For Tata Capital, the plan shows two hundred and sixteen seats against the same requirement, making the relationship between the brief and the drawing clear."
+    },
+    {
+      "id": "support",
+      "start": 120,
+      "end": 134,
+      "text": "There is room to discuss what comes next, with twenty one growth seats identified in the plan. Alongside the teams, you can inspect the meeting spaces and supporting rooms that complete the workplace."
+    },
+    {
+      "id": "training",
+      "start": 134,
+      "end": 145.7,
+      "text": "The fourth floor brings another part of the journey into view, from reception and interviews to induction and training, helping you consider how new colleagues would enter the organisation."
+    },
+    {
+      "id": "close",
+      "start": 145.7,
+      "end": 166,
+      "text": "Now return to the CAD layout and explore the spaces that matter to your team. With Autopilot, each selection keeps your requirements and the drawing in the same conversation, so you can move from an overall impression to a specific decision. Let's explore your next workplace together."
+    }
+  ],
+  "experience": [
+    {
+      "id": "opening",
+      "start": 2,
+      "end": 41,
+      "text": "Your next workplace begins with the people it brings together and the space that supports their day. As we move from the Mumbai skyline into Airoli, the bigger picture becomes a place you can explore. Welcome to Reliable Tech Park. With Autopilot, you can follow the journey from the city around you to the detail of your proposed office, building a clearer picture as you move closer. It is a way to bring your team, your requirements and the property into the same conversation, before you step inside. You can explore the approach and decide which part of the workplace deserves a closer look, connecting what you see with the brief you have already shared."
+    },
+    {
+      "id": "property",
+      "start": 41,
+      "end": 55,
+      "text": "As the building comes into view, take in the glass facade and the space between its two arms. Then look beyond the first impression to the everyday journey your people would make."
+    },
+    {
+      "id": "connection",
+      "start": 55,
+      "end": 82,
+      "text": "Here, you can explore the property alongside its surroundings, follow the connection from the station and inspect the walking route to the gate. The location information stays available for a closer look, so you can judge what matters to your team. And as we approach the entrance, the focus moves naturally from the journey here to the workplace inside."
+    },
+    {
+      "id": "arrival",
+      "start": 82,
+      "end": 90.5,
+      "text": "Now open your CAD layout and explore the proposed workplace, team by team, against your requirements."
+    }
+  ],
+  "take": "female-take2"
+}

@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Geo pack preview</title>
+<style>
+  :root { --bg: #0b0d10; --ink: #e8e4dc; --dim: #8d8a84; }
+  html, body { margin: 0; height: 100%; background: var(--bg); color: var(--ink); font: 13px/1.4 system-ui, sans-serif; }
+  canvas { display: block; }
+  #ui { position: fixed; left: 16px; top: 16px; max-width: 360px; background: rgba(11,13,16,.72); padding: 10px 12px; border-radius: 8px; }
+  #ui label { display: block; margin-top: 6px; color: var(--dim); }
+  #ui input[type=range] { width: 100%; }
+  #credit { position: fixed; left: 16px; right: 16px; bottom: 10px; color: var(--dim); font-size: 11px; }
+  .lbl { position: fixed; transform: translate(-50%, -100%); white-space: nowrap; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; text-shadow: 0 1px 3px #000; pointer-events: none; }
+</style>
+<script type="importmap">{ "imports": { "three": "/engine/vendor/three/three.module.min.js", "three/addons/": "/engine/vendor/three/jsm/" } }</script>
+</head>
+<body>
+<div id="ui">
+  <b>Geo pack preview</b> (QA only, not the experience)
+  <label>Camera height <span id="altv"></span><input id="alt" type="range" min="0" max="1000" value="620"></label>
+  <label>Tilt <input id="tilt" type="range" min="0" max="80" value="35"></label>
+  <label><input id="v2026" type="checkbox" checked> 2026 plates from 50 km down</label>
+  <label><input id="terr" type="checkbox" checked> terrain (true scale)</label>
+</div>
+<div id="credit"></div>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+const base = './';
+const geo = await (await fetch(base + 'geo.json')).json();
+document.getElementById('credit').textContent = geo.attribution.on_screen_with_2026_plates;
+const renderer = new THREE.WebGLRenderer({ antialias: true, logarithmicDepthBuffer: true });
+renderer.setPixelRatio(Math.min(2, devicePixelRatio)); renderer.setSize(innerWidth, innerHeight);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+document.body.appendChild(renderer.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color(0x0b0d10);
+const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 1, 3e6);
+const controls = new OrbitControls(camera, renderer.domElement);
+const loader = new THREE.TextureLoader();
+const terrById = Object.fromEntries(geo.terrain.map(t => [t.id, t]));
+const plates = [];
+async function plate(m, order, alt) {
+  const t = m.terrain && terrById[m.terrain];
+  const g = t ? new THREE.PlaneGeometry(m.three_plane.width, m.three_plane.height, t.cols - 1, t.rows - 1)
+              : new THREE.PlaneGeometry(m.three_plane.width, m.three_plane.height, 1, 1);
+  g.rotateX(-Math.PI / 2);
+  let heights = null;
+  if (t) heights = new Float32Array(await (await fetch(base + t.file)).arrayBuffer());
+  const tex = loader.load(base + m.file); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -order, polygonOffsetUnits: -order });
+  mat.onBeforeCompile = s => { // fade the outer 8 % of each plate so no edge shows
+    s.fragmentShader = s.fragmentShader.replace('#include <map_fragment>', `#include <map_fragment>
+      vec2 e = min(vMapUv, 1.0 - vMapUv); diffuseColor.a *= smoothstep(0.0, 0.08, min(e.x, e.y));`);
+  };
+  const mesh = new THREE.Mesh(g, mat); mesh.renderOrder = order;
+  mesh.position.set(m.three_plane.center[0], 0, m.three_plane.center[2]);
+  scene.add(mesh);
+  plates.push({ m, mesh, heights, ex: t ? t.suggested_exaggeration : 1 });
+}
+const fine = Object.fromEntries(geo.mosaics_2026.map(m => [m.same_ground_as, m]));
+let order = 1;
+for (const m of geo.mosaics) await plate(fine[m.id] && document.getElementById('v2026').checked ? fine[m.id] : m, order++);
+function applyTerrain() {
+  const on = document.getElementById('terr').checked;
+  for (const p of plates) if (p.heights) {
+    const pos = p.mesh.geometry.attributes.position;
+    for (let k = 0; k < pos.count; k++) pos.setY(k, on ? p.heights[k] * p.ex : 0);
+    pos.needsUpdate = true;
+  }
+}
+applyTerrain();
+document.getElementById('terr').onchange = applyTerrain;
+document.getElementById('v2026').onchange = () => location.reload();
+const pin = new THREE.Mesh(new THREE.CylinderGeometry(6, 6, 120, 12), new THREE.MeshBasicMaterial({ color: 0xff4040 }));
+pin.position.y = 60; scene.add(pin);
+const labels = geo.labels.map(l => { const d = document.createElement('div'); d.className = 'lbl'; d.textContent = l.text; document.body.appendChild(d); return { l, d, v: new THREE.Vector3(l.three[0], 0, l.three[2]) }; });
+function setCam() {
+  const a = document.getElementById('alt').value / 1000; const h = 300 * Math.pow(800000 / 300, a);
+  const tilt = THREE.MathUtils.degToRad(document.getElementById('tilt').value);
+  document.getElementById('altv').textContent = h > 1000 ? (h / 1000).toFixed(1) + ' km' : Math.round(h) + ' m';
+  camera.position.set(0, h, Math.tan(tilt) * h); controls.target.set(0, 0, 0); controls.update();
+}
+document.getElementById('alt').oninput = setCam; document.getElementById('tilt').oninput = setCam; setCam();
+addEventListener('resize', () => { camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix(); renderer.setSize(innerWidth, innerHeight); });
+renderer.setAnimationLoop(() => {
+  renderer.render(scene, camera);
+  for (const { v, d } of labels) { const p = v.clone().project(camera); const vis = p.z < 1 && Math.abs(p.x) < 1 && Math.abs(p.y) < 1;
+    d.style.display = vis ? 'block' : 'none'; d.style.left = ((p.x + 1) / 2 * innerWidth) + 'px'; d.style.top = ((1 - p.y) / 2 * innerHeight) + 'px'; }
+});
+window.__geoReady = true;
+</script>
+</body>
+</html>

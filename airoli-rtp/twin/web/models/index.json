@@ -1,4 +1,17 @@
 {
  "about": "What the Blender builder has delivered for the web viewer (paths relative to this folder). A plan with no entry is shown as the placeholder built from its CAD layout.",
- "tenants": {}
+ "tenants": {
+  "rtp6-a": {
+   "viewer": "rtp6-a/rtp6-a_viewer.json",
+   "cameras": "rtp6-a/rtp6-a_cameras.json"
+  },
+  "rtp4-suite": {
+   "viewer": "rtp4-suite/rtp4-suite_viewer.json",
+   "cameras": "rtp4-suite/rtp4-suite_cameras.json"
+  },
+  "rtp6-c": {
+   "viewer": "rtp6-c/rtp6-c_viewer.json",
+   "cameras": "rtp6-c/rtp6-c_cameras.json"
+  }
+ }
 }

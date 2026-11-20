@@ -1,0 +1,373 @@
+{
+ "frame": "glTF / three.js world of <tenant>.glb: x = plan east, y = up (0 = finished floor), z = -plan north; metres. position = the lens, target = a point on the view axis; hfov_deg = horizontal field of view for a 16:9 frame (three.js PerspectiveCamera.fov is vertical: vfov = 2 atan(tan(hfov/2) * h / w)). The stills use the same camera made level with lens shift; using lookAt(target) gives the same view with a 5-10 deg tilt.",
+ "tenant": "rtp4-suite",
+ "rooms": {
+  "TRAINING ROOM_05": [
+   {
+    "kind": "entry",
+    "position": [
+     38.585,
+     1.5,
+     -112.631
+    ],
+    "target": [
+     42.828,
+     1.5,
+     -108.388
+    ],
+    "hfov_deg": 80,
+    "room": "TRAINING ROOM_05",
+    "label": "Training Room_05: entry",
+    "name": "rtp4-suite_WEB_training-room-05_entry"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     37.614,
+     1.5,
+     -108.746
+    ],
+    "target": [
+     43.157,
+     1.5,
+     -111.042
+    ],
+    "hfov_deg": 80,
+    "room": "TRAINING ROOM_05",
+    "label": "Training Room_05: feature",
+    "name": "rtp4-suite_WEB_training-room-05_feature"
+   }
+  ],
+  "RECEPTION AND WAITING": [
+   {
+    "kind": "entry",
+    "position": [
+     26.63997459411621,
+     1.5,
+     -100.0920639038086
+    ],
+    "target": [
+     31.839181900024414,
+     1.6,
+     -100.00130462646484
+    ],
+    "hfov_deg": 70,
+    "room": "RECEPTION AND WAITING",
+    "label": "Reception And Waiting: logo wall",
+    "name": "rtp4-suite_CAM_reception-and-waiting_logo"
+   }
+  ],
+  "ADMIN ROOM": [
+   {
+    "kind": "entry",
+    "position": [
+     23.079,
+     1.5,
+     -111.692
+    ],
+    "target": [
+     17.535,
+     1.5,
+     -113.988
+    ],
+    "hfov_deg": 80,
+    "room": "ADMIN ROOM",
+    "label": "Admin Room: entry",
+    "name": "rtp4-suite_WEB_admin-room_entry"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     19.66,
+     1.5,
+     -111.977
+    ],
+    "target": [
+     21.956,
+     1.5,
+     -117.52
+    ],
+    "hfov_deg": 80,
+    "room": "ADMIN ROOM",
+    "label": "Admin Room: feature",
+    "name": "rtp4-suite_WEB_admin-room_feature"
+   }
+  ],
+  "HR ROOM": [
+   {
+    "kind": "entry",
+    "position": [
+     23.021,
+     1.5,
+     -110.124
+    ],
+    "target": [
+     17.478,
+     1.5,
+     -107.828
+    ],
+    "hfov_deg": 80,
+    "room": "HR ROOM",
+    "label": "Hr Room: entry",
+    "name": "rtp4-suite_WEB_hr-room_entry"
+   }
+  ],
+  "TRAINING ROOM_04": [
+   {
+    "kind": "entry",
+    "position": [
+     45.01,
+     1.5,
+     -102.926
+    ],
+    "target": [
+     40.767,
+     1.5,
+     -107.168
+    ],
+    "hfov_deg": 80,
+    "room": "TRAINING ROOM_04",
+    "label": "Training Room_04: entry",
+    "name": "rtp4-suite_WEB_training-room-04_entry"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     38.708,
+     1.5,
+     -103.766
+    ],
+    "target": [
+     44.251,
+     1.5,
+     -106.062
+    ],
+    "hfov_deg": 80,
+    "room": "TRAINING ROOM_04",
+    "label": "Training Room_04: feature",
+    "name": "rtp4-suite_WEB_training-room-04_feature"
+   }
+  ],
+  "HR INDUCTION ROOM": [
+   {
+    "kind": "entry",
+    "position": [
+     26.609,
+     1.5,
+     -111.039
+    ],
+    "target": [
+     26.609,
+     1.5,
+     -105.039
+    ],
+    "hfov_deg": 80,
+    "room": "HR INDUCTION ROOM",
+    "label": "Hr Induction Room: entry",
+    "name": "rtp4-suite_WEB_hr-induction-room_entry"
+   }
+  ],
+  "06 SEATER MEETING ROOM 01 (1)": [
+   {
+    "kind": "entry",
+    "position": [
+     27.023,
+     1.5,
+     -104.4
+    ],
+    "target": [
+     24.727,
+     1.5,
+     -109.943
+    ],
+    "hfov_deg": 80,
+    "room": "06 SEATER MEETING ROOM 01 (1)",
+    "label": "06 Seater Meeting Room 01 (1): entry",
+    "name": "rtp4-suite_WEB_06-seater-meeting-room-01-1_entry"
+   }
+  ],
+  "12 SEATER CONFERENCE ROOM_01": [
+   {
+    "kind": "entry",
+    "position": [
+     31.741,
+     1.5,
+     -105.463
+    ],
+    "target": [
+     37.741,
+     1.5,
+     -105.463
+    ],
+    "hfov_deg": 80,
+    "room": "12 SEATER CONFERENCE ROOM_01",
+    "label": "12 Seater Conference Room_01: entry",
+    "name": "rtp4-suite_WEB_12-seater-conference-room-01_entry"
+   }
+  ],
+  "06 SEATER MEETING ROOM 01 (2)": [
+   {
+    "kind": "entry",
+    "position": [
+     28.65,
+     1.5,
+     -104.6
+    ],
+    "target": [
+     32.893,
+     1.5,
+     -108.842
+    ],
+    "hfov_deg": 80,
+    "room": "06 SEATER MEETING ROOM 01 (2)",
+    "label": "06 Seater Meeting Room 01 (2): entry",
+    "name": "rtp4-suite_WEB_06-seater-meeting-room-01-2_entry"
+   }
+  ],
+  "TRAINING ROOM_02": [
+   {
+    "kind": "entry",
+    "position": [
+     41.366,
+     1.5,
+     -89.253
+    ],
+    "target": [
+     45.609,
+     1.5,
+     -93.496
+    ],
+    "hfov_deg": 80,
+    "room": "TRAINING ROOM_02",
+    "label": "Training Room_02: entry",
+    "name": "rtp4-suite_WEB_training-room-02_entry"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     45.496,
+     1.5,
+     -93.842
+    ],
+    "target": [
+     43.2,
+     1.5,
+     -88.299
+    ],
+    "hfov_deg": 80,
+    "room": "TRAINING ROOM_02",
+    "label": "Training Room_02: feature",
+    "name": "rtp4-suite_WEB_training-room-02_feature"
+   }
+  ],
+  "TRAINING ROOM_01": [
+   {
+    "kind": "entry",
+    "position": [
+     39.298,
+     1.5,
+     -89.369
+    ],
+    "target": [
+     35.055,
+     1.5,
+     -93.612
+    ],
+    "hfov_deg": 80,
+    "room": "TRAINING ROOM_01",
+    "label": "Training Room_01: entry",
+    "name": "rtp4-suite_WEB_training-room-01_entry"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     34.757,
+     1.5,
+     -93.91
+    ],
+    "target": [
+     38.999,
+     1.5,
+     -89.667
+    ],
+    "hfov_deg": 80,
+    "room": "TRAINING ROOM_01",
+    "label": "Training Room_01: feature",
+    "name": "rtp4-suite_WEB_training-room-01_feature"
+   }
+  ],
+  "TRAINING ROOM_03": [
+   {
+    "kind": "entry",
+    "position": [
+     39.092,
+     1.5,
+     -100.838
+    ],
+    "target": [
+     44.635,
+     1.5,
+     -98.541
+    ],
+    "hfov_deg": 80,
+    "room": "TRAINING ROOM_03",
+    "label": "Training Room_03: entry",
+    "name": "rtp4-suite_WEB_training-room-03_entry"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     44.796,
+     1.5,
+     -98.205
+    ],
+    "target": [
+     40.554,
+     1.5,
+     -102.447
+    ],
+    "hfov_deg": 80,
+    "room": "TRAINING ROOM_03",
+    "label": "Training Room_03: feature",
+    "name": "rtp4-suite_WEB_training-room-03_feature"
+   }
+  ],
+  "TRAINING ROOM_06": [
+   {
+    "kind": "entry",
+    "position": [
+     34.241,
+     1.5,
+     -97.33
+    ],
+    "target": [
+     34.241,
+     1.5,
+     -103.33
+    ],
+    "hfov_deg": 80,
+    "room": "TRAINING ROOM_06",
+    "label": "Training Room_06: entry",
+    "name": "rtp4-suite_WEB_training-room-06_entry"
+   },
+   {
+    "kind": "feature",
+    "position": [
+     35.903,
+     1.5,
+     -102.316
+    ],
+    "target": [
+     31.66,
+     1.5,
+     -98.074
+    ],
+    "hfov_deg": 80,
+    "room": "TRAINING ROOM_06",
+    "label": "Training Room_06: feature",
+    "name": "rtp4-suite_WEB_training-room-06_feature"
+   }
+  ]
+ },
+ "about_views": "web views: level, inside the room, clear of walls/doors/furniture by 0.45 m (web_cams.py)"
+}

@@ -1,0 +1,2828 @@
+{
+ "name": "Reliable Tech Park: site-detail models",
+ "file": "rtp_site_details.glb",
+ "build_id": "site-20261120-014826",
+ "built": "2026-11-20 01:50 IST",
+ "frame": "rtp_local metres (x east, y north from the Maps pin 19.1692159 N 73.0017703 E, z up). The GLB is glTF Y-up: three.js (x, y, z) = rtp_local (x, z, -y), same as twin/web/models/exterior/*.glb. Not recentred. Ground level (z 0) is the twin's site ground (11.56 m above sea level).",
+ "loading": "GLTFLoader with setMeshoptDecoder(MeshoptDecoder). Repeated props (palms, lamps, bollards) arrive as EXT_mesh_gpu_instancing (InstancedMesh); extras.instance_names lists each instance, and the 'instance_sets' below give their positions. Every node carries extras {group, what, photos, estimated, default_visible}.",
+ "honesty": "Every size and most positions here are ESTIMATES read from public photos (reference/MODEL_NOTES.md: people, cars, lanes and the model's 3.6 m floor height). None come from drawings or a site survey. Positions anchored on data: the building outline (twin/web/plate.json), the access-road and gate-lane lines (OSM/Overture via review/context_overture.json and demo/data/route.json), the Street View pano positions (reference/site/INDEX.md), the Overture playground polygon (turf box) and the twin's drum_west centre (CLARIANT). Treat everything as 'indicative, to be checked on site'.",
+ "brand_marks": "site_sign_reliable_letters and site_sign_R_box carry the landlord's marks (RELIABLE, R); site_sign_clariant carries a tenant's mark and is hidden by default. Whether these may appear in client material is open question 3 in EXTERIOR_PLAN.md. The R is plain Times New Roman Bold in a navy box: the real logo's red swoosh and the Reliable Cloud City cloud logo on the gates are deliberately not reproduced. Tenant-board names and the Hotel Mumbai House sign are not reproduced.",
+ "night": "Materials with extras.emit_night: multiply emissiveIntensity by that factor at night (sign letters x14, R box white x9, globe lamps x24, LED heads x20, soffit downlights x8, tenant board x8, tube lights under the podium x8). The GLB has no lights; add point/spot lights in the viewer if wanted (the check renders used point lights at the canopy downlights, every second wall globe, the pole lamps and the podium tubes).",
+ "groups": {
+  "gate": {
+   "what": "Main gate porte-cochere: two flat canopies with coffered soffit and downlights, bronze ACP fascia, two clad security cabins, central charcoal pier over a white-framed booth, black MS sliding gates (shown open), red planter island with a date palm and 10 globe bollards, blue tenant board, gate apron with hatched crossings and stop lines.",
+   "photos": [
+    "16",
+    "19",
+    "22",
+    "23",
+    "24"
+   ],
+   "placement": "Street View pano (-20,-24) of photo 16 read as standing in the IN lane 3.5 m in front of the canopy; OSM IN/OUT lane junctions; access road line. Canopy front centre (-14.44,-22.73), front at bearing 115 deg, lanes at 25 deg. Position good to a few metres only. All sizes estimated from photos (people, cars, lanes); MODEL_NOTES item 1 range 22-30 m wide x 12-18 m deep, built 30 x 14 m."
+  },
+  "wall": {
+   "what": "Boundary wall along the access road: rendered plinth, rendered piers at ~3 m with caps and globe lamps, black MS railing, red-painted kerb on the road side.",
+   "photos": [
+    "15",
+    "18",
+    "09"
+   ],
+   "placement": "5.0 m north of the OSM/Overture access-road centreline (just behind the twin's footpath), from the gate cabins east to x = 50 and west to x = -38 (where the next campus road enters). Extent and offset estimated."
+  },
+  "signage": {
+   "what": "Rooftop signs: red RELIABLE channel letters on a steel frame along the roof edge of the east arm's rounded south end, the navy R box with a white R on a lattice tower behind them (both lit at night), and white CLARIANT letters on a frame on top of the north arm's west drum.",
+   "photos": [
+    "01",
+    "02",
+    "07",
+    "09",
+    "03",
+    "06",
+    "10",
+    "14",
+    "26"
+   ],
+   "placement": "South-end centre ~(29.0, 0.3), roof edge r ~14.5 m, sign facing bearing 220 deg (photo 02 from the south-west). CLARIANT on the twin's drum_west (-39.74, 99.81, top +42.6 m) facing 215 deg. Letter heights 2.0 m and 1.5 m, R box 4 x 4 m: estimates."
+  },
+  "podium": {
+   "what": "Raised podium deck along the court faces of both arms: 0.6 m RCC slab at +4.5 m, 2.2 m deep weathered concrete edge beam and parapet, steel railing, planter strip with a palm row, hanging creeper curtains, open parking below with red stamped floor, 0.6 m columns with black-yellow hazard bands, tube lights.",
+   "photos": [
+    "03",
+    "07",
+    "14",
+    "16",
+    "23",
+    "30",
+    "34"
+   ],
+   "placement": "East strip x 1.0 to the east arm's court face, y -4 to 48; north strip y 72.5 to the north arm's court face, x -44 to -1. Deck edges follow plate.json 'outer'. Depth, extent and heights estimated (MODEL_NOTES item 3: deck +4.5 m, parapet 1.1 m, depth 12-15 m)."
+  },
+  "lobby": {
+   "what": "Lobby entrance: curved glass canopy on steel ribs and two round columns at the chamfered inner corner, paved forecourt / drop-off with black-yellow kerbs, steel bollards, two palms in red planters, steps up to the ground-floor level (+0.6 m).",
+   "photos": [
+    "12",
+    "04",
+    "13"
+   ],
+   "placement": "On the twin's lobby chamfer (6.48,82.84)-(15.53,73.79), which is itself a modelling assumption (exterior/NOTES.md). Canopy 12 x 7 m, 6.4 m high at the facade: estimated."
+  },
+  "court": {
+   "what": "Court: netted artificial-turf sports box with galvanised posts, side and roof nets, kickboard, goals, markings and two flood-light poles, on a paved surround of grey interlocking pavers; paved walkways along the podium fronts with campus pole lamps.",
+   "photos": [
+    "26",
+    "37",
+    "12",
+    "35",
+    "14"
+   ],
+   "placement": "Turf box on the Overture 'recreation/playground' polygon (-29.6,70.8)(-31.2,53.7)(6.7,50.0)(7.6,69.4), rotated -3.9 deg; box 32 x 15 m (MODEL_NOTES item 4: 30 x 15 m +-25 %). Built at grade; photo 37 suggests it may sit at podium level, not confirmed."
+  },
+  "south_end": {
+   "what": "Planting bed round the east arm's south end: red rendered planter kerbs, ground cover, three fan palms, an araucaria and garden globe lamps.",
+   "photos": [
+    "11",
+    "15"
+   ],
+   "placement": "Arc 3 m wide at 16-19 m from the south-end centre (29.0, 0.0), bearings 110-245 deg. Estimated."
+  }
+ },
+ "nodes": [
+  {
+   "node": "site_gate_apron",
+   "group": "gate",
+   "what": "Gate apron (asphalt, top +0.16 m to sit over the twin's footpath), hatched crossings, stop lines, raised island with black-yellow kerbs",
+   "photos": [
+    "16",
+    "23",
+    "24"
+   ],
+   "estimated": true,
+   "default_visible": true,
+   "centre_base_rtp_local": [
+    -11.8,
+    -17.07,
+    0.0
+   ],
+   "bbox_min": [
+    -30.87,
+    -32.88,
+    0.0
+   ],
+   "bbox_max": [
+    7.28,
+    -1.26,
+    0.34
+   ],
+   "size_m": [
+    38.15,
+    31.62,
+    0.34
+   ],
+   "triangles": 160,
+   "materials": [
+    "site_asphalt",
+    "site_road_paint",
+    "site_pavers",
+    "site_kerb_black_yellow"
+   ]
+  },
+  {
+   "node": "site_gate_canopy",
+   "group": "gate",
+   "what": "Gate canopy: two flat slabs 15 x 14 m (soffit +6.2 m and +5.6 m, 1.2 m bronze ACP fascia), coffered white soffit with downlights, roof stubs",
+   "photos": [
+    "22",
+    "23",
+    "24"
+   ],
+   "estimated": true,
+   "default_visible": true,
+   "centre_base_rtp_local": [
+    -11.48,
+    -16.39,
+    5.6
+   ],
+   "bbox_min": [
+    -28.07,
+    -29.11,
+    5.6
+   ],
+   "bbox_max": [
+    5.11,
+    -3.66,
+    8.3
+   ],
+   "size_m": [
+    33.19,
+    25.45,
+    2.7
+   ],
+   "triangles": 1910,
+   "materials": [
+    "site_bronze_acp",
+    "site_roof_membrane",
+    "site_soffit_white",
+    "site_soffit_recess",
+    "site_downlight",
+    "site_render_cream",
+    "site_charcoal_acp"
+   ]
+  },
+  {
+   "node": "site_gate_cabins_pier",
+   "group": "gate",
+   "what": "Two security cabins in cream grid cladding (4.4 x 7.0 m and 4.4 x 6.0 m, to the soffit) with windows, and the central pier: 3.6 x 3.6 m charcoal box (+3.3 to +7.8 m) on four white columns over a glazed booth",
+   "photos": [
+    "16",
+    "22",
+    "23",
+    "24"
+   ],
+   "estimated": true,
+   "default_visible": true,
+   "centre_base_rtp_local": [
+    -12.54,
+    -18.2,
+    0.02
+   ],
+   "bbox_min": [
+    -26.68,
+    -27.37,
+    0.02
+   ],
+   "bbox_max": [
+    1.6,
+    -9.03,
+    7.8
+   ],
+   "size_m": [
+    28.27,
+    18.35,
+    7.78
+   ],
+   "triangles": 326,
+   "materials": [
+    "site_cladding_cream",
+    "site_glass_dark",
+    "site_render_white",
+    "site_charcoal_acp",
+    "site_soffit_white",
+    "site_roof_membrane"
+   ]
+  },
+  {
+   "node": "site_gate_gates",
+   "group": "gate",
+   "what": "Black MS sliding gates, two 3.3 m leaves per lane, shown slid open; gate posts; wood-look panels (logo not reproduced)",
+   "photos": [
+    "16",
+    "19",
+    "23",
+    "24"
+   ],
+   "estimated": true,
+   "default_visible": true,
+   "centre_base_rtp_local": [
+    -10.13,
+    -13.49,
+    0.16
+   ],
+   "bbox_min": [
+    -22.02,
+    -19.06,
+    0.16
+   ],
+   "bbox_max": [
+    1.76,
+    -7.91,
+    2.6
+   ],
+   "size_m": [
+    23.78,
+    11.15,
+    2.44
+   ],
+   "triangles": 1072,
+   "materials": [
+    "site_steel_black",
+    "site_wood_panel"
+   ]
+  },
+  {
+   "node": "site_gate_planter",
+   "group": "gate",
+   "what": "Round red rendered planter island 6.4 m across, 0.8 m high, ground-cover mound, 10 globe bollards (0.3 m globe on green post)",
+   "photos": [
+    "16",
+    "19",
+    "22"
+   ],
+   "estimated": true,
+   "default_visible": true,
+   "centre_base_rtp_local": [
+    -14.69,
+    -23.27,
+    0.34
+   ],
+   "bbox_min": [
+    -17.88,
+    -26.46,
+    0.34
+   ],
+   "bbox_max": [
+    -11.51,
+    -20.09,
+    1.92
+   ],
+   "size_m": [
+    6.38,
+    6.38,
+    1.58
+   ],
+   "triangles": 1532,
+   "materials": [
+    "site_render_red",
+    "site_groundcover",
+    "site_post_green",
+    "site_globe_light"
+   ]
+  },
+  {
+   "node": "site_gate_tenant_board",
+   "group": "gate",
+   "what": "Blue lit tenant directory board 2.4 x 1.5 m on the island behind the gates (names not reproduced)",
+   "photos": [
+    "14",
+    "16",
+    "24"
+   ],
+   "estimated": true,
+   "default_visible": true,
+   "centre_base_rtp_local": [
+    -11.1,
+    -10.83,
+    0.34
+   ],
+   "bbox_min": [
+    -12.21,
+    -11.38,
+    0.34
+   ],
+   "bbox_max": [
+    -9.99,
+    -10.28,
+    2.48
+   ],
+   "size_m": [
+    2.22,
+    1.1,
+    2.14
+   ],
+   "triangles": 36,
+   "materials": [
+    "site_steel_galvanised",
+    "site_board_blue"
+   ]
+  },
+  {
+   "node": "site_wall",
+   "group": "wall",
+   "what": "Boundary wall: 0.6 m rendered plinth, 0.45 m piers 1.9 m tall at ~3 m centres, black MS railing (25 mm bars at 120 mm, modelled as real bars), red kerb; 70 m in two runs",
+   "photos": [
+    "15",
+    "18"
+   ],
+   "estimated": true,
+   "default_visible": true,
+   "centre_base_rtp_local": [
+    6.07,
+    -26.17,
+    0.0
+   ],
+   "bbox_min": [
+    -38.29,
+    -36.85,
+    0.0
+   ],
+   "bbox_max": [
+    50.42,
+    -15.49,
+    1.98
+   ],
+   "size_m": [
+    88.72,
+    21.36,
+    1.98
+   ],
+   "triangles": 5586,
+   "materials": [
+    "site_render_cream",
+    "site_render_white",
+    "site_steel_black",
+    "site_kerb_red"
+   ]
+  },
+  {
+   "node": "site_wall_globe_lamps",
+   "group": "wall",
+   "what": "Globe lamps on the 29 wall piers (0.36 m globe on a green stub)",
+   "photos": [
+    "09",
+    "15"
+   ],
+   "estimated": true,
+   "default_visible": true,
+   "centre_base_rtp_local": [
+    6.0,
+    -26.13,
+    1.98
+   ],
+   "bbox_min": [
+    -38.18,
+    -36.56,
+    1.98
+   ],
+   "bbox_max": [
+    50.18,
+    -15.7,
+    2.5
+   ],
+   "size_m": [
+    88.36,
+    20.86,
+    0.52
+   ],
+   "triangles": 3364,
+   "materials": [
+    "site_post_green",
+    "site_globe_light"
+   ]
+  },
+  {
+   "node": "site_sign_reliable_letters",
+   "group": "signage",
+   "what": "Red RELIABLE channel letters, 2.0 m cap height, 18.7 m long, 0.25 m deep, on a steel frame on the roof edge, facing bearing 220 deg",
+   "photos": [
+    "01",
+    "02",
+    "09"
+   ],
+   "estimated": true,
+   "default_visible": true,
+   "centre_base_rtp_local": [
+    22.13,
+    -7.87,
+    36.58
+   ],
+   "bbox_min": [
+    14.41,
+    -14.56,
+    36.58
+   ],
+   "bbox_max": [
+    29.85,
+    -1.18,
+    40.3
+   ],
+   "size_m": [
+    15.45,
+    13.38,
+    3.72
+   ],
+   "triangles": 2376,
+   "materials": [
+    "site_sign_red",
+    "site_steel_galvanised"
+   ]
+  },
+  {
+   "node": "site_sign_R_box",
+   "group": "signage",
+   "what": "Navy R logo box 4 x 4 x 0.9 m with a white serif R (3 m), on a 5 m steel lattice tower behind the letters (swoosh of the real logo not reproduced)",
+   "photos": [
+    "01",
+    "03",
+    "07",
+    "09"
+   ],
+   "estimated": true,
+   "default_visible": true,
+   "centre_base_rtp_local": [
+    23.65,
+    -6.13,
+    36.6
+   ],
+   "bbox_min": [
+    21.83,
+    -7.77,
+    36.6
+   ],
+   "bbox_max": [
+    25.47,
+    -4.5,
+    45.6
+   ],
+   "size_m": [
+    3.64,
+    3.26,
+    9.0
+   ],
+   "triangles": 852,
+   "materials": [
+    "site_steel_galvanised",
+    "site_sign_navy",
+    "site_sign_white"
+   ]
+  },
+  {
+   "node": "site_sign_clariant",
+   "group": "signage",
+   "what": "White CLARIANT letters, 1.5 m cap height, 10.9 m long, on a low frame on top of the west drum, facing bearing 215 deg (a tenant's mark: hidden by default)",
+   "photos": [
+    "06",
+    "10",
+    "14",
+    "26"
+   ],
+   "estimated": true,
+   "default_visible": false,
+   "centre_base_rtp_local": [
+    -41.16,
+    97.75,
+    42.58
+   ],
+   "bbox_min": [
+    -46.07,
+    93.97,
+    42.58
+   ],
+   "bbox_max": [
+    -36.25,
+    101.54,
+    44.35
+   ],
+   "size_m": [
+    9.82,
+    7.57,
+    1.77
+   ],
+   "triangles": 772,
+   "materials": [
+    "site_sign_white",
+    "site_steel_galvanised"
+   ]
+  },
+  {
+   "node": "site_podium_east",
+   "group": "podium",
+   "what": "Podium deck, east strip: 52 m along the east arm's court face, 12-14 m deep, top +4.5 m, parapet to +5.6 m, parking below on 14 columns",
+   "photos": [
+    "03",
+    "07",
+    "14",
+    "30",
+    "34"
+   ],
+   "estimated": true,
+   "default_visible": true,
+   "centre_base_rtp_local": [
+    8.06,
+    22.0,
+    0.08
+   ],
+   "bbox_min": [
+    1.0,
+    -4.0,
+    0.08
+   ],
+   "bbox_max": [
+    15.13,
+    48.0,
+    5.6
+   ],
+   "size_m": [
+    14.13,
+    52.0,
+    5.52
+   ],
+   "triangles": 353,
+   "materials": [
+    "site_pavers",
+    "site_concrete_light",
+    "site_stamped_red",
+    "site_concrete_weathered",
+    "site_groundcover",
+    "site_hazard_bands",
+    "site_tube_light"
+   ]
+  },
+  {
+   "node": "site_podium_east_creepers",
+   "group": "podium",
+   "what": "Hanging creeper curtains on the deck edge, 2.2-3.5 m long, about 78 % of the length",
+   "photos": [
+    "03",
+    "14",
+    "23",
+    "34"
+   ],
+   "estimated": true,
+   "default_visible": true,
+   "centre_base_rtp_local": [
+    1.09,
+    22.0,
+    2.27
+   ],
+   "bbox_min": [
+    0.83,
+    -4.0,
+    2.27
+   ],
+   "bbox_max": [
+    1.35,
+    48.0,
+    5.9
+   ],
+   "size_m": [
+    0.52,
+    52.0,
+    3.63
+   ],
+   "triangles": 96,
+   "materials": [
+    "site_creeper"
+   ]
+  },
+  {
+   "node": "site_podium_east_creepers_south",
+   "group": "podium",
+   "what": "Creepers on the south end of the east podium strip, facing the gate",
+   "photos": [
+    "16",
+    "23"
+   ],
+   "estimated": true,
+   "default_visible": true,
+   "centre_base_rtp_local": [
+    8.06,
+    -4.12,
+    2.41
+   ],
+   "bbox_min": [
+    1.3,
+    -4.12,
+    2.41
+   ],
+   "bbox_max": [
+    14.83,
+    -4.12,
+    5.75
+   ],
+   "size_m": [
+    13.53,
+    0.0,
+    3.34
+   ],
+   "triangles": 10,
+   "materials": [
+    "site_creeper"
+   ]
+  },
+  {
+   "node": "site_podium_north",
+   "group": "podium",
+   "what": "Podium deck, north strip: 43 m along the north arm's court face, ~9.5 m deep, top +4.5 m, parapet to +5.6 m, parking below on 12 columns",
+   "photos": [
+    "03",
+    "07",
+    "14",
+    "30",
+    "34"
+   ],
+   "estimated": true,
+   "default_visible": true,
+   "centre_base_rtp_local": [
+    -22.5,
+    78.52,
+    0.08
+   ],
+   "bbox_min": [
+    -44.0,
+    72.5,
+    0.08
+   ],
+   "bbox_max": [
+    -1.0,
+    84.55,
+    5.6
+   ],
+   "size_m": [
+    43.0,
+    12.05,
+    5.52
+   ],
+   "triangles": 295,
+   "materials": [
+    "site_pavers",
+    "site_concrete_light",
+    "site_stamped_red",
+    "site_concrete_weathered",
+    "site_groundcover",
+    "site_hazard_bands",
+    "site_tube_light"
+   ]
+  },
+  {
+   "node": "site_podium_north_creepers",
+   "group": "podium",
+   "what": "Hanging creeper curtains on the deck edge, 2.2-3.5 m long, about 78 % of the length",
+   "photos": [
+    "03",
+    "14",
+    "23",
+    "34"
+   ],
+   "estimated": true,
+   "default_visible": true,
+   "centre_base_rtp_local": [
+    -22.5,
+    72.59,
+    2.27
+   ],
+   "bbox_min": [
+    -44.0,
+    72.33,
+    2.27
+   ],
+   "bbox_max": [
+    -1.0,
+    72.85,
+    5.9
+   ],
+   "size_m": [
+    43.0,
+    0.52,
+    3.63
+   ],
+   "triangles": 96,
+   "materials": [
+    "site_creeper"
+   ]
+  },
+  {
+   "node": "site_podium_railings",
+   "group": "podium",
+   "what": "Steel pipe railing on the podium parapets (posts at 2 m, rails at +6.05 and +6.45 m)",
+   "photos": [
+    "07",
+    "34"
+   ],
+   "estimated": true,
+   "default_visible": true,
+   "centre_base_rtp_local": [
+    -21.42,
+    34.33,
+    5.6
+   ],
+   "bbox_min": [
+    -44.03,
+    -4.03,
+    5.6
+   ],
+   "bbox_max": [
+    1.18,
+    72.68,
+    6.5
+   ],
+   "size_m": [
+    45.21,
+    76.71,
+    0.9
+   ],
+   "triangles": 538,
+   "materials": [
+    "site_steel_galvanised"
+   ]
+  },
+  {
+   "node": "site_lobby_forecourt",
+   "group": "lobby",
+   "what": "Paved lobby forecourt / drop-off (grey pavers, 16 cm, black-yellow kerb edge), two steps up to the ground floor (+0.6 m), two red palm planters",
+   "photos": [
+    "12",
+    "35"
+   ],
+   "estimated": true,
+   "default_visible": true,
+   "centre_base_rtp_local": [
+    7.39,
+    70.52,
+    0.0
+   ],
+   "bbox_min": [
+    -0.95,
+    58.0,
+    0.0
+   ],
+   "bbox_max": [
+    15.74,
+    83.04,
+    0.62
+   ],
+   "size_m": [
+    16.69,
+    25.04,
+    0.62
+   ],
+   "triangles": 265,
+   "materials": [
+    "site_pavers",
+    "site_kerb_black_yellow",
+    "site_kerb_grey",
+    "site_render_red",
+    "site_groundcover"
+   ]
+  },
+  {
+   "node": "site_lobby_canopy_glass",
+   "group": "lobby",
+   "what": "Curved glass canopy 12 x 7 m, +6.4 m at the facade falling to +5.5 m at the edge (alpha-blended glass)",
+   "photos": [
+    "12"
+   ],
+   "estimated": true,
+   "default_visible": true,
+   "centre_base_rtp_local": [
+    8.53,
+    75.83,
+    5.5
+   ],
+   "bbox_min": [
+    1.81,
+    69.11,
+    5.5
+   ],
+   "bbox_max": [
+    15.24,
+    82.54,
+    6.4
+   ],
+   "size_m": [
+    13.44,
+    13.44,
+    0.9
+   ],
+   "triangles": 16,
+   "materials": [
+    "site_glass_canopy"
+   ]
+  },
+  {
+   "node": "site_lobby_canopy_steel",
+   "group": "lobby",
+   "what": "White steel ribs (9 at 1.5 m), edge and wall beams, two round 0.22 m columns",
+   "photos": [
+    "12"
+   ],
+   "estimated": true,
+   "default_visible": true,
+   "centre_base_rtp_local": [
+    8.52,
+    75.82,
+    0.16
+   ],
+   "bbox_min": [
+    1.74,
+    69.04,
+    0.16
+   ],
+   "bbox_max": [
+    15.3,
+    82.6,
+    6.35
+   ],
+   "size_m": [
+    13.56,
+    13.56,
+    6.19
+   ],
+   "triangles": 956,
+   "materials": [
+    "site_steel_white"
+   ]
+  },
+  {
+   "node": "site_court_turf_box",
+   "group": "court",
+   "what": "Paved surround (Overture playground polygon, grey pavers) and the 32 x 15 m artificial-turf box with futsal markings and kickboard",
+   "photos": [
+    "26",
+    "37",
+    "35"
+   ],
+   "estimated": true,
+   "default_visible": true,
+   "centre_base_rtp_local": [
+    -11.8,
+    60.4,
+    0.0
+   ],
+   "bbox_min": [
+    -31.2,
+    50.0,
+    0.0
+   ],
+   "bbox_max": [
+    7.6,
+    70.8,
+    0.45
+   ],
+   "size_m": [
+    38.8,
+    20.8,
+    0.45
+   ],
+   "triangles": 60,
+   "materials": [
+    "site_pavers",
+    "site_kerb_grey",
+    "site_turf",
+    "site_kickboard_green"
+   ]
+  },
+  {
+   "node": "site_court_turf_frame",
+   "group": "court",
+   "what": "Galvanised net posts (0.1 m, 6 m tall, ~4 m centres), top frame with cross and diagonal ties, two goals 3 x 2 m",
+   "photos": [
+    "37",
+    "26"
+   ],
+   "estimated": true,
+   "default_visible": true,
+   "centre_base_rtp_local": [
+    -11.6,
+    61.0,
+    0.18
+   ],
+   "bbox_min": [
+    -28.13,
+    52.38,
+    0.18
+   ],
+   "bbox_max": [
+    4.93,
+    69.62,
+    6.01
+   ],
+   "size_m": [
+    33.05,
+    17.25,
+    5.83
+   ],
+   "triangles": 540,
+   "materials": [
+    "site_steel_galvanised",
+    "site_steel_white"
+   ]
+  },
+  {
+   "node": "site_court_turf_nets",
+   "group": "court",
+   "what": "Side and roof netting, 100 mm mesh (alpha cut-out)",
+   "photos": [
+    "37"
+   ],
+   "estimated": true,
+   "default_visible": true,
+   "centre_base_rtp_local": [
+    -11.6,
+    61.0,
+    0.45
+   ],
+   "bbox_min": [
+    -28.07,
+    52.43,
+    0.45
+   ],
+   "bbox_max": [
+    4.87,
+    69.57,
+    6.0
+   ],
+   "size_m": [
+    32.95,
+    17.14,
+    5.55
+   ],
+   "triangles": 10,
+   "materials": [
+    "site_sports_net"
+   ]
+  },
+  {
+   "node": "site_court_walkways",
+   "group": "court",
+   "what": "Paved walkways (2.5 m and 1.5 m) along the podium fronts with black-yellow kerbs",
+   "photos": [
+    "03",
+    "12",
+    "35"
+   ],
+   "estimated": true,
+   "default_visible": true,
+   "centre_base_rtp_local": [
+    -21.5,
+    34.25,
+    0.0
+   ],
+   "bbox_min": [
+    -44.0,
+    -4.0,
+    0.0
+   ],
+   "bbox_max": [
+    1.0,
+    72.5,
+    0.16
+   ],
+   "size_m": [
+    45.0,
+    76.5,
+    0.16
+   ],
+   "triangles": 20,
+   "materials": [
+    "site_pavers",
+    "site_kerb_black_yellow"
+   ]
+  },
+  {
+   "node": "site_south_end_planter",
+   "group": "south_end",
+   "what": "Curved planting bed round the south end: red rendered kerbs 0.45 m, ground cover, 3 m wide over bearings 110-245 deg",
+   "photos": [
+    "11",
+    "15"
+   ],
+   "estimated": true,
+   "default_visible": true,
+   "centre_base_rtp_local": [
+    29.32,
+    -12.18,
+    0.0
+   ],
+   "bbox_min": [
+    11.78,
+    -18.99,
+    0.0
+   ],
+   "bbox_max": [
+    46.85,
+    -5.38,
+    0.45
+   ],
+   "size_m": [
+    35.07,
+    13.61,
+    0.45
+   ],
+   "triangles": 448,
+   "materials": [
+    "site_groundcover",
+    "site_render_red"
+   ]
+  }
+ ],
+ "instance_sets": [
+  {
+   "mesh": "proto_palm_royal_a",
+   "group": "vegetation",
+   "what": "Royal / foxtail-type palm, smooth grey trunk, green crownshaft, trunk 9.6 m",
+   "photos": [
+    "03",
+    "07",
+    "16",
+    "22",
+    "34"
+   ],
+   "estimated": true,
+   "count": 5,
+   "triangles_each": 542,
+   "size_m": [
+    5.74,
+    5.39,
+    12.0
+   ],
+   "instances": [
+    {
+     "node": "proto_palm_royal_a_00",
+     "where": "site_podium_east",
+     "at_rtp_local": [
+      2.3,
+      -1.0,
+      5.0
+     ],
+     "yaw_deg": 159.6,
+     "scale": 1.006
+    },
+    {
+     "node": "proto_palm_royal_a_01",
+     "where": "site_podium_east",
+     "at_rtp_local": [
+      2.3,
+      19.55,
+      5.0
+     ],
+     "yaw_deg": 76.6,
+     "scale": 0.999
+    },
+    {
+     "node": "proto_palm_royal_a_02",
+     "where": "site_podium_east",
+     "at_rtp_local": [
+      2.3,
+      40.1,
+      5.0
+     ],
+     "yaw_deg": 345.3,
+     "scale": 1.031
+    },
+    {
+     "node": "proto_palm_royal_a_03",
+     "where": "site_podium_north",
+     "at_rtp_local": [
+      -34.0,
+      73.8,
+      5.0
+     ],
+     "yaw_deg": 142.2,
+     "scale": 1.039
+    },
+    {
+     "node": "proto_palm_royal_a_04",
+     "where": "site_podium_north",
+     "at_rtp_local": [
+      -13.0,
+      73.8,
+      5.0
+     ],
+     "yaw_deg": 352.7,
+     "scale": 1.024
+    }
+   ]
+  },
+  {
+   "mesh": "proto_palm_royal_b",
+   "group": "vegetation",
+   "what": "Royal / foxtail-type palm, trunk 10.8 m",
+   "photos": [
+    "03",
+    "07",
+    "16",
+    "22",
+    "34"
+   ],
+   "estimated": true,
+   "count": 6,
+   "triangles_each": 542,
+   "size_m": [
+    5.71,
+    5.72,
+    13.12
+   ],
+   "instances": [
+    {
+     "node": "proto_palm_royal_b_00",
+     "where": "site_podium_east",
+     "at_rtp_local": [
+      2.3,
+      5.85,
+      5.0
+     ],
+     "yaw_deg": 186.8,
+     "scale": 0.946
+    },
+    {
+     "node": "proto_palm_royal_b_01",
+     "where": "site_podium_east",
+     "at_rtp_local": [
+      2.3,
+      26.4,
+      5.0
+     ],
+     "yaw_deg": 50.0,
+     "scale": 1.008
+    },
+    {
+     "node": "proto_palm_royal_b_02",
+     "where": "site_podium_east",
+     "at_rtp_local": [
+      2.3,
+      46.95,
+      5.0
+     ],
+     "yaw_deg": 48.2,
+     "scale": 0.995
+    },
+    {
+     "node": "proto_palm_royal_b_03",
+     "where": "site_podium_north",
+     "at_rtp_local": [
+      -41.0,
+      73.8,
+      5.0
+     ],
+     "yaw_deg": 71.5,
+     "scale": 1.007
+    },
+    {
+     "node": "proto_palm_royal_b_04",
+     "where": "site_podium_north",
+     "at_rtp_local": [
+      -20.0,
+      73.8,
+      5.0
+     ],
+     "yaw_deg": 252.0,
+     "scale": 1.03
+    },
+    {
+     "node": "proto_palm_royal_b_05",
+     "where": "forecourt",
+     "at_rtp_local": [
+      12.2,
+      60.5,
+      0.6
+     ],
+     "yaw_deg": 63.0,
+     "scale": 0.95
+    }
+   ]
+  },
+  {
+   "mesh": "proto_palm_royal_c",
+   "group": "vegetation",
+   "what": "Royal / foxtail-type palm, trunk 8.6 m",
+   "photos": [
+    "03",
+    "07",
+    "16",
+    "22",
+    "34"
+   ],
+   "estimated": true,
+   "count": 5,
+   "triangles_each": 542,
+   "size_m": [
+    6.26,
+    5.88,
+    10.92
+   ],
+   "instances": [
+    {
+     "node": "proto_palm_royal_c_00",
+     "where": "site_podium_east",
+     "at_rtp_local": [
+      2.3,
+      12.7,
+      5.0
+     ],
+     "yaw_deg": 105.7,
+     "scale": 0.958
+    },
+    {
+     "node": "proto_palm_royal_c_01",
+     "where": "site_podium_east",
+     "at_rtp_local": [
+      2.3,
+      33.25,
+      5.0
+     ],
+     "yaw_deg": 38.2,
+     "scale": 0.976
+    },
+    {
+     "node": "proto_palm_royal_c_02",
+     "where": "site_podium_north",
+     "at_rtp_local": [
+      -27.0,
+      73.8,
+      5.0
+     ],
+     "yaw_deg": 220.0,
+     "scale": 0.986
+    },
+    {
+     "node": "proto_palm_royal_c_03",
+     "where": "site_podium_north",
+     "at_rtp_local": [
+      -6.0,
+      73.8,
+      5.0
+     ],
+     "yaw_deg": 113.3,
+     "scale": 1.013
+    },
+    {
+     "node": "proto_palm_royal_c_04",
+     "where": "forecourt",
+     "at_rtp_local": [
+      12.2,
+      67.0,
+      0.6
+     ],
+     "yaw_deg": 166.2,
+     "scale": 1.0
+    }
+   ]
+  },
+  {
+   "mesh": "proto_palm_coconut",
+   "group": "vegetation",
+   "what": "Coconut palm, leaning trunk 8.2 m",
+   "photos": [
+    "02",
+    "22"
+   ],
+   "estimated": true,
+   "count": 2,
+   "triangles_each": 736,
+   "size_m": [
+    6.79,
+    7.11,
+    8.73
+   ],
+   "instances": [
+    {
+     "node": "proto_palm_coconut_00",
+     "where": "behind the OUT cabin",
+     "at_rtp_local": [
+      3.26,
+      -25.47,
+      0.0
+     ],
+     "yaw_deg": 345.0,
+     "scale": 1.0
+    },
+    {
+     "node": "proto_palm_coconut_01",
+     "where": "behind the OUT cabin",
+     "at_rtp_local": [
+      7.04,
+      -21.16,
+      0.0
+     ],
+     "yaw_deg": 300.0,
+     "scale": 0.92
+    }
+   ]
+  },
+  {
+   "mesh": "proto_palm_date",
+   "group": "vegetation",
+   "what": "Date palm (Phoenix), diamond-pattern trunk 4.4 m",
+   "photos": [
+    "16",
+    "19",
+    "22"
+   ],
+   "estimated": true,
+   "count": 1,
+   "triangles_each": 800,
+   "size_m": [
+    4.95,
+    4.67,
+    5.79
+   ],
+   "instances": [
+    {
+     "node": "proto_palm_date_00",
+     "where": "gate planter",
+     "at_rtp_local": [
+      -14.69,
+      -23.27,
+      1.08
+     ],
+     "yaw_deg": 245.0,
+     "scale": 1.0
+    }
+   ]
+  },
+  {
+   "mesh": "proto_palm_fan",
+   "group": "vegetation",
+   "what": "Fan palm, trunk 3.4 m",
+   "photos": [
+    "11",
+    "15"
+   ],
+   "estimated": true,
+   "count": 3,
+   "triangles_each": 218,
+   "size_m": [
+    4.83,
+    5.08,
+    5.68
+   ],
+   "instances": [
+    {
+     "node": "proto_palm_fan_00",
+     "where": "south-end bed",
+     "at_rtp_local": [
+      37.75,
+      -15.16,
+      0.4
+     ],
+     "yaw_deg": 214.9,
+     "scale": 0.976
+    },
+    {
+     "node": "proto_palm_fan_01",
+     "where": "south-end bed",
+     "at_rtp_local": [
+      25.36,
+      -17.12,
+      0.4
+     ],
+     "yaw_deg": 11.5,
+     "scale": 0.939
+    },
+    {
+     "node": "proto_palm_fan_02",
+     "where": "south-end bed",
+     "at_rtp_local": [
+      15.21,
+      -10.77,
+      0.4
+     ],
+     "yaw_deg": 83.7,
+     "scale": 0.949
+    }
+   ]
+  },
+  {
+   "mesh": "proto_araucaria",
+   "group": "vegetation",
+   "what": "Araucaria (tiered conifer), 8 m",
+   "photos": [
+    "11",
+    "15"
+   ],
+   "estimated": true,
+   "count": 1,
+   "triangles_each": 1208,
+   "size_m": [
+    5.37,
+    5.41,
+    8.2
+   ],
+   "instances": [
+    {
+     "node": "proto_araucaria_00",
+     "where": "south-end bed",
+     "at_rtp_local": [
+      19.73,
+      -14.84,
+      0.4
+     ],
+     "yaw_deg": 22.9,
+     "scale": 1.0
+    }
+   ]
+  },
+  {
+   "mesh": "proto_lamp_campus",
+   "group": "furniture",
+   "what": "Campus pole lamp, single arm, 7 m, LED head",
+   "photos": [
+    "14",
+    "18"
+   ],
+   "estimated": true,
+   "count": 7,
+   "triangles_each": 58,
+   "size_m": [
+    1.68,
+    0.36,
+    7.1
+   ],
+   "instances": [
+    {
+     "node": "proto_lamp_campus_00",
+     "where": "east walkway",
+     "at_rtp_local": [
+      -1.0,
+      3.0,
+      0.16
+     ],
+     "yaw_deg": 180.0,
+     "scale": 1.0
+    },
+    {
+     "node": "proto_lamp_campus_01",
+     "where": "east walkway",
+     "at_rtp_local": [
+      -1.0,
+      17.0,
+      0.16
+     ],
+     "yaw_deg": 180.0,
+     "scale": 1.0
+    },
+    {
+     "node": "proto_lamp_campus_02",
+     "where": "east walkway",
+     "at_rtp_local": [
+      -1.0,
+      31.0,
+      0.16
+     ],
+     "yaw_deg": 180.0,
+     "scale": 1.0
+    },
+    {
+     "node": "proto_lamp_campus_03",
+     "where": "east walkway",
+     "at_rtp_local": [
+      -1.0,
+      45.0,
+      0.16
+     ],
+     "yaw_deg": 180.0,
+     "scale": 1.0
+    },
+    {
+     "node": "proto_lamp_campus_04",
+     "where": "north walkway",
+     "at_rtp_local": [
+      -40.0,
+      71.4,
+      0.16
+     ],
+     "yaw_deg": 270.0,
+     "scale": 1.0
+    },
+    {
+     "node": "proto_lamp_campus_05",
+     "where": "north walkway",
+     "at_rtp_local": [
+      -26.0,
+      71.4,
+      0.16
+     ],
+     "yaw_deg": 270.0,
+     "scale": 1.0
+    },
+    {
+     "node": "proto_lamp_campus_06",
+     "where": "north walkway",
+     "at_rtp_local": [
+      -12.0,
+      71.4,
+      0.16
+     ],
+     "yaw_deg": 270.0,
+     "scale": 1.0
+    }
+   ]
+  },
+  {
+   "mesh": "proto_lamp_flood",
+   "group": "furniture",
+   "what": "Flood-light pole, 10 m, three heads",
+   "photos": [
+    "14"
+   ],
+   "estimated": true,
+   "count": 2,
+   "triangles_each": 82,
+   "size_m": [
+    0.5,
+    1.6,
+    10.1
+   ],
+   "instances": [
+    {
+     "node": "proto_lamp_flood_00",
+     "where": "turf box west end",
+     "at_rtp_local": [
+      -29.13,
+      53.88,
+      0.16
+     ],
+     "yaw_deg": 10.4,
+     "scale": 1.0
+    },
+    {
+     "node": "proto_lamp_flood_01",
+     "where": "turf box west end",
+     "at_rtp_local": [
+      -28.0,
+      70.44,
+      0.16
+     ],
+     "yaw_deg": 341.8,
+     "scale": 1.0
+    }
+   ]
+  },
+  {
+   "mesh": "proto_lamp_globe",
+   "group": "furniture",
+   "what": "Garden globe lamp, 1.2 m",
+   "photos": [
+    "11",
+    "09"
+   ],
+   "estimated": true,
+   "count": 7,
+   "triangles_each": 122,
+   "size_m": [
+    0.32,
+    0.3,
+    1.22
+   ],
+   "instances": [
+    {
+     "node": "proto_lamp_globe_00",
+     "where": "south-end bed",
+     "at_rtp_local": [
+      44.65,
+      -9.78,
+      0.4
+     ],
+     "yaw_deg": 0.0,
+     "scale": 1.0
+    },
+    {
+     "node": "proto_lamp_globe_01",
+     "where": "south-end bed",
+     "at_rtp_local": [
+      40.86,
+      -14.13,
+      0.4
+     ],
+     "yaw_deg": 0.0,
+     "scale": 1.0
+    },
+    {
+     "node": "proto_lamp_globe_02",
+     "where": "south-end bed",
+     "at_rtp_local": [
+      33.78,
+      -17.82,
+      0.4
+     ],
+     "yaw_deg": 0.0,
+     "scale": 1.0
+    },
+    {
+     "node": "proto_lamp_globe_03",
+     "where": "south-end bed",
+     "at_rtp_local": [
+      28.36,
+      -18.44,
+      0.4
+     ],
+     "yaw_deg": 0.0,
+     "scale": 1.0
+    },
+    {
+     "node": "proto_lamp_globe_04",
+     "where": "south-end bed",
+     "at_rtp_local": [
+      22.09,
+      -17.11,
+      0.4
+     ],
+     "yaw_deg": 0.0,
+     "scale": 1.0
+    },
+    {
+     "node": "proto_lamp_globe_05",
+     "where": "south-end bed",
+     "at_rtp_local": [
+      16.65,
+      -13.71,
+      0.4
+     ],
+     "yaw_deg": 0.0,
+     "scale": 1.0
+    },
+    {
+     "node": "proto_lamp_globe_06",
+     "where": "south-end bed",
+     "at_rtp_local": [
+      13.02,
+      -9.23,
+      0.4
+     ],
+     "yaw_deg": 0.0,
+     "scale": 1.0
+    }
+   ]
+  },
+  {
+   "mesh": "proto_bollard_steel",
+   "group": "furniture",
+   "what": "Steel bollard, 0.9 m",
+   "photos": [
+    "12"
+   ],
+   "estimated": true,
+   "count": 9,
+   "triangles_each": 58,
+   "size_m": [
+    0.16,
+    0.16,
+    0.9
+   ],
+   "instances": [
+    {
+     "node": "proto_bollard_steel_00",
+     "where": "forecourt edge",
+     "at_rtp_local": [
+      8.85,
+      59.0,
+      0.16
+     ],
+     "yaw_deg": 0.0,
+     "scale": 1.0
+    },
+    {
+     "node": "proto_bollard_steel_01",
+     "where": "forecourt edge",
+     "at_rtp_local": [
+      8.85,
+      61.4,
+      0.16
+     ],
+     "yaw_deg": 0.0,
+     "scale": 1.0
+    },
+    {
+     "node": "proto_bollard_steel_02",
+     "where": "forecourt edge",
+     "at_rtp_local": [
+      8.85,
+      63.8,
+      0.16
+     ],
+     "yaw_deg": 0.0,
+     "scale": 1.0
+    },
+    {
+     "node": "proto_bollard_steel_03",
+     "where": "forecourt edge",
+     "at_rtp_local": [
+      8.85,
+      66.2,
+      0.16
+     ],
+     "yaw_deg": 0.0,
+     "scale": 1.0
+    },
+    {
+     "node": "proto_bollard_steel_04",
+     "where": "forecourt edge",
+     "at_rtp_local": [
+      8.85,
+      68.6,
+      0.16
+     ],
+     "yaw_deg": 0.0,
+     "scale": 1.0
+    },
+    {
+     "node": "proto_bollard_steel_05",
+     "where": "forecourt edge",
+     "at_rtp_local": [
+      0.2,
+      71.25,
+      0.16
+     ],
+     "yaw_deg": 0.0,
+     "scale": 1.0
+    },
+    {
+     "node": "proto_bollard_steel_06",
+     "where": "forecourt edge",
+     "at_rtp_local": [
+      2.6,
+      71.25,
+      0.16
+     ],
+     "yaw_deg": 0.0,
+     "scale": 1.0
+    },
+    {
+     "node": "proto_bollard_steel_07",
+     "where": "forecourt edge",
+     "at_rtp_local": [
+      5.0,
+      71.25,
+      0.16
+     ],
+     "yaw_deg": 0.0,
+     "scale": 1.0
+    },
+    {
+     "node": "proto_bollard_steel_08",
+     "where": "forecourt edge",
+     "at_rtp_local": [
+      7.4,
+      71.25,
+      0.16
+     ],
+     "yaw_deg": 0.0,
+     "scale": 1.0
+    }
+   ]
+  }
+ ],
+ "twin_overrides": {
+  "why": "The site details replace or collide with some objects in the twin's exterior GLBs. Hide these in the viewer when rtp_site_details.glb is shown. Names are node names in twin/web/models/exterior/rtp_building.glb (signs) and instance names in rtp_context.glb (props: look them up in each instanced node's extras.instance_names and set that instance's scale to 0).",
+  "hide_in_rtp_building_glb": [
+   "rtp_ROOF_sign_RELIABLE",
+   "rtp_ROOF_sign_logo",
+   "rtp_ROOF_sign_back"
+  ],
+  "hide_props_in_rtp_context_glb": [
+   {
+    "object": "shrub_0",
+    "kind": "shrub",
+    "why": "shrub_inside_turf_box_and_surround",
+    "at": [
+     -5.87,
+     54.79
+    ]
+   },
+   {
+    "object": "palm_2",
+    "kind": "palm",
+    "why": "palm_inside_turf_box_and_surround",
+    "at": [
+     -15.26,
+     70.25
+    ]
+   },
+   {
+    "object": "palm_3",
+    "kind": "palm",
+    "why": "palm_inside_turf_box_and_surround",
+    "at": [
+     -7.63,
+     69.96
+    ]
+   },
+   {
+    "object": "palm_4",
+    "kind": "palm",
+    "why": "palm_inside_turf_box_and_surround",
+    "at": [
+     0.0,
+     69.66
+    ]
+   },
+   {
+    "object": "palm_5",
+    "kind": "palm",
+    "why": "palm_inside_turf_box_and_surround",
+    "at": [
+     7.57,
+     69.31
+    ]
+   },
+   {
+    "object": "palm_6",
+    "kind": "palm",
+    "why": "palm_inside_turf_box_and_surround",
+    "at": [
+     7.22,
+     61.69
+    ]
+   },
+   {
+    "object": "palm_7",
+    "kind": "palm",
+    "why": "palm_inside_turf_box_and_surround",
+    "at": [
+     6.87,
+     54.06
+    ]
+   },
+   {
+    "object": "palm_9",
+    "kind": "palm",
+    "why": "palm_inside_walkway_east",
+    "at": [
+     0.51,
+     44.98
+    ]
+   },
+   {
+    "object": "palm_10",
+    "kind": "palm",
+    "why": "palm_inside_walkway_east",
+    "at": [
+     0.32,
+     37.35
+    ]
+   },
+   {
+    "object": "palm_11",
+    "kind": "palm",
+    "why": "palm_inside_walkway_east",
+    "at": [
+     0.84,
+     29.74
+    ]
+   },
+   {
+    "object": "palm_12",
+    "kind": "palm",
+    "why": "palm_inside_podium_east_deck",
+    "at": [
+     1.05,
+     22.12
+    ]
+   },
+   {
+    "object": "palm_18",
+    "kind": "palm",
+    "why": "palm_inside_turf_box_and_surround",
+    "at": [
+     -24.62,
+     53.06
+    ]
+   },
+   {
+    "object": "palm_19",
+    "kind": "palm",
+    "why": "palm_inside_turf_box_and_surround",
+    "at": [
+     -30.75,
+     56.22
+    ]
+   },
+   {
+    "object": "palm_25",
+    "kind": "palm",
+    "why": "palm_inside_gate_canopy_and_apron",
+    "at": [
+     -20.0,
+     -6.0
+    ]
+   },
+   {
+    "object": "lamp_278",
+    "kind": "lamp",
+    "why": "lamp_inside_podium_north_deck",
+    "at": [
+     -38.87,
+     82.68
+    ]
+   },
+   {
+    "object": "lamp_279",
+    "kind": "lamp",
+    "why": "lamp_inside_podium_north_deck",
+    "at": [
+     -21.1,
+     81.12
+    ]
+   },
+   {
+    "object": "lamp_280",
+    "kind": "lamp",
+    "why": "lamp_inside_podium_north_deck",
+    "at": [
+     -3.33,
+     81.19
+    ]
+   },
+   {
+    "object": "lamp_282",
+    "kind": "lamp",
+    "why": "lamp_inside_lobby_forecourt",
+    "at": [
+     13.42,
+     63.21
+    ]
+   },
+   {
+    "object": "lamp_283",
+    "kind": "lamp",
+    "why": "lamp_inside_podium_east_deck",
+    "at": [
+     12.58,
+     45.4
+    ]
+   },
+   {
+    "object": "lamp_284",
+    "kind": "lamp",
+    "why": "lamp_inside_podium_east_deck",
+    "at": [
+     13.06,
+     27.58
+    ]
+   },
+   {
+    "object": "lamp_285",
+    "kind": "lamp",
+    "why": "lamp_inside_podium_east_deck",
+    "at": [
+     13.26,
+     9.72
+    ]
+   },
+   {
+    "object": "lamp_287",
+    "kind": "lamp",
+    "why": "lamp_inside_walkway_east",
+    "at": [
+     -0.91,
+     0.76
+    ]
+   },
+   {
+    "object": "car_1",
+    "kind": "car",
+    "why": "car_hits_podium_column",
+    "at": [
+     9.05,
+     -0.5
+    ]
+   },
+   {
+    "object": "car_3",
+    "kind": "car",
+    "why": "car_hits_podium_column",
+    "at": [
+     1.25,
+     5.5
+    ]
+   },
+   {
+    "object": "car_6",
+    "kind": "car",
+    "why": "car_hits_podium_column",
+    "at": [
+     9.05,
+     5.5
+    ]
+   },
+   {
+    "object": "car_9",
+    "kind": "car",
+    "why": "car_on_walkway_east",
+    "at": [
+     -1.35,
+     11.5
+    ]
+   },
+   {
+    "object": "car_11",
+    "kind": "car",
+    "why": "car_hits_podium_column",
+    "at": [
+     9.05,
+     11.5
+    ]
+   },
+   {
+    "object": "car_22",
+    "kind": "car",
+    "why": "car_hits_podium_column",
+    "at": [
+     9.05,
+     29.5
+    ]
+   },
+   {
+    "object": "car_25",
+    "kind": "car",
+    "why": "car_hits_podium_column",
+    "at": [
+     9.05,
+     35.5
+    ]
+   },
+   {
+    "object": "car_30",
+    "kind": "car",
+    "why": "car_on_walkway_north",
+    "at": [
+     -40.35,
+     71.5
+    ]
+   },
+   {
+    "object": "car_31",
+    "kind": "car",
+    "why": "car_on_walkway_north",
+    "at": [
+     -37.75,
+     71.5
+    ]
+   },
+   {
+    "object": "car_32",
+    "kind": "car",
+    "why": "car_hits_podium_column",
+    "at": [
+     -35.15,
+     71.5
+    ]
+   },
+   {
+    "object": "car_33",
+    "kind": "car",
+    "why": "car_hits_podium_column",
+    "at": [
+     -42.95,
+     77.5
+    ]
+   },
+   {
+    "object": "car_36",
+    "kind": "car",
+    "why": "car_hits_podium_column",
+    "at": [
+     -35.15,
+     77.5
+    ]
+   },
+   {
+    "object": "car_39",
+    "kind": "car",
+    "why": "car_hits_podium_column",
+    "at": [
+     -27.35,
+     77.5
+    ]
+   },
+   {
+    "object": "car_40",
+    "kind": "car",
+    "why": "car_hits_podium_column",
+    "at": [
+     -22.15,
+     77.5
+    ]
+   },
+   {
+    "object": "car_41",
+    "kind": "car",
+    "why": "car_hits_podium_column",
+    "at": [
+     -14.35,
+     77.5
+    ]
+   },
+   {
+    "object": "car_44",
+    "kind": "car",
+    "why": "car_hits_podium_column",
+    "at": [
+     -6.55,
+     77.5
+    ]
+   },
+   {
+    "object": "car_47",
+    "kind": "car",
+    "why": "car_on_lobby_forecourt",
+    "at": [
+     3.85,
+     77.5
+    ]
+   },
+   {
+    "object": "car_48",
+    "kind": "car",
+    "why": "car_on_lobby_forecourt",
+    "at": [
+     6.45,
+     77.5
+    ]
+   },
+   {
+    "object": "car_49",
+    "kind": "car",
+    "why": "car_on_lobby_forecourt",
+    "at": [
+     9.05,
+     77.5
+    ]
+   },
+   {
+    "object": "car_50",
+    "kind": "car",
+    "why": "car_on_lobby_forecourt",
+    "at": [
+     11.65,
+     77.5
+    ]
+   }
+  ],
+  "footprints_checked": {
+   "gate_canopy_and_apron": [
+    [
+     -31.17,
+     -19.56
+    ],
+    [
+     -1.26,
+     -33.51
+    ],
+    [
+     7.28,
+     -15.2
+    ],
+    [
+     -22.63,
+     -1.26
+    ]
+   ],
+   "podium_east_deck": [
+    [
+     1.0,
+     -4.0
+    ],
+    [
+     15.13,
+     -4.0
+    ],
+    [
+     14.91,
+     0.0
+    ],
+    [
+     14.54,
+     6.7
+    ],
+    [
+     14.4,
+     12.0
+    ],
+    [
+     14.25,
+     17.9
+    ],
+    [
+     14.25,
+     23.0
+    ],
+    [
+     14.26,
+     29.1
+    ],
+    [
+     13.68,
+     34.0
+    ],
+    [
+     13.49,
+     39.6
+    ],
+    [
+     13.76,
+     45.2
+    ],
+    [
+     14.14,
+     48.0
+    ],
+    [
+     1.0,
+     48.0
+    ]
+   ],
+   "podium_north_deck": [
+    [
+     -44.0,
+     72.5
+    ],
+    [
+     -1.0,
+     72.5
+    ],
+    [
+     -1.0,
+     82.31
+    ],
+    [
+     -5.1,
+     82.45
+    ],
+    [
+     -10.1,
+     81.75
+    ],
+    [
+     -15.4,
+     81.67
+    ],
+    [
+     -19.9,
+     82.12
+    ],
+    [
+     -23.6,
+     82.88
+    ],
+    [
+     -31.2,
+     83.22
+    ],
+    [
+     -38.8,
+     83.88
+    ],
+    [
+     -44.0,
+     84.55
+    ]
+   ],
+   "turf_box_and_surround": [
+    [
+     -29.6,
+     70.8
+    ],
+    [
+     -31.2,
+     53.7
+    ],
+    [
+     6.7,
+     50.0
+    ],
+    [
+     7.6,
+     69.4
+    ]
+   ],
+   "lobby_forecourt": [
+    [
+     -0.95,
+     71.0
+    ],
+    [
+     8.6,
+     71.0
+    ],
+    [
+     8.6,
+     58.0
+    ],
+    [
+     14.44,
+     58.0
+    ],
+    [
+     14.61,
+     66.0
+    ],
+    [
+     14.81,
+     72.2
+    ],
+    [
+     15.53,
+     73.79
+    ],
+    [
+     6.48,
+     82.84
+    ],
+    [
+     -0.95,
+     82.21
+    ]
+   ],
+   "walkway_east": [
+    [
+     -1.5,
+     -4.0
+    ],
+    [
+     1.0,
+     -4.0
+    ],
+    [
+     1.0,
+     48.0
+    ],
+    [
+     -1.5,
+     48.0
+    ]
+   ],
+   "walkway_north": [
+    [
+     -44.0,
+     71.0
+    ],
+    [
+     -1.1,
+     71.0
+    ],
+    [
+     -1.1,
+     72.5
+    ],
+    [
+     -44.0,
+     72.5
+    ]
+   ],
+   "south_end_bed": [
+    [
+     46.85,
+     -6.5
+    ],
+    [
+     46.29,
+     -7.88
+    ],
+    [
+     45.62,
+     -9.21
+    ],
+    [
+     44.84,
+     -10.49
+    ],
+    [
+     43.97,
+     -11.7
+    ],
+    [
+     43.01,
+     -12.84
+    ],
+    [
+     41.96,
+     -13.9
+    ],
+    [
+     40.83,
+     -14.87
+    ],
+    [
+     39.62,
+     -15.75
+    ],
+    [
+     38.36,
+     -16.54
+    ],
+    [
+     37.03,
+     -17.22
+    ],
+    [
+     35.65,
+     -17.8
+    ],
+    [
+     34.24,
+     -18.26
+    ],
+    [
+     32.79,
+     -18.62
+    ],
+    [
+     31.32,
+     -18.86
+    ],
+    [
+     29.83,
+     -18.98
+    ],
+    [
+     28.34,
+     -18.99
+    ],
+    [
+     26.85,
+     -18.88
+    ],
+    [
+     25.37,
+     -18.65
+    ],
+    [
+     23.92,
+     -18.31
+    ],
+    [
+     22.5,
+     -17.85
+    ],
+    [
+     21.12,
+     -17.29
+    ],
+    [
+     19.79,
+     -16.62
+    ],
+    [
+     18.51,
+     -15.84
+    ],
+    [
+     17.3,
+     -14.97
+    ],
+    [
+     16.16,
+     -14.01
+    ],
+    [
+     15.1,
+     -12.96
+    ],
+    [
+     14.13,
+     -11.83
+    ],
+    [
+     13.25,
+     -10.62
+    ],
+    [
+     12.46,
+     -9.36
+    ],
+    [
+     11.78,
+     -8.03
+    ],
+    [
+     14.5,
+     -6.76
+    ],
+    [
+     15.07,
+     -7.88
+    ],
+    [
+     15.74,
+     -8.95
+    ],
+    [
+     16.48,
+     -9.96
+    ],
+    [
+     17.3,
+     -10.91
+    ],
+    [
+     18.19,
+     -11.8
+    ],
+    [
+     19.15,
+     -12.61
+    ],
+    [
+     20.17,
+     -13.34
+    ],
+    [
+     21.24,
+     -13.99
+    ],
+    [
+     22.36,
+     -14.56
+    ],
+    [
+     23.53,
+     -15.04
+    ],
+    [
+     24.72,
+     -15.42
+    ],
+    [
+     25.95,
+     -15.71
+    ],
+    [
+     27.19,
+     -15.9
+    ],
+    [
+     28.44,
+     -15.99
+    ],
+    [
+     29.7,
+     -15.98
+    ],
+    [
+     30.95,
+     -15.88
+    ],
+    [
+     32.19,
+     -15.68
+    ],
+    [
+     33.41,
+     -15.38
+    ],
+    [
+     34.6,
+     -14.99
+    ],
+    [
+     35.76,
+     -14.5
+    ],
+    [
+     36.88,
+     -13.93
+    ],
+    [
+     37.95,
+     -13.26
+    ],
+    [
+     38.96,
+     -12.52
+    ],
+    [
+     39.91,
+     -11.7
+    ],
+    [
+     40.8,
+     -10.81
+    ],
+    [
+     41.61,
+     -9.85
+    ],
+    [
+     42.34,
+     -8.83
+    ],
+    [
+     42.99,
+     -7.76
+    ],
+    [
+     43.56,
+     -6.64
+    ],
+    [
+     44.04,
+     -5.47
+    ]
+   ]
+  },
+  "cannot_be_separated": [
+   "rtp_L00_lobby in rtp_building.glb includes the twin's flat ACP lobby canopy (+4.8 to 5.1 m). The curved glass canopy here sits above it (+5.5 to 6.4 m); both show until the twin's canopy is split out by the twin's owner.",
+   "rtp_ROOF_dome sits on the south drum in the twin. The photos put the dome over the court-side bulge of the east arm (MODEL_NOTES item 6). Not changed here: it belongs to the twin's build.",
+   "The twin's lawn, parking bays and court cars stay; the turf box and the podium sit on top of them. Cars under the podium decks are kept because the photos show parking there."
+  ]
+ },
+ "not_modelled": {
+  "B Wing signage": "No B Wing sign was found in any photo or Street View (reference/site/INDEX.md). Nothing invented.",
+  "Neighbour car-park tower (MODEL_NOTES item 15)": "Its position is inferred from photos only (north / north-west) and its estimated 65-70 m height disagrees with the open-data heights of the candidate footprints (Empire Tower: Overture DSM excess 37 m). Placing it would invent a building, so it is left to the twin until a site visit or the satellite check settles which footprint it is.",
+  "Pylons, switchyard, transformer yard": "Positions need OSM power data or the satellite view (MODEL_NOTES item 16).",
+  "Water features and sculptures": "Pool, dandelion fountain and the three-figure sculpture: positions unknown, and the fountain may be gone (photo from 2018).",
+  "Roof drum crenellations, stepped Clariant rotunda, facade rhythm": "Those are changes to the twin's building mesh, owned by the twin build (MODEL_NOTES items 5, 7, 8)."
+ },
+ "wall_runs_rtp_local": {
+  "east": [
+   [
+    -0.96,
+    -28.13
+   ],
+   [
+    0.0,
+    -32.24
+   ],
+   [
+    15.88,
+    -36.38
+   ],
+   [
+    40.38,
+    -35.74
+   ],
+   [
+    50.0,
+    -29.06
+   ]
+  ],
+  "west": [
+   [
+    -38.0,
+    -22.45
+   ],
+   [
+    -34.07,
+    -22.71
+   ],
+   [
+    -27.24,
+    -15.88
+   ]
+  ]
+ },
+ "gate_frame": {
+  "origin_rtp_local": [
+   -14.44,
+   -22.73
+  ],
+  "front_bearing_deg": 115.0,
+  "lane_bearing_deg": 25.0
+ },
+ "materials_emit_night": {
+  "site_board_blue": 8.0,
+  "site_downlight": 8.0,
+  "site_globe_light": 24.0,
+  "site_sign_red": 6.0,
+  "site_sign_white": 9.0,
+  "site_tube_light": 8.0,
+  "site_lamp_led": 20.0
+ },
+ "checks": {
+  "size_mb": 1.41,
+  "size_limit_mb": 6.0,
+  "size_ok": true,
+  "triangles": 36441,
+  "triangle_limit": 150000,
+  "triangles_ok": true,
+  "meshopt": {
+   "instanced_nodes_from": 46,
+   "instanced_into": 9,
+   "draw_calls": 103,
+   "triangles": 36441,
+   "in_mb": 2.22,
+   "out_mb": 1.41,
+   "compressed_views": 397,
+   "saved_mb": 0.88
+  },
+  "textures_max_px": 1024,
+  "images": [
+   {
+    "name": "trunk_grey",
+    "mime": "image/jpeg",
+    "bytes": 17400
+   },
+   {
+    "name": "araucaria",
+    "mime": "image/png",
+    "bytes": 9373
+   },
+   {
+    "name": "noise_light",
+    "mime": "image/jpeg",
+    "bytes": 30232
+   },
+   {
+    "name": "frond",
+    "mime": "image/png",
+    "bytes": 26501
+   },
+   {
+    "name": "trunk_date",
+    "mime": "image/jpeg",
+    "bytes": 9680
+   },
+   {
+    "name": "fan_leaf",
+    "mime": "image/png",
+    "bytes": 7599
+   },
+   {
+    "name": "pavers",
+    "mime": "image/jpeg",
+    "bytes": 192982
+   },
+   {
+    "name": "turf",
+    "mime": "image/jpeg",
+    "bytes": 65509
+   },
+   {
+    "name": "net",
+    "mime": "image/png",
+    "bytes": 775
+   },
+   {
+    "name": "kerb_by",
+    "mime": "image/jpeg",
+    "bytes": 603
+   },
+   {
+    "name": "grid_panels",
+    "mime": "image/jpeg",
+    "bytes": 15868
+   },
+   {
+    "name": "wood",
+    "mime": "image/jpeg",
+    "bytes": 7239
+   },
+   {
+    "name": "groundcover",
+    "mime": "image/jpeg",
+    "bytes": 101489
+   },
+   {
+    "name": "stamped_red",
+    "mime": "image/jpeg",
+    "bytes": 36567
+   },
+   {
+    "name": "concrete_stain",
+    "mime": "image/jpeg",
+    "bytes": 125679
+   },
+   {
+    "name": "hazard",
+    "mime": "image/jpeg",
+    "bytes": 6240
+   },
+   {
+    "name": "creeper",
+    "mime": "image/png",
+    "bytes": 59598
+   }
+  ],
+  "images_mb": 0.71
+ },
+ "check_images": [
+  "review/site_details/01_gate_from_access_road.png",
+  "review/site_details/02_gate_in_lane_pano.png",
+  "review/site_details/03_wall_and_south_end.png",
+  "review/site_details/04_signage_from_south_west.png",
+  "review/site_details/05_podium_from_court.png",
+  "review/site_details/06_court_turf_box_elevated.png",
+  "review/site_details/07_lobby_canopy_forecourt.png",
+  "review/site_details/08_south_end_planting.png",
+  "review/site_details/09_overview_from_south_west.png",
+  "review/site_details/10_clariant_drum.png",
+  "review/site_details/11_signage_night.png",
+  "review/site_details/12_gate_night.png",
+  "review/site_details/13_plan_top_down.png"
+ ],
+ "rebuild": [
+  "python3 -I tools/site_textures.py models/_build/tex",
+  "/Applications/Blender.app/Contents/MacOS/Blender -b --factory-startup --python tools/build_site_details.py",
+  "python3 -I tools/finalize_site_details.py"
+ ]
+}

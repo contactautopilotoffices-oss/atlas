@@ -1,0 +1,1429 @@
+{
+ "name": "RTP descent geo pack: satellite plates, terrain and labels",
+ "generated": "2026-11-20",
+ "build_script": "airoli-rtp/experience/tools/build_geo_pack.py",
+ "frame": {
+  "name": "rtp_local",
+  "origin": {
+   "lat": 19.1692159,
+   "lng": 73.0017703
+  },
+  "to_local": "x = (lng - 73.0017703) * 111320 * cos(19.1692159 deg) = (lng - 73.0017703) * 105147.632;  y = (lat - 19.1692159) * 110574",
+  "klat_m_per_deg": 110574.0,
+  "klng_m_per_deg": 105147.632,
+  "three": "three (x, y, z) = rtp_local (x, height, -y); north is -z. Same frame as twin/web/models/exterior (not recentred).",
+  "note": "Every plate is resampled so this linear conversion is exact for it (rows evenly spaced in latitude, columns in longitude). The flat frame's east-west scale is exact at the pin's latitude and off by 0.14% at the 50 km plate's north and south edges, 0.6% at the 200 km plate's and up to 2.4% at the 800 km backdrop's (the same frame the twin uses, so nothing drifts against it)."
+ },
+ "site_ground_m_above_sea": 11.557,
+ "attribution": {
+  "imagery": "Sentinel-2 cloudless - https://s2maps.eu by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016)",
+  "imagery_current_wording": "EOxCloudless https://cloudless.eox.at by EOX IT Services GmbH (Contains modified Copernicus Sentinel data 2016)",
+  "terrain": "Copernicus DEM GLO-30: produced using Copernicus WorldDEM-30 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved",
+  "labels": "© OpenStreetMap contributors (ODbL)",
+  "on_screen": "Imagery: Sentinel-2 cloudless 2016 by EOX (s2maps.eu), contains modified Copernicus Sentinel data 2016 · Terrain: Copernicus DEM GLO-30 · Labels: © OpenStreetMap contributors",
+  "imagery_2026_plates": "Contains modified Copernicus Sentinel data 2026",
+  "on_screen_with_2026_plates": "Imagery: Sentinel-2 cloudless 2016 by EOX (s2maps.eu) and Copernicus Sentinel-2 (12 Nov 2026); contains modified Copernicus Sentinel data 2016 and 2026 · Terrain: Copernicus DEM GLO-30 · Labels: © OpenStreetMap contributors"
+ },
+ "licence": [
+  "Imagery: EOX Sentinel-2 cloudless 2016 (layer s2cloudless_3857), Creative Commons Attribution 4.0. EOX's FAQ (cloudless.eox.at/documentation/faq, read 19 Nov 2026) confirms the 2016 vintage may be used commercially, provided the attribution is shown; the 2018 and later layers are non-commercial and are not used here.",
+  "EOX asks that the attribution be visible on the map interface, and be embedded in any screenshot or video made from it.",
+  "Do not hand the raw/ copies to anyone as a dataset: EOX does not allow redistributing the source imagery on its own. They are kept only to re-grade.",
+  "Terrain: Copernicus DEM GLO-30 Public, free licence with the attribution above.",
+  "Labels: OpenStreetMap, ODbL; show the credit.",
+  "The *_2026 plates: Copernicus Sentinel-2 data, free and open for any use including commercial (Sentinel Data Legal Notice, linked in each plate's source.licence); the notice 'Contains modified Copernicus Sentinel data 2026' must be shown."
+ ],
+ "imagery_dates": [
+  "The EOX plates are a 2016 mosaic: they show the ground as it was in 2016. Anything built since (for example the Mumbai Trans Harbour Link across the harbour south of Vashi, opened in 2024) is not in them, while the 3D context buildings come from Overture 2026. Do not label anything that only exists after 2016 on those plates.",
+  "SCRIPT.md (B01-B04 notes) quotes 'Contains modified Copernicus Sentinel data 2026'. That is only true where the *_2026 plates are on screen; on the EOX plates it must read 2016.",
+  "The *_2026 plates (50 km, flight corridor, 12 km, 6.4 km) come from one cloud-free satellite pass of 12 Nov 2026 (two adjoining Sentinel-2 tiles of the same pass), so they match today's ground and the Overture buildings, and they are visibly sharper than the EOX mosaic at these scales. Use them from the 50 km plate down; the 800 km and 200 km plates stay 2016, where change is invisible from that height."
+ ],
+ "grade": {
+  "params": {
+   "black": 0.12,
+   "white": 0.64,
+   "gamma": 0.96,
+   "saturation": 0.78,
+   "s_curve": 0.22,
+   "shadow_tint": [
+    0.012,
+    0.005,
+    -0.003
+   ],
+   "highlight_gain": [
+    1.05,
+    1.0,
+    0.915
+   ],
+   "matte": 0.015
+  },
+  "note": "One fixed grade for every plate (a levels stretch, since the source is flat; slight desaturation; a gentle S-curve; warm shadows and highlights; a light matte lift), so plates never shift colour during a crossfade. Ungraded copies are in raw/."
+ },
+ "edits": [
+  "Open sea (800 km and 200 km plates only): beyond the imaged coastal water EOX shows a flat navy (24, 44, 77) with a hard edge. The graded plates fade the coastal water's own colour out into that navy over 3 % of the plate width (24 km and 6 km), on the navy side only. Nothing on land or in the imaged water is changed. The raw/ copies keep the original edge.",
+  "Known blemishes in the source, all at the far edges of the 800 km plate and hidden by an edge fade: a lighter rectangle over the Gulf of Kutch (top-left corner) and a straight scene seam in the Gulf of Khambhat."
+ ],
+ "mosaics": [
+  {
+   "id": "west_coast_800km",
+   "title": "West coast of India",
+   "use": "opening backdrop and horizon fill seen from very high up",
+   "file": "west_coast_800km.jpg",
+   "raw_file": "raw/west_coast_800km.jpg",
+   "px": [
+    2048,
+    2048
+   ],
+   "width_m": 800000.0,
+   "height_m": 800000.0,
+   "metres_per_px": 390.625,
+   "bounds_m": {
+    "xmin": -400000.0,
+    "xmax": 400000.0,
+    "ymin": -400000.0,
+    "ymax": 400000.0
+   },
+   "bounds_ll": {
+    "west": 69.1975952,
+    "east": 76.8059454,
+    "south": 15.551729,
+    "north": 22.7867028
+   },
+   "three_plane": {
+    "width": 800000.0,
+    "height": 800000.0,
+    "center": [
+     0.0,
+     0,
+     0.0
+    ],
+    "how": "PlaneGeometry(width, height), rotateX(-Math.PI/2), then position at center; default UVs put the image's top edge on north (-z). texture.colorSpace = SRGBColorSpace; anisotropy max."
+   },
+   "source": {
+    "layer": "s2cloudless_3857",
+    "zoom": 9,
+    "source_m_per_px_at_pin": 288.8,
+    "tiles": 144,
+    "tile_cols": [
+     354,
+     365
+    ],
+    "tile_rows": [
+     222,
+     233
+    ],
+    "true_detail": "Sentinel-2 is 10 m per pixel at best; finer plates are smooth, not sharper"
+   },
+   "bytes": 934838,
+   "raw_bytes": 924647,
+   "suggested_full_frame_altitude_m": 543198
+  },
+  {
+   "id": "mumbai_region_200km",
+   "title": "Mumbai region",
+   "use": "from the clouds: the whole Mumbai region, the coast and the Western Ghats",
+   "file": "mumbai_region_200km.jpg",
+   "raw_file": "raw/mumbai_region_200km.jpg",
+   "px": [
+    4096,
+    4096
+   ],
+   "width_m": 200000.0,
+   "height_m": 200000.0,
+   "metres_per_px": 48.828,
+   "bounds_m": {
+    "xmin": -100000.0,
+    "xmax": 100000.0,
+    "ymin": -100000.0,
+    "ymax": 100000.0
+   },
+   "bounds_ll": {
+    "west": 72.0507265,
+    "east": 73.9528141,
+    "south": 18.2648442,
+    "north": 20.0735876
+   },
+   "three_plane": {
+    "width": 200000.0,
+    "height": 200000.0,
+    "center": [
+     0.0,
+     0,
+     0.0
+    ],
+    "how": "PlaneGeometry(width, height), rotateX(-Math.PI/2), then position at center; default UVs put the image's top edge on north (-z). texture.colorSpace = SRGBColorSpace; anisotropy max."
+   },
+   "source": {
+    "layer": "s2cloudless_3857",
+    "zoom": 12,
+    "source_m_per_px_at_pin": 36.1,
+    "tiles": 529,
+    "tile_cols": [
+     2867,
+     2889
+    ],
+    "tile_rows": [
+     1814,
+     1836
+    ],
+    "true_detail": "Sentinel-2 is 10 m per pixel at best; finer plates are smooth, not sharper"
+   },
+   "bytes": 3684085,
+   "raw_bytes": 3651100,
+   "suggested_full_frame_altitude_m": 135800,
+   "terrain": "mumbai_region_200km"
+  },
+  {
+   "id": "mumbai_navi_mumbai_50km",
+   "title": "Mumbai and Navi Mumbai",
+   "use": "Mumbai island city, Thane Creek, Navi Mumbai and the Parsik hills",
+   "file": "mumbai_navi_mumbai_50km.jpg",
+   "raw_file": "raw/mumbai_navi_mumbai_50km.jpg",
+   "px": [
+    4096,
+    4096
+   ],
+   "width_m": 50000.0,
+   "height_m": 50000.0,
+   "metres_per_px": 12.207,
+   "bounds_m": {
+    "xmin": -25000.0,
+    "xmax": 25000.0,
+    "ymin": -25000.0,
+    "ymax": 25000.0
+   },
+   "bounds_ll": {
+    "west": 72.7640094,
+    "east": 73.2395312,
+    "south": 18.943123,
+    "north": 19.3953088
+   },
+   "three_plane": {
+    "width": 50000.0,
+    "height": 50000.0,
+    "center": [
+     0.0,
+     0,
+     0.0
+    ],
+    "how": "PlaneGeometry(width, height), rotateX(-Math.PI/2), then position at center; default UVs put the image's top edge on north (-z). texture.colorSpace = SRGBColorSpace; anisotropy max."
+   },
+   "source": {
+    "layer": "s2cloudless_3857",
+    "zoom": 14,
+    "source_m_per_px_at_pin": 9.02,
+    "tiles": 529,
+    "tile_cols": [
+     11503,
+     11525
+    ],
+    "tile_rows": [
+     7291,
+     7313
+    ],
+    "true_detail": "Sentinel-2 is 10 m per pixel at best; finer plates are smooth, not sharper"
+   },
+   "bytes": 3167441,
+   "raw_bytes": 3051363,
+   "suggested_full_frame_altitude_m": 33950,
+   "terrain": "mumbai_navi_mumbai_50km"
+  },
+  {
+   "id": "flight_corridor",
+   "title": "Far-flight corridor: Mumbai coast to Airoli",
+   "use": "the low far flight of SCRIPT.md B01-B04 (19.00-19.20 N, 72.75-73.02 E, its 'far-flight ground'), from over the sea off Mumbai across Thane Creek to Airoli, at the full detail Sentinel-2 has",
+   "file": "flight_corridor.jpg",
+   "raw_file": "raw/flight_corridor.jpg",
+   "px": [
+    4096,
+    3191
+   ],
+   "width_m": 28389.9,
+   "height_m": 22114.8,
+   "metres_per_px": 6.931,
+   "bounds_m": {
+    "xmin": -26473.1,
+    "xmax": 1916.8,
+    "ymin": -18710.9,
+    "ymax": 3403.9
+   },
+   "bounds_ll": {
+    "west": 72.75,
+    "east": 73.02,
+    "south": 19.0,
+    "north": 19.2
+   },
+   "three_plane": {
+    "width": 28389.9,
+    "height": 22114.8,
+    "center": [
+     -12278.1,
+     0,
+     7653.5
+    ],
+    "how": "PlaneGeometry(width, height), rotateX(-Math.PI/2), then position at center; default UVs put the image's top edge on north (-z). texture.colorSpace = SRGBColorSpace; anisotropy max."
+   },
+   "source": {
+    "layer": "s2cloudless_3857",
+    "zoom": 15,
+    "source_m_per_px_at_pin": 4.51,
+    "tiles": 546,
+    "tile_cols": [
+     23005,
+     23030
+    ],
+    "tile_rows": [
+     14602,
+     14622
+    ],
+    "true_detail": "Sentinel-2 is 10 m per pixel at best; finer plates are smooth, not sharper"
+   },
+   "bytes": 1678179,
+   "raw_bytes": 1598195,
+   "suggested_full_frame_altitude_m": 19277,
+   "terrain": "flight_corridor"
+  },
+  {
+   "id": "airoli_12km",
+   "title": "Airoli, Thane and Thane Creek",
+   "use": "Airoli, Thane, Ghansoli, the creek and the hills right behind the site",
+   "file": "airoli_12km.jpg",
+   "raw_file": "raw/airoli_12km.jpg",
+   "px": [
+    2048,
+    2048
+   ],
+   "width_m": 12000.0,
+   "height_m": 12000.0,
+   "metres_per_px": 5.859,
+   "bounds_m": {
+    "xmin": -6000.0,
+    "xmax": 6000.0,
+    "ymin": -6000.0,
+    "ymax": 6000.0
+   },
+   "bounds_ll": {
+    "west": 72.9447077,
+    "east": 73.0588329,
+    "south": 19.1149536,
+    "north": 19.2234782
+   },
+   "three_plane": {
+    "width": 12000.0,
+    "height": 12000.0,
+    "center": [
+     0.0,
+     0,
+     0.0
+    ],
+    "how": "PlaneGeometry(width, height), rotateX(-Math.PI/2), then position at center; default UVs put the image's top edge on north (-z). texture.colorSpace = SRGBColorSpace; anisotropy max."
+   },
+   "source": {
+    "layer": "s2cloudless_3857",
+    "zoom": 15,
+    "source_m_per_px_at_pin": 4.51,
+    "tiles": 132,
+    "tile_cols": [
+     23023,
+     23034
+    ],
+    "tile_rows": [
+     14600,
+     14610
+    ],
+    "true_detail": "Sentinel-2 is 10 m per pixel at best; finer plates are smooth, not sharper"
+   },
+   "bytes": 572521,
+   "raw_bytes": 545049,
+   "suggested_full_frame_altitude_m": 8148,
+   "terrain": "airoli_12km"
+  },
+  {
+   "id": "rtp_6400m",
+   "title": "Reliable Tech Park neighbourhood",
+   "use": "last satellite plate before the 3D twin; exactly the 6.4 km square of twin/web/models/exterior/rtp_terrain.glb, so it can also be draped on it",
+   "file": "rtp_6400m.jpg",
+   "raw_file": "raw/rtp_6400m.jpg",
+   "px": [
+    2048,
+    2048
+   ],
+   "width_m": 6400.0,
+   "height_m": 6400.0,
+   "metres_per_px": 3.125,
+   "bounds_m": {
+    "xmin": -3200.0,
+    "xmax": 3200.0,
+    "ymin": -3200.0,
+    "ymax": 3200.0
+   },
+   "bounds_ll": {
+    "west": 72.9713369,
+    "east": 73.0322037,
+    "south": 19.140276,
+    "north": 19.1981558
+   },
+   "three_plane": {
+    "width": 6400.0,
+    "height": 6400.0,
+    "center": [
+     0.0,
+     0,
+     0.0
+    ],
+    "how": "PlaneGeometry(width, height), rotateX(-Math.PI/2), then position at center; default UVs put the image's top edge on north (-z). texture.colorSpace = SRGBColorSpace; anisotropy max."
+   },
+   "source": {
+    "layer": "s2cloudless_3857",
+    "zoom": 15,
+    "source_m_per_px_at_pin": 4.51,
+    "tiles": 49,
+    "tile_cols": [
+     23025,
+     23031
+    ],
+    "tile_rows": [
+     14602,
+     14608
+    ],
+    "true_detail": "Sentinel-2 is 10 m per pixel at best; finer plates are smooth, not sharper"
+   },
+   "bytes": 430266,
+   "raw_bytes": 394300,
+   "suggested_full_frame_altitude_m": 4346,
+   "terrain": "rtp_6400m"
+  }
+ ],
+ "mosaics_2026": [
+  {
+   "title": "Mumbai and Navi Mumbai",
+   "use": "Mumbai island city, Thane Creek, Navi Mumbai and the Parsik hills",
+   "px": [
+    4096,
+    4096
+   ],
+   "width_m": 50000.0,
+   "height_m": 50000.0,
+   "metres_per_px": 12.207,
+   "bounds_m": {
+    "xmin": -25000.0,
+    "xmax": 25000.0,
+    "ymin": -25000.0,
+    "ymax": 25000.0
+   },
+   "bounds_ll": {
+    "west": 72.7640094,
+    "east": 73.2395312,
+    "south": 18.943123,
+    "north": 19.3953088
+   },
+   "three_plane": {
+    "width": 50000.0,
+    "height": 50000.0,
+    "center": [
+     0.0,
+     0,
+     0.0
+    ],
+    "how": "PlaneGeometry(width, height), rotateX(-Math.PI/2), then position at center; default UVs put the image's top edge on north (-z). texture.colorSpace = SRGBColorSpace; anisotropy max."
+   },
+   "suggested_full_frame_altitude_m": 33950,
+   "id": "mumbai_navi_mumbai_50km_2026",
+   "same_ground_as": "mumbai_navi_mumbai_50km",
+   "file": "mumbai_navi_mumbai_50km_2026.jpg",
+   "raw_file": "raw/mumbai_navi_mumbai_50km_2026.jpg",
+   "bytes": 4799014,
+   "raw_bytes": 6321432,
+   "uncovered_fraction": 0.0,
+   "source": {
+    "scenes": [
+     {
+      "id": "S2C_43QBB_20261112_0_L2A",
+      "datetime": "2026-11-12T05:53:38.100000Z",
+      "cloud_cover_percent": 0.000597,
+      "mgrs": "MGRS-43QBB",
+      "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/43/Q/BB/2026/11/S2C_43QBB_20261112_0_L2A/TCI.tif",
+      "licence": [
+       "https://sentinel.esa.int/documents/247904/690755/Sentinel_Data_Legal_Notice"
+      ]
+     },
+     {
+      "id": "S2C_43QCB_20261112_0_L2A",
+      "datetime": "2026-11-12T05:53:34.389000Z",
+      "cloud_cover_percent": 0.001174,
+      "mgrs": "MGRS-43QCB",
+      "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/43/Q/CB/2026/11/S2C_43QCB_20261112_0_L2A/TCI.tif",
+      "licence": [
+       "https://sentinel.esa.int/documents/247904/690755/Sentinel_Data_Legal_Notice"
+      ]
+     }
+    ],
+    "product": "Copernicus Sentinel-2 L2A true-colour image (TCI, 10 m), one satellite pass",
+    "colour": "quantile-matched to the 2016 plate of the same ground, then the common grade"
+   },
+   "terrain": "mumbai_navi_mumbai_50km"
+  },
+  {
+   "title": "Far-flight corridor: Mumbai coast to Airoli",
+   "use": "the low far flight of SCRIPT.md B01-B04 (19.00-19.20 N, 72.75-73.02 E, its 'far-flight ground'), from over the sea off Mumbai across Thane Creek to Airoli, at the full detail Sentinel-2 has",
+   "px": [
+    4096,
+    3191
+   ],
+   "width_m": 28389.9,
+   "height_m": 22114.8,
+   "metres_per_px": 6.931,
+   "bounds_m": {
+    "xmin": -26473.1,
+    "xmax": 1916.8,
+    "ymin": -18710.9,
+    "ymax": 3403.9
+   },
+   "bounds_ll": {
+    "west": 72.75,
+    "east": 73.02,
+    "south": 19.0,
+    "north": 19.2
+   },
+   "three_plane": {
+    "width": 28389.9,
+    "height": 22114.8,
+    "center": [
+     -12278.1,
+     0,
+     7653.5
+    ],
+    "how": "PlaneGeometry(width, height), rotateX(-Math.PI/2), then position at center; default UVs put the image's top edge on north (-z). texture.colorSpace = SRGBColorSpace; anisotropy max."
+   },
+   "suggested_full_frame_altitude_m": 19277,
+   "id": "flight_corridor_2026",
+   "same_ground_as": "flight_corridor",
+   "file": "flight_corridor_2026.jpg",
+   "raw_file": "raw/flight_corridor_2026.jpg",
+   "bytes": 2749442,
+   "raw_bytes": 3505166,
+   "uncovered_fraction": 0.0,
+   "source": {
+    "scenes": [
+     {
+      "id": "S2C_43QBB_20261112_0_L2A",
+      "datetime": "2026-11-12T05:53:38.100000Z",
+      "cloud_cover_percent": 0.000597,
+      "mgrs": "MGRS-43QBB",
+      "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/43/Q/BB/2026/11/S2C_43QBB_20261112_0_L2A/TCI.tif",
+      "licence": [
+       "https://sentinel.esa.int/documents/247904/690755/Sentinel_Data_Legal_Notice"
+      ]
+     },
+     {
+      "id": "S2C_43QCB_20261112_0_L2A",
+      "datetime": "2026-11-12T05:53:34.389000Z",
+      "cloud_cover_percent": 0.001174,
+      "mgrs": "MGRS-43QCB",
+      "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/43/Q/CB/2026/11/S2C_43QCB_20261112_0_L2A/TCI.tif",
+      "licence": [
+       "https://sentinel.esa.int/documents/247904/690755/Sentinel_Data_Legal_Notice"
+      ]
+     }
+    ],
+    "product": "Copernicus Sentinel-2 L2A true-colour image (TCI, 10 m), one satellite pass",
+    "colour": "quantile-matched to the 2016 plate of the same ground, then the common grade"
+   },
+   "terrain": "flight_corridor"
+  },
+  {
+   "title": "Airoli, Thane and Thane Creek",
+   "use": "Airoli, Thane, Ghansoli, the creek and the hills right behind the site",
+   "px": [
+    2048,
+    2048
+   ],
+   "width_m": 12000.0,
+   "height_m": 12000.0,
+   "metres_per_px": 5.859,
+   "bounds_m": {
+    "xmin": -6000.0,
+    "xmax": 6000.0,
+    "ymin": -6000.0,
+    "ymax": 6000.0
+   },
+   "bounds_ll": {
+    "west": 72.9447077,
+    "east": 73.0588329,
+    "south": 19.1149536,
+    "north": 19.2234782
+   },
+   "three_plane": {
+    "width": 12000.0,
+    "height": 12000.0,
+    "center": [
+     0.0,
+     0,
+     0.0
+    ],
+    "how": "PlaneGeometry(width, height), rotateX(-Math.PI/2), then position at center; default UVs put the image's top edge on north (-z). texture.colorSpace = SRGBColorSpace; anisotropy max."
+   },
+   "suggested_full_frame_altitude_m": 8148,
+   "id": "airoli_12km_2026",
+   "same_ground_as": "airoli_12km",
+   "file": "airoli_12km_2026.jpg",
+   "raw_file": "raw/airoli_12km_2026.jpg",
+   "bytes": 930307,
+   "raw_bytes": 1196460,
+   "uncovered_fraction": 0.0,
+   "source": {
+    "scenes": [
+     {
+      "id": "S2C_43QBB_20261112_0_L2A",
+      "datetime": "2026-11-12T05:53:38.100000Z",
+      "cloud_cover_percent": 0.000597,
+      "mgrs": "MGRS-43QBB",
+      "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/43/Q/BB/2026/11/S2C_43QBB_20261112_0_L2A/TCI.tif",
+      "licence": [
+       "https://sentinel.esa.int/documents/247904/690755/Sentinel_Data_Legal_Notice"
+      ]
+     },
+     {
+      "id": "S2C_43QCB_20261112_0_L2A",
+      "datetime": "2026-11-12T05:53:34.389000Z",
+      "cloud_cover_percent": 0.001174,
+      "mgrs": "MGRS-43QCB",
+      "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/43/Q/CB/2026/11/S2C_43QCB_20261112_0_L2A/TCI.tif",
+      "licence": [
+       "https://sentinel.esa.int/documents/247904/690755/Sentinel_Data_Legal_Notice"
+      ]
+     }
+    ],
+    "product": "Copernicus Sentinel-2 L2A true-colour image (TCI, 10 m), one satellite pass",
+    "colour": "quantile-matched to the 2016 plate of the same ground, then the common grade"
+   },
+   "terrain": "airoli_12km"
+  },
+  {
+   "title": "Reliable Tech Park neighbourhood",
+   "use": "last satellite plate before the 3D twin; exactly the 6.4 km square of twin/web/models/exterior/rtp_terrain.glb, so it can also be draped on it",
+   "px": [
+    2048,
+    2048
+   ],
+   "width_m": 6400.0,
+   "height_m": 6400.0,
+   "metres_per_px": 3.125,
+   "bounds_m": {
+    "xmin": -3200.0,
+    "xmax": 3200.0,
+    "ymin": -3200.0,
+    "ymax": 3200.0
+   },
+   "bounds_ll": {
+    "west": 72.9713369,
+    "east": 73.0322037,
+    "south": 19.140276,
+    "north": 19.1981558
+   },
+   "three_plane": {
+    "width": 6400.0,
+    "height": 6400.0,
+    "center": [
+     0.0,
+     0,
+     0.0
+    ],
+    "how": "PlaneGeometry(width, height), rotateX(-Math.PI/2), then position at center; default UVs put the image's top edge on north (-z). texture.colorSpace = SRGBColorSpace; anisotropy max."
+   },
+   "suggested_full_frame_altitude_m": 4346,
+   "id": "rtp_6400m_2026",
+   "same_ground_as": "rtp_6400m",
+   "file": "rtp_6400m_2026.jpg",
+   "raw_file": "raw/rtp_6400m_2026.jpg",
+   "bytes": 661861,
+   "raw_bytes": 836389,
+   "uncovered_fraction": 0.0,
+   "source": {
+    "scenes": [
+     {
+      "id": "S2C_43QBB_20261112_0_L2A",
+      "datetime": "2026-11-12T05:53:38.100000Z",
+      "cloud_cover_percent": 0.000597,
+      "mgrs": "MGRS-43QBB",
+      "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/43/Q/BB/2026/11/S2C_43QBB_20261112_0_L2A/TCI.tif",
+      "licence": [
+       "https://sentinel.esa.int/documents/247904/690755/Sentinel_Data_Legal_Notice"
+      ]
+     },
+     {
+      "id": "S2C_43QCB_20261112_0_L2A",
+      "datetime": "2026-11-12T05:53:34.389000Z",
+      "cloud_cover_percent": 0.001174,
+      "mgrs": "MGRS-43QCB",
+      "href": "https://sentinel-cogs.s3.us-west-2.amazonaws.com/sentinel-s2-l2a-cogs/43/Q/CB/2026/11/S2C_43QCB_20261112_0_L2A/TCI.tif",
+      "licence": [
+       "https://sentinel.esa.int/documents/247904/690755/Sentinel_Data_Legal_Notice"
+      ]
+     }
+    ],
+    "product": "Copernicus Sentinel-2 L2A true-colour image (TCI, 10 m), one satellite pass",
+    "colour": "quantile-matched to the 2016 plate of the same ground, then the common grade"
+   },
+   "terrain": "rtp_6400m"
+  }
+ ],
+ "terrain": [
+  {
+   "id": "mumbai_region_200km",
+   "mosaic": "mumbai_region_200km",
+   "file": "terrain/mumbai_region_200km_501x501.f32",
+   "format": "Float32, little-endian, no header",
+   "cols": 501,
+   "rows": 501,
+   "spacing_x_m": 400.0,
+   "spacing_y_m": 400.0,
+   "bytes": 1004004,
+   "bounds_m": {
+    "xmin": -100000.0,
+    "xmax": 100000.0,
+    "ymin": -100000.0,
+    "ymax": 100000.0
+   },
+   "layout": "row-major, cols x rows values; row 0 = north edge, last row = south edge; columns west to east; the first and last vertices sit exactly on the mosaic's edges. Same vertex order as THREE.PlaneGeometry(width, height, cols-1, rows-1) after rotateX(-Math.PI/2) (then moved to the mosaic's three_plane.center): set position.y of vertex k to heights[k] * exaggeration.",
+   "heights": "metres above the site ground (the twin's y = 0, 11.557 m above sea level); the sea is at sea_level_m",
+   "ground_model": "Copernicus DSM with buildings and trees removed (150 m minimum filter, smoothed), hills kept; the twin's recipe with a smooth instead of a hard hill switch. Agrees with the twin's own terrain (exterior/tools/prep_data.py) to a median 0.2 m inside +-3 km (0.8 m at most inside 560 m; up to about 15 m on the steepest hill flanks, where the twin's sampling window sits a third of a cell off the source grid).",
+   "min_m": -13.47,
+   "max_m": 1484.44,
+   "sea_level_m": -11.56,
+   "smoothing": "13 x 13 source cells averaged before sampling",
+   "suggested_exaggeration": 1.0,
+   "exaggeration_note": "Plates overlap, so use one factor for every plate on screen; otherwise the coarser plate's hills poke through the finer one. 1.0 is true scale; up to 1.5 reads well from above 20 km."
+  },
+  {
+   "id": "mumbai_navi_mumbai_50km",
+   "mosaic": "mumbai_navi_mumbai_50km",
+   "file": "terrain/mumbai_navi_mumbai_50km_501x501.f32",
+   "format": "Float32, little-endian, no header",
+   "cols": 501,
+   "rows": 501,
+   "spacing_x_m": 100.0,
+   "spacing_y_m": 100.0,
+   "bytes": 1004004,
+   "bounds_m": {
+    "xmin": -25000.0,
+    "xmax": 25000.0,
+    "ymin": -25000.0,
+    "ymax": 25000.0
+   },
+   "layout": "row-major, cols x rows values; row 0 = north edge, last row = south edge; columns west to east; the first and last vertices sit exactly on the mosaic's edges. Same vertex order as THREE.PlaneGeometry(width, height, cols-1, rows-1) after rotateX(-Math.PI/2) (then moved to the mosaic's three_plane.center): set position.y of vertex k to heights[k] * exaggeration.",
+   "heights": "metres above the site ground (the twin's y = 0, 11.557 m above sea level); the sea is at sea_level_m",
+   "ground_model": "Copernicus DSM with buildings and trees removed (150 m minimum filter, smoothed), hills kept; the twin's recipe with a smooth instead of a hard hill switch. Agrees with the twin's own terrain (exterior/tools/prep_data.py) to a median 0.2 m inside +-3 km (0.8 m at most inside 560 m; up to about 15 m on the steepest hill flanks, where the twin's sampling window sits a third of a cell off the source grid).",
+   "min_m": -19.61,
+   "max_m": 744.03,
+   "sea_level_m": -11.56,
+   "smoothing": "3 x 3 source cells averaged before sampling",
+   "suggested_exaggeration": 1.0,
+   "exaggeration_note": "Plates overlap, so use one factor for every plate on screen; otherwise the coarser plate's hills poke through the finer one. 1.0 is true scale; up to 1.5 reads well from above 20 km."
+  },
+  {
+   "id": "flight_corridor",
+   "mosaic": "flight_corridor",
+   "file": "terrain/flight_corridor_569x443.f32",
+   "format": "Float32, little-endian, no header",
+   "cols": 569,
+   "rows": 443,
+   "spacing_x_m": 49.982,
+   "spacing_y_m": 50.033,
+   "bytes": 1008268,
+   "bounds_m": {
+    "xmin": -26473.1,
+    "xmax": 1916.8,
+    "ymin": -18710.9,
+    "ymax": 3403.9
+   },
+   "layout": "row-major, cols x rows values; row 0 = north edge, last row = south edge; columns west to east; the first and last vertices sit exactly on the mosaic's edges. Same vertex order as THREE.PlaneGeometry(width, height, cols-1, rows-1) after rotateX(-Math.PI/2) (then moved to the mosaic's three_plane.center): set position.y of vertex k to heights[k] * exaggeration.",
+   "heights": "metres above the site ground (the twin's y = 0, 11.557 m above sea level); the sea is at sea_level_m",
+   "ground_model": "Copernicus DSM with buildings and trees removed (150 m minimum filter, smoothed), hills kept; the twin's recipe with a smooth instead of a hard hill switch. Agrees with the twin's own terrain (exterior/tools/prep_data.py) to a median 0.2 m inside +-3 km (0.8 m at most inside 560 m; up to about 15 m on the steepest hill flanks, where the twin's sampling window sits a third of a cell off the source grid).",
+   "min_m": -20.03,
+   "max_m": 351.39,
+   "sea_level_m": -11.56,
+   "smoothing": "3 x 3 source cells averaged before sampling",
+   "suggested_exaggeration": 1.0,
+   "exaggeration_note": "Plates overlap, so use one factor for every plate on screen; otherwise the coarser plate's hills poke through the finer one. 1.0 is true scale; up to 1.5 reads well from above 20 km."
+  },
+  {
+   "id": "airoli_12km",
+   "mosaic": "airoli_12km",
+   "file": "terrain/airoli_12km_401x401.f32",
+   "format": "Float32, little-endian, no header",
+   "cols": 401,
+   "rows": 401,
+   "spacing_x_m": 30.0,
+   "spacing_y_m": 30.0,
+   "bytes": 643204,
+   "bounds_m": {
+    "xmin": -6000.0,
+    "xmax": 6000.0,
+    "ymin": -6000.0,
+    "ymax": 6000.0
+   },
+   "layout": "row-major, cols x rows values; row 0 = north edge, last row = south edge; columns west to east; the first and last vertices sit exactly on the mosaic's edges. Same vertex order as THREE.PlaneGeometry(width, height, cols-1, rows-1) after rotateX(-Math.PI/2) (then moved to the mosaic's three_plane.center): set position.y of vertex k to heights[k] * exaggeration.",
+   "heights": "metres above the site ground (the twin's y = 0, 11.557 m above sea level); the sea is at sea_level_m",
+   "ground_model": "Copernicus DSM with buildings and trees removed (150 m minimum filter, smoothed), hills kept; the twin's recipe with a smooth instead of a hard hill switch. Agrees with the twin's own terrain (exterior/tools/prep_data.py) to a median 0.2 m inside +-3 km (0.8 m at most inside 560 m; up to about 15 m on the steepest hill flanks, where the twin's sampling window sits a third of a cell off the source grid).",
+   "min_m": -13.32,
+   "max_m": 264.73,
+   "sea_level_m": -11.56,
+   "smoothing": "1 x 1 source cells averaged before sampling",
+   "suggested_exaggeration": 1.0,
+   "exaggeration_note": "Plates overlap, so use one factor for every plate on screen; otherwise the coarser plate's hills poke through the finer one. 1.0 is true scale; up to 1.5 reads well from above 20 km."
+  },
+  {
+   "id": "rtp_6400m",
+   "mosaic": "rtp_6400m",
+   "file": "terrain/rtp_6400m_321x321.f32",
+   "format": "Float32, little-endian, no header",
+   "cols": 321,
+   "rows": 321,
+   "spacing_x_m": 20.0,
+   "spacing_y_m": 20.0,
+   "bytes": 412164,
+   "bounds_m": {
+    "xmin": -3200.0,
+    "xmax": 3200.0,
+    "ymin": -3200.0,
+    "ymax": 3200.0
+   },
+   "layout": "row-major, cols x rows values; row 0 = north edge, last row = south edge; columns west to east; the first and last vertices sit exactly on the mosaic's edges. Same vertex order as THREE.PlaneGeometry(width, height, cols-1, rows-1) after rotateX(-Math.PI/2) (then moved to the mosaic's three_plane.center): set position.y of vertex k to heights[k] * exaggeration.",
+   "heights": "metres above the site ground (the twin's y = 0, 11.557 m above sea level); the sea is at sea_level_m",
+   "ground_model": "Copernicus DSM with buildings and trees removed (150 m minimum filter, smoothed), hills kept; the twin's recipe with a smooth instead of a hard hill switch. Agrees with the twin's own terrain (exterior/tools/prep_data.py) to a median 0.2 m inside +-3 km (0.8 m at most inside 560 m; up to about 15 m on the steepest hill flanks, where the twin's sampling window sits a third of a cell off the source grid).",
+   "min_m": -11.8,
+   "max_m": 264.73,
+   "sea_level_m": -11.56,
+   "smoothing": "1 x 1 source cells averaged before sampling",
+   "suggested_exaggeration": 1.0,
+   "exaggeration_note": "Plates overlap, so use one factor for every plate on screen; otherwise the coarser plate's hills poke through the finer one. 1.0 is true scale; up to 1.5 reads well from above 20 km."
+  }
+ ],
+ "labels": [
+  {
+   "key": "mumbai",
+   "text": "Mumbai",
+   "kind": "city",
+   "required": true,
+   "osm": "node/16173235",
+   "osm_version": 72,
+   "osm_name": "Mumbai",
+   "osm_tags": {
+    "ele": "8",
+    "place": "city",
+    "population": "12442373",
+    "wikidata": "Q1156"
+   },
+   "anchor_rule": "the OSM node itself",
+   "lat": 19.054999,
+   "lng": 72.8692035,
+   "x_m": -13939.1,
+   "y_m": -12629.4,
+   "three": [
+    -13939.1,
+    0,
+    12629.4
+   ],
+   "straight_line_km_from_pin": 18.85
+  },
+  {
+   "key": "thane",
+   "text": "Thane",
+   "kind": "city",
+   "required": true,
+   "osm": "node/619122241",
+   "osm_version": 17,
+   "osm_name": "Thane",
+   "osm_tags": {
+    "place": "city",
+    "population": "1841488",
+    "wikidata": "Q207749"
+   },
+   "anchor_rule": "the OSM node itself",
+   "lat": 19.1943294,
+   "lng": 72.9701779,
+   "x_m": -3321.9,
+   "y_m": 2776.9,
+   "three": [
+    -3321.9,
+    0,
+    -2776.9
+   ],
+   "straight_line_km_from_pin": 4.34
+  },
+  {
+   "key": "navi_mumbai",
+   "text": "Navi Mumbai",
+   "kind": "city",
+   "required": true,
+   "osm": "node/619091882",
+   "osm_version": 34,
+   "osm_name": "Navi Mumbai",
+   "osm_tags": {
+    "place": "city",
+    "population": "1120547",
+    "wikidata": "Q61445"
+   },
+   "anchor_rule": "the OSM node itself",
+   "lat": 19.0308262,
+   "lng": 73.0198537,
+   "x_m": 1901.4,
+   "y_m": -15302.3,
+   "three": [
+    1901.4,
+    0,
+    15302.3
+   ],
+   "straight_line_km_from_pin": 15.51
+  },
+  {
+   "key": "vashi",
+   "text": "Vashi",
+   "kind": "suburb",
+   "required": true,
+   "osm": "node/619090921",
+   "osm_version": 11,
+   "osm_name": "Vashi",
+   "osm_tags": {
+    "place": "suburb",
+    "wikidata": "Q297732"
+   },
+   "anchor_rule": "the OSM node itself",
+   "lat": 19.075784,
+   "lng": 72.9952364,
+   "x_m": -687.0,
+   "y_m": -10331.1,
+   "three": [
+    -687.0,
+    0,
+    10331.1
+   ],
+   "straight_line_km_from_pin": 10.41
+  },
+  {
+   "key": "airoli",
+   "text": "Airoli",
+   "kind": "suburb",
+   "required": true,
+   "osm": "node/619112404",
+   "osm_version": 1,
+   "osm_name": "Airoli",
+   "osm_tags": {
+    "place": "suburb"
+   },
+   "anchor_rule": "the OSM node itself",
+   "lat": 19.1582719,
+   "lng": 72.9967088,
+   "x_m": -532.2,
+   "y_m": -1210.1,
+   "three": [
+    -532.2,
+    0,
+    1210.1
+   ],
+   "straight_line_km_from_pin": 1.33
+  },
+  {
+   "key": "thane_creek",
+   "text": "Thane Creek",
+   "kind": "water",
+   "required": true,
+   "osm": "way/204365993",
+   "osm_version": 19,
+   "osm_name": "Thane Creek",
+   "osm_tags": {
+    "waterway": "river"
+   },
+   "anchor_rule": "the point halfway along the OSM line",
+   "path_m": [
+    [
+     713.0,
+     5761.2
+    ],
+    [
+     501.9,
+     5737.8
+    ],
+    [
+     320.8,
+     5699.0
+    ],
+    [
+     233.8,
+     5658.0
+    ],
+    [
+     -92.7,
+     5440.8
+    ],
+    [
+     -507.7,
+     5267.9
+    ],
+    [
+     -595.8,
+     5204.4
+    ],
+    [
+     -666.9,
+     5127.1
+    ],
+    [
+     -723.3,
+     4932.2
+    ],
+    [
+     -696.9,
+     4473.6
+    ],
+    [
+     -718.2,
+     4373.3
+    ],
+    [
+     -748.7,
+     4229.3
+    ],
+    [
+     -895.8,
+     4001.4
+    ],
+    [
+     -1159.0,
+     3746.3
+    ],
+    [
+     -1186.0,
+     3720.2
+    ],
+    [
+     -1372.7,
+     3558.5
+    ],
+    [
+     -1406.8,
+     3521.5
+    ],
+    [
+     -1440.7,
+     3484.8
+    ],
+    [
+     -1691.2,
+     3092.7
+    ],
+    [
+     -1764.4,
+     2899.0
+    ],
+    [
+     -1783.2,
+     2734.7
+    ],
+    [
+     -1858.2,
+     2607.0
+    ],
+    [
+     -1926.0,
+     2457.9
+    ],
+    [
+     -1901.6,
+     2363.9
+    ],
+    [
+     -1841.3,
+     2291.6
+    ],
+    [
+     -1790.5,
+     2246.8
+    ],
+    [
+     -1765.0,
+     2203.3
+    ],
+    [
+     -1739.2,
+     2159.4
+    ],
+    [
+     -1703.6,
+     2062.7
+    ],
+    [
+     -1680.5,
+     1994.7
+    ],
+    [
+     -1717.2,
+     1921.9
+    ],
+    [
+     -1795.7,
+     1769.8
+    ],
+    [
+     -1840.3,
+     1670.0
+    ],
+    [
+     -1850.6,
+     1572.3
+    ],
+    [
+     -1834.5,
+     1320.2
+    ],
+    [
+     -1831.4,
+     1176.8
+    ],
+    [
+     -1836.1,
+     991.9
+    ],
+    [
+     -1893.2,
+     598.1
+    ],
+    [
+     -1934.9,
+     391.3
+    ],
+    [
+     -2001.5,
+     93.2
+    ],
+    [
+     -2053.3,
+     -206.0
+    ],
+    [
+     -2091.7,
+     -367.3
+    ],
+    [
+     -2175.8,
+     -923.2
+    ],
+    [
+     -2234.3,
+     -1394.7
+    ],
+    [
+     -2286.0,
+     -2114.0
+    ],
+    [
+     -2291.4,
+     -2364.8
+    ],
+    [
+     -2319.4,
+     -2512.7
+    ],
+    [
+     -2584.6,
+     -3702.2
+    ],
+    [
+     -2937.9,
+     -4968.9
+    ],
+    [
+     -2937.9,
+     -4968.9
+    ]
+   ],
+   "path_length_m": 12287,
+   "lat": 19.178785,
+   "lng": 72.9843245,
+   "x_m": -1834.4,
+   "y_m": 1058.1,
+   "three": [
+    -1834.4,
+    0,
+    -1058.1
+   ],
+   "straight_line_km_from_pin": 2.12
+  },
+  {
+   "key": "rtp",
+   "text": "Reliable Tech Park",
+   "kind": "site",
+   "required": true,
+   "osm": "way/1072909784",
+   "osm_version": 2,
+   "osm_name": "Reliable Tech Park",
+   "osm_tags": {
+    "building": "yes",
+    "office": "yes"
+   },
+   "anchor_rule": "the project's Maps pin for B Wing (19.1692159 N, 73.0017703 E), where the 3D twin stands; the OSM building outline (all wings) is kept as outline_m, its centroid as osm_centroid_m",
+   "outline_m": [
+    [
+     -51.2,
+     90.1
+    ],
+    [
+     -54.8,
+     99.7
+    ],
+    [
+     -54.1,
+     105.7
+    ],
+    [
+     -49.0,
+     112.2
+    ],
+    [
+     -42.0,
+     114.9
+    ],
+    [
+     -31.4,
+     116.0
+    ],
+    [
+     -19.0,
+     117.8
+    ],
+    [
+     9.5,
+     114.0
+    ],
+    [
+     44.6,
+     112.2
+    ],
+    [
+     46.6,
+     45.3
+    ],
+    [
+     44.8,
+     -3.2
+    ],
+    [
+     39.8,
+     -12.8
+    ],
+    [
+     34.0,
+     -15.0
+    ],
+    [
+     26.6,
+     -15.0
+    ],
+    [
+     21.4,
+     -14.5
+    ],
+    [
+     16.5,
+     -6.7
+    ],
+    [
+     15.5,
+     82.5
+    ],
+    [
+     -44.8,
+     85.0
+    ]
+   ],
+   "osm_centroid_m": [
+    13.1,
+    68.4
+   ],
+   "lat": 19.1692159,
+   "lng": 73.0017703,
+   "x_m": 0.0,
+   "y_m": 0.0,
+   "three": [
+    0.0,
+    0,
+    -0.0
+   ],
+   "straight_line_km_from_pin": 0.0
+  },
+  {
+   "key": "parsik_hill",
+   "text": "Parsik Hill",
+   "kind": "peak",
+   "required": false,
+   "osm": "node/630729034",
+   "osm_version": 2,
+   "osm_name": "Parsik Hill",
+   "osm_tags": {
+    "natural": "peak"
+   },
+   "anchor_rule": "the OSM node itself",
+   "lat": 19.1918496,
+   "lng": 73.0161541,
+   "x_m": 1512.4,
+   "y_m": 2502.7,
+   "three": [
+    1512.4,
+    0,
+    -2502.7
+   ],
+   "straight_line_km_from_pin": 2.94
+  },
+  {
+   "key": "parsik_hills",
+   "text": "Parsik Hills",
+   "kind": "hills",
+   "required": false,
+   "osm": "relation/8747595",
+   "osm_version": 2,
+   "osm_name": "Parsik Hills",
+   "osm_tags": {
+    "landuse": "forest",
+    "wikidata": "Q15265526"
+   },
+   "anchor_rule": "centre of the bounding box of all the OSM relation's nodes",
+   "lat": 19.1103181,
+   "lng": 73.0363124,
+   "x_m": 3632.0,
+   "y_m": -6512.6,
+   "three": [
+    3632.0,
+    0,
+    6512.6
+   ],
+   "straight_line_km_from_pin": 7.49
+  },
+  {
+   "key": "parsik_hills_summit",
+   "text": "Parsik Hills Summit",
+   "kind": "peak",
+   "required": false,
+   "osm": "node/5934004116",
+   "osm_version": 3,
+   "osm_name": "Parsik Hills Summit",
+   "osm_tags": {
+    "ele": "320",
+    "natural": "peak"
+   },
+   "anchor_rule": "the OSM node itself",
+   "lat": 19.0690639,
+   "lng": 73.0428686,
+   "x_m": 4321.4,
+   "y_m": -11074.2,
+   "three": [
+    4321.4,
+    0,
+    11074.2
+   ],
+   "straight_line_km_from_pin": 11.94
+  },
+  {
+   "key": "ghansoli",
+   "text": "Ghansoli",
+   "kind": "suburb",
+   "required": false,
+   "osm": "node/619109750",
+   "osm_version": 4,
+   "osm_name": "Ghansoli",
+   "osm_tags": {
+    "place": "suburb"
+   },
+   "anchor_rule": "the OSM node itself",
+   "lat": 19.1193307,
+   "lng": 72.9995096,
+   "x_m": -237.7,
+   "y_m": -5516.0,
+   "three": [
+    -237.7,
+    0,
+    5516.0
+   ],
+   "straight_line_km_from_pin": 5.55
+  },
+  {
+   "key": "flamingo_sanctuary",
+   "text": "Thane Creek Flamingo Sanctuary",
+   "kind": "nature",
+   "required": false,
+   "osm": "relation/15073373",
+   "osm_version": 4,
+   "osm_name": "Thane Creek Flamingo Sanctuary",
+   "osm_tags": {},
+   "anchor_rule": "centre of the bounding box of all the OSM relation's nodes",
+   "lat": 19.1147679,
+   "lng": 72.9628854,
+   "x_m": -4088.7,
+   "y_m": -6020.5,
+   "three": [
+    -4088.7,
+    0,
+    6020.5
+   ],
+   "straight_line_km_from_pin": 7.3
+  },
+  {
+   "key": "bom_airport",
+   "text": "Chhatrapati Shivaji Maharaj International Airport",
+   "kind": "airport",
+   "required": false,
+   "osm": "way/22826676",
+   "osm_version": 75,
+   "osm_name": "Chhatrapati Shivaji Maharaj International Airport",
+   "osm_tags": {
+    "ele": "11",
+    "wikidata": "Q504368"
+   },
+   "anchor_rule": "area centroid of the OSM outline",
+   "lat": 19.0907804,
+   "lng": 72.8659904,
+   "x_m": -14276.9,
+   "y_m": -8672.9,
+   "three": [
+    -14276.9,
+    0,
+    8672.9
+   ],
+   "straight_line_km_from_pin": 16.72
+  },
+  {
+   "key": "nmi_airport",
+   "text": "Navi Mumbai International Airport",
+   "kind": "airport",
+   "required": false,
+   "osm": "way/455547086",
+   "osm_version": 29,
+   "osm_name": "Navi Mumbai International Airport",
+   "osm_tags": {
+    "wikidata": "Q3015728"
+   },
+   "anchor_rule": "area centroid of the OSM outline",
+   "lat": 18.9921561,
+   "lng": 73.0628027,
+   "x_m": 6417.4,
+   "y_m": -19578.2,
+   "three": [
+    6417.4,
+    0,
+    19578.2
+   ],
+   "straight_line_km_from_pin": 20.71
+  }
+ ],
+ "how_to_use": [
+  "Descent order: west_coast_800km -> mumbai_region_200km -> mumbai_navi_mumbai_50km -> flight_corridor -> airoli_12km -> rtp_6400m -> the 3D twin. All plates but flight_corridor are squares centred on the pin; flight_corridor is the 28 x 22 km rectangle SCRIPT.md asks for, off-centre (see its three_plane.center). Stack them coarse to fine. Give finer plates a higher renderOrder (or a small polygonOffset) rather than separating them in height, and fade each plate's outer 8-10 % to transparent in the shader so no edge ever shows.",
+  "Vintage: from the 50 km plate down, use the *_2026 files (mosaics_2026: same ground, same bounds, same terrain grids, matched colour). They show today's ground under the 2026 buildings and are much sharper. Keep the 2016 files only as a fallback.",
+  "Crossfade by camera altitude. suggested_full_frame_altitude_m is the height at which the plate just fills a 16:9 screen with a 45 degree vertical field of view looking straight down; fade the next finer plate in from about 1.5x its own figure down to its figure.",
+  "Terrain: build PlaneGeometry(width, height, cols-1, rows-1), rotateX(-Math.PI/2), move it to three_plane.center, then set each vertex's y from the .f32 file (fetch -> arrayBuffer -> new Float32Array). Use the same mosaic as its texture. Heights are already relative to the site ground, matching the twin.",
+  "The twin's own rtp_terrain.glb covers the 6.4 km square of the rtp_6400m plate and is flattened inside 560 m; when the twin is on screen, fade out the coarser plates near the centre or drop them 1-2 m so they never cut through it.",
+  "Sentinel-2 detail stops at 10 m per pixel, so below roughly 1.5 km camera height hand over to the 3D context model.",
+  "rtp_6400m drapes straight onto twin/web/models/exterior/rtp_terrain.glb (the same 6.4 km square): uv = ((x + 3200) / 6400, (y + 3200) / 6400) with y north, i.e. u = (three.x + 3200) / 6400, v = (3200 - three.z) / 6400, texture.flipY left at true.",
+  "Water level: the sea and Thane Creek sit at sea_level_m (-11.557 m in the twin's frame). A water plane there, with a little sky reflection, makes the creek read as water when the camera tilts.",
+  "Earth's curve (optional, for very high shots): lower each vertex by d * d / 12742000 m, where d is its distance from the pin in metres (about 785 m at 100 km).",
+  "Labels: x_m, y_m are rtp_local metres; three = [x, 0, -y]. Thane Creek also carries path_m, the OSM line, for a label that follows the water. straight_line_km_from_pin is a straight line computed from the coordinates, not a travel distance."
+ ]
+}
