@@ -158,8 +158,9 @@ async function floorCards() {
     const b = document.createElement('button'); b.className = 'fl';
     b.innerHTML = `<b>${o.level}</b><div><span>${floorName(o.level)}</span><small>…</small></div><span class="go">Plan ›</span>`;
     b.onclick = () => showFloor(o); b.onmouseenter = () => hiBand(o.level); b.onmouseleave = () => hiBand(null); box.appendChild(b);
-    loadPlan(o.id).then(p => { plans[o.id] = p; const n = p.zones.length; b.querySelector('small').textContent = p.card_summary || (p.zones[0] && p.zones[0].kind === 'process'
-      ? `${p.title.replace(/^.*·\s*/, '')} · ${p.totals.work_seats.toLocaleString('en-IN')} CAD work seats · ${n} processes` : `${p.title.replace(/^.*·\s*/, '')} · ${p.totals.all_seats} seats · ${n} rooms`); });
+    loadPlan(o.id).then(p => { plans[o.id] = p; const work = p.zones.some(z => z.kind === 'process');
+      const count = work ? p.totals.work_seats : p.totals.all_seats;
+      b.querySelector('small').textContent = `${count == null ? 'Capacity pending' : count.toLocaleString('en-IN') + (work ? ' workstations' : ' seats')} · ${p.zones.length} spaces`; });
   }
 }
 floorCards();

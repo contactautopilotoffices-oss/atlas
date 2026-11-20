@@ -17,9 +17,21 @@ assert.equal(third.zones.length, 27);
 assert.equal(third.others.length, 12);
 const items = [...third.zones, ...third.others];
 assert.equal(new Set(items.map(z => z.id)).size, items.length, 'Repeated CAD room labels retain separate identities.');
-assert.equal(items.filter(z => z.outline_verified).length, 20);
-assert.equal(third.totals.all_seats, null, 'Partial labelled seat figures are not a verified whole-floor total.');
-assert.equal(third.totals.work_seats, null);
+assert.equal(items.filter(z => z.outline_verified).length, 30);
+assert.equal(third.totals.all_seats, 773);
+assert.equal(third.totals.work_seats, 515);
+const chairIds = items.flatMap(z => z.cad_chair_ids);
+assert.equal(chairIds.length, 773);
+assert.equal(new Set(chairIds).size, 773, 'Every chair belongs to exactly one space.');
+assert(items.every(z => Number.isInteger(z.seats) && z.seats >= 0));
+assert.match(third.source.area_reader, /@node-projects\/acad-ts/);
+assert.equal(third.brief.totals.required, 340);
+assert.equal(third.brief.totals.achieved, 515);
+const work = third.zones.filter(z => z.kind === 'process');
+assert.equal(work.reduce((n,z) => n+z.seats,0),515);
+assert.equal(work.reduce((n,z) => n+z.sheet_required,0),340);
+assert(work.every(z => z.seats === z.sheet_achieved));
+assert.deepEqual(third.zones.filter(z => !z.outline_verified).map(z => z.group).sort(), ['Other seating', 'Reception & waiting']);
 for (const item of items) {
   assert(item.cad_label && item.source_handle);
   assert(item.label.every(Number.isFinite));
@@ -30,7 +42,7 @@ for (const item of items) {
       assert.equal(item.source_handle, '853FAD');
       assert.equal(item.area_sqft, 122);
       assert.equal(item.area_m2, 11.33);
-      assert.equal(item.cad_area_sqft, 123);
+      assert(Number.isFinite(item.cad_area_sqft) && item.cad_area_sqft > 0);
       assert.match(item.area_basis, /User-confirmed/);
     } else assert.match(item.area_basis, /CAD enclosure/);
   } else {
@@ -41,9 +53,11 @@ for (const item of items) {
 }
 assert.equal(third.zones.filter(z => z.group === 'Training room').length, 8);
 assert.equal(third.zones.find(z => z.cad_label === 'NEW RAMP_283').seats, 283);
-assert(third.zones.filter(z => z.group === 'Training room').every(z => z.seats === null));
+assert.deepEqual(third.zones.filter(z => z.group === 'Training room').sort((a,b) => a.name.localeCompare(b.name)).map(z => z.seats), [19,21,18,18,21,21,21,21]);
+assert.equal(third.zones.filter(z => z.group === 'Training room').reduce((n,z) => n+z.seats,0),160);
+assert.equal(third.zones.filter(z => z.group === 'HR room').length,2, 'Keep CAD names; do not guess which HR room is Admin.');
 assert.equal(fourth.zones.length, 18);
 assert.equal(fourth.totals.all_seats, 212);
 assert.equal(sixth.zones.length, 22);
 assert.equal(sixth.totals.work_seats, 1400);
-console.log('PASS: third-floor registration, CAD provenance, honest unknowns, distinct labels, legacy floor metrics.');
+console.log('PASS: third-floor registration, CAD provenance, unique chair allocation, supplied requirements, measured areas, honest open boundaries, legacy floor metrics.');

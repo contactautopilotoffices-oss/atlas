@@ -46,7 +46,8 @@ const INV = { meeting: ['Meeting rooms', '#8e6fd1'], service: ['Server, electric
 let mode = 'req';
 export async function openPlan(id, onBack) {
   P = await loadPlan(id); $('#plan').classList.add('on'); sel = null; mode = 'req';
-  $('#ptitle').textContent = P.title; $('#psub').textContent = '';
+  $('#ptitle').textContent = P.title; $('#psub').hidden = !P.brief;
+  $('#psub').textContent = P.brief ? `${fmt(P.brief.totals.required)} required · ${fmt(P.brief.totals.achieved)} achieved workstations` : '';
   svg.innerHTML = '';
   const root = el('g', {}, svg);
   el('path', { d: P.plate, fill: '#ffffff', stroke: 'none' }, root);
@@ -115,7 +116,7 @@ function paint() {
   }
 }
 function sidebar() {
-  const row = (z) => `<button class="row" data-id="${z.id}"><i style="background:${z.color}"></i><span>${esc(z.name)}</span><em>${z.seats || '–'}</em><small>${z.kind === 'inv' && !z.dims_m ? (z.cad_sqft ? fmt(z.cad_sqft) + ' sq ft' : '–') : (z.area_sqft == null ? '—' : fmt(z.area_sqft) + ' sq ft')}</small></button>`;
+  const row = (z) => `<button class="row" data-id="${z.id}"><i style="background:${z.color}"></i><span>${esc(z.name)}</span><em>${z.seats_applicable === false ? 'n/a' : z.seats ?? '–'}</em><small>${z.kind === 'inv' && !z.dims_m ? (z.cad_sqft ? fmt(z.cad_sqft) + ' sq ft' : 'Boundary review') : (z.area_sqft == null ? 'Boundary review' : fmt(z.area_sqft) + ' sq ft')}</small></button>`;
   if (mode === 'req') $('#list').innerHTML = P.zones.slice().sort((a, b) => b.seats - a.seats).map(row).join('');
   else { const by = {}; for (const k of Object.keys(INV)) by[INV[k][0]] = []; for (const it of P.inv) by[it.group].push(it);
     $('#list').innerHTML = Object.entries(by).filter(([, l]) => l.length).map(([g, l]) => `<div class="grp k">${g} · ${l.length}</div>` + l.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })).map(row).join('')).join('') || '<div class="grp">No supporting spaces in this drawing.</div>'; }
@@ -130,14 +131,17 @@ function select(id, zoom) {
   const perSeat = z.seats && z.area_sqft != null ? Math.round(z.area_sqft / z.seats) : null, sz = z.dims_m ? `${size(z.dims_m)} (${z.dims_m[0]} × ${z.dims_m[1]} m)` : 'outline not closed in the drawing';
   const area = z.area_sqft == null ? 'Not verified' : `${fmt(z.area_sqft)} sq ft (${z.area_m2} m²)`;
   const rows = z.kind === 'process'
-    ? [['Seats drawn (CAD)', z.seats], ['Brief: required', z.sheet_required], ['Brief: achieved', z.sheet_achieved], ['Desk size (brief)', z.desk], ['Width × depth', sz], ['Area', `${fmt(z.area_sqft)} sq ft (${z.area_m2} m²)`], ['Area per seat', perSeat ? `${perSeat} sq ft` : '–']]
-    : z.kind === 'inv' ? [['Type', z.group], ['Seats drawn (CAD)', z.seats || '–'], ['Width × depth', sz], ['Area', z.dims_m ? `${fmt(z.area_sqft)} sq ft` + (z.approx ? ' (approx.)' : '') : (z.cad_sqft ? `${fmt(z.cad_sqft)} sq ft (per the drawing's label)` : '–')]]
-    : [['Room type', z.group], [z.seat_basis || 'Seats drawn (CAD)', z.seats || '–'], ['Width × depth', sz], ['Area', area], ...(z.brief ? [['On the brief', z.brief]] : [])];
+    ? [['Seats drawn (CAD)', z.seats], ['Brief: required', z.sheet_required], ['Brief: achieved', z.sheet_achieved], ['Desk size (brief)', z.desk], ['Width × depth', sz], ['Area', area], ['Area per seat', perSeat ? `${perSeat} sq ft` : '–']]
+    : z.kind === 'inv' ? [['Type', z.group], [z.seat_basis || 'Seats drawn (CAD)', z.seats_applicable === false ? 'n/a' : z.seats ?? '–'], ['Width × depth', sz], ['Area', z.dims_m ? `${fmt(z.area_sqft)} sq ft` + (z.approx ? ' (approx.)' : '') : (z.cad_sqft ? `${fmt(z.cad_sqft)} sq ft (per the drawing's label)` : '–')]]
+    : [['Room type', z.group], [z.seat_basis || 'Seats drawn (CAD)', z.seats ?? '–'], ...(z.brief_capacity ? [['Brief capacity', z.brief_capacity]] : []), ['Width × depth', sz], ['Area', area], ...(z.brief ? [['On the brief', z.brief]] : [])];
+  if (z.desk_footprint_sqft != null) rows.push(['Desk footprint only', `${fmt(z.desk_footprint_sqft)} sq ft (excludes circulation)`]);
   if (z.cad_label) rows.push(['Drawing label', z.cad_label]);
   if (z.area_basis) rows.push(['Area basis', z.area_basis]);
-  const note = z.note ? `<div class="note">${esc(z.note)}</div>` : z.kind === 'process' && z.sheet_achieved != null && z.seats !== z.sheet_achieved ? `<div class="note">The drawing shows ${z.seats} seats; the brief says ${z.sheet_achieved} achieved.</div>` : '';
+  const countNote = z.brief_capacity_count != null && z.seats !== z.brief_capacity_count ? `${z.seats} chairs counted in CAD; the brief describes ${z.brief_capacity}.` : '';
+  const noteText = [z.note, countNote].filter(Boolean).join(' ');
+  const note = noteText ? `<div class="note">${esc(noteText)}</div>` : z.kind === 'process' && z.sheet_achieved != null && z.seats !== z.sheet_achieved ? `<div class="note">The drawing shows ${z.seats} seats; the brief says ${z.sheet_achieved} achieved.</div>` : '';
   s.innerHTML = `<h3><i style="background:${z.color}"></i>${esc(z.name)}</h3>
-    <div class="big"><div><b>${z.seats || '–'}</b><span>${z.seat_basis ? 'Seats marked' : 'Seats'}</span></div><div><b>${fmt(z.area_sqft)}</b><span>Sq ft</span></div></div>
+    <div class="big"><div><b>${z.seats_applicable === false ? 'n/a' : z.seats ?? '–'}</b><span>${z.seat_basis === 'Seats counted (CAD)' ? 'Seats counted' : z.seat_basis ? 'Seats marked' : 'Seats'}</span></div><div><b>${z.area_sqft == null ? 'Review' : fmt(z.area_sqft)}</b><span>Sq ft</span></div></div>
     <table>${rows.map(([a, b]) => `<tr><td>${esc(a)}</td><td>${esc(b)}</td></tr>`).join('')}</table>${note}`;
   const r = $('#list').querySelector(`[data-id="${id}"]`); if (r) r.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   if (zoom) { const bb = P.items[id].g.getBBox(); const f = fitBox([bb.x, -(bb.y + bb.height), bb.x + bb.width, -bb.y], 2.2); f.s = clampS(Math.max(f.s, P.s0 / 6)); Object.assign(goal, f); kick(); }

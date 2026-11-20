@@ -1,43 +1,53 @@
 # Third-floor CAD import
 
-Source: `20261015_3RD FLOOR.dwg`, supplied by the user, who confirmed this is the
-third floor. The drawing itself also says “RELIABLE TECH PARK” and “3RD FLOOR PLAN”.
-Its separate reference drawing labelled “3RD,4TH,5TH & 9TH FLOOR PLAN” is excluded.
+Source: `20261015_3RD FLOOR.dwg`, confirmed by the user as the third floor.
+The separate old reference drawing is excluded. Original DWGs remain outside the
+repository; the plan records source SHA-256, CAD labels and handles.
 
-The public plan is `plan_rtp3.json`. The original DWG stays outside the repository;
-its SHA-256 and drawing handles are recorded in the plan for traceability.
-LibreDWG converts to DXF, the existing isolated `flatten.py` preserves block
-transforms, and `tools/import_third_floor.py` builds the web data. The header uses
-millimetres; coordinates are converted to metres. Nested layer-0 entities inherit
-their containing insert's layer, preserving the doors and furniture correctly.
+LibreDWG/DXF flattening preserves the displayed CAD linework. Native
+`@node-projects/acad-ts` 3.9.0 reads the DWG for area analysis and chair counting.
+The native reader samples curves before applying nested block transforms, so
+mirrored door arcs retain their handedness. Drawing units are millimetres,
+converted to metres. Layer-0 children inherit their containing insert layer.
 
-The west-arm fit-out window is explicitly recorded. It contains 27 primary spaces
-and 12 supporting spaces. Twenty labels have an unambiguous enclosure made from
-the drawing's existing wall, glass and door edges. Their areas include door swings
-and their displayed dimensions are overall enclosure bounds. No missing boundary
-is closed by hand. Other spaces use location markers with unverified dimensions
-and area. Repeated cabin/conference labels retain distinct CAD handles.
+The recorded west-arm window contains 27 primary and 12 supporting spaces.
+Thirty have closed enclosures from original wall, facade, glass and door edges,
+noded at 1 mm precision. MTEXT attachment points identify labels inside rooms.
+These are CAD enclosure areas including drawn door swings, not certified carpet
+areas. Displayed dimensions are overall enclosure bounds. No boundary is invented.
+Other seating, reception/waiting, one locker bank and six passages need boundary
+review. Their location markers do not claim measured floor areas.
 
-Seat figures come only from the drawing's text, including New Ramp 283, Others 108,
-Growth 88, Corporate 36 and the marked meeting/conference capacities. No complete
-seat audit or third-floor client requirement sheet was supplied, so the floor
-total and unmarked room capacities remain unknown. They are never presented as 0.
-The tab retains the user-requested “Client requirement” label, matching the other
-floors; this label does not turn the CAD figures into a separate verified brief.
+The audit counts 773 physical chair blocks, allocated once each: 515 workstations,
+160 training, 24 conference, 12 meeting, 18 cabin, 10 HR, 4 interview and 30 waiting
+chairs. Human symbols and desk blocks are excluded. Training rooms 01–08 have
+19, 21, 18, 18, 21, 21, 21 and 21 chairs respectively; the brief requests 20 each.
+Counts reflect CAD chairs rather than silently replacing them with brief capacity.
 
-On 20 November 2026, the user confirmed the server room as **122 sq ft**. That
-figure takes precedence over the automatic enclosure calculation of 123 sq ft.
-The original CAD area, boundary and dimensions remain recorded; the displayed
-area is labelled as user-confirmed. The importer preserves this correction.
+`rtp3_requirements.json` transcribes the user-supplied requirement image and records
+its SHA-256. It requests 340 workstations and reports 515 achieved; independently
+counted process chairs reconcile to Corporate 36, Other 108, New Ramp 283 and Extra
+WS 88. Desk footprint figures exclude circulation and are not room floor areas.
+Shared third/sixth-floor room requirements retain their shared scope. CAD labels
+show two HR rooms while the brief lists HR and Admin separately; neither is
+renamed without confirmation.
 
-The third floor is registered with a plan-only field in `building.json`. It does
-not add a tenant manifest or claim a new 3D interior. Existing fourth/sixth-floor
-data, cinematic entry and CAD handoff remain in place.
+The user-confirmed server room area is **122 sq ft**, taking precedence over the
+CAD calculation. The original calculated area and geometry remain traceable.
 
-Rebuild after converting and flattening the supplied DWG:
+The floor is registered as a plan-only entry in `building.json`. Existing fourth
+and sixth floor data and the cinematic entry are preserved. The uploaded October
+sixth-floor DWG is an older, different fit-out than the November source already in
+Atlas; it does not replace the current 1,400-workstation plan.
+
+Rebuild after preparing the isolated DXF flatten and installing acad-ts:
 
 ```sh
+ACAD_TS=/path/to/workspace node airoli-rtp/tools/read_acad_ts.mjs source.dwg native.json
 python -I airoli-rtp/tools/import_third_floor.py flat.json.gz source.dwg \
-  airoli-rtp/demo/data/plan_rtp3.json provenance.json
+  airoli-rtp/demo/data/plan_rtp3.json provenance.json native.json
 npm run test:rtp
 ```
+
+The importer requires Shapely. Its analysis checks unique allocation of all 773
+chairs and reconciliation of process counts with the supplied requirement sheet.
