@@ -466,6 +466,9 @@ def build():
             OFFICE = ["cw_teal", "cw_blue", "cw_grey", "cw_silver", "ribbon_red", "ribbon_white", "com_ribbon"]
             if id(b) in lmk:
                 style = lmk[id(b)][1]; hgt = lmk[id(b)][2] or hgt; print("landmark", lmk[id(b)][0], round(a), "m2", hgt, "m")
+                nm_ = lmk[id(b)][0].split(",")[0].split(" (")[0]; c_ = q.centroid
+                if SLAB.buffer(-30).contains(c_) and (nm_ not in LANDMARKS or LANDMARKS[nm_]["h"] < hgt):
+                    lx_, ly_ = L(c_.x, c_.y); LANDMARKS[nm_] = {"name": nm_, "x": round(lx_, 1), "y": round(ly_, 1), "h": round(hgt, 1)}
             elif a < 70: style = "chawl"
             elif hgt > 45: style = "res_tower" if r_.random() < 0.6 else "com_glass"
             elif b["c"] in ("commercial", "office", "retail", "hotel") or (a > 1500 and r_.random() < 0.5): style = OFFICE[int(b["r"] * 991) % len(OFFICE)]
@@ -822,6 +825,7 @@ def protos():
     mb.build("proto_train", MATS)
 
 # ------------------------------------------------------------------ data ----
+LANDMARKS = {}   # named neighbours (refs/*.json and the built-in landmarks), labelled in the explorer
 def page_data(info):
     def inside(x, y, pad=0): return SLAB.buffer(-pad).contains(Point(x, y))
     trees = []
@@ -850,7 +854,7 @@ def page_data(info):
     return {"id": OID, "name": BO["name"], "origin": [round(OX, 2), round(OY, 2)], "slab": [[round(a, 1), round(b, 1)] for a, b in SL.exterior.coords],
             "building": {"foot": [[round(a, 1), round(b, 1)] for a, b in (L(x, y) for x, y in OPTB["p"])], "h": round(info["H"], 1), "floors": info["floors"], "glassy": info["glassy"],
                          "entrance": [round(v, 1) for v in info["entrance"]], "facing": round(info["canopy_ang"], 3)},
-            "walk0": [round(v, 1) for v in info["walk0"]], "street_cam": [round(v, 1) for v in info["street_cam"]], "stations": info["stations"], "routes": routes,
+            "walk0": [round(v, 1) for v in info["walk0"]], "street_cam": [round(v, 1) for v in info["street_cam"]], "stations": info["stations"], "landmarks": [m for m in LANDMARKS.values() if m["name"] in ("Times Square", "Fleet House")], "routes": routes,
             "trees": trees, "lamps": lamps, "traffic": traffic, "metro": metro, "blocks": blds}
 
 # ---------------------------------------------------------------- export ----

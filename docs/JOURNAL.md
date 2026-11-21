@@ -34,6 +34,7 @@
   - **Live preview:** the upgraded district loads in the walkable explorer at `/flipkart-andheri/world?preview=723-avenue#723-avenue` (3.5 MB). The published model in `d/` is unchanged until the founder approves it.
   - **Baked light in the live explorer:** Blender bakes ambient occlusion (how much open sky each surface sees) for the whole 723 district into 15 maps in about 2.5 minutes. The explorer applies them to 132 meshes, so streets, building bases, corners and the space under the viaduct darken as they do in the stills, while the sun and its shadows stay live. The 723 tower itself is not yet baked: its model has no second UV set.
   - The founder could not arrange a drone or a photo walk. Google imagery may be used only as reference, not pasted onto the models, so further realism means painting each building's facade from what Street View shows.
+  - The explorer labels Times Square and Fleet House in the 3D view. The preview also uses the same AgX colour handling as the Blender stills, so its light and contrast match them more closely.
   - 723 Avenue now has the rooftop garden from the developer's brochure: a timber deck, a curving planted band with trees, checkerboard paving, a glazed pavilion with timber fins and a glass railing. The layout is read from the brochure; sizes are estimates. The brochure image is kept with the 723 photos.
 - **Left undone:**
   - About 60 more significant buildings in the 723 to Marol Naka corridor still use generic facades; each needs its own Street View look. The Line 3 entrances are still the generic canopy.
