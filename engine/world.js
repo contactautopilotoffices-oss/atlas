@@ -195,6 +195,23 @@ async function start(A, W, intro=null) {
     scene.background = bg; scene.fog = fog; bands.forEach((b, i) => (b.visible = bands_[i])); hide.forEach((o) => (o.visible = true));
     root.traverse(o=>{if(!o.isMesh)return;for(const m of Array.isArray(o.material)?o.material:[o.material])if(/^ANDHERI_.*[Gg]lass/.test(m.name||'')){m.envMap=probeRT.texture;m.envMapIntensity=1.25;m.needsUpdate=true;}});
     for (const [n, m] of Object.entries(MAT)) if (REFLECTS.has(n) && m.envMap !== probeRT.texture) { m.envMap = probeRT.texture; m.envMapIntensity = n.startsWith("wall_") ? 1.9 : 1.4; m.needsUpdate = true; }
+    root.traverse(o=>{if(!o.isMesh)return;for(const m of Array.isArray(o.material)?o.material:[o.material])if(m.userData.ao&&REFLECTS.has(m.name)){m.envMap=probeRT.texture;m.envMapIntensity=m.name.startsWith("wall_")?1.9:1.4;m.needsUpdate=true;}});   // AO-baked copies
+  }
+  /* baked ambient occlusion (scripts/world/diorama.py --bake-ao): <id>-ao.json names one map per mesh, on UV 1.
+     Each baked mesh gets its own copies of its materials carrying its aoMap; the sun and shadows stay live. */
+  async function applyBakedAO(id, base) {
+    let J; try { const r = await fetch(`${base}${id}-ao.json`, { cache: "no-store" }); if (!r.ok) { console.log("AO: no map list", r.status); return; } J = await r.json(); } catch (e) { console.log("AO: failed", e); return; }
+    const L = new THREE.TextureLoader(), cache = {};
+    const map = (f) => cache[f] || (cache[f] = (() => { const t = L.load(base + f); t.channel = 1; t.flipY = false; t.colorSpace = THREE.NoColorSpace; t.anisotropy = 4; return t; })());
+    let n = 0;
+    root.traverse((o) => {
+      if (!o.isMesh) return; let f = null; for (let p = o; p && !f; p = p.parent) f = J.maps[p.name];
+      if (!f) return; if (!o.geometry.attributes.uv1) { console.log("AO: no uv1 on", o.name, Object.keys(o.geometry.attributes)); return; }
+      const ao = map(f);
+      const one = (m) => { const c = m.clone(); c.aoMap = ao; c.aoMapIntensity = Number(Q.get("ao") || 1); c.userData.ao = true; c.needsUpdate = true; return c; };
+      o.material = Array.isArray(o.material) ? o.material.map(one) : one(o.material); n++;
+    });
+    console.log("AO: baked maps on", n, "meshes"); window.__ao = n;
   }
 
   /* ------------------------------------------- the map beyond the model ---- */
@@ -365,7 +382,7 @@ async function start(A, W, intro=null) {
     leaveArea();disposeArea();
     $("#veil").classList.add("on");
     // ?preview=<id>: load that diorama from d-preview/ (a candidate build), leaving the published d/ untouched
-    const model=Q.get("preview")===id ? {glb:`${W.data}d-preview/${id}.glb`, data:`${W.data}d-preview/${id}.json`} : W.models && W.models[id];
+    const model=Q.get("preview")===id ? {glb:`${W.data}d-preview/${id}.glb?v=${Date.now()}`, data:`${W.data}d-preview/${id}.json?v=${Date.now()}`} : W.models && W.models[id];
     const [gltf, data] = await Promise.all([
       new Promise((ok, bad) => loader.load(model?.glb || `${W.data}d/${id}.glb`, ok, (e) => { if (e.total && $("#l-bar")) $("#l-bar").style.width = `${Math.round(e.loaded / e.total * 90)}%`; }, bad)),
       fetch(model?.data || `${W.data}d/${id}.json`).then((r) => r.json())]);
@@ -391,6 +408,7 @@ async function start(A, W, intro=null) {
       if (isGround) groundMeshes.push(o);
     });
     await applyAerialSurfaces(root, data);
+    if (Q.get("preview") === id) await applyBakedAO(id, `${W.data}d-preview/`);
     if(request!==selectionRequest)return null;
     for (const p of Object.values(protos)) p.visible = false;
     const pp = (k) => protos[k] ? protoParts(protos[k]) : [];

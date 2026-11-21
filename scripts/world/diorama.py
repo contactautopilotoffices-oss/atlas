@@ -969,6 +969,68 @@ def swap_hero(path):
     new.location.y += (ring[:, 1].min() + ring[:, 1].max()) / 2 - (bb[:, 1].min() + bb[:, 1].max()) / 2
     print("hero swapped from", path, "moved by", tuple(round(v, 2) for v in new.location))
 
+def bake_ao(outdir, tiles=2, size=4096, dist=14.0, samples=96):
+    """--bake-ao: bake ambient occlusion (how much open sky each surface sees) into a second UV set (LM)
+    for the static meshes, one JPEG per mesh, plus <id>-ao.json naming them. The page uses them as
+    aoMaps: they darken the sky light in streets, courtyards and under the viaduct, while the sun and its
+    shadows stay live. The big context mesh is first cut into tiles x tiles pieces for texel density."""
+    import bmesh as _bm
+    sc = bpy.context.scene; os.makedirs(outdir, exist_ok=True)
+    def split(ob, n):
+        if not ob: return []
+        me = ob.data; pts = np.array([p.center[:] for p in me.polygons])
+        if len(pts) == 0: return []
+        x0, x1, y0, y1 = pts[:, 0].min(), pts[:, 0].max() + 1e-3, pts[:, 1].min(), pts[:, 1].max() + 1e-3
+        out = []
+        for i in range(n):
+            for j in range(n):
+                keep = (pts[:, 0] >= x0 + (x1 - x0) * i / n) & (pts[:, 0] < x0 + (x1 - x0) * (i + 1) / n) & (pts[:, 1] >= y0 + (y1 - y0) * j / n) & (pts[:, 1] < y0 + (y1 - y0) * (j + 1) / n)
+                if not keep.any(): continue
+                bm = _bm.new(); bm.from_mesh(me); bm.faces.ensure_lookup_table()
+                _bm.ops.delete(bm, geom=[f for f in bm.faces if not keep[f.index]], context="FACES")
+                m2 = me.copy(); bm.to_mesh(m2); bm.free()
+                o2 = bpy.data.objects.new(f"{ob.name}_{i}{j}", m2); sc.collection.objects.link(o2); o2.matrix_world = ob.matrix_world; out.append(o2)
+        bpy.data.objects.remove(ob, do_unlink=True); return out
+    targets = []
+    for nm in ("context", "rooftops", "ground"):
+        targets += split(bpy.data.objects.get(nm), tiles if nm == "context" else 1 if nm == "rooftops" else 2)
+    for nm in ("metro", "stations", "entries_l3", "opt_" + OID, "roof_garden_723", "plinth"):
+        if bpy.data.objects.get(nm): targets.append(bpy.data.objects[nm])
+    sc.render.engine = "CYCLES"; sc.cycles.samples = samples; sc.cycles.use_denoising = True
+    try:
+        pr = bpy.context.preferences.addons["cycles"].preferences; pr.compute_device_type = "METAL"; pr.get_devices()
+        for dv in pr.devices: dv.use = True
+        sc.cycles.device = "GPU"
+    except Exception as e: print("GPU unavailable", e)
+    try: sc.world.light_settings.distance = dist
+    except Exception: pass
+    out = {}
+    for ob in targets:
+        me = ob.data
+        if len(me.polygons) == 0: continue
+        if "LM" not in me.uv_layers: me.uv_layers.new(name="LM")
+        uv0 = me.uv_layers[0].name; me.uv_layers.active = me.uv_layers["LM"]
+        bpy.ops.object.select_all(action="DESELECT"); ob.select_set(True); bpy.context.view_layer.objects.active = ob
+        bpy.ops.object.mode_set(mode="EDIT"); bpy.ops.mesh.select_all(action="SELECT")
+        bpy.ops.uv.smart_project(angle_limit=math.radians(66), island_margin=0.002, area_weight=1.0, scale_to_bounds=True)
+        bpy.ops.object.mode_set(mode="OBJECT")
+        sz = size if ob.name.startswith(("context", "ground")) else 2048
+        im = bpy.data.images.new("AO_" + ob.name, sz, sz, alpha=False, float_buffer=False); im.generated_color = (1, 1, 1, 1)
+        nodes = []
+        for slot in ob.material_slots:
+            if not slot.material: continue
+            slot.material.use_nodes = True; nt = slot.material.node_tree
+            n = nt.nodes.new("ShaderNodeTexImage"); n.image = im; nt.nodes.active = n; nodes.append((nt, n))
+        t0 = __import__("time").time()
+        bpy.ops.object.bake(type="AO", uv_layer="LM", margin=6, use_clear=True)
+        fn = f"{OID}-ao-{ob.name}.jpg"; im.filepath_raw = os.path.join(outdir, fn); im.file_format = "JPEG"; im.save()
+        for nt, n in nodes: nt.nodes.remove(n)
+        me.uv_layers.active = me.uv_layers[uv0]
+        try: me.uv_layers[uv0].active_render = True
+        except Exception: pass
+        out[ob.name] = fn; print("baked AO", ob.name, sz, round(__import__("time").time() - t0, 1), "s")
+    json.dump({"uv": "LM", "maps": out}, open(os.path.join(outdir, f"{OID}-ao.json"), "w"), indent=1)
+
 def roof_garden(H):
     """--roof-garden: the developer brochure's rooftop for 723 Avenue (House of Wadhwa): a timber deck,
     a curving planted band with trees, checkerboard paving, a glazed pavilion with timber fins and a
@@ -1057,6 +1119,7 @@ def aerial(data, info, name="aerial", az_off=-0.6, dist_k=1.0, el_k=0.42, lens=3
 info = build()
 if "--hero-blend" in A: swap_hero(A[A.index("--hero-blend") + 1])
 if "--roof-garden" in A: roof_garden(info["H"])
+if "--bake-ao" in A: bake_ao(A[A.index("--bake-ao") + 1])
 data = page_data(info)
 json.dump(data, open(os.path.join(OUT, f"{OID}.json"), "w"), separators=(",", ":"))
 if "--glb" in A: export(os.path.join(OUT, f"{OID}.glb"))

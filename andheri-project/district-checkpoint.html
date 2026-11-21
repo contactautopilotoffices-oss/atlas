@@ -1,0 +1,26 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Andheri District Checkpoint</title>
+<style>
+:root{--bg:#0b0d10;--fg:#f2f2ee;--mut:#a7abb0}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);font:15px/1.4 Inter,system-ui,sans-serif;overflow:hidden}
+img{position:fixed;inset:0;width:100%;height:100%;object-fit:contain;background:var(--bg)}
+.cap{position:fixed;left:24px;bottom:22px;max-width:min(680px,calc(100vw - 48px));background:#000a;padding:12px 16px;border-radius:10px}
+.cap b{display:block;font-size:17px}.cap span{color:var(--mut)}
+button{position:fixed;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:50%;border:0;background:#fffd;font-size:22px;cursor:pointer}
+#p{left:16px}#n{right:16px}.k{position:fixed;right:24px;bottom:26px;color:var(--mut)}
+</style></head><body>
+<img id="i" alt="">
+<div class="cap"><b id="t"></b><span id="d"></span></div>
+<button id="p" aria-label="Previous">←</button><button id="n" aria-label="Next">→</button><div class="k" id="c"></div>
+<script>
+const B="/media/flipkart-andheri/world/checkpoint/";
+const S=[["723-district-overview.jpg","The 500 m around 723 Avenue","From across Andheri-Kurla Road: the Times Square campus (centre), 723 behind it, the Line 1 viaduct curving through."],
+["723-district-road.jpg","Andheri-Kurla Road under Line 1","Real road and viaduct geometry from map data, traffic and autos, clear daylight."],
+["723-district-station.jpg","Marol Naka Line 1 station","Rebuilt from Street View: blue columns, opaque concourse with billboards, flat grey canopy, lift core, stairs to the footpath. Fleet House behind."],
+["723-district-aerial2.jpg","723 Avenue in its block","The tower modelled from your photograph: dark vertical fins, WADHWA crown."],
+["723-district-roof.jpg","723 rooftop","Rooftop garden from the developer brochure: timber deck, planted band, paving, pavilion."]];
+let k=0;const $=id=>document.getElementById(id);
+function show(){const s=S[k];$("i").src=B+s[0];$("t").textContent=s[1];$("d").textContent=s[2];$("c").textContent=(k+1)+" / "+S.length}
+$("p").onclick=()=>{k=(k+S.length-1)%S.length;show()};$("n").onclick=()=>{k=(k+1)%S.length;show()};
+addEventListener("keydown",e=>{if(e.key=="ArrowLeft")$("p").click();if(e.key=="ArrowRight")$("n").click()});show();
+</script></body></html>
