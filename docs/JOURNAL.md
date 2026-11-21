@@ -13,7 +13,15 @@
   - The generated 723 tower is replaced by the earlier photo-matched facade study (dark fins, opaque divisions, WADHWA crown). It lands on the same footprint within 4 cm.
   - New photographic aerial stills (GPU, real haze, no tilt-shift), so the scene reads as a drone photograph, not a model on a table.
   - All new behaviour is behind options (`--slab-min`, `--hero-blend`, `--render aerial aerial2`), so the live explorer's existing outputs are unchanged.
-- **What works now:** one command rebuilds a 1.1 km square of Marol around 723 Avenue and renders two drone views in about 30 seconds. The stills are in `media/flipkart-andheri/world/checkpoint/`.
+- **What works now:**
+  - One command rebuilds a 1.1 km square of Marol around 723 Avenue (about 500 m in every direction) and renders three views in about 30 seconds:
+    - an overview from across Andheri-Kurla Road;
+    - a view along the road under the Line 1 viaduct;
+    - a close view of 723.
+  - The stills are in `media/flipkart-andheri/world/checkpoint/`.
+  - After the founder's review, the milky haze was removed for clear daylight.
+  - Times Square (the 8,600 m² complex north of the road) and the Le Western hotel are named landmarks in glass curtain wall.
+  - Office blocks across the area now use six glass and ribbon-window facades instead of one.
 - **Left undone:**
   - The neighbouring buildings still look too clean and uniform. Every facade has the same punched windows, and the satellite heights flatten most of them to 5–8 storeys.
   - Corporate Avenue (2.5 km west) and Privilon are not yet in a checkpoint still.

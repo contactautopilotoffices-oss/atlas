@@ -440,6 +440,14 @@ def build():
 
     # --- the buildings around it ---
     ctx = MB([]); props = MB([])
+    # named landmarks near the options (footprint nearest the point; height from the surface model)
+    # Times Square: the 8,600 m2 complex north of Andheri-Kurla Road, 90 m from the geocoded Le Western hotel
+    LMK = [("Times Square", 72.867 + 1751 / S["k"][0], 19.111 - 319 / S["k"][1], "cw_blue"), ("Le Western", 72.8828176, 19.1078771, "cw_silver")]
+    lmk = {}
+    for nm, lo_, la_, sty in LMK:
+        pt = Point((lo_ - S["origin"][0]) * S["k"][0], (la_ - S["origin"][1]) * S["k"][1])
+        cand = [(p_.centroid.distance(pt), id(b_)) for b_, p_ in bpolys if p_.area > 1200 and b_.get("opt") != OID and id(b_) not in lmk]
+        if cand: lmk[min(cand)[1]] = (nm, sty)
     road_near = unary_union([ROAD["major"], ROAD["minor"]]).buffer(6)
     for b, p in bpolys:
         if b.get("opt") == OID: continue
@@ -447,9 +455,11 @@ def build():
             if q.geom_type != "Polygon" or q.area < 8: continue
             q = q.simplify(0.15); hgt = b["h"]; a = q.area; r_ = random.Random(b["r"])
             ring = [L(x, y) for x, y in q.exterior.coords]
-            if a < 70: style = "chawl"
+            OFFICE = ["cw_teal", "cw_blue", "cw_grey", "cw_silver", "ribbon_red", "ribbon_white", "com_ribbon"]
+            if id(b) in lmk: style = lmk[id(b)][1]; print("landmark", lmk[id(b)][0], round(a), "m2", hgt, "m")
+            elif a < 70: style = "chawl"
             elif hgt > 45: style = "res_tower" if r_.random() < 0.6 else "com_glass"
-            elif b["c"] in ("commercial", "office", "retail") or (a > 1500 and r_.random() < 0.5): style = "com_ribbon"
+            elif b["c"] in ("commercial", "office", "retail", "hotel") or (a > 1500 and r_.random() < 0.5): style = OFFICE[int(b["r"] * 991) % len(OFFICE)]
             else: style = WALL_STYLES[int(b["r"] * 997) % len(WALL_STYLES)]
             mw, mh = MOD[style]
             shop = a > 80 and hgt > 7 and road_near.intersects(q) and style != "chawl"
@@ -946,10 +956,15 @@ def aerial(data, info, name="aerial", az_off=-0.6, dist_k=1.0, el_k=0.42, lens=3
     perspective from a thin world volume, no tilt-shift and no transparent film."""
     sc = bpy.context.scene
     if not getattr(aerial, "lit", False):
-        place_instances(data); light(sc, az=235, el=32); aerial.lit = True
+        place_instances(data); light(sc, az=235, el=38); aerial.lit = True
+        sky = next(n for n in sc.world.node_tree.nodes if n.bl_idname == "ShaderNodeTexSky")
+        for k_, v_ in (("air_density", 1.0), ("aerosol_density", 1.2), ("sun_intensity", 1.0)):
+            try: setattr(sky, k_, v_)
+            except Exception: pass
+        sc.world.node_tree.nodes["Background"].inputs[1].default_value = 0.45; bpy.data.lights["sun"].energy = 4.2
         # haze in a bounded box (a world volume would swallow the sky and the sun at infinity)
         hm = bpy.data.materials.new("haze"); hm.use_nodes = True; ht = hm.node_tree; ht.nodes.remove(ht.nodes["Principled BSDF"])
-        vol = ht.nodes.new("ShaderNodeVolumePrincipled"); vol.inputs["Density"].default_value = 0.00028
+        vol = ht.nodes.new("ShaderNodeVolumePrincipled"); vol.inputs["Density"].default_value = 0.00006
         vol.inputs["Color"].default_value = (0.86, 0.87, 0.9, 1); vol.inputs["Anisotropy"].default_value = 0.35
         ht.links.new(vol.outputs[0], ht.nodes["Material Output"].inputs["Volume"])
         bpy.ops.mesh.primitive_cube_add(size=1, location=(0, 0, 140)); hz = bpy.context.active_object; hz.name = "haze"
@@ -961,8 +976,12 @@ def aerial(data, info, name="aerial", az_off=-0.6, dist_k=1.0, el_k=0.42, lens=3
         except Exception as e: print("GPU unavailable", e)
     E = info["entrance"]; F = info["canopy_ang"]; nx, ny = math.sin(F), -math.cos(F); H = info["H"]
     bc = Polygon(data["building"]["foot"]).centroid
-    a = math.atan2(ny, nx) + az_off; dist = max(420, H * 6) * dist_k
-    camera(sc, (bc.x + math.cos(a) * dist, bc.y + math.sin(a) * dist, dist * el_k), (bc.x - math.cos(a) * 60, bc.y - math.sin(a) * 60, H * 0.2), lens)
+    if isinstance(az_off, tuple):   # explicit shot in the scene frame: (pos, look, lens)
+        (px_, py_, pz_), (lx_, ly_, lz_) = az_off[0], az_off[1]
+        camera(sc, (px_ - OX, py_ - OY, pz_), (lx_ - OX, ly_ - OY, lz_), az_off[2]); a = None
+    else:
+        a = math.atan2(ny, nx) + az_off; dist = max(420, H * 6) * dist_k
+        camera(sc, (bc.x + math.cos(a) * dist, bc.y + math.sin(a) * dist, dist * el_k), (bc.x - math.cos(a) * 60, bc.y - math.sin(a) * 60, H * 0.2), lens)
     sc.render.engine = "CYCLES"; sc.cycles.samples = int(A[A.index("--samples") + 1]) if "--samples" in A else 96; sc.cycles.use_denoising = True
     sc.cycles.max_bounces = 6; sc.cycles.transparent_max_bounces = 8; sc.cycles.volume_step_rate = 4
     sc.render.resolution_x, sc.render.resolution_y = 1920, 1080; sc.render.resolution_percentage = int(A[A.index("--pct") + 1]) if "--pct" in A else 100
@@ -980,5 +999,8 @@ if "--render" in A:
         if k.startswith("--"): break
         if k == "aerial": aerial(data, info)
         elif k == "aerial2": aerial(data, info, "aerial2", az_off=0.9, dist_k=0.55, el_k=0.35, lens=40)
+        # scene-frame shots for 723 Avenue: along Andheri-Kurla Road past Times Square, and the 500 m overview
+        elif k == "road": aerial(data, info, "road", az_off=((1440, -378, 24), (1760, -325, 30), 26))
+        elif k == "overview": aerial(data, info, "overview", az_off=((1690, -1000, 390), (1765, -265, 12), 30))
         else: render(k, data, info)
 if "--sky" in A: sky_hdr()
