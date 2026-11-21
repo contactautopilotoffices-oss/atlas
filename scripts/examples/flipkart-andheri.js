@@ -403,4 +403,15 @@ L3.stations.splice(L3.stations.findIndex(s => s.name === "Sahar Road"), 0, { nam
 flat.transit.lines.splice(2, 0, { key: "line7", name: "Metro Line 7 (Red)", short: "L7", mode: "metro", color: "#d23c3c", status: "open", src: "https://en.wikipedia.org/wiki/Line_7_(Mumbai_Metro)",
   stations: [{ name: "Gundavali", lat: 19.11451, lng: 72.85516, open: true }] });
 flat.copy.connect.note = "Walking distance from each building to its two metro stations, and Andheri railway station by road, as measured in Google Maps (Nov 2026).";
+/* Client shortlist: only this 2D Andheri East atlas changes. Keep the
+   source inventory intact for the separate /flipkart-andheri study. */
+const SHORTLIST = ["723-avenue", "corporate-avenue", "privilon"];
+const visitMedia = JSON.parse(fs.readFileSync(path.join(root, "examples", "flipkart-andheri-east.media.json"), "utf8"));
+flat.options = SHORTLIST.map((id, i) => {
+  const option = flat.options.find(o => o.id === id);
+  return { ...option, n: i + 1, gallery: visitMedia[id] || [] };
+});
+flat.zones = flat.zones.filter(z => flat.options.some(o => o.micro === z.key));
+flat.copy.overview.intro = "{optionCount} shortlisted buildings, with edited property walkthroughs and the metro around them.";
+flat.meta.sheet = `${DECK}. Shortlisted by Autopilot: 723 Avenue, Corporate Avenue and Privilon (Nov 2026). Positions and connectivity researched Nov 2026; each carries its source.`;
 write(MAP_SLUG, flat, MAP_ACCESS, { media: `/media/${SLUG}/` });

@@ -35,3 +35,8 @@ airoli-rtp/rtp*/*_egress.*
 airoli-rtp/rtp*/*_layers.md
 
 airoli-rtp/experience/tests/
+
+# Local video-editing sources; client playback uses compressed media only.
+.env.andheri.local
+Andheri Property Visits */
+andheri-video-edit/

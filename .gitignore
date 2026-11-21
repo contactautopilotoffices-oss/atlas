@@ -107,3 +107,13 @@ airoli-rtp/film/narration-v3/*transcript*.json
 airoli-rtp/film/narration-v3/*.log
 airoli-rtp/interior-semantic/source/
 airoli-rtp/interior-semantic/captures/checkpoint1/
+
+# Andheri raw visit footage and reproducible video work files.
+.env.andheri.local
+Andheri Property Visits */
+andheri-video-edit/work/
+andheri-video-edit/renders/
+andheri-video-edit/.hyperframes/
+andheri-video-edit/.transcode-cache/
+andheri-video-edit/__pycache__/
+!andheri-video-edit/assets/autopilot.png

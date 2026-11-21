@@ -1,0 +1,188 @@
+{
+  "title": "RELIABLE TECH PARK 3RD FLOOR",
+  "source": {
+    "type": "User-supplied requirement sheet",
+    "file": "WhatsApp Image 2026-11-20 at 11.25.27 AM.jpeg",
+    "sha256": "afebf5292a098c20e2ce8a79f9425c11bcd6faea10ed4830123fa90640a834e6",
+    "received": "2026-11-20"
+  },
+  "rooms": [
+    {
+      "id": "meeting-4",
+      "label": "Meeting Room 4 Pax",
+      "floors": [
+        6
+      ],
+      "capacity": 4,
+      "required_rooms": 7,
+      "achieved_rooms": 8
+    },
+    {
+      "id": "conference",
+      "label": "Conference 12 pax",
+      "floors": [
+        3
+      ],
+      "capacity": 12,
+      "required_rooms": 2,
+      "achieved_rooms": 2
+    },
+    {
+      "id": "meeting-4-6",
+      "label": "Meeting Room 4/6 Pax",
+      "floors": [
+        3,
+        6
+      ],
+      "capacity": [
+        4,
+        6
+      ],
+      "required_rooms": 4,
+      "achieved_rooms": 3
+    },
+    {
+      "id": "training",
+      "label": "Training Room 20 pax",
+      "floors": [
+        3
+      ],
+      "capacity": 20,
+      "required_rooms": 8,
+      "achieved_rooms": 8
+    },
+    {
+      "id": "server",
+      "label": "Server room",
+      "floors": [
+        3,
+        6
+      ],
+      "capacity": null,
+      "required_rooms": 1,
+      "achieved_rooms": 1
+    },
+    {
+      "id": "pantry",
+      "label": "Pantry 30 Pax",
+      "floors": [],
+      "capacity": 30,
+      "required_rooms": 0,
+      "achieved_rooms": 0
+    },
+    {
+      "id": "hr",
+      "label": "HR Room",
+      "floors": [
+        3
+      ],
+      "capacity": null,
+      "required_rooms": 1,
+      "achieved_rooms": 1
+    },
+    {
+      "id": "it",
+      "label": "IT Room",
+      "floors": [
+        3
+      ],
+      "capacity": null,
+      "required_rooms": 1,
+      "achieved_rooms": 1
+    },
+    {
+      "id": "admin",
+      "label": "Admin room",
+      "floors": [
+        3
+      ],
+      "capacity": null,
+      "required_rooms": 1,
+      "achieved_rooms": 1
+    },
+    {
+      "id": "interview",
+      "label": "Interview room",
+      "floors": [
+        3
+      ],
+      "capacity": null,
+      "required_rooms": 2,
+      "achieved_rooms": 2
+    },
+    {
+      "id": "corporate-cabins",
+      "label": "Corporate Cabins inside corporate area",
+      "floors": [
+        3
+      ],
+      "capacity": null,
+      "required_rooms": 4,
+      "achieved_rooms": 4
+    },
+    {
+      "id": "waiting",
+      "label": "waiting area 50-60 pax",
+      "floors": [
+        3
+      ],
+      "capacity": [
+        50,
+        60
+      ],
+      "required_rooms": 1,
+      "achieved_rooms": 1
+    },
+    {
+      "id": "cabins",
+      "label": "Cabins",
+      "floors": [
+        3,
+        6
+      ],
+      "capacity": null,
+      "required_rooms": 8,
+      "achieved_rooms": 10
+    }
+  ],
+  "processes": [
+    {
+      "id": "corporate",
+      "cad_handle": "859382",
+      "name": "Corporate",
+      "required": 30,
+      "achieved": 36,
+      "desk_size": "3′6″ × 2′"
+    },
+    {
+      "id": "other",
+      "cad_handle": "858D9A",
+      "name": "Other",
+      "required": 50,
+      "achieved": 108,
+      "desk_size": "3′ × 2′"
+    },
+    {
+      "id": "new-ramp",
+      "cad_handle": "85926F",
+      "name": "New Ramp",
+      "required": 260,
+      "achieved": 283,
+      "desk_size": "3′ × 2′"
+    },
+    {
+      "id": "extra-ws",
+      "cad_handle": "8592E7",
+      "name": "EXTRA WS",
+      "required": 0,
+      "achieved": 88,
+      "desk_size": "3′ × 2′"
+    }
+  ],
+  "totals": {
+    "required": 340,
+    "achieved": 515,
+    "unit": "workstations"
+  },
+  "scope_note": "Rows marked 3rd & 6th are shared-floor figures, not a third-floor-only allocation."
+}

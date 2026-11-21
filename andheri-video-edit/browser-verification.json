@@ -1,0 +1,92 @@
+[
+  {
+    "width": 720,
+    "id": "723-avenue",
+    "duration": 37.433333,
+    "height": 960,
+    "time": 0.468,
+    "muted": true,
+    "error": null,
+    "rect": {
+      "width": 486,
+      "left": 887,
+      "right": 1373
+    },
+    "viewportWidth": 1400
+  },
+  {
+    "width": 720,
+    "id": "corporate-avenue",
+    "duration": 27.9,
+    "height": 960,
+    "time": 0.3671,
+    "muted": true,
+    "error": null,
+    "rect": {
+      "width": 486,
+      "left": 887,
+      "right": 1373
+    },
+    "viewportWidth": 1400
+  },
+  {
+    "width": 720,
+    "id": "privilon",
+    "duration": 28,
+    "height": 960,
+    "time": 0.3471,
+    "muted": true,
+    "error": null,
+    "rect": {
+      "width": 486,
+      "left": 887,
+      "right": 1373
+    },
+    "viewportWidth": 1400
+  },
+  {
+    "width": 720,
+    "id": "723-avenue",
+    "duration": 37.433333,
+    "height": 960,
+    "time": 0.4102,
+    "muted": true,
+    "error": null,
+    "rect": {
+      "width": 356,
+      "left": 17,
+      "right": 373
+    },
+    "viewportWidth": 390
+  },
+  {
+    "width": 720,
+    "id": "corporate-avenue",
+    "duration": 27.9,
+    "height": 960,
+    "time": 0.4786,
+    "muted": true,
+    "error": null,
+    "rect": {
+      "width": 356,
+      "left": 17,
+      "right": 373
+    },
+    "viewportWidth": 390
+  },
+  {
+    "width": 720,
+    "id": "privilon",
+    "duration": 28,
+    "height": 960,
+    "time": 0.2814,
+    "muted": true,
+    "error": null,
+    "rect": {
+      "width": 356,
+      "left": 17,
+      "right": 373
+    },
+    "viewportWidth": 390
+  }
+]

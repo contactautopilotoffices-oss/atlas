@@ -1,0 +1,15 @@
+{
+  "preview": "https://atlas-d4m49lmvg-autopilot-offices-projects.vercel.app/flipkart-andheri-east",
+  "deploymentId": "dpl_HqHA6HJpGyZNeE6UrZ7AfuTeLWRi",
+  "readyState": "READY",
+  "productionChanged": false,
+  "scope": "Focused review deployment of Andheri East only. Do not promote this partial preview to production. The full clean source snapshot is /tmp/atlas-andheri/review-site and the authoritative changes are in the working checkout. Build a complete production deployment after review.",
+  "checks": [
+    "13 engine regression cases passed",
+    "6 real-Chrome playback checks passed at 1400px and 390px using uploaded storage URLs",
+    "8 uploaded assets verified by public HEAD",
+    "MP4 streaming byte range returned HTTP 206 with video/mp4 and CORS headers",
+    "all 3 MP4s fully decoded with zero audio streams",
+    "Protected preview served bundle verified: exactly 3 shortlisted options, all gallery URLs in expected Supabase bucket"
+  ]
+}

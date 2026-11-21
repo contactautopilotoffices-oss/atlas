@@ -504,6 +504,11 @@
   },
   "redirects": [
     {
+      "source": "/jindalx",
+      "destination": "/jindalx/",
+      "permanent": true
+    },
+    {
       "source": "/",
       "has": [
         {

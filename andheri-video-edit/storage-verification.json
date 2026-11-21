@@ -1,0 +1,60 @@
+{
+  "bucket": "atlas-cms",
+  "public": true,
+  "fileSizeLimit": 104857600,
+  "tables": {
+    "atlas_links": [],
+    "atlas_bundles": [],
+    "atlas_overrides": []
+  },
+  "assets": [
+    {
+      "file": "723-avenue-frontal-elevation.jpg",
+      "bytes": 442426,
+      "sha256": "5d5c0d96c20db39af2bfcbf96ad7de8020edef58d03702e51a95efd63e187dbf",
+      "url": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/atlas-cms/flipkart-andheri-east/visits/5d5c0d96c20d/723-avenue-frontal-elevation.jpg"
+    },
+    {
+      "file": "723-avenue-poster.jpg",
+      "bytes": 71342,
+      "sha256": "8988519a05195a57ee60a66615e9709cd62079dd43d931eee05c46454caf9eae",
+      "url": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/atlas-cms/flipkart-andheri-east/visits/8988519a0519/723-avenue-poster.jpg"
+    },
+    {
+      "file": "723-avenue-top-view.jpg",
+      "bytes": 473540,
+      "sha256": "a01df91407a322201764d272aabfbc670e30fc473fd2edb93c0d7025e4634aa6",
+      "url": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/atlas-cms/flipkart-andheri-east/visits/a01df91407a3/723-avenue-top-view.jpg"
+    },
+    {
+      "file": "723-avenue-walkthrough.mp4",
+      "bytes": 12592266,
+      "sha256": "965eec5b4e9954433c4d05ca80b4c0e5a9784b150356b50b522a11b268bea3ae",
+      "url": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/atlas-cms/flipkart-andheri-east/visits/965eec5b4e99/723-avenue-walkthrough.mp4"
+    },
+    {
+      "file": "corporate-avenue-poster.jpg",
+      "bytes": 52831,
+      "sha256": "a62baa551ff90511dd0538eb94d950033e2c4d61013a1ab8370905621ac16cf7",
+      "url": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/atlas-cms/flipkart-andheri-east/visits/a62baa551ff9/corporate-avenue-poster.jpg"
+    },
+    {
+      "file": "corporate-avenue-walkthrough.mp4",
+      "bytes": 7826260,
+      "sha256": "48025384448bc69f081eaab7d0c43e888544bd757359714add251b418b1f46a9",
+      "url": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/atlas-cms/flipkart-andheri-east/visits/48025384448b/corporate-avenue-walkthrough.mp4"
+    },
+    {
+      "file": "privilon-poster.jpg",
+      "bytes": 48854,
+      "sha256": "4d671f976cba72eb7a6dff777bd6aa70a388458058feff80281d4087383da163",
+      "url": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/atlas-cms/flipkart-andheri-east/visits/4d671f976cba/privilon-poster.jpg"
+    },
+    {
+      "file": "privilon-walkthrough.mp4",
+      "bytes": 8656690,
+      "sha256": "b34bb773c2b81b90e75113f3f32578caeb1151e30eb56616cdb0bd4ab36d31c4",
+      "url": "https://wjitngujojkbxzsryjnk.supabase.co/storage/v1/object/public/atlas-cms/flipkart-andheri-east/visits/b34bb773c2b8/privilon-walkthrough.mp4"
+    }
+  ]
+}

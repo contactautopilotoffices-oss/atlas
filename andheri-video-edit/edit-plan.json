@@ -1,0 +1,95 @@
+{
+  "723-avenue": {
+    "name": "723 Avenue",
+    "shots": [
+      {
+        "file": "723 Avenue /Entrance Lobby , 723 .MOV",
+        "start": 2,
+        "duration": 5,
+        "label": "Entrance lobby"
+      },
+      {
+        "file": "13th floor left wing .MOV",
+        "start": 1,
+        "duration": 12,
+        "label": "13th floor \u00b7 Left wing"
+      },
+      {
+        "file": "723 Avenue /13 Floor Right wing.MOV",
+        "start": 8,
+        "duration": 4,
+        "label": "13th floor \u00b7 Right wing"
+      },
+      {
+        "file": "723 Avenue /Ouitdoor Lobby view 2 .MOV",
+        "start": 0.5,
+        "duration": 5,
+        "label": "Outdoor lobby \u00b7 City view"
+      },
+      {
+        "file": "723 Avenue /Ouitdoor Lobby view 2 .MOV",
+        "start": 10.5,
+        "duration": 4.5,
+        "label": "Outdoor lobby \u00b7 Skyline"
+      },
+      {
+        "file": "723 Avenue /14th  outdoor  view.MOV",
+        "start": 15,
+        "duration": 5,
+        "label": "14th floor \u00b7 Outdoor view"
+      }
+    ]
+  },
+  "privilon": {
+    "name": "Privilon",
+    "shots": [
+      {
+        "file": "Privillon/left wing .MOV",
+        "start": 1,
+        "duration": 11,
+        "label": "Left wing \u00b7 Floor overview"
+      },
+      {
+        "file": "Privillon/left wing .MOV",
+        "start": 31,
+        "duration": 7,
+        "label": "Left wing \u00b7 Window frontage"
+      },
+      {
+        "file": "Privillon/right wing .MOV",
+        "start": 8,
+        "duration": 4,
+        "label": "Right wing"
+      },
+      {
+        "file": "Privillon/Balcony View .MOV",
+        "start": 14,
+        "duration": 4,
+        "label": "Balcony \u00b7 City view"
+      }
+    ]
+  },
+  "corporate-avenue": {
+    "name": "Corporate Avenue",
+    "shots": [
+      {
+        "file": "Corporate Avenue/Corporate avenue floor 1  .MOV",
+        "start": 14,
+        "duration": 9,
+        "label": "Walkthrough 1 \u00b7 Workspace"
+      },
+      {
+        "file": "Corporate Avenue/Corporate avenue foor 2 .MOV",
+        "start": 35,
+        "duration": 9,
+        "label": "Walkthrough 2 \u00b7 Workstations"
+      },
+      {
+        "file": "Corporate Avenue/Corporate avenue foor 2 .MOV",
+        "start": 46,
+        "duration": 8,
+        "label": "Walkthrough 2 \u00b7 Floor overview"
+      }
+    ]
+  }
+}

@@ -122,8 +122,10 @@ function keyPan(dt) {
   return any;
 }
 
-// ------------------------------------------------------------------ the two offered floors: a band on the facade, a card
-const OFFER = B.floors.filter(f => (f.tenants || []).length).map(f => ({ level: f.level, id: f.tenants[0] }));
+// ------------------------------------------------------------------ offered CAD floors: a facade band and a card
+// A plan-only floor does not create a tenant/3D manifest in the legacy viewer.
+const OFFER = B.floors.filter(f => f.plan || (f.tenants || []).length).map(f => ({ level: f.level, id: f.plan || f.tenants[0] }));
+const floorName = n => n === 0 ? 'Ground floor' : `${n}${n % 100 >= 11 && n % 100 <= 13 ? 'th' : ({1:'st',2:'nd',3:'rd'}[n % 10] || 'th')} floor`;
 const ccw = (r) => { let A = 0; for (let i = 0; i < r.length; i++) { const a = r[i], b = r[(i + 1) % r.length]; A += a[0] * b[1] - b[0] * a[1]; } return A >= 0 ? r : r.slice().reverse(); };
 function bandGeometry(lv) {
   const R = ccw(PJ.outer), gs = [], z0 = ZL(lv) + .15, h = B.floor_to_floor - .3;
@@ -154,10 +156,11 @@ async function floorCards() {
   const box = $('#floors'); box.innerHTML = '';
   for (const o of OFFER.slice().sort((a, b) => b.level - a.level)) {
     const b = document.createElement('button'); b.className = 'fl';
-    b.innerHTML = `<b>${o.level}</b><div><span>${o.level === 6 ? '6th floor' : o.level === 4 ? '4th floor' : o.level + 'th floor'}</span><small>…</small></div><span class="go">Plan ›</span>`;
+    b.innerHTML = `<b>${o.level}</b><div><span>${floorName(o.level)}</span><small>…</small></div><span class="go">Plan ›</span>`;
     b.onclick = () => showFloor(o); b.onmouseenter = () => hiBand(o.level); b.onmouseleave = () => hiBand(null); box.appendChild(b);
-    loadPlan(o.id).then(p => { plans[o.id] = p; const n = p.zones.length; b.querySelector('small').textContent = p.zones[0] && p.zones[0].kind === 'process'
-      ? `${p.title.replace(/^.*·\s*/, '')} · ${p.totals.work_seats.toLocaleString('en-IN')} CAD work seats · ${n} processes` : `${p.title.replace(/^.*·\s*/, '')} · ${p.totals.all_seats} seats · ${n} rooms`; });
+    loadPlan(o.id).then(p => { plans[o.id] = p; const work = p.zones.some(z => z.kind === 'process');
+      const count = work ? p.totals.work_seats : p.totals.all_seats;
+      b.querySelector('small').textContent = `${count == null ? 'Capacity pending' : count.toLocaleString('en-IN') + (work ? ' workstations' : ' seats')} · ${p.zones.length} spaces`; });
   }
 }
 floorCards();

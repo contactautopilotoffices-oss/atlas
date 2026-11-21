@@ -3,7 +3,8 @@
 const NS = 'http://www.w3.org/2000/svg';
 const $ = (s) => document.querySelector(s);
 const el = (t, a = {}, p) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
-const fmt = (n) => Number(n).toLocaleString('en-IN');
+const fmt = n => n == null || !Number.isFinite(Number(n)) ? '—' : Number(n).toLocaleString('en-IN');
+const esc = value => String(value ?? '—').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const ftin = (m) => { let i = Math.round(m / .0254), f = Math.floor(i / 12); i -= f * 12; return `${f}'${i}"`; };
 const size = (d) => d ? `${ftin(d[0])} × ${ftin(d[1])}` : '';
 const cache = {};
@@ -45,10 +46,14 @@ const INV = { meeting: ['Meeting rooms', '#8e6fd1'], service: ['Server, electric
 let mode = 'req';
 export async function openPlan(id, onBack) {
   P = await loadPlan(id); $('#plan').classList.add('on'); sel = null; mode = 'req';
-  $('#ptitle').textContent = P.title; $('#psub').textContent = '';
+  $('#ptitle').textContent = P.title; $('#psub').hidden = !P.brief || !!P.source_plan;
+  $('.list-columns span:last-child').hidden = !!P.source_plan;
+  $('.inspector-heading p').textContent = P.source_plan ? 'Select a space to see its seats.' : 'Select a process or supporting space to see its seats, dimensions and area.';
+  $('#psub').textContent = P.brief && !P.source_plan ? `${fmt(P.brief.totals.required)} required · ${fmt(P.brief.totals.achieved)} achieved workstations` : '';
   svg.innerHTML = '';
   const root = el('g', {}, svg);
   el('path', { d: P.plate, fill: '#ffffff', stroke: 'none' }, root);
+  if (P.source_plan) el('image', { href: P.source_plan.url, x: 0, y: 0, width: P.source_plan.width, height: P.source_plan.height, 'pointer-events': 'none' }, root);
   const pas = el('g', { 'pointer-events': 'none' }, root);
   for (const o of P.others) if (o.kind === 'passage') el('path', { d: o.d, fill: '#ece8e1', stroke: 'none' }, pas);
   P.items = {}; P.inv = [];
@@ -57,16 +62,17 @@ export async function openPlan(id, onBack) {
     const it = { ...o, id: 'inv-' + i, kind: 'inv', type: o.kind, group: INV[o.kind][0], color: INV[o.kind][1] }; P.inv.push(it);
     const g = el('g', { class: 'z', 'data-id': it.id }, ig);
     if (o.dims_m) el('path', { d: o.d, fill: it.color, 'fill-opacity': .16, stroke: 'none' }, g);
-    else el('circle', { cx: o.label[0], cy: -o.label[1], r: .55, fill: it.color, 'fill-opacity': .16, stroke: it.color, 'stroke-width': 1.2, 'vector-effect': 'non-scaling-stroke' }, g);   // outline not closed in the drawing: a marker, not a guessed shape
+    else el('circle', { cx: o.label[0], cy: -o.label[1], r: P.marker_radius || .55, fill: it.color, 'fill-opacity': .16, stroke: it.color, 'stroke-width': 1.2, 'vector-effect': 'non-scaling-stroke' }, g);   // outline not closed in the drawing: a marker, not a guessed shape
     g.addEventListener('click', (e) => { if (P.moved || mode !== 'inv') return; e.stopPropagation(); select(it.id, false); });
     P.items[it.id] = { z: it, g }; });
   const zg = el('g', { id: 'zoneg' }, root);
   for (const z of P.zones) {
     const g = el('g', { class: 'z', 'data-id': z.id }, zg);
-    el('path', { class: 'f', d: z.d, fill: z.color, 'fill-opacity': .42, stroke: z.color, 'stroke-width': 1.6, 'vector-effect': 'non-scaling-stroke', 'stroke-linejoin': 'round' }, g);
+    const shape = z.d ? {d:z.d,'stroke-linejoin':'round'} : {cx:z.label[0],cy:-z.label[1],r:P.marker_radius || .6};
+    el(z.d ? 'path' : 'circle', { class: 'f', ...shape, fill: z.color, 'fill-opacity': .42, stroke: z.color, 'stroke-width': 1.6, 'vector-effect': 'non-scaling-stroke' }, g);
     g.addEventListener('click', (e) => { if (P.moved || mode !== 'req') return; e.stopPropagation(); select(z.id, false); });
-    g.addEventListener('mouseenter', () => { if (!sel && mode === 'req') g.querySelector('path').setAttribute('fill-opacity', .6); });
-    g.addEventListener('mouseleave', () => { if (!sel && mode === 'req') g.querySelector('path').setAttribute('fill-opacity', .42); });
+    g.addEventListener('mouseenter', () => { if (!sel && mode === 'req') g.querySelector('.f').setAttribute('fill-opacity', .6); });
+    g.addEventListener('mouseleave', () => { if (!sel && mode === 'req') g.querySelector('.f').setAttribute('fill-opacity', .42); });
     P.items[z.id] = { z, g };
   }
   const C = P.cad, cg = el('g', { 'pointer-events': 'none', fill: 'none', 'vector-effect': 'non-scaling-stroke', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, root);
@@ -78,8 +84,8 @@ export async function openPlan(id, onBack) {
     const t = el('text', { x: z.label[0], y: -z.label[1], 'text-anchor': 'middle', 'font-size': fs, 'font-weight': w1, fill: '#1d1c1a', 'stroke-width': fs * .28 }, parent); t.textContent = z.name;
     const t2 = el('text', { x: z.label[0], y: -z.label[1] + fs * 1.05, 'text-anchor': 'middle', 'font-size': fs * .78, 'font-weight': 600, fill: '#3f3c38', 'stroke-width': fs * .24 }, parent); t2.textContent = z.dims_m ? size(z.dims_m) : (z.cad_sqft ? `${z.cad_sqft} sq ft` : '');
     fitLabel(g, t, t2, fs); };
-  for (const z of P.zones) label(z, P.items[z.id].g, lz, Math.max(.55, Math.min(1.5, Math.sqrt(z.area_m2) / 7.5)));
-  for (const it of P.inv) if (it.label) label(it, P.items[it.id].g, li, Math.max(.3, Math.min(.8, Math.sqrt(it.area_sqft / 10.76) / 6)), 700);
+  for (const z of P.source_plan ? [] : P.zones) label(z, P.items[z.id].g, lz, Math.max(.55, Math.min(1.5, Math.sqrt(z.area_m2) / 7.5)));
+  for (const it of P.source_plan ? [] : P.inv) if (it.label) label(it, P.items[it.id].g, li, Math.max(.3, Math.min(.8, Math.sqrt(it.area_sqft / 10.76) / 6)), 700);
   setMode('req');
   requestAnimationFrame(() => { P.s0 = fitBox(P.bounds).s; view = fitBox(P.bounds); goal = { ...view }; view.s *= 1.15; apply(); kick(); });
   $('#back').onclick = () => { closePlan(); onBack && onBack(); };
@@ -113,27 +119,38 @@ function paint() {
   }
 }
 function sidebar() {
-  const row = (z) => `<button class="row" data-id="${z.id}"><i style="background:${z.color}"></i><span>${z.name}</span><em>${z.seats || '–'}</em><small>${z.kind === 'inv' && !z.dims_m ? (z.cad_sqft ? fmt(z.cad_sqft) + ' sq ft' : '–') : fmt(z.area_sqft) + ' sq ft'}</small></button>`;
+  const row = (z) => {
+    const seats = z.seats_applicable === false ? 'n/a' : z.seats ?? '–';
+    const area = z.kind === 'inv' && !z.dims_m ? (z.cad_sqft ? fmt(z.cad_sqft) + ' sq ft' : 'Boundary review') : (z.area_sqft == null ? 'Boundary review' : fmt(z.area_sqft) + ' sq ft');
+    return `<button class="row" data-id="${z.id}"><i style="background:${z.color}"></i><span>${esc(z.name)}</span><em>${seats}</em>${P.source_plan ? '' : `<small>${area}</small>`}</button>`;
+  };
   if (mode === 'req') $('#list').innerHTML = P.zones.slice().sort((a, b) => b.seats - a.seats).map(row).join('');
   else { const by = {}; for (const k of Object.keys(INV)) by[INV[k][0]] = []; for (const it of P.inv) by[it.group].push(it);
     $('#list').innerHTML = Object.entries(by).filter(([, l]) => l.length).map(([g, l]) => `<div class="grp k">${g} · ${l.length}</div>` + l.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })).map(row).join('')).join('') || '<div class="grp">No supporting spaces in this drawing.</div>'; }
   $('#list').querySelectorAll('.row').forEach(b => b.onclick = () => select(b.dataset.id, true));
-  $('#foot').textContent = mode === 'req' ? 'Seats: one chair block per seat in the drawing. Sizes: overall width × depth of the zone outline.' : 'Every supporting space in the drawing, with its overall width × depth and area.';
+  $('#foot').textContent = (P.source_plan ? 'Proposed layout' : P.source_note) || (mode === 'req' ? 'Seats: one chair block per seat in the drawing. Sizes: overall width × depth of the zone outline.' : 'Every supporting space in the drawing, with its overall width × depth and area.');
 }
 function select(id, zoom) {
   if (sel === id) id = null; sel = id; paint();
   $('#list').querySelectorAll('.row').forEach(b => b.classList.toggle('cur', b.dataset.id === id));
   const s = $('#sel'); if (!id) { s.classList.remove('on'); return; }
   const z = P.items[id].z; s.classList.add('on');
-  const perSeat = z.seats ? Math.round(z.area_sqft / z.seats) : null, sz = z.dims_m ? `${size(z.dims_m)} (${z.dims_m[0]} × ${z.dims_m[1]} m)` : 'outline not closed in the drawing';
+  const perSeat = z.seats && z.area_sqft != null ? Math.round(z.area_sqft / z.seats) : null, sz = z.dims_m ? `${size(z.dims_m)} (${z.dims_m[0]} × ${z.dims_m[1]} m)` : 'outline not closed in the drawing';
+  const area = z.area_sqft == null ? 'Not verified' : `${fmt(z.area_sqft)} sq ft (${z.area_m2} m²)`;
   const rows = z.kind === 'process'
-    ? [['Seats drawn (CAD)', z.seats], ['Brief: required', z.sheet_required], ['Brief: achieved', z.sheet_achieved], ['Desk size (brief)', z.desk], ['Width × depth', sz], ['Area', `${fmt(z.area_sqft)} sq ft (${z.area_m2} m²)`], ['Area per seat', perSeat ? `${perSeat} sq ft` : '–']]
-    : z.kind === 'inv' ? [['Type', z.group], ['Seats drawn (CAD)', z.seats || '–'], ['Width × depth', sz], ['Area', z.dims_m ? `${fmt(z.area_sqft)} sq ft` + (z.approx ? ' (approx.)' : '') : (z.cad_sqft ? `${fmt(z.cad_sqft)} sq ft (per the drawing's label)` : '–')]]
-    : [['Room type', z.group], ['Seats drawn (CAD)', z.seats || '–'], ['Width × depth', sz], ['Area', `${fmt(z.area_sqft)} sq ft (${z.area_m2} m²)`], ...(z.brief ? [['On the brief', z.brief]] : [])];
-  const note = z.kind === 'process' && z.seats !== z.sheet_achieved ? `<div class="note">The drawing shows ${z.seats} seats; the brief says ${z.sheet_achieved} achieved.</div>` : '';
-  s.innerHTML = `<h3><i style="background:${z.color}"></i>${z.name}</h3>
-    <div class="big"><div><b>${z.seats || '–'}</b><span>Seats</span></div><div><b>${fmt(z.area_sqft)}</b><span>Sq ft</span></div></div>
-    <table>${rows.map(([a, b]) => `<tr><td>${a}</td><td>${b}</td></tr>`).join('')}</table>${note}`;
+    ? [['Seats drawn (CAD)', z.seats], ['Brief: required', z.sheet_required], ['Brief: achieved', z.sheet_achieved], ['Desk size (brief)', z.desk], ['Width × depth', sz], ['Area', area], ['Area per seat', perSeat ? `${perSeat} sq ft` : '–']]
+    : z.kind === 'inv' ? [['Type', z.group], [z.seat_basis || 'Seats drawn (CAD)', z.seats_applicable === false ? 'n/a' : z.seats ?? '–'], ['Width × depth', sz], ['Area', z.dims_m ? `${fmt(z.area_sqft)} sq ft` + (z.approx ? ' (approx.)' : '') : (z.cad_sqft ? `${fmt(z.cad_sqft)} sq ft (per the drawing's label)` : '–')]]
+    : [['Room type', z.group], [z.seat_basis || 'Seats drawn (CAD)', z.seats ?? '–'], ...(z.brief_capacity ? [['Brief capacity', z.brief_capacity]] : []), ['Width × depth', sz], ['Area', area], ...(z.brief ? [['On the brief', z.brief]] : [])];
+  if (z.desk_footprint_sqft != null) rows.push(['Desk footprint only', `${fmt(z.desk_footprint_sqft)} sq ft (excludes circulation)`]);
+  if (z.cad_label) rows.push(['Drawing label', z.cad_label]);
+  if (z.area_basis) rows.push(['Area basis', z.area_basis]);
+  const countNote = z.brief_capacity_count != null && z.seats !== z.brief_capacity_count ? `${z.seats} chairs counted in CAD; the brief describes ${z.brief_capacity}.` : '';
+  const noteText = [z.note, countNote].filter(Boolean).join(' ');
+  const note = noteText ? `<div class="note">${esc(noteText)}</div>` : z.kind === 'process' && z.sheet_achieved != null && z.seats !== z.sheet_achieved ? `<div class="note">The drawing shows ${z.seats} seats; the brief says ${z.sheet_achieved} achieved.</div>` : '';
+  const title = `<h3><i style="background:${z.color}"></i>${esc(z.name)}</h3>`;
+  s.innerHTML = P.source_plan ? title + (z.seats != null && z.seats_applicable !== false ? `<div class="big"><div><b>${z.seats}</b><span>Seats</span></div></div>` : '') : `<h3><i style="background:${z.color}"></i>${esc(z.name)}</h3>
+    <div class="big"><div><b>${z.seats_applicable === false ? 'n/a' : z.seats ?? '–'}</b><span>${z.seat_basis === 'Seats counted (CAD)' ? 'Seats counted' : z.seat_basis ? 'Seats marked' : 'Seats'}</span></div><div><b>${z.area_sqft == null ? 'Review' : fmt(z.area_sqft)}</b><span>Sq ft</span></div></div>
+    <table>${rows.map(([a, b]) => `<tr><td>${esc(a)}</td><td>${esc(b)}</td></tr>`).join('')}</table>${note}`;
   const r = $('#list').querySelector(`[data-id="${id}"]`); if (r) r.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   if (zoom) { const bb = P.items[id].g.getBBox(); const f = fitBox([bb.x, -(bb.y + bb.height), bb.x + bb.width, -bb.y], 2.2); f.s = clampS(Math.max(f.s, P.s0 / 6)); Object.assign(goal, f); kick(); }
 }

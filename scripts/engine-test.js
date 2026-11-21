@@ -90,6 +90,7 @@ async function cases() {
   /* The Flipkart atlas (scripts/examples/flipkart-andheri.js): seven options
      with a per seat rate, two metro lines, a chooser and a priority flag. */
   const flipkartAndheri = JSON.parse(fs.readFileSync(path.join(ROOT, "examples", "flipkart-andheri.bundle.json"), "utf8"));
+  const flipkartAndheriEast = JSON.parse(fs.readFileSync(path.join(ROOT, "examples", "flipkart-andheri-east.bundle.json"), "utf8"));
 
   /* The two other layouts. A place: one site, competitors with operators,
      an employer, a deal, the market's facts and a metro line. */
@@ -122,11 +123,23 @@ async function cases() {
     facts: { Mumbai: [{ k: "Rent", v: "Rs 150 a sq ft", src: src + "m" }], network: [{ k: "Seats", v: "4,000", src: src + "t" }] }
   };
 
-  return { chennai, minimal, noChooser, noExisting, noTransit, oneOption, ownKinds, fromWorkbook, andheriCoworking, flipkartAndheri, place, network };
+  return { chennai, minimal, noChooser, noExisting, noTransit, oneOption, ownKinds, fromWorkbook, andheriCoworking, flipkartAndheri, flipkartAndheriEast, place, network };
 }
 
 /* What each layout must show as it opens, before anything is clicked. */
 const EXPECT = {
+  flipkartAndheriEast: async (page) => {
+    const errors = [];
+    const ids = await page.locator('#list .card').evaluateAll(els => els.map(e => e.dataset.id));
+    if (ids.join('|') !== '723-avenue|corporate-avenue|privilon') errors.push('the three-property shortlist changed: ' + ids.join(', '));
+    for (const id of ids) {
+      await page.click(`#list .card[data-id="${id}"]`);
+      const media = await page.locator('.gal-videos video').evaluateAll(els => els.map(v => ({ controls: v.controls, muted: v.muted, inline: v.playsInline, preload: v.preload, poster: !!v.poster, label: v.getAttribute('aria-label'), autoplay: v.autoplay })));
+      if (media.length !== 1 || media.some(v => !v.controls || !v.muted || !v.inline || v.preload !== 'metadata' || !v.poster || !v.label || v.autoplay)) errors.push(id + ': missing accessible, manually played video');
+      if (id === '723-avenue' && await page.locator('.gal img').count() !== 2) errors.push('723 Avenue lost its two photos');
+    }
+    return errors;
+  },
   /* The Metro view: selecting a building draws the walk to its station. */
   flipkartAndheri: async (page) => {
     // The tab bar can render before the map's asynchronous load event adds its layers.
