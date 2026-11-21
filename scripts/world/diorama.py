@@ -196,10 +196,12 @@ mat("acp_grey", "#b8bcbf", 0.4, 0.55); mat("acp_red", "#ad322c", 0.42, 0.35); ma
 mat("roof", tex="roof.jpg", rough=0.9); mat("roof_tin", "#8f8f8a", 0.45, 0.6); mat("roof_tarp", "#2f63a8", 0.6); mat("roof_tin_rust", "#7a5b45", 0.7, 0.3)
 mat("parapet", "#ada695", 0.9); mat("ground", "#a29c8f", 0.95, tex="roof.jpg"); mat("asphalt", tex="asphalt.jpg", rough=0.85); mat("pavers", tex="pavers.jpg", rough=0.9)
 mat("kerb", "#bdb8ab", 0.85); mat("grass", tex="grass.jpg", rough=0.95); mat("water", "#3d5257", 0.05, 0.1); mat("marking", "#efefe8", 0.6)
-mat("soil", tex="soil.jpg", rough=1.0); mat("concrete", "#c9c5bb", 0.75); mat("concrete_dark", "#9f9b92", 0.8); mat("metal", "#a9adb1", 0.35, 0.9)
+mat("soil", tex="soil.jpg", rough=1.0); mat("concrete", "#a9a59c", 0.8); mat("concrete_dark", "#9f9b92", 0.8); mat("metal", "#a9adb1", 0.35, 0.9)
 mat("station_roof", "#d9dde0", 0.3, 0.85); mat("station_glass", "#8fb4c4", 0.05, 0.2, alpha=0.35); mat("sign_l1", "#1c5fa8", 0.4); mat("sign_l3", "#1d8a8a", 0.4)
 mat("sign_text", "#ffffff", 0.4, emit="#ffffff", ek=0.6); mat("rail", "#6f6a64", 0.4, 0.9); mat("tank", "#1d1f22", 0.5)
 mat("mullion", "#c4c9cc", 0.3, 0.9); mat("slab_edge", "#e6e3dc", 0.6); mat("glass_lobby", "#6e8a96", 0.03, 0.6); mat("canopy", "#2b2e31", 0.4, 0.6)
+mat("pier_blue", "#3f78a6", 0.6, 0.1); mat("roof_blue", "#2f6fb0", 0.5, 0.3); mat("acp_station", "#d7dadb", 0.45, 0.4)
+mat("ad_red", "#b8322a", 0.5); mat("ad_yellow", "#e2b42c", 0.5); mat("ad_blue", "#1f4f9a", 0.5); mat("ad_white", "#efefea", 0.5)
 mat("opt_name", "#f2f0ea", 0.3, 0.6, emit="#fff4de", ek=0.4); mat("wire", "#3a3a3a", 0.5, 0.8); mat("ballast", "#7d7568", 0.95)
 
 # --- ground kept clear for the metro: the map's footprints include Line 1's stations and viaduct as plain
@@ -447,7 +449,13 @@ def build():
     for nm, lo_, la_, sty in LMK:
         pt = Point((lo_ - S["origin"][0]) * S["k"][0], (la_ - S["origin"][1]) * S["k"][1])
         cand = [(p_.centroid.distance(pt), id(b_)) for b_, p_ in bpolys if p_.area > 1200 and b_.get("opt") != OID and id(b_) not in lmk]
-        if cand: lmk[min(cand)[1]] = (nm, sty)
+        if cand: lmk[min(cand)[1]] = (nm, sty, None)
+    # buildings surveyed in Street View (scripts/world/refs/*.json): facade and, where counted, height
+    RD = os.path.join(os.path.dirname(os.path.abspath(__file__)), "refs")
+    for fn in sorted(os.listdir(RD)) if os.path.isdir(RD) else []:
+        for e in json.load(open(os.path.join(RD, fn))).get("buildings", []):
+            pt = Point(e["x"], e["y"]); cand = [(p_.centroid.distance(pt), id(b_)) for b_, p_ in bpolys if b_.get("opt") != OID]
+            if cand and min(cand)[0] < 15: lmk[min(cand)[1]] = (e["name"], e["style"], e.get("h"))
     road_near = unary_union([ROAD["major"], ROAD["minor"]]).buffer(6)
     for b, p in bpolys:
         if b.get("opt") == OID: continue
@@ -456,7 +464,8 @@ def build():
             q = q.simplify(0.15); hgt = b["h"]; a = q.area; r_ = random.Random(b["r"])
             ring = [L(x, y) for x, y in q.exterior.coords]
             OFFICE = ["cw_teal", "cw_blue", "cw_grey", "cw_silver", "ribbon_red", "ribbon_white", "com_ribbon"]
-            if id(b) in lmk: style = lmk[id(b)][1]; print("landmark", lmk[id(b)][0], round(a), "m2", hgt, "m")
+            if id(b) in lmk:
+                style = lmk[id(b)][1]; hgt = lmk[id(b)][2] or hgt; print("landmark", lmk[id(b)][0], round(a), "m2", hgt, "m")
             elif a < 70: style = "chawl"
             elif hgt > 45: style = "res_tower" if r_.random() < 0.6 else "com_glass"
             elif b["c"] in ("commercial", "office", "retail", "hotel") or (a > 1500 and r_.random() < 0.5): style = OFFICE[int(b["r"] * 991) % len(OFFICE)]
@@ -610,17 +619,20 @@ def build():
             ZC0, ZC1 = ZD - 9.0, ZD - 3.0                                     # concourse floor and ceiling
             # portal frames: twin round columns with a deep crosshead, every 15 m, carrying the concourse
             for k in np.arange(-60, 61, 15):
-                for sg in (-1, 1): cyl(stn, *R(k, sg * 9.2), 0, ZC0, 0.75, 0.75, 0, "concrete", 20)
-                boxm(stn, *R(k, 0), ZC0 - 1.6, ZC0, 1.8, 21.0, ang, "concrete", bottom=True)
+                for sg in (-1, 1): boxm(stn, *R(k, sg * 10.4), 0, ZC0, 1.1, 1.1, ang, "pier_blue")   # blue square columns at the deck edge
+                cyl(stn, *R(k, 0), 0, ZC0 - 1.6, 1.5, 1.5, 0, "concrete", 24)                              # the big round pier on the median
+                boxm(stn, *R(k, 0), ZC0 - 1.6, ZC0, 1.8, 22.4, ang, "concrete", bottom=True)
             boxm(stn, px, py, ZC0, ZC0 + 0.45, 98, 23.6, ang, "concrete", bottom=True)            # concourse floor slab
             boxm(stn, px, py, ZC1, ZC1 + 0.6, 100, 24.4, ang, "concrete", bottom=True)            # platform slab over it
             boxm(stn, px, py, ZC0 + 0.45, ZC0 + 0.5, 97, 22.8, ang, "pavers")                     # concourse floor finish (seen through the glass)
             for sg in (-1, 1):
                 n = sg * 11.6
                 boxm(stn, *R(0, n), ZC0 + 0.45, ZC0 + 1.4, 98, 0.35, ang, "metal")                 # ACP base band
-                boxm(stn, *R(0, sg * 11.5), ZC0 + 1.4, ZC1 - 0.1, 97, 0.06, ang, "station_glass")  # glazing
-                for k in np.arange(-48, 48.1, 1.5):                                               # mullions
-                    boxm(stn, *R(k, n + sg * 0.08), ZC0 + 1.4, ZC1 - 0.1, 0.09, 0.22, ang, "metal")
+                boxm(stn, *R(0, sg * 11.5), ZC0 + 1.4, ZC1 - 1.3, 97, 0.12, ang, "acp_station")    # opaque cladding
+                boxm(stn, *R(0, sg * 11.5), ZC1 - 1.3, ZC1 - 0.1, 97, 0.06, ang, "station_glass")  # clerestory glazing
+                ads = ["ad_white", "ad_red", "ad_blue", "ad_yellow", "ad_white", "ad_blue"]
+                for i_, k in enumerate(np.arange(-40, 41, 16)):                                      # billboard band
+                    boxm(stn, *R(k, n + sg * 0.25), ZC0 + 1.7, ZC0 + 4.6, 13.5, 0.15, ang, ads[(i_ + (sg > 0)) % len(ads)])
                 boxm(stn, *R(0, n + sg * 0.1), ZC1 - 0.45, ZC1, 99, 0.5, ang, "metal")            # head fascia
                 boxm(stn, *R(0, sg * 11.85), ZD - 5.2, ZD - 3.7, 26, 0.18, ang, "sign_l1")        # name board
             # platforms: side platforms, open to the air behind louvres and a parapet
@@ -634,19 +646,19 @@ def build():
                 boxm(stn, *R(0, sg * 12.0), ZD + 6.6, ZD + 6.85, 138, 0.4, ang, "metal")
             # the roof: a shallow arch on exposed steel ribs, with overhanging eaves and a fascia
             HALF = 14.2
-            prof = [(n, ZD + 8.0 + 2.6 * math.cos(n / HALF * math.pi / 2)) for n in np.linspace(-HALF, HALF, 21)]
+            prof = [(n, ZD + 8.0 + 0.9 * math.cos(n / HALF * math.pi / 2)) for n in np.linspace(-HALF, HALF, 21)]
             pr2 = prof + [(n, z + 0.18) for n, z in prof[::-1]]
             line2 = [(px - ca * 74, py - sa * 74), (px + ca * 74, py + sa * 74)]
             sweep(stn, line2, pr2, "station_roof", 6)
             for sg in (-1, 1):   # eaves fascia and gutter
-                sweep(stn, line2, [(sg * HALF - 0.3, ZD + 7.7), (sg * HALF + 0.35, ZD + 7.7), (sg * HALF + 0.35, ZD + 8.3), (sg * HALF - 0.3, ZD + 8.3)], "metal", 6)
+                sweep(stn, line2, [(sg * HALF - 0.3, ZD + 7.3), (sg * HALF + 0.35, ZD + 7.3), (sg * HALF + 0.35, ZD + 8.6), (sg * HALF - 0.3, ZD + 8.6)], "acp_station", 6)
             for k in np.arange(-72, 72.1, 6):   # ribs: a curved steel I-section under the roof skin, on posts
                 rib = [(n, z - 0.05) for n, z in prof]; ribb = [(n, z - 0.75) for n, z in prof[::-1]]
                 sweep(stn, [R(k - 0.12, 0), R(k + 0.12, 0)], rib + ribb, "metal", 2)
-                for sg in (-1, 1): cyl(stn, *R(k, sg * 11.3), ZD + 1.1, ZD + 7.9, 0.2, 0.2, 0, "metal", 10)
+                for sg in (-1, 1): boxm(stn, *R(k, sg * 11.3), ZD + 1.1, ZD + 7.9, 0.35, 0.35, ang, "pier_blue")
             for sg in (-1, 1):   # a purlin line each side, and the ridge
                 for nn in (sg * 5.0, sg * 10.0):
-                    zz = ZD + 8.0 + 2.6 * math.cos(nn / HALF * math.pi / 2) - 0.85
+                    zz = ZD + 8.0 + 0.9 * math.cos(nn / HALF * math.pi / 2) - 0.85
                     boxm(stn, *R(0, nn), zz, zz + 0.2, 146, 0.2, ang, "metal")
             # stairs and escalators down to the footpath, each under its own canopy
             for sg in (-1, 1):
@@ -658,10 +670,16 @@ def build():
                     for side in (-1, 1):   # handrail walls in glass with a steel top rail
                         sweep(stn, [(bx2 + ca * -11.2 + nx2 * side * 1.65, by2 + sa * -11.2 + ny2 * side * 1.65), (bx2 + ca * 11.2 + nx2 * side * 1.65, by2 + sa * 11.2 + ny2 * side * 1.65)],
                               [(-0.03, 0.9), (0.03, 0.9), (0.03, 1.0), (-0.03, 1.0)], "metal", 4)
-                    boxm(stn, bx2, by2, ZC0 + 3.0, ZC0 + 3.25, 24, 4.4, ang, "station_roof")        # canopy
+                    boxm(stn, bx2, by2, ZC0 + 3.0, ZC0 + 3.25, 24, 4.4, ang, "roof_blue")           # canopy
                     for k in (-11, -3.5, 3.5, 11):
-                        for side in (-1, 1): cyl(stn, bx2 + ca * k + nx2 * side * 2.0, by2 + sa * k + ny2 * side * 2.0, 0, ZC0 + 3.0, 0.1, 0.1, 0, "metal", 8)
+                        for side in (-1, 1): cyl(stn, bx2 + ca * k + nx2 * side * 2.0, by2 + sa * k + ny2 * side * 2.0, 0, ZC0 + 3.0, 0.1, 0.1, 0, "pier_blue", 8)
                     boxm(stn, bx2 + nx2 * -sg * 2.5, by2 + ny2 * -sg * 2.5, ZC0, ZC0 + 0.45, 6, 5, ang, "concrete")   # landing to the concourse
+            for e in (-1, 1):   # lift and stair core: white cladding framed in blue, rising to the platform
+                lx, ly = R(e * 47, 14.5)
+                boxm(stn, lx, ly, 0, ZD + 4.5, 5.2, 5.2, ang, "acp_white")
+                for c_ in ((-2.6, -2.6), (2.6, -2.6), (2.6, 2.6), (-2.6, 2.6)):
+                    boxm(stn, lx + ca * c_[0] - sa * c_[1], ly + sa * c_[0] + ca * c_[1], 0, ZD + 4.7, 0.35, 0.35, ang, "pier_blue")
+                boxm(stn, lx, ly, ZD + 4.5, ZD + 4.9, 6.0, 6.0, ang, "roof_blue")
             for sg in (-1, 1):
                 t = text_mesh(s["name"].upper(), 1.15, 0.05, f"sign_{s['name']}_{sg}")
                 t.data.materials.append(MATS["sign_text"])
@@ -1049,6 +1067,7 @@ if "--render" in A:
         elif k == "aerial2": aerial(data, info, "aerial2", az_off=0.9, dist_k=0.55, el_k=0.35, lens=40)
         # scene-frame shots for 723 Avenue: along Andheri-Kurla Road past Times Square, and the 500 m overview
         elif k == "road": aerial(data, info, "road", az_off=((1440, -378, 24), (1760, -325, 30), 26))
+        elif k == "station": aerial(data, info, "station", az_off=((1424, -374, 19), (1310, -316, 12), 26))
         elif k == "roof": aerial(data, info, "roof", az_off=((1831 + 95, -151 - 120, 165), (1831, -151, 58), 35))
         elif k == "overview": aerial(data, info, "overview", az_off=((1690, -1000, 390), (1765, -265, 12), 30))
         else: render(k, data, info)

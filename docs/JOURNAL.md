@@ -22,8 +22,18 @@
   - After the founder's review, the milky haze was removed for clear daylight.
   - Times Square (the 8,600 m² complex north of the road) and the Le Western hotel are named landmarks in glass curtain wall.
   - Office blocks across the area now use six glass and ribbon-window facades instead of one.
+  - **Street View survey** (the normal Google Maps page in Chrome, imagery Feb 2026; nothing copied into the model):
+    - Six buildings along the corridor now carry what was seen there, recorded in `scripts/world/refs/marol_corridor.json` with the viewpoint for each: the three Times Square buildings, InSync Analytics, Fleet House and the Makwana Road tower.
+    - The Times Square curved tower was cut from a satellite reading of 88 m to about 13 storeys (52 m).
+  - **Line 1 stations now follow Marol Naka as photographed:**
+    - large grey round piers on the median and blue square columns at the deck edge;
+    - an opaque concourse with a billboard band in place of a glass box;
+    - a near-flat grey canopy on blue columns;
+    - blue stair canopies, and a white-and-blue lift core at each end.
+  - The viaduct and station concrete is now weathered grey instead of near-white.
   - 723 Avenue now has the rooftop garden from the developer's brochure: a timber deck, a curving planted band with trees, checkerboard paving, a glazed pavilion with timber fins and a glass railing. The layout is read from the brochure; sizes are estimates. The brochure image is kept with the 723 photos.
 - **Left undone:**
+  - About 60 more significant buildings in the 723 to Marol Naka corridor still use generic facades; each needs its own Street View look. The Line 3 entrances are still the generic canopy.
   - The neighbouring buildings still look too clean and uniform. Every facade has the same punched windows, and the satellite heights flatten most of them to 5–8 storeys.
   - Corporate Avenue (2.5 km west) and Privilon are not yet in a checkpoint still.
   - Times Square and the Marol Naka station are in the scene but not yet framed in a shot.

@@ -1,0 +1,14 @@
+{
+  "about": "Buildings surveyed in Google Street View (imagery Feb 2026, viewed in the web page on 2026-11-21; nothing copied into the model). Each entry overrides the facade, and where given the height, of the Overture footprint whose centroid is nearest (x, y) in scene metres (origin 72.867 E, 19.111 N). Heights marked 'sv' are storeys counted in Street View x storey height; others keep the satellite estimate.",
+  "buildings": [
+    {"name": "Times Square, banded office", "x": 1751, "y": -319, "style": "cw_teal", "h_basis": "dsm", "seen": "19.10745,72.88330 heading 340: blue-teal glass with light horizontal bands, round columns at the podium, entrance pylon 'TIMES SQUARE' on Andheri-Kurla Road"},
+    {"name": "Times Square, curved stepped tower", "x": 1675, "y": -349, "style": "cw_silver", "h": 52, "h_basis": "sv: about 13 storeys; satellite 88 m rejected", "seen": "19.10745,72.88330 heading 340: curved glass tower with stepped balcony bands"},
+    {"name": "Times Square, blue glass block", "x": 1631, "y": -352, "style": "cw_blue", "h_basis": "dsm", "seen": "19.10745,72.88330 heading 300: square blue curtain wall"},
+    {"name": "InSync Analytics (OSM, 7 storeys)", "x": 1781, "y": -174, "style": "ribbon_white", "h": 25, "h_basis": "osm building:levels 7", "seen": "19.10930,72.88400 heading 45"},
+    {"name": "Fleet House", "x": 1270, "y": -249, "style": "ribbon_red", "h": 38, "h_basis": "sv: about 9 storeys", "seen": "19.10840,72.87850 heading 60: glass office with a red band, 'FLEET HOUSE' at street level, beside Marol Naka station"},
+    {"name": "Makwana Road residential tower", "x": 1415, "y": -314, "style": "res_ochre", "h_basis": "dsm", "seen": "19.10790,72.88080 heading 300: residential tower, red and yellow balcony bands"}
+  ],
+  "stations": {
+    "Marol Naka (Line 1)": "Street View 19.10812,72.88040 heading 268 and 19.10815,72.87960 heading 90: concourse slab spans the whole road on large grey round piers and blue-painted square columns; the concourse is clad opaque with a billboard band (no full glazing); platform level under a flat grey metal canopy with a deep fascia on blue steel columns; a white-and-blue lift and stair core; covered stairs to the footpath with blue railings and blue roofs; shops and a bank under the deck."
+  }
+}
