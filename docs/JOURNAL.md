@@ -31,6 +31,7 @@
     - a near-flat grey canopy on blue columns;
     - blue stair canopies, and a white-and-blue lift core at each end.
   - The viaduct and station concrete is now weathered grey instead of near-white.
+  - **Live preview:** the upgraded district loads in the walkable explorer at `/flipkart-andheri/world?preview=723-avenue#723-avenue` (3.5 MB). The published model in `d/` is unchanged until the founder approves it.
   - 723 Avenue now has the rooftop garden from the developer's brochure: a timber deck, a curving planted band with trees, checkerboard paving, a glazed pavilion with timber fins and a glass railing. The layout is read from the brochure; sizes are estimates. The brochure image is kept with the 723 photos.
 - **Left undone:**
   - About 60 more significant buildings in the 723 to Marol Naka corridor still use generic facades; each needs its own Street View look. The Line 3 entrances are still the generic canopy.

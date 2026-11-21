@@ -21,6 +21,7 @@
    (x east, y north). three's X is east, Y up, -Z north.
    ============================================================================ */
 import * as THREE from "three";
+import { applyAndheriTheme, easyTabs, twinIntro, propertySpotlight } from "./andheri-ui.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -59,6 +60,7 @@ async function boot() {
   try { await script(`/engine/atlases/${SLUG}.js`); } catch (e) { return fail("This atlas has no 3D explorer."); }
   const A = window.ATLAS, W = A && A.meta && A.meta.world;
   if (!A || !W) return fail("This atlas has no 3D explorer.");
+  if(W.branding==="autopilot-flipkart")applyAndheriTheme("world");
   document.title = `${A.meta.title} · Explorer`;
   if (W.poster) for (const id of ["#load", "#gate"]) $(id).style.backgroundImage = `url("${W.data}${W.poster}")`;
   const KEY = SLUG + "-auth"; let authed = !(A.gate && A.gate.hash);
@@ -72,11 +74,22 @@ async function boot() {
       $("#gate").hidden = true; $("#load").hidden = false; done();
     }));
   }
-  start(A, W).catch((e) => { console.error(e); fail("The explorer could not load: " + e.message); });
+  if(W.branding==='autopilot-flipkart' && window.MAPBOX_TOKEN && Q.get('map')!=='0') {
+    const credits=document.createElement('div');credits.id='map-credits';
+    credits.setAttribute('aria-label','Map imagery attribution');
+    credits.innerHTML='<a href="https://www.mapbox.com/about/maps/" target="_blank" rel="noopener"><img src="/media/flipkart-andheri/brand/mapbox-logo.svg" alt="Mapbox" width="76" height="20"></a><span><a href="https://www.mapbox.com/about/maps/" target="_blank" rel="noopener">© Mapbox</a> · <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap</a> · <a href="https://www.maxar.com/" target="_blank" rel="noopener">© Maxar</a> <a href="https://www.mapbox.com/contribute/" target="_blank" rel="noopener" aria-label="Improve this map" title="Improve this map">↗</a></span>';
+    document.body.append(credits);
+  }
+  const options=A.options.filter(o=>!W.thumbs||W.thumbs[o.id]);
+  const first=options.find(o=>o.id===location.hash.slice(1))||options[0];
+  const intro=W.branding==="autopilot-flipkart"?twinIntro(first):null;
+  start(A, W, intro).catch((e) => { console.error(e); fail("The explorer could not load: " + e.message); });
 }
 
 /* -------------------------------------------------------------- world ---- */
-async function start(A, W) {
+async function start(A, W, intro=null) {
+  if(W.contexts || W.cad)document.body.classList.add('project-tools');
+  if(W.mapHref)$("#to-map").href=W.mapHref;
   const canvas = $("#c");
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true, powerPreference: "high-performance" });
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, MOBILE ? 1.5 : 2));
@@ -127,10 +140,13 @@ async function start(A, W) {
         trunk: [0x5b4a3b, 0.9], leaf: [0xffffff, 0.8], leaf_b: [0xffffff, 0.8], frond: [0x5a8735, 0.75], lamp_head: [0xe6e2d6, 0.4], car_body: [0xffffff, 0.22, 0.55], car_glass: [0x1a2026, 0.04, 0.6], tyre: [0x161616, 0.9], hub: [0xb9bcbf, 0.3, 0.9], trim: [0x202224, 0.5, 0.3],
         lamp_front: [0xfff6e0, 0.2], lamp_rear: [0xa01010, 0.3], person_trousers: [0x2b3240, 0.85], person_shirt: [0xffffff, 0.8], person_skin: [0x8a5a3c, 0.6], person_hair: [0x15110e, 0.7],
         fin_723: [0x3d4752, 0.45, 0.35], pier_723: [0x32373d, 0.5, 0.3], band_723: [0xc8cbcd, 0.55, 0.15], frame_723: [0xd9dcde, 0.35, 0.7], acp_grey: [0xb8bcbf, 0.4, 0.55], acp_red: [0xad322c, 0.42, 0.35], acp_white: [0xe7e7e3, 0.45, 0.25], fin_white: [0xecebe7, 0.5, 0.1],   /* House of Wadhwa 723 Avenue */
+        pier_blue: [0x3f78a6, 0.6, 0.1], roof_blue: [0x2f6fb0, 0.5, 0.3], acp_station: [0xd7dadb, 0.45, 0.4], ad_red: [0xb8322a, 0.5], ad_yellow: [0xe2b42c, 0.5], ad_blue: [0x1f4f9a, 0.5], ad_white: [0xefefea, 0.5],   /* Line 1 stations, from Street View of Marol Naka */
+        deck_wood: [0x8a6a4a, 0.7], pave_dark: [0x2c2e31, 0.6], pave_light: [0xd9d6cf, 0.6], planter: [0x5a4a3c, 0.8], soil_green: [0x3f5f2a, 0.95], fin_timber: [0xb36a2c, 0.6], canopy_leaf: [0x3c6a2c, 0.9], rail_glass: [0x9fb8c2, 0.05, 0.2],   /* 723 roof garden, from the brochure */
         auto_body: [0x2d7d3a, 0.4, 0.2], auto_top: [0xf0c22e, 0.5], bus_body: [0xb8322a, 0.4, 0.3], train_body: [0xeef1f4, 0.25, 0.45], train_win: [0x1e2832, 0.05, 0.6], train_stripe: [0x1c5fa8, 0.35],
       }[name] || [0x9a9a9a, 0.8];
       m = new THREE.MeshStandardMaterial({ color: C[0], roughness: C[1], metalness: C[2] || 0 });
       if (C[3]) { m.map = tex(C[3]); if (REALLOOK) { m.normalMap = tex(C[3] + "_n", false); m.normalScale = new THREE.Vector2(0.6, 0.6); } }
+      if (name === "rail_glass") Object.assign(m, { transparent: true, opacity: 0.3, depthWrite: false });
       if (name === "station_glass") Object.assign(m, { color: new THREE.Color(0x9cc0cf), roughness: 0.05, metalness: 0.3, transparent: true, opacity: 0.32, depthWrite: false });
       if (name === "sign_text" || name === "opt_name") Object.assign(m, { color: new THREE.Color(0xffffff), emissive: new THREE.Color(name === "opt_name" ? 0xfff2da : 0xffffff), emissiveIntensity: 0.55, roughness: 0.4 });
       if (name === "leaf" || name === "leaf_b") Object.assign(m, { color: new THREE.Color(0xffffff), map: tex(name === "leaf" ? "leaves_a" : "leaves_b"), alphaTest: 0.5, side: THREE.DoubleSide, roughness: 0.78 });
@@ -170,13 +186,14 @@ async function start(A, W) {
   const REFLECTS = new Set([...GLASSY, "glass_lobby", "station_glass", "car_glass", "train_win", "water"]);
   function captureReflections() { try { captureReflections_(); } catch (e) { console.warn("reflections skipped", e); } }
   function captureReflections_() {
-    if (!REALLOOK || !D || !root || Q.get("refl") === "0") return;
+    if (areaMode || !REALLOOK || !D || !root || Q.get("refl") === "0") return;
     const hide = []; root.traverse((o) => { if (o.visible && o.name && (o.name.startsWith("opt_") || o.name.startsWith("sign_723"))) { o.visible = false; hide.push(o); } });
     const c = centroid(D.building.foot); probe.position.copy(P3(c[0], c[1], Math.max(12, D.building.h * 0.45)));
     const bg = scene.background, fog = scene.fog, bands_ = bands.map((b) => b.visible);
     scene.background = hdr; scene.fog = null; bands.forEach((b) => (b.visible = false));
     probe.update(renderer, scene); probeRT.texture.needsPMREMUpdate = true;
     scene.background = bg; scene.fog = fog; bands.forEach((b, i) => (b.visible = bands_[i])); hide.forEach((o) => (o.visible = true));
+    root.traverse(o=>{if(!o.isMesh)return;for(const m of Array.isArray(o.material)?o.material:[o.material])if(/^ANDHERI_.*[Gg]lass/.test(m.name||'')){m.envMap=probeRT.texture;m.envMapIntensity=1.25;m.needsUpdate=true;}});
     for (const [n, m] of Object.entries(MAT)) if (REFLECTS.has(n) && m.envMap !== probeRT.texture) { m.envMap = probeRT.texture; m.envMapIntensity = n.startsWith("wall_") ? 1.9 : 1.4; m.needsUpdate = true; }
   }
 
@@ -187,6 +204,46 @@ async function start(A, W) {
      Noida explorer does (scripts/world/regions/*.json) */
   const [LNG0, LAT0] = W.origin || [72.867, 19.111], KX = Math.cos(LAT0 * D2R) * 111320, KY = W.ky || 110540;
   let mapGround = null;
+  const aerialTextures = new Map();
+  async function applyAerialSurfaces(modelRoot, data) {
+    const aerial = data.modelReview?.photoReconstruction?.aerial;
+    const token = window.MAPBOX_TOKEN;
+    if (!aerial || !token || Q.get('map') === '0') return;
+    const groups = new Map();
+    modelRoot.traverse(o => {
+      if (!o.isMesh) return;
+      for (const m of Array.isArray(o.material) ? o.material : [o.material]) {
+        if (!/^ANDHERI_CTX_AERIAL_(?:DETAIL_)?(GROUND|ROOF)$/.test(m?.name || '')) continue;
+        const source = m.name.includes('_DETAIL_') ? aerial.detail : aerial;
+        if (!source) continue;
+        if (!groups.has(source)) groups.set(source, new Set());
+        groups.get(source).add(m);
+      }
+    });
+    await Promise.all([...groups].map(async ([source, materials]) => {
+      const bbox = source.bbox_wgs84;
+      if (!Array.isArray(bbox) || bbox.length !== 4 || !bbox.every(Number.isFinite)) return;
+      const key = bbox.join(',');
+      let pending = aerialTextures.get(key);
+      if (!pending) {
+        const url = `https://api.mapbox.com/styles/v1/mapbox/satellite-v9/static/[${key}]/1280x1280@2x.jpeg?padding=0&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`;
+        pending = texL.loadAsync(url).then(t => {
+          t.colorSpace = THREE.SRGBColorSpace; t.flipY = false;
+          t.channel = Number.isInteger(source.uv_channel) ? source.uv_channel : 0;
+          t.anisotropy = aniso; t.wrapS = t.wrapT = THREE.ClampToEdgeWrapping;
+          return t;
+        }).catch(() => { aerialTextures.delete(key); return null; });
+        aerialTextures.set(key, pending);
+      }
+      const texture = await pending;
+      if (!texture) { console.warn('Satellite detail unavailable; showing the source surface material.'); return; }
+      for (const m of materials) {
+        m.map = texture; m.color.setScalar(0.3);
+        m.emissive.set(0xffffff); m.emissiveMap = texture; m.emissiveIntensity = 0.7;
+        m.needsUpdate = true;
+      }
+    }));
+  }
   function buildMapGround() {
     if (mapGround) { scene.remove(mapGround); mapGround.traverse((o) => { if (o.isMesh) { o.geometry.dispose(); if (o.material.map) o.material.map.dispose(); o.material.dispose(); } }); mapGround = null; }
     const tok = window.MAPBOX_TOKEN; if (!tok || !D || !D.origin || Q.get("map") === "0") return;
@@ -214,11 +271,88 @@ async function start(A, W) {
 
   /* ----------------------------------------------------- the diorama ---- */
   const loader = new GLTFLoader(); loader.setMeshoptDecoder(MeshoptDecoder);
-  let D = null, root = null, inst = [], movers = [], solid = [], groundMeshes = [];
+  let D = null, root = null, rootResources = null, inst = [], movers = [], solid = [], groundMeshes = [], selectionRequest=0;
+  function importedResources(modelRoot) {
+    const geometries=new Set(),materials=new Set(),textures=new Set();
+    modelRoot.traverse(o=>{
+      if(!o.isMesh)return;geometries.add(o.geometry);
+      for(const m of Array.isArray(o.material)?o.material:[o.material]){
+        if(!m)continue;materials.add(m);
+        for(const value of Object.values(m))if(value?.isTexture)textures.add(value);
+      }
+    });
+    return {geometries,materials,textures};
+  }
+  function disposeImported(resources) {
+    if(!resources)return;
+    resources.geometries.forEach(g=>g.dispose());
+    resources.materials.forEach(m=>m.dispose());
+    resources.textures.forEach(t=>t.dispose());
+  }
+  let areaRoot = null, areaPin = null, areaMode = false, areaRequest = 0;
+  function disposeArea() {
+    areaRequest++;
+    if(areaRoot) { scene.remove(areaRoot);areaRoot.traverse(o=>{if(o.isMesh){o.geometry.dispose();for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose();}});areaRoot=null; }
+  }
+  function leaveArea() {
+    if(!areaMode)return;areaMode=false;document.body.classList.remove('showing-area');if(areaRoot)areaRoot.visible=false;
+    if(root)root.visible=true;inst.forEach(o=>o.visible=true);bands.forEach(o=>o.visible=true);
+    if(mapGround)mapGround.visible=true;farGround.visible=REALLOOK;
+    const b=$('#mapped-area');if(b)b.setAttribute('aria-pressed','false');
+    if(D)placeLabels(true);
+    $('#credit').textContent=W.credit || "Built in Blender from Overture Maps footprints. Heights around each building are estimated; the buildings use the deck's floors. Distances: Google Maps.";
+  }
+  async function showArea() {
+    if(!W.contexts || !D || (W.contexts.reviewOnly && Q.get('context-review')!=='1'))return;
+    const request=++areaRequest, id=SEL;
+    const button=$('#mapped-area');button.disabled=true;button.textContent='Loading area…';
+    try {
+      if(!areaRoot) {
+        const base=W.contexts.base+id+'/';
+        const [gltf,r]=await Promise.all([loader.loadAsync(base+'context.glb'),fetch(base+'metadata.json')]);
+        if(!r.ok)throw new Error('Mapped area is unavailable');const meta=await r.json();
+        if(request!==areaRequest || id!==SEL)return;
+        const x=(meta.origin.lon-LNG0)*KX-D.origin[0],y=(meta.origin.lat-LAT0)*KY-D.origin[1];
+        areaRoot=gltf.scene;areaRoot.name='mapped_surroundings';areaRoot.position.copy(P3(x,y));
+        areaPin=[x,y];areaRoot.userData.metadata=meta;
+        areaRoot.traverse(o=>{if(o.isMesh){o.castShadow=true;o.receiveShadow=true;}});
+        scene.add(areaRoot);
+        const marker=new THREE.Mesh(new THREE.ConeGeometry(5,16,12),new THREE.MeshBasicMaterial({color:W.branding?0xffc200:0xc6f24a}));
+        areaRoot.userData.pinHeight=new THREE.Box3().setFromObject(areaRoot).max.y+14;
+        marker.position.set(0,areaRoot.userData.pinHeight,0);marker.rotation.z=Math.PI;areaRoot.add(marker);
+      }
+      setRoute(null);areaMode=true;document.body.classList.add('showing-area');areaRoot.visible=true;
+      root.visible=false;inst.forEach(o=>o.visible=false);bands.forEach(o=>o.visible=false);
+      if(mapGround)mapGround.visible=false;farGround.visible=false;
+      controls.enabled=true;controls.autoRotate=false;MODE='dollhouse';document.body.classList.remove('walk','routing');setModeUI();
+      for(const id of ['#walkhud','#compass','#mini','#hint','#route'])$(id).hidden=true;
+      const box=new THREE.Box3().setFromObject(areaRoot),size=box.getSize(new THREE.Vector3()),at=box.getCenter(new THREE.Vector3());
+      const R=areaRoot.userData.metadata.radius_m*2,distance=Math.max(R,R/camera.aspect)*1.75;
+      at.set(areaPin[0],0,-areaPin[1]);
+      camera.fov=46;camera.near=.5;camera.far=15000;camera.updateProjectionMatrix();
+      controls.minDistance=60;controls.maxDistance=distance*2;controls.minPolarAngle=12*D2R;controls.maxPolarAngle=84*D2R;
+      scene.background=hdr;scene.fog=new THREE.Fog(0xd9cbb4,R*2,R*5);tilt.enabled=false;sunBox(R*.65,at);
+      flyTo(at,new THREE.Vector3(at.x+distance*.4,at.y+distance*.65,at.z+distance*.65),1400);
+      button.setAttribute('aria-pressed','true');placeLabels(true);
+      $('#credit').innerHTML='Mapped surroundings · Concept Studio OSM · <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap contributors</a> · NASA SRTM. Unspecified heights are estimated. <a href="'+W.contexts.base+id+'/source-osm.json">Source data</a>';
+    } catch(e) { console.warn(e);button.title='Mapped area could not load. Try again.'; }
+    finally {button.disabled=false;button.textContent='Surroundings';}
+  }
+  if(W.contexts && (!W.contexts.reviewOnly || Q.get('context-review')==='1')) {
+    const b=document.createElement('button');b.id='mapped-area';b.textContent='Surroundings';b.setAttribute('aria-pressed','false');
+    b.onclick=()=>areaMode?dollhouse():showArea();$('#modes').appendChild(b);
+  }
+  if(W.cad) {
+    const link=document.createElement('a');link.id='cad-link';link.textContent='Explore floor plans →';link.hidden=true;
+    Object.assign(link.style,{marginTop:'12px',padding:'11px 16px',borderRadius:'999px',background:'var(--acc)',color:'var(--acc-ink)',fontWeight:'650',alignSelf:'flex-start'});
+    $('#hud').insertBefore(link,$('#conn'));
+  }
+  if(W.branding==="autopilot-flipkart")easyTabs($("#modes"));
   const OPTS = A.options.filter((o) => !W.thumbs || W.thumbs[o.id]);   // buildings with a 3D model
   function protoParts(node) {   // every mesh under a prototype, with its transform relative to it
     const out = []; node.updateMatrixWorld(true); const inv = node.matrixWorld.clone().invert();
-    node.traverse((o) => { if (o.isMesh) out.push({ geo: o.geometry, mat: material(o.material.name), m: inv.clone().multiply(o.matrixWorld) }); });
+    const finish = m => /^(SKY_|ANDHERI_)/.test(m?.name || '') ? m : material(m?.name || 'concrete');
+    node.traverse((o) => { if (o.isMesh) out.push({ geo: o.geometry, mat: Array.isArray(o.material) ? o.material.map(finish) : finish(o.material), m: inv.clone().multiply(o.matrixWorld) }); });
     return out;
   }
   function instance(parts, mats, shadow = true) {   // mats: array of Matrix4
@@ -227,32 +361,45 @@ async function start(A, W) {
       mats.forEach((m, i) => im.setMatrixAt(i, t.multiplyMatrices(m, p.m))); im.castShadow = shadow; im.receiveShadow = true; scene.add(im); out.push(im); }
     return out;
   }
-  async function loadDiorama(id) {
+  async function loadDiorama(id, request) {
+    leaveArea();disposeArea();
     $("#veil").classList.add("on");
+    // ?preview=<id>: load that diorama from d-preview/ (a candidate build), leaving the published d/ untouched
+    const model=Q.get("preview")===id ? {glb:`${W.data}d-preview/${id}.glb`, data:`${W.data}d-preview/${id}.json`} : W.models && W.models[id];
     const [gltf, data] = await Promise.all([
-      new Promise((ok, bad) => loader.load(`${W.data}d/${id}.glb`, ok, (e) => { if (e.total) $("#l-bar").style.width = `${Math.round(e.loaded / e.total * 90)}%`; }, bad)),
-      fetch(`${W.data}d/${id}.json`).then((r) => r.json())]);
-    if (root) { scene.remove(root); root.traverse((o) => { if (o.isMesh) o.geometry.dispose(); }); }
+      new Promise((ok, bad) => loader.load(model?.glb || `${W.data}d/${id}.glb`, ok, (e) => { if (e.total && $("#l-bar")) $("#l-bar").style.width = `${Math.round(e.loaded / e.total * 90)}%`; }, bad)),
+      fetch(model?.data || `${W.data}d/${id}.json`).then((r) => r.json())]);
+    const resources=importedResources(gltf.scene);
+    if(request!==selectionRequest){disposeImported(resources);return null;}
+    if (root) { scene.remove(root); disposeImported(rootResources); }
     for (const m of inst) { scene.remove(m); m.dispose(); } inst = []; movers = []; groundMeshes = [];
-    D = data; root = gltf.scene; scene.add(root); buildMapGround();
+    D = data; root = gltf.scene; rootResources = resources; scene.add(root); buildMapGround();
     const protos = {};
     root.traverse((o) => {
       if (o.name && o.name.startsWith("proto_") && !o.name.endsWith("_c") && !o.name.includes("_crown") && o.parent === root) protos[o.name] = o;
       if (!o.isMesh) return;
-      const n = o.material && o.material.name;
       /* a building modelled on its own (the F1 Skymark twin) brings its own PBR materials,
          named SKY_*: keep them, with the scene's sky in their reflections */
-      if (/^SKY_/.test(n || "")) { o.material.envMapIntensity = 1; if (o.material.transmission) o.material.thickness = 0.02; }
-      else o.material = material(n || "concrete");
-      o.castShadow = !/^(ground|asphalt|pavers|grass|marking|water|kerb|soil)$/.test(n); o.receiveShadow = true;
-      if (/^(ground|asphalt|pavers|grass|kerb|marking|water)$/.test(n)) groundMeshes.push(o);
+      const finish = m => {
+        if (!/^(SKY_|ANDHERI_)/.test(m?.name || '')) return material(m?.name || 'concrete');
+        m.envMapIntensity = 1; if (m.transmission) m.thickness = 0.02; return m;
+      };
+      o.material = Array.isArray(o.material) ? o.material.map(finish) : finish(o.material);
+      const names = (Array.isArray(o.material) ? o.material : [o.material]).map(m => m.name || '');
+      const isGround = names.every(n => /^(?:ANDHERI_CTX_)?(?:ground|asphalt|pavers|grass|marking|water|kerb|soil|AERIAL_GROUND)$/i.test(n));
+      o.castShadow = !isGround; o.receiveShadow = true;
+      if (isGround) groundMeshes.push(o);
     });
+    await applyAerialSurfaces(root, data);
+    if(request!==selectionRequest)return null;
     for (const p of Object.values(protos)) p.visible = false;
     const pp = (k) => protos[k] ? protoParts(protos[k]) : [];
     // trees and palms
     const m4 = (x, y, z, rot, s) => new THREE.Matrix4().compose(P3(x, y, z), new THREE.Quaternion().setFromEuler(new THREE.Euler(0, rot, 0)), new THREE.Vector3(s, s, s));
-    const T = [[], [], []]; for (const [x, y, t, k, r] of D.trees) T[t].push(m4(x, y, 0, r, 0.75 + 0.35 * k));
-    inst.push(...instance(pp("proto_tree_a"), T[0]), ...instance(pp("proto_tree_b"), T[1]), ...instance(pp("proto_palm"), T[2]));
+    if (!(model?.bakedProps?.trees || D.modelReview?.photoReconstruction?.bakedProps?.trees)) {
+      const T = [[], [], []]; for (const [x, y, t, k, r] of D.trees) T[t].push(m4(x, y, 0, r, 0.75 + 0.35 * k));
+      inst.push(...instance(pp("proto_tree_a"), T[0]), ...instance(pp("proto_tree_b"), T[1]), ...instance(pp("proto_palm"), T[2]));
+    }
     inst.push(...instance(pp("proto_lamp"), D.lamps.map(([x, y], i) => m4(x, y, 0.2, (i * 2.4) % 6.28, 1)), false));
     // traffic: cars, autos and buses running in their lanes
     const lanes = D.traffic.map((t) => { const P = t.p.map(([x, y]) => new THREE.Vector2(x, -y)); const L = [0]; for (let i = 1; i < P.length; i++) L.push(L[i - 1] + P[i].distanceTo(P[i - 1])); return { P, L, len: L[L.length - 1], w: t.w }; });
@@ -272,7 +419,7 @@ async function start(A, W) {
     for (const [k, list] of Object.entries(kinds)) { if (!list.length) continue; const parts = instance(pp(k), list.map(() => new THREE.Matrix4())); inst.push(...parts); movers.push({ parts, list, base: pp(k) });
       // each car its own paint, each person their own shirt
       const tint = k === "proto_car" ? ["car_body", PAINT] : k === "proto_person" ? ["person_shirt", SHIRT] : null;
-      if (tint) parts.forEach((im) => { if (im.material && im.material.name === tint[0]) { const c = new THREE.Color(); list.forEach((_, i) => im.setColorAt(i, c.setHex(tint[1][Math.floor(Math.random() * tint[1].length)]))); im.instanceColor.needsUpdate = true; } });
+      if (tint) parts.forEach((im) => { if (im.material && im.material.name.replace(/^ANDHERI_CTX_/, '') === tint[0]) { const c = new THREE.Color(); list.forEach((_, i) => im.setColorAt(i, c.setHex(tint[1][Math.floor(Math.random() * tint[1].length)]))); im.instanceColor.needsUpdate = true; } });
     }
     // the Line 1 / Line 7 trains
     for (const [key, ls] of Object.entries(D.metro || {})) for (const m of ls.slice(0, 1)) {
@@ -286,6 +433,7 @@ async function start(A, W) {
     solid = D.blocks.map((r) => r.map(([x, y]) => [x, y]));
     placeLabels(true);
     await new Promise((r) => setTimeout(r, 50));
+    if(request!==selectionRequest)return null;
     $("#veil").classList.remove("on");
     return D;
   }
@@ -312,16 +460,19 @@ async function start(A, W) {
       LAB.innerHTML = ""; LBL = [];
       const b = D.building; const c = centroid(b.foot);
       const add = (cls, html, v, extra = {}) => { const el = document.createElement("div"); el.className = "lb " + cls; el.innerHTML = html; LAB.appendChild(el); LBL.push({ el, v, ...extra }); return el; };
-      add("bld", `<b>${esc(D.name)}</b><i></i>`, P3(c[0], c[1], b.h + 6), { bld: true });
+      add("bld", `<b>${esc(D.name)}</b><i></i>`, areaMode && areaPin ? P3(areaPin[0],areaPin[1],(areaRoot?.userData.pinHeight||36)+12) : P3(c[0], c[1], b.h + 6), { bld: true });
       for (const s of D.stations) { const [col] = LINE[s.line] || ["#888"]; add("st", `<em style="background:${col}">${s.line}</em>${esc(s.name)}`, P3(s.x, s.y, s.line === "L3" ? 8 : 26)); }
       distEl = add("dist", "", new THREE.Vector3(), { dist: true });
     }
     const w = innerWidth, h = innerHeight;
+    const blocked=W.branding ? [...document.querySelectorAll('#top,#hud,#strip,#credit')].filter(el=>!el.hidden&&getComputedStyle(el).display!=='none').map(el=>el.getBoundingClientRect()) : [];
+    const placed=[];const overlaps=(a,b)=>a.left<b.right+10&&a.right>b.left-10&&a.top<b.bottom+10&&a.bottom>b.top-10;
     for (const L of LBL) {
       if (L.dist && (!ROUTE || MODE !== "dollhouse")) { L.el.style.display = "none"; continue; }
       _p.copy(L.v).project(camera); const vis = _p.z < 1 && Math.abs(_p.x) < 1.05 && Math.abs(_p.y) < 1.05;
       L.el.style.display = vis ? "" : "none"; if (!vis) continue;
       L.el.style.transform = `translate(${((_p.x + 1) / 2 * w).toFixed(1)}px,${((1 - _p.y) / 2 * h).toFixed(1)}px) ${L.dist ? "translate(-50%,-50%)" : "translate(-50%,-100%)"}`;
+      if(W.branding){const rect=L.el.getBoundingClientRect();if(blocked.some(b=>overlaps(rect,b))||placed.some(b=>overlaps(rect,b)))L.el.style.display='none';else placed.push(rect);}
     }
   }
 
@@ -384,6 +535,7 @@ async function start(A, W) {
     el.querySelector(".fnote").textContent = on.size ? `Floor ${offered(o).text}, lit on the building` : `Floor: ${offered(o).text || "not given"}`;
   }
   function flyToFloor(n) {   // push in to a floor: level with it, close enough to read the slab
+    leaveArea();
     if (!D) return; FLOOR_SEL = n; const o = OPTS.find((x) => x.id === SEL); renderStack(o);
     const c = centroid(D.building.foot), z = floorZ(n) + floorH(n) / 2, t = P3(c[0], c[1], z), az = D.building.facing + Math.PI / 2 + 0.55, d = 70 + D.building.h * 0.4;
     if (MODE !== "dollhouse") dollhouse(0);
@@ -391,6 +543,7 @@ async function start(A, W) {
     flyTo(t, new THREE.Vector3(t.x + Math.cos(az) * d, Math.max(z + 6, 8), t.z - Math.sin(az) * d), 1500);
   }
   function renderHUD(o) {
+    const cad=$('#cad-link');if(cad){cad.hidden=!W.cad[o.id];if(W.cad[o.id])cad.href=W.cad[o.id];}
     const pr = (o.reason || "").startsWith("PRIORITY") ? o.reason.split(" · ")[0] : "";
     $("#h-eyebrow").textContent = `${String(o.n).padStart(2, "0")} · ${factOf(o, "Micro-market")}`;
     $("#h-prio").hidden = !pr; $("#h-prio").textContent = pr;
@@ -405,6 +558,7 @@ async function start(A, W) {
     $("#src").textContent = (A.copy && A.copy.connect && A.copy.connect.note) || "";
     $("#spec").innerHTML = (o.facts || []).filter((f) => !f.src).map((f) => `<dt>${esc(f.k)}</dt><dd>${esc(f.v)}</dd>`).join("");
     const ph = W.renders && W.renders[o.id]; $("#photo").hidden = !ph || $("#spec").hidden; if (ph) $("#photo img").src = W.data + ph;
+    if(W.branding==="autopilot-flipkart")propertySpotlight(o,r=>{leaveArea();setRoute(routeOf(r));renderHUD(o);if(MODE==="dollhouse")frameRoute();});
     renderStack(o);
   }
   { const f = $("#floors");
@@ -414,7 +568,7 @@ async function start(A, W) {
       f.addEventListener("click", (e) => { const g = e.target.closest(".fl"); if (g) flyToFloor(+g.dataset.n); });
     } }
   $("#more").addEventListener("click", () => { const h = !$("#spec").hidden; $("#spec").hidden = h; $("#photo").hidden = h || !(W.renders && W.renders[SEL]); $("#more").textContent = h ? "Property details" : "Hide details"; });
-  $("#conn").addEventListener("click", (e) => { const b = e.target.closest("[data-i]"); if (!b) return; const o = OPTS.find((x) => x.id === SEL); setRoute(routeOf(o.routes[+b.dataset.i])); renderHUD(o); if (MODE === "dollhouse") frameRoute(); });
+  $("#conn").addEventListener("click", (e) => { const b = e.target.closest("[data-i]"); if (!b) return; const o = OPTS.find((x) => x.id === SEL); leaveArea();setRoute(routeOf(o.routes[+b.dataset.i])); renderHUD(o); if (MODE === "dollhouse") frameRoute(); });
   $("#go").addEventListener("click", () => startRouteWalk());
 
   /* ---------------------------------------------------- cameras ---- */
@@ -424,22 +578,26 @@ async function start(A, W) {
   function slabSize() { let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9; for (const [x, y] of D.slab) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); } return Math.max(x1 - x0, y1 - y0); }
   function sunBox(half, at) { const sc = sun.shadow.camera; sc.left = -half; sc.right = half; sc.top = half; sc.bottom = -half; sc.near = 10; sc.far = half * 6; sc.updateProjectionMatrix(); sun.target.position.copy(at); sun.position.copy(at).addScaledVector(SUN, half * 3); }
   function dollhouse(ms = 1600) {
+    leaveArea();
     MODE = "dollhouse"; RW = null; document.body.classList.remove("walk", "routing"); setModeUI();
     controls.enabled = true; camera.fov = 32; camera.near = 1; camera.far = 8000; camera.updateProjectionMatrix(); scene.background = null; scene.fog = null;
     // the building at the centre of the turntable; pulled back until the whole slab fits
     const c = centroid(D.building.foot), R = slabSize(); const t = P3(c[0] * 0.35, c[1] * 0.35, D.building.h * 0.2);
-    const az = D.building.facing + Math.PI / 2 + 0.55, polar = 52 * D2R, dist = R * 1.95;
+    const proof=W.branding && D.modelReview?.camera;
+    const az=proof ? Math.atan2(proof.position[1]-proof.target[1],proof.position[0]-proof.target[0]) : D.building.facing+Math.PI/2+.55, polar=52*D2R, dist=R*1.95;
     controls.minDistance = Math.max(90, D.building.h * 1.4); controls.maxDistance = R * 3;
     flyTo(t, new THREE.Vector3(t.x + Math.cos(az) * Math.sin(polar) * dist, t.y + Math.cos(polar) * dist, t.z - Math.sin(az) * Math.sin(polar) * dist), ms);
     frameOffset(true);
-    controls.autoRotate = true; tilt.enabled = !REALLOOK; sunBox(R * 0.62, P3(0, 0));
+    controls.autoRotate = !(W.branding && matchMedia("(prefers-reduced-motion:reduce)").matches); tilt.enabled = !REALLOOK; sunBox(R * 0.62, P3(0, 0));
     if (REALLOOK) {
       // a photograph of the place through the eye's own lens: 50 mm on full frame (EYE_FOV, 27 deg vertical), pulled back so the frame holds the same street
       camera.fov = EYE_FOV; camera.updateProjectionMatrix();
       scene.background = hdr; scene.backgroundIntensity = 1.0; scene.fog = new THREE.Fog(0xd9cbb4, 460, 1500);
       const h = D.building.h, tr = P3(c[0], c[1], h * 0.4), d2 = Math.max(330, h * 6.3), pol = 67 * D2R;
       controls.minDistance = 100; controls.maxDistance = 1050; controls.minPolarAngle = 35 * D2R; controls.maxPolarAngle = 84 * D2R;
-      flyTo(tr, new THREE.Vector3(tr.x + Math.cos(az) * Math.sin(pol) * d2, tr.y + Math.cos(pol) * d2, tr.z - Math.sin(az) * Math.sin(pol) * d2), ms);
+      if(proof){
+        const at=P3(...proof.target),position=P3(...proof.position);position.sub(at).multiplyScalar(innerWidth>900?1.4:1.7).add(at);controls.minDistance=60;controls.autoRotate=false;flyTo(at,position,ms);
+      }else flyTo(tr, new THREE.Vector3(tr.x + Math.cos(az) * Math.sin(pol) * d2, tr.y + Math.cos(pol) * d2, tr.z - Math.sin(az) * Math.sin(pol) * d2), ms);
     }
     for (const id of ["#walkhud", "#compass", "#mini", "#hint", "#route"]) $(id).hidden = true;
   }
@@ -456,6 +614,7 @@ async function start(A, W) {
     if (r) for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const [ax, ay] = P[j], [bx, by] = P[i]; const dx = bx - ax, dy = by - ay; const t = clamp(((x - ax) * dx + (y - ay) * dy) / (dx * dx + dy * dy + 1e-9), 0, 1); if (Math.hypot(x - ax - dx * t, y - ay - dy * t) < r) return true; } return false; }
   function blocked(x, y) { if (!pip(x, y, D.slab, 0)) return true; for (const p of solid) if (pip(x, y, p, 0.6)) return true; return false; }
   function startWalk(at) {
+    leaveArea();
     MODE = "walk"; document.body.classList.add("walk"); document.body.classList.remove("routing"); setModeUI(); controls.enabled = false; controls.autoRotate = false; tilt.enabled = false; fly = null;
     camera.fov = EYE_FOV; camera.near = 0.3;   /* eye level: 1.68 m up, through a 50 mm lens: what the eye sees, not wide-angle, not zoomed */ camera.far = 2500; frameOffset(false); scene.background = hdr; scene.backgroundIntensity = 0.9; scene.fog = new THREE.Fog(0xd9cbb4, 260, 900);
     const w0 = at || D.street_cam || D.walk0; walk.pos.set(w0[0], w0[1]);
@@ -463,7 +622,7 @@ async function start(A, W) {
     for (const id of ["#walkhud", "#compass", "#mini", "#hint"]) $(id).hidden = false; $("#route").hidden = true; $("#hint").style.opacity = "1";
     setTimeout(() => ($("#hint").style.opacity = "0"), 6000);
   }
-  function setModeUI() { document.querySelectorAll("#modes button").forEach((b) => b.classList.toggle("on", b.dataset.mode === MODE || (MODE === "route" && b.dataset.mode === "walk"))); }
+  function setModeUI() { document.querySelectorAll("#modes button").forEach((b) => { const on=areaMode ? b.id==="mapped-area" : b.dataset.mode===MODE || (MODE==="route" && b.dataset.mode==="walk");b.classList.toggle("on",on);b.setAttribute("aria-pressed",String(on)); }); }
   $("#modes").addEventListener("click", (e) => { const b = e.target.closest("[data-mode]"); if (!b) return; if (b.dataset.mode === "walk") startWalk(); else dollhouse(); });
   let drag = null;
   canvas.addEventListener("pointerdown", (e) => { if (MODE === "dollhouse") return; drag = { x: e.clientX, y: e.clientY, yaw: walk.yaw, pitch: walk.pitch, moved: false }; try { canvas.setPointerCapture(e.pointerId); } catch (x) {} });
@@ -506,8 +665,8 @@ async function start(A, W) {
     const S = 380, k = S / 2 / 220; mctx.clearRect(0, 0, S, S); mctx.save(); mctx.beginPath(); mctx.arc(S / 2, S / 2, S / 2 - 2, 0, 6.283); mctx.clip();
     mctx.translate(S / 2, S / 2); mctx.rotate(-walk.yaw); mctx.scale(k, -k); mctx.translate(-walk.pos.x, -walk.pos.y);
     mctx.fillStyle = "rgba(255,255,255,.18)"; for (const p of solid) { mctx.beginPath(); p.forEach(([x, y], i) => (i ? mctx.lineTo(x, y) : mctx.moveTo(x, y))); mctx.fill(); }
-    mctx.fillStyle = "#c6f24a"; mctx.beginPath(); D.building.foot.forEach(([x, y], i) => (i ? mctx.lineTo(x, y) : mctx.moveTo(x, y))); mctx.fill();
-    if (ROUTE) { mctx.strokeStyle = "#c6f24a"; mctx.lineWidth = 3 / k; mctx.beginPath(); ROUTE.path.forEach(([x, y], i) => (i ? mctx.lineTo(x, y) : mctx.moveTo(x, y))); mctx.stroke(); }
+    mctx.fillStyle = W.branding?"#ffc200":"#c6f24a"; mctx.beginPath(); D.building.foot.forEach(([x, y], i) => (i ? mctx.lineTo(x, y) : mctx.moveTo(x, y))); mctx.fill();
+    if (ROUTE) { mctx.strokeStyle = W.branding?"#ffc200":"#c6f24a"; mctx.lineWidth = 3 / k; mctx.beginPath(); ROUTE.path.forEach(([x, y], i) => (i ? mctx.lineTo(x, y) : mctx.moveTo(x, y))); mctx.stroke(); }
     for (const s of D.stations) { mctx.fillStyle = (LINE[s.line] || ["#888"])[0]; mctx.beginPath(); mctx.arc(s.x, s.y, 7 / k, 0, 6.283); mctx.fill(); }
     mctx.restore(); mctx.fillStyle = "#fff"; mctx.beginPath(); mctx.moveTo(S / 2, S / 2 - 12); mctx.lineTo(S / 2 + 8, S / 2 + 9); mctx.lineTo(S / 2 - 8, S / 2 + 9); mctx.fill();
   }
@@ -515,6 +674,7 @@ async function start(A, W) {
   /* the route walk: along the street path at walking pace, time-lapsed */
   let RW = null;
   function startRouteWalk() {
+    leaveArea();
     const o = OPTS.find((x) => x.id === SEL); const r0 = (ROUTE && ROUTE.kind !== "rail") ? ROUTE : o.routes.find((x) => x.kind === "metro"); const r = routeOf(r0); if (!r) return;
     setRoute(r); renderHUD(o);
     startWalk(ROUTE.path[0]); MODE = "route"; document.body.classList.add("routing"); setModeUI();
@@ -534,10 +694,12 @@ async function start(A, W) {
 
   /* ------------------------------------------------------ switching ---- */
   async function select(id, first) {
+    const request=++selectionRequest;if(!first)intro?.selection();
     SEL = id; const o = OPTS.find((x) => x.id === id);
     document.querySelectorAll(".film").forEach((f) => f.classList.toggle("on", f.dataset.id === id));
     RW = null; ROUTE = null; renderHUD(o);
-    await loadDiorama(id);
+    await loadDiorama(id,request);
+    if(request!==selectionRequest)return;
     FLOOR_SEL = null; setBands(o);
     captureReflections(); setTimeout(captureReflections, 2500);
     setRoute(routeOf(o.routes.find((x) => x.kind === "metro"))); renderHUD(o);
@@ -548,8 +710,8 @@ async function start(A, W) {
   /* the wording is the atlas's when it gives it (W.brand, W.credit), Andheri East's otherwise */
   const BR = W.brand || { kicker: "Autopilot · Flipkart", title: "Andheri East" };
   $("#t-eyebrow").textContent = BR.kicker; $("#t-title").textContent = BR.title;
-  if ($("#l-title")) $("#l-title").textContent = BR.title;
-  $("#to-map").href = A.path || "/" + SLUG;
+  if (!intro && $("#l-title")) $("#l-title").textContent = BR.title;
+  $("#to-map").href = W.mapHref || A.path || "/" + SLUG;
   $("#credit").textContent = W.credit || "Built in Blender from Overture Maps footprints. Heights around each building are estimated; the buildings use the deck's floors. Distances: Google Maps.";
   $("#strip").innerHTML = OPTS.map((o) => { const r = (o.routes || []).find((x) => x.kind === "metro"); const th = W.thumbs && W.thumbs[o.id];
     return `<button class="film" data-id="${esc(o.id)}" style="${th ? `background-image:url('${W.data}${th}')` : ""}"><span><span class="n">${String(o.n).padStart(2, "0")}</span><b>${esc(o.name)}</b>${r ? `<i>${fm(r.m)} · ${esc(r.name)}</i>` : ""}</span></button>`; }).join("");
@@ -559,7 +721,7 @@ async function start(A, W) {
   const deep = location.hash.slice(1); const first = OPTS.some((o) => o.id === deep) ? deep : OPTS[0].id;
   await select(first, true);
   for (const id of ["#top", "#hud", "#strip"]) $(id).hidden = false;
-  $("#l-bar").style.width = "100%"; setTimeout(() => { $("#load").style.transition = "opacity .9s"; $("#load").style.opacity = "0"; setTimeout(() => $("#load").remove(), 950); }, 200);
+  if(intro)intro.ready();else { $("#l-bar").style.width = "100%"; setTimeout(() => { $("#load").style.transition = "opacity .9s"; $("#load").style.opacity = "0"; setTimeout(() => $("#load").remove(), 950); }, 200); }
   if (Q.get("mode") === "walk") startWalk();
 
   /* -------------------------------------------------------- loop ---- */
@@ -569,7 +731,7 @@ async function start(A, W) {
     if (fly) { const t = Math.min(1, (now - fly.t0) / fly.ms), e = ease(t); controls.target.lerpVectors(fly.a.t, fly.b.t, e); camera.position.lerpVectors(fly.a.p, fly.b.p, e); if (t >= 1) fly = null; }
     if (MODE === "dollhouse") controls.update();
     else if (MODE === "walk") stepWalk(dt); else if (MODE === "route") stepRouteWalk(dt);
-    stepMovers(dt);
+    if(!areaMode)stepMovers(dt);
     composer.render(); placeLabels(false); clock.frames++;
     if (!STILL) requestAnimationFrame(frame);
   }
