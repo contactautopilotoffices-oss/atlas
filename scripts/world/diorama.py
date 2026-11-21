@@ -951,6 +951,53 @@ def swap_hero(path):
     new.location.y += (ring[:, 1].min() + ring[:, 1].max()) / 2 - (bb[:, 1].min() + bb[:, 1].max()) / 2
     print("hero swapped from", path, "moved by", tuple(round(v, 2) for v in new.location))
 
+def roof_garden(H):
+    """--roof-garden: the developer brochure's rooftop for 723 Avenue (House of Wadhwa): a timber deck,
+    a curving planted band with trees, checkerboard paving, a glazed pavilion with timber fins and a
+    glass railing inside the fin screen. Layout proportions are read from the brochure image; sizes are estimates."""
+    mat("deck_wood", "#8a6a4a", 0.7); mat("pave_dark", "#2c2e31", 0.6); mat("pave_light", "#d9d6cf", 0.6)
+    mat("planter", "#5a4a3c", 0.8); mat("soil_green", "#3f5f2a", 0.95); mat("fin_timber", "#b36a2c", 0.6)
+    mat("rail_glass", "#9fb8c2", 0.05, 0.2, alpha=0.3); mat("canopy_leaf", "#3c6a2c", 0.9); mat("trunk", "#4b3a2c", 0.9)
+    q = Polygon(OPTB["p"]).simplify(0.2); rr = q.minimum_rotated_rectangle
+    cs = list(rr.exterior.coords)[:4]; e0 = np.subtract(cs[1], cs[0]); e1 = np.subtract(cs[2], cs[1])
+    ax = e0 if np.linalg.norm(e0) >= np.linalg.norm(e1) else e1; ang = math.atan2(ax[1], ax[0])
+    Lg, Sh = max(np.linalg.norm(e0), np.linalg.norm(e1)), min(np.linalg.norm(e0), np.linalg.norm(e1))
+    c = q.centroid; ca, sa = math.cos(ang), math.sin(ang)
+    def W(u, v): return (c.x + u * ca - v * sa, c.y + u * sa + v * ca)      # roof frame: u along the long side
+    z = H + 0.25; rg = MB([])
+    deck = q.buffer(-1.0); flat(rg, lpoly(deck), z, "deck_wood", 1.2)
+    walls(rg, [L(*p) for p in deck.exterior.coords], z, z + 1.15, "rail_glass", 2, 2)
+    # pavilion at one end (a third of the long side), glazed, with a band of timber fins
+    pu0, pu1 = Lg * 0.18, Lg * 0.48; pv = Sh * 0.42
+    pav = Polygon([W(pu0, -pv), W(pu1, -pv), W(pu1, pv), W(pu0, pv)]).intersection(deck)
+    if not pav.is_empty and pav.geom_type == "Polygon":
+        ring = [L(*p) for p in pav.exterior.coords]
+        walls(rg, ring, z, z + 4.2, "glass_lobby", 2, 2); flat(rg, lpoly(pav.buffer(0.6)), z + 4.2, "roof", 4)
+        walls(rg, [L(*p) for p in pav.buffer(0.6).exterior.coords], z + 3.9, z + 4.6, "slab_edge", 2, 2)
+        for k in range(14):   # timber fins on the face toward the garden
+            t = k / 13; px, py = W(pu0, -pv + 0.3 + t * (2 * pv - 0.6)); boxm(rg, *L(px, py), z, z + 3.9, 0.18, 0.6, ang, "fin_timber")
+    # checkerboard paving between the pavilion and the garden
+    tile = 1.2; cu0, cu1 = -Lg * 0.05, Lg * 0.16
+    for i, u in enumerate(np.arange(cu0, cu1, tile)):
+        for j, v in enumerate(np.arange(-Sh * 0.3, Sh * 0.3, tile)):
+            t_ = Polygon([W(u, v), W(u + tile, v), W(u + tile, v + tile), W(u, v + tile)])
+            if deck.contains(t_): flat(rg, lpoly(t_), z + 0.03, "pave_dark" if (i + j) % 2 else "pave_light", 1.2)
+    # a curving planted band across the other half, with small trees
+    band = LineString([W(u, Sh * 0.32 * math.sin((u + Lg * 0.5) / (Lg * 0.5) * math.pi * 1.2)) for u in np.linspace(-Lg * 0.48, -Lg * 0.06, 30)])
+    pl = band.buffer(1.1).intersection(deck)
+    for g in (pl.geoms if hasattr(pl, "geoms") else [pl]):
+        if g.geom_type != "Polygon": continue
+        walls(rg, [L(*p) for p in g.exterior.coords], z, z + 0.7, "planter", 2, 2); flat(rg, lpoly(g), z + 0.65, "soil_green", 2)
+    for k, t in enumerate(np.linspace(0.05, 0.95, 7)):
+        p = band.interpolate(t, normalized=True); h_ = 2.6 + (k % 3) * 0.7
+        cyl(rg, *L(p.x, p.y), z + 0.65, z + h_, 0.12, 0.12, 0, "trunk", 8)
+        cyl(rg, *L(p.x, p.y), z + h_ - 0.4, z + h_ + 1.4, 1.5, 1.3, k, "canopy_leaf", 12)
+    # planters along the railing, as in the brochure's edge greenery
+    edge = deck.exterior
+    for t in np.linspace(0, 1, 26, endpoint=False):
+        p = edge.interpolate(t, normalized=True); cyl(rg, *L(p.x, p.y), z, z + 0.9, 0.7, 0.7, 0, "canopy_leaf", 10)
+    rg.build("roof_garden_723", MATS); print("roof garden built", round(Lg, 1), "x", round(Sh, 1), "m at", round(z, 1))
+
 def aerial(data, info, name="aerial", az_off=-0.6, dist_k=1.0, el_k=0.42, lens=35):
     """A photographic drone still of the district: GPU Cycles, a hazy Mumbai sky, aerial
     perspective from a thin world volume, no tilt-shift and no transparent film."""
@@ -991,6 +1038,7 @@ def aerial(data, info, name="aerial", az_off=-0.6, dist_k=1.0, el_k=0.42, lens=3
 
 info = build()
 if "--hero-blend" in A: swap_hero(A[A.index("--hero-blend") + 1])
+if "--roof-garden" in A: roof_garden(info["H"])
 data = page_data(info)
 json.dump(data, open(os.path.join(OUT, f"{OID}.json"), "w"), separators=(",", ":"))
 if "--glb" in A: export(os.path.join(OUT, f"{OID}.glb"))
@@ -1001,6 +1049,7 @@ if "--render" in A:
         elif k == "aerial2": aerial(data, info, "aerial2", az_off=0.9, dist_k=0.55, el_k=0.35, lens=40)
         # scene-frame shots for 723 Avenue: along Andheri-Kurla Road past Times Square, and the 500 m overview
         elif k == "road": aerial(data, info, "road", az_off=((1440, -378, 24), (1760, -325, 30), 26))
+        elif k == "roof": aerial(data, info, "roof", az_off=((1831 + 95, -151 - 120, 165), (1831, -151, 58), 35))
         elif k == "overview": aerial(data, info, "overview", az_off=((1690, -1000, 390), (1765, -265, 12), 30))
         else: render(k, data, info)
 if "--sky" in A: sky_hdr()

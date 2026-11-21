@@ -22,6 +22,7 @@
   - After the founder's review, the milky haze was removed for clear daylight.
   - Times Square (the 8,600 m² complex north of the road) and the Le Western hotel are named landmarks in glass curtain wall.
   - Office blocks across the area now use six glass and ribbon-window facades instead of one.
+  - 723 Avenue now has the rooftop garden from the developer's brochure: a timber deck, a curving planted band with trees, checkerboard paving, a glazed pavilion with timber fins and a glass railing. The layout is read from the brochure; sizes are estimates. The brochure image is kept with the 723 photos.
 - **Left undone:**
   - The neighbouring buildings still look too clean and uniform. Every facade has the same punched windows, and the satellite heights flatten most of them to 5–8 storeys.
   - Corporate Avenue (2.5 km west) and Privilon are not yet in a checkpoint still.
