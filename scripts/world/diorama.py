@@ -189,7 +189,8 @@ def mat(name, col="#808080", rough=0.8, metal=0.0, tex=None, rtex=None, glass=Fa
 WALL_STYLES = ["res_cream", "res_peach", "res_grey", "res_ochre"]
 MOD = {"res_cream": (6, 12), "res_peach": (6, 12), "res_grey": (6, 12), "res_ochre": (6, 12), "res_tower": (6, 12), "com_ribbon": (8, 16), "com_glass": (6, 16),
        "shop": (6, 4.5), "chawl": (4, 3), "opt_glass": (6, 16.4), "opt_plaster": (6, 16.4), "glass723": (6, 4.1), "retail723": (7.2, 5.6),
-       "cw_teal": (6, 4.1), "cw_blue": (6, 4.1), "cw_grey": (6, 4.1), "cw_silver": (6, 4.1), "ribbon_red": (6, 4.1), "ribbon_white": (6, 4.1)}
+       "cw_teal": (6, 4.1), "cw_blue": (6, 4.1), "cw_grey": (6, 4.1), "cw_silver": (6, 4.1), "ribbon_red": (6, 4.1), "ribbon_white": (6, 4.1),
+       "shophouse": (6, 12), "signs": (6, 4.5), "glass_grid": (6, 4.1)}   # corridor facades from Street View (tex_corridor.py)
 for k in MOD: mat("wall_" + k, tex=k + ".jpg", rtex=k + "_r.jpg", glass=k in ("com_glass", "opt_glass", "com_ribbon", "opt_plaster", "res_tower", "glass723", "retail723") or k.startswith(("cw_", "ribbon_")))
 mat("fin_723", "#3d4752", 0.45, 0.35); mat("pier_723", "#32373d", 0.5, 0.3); mat("band_723", "#c8cbcd", 0.55, 0.15); mat("frame_723", "#d9dcde", 0.35, 0.7)
 mat("acp_grey", "#b8bcbf", 0.4, 0.55); mat("acp_red", "#ad322c", 0.42, 0.35); mat("acp_white", "#e7e7e3", 0.45, 0.25); mat("fin_white", "#ecebe7", 0.5, 0.1)
@@ -449,13 +450,13 @@ def build():
     for nm, lo_, la_, sty in LMK:
         pt = Point((lo_ - S["origin"][0]) * S["k"][0], (la_ - S["origin"][1]) * S["k"][1])
         cand = [(p_.centroid.distance(pt), id(b_)) for b_, p_ in bpolys if p_.area > 1200 and b_.get("opt") != OID and id(b_) not in lmk]
-        if cand: lmk[min(cand)[1]] = (nm, sty, None)
+        if cand: lmk[min(cand)[1]] = (nm, sty, None, None)
     # buildings surveyed in Street View (scripts/world/refs/*.json): facade and, where counted, height
     RD = os.path.join(os.path.dirname(os.path.abspath(__file__)), "refs")
     for fn in sorted(os.listdir(RD)) if os.path.isdir(RD) else []:
         for e in json.load(open(os.path.join(RD, fn))).get("buildings", []):
             pt = Point(e["x"], e["y"]); cand = [(p_.centroid.distance(pt), id(b_)) for b_, p_ in bpolys if b_.get("opt") != OID]
-            if cand and min(cand)[0] < 15: lmk[min(cand)[1]] = (e["name"], e["style"], e.get("h"))
+            if cand and min(cand)[0] < 15: lmk[min(cand)[1]] = (e["name"], e["style"], e.get("h"), e.get("ground"))
     road_near = unary_union([ROAD["major"], ROAD["minor"]]).buffer(6)
     for b, p in bpolys:
         if b.get("opt") == OID: continue
@@ -474,9 +475,10 @@ def build():
             elif b["c"] in ("commercial", "office", "retail", "hotel") or (a > 1500 and r_.random() < 0.5): style = OFFICE[int(b["r"] * 991) % len(OFFICE)]
             else: style = WALL_STYLES[int(b["r"] * 997) % len(WALL_STYLES)]
             mw, mh = MOD[style]
-            shop = a > 80 and hgt > 7 and road_near.intersects(q) and style != "chawl"
-            z_shop = 4.5 if shop else 0.0
-            if shop: walls(ctx, ring, 0, 4.5, "wall_shop", *MOD["shop"])
+            gband = lmk[id(b)][3] if id(b) in lmk else None
+            shop = (a > 80 and hgt > 7 and road_near.intersects(q) and style != "chawl") or gband == "signs"
+            z_shop = min(4.5, hgt - 1.0) if shop else 0.0
+            if shop: walls(ctx, ring, 0, z_shop, "wall_signs" if gband == "signs" else "wall_shop", *MOD["signs" if gband == "signs" else "shop"])
             walls(ctx, ring, z_shop, hgt, "wall_" + style, mw, mh, v0=z_shop)
             # roof and parapet
             inner = q.buffer(-0.25)

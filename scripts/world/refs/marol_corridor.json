@@ -1,14 +1,214 @@
 {
-  "about": "Buildings surveyed in Google Street View (imagery Feb 2026, viewed in the web page on 2026-11-21; nothing copied into the model). Each entry overrides the facade, and where given the height, of the Overture footprint whose centroid is nearest (x, y) in scene metres (origin 72.867 E, 19.111 N). Heights marked 'sv' are storeys counted in Street View x storey height; others keep the satellite estimate.",
-  "buildings": [
-    {"name": "Times Square, banded office", "x": 1751, "y": -319, "style": "cw_teal", "h_basis": "dsm", "seen": "19.10745,72.88330 heading 340: blue-teal glass with light horizontal bands, round columns at the podium, entrance pylon 'TIMES SQUARE' on Andheri-Kurla Road"},
-    {"name": "Times Square, curved stepped tower", "x": 1675, "y": -349, "style": "cw_silver", "h": 52, "h_basis": "sv: about 13 storeys; satellite 88 m rejected", "seen": "19.10745,72.88330 heading 340: curved glass tower with stepped balcony bands"},
-    {"name": "Times Square, blue glass block", "x": 1631, "y": -352, "style": "cw_blue", "h_basis": "dsm", "seen": "19.10745,72.88330 heading 300: square blue curtain wall"},
-    {"name": "InSync Analytics (OSM, 7 storeys)", "x": 1781, "y": -174, "style": "ribbon_white", "h": 25, "h_basis": "osm building:levels 7", "seen": "19.10930,72.88400 heading 45"},
-    {"name": "Fleet House", "x": 1270, "y": -249, "style": "ribbon_red", "h": 38, "h_basis": "sv: about 9 storeys", "seen": "19.10840,72.87850 heading 60: glass office with a red band, 'FLEET HOUSE' at street level, beside Marol Naka station"},
-    {"name": "Makwana Road residential tower", "x": 1415, "y": -314, "style": "res_ochre", "h_basis": "dsm", "seen": "19.10790,72.88080 heading 300: residential tower, red and yellow balcony bands"}
-  ],
-  "stations": {
-    "Marol Naka (Line 1)": "Street View 19.10812,72.88040 heading 268 and 19.10815,72.87960 heading 90: concourse slab spans the whole road on large grey round piers and blue-painted square columns; the concourse is clad opaque with a billboard band (no full glazing); platform level under a flat grey metal canopy with a deep fascia on blue steel columns; a white-and-blue lift and stair core; covered stairs to the footpath with blue railings and blue roofs; shops and a bank under the deck."
+ "about": "Buildings surveyed in Google Street View (imagery Feb 2026, viewed in the web page on 2026-11-21; nothing copied into the model). Each entry overrides the facade, and where given the height, of the Overture footprint whose centroid is nearest (x, y) in scene metres (origin 72.867 E, 19.111 N). Heights marked 'sv' are storeys counted in Street View x storey height; others keep the satellite estimate. 'ground': 'signs' gives the ground and first floor the signboard band. The satellite surface model reads 3-5 times too tall for these low frontage blocks (trees and taller buildings behind blur into them), so every height here is the Street View storey count.",
+ "buildings": [
+  {
+   "name": "Times Square, banded office",
+   "x": 1751,
+   "y": -319,
+   "style": "cw_teal",
+   "h_basis": "dsm",
+   "seen": "19.10745,72.88330 heading 340: blue-teal glass with light horizontal bands, round columns at the podium, entrance pylon 'TIMES SQUARE' on Andheri-Kurla Road"
+  },
+  {
+   "name": "Times Square, curved stepped tower",
+   "x": 1675,
+   "y": -349,
+   "style": "cw_silver",
+   "h": 52,
+   "h_basis": "sv: about 13 storeys; satellite 88 m rejected",
+   "seen": "19.10745,72.88330 heading 340: curved glass tower with stepped balcony bands"
+  },
+  {
+   "name": "Times Square, blue glass block",
+   "x": 1631,
+   "y": -352,
+   "style": "cw_blue",
+   "h_basis": "dsm",
+   "seen": "19.10745,72.88330 heading 300: square blue curtain wall"
+  },
+  {
+   "name": "InSync Analytics (OSM, 7 storeys)",
+   "x": 1781,
+   "y": -174,
+   "style": "ribbon_white",
+   "h": 25,
+   "h_basis": "osm building:levels 7",
+   "seen": "19.10930,72.88400 heading 45"
+  },
+  {
+   "name": "Fleet House",
+   "x": 1270,
+   "y": -249,
+   "style": "ribbon_red",
+   "h": 38,
+   "h_basis": "sv: about 9 storeys",
+   "seen": "19.10840,72.87850 heading 60: glass office with a red band, 'FLEET HOUSE' at street level, beside Marol Naka station"
+  },
+  {
+   "name": "Makwana Road residential tower",
+   "x": 1415,
+   "y": -314,
+   "style": "res_ochre",
+   "h_basis": "dsm",
+   "seen": "19.10790,72.88080 heading 300: residential tower, red and yellow balcony bands"
+  },
+  {
+   "name": "Andheri-Kurla Rd no. 111 (Allure Thai, Amara, Sahyog)",
+   "x": 1564,
+   "y": -431,
+   "style": "shophouse",
+   "h": 14,
+   "h_basis": "sv: 4 storeys",
+   "seen": "Street View Feb 2026, 19.107381,72.882021 heading 200",
+   "ground": "signs"
+  },
+  {
+   "name": "Commercial block opposite Times Square (Yes Bank, AU Bank)",
+   "x": 1642,
+   "y": -442,
+   "style": "shophouse",
+   "h": 12,
+   "h_basis": "sv: 3 storeys",
+   "seen": "Street View Feb 2026, 19.107327,72.882782 heading 200",
+   "ground": "signs"
+  },
+  {
+   "name": "Shop row under Marol Naka station, east",
+   "x": 1348,
+   "y": -400,
+   "style": "shophouse",
+   "h": 11,
+   "h_basis": "sv: 3 storeys",
+   "seen": "Street View Feb 2026, 19.108015,72.879739 heading 185",
+   "ground": "signs"
+  },
+  {
+   "name": "Shop row under Marol Naka station, middle",
+   "x": 1336,
+   "y": -400,
+   "style": "shophouse",
+   "h": 10,
+   "h_basis": "sv: 3 storeys",
+   "seen": "Street View Feb 2026, 19.108015,72.879739 heading 185",
+   "ground": "signs"
+  },
+  {
+   "name": "Shop row under Marol Naka station, corner",
+   "x": 1365,
+   "y": -399,
+   "style": "shophouse",
+   "h": 13,
+   "h_basis": "sv: 4 storeys",
+   "seen": "Street View Feb 2026, 19.108015,72.879739 heading 160",
+   "ground": "signs"
+  },
+  {
+   "name": "Shops south of Marol Naka station",
+   "x": 1323,
+   "y": -370,
+   "style": "shophouse",
+   "h": 10,
+   "h_basis": "sv: 3 storeys",
+   "seen": "Street View Feb 2026, 19.108015,72.879739 heading 203",
+   "ground": "signs"
+  },
+  {
+   "name": "Shops south-east of Marol Naka station",
+   "x": 1370,
+   "y": -423,
+   "style": "shophouse",
+   "h": 9,
+   "h_basis": "sv: 3 storeys",
+   "seen": "Street View Feb 2026, 19.107599,72.880500 heading 226",
+   "ground": "signs"
+  },
+  {
+   "name": "Frontage block east of Makwana Road",
+   "x": 1410,
+   "y": -395,
+   "style": "shophouse",
+   "h": 12,
+   "h_basis": "sv: inferred from the frontage either side",
+   "seen": "Street View Feb 2026, 19.107599,72.880500 heading 207",
+   "ground": "signs"
+  },
+  {
+   "name": "Old 3-storey block, north side",
+   "x": 1496,
+   "y": -344,
+   "style": "shophouse",
+   "h": 11,
+   "h_basis": "sv: 3 storeys",
+   "seen": "Street View Feb 2026, 19.107490,72.881261 heading 355",
+   "ground": "signs"
+  },
+  {
+   "name": "Blue-grey ribbon office",
+   "x": 1438,
+   "y": -441,
+   "style": "cw_grey",
+   "h": 20,
+   "h_basis": "sv: 5 storeys",
+   "seen": "Street View Feb 2026, 19.107599,72.880500 heading 150"
+  },
+  {
+   "name": "Office with dark glass grid",
+   "x": 1475,
+   "y": -403,
+   "style": "glass_grid",
+   "h": 24,
+   "h_basis": "sv: 6 storeys",
+   "seen": "Street View Feb 2026, 19.107599,72.880500 heading 150"
+  },
+  {
+   "name": "Gray Craft office",
+   "x": 1714,
+   "y": -455,
+   "style": "cw_blue",
+   "h": 34,
+   "h_basis": "sv: about 8 storeys",
+   "seen": "Street View Feb 2026, 19.107264,72.883580 heading 160"
+  },
+  {
+   "name": "Shops on Marol Co-op Industrial Estate Rd (Rivaz Pizza, Krishna Medicos)",
+   "x": 1745,
+   "y": -212,
+   "style": "shophouse",
+   "h": 8,
+   "h_basis": "sv: 2 storeys",
+   "seen": "Street View Feb 2026, 19.109191,72.884018 heading 260",
+   "ground": "signs"
+  },
+  {
+   "name": "Shops on Marol Co-op Industrial Estate Rd, south",
+   "x": 1731,
+   "y": -246,
+   "style": "shophouse",
+   "h": 8,
+   "h_basis": "sv: 2 storeys",
+   "seen": "Street View Feb 2026, 19.109191,72.884018 heading 232",
+   "ground": "signs"
+  },
+  {
+   "name": "Compound sheds and site south of the road",
+   "x": 1794,
+   "y": -488,
+   "style": "chawl",
+   "h": 6,
+   "h_basis": "sv: sheds behind a wall",
+   "seen": "Street View Feb 2026, 19.106848,72.884369 heading 230"
+  },
+  {
+   "name": "Compound sheds, west",
+   "x": 1772,
+   "y": -504,
+   "style": "chawl",
+   "h": 6,
+   "h_basis": "sv: sheds behind a wall",
+   "seen": "Street View Feb 2026, 19.106848,72.884369 heading 230"
   }
+ ],
+ "stations": {
+  "Marol Naka (Line 1)": "Street View 19.10812,72.88040 heading 268 and 19.10815,72.87960 heading 90: concourse slab spans the whole road on large grey round piers and blue-painted square columns; the concourse is clad opaque with a billboard band (no full glazing); platform level under a flat grey metal canopy with a deep fascia on blue steel columns; a white-and-blue lift and stair core; covered stairs to the footpath with blue railings and blue roofs; shops and a bank under the deck."
+ }
 }
