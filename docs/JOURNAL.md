@@ -1,5 +1,30 @@
 # Atlas — Development Journal
 
+## 2026-11-21 — Atlas: Andheri district twin, first realism checkpoint
+
+**Tested whether Google can supply a real 3D Andheri (it cannot), then upgraded the existing Andheri district builder: 723 Avenue now matches the photograph and the city around it is weathered and hazy. Two checkpoint stills are ready for review.**
+
+- **Why:** the founder wants the area around 723 Avenue, Corporate Avenue and Privilon to feel like a real place, as Google's 3D city does in New York. ChatGPT's attempt produced either a lone tower or a flat satellite map.
+- **What was established:**
+  - Google's Map Tiles API was tested with the founder's key. At New York the finest tiles stand up to 265 m (real buildings). At 723 Avenue, Marol Naka, Times Square, Privilon, Corporate Avenue and even BKC they are flat, 18 m at most. Google has no 3D buildings for Mumbai, so no import tool or key can produce that look here. The city must be modelled.
+  - The OpenStreetMap file the founder offered holds only about 1,500 buildings for this strip. The builder uses Overture Maps instead (OpenStreetMap plus Google's and Microsoft's building outlines), with heights read from the Copernicus satellite surface model.
+- **Structural decisions:**
+  - Reused the existing district builder (`scripts/world`) instead of writing a new one. It already models roads, footpaths, the Line 1 viaduct, stations, water tanks and trees. A fresh build would have repeated that work.
+  - The generated 723 tower is replaced by the earlier photo-matched facade study (dark fins, opaque divisions, WADHWA crown). It lands on the same footprint within 4 cm.
+  - New photographic aerial stills (GPU, real haze, no tilt-shift), so the scene reads as a drone photograph, not a model on a table.
+  - All new behaviour is behind options (`--slab-min`, `--hero-blend`, `--render aerial aerial2`), so the live explorer's existing outputs are unchanged.
+- **What works now:** one command rebuilds a 1.1 km square of Marol around 723 Avenue and renders two drone views in about 30 seconds. The stills are in `media/flipkart-andheri/world/checkpoint/`.
+- **Left undone:**
+  - The neighbouring buildings still look too clean and uniform. Every facade has the same punched windows, and the satellite heights flatten most of them to 5–8 storeys.
+  - Corporate Avenue (2.5 km west) and Privilon are not yet in a checkpoint still.
+  - Times Square and the Marol Naka station are in the scene but not yet framed in a shot.
+  - Nothing is published to the live explorer.
+  - The NotebookLM push was not attempted: `add_source` is known to be broken.
+- **Open questions for the founder:**
+  - Is this direction worth more time, given that a modelled city will never match Google's photographed New York?
+  - Privilon is under construction and absent from all map data. Can someone confirm its exact plot beside Marol Naka station?
+  - The Maps key was pasted in chat. Should it be restricted or replaced in Google Cloud?
+
 ## 2026-11-20 — Atlas: procedural semantic CAD proof for RTP 603 & 604
 
 **The 6th-floor fit-out drawing for Offices 603 & 604 now becomes a FreeCAD/IFC model and a semantic DXF. Every wall and door carries its type, size, build-up and header, and records where each value came from.**

@@ -151,10 +151,11 @@ def tile(name, size, col, seed, spots=None):
     if spots:
         d = ImageDraw.Draw(img); r = random.Random(seed)
         for _ in range(spots[0]):
-            x, y, s = r.uniform(0, size), r.uniform(0, size), r.uniform(4, spots[1]); d.ellipse([x - s, y - s, x + s, y + s], fill=tuple(int(c * 0.8) for c in col))
+            x, y, s = r.uniform(0, size), r.uniform(0, size), r.uniform(4, spots[1]); k = r.choice(spots[2]) if len(spots) > 2 else 0.8
+            d.ellipse([x - s, y - s, x + s, y + s], fill=tuple(int(c * k) for c in col))
         img = img.filter(ImageFilter.GaussianBlur(1.2))
     img.save(os.path.join(OUT, name + ".jpg"), quality=86)
-tile("roof", 512, (170, 166, 156), 20, (40, 30))
+tile("roof", 512, (128, 124, 116), 20, (70, 46, (0.55, 0.7, 0.8, 1.15)))   # weathered slab: tar patches, damp, repairs
 tile("asphalt", 512, (64, 65, 68), 21, (80, 12))
 tile("pavers", 512, (176, 168, 152), 22)
 tile("grass", 512, (96, 122, 62), 23, (120, 18))

@@ -39,7 +39,7 @@ import shapely
 from shapely.geometry import Polygon, MultiPolygon, LineString, Point, box
 from shapely.ops import unary_union
 
-A = sys.argv[1:]
+A = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else sys.argv[1:]   # bpy module, or Blender app after --
 SCENE, WORLD, TEX, OID, OUT = A[:5]
 bpy.ops.wm.read_factory_settings(use_empty=True)
 FAST = "--fast" in A
@@ -58,9 +58,10 @@ metro_r = next((r for r in SO["routes"] if r["kind"] == "metro"), None)
 pts = [fc.coords[0]] + ([tuple(metro_r["path"][-1])] if metro_r else [])
 bx = shapely.MultiPoint(pts).envelope.buffer(170, join_style="mitre")
 minx, miny, maxx, maxy = bx.bounds
-w, h = max(760, maxx - minx), max(760, maxy - miny)
+SMIN = float(A[A.index("--slab-min") + 1]) if "--slab-min" in A else 760   # --slab-min: a wider district slab
+w, h = max(SMIN, maxx - minx), max(SMIN, maxy - miny)
 cx, cy = (minx + maxx) / 2, (miny + maxy) / 2
-w, h = min(w, 1500), min(h, 1500)
+w, h = min(w, max(1500, SMIN)), min(h, max(1500, SMIN))
 SLAB = box(cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2).buffer(-60).buffer(60, quad_segs=12)
 OX, OY = cx, cy
 def L(x, y): return (x - OX, y - OY)
@@ -193,7 +194,7 @@ for k in MOD: mat("wall_" + k, tex=k + ".jpg", rtex=k + "_r.jpg", glass=k in ("c
 mat("fin_723", "#3d4752", 0.45, 0.35); mat("pier_723", "#32373d", 0.5, 0.3); mat("band_723", "#c8cbcd", 0.55, 0.15); mat("frame_723", "#d9dcde", 0.35, 0.7)
 mat("acp_grey", "#b8bcbf", 0.4, 0.55); mat("acp_red", "#ad322c", 0.42, 0.35); mat("acp_white", "#e7e7e3", 0.45, 0.25); mat("fin_white", "#ecebe7", 0.5, 0.1)
 mat("roof", tex="roof.jpg", rough=0.9); mat("roof_tin", "#8f8f8a", 0.45, 0.6); mat("roof_tarp", "#2f63a8", 0.6); mat("roof_tin_rust", "#7a5b45", 0.7, 0.3)
-mat("parapet", "#cfc8b8", 0.9); mat("ground", "#a29c8f", 0.95, tex="roof.jpg"); mat("asphalt", tex="asphalt.jpg", rough=0.85); mat("pavers", tex="pavers.jpg", rough=0.9)
+mat("parapet", "#ada695", 0.9); mat("ground", "#a29c8f", 0.95, tex="roof.jpg"); mat("asphalt", tex="asphalt.jpg", rough=0.85); mat("pavers", tex="pavers.jpg", rough=0.9)
 mat("kerb", "#bdb8ab", 0.85); mat("grass", tex="grass.jpg", rough=0.95); mat("water", "#3d5257", 0.05, 0.1); mat("marking", "#efefe8", 0.6)
 mat("soil", tex="soil.jpg", rough=1.0); mat("concrete", "#c9c5bb", 0.75); mat("concrete_dark", "#9f9b92", 0.8); mat("metal", "#a9adb1", 0.35, 0.9)
 mat("station_roof", "#d9dde0", 0.3, 0.85); mat("station_glass", "#8fb4c4", 0.05, 0.2, alpha=0.35); mat("sign_l1", "#1c5fa8", 0.4); mat("sign_l3", "#1d8a8a", 0.4)
@@ -926,12 +927,58 @@ def sky_hdr():
     im = bpy.data.images.load(sc.render.filepath); px = np.array(im.pixels[:]).reshape(-1, 4); px[:, :3] = np.minimum(px[:, :3], 8.0)
     im.pixels[:] = px.ravel(); im.filepath_raw = sc.render.filepath; im.file_format = "HDR"; im.save(); print("sky.hdr")
 
+def swap_hero(path):
+    """--hero-blend: replace the generated opt_<id> with the photo-matched facade study
+    (andheri-project/_build/exteriors/<id>.blend), moved onto this slab's footprint."""
+    old = bpy.data.objects.get("opt_" + OID)
+    with bpy.data.libraries.load(path, link=False) as (src, dst): dst.objects = ["opt_" + OID]
+    new = dst.objects[0]
+    if old: bpy.data.objects.remove(old, do_unlink=True)
+    new.name = "opt_" + OID; bpy.context.scene.collection.objects.link(new)
+    ring = np.array([L(x, y) for x, y in OPTB["p"]])
+    bb = np.array([new.matrix_world @ __import__("mathutils").Vector(c) for c in new.bound_box])
+    new.location.x += (ring[:, 0].min() + ring[:, 0].max()) / 2 - (bb[:, 0].min() + bb[:, 0].max()) / 2
+    new.location.y += (ring[:, 1].min() + ring[:, 1].max()) / 2 - (bb[:, 1].min() + bb[:, 1].max()) / 2
+    print("hero swapped from", path, "moved by", tuple(round(v, 2) for v in new.location))
+
+def aerial(data, info, name="aerial", az_off=-0.6, dist_k=1.0, el_k=0.42, lens=35):
+    """A photographic drone still of the district: GPU Cycles, a hazy Mumbai sky, aerial
+    perspective from a thin world volume, no tilt-shift and no transparent film."""
+    sc = bpy.context.scene
+    if not getattr(aerial, "lit", False):
+        place_instances(data); light(sc, az=235, el=32); aerial.lit = True
+        # haze in a bounded box (a world volume would swallow the sky and the sun at infinity)
+        hm = bpy.data.materials.new("haze"); hm.use_nodes = True; ht = hm.node_tree; ht.nodes.remove(ht.nodes["Principled BSDF"])
+        vol = ht.nodes.new("ShaderNodeVolumePrincipled"); vol.inputs["Density"].default_value = 0.00028
+        vol.inputs["Color"].default_value = (0.86, 0.87, 0.9, 1); vol.inputs["Anisotropy"].default_value = 0.35
+        ht.links.new(vol.outputs[0], ht.nodes["Material Output"].inputs["Volume"])
+        bpy.ops.mesh.primitive_cube_add(size=1, location=(0, 0, 140)); hz = bpy.context.active_object; hz.name = "haze"
+        hz.scale = (6000, 6000, 280); hz.data.materials.append(hm); hz.visible_shadow = False
+        try:
+            pr = bpy.context.preferences.addons["cycles"].preferences; pr.compute_device_type = "METAL"; pr.get_devices()
+            for dv in pr.devices: dv.use = True
+            sc.cycles.device = "GPU"
+        except Exception as e: print("GPU unavailable", e)
+    E = info["entrance"]; F = info["canopy_ang"]; nx, ny = math.sin(F), -math.cos(F); H = info["H"]
+    bc = Polygon(data["building"]["foot"]).centroid
+    a = math.atan2(ny, nx) + az_off; dist = max(420, H * 6) * dist_k
+    camera(sc, (bc.x + math.cos(a) * dist, bc.y + math.sin(a) * dist, dist * el_k), (bc.x - math.cos(a) * 60, bc.y - math.sin(a) * 60, H * 0.2), lens)
+    sc.render.engine = "CYCLES"; sc.cycles.samples = int(A[A.index("--samples") + 1]) if "--samples" in A else 96; sc.cycles.use_denoising = True
+    sc.cycles.max_bounces = 6; sc.cycles.transparent_max_bounces = 8; sc.cycles.volume_step_rate = 4
+    sc.render.resolution_x, sc.render.resolution_y = 1920, 1080; sc.render.resolution_percentage = int(A[A.index("--pct") + 1]) if "--pct" in A else 100
+    sc.view_settings.view_transform = "AgX"; sc.view_settings.look = "AgX - Base Contrast"; sc.view_settings.exposure = 0.0
+    sc.render.film_transparent = False; sc.render.image_settings.file_format = "PNG"; sc.render.image_settings.color_mode = "RGB"
+    sc.render.filepath = os.path.join(OUT, f"{OID}-{name}.png"); bpy.ops.render.render(write_still=True); print("rendered", name)
+
 info = build()
+if "--hero-blend" in A: swap_hero(A[A.index("--hero-blend") + 1])
 data = page_data(info)
 json.dump(data, open(os.path.join(OUT, f"{OID}.json"), "w"), separators=(",", ":"))
 if "--glb" in A: export(os.path.join(OUT, f"{OID}.glb"))
 if "--render" in A:
     for k in A[A.index("--render") + 1:]:
         if k.startswith("--"): break
-        render(k, data, info)
+        if k == "aerial": aerial(data, info)
+        elif k == "aerial2": aerial(data, info, "aerial2", az_off=0.9, dist_k=0.55, el_k=0.35, lens=40)
+        else: render(k, data, info)
 if "--sky" in A: sky_hdr()
