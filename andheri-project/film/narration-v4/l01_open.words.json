@@ -1,0 +1,87 @@
+[
+ {
+  "word": "Let's",
+  "start": 0.0,
+  "end": 0.255
+ },
+ {
+  "word": "not",
+  "start": 0.302,
+  "end": 0.43
+ },
+ {
+  "word": "start",
+  "start": 0.476,
+  "end": 0.697
+ },
+ {
+  "word": "with",
+  "start": 0.731,
+  "end": 0.848
+ },
+ {
+  "word": "a",
+  "start": 0.882,
+  "end": 0.906
+ },
+ {
+  "word": "list",
+  "start": 0.964,
+  "end": 1.126
+ },
+ {
+  "word": "of",
+  "start": 1.173,
+  "end": 1.231
+ },
+ {
+  "word": "buildings.",
+  "start": 1.277,
+  "end": 1.892
+ },
+ {
+  "word": "Let's",
+  "start": 2.659,
+  "end": 2.891
+ },
+ {
+  "word": "start",
+  "start": 2.914,
+  "end": 3.135
+ },
+ {
+  "word": "with",
+  "start": 3.17,
+  "end": 3.297
+ },
+ {
+  "word": "how",
+  "start": 3.344,
+  "end": 3.46
+ },
+ {
+  "word": "your",
+  "start": 3.518,
+  "end": 3.634
+ },
+ {
+  "word": "people",
+  "start": 3.68,
+  "end": 3.959
+ },
+ {
+  "word": "get",
+  "start": 4.005,
+  "end": 4.168
+ },
+ {
+  "word": "to",
+  "start": 4.214,
+  "end": 4.284
+ },
+ {
+  "word": "work.",
+  "start": 4.354,
+  "end": 5.433
+ }
+]

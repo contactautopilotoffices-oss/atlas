@@ -1,0 +1,77 @@
+{
+ "composition_plan": {
+  "positive_global_styles": [
+   "premium cinematic underscore for a corporate real-estate film",
+   "soft felt piano",
+   "warm string ensemble",
+   "gentle steady pulse from softly repeated muted piano and a low warm synth pulse",
+   "80 BPM",
+   "D major",
+   "calm, premium, ambient",
+   "instrumental"
+  ],
+  "negative_global_styles": [
+   "vocals",
+   "choir",
+   "humming",
+   "drum kit",
+   "snare",
+   "hi-hats",
+   "claps",
+   "EDM",
+   "trap",
+   "dubstep",
+   "trailer hits",
+   "braams",
+   "cheesy corporate stock music",
+   "ukulele",
+   "whistling",
+   "glockenspiel",
+   "electric guitar",
+   "lead synth",
+   "bombastic brass"
+  ],
+  "sections": [
+   {
+    "section_name": "Ambient A",
+    "positive_local_styles": [
+     "ambient, minimal and steady",
+     "scattered felt piano notes over a warm string pad",
+     "the same soft low pulse throughout",
+     "constant gentle dynamics",
+     "no intro, no ending, loopable"
+    ],
+    "negative_local_styles": [
+     "crescendo",
+     "build",
+     "ending",
+     "fade out",
+     "drums"
+    ],
+    "duration_ms": 35000,
+    "lines": []
+   },
+   {
+    "section_name": "Ambient B",
+    "positive_local_styles": [
+     "ambient, minimal and steady",
+     "scattered felt piano notes over a warm string pad",
+     "the same soft low pulse throughout",
+     "constant gentle dynamics",
+     "continues seamlessly, no ending"
+    ],
+    "negative_local_styles": [
+     "crescendo",
+     "build",
+     "ending",
+     "fade out",
+     "drums"
+    ],
+    "duration_ms": 35000,
+    "lines": []
+   }
+  ]
+ },
+ "model_id": "music_v1",
+ "respect_sections_durations": true
+}

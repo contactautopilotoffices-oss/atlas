@@ -1,0 +1,3527 @@
+{
+ "film": "Flipkart x Autopilot: Andheri East, the shortlist (script draft 4)",
+ "voice": "Alka S - Natural, Warm, Ecom-Ready",
+ "voice_id": "Z1oY2Vw237R6ALt5CZcD",
+ "model": "eleven_multilingual_v2",
+ "output_format": "mp3_44100_128",
+ "settings": {
+  "similarity_boost": 0.75,
+  "use_speaker_boost": true,
+  "stability": 0.45,
+  "style": 0.3,
+  "speed": 1.0
+ },
+ "settings_reason": "Both settings passed speech-to-text on both lines. A (speed 0.95) came out with slightly wider pitch movement (11.3-13.5 vs 10.7-11.9 semitones, 10th-90th percentile) but that is within take-to-take variation: A's opening line was actually shorter than B's. The difference that matters is pace on the long line: A spoke l02 at 2.75 words a second (10.9 s in a 12 s slot), B at 2.99 (10.0 s). Over the whole script (about 365 spoken words) A projects to about 143 s of voice plus breaths against 130 s of script slots, past the 2:10 picture and the 2:20 bed; B projects to about 132 s. B is also the more energetic read the founder asked for, and still well below the Reliable film's rushed 3.7 words a second at default speed. The opener (under black, 8 s slot) came out at 4.2 words a second in both takes, so its tts text carries one written 0.6 s pause between its two sentences; the words are unchanged.",
+ "continuity": "each request carries previous_text and next_text (the neighbouring lines)",
+ "timings": "times in each line are seconds from the start of its own file; slot_s is the script time slot in film seconds",
+ "lines": [
+  {
+   "id": "l01_open",
+   "section": "Open",
+   "slot_s": [
+    0,
+    8
+   ],
+   "text": "Let's not start with a list of buildings. Let's start with how your people get to work.",
+   "tts_text": "Let's not start with a list of buildings. <break time=\"0.6s\" /> Let's start with how your people get to work.",
+   "file": "l01_open.mp3",
+   "words_file": "l01_open.words.json",
+   "take": 1,
+   "duration_s": 5.433,
+   "speech_start_s": 0.0,
+   "speech_end_s": 4.515,
+   "speech_s": 4.515,
+   "words_per_s": 3.77,
+   "internal_pauses_s": [
+    1.04
+   ],
+   "loudness_lufs": -21.78,
+   "true_peak_dbtp": -5.16,
+   "lra_lu": 0.9,
+   "f0_median_hz": 231.9,
+   "f0_spread_st": 11.65,
+   "stt_text": "Let's not start with a list of buildings. Let's start with how your people get to work",
+   "stt_pass": true,
+   "stt_terms": {
+    "list of buildings": true,
+    "your people": true,
+    "get to work": true
+   },
+   "words": [
+    {
+     "word": "Let's",
+     "start": 0.0,
+     "end": 0.255
+    },
+    {
+     "word": "not",
+     "start": 0.302,
+     "end": 0.43
+    },
+    {
+     "word": "start",
+     "start": 0.476,
+     "end": 0.697
+    },
+    {
+     "word": "with",
+     "start": 0.731,
+     "end": 0.848
+    },
+    {
+     "word": "a",
+     "start": 0.882,
+     "end": 0.906
+    },
+    {
+     "word": "list",
+     "start": 0.964,
+     "end": 1.126
+    },
+    {
+     "word": "of",
+     "start": 1.173,
+     "end": 1.231
+    },
+    {
+     "word": "buildings.",
+     "start": 1.277,
+     "end": 1.892
+    },
+    {
+     "word": "Let's",
+     "start": 2.659,
+     "end": 2.891
+    },
+    {
+     "word": "start",
+     "start": 2.914,
+     "end": 3.135
+    },
+    {
+     "word": "with",
+     "start": 3.17,
+     "end": 3.297
+    },
+    {
+     "word": "how",
+     "start": 3.344,
+     "end": 3.46
+    },
+    {
+     "word": "your",
+     "start": 3.518,
+     "end": 3.634
+    },
+    {
+     "word": "people",
+     "start": 3.68,
+     "end": 3.959
+    },
+    {
+     "word": "get",
+     "start": 4.005,
+     "end": 4.168
+    },
+    {
+     "word": "to",
+     "start": 4.214,
+     "end": 4.284
+    },
+    {
+     "word": "work.",
+     "start": 4.354,
+     "end": 5.433
+    }
+   ],
+   "takes": [
+    {
+     "tts_text": "Let's not start with a list of buildings. <break time=\"0.6s\" /> Let's start with how your people get to work.",
+     "take": 1,
+     "duration_s": 5.433,
+     "speech_start_s": 0.0,
+     "speech_end_s": 4.515,
+     "speech_s": 4.515,
+     "words_per_s": 3.77,
+     "internal_pauses_s": [
+      1.04
+     ],
+     "loudness_lufs": -21.78,
+     "true_peak_dbtp": -5.16,
+     "lra_lu": 0.9,
+     "f0_median_hz": 231.9,
+     "f0_spread_st": 11.65,
+     "stt_text": "Let's not start with a list of buildings. Let's start with how your people get to work",
+     "stt_pass": true,
+     "stt_terms": {
+      "list of buildings": true,
+      "your people": true,
+      "get to work": true
+     },
+     "file": "takes/l01_open_t1.mp3"
+    }
+   ],
+   "provisional_at": 1.6,
+   "provisional_speech": [
+    1.6,
+    6.115
+   ]
+  },
+  {
+   "id": "l02_descent",
+   "section": "Open",
+   "slot_s": [
+    8,
+    20
+   ],
+   "text": "Flipkart asked us for space in Andheri East. We walked the micro-market, checked every building against the deck, and brought it down to three. Each one answers a different question.",
+   "tts_text": "Flipkart asked us for space in Andheri East. We walked the micro-market, checked every building against the deck, and brought it down to three. Each one answers a different question.",
+   "file": "l02_descent.mp3",
+   "words_file": "l02_descent.words.json",
+   "take": 1,
+   "duration_s": 10.217,
+   "speech_start_s": 0.0,
+   "speech_end_s": 9.608,
+   "speech_s": 9.608,
+   "words_per_s": 3.12,
+   "internal_pauses_s": [
+    0.79,
+    0.12,
+    0.15,
+    0.67,
+    0.18
+   ],
+   "loudness_lufs": -21.61,
+   "true_peak_dbtp": -2.64,
+   "lra_lu": 4.8,
+   "f0_median_hz": 225.4,
+   "f0_spread_st": 10.69,
+   "stt_text": "Flipkart asked us for space in Andheri East. We walked the micro market, checked every building against the deck, and brought it down to three. Each one answers a different question.",
+   "stt_pass": true,
+   "stt_terms": {
+    "flipkart": true,
+    "andheri east": true,
+    "micro market|micromarket": true,
+    "against the deck": true,
+    "down to three|down to 3": true,
+    "different question": true
+   },
+   "words": [
+    {
+     "word": "Flipkart",
+     "start": 0.0,
+     "end": 0.464
+    },
+    {
+     "word": "asked",
+     "start": 0.522,
+     "end": 0.743
+    },
+    {
+     "word": "us",
+     "start": 0.789,
+     "end": 0.871
+    },
+    {
+     "word": "for",
+     "start": 0.929,
+     "end": 1.033
+    },
+    {
+     "word": "space",
+     "start": 1.08,
+     "end": 1.428
+    },
+    {
+     "word": "in",
+     "start": 1.463,
+     "end": 1.533
+    },
+    {
+     "word": "Andheri",
+     "start": 1.614,
+     "end": 1.997
+    },
+    {
+     "word": "East.",
+     "start": 2.032,
+     "end": 2.45
+    },
+    {
+     "word": "We",
+     "start": 2.961,
+     "end": 3.1
+    },
+    {
+     "word": "walked",
+     "start": 3.158,
+     "end": 3.425
+    },
+    {
+     "word": "the",
+     "start": 3.448,
+     "end": 3.518
+    },
+    {
+     "word": "micro-market,",
+     "start": 3.564,
+     "end": 4.296
+    },
+    {
+     "word": "checked",
+     "start": 4.331,
+     "end": 4.598
+    },
+    {
+     "word": "every",
+     "start": 4.667,
+     "end": 5.062
+    },
+    {
+     "word": "building",
+     "start": 5.12,
+     "end": 5.433
+    },
+    {
+     "word": "against",
+     "start": 5.48,
+     "end": 5.782
+    },
+    {
+     "word": "the",
+     "start": 5.817,
+     "end": 5.886
+    },
+    {
+     "word": "deck,",
+     "start": 5.933,
+     "end": 6.165
+    },
+    {
+     "word": "and",
+     "start": 6.188,
+     "end": 6.293
+    },
+    {
+     "word": "brought",
+     "start": 6.339,
+     "end": 6.571
+    },
+    {
+     "word": "it",
+     "start": 6.606,
+     "end": 6.653
+    },
+    {
+     "word": "down",
+     "start": 6.699,
+     "end": 6.861
+    },
+    {
+     "word": "to",
+     "start": 6.896,
+     "end": 6.954
+    },
+    {
+     "word": "three.",
+     "start": 7.012,
+     "end": 7.419
+    },
+    {
+     "word": "Each",
+     "start": 7.86,
+     "end": 8.057
+    },
+    {
+     "word": "one",
+     "start": 8.127,
+     "end": 8.429
+    },
+    {
+     "word": "answers",
+     "start": 8.475,
+     "end": 8.882
+    },
+    {
+     "word": "a",
+     "start": 8.928,
+     "end": 8.951
+    },
+    {
+     "word": "different",
+     "start": 8.998,
+     "end": 9.276
+    },
+    {
+     "word": "question.",
+     "start": 9.3,
+     "end": 10.217
+    }
+   ],
+   "takes": [
+    {
+     "tts_text": "Flipkart asked us for space in Andheri East. We walked the micro-market, checked every building against the deck, and brought it down to three. Each one answers a different question.",
+     "take": 1,
+     "duration_s": 10.217,
+     "speech_start_s": 0.0,
+     "speech_end_s": 9.608,
+     "speech_s": 9.608,
+     "words_per_s": 3.12,
+     "internal_pauses_s": [
+      0.79,
+      0.12,
+      0.15,
+      0.67,
+      0.18
+     ],
+     "loudness_lufs": -21.61,
+     "true_peak_dbtp": -2.64,
+     "lra_lu": 4.8,
+     "f0_median_hz": 225.4,
+     "f0_spread_st": 10.69,
+     "stt_text": "Flipkart asked us for space in Andheri East. We walked the micro market, checked every building against the deck, and brought it down to three. Each one answers a different question.",
+     "stt_pass": true,
+     "stt_terms": {
+      "flipkart": true,
+      "andheri east": true,
+      "micro market|micromarket": true,
+      "against the deck": true,
+      "down to three|down to 3": true,
+      "different question": true
+     },
+     "file": "takes/l02_descent_t1.mp3"
+    }
+   ],
+   "provisional_at": 8.3,
+   "provisional_speech": [
+    8.3,
+    17.908
+   ]
+  },
+  {
+   "id": "l03_marol",
+   "section": "Open",
+   "slot_s": [
+    20,
+    27
+   ],
+   "text": "Two of them are at Marol Naka, where Metro Line One meets Line Three. The third is one stop west, in Chakala.",
+   "tts_text": "Two of them are at Marol Naka, where Metro Line One meets Line Three. The third is one stop west, in Chakala.",
+   "file": "l03_marol.mp3",
+   "words_file": "l03_marol.words.json",
+   "take": 1,
+   "duration_s": 7.616,
+   "speech_start_s": 0.12,
+   "speech_end_s": 6.935,
+   "speech_s": 6.815,
+   "words_per_s": 3.23,
+   "internal_pauses_s": [
+    0.39,
+    0.35,
+    0.78
+   ],
+   "loudness_lufs": -21.48,
+   "true_peak_dbtp": -4.57,
+   "lra_lu": 2.4,
+   "f0_median_hz": 222.2,
+   "f0_spread_st": 13.51,
+   "stt_text": "Two of them are at Marol Naka, where Metro Line 1 meets Line 3. The third is One Stop West in Chakala",
+   "stt_pass": true,
+   "stt_terms": {
+    "two of them|2 of them": true,
+    "marol naka": true,
+    "line one|line 1": true,
+    "line three|line 3": true,
+    "one stop west|1 stop west": true,
+    "chakala": true
+   },
+   "words": [
+    {
+     "word": "Two",
+     "start": 0.0,
+     "end": 0.221
+    },
+    {
+     "word": "of",
+     "start": 0.302,
+     "end": 0.383
+    },
+    {
+     "word": "them",
+     "start": 0.441,
+     "end": 0.569
+    },
+    {
+     "word": "are",
+     "start": 0.639,
+     "end": 0.755
+    },
+    {
+     "word": "at",
+     "start": 0.778,
+     "end": 0.848
+    },
+    {
+     "word": "Marol",
+     "start": 0.917,
+     "end": 1.196
+    },
+    {
+     "word": "Naka,",
+     "start": 1.254,
+     "end": 1.753
+    },
+    {
+     "word": "where",
+     "start": 1.927,
+     "end": 2.125
+    },
+    {
+     "word": "Metro",
+     "start": 2.159,
+     "end": 2.415
+    },
+    {
+     "word": "Line",
+     "start": 2.461,
+     "end": 2.647
+    },
+    {
+     "word": "One",
+     "start": 2.694,
+     "end": 3.03
+    },
+    {
+     "word": "meets",
+     "start": 3.204,
+     "end": 3.471
+    },
+    {
+     "word": "Line",
+     "start": 3.541,
+     "end": 3.785
+    },
+    {
+     "word": "Three.",
+     "start": 3.82,
+     "end": 4.307
+    },
+    {
+     "word": "The",
+     "start": 4.818,
+     "end": 4.957
+    },
+    {
+     "word": "third",
+     "start": 5.016,
+     "end": 5.259
+    },
+    {
+     "word": "is",
+     "start": 5.317,
+     "end": 5.399
+    },
+    {
+     "word": "one",
+     "start": 5.468,
+     "end": 5.642
+    },
+    {
+     "word": "stop",
+     "start": 5.677,
+     "end": 5.921
+    },
+    {
+     "word": "west,",
+     "start": 5.991,
+     "end": 6.281
+    },
+    {
+     "word": "in",
+     "start": 6.316,
+     "end": 6.385
+    },
+    {
+     "word": "Chakala.",
+     "start": 6.444,
+     "end": 7.616
+    }
+   ],
+   "takes": [
+    {
+     "tts_text": "Two of them are at Marol Naka, where Metro Line One meets Line Three. The third is one stop west, in Chakala.",
+     "take": 1,
+     "duration_s": 7.616,
+     "speech_start_s": 0.12,
+     "speech_end_s": 6.935,
+     "speech_s": 6.815,
+     "words_per_s": 3.23,
+     "internal_pauses_s": [
+      0.39,
+      0.35,
+      0.78
+     ],
+     "loudness_lufs": -21.48,
+     "true_peak_dbtp": -4.57,
+     "lra_lu": 2.4,
+     "f0_median_hz": 222.2,
+     "f0_spread_st": 13.51,
+     "stt_text": "Two of them are at Marol Naka, where Metro Line 1 meets Line 3. The third is One Stop West in Chakala",
+     "stt_pass": true,
+     "stt_terms": {
+      "two of them|2 of them": true,
+      "marol naka": true,
+      "line one|line 1": true,
+      "line three|line 3": true,
+      "one stop west|1 stop west": true,
+      "chakala": true
+     },
+     "file": "takes/l03_marol_t1.mp3"
+    }
+   ],
+   "provisional_at": 20.18,
+   "provisional_speech": [
+    20.3,
+    27.115
+   ]
+  },
+  {
+   "id": "l04_privilon_commute",
+   "section": "Privilon",
+   "slot_s": [
+    27,
+    37
+   ],
+   "text": "First, the commute. Privilon stands right beside Marol Naka station. A hundred and forty metres from the station steps. Two minutes on foot, in any weather.",
+   "tts_text": "First, the commute. Priv-i-lon stands right beside Marol Naka station. A hundred and forty metres from the station steps. Two minutes on foot, in any weather.",
+   "file": "l04_privilon_commute.mp3",
+   "words_file": "l04_privilon_commute.words.json",
+   "take": 3,
+   "duration_s": 9.149,
+   "speech_start_s": 0.0,
+   "speech_end_s": 8.646,
+   "speech_s": 8.646,
+   "words_per_s": 3.01,
+   "internal_pauses_s": [
+    0.51,
+    0.55,
+    0.63,
+    0.18
+   ],
+   "loudness_lufs": -22.97,
+   "true_peak_dbtp": -5.77,
+   "lra_lu": 2.7,
+   "f0_median_hz": 213.3,
+   "f0_spread_st": 10.52,
+   "stt_text": "First, the commute. Privillon stands right beside Marol Naka station, 140 meters from the station steps, two minutes on foot in any weather",
+   "stt_pass": true,
+   "stt_terms": {
+    "the commute": true,
+    "privilon|privillon|privi lon|pri vi lon": true,
+    "marol naka": true,
+    "a hundred and forty|one hundred and forty|hundred and forty|140": true,
+    "metres|meters": true,
+    "two minutes|2 minutes": true,
+    "any weather": true
+   },
+   "words": [
+    {
+     "word": "First,",
+     "start": 0.0,
+     "end": 0.325
+    },
+    {
+     "word": "the",
+     "start": 0.348,
+     "end": 0.418
+    },
+    {
+     "word": "commute.",
+     "start": 0.464,
+     "end": 0.906
+    },
+    {
+     "word": "Priv-i-lon",
+     "start": 1.149,
+     "end": 1.683
+    },
+    {
+     "word": "stands",
+     "start": 1.741,
+     "end": 2.078
+    },
+    {
+     "word": "right",
+     "start": 2.148,
+     "end": 2.345
+    },
+    {
+     "word": "beside",
+     "start": 2.403,
+     "end": 2.705
+    },
+    {
+     "word": "Marol",
+     "start": 2.752,
+     "end": 3.007
+    },
+    {
+     "word": "Naka",
+     "start": 3.065,
+     "end": 3.286
+    },
+    {
+     "word": "station.",
+     "start": 3.332,
+     "end": 3.913
+    },
+    {
+     "word": "A",
+     "start": 4.238,
+     "end": 4.307
+    },
+    {
+     "word": "hundred",
+     "start": 4.389,
+     "end": 4.656
+    },
+    {
+     "word": "and",
+     "start": 4.69,
+     "end": 4.76
+    },
+    {
+     "word": "forty",
+     "start": 4.818,
+     "end": 5.097
+    },
+    {
+     "word": "metres",
+     "start": 5.155,
+     "end": 5.433
+    },
+    {
+     "word": "from",
+     "start": 5.468,
+     "end": 5.608
+    },
+    {
+     "word": "the",
+     "start": 5.654,
+     "end": 5.724
+    },
+    {
+     "word": "station",
+     "start": 5.759,
+     "end": 6.107
+    },
+    {
+     "word": "steps.",
+     "start": 6.165,
+     "end": 6.653
+    },
+    {
+     "word": "Two",
+     "start": 6.931,
+     "end": 7.117
+    },
+    {
+     "word": "minutes",
+     "start": 7.187,
+     "end": 7.465
+    },
+    {
+     "word": "on",
+     "start": 7.523,
+     "end": 7.628
+    },
+    {
+     "word": "foot,",
+     "start": 7.697,
+     "end": 7.964
+    },
+    {
+     "word": "in",
+     "start": 7.999,
+     "end": 8.127
+    },
+    {
+     "word": "any",
+     "start": 8.173,
+     "end": 8.324
+    },
+    {
+     "word": "weather.",
+     "start": 8.371,
+     "end": 9.149
+    }
+   ],
+   "takes": [
+    {
+     "tts_text": "First, the commute. Privilon stands right beside Marol Naka station. A hundred and forty metres from the station steps. Two minutes on foot, in any weather.",
+     "take": 1,
+     "duration_s": 9.009,
+     "speech_start_s": 0.0,
+     "speech_end_s": 8.452,
+     "speech_s": 8.452,
+     "words_per_s": 3.08,
+     "internal_pauses_s": [
+      0.2,
+      0.75,
+      0.6,
+      0.19
+     ],
+     "loudness_lufs": -22.34,
+     "true_peak_dbtp": -5.31,
+     "lra_lu": 1.7,
+     "f0_median_hz": 207.8,
+     "f0_spread_st": 11.07,
+     "stt_text": "First, the commute. Breville on stands right beside Merrill Naka Station, 140 meters from the station steps, two minutes on foot in any weather.",
+     "stt_pass": false,
+     "stt_terms": {
+      "the commute": true,
+      "privilon|privillon|privi lon|pri vi lon": false,
+      "marol naka": false,
+      "a hundred and forty|one hundred and forty|hundred and forty|140": true,
+      "metres|meters": true,
+      "two minutes|2 minutes": true,
+      "any weather": true
+     },
+     "file": "takes/l04_privilon_commute_t1.mp3"
+    },
+    {
+     "take": 2,
+     "file": "takes/l04_privilon_commute_t2.mp3",
+     "tts_text": "First, the commute. Pri-vi-lon stands right beside Marol Naka station. A hundred and forty metres from the station steps. Two minutes on foot, in any weather.",
+     "settings": {
+      "similarity_boost": 0.75,
+      "use_speaker_boost": true,
+      "stability": 0.45,
+      "style": 0.3,
+      "speed": 1.0
+     },
+     "duration_s": 9.892,
+     "speech_start_s": 0.0,
+     "speech_end_s": 9.413,
+     "speech_s": 9.413,
+     "words_per_s": 2.76,
+     "internal_pauses_s": [
+      0.45,
+      0.63,
+      0.79,
+      0.48
+     ],
+     "loudness_lufs": -23.08,
+     "true_peak_dbtp": -4.76,
+     "lra_lu": 1.1,
+     "f0_median_hz": 195.1,
+     "f0_spread_st": 10.32,
+     "stt_text": "First, the commute. Privillon stands right beside Marol Naka station, 140 meters from the station steps, two minutes on foot in any weather",
+     "stt_pass": true,
+     "stt_terms": {
+      "the commute": true,
+      "privilon|privillon|privi lon|pri vi lon": true,
+      "marol naka": true,
+      "a hundred and forty|one hundred and forty|hundred and forty|140": true,
+      "metres|meters": true,
+      "two minutes|2 minutes": true,
+      "any weather": true
+     }
+    },
+    {
+     "take": 3,
+     "file": "takes/l04_privilon_commute_t3.mp3",
+     "tts_text": "First, the commute. Priv-i-lon stands right beside Marol Naka station. A hundred and forty metres from the station steps. Two minutes on foot, in any weather.",
+     "settings": {
+      "similarity_boost": 0.75,
+      "use_speaker_boost": true,
+      "stability": 0.45,
+      "style": 0.3,
+      "speed": 1.0
+     },
+     "duration_s": 9.149,
+     "speech_start_s": 0.0,
+     "speech_end_s": 8.646,
+     "speech_s": 8.646,
+     "words_per_s": 3.01,
+     "internal_pauses_s": [
+      0.51,
+      0.55,
+      0.63,
+      0.18
+     ],
+     "loudness_lufs": -22.97,
+     "true_peak_dbtp": -5.77,
+     "lra_lu": 2.7,
+     "f0_median_hz": 213.3,
+     "f0_spread_st": 10.52,
+     "stt_text": "First, the commute. Privillon stands right beside Marol Naka station, 140 meters from the station steps, two minutes on foot in any weather",
+     "stt_pass": true,
+     "stt_terms": {
+      "the commute": true,
+      "privilon|privillon|privi lon|pri vi lon": true,
+      "marol naka": true,
+      "a hundred and forty|one hundred and forty|hundred and forty|140": true,
+      "metres|meters": true,
+      "two minutes|2 minutes": true,
+      "any weather": true
+     }
+    }
+   ],
+   "stt_notes": "Take 1 (plain spelling) was heard as 'Breville on' (and 'Merrill Naka'). Takes 2 and 3 send the respellings 'Pri-vi-lon' and 'Priv-i-lon' and are heard as 'Privillon': the same sounds as Privilon with a doubled l, so it is accepted, as AUDIO_NOTES accepted 'anyone' for 'any one'. Speech-to-text does not know the name, so it never spells it 'Privilon'; in the full mix it wrote 'Previlleon'. Take 3 is used (tighter, 8.7 s in the 10 s slot).",
+   "provisional_at": 28.115,
+   "provisional_speech": [
+    28.115,
+    36.761
+   ]
+  },
+  {
+   "id": "l05_privilon_tower",
+   "section": "Privilon",
+   "slot_s": [
+    37,
+    44
+   ],
+   "text": "A new Grade A tower, ground plus fifteen. One long, clear floor plate. Possession in January.",
+   "tts_text": "A new Grade A tower, ground plus fifteen. One long, clear floor plate. Possession in January.",
+   "file": "l05_privilon_tower.mp3",
+   "words_file": "l05_privilon_tower.words.json",
+   "take": 1,
+   "duration_s": 7.338,
+   "speech_start_s": 0.0,
+   "speech_end_s": 6.67,
+   "speech_s": 6.67,
+   "words_per_s": 2.4,
+   "internal_pauses_s": [
+    0.33,
+    0.59,
+    0.62
+   ],
+   "loudness_lufs": -22.92,
+   "true_peak_dbtp": -6.51,
+   "lra_lu": 3.8,
+   "f0_median_hz": 186.0,
+   "f0_spread_st": 9.92,
+   "stt_text": "A new grade A tower, ground plus 15, one long clear floor plate, possession in January",
+   "stt_pass": true,
+   "stt_terms": {
+    "grade a": true,
+    "ground plus fifteen|ground plus 15|ground 15": true,
+    "floor plate": true,
+    "possession": true,
+    "january": true
+   },
+   "words": [
+    {
+     "word": "A",
+     "start": 0.0,
+     "end": 0.104
+    },
+    {
+     "word": "new",
+     "start": 0.186,
+     "end": 0.337
+    },
+    {
+     "word": "Grade",
+     "start": 0.383,
+     "end": 0.673
+    },
+    {
+     "word": "A",
+     "start": 0.731,
+     "end": 0.848
+    },
+    {
+     "word": "tower,",
+     "start": 0.929,
+     "end": 1.509
+    },
+    {
+     "word": "ground",
+     "start": 1.66,
+     "end": 1.95
+    },
+    {
+     "word": "plus",
+     "start": 1.985,
+     "end": 2.206
+    },
+    {
+     "word": "fifteen.",
+     "start": 2.276,
+     "end": 2.902
+    },
+    {
+     "word": "One",
+     "start": 3.344,
+     "end": 3.68
+    },
+    {
+     "word": "long,",
+     "start": 3.762,
+     "end": 4.133
+    },
+    {
+     "word": "clear",
+     "start": 4.168,
+     "end": 4.447
+    },
+    {
+     "word": "floor",
+     "start": 4.516,
+     "end": 4.748
+    },
+    {
+     "word": "plate.",
+     "start": 4.807,
+     "end": 5.271
+    },
+    {
+     "word": "Possession",
+     "start": 5.596,
+     "end": 6.037
+    },
+    {
+     "word": "in",
+     "start": 6.084,
+     "end": 6.142
+    },
+    {
+     "word": "January.",
+     "start": 6.2,
+     "end": 7.338
+    }
+   ],
+   "takes": [
+    {
+     "tts_text": "A new Grade A tower, ground plus fifteen. One long, clear floor plate. Possession in January.",
+     "take": 1,
+     "duration_s": 7.338,
+     "speech_start_s": 0.0,
+     "speech_end_s": 6.67,
+     "speech_s": 6.67,
+     "words_per_s": 2.4,
+     "internal_pauses_s": [
+      0.33,
+      0.59,
+      0.62
+     ],
+     "loudness_lufs": -22.92,
+     "true_peak_dbtp": -6.51,
+     "lra_lu": 3.8,
+     "f0_median_hz": 186.0,
+     "f0_spread_st": 9.92,
+     "stt_text": "A new grade A tower, ground plus 15, one long clear floor plate, possession in January",
+     "stt_pass": true,
+     "stt_terms": {
+      "grade a": true,
+      "ground plus fifteen|ground plus 15|ground 15": true,
+      "floor plate": true,
+      "possession": true,
+      "january": true
+     },
+     "file": "takes/l05_privilon_tower_t1.mp3"
+    }
+   ],
+   "provisional_at": 37.361,
+   "provisional_speech": [
+    37.361,
+    44.031
+   ]
+  },
+  {
+   "id": "l06_privilon_plans",
+   "section": "Privilon",
+   "slot_s": [
+    44,
+    56
+   ],
+   "text": "We've drawn the floor three ways: two sixty, two eighty, and three hundred and one seats. Every chair counted from the drawing. So the floor you sign is the floor that grows with you.",
+   "tts_text": "We've drawn the floor three ways: two sixty, two eighty, and three hundred and one seats. Every chair counted from the drawing. So the floor you sign is the floor that grows with you.",
+   "file": "l06_privilon_plans.mp3",
+   "words_file": "l06_privilon_plans.words.json",
+   "take": 1,
+   "duration_s": 10.542,
+   "speech_start_s": 0.0,
+   "speech_end_s": 9.997,
+   "speech_s": 9.997,
+   "words_per_s": 3.4,
+   "internal_pauses_s": [
+    0.68,
+    0.24,
+    0.28,
+    0.78,
+    0.49
+   ],
+   "loudness_lufs": -22.2,
+   "true_peak_dbtp": -3.66,
+   "lra_lu": 2.1,
+   "f0_median_hz": 235.3,
+   "f0_spread_st": 12.58,
+   "stt_text": "We've drawn the floor three ways, two-sixty, two-eighty, and three hundred and one seats. Every chair counted from the drawing, so the floor you sign is the floor that grows with you.",
+   "stt_pass": true,
+   "stt_terms": {
+    "three ways|3 ways": true,
+    "two sixty|260|2 60": true,
+    "two eighty|280|2 80": true,
+    "three hundred and one|301": true,
+    "every chair": true,
+    "grows with you": true
+   },
+   "words": [
+    {
+     "word": "We've",
+     "start": 0.0,
+     "end": 0.279
+    },
+    {
+     "word": "drawn",
+     "start": 0.302,
+     "end": 0.534
+    },
+    {
+     "word": "the",
+     "start": 0.569,
+     "end": 0.639
+    },
+    {
+     "word": "floor",
+     "start": 0.685,
+     "end": 0.894
+    },
+    {
+     "word": "three",
+     "start": 0.952,
+     "end": 1.149
+    },
+    {
+     "word": "ways:",
+     "start": 1.196,
+     "end": 1.718
+    },
+    {
+     "word": "two",
+     "start": 1.997,
+     "end": 2.194
+    },
+    {
+     "word": "sixty,",
+     "start": 2.252,
+     "end": 2.763
+    },
+    {
+     "word": "two",
+     "start": 2.833,
+     "end": 2.995
+    },
+    {
+     "word": "eighty,",
+     "start": 3.065,
+     "end": 3.529
+    },
+    {
+     "word": "and",
+     "start": 3.587,
+     "end": 3.715
+    },
+    {
+     "word": "three",
+     "start": 3.762,
+     "end": 3.947
+    },
+    {
+     "word": "hundred",
+     "start": 3.982,
+     "end": 4.226
+    },
+    {
+     "word": "and",
+     "start": 4.249,
+     "end": 4.319
+    },
+    {
+     "word": "one",
+     "start": 4.389,
+     "end": 4.551
+    },
+    {
+     "word": "seats.",
+     "start": 4.586,
+     "end": 5.097
+    },
+    {
+     "word": "Every",
+     "start": 5.538,
+     "end": 5.875
+    },
+    {
+     "word": "chair",
+     "start": 5.933,
+     "end": 6.142
+    },
+    {
+     "word": "counted",
+     "start": 6.223,
+     "end": 6.56
+    },
+    {
+     "word": "from",
+     "start": 6.594,
+     "end": 6.745
+    },
+    {
+     "word": "the",
+     "start": 6.803,
+     "end": 6.873
+    },
+    {
+     "word": "drawing.",
+     "start": 6.92,
+     "end": 7.419
+    },
+    {
+     "word": "So",
+     "start": 7.697,
+     "end": 7.86
+    },
+    {
+     "word": "the",
+     "start": 7.918,
+     "end": 7.988
+    },
+    {
+     "word": "floor",
+     "start": 8.046,
+     "end": 8.266
+    },
+    {
+     "word": "you",
+     "start": 8.324,
+     "end": 8.406
+    },
+    {
+     "word": "sign",
+     "start": 8.475,
+     "end": 8.731
+    },
+    {
+     "word": "is",
+     "start": 8.789,
+     "end": 8.87
+    },
+    {
+     "word": "the",
+     "start": 8.928,
+     "end": 8.998
+    },
+    {
+     "word": "floor",
+     "start": 9.044,
+     "end": 9.242
+    },
+    {
+     "word": "that",
+     "start": 9.288,
+     "end": 9.404
+    },
+    {
+     "word": "grows",
+     "start": 9.439,
+     "end": 9.671
+    },
+    {
+     "word": "with",
+     "start": 9.718,
+     "end": 9.857
+    },
+    {
+     "word": "you.",
+     "start": 9.903,
+     "end": 10.542
+    }
+   ],
+   "takes": [
+    {
+     "tts_text": "We've drawn the floor three ways: two sixty, two eighty, and three hundred and one seats. Every chair counted from the drawing. So the floor you sign is the floor that grows with you.",
+     "take": 1,
+     "duration_s": 10.542,
+     "speech_start_s": 0.0,
+     "speech_end_s": 9.997,
+     "speech_s": 9.997,
+     "words_per_s": 3.4,
+     "internal_pauses_s": [
+      0.68,
+      0.24,
+      0.28,
+      0.78,
+      0.49
+     ],
+     "loudness_lufs": -22.2,
+     "true_peak_dbtp": -3.66,
+     "lra_lu": 2.1,
+     "f0_median_hz": 235.3,
+     "f0_spread_st": 12.58,
+     "stt_text": "We've drawn the floor three ways, two-sixty, two-eighty, and three hundred and one seats. Every chair counted from the drawing, so the floor you sign is the floor that grows with you.",
+     "stt_pass": true,
+     "stt_terms": {
+      "three ways|3 ways": true,
+      "two sixty|260|2 60": true,
+      "two eighty|280|2 80": true,
+      "three hundred and one|301": true,
+      "every chair": true,
+      "grows with you": true
+     },
+     "file": "takes/l06_privilon_plans_t1.mp3"
+    }
+   ],
+   "provisional_at": 44.631,
+   "provisional_speech": [
+    44.631,
+    54.628
+   ]
+  },
+  {
+   "id": "l07_corporate_speed",
+   "section": "Corporate Avenue",
+   "slot_s": [
+    56,
+    64
+   ],
+   "text": "Second, speed. Corporate Avenue in Chakala is a gated office campus, with two floors ready now. Ready the day you are.",
+   "tts_text": "Second, speed. Corporate Avenue in Chakala is a gated office campus, with two floors ready now. Ready the day you are.",
+   "file": "l07_corporate_speed.mp3",
+   "words_file": "l07_corporate_speed.words.json",
+   "take": 1,
+   "duration_s": 8.406,
+   "speech_start_s": 0.0,
+   "speech_end_s": 7.85,
+   "speech_s": 7.85,
+   "words_per_s": 2.68,
+   "internal_pauses_s": [
+    0.62,
+    0.15,
+    0.23,
+    0.14,
+    0.68
+   ],
+   "loudness_lufs": -22.97,
+   "true_peak_dbtp": -5.66,
+   "lra_lu": 2.1,
+   "f0_median_hz": 195.1,
+   "f0_spread_st": 9.41,
+   "stt_text": "Second speed: Corporate Avenue in Chakala is a gated office campus with two floors ready now. Ready the day you are",
+   "stt_pass": true,
+   "stt_terms": {
+    "second speed": true,
+    "corporate avenue": true,
+    "chakala": true,
+    "gated office campus": true,
+    "two floors|2 floors": true,
+    "ready now": true,
+    "ready the day you are": true
+   },
+   "words": [
+    {
+     "word": "Second,",
+     "start": 0.0,
+     "end": 0.418
+    },
+    {
+     "word": "speed.",
+     "start": 0.441,
+     "end": 0.998
+    },
+    {
+     "word": "Corporate",
+     "start": 1.382,
+     "end": 1.834
+    },
+    {
+     "word": "Avenue",
+     "start": 1.869,
+     "end": 2.241
+    },
+    {
+     "word": "in",
+     "start": 2.287,
+     "end": 2.368
+    },
+    {
+     "word": "Chakala",
+     "start": 2.415,
+     "end": 2.995
+    },
+    {
+     "word": "is",
+     "start": 3.111,
+     "end": 3.32
+    },
+    {
+     "word": "a",
+     "start": 3.39,
+     "end": 3.413
+    },
+    {
+     "word": "gated",
+     "start": 3.483,
+     "end": 3.82
+    },
+    {
+     "word": "office",
+     "start": 3.866,
+     "end": 4.145
+    },
+    {
+     "word": "campus,",
+     "start": 4.18,
+     "end": 4.772
+    },
+    {
+     "word": "with",
+     "start": 4.865,
+     "end": 5.074
+    },
+    {
+     "word": "two",
+     "start": 5.12,
+     "end": 5.271
+    },
+    {
+     "word": "floors",
+     "start": 5.329,
+     "end": 5.642
+    },
+    {
+     "word": "ready",
+     "start": 5.712,
+     "end": 5.921
+    },
+    {
+     "word": "now.",
+     "start": 5.979,
+     "end": 6.351
+    },
+    {
+     "word": "Ready",
+     "start": 6.861,
+     "end": 7.14
+    },
+    {
+     "word": "the",
+     "start": 7.21,
+     "end": 7.279
+    },
+    {
+     "word": "day",
+     "start": 7.338,
+     "end": 7.454
+    },
+    {
+     "word": "you",
+     "start": 7.512,
+     "end": 7.605
+    },
+    {
+     "word": "are.",
+     "start": 7.686,
+     "end": 8.406
+    }
+   ],
+   "takes": [
+    {
+     "tts_text": "Second, speed. Corporate Avenue in Chakala is a gated office campus, with two floors ready now. Ready the day you are.",
+     "take": 1,
+     "duration_s": 8.406,
+     "speech_start_s": 0.0,
+     "speech_end_s": 7.85,
+     "speech_s": 7.85,
+     "words_per_s": 2.68,
+     "internal_pauses_s": [
+      0.62,
+      0.15,
+      0.23,
+      0.14,
+      0.68
+     ],
+     "loudness_lufs": -22.97,
+     "true_peak_dbtp": -5.66,
+     "lra_lu": 2.1,
+     "f0_median_hz": 195.1,
+     "f0_spread_st": 9.41,
+     "stt_text": "Second speed: Corporate Avenue in Chakala is a gated office campus with two floors ready now. Ready the day you are",
+     "stt_pass": true,
+     "stt_terms": {
+      "second speed": true,
+      "corporate avenue": true,
+      "chakala": true,
+      "gated office campus": true,
+      "two floors|2 floors": true,
+      "ready now": true,
+      "ready the day you are": true
+     },
+     "file": "takes/l07_corporate_speed_t1.mp3"
+    }
+   ],
+   "provisional_at": 56.3,
+   "provisional_speech": [
+    56.3,
+    64.15
+   ]
+  },
+  {
+   "id": "l08_corporate_floors",
+   "section": "Corporate Avenue",
+   "slot_s": [
+    64,
+    76
+   ],
+   "text": "The third and fourth floors. Six thousand two hundred square feet of carpet on each, twelve thousand four hundred together. Two floors means two teams with their own space, one stair apart, under one roof.",
+   "tts_text": "The third and fourth floors. Six thousand two hundred square feet of carpet on each, twelve thousand four hundred together. Two floors means two teams with their own space, one stair apart, under one roof.",
+   "file": "l08_corporate_floors.mp3",
+   "words_file": "l08_corporate_floors.words.json",
+   "take": 1,
+   "duration_s": 12.864,
+   "speech_start_s": 0.0,
+   "speech_end_s": 12.015,
+   "speech_s": 12.015,
+   "words_per_s": 2.91,
+   "internal_pauses_s": [
+    0.6,
+    0.51,
+    0.75,
+    0.31,
+    0.27
+   ],
+   "loudness_lufs": -22.96,
+   "true_peak_dbtp": -5.03,
+   "lra_lu": 2.2,
+   "f0_median_hz": 203.8,
+   "f0_spread_st": 10.02,
+   "stt_text": "The third and fourth floors, six thousand two hundred square feet of carpet on each, twelve thousand four hundred together. Two floors means two teams with their own space, one stair apart under one roof",
+   "stt_pass": true,
+   "stt_terms": {
+    "third and fourth|3rd and 4th": true,
+    "six thousand two hundred|6200|6 200": true,
+    "square feet": true,
+    "carpet": true,
+    "twelve thousand four hundred|12400|12 400": true,
+    "two teams|2 teams": true,
+    "one stair apart|1 stair apart": true,
+    "under one roof|under 1 roof": true
+   },
+   "words": [
+    {
+     "word": "The",
+     "start": 0.0,
+     "end": 0.139
+    },
+    {
+     "word": "third",
+     "start": 0.186,
+     "end": 0.395
+    },
+    {
+     "word": "and",
+     "start": 0.43,
+     "end": 0.499
+    },
+    {
+     "word": "fourth",
+     "start": 0.557,
+     "end": 0.778
+    },
+    {
+     "word": "floors.",
+     "start": 0.813,
+     "end": 1.312
+    },
+    {
+     "word": "Six",
+     "start": 1.753,
+     "end": 2.009
+    },
+    {
+     "word": "thousand",
+     "start": 2.067,
+     "end": 2.485
+    },
+    {
+     "word": "two",
+     "start": 2.543,
+     "end": 2.705
+    },
+    {
+     "word": "hundred",
+     "start": 2.775,
+     "end": 3.065
+    },
+    {
+     "word": "square",
+     "start": 3.111,
+     "end": 3.425
+    },
+    {
+     "word": "feet",
+     "start": 3.471,
+     "end": 3.727
+    },
+    {
+     "word": "of",
+     "start": 3.843,
+     "end": 4.005
+    },
+    {
+     "word": "carpet",
+     "start": 4.122,
+     "end": 4.447
+    },
+    {
+     "word": "on",
+     "start": 4.505,
+     "end": 4.574
+    },
+    {
+     "word": "each,",
+     "start": 4.621,
+     "end": 4.992
+    },
+    {
+     "word": "twelve",
+     "start": 5.166,
+     "end": 5.457
+    },
+    {
+     "word": "thousand",
+     "start": 5.492,
+     "end": 5.817
+    },
+    {
+     "word": "four",
+     "start": 5.886,
+     "end": 6.037
+    },
+    {
+     "word": "hundred",
+     "start": 6.072,
+     "end": 6.327
+    },
+    {
+     "word": "together.",
+     "start": 6.362,
+     "end": 6.966
+    },
+    {
+     "word": "Two",
+     "start": 7.477,
+     "end": 7.686
+    },
+    {
+     "word": "floors",
+     "start": 7.755,
+     "end": 8.15
+    },
+    {
+     "word": "means",
+     "start": 8.22,
+     "end": 8.44
+    },
+    {
+     "word": "two",
+     "start": 8.51,
+     "end": 8.707
+    },
+    {
+     "word": "teams",
+     "start": 8.777,
+     "end": 9.056
+    },
+    {
+     "word": "with",
+     "start": 9.114,
+     "end": 9.242
+    },
+    {
+     "word": "their",
+     "start": 9.276,
+     "end": 9.439
+    },
+    {
+     "word": "own",
+     "start": 9.485,
+     "end": 9.601
+    },
+    {
+     "word": "space,",
+     "start": 9.648,
+     "end": 10.205
+    },
+    {
+     "word": "one",
+     "start": 10.379,
+     "end": 10.612
+    },
+    {
+     "word": "stair",
+     "start": 10.646,
+     "end": 10.913
+    },
+    {
+     "word": "apart,",
+     "start": 10.96,
+     "end": 11.389
+    },
+    {
+     "word": "under",
+     "start": 11.482,
+     "end": 11.703
+    },
+    {
+     "word": "one",
+     "start": 11.773,
+     "end": 11.923
+    },
+    {
+     "word": "roof.",
+     "start": 11.947,
+     "end": 12.864
+    }
+   ],
+   "takes": [
+    {
+     "tts_text": "The third and fourth floors. Six thousand two hundred square feet of carpet on each, twelve thousand four hundred together. Two floors means two teams with their own space, one stair apart, under one roof.",
+     "take": 1,
+     "duration_s": 12.864,
+     "speech_start_s": 0.0,
+     "speech_end_s": 12.015,
+     "speech_s": 12.015,
+     "words_per_s": 2.91,
+     "internal_pauses_s": [
+      0.6,
+      0.51,
+      0.75,
+      0.31,
+      0.27
+     ],
+     "loudness_lufs": -22.96,
+     "true_peak_dbtp": -5.03,
+     "lra_lu": 2.2,
+     "f0_median_hz": 203.8,
+     "f0_spread_st": 10.02,
+     "stt_text": "The third and fourth floors, six thousand two hundred square feet of carpet on each, twelve thousand four hundred together. Two floors means two teams with their own space, one stair apart under one roof",
+     "stt_pass": true,
+     "stt_terms": {
+      "third and fourth|3rd and 4th": true,
+      "six thousand two hundred|6200|6 200": true,
+      "square feet": true,
+      "carpet": true,
+      "twelve thousand four hundred|12400|12 400": true,
+      "two teams|2 teams": true,
+      "one stair apart|1 stair apart": true,
+      "under one roof|under 1 roof": true
+     },
+     "file": "takes/l08_corporate_floors_t1.mp3"
+    }
+   ],
+   "provisional_at": 64.75,
+   "provisional_speech": [
+    64.75,
+    76.765
+   ]
+  },
+  {
+   "id": "l09_corporate_metro",
+   "section": "Corporate Avenue",
+   "slot_s": [
+    76,
+    81
+   ],
+   "text": "Chakala metro is eight hundred and fifty metres away. About eleven minutes on foot.",
+   "tts_text": "Chakala metro is eight hundred and fifty metres away. About eleven minutes on foot.",
+   "file": "l09_corporate_metro.mp3",
+   "words_file": "l09_corporate_metro.words.json",
+   "take": 1,
+   "duration_s": 5.016,
+   "speech_start_s": 0.0,
+   "speech_end_s": 4.518,
+   "speech_s": 4.518,
+   "words_per_s": 3.1,
+   "internal_pauses_s": [
+    0.54
+   ],
+   "loudness_lufs": -22.11,
+   "true_peak_dbtp": -4.58,
+   "lra_lu": 0.5,
+   "f0_median_hz": 228.6,
+   "f0_spread_st": 10.4,
+   "stt_text": "Chakala Metro is 850 meters away, about 11 minutes on foot",
+   "stt_pass": true,
+   "stt_terms": {
+    "chakala": true,
+    "eight hundred and fifty|850": true,
+    "metres|meters": true,
+    "eleven minutes|11 minutes": true
+   },
+   "words": [
+    {
+     "word": "Chakala",
+     "start": 0.0,
+     "end": 0.488
+    },
+    {
+     "word": "metro",
+     "start": 0.546,
+     "end": 0.848
+    },
+    {
+     "word": "is",
+     "start": 0.917,
+     "end": 1.033
+    },
+    {
+     "word": "eight",
+     "start": 1.115,
+     "end": 1.312
+    },
+    {
+     "word": "hundred",
+     "start": 1.347,
+     "end": 1.614
+    },
+    {
+     "word": "and",
+     "start": 1.649,
+     "end": 1.73
+    },
+    {
+     "word": "fifty",
+     "start": 1.788,
+     "end": 2.043
+    },
+    {
+     "word": "metres",
+     "start": 2.101,
+     "end": 2.392
+    },
+    {
+     "word": "away.",
+     "start": 2.426,
+     "end": 2.798
+    },
+    {
+     "word": "About",
+     "start": 3.123,
+     "end": 3.402
+    },
+    {
+     "word": "eleven",
+     "start": 3.46,
+     "end": 3.762
+    },
+    {
+     "word": "minutes",
+     "start": 3.808,
+     "end": 4.075
+    },
+    {
+     "word": "on",
+     "start": 4.122,
+     "end": 4.214
+    },
+    {
+     "word": "foot.",
+     "start": 4.284,
+     "end": 5.016
+    }
+   ],
+   "takes": [
+    {
+     "tts_text": "Chakala metro is eight hundred and fifty metres away. About eleven minutes on foot.",
+     "take": 1,
+     "duration_s": 5.016,
+     "speech_start_s": 0.0,
+     "speech_end_s": 4.518,
+     "speech_s": 4.518,
+     "words_per_s": 3.1,
+     "internal_pauses_s": [
+      0.54
+     ],
+     "loudness_lufs": -22.11,
+     "true_peak_dbtp": -4.58,
+     "lra_lu": 0.5,
+     "f0_median_hz": 228.6,
+     "f0_spread_st": 10.4,
+     "stt_text": "Chakala Metro is 850 meters away, about 11 minutes on foot",
+     "stt_pass": true,
+     "stt_terms": {
+      "chakala": true,
+      "eight hundred and fifty|850": true,
+      "metres|meters": true,
+      "eleven minutes|11 minutes": true
+     },
+     "file": "takes/l09_corporate_metro_t1.mp3"
+    }
+   ],
+   "provisional_at": 77.365,
+   "provisional_speech": [
+    77.365,
+    81.883
+   ]
+  },
+  {
+   "id": "l10_a723_top",
+   "section": "723 Avenue",
+   "slot_s": [
+    81,
+    90
+   ],
+   "text": "Third, the view from the top. At 723 Avenue, Flipkart takes the thirteenth and fourteenth floors, and the terrace above them comes with it.",
+   "tts_text": "Third, the view from the top. At Seven Twenty-Three Avenue, Flipkart takes the thirteenth and fourteenth floors, and the terrace above them comes with it.",
+   "file": "l10_a723_top.mp3",
+   "words_file": "l10_a723_top.words.json",
+   "take": 1,
+   "duration_s": 8.824,
+   "speech_start_s": 0.0,
+   "speech_end_s": 8.264,
+   "speech_s": 8.264,
+   "words_per_s": 3.03,
+   "internal_pauses_s": [
+    0.14,
+    0.91,
+    0.57
+   ],
+   "loudness_lufs": -23.09,
+   "true_peak_dbtp": -5.9,
+   "lra_lu": 1.0,
+   "f0_median_hz": 222.2,
+   "f0_spread_st": 10.49,
+   "stt_text": "Third, the view from the top. At 723 Avenue, Flipkart takes the thirteenth and fourteenth floors, and the terrace above them comes with it",
+   "stt_pass": true,
+   "stt_terms": {
+    "view from the top": true,
+    "seven twenty three|723|7 23": true,
+    "avenue": true,
+    "flipkart": true,
+    "thirteenth|13th": true,
+    "fourteenth|14th": true,
+    "terrace": true
+   },
+   "words": [
+    {
+     "word": "Third,",
+     "start": 0.0,
+     "end": 0.476
+    },
+    {
+     "word": "the",
+     "start": 0.499,
+     "end": 0.604
+    },
+    {
+     "word": "view",
+     "start": 0.662,
+     "end": 0.813
+    },
+    {
+     "word": "from",
+     "start": 0.859,
+     "end": 1.01
+    },
+    {
+     "word": "the",
+     "start": 1.068,
+     "end": 1.138
+    },
+    {
+     "word": "top.",
+     "start": 1.184,
+     "end": 1.579
+    },
+    {
+     "word": "At",
+     "start": 2.183,
+     "end": 2.345
+    },
+    {
+     "word": "Seven",
+     "start": 2.392,
+     "end": 2.624
+    },
+    {
+     "word": "Twenty-Three",
+     "start": 2.67,
+     "end": 3.123
+    },
+    {
+     "word": "Avenue,",
+     "start": 3.17,
+     "end": 3.564
+    },
+    {
+     "word": "Flipkart",
+     "start": 3.587,
+     "end": 4.017
+    },
+    {
+     "word": "takes",
+     "start": 4.04,
+     "end": 4.284
+    },
+    {
+     "word": "the",
+     "start": 4.342,
+     "end": 4.447
+    },
+    {
+     "word": "thirteenth",
+     "start": 4.505,
+     "end": 4.992
+    },
+    {
+     "word": "and",
+     "start": 5.039,
+     "end": 5.12
+    },
+    {
+     "word": "fourteenth",
+     "start": 5.19,
+     "end": 5.619
+    },
+    {
+     "word": "floors,",
+     "start": 5.654,
+     "end": 6.258
+    },
+    {
+     "word": "and",
+     "start": 6.536,
+     "end": 6.699
+    },
+    {
+     "word": "the",
+     "start": 6.745,
+     "end": 6.815
+    },
+    {
+     "word": "terrace",
+     "start": 6.861,
+     "end": 7.198
+    },
+    {
+     "word": "above",
+     "start": 7.233,
+     "end": 7.488
+    },
+    {
+     "word": "them",
+     "start": 7.523,
+     "end": 7.674
+    },
+    {
+     "word": "comes",
+     "start": 7.755,
+     "end": 7.988
+    },
+    {
+     "word": "with",
+     "start": 8.034,
+     "end": 8.197
+    },
+    {
+     "word": "it.",
+     "start": 8.243,
+     "end": 8.824
+    }
+   ],
+   "takes": [
+    {
+     "tts_text": "Third, the view from the top. At Seven Twenty-Three Avenue, Flipkart takes the thirteenth and fourteenth floors, and the terrace above them comes with it.",
+     "take": 1,
+     "duration_s": 8.824,
+     "speech_start_s": 0.0,
+     "speech_end_s": 8.264,
+     "speech_s": 8.264,
+     "words_per_s": 3.03,
+     "internal_pauses_s": [
+      0.14,
+      0.91,
+      0.57
+     ],
+     "loudness_lufs": -23.09,
+     "true_peak_dbtp": -5.9,
+     "lra_lu": 1.0,
+     "f0_median_hz": 222.2,
+     "f0_spread_st": 10.49,
+     "stt_text": "Third, the view from the top. At 723 Avenue, Flipkart takes the thirteenth and fourteenth floors, and the terrace above them comes with it",
+     "stt_pass": true,
+     "stt_terms": {
+      "view from the top": true,
+      "seven twenty three|723|7 23": true,
+      "avenue": true,
+      "flipkart": true,
+      "thirteenth|13th": true,
+      "fourteenth|14th": true,
+      "terrace": true
+     },
+     "file": "takes/l10_a723_top_t1.mp3"
+    }
+   ],
+   "provisional_at": 82.883,
+   "provisional_speech": [
+    82.883,
+    91.147
+   ]
+  },
+  {
+   "id": "l11_a723_terrace",
+   "section": "723 Avenue",
+   "slot_s": [
+    90,
+    100
+   ],
+   "text": "A bare-shell floor, ready to fit out your way, with your own open-air breakout above it. A place to step outside between the hard hours.",
+   "tts_text": "A bare-shell floor, ready to fit out your way, with your own open-air breakout above it. A place to step outside between the hard hours.",
+   "file": "l11_a723_terrace.mp3",
+   "words_file": "l11_a723_terrace.words.json",
+   "take": 1,
+   "duration_s": 7.895,
+   "speech_start_s": 0.0,
+   "speech_end_s": 7.174,
+   "speech_s": 7.174,
+   "words_per_s": 3.48,
+   "internal_pauses_s": [
+    0.41,
+    0.69
+   ],
+   "loudness_lufs": -22.3,
+   "true_peak_dbtp": -6.13,
+   "lra_lu": 1.0,
+   "f0_median_hz": 235.3,
+   "f0_spread_st": 10.63,
+   "stt_text": "A bare shell floor, ready to fit out your way with your own open-air breakout above it. A place to step outside between the hard hours.",
+   "stt_pass": true,
+   "stt_terms": {
+    "bare shell": true,
+    "fit out": true,
+    "open air": true,
+    "breakout|break out": true,
+    "step outside": true,
+    "hard hours": true
+   },
+   "words": [
+    {
+     "word": "A",
+     "start": 0.0,
+     "end": 0.104
+    },
+    {
+     "word": "bare-shell",
+     "start": 0.186,
+     "end": 0.592
+    },
+    {
+     "word": "floor,",
+     "start": 0.65,
+     "end": 1.126
+    },
+    {
+     "word": "ready",
+     "start": 1.37,
+     "end": 1.602
+    },
+    {
+     "word": "to",
+     "start": 1.649,
+     "end": 1.707
+    },
+    {
+     "word": "fit",
+     "start": 1.776,
+     "end": 1.916
+    },
+    {
+     "word": "out",
+     "start": 1.962,
+     "end": 2.09
+    },
+    {
+     "word": "your",
+     "start": 2.148,
+     "end": 2.264
+    },
+    {
+     "word": "way,",
+     "start": 2.322,
+     "end": 2.496
+    },
+    {
+     "word": "with",
+     "start": 2.519,
+     "end": 2.67
+    },
+    {
+     "word": "your",
+     "start": 2.717,
+     "end": 2.833
+    },
+    {
+     "word": "own",
+     "start": 2.902,
+     "end": 3.053
+    },
+    {
+     "word": "open-air",
+     "start": 3.111,
+     "end": 3.483
+    },
+    {
+     "word": "breakout",
+     "start": 3.518,
+     "end": 3.913
+    },
+    {
+     "word": "above",
+     "start": 3.982,
+     "end": 4.261
+    },
+    {
+     "word": "it.",
+     "start": 4.307,
+     "end": 4.54
+    },
+    {
+     "word": "A",
+     "start": 4.981,
+     "end": 5.05
+    },
+    {
+     "word": "place",
+     "start": 5.12,
+     "end": 5.375
+    },
+    {
+     "word": "to",
+     "start": 5.41,
+     "end": 5.48
+    },
+    {
+     "word": "step",
+     "start": 5.538,
+     "end": 5.77
+    },
+    {
+     "word": "outside",
+     "start": 5.828,
+     "end": 6.223
+    },
+    {
+     "word": "between",
+     "start": 6.269,
+     "end": 6.594
+    },
+    {
+     "word": "the",
+     "start": 6.641,
+     "end": 6.711
+    },
+    {
+     "word": "hard",
+     "start": 6.769,
+     "end": 6.966
+    },
+    {
+     "word": "hours.",
+     "start": 7.012,
+     "end": 7.895
+    }
+   ],
+   "takes": [
+    {
+     "tts_text": "A bare-shell floor, ready to fit out your way, with your own open-air breakout above it. A place to step outside between the hard hours.",
+     "take": 1,
+     "duration_s": 7.895,
+     "speech_start_s": 0.0,
+     "speech_end_s": 7.174,
+     "speech_s": 7.174,
+     "words_per_s": 3.48,
+     "internal_pauses_s": [
+      0.41,
+      0.69
+     ],
+     "loudness_lufs": -22.3,
+     "true_peak_dbtp": -6.13,
+     "lra_lu": 1.0,
+     "f0_median_hz": 235.3,
+     "f0_spread_st": 10.63,
+     "stt_text": "A bare shell floor, ready to fit out your way with your own open-air breakout above it. A place to step outside between the hard hours.",
+     "stt_pass": true,
+     "stt_terms": {
+      "bare shell": true,
+      "fit out": true,
+      "open air": true,
+      "breakout|break out": true,
+      "step outside": true,
+      "hard hours": true
+     },
+     "file": "takes/l11_a723_terrace_t1.mp3"
+    }
+   ],
+   "provisional_at": 91.747,
+   "provisional_speech": [
+    91.747,
+    98.921
+   ]
+  },
+  {
+   "id": "l12_a723_metro",
+   "section": "723 Avenue",
+   "slot_s": [
+    100,
+    104
+   ],
+   "text": "Marol Naka metro is seven hundred metres away. About nine minutes on foot.",
+   "tts_text": "Marol Naka metro is seven hundred metres away. About nine minutes on foot.",
+   "file": "l12_a723_metro.mp3",
+   "words_file": "l12_a723_metro.words.json",
+   "take": 1,
+   "duration_s": 4.783,
+   "speech_start_s": 0.0,
+   "speech_end_s": 4.301,
+   "speech_s": 4.301,
+   "words_per_s": 3.02,
+   "internal_pauses_s": [
+    0.83
+   ],
+   "loudness_lufs": -21.01,
+   "true_peak_dbtp": -4.45,
+   "lra_lu": 1.2,
+   "f0_median_hz": 219.2,
+   "f0_spread_st": 11.77,
+   "stt_text": "Marol Naka Metro is 700 meters away, about nine minutes on foot",
+   "stt_pass": true,
+   "stt_terms": {
+    "marol naka": true,
+    "seven hundred|700": true,
+    "metres|meters": true,
+    "nine minutes|9 minutes": true
+   },
+   "words": [
+    {
+     "word": "Marol",
+     "start": 0.0,
+     "end": 0.372
+    },
+    {
+     "word": "Naka",
+     "start": 0.43,
+     "end": 0.685
+    },
+    {
+     "word": "metro",
+     "start": 0.743,
+     "end": 1.045
+    },
+    {
+     "word": "is",
+     "start": 1.103,
+     "end": 1.184
+    },
+    {
+     "word": "seven",
+     "start": 1.231,
+     "end": 1.498
+    },
+    {
+     "word": "hundred",
+     "start": 1.556,
+     "end": 1.823
+    },
+    {
+     "word": "metres",
+     "start": 1.858,
+     "end": 2.136
+    },
+    {
+     "word": "away.",
+     "start": 2.183,
+     "end": 2.531
+    },
+    {
+     "word": "About",
+     "start": 3.135,
+     "end": 3.413
+    },
+    {
+     "word": "nine",
+     "start": 3.483,
+     "end": 3.704
+    },
+    {
+     "word": "minutes",
+     "start": 3.738,
+     "end": 3.994
+    },
+    {
+     "word": "on",
+     "start": 4.04,
+     "end": 4.133
+    },
+    {
+     "word": "foot.",
+     "start": 4.191,
+     "end": 4.783
+    }
+   ],
+   "takes": [
+    {
+     "tts_text": "Marol Naka metro is seven hundred metres away. About nine minutes on foot.",
+     "take": 1,
+     "duration_s": 4.783,
+     "speech_start_s": 0.0,
+     "speech_end_s": 4.301,
+     "speech_s": 4.301,
+     "words_per_s": 3.02,
+     "internal_pauses_s": [
+      0.83
+     ],
+     "loudness_lufs": -21.01,
+     "true_peak_dbtp": -4.45,
+     "lra_lu": 1.2,
+     "f0_median_hz": 219.2,
+     "f0_spread_st": 11.77,
+     "stt_text": "Marol Naka Metro is 700 meters away, about nine minutes on foot",
+     "stt_pass": true,
+     "stt_terms": {
+      "marol naka": true,
+      "seven hundred|700": true,
+      "metres|meters": true,
+      "nine minutes|9 minutes": true
+     },
+     "file": "takes/l12_a723_metro_t1.mp3"
+    }
+   ],
+   "provisional_at": 100.3,
+   "provisional_speech": [
+    100.3,
+    104.601
+   ]
+  },
+  {
+   "id": "l13_close_choose",
+   "section": "Autopilot",
+   "slot_s": [
+    104,
+    116
+   ],
+   "text": "Three buildings. The commute, the speed, the view from the top. You choose what matters most, and we'll show you every seat and every rupee before a single wall goes up.",
+   "tts_text": "Three buildings. The commute, the speed, the view from the top. You choose what matters most, and we'll show you every seat and every rupee before a single wall goes up.",
+   "file": "l13_close_choose.mp3",
+   "words_file": "l13_close_choose.words.json",
+   "take": 2,
+   "duration_s": 11.471,
+   "speech_start_s": 0.0,
+   "speech_end_s": 10.383,
+   "speech_s": 10.383,
+   "words_per_s": 2.99,
+   "internal_pauses_s": [
+    0.38,
+    0.44,
+    0.49,
+    0.74,
+    0.13,
+    0.41
+   ],
+   "loudness_lufs": -23.48,
+   "true_peak_dbtp": -5.97,
+   "lra_lu": 2.7,
+   "f0_median_hz": 202.5,
+   "f0_spread_st": 8.53,
+   "stt_text": "Three buildings, the commute, the speed, the view from the top. You choose what matters most and we'll show you every seat and every rupee before a single wall goes up",
+   "stt_pass": true,
+   "stt_terms": {
+    "three buildings|3 buildings": true,
+    "the commute": true,
+    "the speed": true,
+    "view from the top": true,
+    "what matters most": true,
+    "every seat": true,
+    "every rupee": true,
+    "single wall": true
+   },
+   "words": [
+    {
+     "word": "Three",
+     "start": 0.0,
+     "end": 0.267
+    },
+    {
+     "word": "buildings.",
+     "start": 0.313,
+     "end": 0.987
+    },
+    {
+     "word": "The",
+     "start": 1.161,
+     "end": 1.277
+    },
+    {
+     "word": "commute,",
+     "start": 1.335,
+     "end": 1.858
+    },
+    {
+     "word": "the",
+     "start": 2.032,
+     "end": 2.148
+    },
+    {
+     "word": "speed,",
+     "start": 2.206,
+     "end": 2.844
+    },
+    {
+     "word": "the",
+     "start": 3.17,
+     "end": 3.274
+    },
+    {
+     "word": "view",
+     "start": 3.332,
+     "end": 3.495
+    },
+    {
+     "word": "from",
+     "start": 3.553,
+     "end": 3.704
+    },
+    {
+     "word": "the",
+     "start": 3.762,
+     "end": 3.831
+    },
+    {
+     "word": "top.",
+     "start": 3.878,
+     "end": 4.261
+    },
+    {
+     "word": "You",
+     "start": 4.772,
+     "end": 4.981
+    },
+    {
+     "word": "choose",
+     "start": 5.074,
+     "end": 5.352
+    },
+    {
+     "word": "what",
+     "start": 5.387,
+     "end": 5.538
+    },
+    {
+     "word": "matters",
+     "start": 5.608,
+     "end": 5.921
+    },
+    {
+     "word": "most,",
+     "start": 5.979,
+     "end": 6.246
+    },
+    {
+     "word": "and",
+     "start": 6.269,
+     "end": 6.362
+    },
+    {
+     "word": "we'll",
+     "start": 6.409,
+     "end": 6.56
+    },
+    {
+     "word": "show",
+     "start": 6.606,
+     "end": 6.757
+    },
+    {
+     "word": "you",
+     "start": 6.815,
+     "end": 6.896
+    },
+    {
+     "word": "every",
+     "start": 7.012,
+     "end": 7.419
+    },
+    {
+     "word": "seat",
+     "start": 7.477,
+     "end": 7.755
+    },
+    {
+     "word": "and",
+     "start": 7.906,
+     "end": 8.208
+    },
+    {
+     "word": "every",
+     "start": 8.29,
+     "end": 8.591
+    },
+    {
+     "word": "rupee",
+     "start": 8.649,
+     "end": 8.928
+    },
+    {
+     "word": "before",
+     "start": 8.975,
+     "end": 9.265
+    },
+    {
+     "word": "a",
+     "start": 9.288,
+     "end": 9.323
+    },
+    {
+     "word": "single",
+     "start": 9.392,
+     "end": 9.787
+    },
+    {
+     "word": "wall",
+     "start": 9.834,
+     "end": 10.043
+    },
+    {
+     "word": "goes",
+     "start": 10.101,
+     "end": 10.286
+    },
+    {
+     "word": "up.",
+     "start": 10.344,
+     "end": 11.471
+    }
+   ],
+   "takes": [
+    {
+     "tts_text": "Three buildings. The commute, the speed, the view from the top. You choose what matters most, and we'll show you every seat and every rupee before a single wall goes up.",
+     "take": 1,
+     "duration_s": 9.567,
+     "speech_start_s": 0.0,
+     "speech_end_s": 8.875,
+     "speech_s": 8.875,
+     "words_per_s": 3.49,
+     "internal_pauses_s": [
+      0.43,
+      0.42,
+      0.33,
+      0.67
+     ],
+     "loudness_lufs": -23.6,
+     "true_peak_dbtp": -5.68,
+     "lra_lu": 3.0,
+     "f0_median_hz": 210.5,
+     "f0_spread_st": 7.4,
+     "stt_text": "Three buildings. The commute, the speed, the view from the top. You choose what matters most, and we'll show you every seat and every rupee before a single wall goes up",
+     "stt_pass": true,
+     "stt_terms": {
+      "three buildings|3 buildings": true,
+      "the commute": true,
+      "the speed": true,
+      "view from the top": true,
+      "what matters most": true,
+      "every seat": true,
+      "every rupee": true,
+      "single wall": true
+     },
+     "file": "takes/l13_close_choose_t1.mp3"
+    },
+    {
+     "take": 2,
+     "file": "takes/l13_close_choose_t2.mp3",
+     "tts_text": "Three buildings. The commute, the speed, the view from the top. You choose what matters most, and we'll show you every seat and every rupee before a single wall goes up.",
+     "settings": {
+      "similarity_boost": 0.75,
+      "use_speaker_boost": true,
+      "stability": 0.45,
+      "style": 0.3,
+      "speed": 1.0
+     },
+     "duration_s": 11.471,
+     "speech_start_s": 0.0,
+     "speech_end_s": 10.383,
+     "speech_s": 10.383,
+     "words_per_s": 2.99,
+     "internal_pauses_s": [
+      0.38,
+      0.44,
+      0.49,
+      0.74,
+      0.13,
+      0.41
+     ],
+     "loudness_lufs": -23.48,
+     "true_peak_dbtp": -5.97,
+     "lra_lu": 2.7,
+     "f0_median_hz": 202.5,
+     "f0_spread_st": 8.53,
+     "stt_text": "Three buildings, the commute, the speed, the view from the top. You choose what matters most and we'll show you every seat and every rupee before a single wall goes up",
+     "stt_pass": true,
+     "stt_terms": {
+      "three buildings|3 buildings": true,
+      "the commute": true,
+      "the speed": true,
+      "view from the top": true,
+      "what matters most": true,
+      "every seat": true,
+      "every rupee": true,
+      "single wall": true
+     }
+    }
+   ],
+   "provisional_at": 105.601,
+   "provisional_speech": [
+    105.601,
+    115.984
+   ]
+  },
+  {
+   "id": "l14_close_autopilot",
+   "section": "Autopilot",
+   "slot_s": [
+    116,
+    126
+   ],
+   "text": "We're Autopilot. Fifteen thousand seats, twenty centres, seven cities. We pick the building first, plan it to the last chair, and then we run it like it's our own. Pehle vyavahar, phir vyapar. Relationship first, business next.",
+   "tts_text": "We're Autopilot. Fifteen thousand seats, twenty centres, seven cities. We pick the building first, plan it to the last chair, and then we run it like it's our own. Pehle vyavhaar, phir vyapaar. Relationship first, business next.",
+   "file": "l14_close_autopilot.mp3",
+   "words_file": "l14_close_autopilot.words.json",
+   "take": 1,
+   "duration_s": 15.279,
+   "speech_start_s": 0.0,
+   "speech_end_s": 15.034,
+   "speech_s": 15.034,
+   "words_per_s": 2.46,
+   "internal_pauses_s": [
+    0.6,
+    0.33,
+    0.23,
+    0.55,
+    0.13,
+    0.55,
+    0.46,
+    0.18,
+    0.54,
+    0.18,
+    0.54,
+    0.24
+   ],
+   "loudness_lufs": -22.25,
+   "true_peak_dbtp": -4.3,
+   "lra_lu": 2.9,
+   "f0_median_hz": 210.5,
+   "f0_spread_st": 11.09,
+   "stt_text": "We're Autopilot. Fifteen thousand seats, twenty centers, seven cities. We pick the building first, plan it to the last chair, and then we run it like it's our own. Pehle vyavahar, phir vyapar. Relationship first, business next",
+   "stt_pass": true,
+   "stt_terms": {
+    "autopilot|auto pilot": true,
+    "fifteen thousand|15000|15 000": true,
+    "twenty centres|twenty centers|20 centres|20 centers": true,
+    "seven cities|7 cities": true,
+    "last chair": true,
+    "our own": true,
+    "@pehle": true,
+    "@vyavhaar": true,
+    "@phir": true,
+    "@vyapaar": true,
+    "relationship first": true,
+    "business next": true
+   },
+   "words": [
+    {
+     "word": "We're",
+     "start": 0.0,
+     "end": 0.267
+    },
+    {
+     "word": "Autopilot.",
+     "start": 0.302,
+     "end": 1.126
+    },
+    {
+     "word": "Fifteen",
+     "start": 1.405,
+     "end": 1.811
+    },
+    {
+     "word": "thousand",
+     "start": 1.858,
+     "end": 2.206
+    },
+    {
+     "word": "seats,",
+     "start": 2.264,
+     "end": 2.786
+    },
+    {
+     "word": "twenty",
+     "start": 2.868,
+     "end": 3.193
+    },
+    {
+     "word": "centres,",
+     "start": 3.239,
+     "end": 3.704
+    },
+    {
+     "word": "seven",
+     "start": 3.831,
+     "end": 4.122
+    },
+    {
+     "word": "cities.",
+     "start": 4.18,
+     "end": 4.725
+    },
+    {
+     "word": "We",
+     "start": 5.05,
+     "end": 5.271
+    },
+    {
+     "word": "pick",
+     "start": 5.306,
+     "end": 5.492
+    },
+    {
+     "word": "the",
+     "start": 5.55,
+     "end": 5.619
+    },
+    {
+     "word": "building",
+     "start": 5.666,
+     "end": 5.968
+    },
+    {
+     "word": "first,",
+     "start": 6.037,
+     "end": 6.525
+    },
+    {
+     "word": "plan",
+     "start": 6.803,
+     "end": 7.059
+    },
+    {
+     "word": "it",
+     "start": 7.105,
+     "end": 7.175
+    },
+    {
+     "word": "to",
+     "start": 7.21,
+     "end": 7.268
+    },
+    {
+     "word": "the",
+     "start": 7.326,
+     "end": 7.396
+    },
+    {
+     "word": "last",
+     "start": 7.442,
+     "end": 7.651
+    },
+    {
+     "word": "chair,",
+     "start": 7.686,
+     "end": 8.139
+    },
+    {
+     "word": "and",
+     "start": 8.348,
+     "end": 8.475
+    },
+    {
+     "word": "then",
+     "start": 8.522,
+     "end": 8.626
+    },
+    {
+     "word": "we",
+     "start": 8.673,
+     "end": 8.766
+    },
+    {
+     "word": "run",
+     "start": 8.824,
+     "end": 8.986
+    },
+    {
+     "word": "it",
+     "start": 9.033,
+     "end": 9.137
+    },
+    {
+     "word": "like",
+     "start": 9.253,
+     "end": 9.462
+    },
+    {
+     "word": "it's",
+     "start": 9.497,
+     "end": 9.648
+    },
+    {
+     "word": "our",
+     "start": 9.706,
+     "end": 9.903
+    },
+    {
+     "word": "own.",
+     "start": 9.985,
+     "end": 10.368
+    },
+    {
+     "word": "Pehle",
+     "start": 10.693,
+     "end": 10.96
+    },
+    {
+     "word": "vyavhaar,",
+     "start": 11.006,
+     "end": 11.575
+    },
+    {
+     "word": "phir",
+     "start": 11.61,
+     "end": 11.889
+    },
+    {
+     "word": "vyapaar.",
+     "start": 11.97,
+     "end": 12.725
+    },
+    {
+     "word": "Relationship",
+     "start": 13.05,
+     "end": 13.689
+    },
+    {
+     "word": "first,",
+     "start": 13.747,
+     "end": 14.257
+    },
+    {
+     "word": "business",
+     "start": 14.35,
+     "end": 14.745
+    },
+    {
+     "word": "next.",
+     "start": 14.803,
+     "end": 15.279
+    }
+   ],
+   "takes": [
+    {
+     "tts_text": "We're Autopilot. Fifteen thousand seats, twenty centres, seven cities. We pick the building first, plan it to the last chair, and then we run it like it's our own. Pehle vyavhaar, phir vyapaar. Relationship first, business next.",
+     "take": 1,
+     "duration_s": 15.279,
+     "speech_start_s": 0.0,
+     "speech_end_s": 15.034,
+     "speech_s": 15.034,
+     "words_per_s": 2.46,
+     "internal_pauses_s": [
+      0.6,
+      0.33,
+      0.23,
+      0.55,
+      0.13,
+      0.55,
+      0.46,
+      0.18,
+      0.54,
+      0.18,
+      0.54,
+      0.24
+     ],
+     "loudness_lufs": -22.25,
+     "true_peak_dbtp": -4.3,
+     "lra_lu": 2.9,
+     "f0_median_hz": 210.5,
+     "f0_spread_st": 11.09,
+     "stt_text": "We're Autopilot. Fifteen thousand seats, twenty centers, seven cities. We pick the building first, plan it to the last chair, and then we run it like it's our own. Pehle vyavahar, phir vyapar. Relationship first, business next",
+     "stt_pass": true,
+     "stt_terms": {
+      "autopilot|auto pilot": true,
+      "fifteen thousand|15000|15 000": true,
+      "twenty centres|twenty centers|20 centres|20 centers": true,
+      "seven cities|7 cities": true,
+      "last chair": true,
+      "our own": true,
+      "@pehle": true,
+      "@vyavhaar": true,
+      "@phir": true,
+      "@vyapaar": true,
+      "relationship first": true,
+      "business next": true
+     },
+     "file": "takes/l14_close_autopilot_t1.mp3"
+    },
+    {
+     "take": 2,
+     "file": "takes/l14_close_autopilot_t2.mp3",
+     "tts_text": "We're Autopilot. Fifteen thousand seats, twenty centres, seven cities. We pick the building first, plan it to the last chair, and then we run it like it's our own. Pehle vyavhaar, phir vyapaar. Relationship first, business next.",
+     "settings": {
+      "similarity_boost": 0.75,
+      "use_speaker_boost": true,
+      "stability": 0.45,
+      "style": 0.3,
+      "speed": 1.0
+     },
+     "duration_s": 15.418,
+     "speech_start_s": 0.0,
+     "speech_end_s": 15.216,
+     "speech_s": 15.216,
+     "words_per_s": 2.43,
+     "internal_pauses_s": [
+      0.38,
+      0.54,
+      0.36,
+      0.62,
+      0.13,
+      0.56,
+      0.64,
+      0.44,
+      0.5,
+      0.17,
+      0.46
+     ],
+     "loudness_lufs": -22.13,
+     "true_peak_dbtp": -4.48,
+     "lra_lu": 2.7,
+     "f0_median_hz": 210.5,
+     "f0_spread_st": 9.69,
+     "stt_text": "We're Autopilot. Fifteen thousand seats, twenty centers, seven cities. We pick the building first, plan it to the last chair, and then we run it like it's our own. Pehle vyavahar, phir vyapar. Relationship first, business next.",
+     "stt_pass": true,
+     "stt_terms": {
+      "autopilot|auto pilot": true,
+      "fifteen thousand|15000|15 000": true,
+      "twenty centres|twenty centers|20 centres|20 centers": true,
+      "seven cities|7 cities": true,
+      "last chair": true,
+      "our own": true,
+      "@pehle": true,
+      "@vyavhaar": true,
+      "@phir": true,
+      "@vyapaar": true,
+      "relationship first": true,
+      "business next": true
+     }
+    }
+   ],
+   "provisional_at": 116.584,
+   "provisional_speech": [
+    116.584,
+    131.618
+   ]
+  },
+  {
+   "id": "l15_close_together",
+   "section": "Autopilot",
+   "slot_s": [
+    126,
+    130
+   ],
+   "text": "Andheri East. Let's choose it together.",
+   "tts_text": "Andheri East. <break time=\"0.5s\" /> Let's choose it together.",
+   "file": "l15_close_together.mp3",
+   "words_file": "l15_close_together.words.json",
+   "take": 2,
+   "duration_s": 2.786,
+   "speech_start_s": 0.0,
+   "speech_end_s": 2.414,
+   "speech_s": 2.414,
+   "words_per_s": 2.49,
+   "internal_pauses_s": [
+    0.73
+   ],
+   "loudness_lufs": -23.66,
+   "true_peak_dbtp": -3.1,
+   "lra_lu": 0.0,
+   "f0_median_hz": 179.8,
+   "f0_spread_st": 10.56,
+   "stt_text": "And here he is. Let's choose it together",
+   "stt_pass": false,
+   "stt_terms": {
+    "andheri east": false,
+    "choose it together": true
+   },
+   "words": [
+    {
+     "word": "Andheri",
+     "start": 0.0,
+     "end": 0.488
+    },
+    {
+     "word": "East.",
+     "start": 0.546,
+     "end": 0.894
+    },
+    {
+     "word": "Let's",
+     "start": 1.463,
+     "end": 1.683
+    },
+    {
+     "word": "choose",
+     "start": 1.718,
+     "end": 1.95
+    },
+    {
+     "word": "it",
+     "start": 1.974,
+     "end": 2.043
+    },
+    {
+     "word": "together.",
+     "start": 2.078,
+     "end": 2.786
+    }
+   ],
+   "takes": [
+    {
+     "tts_text": "Andheri East. Let's choose it together.",
+     "take": 1,
+     "duration_s": 2.183,
+     "speech_start_s": 0.0,
+     "speech_end_s": 1.762,
+     "speech_s": 1.762,
+     "words_per_s": 3.41,
+     "internal_pauses_s": [
+      0.18
+     ],
+     "loudness_lufs": -22.93,
+     "true_peak_dbtp": -2.68,
+     "lra_lu": 0.0,
+     "f0_median_hz": 186.0,
+     "f0_spread_st": 10.36,
+     "stt_text": "And here he is. Let's choose it together",
+     "stt_pass": false,
+     "stt_terms": {
+      "andheri east": false,
+      "choose it together": true
+     },
+     "file": "takes/l15_close_together_t1.mp3"
+    },
+    {
+     "take": 2,
+     "file": "takes/l15_close_together_t2.mp3",
+     "tts_text": "Andheri East. <break time=\"0.5s\" /> Let's choose it together.",
+     "settings": {
+      "similarity_boost": 0.75,
+      "use_speaker_boost": true,
+      "stability": 0.45,
+      "style": 0.3,
+      "speed": 1.0
+     },
+     "duration_s": 2.786,
+     "speech_start_s": 0.0,
+     "speech_end_s": 2.414,
+     "speech_s": 2.414,
+     "words_per_s": 2.49,
+     "internal_pauses_s": [
+      0.73
+     ],
+     "loudness_lufs": -23.66,
+     "true_peak_dbtp": -3.1,
+     "lra_lu": 0.0,
+     "f0_median_hz": 179.8,
+     "f0_spread_st": 10.56,
+     "stt_text": "And here he is. Let's choose it together",
+     "stt_pass": false,
+     "stt_terms": {
+      "andheri east": false,
+      "choose it together": true
+     }
+    },
+    {
+     "take": 3,
+     "file": "takes/l15_close_together_t3.mp3",
+     "tts_text": "Andheri East. <break time=\"0.5s\" /> Let's choose it together.",
+     "settings": {
+      "similarity_boost": 0.75,
+      "use_speaker_boost": true,
+      "stability": 0.45,
+      "style": 0.3,
+      "speed": 0.92
+     },
+     "duration_s": 2.879,
+     "speech_start_s": 0.0,
+     "speech_end_s": 2.417,
+     "speech_s": 2.417,
+     "words_per_s": 2.48,
+     "internal_pauses_s": [
+      0.78
+     ],
+     "loudness_lufs": -23.96,
+     "true_peak_dbtp": -3.11,
+     "lra_lu": 0.0,
+     "f0_median_hz": 176.8,
+     "f0_spread_st": 8.73,
+     "stt_text": "And here east. Let's choose it together.",
+     "stt_pass": false,
+     "stt_terms": {
+      "andheri east": false,
+      "choose it together": true
+     }
+    },
+    {
+     "take": 4,
+     "file": "takes/l15_close_together_t4.mp3",
+     "tts_text": "Undheri East. <break time=\"0.5s\" /> Let's choose it together.",
+     "settings": {
+      "similarity_boost": 0.75,
+      "use_speaker_boost": true,
+      "stability": 0.45,
+      "style": 0.3,
+      "speed": 1.0
+     },
+     "duration_s": 2.74,
+     "speech_start_s": 0.0,
+     "speech_end_s": 2.292,
+     "speech_s": 2.292,
+     "words_per_s": 2.62,
+     "internal_pauses_s": [
+      0.8
+     ],
+     "loudness_lufs": -23.97,
+     "true_peak_dbtp": -4.21,
+     "lra_lu": 0.0,
+     "f0_median_hz": 186.0,
+     "f0_spread_st": 9.93,
+     "stt_text": "Under East, let's choose it together",
+     "stt_pass": false,
+     "stt_terms": {
+      "andheri east": false,
+      "choose it together": true
+     }
+    },
+    {
+     "take": 5,
+     "file": "takes/l15_close_together_t5.mp3",
+     "tts_text": "Andheri East, <break time=\"0.4s\" /> let's choose it together.",
+     "settings": {
+      "similarity_boost": 0.75,
+      "use_speaker_boost": true,
+      "stability": 0.45,
+      "style": 0.3,
+      "speed": 1.0
+     },
+     "duration_s": 2.786,
+     "speech_start_s": 0.0,
+     "speech_end_s": 2.381,
+     "speech_s": 2.381,
+     "words_per_s": 2.52,
+     "internal_pauses_s": [
+      0.64
+     ],
+     "loudness_lufs": -22.23,
+     "true_peak_dbtp": -2.53,
+     "lra_lu": 0.0,
+     "f0_median_hz": 192.8,
+     "f0_spread_st": 9.27,
+     "stt_text": "And here is. Let's choose it together",
+     "stt_pass": false,
+     "stt_terms": {
+      "andheri east": false,
+      "choose it together": true
+     }
+    },
+    {
+     "take": 6,
+     "file": "takes/l15_close_together_t6.mp3",
+     "tts_text": "अंधेरी East. <break time=\"0.5s\" /> Let's choose it together.",
+     "settings": {
+      "similarity_boost": 0.75,
+      "use_speaker_boost": true,
+      "stability": 0.45,
+      "style": 0.3,
+      "speed": 1.0
+     },
+     "duration_s": 2.786,
+     "speech_start_s": 0.0,
+     "speech_end_s": 2.409,
+     "speech_s": 2.409,
+     "words_per_s": 2.49,
+     "internal_pauses_s": [
+      0.71
+     ],
+     "loudness_lufs": -23.65,
+     "true_peak_dbtp": -4.37,
+     "lra_lu": 0.0,
+     "f0_median_hz": 203.8,
+     "f0_spread_st": 9.41,
+     "stt_text": "And there is. Let's choose it together",
+     "stt_pass": false,
+     "stt_terms": {
+      "andheri east": false,
+      "choose it together": true
+     }
+    }
+   ],
+   "stt_notes": "Speech-to-text never wrote 'Andheri East' for this line on its own (6 takes: 'And here he is', 'And here east', 'Under East', 'And here is', 'And there is'; respellings 'Undheri' and Devanagari 'अंधेरी' and a slower read did not change it). Control: the 'Andheri East' cut out of l02, which speech-to-text writes correctly inside its sentence, is heard as 'Under East' when isolated. So the failure is the speech-to-text's need for context, not her pronunciation. With l02's 'Flipkart asked us for space in' spliced in front, every take is heard as 'Andheri East. Let's choose it together'. Take 2 is used (plain spelling, the chosen settings, a 0.5 s pause).",
+   "stt_pass_isolated": false,
+   "stt_pass_in_context": true,
+   "stt_context_text": "Flipkart asked us for space in Andheri East. Let's choose it together",
+   "provisional_at": 132.218,
+   "provisional_speech": [
+    132.218,
+    134.632
+   ]
+  }
+ ],
+ "summary": {
+  "lines": 15,
+  "total_speech_s": 118.2,
+  "total_file_s": 127.62,
+  "words_per_minute_while_speaking": 178.7,
+  "stt_isolated_pass": [
+   "l01_open",
+   "l02_descent",
+   "l03_marol",
+   "l04_privilon_commute",
+   "l05_privilon_tower",
+   "l06_privilon_plans",
+   "l07_corporate_speed",
+   "l08_corporate_floors",
+   "l09_corporate_metro",
+   "l10_a723_top",
+   "l11_a723_terrace",
+   "l12_a723_metro",
+   "l13_close_choose",
+   "l14_close_autopilot"
+  ],
+  "stt_isolated_fail": [
+   "l15_close_together"
+  ],
+  "table": [
+   {
+    "id": "l01_open",
+    "take": 1,
+    "file_s": 5.433,
+    "speech_s": 4.515,
+    "slot": [
+     0,
+     8
+    ],
+    "slot_len_s": 8,
+    "fits_slot": true,
+    "stt_pass": true,
+    "heard": "Let's not start with a list of buildings. Let's start with how your people get to work"
+   },
+   {
+    "id": "l02_descent",
+    "take": 1,
+    "file_s": 10.217,
+    "speech_s": 9.608,
+    "slot": [
+     8,
+     20
+    ],
+    "slot_len_s": 12,
+    "fits_slot": true,
+    "stt_pass": true,
+    "heard": "Flipkart asked us for space in Andheri East. We walked the micro market, checked every building against the deck, and brought it down to three. Each one answers a different question."
+   },
+   {
+    "id": "l03_marol",
+    "take": 1,
+    "file_s": 7.616,
+    "speech_s": 6.815,
+    "slot": [
+     20,
+     27
+    ],
+    "slot_len_s": 7,
+    "fits_slot": true,
+    "stt_pass": true,
+    "heard": "Two of them are at Marol Naka, where Metro Line 1 meets Line 3. The third is One Stop West in Chakala"
+   },
+   {
+    "id": "l04_privilon_commute",
+    "take": 3,
+    "file_s": 9.149,
+    "speech_s": 8.646,
+    "slot": [
+     27,
+     37
+    ],
+    "slot_len_s": 10,
+    "fits_slot": true,
+    "stt_pass": true,
+    "heard": "First, the commute. Privillon stands right beside Marol Naka station, 140 meters from the station steps, two minutes on foot in any weather"
+   },
+   {
+    "id": "l05_privilon_tower",
+    "take": 1,
+    "file_s": 7.338,
+    "speech_s": 6.67,
+    "slot": [
+     37,
+     44
+    ],
+    "slot_len_s": 7,
+    "fits_slot": true,
+    "stt_pass": true,
+    "heard": "A new grade A tower, ground plus 15, one long clear floor plate, possession in January"
+   },
+   {
+    "id": "l06_privilon_plans",
+    "take": 1,
+    "file_s": 10.542,
+    "speech_s": 9.997,
+    "slot": [
+     44,
+     56
+    ],
+    "slot_len_s": 12,
+    "fits_slot": true,
+    "stt_pass": true,
+    "heard": "We've drawn the floor three ways, two-sixty, two-eighty, and three hundred and one seats. Every chair counted from the drawing, so the floor you sign is the floor that grows with you."
+   },
+   {
+    "id": "l07_corporate_speed",
+    "take": 1,
+    "file_s": 8.406,
+    "speech_s": 7.85,
+    "slot": [
+     56,
+     64
+    ],
+    "slot_len_s": 8,
+    "fits_slot": true,
+    "stt_pass": true,
+    "heard": "Second speed: Corporate Avenue in Chakala is a gated office campus with two floors ready now. Ready the day you are"
+   },
+   {
+    "id": "l08_corporate_floors",
+    "take": 1,
+    "file_s": 12.864,
+    "speech_s": 12.015,
+    "slot": [
+     64,
+     76
+    ],
+    "slot_len_s": 12,
+    "fits_slot": false,
+    "stt_pass": true,
+    "heard": "The third and fourth floors, six thousand two hundred square feet of carpet on each, twelve thousand four hundred together. Two floors means two teams with their own space, one stair apart under one roof"
+   },
+   {
+    "id": "l09_corporate_metro",
+    "take": 1,
+    "file_s": 5.016,
+    "speech_s": 4.518,
+    "slot": [
+     76,
+     81
+    ],
+    "slot_len_s": 5,
+    "fits_slot": true,
+    "stt_pass": true,
+    "heard": "Chakala Metro is 850 meters away, about 11 minutes on foot"
+   },
+   {
+    "id": "l10_a723_top",
+    "take": 1,
+    "file_s": 8.824,
+    "speech_s": 8.264,
+    "slot": [
+     81,
+     90
+    ],
+    "slot_len_s": 9,
+    "fits_slot": true,
+    "stt_pass": true,
+    "heard": "Third, the view from the top. At 723 Avenue, Flipkart takes the thirteenth and fourteenth floors, and the terrace above them comes with it"
+   },
+   {
+    "id": "l11_a723_terrace",
+    "take": 1,
+    "file_s": 7.895,
+    "speech_s": 7.174,
+    "slot": [
+     90,
+     100
+    ],
+    "slot_len_s": 10,
+    "fits_slot": true,
+    "stt_pass": true,
+    "heard": "A bare shell floor, ready to fit out your way with your own open-air breakout above it. A place to step outside between the hard hours."
+   },
+   {
+    "id": "l12_a723_metro",
+    "take": 1,
+    "file_s": 4.783,
+    "speech_s": 4.301,
+    "slot": [
+     100,
+     104
+    ],
+    "slot_len_s": 4,
+    "fits_slot": false,
+    "stt_pass": true,
+    "heard": "Marol Naka Metro is 700 meters away, about nine minutes on foot"
+   },
+   {
+    "id": "l13_close_choose",
+    "take": 2,
+    "file_s": 11.471,
+    "speech_s": 10.383,
+    "slot": [
+     104,
+     116
+    ],
+    "slot_len_s": 12,
+    "fits_slot": true,
+    "stt_pass": true,
+    "heard": "Three buildings, the commute, the speed, the view from the top. You choose what matters most and we'll show you every seat and every rupee before a single wall goes up"
+   },
+   {
+    "id": "l14_close_autopilot",
+    "take": 1,
+    "file_s": 15.279,
+    "speech_s": 15.034,
+    "slot": [
+     116,
+     126
+    ],
+    "slot_len_s": 10,
+    "fits_slot": false,
+    "stt_pass": true,
+    "heard": "We're Autopilot. Fifteen thousand seats, twenty centers, seven cities. We pick the building first, plan it to the last chair, and then we run it like it's our own. Pehle vyavahar, phir vyapar. Relationship first, business next"
+   },
+   {
+    "id": "l15_close_together",
+    "take": 2,
+    "file_s": 2.786,
+    "speech_s": 2.414,
+    "slot": [
+     126,
+     130
+    ],
+    "slot_len_s": 4,
+    "fits_slot": true,
+    "stt_pass": false,
+    "heard": "And here he is. Let's choose it together"
+   }
+  ]
+ },
+ "retake_rules": "A line passes when the speech-to-text transcript (scribe_v1, English) contains every key-word group in lines.json; respellings change only tts_text, never the words."
+}
