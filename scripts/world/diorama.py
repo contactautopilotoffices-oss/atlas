@@ -1318,6 +1318,7 @@ def animate(data, info, spec_path, name):
         pins[f] = {k: [round(c, 4) for c in world_to_camera_view(sc, cam, mathutils.Vector((v[0] - OX, v[1] - OY, v[2])))] for k, v in sp.get("pins", {}).items()}
     json.dump({"fps": sc.render.fps, "frames": sp["frames"], "pins": pins}, open(os.path.join(out, "pins.json"), "w"))
     sc.render.use_persistent_data = True
+    sc.render.use_overwrite = False   # resume: frames already on disk are kept
     sc.render.image_settings.file_format = "PNG"; sc.render.image_settings.color_mode = "RGB"; sc.render.image_settings.color_depth = "8"
     sc.render.filepath = os.path.join(out, "f_####")
     if "--frames" in A: sc.frame_start, sc.frame_end = (int(v) for v in A[A.index("--frames") + 1].split("-"))
