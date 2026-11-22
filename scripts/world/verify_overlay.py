@@ -41,6 +41,8 @@ for b in S["buildings"]:
         d.line(pts + [pts[0]], fill=(255, 220, 0) if b.get("opt") else (0, 230, 255), width=3 if b.get("opt") else 2)
 for e in J.get("added", []):
     pts = [P(*p) for p in e["poly"]]; d.line(pts + [pts[0]], fill=(255, 0, 255), width=3)
+if J.get("privilon", {}).get("poly"):
+    pts = [P(*p) for p in J["privilon"]["poly"]]; d.line(pts + [pts[0]], fill=(255, 140, 0), width=4)
 for e in J.get("buildings", []):
     a, c = P(e["x"], e["y"]); d.ellipse([a - 4, c - 4, a + 4, c + 4], fill=(255, 220, 0))
 for gx, gy in GATES:

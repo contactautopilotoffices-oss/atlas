@@ -1,5 +1,27 @@
 # Atlas — Development Journal
 
+## 2026-11-23 — Atlas: Privilon remodelled and lit by the real sun; intro film script
+
+**Privilon is now one long glass floor plate on Fleet House's frontage line, modelled from the developer's render with real depth, lit with photographed skies and the computed sun for sunrise, sunset and blue hour.**
+
+- **Why:** the founder found Privilon set too far back and the wrong shape (a T), and wants a premium intro film for Flipkart where sunrise and sunset on Privilon matter.
+- **Structural decisions:**
+  - Privilon is a separate modelled building (`scripts/world/privilon_hero.py`), not a generic block. It has modelled fins, mullions, slab bands, two recessed dark slots with bronze edges, a recessed lobby on granite columns, and lit ceilings with a downlight grid behind the glass that switch on at dusk.
+  - Its outline (25 m road face by 55 m deep, front edge on Fleet House's road line) is recorded in `scripts/world/refs/marol_corridor.json` and checked on the Google satellite sheet.
+  - Light uses free CC0 skies and scanned textures from Poly Haven, now reachable from this Mac, and the sun's real position for Marol in late November. Sunrise is at about 07:00 from 112 degrees and sunset at about 17:55 from 248 degrees, so the long east face takes the morning sun and the west face the evening sun.
+- **What works now:**
+  - Three full-HD renders in `media/flipkart-andheri/world/privilon-hero/`: blue hour, sunrise and sunset.
+  - A film script and production plan in `andheri-project/film/SCRIPT.md`: about 115 seconds, one clear reason per building, and only deck figures.
+- **Left undone:**
+  - The photographed skies show their own horizon (a bridge, a car park) behind the district; this needs a sky-only horizon.
+  - Neighbouring buildings are still flat painted boxes; the next step is modelled depth within about 100 m of each film shot.
+  - The explorer preview still has the earlier Privilon.
+- **Open questions for the founder:**
+  - Metro walking distances: the explorer and the route data disagree (Privilon 140 m against 40 m; Corporate Avenue 920 m to WEH against 850 m to Chakala; 723 Avenue 810 m against 700 m).
+  - Is the 723 terrace available to the tenant?
+  - Choice of narrator after auditions.
+
+
 ## 2026-11-21 — Atlas: Andheri district twin, first realism checkpoint
 
 **Tested whether Google can supply a real 3D Andheri (it cannot), then upgraded the existing Andheri district builder: 723 Avenue now matches the photograph and the city around it is weathered and hazy. Two checkpoint stills are ready for review.**

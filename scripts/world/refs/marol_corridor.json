@@ -255,6 +255,15 @@
    "h": 36,
    "h_basis": "estimate from satellite shadow",
    "seen": "satellite layout"
+  },
+  {
+   "name": "Block east of Privilon",
+   "x": 1359,
+   "y": -279,
+   "style": "glass_grid",
+   "h": 24,
+   "h_basis": "estimate: about 6 storeys on Google satellite; the 49 m satellite height reading merges Privilon's construction tower next door",
+   "seen": "Google satellite overlay"
   }
  ],
  "stations": {
@@ -265,7 +274,26 @@
    1337,
    -234
   ],
-  "seen": "Street View Feb 2026, 19.1085449,72.8787139 heading 60 and 19.10812,72.88040 heading 320: a concrete tower under construction behind Fleet House, north-west of Marol Naka station. Google Maps lists Privilon's office at plus code 4V5H+7RP, which falls on the station building (its sales office, 'Floor 1 - Marol Naka'), not the plot."
+  "seen": "Street View Feb 2026, 19.1085449,72.8787139 heading 60 and 19.10812,72.88040 heading 320: a concrete tower under construction behind Fleet House, north-west of Marol Naka station. Google Maps lists Privilon's office at plus code 4V5H+7RP, which falls on the station building (its sales office, 'Floor 1 - Marol Naka'), not the plot.",
+  "poly": [
+   [
+    1311.5,
+    -291.4
+   ],
+   [
+    1335.9,
+    -297.0
+   ],
+   [
+    1348.2,
+    -243.4
+   ],
+   [
+    1323.8,
+    -237.8
+   ]
+  ],
+  "basis": "Founder: Privilon's road face is on the same line as Fleet House, and the building is one elongated rectangular floor plate (no T), running back from the road. 25 m frontage x 55 m deep (about 1,375 m2 gross per floor, fitting the 11,331 sq ft carpet). Axis from the plot strip behind Fleet House; front edge on Fleet House's road-face line. Developer render: ~16 floors, glass with stepped vertical fin zones, two dark vertical slots on the side face, double-height glazed base, Line 1 viaduct alongside."
  },
  "added": [
   {

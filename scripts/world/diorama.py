@@ -60,6 +60,13 @@ if "--opt-at" in A:   # --opt-at X,Y: the option's real footprint, when the map 
     for b in S["buildings"]:
         if b.get("opt") == OID: del b["opt"]
     min(S["buildings"], key=lambda b: Polygon(b["p"]).centroid.distance(Point(ox_, oy_)))["opt"] = OID
+if "--opt-poly-ref" in A:   # the option's outline from scripts/world/refs/*.json (Privilon: founder + Google satellite)
+    _key = A[A.index("--opt-poly-ref") + 1]; _poly = None
+    for _fn in (sorted(os.listdir(_RD)) if os.path.isdir(_RD) else []):
+        _poly = json.load(open(os.path.join(_RD, _fn))).get(_key, {}).get("poly") or _poly
+    _op = Polygon(_poly)
+    S["buildings"] = [b for b in S["buildings"] if b.get("opt") != OID and not (_op.contains(Polygon(b["p"]).centroid) or Polygon(b["p"]).intersection(_op).area > 0.4 * Polygon(b["p"]).area)]
+    S["buildings"].append({"p": _poly, "h": 67.5, "c": "commercial", "r": 0.5, "opt": OID})
 OPTB = next(b for b in S["buildings"] if b.get("opt") == OID)
 # --neighbour-hero ID=BLEND (repeatable): another shortlisted property standing in this district, shown with its
 # own facade study and a pin, not as a generic block (723 Avenue is visible from Privilon)
@@ -1255,6 +1262,34 @@ def roof_garden(H, foot=None, name="roof_garden_723"):
         p = edge.interpolate(t, normalized=True); cyl(rg, *L(p.x, p.y), z, z + 0.9, 0.7, 0.7, 0, "canopy_leaf", 10)
     rg.build(name, MATS); print("roof garden built", round(Lg, 1), "x", round(Sh, 1), "m at", round(z, 1))
 
+def hdri_light(sc):
+    """--hdri FILE [--sun-az DEG --sun-el DEG --sky K --sun K --night 0..1]: a real sky (Poly Haven CC0 HDRI) turned so
+    its glow sits where the real sun is, plus a sun lamp at the computed solar position for crisp shadows.
+    Compass azimuth: 0 north, 90 east. Night drives the hero's lit interiors (object property 'night')."""
+    g = lambda k, d: float(A[A.index(k) + 1]) if k in A else d
+    az, el = g("--sun-az", 246.0), g("--sun-el", 5.5)
+    w = bpy.data.worlds.new("hdri"); sc.world = w; w.use_nodes = True; nt = w.node_tree
+    env = nt.nodes.new("ShaderNodeTexEnvironment"); env.image = bpy.data.images.load(os.path.abspath(A[A.index("--hdri") + 1]))
+    px = np.array(env.image.pixels[:], dtype=np.float32).reshape(env.image.size[1], env.image.size[0], 4)[..., :3].sum(-1)
+    u = (np.unravel_index(px.argmax(), px.shape)[1] + 0.5) / env.image.size[0]
+    az_hdr = math.pi / 2 - (0.5 - u) * 2 * math.pi
+    tc = nt.nodes.new("ShaderNodeTexCoord"); mp = nt.nodes.new("ShaderNodeMapping"); mp.inputs["Rotation"].default_value = (0, 0, math.radians(az) - az_hdr)
+    nt.links.new(tc.outputs["Generated"], mp.inputs[0]); nt.links.new(mp.outputs[0], env.inputs[0])
+    nt.links.new(env.outputs[0], nt.nodes["Background"].inputs[0]); nt.nodes["Background"].inputs[1].default_value = g("--sky", 1.0)
+    sun = bpy.data.lights.get("sun")
+    if sun:
+        sun.energy = g("--sun", 3.0) * max(0.0, math.sin(math.radians(max(el, 0))) * 4 + 0.15) if el > 0 else 0.0
+        sun.color = (1.0, 0.72, 0.48) if el < 12 else (1, 0.93, 0.82); sun.angle = math.radians(1.2)
+        bpy.data.objects["sun"].rotation_euler = (math.radians(90 - el), 0, -math.radians(az + 180))
+    lit_ = []
+    for o in bpy.data.objects:
+        if o.name.startswith("opt_") or o.name.startswith("nb_"): o["night"] = g("--night", 0.0); lit_.append(o.name)
+    cm = bpy.data.materials.get("ANDHERI_PRV_Ceiling")
+    print("night set on", lit_, "| ceiling material", bool(cm), [(n.bl_idname, getattr(n, "attribute_name", ""), getattr(n, "attribute_type", "")) for n in cm.node_tree.nodes if n.bl_idname == "ShaderNodeAttribute"] if cm else None)
+    hz = bpy.data.objects.get("haze")
+    if hz: bpy.data.objects.remove(hz, do_unlink=True)
+    print("HDRI sky", os.path.basename(A[A.index("--hdri") + 1]), "sun az %.0f el %.1f" % (az, el))
+
 def aerial(data, info, name="aerial", az_off=-0.6, dist_k=1.0, el_k=0.42, lens=35):
     """A photographic drone still of the district: GPU Cycles, a hazy Mumbai sky, aerial
     perspective from a thin world volume, no tilt-shift and no transparent film."""
@@ -1278,6 +1313,7 @@ def aerial(data, info, name="aerial", az_off=-0.6, dist_k=1.0, el_k=0.42, lens=3
             for dv in pr.devices: dv.use = True
             sc.cycles.device = "GPU"
         except Exception as e: print("GPU unavailable", e)
+        if "--hdri" in A: hdri_light(sc)
     E = info["entrance"]; F = info["canopy_ang"]; nx, ny = math.sin(F), -math.cos(F); H = info["H"]
     bc = Polygon(data["building"]["foot"]).centroid
     if isinstance(az_off, tuple):   # explicit shot in the scene frame: (pos, look, lens)
@@ -1289,7 +1325,8 @@ def aerial(data, info, name="aerial", az_off=-0.6, dist_k=1.0, el_k=0.42, lens=3
     sc.render.engine = "CYCLES"; sc.cycles.samples = int(A[A.index("--samples") + 1]) if "--samples" in A else 96; sc.cycles.use_denoising = True
     sc.cycles.max_bounces = 6; sc.cycles.transparent_max_bounces = 8; sc.cycles.volume_step_rate = 4
     sc.render.resolution_x, sc.render.resolution_y = 1920, 1080; sc.render.resolution_percentage = int(A[A.index("--pct") + 1]) if "--pct" in A else 100
-    sc.view_settings.view_transform = "AgX"; sc.view_settings.look = "AgX - Base Contrast"; sc.view_settings.exposure = 0.0
+    sc.view_settings.view_transform = "AgX"; sc.view_settings.look = "AgX - Medium High Contrast" if "--hdri" in A else "AgX - Base Contrast"
+    sc.view_settings.exposure = float(A[A.index("--exposure") + 1]) if "--exposure" in A else 0.0
     sc.render.film_transparent = False; sc.render.image_settings.file_format = "PNG"; sc.render.image_settings.color_mode = "RGB"
     sc.render.filepath = os.path.join(OUT, f"{OID}-{name}.png"); bpy.ops.render.render(write_still=True); print("rendered", name)
 
@@ -1327,6 +1364,12 @@ if "--render" in A:
         elif k == "lobby":   # from the forecourt, eye height, looking into the lobby
             E = info["entrance"]; nx, ny, tx, ty, F = lobby_723.out
             aerial(data, info, "lobby", az_off=((E[0] + OX + nx * 17 + tx * 6, E[1] + OY + ny * 17 + ty * 6, 1.7), (E[0] + OX - nx * 6, E[1] + OY - ny * 6, 2.6), 22))
+        elif k == "prv_street":   # from the road under the Line 1 viaduct, looking up at Privilon's corner (the developer render's view)
+            aerial(data, info, "prv_street", az_off=((1405, -380, 30), (1328, -262, 32), 24))
+        elif k == "prv_aerial":   # from the east, high: the face the sunrise lands on, the station and the road
+            aerial(data, info, "prv_aerial", az_off=((1262, -430, 105), (1328, -262, 30), 30))
+        elif k == "prv_west":     # from the west over the junction: the face the sunset lands on
+            aerial(data, info, "prv_west", az_off=((1175, -300, 70), (1328, -262, 30), 30))
         elif k == "campus":   # from over the main road, looking down at the gates and the compound
             c_ = Polygon(OPTB["p"]).centroid
             aerial(data, info, "campus", az_off=((c_.x + 70, c_.y + 210, 120), (c_.x - 5, c_.y + 40, 0), 32))
