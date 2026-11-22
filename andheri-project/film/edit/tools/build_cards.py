@@ -53,7 +53,7 @@ f"""<div class="shade" id="sh"></div><div class="bar" id="bar"></div><div class=
 .to('#sh,#bar,#eb,#nm,#ln',{opacity:0,duration:0.6,ease:'power1.in'},5.2);"""))
 
 # ------------------------------------------------------------ pins that track the closing pull-back
-def tracked(cid, shot, labels, dur, fps=24):
+def tracked(cid, shot, labels, dur, fps=24, stretch=1.0):
     pj = os.path.join(ROOT, "andheri-project/film/shots/out", shot, "pins.json")
     if not os.path.exists(pj): print("no pins yet for", shot); return
     P = json.load(open(pj)); frames = sorted(int(k) for k in P["pins"])
@@ -62,7 +62,7 @@ def tracked(cid, shot, labels, dur, fps=24):
         body.append(f'<div class="pin" id="pin{i}"><div class="chip"><b>{pname}</b><span>{sub}</span></div><div class="stem"></div><div class="dot"></div></div>')
         for f in frames:
             x, y, z = P["pins"][str(f)].get(pname, [0, 0, -1])
-            t = round((f - 1) / fps, 4)
+            t = round((f - 1) / fps * stretch, 4)
             if t >= dur: break
             vis = 1 if (z > 0 and 0.03 < x < 0.97 and 0.06 < y < 0.97) else 0
             js.append(f"tl.set('#pin{i}',{{x:{round(x*1920,1)},y:{round((1-y)*1080,1)},opacity:{vis}}},{t});")
@@ -76,17 +76,20 @@ def tracked(cid, shot, labels, dur, fps=24):
 .pin .chip span{font-size:22px;color:#c9d1dc;letter-spacing:.02em}""", "".join(body), "\n".join(js)))
     print("tracked pins:", cid, len(frames), "frames")
 
-tracked("pins-close", "close_pullback", {"Privilon": "Marol · beside the metro", "723 Avenue": "Marol · 13th + 14th floors"}, 8)
+import sys
+_st = float(sys.argv[sys.argv.index("--pins-stretch") + 1]) if "--pins-stretch" in sys.argv else 1.0
+_pd = float(sys.argv[sys.argv.index("--pins-dur") + 1]) if "--pins-dur" in sys.argv else 8.0
+tracked("pins-close", "close_pullback", {"Privilon": "Marol · beside the metro", "723 Avenue": "Marol · 13th + 14th floors"}, _pd, stretch=_st)
 
 # ------------------------------------------------------------ the Autopilot close
-LOGO_AP = "assets/brand/autopilot-white.png"; LOGO_FK = "assets/brand/flipkart-full.png"
+LOGO_AP = "assets/brand/autopilot-white.png"; LOGO_FK = "assets/brand/flipkart-logo-reverse.svg"
 def odo(oid, digits, comma_after=None):
     cols = []
     for i in range(digits):
         cols.append('<span class="col c%d"><span class="strip">%s</span></span>' % (i, "".join(f"<i>{d % 10}</i>" for d in range(30))))
         if comma_after is not None and i == comma_after: cols.append('<span class="comma">,</span>')
     return f'<span class="odo" id="{oid}">{"".join(cols)}</span>'
-save("close", comp("close", 16, """
+save("close", comp("close", 23.8, """
 #close-stage{background:radial-gradient(1100px 600px at 50% 45%,#121c2c,#05070b 75%)}
 .l1{position:absolute;left:0;right:0;top:250px;text-align:center;font-family:'Instrument Serif',serif;font-style:italic;font-size:84px}
 .stats{position:absolute;left:0;right:0;top:400px;display:flex;justify-content:center;gap:120px}
@@ -94,6 +97,7 @@ save("close", comp("close", 16, """
 .odo{display:inline-flex;font-size:104px;line-height:1;height:1em;overflow:hidden;font-weight:600;font-variant-numeric:tabular-nums}
 .odo .col{display:inline-block;height:1em;overflow:hidden;width:.62em;text-align:center}.odo .strip{display:flex;flex-direction:column}.odo .strip i{font-style:normal;height:1em;display:block}
 .odo .comma{width:.28em}.plus{font-size:80px;color:#ffc200;font-weight:600}
+.ways{position:absolute;left:0;right:0;top:640px;display:flex;justify-content:center;gap:56px;font-size:36px;color:#dfe4ea;letter-spacing:.02em}
 .belief{position:absolute;left:0;right:0;top:640px;text-align:center;font-family:'Instrument Serif',serif;font-style:italic;font-size:64px;color:#ffc200}
 .belief2{position:absolute;left:0;right:0;top:724px;text-align:center;font-size:30px;color:#dfe4ea;letter-spacing:.06em}
 .lock{position:absolute;left:0;right:0;top:440px;display:flex;align-items:center;justify-content:center;gap:56px;opacity:0}
@@ -102,16 +106,19 @@ save("close", comp("close", 16, """
 .cta{position:absolute;left:0;right:0;top:700px;text-align:center;font-size:26px;letter-spacing:.24em;text-transform:uppercase;color:#ffc200;opacity:0}""",
 f"""<div id="g1"><div class="l1" id="l1">We're Autopilot.</div>
 <div class="stats"><div class="stat">{odo('o1',5,1)}<span class="plus">+</span><small>seats delivered</small></div><div class="stat">{odo('o2',2)}<span class="plus">+</span><small>centres</small></div><div class="stat">{odo('o3',1)}<small>cities</small></div></div>
+<div class="ways"><span id="w1">Pick the building.</span><span id="w2">Plan every seat.</span><span id="w3">Run it like our own.</span></div>
 <div class="belief" id="bl">Pehle vyavahar, phir vyapar.</div><div class="belief2" id="bl2">Relationship first, business next.</div></div>
 <div class="lock" id="lock"><img src="{LOGO_AP}" alt="Autopilot"><span class="x">×</span><img src="{LOGO_FK}" alt="Flipkart"></div>
 <div class="end" id="end">Andheri East. Let's choose it together.</div><div class="cta" id="cta">Enter the experience</div>""",
 """function odoTo(id,value,at,dur,digits){const s=String(value).padStart(digits,'0');for(let i=0;i<digits;i++){tl.to('#'+id+' .c'+i+' .strip',{yPercent:-(10+(+s[i]))/30*100,duration:dur,ease:'power3.out'},at+i*0.07);}}
-tl.from('#l1',{opacity:0,y:20,filter:'blur(6px)',duration:1.0,ease:'power3.out'},0.3);
-tl.from('#close-stage .stats',{opacity:0,y:20,duration:0.8,ease:'power3.out'},1.0);
-odoTo('o1',15000,1.1,1.8,5); odoTo('o2',20,1.3,1.6,2); odoTo('o3',7,1.5,1.4,1);
-tl.from('#bl',{opacity:0,y:18,duration:1.0,ease:'power3.out'},4.6).from('#bl2',{opacity:0,duration:0.9},5.4);
-tl.to('#g1',{opacity:0,duration:0.8,ease:'power1.in'},9.6);
-tl.to('#lock',{opacity:1,duration:1.0,ease:'power2.out'},10.4).from('#lock',{scale:0.96,duration:1.4,ease:'power3.out'},10.4);
-tl.to('#end',{opacity:1,duration:1.0},11.8).to('#cta',{opacity:1,duration:0.8},12.8);
-tl.to('#lock,#end,#cta',{opacity:0,duration:0.8},15.2);"""))
+tl.from('#l1',{opacity:0,y:20,filter:'blur(6px)',duration:0.9,ease:'power3.out'},0.4);
+tl.from('#close-stage .stats',{opacity:0,y:20,duration:0.7,ease:'power3.out'},1.3);
+odoTo('o1',15000,1.6,1.2,5); odoTo('o2',20,3.1,1.0,2); odoTo('o3',7,4.05,0.9,1);
+tl.from('#w1',{opacity:0,y:14,duration:0.6,ease:'power3.out'},5.6).from('#w2',{opacity:0,y:14,duration:0.6,ease:'power3.out'},7.1).from('#w3',{opacity:0,y:14,duration:0.6,ease:'power3.out'},9.1);
+tl.to('#close-stage .ways',{opacity:0,duration:0.5},10.6);
+tl.from('#bl',{opacity:0,y:18,duration:0.9,ease:'power3.out'},10.95).from('#bl2',{opacity:0,duration:0.8},13.3);
+tl.to('#g1',{opacity:0,duration:0.7,ease:'power1.in'},15.1);
+tl.to('#lock',{opacity:1,duration:0.9,ease:'power2.out'},15.5).from('#lock',{scale:0.96,duration:1.3,ease:'power3.out'},15.5);
+tl.to('#end',{opacity:1,duration:0.8},16.0).to('#cta',{opacity:1,duration:0.8},17.4);
+tl.to('#lock,#end,#cta',{opacity:0,duration:1.2},22.4);"""))
 print("built title, cards, close")

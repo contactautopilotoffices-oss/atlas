@@ -55,9 +55,9 @@ function odoTo(tl, id, value, at, dur, digits){
   }
 }
 function drawPlan(tl, sel, at){
-  tl.to(sel + ' .walls,' + sel + ' .glass,' + sel + ' .doors', {strokeDashoffset: 0, duration: 1.8, ease: 'power2.inOut', stagger: 0.15}, at);
+  tl.to(sel + ' .walls,' + sel + ' .glass,' + sel + ' .doors', {strokeDashoffset: 0, duration: 1.4, ease: 'power2.inOut', stagger: 0.12}, at);
   tl.to(sel + ' .zone', {opacity: 1, duration: 0.6, stagger: {each: 0.035, from: 'random'}, ease: 'power1.out'}, at + 0.5);
-  tl.to(sel + ' .desk', {opacity: 1, duration: 0.25, stagger: {each: 0.004, from: 'start'}, ease: 'none'}, at + 1.4);
+  tl.to(sel + ' .desk', {opacity: 1, duration: 0.2, stagger: {each: 0.003, from: 'start'}, ease: 'none'}, at + 1.0);
 }
 """
 
@@ -77,14 +77,13 @@ body = f"""<div class="eyebrow">Privilon · one floor plate</div><div class="hea
 <div class="big" style="right:120px;top:150px">{odo('pvodo', 3)}<span class="unit">workstations</span></div>
 <div class="chips" style="right:120px;top:330px"><span class="chip on" id="ch260">260</span><span class="chip" id="ch280">280</span><span class="chip" id="ch301">301</span></div>
 {pv}<div class="src">Seats counted from the developer's CAD drawings · 22.4 × 67.3 m floor plate</div>"""
-js = """drawPlan(tl,'.pv260',0.6); odoTo(tl,'pvodo',260,2.0,1.4,3);
-tl.to('#pv260',{opacity:0,duration:0.7},5.0).to('#pv280',{opacity:1,duration:0.7},5.0);
+js = """drawPlan(tl,'.pv260',0.2); odoTo(tl,'pvodo',260,2.2,0.7,3);
 tl.set('#pv280 .walls,#pv280 .glass,#pv280 .doors',{strokeDashoffset:0},0).set('#pv280 .zone,#pv280 .desk',{opacity:1},0);
 tl.set('#pv301 .walls,#pv301 .glass,#pv301 .doors',{strokeDashoffset:0},0).set('#pv301 .zone,#pv301 .desk',{opacity:1},0);
-odoTo(tl,'pvodo',280,5.1,1.0,3); tl.to('#ch260',{backgroundColor:'rgba(255,255,255,.05)',borderColor:'rgba(255,255,255,.18)',color:'#c9d1dc',duration:0.3},5.0).to('#ch280',{backgroundColor:'#2a55e5',borderColor:'#2a55e5',color:'#fff',duration:0.3},5.0);
-tl.to('#pv280',{opacity:0,duration:0.7},8.0).to('#pv301',{opacity:1,duration:0.7},8.0);
-odoTo(tl,'pvodo',301,8.1,1.0,3); tl.to('#ch280',{backgroundColor:'rgba(255,255,255,.05)',borderColor:'rgba(255,255,255,.18)',color:'#c9d1dc',duration:0.3},8.0).to('#ch301',{backgroundColor:'#2a55e5',borderColor:'#2a55e5',color:'#fff',duration:0.3},8.0);"""
-open(os.path.join(E, "compositions/plan-privilon.html"), "w").write(scene("plan-privilon", 12, body, js))
+const OFF={backgroundColor:'rgba(255,255,255,.05)',borderColor:'rgba(255,255,255,.18)',color:'#c9d1dc',duration:0.25}, ON={backgroundColor:'#2a55e5',borderColor:'#2a55e5',color:'#fff',duration:0.25};
+tl.to('#pv260',{opacity:0,duration:0.35},3.1).to('#pv280',{opacity:1,duration:0.35},3.1); odoTo(tl,'pvodo',280,3.1,0.6,3); tl.to('#ch260',OFF,3.1).to('#ch280',ON,3.1);
+tl.to('#pv280',{opacity:0,duration:0.35},4.05).to('#pv301',{opacity:1,duration:0.35},4.05); odoTo(tl,'pvodo',301,4.05,0.6,3); tl.to('#ch280',OFF,4.05).to('#ch301',ON,4.05);"""
+open(os.path.join(E, "compositions/plan-privilon.html"), "w").write(scene("plan-privilon", 11.8, body, js))
 
 # ---------------- Corporate Avenue: two floors (152 + 114 = 266), 6,207 sq ft each
 c1 = svg("corporate-266-plan1", "ca1").replace('<svg class="plan', '<svg style="position:absolute;left:0;top:0;width:520px;height:668px" class="plan')
@@ -93,19 +92,20 @@ body = f"""<div class="eyebrow">Corporate Avenue · 3rd and 4th floors</div><div
 <div style="position:absolute;left:1150px;top:250px;width:520px;height:668px">{c1}</div><div class="cap" style="left:1150px;top:940px">3rd floor · {odo('caf1',3)}</div>
 <div style="position:absolute;left:1620px;top:250px;width:520px;height:668px;transform:translateX(-300px)"></div>
 <div style="position:absolute;left:1360px;top:250px;width:520px;height:668px;opacity:0" id="ca2wrap">{c2}</div>
-<div class="big" style="left:120px;top:420px">{odo('caodo',3)}<span class="unit">workstations<br>across both floors</span></div>
-<div class="big" style="left:120px;top:640px">{odo('casq',4,0).replace('font-size:150px','')}<span class="unit">sq ft carpet<br>on each floor</span></div>
-<div class="chips" style="left:120px;top:860px"><span class="chip on">266</span><span class="chip">281</span><span class="chip">373</span><span class="chip" style="border:none;background:none;color:#6c7684">seat plans</span></div>
+<div class="big" style="left:120px;top:410px">{odo('casq',4,0)}<span class="unit">sq ft carpet<br>on each floor</span></div>
+<div class="big" id="ca2big" style="left:120px;top:620px;opacity:0">{odo('catot',5,1)}<span class="unit">sq ft across<br>both floors</span></div>
+<div class="chips" style="left:120px;top:860px"><span class="chip on">266</span><span class="chip">281</span><span class="chip">373</span><span class="chip" style="border:none;background:none;color:#aab3bf">workstation plans</span></div>
 <div class="src">Seats counted from the CAD · carpet area from the deck</div>"""
 body = body.replace('<div style="position:absolute;left:1620px;top:250px;width:520px;height:668px;transform:translateX(-300px)"></div>\n', '')
 body = body.replace('<div class="cap" style="left:1150px;top:940px">3rd floor · ' + odo('caf1',3) + '</div>', '<div class="cap" id="cap3" style="left:860px;top:940px">3rd floor</div><div class="cap" id="cap4" style="left:1390px;top:940px;opacity:0">4th floor</div>')
 body = body.replace('left:1150px;top:250px;width:520px;height:668px">', 'left:860px;top:250px;width:520px;height:668px">')
 body = body.replace('left:1360px;top:250px;width:520px;height:668px;opacity:0" id="ca2wrap"', 'left:1390px;top:250px;width:520px;height:668px;opacity:0" id="ca2wrap"')
-js = """drawPlan(tl,'.ca1',0.6); odoTo(tl,'caodo',152,2.0,1.3,3);
-tl.to('#ca2wrap',{opacity:1,duration:0.6},4.6).to('#cap4',{opacity:1,duration:0.6},4.6); drawPlan(tl,'.ca2',4.6); odoTo(tl,'caodo',266,6.2,1.2,3);
-odoTo(tl,'casq',6207,7.4,1.4,4);
-tl.from('#plan-corporate-stage .chips',{opacity:0,y:16,duration:0.6},8.4);"""
-open(os.path.join(E, "compositions/plan-corporate.html"), "w").write(scene("plan-corporate", 12, body.replace('class="odo" id="casq"','class="odo" id="casq" style="font-size:110px"'), js))
+js = """drawPlan(tl,'.ca1',0.2);
+tl.to('#ca2wrap',{opacity:1,duration:0.5},0.85).to('#cap4',{opacity:1,duration:0.5},0.85); drawPlan(tl,'.ca2',0.85);
+odoTo(tl,'casq',6207,2.0,0.9,4);
+tl.to('#ca2big',{opacity:1,duration:0.4},5.3); odoTo(tl,'catot',12414,5.35,0.9,5);
+tl.from('#plan-corporate-stage .chips',{opacity:0,y:16,duration:0.6},7.7);"""
+open(os.path.join(E, "compositions/plan-corporate.html"), "w").write(scene("plan-corporate", 12.6, body.replace('class="odo" id="catot"','class="odo" id="catot" style="font-size:96px"'), js))
 
 # ---------------- 723 Avenue: 13th and 14th floors + terrace
 a1 = svg("723-284-plan1", "a1").replace('<svg class="plan', '<svg style="position:absolute;left:0;top:0;width:620px;height:390px" class="plan')
@@ -116,8 +116,8 @@ body = f"""<div class="eyebrow">723 Avenue · the top of the building</div><div 
 <div class="big" style="left:120px;top:420px">{odo('aodo',3)}<span class="unit">workstations<br>proposed plan</span></div>
 <div class="tile" id="terr" style="left:560px;top:790px;width:1280px;opacity:0"><b>Terrace · Flipkart's own breakout</b><span>Open air above the 14th floor, available with the offer · bare-shell floors, ready to fit out</span></div>
 <div class="src">Seats counted from the CAD</div>"""
-js = """drawPlan(tl,'.a1',0.6); odoTo(tl,'aodo',168,2.0,1.3,3);
-tl.to('#a2wrap,#cap14',{opacity:1,duration:0.6},3.6); drawPlan(tl,'.a2',3.6); odoTo(tl,'aodo',284,5.2,1.2,3);
-tl.to('#terr',{opacity:1,y:-10,duration:0.8,ease:'power3.out'},6.4);"""
-open(os.path.join(E, "compositions/plan-723.html"), "w").write(scene("plan-723", 10, body, js))
+js = """drawPlan(tl,'.a1',0.2); odoTo(tl,'aodo',168,1.4,0.9,3);
+tl.to('#a2wrap,#cap14',{opacity:1,duration:0.5},1.0); drawPlan(tl,'.a2',1.0); odoTo(tl,'aodo',284,2.6,0.9,3);
+tl.to('#terr',{opacity:1,y:-10,duration:0.7,ease:'power3.out'},3.35);"""
+open(os.path.join(E, "compositions/plan-723.html"), "w").write(scene("plan-723", 8.6, body, js))
 print("built plan-privilon, plan-corporate, plan-723")
