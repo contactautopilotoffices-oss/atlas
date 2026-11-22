@@ -15,3 +15,8 @@ shot prv_dusk privilon "${PRV[@]}" "${DUSK[@]}"
 shot a723_rise 723-avenue "${A723[@]}" "${DUSK[@]}"
 shot close_pullback privilon "${PRV[@]}" "${DUSK[@]}"
 echo "== queue done $(date +%H:%M)"
+# Corporate Avenue drone (runs after the hero model exists: .w3d/corporate_hero.blend)
+CA=(--slab-min 1100 --hero-blend .w3d/corporate_hero.blend --hero-fit --campus --campus-road -768,44 --campus-box -865,-60,-735,60 --campus-gates "-796.6,58.1;-741.6,58.1")
+AFTERNOON=(--hdri .w3d/assets/cedar_bridge_sunset_1_4k.hdr --sun-az 245 --sun-el 18 --sky 0.8 --sun 3 --night 0.1 --exposure 0.1 --haze 0.0003)
+[ -f .w3d/corporate_hero.blend ] && shot corp_drone corporate-avenue "${CA[@]}" "${AFTERNOON[@]}"
+echo "== queue + corporate done $(date +%H:%M)"

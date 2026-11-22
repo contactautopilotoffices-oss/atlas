@@ -1,0 +1,14 @@
+<template><style>@font-face{font-family:Urbanist;src:url('assets/fonts/Urbanist.ttf')}
+@font-face{font-family:'Instrument Serif';src:url('assets/fonts/InstrumentSerif-Regular.ttf')}
+#root{width:1920px;height:1080px;position:relative;overflow:hidden;font-family:Urbanist,sans-serif;color:#fff}
+#title-stage{background:#000}
+.t1{position:absolute;left:0;right:0;top:430px;text-align:center;font-size:128px;font-weight:300;letter-spacing:.34em;padding-left:.34em}
+.rule{position:absolute;left:810px;width:300px;top:600px;height:1px;background:linear-gradient(90deg,transparent,#ffc200,transparent);transform-origin:center}
+.t2{position:absolute;left:0;right:0;top:628px;text-align:center;font-family:'Instrument Serif',serif;font-style:italic;font-size:48px;color:#c9d1dc}</style>
+<div id="root" data-composition-id="title" data-width="1920" data-height="1080" data-duration="8">
+<div id="title-stage" class="clip" data-start="0" data-duration="8" data-track-index="1" data-layout-allow-overflow data-layout-allow-overlap><div class="t1" id="t1">ANDHERI EAST</div><div class="rule" id="rule"></div><div class="t2" id="t2">Marol · Chakala</div></div></div>
+<script>(function(){const tl=gsap.timeline({paused:true});tl.from('#t1',{opacity:0,letterSpacing:'0.6em',filter:'blur(10px)',duration:2.6,ease:'power2.out'},0.6)
+.from('#rule',{scaleX:0,duration:1.4,ease:'power3.inOut'},1.8)
+.from('#t2',{opacity:0,y:14,duration:1.2,ease:'power2.out'},2.4)
+.to('#t1,#rule,#t2',{opacity:0,duration:1.0,ease:'power1.in'},6.8);
+window.__timelines['title']=tl;})();</script></template>

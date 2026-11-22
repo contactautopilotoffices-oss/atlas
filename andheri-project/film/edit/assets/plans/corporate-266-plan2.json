@@ -1,0 +1,116 @@
+{
+ "id": "corporate-266-plan2",
+ "bounds": [
+  0,
+  0,
+  26.5,
+  34.1
+ ],
+ "desks": 114,
+ "totals": {
+  "work_seats": 114,
+  "all_seats": null
+ },
+ "zones": [
+  {
+   "name": "4 Seater Meeting Room-1",
+   "label": [
+    9.841,
+    12.452
+   ],
+   "group": "Meeting room",
+   "seats": 4,
+   "color": "#8964bf"
+  },
+  {
+   "name": "4 Seater Meeting Room-2",
+   "label": [
+    12.508,
+    12.452
+   ],
+   "group": "Meeting room",
+   "seats": 4,
+   "color": "#8964bf"
+  },
+  {
+   "name": "Phone booth 03",
+   "label": [
+    5.438,
+    15.405
+   ],
+   "group": "Phone booth",
+   "seats": null,
+   "color": "#94735c"
+  },
+  {
+   "name": "Phone booth 02",
+   "label": [
+    4.529,
+    15.383
+   ],
+   "group": "Phone booth",
+   "seats": null,
+   "color": "#94735c"
+  },
+  {
+   "name": "Phone booth 01",
+   "label": [
+    3.538,
+    15.383
+   ],
+   "group": "Phone booth",
+   "seats": null,
+   "color": "#94735c"
+  },
+  {
+   "name": "Phone booth 04",
+   "label": [
+    6.51,
+    15.383
+   ],
+   "group": "Phone booth",
+   "seats": null,
+   "color": "#94735c"
+  },
+  {
+   "name": "6 Seater Meeting Room",
+   "label": [
+    6.552,
+    26.451
+   ],
+   "group": "Meeting room",
+   "seats": 6,
+   "color": "#8964bf"
+  },
+  {
+   "name": "4 Seater Meeting Room-3",
+   "label": [
+    5.805,
+    24.26
+   ],
+   "group": "Meeting room",
+   "seats": 4,
+   "color": "#8964bf"
+  },
+  {
+   "name": "4 Seater Meeting Room-4",
+   "label": [
+    6.551,
+    29.839
+   ],
+   "group": "Meeting room",
+   "seats": 4,
+   "color": "#8964bf"
+  },
+  {
+   "name": "Workstation zone 1",
+   "label": [
+    7.935,
+    15.652
+   ],
+   "group": "Workstations",
+   "seats": 114,
+   "color": "#287f91"
+  }
+ ]
+}

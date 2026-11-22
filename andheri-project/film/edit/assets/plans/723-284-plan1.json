@@ -1,0 +1,148 @@
+{
+ "id": "723-284-plan1",
+ "bounds": [
+  0,
+  0,
+  48.139,
+  30.158
+ ],
+ "desks": 168,
+ "totals": {
+  "work_seats": 168,
+  "counted_workstations": 168,
+  "marked_work_seats": 168,
+  "all_seats": null
+ },
+ "zones": [
+  {
+   "name": "Phone booth 03",
+   "label": [
+    31.724,
+    13.858
+   ],
+   "group": "Phone booth",
+   "seats": null,
+   "color": "#94735c"
+  },
+  {
+   "name": "Phone booth 04",
+   "label": [
+    31.724,
+    12.681
+   ],
+   "group": "Phone booth",
+   "seats": null,
+   "color": "#94735c"
+  },
+  {
+   "name": "6 Seater Meeting Room-01",
+   "label": [
+    13.974,
+    22.386
+   ],
+   "group": "Meeting room",
+   "seats": 6,
+   "color": "#8964bf"
+  },
+  {
+   "name": "4 Seater Meeting Room-03",
+   "label": [
+    13.974,
+    19.005
+   ],
+   "group": "Meeting room",
+   "seats": 4,
+   "color": "#8964bf"
+  },
+  {
+   "name": "4 Seater Meeting Room-04",
+   "label": [
+    27.789,
+    12.494
+   ],
+   "group": "Meeting room",
+   "seats": 4,
+   "color": "#8964bf"
+  },
+  {
+   "name": "3 Seater Meeting Room-01",
+   "label": [
+    24.706,
+    12.288
+   ],
+   "group": "Meeting room",
+   "seats": 3,
+   "color": "#8964bf"
+  },
+  {
+   "name": "Workstation zone 1",
+   "label": [
+    10.142,
+    13.762
+   ],
+   "group": "Workstations",
+   "seats": 118,
+   "color": "#287f91"
+  },
+  {
+   "name": "22 Seater Collapsible Conference Room",
+   "label": [
+    14.785,
+    5.155
+   ],
+   "group": "Training & conference",
+   "seats": 22,
+   "color": "#3b7dd8"
+  },
+  {
+   "name": "4 Seater Meeting Room-01",
+   "label": [
+    18.225,
+    7.51
+   ],
+   "group": "Meeting room",
+   "seats": 4,
+   "color": "#8964bf"
+  },
+  {
+   "name": "4 Seater Meeting Room-02",
+   "label": [
+    15.15,
+    7.51
+   ],
+   "group": "Meeting room",
+   "seats": 4,
+   "color": "#8964bf"
+  },
+  {
+   "name": "Phone booth 02",
+   "label": [
+    13.169,
+    7.28
+   ],
+   "group": "Phone booth",
+   "seats": null,
+   "color": "#94735c"
+  },
+  {
+   "name": "Phone booth 01",
+   "label": [
+    13.202,
+    8.595
+   ],
+   "group": "Phone booth",
+   "seats": null,
+   "color": "#94735c"
+  },
+  {
+   "name": "Workstation zone 2",
+   "label": [
+    41.263,
+    9.002
+   ],
+   "group": "Workstations",
+   "seats": 50,
+   "color": "#287f91"
+  }
+ ]
+}

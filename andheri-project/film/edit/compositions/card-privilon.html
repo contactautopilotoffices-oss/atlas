@@ -1,0 +1,15 @@
+<template><style>@font-face{font-family:Urbanist;src:url('assets/fonts/Urbanist.ttf')}
+@font-face{font-family:'Instrument Serif';src:url('assets/fonts/InstrumentSerif-Regular.ttf')}
+#root{width:1920px;height:1080px;position:relative;overflow:hidden;font-family:Urbanist,sans-serif;color:#fff}
+.shade{position:absolute;left:0;right:0;bottom:0;height:520px;background:linear-gradient(0deg,#000000b0,#00000000)}
+.eb{position:absolute;left:120px;bottom:250px;font-size:24px;letter-spacing:.22em;text-transform:uppercase;color:#ffc200;font-weight:600}
+.nm{position:absolute;left:116px;bottom:140px;font-family:'Instrument Serif',serif;font-style:italic;font-size:120px;line-height:1}
+.ln{position:absolute;left:120px;bottom:96px;font-size:30px;color:#dfe4ea;letter-spacing:.02em}
+.bar{position:absolute;left:120px;bottom:232px;width:64px;height:2px;background:#ffc200;transform-origin:left}</style>
+<div id="root" data-composition-id="card-privilon" data-width="1920" data-height="1080" data-duration="6">
+<div id="card-privilon-stage" class="clip" data-start="0" data-duration="6" data-track-index="1" data-layout-allow-overflow data-layout-allow-overlap><div class="shade" id="sh"></div><div class="bar" id="bar"></div><div class="eb" id="eb">01 · The commute</div><div class="nm" id="nm">Privilon</div><div class="ln" id="ln">Marol · Grade A · G+15 · beside Marol Naka metro</div></div></div>
+<script>(function(){const tl=gsap.timeline({paused:true});tl.from('#sh',{opacity:0,duration:0.8},0).from('#bar',{scaleX:0,duration:0.7,ease:'power3.out'},0.3)
+.from('#eb',{opacity:0,x:-16,duration:0.7,ease:'power3.out'},0.45).from('#nm',{opacity:0,y:30,filter:'blur(8px)',duration:1.0,ease:'power3.out'},0.55)
+.from('#ln',{opacity:0,y:14,duration:0.8,ease:'power2.out'},0.9)
+.to('#sh,#bar,#eb,#nm,#ln',{opacity:0,duration:0.6,ease:'power1.in'},5.2);
+window.__timelines['card-privilon']=tl;})();</script></template>

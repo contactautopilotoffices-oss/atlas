@@ -1407,7 +1407,8 @@ SHOT_CAMS = {"prv_street": (1405, -380, 30), "prv_west": (1175, -300, 70), "prv_
 _rk = A[A.index("--render") + 1:] if "--render" in A else []
 check_logic.run({"S": S, "A": A, "OID": OID, "OUT": OUT, "L": L, "built": LOGIC.get("built", []), "ROAD": LOGIC["road"],
                  "SLAB": SLAB, "METRO_CLEAR": METRO_CLEAR, "on_road": LOGIC.get("on_road", []),
-                 "cameras": [SHOT_CAMS[k] for k in _rk if k in SHOT_CAMS]})
+                 "cameras": [SHOT_CAMS[k] for k in _rk if k in SHOT_CAMS] +
+                            ([tuple(k["pos"]) for k in json.load(open(A[A.index("--anim") + 1]))[A[A.index("--anim") + 2]]["keys"]] if "--anim" in A else [])})
 if "--hero-blend" in A: swap_hero(A[A.index("--hero-blend") + 1])
 if "--far-field" in A:   # realism/farfield.py: the rest of the city out to the horizon, beyond the slab
     if bpy.data.objects.get("plinth"): bpy.data.objects["plinth"].hide_render = True   # the city continues; no dollhouse edge

@@ -1,0 +1,78 @@
+{
+ "id": "723-284-plan2",
+ "bounds": [
+  0,
+  0,
+  45.474,
+  29.703
+ ],
+ "desks": 116,
+ "totals": {
+  "work_seats": 116,
+  "counted_workstations": 116,
+  "marked_work_seats": 122,
+  "all_seats": null
+ },
+ "zones": [
+  {
+   "name": "4 Seater Meeting Room-05",
+   "label": [
+    19.246,
+    12.242
+   ],
+   "group": "Meeting room",
+   "seats": 4,
+   "color": "#8964bf"
+  },
+  {
+   "name": "4 Seater Meeting Room-06",
+   "label": [
+    22.87,
+    12.242
+   ],
+   "group": "Meeting room",
+   "seats": 4,
+   "color": "#8964bf"
+  },
+  {
+   "name": "6 Seater Meeting Room-02",
+   "label": [
+    16.151,
+    2.594
+   ],
+   "group": "Meeting room",
+   "seats": 6,
+   "color": "#8964bf"
+  },
+  {
+   "name": "6 Seater Meeting Room-02",
+   "label": [
+    16.794,
+    6.03
+   ],
+   "group": "Meeting room",
+   "seats": 6,
+   "color": "#8964bf"
+  },
+  {
+   "name": "Workstation zone 1",
+   "label": [
+    9.492,
+    6.774
+   ],
+   "group": "Workstations",
+   "seats": 88,
+   "color": "#287f91"
+  },
+  {
+   "name": "Workstation zone 2",
+   "label": [
+    26.966,
+    9.138
+   ],
+   "group": "Workstations",
+   "seats": 34,
+   "color": "#287f91"
+  }
+ ]
+}
