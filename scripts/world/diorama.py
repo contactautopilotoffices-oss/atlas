@@ -32,6 +32,7 @@ metres (origin at the slab's centre, x east, y north).
 the footpath at eye height, verticals kept straight) and station.
 """
 import sys, os, json, math, random
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "realism"))   # film-quality modules (realism/*.py)
 import numpy as np
 import bpy, bmesh
 from mathutils import Matrix
@@ -65,7 +66,9 @@ if "--opt-poly-ref" in A:   # the option's outline from scripts/world/refs/*.jso
     for _fn in (sorted(os.listdir(_RD)) if os.path.isdir(_RD) else []):
         _poly = json.load(open(os.path.join(_RD, _fn))).get(_key, {}).get("poly") or _poly
     _op = Polygon(_poly)
-    S["buildings"] = [b for b in S["buildings"] if b.get("opt") != OID and not (_op.contains(Polygon(b["p"]).centroid) or Polygon(b["p"]).intersection(_op).area > 0.4 * Polygon(b["p"]).area)]
+    for b in S["buildings"]:   # the old pin's footprint is a real neighbour (Privilon's pin sat on Fleet House): keep it, drop the tag
+        if b.get("opt") == OID: del b["opt"]
+    S["buildings"] = [b for b in S["buildings"] if not (_op.contains(Polygon(b["p"]).centroid) or Polygon(b["p"]).intersection(_op).area > min(100, 0.25 * Polygon(b["p"]).area))]
     S["buildings"].append({"p": _poly, "h": 67.5, "c": "commercial", "r": 0.5, "opt": OID})
 OPTB = next(b for b in S["buildings"] if b.get("opt") == OID)
 # --neighbour-hero ID=BLEND (repeatable): another shortlisted property standing in this district, shown with its
@@ -244,7 +247,13 @@ def _metro_clear():
                 q = l.interpolate(min(l.length, max(0, t0 + e))); zs.append(q.buffer(22))
     return unary_union(zs) if zs else Polygon()
 METRO_CLEAR = _metro_clear()
-DROPPED, TRIMMED = [], []   # footprints removed for the metro, and kept but trimmed to its clearance
+DROPPED, TRIMMED = [], []
+# --detail-around "x,y,r;x,y,r" (scene metres): buildings whose centroid is inside are handed to realism/facades.py
+# for modelled, film-quality facades instead of painted walls. DETAILED collects them (local coordinates).
+DETAIL_ZONE = unary_union([Point(*(float(v) for v in c.split(",")[:2])).buffer(float(c.split(",")[2]))
+                           for c in A[A.index("--detail-around") + 1].split(";")]) if "--detail-around" in A else Polygon()
+DETAILED = []
+LOGIC = {}   # what the build kept, for realism/../check_logic.py   # footprints removed for the metro, and kept but trimmed to its clearance
 # where the eye must not stand: inside the Line 1 station or its stairs, or under a Line 3 entrance canopy
 KEEP_OUT = unary_union([METRO_CLEAR] + [Point(s["x"], s["y"]).buffer(30) for s in S["stations"] if s["line"] == "L3"])
 def blocks_metro(p):
@@ -426,9 +435,12 @@ def build():
     clipw = SLAB.buffer(2)
     road_all = unary_union([ROAD["major"], ROAD["minor"]]).intersection(SLAB)
     bpolys = []
+    ON_ROAD = []
     for b in S["buildings"]:
         p = Polygon(b["p"])
         if not p.is_valid: p = p.buffer(0)
+        if not b.get("opt") and not b.get("added") and p.intersection(ROAD["major"]).area > 0.6 * p.area:
+            ON_ROAD.append([round(v) for v in p.centroid.coords[0]]); continue   # a map footprint drawn on the carriageway: not a building
         if b.get("opt") != OID and blocks_metro(p):
             # the map draws the station and viaduct as a building; we build the real thing there. Real buildings that only
             # touch the clearance are trimmed back to its edge, not deleted (deleting them left empty lots by the stations)
@@ -439,7 +451,8 @@ def build():
             TRIMMED.append(round(p.area))
         if SLAB.contains(p.centroid): bpolys.append((b, p.intersection(SLAB)))
     built = unary_union([p for _, p in bpolys]) if bpolys else Polygon()
-    print("metro clearance: dropped", len(DROPPED), "footprints", sum(DROPPED), "m2; trimmed and kept", len(TRIMMED))
+    print("metro clearance: dropped", len(DROPPED), "footprints", sum(DROPPED), "m2; trimmed and kept", len(TRIMMED), "| dropped on the carriageway:", len(ON_ROAD))
+    LOGIC.update(on_road=ON_ROAD, built=[(b, p) for b, p in bpolys], road=ROAD)
 
     # --- plinth: the cut edge and the ground ---
     pl = MB([]); ring = list(SL.exterior.coords)
@@ -508,6 +521,11 @@ def build():
             gband = lmk[id(b)][3] if id(b) in lmk else None
             shop = (a > 80 and hgt > 7 and road_near.intersects(q) and style != "chawl") or gband == "signs"
             z_shop = min(4.5, hgt - 1.0) if shop else 0.0
+            if not DETAIL_ZONE.is_empty and DETAIL_ZONE.contains(q.centroid):
+                DETAILED.append({"ring": ring, "h": round(hgt, 2), "style": style, "shop": bool(shop), "z_shop": z_shop, "area": round(a, 1),
+                                 "seed": b.get("r", 0.5), "name": lmk[id(b)][0] if id(b) in lmk else None,
+                                 "near_road": bool(road_near.intersects(q))})
+                continue
             if shop: walls(ctx, ring, 0, z_shop, "wall_signs" if gband == "signs" else "wall_shop", *MOD["signs" if gband == "signs" else "shop"])
             walls(ctx, ring, z_shop, hgt, "wall_" + style, mw, mh, v0=z_shop)
             # roof and parapet
@@ -527,6 +545,9 @@ def build():
                 m = "roof_tarp" if r_.random() < 0.35 else "roof_tin_rust" if r_.random() < 0.4 else "roof_tin"
                 flat(ctx, lpoly(q), hgt, m, 3)
     ctx.build("context", MATS); props.build("rooftops", MATS)
+    if DETAILED:
+        import facades; facades.build(DETAILED, {"MATS": MATS, "mat": mat, "L": L, "OX": OX, "OY": OY, "A": A})
+        print("detailed facades:", len(DETAILED), "buildings")
 
     # --- the option itself ---
     ob = MB([]); q = Polygon(OPTB["p"]).simplify(0.2); ring = [L(x, y) for x, y in q.exterior.coords]
@@ -1314,6 +1335,10 @@ def aerial(data, info, name="aerial", az_off=-0.6, dist_k=1.0, el_k=0.42, lens=3
             sc.cycles.device = "GPU"
         except Exception as e: print("GPU unavailable", e)
         if "--hdri" in A: hdri_light(sc)
+        if "--sky-mode" in A:   # realism/sky.py: what the camera sees of the sky (no foreign horizon from the HDRI photo)
+            import sky; sky.setup(sc, {"A": A, "az": float(A[A.index("--sun-az") + 1]) if "--sun-az" in A else 246.0,
+                                      "el": float(A[A.index("--sun-el") + 1]) if "--sun-el" in A else 5.5,
+                                      "hdri": os.path.abspath(A[A.index("--hdri") + 1]) if "--hdri" in A else None})
     E = info["entrance"]; F = info["canopy_ang"]; nx, ny = math.sin(F), -math.cos(F); H = info["H"]
     bc = Polygon(data["building"]["foot"]).centroid
     if isinstance(az_off, tuple):   # explicit shot in the scene frame: (pos, look, lens)
@@ -1331,7 +1356,17 @@ def aerial(data, info, name="aerial", az_off=-0.6, dist_k=1.0, el_k=0.42, lens=3
     sc.render.filepath = os.path.join(OUT, f"{OID}-{name}.png"); bpy.ops.render.render(write_still=True); print("rendered", name)
 
 info = build()
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); import check_logic
+SHOT_CAMS = {"prv_street": (1405, -380, 30), "prv_west": (1175, -300, 70), "prv_aerial": (1262, -430, 105), "road": (1440, -378, 24)}
+_rk = A[A.index("--render") + 1:] if "--render" in A else []
+check_logic.run({"S": S, "A": A, "OID": OID, "OUT": OUT, "L": L, "built": LOGIC.get("built", []), "ROAD": LOGIC["road"],
+                 "SLAB": SLAB, "METRO_CLEAR": METRO_CLEAR, "on_road": LOGIC.get("on_road", []),
+                 "cameras": [SHOT_CAMS[k] for k in _rk if k in SHOT_CAMS]})
 if "--hero-blend" in A: swap_hero(A[A.index("--hero-blend") + 1])
+if "--far-field" in A:   # realism/farfield.py: the rest of the city out to the horizon, beyond the slab
+    import farfield; farfield.build(S, {"OX": OX, "OY": OY, "SLAB": SLAB, "L": L, "MATS": MATS, "mat": mat, "A": A, "radius": float(A[A.index("--far-field") + 1])})
+if "--pbr" in A:         # realism/pbr.py: scanned CC0 materials on the shared named materials (asphalt, pavers, roof, concrete...)
+    import pbr; pbr.apply(MATS, os.path.abspath(A[A.index("--pbr") + 1]))
 for nid, path in NEIGH.items():
     nb = next((b for b in S["buildings"] if b.get("opt") == nid), None)
     if not nb: print("neighbour", nid, "not in this scene"); continue

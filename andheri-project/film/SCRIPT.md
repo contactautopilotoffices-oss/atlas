@@ -33,7 +33,7 @@ Narrator: an Indian English voice, warm and assured, conversational, not a radio
 | 1:10–1:15 | 2D map: the walking line to the metro. | "Western Express Highway metro is twelve minutes on foot." | **920 m · 12 min**.¹ |
 | **723 Avenue** | | | |
 | 1:15–1:24 | A rise up 723's dark fins to the 13th and 14th floors, which glow; then the terrace. | "723 Avenue gives Flipkart the top of a new building: the thirteenth and fourteenth floors, with the open terrace above." | **723 AVENUE** · *Marol*; **13th + 14th floors · ready now** |
-| 1:24–1:34 | The CAD for the 13th floor in 2D; then the terrace as a 2D plan zone marked "proposed breakout". | "Inside, a bare-shell floor ready to fit out Flipkart's way. And the terrace is the place to step out between focused hours. A breakout space, subject to the building's approval." | **Proposed breakout, subject to approval** |
+| 1:24–1:34 | The CAD for the 13th floor in 2D; then the terrace as a 2D plan zone marked "Flipkart breakout". | "Inside, a bare-shell floor ready to fit out Flipkart's way. And the terrace comes with it: Flipkart's own place to step out between focused hours." | **Terrace · Flipkart breakout** |
 | 1:34–1:38 | The map: the walk to Marol Naka. | "Marol Naka metro is about ten minutes away." | **810 m · 11 min**.¹ |
 | **Close** | | | |
 | 1:38–1:48 | Pull back at dusk: all three pins, then the lit buildings. | "Three buildings. Three ways for Flipkart's teams to work together." | Three pins glow; the music lifts. |
@@ -76,6 +76,6 @@ The founder picks one. Pacing has breaths around every figure.
 ## Open questions
 
 1. The metro distances (note ¹).
-2. Is the 723 terrace available to the tenant at all? The script says "subject to the building's approval".
-3. Narrator: audition the three samples, or go straight with Lisa?
+2. ~~723 terrace~~: confirmed available to Flipkart (founder, 23 Nov).
+3. Narrator: audition the three samples (founder: yes).
 4. The first-draft video from ChatGPT: send the file and I will mark what to keep.
