@@ -143,6 +143,7 @@ async function start(A, W, intro=null) {
         fin_723: [0x3d4752, 0.45, 0.35], pier_723: [0x32373d, 0.5, 0.3], band_723: [0xc8cbcd, 0.55, 0.15], frame_723: [0xd9dcde, 0.35, 0.7], acp_grey: [0xb8bcbf, 0.4, 0.55], acp_red: [0xad322c, 0.42, 0.35], acp_white: [0xe7e7e3, 0.45, 0.25], fin_white: [0xecebe7, 0.5, 0.1],   /* House of Wadhwa 723 Avenue */
         pier_blue: [0x3f78a6, 0.6, 0.1], roof_blue: [0x2f6fb0, 0.5, 0.3], acp_station: [0xd7dadb, 0.45, 0.4], ad_red: [0xb8322a, 0.5], ad_yellow: [0xe2b42c, 0.5], ad_blue: [0x1f4f9a, 0.5], ad_white: [0xefefea, 0.5],   /* Line 1 stations, from Street View of Marol Naka */
         deck_wood: [0x8a6a4a, 0.7], pave_dark: [0x2c2e31, 0.6], pave_light: [0xd9d6cf, 0.6], planter: [0x5a4a3c, 0.8], soil_green: [0x3f5f2a, 0.95], fin_timber: [0xb36a2c, 0.6], canopy_leaf: [0x3c6a2c, 0.9], rail_glass: [0x9fb8c2, 0.05, 0.2],   /* 723 roof garden, from the brochure */
+        gate_pillar: [0xd8d4ca, 0.6], boom: [0xd23b2c, 0.4], cabin: [0xe9e6de, 0.6],   /* Corporate Avenue campus */
         lobby_floor: [0xd9d3c7, 0.18], lobby_stone: [0x26272a, 0.25], lobby_ceiling: [0xefede8, 0.8], door_metal: [0x2a2c2e, 0.35, 0.8], granite: [0x5d5b58, 0.45], planter: [0x5a4a3c, 0.8],   /* 723 lobby, from the brochure */
         auto_body: [0x2d7d3a, 0.4, 0.2], auto_top: [0xf0c22e, 0.5], bus_body: [0xb8322a, 0.4, 0.3], train_body: [0xeef1f4, 0.25, 0.45], train_win: [0x1e2832, 0.05, 0.6], train_stripe: [0x1c5fa8, 0.35],
       }[name] || [0x9a9a9a, 0.8];

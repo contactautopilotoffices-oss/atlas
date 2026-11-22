@@ -842,7 +842,7 @@ def page_data(info):
     # keep the view from the street to the entrance open
     E, W0 = info["entrance"], info["street_cam"]
     sight = LineString([W0, E]).buffer(9).union(Point(*W0).buffer(14)).union(Point(*info["walk0"]).buffer(10))
-    for x, y, k in S["trees"]:
+    for x, y, k in list(S["trees"]) + [(x_, y_, 1.0) for x_, y_ in EXTRA_TREES]:
         if not inside(x, y, 6): continue
         lx, ly = L(x, y)
         if sight.contains(Point(lx, ly)): continue
@@ -1008,7 +1008,7 @@ def bake_ao(outdir, tiles=2, size=4096, dist=14.0, samples=96):
     targets = []
     for nm in ("context", "rooftops", "ground"):
         targets += split(bpy.data.objects.get(nm), tiles if nm == "context" else 1 if nm == "rooftops" else 2)
-    for nm in ("metro", "stations", "entries_l3", "opt_" + OID, "roof_garden_723", "lobby_723", "plinth", "nb_roof_723", *("nb_" + n for n in NEIGH)):
+    for nm in ("metro", "stations", "entries_l3", "opt_" + OID, "roof_garden_723", "lobby_723", "plinth", "nb_roof_723", "campus_corporate", *("nb_" + n for n in NEIGH)):
         if bpy.data.objects.get(nm): targets.append(bpy.data.objects[nm])
     sc.render.engine = "CYCLES"; sc.cycles.samples = samples; sc.cycles.use_denoising = True
     try:
@@ -1105,6 +1105,80 @@ def lobby_723(info, GH=5.6, W_=16.0, D_=12.0):
     lb.build("lobby_723", MATS); print("lobby built at", tuple(round(v, 1) for v in E))
     t = text_mesh("723 AVENUE", 0.55, 0.05, "sign_723_lobby"); t.data.materials.append(MATS["sign_text"])
     t.rotation_euler = (math.pi / 2, 0, F); t.location = (*P(-4.5, 4.62), GH + 0.18)
+
+EXTRA_TREES = []   # (world x, y): trees added by --campus, placed by the page with the district's own tree models
+def campus(gate_off=None):
+    """--campus: Corporate Avenue reads as a gated campus (satellite and the founder): a compound wall, two gates
+    on the main road (Guru Hargovindji Road) on either side of the long block, paved driveways and parking around
+    the buildings, and a planted edge with trees. Gate details and planting are proposals; the layout follows
+    the satellite view, which shows a driveway on each side of the block running in from the main road."""
+    from shapely.ops import nearest_points
+    mat("gate_pillar", "#d8d4ca", 0.6); mat("boom", "#d23b2c", 0.4); mat("cabin", "#e9e6de", 0.6)
+    q = Polygon(OPTB["p"]); c = q.centroid
+    roads = unary_union([Polygon(r[0], r[1:]).buffer(0) for r in S["roads"]["major"] if Polygon(r[0]).distance(q) < 250])
+    MAIN = Point(*(float(v) for v in A[A.index("--campus-road") + 1].split(","))) if "--campus-road" in A else nearest_points(c, roads)[1]
+    rp = nearest_points(MAIN, roads)[1] if roads.distance(MAIN) < 40 else MAIN   # a point on the main road (Guru Hargovindji Road)
+    n = np.array([rp.x - c.x, rp.y - c.y]); n /= np.linalg.norm(n); t = np.array([-n[1], n[0]])
+    others = unary_union([Polygon(b["p"]).buffer(1.0) for b in S["buildings"] if b is not OPTB and Polygon(b["p"]).distance(q) < 40])
+    # the campus: every footprint inside --campus-box (x0,y0,x1,y1, scene metres), from the main road to the option's block
+    bx_ = [float(v) for v in A[A.index("--campus-box") + 1].split(",")] if "--campus-box" in A else None
+    members = [Polygon(b["p"]) for b in S["buildings"] if bx_ and bx_[0] <= Polygon(b["p"]).centroid.x <= bx_[2] and bx_[1] <= Polygon(b["p"]).centroid.y <= bx_[3]] + [q]
+    others = unary_union([Polygon(b["p"]).buffer(1.0) for b in S["buildings"] if b is not OPTB and Polygon(b["p"]).distance(q) < 160 and not any(Polygon(b["p"]).equals(m_) for m_ in members)])
+    hull = unary_union(members).convex_hull.buffer(8, join_style="mitre")
+    # reach the main road: extend the hull towards it, then cut at the road edge
+    hull = unary_union([hull, hull.buffer(0).union(Polygon([*hull.exterior.coords])).convex_hull, LineString([hull.centroid, rp]).buffer(28)]).convex_hull
+    parcel = hull.difference(roads.buffer(1.5)).difference(others)
+    if parcel.geom_type == "MultiPolygon": parcel = max(parcel.geoms, key=lambda g: g.area if g.intersects(q) else 0)
+    cp = MB([])
+    inner = parcel.buffer(-3.0)
+    if inner.geom_type == "MultiPolygon": inner = max(inner.geoms, key=lambda g: g.area)
+    flat(cp, lpoly(parcel.difference(q.buffer(0.5))), 0.07, "grass", 3)                 # planted edge
+    if not inner.is_empty: flat(cp, lpoly(inner.difference(q.buffer(0.5))), 0.09, "asphalt", 6)   # driveways and parking
+    # parking bays along the inner edge
+    if not inner.is_empty and inner.geom_type == "Polygon":
+        ring = LineString(inner.exterior.coords)
+        for s_ in np.arange(0, ring.length, 2.6):
+            p = ring.interpolate(s_); p2 = ring.interpolate(min(ring.length, s_ + 0.5)); a_ = math.atan2(p2.y - p.y, p2.x - p.x)
+            if q.buffer(6).contains(p): continue
+            boxm(cp, *L(p.x - math.sin(a_) * 2.5, p.y + math.cos(a_) * 2.5), 0.1, 0.12, 0.12, 5.0, a_, "marking")
+    # two gates where the driveways meet the main road: either side of the block
+    w = max(e for e in (math.dist(*list(q.minimum_rotated_rectangle.exterior.coords)[i:i + 2]) for i in range(2)))
+    half = abs(np.dot(np.array(q.exterior.coords) - np.array(c.coords[0]), t)).max()
+    gates = []
+    GT = [tuple(float(v) for v in g.split(",")) for g in A[A.index("--campus-gates") + 1].split(";")] if "--campus-gates" in A else \
+         [(c.x + t[0] * sg * (half + 7) + n[0] * 200, c.y + t[1] * sg * (half + 7) + n[1] * 200) for sg in (-1, 1)]
+    for gx_, gy_ in GT:
+        gates.append(nearest_points(parcel.exterior, Point(gx_, gy_))[0])
+    # the compound wall, broken at the gates
+    ext = LineString(parcel.exterior.coords); gap = unary_union([gp.buffer(4.5) for gp in gates])
+    wall = ext.difference(gap)
+    for seg in (wall.geoms if hasattr(wall, "geoms") else [wall]):
+        cs = list(seg.coords)
+        for a, b in zip(cs[:-1], cs[1:]):
+            d = math.dist(a, b)
+            if d < 0.2: continue
+            boxm(cp, *L((a[0] + b[0]) / 2, (a[1] + b[1]) / 2), 0, 2.2, d, 0.25, math.atan2(b[1] - a[1], b[0] - a[0]), "gate_pillar")
+    for i, gp in enumerate(gates):
+        tt = np.array(nearest_points(ext, Point(gp.x + 0.01, gp.y))[0].coords[0]) - np.array(gp.coords[0])
+        a_ = math.atan2(*(lambda v: (v[1], v[0]))(t))    # gate line along the road
+        for e in (-1, 1):
+            boxm(cp, *L(gp.x + t[0] * e * 4.5, gp.y + t[1] * e * 4.5), 0, 3.4, 0.9, 0.9, a_, "gate_pillar")
+        boxm(cp, *L(gp.x + t[0] * -2.0, gp.y + t[1] * -2.0), 1.0, 1.12, 6.0, 0.12, a_, "boom")
+        cx_, cy_ = gp.x - n[0] * 4 + t[0] * 7.5, gp.y - n[1] * 4 + t[1] * 7.5
+        boxm(cp, *L(cx_, cy_), 0, 2.7, 2.6, 2.6, a_, "cabin"); boxm(cp, *L(cx_, cy_), 2.7, 2.95, 3.4, 3.4, a_, "canopy")
+        if i == 0:
+            boxm(cp, *L(gp.x, gp.y), 3.4, 4.2, 10.0, 0.9, a_, "canopy")
+            tm = text_mesh("CORPORATE AVENUE", 0.5, 0.04, "sign_corporate_gate"); tm.data.materials.append(MATS["sign_text"])
+            tm.rotation_euler = (math.pi / 2, 0, a_ + (math.pi if np.dot(n, [math.sin(a_), -math.cos(a_)]) < 0 else 0)); tm.location = (*L(gp.x + n[0] * 0.5, gp.y + n[1] * 0.5), 3.55)
+    # trees along the planted edge
+    pb = parcel.buffer(-1.6)
+    if pb.geom_type == "MultiPolygon": pb = max(pb.geoms, key=lambda g: g.area)
+    for s_ in np.arange(3, ext.length, 9):
+        p = pb.exterior.interpolate(s_) if not pb.is_empty else None
+        if p is None or gap.buffer(3).contains(p) or q.buffer(3).contains(p): continue
+        EXTRA_TREES.append((p.x, p.y))
+    campus.members = members
+    cp.build("campus_corporate", MATS); print("campus: parcel", round(parcel.area), "m2, gates at", [tuple(round(v) for v in L(g.x, g.y)) for g in gates])
 
 def roof_garden(H, foot=None, name="roof_garden_723"):
     """--roof-garden: the developer brochure's rooftop for 723 Avenue (House of Wadhwa): a timber deck,
@@ -1207,6 +1281,9 @@ for nid, path in NEIGH.items():
     print("neighbour", nid, "placed", LANDMARKS[nid])
 if "--roof-garden" in A: roof_garden(info["H"])
 if "--lobby" in A: lobby_723(info)
+if "--campus" in A:
+    for nm_ in ("trunk", "canopy_leaf"): MATS.get(nm_) or mat(nm_, "#4b3a2c" if nm_ == "trunk" else "#3c6a2c", 0.9)
+    campus()
 if "--bake-ao" in A: bake_ao(A[A.index("--bake-ao") + 1])
 data = page_data(info)
 json.dump(data, open(os.path.join(OUT, f"{OID}.json"), "w"), separators=(",", ":"))
@@ -1222,6 +1299,9 @@ if "--render" in A:
         elif k == "lobby":   # from the forecourt, eye height, looking into the lobby
             E = info["entrance"]; nx, ny, tx, ty, F = lobby_723.out
             aerial(data, info, "lobby", az_off=((E[0] + OX + nx * 17 + tx * 6, E[1] + OY + ny * 17 + ty * 6, 1.7), (E[0] + OX - nx * 6, E[1] + OY - ny * 6, 2.6), 22))
+        elif k == "campus":   # from over the main road, looking down at the gates and the compound
+            c_ = Polygon(OPTB["p"]).centroid
+            aerial(data, info, "campus", az_off=((c_.x + 70, c_.y + 210, 120), (c_.x - 5, c_.y + 40, 0), 32))
         elif k == "roof": aerial(data, info, "roof", az_off=((1831 + 95, -151 - 120, 165), (1831, -151, 58), 35))
         elif k == "overview": aerial(data, info, "overview", az_off=((1690, -1000, 390), (1765, -265, 12), 30))
         else: render(k, data, info)

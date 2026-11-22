@@ -41,6 +41,7 @@
   - **723 street lobby** from the developer's brochure: a glazed double-height entrance under a dark canopy with a lit soffit and the name, a stone reception desk, a timber-fin feature wall with lift doors, and a granite forecourt with steps and a ramp. In Feb 2026 Street View the ground floor is still behind hoarding, so this is the developer's design, not the as-built lobby; the interior finishes are a proposal.
   - **Privilon moved to its real plot.** The map pin had put it on Fleet House's footprint. Street View shows a concrete tower under construction behind Fleet House, north-west of Marol Naka station, and Privilon now stands there (`--opt-at 1337,-234`). Fleet House is an ordinary 7-storey neighbour again. The earlier Privilon facade study was shaped for the wrong footprint, so Privilon is now generated from the deck's floors; its facade is generic until the brochure facade is refitted.
   - From Privilon, 723 Avenue now appears as itself: the photo-matched tower with its rooftop, on its own footprint, with a yellow '723 Avenue' pin (`--neighbour-hero`). It was a generic block before.
+  - **Corporate Avenue as a gated campus.** The founder confirmed that Flipkart's floors are in Atul Corporate Avenue (the south block) and that both gates are on Guru Hargovindji Road. The district now has the campus from the main road to Atul: a compound wall, two gates with pillars, boom barriers, security cabins and a CORPORATE AVENUE name beam, paved driveways and parking, and a tree line. The other campus blocks are re-skinned as office glass. There is no Street View inside the campus, so gate details and facades are estimates from the satellite layout. The earlier pale-frame facade study stays on Atul Corporate Avenue.
   - The preview link takes several properties: `?preview=723-avenue,privilon`.
   - 723 Avenue now has the rooftop garden from the developer's brochure: a timber deck, a curving planted band with trees, checkerboard paving, a glazed pavilion with timber fins and a glass railing. The layout is read from the brochure; sizes are estimates. The brochure image is kept with the 723 photos.
 - **Left undone:**
@@ -51,6 +52,7 @@
   - Nothing is published to the live explorer.
   - The NotebookLM push was not attempted: `add_source` is known to be broken.
 - **Open questions for the founder:**
+  - Corporate Avenue: one campus block reads 83 m tall from the satellite data. Is there a tower that tall on the campus, or should it be lower?
   - Can the developer confirm Privilon's plot and storey count (the brochure says 14)?
   - Is this direction worth more time, given that a modelled city will never match Google's photographed New York?
   - Privilon is under construction and absent from all map data. Can someone confirm its exact plot beside Marol Naka station?

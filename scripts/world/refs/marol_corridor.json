@@ -206,6 +206,46 @@
    "h": 6,
    "h_basis": "sv: sheds behind a wall",
    "seen": "Street View Feb 2026, 19.106848,72.884369 heading 230"
+  },
+  {
+   "name": "Corporate Avenue campus block 1",
+   "x": -848,
+   "y": -26,
+   "style": "cw_grey",
+   "h_basis": "dsm",
+   "seen": "satellite layout only (no Street View inside the campus); facade is an estimate so the campus reads as one office development"
+  },
+  {
+   "name": "Corporate Avenue campus block 2",
+   "x": -837,
+   "y": 26,
+   "style": "cw_grey",
+   "h_basis": "dsm",
+   "seen": "satellite layout only (no Street View inside the campus); facade is an estimate so the campus reads as one office development"
+  },
+  {
+   "name": "Corporate Avenue campus block 3",
+   "x": -843,
+   "y": 57,
+   "style": "cw_grey",
+   "h_basis": "dsm",
+   "seen": "satellite layout only (no Street View inside the campus); facade is an estimate so the campus reads as one office development"
+  },
+  {
+   "name": "Corporate Avenue campus block 4",
+   "x": -796,
+   "y": 18,
+   "style": "cw_grey",
+   "h_basis": "dsm",
+   "seen": "satellite layout only (no Street View inside the campus); facade is an estimate so the campus reads as one office development"
+  },
+  {
+   "name": "Corporate Avenue campus block 5",
+   "x": -821,
+   "y": -53,
+   "style": "cw_grey",
+   "h_basis": "dsm",
+   "seen": "satellite layout only (no Street View inside the campus); facade is an estimate so the campus reads as one office development"
   }
  ],
  "stations": {
