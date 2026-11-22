@@ -55,6 +55,9 @@ if "--opt-at" in A:   # --opt-at X,Y: the option's real footprint, when the map 
         if b.get("opt") == OID: del b["opt"]
     min(S["buildings"], key=lambda b: Polygon(b["p"]).centroid.distance(Point(ox_, oy_)))["opt"] = OID
 OPTB = next(b for b in S["buildings"] if b.get("opt") == OID)
+# --neighbour-hero ID=BLEND (repeatable): another shortlisted property standing in this district, shown with its
+# own facade study and a pin, not as a generic block (723 Avenue is visible from Privilon)
+NEIGH = dict(A[i + 1].split("=", 1) for i, a in enumerate(A) if a == "--neighbour-hero")
 rnd = random.Random(OID)
 
 # ------------------------------------------------------------ the slab ----
@@ -464,7 +467,7 @@ def build():
             if cand and min(cand)[0] < 15: lmk[min(cand)[1]] = (e["name"], e["style"], e.get("h"), e.get("ground"))
     road_near = unary_union([ROAD["major"], ROAD["minor"]]).buffer(6)
     for b, p in bpolys:
-        if b.get("opt") == OID: continue
+        if b.get("opt") == OID or b.get("opt") in NEIGH: continue
         for q in (p.geoms if hasattr(p, "geoms") else [p]):
             if q.geom_type != "Polygon" or q.area < 8: continue
             q = q.simplify(0.15); hgt = b["h"]; a = q.area; r_ = random.Random(b["r"])
@@ -861,7 +864,7 @@ def page_data(info):
     return {"id": OID, "name": BO["name"], "origin": [round(OX, 2), round(OY, 2)], "slab": [[round(a, 1), round(b, 1)] for a, b in SL.exterior.coords],
             "building": {"foot": [[round(a, 1), round(b, 1)] for a, b in (L(x, y) for x, y in OPTB["p"])], "h": round(info["H"], 1), "floors": info["floors"], "glassy": info["glassy"],
                          "entrance": [round(v, 1) for v in info["entrance"]], "facing": round(info["canopy_ang"], 3)},
-            "walk0": [round(v, 1) for v in info["walk0"]], "street_cam": [round(v, 1) for v in info["street_cam"]], "stations": info["stations"], "landmarks": [m for m in LANDMARKS.values() if m["name"] in ("Times Square", "Fleet House")], "routes": routes,
+            "walk0": [round(v, 1) for v in info["walk0"]], "street_cam": [round(v, 1) for v in info["street_cam"]], "stations": info["stations"], "landmarks": [m for m in LANDMARKS.values() if m.get("prop") or m["name"] in ("Times Square", "Fleet House")], "routes": routes,
             "trees": trees, "lamps": lamps, "traffic": traffic, "metro": metro, "blocks": blds}
 
 # ---------------------------------------------------------------- export ----
@@ -1005,7 +1008,7 @@ def bake_ao(outdir, tiles=2, size=4096, dist=14.0, samples=96):
     targets = []
     for nm in ("context", "rooftops", "ground"):
         targets += split(bpy.data.objects.get(nm), tiles if nm == "context" else 1 if nm == "rooftops" else 2)
-    for nm in ("metro", "stations", "entries_l3", "opt_" + OID, "roof_garden_723", "lobby_723", "plinth"):
+    for nm in ("metro", "stations", "entries_l3", "opt_" + OID, "roof_garden_723", "lobby_723", "plinth", "nb_roof_723", *("nb_" + n for n in NEIGH)):
         if bpy.data.objects.get(nm): targets.append(bpy.data.objects[nm])
     sc.render.engine = "CYCLES"; sc.cycles.samples = samples; sc.cycles.use_denoising = True
     try:
@@ -1103,14 +1106,14 @@ def lobby_723(info, GH=5.6, W_=16.0, D_=12.0):
     t = text_mesh("723 AVENUE", 0.55, 0.05, "sign_723_lobby"); t.data.materials.append(MATS["sign_text"])
     t.rotation_euler = (math.pi / 2, 0, F); t.location = (*P(-4.5, 4.62), GH + 0.18)
 
-def roof_garden(H):
+def roof_garden(H, foot=None, name="roof_garden_723"):
     """--roof-garden: the developer brochure's rooftop for 723 Avenue (House of Wadhwa): a timber deck,
     a curving planted band with trees, checkerboard paving, a glazed pavilion with timber fins and a
     glass railing inside the fin screen. Layout proportions are read from the brochure image; sizes are estimates."""
     mat("deck_wood", "#8a6a4a", 0.7); mat("pave_dark", "#2c2e31", 0.6); mat("pave_light", "#d9d6cf", 0.6)
     mat("planter", "#5a4a3c", 0.8); mat("soil_green", "#3f5f2a", 0.95); mat("fin_timber", "#b36a2c", 0.6)
     mat("rail_glass", "#9fb8c2", 0.05, 0.2, alpha=0.3); mat("canopy_leaf", "#3c6a2c", 0.9); mat("trunk", "#4b3a2c", 0.9)
-    q = Polygon(OPTB["p"]).simplify(0.2); rr = q.minimum_rotated_rectangle
+    q = Polygon(foot or OPTB["p"]).simplify(0.2); rr = q.minimum_rotated_rectangle
     cs = list(rr.exterior.coords)[:4]; e0 = np.subtract(cs[1], cs[0]); e1 = np.subtract(cs[2], cs[1])
     ax = e0 if np.linalg.norm(e0) >= np.linalg.norm(e1) else e1; ang = math.atan2(ax[1], ax[0])
     Lg, Sh = max(np.linalg.norm(e0), np.linalg.norm(e1)), min(np.linalg.norm(e0), np.linalg.norm(e1))
@@ -1148,7 +1151,7 @@ def roof_garden(H):
     edge = deck.exterior
     for t in np.linspace(0, 1, 26, endpoint=False):
         p = edge.interpolate(t, normalized=True); cyl(rg, *L(p.x, p.y), z, z + 0.9, 0.7, 0.7, 0, "canopy_leaf", 10)
-    rg.build("roof_garden_723", MATS); print("roof garden built", round(Lg, 1), "x", round(Sh, 1), "m at", round(z, 1))
+    rg.build(name, MATS); print("roof garden built", round(Lg, 1), "x", round(Sh, 1), "m at", round(z, 1))
 
 def aerial(data, info, name="aerial", az_off=-0.6, dist_k=1.0, el_k=0.42, lens=35):
     """A photographic drone still of the district: GPU Cycles, a hazy Mumbai sky, aerial
@@ -1190,6 +1193,18 @@ def aerial(data, info, name="aerial", az_off=-0.6, dist_k=1.0, el_k=0.42, lens=3
 
 info = build()
 if "--hero-blend" in A: swap_hero(A[A.index("--hero-blend") + 1])
+for nid, path in NEIGH.items():
+    nb = next((b for b in S["buildings"] if b.get("opt") == nid), None)
+    if not nb: print("neighbour", nid, "not in this scene"); continue
+    with bpy.data.libraries.load(path, link=False) as (src, dst): dst.objects = ["opt_" + nid]
+    o = dst.objects[0]; o.name = "nb_" + nid; bpy.context.scene.collection.objects.link(o)
+    ring = np.array([L(x, y) for x, y in nb["p"]]); bb = np.array([o.matrix_world @ __import__("mathutils").Vector(c) for c in o.bound_box])
+    o.location.x += ring[:, 0].mean() * 0 + (ring[:, 0].min() + ring[:, 0].max()) / 2 - (bb[:, 0].min() + bb[:, 0].max()) / 2
+    o.location.y += (ring[:, 1].min() + ring[:, 1].max()) / 2 - (bb[:, 1].min() + bb[:, 1].max()) / 2
+    if nid == "723-avenue": roof_garden(67.1, nb["p"], "nb_roof_723")
+    c_ = Polygon(nb["p"]).centroid; lx_, ly_ = L(c_.x, c_.y)
+    LANDMARKS[nid] = {"name": next((o_["name"] for o_ in BUNDLE["options"] if o_["id"] == nid), nid), "x": round(lx_, 1), "y": round(ly_, 1), "h": round(float(bb[:, 2].max()), 1), "prop": True}
+    print("neighbour", nid, "placed", LANDMARKS[nid])
 if "--roof-garden" in A: roof_garden(info["H"])
 if "--lobby" in A: lobby_723(info)
 if "--bake-ao" in A: bake_ao(A[A.index("--bake-ao") + 1])

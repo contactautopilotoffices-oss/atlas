@@ -483,7 +483,7 @@ async function start(A, W, intro=null) {
       const add = (cls, html, v, extra = {}) => { const el = document.createElement("div"); el.className = "lb " + cls; el.innerHTML = html; LAB.appendChild(el); LBL.push({ el, v, ...extra }); return el; };
       add("bld", `<b>${esc(D.name)}</b><i></i>`, areaMode && areaPin ? P3(areaPin[0],areaPin[1],(areaRoot?.userData.pinHeight||36)+12) : P3(c[0], c[1], b.h + 6), { bld: true });
       for (const s of D.stations) { const [col] = LINE[s.line] || ["#888"]; add("st", `<em style="background:${col}">${s.line}</em>${esc(s.name)}`, P3(s.x, s.y, s.line === "L3" ? 8 : 26)); }
-      for (const m of D.landmarks || []) add("lmk", `<b>${esc(m.name)}</b>`, P3(m.x, m.y, m.h + 4));   // named neighbours: Times Square, Fleet House…
+      for (const m of D.landmarks || []) add(m.prop ? "lmk prop" : "lmk", `<b>${esc(m.name)}</b>${m.prop ? "<i></i>" : ""}`, P3(m.x, m.y, m.h + 4));   // named neighbours: Times Square, Fleet House…
       distEl = add("dist", "", new THREE.Vector3(), { dist: true });
     }
     const w = innerWidth, h = innerHeight;
