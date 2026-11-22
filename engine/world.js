@@ -143,12 +143,14 @@ async function start(A, W, intro=null) {
         fin_723: [0x3d4752, 0.45, 0.35], pier_723: [0x32373d, 0.5, 0.3], band_723: [0xc8cbcd, 0.55, 0.15], frame_723: [0xd9dcde, 0.35, 0.7], acp_grey: [0xb8bcbf, 0.4, 0.55], acp_red: [0xad322c, 0.42, 0.35], acp_white: [0xe7e7e3, 0.45, 0.25], fin_white: [0xecebe7, 0.5, 0.1],   /* House of Wadhwa 723 Avenue */
         pier_blue: [0x3f78a6, 0.6, 0.1], roof_blue: [0x2f6fb0, 0.5, 0.3], acp_station: [0xd7dadb, 0.45, 0.4], ad_red: [0xb8322a, 0.5], ad_yellow: [0xe2b42c, 0.5], ad_blue: [0x1f4f9a, 0.5], ad_white: [0xefefea, 0.5],   /* Line 1 stations, from Street View of Marol Naka */
         deck_wood: [0x8a6a4a, 0.7], pave_dark: [0x2c2e31, 0.6], pave_light: [0xd9d6cf, 0.6], planter: [0x5a4a3c, 0.8], soil_green: [0x3f5f2a, 0.95], fin_timber: [0xb36a2c, 0.6], canopy_leaf: [0x3c6a2c, 0.9], rail_glass: [0x9fb8c2, 0.05, 0.2],   /* 723 roof garden, from the brochure */
+        lobby_floor: [0xd9d3c7, 0.18], lobby_stone: [0x26272a, 0.25], lobby_ceiling: [0xefede8, 0.8], door_metal: [0x2a2c2e, 0.35, 0.8], granite: [0x5d5b58, 0.45], planter: [0x5a4a3c, 0.8],   /* 723 lobby, from the brochure */
         auto_body: [0x2d7d3a, 0.4, 0.2], auto_top: [0xf0c22e, 0.5], bus_body: [0xb8322a, 0.4, 0.3], train_body: [0xeef1f4, 0.25, 0.45], train_win: [0x1e2832, 0.05, 0.6], train_stripe: [0x1c5fa8, 0.35],
       }[name] || [0x9a9a9a, 0.8];
       m = new THREE.MeshStandardMaterial({ color: C[0], roughness: C[1], metalness: C[2] || 0 });
       if (C[3]) { m.map = tex(C[3]); if (REALLOOK) { m.normalMap = tex(C[3] + "_n", false); m.normalScale = new THREE.Vector2(0.6, 0.6); } }
       if (name === "rail_glass") Object.assign(m, { transparent: true, opacity: 0.3, depthWrite: false });
       if (name === "station_glass") Object.assign(m, { color: new THREE.Color(0x9cc0cf), roughness: 0.05, metalness: 0.3, transparent: true, opacity: 0.32, depthWrite: false });
+      if (name === "lobby_light") Object.assign(m, { color: new THREE.Color(0xfff4e0), emissive: new THREE.Color(0xfff1d6), emissiveIntensity: 1.6 });
       if (name === "sign_text" || name === "opt_name") Object.assign(m, { color: new THREE.Color(0xffffff), emissive: new THREE.Color(name === "opt_name" ? 0xfff2da : 0xffffff), emissiveIntensity: 0.55, roughness: 0.4 });
       if (name === "leaf" || name === "leaf_b") Object.assign(m, { color: new THREE.Color(0xffffff), map: tex(name === "leaf" ? "leaves_a" : "leaves_b"), alphaTest: 0.5, side: THREE.DoubleSide, roughness: 0.78 });
       if (name === "leaf" || name === "leaf_b" || name === "frond") m.onBeforeCompile = (sh) => {   // colour drifts across a crown, as in the stills
@@ -383,7 +385,7 @@ async function start(A, W, intro=null) {
     leaveArea();disposeArea();
     $("#veil").classList.add("on");
     // ?preview=<id>: load that diorama from d-preview/ (a candidate build), leaving the published d/ untouched
-    const model=Q.get("preview")===id ? {glb:`${W.data}d-preview/${id}.glb?v=${Date.now()}`, data:`${W.data}d-preview/${id}.json?v=${Date.now()}`} : W.models && W.models[id];
+    const model=(Q.get("preview")||"").split(",").includes(id) ? {glb:`${W.data}d-preview/${id}.glb?v=${Date.now()}`, data:`${W.data}d-preview/${id}.json?v=${Date.now()}`} : W.models && W.models[id];
     const [gltf, data] = await Promise.all([
       new Promise((ok, bad) => loader.load(model?.glb || `${W.data}d/${id}.glb`, ok, (e) => { if (e.total && $("#l-bar")) $("#l-bar").style.width = `${Math.round(e.loaded / e.total * 90)}%`; }, bad)),
       fetch(model?.data || `${W.data}d/${id}.json`).then((r) => r.json())]);
@@ -409,7 +411,7 @@ async function start(A, W, intro=null) {
       if (isGround) groundMeshes.push(o);
     });
     await applyAerialSurfaces(root, data);
-    if (Q.get("preview") === id) await applyBakedAO(id, `${W.data}d-preview/`);
+    if ((Q.get("preview")||"").split(",").includes(id)) await applyBakedAO(id, `${W.data}d-preview/`);
     if(request!==selectionRequest)return null;
     for (const p of Object.values(protos)) p.visible = false;
     const pp = (k) => protos[k] ? protoParts(protos[k]) : [];

@@ -40,9 +40,9 @@
    "x": 1270,
    "y": -249,
    "style": "ribbon_red",
-   "h": 38,
-   "h_basis": "sv: about 9 storeys",
-   "seen": "19.10840,72.87850 heading 60: glass office with a red band, 'FLEET HOUSE' at street level, beside Marol Naka station"
+   "h": 30,
+   "h_basis": "sv: about 7 storeys",
+   "seen": "19.10840,72.87850 heading 60: glass office with a red band, 'FLEET HOUSE' at street level, beside Marol Naka station; also 19.1085449,72.8787139 heading 60: glass with orange-red vertical bands, Privilon's construction tower rises behind it"
   },
   {
    "name": "Makwana Road residential tower",
@@ -210,5 +210,12 @@
  ],
  "stations": {
   "Marol Naka (Line 1)": "Street View 19.10812,72.88040 heading 268 and 19.10815,72.87960 heading 90: concourse slab spans the whole road on large grey round piers and blue-painted square columns; the concourse is clad opaque with a billboard band (no full glazing); platform level under a flat grey metal canopy with a deep fascia on blue steel columns; a white-and-blue lift and stair core; covered stairs to the footpath with blue railings and blue roofs; shops and a bank under the deck."
+ },
+ "privilon": {
+  "footprint_xy": [
+   1337,
+   -234
+  ],
+  "seen": "Street View Feb 2026, 19.1085449,72.8787139 heading 60 and 19.10812,72.88040 heading 320: a concrete tower under construction behind Fleet House, north-west of Marol Naka station. Google Maps lists Privilon's office at plus code 4V5H+7RP, which falls on the station building (its sales office, 'Floor 1 - Marol Naka'), not the plot."
  }
 }

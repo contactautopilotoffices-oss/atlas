@@ -49,6 +49,11 @@ BUNDLE = json.load(open(S.get("bundle", "examples/flipkart-andheri.bundle.json")
 BO = next(o for o in BUNDLE["options"] if o["id"] == OID)
 FACT = {f["k"]: f["v"] for f in BO["facts"]}
 SO = next(o for o in S["options"] if o["id"] == OID)
+if "--opt-at" in A:   # --opt-at X,Y: the option's real footprint, when the map pin put it on a neighbour (Privilon was on Fleet House)
+    ox_, oy_ = (float(v) for v in A[A.index("--opt-at") + 1].split(","))
+    for b in S["buildings"]:
+        if b.get("opt") == OID: del b["opt"]
+    min(S["buildings"], key=lambda b: Polygon(b["p"]).centroid.distance(Point(ox_, oy_)))["opt"] = OID
 OPTB = next(b for b in S["buildings"] if b.get("opt") == OID)
 rnd = random.Random(OID)
 
@@ -1000,7 +1005,7 @@ def bake_ao(outdir, tiles=2, size=4096, dist=14.0, samples=96):
     targets = []
     for nm in ("context", "rooftops", "ground"):
         targets += split(bpy.data.objects.get(nm), tiles if nm == "context" else 1 if nm == "rooftops" else 2)
-    for nm in ("metro", "stations", "entries_l3", "opt_" + OID, "roof_garden_723", "plinth"):
+    for nm in ("metro", "stations", "entries_l3", "opt_" + OID, "roof_garden_723", "lobby_723", "plinth"):
         if bpy.data.objects.get(nm): targets.append(bpy.data.objects[nm])
     sc.render.engine = "CYCLES"; sc.cycles.samples = samples; sc.cycles.use_denoising = True
     try:
@@ -1036,6 +1041,67 @@ def bake_ao(outdir, tiles=2, size=4096, dist=14.0, samples=96):
         except Exception: pass
         out[ob.name] = fn; print("baked AO", ob.name, sz, round(__import__("time").time() - t0, 1), "s")
     json.dump({"uv": "LM", "maps": out}, open(os.path.join(outdir, f"{OID}-ao.json"), "w"), indent=1)
+
+def lobby_723(info, GH=5.6, W_=16.0, D_=12.0):
+    """--lobby: the street-level entrance lobby of 723 Avenue, from the developer's brochure render (glazed
+    double-height ground floor, steps and a ramp to a raised forecourt, a canopy). In Feb 2026 Street View the
+    ground floor is still behind hoarding, so this is the developer's design, not the as-built lobby. Interior
+    fit-out (stone floor, reception desk, timber-fin feature wall, lift doors, lit coffer) is a proposal."""
+    import bmesh as _bm, mathutils as _mu
+    for k, c, r_, m_ in (("lobby_floor", "#d9d3c7", 0.18, 0.0), ("lobby_stone", "#26272a", 0.25, 0.0), ("lobby_ceiling", "#efede8", 0.8, 0.0),
+                         ("door_metal", "#2a2c2e", 0.35, 0.8), ("granite", "#5d5b58", 0.45, 0.0)):
+        mat(k, c, r_, m_)
+    mat("lobby_light", "#fff4e0", 0.4, emit="#fff1d6", ek=2.5)
+    E = info["entrance"]; F = info["canopy_ang"]; nx, ny = math.sin(F), -math.cos(F); tx, ty = math.cos(F), math.sin(F)
+    foot_l = Polygon([L(x, y) for x, y in OPTB["p"]])
+    if foot_l.contains(Point(E[0] + nx * 5, E[1] + ny * 5)): nx, ny, F = -nx, -ny, F + math.pi; tx, ty = -tx, -ty   # make v point out of the building
+    lobby_723.out = (nx, ny, tx, ty, F)
+    P = lambda u, v: (E[0] + tx * u + nx * v, E[1] + ty * u + ny * v)   # u along the face, v outward (negative = inside)
+    # open the ground storey of the facade study where the lobby is (it was modelled solid)
+    hero = bpy.data.objects.get("opt_" + OID)
+    if hero and hero.type == "MESH":
+        bm = _bm.new(); bm.from_mesh(hero.data); mw = hero.matrix_world; cut = []
+        for f in bm.faces:
+            c = mw @ f.calc_center_median(); u = (c.x - E[0]) * tx + (c.y - E[1]) * ty; v = (c.x - E[0]) * nx + (c.y - E[1]) * ny
+            if c.z < GH - 0.1 and abs(u) < W_ / 2 and -D_ - 0.5 < v < 3.0: cut.append(f)
+        _bm.ops.delete(bm, geom=cut, context="FACES"); bm.to_mesh(hero.data); bm.free(); print("lobby: opened", len(cut), "facade faces")
+    if bpy.data.objects.get("opt_name"): bpy.data.objects.remove(bpy.data.objects["opt_name"], do_unlink=True)   # the canopy carries the name now
+    lb = MB([]); z0 = 0.6
+    rect = lambda u0, u1, v0, v1: Polygon([P(u0, v0), P(u1, v0), P(u1, v1), P(u0, v1)])
+    # the lobby box: stone floor, lit ceiling with a coffer, side and back walls
+    flat(lb, rect(-W_ / 2, W_ / 2, -D_, 0), z0, "lobby_floor", 1.2)
+    flat(lb, rect(-W_ / 2, W_ / 2, -D_, 0), GH - 0.3, "lobby_ceiling", 2, up=False)
+    flat(lb, rect(-W_ / 2 + 2, W_ / 2 - 2, -D_ + 2, -1.5), GH - 0.35, "lobby_light", 2, up=False)
+    boxm(lb, *P(0, -D_ - 0.1), 0, GH, W_ + 0.4, 0.2, F, "lobby_ceiling")                     # back wall
+    for e in (-1, 1): boxm(lb, *P(e * (W_ / 2 + 0.1), -D_ / 2), 0, GH, 0.2, D_ + 0.2, F, "lobby_ceiling")   # side walls
+    # back wall: timber-fin feature wall with the lift doors in it
+    for k in np.arange(-W_ / 2 + 0.4, W_ / 2 - 0.3, 0.35):
+        if abs(k) < 3.2: continue
+        boxm(lb, *P(k, -D_ + 0.25), z0, GH - 0.3, 0.12, 0.3, F, "fin_timber")
+    for k in (-1.8, 0.0, 1.8):
+        boxm(lb, *P(k, -D_ + 0.12), z0, z0 + 2.4, 1.3, 0.1, F, "door_metal")
+    # reception desk and planters
+    boxm(lb, *P(-3.5, -6.5), z0, z0 + 1.1, 5.0, 1.0, F, "lobby_stone"); boxm(lb, *P(-3.5, -6.5), z0 + 1.1, z0 + 1.16, 5.2, 1.2, F, "lobby_floor")
+    for k in (5.2, 6.4):
+        cyl(lb, *P(k, -9.5), z0, z0 + 0.7, 0.5, 0.5, 0, "planter", 14); cyl(lb, *P(k, -9.5), z0 + 0.7, z0 + 2.2, 0.75, 0.75, 0, "canopy_leaf", 12)
+    # glazed front: full-height clear glass on slim dark mullions, a pair of entrance doors
+    boxm(lb, *P(0, 0.05), z0, GH, W_, 0.04, F, "rail_glass")
+    for k in np.arange(-W_ / 2, W_ / 2 + 0.01, 2.0):
+        boxm(lb, *P(k, 0.08), z0, GH, 0.08, 0.16, F, "door_metal")
+    boxm(lb, *P(0, 0.12), z0 + 2.6, z0 + 2.75, W_, 0.18, F, "door_metal")   # transom
+    # raised forecourt, steps across the front and a ramp at one end, in granite
+    flat(lb, rect(-W_ / 2 - 1, W_ / 2 + 1, 0, 4.0), z0, "granite", 1.5)
+    boxm(lb, *P(0, 2.0), 0, z0 - 0.02, W_ + 2, 4.0, F, "granite")          # the plinth under the forecourt
+    for i in range(4):
+        st = i * 0.15; boxm(lb, *P(-1.5, 4.0 + 0.35 * (4 - i) - 0.175), 0, z0 - st, 13.0, 0.35, F, "granite")
+    ram = [P(W_ / 2 - 1.8, 4.0), P(W_ / 2 + 1, 4.0), P(W_ / 2 + 1, 10.0), P(W_ / 2 - 1.8, 10.0)]
+    lb.poly([(*ram[0], z0), (*ram[1], z0), (*ram[2], 0.02), (*ram[3], 0.02)], [(0, 0), (1, 0), (1, 1), (0, 1)], "granite")
+    # canopy over the entrance: a thin dark slab with a lit soffit
+    boxm(lb, *P(-1.5, 2.2), GH + 0.1, GH + 0.5, 14.0, 4.8, F, "door_metal", bottom=True)
+    flat(lb, rect(-8.0, 5.0, 0.4, 4.2), GH + 0.08, "lobby_light", 2, up=False)
+    lb.build("lobby_723", MATS); print("lobby built at", tuple(round(v, 1) for v in E))
+    t = text_mesh("723 AVENUE", 0.55, 0.05, "sign_723_lobby"); t.data.materials.append(MATS["sign_text"])
+    t.rotation_euler = (math.pi / 2, 0, F); t.location = (*P(-4.5, 4.62), GH + 0.18)
 
 def roof_garden(H):
     """--roof-garden: the developer brochure's rooftop for 723 Avenue (House of Wadhwa): a timber deck,
@@ -1125,6 +1191,7 @@ def aerial(data, info, name="aerial", az_off=-0.6, dist_k=1.0, el_k=0.42, lens=3
 info = build()
 if "--hero-blend" in A: swap_hero(A[A.index("--hero-blend") + 1])
 if "--roof-garden" in A: roof_garden(info["H"])
+if "--lobby" in A: lobby_723(info)
 if "--bake-ao" in A: bake_ao(A[A.index("--bake-ao") + 1])
 data = page_data(info)
 json.dump(data, open(os.path.join(OUT, f"{OID}.json"), "w"), separators=(",", ":"))
@@ -1137,6 +1204,9 @@ if "--render" in A:
         # scene-frame shots for 723 Avenue: along Andheri-Kurla Road past Times Square, and the 500 m overview
         elif k == "road": aerial(data, info, "road", az_off=((1440, -378, 24), (1760, -325, 30), 26))
         elif k == "station": aerial(data, info, "station", az_off=((1424, -374, 19), (1310, -316, 12), 26))
+        elif k == "lobby":   # from the forecourt, eye height, looking into the lobby
+            E = info["entrance"]; nx, ny, tx, ty, F = lobby_723.out
+            aerial(data, info, "lobby", az_off=((E[0] + OX + nx * 17 + tx * 6, E[1] + OY + ny * 17 + ty * 6, 1.7), (E[0] + OX - nx * 6, E[1] + OY - ny * 6, 2.6), 22))
         elif k == "roof": aerial(data, info, "roof", az_off=((1831 + 95, -151 - 120, 165), (1831, -151, 58), 35))
         elif k == "overview": aerial(data, info, "overview", az_off=((1690, -1000, 390), (1765, -265, 12), 30))
         else: render(k, data, info)

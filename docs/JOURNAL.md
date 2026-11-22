@@ -38,6 +38,9 @@
   - **Corridor facades from a Street View walk:** 16 more buildings along Andheri-Kurla Road and 723's lane are recorded in `scripts/world/refs/marol_corridor.json` (22 in all). Three new painted facades match what the road actually has: worn 3-4 storey commercial blocks, a ground-floor band of shutters and dense signboards, and a dark glass-grid office.
     - The satellite heights read these low frontage blocks 3-5 times too tall: Andheri-Kurla Rd no. 111 was 55 m and is 4 storeys. Every surveyed height is now the Street View storey count, which turns the road from a row of white towers into the low, busy frontage it is.
     - Many taller buildings set back from the road still carry satellite heights and stock facades.
+  - **723 street lobby** from the developer's brochure: a glazed double-height entrance under a dark canopy with a lit soffit and the name, a stone reception desk, a timber-fin feature wall with lift doors, and a granite forecourt with steps and a ramp. In Feb 2026 Street View the ground floor is still behind hoarding, so this is the developer's design, not the as-built lobby; the interior finishes are a proposal.
+  - **Privilon moved to its real plot.** The map pin had put it on Fleet House's footprint. Street View shows a concrete tower under construction behind Fleet House, north-west of Marol Naka station, and Privilon now stands there (`--opt-at 1337,-234`). Fleet House is an ordinary 7-storey neighbour again. The earlier Privilon facade study was shaped for the wrong footprint, so Privilon is now generated from the deck's floors; its facade is generic until the brochure facade is refitted.
+  - The preview link takes several properties: `?preview=723-avenue,privilon`.
   - 723 Avenue now has the rooftop garden from the developer's brochure: a timber deck, a curving planted band with trees, checkerboard paving, a glazed pavilion with timber fins and a glass railing. The layout is read from the brochure; sizes are estimates. The brochure image is kept with the 723 photos.
 - **Left undone:**
   - About 60 more significant buildings in the 723 to Marol Naka corridor still use generic facades; each needs its own Street View look. The Line 3 entrances are still the generic canopy.
@@ -47,6 +50,7 @@
   - Nothing is published to the live explorer.
   - The NotebookLM push was not attempted: `add_source` is known to be broken.
 - **Open questions for the founder:**
+  - Can the developer confirm Privilon's plot and storey count (the brochure says 14)?
   - Is this direction worth more time, given that a modelled city will never match Google's photographed New York?
   - Privilon is under construction and absent from all map data. Can someone confirm its exact plot beside Marol Naka station?
   - The Maps key was pasted in chat. Should it be restricted or replaced in Google Cloud?
