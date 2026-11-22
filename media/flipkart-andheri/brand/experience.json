@@ -1,0 +1,11 @@
+{
+  "_note": "Optional media for the Andheri opening (engine/andheri-experience.js). Set a path to use it, null to skip; a missing file is never requested.",
+  "film": { "src": "/media/flipkart-andheri/film/andheri-intro.mp4", "poster": "/media/flipkart-andheri/film/andheri-intro-poster.jpg" },
+  "ambient": null,
+  "hero": "/media/flipkart-andheri/world/privilon-hero/privilon-dusk-blue-hour.jpg",
+  "cards": {
+    "privilon": "/media/flipkart-andheri/world/privilon-hero/privilon-sunrise-0720.jpg",
+    "corporate-avenue": "/media/flipkart-andheri/world/checkpoint/corporate-campus.jpg",
+    "723-avenue": "/media/flipkart-andheri/world/checkpoint/723-district-aerial2.jpg"
+  }
+}
