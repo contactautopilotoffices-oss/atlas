@@ -117,3 +117,4 @@ andheri-video-edit/.hyperframes/
 andheri-video-edit/.transcode-cache/
 andheri-video-edit/__pycache__/
 !andheri-video-edit/assets/autopilot.png
+andheri-project/film/shots/out/

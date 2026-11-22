@@ -61,15 +61,16 @@ if "--opt-at" in A:   # --opt-at X,Y: the option's real footprint, when the map 
     for b in S["buildings"]:
         if b.get("opt") == OID: del b["opt"]
     min(S["buildings"], key=lambda b: Polygon(b["p"]).centroid.distance(Point(ox_, oy_)))["opt"] = OID
-if "--opt-poly-ref" in A:   # the option's outline from scripts/world/refs/*.json (Privilon: founder + Google satellite)
-    _key = A[A.index("--opt-poly-ref") + 1]; _poly = None
+for _key in ("privilon",):   # options whose outline is fixed in scripts/world/refs/*.json (founder + Google satellite), in every district
+    _poly = None
     for _fn in (sorted(os.listdir(_RD)) if os.path.isdir(_RD) else []):
         _poly = json.load(open(os.path.join(_RD, _fn))).get(_key, {}).get("poly") or _poly
+    if not _poly: continue
     _op = Polygon(_poly)
     for b in S["buildings"]:   # the old pin's footprint is a real neighbour (Privilon's pin sat on Fleet House): keep it, drop the tag
-        if b.get("opt") == OID: del b["opt"]
+        if b.get("opt") == _key: del b["opt"]
     S["buildings"] = [b for b in S["buildings"] if not (_op.contains(Polygon(b["p"]).centroid) or Polygon(b["p"]).intersection(_op).area > min(100, 0.25 * Polygon(b["p"]).area))]
-    S["buildings"].append({"p": _poly, "h": 67.5, "c": "commercial", "r": 0.5, "opt": OID})
+    S["buildings"].append({"p": _poly, "h": 67.5, "c": "commercial", "r": 0.5, "opt": _key})
 OPTB = next(b for b in S["buildings"] if b.get("opt") == OID)
 # --neighbour-hero ID=BLEND (repeatable): another shortlisted property standing in this district, shown with its
 # own facade study and a pin, not as a generic block (723 Avenue is visible from Privilon)
@@ -1283,6 +1284,45 @@ def roof_garden(H, foot=None, name="roof_garden_723"):
         p = edge.interpolate(t, normalized=True); cyl(rg, *L(p.x, p.y), z, z + 0.9, 0.7, 0.7, 0, "canopy_leaf", 10)
     rg.build(name, MATS); print("roof garden built", round(Lg, 1), "x", round(Sh, 1), "m at", round(z, 1))
 
+def animate(data, info, spec_path, name):
+    """--anim SPEC.json NAME: a keyframed camera move rendered as a PNG sequence to OUT/NAME/, with every frame's
+    screen position of the named pins written to OUT/NAME/pins.json (for labels that track in the edit).
+    SPEC[NAME] = {"frames": N, "fps": 24, "keys": [{"f", "pos": [x,y,z], "look": [x,y,z], "lens"}], "pins": {name: [x,y,z]}}
+    in scene metres; lighting comes from the same flags as aerial() (--hdri, --sky-mode, --sun-az/-el, --night...)."""
+    from bpy_extras.object_utils import world_to_camera_view
+    sp = json.load(open(spec_path))[name]
+    sc = bpy.context.scene
+    aerial(data, info, "_setup", az_off=((sp["keys"][0]["pos"][0], sp["keys"][0]["pos"][1], sp["keys"][0]["pos"][2]), tuple(sp["keys"][0]["look"]), sp["keys"][0].get("lens", 28)), render_now=False)
+    cam = sc.camera; cd = cam.data; cd.sensor_width = 36
+    tgt = bpy.data.objects.new("cam_target", None); sc.collection.objects.link(tgt)
+    for c in list(cam.constraints): cam.constraints.remove(c)
+    tc = cam.constraints.new("TRACK_TO"); tc.target = tgt; tc.track_axis = "TRACK_NEGATIVE_Z"; tc.up_axis = "UP_Y"
+    for k in sp["keys"]:
+        sc.frame_set(k["f"] + 1)
+        cam.location = (k["pos"][0] - OX, k["pos"][1] - OY, k["pos"][2]); cam.keyframe_insert("location", frame=k["f"] + 1)
+        tgt.location = (k["look"][0] - OX, k["look"][1] - OY, k["look"][2]); tgt.keyframe_insert("location", frame=k["f"] + 1)
+        cd.lens = k.get("lens", 28); cd.keyframe_insert("lens", frame=k["f"] + 1)
+    for ob in (cam, tgt, cd):
+        ad = ob.animation_data
+        if ad and ad.action:
+            try: fcs = ad.action.fcurves
+            except Exception: fcs = [fc for l in ad.action.layers for st in l.strips for cb in st.channelbags for fc in cb.fcurves]
+            for fc in fcs:
+                for kp in fc.keyframe_points: kp.interpolation = "BEZIER"; kp.easing = "AUTO"; kp.handle_left_type = kp.handle_right_type = "AUTO_CLAMPED"
+    sc.frame_start, sc.frame_end = 1, sp["frames"]; sc.render.fps = sp.get("fps", 24)
+    out = os.path.join(OUT, name); os.makedirs(out, exist_ok=True)
+    pins = {}
+    import mathutils
+    for f in range(1, sp["frames"] + 1):
+        sc.frame_set(f)
+        pins[f] = {k: [round(c, 4) for c in world_to_camera_view(sc, cam, mathutils.Vector((v[0] - OX, v[1] - OY, v[2])))] for k, v in sp.get("pins", {}).items()}
+    json.dump({"fps": sc.render.fps, "frames": sp["frames"], "pins": pins}, open(os.path.join(out, "pins.json"), "w"))
+    sc.render.use_persistent_data = True
+    sc.render.image_settings.file_format = "PNG"; sc.render.image_settings.color_mode = "RGB"; sc.render.image_settings.color_depth = "8"
+    sc.render.filepath = os.path.join(out, "f_####")
+    if "--frames" in A: sc.frame_start, sc.frame_end = (int(v) for v in A[A.index("--frames") + 1].split("-"))
+    bpy.ops.render.render(animation=True); print("ANIM DONE", name, sc.frame_start, sc.frame_end)
+
 def hdri_light(sc):
     """--hdri FILE [--sun-az DEG --sun-el DEG --sky K --sun K --night 0..1]: a real sky (Poly Haven CC0 HDRI) turned so
     its glow sits where the real sun is, plus a sun lamp at the computed solar position for crisp shadows.
@@ -1304,14 +1344,19 @@ def hdri_light(sc):
         bpy.data.objects["sun"].rotation_euler = (math.radians(90 - el), 0, -math.radians(az + 180))
     lit_ = []
     for o in bpy.data.objects:
-        if o.name.startswith("opt_") or o.name.startswith("nb_"): o["night"] = g("--night", 0.0); lit_.append(o.name)
+        if o.name.startswith("opt_") or o.name.startswith("nb_") or o.name == "farfield": o["night"] = g("--night", 0.0); lit_.append(o.name)
     cm = bpy.data.materials.get("ANDHERI_PRV_Ceiling")
     print("night set on", lit_, "| ceiling material", bool(cm), [(n.bl_idname, getattr(n, "attribute_name", ""), getattr(n, "attribute_type", "")) for n in cm.node_tree.nodes if n.bl_idname == "ShaderNodeAttribute"] if cm else None)
     hz = bpy.data.objects.get("haze")
-    if hz: bpy.data.objects.remove(hz, do_unlink=True)
+    if hz and "--haze" not in A: bpy.data.objects.remove(hz, do_unlink=True)
+    elif hz:   # aerial perspective over the far city, tinted to the hour
+        hz.scale = (9000, 9000, 600); hz.location.z = 300
+        v = hz.data.materials[0].node_tree.nodes["Principled Volume"]
+        v.inputs["Density"].default_value = g("--haze", 0.0003)
+        v.inputs["Color"].default_value = (0.95, 0.82, 0.72, 1) if 0 < el < 12 else (0.62, 0.7, 0.86, 1) if el <= 0 else (0.86, 0.88, 0.92, 1)
     print("HDRI sky", os.path.basename(A[A.index("--hdri") + 1]), "sun az %.0f el %.1f" % (az, el))
 
-def aerial(data, info, name="aerial", az_off=-0.6, dist_k=1.0, el_k=0.42, lens=35):
+def aerial(data, info, name="aerial", az_off=-0.6, dist_k=1.0, el_k=0.42, lens=35, render_now=True):
     """A photographic drone still of the district: GPU Cycles, a hazy Mumbai sky, aerial
     perspective from a thin world volume, no tilt-shift and no transparent film."""
     sc = bpy.context.scene
@@ -1353,6 +1398,7 @@ def aerial(data, info, name="aerial", az_off=-0.6, dist_k=1.0, el_k=0.42, lens=3
     sc.view_settings.view_transform = "AgX"; sc.view_settings.look = "AgX - Medium High Contrast" if "--hdri" in A else "AgX - Base Contrast"
     sc.view_settings.exposure = float(A[A.index("--exposure") + 1]) if "--exposure" in A else 0.0
     sc.render.film_transparent = False; sc.render.image_settings.file_format = "PNG"; sc.render.image_settings.color_mode = "RGB"
+    if not render_now: return
     sc.render.filepath = os.path.join(OUT, f"{OID}-{name}.png"); bpy.ops.render.render(write_still=True); print("rendered", name)
 
 info = build()
@@ -1364,6 +1410,7 @@ check_logic.run({"S": S, "A": A, "OID": OID, "OUT": OUT, "L": L, "built": LOGIC.
                  "cameras": [SHOT_CAMS[k] for k in _rk if k in SHOT_CAMS]})
 if "--hero-blend" in A: swap_hero(A[A.index("--hero-blend") + 1])
 if "--far-field" in A:   # realism/farfield.py: the rest of the city out to the horizon, beyond the slab
+    if bpy.data.objects.get("plinth"): bpy.data.objects["plinth"].hide_render = True   # the city continues; no dollhouse edge
     import farfield; farfield.build(S, {"OX": OX, "OY": OY, "SLAB": SLAB, "L": L, "MATS": MATS, "mat": mat, "A": A, "radius": float(A[A.index("--far-field") + 1])})
 if "--pbr" in A:         # realism/pbr.py: scanned CC0 materials on the shared named materials (asphalt, pavers, roof, concrete...)
     import pbr; pbr.apply(MATS, os.path.abspath(A[A.index("--pbr") + 1]))
@@ -1375,11 +1422,30 @@ for nid, path in NEIGH.items():
     ring = np.array([L(x, y) for x, y in nb["p"]]); bb = np.array([o.matrix_world @ __import__("mathutils").Vector(c) for c in o.bound_box])
     o.location.x += ring[:, 0].mean() * 0 + (ring[:, 0].min() + ring[:, 0].max()) / 2 - (bb[:, 0].min() + bb[:, 0].max()) / 2
     o.location.y += (ring[:, 1].min() + ring[:, 1].max()) / 2 - (bb[:, 1].min() + bb[:, 1].max()) / 2
+    if nid in ("privilon",):   # studies built in their own frame: rotate and scale onto the footprint (as --hero-fit)
+        import mathutils as _mu
+        V = np.array([o.matrix_world @ v.co for v in o.data.vertices])[:, :2]
+        def _rect(pts):
+            r = shapely.MultiPoint([tuple(p) for p in pts]).minimum_rotated_rectangle; c_ = list(r.exterior.coords)[:4]
+            e0, e1 = np.subtract(c_[1], c_[0]), np.subtract(c_[2], c_[1])
+            if np.linalg.norm(e0) < np.linalg.norm(e1): e0, e1 = e1, e0
+            return np.array(r.centroid.coords[0]), math.atan2(e0[1], e0[0]), np.linalg.norm(e0), np.linalg.norm(e1)
+        ch, ah, lh, sh = _rect(V[:: max(1, len(V) // 4000)]); ct, at, lt, st = _rect(ring)
+        o.matrix_world = (_mu.Matrix.Translation((*ct, 0)) @ _mu.Matrix.Rotation(at, 4, "Z") @ _mu.Matrix.Diagonal((lt / lh, st / sh, 1, 1))
+                          @ _mu.Matrix.Rotation(-ah, 4, "Z") @ _mu.Matrix.Translation((-ch[0], -ch[1], 0))) @ o.matrix_world
+        bb = np.array([o.matrix_world @ __import__("mathutils").Vector(c) for c in o.bound_box])
     if nid == "723-avenue": roof_garden(67.1, nb["p"], "nb_roof_723")
     c_ = Polygon(nb["p"]).centroid; lx_, ly_ = L(c_.x, c_.y)
     LANDMARKS[nid] = {"name": next((o_["name"] for o_ in BUNDLE["options"] if o_["id"] == nid), nid), "x": round(lx_, 1), "y": round(ly_, 1), "h": round(float(bb[:, 2].max()), 1), "prop": True}
     print("neighbour", nid, "placed", LANDMARKS[nid])
 if "--roof-garden" in A: roof_garden(info["H"])
+if "--glow-floors" in A:   # the offered floors lit from inside at dusk: "13,14" (ground 5.6 m, 4.1 m floors, as the deck's G+15)
+    mat("offer_glow", "#ffd9a8", 0.5, emit="#ffd2a0", ek=float(A[A.index("--glow-k") + 1]) if "--glow-k" in A else 25.0)
+    q_ = Polygon(OPTB["p"]).buffer(-0.9); gb = MB([])
+    for n_ in (int(v) for v in A[A.index("--glow-floors") + 1].split(",")):
+        z0_ = 5.6 + (n_ - 1) * 4.1 + 0.15; z1_ = z0_ + 3.6
+        walls(gb, [L(x, y) for x, y in q_.exterior.coords], z0_, z1_, "offer_glow", 2, 2)
+    gb.build("offer_glow_floors", MATS); print("glowing floors", A[A.index("--glow-floors") + 1])
 if "--lobby" in A: lobby_723(info)
 if "--campus" in A:
     for nm_ in ("trunk", "canopy_leaf"): MATS.get(nm_) or mat(nm_, "#4b3a2c" if nm_ == "trunk" else "#3c6a2c", 0.9)
@@ -1388,6 +1454,7 @@ if "--bake-ao" in A: bake_ao(A[A.index("--bake-ao") + 1])
 data = page_data(info)
 json.dump(data, open(os.path.join(OUT, f"{OID}.json"), "w"), separators=(",", ":"))
 if "--glb" in A: export(os.path.join(OUT, f"{OID}.glb"))
+if "--anim" in A: animate(data, info, A[A.index("--anim") + 1], A[A.index("--anim") + 2])
 if "--render" in A:
     for k in A[A.index("--render") + 1:]:
         if k.startswith("--"): break
