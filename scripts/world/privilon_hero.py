@@ -21,7 +21,7 @@ from mathutils import Vector, Matrix
 
 A = sys.argv[sys.argv.index("--") + 1:]
 OUT, ASSETS = A[0], os.path.abspath(A[1])
-W, D = 25.0, 55.0                 # road face, depth back from the road
+W, D = 22.4, 67.3                 # road face, depth back from the road: the floor plate of the developer CAD
 GH, FH, NF = 6.0, 4.1, 15         # ground storey, typical storey, typical floors
 H = GH + NF * FH                  # roof slab top
 CROWN = 2.4
