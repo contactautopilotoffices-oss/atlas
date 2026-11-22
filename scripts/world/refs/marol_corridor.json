@@ -246,6 +246,15 @@
    "style": "cw_grey",
    "h_basis": "dsm",
    "seen": "satellite layout only (no Street View inside the campus); facade is an estimate so the campus reads as one office development"
+  },
+  {
+   "name": "Corporate Avenue campus, long block on the main road",
+   "x": -772,
+   "y": 26,
+   "style": "cw_grey",
+   "h": 36,
+   "h_basis": "estimate from satellite shadow",
+   "seen": "satellite layout"
   }
  ],
  "stations": {
@@ -257,5 +266,39 @@
    -234
   ],
   "seen": "Street View Feb 2026, 19.1085449,72.8787139 heading 60 and 19.10812,72.88040 heading 320: a concrete tower under construction behind Fleet House, north-west of Marol Naka station. Google Maps lists Privilon's office at plus code 4V5H+7RP, which falls on the station building (its sales office, 'Floor 1 - Marol Naka'), not the plot."
- }
+ },
+ "added": [
+  {
+   "name": "Corporate Avenue campus, long block on the main road",
+   "poly": [
+    [
+     -776.8,
+     -15.2
+    ],
+    [
+     -748.6,
+     -15.2
+    ],
+    [
+     -748.6,
+     53.9
+    ],
+    [
+     -789.5,
+     53.9
+    ],
+    [
+     -789.5,
+     38.4
+    ],
+    [
+     -776.8,
+     38.4
+    ]
+   ],
+   "h": 36,
+   "c": "commercial",
+   "basis": "missing from Overture and OpenStreetMap; outline traced on Google satellite tiles (Map Tiles API, zoom 19, verification overlay scripts/world/verify_overlay.py): a long north-south block whose wider north end meets Guru Hargovindji Road; height about 9 storeys, estimated."
+  }
+ ]
 }

@@ -42,6 +42,10 @@
   - **Privilon moved to its real plot.** The map pin had put it on Fleet House's footprint. Street View shows a concrete tower under construction behind Fleet House, north-west of Marol Naka station, and Privilon now stands there (`--opt-at 1337,-234`). Fleet House is an ordinary 7-storey neighbour again. The earlier Privilon facade study was shaped for the wrong footprint, so Privilon is now generated from the deck's floors; its facade is generic until the brochure facade is refitted.
   - From Privilon, 723 Avenue now appears as itself: the photo-matched tower with its rooftop, on its own footprint, with a yellow '723 Avenue' pin (`--neighbour-hero`). It was a generic block before.
   - **Corporate Avenue as a gated campus.** The founder confirmed that Flipkart's floors are in Atul Corporate Avenue (the south block) and that both gates are on Guru Hargovindji Road. The district now has the campus from the main road to Atul: a compound wall, two gates with pillars, boom barriers, security cabins and a CORPORATE AVENUE name beam, paved driveways and parking, and a tree line. The other campus blocks are re-skinned as office glass. There is no Street View inside the campus, so gate details and facades are estimates from the satellite layout. The earlier pale-frame facade study stays on Atul Corporate Avenue. The founder confirmed the campus's 83 m tower is real, so its satellite height stands.
+  - **Layout checked against Google satellite.** `scripts/world/verify_overlay.py` uses the founder's Map Tiles key to lay the model's footprints over Google satellite tiles. The sheet is for review only and is never put into a model or published.
+    - It showed Corporate Avenue's long block on the main road is missing from both Overture and OpenStreetMap; it is now traced from the imagery and added, and the two gates sit on the road either side of it.
+    - It showed that a rule in the old builder deleted every building that touched the clearance around a Line 1 station, which left empty lots by Marol Naka. Buildings are now trimmed to the clearance instead; only the station buildings themselves are removed.
+    - Google's Geocoding API returns no building outlines or entrances for India, so it confirms positions only.
   - The preview link takes several properties: `?preview=723-avenue,privilon`.
   - 723 Avenue now has the rooftop garden from the developer's brochure: a timber deck, a curving planted band with trees, checkerboard paving, a glazed pavilion with timber fins and a glass railing. The layout is read from the brochure; sizes are estimates. The brochure image is kept with the 723 photos.
 - **Left undone:**
@@ -52,6 +56,7 @@
   - Nothing is published to the live explorer.
   - The NotebookLM push was not attempted: `add_source` is known to be broken.
 - **Open questions for the founder:**
+  - Privilon's exact plot: the satellite shows a construction site with a crane beside the strip the model now uses.
   - Can the developer confirm Privilon's plot and storey count (the brochure says 14)?
   - Is this direction worth more time, given that a modelled city will never match Google's photographed New York?
   - Privilon is under construction and absent from all map data. Can someone confirm its exact plot beside Marol Naka station?

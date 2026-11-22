@@ -45,6 +45,12 @@ bpy.ops.wm.read_factory_settings(use_empty=True)
 FAST = "--fast" in A
 os.makedirs(OUT, exist_ok=True)
 S = json.load(open(SCENE)); WJ = json.load(open(WORLD))
+# buildings the open maps miss, added from survey (scripts/world/refs/*.json "added")
+_RD = os.path.join(os.path.dirname(os.path.abspath(__file__)), "refs")
+for _fn in (sorted(os.listdir(_RD)) if os.path.isdir(_RD) else []):
+    for _e in json.load(open(os.path.join(_RD, _fn))).get("added", []):
+        _ap = Polygon(_e["poly"]); S["buildings"] = [b for b in S["buildings"] if b.get("opt") or not _ap.contains(Polygon(b["p"]).centroid)]   # map slivers inside it
+        S["buildings"].append({"p": _e["poly"], "h": _e["h"], "c": _e.get("c", "yes"), "r": 0.5, "added": _e["name"]})
 BUNDLE = json.load(open(S.get("bundle", "examples/flipkart-andheri.bundle.json")))
 BO = next(o for o in BUNDLE["options"] if o["id"] == OID)
 FACT = {f["k"]: f["v"] for f in BO["facts"]}
@@ -231,6 +237,7 @@ def _metro_clear():
                 q = l.interpolate(min(l.length, max(0, t0 + e))); zs.append(q.buffer(22))
     return unary_union(zs) if zs else Polygon()
 METRO_CLEAR = _metro_clear()
+DROPPED, TRIMMED = [], []   # footprints removed for the metro, and kept but trimmed to its clearance
 # where the eye must not stand: inside the Line 1 station or its stairs, or under a Line 3 entrance canopy
 KEEP_OUT = unary_union([METRO_CLEAR] + [Point(s["x"], s["y"]).buffer(30) for s in S["stations"] if s["line"] == "L3"])
 def blocks_metro(p):
@@ -415,9 +422,17 @@ def build():
     for b in S["buildings"]:
         p = Polygon(b["p"])
         if not p.is_valid: p = p.buffer(0)
-        if b.get("opt") != OID and blocks_metro(p): continue   # the map draws the station and viaduct as a building; we build the real thing there
+        if b.get("opt") != OID and blocks_metro(p):
+            # the map draws the station and viaduct as a building; we build the real thing there. Real buildings that only
+            # touch the clearance are trimmed back to its edge, not deleted (deleting them left empty lots by the stations)
+            if b.get("c") == "transportation" or p.intersection(METRO_CLEAR).area > 0.6 * p.area: DROPPED.append(round(p.area)); continue
+            p = p.difference(METRO_CLEAR)
+            if p.is_empty or p.area < 30: DROPPED.append(round(p.area)); continue
+            if p.geom_type == "MultiPolygon": p = max(p.geoms, key=lambda g: g.area)
+            TRIMMED.append(round(p.area))
         if SLAB.contains(p.centroid): bpolys.append((b, p.intersection(SLAB)))
     built = unary_union([p for _, p in bpolys]) if bpolys else Polygon()
+    print("metro clearance: dropped", len(DROPPED), "footprints", sum(DROPPED), "m2; trimmed and kept", len(TRIMMED))
 
     # --- plinth: the cut edge and the ground ---
     pl = MB([]); ring = list(SL.exterior.coords)
