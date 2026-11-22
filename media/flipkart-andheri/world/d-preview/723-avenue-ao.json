@@ -1,0 +1,21 @@
+{
+ "uv": "LM",
+ "maps": {
+  "context_00": "723-avenue-ao-context_00.jpg",
+  "context_01": "723-avenue-ao-context_01.jpg",
+  "context_10": "723-avenue-ao-context_10.jpg",
+  "context_11": "723-avenue-ao-context_11.jpg",
+  "rooftops_00": "723-avenue-ao-rooftops_00.jpg",
+  "ground_00": "723-avenue-ao-ground_00.jpg",
+  "ground_01": "723-avenue-ao-ground_01.jpg",
+  "ground_10": "723-avenue-ao-ground_10.jpg",
+  "ground_11": "723-avenue-ao-ground_11.jpg",
+  "metro": "723-avenue-ao-metro.jpg",
+  "stations": "723-avenue-ao-stations.jpg",
+  "entries_l3": "723-avenue-ao-entries_l3.jpg",
+  "opt_723-avenue": "723-avenue-ao-opt_723-avenue.jpg",
+  "roof_garden_723": "723-avenue-ao-roof_garden_723.jpg",
+  "lobby_723": "723-avenue-ao-lobby_723.jpg",
+  "plinth": "723-avenue-ao-plinth.jpg"
+ }
+}

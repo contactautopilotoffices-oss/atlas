@@ -400,7 +400,7 @@ R["POST submissions/review"] = async (req, res, b) => {
   needLink(u, s.link_slug);
   if (s.status !== "pending") fail(409, "This submission has already been reviewed.");
   if (!["approve", "reject"].includes(b.action)) fail(400, "Approve or reject.");
-  if (b.action === "approve") {
+  if (b.action === "approve" && s.payload?.type !== "layout-feedback") {
     const row = await overridesRow(s.link_slug);
     const draft = JSON.parse(JSON.stringify(row.draft || {}));
     const prov = { by: s.broker_name || "Broker", at: s.created_at, note: s.source_note || null, submission: s.id, approvedBy: u.email };
@@ -887,6 +887,15 @@ caseRoutes.register(R, { needUser, needLink, fail, clip, audit, SLUG, RESERVED, 
 /* Is everything an atlas or a case study needs in place? (_preflight.js) */
 R["GET preflight"] = async (req) => { await needUser(req, "admin"); return preflight.run(); };
 
+R['POST layout-feedback'] = async (req,res,b) => {
+  const options={'privilon':['260','280','301'],'corporate-avenue':['266','281','373'],'723-avenue':['252','284','300']};
+  const prefix={'privilon':'privilon','corporate-avenue':'corporate','723-avenue':'723'}[b.property];
+  if(!Array.isArray(options[b.property]) || !options[b.property].some(n=>b.variant===prefix+'-'+n))fail(400,'Unknown layout.');
+  if(typeof b.reviewer!=='string'||!b.reviewer.trim()||b.reviewer.length>100)fail(400,'Enter your name.');
+  for(const key of ['room','floor','roomId','note'])if(typeof b[key]!=='string'||!b[key].trim()||b[key].length>(key==='note'?2000:160))fail(400,'Invalid feedback.');
+  await store.insert('broker_submissions',{link_slug:'flipkart-andheri',property_id:b.property,kind:'update',broker_name:b.reviewer.trim(),payload:{type:'layout-feedback',variant:b.variant,floor:b.floor,roomId:b.roomId,room:b.room},source_note:[b.variant,b.floor,b.room].join(' · '),note:b.note.trim()});
+  return {saved:true};
+};
 /* ------------------------------------------------------------ handler --- */
 module.exports = async (req, res) => {
   try {

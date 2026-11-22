@@ -1,0 +1,85 @@
+{
+  "site": "privilon",
+  "tool": "Concept Studio OSM",
+  "tool_version": "3.5.4",
+  "origin": {
+    "lat": 19.108207,
+    "lon": 72.879563,
+    "height": 13.948182720000949
+  },
+  "radius_m": 600.0,
+  "bbox": [
+    19.10278732292145,
+    72.87386024241435,
+    19.113628082351987,
+    72.88526451344502
+  ],
+  "local_frame": "Blender metres: X east, Y north, Z up; exported GLB: X east, Y up, Z south",
+  "north_offset_degrees": 0,
+  "utm_zone": 43,
+  "utm_epsg": 32643,
+  "utm_note": "Mumbai location zone; geometry is ENU, not UTM coordinates",
+  "mesh_objects": 9,
+  "vertices": 11830,
+  "polygons": 10318,
+  "sources": [
+    "OpenStreetMap via local Geofabrik PBF extract: western-zone-261120.osm.pbf",
+    "NASA SRTM via AWS Terrain Tiles"
+  ],
+  "attribution": [
+    "\u00a9 OpenStreetMap contributors (ODbL)",
+    "Elevation: NASA SRTM via AWS Terrain Tiles (public domain)"
+  ],
+  "imagery": "None. No Google or Esri requests.",
+  "presentation_crop": "600 m half-width around the pin; complete source ways retained separately; terrain skirt is presentation only.",
+  "source_extract": {
+    "source_file": "western-zone-261120.osm.pbf",
+    "source_sha256": "f739b9c8a20f709c76e59033584e25b743bb93dc178824b5c6cd40cb5a0211c4",
+    "source_bytes": 222574339,
+    "source_header": {
+      "generator": "osmium/1.16.0",
+      "timestamp": "2026-11-20T21:21:21Z",
+      "osmosis_replication_timestamp": "2026-11-20T21:21:21Z",
+      "osmosis_replication_sequence_number": "1865"
+    },
+    "site": "privilon",
+    "center_latlon": [
+      19.108207,
+      72.879563
+    ],
+    "radius_m": 600,
+    "bbox_lonlat": [
+      72.87386086473533,
+      19.102786620499703,
+      72.88526513526467,
+      19.113627379500297
+    ],
+    "bounds_method": "Exact Concept Studio OSM meters-per-degree formula at site latitude",
+    "geometry_method": "Native complete multipolygon assembly and full-way disk-cached node resolution; exact polygon/line intersection with requested bbox; geometry retained uncut for add-on clipping.",
+    "counts": {
+      "way": 592,
+      "roads": 292,
+      "railways": 6,
+      "buildings": 297,
+      "relation": 6,
+      "green": 3,
+      "water": 2
+    },
+    "scan_counts": {
+      "nodes": 61653,
+      "ways": 3139271,
+      "relation_areas": 10080
+    },
+    "scan_seconds": 231.68,
+    "processing_errors": [],
+    "attribution": "\u00a9 OpenStreetMap contributors; extract by Geofabrik",
+    "license": "ODbL1.0",
+    "processed_utc": "2026-11-21T13:09:33.674994+00:00"
+  },
+  "assumptions": {
+    "unheighted_buildings": 288,
+    "fallback_building_height_m": 9.0,
+    "height_per_level_m": 3.0,
+    "note": "Context massing only. Unspecified heights and road widths use addon defaults; not survey or CAD geometry."
+  }
+}

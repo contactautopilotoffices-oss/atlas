@@ -1,0 +1,21 @@
+{
+ "uv": "LM",
+ "maps": {
+  "context_00": "privilon-ao-context_00.jpg",
+  "context_01": "privilon-ao-context_01.jpg",
+  "context_10": "privilon-ao-context_10.jpg",
+  "context_11": "privilon-ao-context_11.jpg",
+  "rooftops_00": "privilon-ao-rooftops_00.jpg",
+  "ground_00": "privilon-ao-ground_00.jpg",
+  "ground_01": "privilon-ao-ground_01.jpg",
+  "ground_10": "privilon-ao-ground_10.jpg",
+  "ground_11": "privilon-ao-ground_11.jpg",
+  "metro": "privilon-ao-metro.jpg",
+  "stations": "privilon-ao-stations.jpg",
+  "entries_l3": "privilon-ao-entries_l3.jpg",
+  "opt_privilon": "privilon-ao-opt_privilon.jpg",
+  "plinth": "privilon-ao-plinth.jpg",
+  "nb_roof_723": "privilon-ao-nb_roof_723.jpg",
+  "nb_723-avenue": "privilon-ao-nb_723-avenue.jpg"
+ }
+}

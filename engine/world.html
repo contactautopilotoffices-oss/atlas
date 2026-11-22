@@ -89,6 +89,11 @@ a{color:inherit;text-decoration:none}
 .lb.bld b{padding:7px 12px;border-radius:8px;background:var(--acc);color:var(--acc-ink);font:700 15px/1 var(--disp);letter-spacing:.1em;text-transform:uppercase}
 .lb.bld i{width:1px;height:26px;background:var(--acc)}
 .lb.st{transform:translate(-50%,-100%);display:flex;gap:7px;align-items:center;padding:5px 9px 5px 6px;border-radius:7px;background:rgba(10,12,14,.72);border:1px solid var(--line);font:600 13px/1 var(--disp);letter-spacing:.08em;text-transform:uppercase}
+.lb.lmk{transform:translate(-50%,-100%)}
+.lb.lmk b{display:block;padding:5px 9px;border-radius:7px;background:rgba(255,255,255,.92);color:#15181c;font:700 12px/1 var(--disp);letter-spacing:.08em;text-transform:uppercase;box-shadow:0 2px 8px #0004}
+.lb.lmk.prop{display:flex;flex-direction:column;align-items:center}
+.lb.lmk.prop b{background:var(--acc);color:var(--acc-ink);font-size:13px}
+.lb.lmk.prop i{width:1px;height:22px;background:var(--acc)}
 .lb.st em{font:600 10px/1 var(--mono);font-style:normal;padding:3px 5px;border-radius:4px;color:#fff}
 .lb.dist{transform:translate(-50%,-50%);padding:6px 10px;border-radius:999px;background:rgba(10,12,14,.78);border:1px solid var(--acc);color:var(--acc);font:700 14px/1 var(--disp);letter-spacing:.08em}
 
@@ -152,6 +157,10 @@ body.routing #walkhud,body.routing #hint{display:none}
   .film{flex-basis:150px;height:96px}
   #top{left:16px;right:16px} #strip{left:16px;right:16px}
 }
+
+body.showing-area #floors,body.showing-area #conn,body.showing-area #go,body.showing-area #src,body.showing-area #more,body.showing-area #spec,body.showing-area #photo{display:none!important}
+body.showing-area #credit{display:block}
+@media(max-width:700px){body.project-tools #top{flex-wrap:wrap;gap:10px}body.project-tools #brand{flex:1 0 calc(100% - 100px)}body.project-tools #modes{order:3}body.project-tools #to-map{order:2}body.showing-area #credit{top:auto;bottom:154px;right:16px;max-width:230px;font-size:9px;background:rgba(8,9,11,.65);padding:7px;border-radius:6px}}
 </style>
 </head>
 <body>

@@ -1,0 +1,19 @@
+{
+ "uv": "LM",
+ "maps": {
+  "context_00": "corporate-avenue-ao-context_00.jpg",
+  "context_01": "corporate-avenue-ao-context_01.jpg",
+  "context_10": "corporate-avenue-ao-context_10.jpg",
+  "context_11": "corporate-avenue-ao-context_11.jpg",
+  "rooftops_00": "corporate-avenue-ao-rooftops_00.jpg",
+  "ground_00": "corporate-avenue-ao-ground_00.jpg",
+  "ground_01": "corporate-avenue-ao-ground_01.jpg",
+  "ground_10": "corporate-avenue-ao-ground_10.jpg",
+  "ground_11": "corporate-avenue-ao-ground_11.jpg",
+  "metro": "corporate-avenue-ao-metro.jpg",
+  "stations": "corporate-avenue-ao-stations.jpg",
+  "opt_corporate-avenue": "corporate-avenue-ao-opt_corporate-avenue.jpg",
+  "plinth": "corporate-avenue-ao-plinth.jpg",
+  "campus_corporate": "corporate-avenue-ao-campus_corporate.jpg"
+ }
+}
