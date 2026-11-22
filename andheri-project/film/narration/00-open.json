@@ -1,0 +1,208 @@
+{
+ "file": "00-open.mp3",
+ "duration_s": 6.641,
+ "words": [
+  {
+   "word": "Flipkart",
+   "start": 0.0,
+   "end": 0.499
+  },
+  {
+   "word": "is",
+   "start": 0.569,
+   "end": 0.662
+  },
+  {
+   "word": "choosing",
+   "start": 0.72,
+   "end": 1.033
+  },
+  {
+   "word": "its",
+   "start": 1.08,
+   "end": 1.196
+  },
+  {
+   "word": "next",
+   "start": 1.254,
+   "end": 1.451
+  },
+  {
+   "word": "home",
+   "start": 1.498,
+   "end": 1.73
+  },
+  {
+   "word": "in",
+   "start": 1.765,
+   "end": 1.823
+  },
+  {
+   "word": "Andheri",
+   "start": 1.892,
+   "end": 2.218
+  },
+  {
+   "word": "East.",
+   "start": 2.264,
+   "end": 2.659
+  },
+  {
+   "word": "Three",
+   "start": 2.926,
+   "end": 3.158
+  },
+  {
+   "word": "buildings",
+   "start": 3.204,
+   "end": 3.564
+  },
+  {
+   "word": "made",
+   "start": 3.611,
+   "end": 3.773
+  },
+  {
+   "word": "the",
+   "start": 3.796,
+   "end": 3.866
+  },
+  {
+   "word": "shortlist.",
+   "start": 3.901,
+   "end": 4.447
+  },
+  {
+   "word": "Each",
+   "start": 4.516,
+   "end": 4.725
+  },
+  {
+   "word": "one",
+   "start": 4.783,
+   "end": 4.957
+  },
+  {
+   "word": "solves",
+   "start": 5.004,
+   "end": 5.306
+  },
+  {
+   "word": "a",
+   "start": 5.352,
+   "end": 5.375
+  },
+  {
+   "word": "different",
+   "start": 5.433,
+   "end": 5.712
+  },
+  {
+   "word": "problem.",
+   "start": 5.735,
+   "end": 6.641
+  }
+ ],
+ "normalized_words": [
+  {
+   "word": "Flipkart",
+   "start": 0.046,
+   "end": 0.499
+  },
+  {
+   "word": "is",
+   "start": 0.569,
+   "end": 0.662
+  },
+  {
+   "word": "choosing",
+   "start": 0.72,
+   "end": 1.033
+  },
+  {
+   "word": "its",
+   "start": 1.08,
+   "end": 1.196
+  },
+  {
+   "word": "next",
+   "start": 1.254,
+   "end": 1.451
+  },
+  {
+   "word": "home",
+   "start": 1.498,
+   "end": 1.73
+  },
+  {
+   "word": "in",
+   "start": 1.765,
+   "end": 1.823
+  },
+  {
+   "word": "Andheri",
+   "start": 1.892,
+   "end": 2.218
+  },
+  {
+   "word": "East.",
+   "start": 2.264,
+   "end": 2.659
+  },
+  {
+   "word": "Three",
+   "start": 2.926,
+   "end": 3.158
+  },
+  {
+   "word": "buildings",
+   "start": 3.204,
+   "end": 3.564
+  },
+  {
+   "word": "made",
+   "start": 3.611,
+   "end": 3.773
+  },
+  {
+   "word": "the",
+   "start": 3.796,
+   "end": 3.866
+  },
+  {
+   "word": "shortlist.",
+   "start": 3.901,
+   "end": 4.447
+  },
+  {
+   "word": "Each",
+   "start": 4.516,
+   "end": 4.725
+  },
+  {
+   "word": "one",
+   "start": 4.783,
+   "end": 4.957
+  },
+  {
+   "word": "solves",
+   "start": 5.004,
+   "end": 5.306
+  },
+  {
+   "word": "a",
+   "start": 5.352,
+   "end": 5.375
+  },
+  {
+   "word": "different",
+   "start": 5.433,
+   "end": 5.712
+  },
+  {
+   "word": "problem.",
+   "start": 5.735,
+   "end": 6.211
+  }
+ ]
+}

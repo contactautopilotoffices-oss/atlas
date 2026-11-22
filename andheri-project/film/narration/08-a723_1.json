@@ -1,0 +1,208 @@
+{
+ "file": "08-a723_1.mp3",
+ "duration_s": 7.755,
+ "words": [
+  {
+   "word": "723",
+   "start": 0.0,
+   "end": 1.033
+  },
+  {
+   "word": "Avenue",
+   "start": 1.115,
+   "end": 1.498
+  },
+  {
+   "word": "gives",
+   "start": 1.544,
+   "end": 1.73
+  },
+  {
+   "word": "Flipkart",
+   "start": 1.811,
+   "end": 2.299
+  },
+  {
+   "word": "the",
+   "start": 2.345,
+   "end": 2.415
+  },
+  {
+   "word": "top",
+   "start": 2.461,
+   "end": 2.682
+  },
+  {
+   "word": "of",
+   "start": 2.74,
+   "end": 2.81
+  },
+  {
+   "word": "a",
+   "start": 2.879,
+   "end": 2.902
+  },
+  {
+   "word": "new",
+   "start": 2.972,
+   "end": 3.111
+  },
+  {
+   "word": "building:",
+   "start": 3.158,
+   "end": 3.692
+  },
+  {
+   "word": "the",
+   "start": 4.005,
+   "end": 4.11
+  },
+  {
+   "word": "thirteenth",
+   "start": 4.156,
+   "end": 4.621
+  },
+  {
+   "word": "and",
+   "start": 4.667,
+   "end": 4.737
+  },
+  {
+   "word": "fourteenth",
+   "start": 4.807,
+   "end": 5.236
+  },
+  {
+   "word": "floors,",
+   "start": 5.259,
+   "end": 5.759
+  },
+  {
+   "word": "with",
+   "start": 5.921,
+   "end": 6.095
+  },
+  {
+   "word": "the",
+   "start": 6.142,
+   "end": 6.211
+  },
+  {
+   "word": "open",
+   "start": 6.281,
+   "end": 6.536
+  },
+  {
+   "word": "terrace",
+   "start": 6.594,
+   "end": 6.931
+  },
+  {
+   "word": "above.",
+   "start": 6.966,
+   "end": 7.755
+  }
+ ],
+ "normalized_words": [
+  {
+   "word": "723",
+   "start": 0.035,
+   "end": 1.033
+  },
+  {
+   "word": "Avenue",
+   "start": 1.115,
+   "end": 1.498
+  },
+  {
+   "word": "gives",
+   "start": 1.544,
+   "end": 1.73
+  },
+  {
+   "word": "Flipkart",
+   "start": 1.811,
+   "end": 2.299
+  },
+  {
+   "word": "the",
+   "start": 2.345,
+   "end": 2.415
+  },
+  {
+   "word": "top",
+   "start": 2.461,
+   "end": 2.682
+  },
+  {
+   "word": "of",
+   "start": 2.74,
+   "end": 2.81
+  },
+  {
+   "word": "a",
+   "start": 2.879,
+   "end": 2.902
+  },
+  {
+   "word": "new",
+   "start": 2.972,
+   "end": 3.111
+  },
+  {
+   "word": "building:",
+   "start": 3.158,
+   "end": 3.692
+  },
+  {
+   "word": "the",
+   "start": 4.005,
+   "end": 4.11
+  },
+  {
+   "word": "thirteenth",
+   "start": 4.156,
+   "end": 4.621
+  },
+  {
+   "word": "and",
+   "start": 4.667,
+   "end": 4.737
+  },
+  {
+   "word": "fourteenth",
+   "start": 4.807,
+   "end": 5.236
+  },
+  {
+   "word": "floors,",
+   "start": 5.259,
+   "end": 5.759
+  },
+  {
+   "word": "with",
+   "start": 5.921,
+   "end": 6.095
+  },
+  {
+   "word": "the",
+   "start": 6.142,
+   "end": 6.211
+  },
+  {
+   "word": "open",
+   "start": 6.281,
+   "end": 6.536
+  },
+  {
+   "word": "terrace",
+   "start": 6.594,
+   "end": 6.931
+  },
+  {
+   "word": "above.",
+   "start": 6.966,
+   "end": 7.465
+  }
+ ]
+}

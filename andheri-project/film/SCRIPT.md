@@ -77,5 +77,5 @@ The founder picks one. Pacing has breaths around every figure.
 
 1. The metro distances (note ¹).
 2. ~~723 terrace~~: confirmed available to Flipkart (founder, 23 Nov).
-3. Narrator: audition the three samples (founder: yes).
+3. ~~Narrator~~: **Alka** (founder, 23 Nov). Recorded in `narration/`, one file per section; `narration-alka-timeline.mp3` lays them on the script's timings.
 4. The first-draft video from ChatGPT: send the file and I will mark what to keep.

@@ -1,0 +1,108 @@
+{
+ "file": "11-close_1.mp3",
+ "duration_s": 3.901,
+ "words": [
+  {
+   "word": "Three",
+   "start": 0.0,
+   "end": 0.255
+  },
+  {
+   "word": "buildings.",
+   "start": 0.29,
+   "end": 0.848
+  },
+  {
+   "word": "Three",
+   "start": 1.08,
+   "end": 1.312
+  },
+  {
+   "word": "ways",
+   "start": 1.358,
+   "end": 1.556
+  },
+  {
+   "word": "for",
+   "start": 1.602,
+   "end": 1.707
+  },
+  {
+   "word": "Flipkart's",
+   "start": 1.741,
+   "end": 2.171
+  },
+  {
+   "word": "teams",
+   "start": 2.206,
+   "end": 2.438
+  },
+  {
+   "word": "to",
+   "start": 2.485,
+   "end": 2.554
+  },
+  {
+   "word": "work",
+   "start": 2.612,
+   "end": 2.786
+  },
+  {
+   "word": "together.",
+   "start": 2.833,
+   "end": 3.901
+  }
+ ],
+ "normalized_words": [
+  {
+   "word": "Three",
+   "start": 0.035,
+   "end": 0.255
+  },
+  {
+   "word": "buildings.",
+   "start": 0.29,
+   "end": 0.848
+  },
+  {
+   "word": "Three",
+   "start": 1.08,
+   "end": 1.312
+  },
+  {
+   "word": "ways",
+   "start": 1.358,
+   "end": 1.556
+  },
+  {
+   "word": "for",
+   "start": 1.602,
+   "end": 1.707
+  },
+  {
+   "word": "Flipkart's",
+   "start": 1.741,
+   "end": 2.171
+  },
+  {
+   "word": "teams",
+   "start": 2.206,
+   "end": 2.438
+  },
+  {
+   "word": "to",
+   "start": 2.485,
+   "end": 2.554
+  },
+  {
+   "word": "work",
+   "start": 2.612,
+   "end": 2.786
+  },
+  {
+   "word": "together.",
+   "start": 2.833,
+   "end": 3.309
+  }
+ ]
+}

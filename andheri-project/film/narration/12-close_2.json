@@ -1,0 +1,178 @@
+{
+ "file": "12-close_2.mp3",
+ "duration_s": 4.319,
+ "words": [
+  {
+   "word": "Walk",
+   "start": 0.0,
+   "end": 0.267
+  },
+  {
+   "word": "through",
+   "start": 0.325,
+   "end": 0.569
+  },
+  {
+   "word": "each",
+   "start": 0.604,
+   "end": 0.778
+  },
+  {
+   "word": "one,",
+   "start": 0.848,
+   "end": 1.103
+  },
+  {
+   "word": "compare",
+   "start": 1.138,
+   "end": 1.509
+  },
+  {
+   "word": "the",
+   "start": 1.544,
+   "end": 1.614
+  },
+  {
+   "word": "plans,",
+   "start": 1.649,
+   "end": 1.974
+  },
+  {
+   "word": "and",
+   "start": 1.997,
+   "end": 2.101
+  },
+  {
+   "word": "tell",
+   "start": 2.148,
+   "end": 2.299
+  },
+  {
+   "word": "us",
+   "start": 2.345,
+   "end": 2.415
+  },
+  {
+   "word": "what",
+   "start": 2.461,
+   "end": 2.612
+  },
+  {
+   "word": "matters.",
+   "start": 2.67,
+   "end": 3.042
+  },
+  {
+   "word": "We'll",
+   "start": 3.088,
+   "end": 3.274
+  },
+  {
+   "word": "take",
+   "start": 3.309,
+   "end": 3.471
+  },
+  {
+   "word": "it",
+   "start": 3.495,
+   "end": 3.564
+  },
+  {
+   "word": "from",
+   "start": 3.599,
+   "end": 3.738
+  },
+  {
+   "word": "there.",
+   "start": 3.796,
+   "end": 4.319
+  }
+ ],
+ "normalized_words": [
+  {
+   "word": "Walk",
+   "start": 0.012,
+   "end": 0.267
+  },
+  {
+   "word": "through",
+   "start": 0.325,
+   "end": 0.569
+  },
+  {
+   "word": "each",
+   "start": 0.604,
+   "end": 0.778
+  },
+  {
+   "word": "one,",
+   "start": 0.848,
+   "end": 1.103
+  },
+  {
+   "word": "compare",
+   "start": 1.138,
+   "end": 1.509
+  },
+  {
+   "word": "the",
+   "start": 1.544,
+   "end": 1.614
+  },
+  {
+   "word": "plans,",
+   "start": 1.649,
+   "end": 1.974
+  },
+  {
+   "word": "and",
+   "start": 1.997,
+   "end": 2.101
+  },
+  {
+   "word": "tell",
+   "start": 2.148,
+   "end": 2.299
+  },
+  {
+   "word": "us",
+   "start": 2.345,
+   "end": 2.415
+  },
+  {
+   "word": "what",
+   "start": 2.461,
+   "end": 2.612
+  },
+  {
+   "word": "matters.",
+   "start": 2.67,
+   "end": 3.042
+  },
+  {
+   "word": "We'll",
+   "start": 3.088,
+   "end": 3.274
+  },
+  {
+   "word": "take",
+   "start": 3.309,
+   "end": 3.471
+  },
+  {
+   "word": "it",
+   "start": 3.495,
+   "end": 3.564
+  },
+  {
+   "word": "from",
+   "start": 3.599,
+   "end": 3.738
+  },
+  {
+   "word": "there.",
+   "start": 3.796,
+   "end": 4.052
+  }
+ ]
+}

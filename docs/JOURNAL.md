@@ -13,6 +13,7 @@
   - Three full-HD renders in `media/flipkart-andheri/world/privilon-hero/`: blue hour, sunrise and sunset.
   - A film script and production plan in `andheri-project/film/SCRIPT.md`: about 115 seconds, one clear reason per building, and only deck figures.
 - **Logic gate:** `scripts/world/check_logic.py` now runs inside every build and stops it if the scene breaks reality. It checks that every surveyed building is standing, that nothing stands on a carriageway or inside a station's clearance, that the property is present with nothing overlapping it, and that no camera starts inside a building. It was added after the founder found Fleet House missing (the old pin's tag had deleted it) and buildings on the road.
+- The founder chose **Alka** (natural, warm Indian English) from three auditions. The full narration is recorded one section at a time (about 83 seconds), so a changed figure means re-recording one line, not the film.
 - The founder confirmed the 723 terrace is available to Flipkart; the script now says so.
 - **Left undone:**
   - The photographed skies show their own horizon (a bridge, a car park) behind the district; this needs a sky-only horizon.
@@ -20,7 +21,6 @@
   - The explorer preview still has the earlier Privilon.
 - **Open questions for the founder:**
   - Metro walking distances: the explorer and the route data disagree (Privilon 140 m against 40 m; Corporate Avenue 920 m to WEH against 850 m to Chakala; 723 Avenue 810 m against 700 m).
-  - Choice of narrator after auditions.
 
 
 ## 2026-11-21 — Atlas: Andheri district twin, first realism checkpoint
