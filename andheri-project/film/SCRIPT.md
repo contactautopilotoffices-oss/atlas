@@ -1,6 +1,11 @@
 # Flipkart × Autopilot: Andheri East, the shortlist
 
-Draft 3, 23 Nov 2026. About 2 minutes, 1920×1080. Narrator: **Lily** (warm, mature female), the voice of the Reliable Tech Park film the founder holds up as the reference. Draft 2, which had a feature-led tone, is kept in `SCRIPT-draft2.md`.
+Draft 4, 23 Nov 2026. About 2 minutes, 1920×1080. Narrator: **Alka** (founder's choice: "nice and energetic"), the voice of the Reliable Tech Park film. Draft 2, which had a feature-led tone, is kept in `SCRIPT-draft2.md`.
+
+**Figures in this draft.** Where the deck and the explorer disagree, a figure is used only when two founder sources agree; each is listed in the morning notes.
+- Corporate Avenue: Chakala metro 850 m (deck and route data); carpet 6,207 sq ft per floor (deck), 12,414 sq ft across the two.
+- 723 Avenue: Marol Naka 700 m (deck and route data); 13th and 14th floors (the newer priority list).
+- Privilon: 140 m (the explorer's Google Maps figure; Privilon is not in the deck).
 
 ## The voice of this film
 
@@ -23,19 +28,19 @@ This is the same language as the Reliable film:
 | 0:37–0:44 | Privilon at dusk, lit, the viaduct alongside. | "A new Grade A tower, ground plus fifteen. One long, clear floor plate. Possession in January." |
 | 0:44–0:56 | 2D CAD: the plate draws in; 260, 280 and 301 seats toggle. | "We've drawn the floor three ways: two sixty, two eighty, and three hundred and one seats. Every chair counted from the drawing. So the floor you sign is the floor that grows with you." |
 | **Corporate Avenue** | | |
-| 0:56–1:04 | A drone along Guru Hargovindji Road, through the gates, the campus. | "Second, speed. Corporate Avenue in Chakala is a gated office campus, already furnished. Ready the day you are." |
-| 1:04–1:16 | 2D CAD: the 3rd floor, then the 4th, stacked; the zones fill. | "The third and fourth floors, twelve thousand four hundred square feet of carpet on each. Two floors means two teams with their own space, one stair apart, under one roof." |
-| 1:16–1:21 | 2D map: the walk to the metro. | "Western Express Highway metro is twelve minutes on foot." |
+| 0:56–1:04 | A drone along Guru Hargovindji Road, through the gates, the campus. | "Second, speed. Corporate Avenue in Chakala is a gated office campus, with two floors ready now. Ready the day you are." |
+| 1:04–1:16 | 2D CAD: the 3rd floor, then the 4th, stacked; the zones fill. | "The third and fourth floors. Six thousand two hundred square feet of carpet on each, twelve thousand four hundred together. Two floors means two teams with their own space, one stair apart, under one roof." |
+| 1:16–1:21 | Google-Maps-style map: the walk to Chakala metro. | "Chakala metro is eight hundred and fifty metres away. About eleven minutes on foot." |
 | **723 Avenue** | | |
 | 1:21–1:30 | A rise up 723's dark fins to the glowing 13th and 14th floors, then over the terrace. | "Third, the view from the top. At 723 Avenue, Flipkart takes the thirteenth and fourteenth floors, and the terrace above them comes with it." |
 | 1:30–1:40 | 2D CAD: the 13th floor; the terrace zone marked "Flipkart breakout". | "A bare-shell floor, ready to fit out your way, with your own open-air breakout above it. A place to step outside between the hard hours." |
-| 1:40–1:44 | The map: the walk to Marol Naka. | "Marol Naka metro is about ten minutes away." |
+| 1:40–1:44 | Google-Maps-style map: the walk to Marol Naka. | "Marol Naka metro is seven hundred metres away. About nine minutes on foot." |
 | **Autopilot** | | |
 | 1:44–1:56 | Dusk pull-back: all three pins, then the lit buildings. | "Three buildings. The commute, the speed, the view from the top. You choose what matters most, and we'll show you every seat and every rupee before a single wall goes up." |
 | 1:56–2:06 | Autopilot × Flipkart lockup. Line: **Pehle vyavahar, phir vyapar.** | "We're Autopilot. Fifteen thousand seats, twenty centres, seven cities. We pick the building first, plan it to the last chair, and then we run it like it's our own. Pehle vyavahar, phir vyapar. Relationship first, business next." |
 | 2:06–2:10 | **Andheri East. Let's choose it together.** | "Andheri East. Let's choose it together." |
 
-The Autopilot figures (15,000+ seats, 20+ centres, 7 cities) are the ones the Reliable film states. Distances follow the explorer: Privilon 140 m, Corporate Avenue 920 m to Western Express Highway, 723 Avenue 810 m. These are still to be reconciled with the route data.
+The Autopilot figures (15,000+ seats, 20+ centres, 7 cities) are the ones the Reliable film states.
 
 ## Production
 
@@ -45,4 +50,4 @@ Production is unchanged from draft 2:
 - **Sound:** a licensed music bed, sound design, and the music ducked under the voice.
 - **Cars:** from BlenderKit.
 
-Alka's recording in `narration/` is superseded and will be re-recorded in Lily's voice once this draft is approved.
+Alka records draft 4 (`narration-v4/`); the draft-2 recording in `narration/` is superseded.
