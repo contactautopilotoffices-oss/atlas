@@ -997,6 +997,19 @@ def swap_hero(path):
     new.location.x += (ring[:, 0].min() + ring[:, 0].max()) / 2 - (bb[:, 0].min() + bb[:, 0].max()) / 2
     new.location.y += (ring[:, 1].min() + ring[:, 1].max()) / 2 - (bb[:, 1].min() + bb[:, 1].max()) / 2
     print("hero swapped from", path, "moved by", tuple(round(v, 2) for v in new.location))
+    if "--hero-fit" in A:   # the study was shaped for another footprint: rotate and scale it onto this one's outline
+        import mathutils as _mu
+        V = np.array([new.matrix_world @ v.co for v in new.data.vertices])[:, :2]
+        def rect(pts):
+            r = shapely.MultiPoint([tuple(p) for p in pts]).minimum_rotated_rectangle; c_ = list(r.exterior.coords)[:4]
+            e0, e1 = np.subtract(c_[1], c_[0]), np.subtract(c_[2], c_[1])
+            if np.linalg.norm(e0) < np.linalg.norm(e1): e0, e1 = e1, e0
+            return np.array(r.centroid.coords[0]), math.atan2(e0[1], e0[0]), np.linalg.norm(e0), np.linalg.norm(e1)
+        ch, ah, lh, sh = rect(V[:: max(1, len(V) // 4000)]); ct, at, lt, st = rect(ring)
+        M = (_mu.Matrix.Translation((*ct, 0)) @ _mu.Matrix.Rotation(at, 4, "Z") @ _mu.Matrix.Diagonal((lt / lh, st / sh, 1, 1))
+             @ _mu.Matrix.Rotation(-ah, 4, "Z") @ _mu.Matrix.Translation((-ch[0], -ch[1], 0)))
+        new.matrix_world = M @ new.matrix_world
+        print("hero fitted: %.1f x %.1f m -> %.1f x %.1f m, turned %.1f deg" % (lh, sh, lt, st, math.degrees(at - ah)))
 
 def bake_ao(outdir, tiles=2, size=4096, dist=14.0, samples=96):
     """--bake-ao: bake ambient occlusion (how much open sky each surface sees) into a second UV set (LM)

@@ -46,6 +46,7 @@
     - It showed Corporate Avenue's long block on the main road is missing from both Overture and OpenStreetMap; it is now traced from the imagery and added, and the two gates sit on the road either side of it.
     - It showed that a rule in the old builder deleted every building that touched the clearance around a Line 1 station, which left empty lots by Marol Naka. Buildings are now trimmed to the clearance instead; only the station buildings themselves are removed.
     - Google's Geocoding API returns no building outlines or entrances for India, so it confirms positions only.
+  - **Privilon's plot confirmed** by the founder on the Google satellite sheet: the strip behind Fleet House. The brochure facade study (vertical fin zones, smooth glazed middle bay) is now rotated and scaled onto that 62 x 20 m footprint (`--hero-fit`); it was shaped for a 63 x 43 m footprint, so its fins are compressed front to back.
   - The preview link takes several properties: `?preview=723-avenue,privilon`.
   - 723 Avenue now has the rooftop garden from the developer's brochure: a timber deck, a curving planted band with trees, checkerboard paving, a glazed pavilion with timber fins and a glass railing. The layout is read from the brochure; sizes are estimates. The brochure image is kept with the 723 photos.
 - **Left undone:**
@@ -56,7 +57,6 @@
   - Nothing is published to the live explorer.
   - The NotebookLM push was not attempted: `add_source` is known to be broken.
 - **Open questions for the founder:**
-  - Privilon's exact plot: the satellite shows a construction site with a crane beside the strip the model now uses.
   - Can the developer confirm Privilon's plot and storey count (the brochure says 14)?
   - Is this direction worth more time, given that a modelled city will never match Google's photographed New York?
   - Privilon is under construction and absent from all map data. Can someone confirm its exact plot beside Marol Naka station?
