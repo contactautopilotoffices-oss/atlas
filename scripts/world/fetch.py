@@ -14,6 +14,8 @@ import pyarrow.fs as pafs, pyarrow.parquet as pq, pyarrow as pa, pyarrow.compute
 from concurrent.futures import ThreadPoolExecutor
 REL="release/2026-10-21.0"
 BB=(72.838,19.094,72.896,19.128)
+# another site: BB="W,S,E,N" in the environment (the DEM tile is picked from the box)
+if os.environ.get("BB"): BB=tuple(float(v) for v in os.environ["BB"].split(","))
 s3=pafs.S3FileSystem(anonymous=True, region="us-west-2")
 def rgs(path):
     f=pq.ParquetFile(path, filesystem=s3); md=f.metadata; hits=[]
@@ -49,7 +51,10 @@ import numpy as np, rasterio
 from rasterio.windows import from_bounds
 tif = os.path.join(OUTD, "dsm.tif")
 if not os.path.exists(tif):
-    urllib.request.urlretrieve("https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N19_00_E072_00_DEM/Copernicus_DSM_COG_10_N19_00_E072_00_DEM.tif", tif)
+    import math
+    la, lo = math.floor(BB[1]), math.floor(BB[0])
+    name = f"Copernicus_DSM_COG_10_N{la:02d}_00_E{lo:03d}_00_DEM"
+    urllib.request.urlretrieve(f"https://copernicus-dem-30m.s3.amazonaws.com/{name}/{name}.tif", tif)
 with rasterio.open(tif) as r:
     win = from_bounds(BB[0], BB[1], BB[2], BB[3], r.transform)
     np.save(os.path.join(OUTD, "dsm.npy"), r.read(1, window=win))
