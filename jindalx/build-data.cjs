@@ -18,6 +18,23 @@ const worldVer = (() => {
 })();
 // the 3D explorer (/jindalx-noida/world): one diorama per option, built by scripts/world from two regions
 const origins = {'magnus-towers':[77.3847901,28.604823],'a104':[77.3231094,28.5839319],'a14-18-19':[77.3231094,28.5839319],'d1':[77.3231094,28.5839319]};
+// the guided tour (engine/world-story.js): generated from the workbook and the measured walks, plus jindalx/story-notes.json
+const notes = JSON.parse(fs.readFileSync(path.join(root, 'story-notes.json')));
+const kmOrM = (m) => m < 1000 ? `${Math.round(m / 10) * 10} metres` : `${(m / 1000).toFixed(1)} kilometres`;
+function storyFor(r, id) {
+  const R = Object.fromEntries(Object.entries(r).map(([k, v]) => [k.trim(), String(v).trim()])), g = (k) => R[k] || '', n = notes[id], w = (walks[id] || []).find((x) => x.kind === 'metro');
+  const steps = [
+    { view: 'overview', basis: n.overview.basis, title: n.overview.title, text: n.overview.text },
+    { view: 'facade', basis: n.facade.basis, title: 'The facade', text: n.facade.text },
+    { view: 'approach', basis: n.approach.basis, title: 'The way in', text: n.approach.text + (g('Cons') ? ` Watch for this: ${g('Cons').replace(/\.$/, '')}.` : '') },
+  ];
+  if (w) steps.push({ view: 'metro', basis: 'measured', title: `Walk to ${w.name.replace(/^Noida /, '')} metro`,
+    text: `${kmOrM(w.m)}, about ${w.min} minutes on foot, measured along the streets from the pin. The sheet says ${g('Nearest Metro station')}. The line on the ground is the route.` });
+  steps.push({ view: 'floor', basis: 'workbook', title: `On offer: ${g('Offered floor')} floor`,
+    text: `${g('Lifts each floor')} lifts a floor, parking at ${g('Parking')}, ${g('Timelines').toLowerCase()} to move in. Cafeteria: ${g('Common Cafeteria').toLowerCase()}.` });
+  steps.push({ view: 'overview', basis: n.position.basis, title: 'What is still open', text: n.position.text });
+  return steps;
+}
 const options = source.options.map((r,i) => ({
   id:ids[i],n:i+1,name:r.Location,lat:positions[i][0],lng:positions[i][1],
   address:r['Address/Sector'],locality:r['Address/Sector'],precision:'approx',
@@ -39,8 +56,9 @@ const bundle = {
       // the premium look (VISUAL_REALISM_AUDIT.md): open ground textured, AgX tone mapping, the time-of-day studio
       groundTex:'ground_noida',tone:'agx',lighting:true,lightingEV:-0.35,lightingHour:15.75,
       factKeys:{'Micro-market':'Address/Sector','Floor / Unit':'Offered floor','Possession':'Timelines'},
-      brand:{kicker:'Autopilot · JindalX',title:'Noida, in 3D'},
-      credit:'Options: workbook floor plates and storeys at indicative pins, not surveyed. Context: Overture Maps, heights estimated. Walks: Overture streets from the pins.',
+      ui:'andheri',client:'JindalX',brand:{kicker:'Autopilot · JindalX',title:'Noida, in 3D'},
+      credit:'Options: workbook floor plates and storeys at indicative pins, not surveyed; a check against 2026 imagery found the model positions and facades off (see the tour). Context: Overture Maps, heights estimated. Walks: Overture streets from the pins.',
+      story:Object.fromEntries(source.options.map((r,i)=>[ids[i],storyFor(r,ids[i])])),
       thumbs:Object.fromEntries(ids.map(id=>[id,`r/${id}-hero.jpg`])),renders:Object.fromEntries(ids.map(id=>[id,`r/${id}-street.jpg`]))},
     nextSteps:['Confirm the exact plot pins for all four options before routing site visits.','Reconcile the workbook’s approximately 7 km from the existing office against the verified Sector 125 office pin; no road distance has been verified.','Confirm chargeable area, service scope, deposits, escalation, lock-in and GST.','Validate the December 2026 handover and the separate three-month timelines for Magnus Towers and A104.','Inspect approach roads, shift-change transport, parking and cafeteria proposals.']},
   existing:{id:'jindalx-existing',name:'JindalX · current office',label:'Current office',locality:'Prius Heights, Plot 10/11, 3rd floor, Sector 125, Noida',lat:28.5452606,lng:77.3302287,precision:'building',geoSrc:'https://www.google.com/maps/place/JindalX/data=!4m2!3m1!1s0x0:0xe8b15a782573ec59',geoNote:'Resolved directly from the Maps link supplied in the brief, 20 November 2026.',note:'The supplied workbook states approximately 7 km to every option. Those distances require verification.'},

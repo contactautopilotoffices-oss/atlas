@@ -1,5 +1,22 @@
 # Atlas — Development Journal
 
+## 2026-11-24 — Atlas: JindalX 3D checked against the real buildings; Andheri look and a guided tour on Noida
+
+**The Noida 3D explorer now looks like Andheri's and opens a narrated tour, and a check against Google imagery shows the four building models are not yet in the right place.**
+
+- **Why:** the founder asked whether the JindalX twin matches the real facades, lanes and gates, wanted the 3D to lead with the facts spoken around it, the Andheri look, and the loader bug gone.
+- **Structural decisions:**
+  - The Andheri look is now a switch any atlas can turn on (`ui: andheri`), separate from the Flipkart-only parts (film, shortlist, floor plans). The alternative, calling Noida a Flipkart atlas, would have put Flipkart's logo and Andheri's film on a JindalX page.
+  - The tour is a generic module fed by each atlas's own steps, with an on-screen tag saying whether each fact is from the sheet, measured, modelled or checked.
+  - Imagery stays outside the repository: Google's terms allow review only.
+- **What works now:**
+  - The Noida explorer shows "Autopilot × JindalX" in the Andheri look.
+  - The Tour button flies the camera to the building, facade, way in, metro walk and offered floor, with captions and an optional voice.
+  - The loader no longer says "Andheri East" before switching.
+- **What the check found:** none of the four models matches. Magnus is about 520 m from the real Magnus Greens (plot C-2) and the wrong shape; A104's real building is unconfirmed; A-14 is about 108 m away with a glass front; D-1 is about 139 m away with a round tower. Details in `docs/JINDALX_VERIFICATION.md`. The tour now says so.
+- **Left undone:** the four models are not rebuilt at the corrected positions and facades. It needs the Blender build, and only Magnus and A-14 are reasonably certain. Landlord plot plans would make it exact.
+- **Open questions for the founder:** rebuild now from public evidence, or wait for the landlords' plots and photos? Can the landlords supply a plot plan and a photo for A-104 and D-1? Should the tour voice be a studio recording instead of the browser's voice?
+
 ## 2026-11-23 — Atlas: a playbook so any Claude can make an Andheri-style property film
 
 **The way the Andheri film and experience were built is now written down as one skill, "property-film-studio", that any Claude session in this project loads on its own.**

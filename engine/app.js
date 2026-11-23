@@ -25,7 +25,7 @@
 const A = window.ATLAS || {};
 const SLUG = A.slug || "atlas";
 const M = A.meta || {};
-if(M.branding === "autopilot-flipkart")import("/engine/andheri-ui.js").then(({applyAndheriTheme})=>applyAndheriTheme("atlas"));
+if(M.branding === "autopilot-flipkart" || M.world?.ui === "andheri")import("/engine/andheri-ui.js").then(({applyAndheriTheme})=>applyAndheriTheme("atlas", M.branding === "autopilot-flipkart" ? "" : M.world?.client));
 const O = Array.isArray(A.options) ? A.options : [];
 const F = A.facts || {};
 const EX = A.existing || null;

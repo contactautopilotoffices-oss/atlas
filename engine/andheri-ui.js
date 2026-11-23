@@ -5,8 +5,9 @@ import { SHORTLIST, odometer, rollIn, ICON } from './andheri-experience.js';
 export { brandLockup };
 
 const FONTS = 'https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap';
-export function applyAndheriTheme(surface){
+export function applyAndheriTheme(surface,client){
  document.body.dataset.andheriUi=surface;
+ if(client)document.body.dataset.apClient=client;
  if(!document.querySelector('link[data-andheri-theme]')){
   const css=document.createElement('link');css.rel='stylesheet';css.href='/engine/andheri-ui.css';css.dataset.andheriTheme='';document.head.appendChild(css);
  }

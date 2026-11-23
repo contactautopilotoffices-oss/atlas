@@ -284,3 +284,37 @@ body[data-andheri-ui=atlas] #tabs button{min-height:44px}
 
 }
 @media(prefers-reduced-motion:reduce){body[data-andheri-ui] *,body[data-andheri-ui] *:before,body[data-andheri-ui] *:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+
+/* a client set in type beside Autopilot's mark (no logo file supplied) */
+body[data-andheri-ui] .ap-lockup .ap-client{font:600 15px/1 Geist,Inter,system-ui,sans-serif;letter-spacing:.01em}
+body[data-andheri-ui] .ap-lockup[data-tone=dark] .ap-client{color:#fff}
+body[data-andheri-ui] .ap-lockup[data-tone=light] .ap-client{color:#151a23}
+
+/* the guided tour (engine/world-story.js): the 3D stays the star, a caption card sits low and centre */
+body[data-andheri-ui=world] #story{position:fixed;left:50%;bottom:118px;transform:translateX(-50%);z-index:6;width:min(600px,calc(100vw - 32px));padding:18px 20px 16px;border-radius:22px;color:#fff;
+ background:rgba(14,15,18,.62);backdrop-filter:blur(22px) saturate(1.3);-webkit-backdrop-filter:blur(22px) saturate(1.3);border:1px solid rgba(255,255,255,.14);box-shadow:0 24px 60px rgba(0,0,0,.38)}
+body[data-andheri-ui=world] #story[hidden]{display:none}
+body[data-andheri-ui=world] #story header{display:flex;align-items:center;gap:10px}
+body[data-andheri-ui=world] #story #st-count{color:#ffc200;font:500 11px/1 Geist Mono,ui-monospace,monospace;letter-spacing:.14em}
+body[data-andheri-ui=world] #story .st-basis{font:500 10.5px/1 Geist Mono,ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.22);color:rgba(255,255,255,.78)}
+body[data-andheri-ui=world] #story .st-basis[data-b=assumed],body[data-andheri-ui=world] #story .st-basis[data-b=unverified]{border-color:#ffc200;color:#ffc200}
+body[data-andheri-ui=world] #story .st-basis[data-b=verified],body[data-andheri-ui=world] #story .st-basis[data-b=measured]{border-color:#7fd6a0;color:#7fd6a0}
+body[data-andheri-ui=world] #story #st-x{margin-left:auto;width:30px;height:30px;border-radius:50%;font-size:20px;line-height:1;color:rgba(255,255,255,.7)}
+body[data-andheri-ui=world] #story #st-x:hover{color:#fff;background:rgba(255,255,255,.12)}
+body[data-andheri-ui=world] #story h3{margin:12px 0 6px;font:650 22px/1.15 Geist,Inter,system-ui,sans-serif;letter-spacing:-.005em}
+body[data-andheri-ui=world] #story p{margin:0;font:400 14.5px/1.5 Geist,Inter,system-ui,sans-serif;color:rgba(255,255,255,.86);max-width:56ch}
+body[data-andheri-ui=world] #story footer{display:flex;align-items:center;gap:10px;margin-top:14px}
+body[data-andheri-ui=world] #story footer button{height:34px;min-width:34px;padding:0 12px;border-radius:999px;border:1px solid rgba(255,255,255,.2);color:#fff;font:600 12.5px/1 Geist,Inter,system-ui,sans-serif;letter-spacing:.02em}
+body[data-andheri-ui=world] #story footer button:hover:not(:disabled){background:rgba(255,255,255,.12)}
+body[data-andheri-ui=world] #story footer button:disabled{opacity:.35}
+body[data-andheri-ui=world] #story #st-play,body[data-andheri-ui=world] #story #st-say.on{background:#ffc200;border-color:#ffc200;color:#17140a}
+body[data-andheri-ui=world] #story #st-dots{display:flex;gap:7px;flex:1;justify-content:center}
+body[data-andheri-ui=world] #story #st-dots button{height:8px;min-width:8px;width:8px;padding:0;border:0;background:rgba(255,255,255,.28);transition:width .25s,background .25s}
+body[data-andheri-ui=world] #story #st-dots button.on{width:24px;background:#ffc200}
+body[data-andheri-ui=world] #story.swap h3,body[data-andheri-ui=world] #story.swap p{animation:st-in .45s ease both}
+@keyframes st-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+body.touring #hud,body.touring #credit,body.touring #floors,body.touring #line1,body.touring #line2{opacity:0;pointer-events:none;transition:opacity .35s}
+body[data-andheri-ui=world] #tour-btn{font:inherit}
+body[data-andheri-ui=world] #tour-btn[aria-pressed=true]{background:#ffc200;color:#17140a}
+@media (max-width:700px){body[data-andheri-ui=world] #story{bottom:104px;padding:14px 16px}body[data-andheri-ui=world] #story h3{font-size:19px}body[data-andheri-ui=world] #story p{font-size:13.5px}}
+@media (prefers-reduced-motion:reduce){body[data-andheri-ui=world] #story.swap h3,body[data-andheri-ui=world] #story.swap p{animation:none}}
