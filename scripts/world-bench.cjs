@@ -64,7 +64,8 @@ async function load(ctx, cold) {
   const errors = []; page.on("pageerror", (e) => errors.push(e.message));
   page.on("console", (m) => { if (m.type() === "error" && !/config\.js|Failed to load resource/.test(m.text())) errors.push(m.text()); });
   const t0 = Date.now();
-  await page.goto(`${BASE}/${SLUG}/world?perf=1&bench=1#${OPT}`, { waitUntil: "commit", timeout: 600000 });
+  const qs = process.env.BENCH_QS ? "&" + process.env.BENCH_QS : "";   // e.g. BENCH_QS=ao=0 to price one feature
+  await page.goto(`${BASE}/${SLUG}/world?perf=1&bench=1${qs}#${OPT}`, { waitUntil: "commit", timeout: 600000 });
   await page.waitForFunction(() => window.__world && window.__world.PERF && !document.querySelector("#veil.on"), null, { timeout: 600000, polling: 500 });
   const ready = Date.now() - t0;
   const res = await page.evaluate(() => performance.getEntriesByType("resource").map((e) => ({ name: e.name.replace(location.origin, ""), wire: e.transferSize, size: e.decodedBodySize, ms: Math.round(e.duration) })));

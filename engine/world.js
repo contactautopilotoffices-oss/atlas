@@ -96,6 +96,8 @@ async function start(A, W, intro=null) {
   if(W.contexts || W.cad)document.body.classList.add('project-tools');
   if(W.mapHref)$("#to-map").href=W.mapHref;
   const canvas = $("#c");
+  let wakeUntil = 0; const wake = (ms = 1200) => { wakeUntil = Math.max(wakeUntil, performance.now() + ms); };
+  for (const ev of ["pointerdown", "pointermove", "wheel", "keydown", "keyup", "touchstart", "touchmove", "input", "change", "click"]) addEventListener(ev, () => wake(), { passive: true, capture: true });
   // the Flipkart Andheri explorer opens on the re-modelled buildings (d-preview: new Privilon, Corporate Avenue's tower)
   // unless ?preview= names others; ?preview=none shows the older district models
   const defaultPreview = W.branding === "autopilot-flipkart" ? "privilon,corporate-avenue,723-avenue" : "";
@@ -104,20 +106,46 @@ async function start(A, W, intro=null) {
     (W.models?.[id]?.aoBase || previewIds.has(id));
   let lightingBuilder=null,worldLayouts=null;
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true, powerPreference: "high-performance" });
-  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, MOBILE ? 1.5 : 2));
+  /* Quality tiers. The pixel ratio is capped at 1.5 (a 2x screen at 2 draws 78% more pixels for little visible gain
+     on a city seen from 300 m), and the explorer steps down a tier while frames run slow (adapt(), in the loop):
+     0 the full look, 1 a lower pixel ratio, 2 no ambient occlusion and 2x MSAA at pixel ratio 1, 3 no MSAA below 1
+     for very weak GPUs (4x MSAA on the half-float target is about 30% of a frame once the trees are culled).
+     ?q=low starts at 2, ?dpr= forces a ratio, ?adapt=0 holds the starting tier. */
+  const DPR = devicePixelRatio || 1;
+  const TIERS = [{ dpr: Math.min(DPR, 1.5), ao: true, msaa: 4 }, { dpr: Math.min(DPR, 1.25), ao: true, msaa: 4 }, { dpr: Math.min(DPR, 1), ao: false, msaa: 2 }, { dpr: Math.min(DPR, 0.8), ao: false, msaa: 0 }];
+  let tier = MOBILE || Q.get("q") === "low" ? 2 : 0;
+  try { const saved = +sessionStorage.getItem("atlas-world-tier"); if (saved > tier && saved < TIERS.length) tier = saved; } catch (e) {}
+  if (Q.has("dpr")) TIERS.forEach((t) => (t.dpr = +Q.get("dpr") || 1));
+  renderer.setPixelRatio(TIERS[tier].dpr);
   renderer.setSize(innerWidth, innerHeight);
   renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.92;
   if (previewIds.size || Object.values(W.models || {}).some(model => model.aoBase)) {
     renderer.toneMapping = THREE.AgXToneMapping; renderer.toneMappingExposure = 1.05;
   }
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  /* The shadow map is redrawn only when something that casts or receives a shadow moves: the sun, the shadow box
+     (sunBox), a new diorama. Cars, people and trains do not cast (at 300 m they are a few pixels). Trees cast from
+     per-cell copies on layer 1, which only the sun's camera sees (buildForest). */
+  renderer.shadowMap.autoUpdate = false; let shadowDirty = true;
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(32, innerWidth / innerHeight, 0.3, 6000);
   const controls = new OrbitControls(camera, canvas);
   controls.enableDamping = true; controls.dampingFactor = 0.07; controls.maxPolarAngle = 76 * D2R; controls.minPolarAngle = 18 * D2R;
   controls.autoRotate = true; controls.autoRotateSpeed = 0.35; controls.zoomSpeed = 0.9;
   controls.addEventListener("start", () => { controls.autoRotate = false; });
+  controls.addEventListener("end", () => wake(1500));   // orbit damping eases on after the pointer is let go
 
+  /* Models: the chosen option's diorama starts downloading now, alongside the sky, instead of after it; the
+     other options are fetched once the first is on screen, in idle time (only for atlases of up to six plain
+     models), so switching parses from memory instead of waiting on the network. */
+  const prefetched = new Map();
+  const plainModel = (id) => !W.models?.[id] && !(W.branding === "autopilot-flipkart");
+  function prefetch(id) {
+    if (!plainModel(id) || prefetched.has(id)) return prefetched.get(id);
+    const p = Promise.all([fetch(`${W.data}d/${id}.glb`).then((r) => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); }), fetch(`${W.data}d/${id}.json`).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })]).catch(() => { prefetched.delete(id); return null; });
+    prefetched.set(id, p); return p;
+  }
+  { const opts0 = A.options.filter((o) => !W.thumbs || W.thumbs[o.id]); const f0 = opts0.find((o) => o.id === location.hash.slice(1)) || opts0[0]; if (f0) prefetch(f0.id); }
   /* the Blender sky: lighting and reflections; the background only when walking */
   const hdr = await new RGBELoader().loadAsync(W.data + W.sky);
   hdr.mapping = THREE.EquirectangularReflectionMapping;
@@ -130,12 +158,13 @@ async function start(A, W, intro=null) {
   const SUN = new THREE.Vector3(Math.sin(235 * D2R) * Math.cos(24 * D2R), Math.sin(24 * D2R), -Math.cos(235 * D2R) * Math.cos(24 * D2R)).normalize();
   const sun = new THREE.DirectionalLight(0xffe6c4, 3.1); sun.castShadow = true;
   sun.shadow.mapSize.set(MOBILE ? 2048 : 4096, MOBILE ? 2048 : 4096); sun.shadow.bias = -0.0002; sun.shadow.normalBias = 0.6; sun.shadow.radius = 2.5;
+  sun.shadow.camera.layers.enable(1);
   scene.add(sun, sun.target);
   const fill = new THREE.HemisphereLight(0xcfe0f0, 0x6b6253, 0.35); scene.add(fill);
 
   /* textures, loaded once and shared by every diorama */
   const texL = new THREE.TextureLoader(); const TEX = {},textureJobs=[]; const aniso = renderer.capabilities.getMaxAnisotropy();
-  const tex = (name, srgb = true) => TEX[name] || (TEX[name] = (() => { let ready;const done=new Promise(resolve=>ready=resolve);textureJobs.push(done);const t = texL.load(W.data + "tex/" + name + (name.startsWith("leaves") ? ".png" : ".jpg"),()=>ready(true),undefined,()=>{t.userData.failed=true;ready(false);}); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = aniso; if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.flipY = false; return t; })());
+  const tex = (name, srgb = true) => TEX[name] || (TEX[name] = (() => { let ready;const done=new Promise(resolve=>ready=resolve);textureJobs.push(done);const t = texL.load(W.data + "tex/" + name + (name.startsWith("leaves") ? ".png" : ".jpg"),()=>{ready(true);wake();},undefined,()=>{t.userData.failed=true;ready(false);}); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = aniso; if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.flipY = false; return t; })());
   const GLASSY = new Set(["wall_com_glass", "wall_opt_glass", "wall_com_ribbon", "wall_opt_plaster", "wall_res_tower", "wall_glass723", "wall_retail723", "wall_cw_teal", "wall_cw_blue", "wall_cw_grey", "wall_cw_silver", "wall_ribbon_red", "wall_ribbon_white"]);
   const MAT = {};
   function material(name) {
@@ -178,12 +207,20 @@ async function start(A, W, intro=null) {
 
   /* -------------------------------------------------------- post ---- */
   const LOW = MOBILE || Q.get("q") === "low";
-  const target = new THREE.WebGLRenderTarget(innerWidth, innerHeight, { samples: LOW || Q.get("msaa") === "0" ? 0 : 4, type: THREE.HalfFloatType });
+  const MSAA_OK = !(LOW || Q.get("msaa") === "0");
+  const target = new THREE.WebGLRenderTarget(innerWidth, innerHeight, { samples: MSAA_OK ? TIERS[tier].msaa : 0, type: THREE.HalfFloatType });
   const composer = new EffectComposer(renderer, target);
   composer.addPass(new RenderPass(scene, camera));
   const gtao = new GTAOPass(scene, camera, innerWidth, innerHeight); gtao.output = GTAOPass.OUTPUT.Default;
   gtao.updateGtaoMaterial({ radius: 6, distanceExponent: 1.4, thickness: 6, scale: 1.2, samples: 16 }); gtao.blendIntensity = REALLOOK ? 0.5 : 0.9;
-  if (!LOW && Q.get("ao") !== "0") composer.addPass(gtao);
+  /* GTAO at half resolution: ambient occlusion is soft, low-frequency shading, and its normal pass, sampling and
+     denoise cost scale with pixels (a quarter of them here). The result is blended over the full-resolution frame. */
+  const gtaoSetSize = GTAOPass.prototype.setSize;
+  gtao.setSize = (w, h) => gtaoSetSize.call(gtao, Math.max(1, Math.round(w * 0.5)), Math.max(1, Math.round(h * 0.5)));
+  gtao.setSize(innerWidth * renderer.getPixelRatio(), innerHeight * renderer.getPixelRatio());
+  const AO_ALLOWED = !LOW && Q.get("ao") !== "0";
+  if (AO_ALLOWED) composer.addPass(gtao);
+  gtao.enabled = AO_ALLOWED && TIERS[tier].ao;
   /* tilt-shift: sharp across the middle band, blurred above and below, the
      miniature read of a model photographed close */
   const tilt = new ShaderPass({ uniforms: { tDiffuse: { value: null }, uRes: { value: new THREE.Vector2(innerWidth, innerHeight) }, uK: { value: 1 }, uMid: { value: 0.52 } },
@@ -209,7 +246,9 @@ async function start(A, W, intro=null) {
     const c = centroid(D.building.foot); probe.position.copy(P3(c[0], c[1], Math.max(12, D.building.h * 0.45)));
     const bg = scene.background, fog = scene.fog, bands_ = bands.map((b) => b.visible);
     scene.background = lightingBuilder?.sky||hdr; scene.fog = null; bands.forEach((b) => (b.visible = false));
+    if (forest) forest.showAll(2);
     probe.update(renderer, scene); probeRT.texture.needsPMREMUpdate = true;
+    if (forest) forest.update(camera, true);
     scene.background = bg; scene.fog = fog; bands.forEach((b, i) => (b.visible = bands_[i])); hide.forEach((o) => (o.visible = true));
     root.traverse(o=>{if(!o.isMesh)return;for(const m of Array.isArray(o.material)?o.material:[o.material])if(/^ANDHERI_.*[Gg]lass/.test(m.name||'')){m.envMap=probeRT.texture;m.envMapIntensity=1.25;m.needsUpdate=true;}});
     for (const [n, m] of Object.entries(MAT)) if (REFLECTS.has(n) && m.envMap !== probeRT.texture) { m.envMap = probeRT.texture; m.envMapIntensity = n.startsWith("wall_") ? 1.9 : 1.4; m.needsUpdate = true; }
@@ -308,7 +347,7 @@ async function start(A, W, intro=null) {
   /* ----------------------------------------------------- the diorama ---- */
   const loader = new GLTFLoader(); loader.setMeshoptDecoder(MeshoptDecoder);
   let ownedMaterials=new Set(),ownedTextures=new Set();
-  let D = null, root = null, rootResources = null, inst = [], movers = [], solid = [], groundMeshes = [], selectionRequest=0;
+  let D = null, root = null, rootResources = null, inst = [], movers = [], solid = [], groundMeshes = [], selectionRequest=0, forest = null, solidGrid = null, solidPath = null;
   function importedResources(modelRoot) {
     const geometries=new Set(),materials=new Set(),textures=new Set();
     modelRoot.traverse(o=>{
@@ -402,6 +441,97 @@ async function start(A, W, intro=null) {
       mats.forEach((m, i) => im.setMatrixAt(i, t.multiplyMatrices(m, p.m))); im.castShadow = shadow; im.receiveShadow = true; scene.add(im); out.push(im); }
     return out;
   }
+
+  /* ------------------------------------------------------- the forest ---- */
+  /* Up to 20,000 trees a diorama (Noida's sectors are green), each crown 300 to 830 leaf cards. Drawn as one
+     InstancedMesh a tree type they were 17 million triangles a pass, three passes a frame (shadow, scene, AO).
+     Now:
+       cells      the trees are binned into 100 m cells; a cell outside the view (with a margin) is skipped whole
+       LOD        by distance from the eye: under 150 m the full crown, under 450 m every second leaf card grown
+                  1.4x about its centre, beyond that every eighth card grown 2.6x with no trunk (a tree 450 m away
+                  is a few pixels; its outline and colour hold)
+       culling    each tree in a visible cell is tested against the view frustum; only the visible ones are copied
+                  into the level's InstancedMesh (count), re-sorted when the eye moves 4 m or turns 2 degrees
+       shadows    copies at the middle level in 200 m cells on layer 1, seen only by the sun's camera: every tree
+                  keeps its shadow, the shadow map culls whole cells, and it is redrawn only when the shadow box moves
+  */
+  const isCard = (m) => /(^|_)leaf(_b)?$/i.test((Array.isArray(m) ? m[0] : m)?.name || "");
+  function cardSubset(geo, keep, grow) {   // leaf-card crown: every keep-th card (two triangles), grown about its centre
+    const ix = geo.index, P = geo.attributes.position, N = geo.attributes.normal, U = geo.attributes.uv;
+    const tri = ix ? ix.count / 3 : P.count / 3; if (tri % 2) return geo;
+    const at = (k) => (ix ? ix.getX(k) : k), kept = [], map = new Map(); let n = 0;
+    for (let c = 0; c < tri / 2; c += keep) { const vs = []; for (let k = c * 6; k < c * 6 + 6; k++) vs.push(at(k)); kept.push(vs); for (const v of vs) if (!map.has(v)) map.set(v, n++); }
+    const pos = new Float32Array(n * 3), nor = N ? new Float32Array(n * 3) : null, uv = U ? new Float32Array(n * 2) : null, idx = [];
+    for (const vs of kept) {
+      const u = [...new Set(vs)]; let cx = 0, cy = 0, cz = 0; for (const v of u) { cx += P.getX(v); cy += P.getY(v); cz += P.getZ(v); } cx /= u.length; cy /= u.length; cz /= u.length;
+      for (const v of u) { const j = map.get(v); pos[j * 3] = cx + (P.getX(v) - cx) * grow; pos[j * 3 + 1] = cy + (P.getY(v) - cy) * grow; pos[j * 3 + 2] = cz + (P.getZ(v) - cz) * grow;
+        if (nor) { nor[j * 3] = N.getX(v); nor[j * 3 + 1] = N.getY(v); nor[j * 3 + 2] = N.getZ(v); } if (uv) { uv[j * 2] = U.getX(v); uv[j * 2 + 1] = U.getY(v); } }
+      for (const v of vs) idx.push(map.get(v));
+    }
+    const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.BufferAttribute(pos, 3)); if (nor) g.setAttribute("normal", new THREE.BufferAttribute(nor, 3)); if (uv) g.setAttribute("uv", new THREE.BufferAttribute(uv, 2));
+    g.setIndex(idx); g.computeBoundingSphere(); g.userData.derived = true; return g;
+  }
+  function lodParts(parts, level) {
+    if (level === 0) return parts;
+    const out = [];
+    for (const p of parts) {
+      const card = isCard(p.mat);
+      if (card) out.push({ ...p, geo: level === 1 ? cardSubset(p.geo, 2, 1.4) : cardSubset(p.geo, 8, 2.6) });
+      else if (level === 1 || !parts.some((q) => isCard(q.mat))) out.push(p);   // the far level drops the trunk under a crown
+    }
+    return out;
+  }
+  function buildForest(protoList, lists) {
+    const CELL = 100, NEAR = 150, MID = 450, meshes = [], types = [], derived = new Set();
+    const mk = (parts, n, shadow) => parts.map((p) => { const im = new THREE.InstancedMesh(p.geo, p.mat, Math.max(1, n)); im.count = 0; im.castShadow = shadow; im.receiveShadow = !shadow; im.frustumCulled = shadow; scene.add(im); meshes.push(im); if (p.geo.userData.derived) derived.add(p.geo); return im; });
+    protoList.forEach((parts, t) => {
+      const mats = lists[t]; if (!parts.length || !mats.length) return;
+      const L = [0, 1, 2].map((l) => lodParts(parts, l));
+      const xs = new Float32Array(mats.length), zs = new Float32Array(mats.length), cells = new Map(), e = new THREE.Vector3();
+      mats.forEach((m, i) => { e.setFromMatrixPosition(m); xs[i] = e.x; zs[i] = e.z; const key = Math.floor(e.x / CELL) + "," + Math.floor(e.z / CELL); if (!cells.has(key)) cells.set(key, []); cells.get(key).push(i); });
+      const levels = L.map((parts) => mk(parts, mats.length, false));
+      // the shadow casters: one InstancedMesh per 200 m cell and part at the middle level, on layer 1 only
+      // (coarser than the 100 m view cells: they are drawn only when the shadow map is, and fewer means fewer draw calls then)
+      const casterCells = new Map();
+      mats.forEach((m, i) => { const key = Math.floor(xs[i] / (CELL * 2)) + "," + Math.floor(zs[i] / (CELL * 2)); if (!casterCells.has(key)) casterCells.set(key, []); casterCells.get(key).push(i); });
+      for (const ids of casterCells.values()) {
+        const casters = mk(L[1], ids.length, true);
+        casters.forEach((im, k) => { ids.forEach((i, j) => im.setMatrixAt(j, _fm.multiplyMatrices(mats[i], L[1][k].m))); im.count = ids.length; im.instanceMatrix.needsUpdate = true; im.computeBoundingSphere(); im.layers.set(1); });
+      }
+      types.push({ parts, L, mats, xs, zs, levels, cells: [...cells.entries()].map(([key, ids]) => { const [cx, cz] = key.split(",").map(Number); return { ids, x: (cx + 0.5) * CELL, z: (cz + 0.5) * CELL }; }) });
+    });
+    const fr = new THREE.Frustum(), pv = new THREE.Matrix4(), sph = new THREE.Sphere(), lastP = new THREE.Vector3(1e9, 0, 0), lastQ = new THREE.Quaternion();
+    let lastFov = 0, lastAsp = 0;
+    function update(cam, force) {
+      if (!force && cam.position.distanceToSquared(lastP) < 16 && cam.quaternion.angleTo(lastQ) < 0.035 && cam.fov === lastFov && cam.aspect === lastAsp) return false;
+      lastP.copy(cam.position); lastQ.copy(cam.quaternion); lastFov = cam.fov; lastAsp = cam.aspect;
+      cam.updateMatrixWorld(); pv.multiplyMatrices(cam.projectionMatrix, cam.matrixWorldInverse); fr.setFromProjectionMatrix(pv);
+      const cx = cam.position.x, cz = cam.position.z, cy = cam.position.y;
+      for (const ty of types) {
+        const n = [0, 0, 0];
+        for (const c of ty.cells) {
+          sph.center.set(c.x, 10, c.z); sph.radius = 0.71 * CELL + 40;   // the cell's corners and the tallest crown, plus slack for 2 degrees of turn
+          if (!fr.intersectsSphere(sph)) continue;
+          for (const i of c.ids) {
+            const dx = ty.xs[i] - cx, dz = ty.zs[i] - cz, d = Math.sqrt(dx * dx + dz * dz + cy * cy * 0.25);
+            sph.center.set(ty.xs[i], 8, ty.zs[i]); sph.radius = 14 + d * 0.035;
+            if (!fr.intersectsSphere(sph)) continue;
+            const l = d < NEAR ? 0 : d < MID ? 1 : 2; const k = n[l]++;
+            ty.levels[l].forEach((im, j) => { _fm.multiplyMatrices(ty.mats[i], ty.L[l][j].m); _fm.toArray(im.instanceMatrix.array, k * 16); });
+          }
+        }
+        ty.levels.forEach((ims, l) => ims.forEach((im) => { im.count = n[l]; const a = im.instanceMatrix; if (a.clearUpdateRanges) { a.clearUpdateRanges(); a.addUpdateRange(0, n[l] * 16); } a.needsUpdate = true; }));
+      }
+      return true;
+    }
+    function showAll(level) {   // every tree at one level, for the reflection probe (it looks all round, not along the view)
+      for (const ty of types) { ty.levels.forEach((ims, l) => ims.forEach((im) => (im.count = 0)));
+        ty.levels[level].forEach((im, j) => { ty.mats.forEach((m, i) => { _fm.multiplyMatrices(m, ty.L[level][j].m); _fm.toArray(im.instanceMatrix.array, i * 16); }); im.count = ty.mats.length; if (im.instanceMatrix.clearUpdateRanges) im.instanceMatrix.clearUpdateRanges(); im.instanceMatrix.needsUpdate = true; }); }
+      lastP.set(1e9, 0, 0);
+    }
+    return { meshes, update, showAll, dispose() { derived.forEach((g) => g.dispose()); }, get count() { return types.reduce((s, t) => s + t.mats.length, 0); } };
+  }
+  const _fm = new THREE.Matrix4();
   async function loadDiorama(id, request) {
     leaveArea();disposeArea();
     $("#veil").classList.add("on");
@@ -411,14 +541,15 @@ async function start(A, W, intro=null) {
       ? { glb: previewBase + id + ".glb", data: previewBase + id + ".json", aoBase: previewBase }
       : W.models?.[id];
     const version = model?.aoBase ? "?v=" + revision : "";
-    const [gltf, data] = await Promise.all([
+    const pre = !model && previewIds.size === 0 ? await (prefetch(id) || null) : null;
+    const [gltf, data] = pre ? [await loader.parseAsync(pre[0], `${W.data}d/`), pre[1]] : await Promise.all([
       new Promise((ok, bad) => loader.load((model?.glb || `${W.data}d/${id}.glb`) + version, ok, (e) => { if (e.total && $("#l-bar")) $("#l-bar").style.width = `${Math.round(e.loaded / e.total * 90)}%`; }, bad)),
       fetch((model?.data || `${W.data}d/${id}.json`) + version).then((r) => r.json())]);
     const resources=importedResources(gltf.scene);
     if(request!==selectionRequest){disposeImported(resources);return null;}
     if (root) { scene.remove(root); disposeImported(rootResources); }
     for(const m of ownedMaterials)m.dispose();for(const t of ownedTextures)t.dispose();ownedMaterials.clear();ownedTextures.clear();
-    for (const m of inst) { scene.remove(m); m.dispose(); } inst = []; movers = []; groundMeshes = [];
+    for (const m of inst) { scene.remove(m); m.dispose(); } inst = []; movers = []; groundMeshes = []; if (forest) { forest.dispose(); forest = null; }
     D = data; root = gltf.scene; rootResources = resources; scene.add(root); useOrigin(id); buildMapGround();
     const protos = {};
     root.traverse((o) => {
@@ -451,7 +582,7 @@ async function start(A, W, intro=null) {
     const m4 = (x, y, z, rot, s) => new THREE.Matrix4().compose(P3(x, y, z), new THREE.Quaternion().setFromEuler(new THREE.Euler(0, rot, 0)), new THREE.Vector3(s, s, s));
     if (!(model?.bakedProps?.trees || D.modelReview?.photoReconstruction?.bakedProps?.trees)) {
       const T = [[], [], []]; for (const [x, y, t, k, r] of D.trees) T[t].push(m4(x, y, 0, r, 0.75 + 0.35 * k));
-      inst.push(...instance(pp("proto_tree_a"), T[0]), ...instance(pp("proto_tree_b"), T[1]), ...instance(pp("proto_palm"), T[2]));
+      forest = buildForest([pp("proto_tree_a"), pp("proto_tree_b"), pp("proto_palm")], T); inst.push(...forest.meshes);
     }
     inst.push(...instance(pp("proto_lamp"), D.lamps.map(([x, y], i) => m4(x, y, 0.2, (i * 2.4) % 6.28, 1)), false));
     // traffic: cars, autos and buses running in their lanes
@@ -469,7 +600,7 @@ async function start(A, W, intro=null) {
     }
     const PAINT = [0xf4f4f2, 0xf4f4f2, 0xc9ccd0, 0x8e9297, 0x2b2d31, 0x16171a, 0x7a1d1d, 0x1f3a6b, 0xb8b2a6];
     const SHIRT = [0xf2f2f0, 0x2f4f7f, 0x8a1f2b, 0xd9c7a4, 0x3a5a3a, 0x6b4a8a, 0xe0a030, 0x1f1f22, 0xa8c4d8];
-    for (const [k, list] of Object.entries(kinds)) { if (!list.length) continue; const parts = instance(pp(k), list.map(() => new THREE.Matrix4())); inst.push(...parts); movers.push({ parts, list, base: pp(k) });
+    for (const [k, list] of Object.entries(kinds)) { if (!list.length) continue; const parts = instance(pp(k), list.map(() => new THREE.Matrix4()), false); inst.push(...parts); movers.push({ parts, list, base: pp(k) });
       // each car its own paint, each person their own shirt
       const tint = k === "proto_car" ? ["car_body", PAINT] : k === "proto_person" ? ["person_shirt", SHIRT] : null;
       if (tint) parts.forEach((im) => { if (im.material && im.material.name.replace(/^ANDHERI_CTX_/, '') === tint[0]) { const c = new THREE.Color(); list.forEach((_, i) => im.setColorAt(i, c.setHex(tint[1][Math.floor(Math.random() * tint[1].length)]))); im.instanceColor.needsUpdate = true; } });
@@ -479,15 +610,20 @@ async function start(A, W, intro=null) {
       const P = m.p.map(([x, y]) => new THREE.Vector2(x, -y)); const L = [0]; for (let i = 1; i < P.length; i++) L.push(L[i - 1] + P[i].distanceTo(P[i - 1]));
       const ln = { P, L, len: L[L.length - 1], z: m.z };
       const trains = [{ ln, s: ln.len * 0.3, dir: 1, off: 1.9, v: 11, wait: 0 }, { ln, s: ln.len * 0.75, dir: -1, off: -1.9, v: 11, wait: 0 }];
-      const parts = instance(pp("proto_train"), Array(trains.length * 4).fill(0).map(() => new THREE.Matrix4())); inst.push(...parts);
+      const parts = instance(pp("proto_train"), Array(trains.length * 4).fill(0).map(() => new THREE.Matrix4()), false); inst.push(...parts);
       movers.push({ parts, trains, base: pp("proto_train"), key });
     }
     // solid footprints for walking
     solid = D.blocks.map((r) => r.map(([x, y]) => [x, y]));
+    /* walking tests the footprints in the walker's 20 m cell, not all of them (2,459 at A14/18/19) */
+    solidGrid = new Map(); solidPath = new Path2D();
+    solid.forEach((p) => { let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9; for (const [x, y] of p) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
+      for (let gx = Math.floor((x0 - 1) / 20); gx <= Math.floor((x1 + 1) / 20); gx++) for (let gy = Math.floor((y0 - 1) / 20); gy <= Math.floor((y1 + 1) / 20); gy++) { const k = gx + "," + gy; if (!solidGrid.has(k)) solidGrid.set(k, []); solidGrid.get(k).push(p); }
+      p.forEach(([x, y], i) => (i ? solidPath.lineTo(x, y) : solidPath.moveTo(x, y))); solidPath.closePath(); });
     placeLabels(true);
     await new Promise((r) => setTimeout(r, 50));
     if(request!==selectionRequest)return null;
-    $("#veil").classList.remove("on");
+    $("#veil").classList.remove("on"); shadowDirty = true; wake(2000);
     return D;
   }
   const along = (ln, s, out) => { s = clamp(s, 0, ln.len); let i = 1; while (i < ln.L.length - 1 && ln.L[i] < s) i++; const t = (s - ln.L[i - 1]) / Math.max(1e-6, ln.L[i] - ln.L[i - 1]);
@@ -630,9 +766,9 @@ async function start(A, W, intro=null) {
   /* ---------------------------------------------------- cameras ---- */
   let MODE = "dollhouse", fly = null;
   const ease = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-  function flyTo(t, p, ms = 1500) { fly = { t0: performance.now(), ms, a: { t: controls.target.clone(), p: camera.position.clone() }, b: { t, p } }; }
+  function flyTo(t, p, ms = 1500) { wake(ms + 300); fly = { t0: performance.now(), ms, a: { t: controls.target.clone(), p: camera.position.clone() }, b: { t, p } }; }
   function slabSize() { let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9; for (const [x, y] of D.slab) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); } return Math.max(x1 - x0, y1 - y0); }
-  function sunBox(half, at) { if(lightingBuilder?.active&&D){half=Math.min(half,160);at=P3(...centroid(D.building.foot),D.building.h*.35);}const sc = sun.shadow.camera; sc.left = -half; sc.right = half; sc.top = half; sc.bottom = -half; sc.near = 10; sc.far = half * 6; sc.updateProjectionMatrix(); sun.target.position.copy(at); sun.position.copy(at).addScaledVector(SUN, half * 3); }
+  function sunBox(half, at) { if(lightingBuilder?.active&&D){half=Math.min(half,160);at=P3(...centroid(D.building.foot),D.building.h*.35);}const sc = sun.shadow.camera; sc.left = -half; sc.right = half; sc.top = half; sc.bottom = -half; sc.near = 10; sc.far = half * 6; sc.updateProjectionMatrix(); sun.target.position.copy(at); sun.position.copy(at).addScaledVector(SUN, half * 3); shadowDirty = true; wake(); }
   function dollhouse(ms = 1600) {
     leaveArea();
     MODE = "dollhouse"; RW = null; document.body.classList.remove("walk", "routing"); setModeUI();
@@ -671,11 +807,11 @@ async function start(A, W, intro=null) {
     const az = Math.atan2(camera.position.x - c.x, camera.position.z - c.z); controls.autoRotate = false; flyTo(c, new THREE.Vector3(c.x + Math.sin(az) * R * 0.9, R * 0.95, c.z + Math.cos(az) * R * 0.9)); }
 
   /* walk: yaw/pitch by drag, WASD to move, click the ground to go there */
-  const walk = { pos: new THREE.Vector2(), yaw: 0, pitch: 0.12, keys: new Set(), goal: null };
+  const walk = { pos: new THREE.Vector2(), yaw: 0, pitch: 0.12, keys: new Set(), goal: null }; let shadowAt = null;
   const EYE = 1.68;
   function pip(x, y, P, r) { let c = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const [xi, yi] = P[i], [xj, yj] = P[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi + 1e-12) + xi) c = !c; } if (c) return true;
     if (r) for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const [ax, ay] = P[j], [bx, by] = P[i]; const dx = bx - ax, dy = by - ay; const t = clamp(((x - ax) * dx + (y - ay) * dy) / (dx * dx + dy * dy + 1e-9), 0, 1); if (Math.hypot(x - ax - dx * t, y - ay - dy * t) < r) return true; } return false; }
-  function blocked(x, y) { if (!pip(x, y, D.slab, 0)) return true; for (const p of solid) if (pip(x, y, p, 0.6)) return true; return false; }
+  function blocked(x, y) { if (!pip(x, y, D.slab, 0)) return true; for (const p of solidGrid?.get(Math.floor(x / 20) + "," + Math.floor(y / 20)) || []) if (pip(x, y, p, 0.6)) return true; return false; }
   function startWalk(at) {
     leaveArea();
     MODE = "walk"; document.body.classList.add("walk"); document.body.classList.remove("routing"); setModeUI(); controls.enabled = false; controls.autoRotate = false; tilt.enabled = false; fly = null;
@@ -714,7 +850,7 @@ async function start(A, W, intro=null) {
   function placeWalkCam(hud) {
     camera.position.set(walk.pos.x, EYE + (walk.goal || walk.keys.size ? Math.sin(performance.now() / 160) * 0.025 : 0), -walk.pos.y);
     const cp = Math.cos(walk.pitch); camera.lookAt(camera.position.x + Math.sin(walk.yaw) * cp, camera.position.y + Math.sin(walk.pitch), camera.position.z - Math.cos(walk.yaw) * cp);
-    sunBox(110, camera.position.clone().setY(0));
+    if (!shadowAt || Math.hypot(camera.position.x - shadowAt.x, camera.position.z - shadowAt.z) > 25) { shadowAt = camera.position.clone().setY(0); sunBox(110, shadowAt); }
     const deg = ((walk.yaw / D2R) % 360 + 360) % 360; $("#compass").textContent = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"][Math.round(deg / 45) % 8] + " · " + Math.round(deg) + "°";
     if (hud) {   // straight-line distances from where you stand
       const e = D.building.entrance, dE = Math.hypot(e[0] - walk.pos.x, e[1] - walk.pos.y);
@@ -725,10 +861,12 @@ async function start(A, W, intro=null) {
     drawMini();
   }
   const mini = $("#mini"), mctx = mini.getContext("2d");
+  let miniKey = "";
   function drawMini() {
+    const key = walk.pos.x.toFixed(1) + walk.pos.y.toFixed(1) + walk.yaw.toFixed(3) + (ROUTE ? ROUTE.name : ""); if (key === miniKey) return; miniKey = key;   // redrawn only when the walker moves or turns
     const S = 380, k = S / 2 / 220; mctx.clearRect(0, 0, S, S); mctx.save(); mctx.beginPath(); mctx.arc(S / 2, S / 2, S / 2 - 2, 0, 6.283); mctx.clip();
     mctx.translate(S / 2, S / 2); mctx.rotate(-walk.yaw); mctx.scale(k, -k); mctx.translate(-walk.pos.x, -walk.pos.y);
-    mctx.fillStyle = "rgba(255,255,255,.18)"; for (const p of solid) { mctx.beginPath(); p.forEach(([x, y], i) => (i ? mctx.lineTo(x, y) : mctx.moveTo(x, y))); mctx.fill(); }
+    mctx.fillStyle = "rgba(255,255,255,.18)"; if (solidPath) mctx.fill(solidPath);
     mctx.fillStyle = W.branding?"#ffc200":"#c6f24a"; mctx.beginPath(); D.building.foot.forEach(([x, y], i) => (i ? mctx.lineTo(x, y) : mctx.moveTo(x, y))); mctx.fill();
     if (ROUTE) { mctx.strokeStyle = W.branding?"#ffc200":"#c6f24a"; mctx.lineWidth = 3 / k; mctx.beginPath(); ROUTE.path.forEach(([x, y], i) => (i ? mctx.lineTo(x, y) : mctx.moveTo(x, y))); mctx.stroke(); }
     for (const s of D.stations) { mctx.fillStyle = (LINE[s.line] || ["#888"])[0]; mctx.beginPath(); mctx.arc(s.x, s.y, 7 / k, 0, 6.283); mctx.fill(); }
@@ -758,7 +896,7 @@ async function start(A, W, intro=null) {
 
   /* ------------------------------------------------------ switching ---- */
   async function select(id, first) {
-    const request=++selectionRequest;if(!first)intro?.selection();
+    wake(4000); const request=++selectionRequest;if(!first)intro?.selection();
     SEL = id; const o = OPTS.find((x) => x.id === id);
     document.querySelectorAll(".film").forEach((f) => f.classList.toggle("on", f.dataset.id === id));
     RW = null; ROUTE = null; renderHUD(o);
@@ -784,21 +922,52 @@ async function start(A, W, intro=null) {
   $("#strip").innerHTML = OPTS.map((o) => { const r = (o.routes || []).find((x) => x.kind === "metro"); const th = W.thumbs && W.thumbs[o.id];
     return `<button class="film" data-id="${esc(o.id)}" style="${th ? `background-image:url('${W.data}${th}')` : ""}"><span><span class="n">${String(o.n).padStart(2, "0")}</span><b>${esc(o.name)}</b>${r ? `<i>${fm(r.m)} · ${esc(r.name)}</i>` : ""}</span></button>`; }).join("");
   $("#strip").addEventListener("click", (e) => { const f = e.target.closest(".film"); if (f && f.dataset.id !== SEL) select(f.dataset.id); });
-  addEventListener("resize", () => { camera.aspect = innerWidth / innerHeight; frameOffset(MODE === "dollhouse"); renderer.setSize(innerWidth, innerHeight); composer.setSize(innerWidth, innerHeight); gtao.setSize(innerWidth, innerHeight); tilt.uniforms.uRes.value.set(innerWidth, innerHeight); });
+  addEventListener("resize", () => { camera.aspect = innerWidth / innerHeight; frameOffset(MODE === "dollhouse"); renderer.setSize(innerWidth, innerHeight); composer.setSize(innerWidth, innerHeight); tilt.uniforms.uRes.value.set(innerWidth, innerHeight); wake(); });
 
   const deep = location.hash.slice(1); const first = OPTS.some((o) => o.id === deep) ? deep : OPTS[0].id;
   await select(first, true);
   for (const id of ["#top", "#hud", "#strip"]) $(id).hidden = false;
   if(intro)intro.ready({select:(id)=>select(id),selected:()=>SEL});else { $("#l-bar").style.width = "100%"; setTimeout(() => { $("#load").style.transition = "opacity .9s"; $("#load").style.opacity = "0"; setTimeout(() => $("#load").remove(), 950); }, 200); }
   if (Q.get("mode") === "walk") startWalk();
+  if (OPTS.length <= 6) (window.requestIdleCallback || ((f) => setTimeout(f, 1500)))(() => setTimeout(() => { if (!navigator.connection?.saveData) OPTS.forEach((o) => prefetch(o.id)); }, 2500));
 
   /* -------------------------------------------------------- loop ---- */
-  let last = performance.now(), coveredAt = 0; const clock = { frames: 0 };
+  let last = performance.now(), coveredAt = 0, lastDrawn = 0; const clock = { frames: 0 };
+  /* Render on demand. A frame is drawn when something changes: input, the camera easing (fly, orbit damping),
+     auto-rotate, walking, the route walk, a texture arriving, a resize. Standing still in the street draws at
+     30 fps (the traffic keeps moving); a still dollhouse nobody is touching draws nothing. */
+  const busy = () => fly || drag || MODE === "route" && RW && !RW.paused || (MODE === "walk" && (walk.keys.size || walk.goal));
+  const IDLE_MS = 1000 / 30;
+  /* adapt the quality tier: the median frame over the last 90 drawn at full rate */
+  const intervals = []; let tierAt = performance.now(), downs = 0;
+  function setTier(t) {
+    tier = t; tierAt = performance.now(); intervals.length = 0;
+    renderer.setPixelRatio(TIERS[t].dpr); composer.setPixelRatio(TIERS[t].dpr); gtao.enabled = AO_ALLOWED && TIERS[t].ao;
+    const samples = MSAA_OK ? TIERS[t].msaa : 0;
+    for (const rt of [composer.renderTarget1, composer.renderTarget2]) if (rt.samples !== samples) { rt.samples = samples; rt.dispose(); }
+    wake();
+    try { sessionStorage.setItem("atlas-world-tier", String(t)); } catch (e) {}
+    document.body.dataset.quality = String(t);
+  }
+  function adapt(dt) {
+    if (Q.get("adapt") === "0" || STILL || performance.now() - tierAt < 3000) return;   // not while shaders compile after a load or a change
+    intervals.push(dt); if (intervals.length < 90) return;
+    const m = [...intervals].sort((a, b) => a - b)[45]; intervals.length = 0;
+    if (m > 28 && tier < TIERS.length - 1) { downs++; setTier(tier + 1); }
+    else if (m < 17.5 && tier > 0 && downs < 3 && performance.now() - tierAt > 20000) setTier(tier - 1);
+  }
+  document.body.dataset.quality = String(tier);
   /* ?perf=1: what a frame costs, for scripts/world-bench.cjs (every pass of one frame: shadows, scene, AO, output) */
   const PERF = Q.has("perf") ? { frames: 0, js: [], calls: 0, tris: 0, at: [] } : null;
   if (PERF) renderer.info.autoReset = false;
   function frame(now) {
     if (PERF && (PERF.frozen || Q.has("bench")) && !PERF.ticking) { requestAnimationFrame(frame); return; }   // the benchmark renders through tick() alone
+    if (!STILL) {
+      const full = now < wakeUntil || busy() || (MODE === "dollhouse" && controls.autoRotate && !areaMode), animated = MODE !== "dollhouse";
+      if (!full && !(animated && now - lastDrawn >= IDLE_MS - 2)) { last = now; requestAnimationFrame(frame); return; }
+      if (full && lastDrawn) adapt(now - lastDrawn);
+      lastDrawn = now;
+    }
     if (PERF) { const t0 = performance.now(); renderer.info.reset(); frame_(now); PERF.js.push(performance.now() - t0); PERF.at.push(now); PERF.frames++; PERF.calls = renderer.info.render.calls; PERF.tris = renderer.info.render.triangles; if (PERF.js.length > 600) { PERF.js.shift(); PERF.at.shift(); } if (!STILL) requestAnimationFrame(frame); return; }
     frame_(now); if (!STILL) requestAnimationFrame(frame);
   }
@@ -810,10 +979,12 @@ async function start(A, W, intro=null) {
     if (MODE === "dollhouse") controls.update();
     else if (MODE === "walk") stepWalk(dt); else if (MODE === "route") stepRouteWalk(dt);
     if(!areaMode)stepMovers(dt);
+    if (forest) forest.update(camera, false);
+    if (shadowDirty) { renderer.shadowMap.needsUpdate = true; shadowDirty = false; }
     composer.render(); placeLabels(false); clock.frames++;
   }
   if (STILL) frame(performance.now()); else requestAnimationFrame(frame);
-  window.__world = { PERF, scene, camera, controls, get mode() { return MODE; }, tick: (n = 1, dt = 0.25) => { if (PERF) PERF.ticking = true; for (let i = 0; i < n; i++) { last = performance.now() - dt * 1000; if (fly) fly.t0 -= 1e9; if (PERF) { renderer.info.reset(); frame_(performance.now()); PERF.calls = renderer.info.render.calls; PERF.tris = renderer.info.render.triangles; } else frame(performance.now()); } if (PERF) PERF.ticking = false; }, select, startWalk, startRouteWalk, dollhouse, clock, renderer, walk, setRW: (s) => { if (RW) RW.s = s; } };
+  window.__world = { PERF, scene, camera, controls, get mode() { return MODE; }, get tier() { return tier; }, setTier, get forest() { return forest; }, tick: (n = 1, dt = 0.25) => { if (PERF) PERF.ticking = true; for (let i = 0; i < n; i++) { last = performance.now() - dt * 1000; if (fly) fly.t0 -= 1e9; if (PERF) { renderer.info.reset(); frame_(performance.now()); PERF.calls = renderer.info.render.calls; PERF.tris = renderer.info.render.triangles; } else { wake(1); frame(performance.now()); } } if (PERF) PERF.ticking = false; }, select, startWalk, startRouteWalk, dollhouse, clock, renderer, walk, setRW: (s) => { if (RW) RW.s = s; } };
 }
 
 boot();
