@@ -186,6 +186,10 @@ async function start(A, W, intro=null) {
     hero_pavers: ["hero_pavers", 0, 0.9, 0.6], hero_asphalt: ["hero_asphalt", 0, 0.6, 0.5], hero_lawn: ["hero_lawn", 0, 0.8, 0.5],
     hero_mulch: ["hero_mulch", 0, 0.8, 0.4], hero_hedge: ["leaves_shrub", 0, 0, 0.5], ground_noida: ["ground_noida", 0, 0.6, 0.5],
     hero_plaster: ["hero_plaster", 0, 0.5, 0.6], hero_plaster_b: ["hero_plaster_b", 0, 0.5, 0.6], hero_bark: ["hero_bark", 0, 0.8, 0.4],
+    /* the four JindalX buildings as imagery shows them (docs/JINDALX_VERIFICATION.md): composite panels, tinted glass, cream and white render */
+    hero_acp_white: ["hero_acp_white", 0.5, 0.45, 1.2], hero_acp_charcoal: ["hero_acp_charcoal", 0.55, 0.45, 1.2], hero_acp_copper: ["hero_acp_copper", 0.6, 0.45, 1.25], hero_acp_grey: ["hero_acp_grey", 0.55, 0.45, 1.2],
+    hero_glass_dark: ["hero_glass_dark", 0.22, 0.25, 1.15], hero_glass_bluegrey: ["hero_glass_bluegrey", 0.22, 0.25, 1.15], hero_glass_green: ["hero_glass_green", 0.22, 0.25, 1.15], hero_glass_teal: ["hero_glass_teal", 0.2, 0.25, 1.1],
+    hero_plaster_cream: ["hero_plaster_cream", 0, 0.5, 0.6], hero_plaster_white: ["hero_plaster_white", 0, 0.5, 0.6],
   };
   const HERO_FLAT = { hero_mullion: [0x2e3236, 0.35, 0.8], hero_hvac: [0xb8bcbe, 0.45, 0.6], hero_solar: [0x1c2a44, 0.14, 0.35], hero_dark: [0x121416, 0.9, 0], hero_rail: [0x2a2c2e, 0.4, 0.8] };
   function material(name) {
@@ -269,7 +273,7 @@ async function start(A, W, intro=null) {
      that picture as its reflection. Taken once per building, and again once its textures have arrived. */
   const probeRT = new THREE.WebGLCubeRenderTarget(LOW ? 256 : 512, { type: THREE.HalfFloatType, generateMipmaps: true, minFilter: THREE.LinearMipmapLinearFilter });
   const probe = new THREE.CubeCamera(1, 4000, probeRT);
-  const REFLECTS = new Set([...GLASSY, "glass_lobby", "station_glass", "car_glass", "train_win", "water", "hero_glass", "hero_spandrel", "hero_lobby_glass"]);
+  const REFLECTS = new Set([...GLASSY, "glass_lobby", "station_glass", "car_glass", "train_win", "water", "hero_glass", "hero_spandrel", "hero_lobby_glass", "hero_glass_dark", "hero_glass_bluegrey", "hero_glass_green", "hero_glass_teal", "hero_acp_white", "hero_acp_charcoal", "hero_acp_copper", "hero_acp_grey"]);
   function captureReflections() { try { captureReflections_(); } catch (e) { console.warn("reflections skipped", e); } }
   function captureReflections_() {
     if (areaMode || !REALLOOK || !D || !root || Q.get("refl") === "0") return;
