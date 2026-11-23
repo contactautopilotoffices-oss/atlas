@@ -40,7 +40,7 @@ window.ATLAS = {
     "world": {
       "href": "/jindalx-noida/world",
       "data": "/media/jindalx-noida/world/",
-      "ver": "c0f8dc8ad8",
+      "ver": "05288006ce",
       "sky": "sky.hdr",
       "poster": "hero.jpg",
       "mapHref": "/engine/?atlas=jindalx-noida",

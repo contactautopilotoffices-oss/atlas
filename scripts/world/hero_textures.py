@@ -26,6 +26,7 @@ map UVs in metres divided by that size (scripts/world/hero_building.py).
   leaves_palm    palm frond leaflets on a rachis                                         RGBA
   leaves_shrub   dense small-leaved shrub and hedge (Murraya, boxwood)                  RGBA
   leaves_bloom   bougainvillea: leaves with magenta bracts                               RGBA
+  leaves_broad, _young, _ashoka, _frond, _under   the richer tree atlases (scripts/world/leaf_atlas.py; python hero_textures.py TEX_DIR --leaves writes only these)
 
 JindalX Noida facade sets (python scripts/world/hero_textures.py TEX_DIR --facades [names]; also written by a full run).
 Tile sizes in metres (w x h); the builder maps UV = metres / tile. Same list, with notes, in TEX_DIR/TILES.json. 1024 px each.
@@ -757,6 +758,9 @@ def jindalx_facades(only=None):
     json.dump(notes, open(path, "w"), indent=1)
     print("facade sets: %d, %.0f KB total, %.1fs" % (len(res), tot, time.time() - t0))
 
+if "--leaves" in sys.argv:   # only the tree leaf atlases for "greens": "evidence" dioramas (leaf_atlas.py): leaves_broad, _young, _ashoka, _frond, _under
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); import leaf_atlas; leaf_atlas.write(OUT); sys.exit(0)
+
 if "--facades" in sys.argv:
     jindalx_facades([a for a in sys.argv[sys.argv.index("--facades") + 1:] if not a.startswith("-")] or None); sys.exit(0)
 
@@ -768,4 +772,5 @@ plaster("hero_plaster", (226, 220, 206), 121); plaster("hero_plaster_b", (176, 1
 atlas("leaves_a", neem); atlas("leaves_b", ashoka); atlas("leaves_palm", palm); atlas("leaves_shrub", shrub); atlas("leaves_bloom", bloom)
 atlas("leaves_grass", grass); atlas("leaves_flower", flowers)
 jindalx_facades()
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); import leaf_atlas; leaf_atlas.write(OUT)   # the newer tree atlases, beside the older leaves_a / _b / _palm
 print("done")
