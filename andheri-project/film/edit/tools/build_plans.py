@@ -25,7 +25,7 @@ STYLE = """
 @font-face{font-family:Urbanist;src:url('assets/fonts/Urbanist.ttf')}
 @font-face{font-family:'Instrument Serif';src:url('assets/fonts/InstrumentSerif-Regular.ttf')}
 #root{width:1920px;height:1080px;position:relative;overflow:hidden;background:radial-gradient(1200px 700px at 70% 55%,#111a28 0%,#080b11 70%);color:#f4f6fa;font-family:Urbanist,sans-serif}
-.eyebrow{position:absolute;left:120px;top:118px;font-size:22px;letter-spacing:.22em;text-transform:uppercase;color:#ffc200;font-weight:600}
+.eyebrow{position:absolute;left:120px;top:118px;font-size:28px;letter-spacing:.22em;text-transform:uppercase;color:#ffc200;font-weight:600}
 .head{position:absolute;left:120px;top:160px;font-family:'Instrument Serif',serif;font-style:italic;font-size:74px;line-height:1.02;color:#fff;max-width:760px}
 .big{position:absolute;display:flex;align-items:baseline;gap:18px}
 .odo{display:inline-flex;font-size:150px;line-height:1;height:1em;overflow:hidden;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
@@ -35,15 +35,15 @@ STYLE = """
 .odo .comma{width:.28em}
 .unit{font-size:28px;color:#9aa4b2;letter-spacing:.04em}
 .chips{position:absolute;display:flex;gap:12px}
-.chip{padding:12px 22px;border-radius:999px;border:1px solid #ffffff2e;background:#ffffff0d;font-size:24px;color:#c9d1dc;letter-spacing:.02em}
+.chip{padding:12px 22px;border-radius:999px;border:1px solid #ffffff2e;background:#ffffff0d;font-size:28px;color:#c9d1dc;letter-spacing:.02em}
 .chip.on{background:#2a55e5;border-color:#2a55e5;color:#fff}
 .plan{position:absolute;overflow:visible}
 .plan .walls,.plan .glass,.plan .doors{stroke-dashoffset:1}
 .plan .zone{opacity:0}.plan .desk{opacity:0}
-.cap{position:absolute;font-size:22px;letter-spacing:.18em;text-transform:uppercase;color:#9aa4b2}
-.src{position:absolute;right:120px;bottom:44px;font-size:22px;color:#8f99a8;letter-spacing:.03em}
+.cap{position:absolute;font-size:28px;letter-spacing:.18em;text-transform:uppercase;color:#9aa4b2}
+.src{position:absolute;right:120px;bottom:44px;font-size:28px;color:#8f99a8;letter-spacing:.03em}
 .tile{position:absolute;padding:22px 28px;border-radius:18px;background:linear-gradient(135deg,#ffffff14,#ffffff06);border:1px solid #ffffff24;backdrop-filter:blur(8px)}
-.tile b{display:block;font-size:30px;font-weight:600;color:#fff}.tile span{font-size:22px;color:#aab3bf}
+.tile b{display:block;font-size:30px;font-weight:600;color:#fff}.tile span{font-size:28px;color:#aab3bf}
 """
 
 ODO_JS = """
@@ -63,10 +63,11 @@ function drawPlan(tl, sel, at){
 
 def scene(cid, dur, body, js):
     return f"""<template><style>{STYLE}</style><div id="root" data-composition-id="{cid}" data-width="1920" data-height="1080" data-duration="{dur}">
-<div id="{cid}-stage" class="clip" data-start="0" data-duration="{dur}" data-track-index="1" data-layout-allow-overflow data-layout-allow-overlap>{body}</div></div>
+<div id="{cid}-stage" class="clip" data-start="0" data-duration="{dur}" data-track-index="1" data-layout-allow-overflow data-layout-allow-overlap><div class="push" style="position:absolute;inset:0;transform-origin:50% 60%">{body}</div></div></div>
 <script>(function(){{const tl=gsap.timeline({{paused:true}});{ODO_JS}
 tl.from('#{cid}-stage .eyebrow,#{cid}-stage .head',{{opacity:0,y:24,duration:0.9,stagger:0.12,ease:'power3.out'}},0.2);
 {js}
+tl.fromTo('#{cid}-stage .push',{{scale:1}},{{scale:1.035,duration:{dur},ease:'none',immediateRender:false}},0);
 tl.to('#{cid}-stage',{{opacity:0,duration:0.5}},{dur}-0.5);
 window.__timelines['{cid}']=tl;}})();</script></template>"""
 

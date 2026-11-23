@@ -28,7 +28,8 @@ save("title", comp("title", 8, """
 .rule{position:absolute;left:810px;width:300px;top:600px;height:1px;background:linear-gradient(90deg,transparent,#ffc200,transparent);transform-origin:center}
 .t2{position:absolute;left:0;right:0;top:628px;text-align:center;font-family:'Instrument Serif',serif;font-style:italic;font-size:48px;color:#c9d1dc}""",
 """<div class="t1" id="t1">ANDHERI EAST</div><div class="rule" id="rule"></div><div class="t2" id="t2">Marol · Chakala</div>""",
-"""tl.from('#t1',{opacity:0,letterSpacing:'0.6em',filter:'blur(10px)',duration:2.6,ease:'power2.out'},0.6)
+"""tl.from('#t1',{opacity:0,scale:1.12,filter:'blur(10px)',duration:2.6,ease:'power2.out'},0.6)
+.fromTo('#t1,#t2',{scale:1},{scale:1.035,duration:4.8,ease:'none',immediateRender:false},3.2)
 .from('#rule',{scaleX:0,duration:1.4,ease:'power3.inOut'},1.8)
 .from('#t2',{opacity:0,y:14,duration:1.2,ease:'power2.out'},2.4)
 .to('#t1,#rule,#t2',{opacity:0,duration:1.0,ease:'power1.in'},6.8);"""))
@@ -42,7 +43,7 @@ CARDS = {
 for key, (eb, name, line) in CARDS.items():
     save("card-" + key, comp("card-" + key, 6, """
 .shade{position:absolute;left:0;right:0;bottom:0;height:520px;background:linear-gradient(0deg,#000000b0,#00000000)}
-.eb{position:absolute;left:120px;bottom:250px;font-size:24px;letter-spacing:.22em;text-transform:uppercase;color:#ffc200;font-weight:600}
+.eb{position:absolute;left:120px;bottom:250px;font-size:28px;letter-spacing:.22em;text-transform:uppercase;color:#ffc200;font-weight:600}
 .nm{position:absolute;left:116px;bottom:140px;font-family:'Instrument Serif',serif;font-style:italic;font-size:120px;line-height:1}
 .ln{position:absolute;left:120px;bottom:96px;font-size:30px;color:#dfe4ea;letter-spacing:.02em}
 .bar{position:absolute;left:120px;bottom:232px;width:64px;height:2px;background:#ffc200;transform-origin:left}""",
@@ -73,7 +74,7 @@ def tracked(cid, shot, labels, dur, fps=24, stretch=1.0):
 .pin .stem{position:absolute;left:-1px;top:-70px;width:2px;height:64px;background:linear-gradient(#ffffffcc,#ffffff00)}
 .pin .chip{position:absolute;left:-150px;top:-148px;width:300px;text-align:center;padding:14px 18px;border-radius:16px;background:#0b1220d9;border:1px solid #ffffff30;box-shadow:0 10px 30px #0008}
 .pin .chip b{display:block;font-family:'Instrument Serif',serif;font-style:italic;font-weight:400;font-size:40px;line-height:1.05}
-.pin .chip span{font-size:22px;color:#c9d1dc;letter-spacing:.02em}""", "".join(body), "\n".join(js)))
+.pin .chip span{font-size:28px;color:#c9d1dc;letter-spacing:.02em}""", "".join(body), "\n".join(js)))
     print("tracked pins:", cid, len(frames), "frames")
 
 import sys
@@ -93,7 +94,7 @@ save("close", comp("close", 23.8, """
 #close-stage{background:radial-gradient(1100px 600px at 50% 45%,#121c2c,#05070b 75%)}
 .l1{position:absolute;left:0;right:0;top:250px;text-align:center;font-family:'Instrument Serif',serif;font-style:italic;font-size:84px}
 .stats{position:absolute;left:0;right:0;top:400px;display:flex;justify-content:center;gap:120px}
-.stat{text-align:center}.stat small{display:block;font-size:26px;color:#aab3bf;letter-spacing:.14em;text-transform:uppercase;margin-top:8px}
+.stat{text-align:center}.stat small{display:block;font-size:28px;color:#aab3bf;letter-spacing:.14em;text-transform:uppercase;margin-top:8px}
 .odo{display:inline-flex;font-size:104px;line-height:1;height:1em;overflow:hidden;font-weight:600;font-variant-numeric:tabular-nums}
 .odo .col{display:inline-block;height:1em;overflow:hidden;width:.62em;text-align:center}.odo .strip{display:flex;flex-direction:column}.odo .strip i{font-style:normal;height:1em;display:block}
 .odo .comma{width:.28em}.plus{font-size:80px;color:#ffc200;font-weight:600}
@@ -103,7 +104,7 @@ save("close", comp("close", 23.8, """
 .lock{position:absolute;left:0;right:0;top:440px;display:flex;align-items:center;justify-content:center;gap:56px;opacity:0}
 .lock img{height:72px;width:auto;object-fit:contain}.lock .x{font-size:44px;color:#8b95a3;font-weight:300}
 .end{position:absolute;left:0;right:0;top:600px;text-align:center;font-family:'Instrument Serif',serif;font-style:italic;font-size:58px;opacity:0}
-.cta{position:absolute;left:0;right:0;top:700px;text-align:center;font-size:26px;letter-spacing:.24em;text-transform:uppercase;color:#ffc200;opacity:0}""",
+.cta{position:absolute;left:0;right:0;top:700px;text-align:center;font-size:28px;letter-spacing:.24em;text-transform:uppercase;color:#ffc200;opacity:0}""",
 f"""<div id="g1"><div class="l1" id="l1">We're Autopilot.</div>
 <div class="stats"><div class="stat">{odo('o1',5,1)}<span class="plus">+</span><small>seats delivered</small></div><div class="stat">{odo('o2',2)}<span class="plus">+</span><small>centres</small></div><div class="stat">{odo('o3',1)}<small>cities</small></div></div>
 <div class="ways"><span id="w1">Pick the building.</span><span id="w2">Plan every seat.</span><span id="w3">Run it like our own.</span></div>

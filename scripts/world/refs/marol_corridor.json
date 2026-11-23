@@ -301,11 +301,11 @@
    "poly": [
     [
      -776.8,
-     -15.2
+     -6.0
     ],
     [
      -748.6,
-     -15.2
+     -6.0
     ],
     [
      -748.6,
@@ -326,7 +326,30 @@
    ],
    "h": 36,
    "c": "commercial",
-   "basis": "missing from Overture and OpenStreetMap; outline traced on Google satellite tiles (Map Tiles API, zoom 19, verification overlay scripts/world/verify_overlay.py): a long north-south block whose wider north end meets Guru Hargovindji Road; height about 9 storeys, estimated."
+   "basis": "missing from Overture and OpenStreetMap; outline traced on Google satellite tiles (Map Tiles API, zoom 19, verification overlay scripts/world/verify_overlay.py): a long north-south block whose wider north end meets Guru Hargovindji Road; height about 9 storeys, estimated.",
+   "note_trim": "South tail cut from y -15.2 to -6.0 (2026-11-23): the Corporate Avenue tower (83 x 41 m canopy, fitted to 79.1 x 35.0 m) stands here; founder to confirm on the Google satellite overlay."
   }
- ]
+ ],
+ "corporate-avenue": {
+  "poly": [
+   [
+    -833.8,
+    -44.4
+   ],
+   [
+    -754.7,
+    -41.9
+   ],
+   [
+    -755.8,
+    -7.0
+   ],
+   [
+    -834.9,
+    -9.5
+   ]
+  ],
+  "note": "Atul Corporate Avenue tower: a 79.1 x 35.0 m box on the OSM footprint's walls (1.8 deg), moved 6.6 m north so it clears the 20 m block to the south-west. Replaces the irregular OSM outline. Founder to confirm on the Google satellite overlay.",
+  "h": 41.8
+ }
 }

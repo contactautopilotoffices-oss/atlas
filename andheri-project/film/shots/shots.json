@@ -184,42 +184,43 @@
   }
  },
  "corp_drone": {
-  "frames": 192,
+  "frames": 200,
+  "note": "High descent from the west-north-west: the afternoon sun (az 245) lights the corner block's west side and the white frames; the line of sight passes south of the 83 m campus tower and over the 36.5 m west neighbour.",
   "keys": [
    {
     "f": 0,
     "pos": [
-     -690,
-     92,
-     28
+     -990,
+     70,
+     125
     ],
     "look": [
-     -782,
-     10,
-     16
+     -805,
+     -20,
+     24
     ],
-    "lens": 26
+    "lens": 30
    },
    {
-    "f": 191,
+    "f": 199,
     "pos": [
-     -772,
-     150,
-     70
+     -925,
+     38,
+     92
     ],
     "look": [
-     -795,
-     -28,
+     -798,
+     -26,
      18
     ],
-    "lens": 28
+    "lens": 35
    }
   ],
   "pins": {
    "Corporate Avenue": [
     -795,
-    -32,
-    40
+    -26,
+    44
    ]
   }
  }

@@ -61,16 +61,17 @@ if "--opt-at" in A:   # --opt-at X,Y: the option's real footprint, when the map 
     for b in S["buildings"]:
         if b.get("opt") == OID: del b["opt"]
     min(S["buildings"], key=lambda b: Polygon(b["p"]).centroid.distance(Point(ox_, oy_)))["opt"] = OID
-for _key in ("privilon",):   # options whose outline is fixed in scripts/world/refs/*.json (founder + Google satellite), in every district
-    _poly = None
+for _key in ("privilon", "corporate-avenue"):   # options whose outline is fixed in scripts/world/refs/*.json (founder + Google satellite), in every district
+    _poly, _h = None, 67.5
     for _fn in (sorted(os.listdir(_RD)) if os.path.isdir(_RD) else []):
-        _poly = json.load(open(os.path.join(_RD, _fn))).get(_key, {}).get("poly") or _poly
+        _e = json.load(open(os.path.join(_RD, _fn))).get(_key, {})
+        if _e.get("poly"): _poly, _h = _e["poly"], _e.get("h", 67.5)
     if not _poly: continue
     _op = Polygon(_poly)
     for b in S["buildings"]:   # the old pin's footprint is a real neighbour (Privilon's pin sat on Fleet House): keep it, drop the tag
         if b.get("opt") == _key: del b["opt"]
     S["buildings"] = [b for b in S["buildings"] if not (_op.contains(Polygon(b["p"]).centroid) or Polygon(b["p"]).intersection(_op).area > min(100, 0.25 * Polygon(b["p"]).area))]
-    S["buildings"].append({"p": _poly, "h": 67.5, "c": "commercial", "r": 0.5, "opt": _key})
+    S["buildings"].append({"p": _poly, "h": _h, "c": "commercial", "r": 0.5, "opt": _key})
 OPTB = next(b for b in S["buildings"] if b.get("opt") == OID)
 # --neighbour-hero ID=BLEND (repeatable): another shortlisted property standing in this district, shown with its
 # own facade study and a pin, not as a generic block (723 Avenue is visible from Privilon)
@@ -440,8 +441,11 @@ def build():
     for b in S["buildings"]:
         p = Polygon(b["p"])
         if not p.is_valid: p = p.buffer(0)
-        if not b.get("opt") and not b.get("added") and p.intersection(ROAD["major"]).area > 0.6 * p.area:
-            ON_ROAD.append([round(v) for v in p.centroid.coords[0]]); continue   # a map footprint drawn on the carriageway: not a building
+        _on = p.intersection(ROAD["major"]).area / max(p.area, 1e-6)
+        if not b.get("opt") and not b.get("added") and (_on > 0.6 or (p.area < 100 and _on > 0.5)):
+            # a map footprint drawn on the carriageway: not a building. Small ones (kiosks, stalls, a mapping offset at the
+            # road edge) go at half on the road, the logic gate's own line; bigger ones still fail the gate between 50-60%.
+            ON_ROAD.append([round(v) for v in p.centroid.coords[0]]); continue
         if b.get("opt") != OID and blocks_metro(p):
             # the map draws the station and viaduct as a building; we build the real thing there. Real buildings that only
             # touch the clearance are trimmed back to its edge, not deleted (deleting them left empty lots by the stations)
@@ -1035,6 +1039,20 @@ def swap_hero(path):
             if np.linalg.norm(e0) < np.linalg.norm(e1): e0, e1 = e1, e0
             return np.array(r.centroid.coords[0]), math.atan2(e0[1], e0[0]), np.linalg.norm(e0), np.linalg.norm(e1)
         ch, ah, lh, sh = rect(V[:: max(1, len(V) // 4000)]); ct, at, lt, st = rect(ring)
+        # An irregular footprint's minimum rectangle can sit turned off the real walls (Corporate Avenue: -11.6 deg against
+        # walls 1.5 deg off east-west), which skews the hero into its neighbour. Use the walls' own direction instead: the
+        # length-weighted mean of the edge angles (mod 90), the representative nearest the rectangle's (keeps the facing),
+        # and the footprint's extent and centre measured along it.
+        E = np.diff(np.vstack([ring, ring[:1]]), axis=0); wl = np.hypot(E[:, 0], E[:, 1]); th = np.arctan2(E[:, 1], E[:, 0])
+        aw = math.atan2((wl * np.sin(4 * th)).sum(), (wl * np.cos(4 * th)).sum()) / 4
+        aw = min((aw + k * math.pi / 2 for k in range(-4, 5)), key=lambda a: abs((a - at + math.pi) % (2 * math.pi) - math.pi))
+        aw = (aw + math.pi) % (2 * math.pi) - math.pi
+        u, w_ = np.array([math.cos(aw), math.sin(aw)]), np.array([-math.sin(aw), math.cos(aw)])
+        pu, pw = ring @ u, ring @ w_
+        if abs(math.degrees(aw - at)) > 0.5:
+            print("hero fit: walls run %.1f deg, minimum rectangle %.1f deg; using the walls" % (math.degrees(aw), math.degrees(at)))
+            at, lt, st = aw, pu.max() - pu.min(), pw.max() - pw.min()
+            ct = u * (pu.max() + pu.min()) / 2 + w_ * (pw.max() + pw.min()) / 2
         M = (_mu.Matrix.Translation((*ct, 0)) @ _mu.Matrix.Rotation(at, 4, "Z") @ _mu.Matrix.Diagonal((lt / lh, st / sh, 1, 1))
              @ _mu.Matrix.Rotation(-ah, 4, "Z") @ _mu.Matrix.Translation((-ch[0], -ch[1], 0)))
         new.matrix_world = M @ new.matrix_world
@@ -1322,6 +1340,7 @@ def animate(data, info, spec_path, name):
     sc.render.image_settings.file_format = "PNG"; sc.render.image_settings.color_mode = "RGB"; sc.render.image_settings.color_depth = "8"
     sc.render.filepath = os.path.join(out, "f_####")
     if "--frames" in A: sc.frame_start, sc.frame_end = (int(v) for v in A[A.index("--frames") + 1].split("-"))
+    if "--frame-step" in A: sc.frame_step = int(A[A.index("--frame-step") + 1])   # render every Nth frame first; a later pass fills the rest
     bpy.ops.render.render(animation=True); print("ANIM DONE", name, sc.frame_start, sc.frame_end)
 
 def hdri_light(sc):
