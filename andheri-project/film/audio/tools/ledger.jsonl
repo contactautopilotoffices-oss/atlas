@@ -71,3 +71,5 @@
 {"t": "2026-11-23 03:44:37", "kind": "stt", "id": "l04_privilon_commute_t3", "chars": 0, "seconds": 9.149}
 {"t": "2026-11-23 03:45:50", "kind": "stt", "id": "mix_provisional", "chars": 0, "seconds": 140}
 {"t": "2026-11-23 03:58:46", "kind": "stt", "id": "mix_provisional", "chars": 0, "seconds": 140}
+{"t": "2026-11-23 08:59:20", "kind": "tts", "id": "l03_marol_t2", "chars": 110, "voice_id": "Z1oY2Vw237R6ALt5CZcD", "settings": {"similarity_boost": 0.75, "use_speaker_boost": true, "stability": 0.45, "style": 0.3, "speed": 1.0}}
+{"t": "2026-11-23 08:59:21", "kind": "stt", "id": "l03_marol_t2", "chars": 0, "seconds": 6.455}

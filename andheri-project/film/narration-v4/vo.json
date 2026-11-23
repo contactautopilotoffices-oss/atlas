@@ -405,146 +405,145 @@
     20,
     27
    ],
-   "text": "Two of them are at Marol Naka, where Metro Line One meets Line Three. The third is one stop west, in Chakala.",
-   "tts_text": "Two of them are at Marol Naka, where Metro Line One meets Line Three. The third is one stop west, in Chakala.",
+   "text": "Two of them are at Marol Naka, where Metro Line One meets Line Three. The third is two stops west, in Chakala.",
+   "tts_text": "Two of them are at Marol Naka, where Metro Line One meets Line Three. The third is two stops west, in Chakala.",
    "file": "l03_marol.mp3",
    "words_file": "l03_marol.words.json",
-   "take": 1,
-   "duration_s": 7.616,
-   "speech_start_s": 0.12,
-   "speech_end_s": 6.935,
-   "speech_s": 6.815,
-   "words_per_s": 3.23,
+   "take": 2,
+   "duration_s": 6.455,
+   "speech_start_s": 0.0,
+   "speech_end_s": 6.15,
+   "speech_s": 6.15,
+   "words_per_s": 3.58,
    "internal_pauses_s": [
-    0.39,
-    0.35,
-    0.78
+    0.13,
+    0.59
    ],
-   "loudness_lufs": -21.48,
-   "true_peak_dbtp": -4.57,
-   "lra_lu": 2.4,
-   "f0_median_hz": 222.2,
-   "f0_spread_st": 13.51,
-   "stt_text": "Two of them are at Marol Naka, where Metro Line 1 meets Line 3. The third is One Stop West in Chakala",
+   "loudness_lufs": -22.46,
+   "true_peak_dbtp": -4.01,
+   "lra_lu": 2.0,
+   "f0_median_hz": 202.5,
+   "f0_spread_st": 10.93,
+   "stt_text": "Two of them are at Marol Naka, where Metro Line 1 meets Line 3. The third is two stops west in Chakala.",
    "stt_pass": true,
    "stt_terms": {
     "two of them|2 of them": true,
     "marol naka": true,
     "line one|line 1": true,
     "line three|line 3": true,
-    "one stop west|1 stop west": true,
+    "two stops west|2 stops west": true,
     "chakala": true
    },
    "words": [
     {
      "word": "Two",
      "start": 0.0,
-     "end": 0.221
+     "end": 0.197
     },
     {
      "word": "of",
-     "start": 0.302,
-     "end": 0.383
+     "start": 0.267,
+     "end": 0.348
     },
     {
      "word": "them",
-     "start": 0.441,
-     "end": 0.569
+     "start": 0.406,
+     "end": 0.546
     },
     {
      "word": "are",
-     "start": 0.639,
-     "end": 0.755
+     "start": 0.615,
+     "end": 0.778
     },
     {
      "word": "at",
-     "start": 0.778,
-     "end": 0.848
+     "start": 0.813,
+     "end": 0.882
     },
     {
      "word": "Marol",
-     "start": 0.917,
-     "end": 1.196
+     "start": 0.952,
+     "end": 1.219
     },
     {
      "word": "Naka,",
-     "start": 1.254,
-     "end": 1.753
+     "start": 1.265,
+     "end": 1.614
     },
     {
      "word": "where",
-     "start": 1.927,
-     "end": 2.125
+     "start": 1.649,
+     "end": 1.846
     },
     {
      "word": "Metro",
-     "start": 2.159,
-     "end": 2.415
+     "start": 1.892,
+     "end": 2.136
     },
     {
      "word": "Line",
-     "start": 2.461,
-     "end": 2.647
+     "start": 2.194,
+     "end": 2.38
     },
     {
      "word": "One",
-     "start": 2.694,
-     "end": 3.03
+     "start": 2.438,
+     "end": 2.635
     },
     {
      "word": "meets",
-     "start": 3.204,
-     "end": 3.471
+     "start": 2.682,
+     "end": 2.902
     },
     {
      "word": "Line",
-     "start": 3.541,
-     "end": 3.785
+     "start": 2.972,
+     "end": 3.204
     },
     {
      "word": "Three.",
-     "start": 3.82,
-     "end": 4.307
+     "start": 3.228,
+     "end": 3.622
     },
     {
      "word": "The",
-     "start": 4.818,
-     "end": 4.957
+     "start": 4.005,
+     "end": 4.122
     },
     {
      "word": "third",
-     "start": 5.016,
-     "end": 5.259
+     "start": 4.18,
+     "end": 4.458
     },
     {
      "word": "is",
-     "start": 5.317,
-     "end": 5.399
+     "start": 4.516,
+     "end": 4.598
     },
     {
-     "word": "one",
-     "start": 5.468,
-     "end": 5.642
+     "word": "two",
+     "start": 4.679,
+     "end": 4.783
     },
     {
-     "word": "stop",
-     "start": 5.677,
-     "end": 5.921
+     "word": "stops",
+     "start": 4.83,
+     "end": 5.132
     },
     {
      "word": "west,",
-     "start": 5.991,
-     "end": 6.281
+     "start": 5.201,
+     "end": 5.503
     },
     {
      "word": "in",
-     "start": 6.316,
-     "end": 6.385
+     "start": 5.538,
+     "end": 5.608
     },
     {
      "word": "Chakala.",
-     "start": 6.444,
-     "end": 7.616
+     "start": 5.666,
+     "end": 6.455
     }
    ],
    "takes": [
@@ -577,12 +576,48 @@
       "chakala": true
      },
      "file": "takes/l03_marol_t1.mp3"
+    },
+    {
+     "take": 2,
+     "file": "takes/l03_marol_t2.mp3",
+     "tts_text": "Two of them are at Marol Naka, where Metro Line One meets Line Three. The third is two stops west, in Chakala.",
+     "settings": {
+      "similarity_boost": 0.75,
+      "use_speaker_boost": true,
+      "stability": 0.45,
+      "style": 0.3,
+      "speed": 1.0
+     },
+     "duration_s": 6.455,
+     "speech_start_s": 0.0,
+     "speech_end_s": 6.15,
+     "speech_s": 6.15,
+     "words_per_s": 3.58,
+     "internal_pauses_s": [
+      0.13,
+      0.59
+     ],
+     "loudness_lufs": -22.46,
+     "true_peak_dbtp": -4.01,
+     "lra_lu": 2.0,
+     "f0_median_hz": 202.5,
+     "f0_spread_st": 10.93,
+     "stt_text": "Two of them are at Marol Naka, where Metro Line 1 meets Line 3. The third is two stops west in Chakala.",
+     "stt_pass": true,
+     "stt_terms": {
+      "two of them|2 of them": true,
+      "marol naka": true,
+      "line one|line 1": true,
+      "line three|line 3": true,
+      "two stops west|2 stops west": true,
+      "chakala": true
+     }
     }
    ],
-   "provisional_at": 20.18,
+   "provisional_at": 20.3,
    "provisional_speech": [
     20.3,
-    27.115
+    26.45
    ]
   },
   {
@@ -869,10 +904,10 @@
     }
    ],
    "stt_notes": "Take 1 (plain spelling) was heard as 'Breville on' (and 'Merrill Naka'). Takes 2 and 3 send the respellings 'Pri-vi-lon' and 'Priv-i-lon' and are heard as 'Privillon': the same sounds as Privilon with a doubled l, so it is accepted, as AUDIO_NOTES accepted 'anyone' for 'any one'. Speech-to-text does not know the name, so it never spells it 'Privilon'; in the full mix it wrote 'Previlleon'. Take 3 is used (tighter, 8.7 s in the 10 s slot).",
-   "provisional_at": 28.115,
+   "provisional_at": 27.45,
    "provisional_speech": [
-    28.115,
-    36.761
+    27.45,
+    36.096
    ]
   },
   {
@@ -1024,10 +1059,10 @@
      "file": "takes/l05_privilon_tower_t1.mp3"
     }
    ],
-   "provisional_at": 37.361,
+   "provisional_at": 37.3,
    "provisional_speech": [
-    37.361,
-    44.031
+    37.3,
+    43.97
    ]
   },
   {
@@ -1275,10 +1310,10 @@
      "file": "takes/l06_privilon_plans_t1.mp3"
     }
    ],
-   "provisional_at": 44.631,
+   "provisional_at": 44.57,
    "provisional_speech": [
-    44.631,
-    54.628
+    44.57,
+    54.567
    ]
   },
   {

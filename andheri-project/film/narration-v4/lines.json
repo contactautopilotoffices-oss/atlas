@@ -62,8 +62,8 @@
     27
    ],
    "section": "Open",
-   "text": "Two of them are at Marol Naka, where Metro Line One meets Line Three. The third is one stop west, in Chakala.",
-   "tts": "Two of them are at Marol Naka, where Metro Line One meets Line Three. The third is one stop west, in Chakala.",
+   "text": "Two of them are at Marol Naka, where Metro Line One meets Line Three. The third is two stops west, in Chakala.",
+   "tts": "Two of them are at Marol Naka, where Metro Line One meets Line Three. The third is two stops west, in Chakala.",
    "terms": [
     [
      "two of them",
@@ -81,8 +81,8 @@
      "line 3"
     ],
     [
-     "one stop west",
-     "1 stop west"
+     "two stops west",
+     "2 stops west"
     ],
     [
      "chakala"

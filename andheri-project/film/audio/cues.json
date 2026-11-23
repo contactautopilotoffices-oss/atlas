@@ -11,7 +11,7 @@
   "true_peak_ceiling_dbtp": -1.5,
   "measured_lufs": -16.0,
   "measured_true_peak_dbtp": -1.8,
-  "lra_lu": 3.4,
+  "lra_lu": 3.3,
   "master_gain_db": 2.07,
   "limiter": "4x oversampled alimiter, ceiling -1.8 dBFS"
  },
@@ -23,9 +23,9 @@
   ],
   "note": "each at its mix level with the master gain applied, before the limiter; vo + music + sfx = the mix apart from limiting",
   "lufs": {
-   "vo": -15.9,
-   "music": -28.81,
-   "sfx": -33.4
+   "vo": -15.88,
+   "music": -28.8,
+   "sfx": -33.39
   }
  },
  "sections": [
@@ -63,9 +63,9 @@
  "music": {
   "file": "music/bed_v2.mp3",
   "at": 0.0,
-  "choice": "bed_v2 is used. Both takes have no vocals and follow the section plan. bed_v1 opens with a pad swelling out of silence and its low piano note only at 0:05, runs at about 76 BPM, and stays flat from Corporate Avenue to 723 Avenue. bed_v2 opens on one low D piano note at 0:00 under black (then single low notes a bar apart, G at 0:03 and A at 0:06). It is a measured 80 BPM (3.000 s bars), and it lifts at every section: section RMS -22.0 / -18.6 / -15.4 / -14.6 / -13.1 / -12.6 dBFS from the open to Autopilot. It resolves at about 2:06 and decays to silence by about 2:16.",
   "base_level_lufs": -23.0,
   "gain_db": -8.1,
+  "choice": "bed_v2 is used. Both takes have no vocals and follow the section plan. bed_v1 opens with a pad swelling out of silence and its low piano note only at 0:05, runs at about 76 BPM, and stays flat from Corporate Avenue to 723 Avenue. bed_v2 opens on one low D piano note at 0:00 under black (then single low notes a bar apart, G at 0:03 and A at 0:06). It is a measured 80 BPM (3.000 s bars), and it lifts at every section: section RMS -22.0 / -18.6 / -15.4 / -14.6 / -13.1 / -12.6 dBFS from the open to Autopilot. It resolves at about 2:06 and decays to silence by about 2:16.",
   "ducking": {
    "depth_db": -8.0,
    "attack_s": 0.25,
@@ -87,8 +87,8 @@
      18.52
     ],
     [
-     20.18,
-     55.17
+     20.3,
+     55.11
     ],
     [
      56.3,
@@ -97,12 +97,12 @@
    ]
   },
   "voice_over_music_db_while_speaking": {
-   "median": 12.5,
+   "median": 12.4,
    "p10": 6.9
   },
   "voice_over_music_and_sfx_db_while_speaking": {
    "median": 11.5,
-   "p10": 6.2,
+   "p10": 6.5,
    "min": -2.4
   }
  },
@@ -144,30 +144,30 @@
    "id": "l03_marol",
    "section": "Open",
    "file": "../narration-v4/l03_marol.mp3",
-   "at": 20.18,
+   "at": 20.3,
    "speech_from": 20.3,
-   "speech_to": 27.115,
+   "speech_to": 26.45,
    "script_slot": [
     20,
     27
    ],
    "starts_late_by_s": 0.3,
-   "overruns_slot_by_s": 0.11,
-   "gain_db": 3.48,
-   "text": "Two of them are at Marol Naka, where Metro Line One meets Line Three. The third is one stop west, in Chakala."
+   "overruns_slot_by_s": 0,
+   "gain_db": 4.46,
+   "text": "Two of them are at Marol Naka, where Metro Line One meets Line Three. The third is two stops west, in Chakala."
   },
   {
    "id": "l04_privilon_commute",
    "section": "Privilon",
    "file": "../narration-v4/l04_privilon_commute.mp3",
-   "at": 28.115,
-   "speech_from": 28.115,
-   "speech_to": 36.761,
+   "at": 27.45,
+   "speech_from": 27.45,
+   "speech_to": 36.096,
    "script_slot": [
     27,
     37
    ],
-   "starts_late_by_s": 1.11,
+   "starts_late_by_s": 0.45,
    "overruns_slot_by_s": 0,
    "gain_db": 4.97,
    "text": "First, the commute. Privilon stands right beside Marol Naka station. A hundred and forty metres from the station steps. Two minutes on foot, in any weather."
@@ -176,15 +176,15 @@
    "id": "l05_privilon_tower",
    "section": "Privilon",
    "file": "../narration-v4/l05_privilon_tower.mp3",
-   "at": 37.361,
-   "speech_from": 37.361,
-   "speech_to": 44.031,
+   "at": 37.3,
+   "speech_from": 37.3,
+   "speech_to": 43.97,
    "script_slot": [
     37,
     44
    ],
-   "starts_late_by_s": 0.36,
-   "overruns_slot_by_s": 0.03,
+   "starts_late_by_s": 0.3,
+   "overruns_slot_by_s": 0,
    "gain_db": 4.92,
    "text": "A new Grade A tower, ground plus fifteen. One long, clear floor plate. Possession in January."
   },
@@ -192,14 +192,14 @@
    "id": "l06_privilon_plans",
    "section": "Privilon",
    "file": "../narration-v4/l06_privilon_plans.mp3",
-   "at": 44.631,
-   "speech_from": 44.631,
-   "speech_to": 54.628,
+   "at": 44.57,
+   "speech_from": 44.57,
+   "speech_to": 54.567,
    "script_slot": [
     44,
     56
    ],
-   "starts_late_by_s": 0.63,
+   "starts_late_by_s": 0.57,
    "overruns_slot_by_s": 0,
    "gain_db": 4.2,
    "text": "We've drawn the floor three ways: two sixty, two eighty, and three hundred and one seats. Every chair counted from the drawing. So the floor you sign is the floor that grows with you."
@@ -507,9 +507,9 @@
    "sync": "picture (script time)"
   },
   {
-   "id": "sfx_counter_roll@46.38",
+   "id": "sfx_counter_roll@46.32",
    "file": "sfx/sfx_counter_roll.mp3",
-   "at": 46.378,
+   "at": 46.317,
    "play_s": 1.48,
    "fade_in": 0.0,
    "fade_out": 0.2,
@@ -520,9 +520,9 @@
    "sync": "voice: \"two sixty\" in l06_privilon_plans"
   },
   {
-   "id": "sfx_counter_roll@47.21",
+   "id": "sfx_counter_roll@47.15",
    "file": "sfx/sfx_counter_roll.mp3",
-   "at": 47.214,
+   "at": 47.153,
    "play_s": 1.48,
    "fade_in": 0.0,
    "fade_out": 0.2,
@@ -533,9 +533,9 @@
    "sync": "voice: \"two eighty\" in l06_privilon_plans"
   },
   {
-   "id": "sfx_counter_roll@48.14",
+   "id": "sfx_counter_roll@48.08",
    "file": "sfx/sfx_counter_roll.mp3",
-   "at": 48.143,
+   "at": 48.082,
    "play_s": 1.48,
    "fade_in": 0.0,
    "fade_out": 0.2,
@@ -806,5 +806,5 @@
    "sync": "voice: \"seven\" in l14_close_autopilot"
   }
  ],
- "vo_speech_total_s": 118.2
+ "vo_speech_total_s": 117.54
 }

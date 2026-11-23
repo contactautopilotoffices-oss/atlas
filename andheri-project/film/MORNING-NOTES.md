@@ -46,7 +46,11 @@ All figures come from the canonical table in `andheri-project/film/OVERNIGHT-BRI
    - Each renders every other frame first, and the frames in between are interpolated, so a complete film exists early.
    - A second pass then renders the real in-between frames, and the film is rebuilt.
 4. **The film runs at 24 frames a second**, the rate of the Blender shots.
-5. **Music on the cards screen:** a 60-second loop of the film's music bed plays quietly while the cards are on screen. It is silent if sound was turned off at the start.
+5. **One line of narration was re-recorded.**
+   - Alka said Chakala is "one stop west" of Marol Naka. On Line 1 it is two stops, with Airport Road in between.
+   - The line now says "two stops west", re-recorded in the same voice and settings, and it passed the speech-to-text check.
+   - The re-mix moves the three Privilon lines up to 0.7 s earlier. Every other line is where it was.
+6. **Music on the cards screen:** a 60-second loop of the film's music bed plays quietly while the cards are on screen. It is silent if sound was turned off at the start.
 
 ## Questions only the founder can answer
 
@@ -67,5 +71,7 @@ All figures come from the canonical table in `andheri-project/film/OVERNIGHT-BRI
 
 - To free disk space for the renders, the npm and pip download caches were cleared (about 12 GB). They refill on their own when needed.
 - **BlenderKit cars:** BlenderKit has to be installed from Blender's Get Extensions and signed in to your account before its cars can be used. The film has no modelled cars yet.
+- **The local server cannot jump within the film.** It does not answer byte-range requests, so the film always plays from the start; Skip still works. Any normal host (Netlify, Vercel) serves ranges, so seeking will work once the page is deployed.
+- The Corporate Avenue and 723 Avenue cards now show frames from the new film shots (`media/flipkart-andheri/world/film-stills/`).
 - Privilon was resized to the CAD floor plate (22.4 × 67.3 m) before the film shots were rendered.
 - **Not seen by eye.** From about 03:45 the app's image viewer stopped responding, for me and for every agent. Everything rendered after that was checked by numbers instead: exposure, black frames, clipping, overlaps and the logic gate. That includes the Corporate Avenue model, the map sequences and the final film. **Please watch the film before it goes to Flipkart.**

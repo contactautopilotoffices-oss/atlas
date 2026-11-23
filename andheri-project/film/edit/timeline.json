@@ -63,9 +63,13 @@
   },
   {
    "beat": "corp_drone",
+   "natural_s": 8.21,
+   "rate": 0.977
+  },
+  {
+   "beat": "corp_drone",
    "start": 56.0,
-   "end": 64.4,
-   "fallback": "assets/stills/corporate-campus.jpg"
+   "end": 64.4
   },
   {
    "beat": "plan-corporate",

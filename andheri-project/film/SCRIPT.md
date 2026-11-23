@@ -22,7 +22,7 @@ This is the same language as the Reliable film:
 | --- | --- | --- |
 | 0:00–0:08 | Black. Type fades up: **ANDHERI EAST** / *Marol · Chakala*. A single low piano note. | "Let's not start with a list of buildings. Let's start with how your people get to work." |
 | 0:08–0:20 | Down through cloud. Mumbai, the airport, then Andheri East. Three pins land. | "Flipkart asked us for space in Andheri East. We walked the micro-market, checked every building against the deck, and brought it down to three. Each one answers a different question." |
-| 0:20–0:27 | Marol Naka: the Line 1 viaduct and the Line 3 interchange. | "Two of them are at Marol Naka, where Metro Line One meets Line Three. The third is one stop west, in Chakala." |
+| 0:20–0:27 | Marol Naka: the Line 1 viaduct and the Line 3 interchange. | "Two of them are at Marol Naka, where Metro Line One meets Line Three. The third is two stops west, in Chakala." |
 | **Privilon** | | |
 | 0:27–0:37 | Sunrise on Privilon's east face, the station roof in front, a slow push-in. The walking line from the station steps to the door. | "First, the commute. Privilon stands right beside Marol Naka station. A hundred and forty metres from the station steps. Two minutes on foot, in any weather." |
 | 0:37–0:44 | Privilon at dusk, lit, the viaduct alongside. | "A new Grade A tower, ground plus fifteen. One long, clear floor plate. Possession in January." |
