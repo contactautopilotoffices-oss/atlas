@@ -18,7 +18,7 @@ surface model (the highest 30 m cell over the footprint less the local ground)
 and capped by footprint size, since the 30 m model blurs small buildings.
 """
 import sys, os, json, math, hashlib
-import numpy as np, pyarrow.parquet as pq, shapely
+import numpy as np, pyarrow.parquet as pq, shapely, shapely.ops
 from shapely.geometry import Polygon, MultiPolygon, LineString, MultiLineString, Point
 from PIL import Image, ImageDraw, ImageFilter
 from scipy import ndimage
@@ -186,7 +186,73 @@ for u, v in TREES:
         TT.append([round(x, 1), round(y, 1), round(float(5 + 9 * rng.random() ** 1.5), 1), int(rng.integers(0, 4))])
 print(len(TT), "trees")
 
+# ---- the near field: 800 m round the tower at 4 px a metre, for the close push-in ---------
+# (the camera ends about 300 m from the tower, where 1 px a metre turns to mush)
+HX, HY = -23.5, -42.1; NR = 400.0; NG = 0.25
+NX0, NY0, NX1, NY1 = HX - NR, HY - NR, HX + NR, HY + NR; NW_ = int(2 * NR / NG)
+def npx(pts): return [((u - NX0) / NG, (NY1 - v) / NG) for u, v in pts]
+# painted afresh at this scale (an upsampled coarse map carries its blurred shadows along)
+def nnoise(cell):
+    g = rng.random((NW_ // cell + 2, NW_ // cell + 2)).astype(np.float32)
+    return np.asarray(Image.fromarray(g).resize((NW_ + cell, NW_ + cell), Image.BICUBIC))[:NW_, :NW_]
+m1, m2, grain = nnoise(240), nnoise(24), rng.random((NW_, NW_)).astype(np.float32)
+base = np.stack([0.60 + 0.07 * m1, 0.56 + 0.06 * m1, 0.47 + 0.05 * m1], -1) * (0.86 + 0.14 * m2[..., None] + 0.06 * grain[..., None])
+near = Image.fromarray(np.clip(base * 255, 0, 255).astype(np.uint8)); nd = ImageDraw.Draw(near)
+for x in rows("land_cover"):
+    c = LC.get(x["subtype"])
+    if c:
+        for p in parts(proj(shapely.from_wkb(x["geometry"]))):
+            if isinstance(p, Polygon): nd.polygon(npx(p.exterior.coords), fill=c)
+for order in (("residential", "commercial", "industrial", "construction", "school", "retail"),
+              ("park", "grass", "garden", "orchard", "recreation_ground", "pitch", "farmland", "cemetery", "species_management_area")):
+    for x in rows("land_use"):
+        if x["class"] in order:
+            for p in parts(proj(shapely.from_wkb(x["geometry"]))):
+                if isinstance(p, Polygon) and p.area > 40: nd.polygon(npx(p.exterior.coords), fill=LU[x["class"]])
+hero_ring = next(b["ring"] for b in B if b["hero"])
+nd.polygon(npx(Polygon(hero_ring).buffer(11, join_style=2).exterior.coords), fill=(186, 178, 164))     # the forecourt, paved
+a_ = np.asarray(near).astype(np.float32) * (0.88 + 0.16 * m2[..., None] + 0.05 * grain[..., None])
+near = Image.fromarray(np.clip(a_, 0, 255).astype(np.uint8)); nd = ImageDraw.Draw(near)
+ROADS_NEAR = []
+for want in ("minor", "major"):
+    for x in SEG:
+        if x["subtype"] != "road": continue
+        w = RW.get(x["class"], 4)
+        if (w >= 8) != (want == "major"): continue
+        for l in parts(proj(shapely.from_wkb(x["geometry"]))):
+            if not isinstance(l, LineString) or l.distance(Point(HX, HY)) > NR + 50: continue
+            pts = npx(l.coords)
+            if w >= 4:
+                nd.line(pts, fill=(168, 162, 150), width=int((w + 4.0) / NG), joint="curve")      # footpath, pavers
+                nd.line(pts, fill=(140, 136, 128), width=int((w + 0.6) / NG), joint="curve")      # kerb line
+            nd.line(pts, fill=(82, 82, 82) if w >= 8 else (104, 102, 98) if w >= 4 else (150, 140, 124), width=int(w / NG), joint="curve")
+            ROADS_NEAR.append({"cls": x["class"], "w": w, "name": (x["names"] or {}).get("primary") if x["names"] else None,
+                               "pts": [[round(u, 2), round(v, 2)] for u, v in l.coords]})
+for r in ROADS_NEAR:     # lane markings on the main road: dashed lane lines, a solid centre
+    if r["w"] < 11: continue
+    l = LineString(r["pts"])
+    for off in (-3.5, 3.5):
+        o = l.offset_curve(off)
+        for d in np.arange(0, o.length, 9.0):
+            seg = shapely.ops.substring(o, d, min(d + 3.0, o.length))
+            if seg.length > 0.5: nd.line(npx(seg.coords), fill=(214, 210, 198), width=max(1, round(0.15 / NG)))
+    nd.line(npx(r["pts"]), fill=(226, 196, 92), width=int(0.2 / NG))
+# contact shadows, sharper
+occ = Image.new("L", (NW_, NW_), 0); od = ImageDraw.Draw(occ)
+for b in B:
+    if abs(b["ring"][0][0] - HX) < NR + 30 and abs(b["ring"][0][1] - HY) < NR + 30: od.polygon(npx(b["ring"]), fill=255)
+occ = np.asarray(occ.filter(ImageFilter.GaussianBlur(1.2 / NG))).astype(np.float32) / 255
+a = np.asarray(near).astype(np.float32) * (1 - 0.4 * occ[..., None])
+Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)).save(f"{OUT}/ground_near.jpg", quality=92)
+INFRA = []
+for x in rows("infrastructure"):
+    g = proj(shapely.from_wkb(x["geometry"]))
+    if g.distance(Point(HX, HY)) < NR and x["class"] in ("bus_stop", "gate", "atm", "parking"):
+        c = g.centroid; INFRA.append({"cls": x["class"], "name": (x["names"] or {}).get("primary") if x["names"] else None, "xy": [round(c.x, 1), round(c.y, 1)]})
+print(len(ROADS_NEAR), "near roads;", len(INFRA), "near street things")
+
 json.dump({"origin": [LAT0, LNG0], "kx": KX, "ky": KY, "box": [X0, Y0, X1, Y1], "gpx": GPX, "ground0": G0,
+           "near": {"box": [NX0, NY0, NX1, NY1], "gpx": NG}, "roads_near": ROADS_NEAR, "infra_near": INFRA,
            "terrain": {"x0": float(tx[0]), "y0": float(ty[0]), "step": TS, "nx": len(tx), "ny": len(ty)},
            "buildings": B, "water": WATER, "metro": METRO, "trees": TT}, open(f"{OUT}/scene.json", "w"))
 print("written", OUT)
