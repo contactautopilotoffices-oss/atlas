@@ -1,5 +1,44 @@
 # Atlas — Development Journal
 
+## 2026-11-23 — Atlas: the Andheri film plays inside the experience, then the three buildings
+
+**A 140-second film in Alka's voice now opens the Flipkart Andheri experience: Enter, watch, and the three buildings appear as cards that open the 3D explorer.**
+
+- **Why:** the founder asked for a premium film by morning. It shows the three modelled buildings, pins them, draws the metro walks the way Google Maps does, and leads straight into the choice of building, with transparent Flipkart (blue and yellow) and Autopilot logos.
+- **What works now:**
+  - **The experience.** The page opens on the new Privilon at blue hour. **Enter the experience** becomes available once the 3D city has loaded, then plays the film with sound. When it ends, or on Skip, the three cards roll in (Privilon, Corporate Avenue, 723 Avenue), each with an image from the new renders. A card opens the explorer at that building, which now shows the remodelled Privilon (beside Fleet House) and Corporate Avenue's new tower. **Shortlist** brings the cards back.
+  - **The film,** 140 s:
+    - the title on black;
+    - a satellite descent through cloud;
+    - the Marol Naka interchange with all three pinned;
+    - **Privilon** at sunrise and at dusk;
+    - its floor drawn three ways (260 / 280 / 301 seats);
+    - **Corporate Avenue** from the air in afternoon sun, with its two floors (6,207 sq ft each);
+    - **723 Avenue** rising at dusk with its floors lit and the terrace;
+    - a walk from the metro for each building (140 m, 850 m, 700 m);
+    - a closing pull-back over all three with pins;
+    - Autopilot's record and "Pehle vyavahar, phir vyapar".
+  - **Corporate Avenue** is a modelled building after the developer's render, standing on the campus with its gates on the main road.
+- **Founder's morning review and fixes:**
+  - The corner logo flickered: it was burnt into the film and jumped corners. It was removed.
+  - The film stuttered: clips were sped up or slowed down at playback, and the 3D city loaded while the film played. Clips are now re-timed smoothly in advance, and the film waits for the city to load.
+  - Rolling numbers overlapped: all figures now count up as plain text.
+  - The old Privilon still appeared on the cards, in the explorer and at the end of the film. The new building is now used everywhere.
+  - **Fleet House** was reported missing. It is in place: the red-banded block beside Privilon, labelled in the explorer. In the frame the founder sent, it was hidden behind a nearer block.
+  - Narration fix: Chakala is two Line 1 stops west of Marol Naka, not one. Alka's line was re-recorded.
+- **Structural decisions:**
+  - **The edit follows the voice.** It is a HyperFrames project (`andheri-project/film/edit/`), rebuilt by one command, with each picture fitted to its voice line.
+  - **All cores are used.** The frame-smoothing step works on all ten cores at once, and the film renders in about two minutes.
+  - **Corporate Avenue's outline is fixed by hand**, in the survey file beside Privilon's. The open-map outline put the modelled tower into its neighbours.
+- **Left undone:**
+  - The explorer's new 3D files are heavy (Corporate Avenue 80 MB, Privilon 24 MB). They load fine locally, but need compressing before deployment. The compression tool download needs the founder's permission.
+  - No cars or people in the shots. BlenderKit needs the founder's own install and sign-in.
+- **Open questions for the founder:**
+  - Which metro distances to show: the deck's (140 / 850 / 700 m), which are in the film, or the measured ones (80–162 m, 908–989 m, 698–780 m).
+  - Whether Corporate Avenue's tower and the trimmed long block stand right on Google satellite.
+  - 723 Avenue's floors, and Corporate Avenue's condition.
+  - Details in `andheri-project/film/MORNING-NOTES.md`.
+
 ## 2026-11-23 — Atlas: Privilon remodelled and lit by the real sun; intro film script
 
 **Privilon is now one long glass floor plate on Fleet House's frontage line, modelled from the developer's render with real depth, lit with photographed skies and the computed sun for sunrise, sunset and blue hour.**
