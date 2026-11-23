@@ -1,0 +1,207 @@
+/* Andheri experience: opening, film, shortlist cards, rolling figures.
+   Design system (EasyUI anatomy, native CSS; MIT notice in engine/vendor/easyui):
+   - Type: Geist 400/500/600 for everything, Geist Mono for small labels; tabular figures.
+   - Surfaces: near-black #0a0a0b, dark glass rgba(16,16,18,.6) + 24px blur, 1px white/10% hairlines.
+   - One primary action per screen: light #f4f4f5 fill, dark text (EasyUI Button "primary").
+   - Flipkart yellow #FFC200 only marks: the active dot, the walk icon, the selected property.
+   - Motion: ease-out (.22,1,.36,1) 320 to 800 ms; cards stagger 110 ms; digits roll like a picker drum. */
+body[data-andheri-ui=world]{
+  --ax-font:Geist,Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;
+  --ax-mono:'Geist Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+  --ax-bg:#0a0a0b; --ax-text:#f4f4f5; --ax-text-2:rgba(244,244,245,.74); --ax-text-3:rgba(244,244,245,.56);
+  --ax-line:rgba(255,255,255,.1); --ax-line-2:rgba(255,255,255,.18);
+  --ax-glass:rgba(15,15,17,.7); --ax-glass-2:rgba(15,15,17,.84); --ax-fill:rgba(255,255,255,.06); --ax-fill-2:rgba(255,255,255,.1);
+  --ax-yellow:#FFC200; --ax-blue:#2A55E5;
+  --ax-r-lg:22px; --ax-r:14px; --ax-r-sm:10px;
+  --ax-ease:cubic-bezier(.22,1,.36,1); --ax-ease-fast:cubic-bezier(.2,0,0,1);
+  --ax-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 24px 60px -16px rgba(0,0,0,.6);
+  --ax-blur:blur(24px) saturate(160%);
+  --ax-cell:1.18em;
+}
+
+/* ------------------------------------------------------------- shared atoms */
+body[data-andheri-ui=world] .ax-eyebrow{display:flex;align-items:center;gap:10px;margin:0;font:500 12px/1.2 var(--ax-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--ax-text-2)}
+body[data-andheri-ui=world] .ax-dot{width:6px;height:6px;border-radius:50%;background:var(--ax-yellow);box-shadow:0 0 0 4px rgba(255,194,0,.14);flex:none}
+body[data-andheri-ui=world] .ax-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:44px;padding:0 18px;border-radius:999px;font:500 14px/1 var(--ax-font);letter-spacing:-.005em;color:var(--ax-text);white-space:nowrap;transition:background .25s var(--ax-ease),color .25s,border-color .25s,transform .35s var(--ax-ease),opacity .3s}
+body[data-andheri-ui=world] .ax-btn svg{width:18px;height:18px;flex:none}
+body[data-andheri-ui=world] .ax-btn:active{transform:scale(.97)}
+body[data-andheri-ui=world] .ax-btn-primary{min-height:56px;padding:0 26px 0 8px;background:#f4f4f5;color:#0a0a0b;font-weight:600;font-size:15px;box-shadow:0 10px 30px -10px rgba(0,0,0,.6)}
+body[data-andheri-ui=world] .ax-btn-primary:hover{background:#fff}
+body[data-andheri-ui=world] .ax-btn-icon{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:#0a0a0b;color:#f4f4f5}
+body[data-andheri-ui=world] .ax-btn-icon svg{width:16px;height:16px;margin-left:2px}
+body[data-andheri-ui=world] :is(.ax-btn-glass,.ax-btn-ghost,.ax-sound,.ax-back){background:var(--ax-glass);border:1px solid var(--ax-line);-webkit-backdrop-filter:var(--ax-blur);backdrop-filter:var(--ax-blur);box-shadow:var(--ax-shadow)}
+body[data-andheri-ui=world] :is(.ax-btn-glass,.ax-btn-ghost):hover{background:var(--ax-glass-2);border-color:var(--ax-line-2)}
+body[data-andheri-ui=world] .ax-sound,body[data-andheri-ui=world] .ax-back{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px 0 13px;border-radius:999px;font:500 13px/1 var(--ax-font);color:var(--ax-text);white-space:nowrap;transition:background .25s,border-color .25s}
+body[data-andheri-ui=world] :is(.ax-sound,.ax-back) svg{width:18px;height:18px;flex:none}
+body[data-andheri-ui=world] :is(.ax-sound,.ax-back):hover{background:var(--ax-glass-2);border-color:var(--ax-line-2)}
+body[data-andheri-ui=world] .ax-sound[aria-pressed=false]{color:var(--ax-text-2)}
+body[data-andheri-ui=world] :is(.ax-root,#top,#hud,#strip) :focus-visible{outline:2px solid var(--ax-yellow);outline-offset:3px}
+
+/* rolling figures: a picker drum per digit */
+body[data-andheri-ui=world] .ax-odo{position:relative;display:inline-flex;font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1;white-space:nowrap}
+body[data-andheri-ui=world] .ax-odo-col{display:inline-block;height:var(--ax-cell,1.18em);line-height:var(--ax-cell,1.18em);overflow:hidden;vertical-align:-.24em}
+body[data-andheri-ui=world] .ax-odo-reel{display:flex;flex-direction:column;will-change:transform}
+body[data-andheri-ui=world] .ax-odo-reel>span{display:block;height:var(--ax-cell,1.18em);text-align:center}
+body[data-andheri-ui=world] .ax-odo-sep{display:inline-block}
+body[data-andheri-ui=world] .ax-sr{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+body[data-andheri-ui=world] .ax-odo.ax-rolling .ax-odo-col{-webkit-mask-image:linear-gradient(180deg,transparent,#000 26%,#000 74%,transparent);mask-image:linear-gradient(180deg,transparent,#000 26%,#000 74%,transparent)}
+
+/* ----------------------------------------------------------------- the root */
+body[data-andheri-ui=world] #load.ax-root{position:fixed;inset:0;z-index:20;display:block;place-items:initial;overflow:hidden;background:var(--ax-bg);color:var(--ax-text);font-family:var(--ax-font);-webkit-font-smoothing:antialiased;transition:opacity .5s var(--ax-ease),transform .6s var(--ax-ease)}
+body[data-andheri-ui=world] #load.ax-root::before{display:none}
+body[data-andheri-ui=world] #load.ax-root.ax-leaving{opacity:0;transform:scale(1.02);pointer-events:none}
+body[data-andheri-ui=world] .ax-bg{position:absolute;inset:0;overflow:hidden}
+body[data-andheri-ui=world] .ax-bg-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:42% 50%;transform-origin:42% 45%;animation:ax-kenburns 26s var(--ax-ease) both;transition:filter .9s var(--ax-ease),transform 1.2s var(--ax-ease)}
+body[data-andheri-ui=world] .ax-bg-shade{position:absolute;inset:0;background:
+  linear-gradient(180deg,rgba(10,10,11,.6) 0%,rgba(10,10,11,0) 20%,rgba(10,10,11,0) 38%,rgba(10,10,11,.78) 74%,#0a0a0b 100%),
+  radial-gradient(85% 75% at 0% 100%,rgba(10,10,11,.7),rgba(10,10,11,0) 62%);transition:background .9s var(--ax-ease)}
+body[data-andheri-ui=world] .ax-root[data-screen=pick] .ax-bg-img{filter:blur(22px) saturate(.85) brightness(.42);transform:scale(1.12);animation:none}
+body[data-andheri-ui=world] .ax-root[data-screen=pick] .ax-bg-shade{background:linear-gradient(180deg,rgba(10,10,11,.5),rgba(10,10,11,.2) 40%,rgba(10,10,11,.75))}
+@keyframes ax-kenburns{from{transform:scale(1.09)}to{transform:scale(1)}}
+
+/* glass navbar anatomy: brand slot, flexible gap, action slot */
+body[data-andheri-ui=world] .ax-bar{position:absolute;z-index:4;top:max(22px,env(safe-area-inset-top));left:36px;right:36px;display:flex;align-items:center;justify-content:space-between;gap:16px;animation:ax-fade .9s var(--ax-ease) .1s both}
+body[data-andheri-ui=world] .ax-bar-actions{display:flex;align-items:center;gap:10px}
+body[data-andheri-ui=world] .ax-bar .ap-lockup .ap-logo{height:15px}
+body[data-andheri-ui=world] .ax-bar .ap-lockup .fk-logo{height:42px}
+
+/* ------------------------------------------------------------ opening screen */
+body[data-andheri-ui=world] .ax-screen{position:absolute;inset:0;z-index:2}
+body[data-andheri-ui=world] .ax-open{display:grid;grid-template-columns:minmax(0,1000px) minmax(0,1fr);align-items:end;gap:40px;padding:0 48px max(56px,calc(env(safe-area-inset-bottom) + 32px))}
+body[data-andheri-ui=world] .ax-open-copy>*{animation:ax-rise 1s var(--ax-ease) both}
+body[data-andheri-ui=world] .ax-open-copy>:nth-child(1){animation-delay:.25s}body[data-andheri-ui=world] .ax-open-copy>:nth-child(2){animation-delay:.35s}body[data-andheri-ui=world] .ax-open-copy>:nth-child(3){animation-delay:.47s}body[data-andheri-ui=world] .ax-open-copy>:nth-child(4){animation-delay:.6s}
+body[data-andheri-ui=world] .ax-h1{margin:22px 0 22px;font:600 clamp(46px,5.4vw,84px)/.98 var(--ax-font);letter-spacing:-.045em;text-wrap:balance}
+body[data-andheri-ui=world] .ax-h1 span{color:rgba(244,244,245,.62)}
+body[data-andheri-ui=world] .ax-lede{margin:0;max-width:560px;font:400 17px/1.55 var(--ax-font);color:var(--ax-text-2);text-wrap:pretty}
+body[data-andheri-ui=world] .ax-cta-row{display:flex;align-items:center;gap:20px;margin-top:34px;flex-wrap:wrap}
+body[data-andheri-ui=world] .ax-meta{font:400 13px/1.4 var(--ax-font);color:var(--ax-text-3)}
+body[data-andheri-ui=world] .ax-open-list{justify-self:end;list-style:none;margin:0;padding:0;min-width:250px;animation:ax-fade 1.2s var(--ax-ease) .8s both}
+body[data-andheri-ui=world] .ax-open-list li{display:grid;grid-template-columns:28px 1fr auto;align-items:baseline;gap:10px;padding:13px 0;border-top:1px solid var(--ax-line);font:500 14px/1.2 var(--ax-font)}
+body[data-andheri-ui=world] .ax-open-list li:last-child{border-bottom:1px solid var(--ax-line)}
+body[data-andheri-ui=world] .ax-open-list span{font:500 11px/1 var(--ax-mono);color:var(--ax-text-3)}
+body[data-andheri-ui=world] .ax-open-list i{font:400 13px/1 var(--ax-font);font-style:normal;color:var(--ax-text-3)}
+
+/* --------------------------------------------------------------------- film */
+body[data-andheri-ui=world] .ax-film{background:#000;animation:ax-fade .6s var(--ax-ease) both;outline:none}
+body[data-andheri-ui=world] .ax-video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
+@media (min-aspect-ratio:3/2) and (max-aspect-ratio:2/1){body[data-andheri-ui=world] .ax-video{object-fit:cover}}
+body[data-andheri-ui=world] .ax-film-ui{position:absolute;inset:0;pointer-events:none}
+body[data-andheri-ui=world] .ax-film-ui>*{pointer-events:auto}
+body[data-andheri-ui=world] .ax-film-btn{position:absolute;top:max(20px,env(safe-area-inset-top));right:24px;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;color:#f4f4f5;background:rgba(10,10,11,.42);border:1px solid rgba(255,255,255,.14);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);transition:background .25s}
+body[data-andheri-ui=world] .ax-film-btn:hover{background:rgba(10,10,11,.62)}
+body[data-andheri-ui=world] .ax-film-btn svg{width:19px;height:19px}
+body[data-andheri-ui=world] .ax-skip{position:absolute;right:24px;bottom:max(28px,calc(env(safe-area-inset-bottom) + 18px));animation:ax-fade .5s var(--ax-ease) both}
+body[data-andheri-ui=world] .ax-progress{position:absolute;left:0;right:0;bottom:0;height:2px;background:rgba(255,255,255,.14)}
+body[data-andheri-ui=world] .ax-progress i{position:absolute;inset:0;background:#f4f4f5;transform-origin:0 50%;transform:scaleX(0);transition:transform .25s linear}
+body[data-andheri-ui=world] .ax-root.ax-film-out .ax-film{opacity:0;transition:opacity .42s var(--ax-ease)}
+
+/* --------------------------------------------------------------- shortlist */
+body[data-andheri-ui=world] .ax-pick{display:flex;flex-direction:column;padding:104px 48px max(24px,env(safe-area-inset-bottom));overflow-y:auto;overscroll-behavior:contain}
+body[data-andheri-ui=world] .ax-pick-head{width:100%;max-width:1320px;margin:0 auto}
+body[data-andheri-ui=world] .ax-pick-head>*{animation:ax-rise .9s var(--ax-ease) both}
+body[data-andheri-ui=world] .ax-pick-head>:nth-child(2){animation-delay:.06s}body[data-andheri-ui=world] .ax-pick-head>:nth-child(3){animation-delay:.12s}
+body[data-andheri-ui=world] .ax-h2:focus{outline:none}
+body[data-andheri-ui=world] .ax-h2{margin:16px 0 12px;font:600 clamp(30px,3.1vw,46px)/1.05 var(--ax-font);letter-spacing:-.035em;text-wrap:balance}
+body[data-andheri-ui=world] .ax-pick .ax-lede{font-size:16px;max-width:660px}
+body[data-andheri-ui=world] .ax-cards{list-style:none;margin:32px auto 0;padding:0;width:100%;max-width:1320px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+body[data-andheri-ui=world] .ax-card-slot{opacity:0;display:flex}
+body[data-andheri-ui=world] .ax-cards-in .ax-card-slot{animation:ax-card-in .9s var(--ax-ease) both;animation-delay:calc(140ms + var(--i) * 110ms)}
+body[data-andheri-ui=world] .ax-card{position:relative;display:flex;flex-direction:column;width:100%;padding:0;text-align:left;color:var(--ax-text);border-radius:var(--ax-r-lg);overflow:hidden;background:rgba(20,20,22,.66);border:1px solid var(--ax-line);-webkit-backdrop-filter:var(--ax-blur);backdrop-filter:var(--ax-blur);box-shadow:var(--ax-shadow);transition:transform .5s var(--ax-ease),border-color .3s,background .3s,box-shadow .5s var(--ax-ease)}
+body[data-andheri-ui=world] .ax-card-media{position:relative;display:block;aspect-ratio:16/9;overflow:hidden;background:#141416}
+body[data-andheri-ui=world] .ax-card-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.2s var(--ax-ease)}
+body[data-andheri-ui=world] .ax-card-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,11,.25),rgba(10,10,11,0) 30%,rgba(10,10,11,0) 55%,rgba(20,20,22,.9))}
+body[data-andheri-ui=world] .ax-card-num{position:absolute;z-index:1;top:14px;left:14px;padding:6px 9px;border-radius:999px;font:500 11px/1 var(--ax-mono);letter-spacing:.08em;background:rgba(10,10,11,.5);border:1px solid rgba(255,255,255,.14);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+body[data-andheri-ui=world] .ax-card-tag{position:absolute;z-index:1;left:16px;bottom:14px;display:inline-flex;align-items:center;gap:8px;font:500 13px/1 var(--ax-font);color:#fff}
+body[data-andheri-ui=world] .ax-card-tag::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ax-yellow)}
+body[data-andheri-ui=world] .ax-card-body{display:flex;flex-direction:column;flex:1;padding:18px 22px 20px}
+body[data-andheri-ui=world] .ax-card-kicker{font:500 11px/1.2 var(--ax-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ax-text-3)}
+body[data-andheri-ui=world] .ax-card-name{margin:8px 0 6px;font:600 28px/1.08 var(--ax-font);letter-spacing:-.03em}
+body[data-andheri-ui=world] .ax-card-sub{font:400 14px/1.4 var(--ax-font);color:var(--ax-text-2)}
+body[data-andheri-ui=world] .ax-chip{display:inline-flex;align-items:center;gap:8px;min-height:34px;padding:0 14px 0 10px;border-radius:999px;background:var(--ax-fill);border:1px solid var(--ax-line);font:500 13px/1 var(--ax-font);white-space:nowrap}
+body[data-andheri-ui=world] .ax-chip svg{width:17px;height:17px;color:var(--ax-yellow);flex:none}
+body[data-andheri-ui=world] .ax-metro{align-self:flex-start;margin-top:16px;max-width:100%}
+body[data-andheri-ui=world] .ax-metro-figs{display:inline;font-variant-numeric:tabular-nums;color:var(--ax-text)}
+body[data-andheri-ui=world] .ax-metro-to{color:var(--ax-text-2);overflow:hidden;text-overflow:ellipsis}
+body[data-andheri-ui=world] .ax-card-stats{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px;padding-top:16px;border-top:1px solid var(--ax-line)}
+body[data-andheri-ui=world] .ax-stat{display:flex;flex-direction:column;min-width:0}
+body[data-andheri-ui=world] .ax-stat small{font:500 11px/1.2 var(--ax-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ax-text-3)}
+body[data-andheri-ui=world] .ax-stat strong{margin-top:8px;font:600 26px/1.1 var(--ax-font);letter-spacing:-.025em;font-variant-numeric:tabular-nums}
+body[data-andheri-ui=world] .ax-stat strong.ax-stat-text{font-size:17px;line-height:1.3;letter-spacing:-.01em}
+body[data-andheri-ui=world] .ax-stat em{margin-top:5px;font:400 12.5px/1.4 var(--ax-font);font-style:normal;color:var(--ax-text-3)}
+body[data-andheri-ui=world] .ax-unit{font-size:.56em;font-weight:500;letter-spacing:0;color:var(--ax-text-2);white-space:pre}
+body[data-andheri-ui=world] .ax-metro-figs .ax-unit{font-size:1em;font-weight:400}
+body[data-andheri-ui=world] .ax-card-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:auto;padding-top:20px;font:400 13px/1.35 var(--ax-font);color:var(--ax-text-2)}
+body[data-andheri-ui=world] .ax-card-foot>span:first-child{padding-top:0}
+body[data-andheri-ui=world] .ax-card-go{display:inline-flex;align-items:center;gap:6px;flex:none;font-weight:600;color:var(--ax-text)}
+body[data-andheri-ui=world] .ax-card-go svg{width:16px;height:16px;transition:transform .35s var(--ax-ease)}
+body[data-andheri-ui=world] .ax-card-progress{position:absolute;left:0;right:0;bottom:0;height:2px;overflow:hidden;opacity:0;transition:opacity .3s}
+body[data-andheri-ui=world] .ax-card-progress i{position:absolute;top:0;bottom:0;width:40%;background:linear-gradient(90deg,transparent,var(--ax-yellow),transparent);animation:ax-scan 1.1s var(--ax-ease-fast) infinite}
+body[data-andheri-ui=world] .ax-card.ax-chosen{border-color:rgba(255,194,0,.55)}
+body[data-andheri-ui=world] .ax-card.ax-chosen .ax-card-progress{opacity:1}
+body[data-andheri-ui=world] .ax-world-ready .ax-card.ax-chosen .ax-card-progress{opacity:0}
+@media (hover:hover) and (pointer:fine){
+  body[data-andheri-ui=world] .ax-card:hover{transform:translateY(-4px);border-color:var(--ax-line-2);background:rgba(26,26,28,.72);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 34px 70px -18px rgba(0,0,0,.7)}
+  body[data-andheri-ui=world] .ax-card:hover .ax-card-media img{transform:scale(1.045)}
+  body[data-andheri-ui=world] .ax-card:hover .ax-card-go svg{transform:translateX(4px)}
+}
+body[data-andheri-ui=world] .ax-card:active{transform:scale(.985)}
+body[data-andheri-ui=world] .ax-dots{display:none}
+body[data-andheri-ui=world] .ax-pick-foot{width:100%;max-width:1320px;margin:22px auto 0;display:flex;align-items:center;gap:14px}
+body[data-andheri-ui=world] .ax-load-track{position:relative;flex:0 0 140px;height:2px;border-radius:2px;background:rgba(255,255,255,.12);overflow:hidden;transition:opacity .4s}
+body[data-andheri-ui=world] .ax-load-track #l-bar{position:absolute;left:0;top:0;bottom:0;width:0;background:#f4f4f5;transition:width .3s var(--ax-ease)}
+body[data-andheri-ui=world] .ax-world-ready:not(.ax-choosing) .ax-pick-foot{display:none}
+body[data-andheri-ui=world] .ax-pick-foot #l-msg{margin:0;font:400 12.5px/1.4 var(--ax-font);color:var(--ax-text-3)}
+body[data-andheri-ui=world] .ax-root.ax-direct .ax-pick-head,body[data-andheri-ui=world] .ax-root.ax-direct .ax-cards{visibility:hidden}
+
+@keyframes ax-fade{from{opacity:0}to{opacity:1}}
+@keyframes ax-rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes ax-card-in{from{opacity:0;transform:translateY(34px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes ax-scan{from{transform:translateX(-100%)}to{transform:translateX(260%)}}
+
+/* ------------------------------------------------------------------ phones */
+@media (max-width:860px){
+  body[data-andheri-ui=world] .ax-bar{left:16px;right:16px;top:max(14px,env(safe-area-inset-top))}
+  body[data-andheri-ui=world] .ax-bar .ap-lockup .ap-logo{height:11px}
+  body[data-andheri-ui=world] .ax-bar .ap-lockup .fk-logo{height:31px}
+  body[data-andheri-ui=world] .ax-bar .ax-sound span,body[data-andheri-ui=world] .ax-bar .ax-replay span{display:none}
+  body[data-andheri-ui=world] .ax-bar :is(.ax-sound,.ax-replay){width:44px;padding:0;justify-content:center}
+  body[data-andheri-ui=world] .ax-open{grid-template-columns:1fr;padding:0 20px max(28px,calc(env(safe-area-inset-bottom) + 20px));gap:0}
+  body[data-andheri-ui=world] .ax-open-list{display:none}
+  body[data-andheri-ui=world] .ax-bg-img{object-position:34% 50%}
+  body[data-andheri-ui=world] .ax-bg-shade{background:linear-gradient(180deg,rgba(10,10,11,.55) 0%,rgba(10,10,11,0) 16%,rgba(10,10,11,0) 34%,rgba(10,10,11,.86) 64%,#0a0a0b 100%)}
+  body[data-andheri-ui=world] .ax-h1{font-size:clamp(38px,11vw,52px);margin:16px 0 16px}
+  body[data-andheri-ui=world] .ax-lede{font-size:15px}
+  body[data-andheri-ui=world] .ax-cta-row{margin-top:26px;gap:12px}
+  body[data-andheri-ui=world] .ax-cta-row .ax-btn-primary{width:100%;justify-content:flex-start}
+  body[data-andheri-ui=world] .ax-meta{width:100%;text-align:center}
+  body[data-andheri-ui=world] .ax-pick{padding:78px 0 max(18px,env(safe-area-inset-bottom))}
+  body[data-andheri-ui=world] .ax-pick-head{padding:0 20px}
+  body[data-andheri-ui=world] .ax-pick .ax-eyebrow{font-size:11px}
+  body[data-andheri-ui=world] .ax-h2:focus{outline:none}
+body[data-andheri-ui=world] .ax-h2{font-size:27px;margin:12px 0 8px}
+  body[data-andheri-ui=world] .ax-pick .ax-lede{font-size:14px}
+  body[data-andheri-ui=world] .ax-cards{display:flex;gap:12px;margin-top:20px;padding:4px 20px 6px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 20px;scrollbar-width:none;overscroll-behavior-x:contain}
+  body[data-andheri-ui=world] .ax-cards::-webkit-scrollbar{display:none}
+  body[data-andheri-ui=world] .ax-card-slot{flex:0 0 min(84vw,360px);scroll-snap-align:center}
+  body[data-andheri-ui=world] .ax-card-media{aspect-ratio:16/9}
+  body[data-andheri-ui=world] .ax-card-body{padding:14px 18px 16px}
+  body[data-andheri-ui=world] .ax-card-name{font-size:24px;margin:6px 0 4px}
+  body[data-andheri-ui=world] .ax-card-sub{font-size:13px}
+  body[data-andheri-ui=world] .ax-metro{margin-top:12px}
+  body[data-andheri-ui=world] .ax-card-stats{margin-top:14px;padding-top:12px;gap:14px}
+  body[data-andheri-ui=world] .ax-stat strong{font-size:22px;margin-top:6px}
+  body[data-andheri-ui=world] .ax-stat strong.ax-stat-text{font-size:15px}
+  body[data-andheri-ui=world] .ax-card-foot{padding-top:14px;font-size:12.5px}
+  body[data-andheri-ui=world] .ax-dots{display:flex;justify-content:center;gap:6px;margin-top:14px}
+  body[data-andheri-ui=world] .ax-dots i{width:6px;height:6px;border-radius:3px;background:rgba(255,255,255,.25);transition:width .35s var(--ax-ease),background .35s}
+  body[data-andheri-ui=world] .ax-dots i.on{width:18px;background:#f4f4f5}
+  body[data-andheri-ui=world] .ax-pick-foot{padding:0 20px;margin-top:12px;justify-content:center}
+  body[data-andheri-ui=world] .ax-film-btn{right:16px}
+  body[data-andheri-ui=world] .ax-skip{right:16px}
+}
+@media (max-width:860px) and (max-height:720px){body[data-andheri-ui=world] .ax-pick .ax-lede{display:none}body[data-andheri-ui=world] .ax-card-media{aspect-ratio:2/1}}
+@media (prefers-reduced-motion:reduce){
+  body[data-andheri-ui=world] .ax-bg-img,body[data-andheri-ui=world] .ax-bar,body[data-andheri-ui=world] .ax-open-copy>*,body[data-andheri-ui=world] .ax-open-list,body[data-andheri-ui=world] .ax-pick-head>*,body[data-andheri-ui=world] .ax-film,body[data-andheri-ui=world] .ax-skip{animation:none!important}
+  body[data-andheri-ui=world] .ax-cards-in .ax-card-slot{animation:none;opacity:1}
+  body[data-andheri-ui=world] .ax-card,body[data-andheri-ui=world] .ax-card-media img,body[data-andheri-ui=world] #load.ax-root{transition:none!important}
+}

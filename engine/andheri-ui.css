@@ -1,0 +1,286 @@
+/* Autopilot × Flipkart surfaces. EasyUI patterns (Glass Navbar, Animated Tabs, Floating Action Dock,
+   Animated Number) adapted to the existing Atlas DOM; see engine/vendor/easyui. The opening, film and
+   shortlist live in andheri-experience.css, which also defines the --ax-* tokens used below. */
+body[data-andheri-ui]{--fk-blue:#2a55e5;--fk-blue-hover:#2045c7;--fk-yellow:#ffc200;--ap-ink:#151a23;--ap-muted:#657084;--ap-line:#dce3ef;--ap-soft:#edf2ff;--ap-spring:cubic-bezier(.2,.85,.25,1.12)}
+body[data-andheri-ui] :is(button,a,select,input):focus-visible{outline:3px solid #85a7ff;outline-offset:3px}
+body[data-andheri-ui] :is(button,select){touch-action:manipulation}
+body[data-andheri-ui] button,body[data-andheri-ui] .ap-action{transition:background .18s,color .18s,border-color .18s,transform .22s var(--ap-spring)}
+body[data-andheri-ui] button:active,body[data-andheri-ui] .ap-action:active{transform:scale(.97)}
+
+/* the co-brand lockup: both marks on transparency, never on a plaque */
+body[data-andheri-ui] .ap-lockup{display:inline-flex;align-items:center;gap:12px;flex:none;width:fit-content;max-width:100%;padding:0;background:none;border-radius:0;line-height:1;box-sizing:border-box}
+body[data-andheri-ui] .ap-lockup img{display:block;width:auto;max-width:none;flex:none;padding:0;border:0;filter:none;object-fit:contain;-webkit-user-drag:none;user-select:none}
+body[data-andheri-ui] .ap-lockup .ap-logo{height:13px}
+body[data-andheri-ui] .ap-lockup .fk-logo{height:36px}
+body[data-andheri-ui] .ap-lockup .ap-x{font:300 17px/1 Geist,Inter,system-ui,sans-serif;opacity:.55;transform:translateY(-1px)}
+body[data-andheri-ui] .ap-lockup[data-tone=dark] .ap-x{color:#fff}
+body[data-andheri-ui] .ap-lockup[data-tone=light] .ap-x{color:#151a23}
+body[data-andheri-ui] .ap-tabs{position:relative;isolation:isolate}
+body[data-andheri-ui] .ap-tab-indicator{position:absolute;left:0;top:0;z-index:0;pointer-events:none;border-radius:999px;background:var(--fk-blue);box-shadow:0 2px 8px #2145ae20;transition:transform .32s var(--ap-spring),width .32s var(--ap-spring),height .2s}
+body[data-andheri-ui] .ap-tabs button{position:relative;z-index:1;min-height:44px;background:transparent}
+
+/* =============================================================== the explorer
+   Dark glass chrome over the 3D model: two floating navbar groups, a property card at left,
+   a compact property rail at the bottom, a floor dock at right. */
+body[data-andheri-ui=world]{--bg:#0a0a0b;--ink:#f4f4f5;--mut:rgba(244,244,245,.74);--dim:rgba(244,244,245,.56);--line:rgba(255,255,255,.12);--line2:rgba(255,255,255,.08);--acc:var(--fk-yellow);--acc-ink:#141414;--glass:rgba(16,16,18,.6);
+  --disp:var(--ax-font);--font:var(--ax-font);--mono:var(--ax-mono);font-family:var(--ax-font);background:#0a0a0b;-webkit-font-smoothing:antialiased}
+body[data-andheri-ui=world] .scrim{display:none}
+body[data-andheri-ui=world] .mono{font:500 11px/1.2 var(--ax-mono);letter-spacing:.12em;text-transform:uppercase}
+body[data-andheri-ui=world] :is(#top>*:not(#brand):not(#modes):not(#scene-lighting),#brand,#modes,#scene-lighting summary,#hud,#strip .film,#floors,#walkhud,#route,#hint,#map-credits){-webkit-backdrop-filter:var(--ax-blur);backdrop-filter:var(--ax-blur)}
+
+/* navbar groups */
+body[data-andheri-ui=world] #top{left:20px;right:20px;top:max(16px,env(safe-area-inset-top));gap:10px;align-items:center}
+body[data-andheri-ui=world] #brand{flex-direction:row;align-items:center;gap:0;height:48px;padding:0 18px;border-radius:999px;background:var(--ax-glass);border:1px solid var(--ax-line);box-shadow:var(--ax-shadow)}
+body[data-andheri-ui=world] #brand .ap-lockup .ap-logo{height:12px}
+body[data-andheri-ui=world] #brand .ap-lockup .fk-logo{height:34px}
+body[data-andheri-ui=world] #t-eyebrow,body[data-andheri-ui=world] #t-title{display:none}
+body[data-andheri-ui=world] #ax-back{height:48px;min-height:48px}
+body[data-andheri-ui=world] #ax-back{order:1}body[data-andheri-ui=world] #brand{order:2}body[data-andheri-ui=world] #modes{order:3}body[data-andheri-ui=world] #scene-lighting{order:4}body[data-andheri-ui=world] #to-map{order:5}body[data-andheri-ui=world] #ax-top-sound{order:6}
+body[data-andheri-ui=world] #modes{padding:4px;height:48px;border-radius:999px;background:var(--ax-glass);border:1px solid var(--ax-line);box-shadow:var(--ax-shadow);align-items:center}
+body[data-andheri-ui=world] #modes .ap-tab-indicator{background:#f4f4f5;box-shadow:0 2px 10px rgba(0,0,0,.25)}
+body[data-andheri-ui=world] #modes button{min-height:38px;height:38px;padding:0 15px;gap:7px;border-radius:999px;font:500 13px/1 var(--ax-font);letter-spacing:-.005em;text-transform:none;color:var(--ax-text-2)}
+body[data-andheri-ui=world] #modes button:hover{color:var(--ax-text)}
+body[data-andheri-ui=world] #modes button.on{background:transparent;color:#0a0a0b}
+body[data-andheri-ui=world] #modes button svg{width:16px;height:16px}
+body[data-andheri-ui=world] #to-map{display:inline-flex;align-items:center;height:48px;padding:0 18px;border-radius:999px;background:var(--ax-glass);border:1px solid var(--ax-line);box-shadow:var(--ax-shadow);font:500 13px/1 var(--ax-font);letter-spacing:0;text-transform:none;color:var(--ax-text)}
+body[data-andheri-ui=world] #to-map:hover{background:var(--ax-glass-2);border-color:var(--ax-line-2)}
+body[data-andheri-ui=world] #ax-top-sound{height:48px;min-height:48px}
+body[data-andheri-ui=world] #scene-lighting{font-family:var(--ax-font)}
+body[data-andheri-ui=world] #scene-lighting summary{height:48px;min-height:48px;padding:0 18px;border-radius:999px;background:var(--ax-glass);border:1px solid var(--ax-line);box-shadow:var(--ax-shadow);font:500 13px/1 var(--ax-font);color:var(--ax-text)}
+body[data-andheri-ui=world] #scene-lighting[open] summary{background:#f4f4f5;border-color:#f4f4f5;color:#0a0a0b}
+body[data-andheri-ui=world] #scene-lighting .scene-lighting-panel{top:calc(100% + 10px);border-radius:20px;background:var(--ax-glass-2);border:1px solid var(--ax-line);box-shadow:var(--ax-shadow);-webkit-backdrop-filter:var(--ax-blur);backdrop-filter:var(--ax-blur);font-family:var(--ax-font)}
+body[data-andheri-ui=world] #scene-lighting .scene-lighting-panel h3{font:600 17px/1.2 var(--ax-font);letter-spacing:-.02em}
+body[data-andheri-ui=world] #scene-lighting .scene-lighting-panel :is(input[type=range]){accent-color:#f4f4f5}
+body[data-andheri-ui=world] #scene-lighting :is(.scene-light-presets button,#scene-reset){border-radius:10px;background:var(--ax-fill);border:1px solid var(--ax-line);color:var(--ax-text)}
+
+/* the property card (EasyUI card + sheet anatomy) */
+body[data-andheri-ui=world] #hud{left:20px;top:calc(var(--world-header-bottom,64px) + 12px);bottom:auto;width:372px;max-height:calc(100dvh - var(--world-header-bottom,64px) - 132px);padding:22px 22px 20px;border-radius:var(--ax-r-lg);background:var(--ax-glass);border:1px solid var(--ax-line);box-shadow:var(--ax-shadow);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.2) transparent}
+body[data-andheri-ui=world] #hud .eyebrow{display:flex;color:var(--ax-text-3)}
+body[data-andheri-ui=world] #h-eyebrow{font:500 11px/1.3 var(--ax-mono);letter-spacing:.12em}
+body[data-andheri-ui=world] #h-prio{display:none!important}
+body[data-andheri-ui=world] #name:focus{outline:none}
+body[data-andheri-ui=world] #name{margin:10px 0 4px;font:600 34px/1.04 var(--ax-font);letter-spacing:-.035em;text-transform:none}
+body[data-andheri-ui=world] :is(#line1,#line2){display:none}
+body[data-andheri-ui=world] .ax-spot-sub{margin:0;font:400 14px/1.45 var(--ax-font);color:var(--ax-text-2)}
+body[data-andheri-ui=world] .ax-spot-stats{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px;padding:14px 0;border-top:1px solid var(--ax-line);border-bottom:1px solid var(--ax-line)}
+body[data-andheri-ui=world] .ax-spot-stats>div{display:flex;flex-direction:column;min-width:0}
+body[data-andheri-ui=world] .ax-spot-stats small{font:500 10.5px/1.2 var(--ax-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ax-text-3)}
+body[data-andheri-ui=world] .ax-spot-stats strong{margin-top:7px;font:600 24px/1.1 var(--ax-font);letter-spacing:-.025em;font-variant-numeric:tabular-nums}
+body[data-andheri-ui=world] .ax-spot-stats strong.ax-stat-text{font-size:15px;line-height:1.3;letter-spacing:-.01em}
+body[data-andheri-ui=world] .ax-spot-stats em{margin-top:4px;font:400 12px/1.4 var(--ax-font);font-style:normal;color:var(--ax-text-3)}
+body[data-andheri-ui=world] .ax-spot-status{display:flex;align-items:center;gap:8px;margin:12px 0 0;font:400 13px/1.4 var(--ax-font);color:var(--ax-text-2)}
+body[data-andheri-ui=world] .ax-spot-status i{width:6px;height:6px;border-radius:50%;background:var(--fk-yellow);flex:none}
+body[data-andheri-ui=world] .ax-metro-row{display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:12px;width:100%;margin-top:14px;padding:11px 14px 11px 11px;border-radius:16px;background:var(--ax-fill);border:1px solid var(--ax-line);text-align:left;color:var(--ax-text)}
+body[data-andheri-ui=world] .ax-metro-row:hover{background:var(--ax-fill-2);border-color:var(--ax-line-2)}
+body[data-andheri-ui=world] .ax-metro-ico{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:rgba(255,194,0,.12);color:var(--fk-yellow)}
+body[data-andheri-ui=world] .ax-metro-ico svg{width:20px;height:20px}
+body[data-andheri-ui=world] .ax-metro-name{min-width:0}
+body[data-andheri-ui=world] .ax-metro-name small{display:block;font:500 10.5px/1.2 var(--ax-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ax-text-3)}
+body[data-andheri-ui=world] .ax-metro-name b{display:block;margin-top:4px;font:600 15px/1.25 var(--ax-font);letter-spacing:-.01em}
+body[data-andheri-ui=world] .ax-metro-val{text-align:right;font:600 22px/1 var(--ax-font);letter-spacing:-.02em;font-variant-numeric:tabular-nums;white-space:nowrap}
+body[data-andheri-ui=world] .ax-metro-val .ax-unit{font-size:13px}
+body[data-andheri-ui=world] .ax-metro-val small{display:block;margin-top:5px;font:500 12px/1 var(--ax-font);letter-spacing:0;color:var(--ax-text-2)}
+body[data-andheri-ui=world] #cad-link{display:flex!important;align-items:center;justify-content:center;gap:8px;width:100%;min-height:48px;margin-top:16px!important;padding:0 18px!important;border-radius:var(--ax-r)!important;background:#f4f4f5!important;color:#0a0a0b!important;font:600 14px/1 var(--ax-font)!important;letter-spacing:-.005em;align-self:stretch!important;box-shadow:0 10px 30px -12px rgba(0,0,0,.6);transition:background .2s}
+body[data-andheri-ui=world] #cad-link[hidden]{display:none!important}
+body[data-andheri-ui=world] #cad-link:hover{background:#fff!important}
+body[data-andheri-ui=world] #hud>#cad-link{order:0}
+body[data-andheri-ui=world] #world-layout-menu{margin-top:10px;font:500 13px/1.3 var(--ax-font);color:var(--ax-text-2)}
+body[data-andheri-ui=world] #world-layout-menu summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;min-height:40px;padding:0 4px;border-radius:10px}
+body[data-andheri-ui=world] #world-layout-menu summary::-webkit-details-marker{display:none}
+body[data-andheri-ui=world] #world-layout-menu summary::after{content:"";width:7px;height:7px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg) translateY(-2px);transition:transform .25s var(--ax-ease)}
+body[data-andheri-ui=world] #world-layout-menu[open] summary::after{transform:rotate(-135deg)}
+body[data-andheri-ui=world] #world-layout-menu summary:hover{color:var(--ax-text)}
+body[data-andheri-ui=world] #world-layout-menu>div{display:grid;gap:8px;padding:6px 0 4px}
+body[data-andheri-ui=world] #world-layout-menu select{min-height:44px;padding:0 12px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid var(--ax-line);color:var(--ax-text);font:500 14px var(--ax-font);color-scheme:dark}
+body[data-andheri-ui=world] #world-layout-menu a{display:flex;align-items:center;justify-content:center;min-height:44px;border-radius:12px;background:var(--ax-fill);border:1px solid var(--ax-line);color:var(--ax-text);font-weight:500}
+body[data-andheri-ui=world] #conn{margin-top:20px}
+body[data-andheri-ui=world] #conn .mono{margin-bottom:6px;color:var(--ax-text-3)}
+body[data-andheri-ui=world] .row{grid-template-columns:8px 1fr auto;gap:12px;padding:12px 2px;border-color:var(--ax-line);border-radius:0}
+body[data-andheri-ui=world] .row .dot{width:8px;height:8px}
+body[data-andheri-ui=world] .row b{font:500 14px/1.25 var(--ax-font);letter-spacing:-.005em;text-transform:none}
+body[data-andheri-ui=world] .row i{font:400 12px/1.3 var(--ax-font);color:var(--ax-text-3)}
+body[data-andheri-ui=world] .row .v{font:600 18px/1 var(--ax-font);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+body[data-andheri-ui=world] .row .v small{font:500 12px/1 var(--ax-font);letter-spacing:0;text-transform:lowercase;color:var(--ax-text-2)}
+body[data-andheri-ui=world] .row .v em{margin-top:4px;font:500 11px/1.2 var(--ax-font);letter-spacing:0;text-transform:lowercase;color:var(--ax-text-3)}
+body[data-andheri-ui=world] .row:hover b,body[data-andheri-ui=world] .row.on b{color:var(--ax-text)}
+body[data-andheri-ui=world] .row.on .v{color:var(--fk-yellow)}
+body[data-andheri-ui=world] .row.on{box-shadow:inset 2px 0 0 var(--fk-yellow)}
+body[data-andheri-ui=world] #go{width:100%;justify-content:center;margin-top:14px;min-height:46px;padding:0 18px;border-radius:var(--ax-r);background:var(--ax-fill);border:1px solid var(--ax-line);color:var(--ax-text);font:500 14px/1 var(--ax-font);letter-spacing:0;text-transform:none;align-self:stretch}
+body[data-andheri-ui=world] #go:hover{background:var(--ax-fill-2);border-color:var(--ax-line-2);filter:none}
+body[data-andheri-ui=world] #src{font:400 11.5px/1.5 var(--ax-font);color:var(--ax-text-3)}
+body[data-andheri-ui=world] #more{margin-top:8px;padding:6px 0;border:0;font:500 13px/1 var(--ax-font);letter-spacing:0;text-transform:none;color:var(--ax-text-2);text-decoration:underline;text-decoration-color:rgba(255,255,255,.25);text-underline-offset:4px}
+body[data-andheri-ui=world] #more:hover{color:var(--ax-text)}
+body[data-andheri-ui=world] #spec{font:400 12.5px/1.45 var(--ax-font);gap:6px 16px;overflow:visible}
+body[data-andheri-ui=world] #photo{border-radius:var(--ax-r);border-color:var(--ax-line)}
+body[data-andheri-ui=world] #photo span{font:400 11px/1.4 var(--ax-font);background:rgba(10,10,11,.6)}
+body[data-andheri-ui=world].showing-area #property-spotlight .ax-metro-row{display:none}
+
+/* property rail */
+body[data-andheri-ui=world] #strip{left:20px;right:auto;max-width:calc(100vw - 40px);bottom:max(18px,env(safe-area-inset-bottom));gap:10px;padding:2px}
+body[data-andheri-ui=world] .film{flex:0 0 228px;height:78px;border-radius:18px;border:1px solid var(--ax-line);background-color:#151517;box-shadow:var(--ax-shadow);transition:transform .45s var(--ax-ease),border-color .25s,box-shadow .3s}
+body[data-andheri-ui=world] .film::after{background:linear-gradient(90deg,rgba(12,12,14,.92) 0%,rgba(12,12,14,.72) 48%,rgba(12,12,14,.18) 100%)}
+body[data-andheri-ui=world] .film>span{left:16px;right:16px;bottom:auto;top:50%;transform:translateY(-50%)}
+body[data-andheri-ui=world] .film .n{font:500 10.5px/1 var(--ax-mono);letter-spacing:.1em;color:var(--ax-text-3)}
+body[data-andheri-ui=world] .film b{margin-top:6px;font:600 16px/1.1 var(--ax-font);letter-spacing:-.015em;text-transform:none}
+body[data-andheri-ui=world] .film i{margin-top:5px;font:400 12px/1.2 var(--ax-font);color:var(--ax-text-2)}
+body[data-andheri-ui=world] .film:hover{transform:translateY(-2px);border-color:var(--ax-line-2)}
+body[data-andheri-ui=world] .film.on{border-color:rgba(255,194,0,.7);box-shadow:0 0 0 1px rgba(255,194,0,.55),var(--ax-shadow)}
+body[data-andheri-ui=world] .film.on .n{color:var(--fk-yellow)}
+
+/* floor dock */
+body[data-andheri-ui=world] #floors{right:20px;width:172px;padding:16px 14px 12px;border-radius:var(--ax-r-lg);background:var(--ax-glass);border:1px solid var(--ax-line);box-shadow:var(--ax-shadow)}
+body[data-andheri-ui=world] #floors .mono{color:var(--ax-text-3)}
+body[data-andheri-ui=world] #floors .fl .b{fill:rgba(255,255,255,.05);stroke:rgba(255,255,255,.1)}
+body[data-andheri-ui=world] #floors .fl text{fill:rgba(244,244,245,.75);font:500 10.5px var(--ax-mono)}
+body[data-andheri-ui=world] #floors .fl:hover .b{fill:rgba(255,255,255,.14)}
+body[data-andheri-ui=world] #floors .fl.on .b{fill:var(--fk-yellow);stroke:var(--fk-yellow)}
+body[data-andheri-ui=world] #floors .fl.on text{fill:#141414}
+body[data-andheri-ui=world] #floors .fnote{font:400 11px/1.4 var(--ax-font);color:var(--ax-text-3)}
+
+/* credits */
+body[data-andheri-ui=world] #credit{top:calc(var(--world-header-bottom,64px) + 14px);right:24px;max-width:300px;font:400 10.5px/1.45 var(--ax-font);color:var(--ax-text-3);text-shadow:0 1px 8px rgba(0,0,0,.6)}
+body[data-andheri-ui=world] #map-credits{position:fixed;right:12px;bottom:6px;z-index:4;display:flex;align-items:center;gap:8px;padding:3px 8px;border-radius:8px;background:rgba(10,10,11,.55);border:1px solid var(--ax-line);color:#e4e4e7;font:400 10px/1.2 var(--ax-font)}
+body[data-andheri-ui=world] #map-credits a{color:inherit;text-decoration:none}
+body[data-andheri-ui=world] #map-credits img{display:block;width:76px;height:20px}
+
+/* labels in the scene */
+body[data-andheri-ui=world] .lb.bld b{padding:8px 12px;border-radius:10px;background:var(--fk-yellow);color:#141414;font:600 13px/1 var(--ax-font);letter-spacing:-.005em;text-transform:none;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+body[data-andheri-ui=world] .lb.st{padding:6px 10px 6px 7px;border-radius:10px;background:rgba(14,14,16,.72);font:500 12px/1 var(--ax-font);letter-spacing:0;text-transform:none}
+body[data-andheri-ui=world] .lb.lmk b{padding:6px 10px;border-radius:9px;background:rgba(255,255,255,.94);color:#141414;font:600 11.5px/1 var(--ax-font);letter-spacing:0;text-transform:none}
+body[data-andheri-ui=world] .lb.lmk.prop b{background:var(--fk-yellow);color:#141414;font-size:12.5px}
+body[data-andheri-ui=world] .lb.dist{padding:7px 11px;background:rgba(14,14,16,.8);font:600 13px/1 var(--ax-font);letter-spacing:0}
+
+/* walking and the route walk */
+body[data-andheri-ui=world] #walkhud,body[data-andheri-ui=world] #route,body[data-andheri-ui=world] #hint{background:var(--ax-glass);border:1px solid var(--ax-line);box-shadow:var(--ax-shadow);border-radius:var(--ax-r-lg)}
+body[data-andheri-ui=world] #walkhud b{font:600 30px/1 var(--ax-font);letter-spacing:-.025em;font-variant-numeric:tabular-nums}
+body[data-andheri-ui=world] #walkhud b small{font:500 13px/1 var(--ax-font);letter-spacing:0}
+body[data-andheri-ui=world] #compass{font:500 12px/1 var(--ax-mono);letter-spacing:.2em}
+body[data-andheri-ui=world] #hint{border-radius:999px;font:400 12.5px/1.3 var(--ax-font)}
+body[data-andheri-ui=world] #route h4{font:600 26px/1.1 var(--ax-font);letter-spacing:-.025em;text-transform:none}
+body[data-andheri-ui=world] #route .big{font:600 38px/.95 var(--ax-font);letter-spacing:-.03em;color:var(--fk-yellow);font-variant-numeric:tabular-nums}
+body[data-andheri-ui=world] #route .big small{font:500 11px/1.4 var(--ax-mono);letter-spacing:.08em}
+body[data-andheri-ui=world] #route .track{height:2px;background:rgba(255,255,255,.16)}
+body[data-andheri-ui=world] #route .track b{box-shadow:0 0 0 4px rgba(255,194,0,.22)}
+body[data-andheri-ui=world] #route .ctl button{min-height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--ax-line);background:var(--ax-fill);font:500 12.5px/1 var(--ax-font);letter-spacing:0;text-transform:none;color:var(--ax-text)}
+body[data-andheri-ui=world] #route .ctl button:hover{background:var(--ax-fill-2);border-color:var(--ax-line-2)}
+body[data-andheri-ui=world] #mini{border-color:var(--ax-line);background:rgba(14,14,16,.6)}
+
+/* the password gate, in the same system */
+body[data-andheri-ui=world] #gate{background:#0a0a0b url(/media/flipkart-andheri/world/privilon-hero/privilon-dusk-blue-hour.jpg) 42% 50%/cover no-repeat!important;font-family:var(--ax-font)}
+body[data-andheri-ui=world] #gate::before{background:linear-gradient(180deg,rgba(10,10,11,.5),rgba(10,10,11,.85))}
+body[data-andheri-ui=world] #gate .box{width:min(420px,calc(100vw - 32px));padding:30px 28px 26px;border-radius:24px;background:var(--ax-glass);border:1px solid var(--ax-line);box-shadow:var(--ax-shadow);-webkit-backdrop-filter:var(--ax-blur);backdrop-filter:var(--ax-blur)}
+body[data-andheri-ui=world] #gate .box>.mono{display:none}
+body[data-andheri-ui=world] #gate .ap-lockup{margin-bottom:26px}
+body[data-andheri-ui=world] #gate .ap-lockup .ap-logo{height:13px}
+body[data-andheri-ui=world] #gate .ap-lockup .fk-logo{height:37px}
+body[data-andheri-ui=world] #gate h1{margin:0 0 6px;font:600 30px/1.1 var(--ax-font);letter-spacing:-.03em;text-transform:none}
+body[data-andheri-ui=world] #gate p{margin:0 0 20px;font:400 14px/1.5 var(--ax-font);color:var(--ax-text-2)}
+body[data-andheri-ui=world] #gate input{min-height:48px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid var(--ax-line);font:400 15px var(--ax-font);color:var(--ax-text)}
+body[data-andheri-ui=world] #gate input:focus{outline:none;border-color:rgba(255,255,255,.4)}
+body[data-andheri-ui=world] #gate .go{min-height:50px;margin-top:4px;border-radius:999px;background:#f4f4f5;color:#0a0a0b;font:600 15px/1 var(--ax-font);letter-spacing:0;text-transform:none}
+body[data-andheri-ui=world] #veil{background:#0a0a0b}
+
+/* CAD and interior chrome share the same calm white/blue surfaces. */
+body[data-andheri-ui=cad],body[data-andheri-ui=interior]{--bg:#eff3fa;--paper:#f8faff;--ink:var(--ap-ink);--sub:var(--ap-muted);--mut:var(--ap-muted);--line:var(--ap-line);--accent:var(--fk-blue);--accent-soft:var(--ap-soft)}
+body[data-andheri-ui=cad] #ptop{border-top:3px solid var(--fk-blue)}
+body[data-andheri-ui=cad] .inspector-heading .ap-lockup{padding:0;margin:0 0 15px}
+body[data-andheri-ui=cad] #variant-controls label{color:var(--ap-muted)}
+body[data-andheri-ui=cad] #view3d{display:inline-flex;align-items:center;justify-content:center;min-height:44px;background:var(--fk-blue);color:#fff;text-decoration:none}
+body[data-andheri-ui=cad] #mode{border:1px solid var(--ap-line);background:#eff3fa;border-radius:999px}
+body[data-andheri-ui=cad] #mode button.on{background:transparent;color:white;border-color:transparent;box-shadow:none}
+body[data-andheri-ui=cad] #list .row.cur{background:var(--ap-soft);border-color:#c7d6ff}
+body[data-andheri-ui=cad] #sel .big div{border-left:3px solid var(--fk-yellow)}
+body[data-andheri-ui=cad] #variant-controls select{min-height:44px}
+body[data-andheri-ui=interior] header{border-top:3px solid var(--fk-blue);box-shadow:0 10px 35px #1d398111}
+body[data-andheri-ui=interior] header .ap-lockup{padding:0}
+body[data-andheri-ui=interior] #kicker{color:var(--fk-blue);font-weight:650}
+body[data-andheri-ui=interior] :is(#options select,#tools button,#tools label){min-height:44px}
+body[data-andheri-ui=interior] #tools{border-radius:18px;background:#fffffff2;border:1px solid #dce3ef;box-shadow:0 12px 32px #162b5525}
+body[data-andheri-ui=interior] #tools button{border-color:#e3e8f2;border-radius:11px;background:#f8faff}
+body[data-andheri-ui=interior] #tools button[aria-pressed=true]{background:var(--fk-blue);color:white;border-color:var(--fk-blue)}
+body[data-andheri-ui=interior] #tools #save{background:var(--fk-blue);color:white;border-color:var(--fk-blue)}
+body[data-andheri-ui=interior] input[type=checkbox]{accent-color:var(--fk-blue);width:17px;height:17px}
+body[data-andheri-ui=interior] #space-toggle{width:100%;display:flex;justify-content:space-between;align-items:center;padding:7px;border:0;background:transparent;font-size:11px;letter-spacing:.06em;text-transform:uppercase;font-weight:650;min-height:36px}
+body[data-andheri-ui=interior] #space-toggle:after{content:'−';font-size:20px;line-height:1}
+body[data-andheri-ui=interior] #space-toggle[aria-expanded=false]:after{content:'+'}
+body[data-andheri-ui=interior] #spaces[data-collapsed] #space-list{display:none}
+body[data-andheri-ui=interior] #space-list button{min-height:44px}
+@media(hover:hover){body[data-andheri-ui=interior] #tools button:hover{transform:translateY(-2px);box-shadow:0 4px 9px #16336112}}
+
+/* The existing three-property 2D Atlas receives tokens, not data changes. */
+body[data-andheri-ui=atlas]{--bg:#edf2fa;--paper:#fff;--panel:rgba(255,255,255,.94);--panel-solid:#fff;--ink:#182437;--mut:#56647a;--dim:#738299;--line:#dae3f0;--line2:#e9eef6;--acc:var(--fk-blue);--acc2:#345fec;--accbg:#edf2ff;--serif:Inter,system-ui,sans-serif}
+body[data-andheri-ui=atlas] #brand .ap-lockup{padding:0}
+body[data-andheri-ui=atlas] #brand :is(.t,.s){display:none}
+body[data-andheri-ui=atlas] #gate .ap-lockup{margin:0 0 24px;padding:12px 14px}
+body[data-andheri-ui=atlas] #gate .eyebrow{color:#ffc200}
+body[data-andheri-ui=atlas] #gate :is(h1,p){color:#fff}
+body[data-andheri-ui=atlas] #tabs button{min-height:44px}
+
+@media(max-width:860px){
+ body[data-andheri-ui] .ap-lockup{gap:9px}
+ body[data-andheri-ui] .ap-lockup .ap-logo{height:11px}
+ body[data-andheri-ui] .ap-lockup .fk-logo{height:30px}
+ body[data-andheri-ui] .ap-lockup .ap-x{font-size:14px}
+ body[data-andheri-ui] :is(button,select,a.ap-action){min-height:44px}
+ /* explorer: brand row, then a controls row; the property card becomes a bottom sheet over the rail */
+ body[data-andheri-ui=world] #top{left:12px;right:12px;top:max(10px,env(safe-area-inset-top));display:flex;flex-wrap:wrap;gap:8px}
+ body[data-andheri-ui=world] #ax-back{order:1;width:44px;height:44px;min-height:44px;padding:0;justify-content:center}
+ body[data-andheri-ui=world] #ax-back span{display:none}
+ body[data-andheri-ui=world] #brand{order:2;flex:1 0 calc(100% - 104px);min-width:0;height:44px;padding:0 14px;justify-content:center;margin:0}
+ body[data-andheri-ui=world] #brand .ap-lockup .ap-logo{height:10px}
+ body[data-andheri-ui=world] #brand .ap-lockup .fk-logo{height:28px}
+ body[data-andheri-ui=world] #ax-top-sound{order:3;width:44px;height:44px;min-height:44px;padding:0;justify-content:center}
+ body[data-andheri-ui=world] #ax-top-sound span{display:none}
+ body[data-andheri-ui=world] #top #modes{order:4;flex:1 1 auto!important;width:auto!important;height:44px;justify-content:space-between}
+ body[data-andheri-ui=world] #modes button{flex:1;justify-content:center;height:34px;min-height:34px;padding:0 10px;font-size:12.5px}
+ body[data-andheri-ui=world] #scene-lighting{order:5}
+ body[data-andheri-ui=world] #scene-lighting summary{height:44px;min-height:44px;width:44px;min-width:44px!important;padding:0!important;justify-content:center;font-size:0}
+ body[data-andheri-ui=world] #scene-lighting summary::before{content:"☀";font-size:17px}
+ body[data-andheri-ui=world] #to-map{order:6;height:44px;padding:0 14px;font-size:12.5px}
+ body[data-andheri-ui=world] #scene-lighting .scene-lighting-panel{position:fixed;left:12px;right:12px;width:auto;top:calc(var(--world-header-bottom,120px) + 8px)}
+ body[data-andheri-ui=world] #hud{left:12px;right:12px;width:auto;top:auto;bottom:calc(96px + env(safe-area-inset-bottom));max-height:min(46dvh,calc(100dvh - var(--world-header-bottom,120px) - 120px));padding:16px 16px 14px;border-radius:20px}
+ body[data-andheri-ui=world] #name{font-size:26px;margin:6px 0 2px}
+ body[data-andheri-ui=world] .ax-spot-sub{font-size:13px}
+ body[data-andheri-ui=world] .ax-spot-stats{margin-top:12px;padding:10px 0;gap:12px}
+ body[data-andheri-ui=world] .ax-spot-stats strong{font-size:20px}
+ body[data-andheri-ui=world] .ax-metro-row{margin-top:10px;padding:9px 12px 9px 9px;grid-template-columns:36px 1fr auto}
+ body[data-andheri-ui=world] .ax-metro-ico{width:36px;height:36px}
+ body[data-andheri-ui=world] .ax-metro-val{font-size:19px}
+ body[data-andheri-ui=world] #cad-link{min-height:46px;margin-top:12px!important}
+ body[data-andheri-ui=world] #strip{left:12px;right:12px;max-width:none;bottom:calc(26px + env(safe-area-inset-bottom))}
+ body[data-andheri-ui=world] .film{flex:0 0 172px;height:60px;border-radius:15px}
+ body[data-andheri-ui=world] .film>span{left:12px;right:10px}
+ body[data-andheri-ui=world] .film b{font-size:14px;margin-top:4px}
+ body[data-andheri-ui=world] .film i{font-size:11px;margin-top:3px}
+ body[data-andheri-ui=world] #map-credits{right:8px;bottom:calc(3px + env(safe-area-inset-bottom));font-size:9px;padding:2px 6px}
+ body[data-andheri-ui=world] #map-credits img{width:60px;height:16px}
+ body[data-andheri-ui=world].showing-area #credit{display:block;top:calc(var(--world-header-bottom,120px) + 10px);bottom:auto;left:12px;right:12px;width:auto;max-width:none;text-align:left;font-size:9.5px;line-height:1.45;background:rgba(10,10,11,.6);padding:8px;border-radius:10px}
+ body[data-andheri-ui=world] #route{width:calc(100vw - 24px);padding:14px 16px}
+ body[data-andheri-ui=world] #route h4{font-size:20px}
+ body[data-andheri-ui=world] #route .big{font-size:28px}
+ body[data-andheri-ui=cad] #variant-controls{gap:6px;flex-wrap:nowrap;margin:0;width:100%}
+ body[data-andheri-ui=cad] #variant-controls label{display:none}
+ body[data-andheri-ui=cad] #variant{min-width:0;flex:1;width:145px;max-width:none;font-size:16px;padding:8px}
+ body[data-andheri-ui=cad] #drawing{font-size:16px;width:82px;max-width:none;min-width:0;padding:8px 4px}
+ body[data-andheri-ui=cad] #view3d{font-size:13px;min-width:59px;padding:8px}
+ body[data-andheri-ui=cad] #view3d .wide-label{display:none}
+ body[data-andheri-ui=cad] #ptop>div:not(#variant-controls){min-width:0;flex:1}
+ body[data-andheri-ui=cad] #ptop{gap:7px}
+ body[data-andheri-ui=cad] .inspector-heading .ap-lockup{margin-bottom:7px}
+ body[data-andheri-ui=cad] .inspector-heading h2{font-size:17px}
+ body[data-andheri-ui=cad] #side{top:53%}
+ body[data-andheri-ui=interior] header{display:grid;grid-template-columns:1fr;gap:8px}
+ body[data-andheri-ui=interior] header .ap-lockup{padding:0;justify-self:start}
+ body[data-andheri-ui=interior] #options{width:100%;display:flex;gap:8px}
+ body[data-andheri-ui=interior] #options select{font-size:16px;min-width:0;max-width:none;flex:1;padding:8px}
+ body[data-andheri-ui=interior] h1{font-size:16px;margin:2px 0}
+ body[data-andheri-ui=interior] #spaces{top:var(--workspace-tools-top,190px);left:12px;right:12px;width:auto;max-height:35dvh;padding:4px 8px;overflow:auto}
+ body[data-andheri-ui=interior] #space-toggle{min-height:44px}
+ body[data-andheri-ui=interior] #tools{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));width:calc(100% - 24px);max-width:none;gap:5px;padding:7px;bottom:calc(12px + env(safe-area-inset-bottom));overflow:visible;white-space:normal}
+ body[data-andheri-ui=interior] #tools :is(button,label){width:100%;font-size:12px;min-width:0;padding:7px;justify-content:center;margin:0;line-height:1.25}
+ body[data-andheri-ui=interior] #note{bottom:calc(130px + env(safe-area-inset-bottom));font-size:10px;max-width:230px}
+ body[data-andheri-ui=atlas] #brand{min-width:0}
+ body[data-andheri-ui=atlas] #top{--top-h:110px}
+
+}
+@media(prefers-reduced-motion:reduce){body[data-andheri-ui] *,body[data-andheri-ui] *:before,body[data-andheri-ui] *:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
