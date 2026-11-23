@@ -794,19 +794,26 @@ async function start(A, W, intro=null) {
 
   /* -------------------------------------------------------- loop ---- */
   let last = performance.now(), coveredAt = 0; const clock = { frames: 0 };
+  /* ?perf=1: what a frame costs, for scripts/world-bench.cjs (every pass of one frame: shadows, scene, AO, output) */
+  const PERF = Q.has("perf") ? { frames: 0, js: [], calls: 0, tris: 0, at: [] } : null;
+  if (PERF) renderer.info.autoReset = false;
   function frame(now) {
+    if (PERF && (PERF.frozen || Q.has("bench")) && !PERF.ticking) { requestAnimationFrame(frame); return; }   // the benchmark renders through tick() alone
+    if (PERF) { const t0 = performance.now(); renderer.info.reset(); frame_(now); PERF.js.push(performance.now() - t0); PERF.at.push(now); PERF.frames++; PERF.calls = renderer.info.render.calls; PERF.tris = renderer.info.render.triangles; if (PERF.js.length > 600) { PERF.js.shift(); PERF.at.shift(); } if (!STILL) requestAnimationFrame(frame); return; }
+    frame_(now); if (!STILL) requestAnimationFrame(frame);
+  }
+  function frame_(now) {
     // while the full-screen opening, film or shortlist covers the canvas, draw a frame only every 400 ms
-    if (!STILL && document.body.classList.contains("ax-covered")) { if (now - coveredAt < 400) { requestAnimationFrame(frame); return; } coveredAt = now; }
+    if (!STILL && document.body.classList.contains("ax-covered")) { if (now - coveredAt < 400) return; coveredAt = now; }
     const dt = Math.min(STILL ? 0.5 : 0.05, (now - last) / 1000); last = now; ribbonMat.uniforms.uTime.value += dt;
     if (fly) { const t = Math.min(1, (now - fly.t0) / fly.ms), e = ease(t); controls.target.lerpVectors(fly.a.t, fly.b.t, e); camera.position.lerpVectors(fly.a.p, fly.b.p, e); if (t >= 1) fly = null; }
     if (MODE === "dollhouse") controls.update();
     else if (MODE === "walk") stepWalk(dt); else if (MODE === "route") stepRouteWalk(dt);
     if(!areaMode)stepMovers(dt);
     composer.render(); placeLabels(false); clock.frames++;
-    if (!STILL) requestAnimationFrame(frame);
   }
   if (STILL) frame(performance.now()); else requestAnimationFrame(frame);
-  window.__world = { tick: (n = 1, dt = 0.25) => { for (let i = 0; i < n; i++) { last = performance.now() - dt * 1000; if (fly) fly.t0 -= 1e9; frame(performance.now()); } }, select, startWalk, startRouteWalk, dollhouse, clock, renderer, walk, setRW: (s) => { if (RW) RW.s = s; } };
+  window.__world = { PERF, scene, camera, controls, get mode() { return MODE; }, tick: (n = 1, dt = 0.25) => { if (PERF) PERF.ticking = true; for (let i = 0; i < n; i++) { last = performance.now() - dt * 1000; if (fly) fly.t0 -= 1e9; if (PERF) { renderer.info.reset(); frame_(performance.now()); PERF.calls = renderer.info.render.calls; PERF.tris = renderer.info.render.triangles; } else frame(performance.now()); } if (PERF) PERF.ticking = false; }, select, startWalk, startRouteWalk, dollhouse, clock, renderer, walk, setRW: (s) => { if (RW) RW.s = s; } };
 }
 
 boot();
