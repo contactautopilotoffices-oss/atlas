@@ -152,7 +152,7 @@ The container has no GPU, so Chromium renders with SwiftShader on the CPU:
 | Frame, walking | 23.5 s | 3.03 s | 7.8× faster |
 | Textures in memory | 59 | 93 | +34 |
 | JS heap | 53 MB | 49 MB | -4 MB |
-| Download, first visit | 7.7 MB | MAGNUS_WIRE | MAGNUS_DELTA |
+| Download, first visit | 7.7 MB | 10.9 MB | +3.2 MB |
 | Page ready (UI interactive) | 1.18 s | 1.82 s | +0.6 s |
 | First 3D frame | 27.5 s | 11.2 s | 2.5× sooner |
 
@@ -168,7 +168,7 @@ The container has no GPU, so Chromium renders with SwiftShader on the CPU:
 | Frame, walking | 18.3 s | 2.16 s | 8.5× faster |
 | Textures in memory | 67 | 72 | +5 |
 | JS heap | 61 MB | 52 MB | -9 MB |
-| Download, first visit | 10.5 MB | A14_WIRE | A14_DELTA |
+| Download, first visit | 10.5 MB | 11.0 MB | +0.5 MB |
 | First 3D frame | 20.5 s | 12.4 s | 1.7× sooner |
 
 ### Where the cost went, and why it is accepted
@@ -185,6 +185,8 @@ The container has no GPU, so Chromium renders with SwiftShader on the CPU:
   - To contain them, normal and roughness maps are saved at JPEG quality 82 and 80, and the leaf
     atlases as 256-colour PNGs with alpha. That took the new textures from 4.6 MB to 2.3 MB with no
     visible change (checked in the landscape view).
+  - Net effect on the first visit: Magnus +3.2 MB (the hero GLB and its textures), A14 +0.5 MB
+    (thinner forest data offsets most of the new textures).
   - All textures are cached for a year (`vercel.json`), so this is a first-visit cost only.
 - **Page ready is 0.6 s later** on Magnus. It is the bigger GLB (the hero and its site). The
   first 3D frame still comes 16 s sooner on this machine, because there is so much less to draw.
