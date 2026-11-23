@@ -1,5 +1,15 @@
 # Atlas — Development Journal
 
+## 2026-11-23 — Atlas: a playbook so any Claude can make an Andheri-style property film
+
+**The way the Andheri film and experience were built is now written down as one skill, "property-film-studio", that any Claude session in this project loads on its own.**
+
+- **Why:** the founder wants the next property film (any client, any city) to start from what Andheri taught, not from scratch, and to be easy for newcomers.
+- **Structural decisions:** one short main page with the ten-stage pipeline and the rules, plus nine detailed chapters (intake questions, site from a map pin, Blender modelling/texturing/lighting, shots and maps, ElevenLabs audio, the ffmpeg edit, the web experience, the voice agent, and pitfalls). The alternative, one long page, would be loaded in full every time and was rejected.
+- **What works now:** asking "make a film like Andheri for this building" walks Claude through the questions to ask first, how to survey the site from a latitude and longitude, how to settle a building's plot (as done for Privilon), the lighting presets, how to use every core of the Mac, ready-to-use ElevenLabs voice, sound and music prompts, and how to ship.
+- **Left undone:** the voice agent chapter is a plan, not a built feature; the baked-lightmap web pipeline is described but Andheri only shipped ambient-occlusion bakes so far.
+- **Open questions for the founder:** should the voice agent be the next build, and may it quote rent?
+
 ## 2026-11-23 — Atlas: the Andheri film plays inside the experience, then the three buildings
 
 **A 140-second film in Alka's voice now opens the Flipkart Andheri experience: Enter, watch, and the three buildings appear as cards that open the 3D explorer.**
