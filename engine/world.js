@@ -66,8 +66,11 @@ async function boot() {
   if (!A || !W) return fail("This atlas has no 3D explorer.");
   if(W.branding==="autopilot-flipkart"){applyAndheriTheme("world");applyCanonicalFacts(A.options);}
   document.title = `${A.meta.title} · Explorer`;
+  /* W.ver: a hash of the atlas's world media (models, textures, sky, stills), written by its build-data script. The
+     media are cached for a while (vercel.json), so every URL carries it: a rebuild is a new URL, never a stale copy. */
+  const MV = W.ver ? "?v=" + encodeURIComponent(W.ver) : "";
   const poster = W.branding === "autopilot-flipkart" && W.thumbs?.[location.hash.slice(1)] || W.poster;
-  if (poster) for (const id of ["#load", "#gate"]) $(id).style.backgroundImage = `url("${W.data}${poster}")`;
+  if (poster) for (const id of ["#load", "#gate"]) $(id).style.backgroundImage = `url("${W.data}${poster}${MV}")`;
   const KEY = SLUG + "-auth"; let authed = !(A.gate && A.gate.hash);
   try { if (sessionStorage.getItem(KEY) === "1") authed = true; } catch (e) {}
   if (!authed) {
@@ -142,12 +145,12 @@ async function start(A, W, intro=null) {
   const plainModel = (id) => !W.models?.[id] && !(W.branding === "autopilot-flipkart");
   function prefetch(id) {
     if (!plainModel(id) || prefetched.has(id)) return prefetched.get(id);
-    const p = Promise.all([fetch(`${W.data}d/${id}.glb`).then((r) => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); }), fetch(`${W.data}d/${id}.json`).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })]).catch(() => { prefetched.delete(id); return null; });
+    const p = Promise.all([fetch(`${W.data}d/${id}.glb${MV}`).then((r) => { if (!r.ok) throw new Error(r.status); return r.arrayBuffer(); }), fetch(`${W.data}d/${id}.json${MV}`).then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })]).catch(() => { prefetched.delete(id); return null; });
     prefetched.set(id, p); return p;
   }
   { const opts0 = A.options.filter((o) => !W.thumbs || W.thumbs[o.id]); const f0 = opts0.find((o) => o.id === location.hash.slice(1)) || opts0[0]; if (f0) prefetch(f0.id); }
   /* the Blender sky: lighting and reflections; the background only when walking */
-  const hdr = await new RGBELoader().loadAsync(W.data + W.sky);
+  const hdr = await new RGBELoader().loadAsync(W.data + W.sky + MV);
   hdr.mapping = THREE.EquirectangularReflectionMapping;
   const pmrem = new THREE.PMREMGenerator(renderer); const env = pmrem.fromEquirectangular(hdr).texture;
   scene.environment = env; scene.environmentIntensity = REALLOOK ? 0.75 : 0.55;
@@ -164,7 +167,7 @@ async function start(A, W, intro=null) {
 
   /* textures, loaded once and shared by every diorama */
   const texL = new THREE.TextureLoader(); const TEX = {},textureJobs=[]; const aniso = renderer.capabilities.getMaxAnisotropy();
-  const tex = (name, srgb = true) => TEX[name] || (TEX[name] = (() => { let ready;const done=new Promise(resolve=>ready=resolve);textureJobs.push(done);const t = texL.load(W.data + "tex/" + name + (name.startsWith("leaves") ? ".png" : ".jpg"),()=>{ready(true);wake();},undefined,()=>{t.userData.failed=true;ready(false);}); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = aniso; if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.flipY = false; return t; })());
+  const tex = (name, srgb = true) => TEX[name] || (TEX[name] = (() => { let ready;const done=new Promise(resolve=>ready=resolve);textureJobs.push(done);const t = texL.load(W.data + "tex/" + name + (name.startsWith("leaves") ? ".png" : ".jpg") + MV,()=>{ready(true);wake();},undefined,()=>{t.userData.failed=true;ready(false);}); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = aniso; if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.flipY = false; return t; })());
   const GLASSY = new Set(["wall_com_glass", "wall_opt_glass", "wall_com_ribbon", "wall_opt_plaster", "wall_res_tower", "wall_glass723", "wall_retail723", "wall_cw_teal", "wall_cw_blue", "wall_cw_grey", "wall_cw_silver", "wall_ribbon_red", "wall_ribbon_white"]);
   const MAT = {};
   /* The modelled properties (scripts/world/hero_building.py) and the premium ground: PBR sets from tex/ by name,
@@ -561,7 +564,7 @@ async function start(A, W, intro=null) {
     const model = previewIds.has(id)
       ? { glb: previewBase + id + ".glb", data: previewBase + id + ".json", aoBase: previewBase }
       : W.models?.[id];
-    const version = model?.aoBase ? "?v=" + revision : "";
+    const version = model?.aoBase ? "?v=" + revision : MV;
     const pre = !model && previewIds.size === 0 ? await (prefetch(id) || null) : null;
     const [gltf, data] = pre ? [await loader.parseAsync(pre[0], `${W.data}d/`), pre[1]] : await Promise.all([
       new Promise((ok, bad) => loader.load((model?.glb || `${W.data}d/${id}.glb`) + version, ok, (e) => { if (e.total && $("#l-bar")) $("#l-bar").style.width = `${Math.round(e.loaded / e.total * 90)}%`; }, bad)),
@@ -774,7 +777,7 @@ async function start(A, W, intro=null) {
     $("#go").hidden = !r; if (r) $("#go").innerHTML = `Walk to ${esc(r.name)} <span aria-hidden="true">→</span>`;
     $("#src").textContent = (A.copy && A.copy.connect && A.copy.connect.note) || "";
     $("#spec").innerHTML = (o.facts || []).filter((f) => !f.src || W.specSourced).map((f) => `<dt>${esc(f.k)}</dt><dd>${esc(f.v)}</dd>`).join("");
-    const ph = W.renders && W.renders[o.id]; $("#photo").hidden = !ph || $("#spec").hidden; if (ph) $("#photo img").src = W.data + ph;
+    const ph = W.renders && W.renders[o.id]; $("#photo").hidden = !ph || $("#spec").hidden; if (ph) $("#photo img").src = W.data + ph + MV;
     if(W.branding==="autopilot-flipkart")propertySpotlight(o,r=>{leaveArea();setRoute(routeOf(r));renderHUD(o);if(MODE==="dollhouse")frameRoute();});
     renderStack(o);
   }
@@ -945,7 +948,7 @@ async function start(A, W, intro=null) {
   $("#to-map").href = W.mapHref || A.path || "/" + SLUG;
   $("#credit").textContent = W.credit || "Built in Blender from Overture Maps footprints. Heights around each building are estimated; the buildings use the deck's floors. Distances: Google Maps.";
   $("#strip").innerHTML = OPTS.map((o) => { const r = (o.routes || []).find((x) => x.kind === "metro"); const th = W.thumbs && W.thumbs[o.id];
-    return `<button class="film" data-id="${esc(o.id)}" style="${th ? `background-image:url('${W.data}${th}')` : ""}"><span><span class="n">${String(o.n).padStart(2, "0")}</span><b>${esc(o.name)}</b>${r ? `<i>${fm(r.m)} · ${esc(r.name)}</i>` : ""}</span></button>`; }).join("");
+    return `<button class="film" data-id="${esc(o.id)}" style="${th ? `background-image:url('${W.data}${th}${MV}')` : ""}"><span><span class="n">${String(o.n).padStart(2, "0")}</span><b>${esc(o.name)}</b>${r ? `<i>${fm(r.m)} · ${esc(r.name)}</i>` : ""}</span></button>`; }).join("");
   $("#strip").addEventListener("click", (e) => { const f = e.target.closest(".film"); if (f && f.dataset.id !== SEL) select(f.dataset.id); });
   addEventListener("resize", () => { camera.aspect = innerWidth / innerHeight; frameOffset(MODE === "dollhouse"); renderer.setSize(innerWidth, innerHeight); composer.setSize(innerWidth, innerHeight); tilt.uniforms.uRes.value.set(innerWidth, innerHeight); wake(); });
 

@@ -8,6 +8,14 @@ const prices = [2008000,2150000,1850000,2450000];
 const tags = ['Largest floor plate','Three-month timeline','Lowest monthly outflow','Closest stated metro'];
 const sourceHref = '/jindalx/source-options.json';
 const walks = JSON.parse(fs.readFileSync(path.join(root, 'world-routes.json'))).routes;
+// the world media's version: a hash of every file the explorer loads (models, textures, sky, stills). It goes on every
+// media URL, so a rebuild is fetched fresh although the media are cached (vercel.json). Rerun this script after a rebuild.
+const worldVer = (() => {
+  const h = require('node:crypto').createHash('sha1'), dir = path.join(root, '..', 'media', 'jindalx-noida', 'world');
+  const walk = (d) => fs.readdirSync(d, { withFileTypes: true }).sort((a, b) => a.name.localeCompare(b.name))
+    .forEach((e) => { const p = path.join(d, e.name); if (e.isDirectory()) walk(p); else { h.update(path.relative(dir, p)); h.update(fs.readFileSync(p)); } });
+  walk(dir); return h.digest('hex').slice(0, 10);
+})();
 // the 3D explorer (/jindalx-noida/world): one diorama per option, built by scripts/world from two regions
 const origins = {'magnus-towers':[77.3847901,28.604823],'a104':[77.3231094,28.5839319],'a14-18-19':[77.3231094,28.5839319],'d1':[77.3231094,28.5839319]};
 const options = source.options.map((r,i) => ({
@@ -26,7 +34,7 @@ const bundle = {
   meta:{title:'JindalX · Noida',sub:'Four workspace options · November 2026',asOf:'2026-11-20',center:[77.347,28.58],zoom:11.8,
     sheet:'JindalX options.xlsx · Sheet1 · columns B–E. Broker estimates, not independently confirmed.',
     columns:{monthlyOutflow:{label:'Tentative monthly outflow',unit:'INR + GST / month',type:'number',sortable:true,higherIsBetter:false},floorPlate:{label:'Built-up area per floor',type:'text'},floorOffered:{label:'Offered floor',type:'text'},timeline:{label:'Timeline',type:'text'},metro:{label:'Metro distance stated in workbook',type:'text'}},
-    world:{href:'/jindalx-noida/world',data:'/media/jindalx-noida/world/',sky:'sky.hdr',poster:'hero.jpg',mapHref:'/engine/?atlas=jindalx-noida',
+    world:{href:'/jindalx-noida/world',data:'/media/jindalx-noida/world/',ver:worldVer,sky:'sky.hdr',poster:'hero.jpg',mapHref:'/engine/?atlas=jindalx-noida',
       origin:origins['a104'],origins,ky:110950,specSourced:true,
       // the premium look (VISUAL_REALISM_AUDIT.md): open ground textured, AgX tone mapping, the time-of-day studio
       groundTex:'ground_noida',tone:'agx',lighting:true,lightingEV:-0.35,lightingHour:15.75,

@@ -207,6 +207,82 @@ The container has no GPU, so Chromium renders with SwiftShader on the CPU:
 | Download, first visit | 10.5 MB | 11.0 MB | +0.5 MB |
 | First 3D frame | 20.5 s | 12.4 s | 1.7× sooner |
 
+### Round 2: all four options against the pilot
+
+Same tool, container and viewport. The pilot build (`a902e1d`) is on the left, and this round is on the right. All eight runs report no page errors.
+
+#### Magnus Towers
+
+| | Pilot (a902e1d) | Now | Change |
+| --- | --- | --- | --- |
+| Download, first visit (MB) | 10.91 | 11.09 | +2% |
+| First 3D frame (s) | 11.50 | 11.71 | +2% |
+| Frame, dollhouse still (s) | 2.28 | 2.12 | -7% |
+| Frame, dollhouse orbit (s) | 2.16 | 2.18 | +1% |
+| Frame, walking (s) | 3.00 | 3.06 | +2% |
+| Draw calls, dollhouse | 196 | 207 | +6% |
+| Triangles, dollhouse (M) | 1.00 | 1.01 | +2% |
+| Triangles, walk (M) | 1.00 | 1.01 | +0% |
+| Textures | 93 | 95 | +2% |
+| JS heap (MB) | 49.0 | 49.5 | +1% |
+
+#### A104
+
+| | Pilot (a902e1d) | Now | Change |
+| --- | --- | --- | --- |
+| Download, first visit (MB) | 8.23 | 11.30 | +37% |
+| First 3D frame (s) | 11.23 | 11.43 | +2% |
+| Frame, dollhouse still (s) | 2.37 | 2.53 | +7% |
+| Frame, dollhouse orbit (s) | 2.48 | 2.61 | +5% |
+| Frame, walking (s) | 1.48 | 1.75 | +19% |
+| Draw calls, dollhouse | 227 | 312 | +37% |
+| Triangles, dollhouse (M) | 1.13 | 1.32 | +17% |
+| Triangles, walk (M) | 0.51 | 0.65 | +27% |
+| Textures | 69 | 100 | +45% |
+| JS heap (MB) | 42.9 | 43.8 | +2% |
+
+#### A14/18/19
+
+| | Pilot (a902e1d) | Now | Change |
+| --- | --- | --- | --- |
+| Download, first visit (MB) | 11.04 | 14.14 | +28% |
+| First 3D frame (s) | 11.82 | 13.66 | +16% |
+| Frame, dollhouse still (s) | 2.30 | 2.70 | +17% |
+| Frame, dollhouse orbit (s) | 2.50 | 2.66 | +7% |
+| Frame, walking (s) | 2.17 | 3.54 | +63% |
+| Draw calls, dollhouse | 156 | 239 | +53% |
+| Triangles, dollhouse (M) | 1.46 | 1.64 | +12% |
+| Triangles, walk (M) | 1.10 | 1.51 | +37% |
+| Textures | 72 | 106 | +47% |
+| JS heap (MB) | 59.1 | 63.3 | +7% |
+
+#### D1
+
+| | Pilot (a902e1d) | Now | Change |
+| --- | --- | --- | --- |
+| Download, first visit (MB) | 7.40 | 10.41 | +41% |
+| First 3D frame (s) | 9.36 | 10.20 | +9% |
+| Frame, dollhouse still (s) | 2.18 | 2.27 | +4% |
+| Frame, dollhouse orbit (s) | 2.16 | 2.31 | +7% |
+| Frame, walking (s) | 2.43 | 2.18 | -10% |
+| Draw calls, dollhouse | 259 | 317 | +22% |
+| Triangles, dollhouse (M) | 1.02 | 1.16 | +14% |
+| Triangles, walk (M) | 0.60 | 0.62 | +5% |
+| Textures | 66 | 100 | +52% |
+| JS heap (MB) | 40.4 | 38.8 | -4% |
+
+#### What the round 2 numbers mean
+
+- **Magnus Towers is unchanged within noise.** The builder change only added collections and the layered planting.
+- **A104, A14/18/19 and D1 now pay for their buildings.**
+  - Each was a box. Each now has a 40,000 to 46,000-triangle building and plot with about 30 materials.
+  - That adds 58 to 85 draw calls (the building is drawn in the main pass and the shadow pass), and 3.0 to 3.1 MB to the first visit.
+  - It also adds 4 to 17% to a dollhouse frame on SwiftShader.
+  - Investigated: the increase is the building alone. The context, trees and textures are shared.
+  - Even so, the options stay faster than before the pilot. A14/18/19, for example, drew 2.35 M triangles in 7.35 s frames at `d178278`. It now draws 1.64 M in 2.70 s frames.
+- **The A14/18/19 walk figure (+63%) is not like for like.** The pilot's walk start for that option stood inside a building and faced a wall, so it drew almost nothing. The new walk start stands on the street and sees the building, the plot and the road.
+- **Draw calls stay modest** (207 to 317 a frame) for a desktop or a recent phone GPU. A next step that would cut them: merge the flat-colour materials (mullions, plant, rails, tanks, markings) into one material with vertex colours. That would remove about 12 draw calls a building per pass.
+
 ### Where the cost went, and why it is accepted
 
 - **Faster frames.** The tree thinning removed far more than the building and its site added.
