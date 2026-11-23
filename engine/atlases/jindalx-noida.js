@@ -84,7 +84,7 @@ window.ATLAS = {
         "kicker": "Autopilot · JindalX",
         "title": "Noida, in 3D"
       },
-      "credit": "Options: workbook floor plates and storeys at indicative pins, not surveyed; a check against 2026 imagery found the model positions and facades off (see the tour). Context: Overture Maps, heights estimated. Walks: Overture streets from the pins.",
+      "credit": "Buildings stand where imagery shows them and are modelled from Street View, at the workbook floors; plots, entrances and exact finishes are unconfirmed. Context: Overture Maps, heights estimated. Walks: Overture streets.",
       "story": {
         "magnus-towers": [
           {
@@ -1547,7 +1547,7 @@ window.ATLAS = {
   ],
   "copy": {
     "connect": {
-      "note": "Walking distances are measured on Overture Maps streets from the indicative pins, so they differ from the workbook figures (A104 ~800 m, D1 ~500 m to Sector 16). Both are shown until the landlords confirm the entrances."
+      "note": "Walking distances are measured on Overture Maps streets from the position of each building as seen in imagery, so they differ from the workbook figures (Magnus ~2 km, A104 ~800 m, A14 ~2 km, D1 ~500 m). Both are shown until the landlords confirm the entrances."
     },
     "overview": {
       "eyebrow": "Prepared for JindalX · Noida",
