@@ -31,7 +31,7 @@ metres (origin at the slab's centre, x east, y north).
 --render writes Cycles stills: hero (the dollhouse from above), street (from
 the footpath at eye height, verticals kept straight) and station.
 """
-import sys, os, json, math, random
+import hashlib, sys, os, json, math, random
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "realism"))   # film-quality modules (realism/*.py)
 import numpy as np
 import bpy, bmesh
@@ -489,7 +489,7 @@ def build():
     pl.build("plinth", MATS)
     gr = MB([])
     flat(gr, SL, 0.0, "ground", 6)
-    for k, m, z in (("green", "grass", 0.03), ("water", "water", 0.02)):
+    for k, m, z in (("green", "grass", 0.03), ("canopy", "grass", 0.035), ("water", "water", 0.02)):
         g = unary_union([Polygon(r[0], r[1:]).buffer(0) for r in (S["land"].get(k) or [])]) if S["land"].get(k) else None
         if g is not None: flat(gr, lpoly(g.intersection(SLAB).difference(built)), z, m, 6)
     flat(gr, lpoly(road_all), 0.06, "asphalt", 6)
@@ -800,9 +800,161 @@ def build():
             boxm(l3, ex, ey, 3.6, 4.4, 8, 0.2, 0.3, "sign_l3")
     mt.build("metro", MATS); stn.build("stations", MATS); l3.build("entries_l3", MATS)
 
+    # --- compound walls round the plots (region flag "walls": "plots") ---
+    if S.get("walls") == "plots":
+        for nm_ in ("hero_plaster_cream", "hero_plaster_white", "hero_plaster_b"): MATS.get(nm_) or mat(nm_, "#d8d0c0", 0.85, tex=nm_ + ".jpg")
+        MATS.get("door_metal") or mat("door_metal", "#2a2c2e", 0.35, 0.8); MATS.get("concrete") or mat("concrete", "#a9a59c", 0.8)
+        clear_ = unary_union([Point(entrance[0] + OX, entrance[1] + OY).buffer(7), Point(walk0[0] + OX, walk0[1] + OY).buffer(5), Point(street_cam[0] + OX, street_cam[1] + OY).buffer(5)])
+        boundary_walls(bpolys, ROAD, road_all, clear_)
     # --- prototypes: trees, palm, lamp, cars, a Line 1 car ---
     protos()
     return {"entrance": entrance, "walk0": walk0, "street_cam": street_cam, "stations": STATIONS, "H": H, "floors": floors, "glassy": glassy, "canopy_ang": ang}
+
+WALLS = {"polys": [], "lines": [], "stats": {}}   # solid footprints and centre lines of the compound walls (page_data adds the footprints to "blocks")
+def boundary_walls(bpolys, ROAD, road_all, keep_clear):
+    """Compound walls round the plots that stand in their own ground (region flag "walls": "plots").
+
+    Noida's sectors are sold as walled plots, but the open maps draw only the buildings. A plot is rebuilt from the buildings and
+    the streets: buildings less than 6 m apart are one compound; its plot is the ground within 11 m of it, out to the footpath
+    edge (2.7 m off the carriageway) and no further than half way to the next compound. The wall runs along the plot's street face
+    and along the line it shares with a neighbouring plot, 1.8 to 2.4 m of plastered brick with a coping and a pillar every 4 m,
+    and not where a building is the boundary itself (shopfront lanes and plots built wall to wall get none). The street face has a
+    gate: two taller pillars and the leaves swung open. The wall is 0.3 m thick and solid for walk mode; the gate gap is not."""
+    SMAX, WT = 11.0, 0.3
+    foot_edge = road_all.buffer(2.7)
+    free = SLAB.difference(foot_edge)
+    hero = Polygon(SITE["plot"]).buffer(1.5) if SITE else Polygon()
+    allb = unary_union([p for b, p in bpolys]).buffer(0.8, quad_segs=2)
+    bl = [(b, p) for b, p in bpolys if b.get("opt") != OID and not p.intersects(hero) and p.area > 12]
+    if not bl: return
+    U = unary_union([p.buffer(3.0, quad_segs=2) for b, p in bl])
+    comps = list(U.geoms) if hasattr(U, "geoms") else [U]
+    clus = []
+    for c in comps:
+        C = c.buffer(-3.0 + 0.05, quad_segs=2)
+        if C.is_empty: continue
+        for Cp in (C.geoms if hasattr(C, "geoms") else [C]):
+            if Cp.geom_type == "Polygon" and Cp.area > 30: clus.append(Cp)
+    ct = shapely.STRtree(clus)
+    bt = shapely.STRtree([p for b, p in bl])
+    plots = []
+    for i, C in enumerate(clus):
+        claim = C.buffer(SMAX, quad_segs=3).intersection(free).union(C)
+        for j in ct.query(C.buffer(2 * SMAX + 1)):
+            if j == i: continue
+            d = C.distance(clus[j]); claim = claim.difference(clus[j].buffer(max(0.6, d / 2 - 0.15), quad_segs=3))
+        claim = claim.union(C).buffer(0.5, quad_segs=2).buffer(-0.5, quad_segs=2)
+        parts = [g for g in (claim.geoms if hasattr(claim, "geoms") else [claim]) if g.geom_type == "Polygon" and g.intersects(C)]
+        if not parts: continue
+        P = unary_union(parts); P = Polygon(max(P.geoms, key=lambda g: g.area).exterior) if hasattr(P, "geoms") else Polygon(P.exterior)
+        P = P.simplify(0.7)
+        bi = [bl[k][1] for k in bt.query(P) if bl[k][1].intersects(C)]
+        built_area = unary_union(bi).intersection(P).area if bi else 0.0
+        plots.append((i, C, P, built_area, unary_union(bi) if bi else Polygon()))
+    n_plots = n_gate = 0; length = 0.0; wall_lines, polys, gates = [], [], []
+    mb = MB([]); acc = []
+    h_ = lambda s_: int(hashlib.md5(s_.encode()).hexdigest()[:6], 16) / 0xffffff
+    PLASTER = ["hero_plaster_cream", "hero_plaster_white", "hero_plaster_b", "hero_plaster_cream"]
+    plot_polys = [p for _, _, p, _, _ in plots]; pt = shapely.STRtree(plot_polys)
+    for idx, (i, C, P, ba, BI) in enumerate(plots):
+        if P.area < 90 or ba / max(P.area, 1) > 0.88: continue   # fully built: the building is the boundary
+        ring = P.exterior; rid = f"{round(C.centroid.x)},{round(C.centroid.y)}"
+        free_ring = ring.difference(BI.buffer(1.0, quad_segs=2))           # where a building does not stand on the line
+        if free_ring.is_empty: continue
+        street = foot_edge.boundary.buffer(0.9)                              # the street face
+        party = unary_union([plot_polys[j] for j in pt.query(P.buffer(1.0)) if j != idx]).buffer(0.9) if len(pt.query(P.buffer(1.0))) > 1 else Polygon()
+        keep = free_ring.intersection(unary_union([street, party])) if not party.is_empty else free_ring.intersection(street)
+        keep = keep.difference(ROAD["foot"].buffer(0.6)).difference(keep_clear).difference(allb)
+        if acc: keep = keep.difference(unary_union(acc).buffer(0.9))        # a shared line is walled once
+        # build-to-line: a stretch of the boundary with a building within 9 m of it (3 m on a shared line) is a facade or a service strip, not
+        # a yard (the map's road widths are generic, so buildings drawn 4 m back from the footpath still front the street): no wall there
+        segs = []
+        for l in (keep.geoms if hasattr(keep, "geoms") else [keep]):
+            if l.geom_type != "LineString" or l.length < 4.0: continue
+            cs = np.asarray(l.coords); cut = [0]   # straight pieces: split at corners sharper than 35 degrees
+            for k_ in range(1, len(cs) - 1):
+                v0, v1 = cs[k_] - cs[k_ - 1], cs[k_ + 1] - cs[k_]
+                if abs(math.atan2(v0[0] * v1[1] - v0[1] * v1[0], v0 @ v1)) > math.radians(35): cut.append(k_)
+            cut.append(len(cs) - 1)
+            for a_, b_ in zip(cut[:-1], cut[1:]):
+                pc = LineString(cs[a_:b_ + 1])
+                if pc.length < 9.0: continue
+                chord = math.hypot(*(cs[b_] - cs[a_]))
+                if pc.length / max(chord, 1e-6) > 1.12: continue
+                n_ch = max(1, int(round(pc.length / 6.0))); run = []
+                for c_ in range(n_ch):
+                    ch = shapely.ops.substring(pc, pc.length * c_ / n_ch, pc.length * (c_ + 1) / n_ch)
+                    is_street = ch.distance(foot_edge.boundary) < 1.2
+                    strip = ch.buffer(9.0 if is_street else 3.0, cap_style="flat").intersection(P)
+                    cov = BI.intersection(strip).area / max(strip.area, 1.0)
+                    if cov < (0.10 if is_street else 0.02) and (is_street or pc.length >= 18): run.append(ch)
+                    elif run: segs.append(shapely.ops.linemerge(run) if len(run) > 1 else run[0]); run = []
+                if run: segs.append(shapely.ops.linemerge(run) if len(run) > 1 else run[0])
+        segs = [l for l in segs if l.geom_type == "LineString" and l.length >= 9.0]
+        if not segs: continue
+        n_plots += 1; col = PLASTER[int(h_(rid) * 4) % 4]; H = round(1.8 + 0.6 * h_(rid + "h"), 2); acc.extend(segs)
+        gate_done = 0; bc = C.centroid; street_segs = [s for s in segs if s.distance(foot_edge.boundary) < 1.2]
+        order_s = sorted(street_segs, key=lambda s: -s.length)
+        gate_for = {id(s): (s.length >= 7.0 and k < (2 if s.length > 25 else 1)) for k, s in enumerate(order_s)}
+        pieces = []
+        for s in segs:
+            if gate_for.get(id(s)):
+                gw = 4.2 if P.area > 600 else 3.0; t0 = s.project(bc); t0 = min(max(t0, gw / 2 + 1.2), s.length - gw / 2 - 1.2)
+                if t0 - gw / 2 > 1.0 and s.length - t0 - gw / 2 > 1.0 or True:
+                    a = shapely.ops.substring(s, 0, t0 - gw / 2); b = shapely.ops.substring(s, t0 + gw / 2, s.length)
+                    for q_ in (a, b):
+                        if q_.length > 0.8: pieces.append(q_)
+                    g0 = s.interpolate(t0 - gw / 2); g1 = s.interpolate(t0 + gw / 2); gates.append((g0.x, g0.y, g1.x, g1.y, col, P)); n_gate += 1; continue
+            pieces.append(s)
+        for s in pieces:
+            pts = [(x, y) for x, y in s.simplify(0.3).coords]; length += s.length
+            wall_lines.append(s); polys.append(s.buffer(WT / 2, cap_style="flat", join_style="mitre"))
+            wall_run(mb, [L(x, y) for x, y in pts], H, WT, col)
+    # gates: two taller pillars, the leaves swung open into the plot
+    for (x0, y0, x1, y1, col, P) in gates:
+        dx, dy = x1 - x0, y1 - y0; gl = math.hypot(dx, dy); ux, uy = dx / gl, dy / gl; nx, ny = -uy, ux
+        mx_, my_ = (x0 + x1) / 2, (y0 + y1) / 2
+        if not P.contains(Point(mx_ + nx * 3, my_ + ny * 3)): nx, ny = -nx, -ny      # into the plot
+        for (px_, py_) in ((x0, y0), (x1, y1)):
+            lx, ly = L(px_, py_); ang = math.atan2(uy, ux)
+            boxm(mb, lx, ly, 0, 2.85, 0.62, 0.62, ang, col, 2.4); boxm(mb, lx, ly, 2.85, 2.97, 0.78, 0.78, ang, "concrete", 1.0)
+        for sgn, (px_, py_) in ((1, (x0, y0)), (-1, (x1, y1))):   # a leaf hinged on each pillar, swung open into the plot
+            Lf = gl / 2 - 0.35; cx2, cy2 = L(px_ + sgn * ux * 0.42 + nx * (Lf / 2 + 0.4), py_ + sgn * uy * 0.42 + ny * (Lf / 2 + 0.4))
+            boxm(mb, cx2, cy2, 0.15, 1.95, 0.05, Lf, math.atan2(ny, nx) - math.pi / 2, "door_metal", 1.0)
+    mb.build("compound_walls", MATS)
+    WALLS["polys"], WALLS["lines"] = polys, wall_lines
+    WALLS["stats"] = {"plots": len(plots), "walled": n_plots, "gates": n_gate, "length_m": round(length)}
+    print("boundary walls:", WALLS["stats"])
+    json.dump({"lines": [[[round(a, 1), round(b, 1)] for a, b in l.coords] for l in wall_lines], "plots": [[[round(a, 1), round(b, 1)] for a, b in p.exterior.coords] for _, _, p, _, _ in plots], "gates": [[round(v, 1) for v in g[:4]] for g in gates]},
+              open(os.path.join(OUT, f"{OID}-walls.json"), "w"), separators=(",", ":"))
+
+def wall_run(mb, pts, H, T, col):
+    """A plastered wall along a polyline: sides, coping and a pillar at the ends and about every 4 m."""
+    P = np.asarray(pts, float)
+    if len(P) < 2: return
+    S_ = 0.0
+    for k in range(len(P) - 1):
+        (ax, ay), (bx_, by) = P[k], P[k + 1]; d = math.hypot(bx_ - ax, by - ay)
+        if d < 0.05: continue
+        ux, uy = (bx_ - ax) / d, (by - ay) / d; nx, ny = -uy * T / 2, ux * T / 2; cw = T / 2 + 0.06
+        for sgn in (1, -1):   # the two faces
+            A0, B0 = (ax + sgn * nx, ay + sgn * ny), (bx_ + sgn * nx, by + sgn * ny)
+            q = [(A0[0], A0[1], -0.05), (B0[0], B0[1], -0.05), (B0[0], B0[1], H), (A0[0], A0[1], H)]
+            uv = [((S_) / 2.4, 0), ((S_ + d) / 2.4, 0), ((S_ + d) / 2.4, (H + 0.05) / 2.4), ((S_) / 2.4, (H + 0.05) / 2.4)]
+            if sgn < 0: q, uv = q[::-1], uv[::-1]
+            mb.quad(*q, uv, col)
+        # coping: a slab slightly wider than the wall
+        c0 = [(ax - uy * cw, ay + ux * cw), (bx_ - uy * cw, by + ux * cw), (bx_ + uy * cw, by - ux * cw), (ax + uy * cw, ay - ux * cw)]
+        mb.quad(*[(x, y, H + 0.07) for x, y in c0], [(0, 0), (d, 0), (d, 1), (0, 1)], "concrete")
+        for sgn in (1, -1):
+            A0, B0 = (ax + sgn * uy * -cw, ay + sgn * ux * cw), (bx_ + sgn * -uy * cw, by + sgn * ux * cw)
+            q = [(A0[0], A0[1], H), (B0[0], B0[1], H), (B0[0], B0[1], H + 0.07), (A0[0], A0[1], H + 0.07)]
+            mb.quad(*(q if sgn > 0 else q[::-1]), [(0, 0), (d, 0), (d, 0.07), (0, 0.07)], "concrete")
+        n = max(1, int(d // 4.0))
+        for m_ in range(n + (1 if k == len(P) - 2 else 0)):
+            t = m_ / n if n else 0; px_, py_ = ax + (bx_ - ax) * t, ay + (by - ay) * t
+            boxm(mb, px_, py_, -0.05, H + 0.32, 0.46, 0.46, math.atan2(uy, ux), col, 2.4); boxm(mb, px_, py_, H + 0.32, H + 0.4, 0.58, 0.58, math.atan2(uy, ux), "concrete", 1.0)
+        S_ += d
 
 def protos():
     def tree(name, crowns, trunk_h, trunk_r):
@@ -997,11 +1149,24 @@ def page_data(info):
     # keep the view from the street to the entrance open
     E, W0 = info["entrance"], info["street_cam"]
     sight = LineString([W0, E]).buffer(9).union(Point(*W0).buffer(14)).union(Point(*info["walk0"]).buffer(10))
-    for x, y, k in list(S["trees"]) + [(x_, y_, 1.0) for x_, y_ in EXTRA_TREES]:
-        if not inside(x, y, 6): continue
+    EV = S.get("greens") == "evidence"   # trees from open data (prep.py): [x, y, scale, species]; the older scatter is [x, y, k] with a random species
+    TL = list(S["trees"])
+    if EV:
+        ins = [t for t in TL if inside(t[0], t[1], 6)]
+        cap = S.get("tree_cap") or 0
+        if cap and len(ins) > cap: ins = sorted(ins, key=lambda t: -t[2])[:cap]   # over the page's budget: the small, isolated trees go first
+        wl = unary_union([l.buffer(1.1) for l in WALLS["lines"]]) if WALLS["lines"] else None
+        if wl is not None: shapely.prepare(wl)
+        TL = ins
+    for tt in TL + [(x_, y_, 1.0) for x_, y_ in EXTRA_TREES]:
+        x, y = tt[0], tt[1]
+        if not EV and not inside(x, y, 6): continue
         lx, ly = L(x, y)
         if sight.contains(Point(lx, ly)): continue
-        t = 2 if rnd.random() < 0.18 else 1 if rnd.random() < 0.3 else 0; trees.append([round(lx, 1), round(ly, 1), t, round(k, 2), round(rnd.random() * 6.28, 2)])
+        if EV and len(tt) > 3:
+            if wl is not None and wl.contains(Point(x, y)): continue    # no tree through a compound wall
+            trees.append([round(lx, 1), round(ly, 1), int(tt[3]), round((tt[2] - 0.75) / 0.35, 2), round(rnd.random() * 6.28, 2)]); continue
+        k = tt[2]; t = 2 if rnd.random() < 0.18 else 1 if rnd.random() < 0.3 else 0; trees.append([round(lx, 1), round(ly, 1), t, round(k, 2), round(rnd.random() * 6.28, 2)])
     for x, y, t, k in (SITE["trees"] if SITE else []):   # the plot's own planting: species and size as designed
         lx, ly = L(x, y); trees.append([round(lx, 1), round(ly, 1), int(t), round(k, 2), round(rnd.random() * 6.28, 2)])
     lamps = [[*map(lambda v: round(v, 1), L(x, y))] for x, y in WJ["lamps"] if inside(x, y, 4)]
@@ -1023,7 +1188,7 @@ def page_data(info):
                          **({"upper": {"from": SITE["upper"]["from"], "foot": [[round(a, 1), round(b, 1)] for a, b in (L(x, y) for x, y in SITE["upper"]["foot"])]}} if SITE and SITE.get("upper") else {}),
                          "entrance": [round(v, 1) for v in info["entrance"]], "facing": round(info["canopy_ang"], 3)},
             "walk0": [round(v, 1) for v in info["walk0"]], "street_cam": [round(v, 1) for v in info["street_cam"]], "stations": info["stations"], "landmarks": [m for m in LANDMARKS.values() if m.get("prop") or m["name"] in ("Times Square", "Fleet House")], "routes": routes,
-            "trees": trees, "lamps": lamps, "traffic": traffic, "metro": metro, "blocks": blds}
+            "trees": trees, "lamps": lamps, "traffic": traffic, "metro": metro, "blocks": blds + [[[round(a, 1), round(b, 1)] for a, b in (L(x, y) for x, y in w.exterior.coords)] for w in WALLS["polys"] if w.geom_type == "Polygon"]}
 
 # ---------------------------------------------------------------- export ----
 def export(path):
@@ -1536,7 +1701,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); import check_log
 SHOT_CAMS = {"prv_street": (1405, -380, 30), "prv_west": (1175, -300, 70), "prv_aerial": (1262, -430, 105), "road": (1440, -378, 24)}
 _rk = A[A.index("--render") + 1:] if "--render" in A else []
 check_logic.run({"S": S, "A": A, "OID": OID, "OUT": OUT, "L": L, "built": LOGIC.get("built", []), "ROAD": LOGIC["road"],
-                 "SLAB": SLAB, "METRO_CLEAR": METRO_CLEAR, "on_road": LOGIC.get("on_road", []),
+                 "SLAB": SLAB, "METRO_CLEAR": METRO_CLEAR, "on_road": LOGIC.get("on_road", []), "walls": WALLS["polys"], "wall_stats": WALLS["stats"],
                  "cameras": [SHOT_CAMS[k] for k in _rk if k in SHOT_CAMS] +
                             ([tuple(k["pos"]) for k in json.load(open(A[A.index("--anim") + 1]))[A[A.index("--anim") + 2]]["keys"]] if "--anim" in A else [])})
 if "--hero-blend" in A: swap_hero(A[A.index("--hero-blend") + 1])

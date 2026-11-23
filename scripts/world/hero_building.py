@@ -22,10 +22,24 @@ The Blender scene is organised into the asset collections used across Autopilot'
 Amenities stays empty unless the spec lists amenities that the property is known to have: nothing is
 invented (no pool, courts or clubhouse unless the workbook or the landlord says so).
 
-Two building families, following the repository's convention (scripts/world/README.md):
-  Grade A   curtain wall with spandrels and slab bands, stone colonnade, double-height entrance, fins
-  Grade B   painted plaster with ribbon windows, sunshades (chajjas) and pilasters; a stilt or a lobby ground
+Building families (spec "facade"; the first two follow the repository's convention, scripts/world/README.md):
+  curtain   Grade A: curtain wall with spandrels and slab bands, stone colonnade, double-height entrance, fins
+  banded    Grade B: painted plaster with ribbon windows, sunshades (chajjas) and pilasters; a stilt or a lobby ground
             floor; split AC units on older blocks; an optional set-back upper block (for "+2 floors of 8k")
+  The JindalX set, built from imagery (docs/JINDALX_VERIFICATION.md), driven by a "level engine": the spec lists
+  "boxes" (a plan per storey range, a facade "kind" each), the engine draws every exterior edge of every storey's plan
+  with the owning box's facade, and a terrace, roof or soffit wherever one storey is bigger or smaller than the next.
+  magnus    Magnus Greens: white plaster podium with glazed lobby bays and three numbered portals, dark glass and
+            charcoal-ACP storeys, cantilevered stepped white aluminium-panel tiers with louvre fins, planted terraces,
+            a rooftop pergola, a sign tower, a boundary wall and a tree belt
+  acp       A104: charcoal ACP piers, blue-grey reflective glazing bands, black sunshade fins, awning windows, bare roof
+  a14       A-14: open stilt ground floor, copper/white/grey ACP bands between glazed ribbons, dark grey ACP crown with
+            an angled white cornice, white plaster side walls, scaffolding at one front edge
+  stucco    D-1: cream stucco with bands, large teal punched windows, a green glass bay, a round glazed corner tower
+UVs on these families: u = metres along the face, v = metres UP from the ground, so the real tile sizes in
+TEX/TILES.json apply at true scale; storey glass tiles start on the first floor's slab line.
+The refs entry may carry "plot" (the traced plot, scene metres), "gates" (scene metres) and "front_toward" (a scene
+point near the entrance face); "poly" is always the building itself (what the explorer collides with).
 """
 import sys, os, json, math, random
 import numpy as np
@@ -514,13 +528,13 @@ if not LEGACY:
     PLW, PLC = "hero_plaster_white", "hero_plaster_cream"
     def ZB(k): return 0.0 if k == 0 else GH + (k - 1) * FH       # bottom of storey k (0 = ground)
     def ZT(k): return GH + k * FH                                  # top of storey k
+    def _v(x): return float(eval(x, {"W": W, "D": D})) if isinstance(x, str) else float(x)     # spec numbers may be "W-5.8" (front width W, depth D)
     BOXES = []
     for bd in SP["boxes"]:
-        if "poly" in bd: g_ = Polygon([(X0 + p[0], YF + p[1]) for p in bd["poly"]])
-        elif "tower" in bd:
-            tx, ty = bd["tower"]["at"]; g_ = Point(X0 + tx, YF + ty).buffer(bd["tower"]["r"], 4)
-        else: g_ = box(X0 + bd["x"][0], YF + bd["y"][0], X0 + bd["x"][1], YF + (bd["y"][1] if len(bd["y"]) > 1 and bd["y"][1] is not None else D))
-        if bd.get("cut"): g_ = g_.difference(box(X0 + bd["cut"][0], YF + bd["cut"][1], X0 + bd["cut"][2], YF + bd["cut"][3]))
+        if "tower" in bd:
+            tx, ty = (_v(t_) for t_ in bd["tower"]["at"]); g_ = Point(X0 + tx, YF + ty).buffer(_v(bd["tower"]["r"]), 4)
+        else: g_ = box(X0 + _v(bd["x"][0]), YF + _v(bd["y"][0]), X0 + _v(bd["x"][1]), YF + (_v(bd["y"][1]) if len(bd["y"]) > 1 and bd["y"][1] is not None else D))
+        if bd.get("cut"): c_ = [_v(t_) for t_ in bd["cut"]]; g_ = g_.difference(box(X0 + c_[0], YF + c_[1], X0 + c_[2], YF + c_[3]))
         BOXES.append(dict(bd, g=orient(g_.buffer(0), 1.0)))
     KMAX = max(b["l"][1] for b in BOXES) - 1
     def plan(k):
@@ -545,11 +559,11 @@ if not LEGACY:
         pts = [PT(sg, s0_, o0), PT(sg, s1_, o0), PT(sg, s1_, o1), PT(sg, s0_, o1)]       # u then inward (o1 < o0) is counter-clockwise: faces up
         if not up: pts = pts[::-1]
         tw, th = TILE.get(m, (1.0, 1.0)); poly3(m, [(x, y, z) for x, y in pts], [(x / tw, y / th) for x, y in pts])
-    def punched(sg, z0, z1, wins, zw0, zw1, wlo, whi, wpier, gmat, rec=0.22, mull=None, jmat=None):
-        """A wall z0..z1 with recessed glazed windows (s0, s1) between zw0 and zw1; reveals returned into the opening."""
-        L = sg["L"]; jmat = jmat or wpier
-        WL(wlo, sg, 0, L, z0, zw0); WL(whi, sg, 0, L, zw1, z1)
-        cur = 0.0
+    def punched(sg, z0, z1, wins, zw0, zw1, wlo, whi, wpier, gmat, rec=0.22, mull=None, jmat=None, span=None):
+        """A wall z0..z1 (along the span, default the whole segment) with recessed glazed windows (s0, s1) between zw0 and zw1; reveals returned into the opening."""
+        L = sg["L"]; jmat = jmat or wpier; sa, sb = span or (0.0, L)
+        WL(wlo, sg, sa, sb, z0, zw0); WL(whi, sg, sa, sb, zw1, z1)
+        cur = sa
         for a_, b_ in sorted(wins):
             if a_ > cur + 1e-3: WL(wpier, sg, cur, a_, zw0, zw1)
             WL(gmat, sg, a_, b_, zw0, zw1, off=-rec, vo=(zw0 if gmat == "hero_glass_teal" else z0 if gmat in STOREY_GLASS else None), u0=(0.0 if gmat == "hero_glass_teal" else None))
@@ -558,7 +572,7 @@ if not LEGACY:
             if mull:
                 for s in np.arange(a_ + mull, b_ - mull / 2, mull): BXs("hero_mullion", sg, s - 0.035, s + 0.035, -rec - 0.01, 0.02, zw0, zw1, top=False)
             cur = b_
-        if cur < L - 1e-3: WL(wpier, sg, cur, L, zw0, zw1)
+        if cur < sb - 1e-3: WL(wpier, sg, cur, sb, zw0, zw1)
     def cols_even(L, margin, pitch, w):
         n = max(1, int((L - 2 * margin + (pitch - w)) // pitch)); tot = n * pitch - (pitch - w); s0_ = (L - tot) / 2
         return [(s0_ + i * pitch, s0_ + i * pitch + w) for i in range(n)]
@@ -572,21 +586,20 @@ if not LEGACY:
                 if s1_ <= 0 or s0_ >= L: continue
                 s0_, s1_ = max(s0_, 0.0), min(s1_, L)
                 if s0_ > cur: WL(PLW, sg, cur, s0_, z0, z1)
-                j = 0.9 if bb["kind"] == "glass" else 1.1
-                WL(PLW, sg, s0_, s0_ + j, z0, z1); WL(PLW, sg, s1_ - j, s1_, z0, z1)
+                j = 0.9 if bb["kind"] == "glass" else 1.1; dep = 0.25 if bb["kind"] == "glass" else 0.5
                 if bb["kind"] == "glass":
-                    punched(sg, z0, z1, [(s0_ + j, s1_ - j)], 0.55, z1 - 0.9, PLW, PLW, PLW, "hero_glass_dark", rec=0.6, mull=1.9)
+                    punched(sg, z0, z1, [(s0_ + j, s1_ - j)], 0.55, z1 - 0.9, PLW, PLW, PLW, "hero_glass_dark", rec=0.6, mull=1.9, span=(s0_, s1_))
                 else:   # the numbered entrance: a deep white frame, glazed doors, a lit lobby behind
-                    punched(sg, z0, z1, [(s0_ + j, s1_ - j)], 0.0, z1 - 1.1, PLW, PLW, PLW, "hero_lobby_glass", rec=1.3, mull=2.0)
+                    punched(sg, z0, z1, [(s0_ + j, s1_ - j)], 0.0, z1 - 1.1, PLW, PLW, PLW, "hero_lobby_glass", rec=1.3, mull=2.0, span=(s0_, s1_))
                     a_, b2 = s0_ + j, s1_ - j
-                    WL("lobby_light", sg, a_, b2, 0.0, z1 - 1.1, off=-4.2)
-                    for sx_ in (a_, b2): wall("lobby_ceiling", *PT(sg, sx_, -4.2), *PT(sg, sx_, -1.3), 0.0, z1 - 1.1) if sx_ == b2 else wall("lobby_ceiling", *PT(sg, sx_, -1.3), *PT(sg, sx_, -4.2), 0.0, z1 - 1.1)
-                    HQ("hero_stone", sg, a_, b2, -1.3, -4.2, 0.03); HQ("lobby_ceiling", sg, a_, b2, -1.3, -4.2, z1 - 1.1, up=False)
-                    HQ("hero_stone", sg, a_, b2, 0.0, -1.3, 0.03)
+                    WL("lobby_ceiling", sg, a_, b2, 0.0, z1 - 1.1, off=-4.2)
+                    wall("lobby_ceiling", *PT(sg, b2, -4.2), *PT(sg, b2, -1.3), 0.0, z1 - 1.1); wall("lobby_ceiling", *PT(sg, a_, -1.3), *PT(sg, a_, -4.2), 0.0, z1 - 1.1)
+                    HQ("hero_stone", sg, a_, b2, -1.3, -4.2, 0.03); HQ("lobby_ceiling", sg, a_, b2, -1.3, -4.2, z1 - 1.1, up=False); HQ("hero_stone", sg, a_, b2, 0.0, -1.3, 0.03)
                     for sx_ in np.arange(a_ + 1.2, b2 - 0.6, 2.4): HQ("lobby_light", sg, sx_ - 0.5, sx_ + 0.5, -2.2, -3.2, z1 - 1.12, up=False)
                     pe = PT(sg, (s0_ + s1_) / 2, 0.0)
-                    if bb.get("label"): LABELS.append((bb["label"], pe[0], pe[1] - 0.03, z1 - 0.95, 0.7))
-                    BXs("hero_acp_white", sg, s0_ - 0.4, s1_ + 0.4, 0.0, 0.5, z1 - 0.12, z1 + 0.0)    # a thin cap line over the portal frame
+                    if bb.get("label"): LABELS.append((bb["label"], pe[0], pe[1] - dep - 0.03, z1 - 0.95, 0.7))
+                BXs(PLW, sg, s0_, s0_ + j, 0.0, dep, z0, z1 + 0.0); BXs(PLW, sg, s1_ - j, s1_, 0.0, dep, z0, z1 + 0.0)       # the frame stands proud of the wall: posts and lintel
+                BXs(PLW, sg, s0_ + j, s1_ - j, 0.0, dep, z1 - (0.9 if bb["kind"] == "glass" else 1.1), z1)
                 cur = s1_
             if cur < L: WL(PLW, sg, cur, L, z0, z1)
         else:
@@ -619,8 +632,8 @@ if not LEGACY:
         BXs("hero_dark", sg, pier, L - pier, 0.0, 0.5, z1 - 0.08, z1, top=True)                    # black sunshade fin at the head of every band
         for s in np.arange(pier + 3.6, L - pier - 0.2, 4.8): BXs("hero_dark", sg, s - 0.03, s + 0.03, 0.0, 0.38, z0 + 0.5, z1 - 0.08, top=False)   # black vertical fins on the 1.2 m bay lines
         for s in np.arange(pier + 3.0, L - pier - 0.5, 9.6):      # awning windows: charcoal flaps hinged at the top, open at the foot
-            zt_, zb_ = z0 + 3.0, z0 + 2.2
-            P4 = [(*PT(sg, s - 0.55, -0.14), zt_), (*PT(sg, s + 0.55, -0.14), zt_), (*PT(sg, s + 0.55, 0.26), zb_), (*PT(sg, s - 0.55, 0.26), zb_)]
+            zt_, zb_ = z0 + 2.9, z0 + 2.3
+            P4 = [(*PT(sg, s - 0.55, -0.15), zt_), (*PT(sg, s + 0.55, -0.15), zt_), (*PT(sg, s + 0.55, 0.16), zb_), (*PT(sg, s - 0.55, 0.16), zb_)]
             poly3("hero_acp_charcoal", P4, [(0, 0), (1, 0), (1, 1), (0, 1)]); poly3("hero_acp_charcoal", P4[::-1], [(0, 0), (1, 0), (1, 1), (0, 1)])
     BANDS = {1: (1.15, "hero_acp_copper"), 2: (1.35, "hero_acp_copper"), 3: (0.95, "hero_acp_white"), 4: (1.05, "hero_acp_grey")}
     def f_a14(sg, k, z0, z1, b_):
@@ -656,16 +669,16 @@ if not LEGACY:
             WL(PLW, sg, 0, 0.6, z0, z1)
             WL("hero_glass_green", sg, 0.6, bay_e, z0, z1, off=-0.1, vo=z0, u0=sg["s0"] + 0.6)      # one storey of tile per floor, spandrel on the slab line
             BXs(PLW, sg, 0.6, bay_e, -0.1, 0.12, z1 - 0.06, z1 + 0.06)
-            WL(W0, sg, bay_e, L, z0, z1)
             rest = [(bay_e + 0.6, bay_e + 0.6 + 1.8)] if L - bay_e > 2.6 + 1.8 else []
-            if rest: punched(sg, z0, z1, rest, z0 + (1.0 if k == 0 else 0.95), z0 + (1.0 if k == 0 else 0.95) + 2.1, W0, W0, W0, W1, rec=0.2, jmat=PLW)
+            if rest: punched(sg, z0, z1, rest, z0 + (1.0 if k == 0 else 0.95), z0 + (1.0 if k == 0 else 0.95) + 2.1, W0, W0, W0, W1, rec=0.2, jmat=PLW, span=(bay_e, L))
+            else: WL(W0, sg, bay_e, L, z0, z1)
             return
         wins = cols_even(L, 1.8, 5.4, 3.6); zz0 = z0 + (1.0 if k == 0 else 0.95); zz1 = zz0 + 2.1      # 3.6 x 2.1 m: two of the teal window units side by side
         punched(sg, z0, z1, wins, zz0, zz1, W0, W0, W0, W1, rec=0.22, jmat=PLW)
         for a_, b2 in wins:    # a stucco sill and lintel to each window
             BXs(PLW, sg, a_ - 0.15, b2 + 0.15, 0.0, 0.2, zz0 - 0.16, zz0 + 0.02); BXs(PLW, sg, a_ - 0.22, b2 + 0.22, 0.0, 0.16, zz1 - 0.02, zz1 + 0.26)
     FKIND = {"podium": f_podium, "punch_dark": f_punch_dark, "glass": f_glass, "white": f_white, "sign": f_sign, "acp": f_acp, "a14": f_a14, "stilt": f_stilt, "stucco": f_stucco, "tower": f_stucco}
-    PARAPET = {"podium": (0.0, None), "punch_dark": (0.0, None), "glass": (0.0, None), "white": (1.1, "hero_acp_white"), "sign": (0.4, "hero_acp_white"), "acp": (1.0, "hero_acp_charcoal"),
+    PARAPET = {"podium": (0.5, "hero_plaster_white"), "punch_dark": (0.0, None), "glass": (0.0, None), "white": (1.1, "hero_acp_white"), "sign": (0.4, "hero_acp_white"), "acp": (1.0, "hero_acp_charcoal"),
                "a14": (1.2, PLW), "stilt": (0.0, None), "stucco": (1.0, "hero_plaster_cream"), "tower": (0.0, None)}
     SOFFIT_M = "hero_acp_charcoal"
     def edge_pieces(a, b_, boxes_k):
@@ -710,7 +723,7 @@ if not LEGACY:
                 for ls in [l_ for l_ in [rg.exterior] if l_.length > 4]:
                     cc = list(ls.coords)
                     for a, b_ in zip(cc, cc[1:]):
-                        if not Pk.exterior.buffer(0.05).contains(Point((a[0] + b_[0]) / 2, (a[1] + b_[1]) / 2)) and not any(g_.exterior.buffer(0.05).contains(Point((a[0] + b_[0]) / 2, (a[1] + b_[1]) / 2)) for g_ in polys_of(Pk)): continue
+                        if not any(g_.exterior.buffer(0.05).contains(Point((a[0] + b_[0]) / 2, (a[1] + b_[1]) / 2)) for g_ in polys_of(Pk)): continue
                         sg = seg_of(a, b_)
                         if sg["L"] < 3: continue
                         BXs("hero_stone", sg, 0.4, sg["L"] - 0.4, -1.25, -0.55, z1 + 0.04, z1 + 0.62, top=False)
@@ -731,9 +744,10 @@ if not LEGACY:
     def roof_plant(items):
         coll("Rooftops")
         for it in items:
-            z_ = ZT(it.get("level", NF)); cx_, cy_ = X0 + it["x"], YF + it["y"]
+            z_ = ZT(it.get("level", NF)); ix_, iy_ = _v(it["x"]), _v(it["y"]); cx_, cy_ = (X0 + ix_) if ix_ >= 0 else (X1 + ix_), (YF + iy_) if iy_ >= 0 else (YB + iy_)
             if it.get("shape") == "tank": cyl("tank", cx_, cy_, z_, z_ + it["h"], it["w"] / 2, 16)
             else: bx(it.get("mat", "hero_acp_charcoal"), cx_, cy_, z_, z_ + it["h"], it["w"], it["d"])
+            if it.get("shape") != "tank": pass
     if FAM == "magnus":
         STILT = False
         ENTR = [{"x": X0 + (bb["x"][0] + bb["x"][1]) / 2, "w": bb["x"][1] - bb["x"][0] + 4.0, "d": 7.0} for bb in SP.get("bays", []) if bb["kind"] == "portal"]
@@ -986,6 +1000,23 @@ for g in GATES:
     tx, ty = math.cos(g["ang"]), math.sin(g["ang"])
     if SP.get("bougainvillea", LEGACY):
         for sx in (-GATE_W / 2 - 1.4, GATE_W / 2 + 1.4): shrub("leaf_bloom", g["x"] + tx * sx + g["in"][0] * 0.9, g["y"] + ty * sx + g["in"][1] * 0.9, 0.06, 1.3, 22)
+# the street camera: straight out from the entrance, across the road to its far edge (the opposite footpath), never inside a building
+road_l = unary_union([Polygon([Tinv(*p) for p in g.exterior.coords]) for g in getattr(roads, "geoms", [roads])]).buffer(0)
+blt_l = unary_union([Polygon([Tinv(*p) for p in Polygon(b["p"]).exterior.coords]).buffer(0) for b in S["buildings"] if Polygon(b["p"]).distance(foot) < 120] + [B])
+street_xy = None
+_cl = Point(-14.0, YF - 31.0)   # the classic view across a wide road, kept wherever it stands on the street
+if road_l.buffer(1.8).contains(_cl) and not blt_l.buffer(1.0).contains(_cl): street_xy = (-14.0, YF - 31.0)
+for sx in ((-10.0, -6.0, -14.0, 0.0, 6.0) if street_xy is None else ()):
+    run_ = [d for d in np.arange(6.0, 60.0, 0.5) if road_l.buffer(1.8).contains(Point(sx, YF - d)) and not blt_l.buffer(1.0).contains(Point(sx, YF - d))]
+    if not run_: continue
+    first = [run_[0]]
+    for d in run_[1:]:
+        if d - first[-1] > 0.6: break
+        first.append(d)
+    if first[-1] - first[0] >= 4.0: street_xy = (sx, YF - first[-1]); break
+if street_xy is None: street_xy = (-14.0, YF - 31.0)
+print("street camera", [round(v, 1) for v in street_xy], "local")
+
 # trees for the site file: ashoka along the road boundary, neem along the others, palms at the forecourt
 trees = []
 inner_ring = plot.buffer(-1.6, join_style="mitre").exterior
@@ -994,7 +1025,7 @@ for d in np.arange(2.0, inner_ring.length, 1.0):
     if any(math.hypot(p.x - g["x"], p.y - g["y"]) < GATE_W / 2 + 2.5 for g in GATES): continue
     if B.buffer(2.0).contains(p): continue
     front_side = p.y < YF - FS_Y + 0.5
-    step = 4.5 if front_side else 9.0
+    step = SP.get("front_tree_step", 4.5) if front_side else 9.0
     if trees and min(math.hypot(p.x - t[0], p.y - t[1]) for t in trees) < step: continue
     if rx is not None and abs(p.x - rx) < 4 and abs(p.y - ry) < 7: continue
     if front_side and any(abs(p.x - e["x"]) < e["w"] / 2 + 5 for e in ENTR): continue      # keep the view to the entrance open
@@ -1014,6 +1045,7 @@ if TB:
             sp_ = Point(*T(lx, ly))
             if roads_b.contains(sp_) or blds_all.contains(sp_) or plot.buffer(0.8).contains(Point(lx, ly)): continue
             if any(math.hypot(lx - g["x"], ly - g["y"]) < GATE_W for g in GATES): continue
+            if Point(lx, ly).distance(LineString([street_xy, (0.0, YF)])) < 4.5 or math.hypot(lx - street_xy[0], ly - street_xy[1]) < 9.0: continue     # the street view stays open
             if belt and min(math.hypot(lx - q[0], ly - q[1]) for q in belt) < step * 0.6: continue
             belt.append((lx, ly)); trees.append((lx, ly, 1 if RND.random() < 0.3 else 0, RND.uniform(0.85, 1.25)))
     print("tree belt", len(belt), "trees")
@@ -1136,7 +1168,16 @@ def crown_cards(m, x, y, z, r, n, hz=0.75):
         cx_, cy_ = x + math.cos(a) * rr, y + math.sin(a) * rr; s = r * RND.uniform(0.32, 0.45); t = RND.uniform(0, math.pi); tl = RND.uniform(-0.8, 0.8)
         ex, ey = math.cos(t) * s, math.sin(t) * s; fx, fy, fz = -math.sin(t) * math.sin(tl) * s, math.cos(t) * math.sin(tl) * s, math.cos(tl) * s
         poly3(m, [(cx_ + sx * ex + sy * fx, cy_ + sx * ey + sy * fy, zz + sy * fz) for sx, sy in ((-1, -1), (1, -1), (1, 1), (-1, 1))], [(0, 1), (1, 1), (1, 0), (0, 0)])
+CAMS = {   # local frame: (eye x, y, z), (look-at x, y, z), lens
+    "property": ((-W * 0.95, YF - D * 1.15, max(45, H * 2.6)), (0, 0, H * 0.3), 32),
+    "closeup": ((-W * 0.22, YF - 16.0, 6.5), (-W * 0.05, YF, H * 0.62), 28),
+    "street": None,
+    "landscape": ((X1 + 2.0, YF - 12.0, 3.2), (X1 - W * 0.35, YF - 4.0, 1.2), 24),
+}
+for _t, _v_ in SP.get("cams", {}).items(): CAMS[_t] = (tuple(_v_[0]), tuple(_v_[1]), _v_[2])
+_cam_xy = [street_xy] + [c_[0][:2] for c_ in CAMS.values() if c_]
 for x, y, t, s in trees:
+    if any(math.hypot(x - q[0], y - q[1]) < 5.0 for q in _cam_xy): continue     # preview only: no leaf card in front of a lens
     if t == 2:   # palm: a ringed trunk and a crown of fronds
         cyl("hero_bark", x, y, 0.0, 8.0 * s, 0.18 * s, 8, top=False)
         for k in range(14):
@@ -1159,12 +1200,6 @@ sun = bpy.data.objects.new("sun", bpy.data.lights.new("sun", "SUN")); CO["Lighti
 sun.data.energy = 3.6; sun.data.angle = math.radians(0.8); sun.data.color = (1.0, 0.88, 0.74)
 az, el = math.radians(245), math.radians(19)       # late afternoon: the warm, long-shadow light of the references
 sun.rotation_euler = mathutils.Vector((math.sin(az) * math.cos(el), math.cos(az) * math.cos(el), math.sin(el))).to_track_quat("Z", "Y").to_euler()
-CAMS = {   # local frame: (eye x, y, z), (look-at x, y, z), lens
-    "property": ((-W * 0.95, YF - D * 1.15, max(45, H * 2.6)), (0, 0, H * 0.3), 32),
-    "closeup": ((-W * 0.22, YF - 16.0, 6.5), (-W * 0.05, YF, H * 0.62), 28),
-    "street": None,
-    "landscape": ((X1 + 2.0, YF - 12.0, 3.2), (X1 - W * 0.35, YF - 4.0, 1.2), 24),
-}
 CAMOBJ = {}
 CAMS["street"] = ((-14.0, YF - 31.0, 1.7), (0, YF, H * 0.45), 24)   # replaced by the road-aware position below, once the site is known
 for tag, (eye, at_, lens) in CAMS.items():
@@ -1185,21 +1220,6 @@ bpy.data.objects.remove(merged, do_unlink=True)
 json.dump({"C": [0.0, 0.0], "phi": 0.0, "note": "built in the scene's own metres"}, open(OUT + ".frame.json", "w"))
 # the street camera: straight out from the entrance, across the road to its far edge (the opposite footpath), never
 # inside a building; falls back to 31 m out, the classic view across a wide road
-road_l = unary_union([Polygon([Tinv(*p) for p in g.exterior.coords]) for g in getattr(roads, "geoms", [roads])]).buffer(0)
-blt_l = unary_union([Polygon([Tinv(*p) for p in Polygon(b["p"]).exterior.coords]).buffer(0) for b in S["buildings"] if Polygon(b["p"]).distance(foot) < 120] + [B])
-street_xy = None
-_cl = Point(-14.0, YF - 31.0)   # the classic view across a wide road, kept wherever it stands on the street
-if road_l.buffer(1.8).contains(_cl) and not blt_l.buffer(1.0).contains(_cl): street_xy = (-14.0, YF - 31.0)
-for sx in ((-10.0, -6.0, -14.0, 0.0, 6.0) if street_xy is None else ()):
-    run_ = [d for d in np.arange(6.0, 60.0, 0.5) if road_l.buffer(1.8).contains(Point(sx, YF - d)) and not blt_l.buffer(1.0).contains(Point(sx, YF - d))]
-    if not run_: continue
-    first = [run_[0]]
-    for d in run_[1:]:
-        if d - first[-1] > 0.6: break
-        first.append(d)
-    if first[-1] - first[0] >= 4.0: street_xy = (sx, YF - first[-1]); break
-if street_xy is None: street_xy = (-14.0, YF - 31.0)
-print("street camera", [round(v, 1) for v in street_xy], "local")
 _c = CAMOBJ["street"]; _ex, _ey = T(*street_xy); _ax, _ay = T(0, YF); _c.location = (_ex, _ey, 1.7)
 _c.rotation_euler = mathutils.Vector((_ax - _ex, _ay - _ey, H * 0.45 - 1.7)).to_track_quat("-Z", "Y").to_euler()
 site = {"plot": [[round(x, 2), round(y, 2)] for x, y in (T(*p) for p in plot.exterior.coords)],

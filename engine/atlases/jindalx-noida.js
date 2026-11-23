@@ -40,7 +40,7 @@ window.ATLAS = {
     "world": {
       "href": "/jindalx-noida/world",
       "data": "/media/jindalx-noida/world/",
-      "ver": "33647a651b",
+      "ver": "c0f8dc8ad8",
       "sky": "sky.hdr",
       "poster": "hero.jpg",
       "mapHref": "/engine/?atlas=jindalx-noida",
@@ -250,6 +250,16 @@ window.ATLAS = {
         "cons": "Cons",
         "rows": [
           {
+            "id": "rank",
+            "label": "Rank",
+            "field": "n"
+          },
+          {
+            "id": "reason",
+            "label": "Reason",
+            "field": "reason"
+          },
+          {
             "id": "outflow",
             "label": "Monthly outflow",
             "field": "monthlyOutflow",
@@ -351,6 +361,8 @@ window.ATLAS = {
             "id": "office",
             "label": "From today's office",
             "calc": "roadKm",
+            "best": "min",
+            "lead": "the closest to today's office",
             "sheetFact": "Distance from Jindal X existing office"
           }
         ],
@@ -392,6 +404,8 @@ window.ATLAS = {
           }
         ],
         "compare": [
+          "rank",
+          "reason",
           "outflow",
           "plate",
           "efficiency",
@@ -426,6 +440,13 @@ window.ATLAS = {
             "basis": "mixed",
             "title": "How it compares",
             "text": "Lowest monthly outflow: {best:outflow}. Largest floor plate: {best:plate}. Shortest walk to a metro, measured: {best:walk}. Earliest move-in: {best:timeline}. Distances from today's office are our estimate from indicative pins."
+          },
+          {
+            "view": "overview",
+            "panel": "distances",
+            "basis": "assumed",
+            "title": "How the four sit around today's office",
+            "text": "Straight lines between the pins, not routed roads. Nearest to today's office: {office:near}. Farthest: {office:far}. {clusters}. {lone}. Closest pair: {pair:closest}. Farthest pair: {pair:farthest}."
           }
         ]
       },

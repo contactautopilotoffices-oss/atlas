@@ -193,43 +193,130 @@ land = {k: unary_union(v).simplify(0.6) if v else None for k, v in land.items()}
 
 # ---- trees: dense in green areas, scattered in open ground elsewhere ---------
 rng = np.random.default_rng(7)
+GREENS = RG.get("greens", "random")   # "evidence": trees only where open data shows greenery (see the block below); anything else: the scatter below, as before
 blocked = unary_union([road_poly["major"], road_poly["minor"], rail_poly, unary_union([b["g"].buffer(1.5) for b in B])]).buffer(0.5)
 if land["water"] is not None: blocked = blocked.union(land["water"])
-minx, miny, maxx, maxy = CLIP.bounds
-def scatter(area_geom, n):
-    if area_geom is None or area_geom.is_empty: return np.zeros((0, 2))
-    bx = area_geom.bounds; pts = np.c_[rng.uniform(bx[0], bx[2], n), rng.uniform(bx[1], bx[3], n)]
-    ok = shapely.contains_xy(area_geom, pts[:, 0], pts[:, 1]) & ~shapely.contains_xy(blocked, pts[:, 0], pts[:, 1])
-    return pts[ok]
 shapely.prepare(blocked)
-tg = scatter(land["green"], 60000)
-# Roadside trees: a band along minor and major roads.
-band = unary_union([road_poly["major"].buffer(5), road_poly["minor"].buffer(3.5)]).difference(unary_union([road_poly["major"], road_poly["minor"]]))
-tr = scatter(band, 420000)[::2]
-to = scatter(CLIP, 520000)[::3]
-# Region options (scripts/world/regions/*.json), for districts where the defaults make a carpet of trees:
-#   "open_tree_density": keep this share of the random scatter over open ground (default 1, as before)
-#   "roadside_tree_density": keep this share of the random roadside band (default 1)
-#   "avenue_spacing": plant the main roads (motorway to secondary) as avenues, a tree every N metres on
-#                     both sides, set back from the carriageway edge, where the ground is free (default off)
-k_open, k_road = RG.get("open_tree_density", 1.0), RG.get("roadside_tree_density", 1.0)
-if k_open < 1: to = to[rng.random(len(to)) < k_open]
-if k_road < 1: tr = tr[rng.random(len(tr)) < k_road]
-av = np.zeros((0, 2))
-if RG.get("avenue_spacing"):
-    sp, pts = RG["avenue_spacing"], []
-    for t in traffic:
-        ls = LineString(t["p"])
-        for d in np.arange(sp / 2, ls.length, sp):
-            p, q = ls.interpolate(d), ls.interpolate(min(ls.length, d + 1)); dx, dy = q.x - p.x, q.y - p.y; n = math.hypot(dx, dy) or 1
-            for side in (-1, 1):
-                off = t["w"] / 2 + 2.6
-                pts.append((p.x - dy / n * off * side + rng.uniform(-0.4, 0.4), p.y + dx / n * off * side + rng.uniform(-0.4, 0.4)))
-    pts = np.array(pts) if pts else np.zeros((0, 2))
-    if len(pts): pts = pts[shapely.contains_xy(CLIP, pts[:, 0], pts[:, 1]) & ~shapely.contains_xy(blocked, pts[:, 0], pts[:, 1])]
-    av = pts
-trees = np.vstack([tg, tr, to, av]); print("trees", len(tg), len(tr), len(to), "avenue", len(av))
+tree_types = None
+if GREENS != "evidence":
+    minx, miny, maxx, maxy = CLIP.bounds
+    def scatter(area_geom, n):
+        if area_geom is None or area_geom.is_empty: return np.zeros((0, 2))
+        bx = area_geom.bounds; pts = np.c_[rng.uniform(bx[0], bx[2], n), rng.uniform(bx[1], bx[3], n)]
+        ok = shapely.contains_xy(area_geom, pts[:, 0], pts[:, 1]) & ~shapely.contains_xy(blocked, pts[:, 0], pts[:, 1])
+        return pts[ok]
+    shapely.prepare(blocked)
+    tg = scatter(land["green"], 60000)
+    # Roadside trees: a band along minor and major roads.
+    band = unary_union([road_poly["major"].buffer(5), road_poly["minor"].buffer(3.5)]).difference(unary_union([road_poly["major"], road_poly["minor"]]))
+    tr = scatter(band, 420000)[::2]
+    to = scatter(CLIP, 520000)[::3]
+    # Region options (scripts/world/regions/*.json), for districts where the defaults make a carpet of trees:
+    #   "open_tree_density": keep this share of the random scatter over open ground (default 1, as before)
+    #   "roadside_tree_density": keep this share of the random roadside band (default 1)
+    #   "avenue_spacing": plant the main roads (motorway to secondary) as avenues, a tree every N metres on
+    #                     both sides, set back from the carriageway edge, where the ground is free (default off)
+    k_open, k_road = RG.get("open_tree_density", 1.0), RG.get("roadside_tree_density", 1.0)
+    if k_open < 1: to = to[rng.random(len(to)) < k_open]
+    if k_road < 1: tr = tr[rng.random(len(tr)) < k_road]
+    av = np.zeros((0, 2))
+    if RG.get("avenue_spacing"):
+        sp, pts = RG["avenue_spacing"], []
+        for t in traffic:
+            ls = LineString(t["p"])
+            for d in np.arange(sp / 2, ls.length, sp):
+                p, q = ls.interpolate(d), ls.interpolate(min(ls.length, d + 1)); dx, dy = q.x - p.x, q.y - p.y; n = math.hypot(dx, dy) or 1
+                for side in (-1, 1):
+                    off = t["w"] / 2 + 2.6
+                    pts.append((p.x - dy / n * off * side + rng.uniform(-0.4, 0.4), p.y + dx / n * off * side + rng.uniform(-0.4, 0.4)))
+        pts = np.array(pts) if pts else np.zeros((0, 2))
+        if len(pts): pts = pts[shapely.contains_xy(CLIP, pts[:, 0], pts[:, 1]) & ~shapely.contains_xy(blocked, pts[:, 0], pts[:, 1])]
+        av = pts
+    trees = np.vstack([tg, tr, to, av]); print("trees", len(tg), len(tr), len(to), "avenue", len(av))
 
+else:
+    # ---- "greens": "evidence" -------------------------------------------------------------------------------------
+    # Trees stand only where open data shows greenery: the 10 m Sentinel-2 NDVI of the dry, leaf-on months (fetch_ndvi.py,
+    # Copernicus, open licence), read as canopy cover, and Overture land_use parks and gardens (which lower the bar a park
+    # has to clear). Overture's land_cover is the 10 m ESA WorldCover generalised to whole cities here (one "urban" polygon
+    # for the clip), so it says nothing at this scale. Nothing is scattered over built-up blocks: a block with no NDVI shows no
+    # trees. Density, size and species follow the cover; avenues are planted only along roads where the NDVI shows an avenue.
+    import rasterio.warp as rw
+    N0, N1, NP0 = RG.get("ndvi_lo", 0.23), RG.get("ndvi_hi", 0.50), RG.get("ndvi_lo_park", 0.18)
+    nd = np.load(f"{D}/ndvi.npy"); NT = json.load(open(f"{D}/ndvi_t.json")); na, nb_, nc, nd_, ne, nf = NT["t"]
+    nd = np.where(np.isnan(nd), np.nanmedian(nd), nd)
+    def ndvi_at(xs, ys):   # bilinear at local metres
+        xs, ys = np.asarray(xs, float), np.asarray(ys, float)
+        ex, ny = rw.transform("EPSG:4326", NT["crs"], (LNG0 + xs / KX).tolist(), (LAT0 + ys / KY).tolist())
+        col = (np.array(ex) - nc) / na - 0.5; row = (np.array(ny) - nf) / ne - 0.5
+        c0 = np.floor(col).astype(int); r0 = np.floor(row).astype(int); fc, fr = col - c0, row - r0
+        cl = lambda a, n: np.clip(a, 0, n - 1)
+        g = lambda r, c: nd[cl(r, nd.shape[0]), cl(c, nd.shape[1])]
+        return (g(r0, c0) * (1 - fc) * (1 - fr) + g(r0, c0 + 1) * fc * (1 - fr) + g(r0 + 1, c0) * (1 - fc) * fr + g(r0 + 1, c0 + 1) * fc * fr)
+    def cover_of(v, lo):
+        t = np.clip((v - lo) / (N1 - lo), 0, 1); return t * t * (3 - 2 * t)
+    in_park = lambda xs, ys: shapely.contains_xy(land["green"], xs, ys) if land["green"] is not None else np.zeros(len(xs), bool)
+    minx, miny, maxx, maxy = CLIP.bounds; G = RG.get("tree_grid", 3.6); DENS = RG.get("tree_density", 1.0)
+    gx, gy = np.meshgrid(np.arange(minx + G / 2, maxx, G), np.arange(miny + G / 2, maxy, G)); gx, gy = gx.ravel(), gy.ravel()
+    px, py = gx + rng.uniform(-0.38, 0.38, gx.size) * G, gy + rng.uniform(-0.38, 0.38, gx.size) * G
+    ok = shapely.contains_xy(CLIP, px, py) & ~shapely.contains_xy(blocked, px, py); px, py = px[ok], py[ok]
+    ndv = ndvi_at(px, py); park = in_park(px, py)
+    cov = np.where(park, cover_of(ndv, NP0), cover_of(ndv, N0))
+    keep = rng.random(px.size) < (cov ** 1.15) * DENS
+    # blue-noise thinning: crowns spaced 5.2 to 6.4 m (the denser the cover the closer), so a tree belt is a row or two with
+    # overlapping crowns, not a pile of ten; the strongest cover is placed first
+    order = np.flatnonzero(keep); order = order[np.argsort(-cov[order])]; RMIN = RG.get("tree_min_dist", 6.4)
+    hg, acc = {}, []
+    for i in order:
+        r = RMIN - 1.2 * cov[i]; cx_, cy_ = int(px[i] // RMIN), int(py[i] // RMIN)
+        if any(hg.get((cx_ + a, cy_ + b)) and any((px[j] - px[i]) ** 2 + (py[j] - py[i]) ** 2 < r * r for j in hg[(cx_ + a, cy_ + b)]) for a in (-1, 0, 1) for b in (-1, 0, 1)): continue
+        hg.setdefault((cx_, cy_), []).append(i); acc.append(i)
+    keep = np.zeros(px.size, bool); keep[acc] = True
+    sx, sy, sc = px[keep], py[keep], cov[keep]; print("evidence trees: candidates", px.size, "kept", int(keep.sum()), "of which in parks", int(park[keep].sum()))
+    # avenues: a regular row along a main road only where the NDVI beside it shows trees
+    ax_, ay_, asz = [], [], []
+    if RG.get("avenue_spacing"):
+        sp = RG["avenue_spacing"]; THR = RG.get("avenue_ndvi", 0.34)
+        for t in traffic:
+            ls = LineString(t["p"])
+            for d in np.arange(sp / 2, ls.length, sp):
+                p, q = ls.interpolate(d), ls.interpolate(min(ls.length, d + 1)); dx, dy = q.x - p.x, q.y - p.y; n = math.hypot(dx, dy) or 1; tx, ty = dx / n, dy / n
+                for side in (-1, 1):
+                    off = t["w"] / 2 + 2.6; X = p.x - ty * off * side + rng.uniform(-0.4, 0.4); Y = p.y + tx * off * side + rng.uniform(-0.4, 0.4)
+                    if not shapely.contains_xy(CLIP, X, Y) or shapely.contains_xy(blocked, X, Y): continue
+                    sm = ndvi_at([X, X + 5 * tx, X - 5 * tx, X - 4 * ty * side, X + 4 * ty * side], [Y, Y + 5 * ty, Y - 5 * ty, Y + 4 * tx * side, Y - 4 * tx * side])
+                    v = float(np.max(sm[:3]))   # along the row: the pixel the tree stands in and its neighbours
+                    if v >= THR: ax_.append(X); ay_.append(Y); asz.append(float(cover_of(v, N0)))
+    ax_, ay_, asz = np.array(ax_), np.array(ay_), np.array(asz)
+    # scatter trees too close to an avenue tree are dropped (the row wins); two kinds of tree never stand within 2.6 m of each other
+    occ = {}
+    cell = lambda x, y: (int(x // 3), int(y // 3))
+    for x, y in zip(ax_, ay_): occ[cell(x, y)] = 1
+    keep2 = np.ones(sx.size, bool)
+    for i, (x, y) in enumerate(zip(sx, sy)):
+        cx_, cy_ = cell(x, y)
+        occ_hit = any((cx_ + a, cy_ + b) in occ for a in (-1, 0, 1) for b in (-1, 0, 1))
+        if occ_hit and np.min(np.hypot(ax_ - x, ay_ - y)) < 4.0: keep2[i] = False
+    sx, sy, sc = sx[keep2], sy[keep2], sc[keep2]
+    # size and species: dense cover grows bigger trees; ashoka (tall, narrow) where it is dense and edges a road or building, a few palms on avenues
+    edge = shapely.dwithin(shapely.points(sx, sy), blocked, 5.0) if sx.size else np.zeros(0, bool)
+    s_sc = np.clip(0.62 + 0.8 * sc ** 0.8 + rng.normal(0, 0.14, sx.size), 0.55, 1.55)
+    t_sc = np.where(edge & (sc > 0.55) & (rng.random(sx.size) < 0.28), 1, 0)
+    s_av = np.clip(0.95 + 0.45 * asz + rng.normal(0, 0.12, ax_.size), 0.8, 1.5)
+    r_av = rng.random(ax_.size); t_av = np.where(r_av < 0.22, 1, np.where(r_av > 0.975, 2, 0))
+    trees = np.vstack([np.c_[sx, sy], np.c_[ax_, ay_]]) if (sx.size or ax_.size) else np.zeros((0, 2))
+    tree_s = np.concatenate([s_sc, s_av]); tree_types = np.concatenate([t_sc, t_av]).astype(int)
+    print("trees", sx.size, "scatter", ax_.size, "avenue; types", np.bincount(tree_types, minlength=3).tolist())
+    # ground under the canopy: where the cover is strong and the ground is open, a patch of grass, so a grove sits on green, not on bare paving
+    cvx, cvy = np.meshgrid(np.arange(minx + 2, maxx, 4.0), np.arange(miny + 2, maxy, 4.0))
+    cvv = np.where(in_park(cvx.ravel(), cvy.ravel()), cover_of(ndvi_at(cvx.ravel(), cvy.ravel()), NP0), cover_of(ndvi_at(cvx.ravel(), cvy.ravel()), N0)).reshape(cvx.shape)
+    import rasterio.features as rf
+    from rasterio.transform import Affine
+    msk = (cvv > 0.5).astype(np.uint8)[::-1]   # north up for rasterio
+    cano = [shapely.geometry.shape(g) for g, v in rf.shapes(msk, mask=msk > 0, transform=Affine(4.0, 0, minx, 0, -4.0, maxy)) if v]
+    canopy_ground = unary_union(cano).buffer(2.0).buffer(-2.0).difference(blocked).simplify(1.5) if cano else None
+    if canopy_ground is not None and not canopy_ground.is_empty: land["canopy"] = canopy_ground
+    print("canopy ground", round(canopy_ground.area / 1e4, 1) if canopy_ground is not None else 0, "ha")
 # ---- write ----------------------------------------------------------------------
 def rings(g):
     out = []
@@ -241,6 +328,7 @@ def rings(g):
 scene = {
     **({"floor_h": RG["floor_h"], "ground_h": RG["ground_h"]} if "ground_h" in RG else {}),
     **({"bundle": RG["bundle"]} if "bundle" in RG else {}),
+    **({"greens": GREENS, "tree_cap": RG.get("tree_cap", 0), "walls": RG.get("walls", ""), "greens_source": "Sentinel-2 L2A NDVI (Copernicus, open licence) + Overture land_use parks"} if GREENS == "evidence" else {}),
     "origin": [LNG0, LAT0], "k": [KX, KY], "bounds": [round(v, 1) for v in CLIP.bounds],
     "source": "Overture Maps 2026-10-21 (OpenStreetMap, Microsoft, Google footprints); heights from Copernicus GLO-30; options from the deck",
     "buildings": [{"p": [[round(a, 1), round(b, 1)] for a, b in b["g"].exterior.coords[:-1]], "h": b["H"], "c": b["cls"], **({"opt": b["opt"]} if b.get("opt") else {}),
@@ -248,7 +336,9 @@ scene = {
     "roads": {k: rings(v) for k, v in road_poly.items()}, "rail": rings(rail_poly), "platforms": rings(rail_platforms),
     "land": {k: rings(v) for k, v in land.items()},
     "metro": METRO, "stations": STATIONS,
-    "trees": [[round(a, 1), round(b, 1), round(float(s), 2)] for (a, b), s in zip(trees, rng.uniform(0.7, 1.4, len(trees)))],
+    # a tree is [x, y, k] (k: 0.7 to 1.4 as the page scales it, 0.75 + 0.35 k); in "evidence" mode [x, y, scale, type] (type 0 broadleaf, 1 ashoka, 2 palm; scale as drawn, 0.55 to 1.55)
+    "trees": ([[round(a, 1), round(b, 1), round(float(sz), 2), int(t)] for (a, b), sz, t in zip(trees, tree_s, tree_types)] if GREENS == "evidence" else
+              [[round(a, 1), round(b, 1), round(float(s), 2)] for (a, b), s in zip(trees, rng.uniform(0.7, 1.4, len(trees)))]),
     "options": [{"id": o["id"], "name": o["name"], "x": round(P(o["lng"], o["lat"])[0], 1), "y": round(P(o["lng"], o["lat"])[1], 1),
                  "h": B[opt_b[o["id"]]]["H"] if o["id"] in opt_b else 40,
                  "routes": [{"kind": r["kind"], "name": r["name"], "m": r["m"], "min": r.get("min"), "path": [[round(a, 1), round(b, 1)] for a, b in (P(*q) for q in r["path"])]} for r in o["routes"]]}

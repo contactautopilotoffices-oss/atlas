@@ -7,7 +7,8 @@ Checks (each one is a mistake that reached the founder before):
   3. the shortlisted property is present, and no context building overlaps it;
   4. no two buildings overlap by more than a sliver;
   5. every Line 1 station in the slab has its station model, and no building stands inside the station's clearance;
-  6. the camera never starts inside a building (a black frame).
+  6. the camera never starts inside a building (a black frame);
+  7. compound walls (region flag "walls") stand in no road and through no building.
 Writes <OUT>/<id>-logic.json and raises SystemExit on any failure unless --allow-logic-fail is given.
 """
 import json, os
@@ -64,6 +65,13 @@ def run(ctx):
         for b, p in polys:
             if p.contains(pt) and cam[2] < b.get("h", 0) + 1:
                 fails.append(f"camera at {cam} starts inside a building")
+    # 7. compound walls (region flag "walls"): none on a carriageway or through a building, none across the property
+    for w in ctx.get("walls", []):
+        if w.intersection(ROAD["major"]).area > 0.02 or w.intersection(ROAD["minor"]).area > 0.02:
+            fails.append(f"compound wall in a road at {[round(v) for v in w.centroid.coords[0]]}")
+        for b, p in polys:
+            if p.intersection(w).area > 0.6 and not b.get("opt"): fails.append(f"compound wall through a building at {[round(v) for v in w.centroid.coords[0]]}"); break
+    if ctx.get("wall_stats"): notes.append(f"compound walls {ctx['wall_stats']}")
     rep = {"id": OID, "fails": fails, "notes": notes, "on_road_dropped": ctx.get("on_road", [])}
     json.dump(rep, open(os.path.join(OUT, f"{OID}-logic.json"), "w"), indent=1)
     print("LOGIC", "PASS" if not fails else "FAIL", len(fails), "failures;", "; ".join(notes))

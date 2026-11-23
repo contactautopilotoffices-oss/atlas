@@ -14,16 +14,18 @@
                 best     "min" | "max": the cell that wins the row in Compare        lead: "the lowest outflow"
                 basis    workbook | measured | assumed | derived (the tag shown beside the figure)
                 sheetFact   (calc roadKm) the sheet's own figure, shown beside the atlas's estimate }
+     tabs[]   which views to offer, in order: overview offer tradeoffs compare distances next (default: all that the atlas can fill)
      offer[]  groups for the offer card: { title, ids[] }          compare[]  row ids in the compare table
      pros / cons   the facts keys of the two lists                  currency, locale, fixes{} (misspellings to mend)
      tour[]   extra tour steps { view, panel, basis, title, text }; text tokens: {name} {<row id>} {pros} {cons}
-              {leads} {best:<row id>} {flag}, {token:l} for lower case, and {token|fallback}. A sentence with a token that has no value is dropped.
+              {leads} {best:<row id>} {flag}, the distances {office:near} {office:far} {pair:closest} {pair:farthest}
+              {clusters} {lone}, {token:l} for lower case, and {token|fallback}. A sentence with a token that has no value is dropped.
    A field the sheet does not give is shown as "Not in the sheet", or left out when no option has it. */
 import { easyTabs } from "./andheri-ui.js";
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const BASIS = { workbook: ["Sheet", "From the client's sheet"], measured: ["Measured", "Measured on the map"], assumed: ["Estimate", "Our estimate, not confirmed"], derived: ["Worked out", "Worked out from sheet figures"] };
-const TABS = [["offer", "Offer"], ["tradeoffs", "Trade-offs"], ["compare", "Compare"], ["next", "To confirm"]];
-const ICON = { offer: '<path d="M4 7h16M4 12h16M4 17h10"/>', tradeoffs: '<path d="M12 3v18M5 8l7-5 7 5M5 16l7 5 7-5"/>', compare: '<path d="M4 5h6v14H4zM14 5h6v14h-6z"/>', next: '<path d="M5 12l4 4 10-10"/>' };
+const TABS = [["overview", "Overview"], ["offer", "Offer"], ["tradeoffs", "Trade-offs"], ["compare", "Compare"], ["distances", "Distances"], ["next", "To confirm"]];
+const ICON = { overview: '<path d="M4 6h16M4 12h10M4 18h16"/>', distances: '<circle cx="6" cy="17" r="2"/><circle cx="18" cy="7" r="2"/><path d="M8 15l8-6"/>', offer: '<path d="M4 7h16M4 12h16M4 17h10"/>', tradeoffs: '<path d="M12 3v18M5 8l7-5 7 5M5 16l7 5 7-5"/>', compare: '<path d="M4 5h6v14H4zM14 5h6v14h-6z"/>', next: '<path d="M5 12l4 4 10-10"/>' };
 
 /* every number in a piece of text; "20,08,000" is one number, "G,1,2- 18000" is 1, 2 and 18000 */
 function nums(t) {
@@ -72,7 +74,7 @@ export function createDataLayer({ A, W, options, getSel, select, onLayout, isTou
     if (row.calc === "roadKm") {
       if (!EX || !isNum(o.lat)) return out;
       const ex = hav(o, EX), km = isNum(o.roadKm) ? o.roadKm : ex * FACTOR, min = o.driveText || `~${Math.max(1, Math.round(ex * FACTOR / KMH * 60))} min`;
-      Object.assign(out, { missing: false, num: km, text: fmtKm(km), basis: rb(row), sub: `${isNum(o.roadKm) ? "by road" : "by road (est.)"} · ${min}` });
+      Object.assign(out, { missing: false, num: km, text: isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(km), basis: rb(row), sub: `${isNum(o.roadKm) ? "by road" : "by road (est.)"} · ${min}` });
       const s = row.sheetFact ? factText(o, row.sheetFact) : ""; if (!gone(s)) out.sheet = `The sheet says ${tidy(s)}`;
       return out;
     }
@@ -106,6 +108,31 @@ export function createDataLayer({ A, W, options, getSel, select, onLayout, isTou
     return new Set(v.filter((x) => x[1] === ext).map((x) => x[0])); };
   const bestOf = {}; for (const r of rows) if (r.best) bestOf[r.id] = winners(r.id);
   const anyHas = (id) => options.some((o) => !valOf(o, id).missing);
+
+  /* ------------------------------------------- distances (the 2D atlas's own maths, engine/app.js) */
+  const MX = (() => {
+    const geo = options.filter((o) => isNum(o.lat) && isNum(o.lng)); if (geo.length < 2) return null;
+    const zones = Array.isArray(A.zones) ? A.zones : [], rank = (a, b) => a.n - b.n;
+    const byZone = zones.flatMap((z) => geo.filter((o) => o.micro === z.key).sort(rank)), seen = new Set(byZone.map((o) => o.id));
+    const list = byZone.concat(geo.filter((o) => !seen.has(o.id)).sort(rank)), all = EX ? [EX, ...list] : list;
+    let max = 0; const pairs = [];
+    for (let i = 0; i < list.length; i++) for (let j = i + 1; j < list.length; j++) { const d = hav(list[i], list[j]); max = Math.max(max, d); pairs.push({ a: list[i], b: list[j], d }); }
+    pairs.sort((x, y) => x.d - y.d);
+    const groups = [], done = new Set();   // chained: an option within 2.5 km of any member joins the group
+    for (const o of list) { if (done.has(o.id)) continue; const g = [o]; done.add(o.id);
+      for (let k = 0; k < g.length; k++) for (const x of list) if (!done.has(x.id) && hav(g[k], x) <= 2.5) { g.push(x); done.add(x.id); } groups.push(g); }
+    const spread = (g) => { let m = 0; for (const a of g) for (const b of g) m = Math.max(m, hav(a, b)); return m; };
+    const home = EX ? list.slice().sort((a, b) => homeKm(a) - homeKm(b) || rank(a, b)) : [];
+    return { list, all, max, pairs, close: pairs[0], far: pairs[pairs.length - 1], clusters: groups.filter((g) => g.length > 1).sort((a, b) => b.length - a.length), lone: groups.filter((g) => g.length === 1).map((g) => g[0]), spread, home,
+      homeMax: home.length ? Math.max(...home.map(homeKm).filter(isNum), 1) : 1 };
+  })();
+  function homeKm(o) { return isNum(o.roadKm) ? o.roadKm : EX ? hav(o, EX) * FACTOR : NaN; }
+  const homeMin = (o) => o.driveText || `~${driveMin(hav(o, EX))} min`;
+  const driveMin = (k) => Math.max(1, Math.round(k * FACTOR / KMH * 60));
+  const homeTxt = (o) => isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(homeKm(o));
+  const nn = (o) => String(o.n == null ? "" : o.n).padStart(2, "0");
+  const near = (d, max) => { const t = Math.min(1, d / max), a = 0.62 * (1 - t) ** 1.4 + 0.04; return `background:rgba(255,194,0,${a.toFixed(2)});color:${a > 0.3 ? "#17140a" : "inherit"}`; };   // near is strong, far is faint
+  const METHOD = `Drive times are straight-line distances at ${KMH} km/h with a ${FACTOR}x road factor${SP.note ? ` (${SP.note})` : ""}. Indicative, not routed.`;
 
   /* ------------------------------------------------- pros and cons lists */
   function listOf(o, key) {
@@ -169,11 +196,68 @@ export function createDataLayer({ A, W, options, getSel, select, onLayout, isTou
       ${steps.length ? `<ol class="dp-steps">${steps.map((s) => `<li>${esc(s)}</li>`).join("")}</ol>` : '<p class="dp-empty">Nothing is listed to confirm.</p>'}
       ${src.length ? `<section><h3 class="mono">What the sheet leaves open</h3><dl class="dp-open">${src.map((x) => `<dt>${esc(x.k)}</dt><dd>${esc(x.v)}</dd>`).join("")}</dl></section>` : ""}${srcLine()}`;
   }
-  const BUILD = { offer: offerHTML, tradeoffs: tradeHTML, compare: compareHTML, next: nextHTML };
+  /* What stands out: the cards the 2D overview opens with, then each option with its headline tag and its "check first" chip */
+  const cp = (A.copy && A.copy.overview) || {}, ins = (A.copy && A.copy.insights) || {};
+  function overviewHTML(o) {
+    const first = options.slice().sort((a, b) => a.n - b.n)[0], home = MX && MX.home[0];
+    const card = (l, v, sub, id, lead) => `<button type="button" class="dp-card${lead ? " lead" : ""}" data-pick="${esc(id)}"><small>${esc(l)}</small><b>${esc(v)}</b><span>${esc(sub)}</span></button>`;
+    const cards = [first && card(ins.first || "Ranked first", first.name, [o === first ? "Selected" : "", first.reason].filter(Boolean).join(" \u00b7 ") || first.address || "", first.id, true),
+      home && card(ins.home || "Closest to today's office", homeTxt(home), `${home.name}, ${homeMin(home)} by road (est.)`, home.id)].filter(Boolean).join("");
+    const flags = options.filter((x) => x.flag && x.flag.v), same = flags.length && flags.every((x) => x.flag.v === flags[0].flag.v);
+    const list = options.map((x) => `<li data-id="${esc(x.id)}"><button type="button" data-pick="${esc(x.id)}"><span class="n">${nn(x)}</span><span class="t"><b>${esc(x.name)}</b>${x.address ? `<small>${esc(x.address)}</small>` : ""}${x.reason ? `<em>${esc(x.reason)}</em>` : ""}</span>
+      <span class="r">${EX && isNum(homeKm(x)) ? `<b>${esc(homeTxt(x))}</b><small>${esc(homeMin(x))}</small>` : ""}${x.flag && x.flag.v ? `<i class="dp-chk" title="${esc(x.flag.v)}">check first</i>` : ""}</span></button></li>`).join("");
+    return `<div class="dp-top"><span class="mono">${esc(cp.eyebrow || "Overview")}</span></div><h2 class="dp-name sm">${esc(cp.title || "The options")}</h2>${cp.intro ? `<p class="dp-sub">${esc(cp.intro)}</p>` : ""}
+      ${cards ? `<section><h3 class="mono">What stands out</h3><div class="dp-cards">${cards}</div></section>` : ""}
+      <section><h3 class="mono">${esc((A.copy && A.copy.ranking && A.copy.ranking.ungrouped) || "The options")} \u00b7 ${options.length}</h3><ul class="dp-opts">${list}</ul></section>
+      ${same ? `<div class="dp-flag"><b>Check first</b><p>${esc(flags[0].flag.v)}</p></div>` : ""}${EX && EX.note ? `<p class="dp-note">${esc(EX.note)}</p>` : ""}${srcLine()}`;
+  }
+
+  /* Distances: today's office and each option against each option, straight line, as the 2D atlas computes them */
+  let pair = null;   // [idA, idB]: the cell last clicked
+  const exOf = (id) => EX && id === EX.id ? EX : options.find((x) => x.id === id);
+  function mapHTML() {   // a plan of the pins, to scale: the selected pair is joined by a line
+    const pts = MX.all.map((p) => ({ p, ...(p === EX ? { ex: true } : {}) })); const lat0 = pts.reduce((m, q) => m + q.p.lat, 0) / pts.length, kx = 111.32 * Math.cos(lat0 * Math.PI / 180), ky = 110.6;
+    for (const q of pts) { q.x = q.p.lng * kx; q.y = -q.p.lat * ky; }
+    const x0 = Math.min(...pts.map((q) => q.x)), x1 = Math.max(...pts.map((q) => q.x)), y0 = Math.min(...pts.map((q) => q.y)), y1 = Math.max(...pts.map((q) => q.y));
+    const W0 = 340, H0 = 170, pad = 22, sc = Math.min((W0 - 2 * pad) / Math.max(x1 - x0, 0.5), (H0 - 2 * pad) / Math.max(y1 - y0, 0.5)), ox = (W0 - sc * (x1 - x0)) / 2, oy = (H0 - sc * (y1 - y0)) / 2;
+    for (const q of pts) { q.X = ox + (q.x - x0) * sc; q.Y = oy + (q.y - y0) * sc; }
+    const at = (id) => pts.find((q) => q.p.id === id), sel = getSel();
+    const line = pair ? (() => { const a = at(pair[0]), b = at(pair[1]); return a && b ? `<line class="ln" x1="${a.X.toFixed(1)}" y1="${a.Y.toFixed(1)}" x2="${b.X.toFixed(1)}" y2="${b.Y.toFixed(1)}"/><text class="lk" x="${((a.X + b.X) / 2).toFixed(1)}" y="${((a.Y + b.Y) / 2 - 6).toFixed(1)}" text-anchor="middle">${fmtKm(hav(a.p, b.p))}</text>` : ""; })() : "";
+    const dots = pts.map((q) => q.ex ? `<g><circle class="ex" cx="${q.X.toFixed(1)}" cy="${q.Y.toFixed(1)}" r="7"/><text x="${q.X.toFixed(1)}" y="${(q.Y + 19).toFixed(1)}" text-anchor="middle">Today</text></g>`
+      : `<g data-pick="${esc(q.p.id)}" class="${q.p.id === sel ? "sel" : ""}${pair && pair.includes(q.p.id) ? " pr" : ""}"><circle cx="${q.X.toFixed(1)}" cy="${q.Y.toFixed(1)}" r="8"/><text x="${q.X.toFixed(1)}" y="${(q.Y + 3.5).toFixed(1)}" text-anchor="middle">${esc(String(q.p.n || ""))}</text></g>`).join("");
+    return `<svg viewBox="0 0 ${W0} ${H0}" role="img" aria-label="Plan of the options and today's office, to scale">${line}${dots}</svg>`;
+  }
+  function pickText() {
+    if (!pair) return "Pick a cell to join that pair on the plan.";
+    const [a, b] = pair.map(exOf), d = hav(a, b);
+    return `<b>${esc(a.name)}</b> to <b>${esc(b.name)}</b>: ${fmtKm(d)} straight line, about ${driveMin(d)} min by road.`;
+  }
+  function distancesHTML(o) {
+    const { all, list, max, close, far, clusters, lone, spread, home, homeMax } = MX;
+    const lab = (p) => p === EX ? "Now" : nn(p);
+    const cell = (r, c) => { if (r === c) return `<td class="self">\u00b7</td>`; const d = hav(r, c);
+      return `<td data-mx="${esc(r.id)}|${esc(c.id)}" style="${near(d, max)}"><button type="button" data-mx="${esc(r.id)}|${esc(c.id)}" aria-label="${esc(r.name)} to ${esc(c.name)}: ${fmtKm(d)}">${d < 10 ? d.toFixed(1) : Math.round(d)}</button></td>`; };
+    const table = `<div class="dp-scroll"><table class="dp-mx"><caption class="vh">Straight-line kilometres between the options</caption><thead><tr><td></td>${all.map((c) => `<th scope="col" title="${esc(c.name)}">${lab(c)}</th>`).join("")}</tr></thead>
+      <tbody>${all.map((r) => `<tr><th scope="row" title="${esc(r.name)}">${r === EX ? "Today" : `${nn(r)} ${esc(r.name)}`}</th>${all.map((c) => cell(r, c)).join("")}</tr>`).join("")}</tbody></table></div>`;
+    const kpi = (l, p) => p ? `<div class="dp-kpi"><small>${l}</small><b>${fmtKm(p.d)}</b><span>${esc(p.a.name)} and ${esc(p.b.name)}</span></div>` : "";
+    const cl = clusters.map((g) => `<p class="dp-clu"><b>${g.length} options within ${fmtKm(spread(g))} of each other</b>${g.map((x) => `<button type="button" data-pick="${esc(x.id)}">${nn(x)} ${esc(x.name)}</button>`).join("")}</p>`).join("");
+    const lo = lone.length ? `<p class="dp-clu"><b>Stand-alone <span>(no other option within 2.5 km)</span></b>${lone.map((x) => `<button type="button" data-pick="${esc(x.id)}">${nn(x)} ${esc(x.name)}</button>`).join("")}</p>` : "";
+    const bars = home.length ? `<section><h3 class="mono">How far each option moves the team from today's office</h3><ul class="dp-bars">${home.map((x) => `<li data-id="${esc(x.id)}"><button type="button" data-pick="${esc(x.id)}"><span class="l">${nn(x)} ${esc(x.name)}</span><span class="tr"><i style="width:${Math.round(Math.min(1, homeKm(x) / homeMax) * 100)}%"></i></span><span class="v" title="${esc(homeMin(x))}">${esc(homeTxt(x))}</span></button></li>`).join("")}</ul></section>` : "";
+    return `<div class="dp-top"><span class="mono">Distances</span></div><h2 class="dp-name sm">How far apart the shortlist is</h2>
+      <p class="dp-sub">Every option against every other and against today's office, straight-line kilometres.</p>
+      <div class="dp-kpis">${kpi("Closest pair", close)}${far !== close ? kpi("Farthest pair", far) : ""}<div class="dp-kpi"><small>Clusters</small><b>${clusters.length}</b><span>groups within 2.5 km of each other</span></div></div>
+      <div id="dp-map" class="dp-plan">${mapHTML()}</div><p id="dp-pick" class="dp-pick" aria-live="polite">${pickText()}</p>
+      <section><h3 class="mono">The matrix</h3><div class="dp-leg"><span>Near</span><i></i><span>Far (${fmtKm(max)})</span></div>${table}</section>
+      <section><h3 class="mono">Clusters</h3>${cl}${lo}</section>${bars}
+      <p class="dp-note">${esc(METHOD)}${EX && EX.note ? " " + esc(EX.note) : ""}</p>${srcLine()}`;
+  }
+  const AVAIL = { overview: () => options.some((x) => x.reason || x.flag) || !!MX, offer: () => true, tradeoffs: () => true, compare: () => options.length > 1, distances: () => !!MX, next: () => ((A.meta && A.meta.nextSteps) || []).length || ((A.facts && A.facts.source) || []).length };
+  const BUILD = { overview: overviewHTML, offer: offerHTML, tradeoffs: tradeHTML, compare: compareHTML, distances: distancesHTML, next: nextHTML };
+  const TAB_LIST = (C.tabs || TABS.map((t) => t[0])).filter((k) => BUILD[k] && AVAIL[k]());
 
   /* ---------------------------------------------------------------- shell */
   const dock = document.createElement("nav"); dock.id = "data-dock"; dock.setAttribute("aria-label", "Numbers for this building");
-  dock.innerHTML = TABS.map(([k, t]) => `<button type="button" data-tab="${k}" aria-pressed="false" aria-controls="data"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg><span>${t}</span></button>`).join("");
+  dock.innerHTML = TABS.filter(([k]) => TAB_LIST.includes(k)).map(([k, t]) => `<button type="button" data-tab="${k}" aria-pressed="false" aria-controls="data"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg><span>${t}</span></button>`).join("");
   const top = document.querySelector("#top"), modes = document.querySelector("#modes");
   if (top) top.insertBefore(dock, modes || null); else document.body.append(dock);
   document.body.classList.add("has-data"); easyTabs(dock);
@@ -187,12 +271,18 @@ export function createDataLayer({ A, W, options, getSel, select, onLayout, isTou
   function render(keepScroll) {
     const o = optOf(getSel()), top0 = keepScroll ? panel.scrollTop : 0;
     if (!tab) return;
-    bodyEl.innerHTML = BUILD[tab](o); panel.scrollTop = top0; mark();
+    bodyEl.innerHTML = BUILD[tab](o); panel.scrollTop = top0; mark(); if (tab === "distances" && pair) markPair();
   }
-  function mark() {   // the selected building's column, without rebuilding the table (focus stays where it is)
-    if (tab !== "compare") return; const id = getSel();
-    for (const el of bodyEl.querySelectorAll("[data-id]")) el.classList.toggle("sel", el.dataset.id === id);
-    for (const b of bodyEl.querySelectorAll("[data-pick]")) b.toggleAttribute("aria-current", b.dataset.pick === id);
+  const KEEP = new Set(["overview", "compare", "distances"]);   // views that only move their highlight when the building changes (focus stays where it is)
+  function mark() {
+    if (!KEEP.has(tab)) return; const id = getSel();
+    for (const el of bodyEl.querySelectorAll("li[data-id],th[data-id],td[data-id]")) el.classList.toggle("sel", el.dataset.id === id);
+    for (const b of bodyEl.querySelectorAll("button[data-pick]")) b.toggleAttribute("aria-current", b.dataset.pick === id);
+    if (tab === "distances") { const m = bodyEl.querySelector("#dp-map"); if (m) m.innerHTML = mapHTML(); }
+  }
+  function markPair() {
+    for (const td of bodyEl.querySelectorAll("td[data-mx]")) { const [a, b] = td.dataset.mx.split("|"); td.classList.toggle("on", !!pair && pair.includes(a) && pair.includes(b)); }
+    const t = bodyEl.querySelector("#dp-pick"); if (t) t.innerHTML = pickText(); const m = bodyEl.querySelector("#dp-map"); if (m) m.innerHTML = mapHTML();
   }
   function layout() { document.body.classList.toggle("data-open", !!tab); document.body.dataset.dataTab = tab || ""; panel.dataset.w = tab === "compare" ? "wide" : "";
     for (const b of dock.querySelectorAll("button")) { const on = b.dataset.tab === tab; b.classList.toggle("on", on); b.setAttribute("aria-pressed", String(on)); }
@@ -206,6 +296,7 @@ export function createDataLayer({ A, W, options, getSel, select, onLayout, isTou
   dock.addEventListener("click", (e) => { const b = e.target.closest("[data-tab]"); if (!b) return; if (tab === b.dataset.tab) close(); else open(b.dataset.tab); });
   panel.addEventListener("click", (e) => {
     if (e.target.closest("#data-x")) { const t = tab; close(); dock.querySelector(`[data-tab="${t}"]`)?.focus(); return; }
+    const x = e.target.closest("button[data-mx]"); if (x) { pair = x.dataset.mx.split("|"); markPair(); return; }
     const p = e.target.closest("[data-pick]"); if (p && p.dataset.pick !== getSel()) select(p.dataset.pick);
   });
   addEventListener("keydown", (e) => { if (e.key !== "Escape" || !tab || isTouring()) return; if (/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName || "")) return;
@@ -215,12 +306,22 @@ export function createDataLayer({ A, W, options, getSel, select, onLayout, isTou
   if ("ResizeObserver" in window) { const ro = new ResizeObserver(() => { const s = sty(); if (s) document.body.style.setProperty("--story-h", Math.ceil(s.getBoundingClientRect().height) + "px"); }); const t = setInterval(() => { const s = sty(); if (s) { ro.observe(s); clearInterval(t); } }, 400); }
 
   /* ----------------------------------------------------------------- tour */
+  function dist(k) {
+    const nm = (a) => listJoin(a.map((x) => x.name)), p = (q) => q ? `${q.a.name} and ${q.b.name}, ${fmtKm(q.d)} apart` : "";
+    const h = (x) => x ? `${x.name}, ${homeTxt(x)} by road${isNum(x.roadKm) ? "" : " (est.)"}, about ${homeMin(x).replace(/^~/, "")}` : "";
+    if (k === "office:near") return h(MX.home[0]); if (k === "office:far") return MX.home.length > 1 ? h(MX.home[MX.home.length - 1]) : "";
+    if (k === "pair:closest") return p(MX.close); if (k === "pair:farthest") return MX.far !== MX.close ? p(MX.far) : "";
+    if (k === "clusters") return MX.clusters.map((g) => `${nm(g)} sit within ${fmtKm(MX.spread(g))} of each other`).join("; ");
+    if (k === "lone") return MX.lone.length ? `${nm(MX.lone)} ${MX.lone.length > 1 ? "stand" : "stands"} alone, with no other option within 2.5 km` : "";
+    return "";
+  }
   const lowFirst = (t) => t.replace(/^([A-Z])(?![A-Z])/, (c) => c.toLowerCase());   // not for "DND" or "A104"
   function fill(tpl, o) {
     const get = (k) => {
       if (k === "name") return o.name; if (k === "pros" || k === "cons") return listJoin(listOf(o, C[k]).map(lowFirst));
       if (k === "leads") return listJoin(leadsOf(o).map((r) => r.lead)); if (k === "flag") return o.flag && o.flag.v || "";
       if (k.startsWith("best:")) { const id = k.slice(5); return listJoin(options.filter((x) => bestOf[id] && bestOf[id].has(x.id)).map((x) => x.name)); }
+      if (k.startsWith("office:") || k.startsWith("pair:") || k === "clusters" || k === "lone") return MX ? dist(k) : "";
       const r = byId[k]; if (!r) return ""; const v = valOf(o, k); return v.missing ? "" : v.lines ? v.lines.join(", ") : v.text + (r.fmt === "money" && v.sub ? " " + v.sub : "");
     };
     return String(tpl).split(/(?<=[.!?])\s+(?=[A-Z{])/).map((s) => {
@@ -242,7 +343,7 @@ export function createDataLayer({ A, W, options, getSel, select, onLayout, isTou
     open, close, tourSteps, tourStep, tourEnd,
     get tab() { return tab; },
     /* the explorer switched building: rebuild the open panel for it */
-    select() { if (tab === "compare") mark(); else if (tab) render(false); },
+    select() { if (KEEP.has(tab)) mark(); else if (tab) render(false); },
     /* what the panel takes of the screen, for the camera to frame the rest: null when it is not showing */
     frame() { if (!tab || document.body.classList.contains("walk") || !panel.offsetWidth) return null;
       return { width: panel.offsetWidth, hud: tab !== "compare" && !isTouring() }; },
