@@ -67,6 +67,7 @@ noida-skymark/twin/_build/
 noida-skymark/twin/web/_review/
 noida-skymark/twin/assets/
 **/*.blend
+!assets/blender/*.blend
 **/*.blend1
 **/*.raw.glb
 **/*.exr

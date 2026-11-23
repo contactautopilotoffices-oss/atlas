@@ -1,10 +1,44 @@
 # Visual realism report: JindalX 3D explorer
 
 `/jindalx-noida/world`, branch `update-jindal-dev`, 23 November 2026. This follows
-`VISUAL_REALISM_AUDIT.md` (phase 1). The pilot is Magnus Towers, and it is now done. The context
-upgrade (trees, ground, light) covers all four JindalX options, because they share one pipeline.
+`VISUAL_REALISM_AUDIT.md` (the audit), `UPGRADE_PLAN.md` (the plan) and `ASSET_INVENTORY.md` (every
+asset). The work came in two rounds:
+
+1. **The Magnus Towers pilot**, plus the context upgrade (trees, ground, light), which covers all four
+   options because they share one pipeline.
+2. **The master brief.**
+   - The Magnus script became one reusable builder, `scripts/world/hero_building.py`, driven by a spec file.
+   - It now models all four options. Each gets an editable `.blend` organised in the ten asset collections.
+   - The round also added layered landscaping, Grade B facades, proper road setbacks, road-aware street views, and late-afternoon light.
 
 ## In short
+
+**Round 2 (master brief)**
+
+- **All four options are modelled buildings now.**
+  - Magnus Towers: Grade A curtain wall.
+  - A104: new Grade B building on stilts, with aluminium-clad pilasters.
+  - A14/18/19: Grade B on stilts, with the workbook's two smaller upper floors set back behind a terrace.
+  - D1: Grade B with a glazed lobby.
+  - Each one has its own plot: wall, gates, cabin, forecourt, parking, lights and layered planting.
+- **One builder, one spec file.** `hero_building.py` reads the workbook facts for each option from
+  `scripts/world/heroes/noida_jindalx.json`. The facts it reads are storeys, grade, stilt or lobby ground floor, and any smaller upper block.
+  - The spec lists what is known and what is assumed.
+  - Adding a property is a new entry, not a new script.
+- **Editable Blender scenes.** `assets/blender/<option>.blend` has the ten collections the brief
+  names, plus a material board and four cameras. The GLB is a merged copy, one primitive per material.
+- **Landscaping like the third reference.**
+  - The road-side beds are layered: ornamental grasses at the wall, shrubs in the middle, flowers at the front.
+  - The beds have a curving inner edge.
+  - There are flowering planters at the entrance.
+  - Two new leaf atlases: grass, and a mixed border.
+- **Correct setbacks.** A104, A14/18/19 and D1 stood 4 to 6 m from the road. They now stand back 9 m,
+  as Noida requires for plots this size. That moved them 3 to 9 m.
+- **Street views stand on the street.** The walk view starts on the far footpath facing the entrance,
+  worked out from the roads and buildings, never inside a building.
+- **The explorer opens at 15:45**, warm and long-shadowed like the first reference. The time-of-day controls are unchanged.
+
+**Round 1 (pilot)**
 
 - **Magnus Towers is now a modelled building on a planned site**, not a highlighted box. It has a
   stone colonnade, a double-height glazed entrance under a canopy, a curtain wall with mullions and
@@ -47,15 +81,17 @@ pavement facing the entrance: canopy with downlights, the "MAGNUS TOWERS" fascia
 
 ![Street](docs/visual-realism/magnus-street.jpg)
 
-**Blender previews** of the building model on its own (aerial, entrance, street). The cone trees
-here are stand-ins used only in this preview; in the app they are replaced by the real species.
+**Blender previews** of the building model on its own, from its four cameras: property aerial,
+architectural close-up, street, landscape. The trees here are preview stand-ins made of leaf cards. In
+the app, the real tree models are planted from the site file.
 
-![Blender preview](docs/visual-realism/magnus-blender-preview.jpg)
+![Magnus Towers in Blender](docs/visual-realism/blender-magnus-towers.jpg)
 
 **Texture library** (colour maps; each also has a roughness and a normal map). Top: glass with
 interior, spandrel glass, champagne aluminium, sandstone, concrete, roof membrane. Middle: pavers,
 asphalt, lawn, mulch, bark, Noida open ground. Bottom: neem, ashoka, palm, shrub and bougainvillea
-leaf cards, and one normal map.
+leaf cards, and one normal map. Last row (round 2): painted plaster, accent plaster, ornamental grass,
+mixed flower border.
 
 ![Textures](docs/visual-realism/texture-library.jpg)
 
@@ -198,7 +234,7 @@ The container has no GPU, so Chromium renders with SwiftShader on the CPU:
 
 - **`scripts/world-smoke.cjs`, 19 of 19 passed.** It covers load, dollhouse, walk, 2D map, option
   switching to every option, all four quality tiers, and no page errors.
-- **`npm test`, 79 of 79 passed.**
+- **`npm test`, 460 of 460 passed** (the whole suite, round 2).
 - **Logic gate (`diorama.py`), passes on all four options.** Nothing is in a road, nothing overlaps,
   and the entrance faces a road.
 - **The Blender option renders** (`media/jindalx-noida/world/r/*-hero.jpg` and `*-street.jpg`, used
@@ -210,11 +246,22 @@ The container has no GPU, so Chromium renders with SwiftShader on the CPU:
   - Known, and used: B+G+5 storeys and 38,000 sq ft a floor (client workbook), and glazing on the
     building (a public glass and glazing contract for this plot).
   - Everything else is a plausible design for a new Noida office building: the colonnade, curtain
-    wall, fins, stone, canopy and rooftop plant. It is labelled as such in `magnus_hero.py`.
+    wall, fins, stone, canopy and rooftop plant. It is labelled as such in the spec file.
   - Swap in the real design when the developer's renders or drawings are available.
 - **The plot layout is typical, not surveyed.** That covers the gates, guard cabin, drive, parking,
   ramp and planting. The building position is still the indicative massing from
   `plot_massing.py`, now set back 12 m from the road and kept 10 m clear of the side road.
+- **The Grade B buildings are typical, not surveyed.**
+  - Known, from the workbook: storeys, stilt or not, plates, grade, the 8,000 sq ft upper floors at A14/18/19, and which buildings are new or being upgraded.
+  - Assumed:
+    - plaster with ribbon windows and sunshades;
+    - the aluminium pilasters at A104;
+    - the upper block's place at the back;
+    - the split AC units on the older blocks;
+    - the rooftop plant.
+  - The spec file lists every assumption per option.
+- **The building name on each canopy** is the plot number (A-104, A-14 / 18 / 19, D-1) or the
+  building's known name (Magnus Towers). It is a label, not the actual signage.
 - **No amenities were invented.** No pool, clubhouse, courts, water features or cafeteria (the
   workbook says a cafeteria is only "planned").
 - **Tree species are generic North Indian street trees** (neem, ashoka, palms), not a survey of the
@@ -228,21 +275,25 @@ The container has no GPU, so Chromium renders with SwiftShader on the CPU:
 - **Scanned CC0 materials and models** (Poly Haven, ambientCG). These sites are blocked from this
   container. Every texture and tree is generated by scripts in the repository, so there are no
   third-party licences to track.
-- **Blender MCP.** Not connected in this session. Blender ran as the `bpy` module, headless, the
-  way the existing pipeline does.
+- **Blender MCP.**
+  - Not reachable from this cloud session. No MCP tools are connected, and the MacBook in Remote Control offers no folders to cloud sessions.
+  - Blender ran as the `bpy` module, headless, which is the brief's fallback.
+  - The same scripts run unchanged in a local session with the MCP Runner.
+- **React Three Fiber.**
+  - Not added. The explorer is plain three.js, and the repository has no React.
+  - Adding R3F means rebuilding the app around React, which the brief rules out. `VISUAL_REALISM_AUDIT.md` maps each R3F and Drei feature to its equivalent already in the explorer.
+- **Basement ramps on A104, A14/18/19 and D1.** The indicative plots have no room behind the
+  buildings, so the ramp is left out rather than squeezed in.
 - **Real-device FPS.** As with the performance report, real frame rates on a laptop or phone have
   not been measured here. The ratios above should carry over.
 
 ## Next steps
 
-1. **Phase 6: the other three options.** A104, A14/18/19 and D1 already have the new context. They
-   still use the generic option building. The same approach applies: a `*_hero.py` per building,
-   from its workbook floor plate and storeys, through `--exterior` and `--site`. Most of
-   `magnus_hero.py` (facade system, roof plant, plot kit) can become a shared module first.
-2. **Merge the hero by material** in Blender before export, to bring Magnus's draw calls back
-   under the old figure.
-3. **KTX2** on a machine with `toktx`.
-4. **Replace the assumed architecture** with the developer's design once it is in hand.
+1. **Replace assumed designs** with the developers' drawings or photos: edit the spec, rerun the
+   builder. Magnus Towers first, since its architect is known.
+2. **Survey the plots** and replace the indicative massings; place the basement ramps then.
+3. **KTX2** on a machine with `toktx`, to cut GPU texture memory on phones.
+4. **Measure on real devices** (a laptop and a phone) at the preview with `?perf=1`.
 
 ## Files
 
@@ -250,7 +301,11 @@ The container has no GPU, so Chromium renders with SwiftShader on the CPU:
 | --- | --- |
 | `VISUAL_REALISM_AUDIT.md` | Phase 1 audit |
 | `VISUAL_REALISM_REPORT.md` | This report |
-| `scripts/world/magnus_hero.py` | Magnus Towers building and site model (new) |
+| `UPGRADE_PLAN.md`, `ASSET_INVENTORY.md` | The plan and the full asset list (round 2) |
+| `scripts/world/hero_building.py` | The property builder for every option (was `magnus_hero.py`) |
+| `scripts/world/heroes/noida_jindalx.json`, `heroes/README.md` | Option specs; how to regenerate and change the models |
+| `assets/blender/*.blend` | Editable Blender scenes, one per option |
+| `scripts/world-compare.cjs` | Identical-camera comparisons for any option |
 | `scripts/world/hero_textures.py` | Texture and leaf-atlas generator (new) |
 | `scripts/world/diorama.py` | `--site` support, new tree models, palm leaf material |
 | `scripts/world/prep.py`, `regions/noida-jindalx-*.json` | Avenue planting and densities |

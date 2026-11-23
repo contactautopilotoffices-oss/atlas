@@ -38,6 +38,12 @@ close-up quality. The browser shows it with three.js in two ways:
 - **The plinth** is the slab's cut edge, in soil. It is what makes it read as
   a dollhouse.
 
+## Property models (JindalX)
+
+The JindalX options are modelled one by one, building and plot, by `hero_building.py` from a spec
+file, and placed into their dioramas with `--exterior` and `--site`. See `heroes/README.md` for how to
+regenerate and change them.
+
 ## Pipeline
 
 ```

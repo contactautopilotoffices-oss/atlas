@@ -1,0 +1,24 @@
+{
+ "_about": "Specs for scripts/world/hero_building.py: one entry per JindalX option. 'known' lists what the client's workbook (jindalx/source-options.json) or a public filing says; 'assumed' lists design choices made because the real design has not been seen. Replace an assumption as soon as the developer's drawings or photos arrive.",
+ "refs": "refs/noida_jindalx.json",
+ "magnus-towers": {
+  "name": "MAGNUS TOWERS", "grade": "A", "facade": "curtain", "ground": "colonnade", "floors": 5, "solar": true, "seed": 67,
+  "known": ["B+G+5, 38,000 sq ft a floor, Grade A (workbook)", "new building, December 2026 handover (workbook)", "6 lifts a floor (workbook)", "glazed: a glass and glazing contract for C-2, Sector 67, Sept 2025 (Faalcon Concepts BSE filing)"],
+  "assumed": ["curtain wall with spandrels, stone colonnade, double-height entrance, canopy, fins, stone corner cores", "rooftop chillers, cooling towers, tanks, solar", "site layout, gates, parking, planting"]
+ },
+ "a104": {
+  "name": "A-104", "grade": "B", "facade": "banded", "accent": "alu", "ground": "stilt", "floors": 3, "solar": true, "seed": 104,
+  "known": ["B+G/S+3: basement, stilt ground floor, three floors above (workbook)", "25,000 sq ft a floor, Grade B (workbook)", "new building, December 2026 handover (workbook)", "2 lifts a floor (workbook)"],
+  "assumed": ["painted plaster with ribbon windows and sunshades, aluminium-clad pilasters and parapet (new Grade B building)", "stilt parking under the building with a glazed lobby at the entrance", "rooftop tanks, VRV units, solar", "site layout, gates, parking, planting"]
+ },
+ "a14-18-19": {
+  "name": "A-14 / 18 / 19", "grade": "B", "facade": "banded", "accent": "plaster", "ground": "stilt", "floors": 4, "upper": {"from": 3, "sqft": 8000}, "split_acs": true, "seed": 1418,
+  "known": ["B+G/S+2+2: stilt ground, two floors of 18,000 sq ft, then two floors of 8,000 sq ft (workbook)", "Grade B; entire-building upgradation in process (workbook)", "2 lifts a floor (workbook)"],
+  "assumed": ["the 8,000 sq ft upper floors set back to the rear, leaving a terrace towards the road", "painted plaster with ribbon windows and sunshades, wall-mounted split AC units on the sides and back (an older block)", "rooftop tanks and VRV units", "site layout, gates, parking, planting"]
+ },
+ "d1": {
+  "name": "D-1", "grade": "B", "facade": "banded", "accent": "plaster", "ground": "lobby", "floors": 2, "split_acs": true, "seed": 31,
+  "known": ["B+G+2, 20,000 sq ft a floor, Grade B (workbook)", "entire-building upgradation in process (workbook)", "3 lifts a floor (workbook)"],
+  "assumed": ["painted plaster with ribbon windows and sunshades, a glazed entrance lobby with a canopy", "wall-mounted split AC units on the sides and back (an older block)", "rooftop tanks and VRV units", "site layout, gates, parking, planting"]
+ }
+}

@@ -71,6 +71,7 @@ window.ATLAS = {
       "tone": "agx",
       "lighting": true,
       "lightingEV": -0.35,
+      "lightingHour": 15.75,
       "factKeys": {
         "Micro-market": "Address/Sector",
         "Floor / Unit": "Offered floor",

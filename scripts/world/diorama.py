@@ -88,7 +88,7 @@ for _key in dict.fromkeys(["privilon", "corporate-avenue"] + [o["id"] for o in B
     S["buildings"] = [b for b in S["buildings"] if not b.get("drop")]
     S["buildings"].append({"p": _poly, "h": _h, "c": "commercial", "r": 0.5, "opt": _key})
 OPTB = next(b for b in S["buildings"] if b.get("opt") == OID)
-# --site FILE (scripts/world/magnus_hero.py writes OUT.glb.site.json): a modelled plot. The district's random trees
+# --site FILE (scripts/world/hero_building.py writes OUT.glb.site.json): a modelled plot. The district's random trees
 # and street lamps inside it are dropped; its own trees (x, y, type, scale) are planted with the page's tree models,
 # and its entrance and street camera are used for the walk start and the street still.
 SITE = json.load(open(A[A.index("--site") + 1])) if "--site" in A else None
@@ -1020,6 +1020,7 @@ def page_data(info):
     routes = [{"kind": r["kind"], "name": r["name"], "m": r["m"], "min": r.get("min"), "path": [[round(a, 1), round(b, 1)] for a, b in (L(x, y) for x, y in r["path"])]} for r in SO["routes"]]
     return {"id": OID, "name": BO["name"], "origin": [round(OX, 2), round(OY, 2)], "slab": [[round(a, 1), round(b, 1)] for a, b in SL.exterior.coords],
             "building": {"foot": [[round(a, 1), round(b, 1)] for a, b in (L(x, y) for x, y in OPTB["p"])], "h": round(info["H"], 1), "floors": info["floors"], "glassy": info["glassy"],
+                         **({"upper": {"from": SITE["upper"]["from"], "foot": [[round(a, 1), round(b, 1)] for a, b in (L(x, y) for x, y in SITE["upper"]["foot"])]}} if SITE and SITE.get("upper") else {}),
                          "entrance": [round(v, 1) for v in info["entrance"]], "facing": round(info["canopy_ang"], 3)},
             "walk0": [round(v, 1) for v in info["walk0"]], "street_cam": [round(v, 1) for v in info["street_cam"]], "stations": info["stations"], "landmarks": [m for m in LANDMARKS.values() if m.get("prop") or m["name"] in ("Times Square", "Fleet House")], "routes": routes,
             "trees": trees, "lamps": lamps, "traffic": traffic, "metro": metro, "blocks": blds}

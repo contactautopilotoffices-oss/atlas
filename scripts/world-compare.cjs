@@ -1,7 +1,9 @@
 /* Identical-camera screenshots of the JindalX explorer, for before-and-after comparisons
    (VISUAL_REALISM_REPORT.md). Cameras are in scene metres around Magnus Towers.
      PORT=8137 node scripts/atlas-dev.js     (and an older checkout on another port)
-     node scripts/world-compare.cjs 8137 /tmp/new      -> /tmp/new-<camera>.png  */
+     node scripts/world-compare.cjs 8137 /tmp/new      -> /tmp/new-<camera>.png
+   Any option: node scripts/world-compare.cjs 8137 /tmp/new d1 /path/to/d1.glb.site.json
+     (cameras placed from the site file's front face, entrance and street view; scene metres)  */
 const { chromium } = require('playwright');
 const CAMS = {
   regional: { eye: [150, -520, 470], at: [-47, 37, 0] },
@@ -11,15 +13,30 @@ const CAMS = {
   street: { walk: [-66.5, -17.8], look: [-50, 37.7], pitch: 0.2 },
 };
 (async () => {
-  const [port, out] = process.argv.slice(2);
+  const [port, out, OPT = 'magnus-towers', SITE] = process.argv.slice(2);
+  if (SITE) {   // cameras from the modelled plot: t along the front face, n out towards the road
+    const st = JSON.parse(require('fs').readFileSync(SITE, 'utf8')); const [A, B] = st.front, E = st.entrance;
+    const M = [(A[0] + B[0]) / 2, (A[1] + B[1]) / 2], W = Math.hypot(B[0] - A[0], B[1] - A[1]), t = [(B[0] - A[0]) / W, (B[1] - A[1]) / W];
+    let n = [-t[1], t[0]]; if ((E[0] - M[0]) * n[0] + (E[1] - M[1]) * n[1] < 0) n = [-n[0], -n[1]];
+    const P = (o, a, b, z) => [o[0] + t[0] * a + n[0] * b, o[1] + t[1] * a + n[1] * b, z];
+    const ctr = P(M, 0, -18, 0);
+    for (const k of Object.keys(CAMS)) delete CAMS[k];
+    Object.assign(CAMS, {
+      regional: { eye: P(ctr, -200, 540, 470), at: ctr },
+      property: { eye: P(ctr, -W * 1.1, 120, 105), at: [ctr[0], ctr[1], 8] },
+      closeup: { eye: P(M, -W * 0.22, 16, 6.5), at: P(M, -W * 0.05, 0, 10) },
+      landscape: { eye: P(B, 2, 13, 4), at: P(B, -W * 0.35, 4, 1) },
+      street: { walk: st.street_cam, look: M, pitch: 0.2 },
+    });
+  }
   const b = await chromium.launch({ args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
   const p = await b.newPage({ viewport: { width: 1280, height: 720 } });
   await p.route(/fonts\.(googleapis|gstatic)\.com/, r => r.abort());
   const errs = []; p.on('pageerror', e => errs.push(e.message));
-  await p.goto(`http://localhost:${port}/jindalx-noida/world?perf=1&bench=1&adapt=0#magnus-towers`, { waitUntil: 'commit' });
+  await p.goto(`http://localhost:${port}/jindalx-noida/world?perf=1&bench=1&adapt=0#${OPT}`, { waitUntil: 'commit' });
   await p.waitForFunction(() => window.__world && !document.querySelector('#veil.on'), null, { timeout: 600000, polling: 500 });
   await p.addStyleTag({ content: '#load,#veil,#hint{display:none!important}' });
-  const origin = await p.evaluate(async () => (await (await fetch('/media/jindalx-noida/world/d/magnus-towers.json')).json()).origin);
+  const origin = await p.evaluate(async (OPT) => (await (await fetch(`/media/jindalx-noida/world/d/${OPT}.json`)).json()).origin, OPT);
   for (const [name, c] of Object.entries(CAMS)) {
     await p.evaluate(([c, o]) => {
       const w = window.__world, L = (x, y, z) => [x - o[0], z, -(y - o[1])];

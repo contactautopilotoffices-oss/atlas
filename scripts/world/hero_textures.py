@@ -5,7 +5,7 @@
 Every texture tiles. Each material is a set: NAME.jpg (colour), NAME_r.jpg (roughness, in the green
 channel as three.js reads it), NAME_n.jpg (tangent-space normal, OpenGL convention), made from one
 height field so colour, roughness and relief agree. Physical sizes are given per texture; the models
-map UVs in metres divided by that size (scripts/world/magnus_hero.py).
+map UVs in metres divided by that size (scripts/world/hero_building.py).
 
   hero_glass     6.0 x 8.0 m   vision glass, two floors of four 1.5 m panes: a reflective tint over a
                                fake interior (ceiling band with linear lights, blinds at random heights,
@@ -293,6 +293,51 @@ def bloom(d, S):   # bougainvillea: heart-shaped leaves and clusters of magenta 
             a = k * math.tau / 3 + rng.uniform(0, 1)
             d.polygon(leaf_poly(cx, cy, S * 0.028, S * 0.024, a, n=10), fill=shade(rng, (198, 40, 120), 22))
 
+def grass(d, S):   # ornamental grass (fountain grass / lemongrass clumps): tall arching blades rising from the card's foot
+    rng = np.random.default_rng(206); greens = [(104, 132, 60), (126, 146, 72), (88, 116, 52), (150, 156, 92), (70, 100, 44)]
+    for _ in range(260):
+        x0 = S * rng.uniform(0.15, 0.85); L = S * rng.uniform(0.55, 0.95); lean = rng.uniform(-0.55, 0.55)
+        pts_l, pts_r = [], []
+        for i in range(13):
+            t = i / 12; w = S * 0.012 * (1 - t) + 1
+            x = x0 + lean * L * t * t; y = S - L * t
+            pts_l.append((x - w, y)); pts_r.append((x + w, y))
+        d.polygon(pts_l + pts_r[::-1], fill=shade(rng, greens[rng.integers(len(greens))], 14))
+    for _ in range(40):   # buff seed heads at the tips
+        x = S * rng.uniform(0.1, 0.9); y = S * rng.uniform(0.05, 0.35)
+        d.polygon(leaf_poly(x, y, S * 0.08, S * 0.012, -math.pi / 2 + rng.uniform(-0.5, 0.5), n=10), fill=shade(rng, (196, 180, 132), 14))
+
+def flowers(d, S):  # a mixed border: lavender spikes, white mounds, coral and yellow (salvia, alyssum, vinca, marigold)
+    rng = np.random.default_rng(207)
+    for _ in range(1500):   # foliage underneath
+        cx, cy = rng.uniform(0.02, 0.98) * S, rng.uniform(0.25, 0.99) * S
+        d.polygon(leaf_poly(cx, cy, S * rng.uniform(0.025, 0.04), S * 0.016, rng.uniform(0, math.tau), n=10), fill=shade(rng, (70, 110, 46), 16))
+    for _ in range(46):     # lavender / salvia spikes
+        x = S * rng.uniform(0.05, 0.95); y0 = S * rng.uniform(0.45, 0.95); L = S * rng.uniform(0.18, 0.32)
+        for k in range(14):
+            t = k / 13; r = S * 0.012 * (1 - 0.5 * t)
+            px, py = x + rng.uniform(-2, 2), y0 - L * t
+            d.ellipse([px - r, py - r * 0.8, px + r, py + r * 0.8], fill=shade(rng, (150, 118, 196), 18))
+    for col, n in (((238, 238, 230), 60), ((236, 104, 86), 40), ((240, 186, 48), 34)):   # white, coral, marigold mounds
+        for _ in range(n):
+            cx, cy = rng.uniform(0.05, 0.95) * S, rng.uniform(0.3, 0.95) * S; R_ = S * rng.uniform(0.035, 0.06)
+            for _ in range(16):
+                a = rng.uniform(0, math.tau); rr = rng.uniform(0, R_); r = S * rng.uniform(0.008, 0.013)
+                px, py = cx + math.cos(a) * rr, cy + math.sin(a) * rr * 0.7
+                d.ellipse([px - r, py - r, px + r, py + r], fill=shade(rng, col, 12))
+
+def plaster(name, base, seed):   # painted cement render, as on most Noida Grade B blocks: trowel texture, faint rain streaks
+    W = 1024; n = pnoise(W, W, 6, seed, 6); fine = pnoise(W, W, 64, seed + 1, 2); st = pnoise(W, W, (48, 2), seed + 2, 2)
+    col = rgb(*base) + ((n - 0.5) * 16)[..., None] + ((fine - 0.5) * 10)[..., None]
+    col -= (np.clip(st - 0.62, 0, 1) * 34)[..., None]
+    joints = grid_lines(W, W, 1, 2, 1.2); col = mix(col, rgb(*base) * 0.82, joints * 0.5)   # a groove every 1.2 m
+    save_set(name, col, 0.86 + fine * 0.06, fine * 0.4 + n * 0.2 - joints * 0.5, 3.0)
+
+if __name__ == "__main__" and "--only-new" in sys.argv:
+    plaster("hero_plaster", (226, 220, 206), 121); plaster("hero_plaster_b", (176, 166, 150), 131)
+    atlas("leaves_grass", grass); atlas("leaves_flower", flowers); print("done"); sys.exit(0)
 glass(); spandrel(); alu(); stone(); concrete(); roof(); pavers(); asphalt(); lawn(); mulch(); bark(); ground_noida()
+plaster("hero_plaster", (226, 220, 206), 121); plaster("hero_plaster_b", (176, 166, 150), 131)
 atlas("leaves_a", neem); atlas("leaves_b", ashoka); atlas("leaves_palm", palm); atlas("leaves_shrub", shrub); atlas("leaves_bloom", bloom)
+atlas("leaves_grass", grass); atlas("leaves_flower", flowers)
 print("done")

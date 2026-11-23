@@ -167,7 +167,7 @@ async function start(A, W, intro=null) {
   const tex = (name, srgb = true) => TEX[name] || (TEX[name] = (() => { let ready;const done=new Promise(resolve=>ready=resolve);textureJobs.push(done);const t = texL.load(W.data + "tex/" + name + (name.startsWith("leaves") ? ".png" : ".jpg"),()=>{ready(true);wake();},undefined,()=>{t.userData.failed=true;ready(false);}); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = aniso; if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.flipY = false; return t; })());
   const GLASSY = new Set(["wall_com_glass", "wall_opt_glass", "wall_com_ribbon", "wall_opt_plaster", "wall_res_tower", "wall_glass723", "wall_retail723", "wall_cw_teal", "wall_cw_blue", "wall_cw_grey", "wall_cw_silver", "wall_ribbon_red", "wall_ribbon_white"]);
   const MAT = {};
-  /* The modelled property (scripts/world/magnus_hero.py) and the premium ground: PBR sets from tex/ by name,
+  /* The modelled properties (scripts/world/hero_building.py) and the premium ground: PBR sets from tex/ by name,
      NAME.jpg (colour), NAME_r.jpg (roughness), NAME_n.jpg (normal), made by scripts/world/hero_textures.py.
      [texture, metalness, normal scale, env intensity, extra] */
   const HERO = {
@@ -175,6 +175,7 @@ async function start(A, W, intro=null) {
     hero_stone: ["hero_stone", 0, 0.8, 0.8], hero_concrete: ["hero_concrete", 0, 0.7, 0.7], hero_roof: ["hero_roof", 0, 0.5, 0.6],
     hero_pavers: ["hero_pavers", 0, 0.9, 0.6], hero_asphalt: ["hero_asphalt", 0, 0.6, 0.5], hero_lawn: ["hero_lawn", 0, 0.8, 0.5],
     hero_mulch: ["hero_mulch", 0, 0.8, 0.4], hero_hedge: ["leaves_shrub", 0, 0, 0.5], ground_noida: ["ground_noida", 0, 0.6, 0.5],
+    hero_plaster: ["hero_plaster", 0, 0.5, 0.6], hero_plaster_b: ["hero_plaster_b", 0, 0.5, 0.6], hero_bark: ["hero_bark", 0, 0.8, 0.4],
   };
   const HERO_FLAT = { hero_mullion: [0x2e3236, 0.35, 0.8], hero_hvac: [0xb8bcbe, 0.45, 0.6], hero_solar: [0x1c2a44, 0.14, 0.35], hero_dark: [0x121416, 0.9, 0], hero_rail: [0x2a2c2e, 0.4, 0.8] };
   function material(name) {
@@ -446,7 +447,7 @@ async function start(A, W, intro=null) {
   if(W.branding==="autopilot-flipkart")easyTabs($("#modes"));
   if(W.branding==="autopilot-flipkart" || W.lighting){
     if(W.branding==="autopilot-flipkart")worldLayouts=createWorldLayouts();
-    lightingBuilder=createSceneLighting({renderer,scene,sun,fill,direction:SUN,ev:+W.lightingEV||0,onChange:()=>{if(D){sunBox(160,P3(...centroid(D.building.foot),D.building.h*.35));captureReflections();}}});
+    lightingBuilder=createSceneLighting({renderer,scene,sun,fill,direction:SUN,ev:+W.lightingEV||0,hour0:+W.lightingHour||10,onChange:()=>{if(D){sunBox(160,P3(...centroid(D.building.foot),D.building.h*.35));captureReflections();}}});
   }
   const OPTS = A.options.filter((o) => !W.thumbs || W.thumbs[o.id]);   // buildings with a 3D model
   function protoParts(node) {   // every mesh under a prototype, with its transform relative to it
@@ -725,9 +726,10 @@ async function start(A, W, intro=null) {
   const bandMat = new THREE.MeshBasicMaterial({ color: 0xffb020, transparent: true, opacity: 0.42, depthWrite: false, side: THREE.DoubleSide, toneMapped: false });
   const hoverMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.32, depthWrite: false, side: THREE.DoubleSide, toneMapped: false });
   function floorBand(n, mat) {   // a lit slice of the building at floor n: its footprint, a hair larger, extruded through the floor
-    const sh = new THREE.Shape(D.building.foot.map(([x, y]) => new THREE.Vector2(x, y)));
+    const up = D.building.upper, foot = up && n >= up.from ? up.foot : D.building.foot;   // a stepped building: the upper floors have their own, smaller plate
+    const sh = new THREE.Shape(foot.map(([x, y]) => new THREE.Vector2(x, y)));
     const g = new THREE.ExtrudeGeometry(sh, { depth: floorH(n) - 0.25, bevelEnabled: false }); g.rotateX(-Math.PI / 2);
-    const m = new THREE.Mesh(g, mat); const c = centroid(D.building.foot); m.position.set(-c[0] * 0.012, floorZ(n) + 0.12, c[1] * 0.012); m.scale.set(1.012, 1, 1.012);
+    const m = new THREE.Mesh(g, mat); const c = centroid(foot); m.position.set(-c[0] * 0.012, floorZ(n) + 0.12, c[1] * 0.012); m.scale.set(1.012, 1, 1.012);
     m.renderOrder = 4; scene.add(m); return m;
   }
   function setBands(o) {
