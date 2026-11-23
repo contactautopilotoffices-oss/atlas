@@ -14,12 +14,9 @@ def svg(pid, cls):
     return s.replace("<svg ", f'<svg class="plan {cls}" ', 1)
 
 def odo(oid, digits, comma_after=None):
-    cols = []
-    for i in range(digits):
-        strip = "".join(f"<i>{d % 10}</i>" for d in range(30))
-        cols.append(f'<span class="col c{i}"><span class="strip">{strip}</span></span>')
-        if comma_after is not None and i == comma_after: cols.append('<span class="comma">,</span>')
-    return f'<span class="odo" id="{oid}">{"".join(cols)}</span>'
+    # a plain figure that counts up (odoTo); width reserved so the units beside it never move
+    w = digits * 0.62 + (0.28 if comma_after is not None else 0)
+    return f'<span class="odo" id="{oid}" style="min-width:{w:.2f}em;display:inline-block;text-align:right">0</span>'
 
 STYLE = """
 @font-face{font-family:Urbanist;src:url('assets/fonts/Urbanist.ttf')}
@@ -48,11 +45,10 @@ STYLE = """
 
 ODO_JS = """
 function odoTo(tl, id, value, at, dur, digits){
-  const s = String(value).padStart(digits, '0');
-  for (let i = 0; i < digits; i++) {
-    const d = +s[i];
-    tl.to('#' + id + ' .c' + i + ' .strip', {yPercent: -(10 + d) / 30 * 100, duration: dur, ease: 'power3.out'}, at + i * 0.07);
-  }
+  const el = document.getElementById(id), st = (window.__odo = window.__odo || {}), from = st[id] || 0; st[id] = value;
+  const p = {v: from};
+  tl.fromTo(p, {v: from}, {v: value, duration: dur + 0.25, ease: 'power3.out', immediateRender: false,
+    onUpdate: () => { el.textContent = Math.round(p.v).toLocaleString('en-US'); }}, at);
 }
 function drawPlan(tl, sel, at){
   tl.to(sel + ' .walls,' + sel + ' .glass,' + sel + ' .doors', {strokeDashoffset: 0, duration: 1.4, ease: 'power2.inOut', stagger: 0.12}, at);

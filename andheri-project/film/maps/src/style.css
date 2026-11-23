@@ -106,6 +106,7 @@ body { font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: anti
   box-shadow: 0 8px 18px -6px rgba(42, 85, 229, .6), inset 0 1px 0 rgba(255, 255, 255, .18); }
 .chip .walk svg { width: 34px; height: 34px; }
 .chip .nums { display: flex; align-items: baseline; font: 600 56px/1 'Inter'; color: var(--ink); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.chip .n { display: inline-block; text-align: right; }
 .chip .unit { font: 500 30px/1 'Inter'; color: var(--ink-2); margin: 0 0 0 10px; letter-spacing: 0; }
 .chip .sep { width: 7px; height: 7px; border-radius: 50%; background: #C2C8D2; margin: 0 22px; align-self: center; transform: translateY(4px); }
 .chip .cap { font: 500 15px/1 'Inter'; color: var(--muted); letter-spacing: .02em; margin-top: 12px; }

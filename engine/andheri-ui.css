@@ -166,7 +166,7 @@ body[data-andheri-ui=world] #route .ctl button:hover{background:var(--ax-fill-2)
 body[data-andheri-ui=world] #mini{border-color:var(--ax-line);background:rgba(14,14,16,.6)}
 
 /* the password gate, in the same system */
-body[data-andheri-ui=world] #gate{background:#0a0a0b url(/media/flipkart-andheri/world/privilon-hero/privilon-dusk-blue-hour.jpg) 42% 50%/cover no-repeat!important;font-family:var(--ax-font)}
+body[data-andheri-ui=world] #gate{background:#0a0a0b url(/media/flipkart-andheri/world/film-stills/privilon-dusk.jpg) 42% 50%/cover no-repeat!important;font-family:var(--ax-font)}
 body[data-andheri-ui=world] #gate::before{background:linear-gradient(180deg,rgba(10,10,11,.5),rgba(10,10,11,.85))}
 body[data-andheri-ui=world] #gate .box{width:min(420px,calc(100vw - 32px));padding:30px 28px 26px;border-radius:24px;background:var(--ax-glass);border:1px solid var(--ax-line);box-shadow:var(--ax-shadow);-webkit-backdrop-filter:var(--ax-blur);backdrop-filter:var(--ax-blur)}
 body[data-andheri-ui=world] #gate .box>.mono{display:none}

@@ -205,3 +205,9 @@ body[data-andheri-ui=world] .ax-h2{font-size:27px;margin:12px 0 8px}
   body[data-andheri-ui=world] .ax-cards-in .ax-card-slot{animation:none;opacity:1}
   body[data-andheri-ui=world] .ax-card,body[data-andheri-ui=world] .ax-card-media img,body[data-andheri-ui=world] #load.ax-root{transition:none!important}
 }
+
+/* Enter waits for the city to load */
+.ax-enter[disabled]{opacity:.72;cursor:progress}
+.ax-spin{width:14px;height:14px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:ax-spin .8s linear infinite}
+@keyframes ax-spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.ax-spin{animation:none}}

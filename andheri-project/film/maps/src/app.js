@@ -313,21 +313,12 @@ async function clipRoute() {
 
   // the distance chip: digit wheels that spin and land on the canonical figure
   const chip = el('chip', `<div class="walk">${ICON_WALK}</div><div><div class="nums"></div><div class="cap">Walk from <em>${R.from}</em> metro</div></div>`);
-  const nums = chip.querySelector('.nums'), wheels = [];
-  const addNumber = (n) => { const s = String(n); for (let i = 0; i < s.length; i++) { const w = document.createElement('span'); w.className = 'wheel';
-      const strip = document.createElement('span'); strip.className = 'strip'; let h = ''; for (let c = 0; c < 4; c++) for (let d = 0; d < 10; d++) h += `<span>${d}</span>`; strip.innerHTML = h;
-      w.appendChild(strip); nums.appendChild(w); wheels.push({ strip, target: +s[i], idx: wheels.length }); } };
-  const addUnit = (u) => { const s = document.createElement('span'); s.className = 'unit'; s.textContent = u; nums.appendChild(s); };
-  addNumber(R.m); wheels.forEach((w) => { w.first = true; }); addUnit('m'); const sep = document.createElement('span'); sep.className = 'sep'; nums.appendChild(sep); addNumber(R.min); addUnit('min');
-  // vertical motion blur per wheel (an SVG filter each)
-  const defs = document.getElementById('filters');
-  wheels.forEach((w, i) => { defs.insertAdjacentHTML('beforeend', `<filter id="vb${i}" x="-20%" y="-50%" width="140%" height="200%"><feGaussianBlur in="SourceGraphic" stdDeviation="0 0"/></filter>`);
-    w.blur = defs.querySelector(`#vb${i} feGaussianBlur`); w.strip.style.filter = `url(#vb${i})`; });
-  const T_ROLL = 1.55, wheelEnd = (i) => 3.35 + i * .2;
-  const rollPos = (w, t) => {   // in digit heights; ends on 30 + target (fourth cycle)
-    const total = (w.first ? 30 : 20) + w.target, k = seg(t, T_ROLL + w.idx * .05, wheelEnd(w.idx));
-    return total * E.outQuart(k);   // a fast spin and a long, soft landing
-  };
+  // the figures count up and settle on the canonical walk (plain text: no wheels, no blur, nothing to collide)
+  const nums = chip.querySelector('.nums');
+  nums.innerHTML = `<span class="n" id="nm"></span><span class="unit">m</span><span class="sep"></span><span class="n" id="nmin"></span><span class="unit">min</span>`;
+  const nm = nums.querySelector('#nm'), nmin = nums.querySelector('#nmin');
+  nm.style.minWidth = `${String(R.m).length * .62}em`; nmin.style.minWidth = `${String(R.min).length * .62}em`;
+  const T_COUNT0 = 1.55, T_COUNT1 = 3.35;
 
   const DOT_T0 = 1.35, DOT_T1 = 4.35;
   return { DUR, apply(t) {
@@ -360,12 +351,8 @@ async function clipRoute() {
       // chip
       const kc = E.outCubic(seg(t, 1.1, 1.75));
       chip.style.opacity = kc.toFixed(3); chip.style.transform = `translateY(${(22 * (1 - kc)).toFixed(2)}px)`;
-      for (const w of wheels) {
-        const pos = rollPos(w, t), dt = 1 / 24, v = (rollPos(w, t + dt) - rollPos(w, t - dt)) / (2 * dt);
-        const H = w.strip.firstChild.offsetHeight;
-        w.strip.style.transform = `translateY(${(-pos * H).toFixed(2)}px)`;
-        w.blur.setAttribute('stdDeviation', `0 ${Math.min(14, Math.abs(v) * H / 24 * .5).toFixed(2)}`);
-      }
+      const kn = E.outQuart(seg(t, T_COUNT0, T_COUNT1));
+      nm.textContent = String(Math.round(R.m * kn)); nmin.textContent = String(Math.max(kn > 0 ? 1 : 0, Math.round(R.min * kn)));
     };
   } };
 }

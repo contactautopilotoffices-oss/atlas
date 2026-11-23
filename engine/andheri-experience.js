@@ -6,7 +6,7 @@ import { brandLockup } from './andheri-brand.js';
 const MEDIA = '/media/flipkart-andheri/';
 const FILM = { src: MEDIA + 'film/andheri-intro.mp4', poster: MEDIA + 'film/andheri-intro-poster.jpg' };
 const CONFIG = MEDIA + 'brand/experience.json';   // optional media (ambient bed, card images); see that file
-const HERO = MEDIA + 'world/privilon-hero/privilon-dusk-blue-hour.jpg';
+const HERO = MEDIA + 'world/film-stills/privilon-dusk.jpg';
 const SFX = { tick: MEDIA + 'brand/selection-tick.mp3' };
 const SEEN = 'andheri-experience-seen', SOUND = 'andheri-sound';
 
@@ -18,7 +18,7 @@ export const SHORTLIST = {
     building: 'Grade A · G+15 · new tower', offer: 'Single floor plate', offerNote: '260 · 280 · 301 workstations',
     carpet: 11331, condition: 'Bare shell', possession: 'January 2027', status: 'Bare shell · possession January 2027',
     metro: { station: 'Marol Naka', line: 'Line 1', m: 140, min: 2 },
-    image: 'world/privilon-hero/privilon-sunrise-0720.jpg',
+    image: 'world/film-stills/privilon-sunrise.jpg',
   },
   'corporate-avenue': {
     n: 2, name: 'Corporate Avenue', market: 'Chakala', question: 'The speed',
@@ -26,14 +26,14 @@ export const SHORTLIST = {
     carpet: 12414, carpetNote: '6,207 sq ft on each floor', condition: 'Ready now', possession: 'Ready now',
     status: 'Ready now · plans for 266, 281 and 373 seats',
     metro: { station: 'Chakala (J B Nagar)', short: 'Chakala', line: 'Line 1', m: 850, min: 11 },
-    image: 'world/checkpoint/corporate-campus.jpg',
+    image: 'world/film-stills/corporate-avenue-drone.jpg',
   },
   '723-avenue': {
     n: 3, name: '723 Avenue', market: 'Marol', question: 'The view from the top',
     building: 'Grade A · G+15', offer: '13th and 14th floors', offerNote: 'Plus the terrace above them',
     carpet: 11331, condition: 'Bare shell', possession: 'Immediate', status: 'Bare shell · possession immediate',
     metro: { station: 'Marol Naka', line: 'Line 1', m: 700, min: 9 },
-    image: 'world/checkpoint/723-district-aerial2.jpg',
+    image: 'world/film-stills/723-avenue-dusk.jpg',
   },
 };
 
@@ -274,7 +274,10 @@ export function andheriExperience({ options, first }) {
   video.addEventListener('error', () => { if (screen === 'film') endFilm(); });
   skip.addEventListener('click', endFilm);
   replay.addEventListener('click', playFilm);
-  root.querySelector('.ax-enter').addEventListener('click', playFilm);
+  // the film starts only once the city has loaded: parsing the 3D models on the main thread while the video plays made it stutter
+  const enter = root.querySelector('.ax-enter'), enterHTML = enter.innerHTML;
+  enter.disabled = true; enter.setAttribute('aria-busy', 'true'); enter.innerHTML = `<span class="ax-btn-icon ax-spin"></span>Preparing the city…`;
+  enter.addEventListener('click', playFilm);
   document.addEventListener('keydown', e => {
     if (root.hidden) return;
     if (e.key === 'Escape' && screen === 'film') { e.preventDefault(); e.stopImmediatePropagation(); endFilm(); return; }
@@ -331,6 +334,7 @@ export function andheriExperience({ options, first }) {
     selection: () => { if (root.hidden) tick(); },   // switching property from the rail
     ready(w) {
       world = w; status('Ready. Choose a building.');
+      enter.disabled = false; enter.removeAttribute('aria-busy'); enter.innerHTML = enterHTML;
       root.classList.add('ax-world-ready');
       if (pending) { const id = pending; pending = null; choose(id, false); }
     },

@@ -17,6 +17,17 @@
         "8137"
       ],
       "port": 8137
+    },
+    {
+      "name": "atlas-world",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "scripts/atlas-dev.js"
+      ],
+      "env": {
+        "PORT": "8137"
+      },
+      "port": 8137
     }
   ]
 }

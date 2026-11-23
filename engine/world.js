@@ -21,6 +21,8 @@
    (x east, y north). three's X is east, Y up, -Z north.
    ============================================================================ */
 import * as THREE from "three";
+import {createSceneLighting} from "./andheri-scene-lighting.js";
+import {createWorldLayouts} from "./andheri-world-layouts.js";
 import { applyAndheriTheme, easyTabs, propertySpotlight } from "./andheri-ui.js";
 import { andheriExperience, applyCanonicalFacts } from "./andheri-experience.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
@@ -38,6 +40,7 @@ const esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&":
 const Q = new URLSearchParams(location.search);
 const MOBILE = /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
 const STILL = Q.get("still") === "1";
+const REALISM_IDS=new Set(["723-avenue","privilon"]);
 /* The look: "real" (default) reads as a photograph of the place: no tilt-shift,
    a 35 mm lens from drone height, sky and haze behind, ground to the horizon,
    relief in the facades. ?look=model brings back the architect's-model look
@@ -63,7 +66,8 @@ async function boot() {
   if (!A || !W) return fail("This atlas has no 3D explorer.");
   if(W.branding==="autopilot-flipkart"){applyAndheriTheme("world");applyCanonicalFacts(A.options);}
   document.title = `${A.meta.title} · Explorer`;
-  if (W.poster) for (const id of ["#load", "#gate"]) $(id).style.backgroundImage = `url("${W.data}${W.poster}")`;
+  const poster = W.branding === "autopilot-flipkart" && W.thumbs?.[location.hash.slice(1)] || W.poster;
+  if (poster) for (const id of ["#load", "#gate"]) $(id).style.backgroundImage = `url("${W.data}${poster}")`;
   const KEY = SLUG + "-auth"; let authed = !(A.gate && A.gate.hash);
   try { if (sessionStorage.getItem(KEY) === "1") authed = true; } catch (e) {}
   if (!authed) {
@@ -92,11 +96,20 @@ async function start(A, W, intro=null) {
   if(W.contexts || W.cad)document.body.classList.add('project-tools');
   if(W.mapHref)$("#to-map").href=W.mapHref;
   const canvas = $("#c");
+  // the Flipkart Andheri explorer opens on the re-modelled buildings (d-preview: new Privilon, Corporate Avenue's tower)
+  // unless ?preview= names others; ?preview=none shows the older district models
+  const defaultPreview = W.branding === "autopilot-flipkart" ? "privilon,corporate-avenue,723-avenue" : "";
+  const previewIds = new Set(((Q.get("preview") ?? defaultPreview) === "none" ? "" : (Q.get("preview") ?? defaultPreview)).split(",").filter(Boolean));
+  const realismFor = id => W.branding === "autopilot-flipkart" && REALISM_IDS.has(id) &&
+    (W.models?.[id]?.aoBase || previewIds.has(id));
+  let lightingBuilder=null,worldLayouts=null;
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: false, alpha: true, powerPreference: "high-performance" });
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, MOBILE ? 1.5 : 2));
   renderer.setSize(innerWidth, innerHeight);
   renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.92;
-  if (Q.get("preview")) { renderer.toneMapping = THREE.AgXToneMapping; renderer.toneMappingExposure = 1.05; }   // match the Blender stills (AgX)
+  if (previewIds.size || Object.values(W.models || {}).some(model => model.aoBase)) {
+    renderer.toneMapping = THREE.AgXToneMapping; renderer.toneMappingExposure = 1.05;
+  }
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(32, innerWidth / innerHeight, 0.3, 6000);
@@ -121,8 +134,8 @@ async function start(A, W, intro=null) {
   const fill = new THREE.HemisphereLight(0xcfe0f0, 0x6b6253, 0.35); scene.add(fill);
 
   /* textures, loaded once and shared by every diorama */
-  const texL = new THREE.TextureLoader(); const TEX = {}; const aniso = renderer.capabilities.getMaxAnisotropy();
-  const tex = (name, srgb = true) => TEX[name] || (TEX[name] = (() => { const t = texL.load(W.data + "tex/" + name + (name.startsWith("leaves") ? ".png" : ".jpg")); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = aniso; if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.flipY = false; return t; })());
+  const texL = new THREE.TextureLoader(); const TEX = {},textureJobs=[]; const aniso = renderer.capabilities.getMaxAnisotropy();
+  const tex = (name, srgb = true) => TEX[name] || (TEX[name] = (() => { let ready;const done=new Promise(resolve=>ready=resolve);textureJobs.push(done);const t = texL.load(W.data + "tex/" + name + (name.startsWith("leaves") ? ".png" : ".jpg"),()=>ready(true),undefined,()=>{t.userData.failed=true;ready(false);}); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = aniso; if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.flipY = false; return t; })());
   const GLASSY = new Set(["wall_com_glass", "wall_opt_glass", "wall_com_ribbon", "wall_opt_plaster", "wall_res_tower", "wall_glass723", "wall_retail723", "wall_cw_teal", "wall_cw_blue", "wall_cw_grey", "wall_cw_silver", "wall_ribbon_red", "wall_ribbon_white"]);
   const MAT = {};
   function material(name) {
@@ -195,7 +208,7 @@ async function start(A, W, intro=null) {
     const hide = []; root.traverse((o) => { if (o.visible && o.name && (o.name.startsWith("opt_") || o.name.startsWith("sign_723"))) { o.visible = false; hide.push(o); } });
     const c = centroid(D.building.foot); probe.position.copy(P3(c[0], c[1], Math.max(12, D.building.h * 0.45)));
     const bg = scene.background, fog = scene.fog, bands_ = bands.map((b) => b.visible);
-    scene.background = hdr; scene.fog = null; bands.forEach((b) => (b.visible = false));
+    scene.background = lightingBuilder?.sky||hdr; scene.fog = null; bands.forEach((b) => (b.visible = false));
     probe.update(renderer, scene); probeRT.texture.needsPMREMUpdate = true;
     scene.background = bg; scene.fog = fog; bands.forEach((b, i) => (b.visible = bands_[i])); hide.forEach((o) => (o.visible = true));
     root.traverse(o=>{if(!o.isMesh)return;for(const m of Array.isArray(o.material)?o.material:[o.material])if(/^ANDHERI_.*[Gg]lass/.test(m.name||'')){m.envMap=probeRT.texture;m.envMapIntensity=1.25;m.needsUpdate=true;}});
@@ -204,19 +217,17 @@ async function start(A, W, intro=null) {
   }
   /* baked ambient occlusion (scripts/world/diorama.py --bake-ao): <id>-ao.json names one map per mesh, on UV 1.
      Each baked mesh gets its own copies of its materials carrying its aoMap; the sun and shadows stay live. */
-  async function applyBakedAO(id, base) {
-    let J; try { const r = await fetch(`${base}${id}-ao.json`, { cache: "no-store" }); if (!r.ok) { console.log("AO: no map list", r.status); return; } J = await r.json(); } catch (e) { console.log("AO: failed", e); return; }
-    const L = new THREE.TextureLoader(), cache = {};
-    const map = (f) => cache[f] || (cache[f] = (() => { const t = L.load(base + f); t.channel = 1; t.flipY = false; t.colorSpace = THREE.NoColorSpace; t.anisotropy = 4; return t; })());
-    let n = 0;
-    root.traverse((o) => {
-      if (!o.isMesh) return; let f = null; for (let p = o; p && !f; p = p.parent) f = J.maps[p.name];
-      if (!f) return; if (!o.geometry.attributes.uv1) { console.log("AO: no uv1 on", o.name, Object.keys(o.geometry.attributes)); return; }
-      const ao = map(f);
-      const one = (m) => { const c = m.clone(); c.aoMap = ao; c.aoMapIntensity = Number(Q.get("ao") || 1); c.userData.ao = true; c.needsUpdate = true; return c; };
-      o.material = Array.isArray(o.material) ? o.material.map(one) : one(o.material); n++;
-    });
-    console.log("AO: baked maps on", n, "meshes"); window.__ao = n;
+  async function applyBakedAO(id, base, revision, modelRoot) {
+    const version=revision?'?v='+encodeURIComponent(revision):'';
+    let J;try{const r=await fetch(base+id+'-ao.json'+version,{cache:'no-store'});if(!r.ok)return;J=await r.json();}catch{return;}
+    const files=[...new Set(Object.values(J.maps||{}))],textures=new Map();
+    await Promise.all(files.map(async file=>{try{const t=await new THREE.TextureLoader().loadAsync(base+file+version);t.channel=1;t.flipY=false;t.colorSpace=THREE.NoColorSpace;t.anisotropy=4;textures.set(file,t);}catch{console.warn('AO map unavailable:',file);}}));
+    if(modelRoot!==root){for(const t of textures.values())t.dispose();return;}
+    const requested=Number(Q.get('ao')),strength=Q.has('ao')?clamp(Number.isFinite(requested)?requested:1,0,1):realismFor(id)?.55:1;
+    for(const t of textures.values())ownedTextures.add(t);
+    let count=0;modelRoot.traverse(o=>{if(!o.isMesh||!o.geometry.attributes.uv1)return;let file;for(let p=o;p&&!file;p=p.parent)file=J.maps?.[p.name];const ao=textures.get(file);if(!ao)return;
+      const one=m=>{const copy=m.clone();ownedMaterials.add(copy);copy.aoMap=ao;copy.aoMapIntensity=realismFor(id)&&(REFLECTS.has(m.name)||/^ANDHERI_.*glass/i.test(m.name))?Math.min(strength,.25):strength;copy.userData.ao=true;copy.needsUpdate=true;return copy;};o.material=Array.isArray(o.material)?o.material.map(one):one(o.material);count++;
+    });document.body.dataset.aoMeshes=String(count);
   }
 
   /* ------------------------------------------- the map beyond the model ---- */
@@ -293,6 +304,7 @@ async function start(A, W, intro=null) {
 
   /* ----------------------------------------------------- the diorama ---- */
   const loader = new GLTFLoader(); loader.setMeshoptDecoder(MeshoptDecoder);
+  let ownedMaterials=new Set(),ownedTextures=new Set();
   let D = null, root = null, rootResources = null, inst = [], movers = [], solid = [], groundMeshes = [], selectionRequest=0;
   function importedResources(modelRoot) {
     const geometries=new Set(),materials=new Set(),textures=new Set();
@@ -370,6 +382,10 @@ async function start(A, W, intro=null) {
     $('#hud').insertBefore(link,$('#conn'));
   }
   if(W.branding==="autopilot-flipkart")easyTabs($("#modes"));
+  if(W.branding==="autopilot-flipkart"){
+    worldLayouts=createWorldLayouts();
+    lightingBuilder=createSceneLighting({renderer,scene,sun,fill,direction:SUN,onChange:()=>{if(D){sunBox(160,P3(...centroid(D.building.foot),D.building.h*.35));captureReflections();}}});
+  }
   const OPTS = A.options.filter((o) => !W.thumbs || W.thumbs[o.id]);   // buildings with a 3D model
   function protoParts(node) {   // every mesh under a prototype, with its transform relative to it
     const out = []; node.updateMatrixWorld(true); const inv = node.matrixWorld.clone().invert();
@@ -386,14 +402,19 @@ async function start(A, W, intro=null) {
   async function loadDiorama(id, request) {
     leaveArea();disposeArea();
     $("#veil").classList.add("on");
-    // ?preview=<id>: load that diorama from d-preview/ (a candidate build), leaving the published d/ untouched
-    const model=(Q.get("preview")||"").split(",").includes(id) ? {glb:`${W.data}d-preview/${id}.glb?v=${Date.now()}`, data:`${W.data}d-preview/${id}.json?v=${Date.now()}`} : W.models && W.models[id];
+    const revision = Date.now();
+    const previewBase = W.data + "d-preview/";
+    const model = previewIds.has(id)
+      ? { glb: previewBase + id + ".glb", data: previewBase + id + ".json", aoBase: previewBase }
+      : W.models?.[id];
+    const version = model?.aoBase ? "?v=" + revision : "";
     const [gltf, data] = await Promise.all([
-      new Promise((ok, bad) => loader.load(model?.glb || `${W.data}d/${id}.glb`, ok, (e) => { if (e.total && $("#l-bar")) $("#l-bar").style.width = `${Math.round(e.loaded / e.total * 90)}%`; }, bad)),
-      fetch(model?.data || `${W.data}d/${id}.json`).then((r) => r.json())]);
+      new Promise((ok, bad) => loader.load((model?.glb || `${W.data}d/${id}.glb`) + version, ok, (e) => { if (e.total && $("#l-bar")) $("#l-bar").style.width = `${Math.round(e.loaded / e.total * 90)}%`; }, bad)),
+      fetch((model?.data || `${W.data}d/${id}.json`) + version).then((r) => r.json())]);
     const resources=importedResources(gltf.scene);
     if(request!==selectionRequest){disposeImported(resources);return null;}
     if (root) { scene.remove(root); disposeImported(rootResources); }
+    for(const m of ownedMaterials)m.dispose();for(const t of ownedTextures)t.dispose();ownedMaterials.clear();ownedTextures.clear();
     for (const m of inst) { scene.remove(m); m.dispose(); } inst = []; movers = []; groundMeshes = [];
     D = data; root = gltf.scene; rootResources = resources; scene.add(root); buildMapGround();
     const protos = {};
@@ -413,7 +434,13 @@ async function start(A, W, intro=null) {
       if (isGround) groundMeshes.push(o);
     });
     await applyAerialSurfaces(root, data);
-    if ((Q.get("preview")||"").split(",").includes(id)) await applyBakedAO(id, `${W.data}d-preview/`);
+    if (model?.aoBase) await applyBakedAO(id, model.aoBase, revision, root);
+    if(realismFor(id)){await Promise.all(textureJobs);if(request!==selectionRequest)return null;
+      root.traverse(o=>{if(!o.isMesh)return;const hero=/^opt_/.test(o.name)||o.parent?.name?.startsWith("opt_");const finish=m=>{for(const key of ["map","roughnessMap","normalMap"])if(m[key]?.userData.failed)m[key]=null;
+        if(!hero||!GLASSY.has(m.name))return m;const glass=new THREE.MeshPhysicalMaterial();THREE.MeshStandardMaterial.prototype.copy.call(glass,m);glass.defines={STANDARD:'',PHYSICAL:''};glass.name=m.name;glass.clearcoat=.55;glass.clearcoatRoughness=.07;glass.ior=1.52;glass.envMapIntensity=1.25;if(glass.normalScale)glass.normalScale.set(.25,.25);glass.onBeforeCompile=shader=>{shader.fragmentShader=shader.fragmentShader.replace("#include <metalnessmap_fragment>","#include <metalnessmap_fragment>\n metalnessFactor = 0.12 + 0.38 * (1.0-smoothstep(0.22,0.5,roughnessFactor));");};glass.userData.heroGlass=true;ownedMaterials.add(glass);return glass;};
+        o.material=Array.isArray(o.material)?o.material.map(finish):finish(o.material);const materials=Array.isArray(o.material)?o.material:[o.material];if(hero&&materials.every(m=>m.userData.heroGlass||m.transmission>0))o.castShadow=false;
+      });
+    }
     if(request!==selectionRequest)return null;
     for (const p of Object.values(protos)) p.visible = false;
     const pp = (k) => protos[k] ? protoParts(protos[k]) : [];
@@ -496,7 +523,7 @@ async function start(A, W, intro=null) {
       _p.copy(L.v).project(camera); const vis = _p.z < 1 && Math.abs(_p.x) < 1.05 && Math.abs(_p.y) < 1.05;
       L.el.style.display = vis ? "" : "none"; if (!vis) continue;
       L.el.style.transform = `translate(${((_p.x + 1) / 2 * w).toFixed(1)}px,${((1 - _p.y) / 2 * h).toFixed(1)}px) ${L.dist ? "translate(-50%,-50%)" : "translate(-50%,-100%)"}`;
-      if(W.branding){const rect=L.el.getBoundingClientRect();if(blocked.some(b=>overlaps(rect,b))||placed.some(b=>overlaps(rect,b)))L.el.style.display='none';else placed.push(rect);}
+      if(W.branding){const rect=L.el.getBoundingClientRect();if(!L.bld&&(blocked.some(b=>overlaps(rect,b))||placed.some(b=>overlaps(rect,b))))L.el.style.display='none';else placed.push(rect);}
     }
   }
 
@@ -567,6 +594,7 @@ async function start(A, W, intro=null) {
     flyTo(t, new THREE.Vector3(t.x + Math.cos(az) * d, Math.max(z + 6, 8), t.z - Math.sin(az) * d), 1500);
   }
   function renderHUD(o) {
+    worldLayouts?.select(o.id);
     const cad=$('#cad-link');if(cad){cad.hidden=!W.cad[o.id];if(W.cad[o.id])cad.href=W.cad[o.id];}
     const pr = (o.reason || "").startsWith("PRIORITY") ? o.reason.split(" · ")[0] : "";
     $("#h-eyebrow").textContent = `${String(o.n).padStart(2, "0")} · ${factOf(o, "Micro-market")}`;
@@ -600,7 +628,7 @@ async function start(A, W, intro=null) {
   const ease = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   function flyTo(t, p, ms = 1500) { fly = { t0: performance.now(), ms, a: { t: controls.target.clone(), p: camera.position.clone() }, b: { t, p } }; }
   function slabSize() { let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9; for (const [x, y] of D.slab) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); } return Math.max(x1 - x0, y1 - y0); }
-  function sunBox(half, at) { const sc = sun.shadow.camera; sc.left = -half; sc.right = half; sc.top = half; sc.bottom = -half; sc.near = 10; sc.far = half * 6; sc.updateProjectionMatrix(); sun.target.position.copy(at); sun.position.copy(at).addScaledVector(SUN, half * 3); }
+  function sunBox(half, at) { if(lightingBuilder?.active&&D){half=Math.min(half,160);at=P3(...centroid(D.building.foot),D.building.h*.35);}const sc = sun.shadow.camera; sc.left = -half; sc.right = half; sc.top = half; sc.bottom = -half; sc.near = 10; sc.far = half * 6; sc.updateProjectionMatrix(); sun.target.position.copy(at); sun.position.copy(at).addScaledVector(SUN, half * 3); }
   function dollhouse(ms = 1600) {
     leaveArea();
     MODE = "dollhouse"; RW = null; document.body.classList.remove("walk", "routing"); setModeUI();
@@ -616,14 +644,21 @@ async function start(A, W, intro=null) {
     if (REALLOOK) {
       // a photograph of the place through the eye's own lens: 50 mm on full frame (EYE_FOV, 27 deg vertical), pulled back so the frame holds the same street
       camera.fov = EYE_FOV; camera.updateProjectionMatrix();
-      scene.background = hdr; scene.backgroundIntensity = 1.0; scene.fog = new THREE.Fog(0xd9cbb4, 460, 1500);
+      scene.background = lightingBuilder?.sky||hdr; scene.backgroundIntensity = 1.0; scene.fog = new THREE.Fog(0xd9cbb4, 460, 1500);
       const h = D.building.h, tr = P3(c[0], c[1], h * 0.4), d2 = Math.max(330, h * 6.3), pol = 67 * D2R;
       controls.minDistance = 100; controls.maxDistance = 1050; controls.minPolarAngle = 35 * D2R; controls.maxPolarAngle = 84 * D2R;
-      if(proof){
+      if (W.branding === "autopilot-flipkart" && SEL === "corporate-avenue") {
+        // The client-selected view, fitted to the roof corners in the November 22 reference.
+        const at = P3(155.14, -265.35, 18.5), eye = P3(179.34, 18.51, 166.5);
+        const narrow = Math.max(1, 1.15 / camera.aspect);
+        controls.autoRotate = false;
+        flyTo(at, eye.sub(at).multiplyScalar(narrow).add(at), ms);
+      } else if(proof){
         const at=P3(...proof.target),position=P3(...proof.position);position.sub(at).multiplyScalar(innerWidth>900?1.4:1.7).add(at);controls.minDistance=60;controls.autoRotate=false;flyTo(at,position,ms);
       }else flyTo(tr, new THREE.Vector3(tr.x + Math.cos(az) * Math.sin(pol) * d2, tr.y + Math.cos(pol) * d2, tr.z - Math.sin(az) * Math.sin(pol) * d2), ms);
     }
     for (const id of ["#walkhud", "#compass", "#mini", "#hint", "#route"]) $(id).hidden = true;
+    lightingBuilder?.atmosphere();
   }
   /* on a wide screen the overlay takes the left, so the view's centre moves right */
   function frameOffset(on) { const w = innerWidth, h = innerHeight; if (on && w > 900) camera.setViewOffset(w, h, -w * 0.16, h * 0.04, w, h); else camera.clearViewOffset(); camera.updateProjectionMatrix(); }
@@ -640,11 +675,12 @@ async function start(A, W, intro=null) {
   function startWalk(at) {
     leaveArea();
     MODE = "walk"; document.body.classList.add("walk"); document.body.classList.remove("routing"); setModeUI(); controls.enabled = false; controls.autoRotate = false; tilt.enabled = false; fly = null;
-    camera.fov = EYE_FOV; camera.near = 0.3;   /* eye level: 1.68 m up, through a 50 mm lens: what the eye sees, not wide-angle, not zoomed */ camera.far = 2500; frameOffset(false); scene.background = hdr; scene.backgroundIntensity = 0.9; scene.fog = new THREE.Fog(0xd9cbb4, 260, 900);
+    camera.fov = EYE_FOV; camera.near = 0.3;   /* eye level: 1.68 m up, through a 50 mm lens: what the eye sees, not wide-angle, not zoomed */ camera.far = 2500; frameOffset(false); scene.background = lightingBuilder?.sky||hdr; scene.backgroundIntensity = 0.9; scene.fog = new THREE.Fog(0xd9cbb4, 260, 900);
     const w0 = at || D.street_cam || D.walk0; walk.pos.set(w0[0], w0[1]);
     const c = centroid(D.building.foot); walk.yaw = Math.atan2(c[0] - w0[0], c[1] - w0[1]); walk.pitch = clamp(Math.atan2(D.building.h * 0.42, Math.hypot(c[0] - w0[0], c[1] - w0[1])), 0, 0.9);
     for (const id of ["#walkhud", "#compass", "#mini", "#hint"]) $(id).hidden = false; $("#route").hidden = true; $("#hint").style.opacity = "1";
     setTimeout(() => ($("#hint").style.opacity = "0"), 6000);
+    lightingBuilder?.atmosphere();
   }
   function setModeUI() { document.querySelectorAll("#modes button").forEach((b) => { const on=areaMode ? b.id==="mapped-area" : b.dataset.mode===MODE || (MODE==="route" && b.dataset.mode==="walk");b.classList.toggle("on",on);b.setAttribute("aria-pressed",String(on)); }); }
   $("#modes").addEventListener("click", (e) => { const b = e.target.closest("[data-mode]"); if (!b) return; if (b.dataset.mode === "walk") startWalk(); else dollhouse(); });
@@ -657,8 +693,8 @@ async function start(A, W, intro=null) {
     ptr.set(e.clientX / innerWidth * 2 - 1, -e.clientY / innerHeight * 2 + 1); ray.setFromCamera(ptr, camera);
     const h = ray.intersectObjects(groundMeshes, false)[0]; if (h) walk.goal = new THREE.Vector2(h.point.x, -h.point.z);
   });
-  addEventListener("keydown", (e) => { if (/INPUT/.test(document.activeElement.tagName)) return; walk.keys.add(e.key.toLowerCase()); if (e.key === "Escape" && MODE !== "dollhouse") dollhouse(); });
-  addEventListener("keyup", (e) => walk.keys.delete(e.key.toLowerCase()));
+  addEventListener("keydown", (e) => { if (!e.key || /INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName)) return; walk.keys.add(e.key.toLowerCase()); if (e.key === "Escape" && MODE !== "dollhouse") dollhouse(); });
+  addEventListener("keyup", (e) => e.key && walk.keys.delete(e.key.toLowerCase()));
   function stepWalk(dt) {
     const k = walk.keys, run = k.has("shift") ? 4.2 : 1.6; let fx = 0, fz = 0;
     if (k.has("w") || k.has("arrowup")) fz += 1; if (k.has("s") || k.has("arrowdown")) fz -= 1; if (k.has("a")) fx -= 1; if (k.has("d")) fx += 1;
@@ -725,10 +761,14 @@ async function start(A, W, intro=null) {
     await loadDiorama(id,request);
     if(request!==selectionRequest)return;
     FLOOR_SEL = null; setBands(o);
-    captureReflections(); setTimeout(captureReflections, 2500);
+    lightingBuilder?.select(o,realismFor(id));
+    gtao.blendIntensity=realismFor(id)?.25:REALLOOK?.5:.9;gtao.updateGtaoMaterial({radius:realismFor(id)?1.25:6,thickness:realismFor(id)?1.5:6});
+    await Promise.all(textureJobs);if(request!==selectionRequest)return;captureReflections();
     setRoute(routeOf(o.routes.find((x) => x.kind === "metro"))); renderHUD(o);
     if (MODE === "walk" || MODE === "route") startWalk(); else dollhouse(first ? 0 : 1600);
-    if (first && fly) { controls.target.copy(fly.b.t); const p0 = fly.b.p.clone(); fly = null; camera.position.copy(controls.target.clone().add(p0.clone().sub(controls.target).multiplyScalar(1.6))); flyTo(controls.target.clone(), p0, 2600); }
+    if (first && fly && W.branding === "autopilot-flipkart" && id === "corporate-avenue" && REALLOOK) {
+      controls.target.copy(fly.b.t); camera.position.copy(fly.b.p); controls.update(); fly = null;
+    } else if (first && fly) { controls.target.copy(fly.b.t); const p0 = fly.b.p.clone(); fly = null; camera.position.copy(controls.target.clone().add(p0.clone().sub(controls.target).multiplyScalar(1.6))); flyTo(controls.target.clone(), p0, 2600); }
     try { history.replaceState(null, "", `#${id}`); } catch (e) {}
   }
   /* the wording is the atlas's when it gives it (W.brand, W.credit), Andheri East's otherwise */

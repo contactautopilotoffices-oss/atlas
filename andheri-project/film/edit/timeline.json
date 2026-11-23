@@ -18,7 +18,7 @@
   },
   {
    "beat": "interchange",
-   "natural_s": 7.0,
+   "natural_s": 7.12,
    "rate": 0.959
   },
   {
@@ -28,7 +28,7 @@
   },
   {
    "beat": "prv_sunrise",
-   "natural_s": 7.0,
+   "natural_s": 4.75,
    "rate": 1.458
   },
   {
@@ -38,7 +38,7 @@
   },
   {
    "beat": "route_privilon",
-   "natural_s": 6.0,
+   "natural_s": 4.88,
    "rate": 1.224
   },
   {
@@ -48,7 +48,7 @@
   },
   {
    "beat": "prv_dusk",
-   "natural_s": 7.0,
+   "natural_s": 7.12,
    "rate": 0.972
   },
   {
@@ -63,8 +63,8 @@
   },
   {
    "beat": "corp_drone",
-   "natural_s": 8.21,
-   "rate": 0.977
+   "natural_s": 8.33,
+   "rate": 0.992
   },
   {
    "beat": "corp_drone",
@@ -78,7 +78,7 @@
   },
   {
    "beat": "route_corporate",
-   "natural_s": 6.0,
+   "natural_s": 5.75,
    "rate": 1.034
   },
   {
@@ -88,7 +88,7 @@
   },
   {
    "beat": "a723_rise",
-   "natural_s": 9.0,
+   "natural_s": 8.54,
    "rate": 1.047
   },
   {
@@ -103,7 +103,7 @@
   },
   {
    "beat": "route_723",
-   "natural_s": 6.0,
+   "natural_s": 5.17,
    "rate": 1.154
   },
   {
@@ -113,9 +113,13 @@
   },
   {
    "beat": "close_pullback",
+   "natural_s": 7.92,
+   "rate": 0.727
+  },
+  {
+   "beat": "close_pullback",
    "start": 105.2,
-   "end": 116.2,
-   "fallback": "assets/stills/privilon-sunset-1730.jpg"
+   "end": 116.2
   },
   {
    "beat": "close",

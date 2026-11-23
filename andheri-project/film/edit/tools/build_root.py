@@ -17,6 +17,25 @@ NV = os.path.join(ROOT, "andheri-project/film/narration-v4"); AU = os.path.join(
 A = os.path.join(E, "assets"); os.makedirs(os.path.join(A, "shots"), exist_ok=True); os.makedirs(os.path.join(A, "maps"), exist_ok=True)
 os.makedirs(os.path.join(A, "audio"), exist_ok=True); os.makedirs(os.path.join(A, "brand"), exist_ok=True)
 
+
+from concurrent.futures import ThreadPoolExecutor
+NCPU = os.cpu_count() or 8
+
+def par_interp(src_args, vf, out, seconds):
+    """minterpolate runs on one core; cut the clip into NCPU time chunks, interpolate them at once, join them."""
+    n = max(1, min(NCPU, int(seconds // 0.75)))
+    tmp = out + ".parts"; shutil.rmtree(tmp, ignore_errors=True); os.makedirs(tmp)
+    edges = [round(seconds * i / n, 4) for i in range(n + 1)]
+    def job(i):
+        part = os.path.join(tmp, "p%02d.mp4" % i)
+        subprocess.run(["ffmpeg", "-loglevel", "error", "-y", *src_args, "-ss", str(edges[i]), "-t", str(edges[i + 1] - edges[i]),
+                        "-vf", vf, "-an", "-c:v", "libx264", "-preset", "slow", "-crf", "15", "-r", "24", part], check=True)
+        return part
+    with ThreadPoolExecutor(n) as ex: parts = list(ex.map(job, range(n)))
+    lst = os.path.join(tmp, "list.txt"); open(lst, "w").write("".join(f"file '{q}'\n" for q in parts))
+    subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-f", "concat", "-safe", "0", "-i", lst, "-c", "copy", out], check=True)
+    shutil.rmtree(tmp, ignore_errors=True)
+
 def dur(p):
     r = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", p], capture_output=True, text=True)
     try: return float(r.stdout.strip())
@@ -43,14 +62,20 @@ def shot(name):
             vf = "minterpolate=fps=24:mi_mode=mci:mc_mode=aobmc:me_mode=bidir:vsbmc=1,scale=1920:1080:flags=lanczos,format=yuv420p"
             print(name, "has gaps:", len(nums), "of", nums[-1], "frames; using", len(odd), "odd frames, interpolated")
         if name in GRADE: vf = GRADE[name] + "," + vf
-        subprocess.run(["ffmpeg", "-loglevel", "error", "-y", *src, "-vf", vf, "-c:v", "libx264", "-preset", "slow", "-crf", "15",
-                        "-r", "24", out], check=True)
+        if "minterpolate" in vf:
+            # output time: the source frames at their input rate
+            par_interp(src, vf, out, len(odd) / 12)
+        else:
+            subprocess.run(["ffmpeg", "-loglevel", "error", "-y", *src, "-vf", vf, "-c:v", "libx264", "-preset", "slow", "-crf", "15",
+                            "-r", "24", out], check=True)
     return "assets/shots/" + name + ".mp4"
 
 def mapclip(name):
     src = os.path.join(MP, name + ".mp4")
     if not os.path.exists(src): return None
-    shutil.copy(src, os.path.join(A, "maps", name + ".mp4")); return "assets/maps/" + name + ".mp4"
+    dst = os.path.join(A, "maps", name + ".mp4")
+    if not os.path.exists(dst) or os.path.getmtime(dst) < os.path.getmtime(src): shutil.copy2(src, dst)   # keep the time: an unchanged clip is not re-fitted
+    return "assets/maps/" + name + ".mp4"
 
 for f in ("autopilot-white.png", "flipkart-logo-reverse.svg", "flipkart-logo.svg"):
     if os.path.exists(os.path.join(ROOT, "media/flipkart-andheri/brand", f)): shutil.copy(os.path.join(ROOT, "media/flipkart-andheri/brand", f), os.path.join(A, "brand", f))
@@ -75,7 +100,7 @@ SCHED = [
 ]
 # a still that stands in (slow push, no pins) while a shot is still rendering: missing, or under half its slot
 FALLBACK = {"corp_drone": "media/flipkart-andheri/world/checkpoint/corporate-campus.jpg",
-            "close_pullback": "media/flipkart-andheri/world/privilon-hero/privilon-sunset-1730.jpg"}
+            "close_pullback": "media/flipkart-andheri/world/film-stills/privilon-dusk.jpg"}
 os.makedirs(os.path.join(A, "stills"), exist_ok=True)
 els, audio, cues, missing, pushes = [], [], [], [], []
 for i, (kind, name, t0, t1, overlay) in enumerate(SCHED):
@@ -94,10 +119,17 @@ for i, (kind, name, t0, t1, overlay) in enumerate(SCHED):
                 els.append(f'<div id="o{i}-{overlay}" class="clip" data-composition-id="{overlay}" data-composition-src="compositions/{overlay}.html" data-start="{round(t0 + 0.4, 2)}" data-duration="{round(min(6.0, L - 0.4), 2)}" data-track-index="1" data-track-kind="graphics"></div>')
             continue
         if not src: missing.append(name); continue
-        rate = round(max(0.6, min(1.5, nat / L)), 3)      # a clip plays slower or faster to fit its slot whole (0.6x-1.5x), so a route's last frame (the walk time) always shows
+        rate = round(max(0.6, min(1.5, nat / L)), 3)      # the clip is fitted whole to its slot (0.6x-1.5x), so a route's last frame (the walk time) always shows
+        if abs(rate - 1) > 0.004:
+            # re-timed here with motion-compensated frames at a steady 24 fps; a playback rate on the page repeats or
+            # skips source frames unevenly, which reads as a stutter
+            rt = os.path.join(E, src[:-4] + "_fit.mp4")
+            if not os.path.exists(rt) or os.path.getmtime(rt) < os.path.getmtime(os.path.join(E, src)):
+                par_interp(["-i", os.path.join(E, src)], f"setpts={1/rate:.5f}*(PTS-STARTPTS),minterpolate=fps=24:mi_mode=mci:mc_mode=aobmc:me_mode=bidir:vsbmc=1,format=yuv420p", rt, nat)
+            src = src[:-4] + "_fit.mp4"; nat = dur(rt)
         if name == "close_pullback":
             subprocess.run(["python3", os.path.join(E, "tools/build_cards.py"), "--pins-stretch", str(round(1 / rate, 4)), "--pins-dur", str(L)], check=True)
-        els.append(f'<video id="b{i}-{name}" class="clip" src="{src}" muted playsinline data-start="{t0}" data-duration="{L}" data-track-index="0" data-playback-rate="{rate}"></video>')
+        els.append(f'<video id="b{i}-{name}" class="clip" src="{src}" muted playsinline data-start="{t0}" data-duration="{L}" data-track-index="0"></video>')
         cues.append({"beat": name, "natural_s": round(nat, 2), "rate": rate})
     if overlay and os.path.exists(os.path.join(E, "compositions", overlay + ".html")):
         od = min(6.0, L - 0.4) if overlay.startswith("card") else L
@@ -111,10 +143,9 @@ if os.path.exists(mix):
 print("missing picture:", missing)
 html = f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Flipkart × Autopilot · Andheri East</title><script src="assets/gsap.min.js"></script>
 <style>*{{box-sizing:border-box}}html,body{{margin:0;background:#000}}#root{{position:relative;width:100%;height:100%;overflow:hidden}}.clip{{position:absolute;inset:0}}video.clip{{width:100%;height:100%;object-fit:cover}}
-#sig{{position:absolute;inset:auto;right:56px;top:48px;z-index:20;opacity:.85}}#sig img{{height:26px;width:auto;display:block}}</style></head><body>
+</style></head><body>
 <div id="root" data-composition-id="main" data-width="1920" data-height="1080" data-duration="{TOTAL}">
 {chr(10).join(els)}
-<div id="sig" class="clip" data-start="8" data-duration="{round(TOTAL - 24, 2)}" data-track-index="6" data-layout-ignore="true"><img src="assets/brand/autopilot-white.png" alt="Autopilot"></div>
 {chr(10).join(audio)}
 </div><script>const tl=gsap.timeline({{paused:true}});tl.to({{}},{{duration:{TOTAL}}});{"".join(pushes)}window.__timelines.main=tl;</script></body></html>"""
 open(os.path.join(E, "index.html"), "w").write(html)

@@ -85,11 +85,9 @@ tracked("pins-close", "close_pullback", {"Privilon": "Marol · beside the metro"
 # ------------------------------------------------------------ the Autopilot close
 LOGO_AP = "assets/brand/autopilot-white.png"; LOGO_FK = "assets/brand/flipkart-logo-reverse.svg"
 def odo(oid, digits, comma_after=None):
-    cols = []
-    for i in range(digits):
-        cols.append('<span class="col c%d"><span class="strip">%s</span></span>' % (i, "".join(f"<i>{d % 10}</i>" for d in range(30))))
-        if comma_after is not None and i == comma_after: cols.append('<span class="comma">,</span>')
-    return f'<span class="odo" id="{oid}">{"".join(cols)}</span>'
+    # a plain figure that counts up (odoTo); width reserved so the units beside it never move
+    w = digits * 0.62 + (0.28 if comma_after is not None else 0)
+    return f'<span class="odo" id="{oid}" style="min-width:{w:.2f}em;display:inline-block;text-align:right">0</span>'
 save("close", comp("close", 23.8, """
 #close-stage{background:radial-gradient(1100px 600px at 50% 45%,#121c2c,#05070b 75%)}
 .l1{position:absolute;left:0;right:0;top:250px;text-align:center;font-family:'Instrument Serif',serif;font-style:italic;font-size:84px}
@@ -111,7 +109,7 @@ f"""<div id="g1"><div class="l1" id="l1">We're Autopilot.</div>
 <div class="belief" id="bl">Pehle vyavahar, phir vyapar.</div><div class="belief2" id="bl2">Relationship first, business next.</div></div>
 <div class="lock" id="lock"><img src="{LOGO_AP}" alt="Autopilot"><span class="x">×</span><img src="{LOGO_FK}" alt="Flipkart"></div>
 <div class="end" id="end">Andheri East. Let's choose it together.</div><div class="cta" id="cta">Enter the experience</div>""",
-"""function odoTo(id,value,at,dur,digits){const s=String(value).padStart(digits,'0');for(let i=0;i<digits;i++){tl.to('#'+id+' .c'+i+' .strip',{yPercent:-(10+(+s[i]))/30*100,duration:dur,ease:'power3.out'},at+i*0.07);}}
+"""function odoTo(id, value, at, dur, digits){  const el = document.getElementById(id), st = (window.__odo = window.__odo || {}), from = st[id] || 0; st[id] = value;  const p = {v: from};  tl.fromTo(p, {v: from}, {v: value, duration: dur + 0.25, ease: 'power3.out', immediateRender: false,    onUpdate: () => { el.textContent = Math.round(p.v).toLocaleString('en-US'); }}, at);}
 tl.from('#l1',{opacity:0,y:20,filter:'blur(6px)',duration:0.9,ease:'power3.out'},0.4);
 tl.from('#close-stage .stats',{opacity:0,y:20,duration:0.7,ease:'power3.out'},1.3);
 odoTo('o1',15000,1.6,1.2,5); odoTo('o2',20,3.1,1.0,2); odoTo('o3',7,4.05,0.9,1);
