@@ -1,0 +1,143 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "route_corporate",
+    "name": "Corporate Avenue",
+    "station": "Chakala (J B Nagar)",
+    "exit": "W1 stairs, street level",
+    "measured_m": 908,
+    "stairs_m": 5,
+    "measured_from_stair_top_m": 913,
+    "measured_from_platform_centre_m": 989,
+    "canonical_m": 850,
+    "canonical_min": 11,
+    "door_connector_m": 34.4,
+    "osm_ways": [
+     183286150,
+     665877159,
+     681314336,
+     1124942666
+    ],
+    "gap_joins_used": 1,
+    "method": "Dijkstra on walkable OSM highway ways (Overpass, 23 Nov 2026); drawn and measured from the foot of the station stairs to the door; private campus roads only inside the destination campus",
+    "source": "\u00a9 OpenStreetMap contributors (ODbL)"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      72.8669342,
+      19.1121455
+     ],
+     [
+      72.8669267,
+      19.1121215
+     ],
+     [
+      72.8668721,
+      19.1121369
+     ],
+     [
+      72.8667755,
+      19.1120298
+     ],
+     [
+      72.8665159,
+      19.1118159
+     ],
+     [
+      72.8662952,
+      19.1116807
+     ],
+     [
+      72.8661548,
+      19.1116151
+     ],
+     [
+      72.8659268,
+      19.1115087
+     ],
+     [
+      72.8658701,
+      19.1114938
+     ],
+     [
+      72.8655864,
+      19.1114194
+     ],
+     [
+      72.8650144,
+      19.1113199
+     ],
+     [
+      72.8635379,
+      19.1110719
+     ],
+     [
+      72.8628502,
+      19.1109439
+     ],
+     [
+      72.8627024,
+      19.1109164
+     ],
+     [
+      72.8623623,
+      19.110926
+     ],
+     [
+      72.8621464,
+      19.1109051
+     ],
+     [
+      72.861762,
+      19.1109104
+     ],
+     [
+      72.8616866,
+      19.1109281
+     ],
+     [
+      72.8614365,
+      19.1109867
+     ],
+     [
+      72.861239,
+      19.111061
+     ],
+     [
+      72.8606016,
+      19.1113282
+     ],
+     [
+      72.8601796,
+      19.1114703
+     ],
+     [
+      72.8598759,
+      19.1115461
+     ],
+     [
+      72.8597885,
+      19.1113479
+     ],
+     [
+      72.8597778,
+      19.1109576
+     ],
+     [
+      72.8598938,
+      19.1108173
+     ],
+     [
+      72.859637,
+      19.110625
+     ]
+    ]
+   }
+  }
+ ]
+}

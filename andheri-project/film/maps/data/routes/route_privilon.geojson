@@ -1,0 +1,49 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "route_privilon",
+    "name": "Privilon",
+    "station": "Marol Naka",
+    "exit": "NE stairs, street level",
+    "measured_m": 80,
+    "stairs_m": 19,
+    "measured_from_stair_top_m": 98,
+    "measured_from_platform_centre_m": 162,
+    "canonical_m": 140,
+    "canonical_min": 2,
+    "door_connector_m": 10.4,
+    "osm_ways": [
+     666061008,
+     1103453738
+    ],
+    "gap_joins_used": 0,
+    "method": "Dijkstra on walkable OSM highway ways (Overpass, 23 Nov 2026); drawn and measured from the foot of the station stairs to the door; private campus roads only inside the destination campus",
+    "source": "\u00a9 OpenStreetMap contributors (ODbL)"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      72.8802589,
+      19.1079551
+     ],
+     [
+      72.8801439,
+      19.1079973
+     ],
+     [
+      72.8796441,
+      19.108182
+     ],
+     [
+      72.87968,
+      19.10827
+     ]
+    ]
+   }
+  }
+ ]
+}

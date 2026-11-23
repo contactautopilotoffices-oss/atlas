@@ -1,0 +1,128 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "id": "route_723",
+    "name": "723 Avenue",
+    "station": "Marol Naka",
+    "exit": "NE stairs, street level",
+    "measured_m": 698,
+    "stairs_m": 19,
+    "measured_from_stair_top_m": 717,
+    "measured_from_platform_centre_m": 780,
+    "canonical_m": 700,
+    "canonical_min": 9,
+    "door_connector_m": 21.7,
+    "osm_ways": [
+     102523206,
+     666061008,
+     1103453738,
+     1152599022,
+     1152599024
+    ],
+    "gap_joins_used": 0,
+    "method": "Dijkstra on walkable OSM highway ways (Overpass, 23 Nov 2026); drawn and measured from the foot of the station stairs to the door; private campus roads only inside the destination campus",
+    "source": "\u00a9 OpenStreetMap contributors (ODbL)"
+   },
+   "geometry": {
+    "type": "LineString",
+    "coordinates": [
+     [
+      72.8802589,
+      19.1079551
+     ],
+     [
+      72.8807092,
+      19.1077909
+     ],
+     [
+      72.8808028,
+      19.1077539
+     ],
+     [
+      72.8809761,
+      19.1076885
+     ],
+     [
+      72.8812616,
+      19.1076291
+     ],
+     [
+      72.8815587,
+      19.1075968
+     ],
+     [
+      72.8820505,
+      19.1075721
+     ],
+     [
+      72.8822305,
+      19.1075631
+     ],
+     [
+      72.8826972,
+      19.1075396
+     ],
+     [
+      72.8832141,
+      19.1074853
+     ],
+     [
+      72.8834337,
+      19.1074329
+     ],
+     [
+      72.8837364,
+      19.1073394
+     ],
+     [
+      72.8839336,
+      19.1072401
+     ],
+     [
+      72.8843701,
+      19.1078408
+     ],
+     [
+      72.884483,
+      19.1080264
+     ],
+     [
+      72.8844935,
+      19.108087
+     ],
+     [
+      72.8844963,
+      19.1081543
+     ],
+     [
+      72.8844709,
+      19.1082824
+     ],
+     [
+      72.8844127,
+      19.1085837
+     ],
+     [
+      72.8843134,
+      19.1090725
+     ],
+     [
+      72.8842954,
+      19.1091235
+     ],
+     [
+      72.8841481,
+      19.1095415
+     ],
+     [
+      72.8843436,
+      19.1096039
+     ]
+    ]
+   }
+  }
+ ]
+}

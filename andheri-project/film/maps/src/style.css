@@ -1,0 +1,121 @@
+/* Andheri film maps: one 1920x1080 stage, driven frame by frame by app.js (window.__seek) */
+@font-face { font-family: 'Inter'; font-weight: 400; src: url(../fonts/inter-latin-400-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Inter'; font-weight: 500; src: url(../fonts/inter-latin-500-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Inter'; font-weight: 600; src: url(../fonts/inter-latin-600-normal.woff2) format('woff2'); }
+@font-face { font-family: 'Inter'; font-weight: 700; src: url(../fonts/inter-latin-700-normal.woff2) format('woff2'); }
+
+:root {
+  --fb: #2A55E5;          /* Flipkart blue: routes and accents */
+  --fy: #FFC200;          /* Flipkart yellow: sparingly */
+  --ink: #0E1726;
+  --ink-2: #3F4A5C;
+  --muted: #6B7686;
+  --l1: #3E8BF0;          /* Metro Line 1, blue */
+  --l3: #22C3B6;          /* Metro Line 3, aqua */
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 1920px; height: 1080px; overflow: hidden; background: #0b1018; }
+body { font-family: 'Inter', system-ui, sans-serif; -webkit-font-smoothing: antialiased; font-feature-settings: 'ss01', 'cv11'; }
+#stage { position: absolute; inset: 0; overflow: hidden; }
+#map, #clouds, #dots, #grade, #ov { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+#clouds, #dots, #grade, #ov { pointer-events: none; }
+.mapboxgl-ctrl-logo, .mapboxgl-ctrl-attrib, .mapboxgl-ctrl-bottom-left, .mapboxgl-ctrl-bottom-right { display: none !important; }
+
+/* colour grade for the satellite clips: a soft vignette and a cool lift in the shadows */
+#grade { opacity: 0; }
+.sat #grade { opacity: 1; background:
+  radial-gradient(120% 95% at 50% 46%, rgba(8, 14, 24, 0) 52%, rgba(8, 14, 24, .34) 100%),
+  linear-gradient(180deg, rgba(10, 18, 30, .10) 0%, rgba(10, 18, 30, 0) 26%, rgba(10, 18, 30, 0) 70%, rgba(10, 18, 30, .20) 100%); }
+.light #grade { opacity: 1; background: radial-gradient(130% 110% at 50% 45%, rgba(30, 40, 60, 0) 60%, rgba(30, 40, 60, .07) 100%); }
+
+/* ------------------------------------------------------------------ attribution */
+#credit { position: absolute; right: 28px; bottom: 22px; display: flex; align-items: center; gap: 10px;
+  font: 500 13px/1 'Inter'; letter-spacing: .01em; }
+#credit img { width: 74px; height: auto; display: block; }
+.sat #credit { color: rgba(255, 255, 255, .78); text-shadow: 0 1px 2px rgba(0, 0, 0, .45); }
+.light #credit { color: rgba(40, 48, 62, .62); }
+
+/* ------------------------------------------------------------------ ground labels on satellite */
+.gl { position: absolute; left: 0; top: 0; white-space: nowrap; color: #fff; will-change: transform, opacity;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .55), 0 0 18px rgba(0, 0, 0, .35); }
+.gl.caps { font: 500 15px/1 'Inter'; letter-spacing: .42em; text-transform: uppercase; }
+.gl.big { font: 600 30px/1 'Inter'; letter-spacing: .5em; text-transform: uppercase; }
+.gl.small { font: 500 13px/1 'Inter'; letter-spacing: .32em; text-transform: uppercase; color: rgba(255, 255, 255, .86); }
+.gl .tick { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #fff; margin-right: 12px; vertical-align: middle; box-shadow: 0 0 0 3px rgba(255,255,255,.18); }
+
+/* ------------------------------------------------------------------ property pins on satellite */
+.pin { position: absolute; left: 0; top: 0; width: 0; height: 0; will-change: transform; }
+.pin .ring { position: absolute; left: -40px; top: -40px; width: 80px; height: 80px; border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, .9); transform: scale(0); opacity: 0; }
+.pin .dot { position: absolute; left: -7px; top: -7px; width: 14px; height: 14px; border-radius: 50%; background: #fff;
+  box-shadow: 0 0 0 4px rgba(42, 85, 229, .95), 0 0 0 9px rgba(42, 85, 229, .22), 0 2px 10px rgba(0, 0, 0, .45); transform: scale(0); }
+.pin .drop { position: absolute; left: 0; bottom: 0; width: 0; will-change: transform, opacity; }
+.pin .stem { position: absolute; left: -0.75px; bottom: 0; width: 1.5px; transform-origin: 50% 100%;
+  background: linear-gradient(0deg, rgba(255, 255, 255, .15), rgba(255, 255, 255, .95)); }
+.pin .card { position: absolute; bottom: 0; left: 0; transform: translate(-50%, 0); white-space: nowrap;
+  padding: 13px 20px 14px 18px; border-radius: 14px; display: flex; align-items: center; gap: 13px;
+  background: rgba(13, 18, 28, .52); border: 1px solid rgba(255, 255, 255, .16);
+  backdrop-filter: blur(18px) saturate(1.35); -webkit-backdrop-filter: blur(18px) saturate(1.35);
+  box-shadow: 0 18px 40px -12px rgba(0, 0, 0, .55), 0 2px 6px rgba(0, 0, 0, .25), inset 0 1px 0 rgba(255, 255, 255, .08); }
+.pin .card .acc { width: 8px; height: 8px; border-radius: 50%; background: var(--fy); flex: none; box-shadow: 0 0 0 4px rgba(255, 194, 0, .16); }
+.pin .card b { display: block; font: 600 23px/1.1 'Inter'; color: #fff; letter-spacing: -.005em; }
+.pin .card small { display: block; font: 500 13px/1 'Inter'; color: rgba(255, 255, 255, .66); letter-spacing: .16em; text-transform: uppercase; margin-top: 7px; }
+
+/* ------------------------------------------------------------------ metro station tags on satellite */
+.st { position: absolute; left: 0; top: 0; width: 0; height: 0; will-change: transform, opacity; }
+.st .node { position: absolute; left: -8px; top: -8px; width: 16px; height: 16px; border-radius: 50%; background: #fff;
+  border: 4px solid var(--c); box-shadow: 0 0 0 3px rgba(255, 255, 255, .35), 0 2px 8px rgba(0, 0, 0, .45); }
+.st .node.minor { left: -5px; top: -5px; width: 10px; height: 10px; border-width: 3px; box-shadow: 0 1px 4px rgba(0,0,0,.4); }
+.st .tag { position: absolute; white-space: nowrap; display: flex; align-items: center; gap: 10px; padding: 9px 14px 9px 10px; border-radius: 999px;
+  background: rgba(255, 255, 255, .9); color: var(--ink); box-shadow: 0 10px 28px -8px rgba(0, 0, 0, .5), 0 1px 3px rgba(0, 0, 0, .25);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+.st .tag i { display: inline-flex; align-items: center; justify-content: center; height: 24px; padding: 0 9px; border-radius: 999px;
+  background: var(--c); color: #fff; font: 600 13px/1 'Inter'; font-style: normal; letter-spacing: .02em; }
+.st .tag b { font: 600 17px/1 'Inter'; letter-spacing: -.005em; }
+
+/* ------------------------------------------------------------------ Google-look route clips */
+.gpin { position: absolute; left: 0; top: 0; width: 0; height: 0; will-change: transform; }
+.gpin .shadow { position: absolute; left: -14px; top: -6px; width: 28px; height: 12px; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(20, 20, 30, .35), rgba(20, 20, 30, 0)); }
+.gpin svg { position: absolute; left: -19px; top: -54px; width: 38px; height: 54px; overflow: visible;
+  filter: drop-shadow(0 3px 4px rgba(60, 10, 10, .28)); transform-origin: 19px 54px; }
+.card-l { position: absolute; white-space: nowrap; padding: 14px 20px 15px; border-radius: 16px;
+  background: rgba(255, 255, 255, .94); border: 1px solid rgba(15, 23, 42, .06);
+  backdrop-filter: blur(20px) saturate(1.6); -webkit-backdrop-filter: blur(20px) saturate(1.6);
+  box-shadow: 0 1px 1px rgba(15, 23, 42, .04), 0 10px 24px -6px rgba(15, 23, 42, .16), 0 28px 60px -18px rgba(15, 23, 42, .22); }
+.card-l b { display: block; font: 600 22px/1.1 'Inter'; color: var(--ink); letter-spacing: -.01em; }
+.card-l small { display: block; font: 500 14px/1.2 'Inter'; color: var(--muted); margin-top: 6px; }
+.badge { position: absolute; left: 0; top: 0; width: 0; height: 0; will-change: transform; }
+.badge .ico { position: absolute; left: -19px; top: -19px; width: 38px; height: 38px; border-radius: 11px; background: var(--l1);
+  border: 2.5px solid #fff; display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 16px -4px rgba(15, 40, 90, .45), 0 1px 3px rgba(15, 23, 42, .25); }
+.badge .ico svg { width: 22px; height: 22px; }
+.badge .card-l { padding: 12px 18px 13px; }
+.badge .card-l b { font-size: 19px; }
+.badge .card-l small { font-size: 13px; display: flex; align-items: center; gap: 7px; }
+.badge .card-l small i { width: 10px; height: 10px; border-radius: 3px; background: var(--l1); display: inline-block; }
+
+/* the distance chip with rolling digits */
+.chip { position: absolute; left: 96px; bottom: 96px; display: flex; align-items: center; gap: 22px;
+  padding: 22px 34px 22px 22px; border-radius: 24px;
+  background: rgba(255, 255, 255, .9); border: 1px solid rgba(15, 23, 42, .06);
+  backdrop-filter: blur(26px) saturate(1.7); -webkit-backdrop-filter: blur(26px) saturate(1.7);
+  box-shadow: 0 1px 1px rgba(15, 23, 42, .05), 0 14px 30px -10px rgba(15, 23, 42, .22), 0 40px 80px -30px rgba(15, 23, 42, .30);
+  will-change: transform, opacity; }
+.chip .walk { width: 64px; height: 64px; border-radius: 18px; background: var(--fb); display: flex; align-items: center; justify-content: center; flex: none;
+  box-shadow: 0 8px 18px -6px rgba(42, 85, 229, .6), inset 0 1px 0 rgba(255, 255, 255, .18); }
+.chip .walk svg { width: 34px; height: 34px; }
+.chip .nums { display: flex; align-items: baseline; font: 600 56px/1 'Inter'; color: var(--ink); letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.chip .unit { font: 500 30px/1 'Inter'; color: var(--ink-2); margin: 0 0 0 10px; letter-spacing: 0; }
+.chip .sep { width: 7px; height: 7px; border-radius: 50%; background: #C2C8D2; margin: 0 22px; align-self: center; transform: translateY(4px); }
+.chip .cap { font: 500 15px/1 'Inter'; color: var(--muted); letter-spacing: .02em; margin-top: 12px; }
+.chip .cap em { font-style: normal; color: var(--fb); font-weight: 600; }
+.wheel { position: relative; display: inline-block; height: 1.12em; overflow: hidden; width: .64em;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 78%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 22%, #000 78%, transparent 100%); }
+.wheel .strip { position: absolute; left: 0; top: 0; width: 100%; text-align: center; will-change: transform; }
+.wheel .strip span { display: block; height: 1.12em; line-height: 1.12em; }
+
+.pin.mini .dot { left: -4.5px; top: -4.5px; width: 9px; height: 9px; box-shadow: 0 0 0 2.5px rgba(42, 85, 229, .95), 0 1px 6px rgba(0, 0, 0, .45); }
+.pin.mini .ring { left: -26px; top: -26px; width: 52px; height: 52px; }
+.pin.mini .dot { display: none; }
