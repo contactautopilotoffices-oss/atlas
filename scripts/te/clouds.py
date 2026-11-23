@@ -74,6 +74,12 @@ def grade(img):
     H, W = img.shape[:2]
     lum = img.mean(-1, keepdims=True)
     img = np.clip((img - 0.06 * np.array([0.66, 0.70, 0.76])) / 0.94, 0, 1)   # lift some of the haze veil
+    # the brick reads too orange once graded: pull strongly orange pixels towards a deeper terracotta
+    r_, g_, b_ = img[..., 0], img[..., 1], img[..., 2]
+    orange = smooth(1.25, 1.6, r_ / (g_ + 1e-3)) * smooth(0.25, 0.4, r_)
+    lum0 = img.mean(-1, keepdims=True)
+    img = img - (img - lum0) * (0.32 * orange[..., None])
+    img = img * (1 - 0.10 * orange[..., None]) * (1 + np.array([0.0, -0.02, -0.03]) * orange[..., None])
     lum = img.mean(-1, keepdims=True)
     img = img + (img - lum) * 0.18                                 # a little saturation
     img = np.clip((img - 0.5) * 1.10 + 0.5, 0, 1)                   # a little contrast
