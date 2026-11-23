@@ -9,6 +9,28 @@ height, light the offered floors and walk to the metro.
   `#a14-18-19` or `#d1`, and the 2D atlas shows a "3D world" button.
 - **No film.** This is the 3D model only, as asked on 23 November 2026.
 
+## Update, 24 November 2026: rebuilt from imagery (read this first)
+
+The first build placed each building by an indicative pin with an assumed facade. A check against Google
+satellite and Street View (`docs/JINDALX_VERIFICATION.md`) found all four wrong, so they were rebuilt.
+Where the tables below disagree with this section, this section wins.
+
+- **Positions** (`jindalx/build-data.cjs`, `positions`): the building seen in imagery, not the sheet's pin.
+  Magnus is Magnus Greens, plot C-2 (Google geocode), 520 m from the old pin. A104 is the best candidate only.
+- **Footprints and gates** (`scripts/world/refs/noida_jindalx.json`): from the proposals in the verification
+  document. `poly` is the building, `plot` the compound, plus `gates` and `front_toward`.
+- **Facades** (`scripts/world/heroes/noida_jindalx.json`, `hero_building.py`): Magnus long dark-glass block with
+  white fascias and three portals; A104 charcoal panels and blue-grey glass; A-14 copper, green glass and grey
+  crown on a stilt floor (452 m2 plot, G+4); D1 cream stucco, teal windows and a round corner tower.
+- **Textures** (`scripts/world/hero_textures.py --facades`): ten PBR sets, real tile sizes in
+  `media/jindalx-noida/world/tex/TILES.json`. Procedural: no imagery is copied.
+- **Walks** are recomputed from the new positions: `routes.py` per region, merged into `world-routes.json`, then
+  `node jindalx/build-data.cjs` and `node jindalx/make-bundle.cjs`.
+- **Magnus slab** needs `--slab-min 1870`: the Sector 59 station is 2.4 km away by street.
+- **Environment** (`scripts/world/prep.py` / `diorama.py`): see the vegetation and walls entry in
+  `docs/JOURNAL.md`.
+- **Environment needs a Python 3.13 venv** for bpy 5.2.3 (`uv venv --python 3.13 .w3d`).
+
 ## What every figure comes from
 
 | Option | Storeys modelled | Floor plate modelled | Offered floors lit | Walk to metro (measured from pin) | Workbook says | Facade |
