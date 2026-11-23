@@ -131,7 +131,7 @@ const EXPECT = {
   flipkartAndheriEast: async (page) => {
     const errors = [];
     const ids = await page.locator('#list .card').evaluateAll(els => els.map(e => e.dataset.id));
-    if (ids.join('|') !== '723-avenue|corporate-avenue|privilon') errors.push('the three-property shortlist changed: ' + ids.join(', '));
+    if (ids.join('|') !== 'privilon|corporate-avenue|723-avenue') errors.push('the three-property shortlist changed: ' + ids.join(', '));   // the priority order published in d19f0eb: Privilon 1, Corporate Avenue 2, 723 Avenue 3
     for (const id of ids) {
       await page.click(`#list .card[data-id="${id}"]`);
       const media = await page.locator('.gal-videos video').evaluateAll(els => els.map(v => ({ controls: v.controls, muted: v.muted, inline: v.playsInline, preload: v.preload, poster: !!v.poster, label: v.getAttribute('aria-label'), autoplay: v.autoplay })));
@@ -228,6 +228,10 @@ async function run(name, bundle, base, browser) {
     if (/mapbox-gl\.css/.test(url)) return route.fulfill({ contentType: "text/css", body: "" });
     if (/atlas-cms\.js/.test(url)) return route.fulfill({ contentType: "text/javascript", body: "/* CMS off in tests */" });
     if (/fonts\.googleapis|fonts\.gstatic/.test(url)) return route.fulfill({ contentType: "text/css", body: "" });
+    /* Gallery media published to the CMS bucket (Supabase storage): served here, so the test does not depend on
+       that host, and a walkthrough video left half-loaded when the next card opens is not a failed request. */
+    if (/supabase\.co\/storage\/.+\.(mp4|webm)(\?|$)/.test(url)) return route.fulfill({ contentType: "video/mp4", body: "" });
+    if (/supabase\.co\/storage\/.+\.(jpe?g|png|webp)(\?|$)/.test(url)) return route.fulfill({ contentType: "image/png", body: Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=", "base64") });
     /* Satellite tiles are fulfilled rather than aborted: an abort surfaces as
        a console error and would drown the errors that matter. */
     /* Routed drive-time areas: squares round the site, 10, 20 and 30 min. */
