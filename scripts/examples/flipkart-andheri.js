@@ -38,7 +38,7 @@ const DECK = "Flipkart Property Inventory, Andheri East (Autopilot deck, Nov 202
 
 /* ---- the deck, one block per slide, in slide order ---------------------- */
 const D = [
-  { id: "723-avenue", name: "723 Avenue", priority: "PRIORITY 1", floor: "13th & 14th", micro: "marol", grade: "A", floors: "G+15",
+  { id: "723-avenue", name: "723 Avenue", priority: "PRIORITY 3", floor: "13th & 14th", micro: "marol", grade: "A", floors: "G+15",
     furnishing: "Bareshell", efficiency: "60%", carpet: 11331, builtUp: 18885, ceiling: "11.7 ft", perSeat: "Rs. 16,000 - Rs. 16,500 + GST",
     parking: "11 Car Parking", parkingCharges: "", noc: "Available", occ: "Available", dg: "Common area only", possession: "Immediately", microText: "Marol" },
   { id: "corporate-avenue", name: "Corporate Avenue", priority: "PRIORITY 2", floor: "3rd and 4th", micro: "chakala", grade: "A-", floors: "G+8",
@@ -47,7 +47,7 @@ const D = [
   { id: "vaman-techno-centre", name: "Vaman Techno Centre", priority: "", floor: "3rd", micro: "marol-metro-station", grade: "B", floors: "G+7",
     furnishing: "Bareshell", efficiency: "62%", carpet: 12300, builtUp: 19700, ceiling: "11 ft - 12 ft (approx.)", perSeat: "Rs. 13,400 - Rs. 13,900 + GST",
     parking: "13 Car parking", parkingCharges: "Rs. 5,000 per car park per month + Taxes", noc: "Available", occ: "Available", dg: "Common area only", possession: "Immediately", microText: "Marol Metro Station" },
-  { id: "privilon", name: "Privilon", priority: "", floor: "Multiple", micro: "marol", grade: "A", floors: "G+15",
+  { id: "privilon", name: "Privilon", priority: "PRIORITY 1", floor: "Multiple", micro: "marol", grade: "A", floors: "G+15",
     furnishing: "Bareshell", efficiency: "60%", carpet: 11331, builtUp: 18885, ceiling: "11.7 ft", perSeat: "Rs. 18,000 - Rs. 18,500 + GST",
     parking: "5 Car parking", parkingCharges: "To Be Discussed", noc: "Jan 2027", occ: "Jan 2027", dg: "Common area only", possession: "Jan 2027", microText: "Marol" },
   { id: "landmark", name: "Landmark", priority: "", floor: "6th", micro: "weh", grade: "B", floors: "G+6",
@@ -215,7 +215,9 @@ function gmapsRoutes(id, routes) {
 const reason = (o) => [o.priority, `Floor ${o.floor}`, o.furnishing, `Carpet area ${o.carpet.toLocaleString("en-US")} sq. ft.`, `Possession: ${o.possession}`].filter(Boolean).join(" · ");
 
 const sqft = (n) => n.toLocaleString("en-US") + " sq. ft.";
-const options = D.map((o, i) => {
+const SHORTLIST = ["privilon", "corporate-avenue", "723-avenue"];
+const orderedInventory = [...SHORTLIST.map(id => D.find(o => o.id === id)), ...D.filter(o => !SHORTLIST.includes(o.id))];
+const options = orderedInventory.map((o, i) => {
   const r = R[o.id];
   /* The deck's "Property specifications" table, in its order and its words. */
   const spec = [
@@ -274,6 +276,12 @@ const zones = [
   { key: "csmi", label: "CSMI Metro", name: "CSMI Metro", color: "#5b7a8c" },
 ];
 
+const sceneDirectory = '/media/flipkart-andheri/world/d-preview/';
+const sceneStills = {
+  '723-avenue': 'checkpoint/723-district-aerial2.jpg',
+  'privilon': 'checkpoint/privilon-confirmed-plot.jpg',
+  'corporate-avenue': 'checkpoint/corporate-campus.jpg',
+};
 const bundle = {
   meta: {
     title: "Flipkart Andheri East Atlas",
@@ -286,8 +294,19 @@ const bundle = {
     routeFeed: "/api/routes/mappls?atlas=flipkart-andheri",
     /* The 3D world at /flipkart-andheri/world: the model is built in Blender
        by scripts/world/ (see scripts/world/README.md). */
-    world: { href: "/flipkart-andheri/world", data: "/media/flipkart-andheri/world/", sky: "sky.hdr", poster: "hero.jpg",
-      thumbs: Object.fromEntries(D.map(o => [o.id, `r/${o.id}-close.jpg`])), renders: Object.fromEntries(D.map(o => [o.id, `r/${o.id}-street.jpg`])) },
+    world: { href: "/flipkart-andheri/world", data: "/media/flipkart-andheri/world/", sky: "sky.hdr", poster: sceneStills.privilon,
+      branding: 'autopilot-flipkart',
+      cad: { 'corporate-avenue': '/engine/cad.html?property=corporate-avenue', privilon: '/engine/cad.html?property=privilon' },
+      mapHref: '/flipkart-andheri-east',
+      contexts: { base: '/media/flipkart-andheri/concept/', radius_m: 600, reviewOnly: true },
+      models: Object.fromEntries(Object.keys(sceneStills).map(id => [id, {
+        glb: sceneDirectory + id + '.glb',
+        data: sceneDirectory + id + '.json',
+        aoBase: sceneDirectory,
+      }])),
+      credit: 'Context: Overture Maps. Source-informed Blender facade studies; unverified dimensions and finishes are indicative. Distances: Google Maps.',
+      thumbs: sceneStills,
+      renders: { ...sceneStills, '723-avenue': 'checkpoint/723-district-lobby.jpg' } },
     sheet: `${DECK}. Positions and connectivity researched Nov 2026; each carries its source.`,
   },
   options, zones, transit,
@@ -326,7 +345,7 @@ write(SLUG, bundle, ACCESS);
    site root's sign-in sends FLIPDEMOACC to /flipkart-andheri). Its sign-in
    backdrop is read from the first atlas's media folder. */
 const MAP_SLUG = "flipkart-andheri-east", MAP_ACCESS = ACCESS;   // the same ID and password as /flipkart-andheri
-const flat = JSON.parse(JSON.stringify(bundle)); delete flat.meta.world;
+const flat = JSON.parse(JSON.stringify(bundle)); delete flat.meta.world; flat.meta.branding='autopilot-flipkart';
 /* Its own connectivity, as Autopilot measured it in Google Maps (Nov 2026): two metro stations
    and Andheri railway station per building, distances only (no walk times
    were given, so none are shown). Landmark's second station is Gundavali
@@ -394,6 +413,8 @@ for (const o of MARWAH) {
    only, bold, with no source links (the sources stay in this script). */
 for (const o of flat.options) o.facts = o.facts.map(({ src, ...f }) => f);
 flat.meta.boldSpec = true;
+flat.meta.world = { href: "/flipkart-andheri/world" };
+flat.copy.world = { label: "Digital twin", hint: "Open the property model, metro connections and CAD floor plans." };
 flat.zones.push({ key: "sakinaka-metro", label: "Sakinaka Metro", name: "Sakinaka Metro", color: "#6b5bb5" });
 flat.meta.sheet = `${DECK}; Marwah Tower and Marwah Business Park from the ${SHEET}. Positions and connectivity researched Nov 2026; each carries its source.`;
 
@@ -405,7 +426,7 @@ flat.transit.lines.splice(2, 0, { key: "line7", name: "Metro Line 7 (Red)", shor
 flat.copy.connect.note = "Walking distance from each building to its two metro stations, and Andheri railway station by road, as measured in Google Maps (Nov 2026).";
 /* Client shortlist: only this 2D Andheri East atlas changes. Keep the
    source inventory intact for the separate /flipkart-andheri study. */
-const SHORTLIST = ["723-avenue", "corporate-avenue", "privilon"];
+
 const visitMedia = JSON.parse(fs.readFileSync(path.join(root, "examples", "flipkart-andheri-east.media.json"), "utf8"));
 flat.options = SHORTLIST.map((id, i) => {
   const option = flat.options.find(o => o.id === id);
@@ -413,5 +434,5 @@ flat.options = SHORTLIST.map((id, i) => {
 });
 flat.zones = flat.zones.filter(z => flat.options.some(o => o.micro === z.key));
 flat.copy.overview.intro = "{optionCount} shortlisted buildings, with edited property walkthroughs and the metro around them.";
-flat.meta.sheet = `${DECK}. Shortlisted by Autopilot: 723 Avenue, Corporate Avenue and Privilon (Nov 2026). Positions and connectivity researched Nov 2026; each carries its source.`;
+flat.meta.sheet = `${DECK}. Shortlisted by Autopilot: Privilon, Corporate Avenue and 723 Avenue (Nov 2026). Positions and connectivity researched Nov 2026; each carries its source.`;
 write(MAP_SLUG, flat, MAP_ACCESS, { media: `/media/${SLUG}/` });

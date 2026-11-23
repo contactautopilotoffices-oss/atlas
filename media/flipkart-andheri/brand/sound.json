@@ -1,0 +1,10 @@
+{
+  "source": "ElevenLabs Sound Effects",
+  "model": "eleven_text_to_sound_v2",
+  "prompt": "A refined four-second architectural digital twin reveal: soft airy rise with delicate precise digital assembly ticks, resolving into one warm crystalline arrival tone. Calm, premium, subtle. No speech, no music, no heavy impact.",
+  "requested_seconds": 4,
+  "file": "twin-arrival.mp3",
+  "sha256": "efd738fc82e5e907e48740539d57902d1a82aa6899acfdd64fa0cff2138c7912",
+  "volume": 0.22,
+  "playback": "Only after the user enters the experience or enables sound; mute control provided."
+}

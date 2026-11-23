@@ -1,0 +1,354 @@
+{
+  "properties": {
+    "corporate-avenue": {
+      "name": "Corporate Avenue",
+      "variants": [
+        {
+          "id": "corporate-266",
+          "label": "266 workstations",
+          "workstations": 266,
+          "source_file": "19112026_FLIPKART_Corporate Avenue - 266.dwg",
+          "source_sha256": "293acf1d4b1c775def877ba1612b677c1e49876143c75794d582c2bd365abb99",
+          "plans": [
+            {
+              "id": "corporate-266-plan1",
+              "file": "corporate-266-plan1.json",
+              "semantic": "corporate-266-plan1-semantic.json",
+              "label": "Floor 1",
+              "workstations": 152,
+              "primary_spaces": 10,
+              "supporting_spaces": 9,
+              "closed_enclosures": 4,
+              "name": "Floor 1",
+              "model": "/media/flipkart-andheri/interiors/corporate-266-plan1.glb",
+              "ceiling": "/media/flipkart-andheri/interiors/corporate-266-plan1-ceiling.glb",
+              "render": "/media/flipkart-andheri/interiors/corporate-266-plan1-daylight-cutaway.png"
+            },
+            {
+              "id": "corporate-266-plan2",
+              "file": "corporate-266-plan2.json",
+              "semantic": "corporate-266-plan2-semantic.json",
+              "label": "Floor 2",
+              "workstations": 114,
+              "primary_spaces": 10,
+              "supporting_spaces": 8,
+              "closed_enclosures": 5,
+              "name": "Floor 2",
+              "model": "/media/flipkart-andheri/interiors/corporate-266-plan2.glb",
+              "ceiling": "/media/flipkart-andheri/interiors/corporate-266-plan2-ceiling.glb"
+            }
+          ],
+          "seats": 266
+        },
+        {
+          "id": "corporate-281",
+          "label": "281 workstations",
+          "workstations": 281,
+          "source_file": "19112026_FLIPKART_Corporate Avenue - 281.dwg",
+          "source_sha256": "b1e3c14138a4549743e5ad417a5c2fd4f7db20ab8e86107d3259af8a1e54afa9",
+          "plans": [
+            {
+              "id": "corporate-281-plan1",
+              "file": "corporate-281-plan1.json",
+              "semantic": "corporate-281-plan1-semantic.json",
+              "label": "Floor 1",
+              "workstations": 152,
+              "primary_spaces": 10,
+              "supporting_spaces": 9,
+              "closed_enclosures": 4,
+              "name": "Floor 1",
+              "model": "/media/flipkart-andheri/interiors/corporate-281-plan1.glb",
+              "ceiling": "/media/flipkart-andheri/interiors/corporate-281-plan1-ceiling.glb"
+            },
+            {
+              "id": "corporate-281-plan2",
+              "file": "corporate-281-plan2.json",
+              "semantic": "corporate-281-plan2-semantic.json",
+              "label": "Floor 2",
+              "workstations": 129,
+              "primary_spaces": 10,
+              "supporting_spaces": 8,
+              "closed_enclosures": 4,
+              "name": "Floor 2",
+              "model": "/media/flipkart-andheri/interiors/corporate-281-plan2.glb",
+              "ceiling": "/media/flipkart-andheri/interiors/corporate-281-plan2-ceiling.glb"
+            }
+          ],
+          "seats": 281
+        },
+        {
+          "id": "corporate-373",
+          "label": "373 workstations",
+          "workstations": 373,
+          "source_file": "19112026_FLIPKART_Corporate Avenue - 373.dwg",
+          "source_sha256": "8ec0f2a33b12f056af1073972bafcac4b2fa25393c702e428b9cba8b9c1e2a25",
+          "plans": [
+            {
+              "id": "corporate-373-plan1",
+              "file": "corporate-373-plan1.json",
+              "semantic": "corporate-373-plan1-semantic.json",
+              "label": "Floor 1",
+              "workstations": 150,
+              "primary_spaces": 10,
+              "supporting_spaces": 9,
+              "closed_enclosures": 4,
+              "name": "Floor 1",
+              "model": "/media/flipkart-andheri/interiors/corporate-373-plan1.glb",
+              "ceiling": "/media/flipkart-andheri/interiors/corporate-373-plan1-ceiling.glb"
+            },
+            {
+              "id": "corporate-373-plan2",
+              "file": "corporate-373-plan2.json",
+              "semantic": "corporate-373-plan2-semantic.json",
+              "label": "Floor 2",
+              "workstations": 223,
+              "primary_spaces": 9,
+              "supporting_spaces": 7,
+              "closed_enclosures": 4,
+              "name": "Floor 2",
+              "model": "/media/flipkart-andheri/interiors/corporate-373-plan2.glb",
+              "ceiling": "/media/flipkart-andheri/interiors/corporate-373-plan2-ceiling.glb"
+            }
+          ],
+          "seats": 373
+        }
+      ]
+    },
+    "privilon": {
+      "name": "Privilon",
+      "variants": [
+        {
+          "id": "privilon-260",
+          "label": "260 workstations",
+          "workstations": 260,
+          "source_file": "PRIVILON_260 SEAT.dwg",
+          "source_sha256": "3955e655457864955b9b554722535fa935e5ca437c04c0f2806cf9a23a37d9fc",
+          "plans": [
+            {
+              "id": "privilon-260-plan1",
+              "file": "privilon-260-plan1.json",
+              "semantic": "privilon-260-plan1-semantic.json",
+              "label": "Floor plan",
+              "workstations": 260,
+              "primary_spaces": 14,
+              "supporting_spaces": 17,
+              "closed_enclosures": 13,
+              "name": "Floor plan",
+              "model": "/media/flipkart-andheri/interiors/privilon-260-plan1.glb",
+              "ceiling": "/media/flipkart-andheri/interiors/privilon-260-plan1-ceiling.glb",
+              "render": "/media/flipkart-andheri/interiors/privilon-260-plan1-daylight-cutaway.png"
+            }
+          ],
+          "seats": 260
+        },
+        {
+          "id": "privilon-280",
+          "label": "280 workstations",
+          "workstations": 280,
+          "source_file": "PRIVILON_280 SEAT.dwg",
+          "source_sha256": "da9d35a07117b3ea317e3dc29212022726e9aa76f52db267110efb5a9718043b",
+          "plans": [
+            {
+              "id": "privilon-280-plan1",
+              "file": "privilon-280-plan1.json",
+              "semantic": "privilon-280-plan1-semantic.json",
+              "label": "Floor plan",
+              "workstations": 280,
+              "primary_spaces": 14,
+              "supporting_spaces": 17,
+              "closed_enclosures": 13,
+              "name": "Floor plan",
+              "model": "/media/flipkart-andheri/interiors/privilon-280-plan1.glb",
+              "ceiling": "/media/flipkart-andheri/interiors/privilon-280-plan1-ceiling.glb"
+            }
+          ],
+          "seats": 280
+        },
+        {
+          "id": "privilon-301",
+          "label": "301 workstations",
+          "workstations": 301,
+          "source_file": "PRIVILON_301 SEAT.dwg",
+          "source_sha256": "da1db4b470240bbe996eac73ecc9409838498dcf0e4e32cdde6bff22ac9da80d",
+          "plans": [
+            {
+              "id": "privilon-301-plan1",
+              "file": "privilon-301-plan1.json",
+              "semantic": "privilon-301-plan1-semantic.json",
+              "label": "Floor plan",
+              "workstations": 301,
+              "primary_spaces": 15,
+              "supporting_spaces": 17,
+              "closed_enclosures": 14,
+              "name": "Floor plan",
+              "model": "/media/flipkart-andheri/interiors/privilon-301-plan1.glb",
+              "ceiling": "/media/flipkart-andheri/interiors/privilon-301-plan1-ceiling.glb"
+            }
+          ],
+          "seats": 301
+        }
+      ]
+    },
+    "723-avenue": {
+      "name": "723 Avenue",
+      "variants": [
+        {
+          "id": "723-252",
+          "label": "252-seat option",
+          "source_option_capacity": 252,
+          "source_file": "723_252 seat.dwg",
+          "source_sha256": "b22133b94401efa0a4390b77927e016b84d0cf1da5b5b92587380a4fa9ab3d31",
+          "seats": 252,
+          "workstations": 250,
+          "counted_workstations": 250,
+          "marked_workstations": 256,
+          "count_review_required": true,
+          "count_note": "CAD legends differ from counted standard desk blocks by six on the 14th floor. Designer confirmation is pending. The 252-seat source option contains 250 recognized standard desks across both floors.",
+          "plans": [
+            {
+              "id": "723-252-plan1",
+              "file": "723-252-plan1.json",
+              "semantic": "723-252-plan1-semantic.json",
+              "svg": "723-252-plan1.svg",
+              "desk_overlay": "723-252-plan1-desks.svg",
+              "provenance": "723-252-plan1-provenance.json.gz",
+              "name": "13th floor",
+              "label": "13th floor",
+              "floor_level": 13,
+              "workstations": 168,
+              "counted_workstations": 168,
+              "marked_workstations": 168,
+              "primary_spaces": 13,
+              "supporting_spaces": 12,
+              "closed_enclosures": 14
+            },
+            {
+              "id": "723-252-plan2",
+              "file": "723-252-plan2.json",
+              "semantic": "723-252-plan2-semantic.json",
+              "svg": "723-252-plan2.svg",
+              "desk_overlay": "723-252-plan2-desks.svg",
+              "provenance": "723-252-plan2-provenance.json.gz",
+              "name": "14th floor",
+              "label": "14th floor",
+              "floor_level": 14,
+              "workstations": 82,
+              "counted_workstations": 82,
+              "marked_workstations": 88,
+              "primary_spaces": 5,
+              "supporting_spaces": 5,
+              "closed_enclosures": 6
+            }
+          ]
+        },
+        {
+          "id": "723-284",
+          "label": "284-seat option",
+          "source_option_capacity": 284,
+          "source_file": "723_284 seat.dwg",
+          "source_sha256": "ece96693531392ac834934f3cd9e7a6275c5bc098cdea47c9b990bb62c24cc35",
+          "seats": 284,
+          "workstations": 284,
+          "counted_workstations": 284,
+          "marked_workstations": 290,
+          "count_review_required": true,
+          "count_note": "CAD legends differ from counted standard desk blocks by six on the 14th floor. Designer confirmation is pending.",
+          "plans": [
+            {
+              "id": "723-284-plan1",
+              "file": "723-284-plan1.json",
+              "semantic": "723-284-plan1-semantic.json",
+              "svg": "723-284-plan1.svg",
+              "desk_overlay": "723-284-plan1-desks.svg",
+              "provenance": "723-284-plan1-provenance.json.gz",
+              "name": "13th floor",
+              "label": "13th floor",
+              "floor_level": 13,
+              "workstations": 168,
+              "counted_workstations": 168,
+              "marked_workstations": 168,
+              "primary_spaces": 13,
+              "supporting_spaces": 12,
+              "closed_enclosures": 14
+            },
+            {
+              "id": "723-284-plan2",
+              "file": "723-284-plan2.json",
+              "semantic": "723-284-plan2-semantic.json",
+              "svg": "723-284-plan2.svg",
+              "desk_overlay": "723-284-plan2-desks.svg",
+              "provenance": "723-284-plan2-provenance.json.gz",
+              "name": "14th floor",
+              "label": "14th floor",
+              "floor_level": 14,
+              "workstations": 116,
+              "counted_workstations": 116,
+              "marked_workstations": 122,
+              "primary_spaces": 6,
+              "supporting_spaces": 5,
+              "closed_enclosures": 6
+            }
+          ]
+        },
+        {
+          "id": "723-300",
+          "label": "300-seat option",
+          "source_option_capacity": 300,
+          "source_file": "723_300 seat.dwg",
+          "source_sha256": "5c4cb112d6d2dc449200dcc06cb0e73a36fa0d68560d5faf2a36aad6db52e25a",
+          "seats": 300,
+          "workstations": 300,
+          "counted_workstations": 300,
+          "marked_workstations": 306,
+          "count_review_required": true,
+          "count_note": "CAD legends differ from counted standard desk blocks by six on the 14th floor. Designer confirmation is pending.",
+          "plans": [
+            {
+              "id": "723-300-plan1",
+              "file": "723-300-plan1.json",
+              "semantic": "723-300-plan1-semantic.json",
+              "svg": "723-300-plan1.svg",
+              "desk_overlay": "723-300-plan1-desks.svg",
+              "provenance": "723-300-plan1-provenance.json.gz",
+              "name": "13th floor",
+              "label": "13th floor",
+              "floor_level": 13,
+              "workstations": 168,
+              "counted_workstations": 168,
+              "marked_workstations": 168,
+              "primary_spaces": 13,
+              "supporting_spaces": 12,
+              "closed_enclosures": 14
+            },
+            {
+              "id": "723-300-plan2",
+              "file": "723-300-plan2.json",
+              "semantic": "723-300-plan2-semantic.json",
+              "svg": "723-300-plan2.svg",
+              "desk_overlay": "723-300-plan2-desks.svg",
+              "provenance": "723-300-plan2-provenance.json.gz",
+              "name": "14th floor",
+              "label": "14th floor",
+              "floor_level": 14,
+              "workstations": 132,
+              "counted_workstations": 132,
+              "marked_workstations": 138,
+              "primary_spaces": 6,
+              "supporting_spaces": 5,
+              "closed_enclosures": 6
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "notes": [
+    "Corporate Avenue source contains two separate plans per option; actual floor level numbers are not specified.",
+    "Workstation counts independently reconcile source legends and unique desk block instances. They exclude meeting/cafeteria/visitor seating.",
+    "Architectural heights, ceiling heights and finishes are not specified by these 2D imports.",
+    "The source drawings explicitly identify 13th and 14th floors.",
+    "Source option labels, CAD marked capacities and recognized standard workstation blocks are separate measures.",
+    "14th-floor source legends exceed recognized standard desk instances by six; the 252 source filename also exceeds the standard desk total by two. Custom furniture and final capacities require designer review.",
+    "No interior model, height, finish, route, slab boundary or carpet-area figure is inferred."
+  ]
+}
