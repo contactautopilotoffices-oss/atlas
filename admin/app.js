@@ -1647,7 +1647,8 @@ function subCard(s, pr, row) {
   const chip = { pending: "warn", approved: "ok", rejected: "bad" }[s.status];
   const fieldType = (k) => (p && typeof p.fields[k] === "number") || (CMS.BROKER_FIELDS.find(f => f.key === k) || {}).type === "number" ? "number" : "text";
   let body;
-  if (s.kind === "update") {
+  if(s.payload?.type==="layout-feedback"){body="<b>Design feedback</b>";}
+  else if (s.kind === "update") {
     const F = (s.payload && s.payload.fields) || {};
     body = `<div class="tw"><table class="ed diff"><thead><tr><th>Field</th><th>On the link now</th><th>Broker says</th></tr></thead><tbody>${Object.entries(F).map(([k, v]) => {
       const cur = (live.fields || {})[k] ?? (p ? p.fields[k] : undefined);

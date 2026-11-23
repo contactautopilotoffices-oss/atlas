@@ -1,0 +1,44 @@
+{
+  "source_file": "western-zone-261120.osm.pbf",
+  "source_sha256": "f739b9c8a20f709c76e59033584e25b743bb93dc178824b5c6cd40cb5a0211c4",
+  "source_bytes": 222574339,
+  "source_header": {
+    "generator": "osmium/1.16.0",
+    "timestamp": "2026-11-20T21:21:21Z",
+    "osmosis_replication_timestamp": "2026-11-20T21:21:21Z",
+    "osmosis_replication_sequence_number": "1865"
+  },
+  "site": "corporate-avenue",
+  "center_latlon": [
+    19.110625,
+    72.859637
+  ],
+  "radius_m": 600,
+  "bbox_lonlat": [
+    72.85393478186073,
+    19.10520462192171,
+    72.86533921813928,
+    19.116045378078287
+  ],
+  "bounds_method": "Exact Concept Studio OSM meters-per-degree formula at site latitude",
+  "geometry_method": "Native complete multipolygon assembly and full-way disk-cached node resolution; exact polygon/line intersection with requested bbox; geometry retained uncut for add-on clipping.",
+  "counts": {
+    "node": 1,
+    "way": 912,
+    "roads": 409,
+    "railways": 14,
+    "buildings": 494,
+    "relation": 8,
+    "green": 5
+  },
+  "scan_counts": {
+    "nodes": 61653,
+    "ways": 3139271,
+    "relation_areas": 10080
+  },
+  "scan_seconds": 231.67,
+  "processing_errors": [],
+  "attribution": "\u00a9 OpenStreetMap contributors; extract by Geofabrik",
+  "license": "ODbL1.0",
+  "processed_utc": "2026-11-21T13:09:33.665443+00:00"
+}
