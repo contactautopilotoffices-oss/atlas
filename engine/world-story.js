@@ -3,12 +3,14 @@
    way in, the walk to the metro, the offered floor) while a short caption says what it is, how we know,
    and what is still unconfirmed. The same words can be read aloud (the browser's own voice; no audio files).
 
-   An atlas supplies its steps in meta.world.story[optionId] = [{ view, title, text, basis }]:
-     view   overview | facade | approach | metro | floor      (world.js knows how to fly to each)
-     basis  workbook | measured | assumed | unverified | verified   (shown as a small tag, never hidden)
+   An atlas supplies its steps in meta.world.story[optionId] = [{ view, title, text, basis, panel? }]:
+     view   overview | facade | approach | metro | floor | stay   (world.js knows how to fly to each; stay leaves the camera)
+     basis  workbook | measured | assumed | unverified | verified | mixed   (shown as a small tag, never hidden)
+     panel  offer | tradeoffs | compare | next   (optional: opens that data panel beside the 3D, see world-data.js,
+            which also adds the data steps from meta.world.dataLayer.tour and keeps the closing step last)
    world.js passes the helpers; this file owns only the panel, the voice and the order of play. */
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const BASIS = { workbook: "From the client's sheet", measured: "Measured on the map", assumed: "Modelled, not confirmed", unverified: "Not yet confirmed", verified: "Checked against imagery" };
+const BASIS = { workbook: "From the client's sheet", measured: "Measured on the map", assumed: "Modelled, not confirmed", unverified: "Not yet confirmed", verified: "Checked against imagery", mixed: "Mixed sources" };
 
 export function createStory({ steps, go, onOpen, onClose }) {
   const root = document.createElement("section");

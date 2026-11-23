@@ -40,7 +40,7 @@ window.ATLAS = {
     "world": {
       "href": "/jindalx-noida/world",
       "data": "/media/jindalx-noida/world/",
-      "ver": "97b32f8839",
+      "ver": "33647a651b",
       "sky": "sky.hdr",
       "poster": "hero.jpg",
       "mapHref": "/engine/?atlas=jindalx-noida",
@@ -109,7 +109,7 @@ window.ATLAS = {
             "view": "metro",
             "basis": "measured",
             "title": "Walk to Sector 59 metro",
-            "text": "1.6 kilometres, about 20 minutes on foot, measured along the streets from the pin. The sheet says Sector 59, ~2KM. The line on the ground is the route."
+            "text": "2.4 kilometres, about 30 minutes on foot, measured along the streets from the pin. The sheet says Sector 59, ~2KM. The line on the ground is the route."
           },
           {
             "view": "floor",
@@ -185,7 +185,7 @@ window.ATLAS = {
             "view": "metro",
             "basis": "measured",
             "title": "Walk to Sector 16 metro",
-            "text": "1.7 kilometres, about 21 minutes on foot, measured along the streets from the pin. The sheet says Sector 16, ~2KM. The line on the ground is the route."
+            "text": "1.5 kilometres, about 19 minutes on foot, measured along the streets from the pin. The sheet says Sector 16, ~2KM. The line on the ground is the route."
           },
           {
             "view": "floor",
@@ -223,7 +223,7 @@ window.ATLAS = {
             "view": "metro",
             "basis": "measured",
             "title": "Walk to Sector 16 metro",
-            "text": "930 metres, about 12 minutes on foot, measured along the streets from the pin. The sheet says Sector 16, ~500 Mtrs. The line on the ground is the route."
+            "text": "680 metres, about 8 minutes on foot, measured along the streets from the pin. The sheet says Sector 16, ~500 Mtrs. The line on the ground is the route."
           },
           {
             "view": "floor",
@@ -236,6 +236,196 @@ window.ATLAS = {
             "basis": "unverified",
             "title": "What is still open",
             "text": "The model stands about 140 metres from the building we believe is D-1. It rests on third-party place data, and no name plate was read, so the landlord must confirm it."
+          }
+        ]
+      },
+      "dataLayer": {
+        "currency": "₹",
+        "locale": "en-IN",
+        "minArea": 100,
+        "fixes": {
+          "Decemeber": "December"
+        },
+        "pros": "Pros",
+        "cons": "Cons",
+        "rows": [
+          {
+            "id": "outflow",
+            "label": "Monthly outflow",
+            "field": "monthlyOutflow",
+            "parse": "money",
+            "fmt": "money",
+            "suffix": "a month + GST",
+            "best": "min",
+            "lead": "the lowest monthly outflow",
+            "noteFact": "Commercial basis"
+          },
+          {
+            "id": "plate",
+            "label": "Floor plate",
+            "fact": "BUA each floor, sqft",
+            "parse": "max",
+            "fmt": "area",
+            "unit": "sq ft",
+            "best": "max",
+            "lead": "the largest floor plate"
+          },
+          {
+            "id": "efficiency",
+            "label": "Efficiency",
+            "fact": "Efficiency",
+            "parse": "first",
+            "fmt": "percent",
+            "best": "max",
+            "lead": "the best efficiency"
+          },
+          {
+            "id": "carpet",
+            "label": "Carpet a floor",
+            "hint": "Built-up area × efficiency",
+            "calc": "scale",
+            "of": "plate",
+            "by": "efficiency",
+            "unit": "sq ft"
+          },
+          {
+            "id": "floor",
+            "label": "Offered floor",
+            "fact": "Offered floor"
+          },
+          {
+            "id": "lifts",
+            "label": "Lifts",
+            "fact": "Lifts each floor",
+            "parse": "first",
+            "suffix": "a floor",
+            "best": "max",
+            "lead": "the most lifts a floor"
+          },
+          {
+            "id": "parking",
+            "label": "Parking",
+            "fact": "Parking"
+          },
+          {
+            "id": "cafeteria",
+            "label": "Cafeteria",
+            "fact": "Common Cafeteria"
+          },
+          {
+            "id": "timeline",
+            "label": "Timeline to move in",
+            "fact": "Timelines",
+            "parse": "months",
+            "best": "min",
+            "lead": "the earliest move-in"
+          },
+          {
+            "id": "structure",
+            "label": "Structure",
+            "fact": "Building structure"
+          },
+          {
+            "id": "grade",
+            "label": "Grade",
+            "fact": "Grade"
+          },
+          {
+            "id": "connectivity",
+            "label": "Local transport",
+            "fact": "Connectivity with local transport"
+          },
+          {
+            "id": "walk",
+            "label": "Walk to a metro",
+            "calc": "walk",
+            "best": "min",
+            "lead": "the shortest walk to a metro"
+          },
+          {
+            "id": "metroSheet",
+            "label": "Metro, per the sheet",
+            "fact": "Nearest Metro station"
+          },
+          {
+            "id": "office",
+            "label": "From today's office",
+            "calc": "roadKm",
+            "sheetFact": "Distance from Jindal X existing office"
+          }
+        ],
+        "offer": [
+          {
+            "title": "",
+            "ids": [
+              "outflow"
+            ]
+          },
+          {
+            "title": "The space",
+            "ids": [
+              "plate",
+              "efficiency",
+              "carpet",
+              "floor",
+              "lifts"
+            ]
+          },
+          {
+            "title": "The building",
+            "ids": [
+              "structure",
+              "grade",
+              "parking",
+              "cafeteria",
+              "timeline"
+            ]
+          },
+          {
+            "title": "Getting there",
+            "ids": [
+              "connectivity",
+              "walk",
+              "metroSheet",
+              "office"
+            ]
+          }
+        ],
+        "compare": [
+          "outflow",
+          "plate",
+          "efficiency",
+          "carpet",
+          "floor",
+          "lifts",
+          "parking",
+          "cafeteria",
+          "timeline",
+          "connectivity",
+          "walk",
+          "office"
+        ],
+        "tour": [
+          {
+            "view": "stay",
+            "panel": "offer",
+            "basis": "workbook",
+            "title": "The offer",
+            "text": "{outflow}, tentative, as the broker quotes it. {plate} a floor at {efficiency} efficiency. Offered floor: {floor|not stated}. {timeline:l} to move in."
+          },
+          {
+            "view": "approach",
+            "panel": "tradeoffs",
+            "basis": "workbook",
+            "title": "The trade-offs",
+            "text": "In the sheet's own words, in its favour: {pros|nothing listed}. Against it: {cons|the sheet lists nothing}. Best of the four on: {leads|no headline measure}."
+          },
+          {
+            "view": "overview",
+            "panel": "compare",
+            "basis": "mixed",
+            "title": "How it compares",
+            "text": "Lowest monthly outflow: {best:outflow}. Largest floor plate: {best:plate}. Shortest walk to a metro, measured: {best:walk}. Earliest move-in: {best:timeline}. Distances from today's office are our estimate from indicative pins."
           }
         ]
       },
@@ -277,13 +467,13 @@ window.ATLAS = {
       "id": "magnus-towers",
       "n": 1,
       "name": "Magnus Towers",
-      "lat": 28.604823,
-      "lng": 77.3847901,
+      "lat": 28.601495,
+      "lng": 77.388284,
       "address": "Magnus towers, Sector 67, Noida",
       "locality": "Magnus towers, Sector 67, Noida",
       "precision": "approx",
       "geoSrc": "https://www.openstreetmap.org/way/71834192",
-      "geoNote": "Sector 67 centre only. The Google Maps Magnus Tower record is a different Sector 73 property. Confirm the landlord pin.",
+      "geoNote": "Magnus Greens, plot C-2, Sector 67, as Google geocodes it. The sheet's own pin was only a road junction. The Google Maps Magnus Tower record is a different Sector 73 property. Confirm the plot with the landlord.",
       "monthlyOutflow": 2008000,
       "floorPlate": "38000",
       "floorOffered": "5th",
@@ -381,17 +571,37 @@ window.ATLAS = {
           ],
           "lat": 28.6065279,
           "lng": 77.3726828,
-          "m": 1640,
-          "min": 20,
+          "m": 2370,
+          "min": 30,
           "mode": "walk",
           "path": [
             [
-              77.38479,
-              28.604823
+              77.388284,
+              28.601495
             ],
             [
-              77.384763,
-              28.604762
+              77.388654,
+              28.601911
+            ],
+            [
+              77.387571,
+              28.601999
+            ],
+            [
+              77.387548,
+              28.602067
+            ],
+            [
+              77.387751,
+              28.604515
+            ],
+            [
+              77.386995,
+              28.604575
+            ],
+            [
+              77.386677,
+              28.604629
             ],
             [
               77.383173,
@@ -489,13 +699,37 @@ window.ATLAS = {
           ],
           "lat": 28.5975854,
           "lng": 77.3722663,
-          "m": 2000,
-          "min": 25,
+          "m": 2730,
+          "min": 34,
           "mode": "walk",
           "path": [
             [
-              77.38479,
-              28.604823
+              77.388284,
+              28.601495
+            ],
+            [
+              77.388654,
+              28.601911
+            ],
+            [
+              77.387571,
+              28.601999
+            ],
+            [
+              77.387548,
+              28.602067
+            ],
+            [
+              77.387751,
+              28.604515
+            ],
+            [
+              77.386995,
+              28.604575
+            ],
+            [
+              77.386677,
+              28.604629
             ],
             [
               77.384763,
@@ -567,13 +801,13 @@ window.ATLAS = {
       "id": "a104",
       "n": 2,
       "name": "A104",
-      "lat": 28.5839319,
-      "lng": 77.3231094,
+      "lat": 28.584006,
+      "lng": 77.321683,
       "address": "A104, Sector 4, Noida",
       "locality": "A104, Sector 4, Noida",
       "precision": "approx",
       "geoSrc": "https://www.google.com/maps/search/A104%2C%20Sector%204%2C%20Noida/",
-      "geoNote": "Indicative area position from address search; exact plot and entrance await landlord confirmation.",
+      "geoNote": "Best candidate seen in imagery; no public page names A-104. Confirm with the landlord.",
       "monthlyOutflow": 2150000,
       "floorPlate": "25000",
       "floorOffered": "1st/2nd",
@@ -671,45 +905,37 @@ window.ATLAS = {
           ],
           "lat": 28.578081,
           "lng": 77.3177778,
-          "m": 1200,
+          "m": 1210,
           "min": 15,
           "mode": "walk",
           "path": [
             [
-              77.323109,
-              28.583932
+              77.321683,
+              28.584006
             ],
             [
-              77.323339,
-              28.583637
+              77.321108,
+              28.58402
             ],
             [
-              77.323542,
-              28.583446
+              77.320012,
+              28.583234
             ],
             [
-              77.323572,
-              28.583388
+              77.320916,
+              28.581893
             ],
             [
-              77.323527,
-              28.583348
+              77.321781,
+              28.580951
             ],
             [
-              77.32366,
-              28.583207
+              77.321836,
+              28.580834
             ],
             [
-              77.323277,
-              28.582921
-            ],
-            [
-              77.324476,
-              28.581643
-            ],
-            [
-              77.322453,
-              28.580223
+              77.322407,
+              28.580188
             ],
             [
               77.32094,
@@ -743,41 +969,21 @@ window.ATLAS = {
           ],
           "lat": 28.5848835,
           "lng": 77.3116118,
-          "m": 1720,
-          "min": 22,
+          "m": 1340,
+          "min": 17,
           "mode": "walk",
           "path": [
             [
-              77.323109,
-              28.583932
+              77.321683,
+              28.584006
             ],
             [
-              77.323339,
-              28.583637
+              77.321108,
+              28.58402
             ],
             [
-              77.323542,
-              28.583446
-            ],
-            [
-              77.323572,
-              28.583388
-            ],
-            [
-              77.323527,
-              28.583348
-            ],
-            [
-              77.32366,
-              28.583207
-            ],
-            [
-              77.323277,
-              28.582921
-            ],
-            [
-              77.321089,
-              28.585277
+              77.320391,
+              28.584772
             ],
             [
               77.320498,
@@ -853,13 +1059,13 @@ window.ATLAS = {
       "id": "a14-18-19",
       "n": 3,
       "name": "A14,18,19",
-      "lat": 28.5866294,
-      "lng": 77.3277564,
+      "lat": 28.585363,
+      "lng": 77.328785,
       "address": "A14/18/19, Sector 9, Noida",
       "locality": "A14/18/19, Sector 9, Noida",
       "precision": "approx",
       "geoSrc": "https://www.google.com/maps/search/A14%2F18%2F19%2C%20Sector%209%2C%20Noida/",
-      "geoNote": "Indicative area position from address search; exact plot and entrance await landlord confirmation.",
+      "geoNote": "Building seen in imagery at this address; plot lines and entrance await landlord confirmation.",
       "monthlyOutflow": 1850000,
       "floorPlate": "G,1,2- 18000 3,4- 8000",
       "floorOffered": "2nd and 3rd",
@@ -957,33 +1163,17 @@ window.ATLAS = {
           ],
           "lat": 28.578081,
           "lng": 77.3177778,
-          "m": 1670,
-          "min": 21,
+          "m": 1540,
+          "min": 19,
           "mode": "walk",
           "path": [
             [
-              77.327756,
-              28.586629
+              77.328785,
+              28.585363
             ],
             [
-              77.327687,
-              28.58661
-            ],
-            [
-              77.325224,
-              28.584764
-            ],
-            [
-              77.326354,
-              28.583587
-            ],
-            [
-              77.326465,
-              28.583347
-            ],
-            [
-              77.326452,
-              28.583097
+              77.329349,
+              28.585224
             ],
             [
               77.324476,
@@ -1025,69 +1215,73 @@ window.ATLAS = {
           ],
           "lat": 28.5848835,
           "lng": 77.3116118,
-          "m": 2120,
-          "min": 26,
+          "m": 2410,
+          "min": 30,
           "mode": "walk",
           "path": [
             [
-              77.327756,
-              28.586629
+              77.328785,
+              28.585363
             ],
             [
-              77.327687,
-              28.58661
+              77.329349,
+              28.585224
             ],
             [
-              77.327458,
-              28.586844
+              77.326886,
+              28.583416
             ],
             [
-              77.326731,
-              28.586312
+              77.326608,
+              28.583405
             ],
             [
-              77.32498,
-              28.588137
+              77.326511,
+              28.583507
             ],
             [
-              77.323751,
-              28.587226
+              77.326354,
+              28.583587
             ],
             [
-              77.32266,
-              28.586472
+              77.325967,
+              28.583982
             ],
             [
-              77.321887,
-              28.587214
+              77.323762,
+              28.582404
             ],
             [
-              77.321429,
-              28.587538
+              77.321089,
+              28.585277
             ],
             [
-              77.320923,
-              28.587811
+              77.320498,
+              28.584854
             ],
             [
-              77.320756,
-              28.587742
+              77.320154,
+              28.585298
             ],
             [
-              77.320155,
-              28.588085
+              77.319651,
+              28.584917
             ],
             [
-              77.319741,
-              28.587604
+              77.319107,
+              28.585375
             ],
             [
-              77.319656,
-              28.587625
+              77.318943,
+              28.58539
             ],
             [
-              77.319106,
-              28.587147
+              77.318477,
+              28.585763
+            ],
+            [
+              77.318162,
+              28.586185
             ],
             [
               77.31809,
@@ -1135,13 +1329,13 @@ window.ATLAS = {
       "id": "d1",
       "n": 4,
       "name": "D1",
-      "lat": 28.5820683,
-      "lng": 77.3183079,
+      "lat": 28.581692,
+      "lng": 77.316915,
       "address": "D1, Sector 3, Noida",
       "locality": "D1, Sector 3, Noida",
       "precision": "approx",
       "geoSrc": "https://www.google.com/maps/search/D1%2C%20Sector%203%2C%20Noida/",
-      "geoNote": "Indicative area position from address search; exact plot and entrance await landlord confirmation.",
+      "geoNote": "Building seen in imagery at this address; plot lines and entrance await landlord confirmation.",
       "monthlyOutflow": 2450000,
       "floorPlate": "20000",
       "floorOffered": "2nd",
@@ -1239,45 +1433,37 @@ window.ATLAS = {
           ],
           "lat": 28.578081,
           "lng": 77.3177778,
-          "m": 930,
-          "min": 12,
+          "m": 680,
+          "min": 8,
           "mode": "walk",
           "path": [
             [
-              77.318308,
-              28.582068
+              77.316915,
+              28.581692
             ],
             [
-              77.318921,
-              28.582195
+              77.316793,
+              28.58214
             ],
             [
-              77.319277,
-              28.581819
+              77.315255,
+              28.580992
             ],
             [
-              77.317577,
-              28.580534
+              77.315885,
+              28.580378
             ],
             [
-              77.318938,
-              28.579076
+              77.31578,
+              28.580298
             ],
             [
-              77.317972,
-              28.578345
+              77.317026,
+              28.579066
             ],
             [
-              77.318749,
-              28.577545
-            ],
-            [
-              77.318528,
-              28.577382
-            ],
-            [
-              77.31773,
-              28.578135
+              77.316899,
+              28.578969
             ],
             [
               77.317778,
@@ -1295,37 +1481,29 @@ window.ATLAS = {
           ],
           "lat": 28.5848835,
           "lng": 77.3116118,
-          "m": 1120,
-          "min": 14,
+          "m": 790,
+          "min": 10,
           "mode": "walk",
           "path": [
             [
-              77.318308,
-              28.582068
+              77.316915,
+              28.581692
             ],
             [
-              77.318921,
-              28.582195
+              77.316793,
+              28.58214
             ],
             [
-              77.317207,
-              28.58093
+              77.315597,
+              28.58335
             ],
             [
-              77.316363,
-              28.581823
+              77.314221,
+              28.585192
             ],
             [
-              77.315255,
-              28.580992
-            ],
-            [
-              77.314641,
-              28.581573
-            ],
-            [
-              77.313603,
-              28.582642
+              77.312498,
+              28.584211
             ],
             [
               77.311845,

@@ -1,0 +1,52 @@
+{
+ "hero_acp_white": [
+  3.6,
+  3.0,
+  "white ACP, three 1.2 x 3.0 m panels across, 12 mm shadow gaps, oil-canning, run-off streaks from the horizontal joint at the tile edge. Satin PVDF: metalness ~0.3, roughness from _r"
+ ],
+ "hero_acp_charcoal": [
+  3.6,
+  3.0,
+  "A104 charcoal ACP, 1.2 x 3.0 m panels, vacant-building dust, pale dust runs, rust-brown staining. Satin: metalness ~0.3"
+ ],
+ "hero_acp_copper": [
+  3.6,
+  3.0,
+  "A-14 copper and bronze anodised ACP, 1.2 x 1.5 m panels in two alternating tones, vertical brushed grain. Metalness 0.6-0.8, roughness from _r"
+ ],
+ "hero_acp_grey": [
+  2.4,
+  2.4,
+  "A-14 crown and cornice dark grey ACP, 1.2 x 1.2 m panels, horizontal grain, faint metallic flake. Metalness ~0.4"
+ ],
+ "hero_glass_dark": [
+  6.0,
+  8.0,
+  "Magnus dark glass bands: four 1.5 m bays, two 4.0 m floors (same grid as hero_glass), 2.82 m vision glass over a 0.88 m white-frit spandrel, dark anodised mullions. Glass roughness ~0.05, metalness 0"
+ ],
+ "hero_glass_bluegrey": [
+  4.8,
+  4.0,
+  "A104 blue-grey glazing, ONE storey: 1.2 m bays, upper fixed light, awning vent (every 2nd bay shown open), lower fixed light, charcoal spandrel band across the tile edge, black frames. Tile vertically per storey"
+ ],
+ "hero_glass_green": [
+  6.0,
+  4.0,
+  "A-14 green-tinted ribbon glazing, ONE storey: four 1.5 m bays, silver aluminium frames, transom at 2.45 m, spandrel across the tile edge"
+ ],
+ "hero_glass_teal": [
+  1.8,
+  2.1,
+  "D-1 teal punched window unit: fanlight over a large pane, white frame (tile edge = half a frame, so neighbours share one). Map 0..1 per window, or tile for ribbon runs"
+ ],
+ "hero_plaster_cream": [
+  2.4,
+  2.0,
+  "D-1 cream stucco render with a V-groove every 0.5 m (4 per tile), sand-float grain, hairline cracks, chips, grime under each lip"
+ ],
+ "hero_plaster_white": [
+  2.4,
+  2.4,
+  "A-14 side returns and Magnus podium: white painted render, trowel swirl, rain streaks, fine control joint every 1.2 m"
+ ]
+}

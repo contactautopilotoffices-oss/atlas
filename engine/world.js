@@ -25,6 +25,7 @@ import {createSceneLighting} from "./andheri-scene-lighting.js";
 import {createWorldLayouts} from "./andheri-world-layouts.js";
 import { applyAndheriTheme, easyTabs, propertySpotlight } from "./andheri-ui.js";
 import { createStory } from "./world-story.js";
+import { createDataLayer } from "./world-data.js";
 import { andheriExperience, applyCanonicalFacts } from "./andheri-experience.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
@@ -840,7 +841,25 @@ async function start(A, W, intro=null) {
     lightingBuilder?.atmosphere();
   }
   /* on a wide screen the overlay takes the left, so the view's centre moves right */
-  function frameOffset(on) { const w = innerWidth, h = innerHeight; if (on && w > 900) camera.setViewOffset(w, h, -w * 0.16, h * 0.04, w, h); else camera.clearViewOffset(); camera.updateProjectionMatrix(); }
+  /* An atlas with a data layer (W.dataLayer, engine/world-data.js) has a panel at the side: the view's centre then moves to the middle of
+     what is left, and eases there. Without one this is exactly the old fixed offset. */
+  let dataUI = null, frameOn = false, FR = null, frameAnim = 0;
+  const putFrame = (x, y) => { const w = innerWidth, h = innerHeight; if (!x && !y) camera.clearViewOffset(); else camera.setViewOffset(w, h, x, y, w, h); camera.updateProjectionMatrix(); wake(160); };
+  function frameGoal(on) {
+    const w = innerWidth, h = innerHeight, p = dataUI && dataUI.frame();
+    if (w <= 900) return { x: 0, y: p ? h * 0.2 : 0 };   // a phone: the panel is a sheet at the bottom, the building rises above it
+    if (!p) return on ? { x: -w * 0.16, y: h * 0.04 } : { x: 0, y: 0 };
+    const L = on && p.hud ? 392 : 0, R = w - p.width - 20; return { x: w / 2 - (L + R) / 2, y: on ? h * 0.04 : 0 };
+  }
+  function frameOffset(on) {
+    frameOn = on;
+    if (!dataUI) { const w = innerWidth, h = innerHeight; if (on && w > 900) camera.setViewOffset(w, h, -w * 0.16, h * 0.04, w, h); else camera.clearViewOffset(); camera.updateProjectionMatrix(); return; }
+    const g = frameGoal(on); cancelAnimationFrame(frameAnim);
+    if (!FR || matchMedia("(prefers-reduced-motion:reduce)").matches) { FR = g; putFrame(g.x, g.y); return; }
+    const a = { ...FR }, t0 = performance.now();
+    const step = (now) => { const k = Math.min(1, (now - t0) / 520), e = ease(k); FR = { x: a.x + (g.x - a.x) * e, y: a.y + (g.y - a.y) * e }; putFrame(FR.x, FR.y); if (k < 1) frameAnim = requestAnimationFrame(step); };
+    frameAnim = requestAnimationFrame(step);
+  }
   function frameRoute() { if (!ROUTE) return; const box = new THREE.Box3(); ROUTE.path.forEach(([x, y]) => box.expandByPoint(P3(x, y))); const c = box.getCenter(new THREE.Vector3()), s = box.getSize(new THREE.Vector3()), R = Math.max(s.x, s.z, 200);
     if (scene.fog) { scene.fog.near = Math.max(scene.fog.near, R * 1.4); scene.fog.far = Math.max(scene.fog.far, R * 4); }   // a long route is seen whole, not through haze
     const az = Math.atan2(camera.position.x - c.x, camera.position.z - c.z); controls.autoRotate = false; flyTo(c, new THREE.Vector3(c.x + Math.sin(az) * R * 0.9, R * 0.95, c.z + Math.cos(az) * R * 0.9)); }
@@ -951,7 +970,7 @@ async function start(A, W, intro=null) {
       controls.target.copy(fly.b.t); camera.position.copy(fly.b.p); controls.update(); fly = null;
     } else if (first && fly) { controls.target.copy(fly.b.t); const p0 = fly.b.p.clone(); fly = null; camera.position.copy(controls.target.clone().add(p0.clone().sub(controls.target).multiplyScalar(1.6))); flyTo(controls.target.clone(), p0, 2600); }
     try { history.replaceState(null, "", `#${id}`); } catch (e) {}
-    story?.retarget(id);
+    story?.retarget(id); dataUI?.select();
   }
   /* the wording is the atlas's when it gives it (W.brand, W.credit), Andheri East's otherwise */
   const BR = W.brand || { kicker: "Autopilot · Flipkart", title: "Andheri East" };
@@ -968,6 +987,7 @@ async function start(A, W, intro=null) {
   function storyView(kind) {
     if (!D) return; const o = OPTS.find((x) => x.id === SEL);
     if (kind === "overview") { dollhouse(1800); controls.autoRotate = false; frameOffset(false); return; }
+    if (kind === "stay") { frameOffset(false); return; }   // a step that shows data and leaves the camera where it is
     if (MODE !== "dollhouse") dollhouse(0);
     controls.autoRotate = false; controls.minDistance = 22; frameOffset(false);
     if (scene.fog) { scene.fog.near = Math.max(scene.fog.near, 700); scene.fog.far = Math.max(scene.fog.far, 2400); }
@@ -982,11 +1002,12 @@ async function start(A, W, intro=null) {
     else if (kind === "floor") { const f = offered(o).floors; if (f.length) flyToFloor(Math.max(...f)); controls.minDistance = 22; }
   }
   const story = createStory({
-    steps: (id) => W.story && W.story[id],
-    go: (view) => storyView(view),
+    steps: (id) => dataUI ? dataUI.tourSteps(id, W.story && W.story[id]) : W.story && W.story[id],
+    go: (view, s) => { storyView(view); dataUI?.tourStep(s); },
     onOpen: () => { $("#tour-btn")?.setAttribute("aria-pressed", "true"); leaveArea(); },
-    onClose: () => { $("#tour-btn")?.setAttribute("aria-pressed", "false"); setRoute(routeOf((OPTS.find((x) => x.id === SEL)?.routes || []).find((x) => x.kind === "metro"))); if (MODE === "dollhouse") dollhouse(1400); },
+    onClose: () => { dataUI?.tourEnd(); $("#tour-btn")?.setAttribute("aria-pressed", "false"); setRoute(routeOf((OPTS.find((x) => x.id === SEL)?.routes || []).find((x) => x.kind === "metro"))); if (MODE === "dollhouse") dollhouse(1400); },
   });
+  if (W.dataLayer && AUI(W)) dataUI = createDataLayer({ A, W, options: OPTS, getSel: () => SEL, select: (id) => { if (id !== SEL) select(id); }, onLayout: () => frameOffset(frameOn), isTouring: () => story.open, wake });
   if (W.story) {
     const t = document.createElement("button"); t.id = "tour-btn"; t.type = "button"; t.textContent = "Tour"; t.setAttribute("aria-pressed", "false");
     t.onclick = () => story.toggle(SEL); $("#modes").appendChild(t);
