@@ -207,7 +207,28 @@ tg = scatter(land["green"], 60000)
 band = unary_union([road_poly["major"].buffer(5), road_poly["minor"].buffer(3.5)]).difference(unary_union([road_poly["major"], road_poly["minor"]]))
 tr = scatter(band, 420000)[::2]
 to = scatter(CLIP, 520000)[::3]
-trees = np.vstack([tg, tr, to]); print("trees", len(tg), len(tr), len(to))
+# Region options (scripts/world/regions/*.json), for districts where the defaults make a carpet of trees:
+#   "open_tree_density": keep this share of the random scatter over open ground (default 1, as before)
+#   "roadside_tree_density": keep this share of the random roadside band (default 1)
+#   "avenue_spacing": plant the main roads (motorway to secondary) as avenues, a tree every N metres on
+#                     both sides, set back from the carriageway edge, where the ground is free (default off)
+k_open, k_road = RG.get("open_tree_density", 1.0), RG.get("roadside_tree_density", 1.0)
+if k_open < 1: to = to[rng.random(len(to)) < k_open]
+if k_road < 1: tr = tr[rng.random(len(tr)) < k_road]
+av = np.zeros((0, 2))
+if RG.get("avenue_spacing"):
+    sp, pts = RG["avenue_spacing"], []
+    for t in traffic:
+        ls = LineString(t["p"])
+        for d in np.arange(sp / 2, ls.length, sp):
+            p, q = ls.interpolate(d), ls.interpolate(min(ls.length, d + 1)); dx, dy = q.x - p.x, q.y - p.y; n = math.hypot(dx, dy) or 1
+            for side in (-1, 1):
+                off = t["w"] / 2 + 2.6
+                pts.append((p.x - dy / n * off * side + rng.uniform(-0.4, 0.4), p.y + dx / n * off * side + rng.uniform(-0.4, 0.4)))
+    pts = np.array(pts) if pts else np.zeros((0, 2))
+    if len(pts): pts = pts[shapely.contains_xy(CLIP, pts[:, 0], pts[:, 1]) & ~shapely.contains_xy(blocked, pts[:, 0], pts[:, 1])]
+    av = pts
+trees = np.vstack([tg, tr, to, av]); print("trees", len(tg), len(tr), len(to), "avenue", len(av))
 
 # ---- write ----------------------------------------------------------------------
 def rings(g):

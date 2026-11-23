@@ -119,7 +119,7 @@ async function start(A, W, intro=null) {
   renderer.setPixelRatio(TIERS[tier].dpr);
   renderer.setSize(innerWidth, innerHeight);
   renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.92;
-  if (previewIds.size || Object.values(W.models || {}).some(model => model.aoBase)) {
+  if (previewIds.size || Object.values(W.models || {}).some(model => model.aoBase) || W.tone === "agx") {
     renderer.toneMapping = THREE.AgXToneMapping; renderer.toneMappingExposure = 1.05;
   }
   renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -167,9 +167,27 @@ async function start(A, W, intro=null) {
   const tex = (name, srgb = true) => TEX[name] || (TEX[name] = (() => { let ready;const done=new Promise(resolve=>ready=resolve);textureJobs.push(done);const t = texL.load(W.data + "tex/" + name + (name.startsWith("leaves") ? ".png" : ".jpg"),()=>{ready(true);wake();},undefined,()=>{t.userData.failed=true;ready(false);}); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = aniso; if (srgb) t.colorSpace = THREE.SRGBColorSpace; t.flipY = false; return t; })());
   const GLASSY = new Set(["wall_com_glass", "wall_opt_glass", "wall_com_ribbon", "wall_opt_plaster", "wall_res_tower", "wall_glass723", "wall_retail723", "wall_cw_teal", "wall_cw_blue", "wall_cw_grey", "wall_cw_silver", "wall_ribbon_red", "wall_ribbon_white"]);
   const MAT = {};
+  /* The modelled property (scripts/world/magnus_hero.py) and the premium ground: PBR sets from tex/ by name,
+     NAME.jpg (colour), NAME_r.jpg (roughness), NAME_n.jpg (normal), made by scripts/world/hero_textures.py.
+     [texture, metalness, normal scale, env intensity, extra] */
+  const HERO = {
+    hero_glass: ["hero_glass", 0.22, 0.25, 1.1], hero_spandrel: ["hero_spandrel", 0.3, 0.3, 1.0], hero_alu: ["hero_alu", 0.65, 0.6, 1.2],
+    hero_stone: ["hero_stone", 0, 0.8, 0.8], hero_concrete: ["hero_concrete", 0, 0.7, 0.7], hero_roof: ["hero_roof", 0, 0.5, 0.6],
+    hero_pavers: ["hero_pavers", 0, 0.9, 0.6], hero_asphalt: ["hero_asphalt", 0, 0.6, 0.5], hero_lawn: ["hero_lawn", 0, 0.8, 0.5],
+    hero_mulch: ["hero_mulch", 0, 0.8, 0.4], hero_hedge: ["leaves_shrub", 0, 0, 0.5], ground_noida: ["ground_noida", 0, 0.6, 0.5],
+  };
+  const HERO_FLAT = { hero_mullion: [0x2e3236, 0.35, 0.8], hero_hvac: [0xb8bcbe, 0.45, 0.6], hero_solar: [0x1c2a44, 0.14, 0.35], hero_dark: [0x121416, 0.9, 0], hero_rail: [0x2a2c2e, 0.4, 0.8] };
   function material(name) {
     if (MAT[name]) return MAT[name];
     let m;
+    if (HERO[name]) {
+      const [t, metal, ns, env] = HERO[name], png = t.startsWith("leaves");
+      m = new THREE.MeshStandardMaterial({ map: tex(t), roughnessMap: png ? null : tex(t + "_r", false), roughness: png ? 0.9 : 1, metalness: metal, envMapIntensity: env });
+      if (ns && !png) { m.normalMap = tex(t + "_n", false); m.normalScale = new THREE.Vector2(ns, ns); }
+      m.name = name; return (MAT[name] = m);
+    }
+    if (HERO_FLAT[name]) { const [c, r, mt] = HERO_FLAT[name]; m = new THREE.MeshStandardMaterial({ color: c, roughness: r, metalness: mt }); m.name = name; return (MAT[name] = m); }
+    if (name === "hero_lobby_glass") { m = new THREE.MeshStandardMaterial({ color: 0x9cb4bc, roughness: 0.04, metalness: 0.2, transparent: true, opacity: 0.26, depthWrite: false, envMapIntensity: 1.4 }); m.name = name; return (MAT[name] = m); }
     if (name.startsWith("wall_")) {
       const k = name.slice(5);
       m = new THREE.MeshStandardMaterial({ map: tex(k), roughnessMap: tex(k + "_r", false), roughness: 1, metalness: 0, envMapIntensity: GLASSY.has(name) && REALLOOK ? 1.7 : 1 });
@@ -191,14 +209,16 @@ async function start(A, W, intro=null) {
         auto_body: [0x2d7d3a, 0.4, 0.2], auto_top: [0xf0c22e, 0.5], bus_body: [0xb8322a, 0.4, 0.3], train_body: [0xeef1f4, 0.25, 0.45], train_win: [0x1e2832, 0.05, 0.6], train_stripe: [0x1c5fa8, 0.35],
       }[name] || [0x9a9a9a, 0.8];
       m = new THREE.MeshStandardMaterial({ color: C[0], roughness: C[1], metalness: C[2] || 0 });
+      if (name === "ground" && W.groundTex) C[3] = W.groundTex, C[0] = 0xffffff;   // an atlas's own open-ground texture (JindalX: ground_noida)
       if (C[3]) { m.map = tex(C[3]); if (REALLOOK) { m.normalMap = tex(C[3] + "_n", false); m.normalScale = new THREE.Vector2(0.6, 0.6); } }
       if (name === "rail_glass") Object.assign(m, { transparent: true, opacity: 0.3, depthWrite: false });
       if (name === "station_glass") Object.assign(m, { color: new THREE.Color(0x9cc0cf), roughness: 0.05, metalness: 0.3, transparent: true, opacity: 0.32, depthWrite: false });
       if (name === "lobby_light") Object.assign(m, { color: new THREE.Color(0xfff4e0), emissive: new THREE.Color(0xfff1d6), emissiveIntensity: 1.6 });
       if (name === "sign_text" || name === "opt_name") Object.assign(m, { color: new THREE.Color(0xffffff), emissive: new THREE.Color(name === "opt_name" ? 0xfff2da : 0xffffff), emissiveIntensity: 0.55, roughness: 0.4 });
-      if (name === "leaf" || name === "leaf_b") Object.assign(m, { color: new THREE.Color(0xffffff), map: tex(name === "leaf" ? "leaves_a" : "leaves_b"), alphaTest: 0.5, side: THREE.DoubleSide, roughness: 0.78 });
-      if (name === "leaf" || name === "leaf_b" || name === "frond") m.onBeforeCompile = (sh) => {   // colour drifts across a crown, as in the stills
-        sh.vertexShader = "varying vec3 vWp;\n" + sh.vertexShader.replace("#include <worldpos_vertex>", "#include <worldpos_vertex>\n vWp = (modelMatrix * instanceMatrix * vec4(transformed, 1.0)).xyz;");
+      const leafCard = /^leaf(_[a-z]+)?$/.test(name);   // leaf, leaf_b, leaf_palm, leaf_shrub, leaf_bloom: cut-out cards
+      if (leafCard) Object.assign(m, { color: new THREE.Color(0xffffff), map: tex(name === "leaf" ? "leaves_a" : name === "leaf_b" ? "leaves_b" : "leaves_" + name.slice(5)), alphaTest: 0.5, side: THREE.DoubleSide, roughness: 0.78 });
+      if (leafCard || name === "frond") m.onBeforeCompile = (sh) => {   // colour drifts across a crown, as in the stills (instanced trees and the plot's own shrubs)
+        sh.vertexShader = "varying vec3 vWp;\n" + sh.vertexShader.replace("#include <worldpos_vertex>", "#include <worldpos_vertex>\n#ifdef USE_INSTANCING\n vWp = (modelMatrix * instanceMatrix * vec4(transformed, 1.0)).xyz;\n#else\n vWp = (modelMatrix * vec4(transformed, 1.0)).xyz;\n#endif");
         sh.fragmentShader = "varying vec3 vWp;\n" + sh.fragmentShader.replace("#include <color_fragment>", "#include <color_fragment>\n float nz = sin(vWp.x * 0.9) * sin(vWp.z * 1.1 + vWp.y * 0.7) * 0.5 + 0.5; diffuseColor.rgb *= mix(vec3(0.72, 0.82, 0.62), vec3(1.25, 1.18, 0.95), nz);");
       };
     }
@@ -238,7 +258,7 @@ async function start(A, W, intro=null) {
      that picture as its reflection. Taken once per building, and again once its textures have arrived. */
   const probeRT = new THREE.WebGLCubeRenderTarget(LOW ? 256 : 512, { type: THREE.HalfFloatType, generateMipmaps: true, minFilter: THREE.LinearMipmapLinearFilter });
   const probe = new THREE.CubeCamera(1, 4000, probeRT);
-  const REFLECTS = new Set([...GLASSY, "glass_lobby", "station_glass", "car_glass", "train_win", "water"]);
+  const REFLECTS = new Set([...GLASSY, "glass_lobby", "station_glass", "car_glass", "train_win", "water", "hero_glass", "hero_spandrel", "hero_lobby_glass"]);
   function captureReflections() { try { captureReflections_(); } catch (e) { console.warn("reflections skipped", e); } }
   function captureReflections_() {
     if (areaMode || !REALLOOK || !D || !root || Q.get("refl") === "0") return;
@@ -424,9 +444,9 @@ async function start(A, W, intro=null) {
     $('#hud').insertBefore(link,$('#conn'));
   }
   if(W.branding==="autopilot-flipkart")easyTabs($("#modes"));
-  if(W.branding==="autopilot-flipkart"){
-    worldLayouts=createWorldLayouts();
-    lightingBuilder=createSceneLighting({renderer,scene,sun,fill,direction:SUN,onChange:()=>{if(D){sunBox(160,P3(...centroid(D.building.foot),D.building.h*.35));captureReflections();}}});
+  if(W.branding==="autopilot-flipkart" || W.lighting){
+    if(W.branding==="autopilot-flipkart")worldLayouts=createWorldLayouts();
+    lightingBuilder=createSceneLighting({renderer,scene,sun,fill,direction:SUN,ev:+W.lightingEV||0,onChange:()=>{if(D){sunBox(160,P3(...centroid(D.building.foot),D.building.h*.35));captureReflections();}}});
   }
   const OPTS = A.options.filter((o) => !W.thumbs || W.thumbs[o.id]);   // buildings with a 3D model
   function protoParts(node) {   // every mesh under a prototype, with its transform relative to it
@@ -455,7 +475,7 @@ async function start(A, W, intro=null) {
        shadows    copies at the middle level in 200 m cells on layer 1, seen only by the sun's camera: every tree
                   keeps its shadow, the shadow map culls whole cells, and it is redrawn only when the shadow box moves
   */
-  const isCard = (m) => /(^|_)leaf(_b)?$/i.test((Array.isArray(m) ? m[0] : m)?.name || "");
+  const isCard = (m) => /(^|_)leaf(_[a-z]+)?$/i.test((Array.isArray(m) ? m[0] : m)?.name || "");
   function cardSubset(geo, keep, grow) {   // leaf-card crown: every keep-th card (two triangles), grown about its centre
     const ix = geo.index, P = geo.attributes.position, N = geo.attributes.normal, U = geo.attributes.uv;
     const tri = ix ? ix.count / 3 : P.count / 3; if (tri % 2) return geo;
@@ -581,7 +601,10 @@ async function start(A, W, intro=null) {
     // trees and palms
     const m4 = (x, y, z, rot, s) => new THREE.Matrix4().compose(P3(x, y, z), new THREE.Quaternion().setFromEuler(new THREE.Euler(0, rot, 0)), new THREE.Vector3(s, s, s));
     if (!(model?.bakedProps?.trees || D.modelReview?.photoReconstruction?.bakedProps?.trees)) {
-      const T = [[], [], []]; for (const [x, y, t, k, r] of D.trees) T[t].push(m4(x, y, 0, r, 0.75 + 0.35 * k));
+      /* each tree its own height and spread (from its position, so the same every visit): no two alike */
+      const m4t = (x, y, rot, s) => { const h = Math.abs(Math.sin(x * 12.9898 + y * 78.233) * 43758.5453) % 1, w = Math.abs(Math.sin(x * 39.346 + y * 11.135) * 24634.6345) % 1;
+        return new THREE.Matrix4().compose(P3(x, y, 0), new THREE.Quaternion().setFromEuler(new THREE.Euler(0, rot, 0)), new THREE.Vector3(s * (0.86 + 0.28 * w), s * (0.82 + 0.36 * h), s * (0.86 + 0.28 * w))); };
+      const T = [[], [], []]; for (const [x, y, t, k, r] of D.trees) T[t].push(m4t(x, y, r, 0.75 + 0.35 * k));
       forest = buildForest([pp("proto_tree_a"), pp("proto_tree_b"), pp("proto_palm")], T); inst.push(...forest.meshes);
     }
     inst.push(...instance(pp("proto_lamp"), D.lamps.map(([x, y], i) => m4(x, y, 0.2, (i * 2.4) % 6.28, 1)), false));
@@ -768,7 +791,7 @@ async function start(A, W, intro=null) {
   const ease = (t) => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
   function flyTo(t, p, ms = 1500) { wake(ms + 300); fly = { t0: performance.now(), ms, a: { t: controls.target.clone(), p: camera.position.clone() }, b: { t, p } }; }
   function slabSize() { let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9; for (const [x, y] of D.slab) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); } return Math.max(x1 - x0, y1 - y0); }
-  function sunBox(half, at) { if(lightingBuilder?.active&&D){half=Math.min(half,160);at=P3(...centroid(D.building.foot),D.building.h*.35);}const sc = sun.shadow.camera; sc.left = -half; sc.right = half; sc.top = half; sc.bottom = -half; sc.near = 10; sc.far = half * 6; sc.updateProjectionMatrix(); sun.target.position.copy(at); sun.position.copy(at).addScaledVector(SUN, half * 3); shadowDirty = true; wake(); }
+  function sunBox(half, at) { if(lightingBuilder?.active&&D){half=Math.min(half,W.lighting?420:160);at=P3(...centroid(D.building.foot),D.building.h*.35);}const sc = sun.shadow.camera; sc.left = -half; sc.right = half; sc.top = half; sc.bottom = -half; sc.near = 10; sc.far = half * 6; sc.updateProjectionMatrix(); sun.target.position.copy(at); sun.position.copy(at).addScaledVector(SUN, half * 3); shadowDirty = true; wake(); }
   function dollhouse(ms = 1600) {
     leaveArea();
     MODE = "dollhouse"; RW = null; document.body.classList.remove("walk", "routing"); setModeUI();
@@ -903,7 +926,7 @@ async function start(A, W, intro=null) {
     await loadDiorama(id,request);
     if(request!==selectionRequest)return;
     FLOOR_SEL = null; setBands(o);
-    lightingBuilder?.select(o,realismFor(id));
+    lightingBuilder?.select(o,realismFor(id)||!!W.lighting);
     gtao.blendIntensity=realismFor(id)?.25:REALLOOK?.5:.9;gtao.updateGtaoMaterial({radius:realismFor(id)?1.25:6,thickness:realismFor(id)?1.5:6});
     await Promise.all(textureJobs);if(request!==selectionRequest)return;captureReflections();
     setRoute(routeOf(o.routes.find((x) => x.kind === "metro"))); renderHUD(o);

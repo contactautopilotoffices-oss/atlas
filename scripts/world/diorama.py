@@ -88,6 +88,15 @@ for _key in dict.fromkeys(["privilon", "corporate-avenue"] + [o["id"] for o in B
     S["buildings"] = [b for b in S["buildings"] if not b.get("drop")]
     S["buildings"].append({"p": _poly, "h": _h, "c": "commercial", "r": 0.5, "opt": _key})
 OPTB = next(b for b in S["buildings"] if b.get("opt") == OID)
+# --site FILE (scripts/world/magnus_hero.py writes OUT.glb.site.json): a modelled plot. The district's random trees
+# and street lamps inside it are dropped; its own trees (x, y, type, scale) are planted with the page's tree models,
+# and its entrance and street camera are used for the walk start and the street still.
+SITE = json.load(open(A[A.index("--site") + 1])) if "--site" in A else None
+if SITE:
+    _plot = Polygon(SITE["plot"]).buffer(0.5); shapely.prepare(_plot)
+    _n0 = len(S["trees"]); S["trees"] = [t for t in S["trees"] if not _plot.contains(Point(t[0], t[1]))]
+    WJ["lamps"] = [l for l in WJ["lamps"] if not _plot.contains(Point(l[0], l[1]))]
+    print(f"site: {_n0 - len(S['trees'])} district trees dropped inside the plot, {len(SITE['trees'])} planted")
 # --neighbour-hero ID=BLEND (repeatable): another shortlisted property standing in this district, shown with its
 # own facade study and a pin, not as a generic block (723 Avenue is visible from Privilon)
 NEIGH = dict(A[i + 1].split("=", 1) for i, a in enumerate(A) if a == "--neighbour-hero")
@@ -654,11 +663,14 @@ def build():
                     street_cam = (c_[0] - OX, c_[1] - OY); break
             if street_cam: break
     street_cam = street_cam or (mx + nx * back, my + ny * back)
+    if SITE:   # the modelled plot knows where its entrance and its best street view are
+        entrance = L(*SITE["entrance"]); street_cam = L(*SITE["street_cam"])
     # make sure the walk starts on open ground (footpath or road)
     # and not under the station's stairs or viaduct, where the eye would sit inside the structure
     def _open(w): q = Point(w[0] + OX, w[1] + OY); return not built.contains(q) and not KEEP_OUT.contains(q)
     cands = [(mx + nx * d - ny * t, my + ny * d + nx * t) for d in range(16, 64, 4) for t in (0, -8, 8, -16, 16)]
     walk0 = next((w for w in cands if _open(w) and (not ON_ROAD or roads.contains(Point(w[0] + OX, w[1] + OY)))), None) or next((w for w in cands if _open(w)), walk0)
+    if SITE: walk0 = street_cam
 
     # --- the metro ---
     mt = MB([]); stn = MB([]); STATIONS = []
@@ -818,7 +830,8 @@ def protos():
         cm.materials.append(MATS["leaf_b" if name.endswith("_b") else "leaf"]); co = bpy.data.objects.new(name + "_crown", cm); bpy.context.scene.collection.objects.link(co); co.parent = me_
         return me_
     mat("trunk", "#5b4a3b", 0.9); mat("leaf", "#4d7a33", 0.75); mat("leaf_b", "#3f6a2c", 0.75); mat("frond", "#5c8a36", 0.7)
-    for k, img in (("leaf", "leaves_a.png"), ("leaf_b", "leaves_b.png")):   # leaf cards: colour and cut-out from the texture
+    mat("leaf_palm", "#5c8a36", 0.75)
+    for k, img in (("leaf", "leaves_a.png"), ("leaf_b", "leaves_b.png"), ("leaf_palm", "leaves_palm.png")):   # leaf cards: colour and cut-out from the texture
         nt = MATS[k].node_tree; b_ = nt.nodes.get("Principled BSDF"); im = nt.nodes.new("ShaderNodeTexImage"); im.image = bpy.data.images.load(os.path.join(TEX, img))
         nt.links.new(im.outputs["Color"], b_.inputs["Base Color"]); nt.links.new(im.outputs["Alpha"], b_.inputs["Alpha"]); b_.inputs["Subsurface Weight"].default_value = 0.1
         try: MATS[k].surface_render_method = "DITHERED"
@@ -828,23 +841,88 @@ def protos():
         cr = nt.nodes.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = hexc("#2c4f1f"); cr.color_ramp.elements[1].color = hexc("#7c9a43")
         nt.links.new(nz.outputs["Fac"], cr.inputs[0]); nt.links.new(cr.outputs[0], nt.nodes.get("Principled BSDF").inputs["Base Color"])
         nt.nodes.get("Principled BSDF").inputs["Subsurface Weight"].default_value = 0.15
-    tree("proto_tree_a", [(0, 0, 7.5, 4.6, 2.6), (2.6, 1.0, 6.8, 3.0, 2.0), (-2.4, -1.2, 7.0, 3.2, 2.1), (0.6, -2.5, 6.6, 2.8, 1.9), (-0.8, 2.3, 8.0, 2.6, 1.8)], 5.5, 0.32)
-    tree("proto_tree_b", [(0, 0, 4.5, 1.9, 3.2), (0, 0, 7.5, 1.6, 2.8), (0, 0, 10.0, 1.1, 2.0)], 3.0, 0.22)
-    # coconut palm: a leaning trunk and fronds
-    mb = MB([]); hgt = 11.0
-    for k in range(10):
-        z0, z1 = k * hgt / 10, (k + 1) * hgt / 10; lx0, lx1 = 0.04 * (z0 / hgt) ** 2 * hgt, 0.04 * (z1 / hgt) ** 2 * hgt
-        cyl(mb, lx0, 0, z0, z1, 0.2 - 0.005 * k, 0.2 - 0.005 * k, 0, "trunk", 8, cap=False)
-    tip = (0.04 * hgt, 0, hgt)
-    for f in range(12):
-        a = f / 12 * math.tau; pts_ = []
-        for t in np.linspace(0, 1, 7):
-            r_ = 4.8 * t; z = tip[2] + 1.2 * t - 3.4 * t * t; pts_.append((tip[0] + math.cos(a) * r_, tip[1] + math.sin(a) * r_, z))
-        for i in range(len(pts_) - 1):
-            wdt = 0.55 * math.sin(math.pi * (i + 0.5) / 6) + 0.05; p0, p1 = pts_[i], pts_[i + 1]
-            nxx, nyy = -math.sin(a) * wdt, math.cos(a) * wdt
-            mb.quad((p0[0] + nxx, p0[1] + nyy, p0[2]), (p0[0] - nxx, p0[1] - nyy, p0[2]), (p1[0] - nxx, p1[1] - nyy, p1[2]), (p1[0] + nxx, p1[1] + nyy, p1[2]), [(0, 0)] * 4, "frond")
-    mb.build("proto_palm", MATS)
+    # --- the tree models (VISUAL_REALISM_AUDIT.md): branches and clusters of leaf cards, not balls of cards ---
+    def tube(mb, p0, p1, r0, r1, m, seg=6):
+        """A tapered tube between two 3D points (branches, a leaning trunk)."""
+        p0, p1 = np.array(p0, float), np.array(p1, float); ax_ = p1 - p0; L_ = np.linalg.norm(ax_); ax_ /= L_
+        up = np.array([0, 0, 1.0]) if abs(ax_[2]) < 0.9 else np.array([1.0, 0, 0]); e1 = np.cross(ax_, up); e1 /= np.linalg.norm(e1); e2 = np.cross(ax_, e1)
+        for k in range(seg):
+            a0, a1 = k / seg * math.tau, (k + 1) / seg * math.tau
+            q = [p0 + r0 * (math.cos(a0) * e1 + math.sin(a0) * e2), p0 + r0 * (math.cos(a1) * e1 + math.sin(a1) * e2), p1 + r1 * (math.cos(a1) * e1 + math.sin(a1) * e2), p1 + r1 * (math.cos(a0) * e1 + math.sin(a0) * e2)]
+            mb.quad(*[tuple(v) for v in q], [(k / seg, 0), ((k + 1) / seg, 0), ((k + 1) / seg, L_ / 2), (k / seg, L_ / 2)], m)
+    def cards(bm, uv, rr, centre, radius, n, size, flatten=0.75, hang=False, shell=0.55):
+        """Leaf cards in a cluster: on and just inside a sphere, mostly facing out, crossed in pairs."""
+        cx_, cy_, cz_ = centre
+        for _ in range(n):
+            th, ph = rr.uniform(0, math.tau), math.acos(rr.uniform(-0.55, 1.0))
+            rad = radius * rr.uniform(shell, 1.0)
+            ox, oy, oz = math.sin(ph) * math.cos(th), math.sin(ph) * math.sin(th), math.cos(ph) * flatten
+            px_, py_, pz_ = cx_ + ox * rad, cy_ + oy * rad, cz_ + oz * rad
+            s_ = size * rr.uniform(0.8, 1.2)
+            for k in range(2):
+                a = th + math.pi / 2 + k * math.pi / 2 + rr.uniform(-0.3, 0.3)
+                tl = rr.uniform(-0.15, 0.15) if hang else rr.uniform(-0.7, 0.7)
+                ex, ey = math.cos(a) * s_ / 2, math.sin(a) * s_ / 2
+                fx, fy, fz = -math.sin(a) * math.sin(tl) * s_ / 2, math.cos(a) * math.sin(tl) * s_ / 2, math.cos(tl) * s_ / 2
+                vs = [bm.verts.new((px_ + sx * ex + sy * fx, py_ + sx * ey + sy * fy, pz_ + sy * fz)) for sx, sy in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
+                f = bm.faces.new(vs)
+                for lp, (uu, vv) in zip(f.loops, ((0, 0), (1, 0), (1, 1), (0, 1))): lp[uv].uv = (uu, vv)
+    def crown_obj(name, parent, mat_name, fill):
+        bm = bmesh.new(); uv = bm.loops.layers.uv.new("UVMap"); fill(bm, uv, random.Random(name))
+        cm = bpy.data.meshes.new(name + "_c"); bm.to_mesh(cm); bm.free()
+        for p_ in cm.polygons: p_.use_smooth = True
+        cm.materials.append(MATS[mat_name]); co = bpy.data.objects.new(name + "_crown", cm); bpy.context.scene.collection.objects.link(co); co.parent = parent
+    # neem-like broadleaf (Azadirachta indica, the commonest street tree in Noida): a short trunk, five spreading
+    # limbs, a wide rounded crown of leaf clusters; about 9.5 m tall and 9 m across at scale 1
+    mb = MB([]); rr = random.Random("neem")
+    tube(mb, (0, 0, 0), (0.15, 0.05, 3.1), 0.34, 0.24, "trunk", 8)
+    ends = []
+    for k in range(5):
+        a = k / 5 * math.tau + rr.uniform(-0.3, 0.3); rad = rr.uniform(2.4, 3.3); top = rr.uniform(5.6, 6.8)
+        mid = (0.15 + math.cos(a) * rad * 0.45, 0.05 + math.sin(a) * rad * 0.45, 4.4)
+        end = (math.cos(a) * rad, math.sin(a) * rad, top); tube(mb, (0.15, 0.05, 3.0), mid, 0.2, 0.13, "trunk", 6); tube(mb, mid, end, 0.13, 0.06, "trunk", 5)
+        ends.append(end)
+    me_ = mb.build("proto_tree_a", MATS)
+    def neem_fill(bm, uv, rr):
+        for e in ends: cards(bm, uv, rr, (e[0], e[1], e[2] + 0.6), rr.uniform(1.9, 2.4), 30, 1.5)
+        for k in range(4):
+            a = k / 4 * math.tau + 0.4; cards(bm, uv, rr, (math.cos(a) * 1.4, math.sin(a) * 1.4, 7.6), 2.2, 30, 1.5)
+        cards(bm, uv, rr, (0.2, 0, 8.4), 2.0, 26, 1.4)
+    crown_obj("proto_tree_a", me_, "leaf", neem_fill)
+    # ashoka (Polyalthia longifolia, planted in rows along Noida plot boundaries): tall, narrow, conical, drooping
+    # leaves from the ground almost to the tip; about 11 m tall and 3.4 m across at scale 1
+    mb = MB([]); tube(mb, (0, 0, 0), (0, 0, 10.6), 0.2, 0.05, "trunk", 6); me_ = mb.build("proto_tree_b", MATS)
+    def ashoka_fill(bm, uv, rr):
+        for i in range(34):
+            z = 1.6 + i * 0.27; rad = 1.75 * (1 - (z - 1.6) / 10.0) ** 0.9 + 0.15
+            for _ in range(int(5 + rad * 4)):
+                th = rr.uniform(0, math.tau); r_ = rad * rr.uniform(0.6, 1.0); s_ = rr.uniform(1.0, 1.35)
+                px_, py_ = math.cos(th) * r_, math.sin(th) * r_; a = th + math.pi / 2 + rr.uniform(-0.4, 0.4)
+                ex, ey = math.cos(a) * s_ / 2, math.sin(a) * s_ / 2
+                vs = [bm.verts.new((px_ + sx * ex, py_ + sx * ey, z + sy * s_ * 0.6)) for sx, sy in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
+                f = bm.faces.new(vs)
+                for lp, (uu, vv) in zip(f.loops, ((0, 0), (1, 0), (1, 1), (0, 1))): lp[uv].uv = (uu, vv)
+    crown_obj("proto_tree_b", me_, "leaf_b", ashoka_fill)
+    # palm (royal or foxtail, planted at entrances): a smooth, slightly curving trunk and 14 arching fronds
+    mb = MB([]); hgt = 10.5; prev = (0, 0, 0)
+    for k in range(1, 9):
+        z = k * hgt / 8; nxt = (0.35 * (z / hgt) ** 2, 0, z); tube(mb, prev, nxt, 0.24 - 0.008 * k, 0.24 - 0.008 * (k + 1), "trunk", 8); prev = nxt
+    tube(mb, prev, (prev[0], 0, hgt + 1.1), 0.18, 0.12, "frond", 8)   # the green crownshaft
+    me_ = mb.build("proto_palm", MATS); tip = (prev[0], 0, hgt + 0.9)
+    def palm_fill(bm, uv, rr):
+        for f in range(14):
+            a = f / 14 * math.tau + rr.uniform(-0.15, 0.15); rise = rr.uniform(0.2, 0.9); Lf = rr.uniform(3.6, 4.4)
+            pts_ = [(tip[0] + math.cos(a) * Lf * t, tip[1] + math.sin(a) * Lf * t, tip[2] + rise * t * 2.2 - 2.6 * t * t) for t in np.linspace(0, 1, 4)]
+            for i in range(3):
+                p0, p1 = pts_[i], pts_[i + 1]; w0, w1 = 0.9 * (0.55 + 0.45 * math.sin(math.pi * (i / 3 + 0.15))), 0.9 * (0.55 + 0.45 * math.sin(math.pi * ((i + 1) / 3 + 0.05)))
+                nx_, ny_ = -math.sin(a), math.cos(a)
+                vs = [bm.verts.new((p0[0] + nx_ * w0, p0[1] + ny_ * w0, p0[2])), bm.verts.new((p1[0] + nx_ * w1, p1[1] + ny_ * w1, p1[2])),
+                      bm.verts.new((p1[0] - nx_ * w1, p1[1] - ny_ * w1, p1[2])), bm.verts.new((p0[0] - nx_ * w0, p0[1] - ny_ * w0, p0[2]))]
+                f_ = bm.faces.new(vs)
+                for lp, (uu, vv) in zip(f_.loops, ((i / 3, 1), ((i + 1) / 3, 1), ((i + 1) / 3, 0), (i / 3, 0))): lp[uv].uv = (uu, vv)
+            # a second, crossed card along the same frond so it has thickness from the side
+            pass
+    crown_obj("proto_palm", me_, "leaf_palm", palm_fill)
     mb = MB([]); cyl(mb, 0, 0, 0, 9.0, 0.09, 0.09, 0, "metal", 8); boxm(mb, 1.0, 0, 8.8, 8.95, 2.2, 0.08, 0, "metal"); boxm(mb, 2.0, 0, 8.6, 8.9, 0.8, 0.3, 0, "lamp_head")
     mat("lamp_head", "#e6e2d6", 0.4, emit="#fff0d0", ek=0.0); mb.build("proto_lamp", MATS)
     mat("car_body", "#ffffff", 0.22, 0.55); mat("car_glass", "#1a2026", 0.04, 0.6); mat("tyre", "#161616", 0.9); mat("hub", "#b9bcbf", 0.3, 0.9)
@@ -924,6 +1002,8 @@ def page_data(info):
         lx, ly = L(x, y)
         if sight.contains(Point(lx, ly)): continue
         t = 2 if rnd.random() < 0.18 else 1 if rnd.random() < 0.3 else 0; trees.append([round(lx, 1), round(ly, 1), t, round(k, 2), round(rnd.random() * 6.28, 2)])
+    for x, y, t, k in (SITE["trees"] if SITE else []):   # the plot's own planting: species and size as designed
+        lx, ly = L(x, y); trees.append([round(lx, 1), round(ly, 1), int(t), round(k, 2), round(rnd.random() * 6.28, 2)])
     lamps = [[*map(lambda v: round(v, 1), L(x, y))] for x, y in WJ["lamps"] if inside(x, y, 4)]
     traffic = []
     for t in WJ["traffic"]:

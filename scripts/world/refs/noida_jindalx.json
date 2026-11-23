@@ -3,20 +3,20 @@
  "magnus-towers": {
   "poly": [
    [
-    -2.7,
-    70.5
+    -10.9,
+    60.4
    ],
    [
-    -9.2,
-    3.0
+    -15.9,
+    8.5
    ],
    [
-    -61.0,
-    8.0
+    -83.3,
+    15.0
    ],
    [
-    -54.6,
-    75.4
+    -78.3,
+    66.8
    ]
   ],
   "h": 26.2,
@@ -24,7 +24,7 @@
    77.3847901,
    28.604823
   ],
-  "basis": "Indicative plot massing, not surveyed. 67.7 m frontage x 52.1 m deep = 3530 m2, the workbook's 38000 sq ft a floor; 6 storeys above ground (B+G+5). Squared to the nearest road edge and set back 4 m from it; its centre is 51 m from the indicative pin. Replace with the landlord's plot outline."
+  "basis": "Indicative plot massing, not surveyed. 52.1 m frontage x 67.7 m deep = 3530 m2, the workbook's 38000 sq ft a floor; 6 storeys above ground (B+G+5). Squared to the nearest road edge and set back 10 m from it; its centre is 60 m from the indicative pin. Replace with the landlord's plot outline."
  },
  "a104": {
   "poly": [

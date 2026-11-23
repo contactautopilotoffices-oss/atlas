@@ -28,5 +28,9 @@
  "station_line": "L1",
  "towers": false,
  "max_h": 24,
- "towers_note": "Sectors 3, 4 and 9 are G+2 to G+5 industrial and office plots: no estimated towers, and estimated heights capped at 24 m (the 30 m surface model reads low blocks too tall, as in Andheri). Overture's own heights are kept."
+ "towers_note": "Sectors 3, 4 and 9 are G+2 to G+5 industrial and office plots: no estimated towers, and estimated heights capped at 24 m (the 30 m surface model reads low blocks too tall, as in Andheri). Overture's own heights are kept.",
+ "open_tree_density": 0.3,
+ "roadside_tree_density": 0.55,
+ "avenue_spacing": 11,
+ "trees_note": "Noida sectors: avenue planting along the main roads, dense planting in parks, a thin scatter elsewhere (the random scatter over all open ground made a carpet: VISUAL_REALISM_AUDIT.md)"
 }

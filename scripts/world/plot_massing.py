@@ -1,6 +1,6 @@
 """Indicative plot massings for options whose pin does not sit on a plot-sized footprint.
 
-  python scripts/world/plot_massing.py OUT_REFS.json SCENE.json:OPTION_ID[:SETBACK_M] ...
+  python scripts/world/plot_massing.py OUT_REFS.json SCENE.json:OPTION_ID[:SETBACK_M[:CLEAR_M]] ...
 
 For each option, a rectangle with the floor plate of the client's workbook (built-up area per
 floor, sq ft), standing at the pin. Its long side is set parallel to the nearest road edge, and
@@ -22,7 +22,10 @@ OUT = sys.argv[1]
 SQFT = 0.09290304
 out = {"about": "Indicative plot massings for the JindalX options (scripts/world/plot_massing.py). Floor plate and storeys from the client's workbook (JindalX options.xlsx); position from the indicative pins in jindalx/build-data.cjs; orientation squared to the nearest Overture road. Not surveyed: confirm the plot with the landlord, then replace the outline."}
 for arg in sys.argv[2:]:
+    # SCENE:OPTION[:SETBACK[:CLEAR]]: an explicit setback is kept (no 6 m fallback); CLEAR is the minimum
+    # distance from every road edge (default 3 m), for a corner plot that fronts two roads
     parts = arg.split(":"); scene_p, oid = parts[0], parts[1]; setback = float(parts[2]) if len(parts) > 2 else 9.0
+    explicit = len(parts) > 2; clear_arg = float(parts[3]) if len(parts) > 3 else 3.0
     S = json.load(open(scene_p)); B = json.load(open(S["bundle"]))
     o = next(x for x in B["options"] if x["id"] == oid); so = next(x for x in S["options"] if x["id"] == oid)
     fact = {f["k"]: f["v"] for f in o["facts"]}
@@ -48,7 +51,7 @@ for arg in sys.argv[2:]:
         return cx, cy, [(cx + ux * a * fr / 2 + nx * b * dp / 2, cy + uy * a * fr / 2 + ny * b * dp / 2) for a, b in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
     # the position nearest the pin that clears every road by `clear` metres: first the frontage on the nearest
     # road at the setback, sliding along it; failing that, any centre within 90 m, squared to the same road
-    clear = 3.0
+    clear = clear_arg
     shapely.prepare(roads)
     # mapped buildings near the pin: covering them costs 1 m of distance per 40 m2, so a new building
     # (Magnus Towers, handover December 2026) prefers the empty plot the older map data shows
@@ -56,7 +59,7 @@ for arg in sys.argv[2:]:
     cost = lambda cs, d: d + Polygon(cs).intersection(built).area / 40
     def rect(cx, cy, fr, dp): return [(cx + ux * a * fr / 2 + nx * b * dp / 2, cy + uy * a * fr / 2 + ny * b * dp / 2) for a, b in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
     best = None
-    for sb in (setback, 6.0):
+    for sb in ((setback,) if explicit else (setback, 6.0)):
         for fr, dp in ((front, depth), (depth, front)):
             for dt in range(-60, 61, 3):
                 cx_, cy_, cs = place(t0 + dt, fr, dp, sb)

@@ -67,6 +67,10 @@ window.ATLAS = {
       },
       "ky": 110950,
       "specSourced": true,
+      "groundTex": "ground_noida",
+      "tone": "agx",
+      "lighting": true,
+      "lightingEV": -0.35,
       "factKeys": {
         "Micro-market": "Address/Sector",
         "Floor / Unit": "Offered floor",

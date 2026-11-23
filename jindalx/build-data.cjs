@@ -28,6 +28,8 @@ const bundle = {
     columns:{monthlyOutflow:{label:'Tentative monthly outflow',unit:'INR + GST / month',type:'number',sortable:true,higherIsBetter:false},floorPlate:{label:'Built-up area per floor',type:'text'},floorOffered:{label:'Offered floor',type:'text'},timeline:{label:'Timeline',type:'text'},metro:{label:'Metro distance stated in workbook',type:'text'}},
     world:{href:'/jindalx-noida/world',data:'/media/jindalx-noida/world/',sky:'sky.hdr',poster:'hero.jpg',mapHref:'/engine/?atlas=jindalx-noida',
       origin:origins['a104'],origins,ky:110950,specSourced:true,
+      // the premium look (VISUAL_REALISM_AUDIT.md): open ground textured, AgX tone mapping, the time-of-day studio
+      groundTex:'ground_noida',tone:'agx',lighting:true,lightingEV:-0.35,
       factKeys:{'Micro-market':'Address/Sector','Floor / Unit':'Offered floor','Possession':'Timelines'},
       brand:{kicker:'Autopilot · JindalX',title:'Noida, in 3D'},
       credit:'Options: workbook floor plates and storeys at indicative pins, not surveyed. Context: Overture Maps, heights estimated. Walks: Overture streets from the pins.',
