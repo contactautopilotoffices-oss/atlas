@@ -40,7 +40,7 @@ def cloud_layer(n=2048, cover=0.5, seed_base=3):
     shade = 0.70 + 0.30 * lit
     core = smooth(0.0, 0.9, a)               # thicker cloud is greyer underneath
     r = np.clip(shade * (1.0 - 0.10 * core), 0, 1); g = np.clip(shade * (0.985 - 0.09 * core), 0, 1); b = np.clip(shade * (0.97 - 0.06 * core), 0, 1)
-    rgb = np.stack([r * 1.02, g, b * 1.03], -1)
+    rgb = np.stack([r * 0.99, g * 0.995, b * 1.02], -1)   # neutral white, a cool cast in the shade
     rgb = np.clip(rgb + 0.06 * (1 - a[..., None]), 0, 1)
     return np.dstack([rgb, a]).astype(np.float32)
 
@@ -73,9 +73,11 @@ def composite(img, f):
 def grade(img):
     H, W = img.shape[:2]
     lum = img.mean(-1, keepdims=True)
-    img = img + (img - lum) * 0.12                                 # a little saturation
-    img = np.clip((img - 0.5) * 1.06 + 0.5, 0, 1)                   # a little contrast
-    img = img * np.array([1.025, 1.0, 0.965]) ** (lum * 1.5)        # warm the highlights (morning sun)
+    img = np.clip((img - 0.06 * np.array([0.66, 0.70, 0.76])) / 0.94, 0, 1)   # lift some of the haze veil
+    lum = img.mean(-1, keepdims=True)
+    img = img + (img - lum) * 0.18                                 # a little saturation
+    img = np.clip((img - 0.5) * 1.10 + 0.5, 0, 1)                   # a little contrast
+    img = img * np.array([1.012, 1.0, 0.985]) ** (lum * 1.5)        # warm the highlights slightly (morning sun)
     yy, xx = np.mgrid[0:H, 0:W]; r = np.hypot((xx - W / 2) / (W / 2), (yy - H / 2) / (H / 2))
     img = img * (1 - 0.18 * smooth(0.6, 1.5, r))[..., None]          # vignette
     return np.clip(img, 0, 1)
