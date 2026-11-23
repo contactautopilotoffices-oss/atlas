@@ -96,6 +96,7 @@ async function boot() {
 
 /* -------------------------------------------------------------- world ---- */
 async function start(A, W, intro=null) {
+  const MV = W.ver ? "?v=" + encodeURIComponent(W.ver) : "";   // the world media's version (see boot)
   if(W.contexts || W.cad)document.body.classList.add('project-tools');
   if(W.mapHref)$("#to-map").href=W.mapHref;
   const canvas = $("#c");
