@@ -118,3 +118,6 @@ andheri-video-edit/.transcode-cache/
 andheri-video-edit/__pycache__/
 !andheri-video-edit/assets/autopilot.png
 andheri-project/film/shots/out/
+
+# headless Blender venv and site data
+.w3d/
