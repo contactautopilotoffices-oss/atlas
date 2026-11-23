@@ -57,43 +57,29 @@ const esc = s => String(s ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<':
 const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 const store = { get(k) { try { return sessionStorage.getItem(k); } catch { return null; } }, set(k, v) { try { sessionStorage.setItem(k, v); } catch { } } };
 
-/* ------------------------------------------------------------- rolling digits ----
-   EasyUI Animated Number, reworked as a date-picker drum: each digit is a reel of 0-9 three times,
-   spun upward and settled with a small overshoot; edges fade like a picker wheel. */
-const CELL = 1.18;   // em per reel cell; matches --ax-cell in the CSS
+/* ------------------------------------------------------------- counting figures ----
+   Plain figures that count up and settle (the founder found rolling digit wheels read as overlapping numbers).
+   Width is reserved from the final figure, so the units beside it never move. */
 export function odometer(value, { suffix = '' } = {}) {
   const text = typeof value === 'number' ? value.toLocaleString('en-IN') : String(value);
-  const el = document.createElement('span'); el.className = 'ax-odo'; el.dataset.value = text;
-  const sr = document.createElement('span'); sr.className = 'ax-sr'; sr.textContent = text + suffix; el.append(sr);   // what assistive tech reads
-  const digits = [...text].filter(ch => /\d/.test(ch)).length; let seen = 0;
-  for (const ch of text) {
-    if (/\d/.test(ch)) {
-      const fromRight = digits - (++seen);
-      const col = document.createElement('span'); col.className = 'ax-odo-col'; col.setAttribute('aria-hidden', 'true');
-      const reel = document.createElement('span'); reel.className = 'ax-odo-reel';
-      reel.innerHTML = Array.from({ length: 30 }, (_, i) => `<span>${i % 10}</span>`).join('');
-      reel.dataset.end = String(Number(ch) + 10 * (fromRight > 1 ? 1 : 2));
-      reel.style.transform = `translateY(${-(Number(reel.dataset.end)) * CELL}em)`;
-      col.append(reel); el.append(col);
-    } else {
-      const sep = document.createElement('span'); sep.className = 'ax-odo-sep'; sep.setAttribute('aria-hidden', 'true'); sep.textContent = ch; el.append(sep);
-    }
-  }
+  const el = document.createElement('span'); el.className = 'ax-odo ax-count'; el.dataset.value = text; el.textContent = text;
+  el.style.minWidth = `${text.length * 0.55}em`; el.setAttribute('aria-label', text + suffix);
   return el;
 }
 export function rollIn(root, { delay = 0 } = {}) {
-  if (reduced()) return;
-  const reels = [...root.querySelectorAll('.ax-odo-reel')];
-  reels.forEach((reel, i) => {
-    const end = Number(reel.dataset.end), start = end % 10 === 0 && end > 9 ? end - 10 : 0;
-    reel.getAnimations().forEach(a => a.cancel());
-    reel.closest('.ax-odo').classList.add('ax-rolling');
-    const anim = reel.animate([
-      { transform: `translateY(${-start * CELL}em)`, easing: 'cubic-bezier(.14,.62,.24,1)' },
-      { transform: `translateY(${-(end + .16) * CELL}em)`, offset: .82, easing: 'cubic-bezier(.33,0,.3,1)' },
-      { transform: `translateY(${-end * CELL}em)` },
-    ], { duration: 980 + i * 70, delay: delay + i * 45, fill: 'backwards' });
-    anim.onfinish = () => { if (reels.every(r => !r.getAnimations().length)) root.querySelectorAll('.ax-rolling').forEach(n => n.classList.remove('ax-rolling')); };
+  const els = [...root.querySelectorAll('.ax-count')];
+  els.forEach((el, i) => {
+    const text = el.dataset.value, target = Number(text.replace(/[^\d]/g, ''));
+    cancelAnimationFrame(el._raf); clearTimeout(el._t);
+    if (reduced() || !target) { el.textContent = text; return; }
+    const dur = 900 + i * 60, fmt = v => text.includes(',') ? v.toLocaleString('en-IN') : String(v);
+    el.textContent = fmt(0);
+    el._t = setTimeout(() => {
+      const t0 = performance.now();
+      const step = now => { const k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 4);
+        el.textContent = k < 1 ? fmt(Math.round(target * e)) : text; if (k < 1) el._raf = requestAnimationFrame(step); };
+      el._raf = requestAnimationFrame(step);
+    }, delay + i * 45);
   });
 }
 

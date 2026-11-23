@@ -211,3 +211,5 @@ body[data-andheri-ui=world] .ax-h2{font-size:27px;margin:12px 0 8px}
 .ax-spin{width:14px;height:14px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;animation:ax-spin .8s linear infinite}
 @keyframes ax-spin{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){.ax-spin{animation:none}}
+
+.ax-count{display:inline-block;text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
