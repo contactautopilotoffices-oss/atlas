@@ -23,6 +23,7 @@ def run(ctx):
     rd = os.path.join(os.path.dirname(os.path.abspath(__file__)), "refs")
     for fn in sorted(os.listdir(rd)):
         J = json.load(open(os.path.join(rd, fn)))
+        if any(abs(a - b) > 1e-6 for a, b in zip(J.get("scene_origin", [72.867, 19.111]), S["origin"])): continue   # another region's survey (no origin: Andheri East)
         for e in J.get("buildings", []):
             pt = Point(e["x"], e["y"])
             if not SLAB.buffer(-5).contains(pt): continue

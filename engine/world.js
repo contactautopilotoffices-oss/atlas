@@ -235,7 +235,10 @@ async function start(A, W, intro=null) {
      (Mapbox satellite with streets), so a route to a station 4 km away runs across Andheri, not empty haze */
   /* the region's origin: Andheri East unless the atlas names another (W.origin, W.ky), as the
      Noida explorer does (scripts/world/regions/*.json) */
-  const [LNG0, LAT0] = W.origin || [72.867, 19.111], KX = Math.cos(LAT0 * D2R) * 111320, KY = W.ky || 110540;
+  let [LNG0, LAT0] = W.origin || [72.867, 19.111], KX = Math.cos(LAT0 * D2R) * 111320;
+  const KY = W.ky || 110540;
+  /* an atlas whose buildings stand in different regions (JindalX: Sectors 3-9 and Sector 67) names each model's origin */
+  const useOrigin = (id) => { const o = W.origins?.[id]; if (!o) return; [LNG0, LAT0] = o; KX = Math.cos(LAT0 * D2R) * 111320; };
   let mapGround = null;
   const aerialTextures = new Map();
   async function applyAerialSurfaces(modelRoot, data) {
@@ -416,7 +419,7 @@ async function start(A, W, intro=null) {
     if (root) { scene.remove(root); disposeImported(rootResources); }
     for(const m of ownedMaterials)m.dispose();for(const t of ownedTextures)t.dispose();ownedMaterials.clear();ownedTextures.clear();
     for (const m of inst) { scene.remove(m); m.dispose(); } inst = []; movers = []; groundMeshes = [];
-    D = data; root = gltf.scene; rootResources = resources; scene.add(root); buildMapGround();
+    D = data; root = gltf.scene; rootResources = resources; scene.add(root); useOrigin(id); buildMapGround();
     const protos = {};
     root.traverse((o) => {
       if (o.name && o.name.startsWith("proto_") && !o.name.endsWith("_c") && !o.name.includes("_crown") && o.parent === root) protos[o.name] = o;
@@ -547,7 +550,8 @@ async function start(A, W, intro=null) {
 
   /* ---------------------------------------------------- the HUD ---- */
   let SEL = null;
-  const factOf = (o, k) => ((o.facts || []).find((f) => f.k === k) || {}).v || "";
+  /* W.factKeys maps the explorer's fact names onto an atlas's own (JindalX: the workbook's column names) */
+  const factOf = (o, k) => { const f = (o.facts || []).find((x) => x.k === k) || (W.factKeys?.[k] && (o.facts || []).find((x) => x.k === W.factKeys[k])); return (f || {}).v || ""; };
   /* Floors: G is the 5.6 m lobby, then 4.1 m a floor (scripts/world/prep.py);
      the offered floors come from the atlas's "Floor / Unit" (the deck's words). */
   const floorZ = (n) => n === 0 ? 0 : 5.6 + (n - 1) * 4.1, floorH = (n) => n === 0 ? 5.6 : 4.1;
@@ -608,7 +612,7 @@ async function start(A, W, intro=null) {
     const r = ROUTE && ROUTE.kind !== "rail" ? ROUTE : rows.find((x) => x.kind === "metro");
     $("#go").hidden = !r; if (r) $("#go").innerHTML = `Walk to ${esc(r.name)} <span aria-hidden="true">→</span>`;
     $("#src").textContent = (A.copy && A.copy.connect && A.copy.connect.note) || "";
-    $("#spec").innerHTML = (o.facts || []).filter((f) => !f.src).map((f) => `<dt>${esc(f.k)}</dt><dd>${esc(f.v)}</dd>`).join("");
+    $("#spec").innerHTML = (o.facts || []).filter((f) => !f.src || W.specSourced).map((f) => `<dt>${esc(f.k)}</dt><dd>${esc(f.v)}</dd>`).join("");
     const ph = W.renders && W.renders[o.id]; $("#photo").hidden = !ph || $("#spec").hidden; if (ph) $("#photo img").src = W.data + ph;
     if(W.branding==="autopilot-flipkart")propertySpotlight(o,r=>{leaveArea();setRoute(routeOf(r));renderHUD(o);if(MODE==="dollhouse")frameRoute();});
     renderStack(o);

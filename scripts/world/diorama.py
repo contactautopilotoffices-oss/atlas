@@ -48,8 +48,14 @@ os.makedirs(OUT, exist_ok=True)
 S = json.load(open(SCENE)); WJ = json.load(open(WORLD))
 # buildings the open maps miss, added from survey (scripts/world/refs/*.json "added")
 _RD = os.path.join(os.path.dirname(os.path.abspath(__file__)), "refs")
+# a refs file is in one region's metres: its "scene_origin" (entry or file), else Andheri East's (72.867 E, 19.111 N)
+def _same_region(e, f):
+    o = e.get("scene_origin") or f.get("scene_origin") or [72.867, 19.111]
+    return all(abs(a - b) < 1e-6 for a, b in zip(o, S["origin"]))
 for _fn in (sorted(os.listdir(_RD)) if os.path.isdir(_RD) else []):
-    for _e in json.load(open(os.path.join(_RD, _fn))).get("added", []):
+    _f = json.load(open(os.path.join(_RD, _fn)))
+    for _e in _f.get("added", []):
+        if not _same_region(_e, _f): continue
         _ap = Polygon(_e["poly"]); S["buildings"] = [b for b in S["buildings"] if b.get("opt") or not _ap.contains(Polygon(b["p"]).centroid)]   # map slivers inside it
         S["buildings"].append({"p": _e["poly"], "h": _e["h"], "c": _e.get("c", "yes"), "r": 0.5, "added": _e["name"]})
 BUNDLE = json.load(open(S.get("bundle", "examples/flipkart-andheri.bundle.json")))
@@ -61,16 +67,25 @@ if "--opt-at" in A:   # --opt-at X,Y: the option's real footprint, when the map 
     for b in S["buildings"]:
         if b.get("opt") == OID: del b["opt"]
     min(S["buildings"], key=lambda b: Polygon(b["p"]).centroid.distance(Point(ox_, oy_)))["opt"] = OID
-for _key in ("privilon", "corporate-avenue"):   # options whose outline is fixed in scripts/world/refs/*.json (founder + Google satellite), in every district
+for _key in dict.fromkeys(["privilon", "corporate-avenue"] + [o["id"] for o in BUNDLE["options"]]):   # options whose outline is fixed in scripts/world/refs/*.json (founder + Google satellite, or a plot massing from the deck's floor plate), in every district
     _poly, _h = None, 67.5
     for _fn in (sorted(os.listdir(_RD)) if os.path.isdir(_RD) else []):
-        _e = json.load(open(os.path.join(_RD, _fn))).get(_key, {})
+        _f = json.load(open(os.path.join(_RD, _fn))); _e = _f.get(_key, {})
+        if not _same_region(_e, _f): continue   # made in another region's metres
         if _e.get("poly"): _poly, _h = _e["poly"], _e.get("h", 67.5)
     if not _poly: continue
     _op = Polygon(_poly)
     for b in S["buildings"]:   # the old pin's footprint is a real neighbour (Privilon's pin sat on Fleet House): keep it, drop the tag
         if b.get("opt") == _key: del b["opt"]
     S["buildings"] = [b for b in S["buildings"] if not (_op.contains(Polygon(b["p"]).centroid) or Polygon(b["p"]).intersection(_op).area > min(100, 0.25 * Polygon(b["p"]).area))]
+    for b in S["buildings"]:   # what still touches the outline is trimmed back to it (the largest piece left, 0.5 m clear)
+        _bp = Polygon(b["p"]).buffer(0)
+        if b.get("opt") or not _bp.intersects(_op) or _bp.intersection(_op).area < 0.5: continue
+        _rest = _bp.difference(_op.buffer(0.5, join_style="mitre"))
+        _rest = max(getattr(_rest, "geoms", [_rest]), key=lambda g: g.area) if not _rest.is_empty else None
+        if _rest is not None and _rest.geom_type == "Polygon" and _rest.area > 20: b["p"] = [list(c) for c in _rest.exterior.coords[:-1]]; b["trimmed"] = _key
+        else: b["drop"] = True
+    S["buildings"] = [b for b in S["buildings"] if not b.get("drop")]
     S["buildings"].append({"p": _poly, "h": _h, "c": "commercial", "r": 0.5, "opt": _key})
 OPTB = next(b for b in S["buildings"] if b.get("opt") == OID)
 # --neighbour-hero ID=BLEND (repeatable): another shortlisted property standing in this district, shown with its
@@ -498,11 +513,13 @@ def build():
     for nm, lo_, la_, sty in LMK:
         pt = Point((lo_ - S["origin"][0]) * S["k"][0], (la_ - S["origin"][1]) * S["k"][1])
         cand = [(p_.centroid.distance(pt), id(b_)) for b_, p_ in bpolys if p_.area > 1200 and b_.get("opt") != OID and id(b_) not in lmk]
-        if cand: lmk[min(cand)[1]] = (nm, sty, None, None)
+        if cand and min(cand)[0] < 400: lmk[min(cand)[1]] = (nm, sty, None, None)   # Andheri only: never tag a building in another city
     # buildings surveyed in Street View (scripts/world/refs/*.json): facade and, where counted, height
     RD = os.path.join(os.path.dirname(os.path.abspath(__file__)), "refs")
     for fn in sorted(os.listdir(RD)) if os.path.isdir(RD) else []:
-        for e in json.load(open(os.path.join(RD, fn))).get("buildings", []):
+        _f = json.load(open(os.path.join(RD, fn)))
+        if not _same_region({}, _f): continue
+        for e in _f.get("buildings", []):
             pt = Point(e["x"], e["y"]); cand = [(p_.centroid.distance(pt), id(b_)) for b_, p_ in bpolys if b_.get("opt") != OID]
             if cand and min(cand)[0] < 15: lmk[min(cand)[1]] = (e["name"], e["style"], e.get("h"), e.get("ground"))
     road_near = unary_union([ROAD["major"], ROAD["minor"]]).buffer(6)
@@ -608,7 +625,19 @@ def build():
             t2.rotation_euler = (math.pi / 2, 0, ang); t2.location = (sx + nx * 0.6, sy + ny * 0.6, H + dz)
     entrance = (mx + nx * 0.5, my + ny * 0.5); walk0 = (mx + nx * 16, my + ny * 16)
     back = max(38.0, H * 0.62); street_cam = None
+    # --cam-on-road: on narrow streets lined both sides (Noida's sector blocks) the first clear spot 38 m out is a gap
+    # between the buildings opposite; stand on the carriageway in front of the face instead, when there is one
+    ON_ROAD = "--cam-on-road" in A
+    if ON_ROAD:
+        for kk in (0.55, 0.45, 0.65, 0.35, 0.8):
+            for side in (0.0, 0.3, -0.3, 0.6, -0.6):
+                c_ = (mx + nx * back * kk + math.cos(ang) * back * side, my + ny * back * kk + math.sin(ang) * back * side)
+                q_ = Point(c_[0] + OX, c_[1] + OY)
+                if roads.contains(q_) and not built.buffer(1.5).contains(q_) and not KEEP_OUT.contains(q_) and not built.intersects(LineString([(c_[0] + OX, c_[1] + OY), (mx + nx * 8 + OX, my + ny * 8 + OY)])):
+                    street_cam = c_; break
+            if street_cam: break
     for side in (0.35, -0.35, 0.6, -0.6, 0.0, 0.9, -0.9):
+        if street_cam: break
         for kk in (1.0, 0.8, 1.25, 0.65, 1.5):
             c_ = (mx + nx * back * kk + math.cos(ang) * back * side, my + ny * back * kk + math.sin(ang) * back * side)
             if not built.buffer(1.5).contains(Point(c_[0] + OX, c_[1] + OY)) and not KEEP_OUT.contains(Point(c_[0] + OX, c_[1] + OY)) and not built.intersects(LineString([(c_[0] + OX, c_[1] + OY), (mx + nx * 8 + OX, my + ny * 8 + OY)])):
@@ -629,7 +658,7 @@ def build():
     # and not under the station's stairs or viaduct, where the eye would sit inside the structure
     def _open(w): q = Point(w[0] + OX, w[1] + OY); return not built.contains(q) and not KEEP_OUT.contains(q)
     cands = [(mx + nx * d - ny * t, my + ny * d + nx * t) for d in range(16, 64, 4) for t in (0, -8, 8, -16, 16)]
-    walk0 = next((w for w in cands if _open(w)), walk0)
+    walk0 = next((w for w in cands if _open(w) and (not ON_ROAD or roads.contains(Point(w[0] + OX, w[1] + OY)))), None) or next((w for w in cands if _open(w)), walk0)
 
     # --- the metro ---
     mt = MB([]); stn = MB([]); STATIONS = []

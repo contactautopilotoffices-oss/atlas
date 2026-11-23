@@ -1,0 +1,107 @@
+{
+ "about": "Indicative plot massings for the JindalX options (scripts/world/plot_massing.py). Floor plate and storeys from the client's workbook (JindalX options.xlsx); position from the indicative pins in jindalx/build-data.cjs; orientation squared to the nearest Overture road. Not surveyed: confirm the plot with the landlord, then replace the outline.",
+ "magnus-towers": {
+  "poly": [
+   [
+    -2.7,
+    70.5
+   ],
+   [
+    -9.2,
+    3.0
+   ],
+   [
+    -61.0,
+    8.0
+   ],
+   [
+    -54.6,
+    75.4
+   ]
+  ],
+  "h": 26.2,
+  "scene_origin": [
+   77.3847901,
+   28.604823
+  ],
+  "basis": "Indicative plot massing, not surveyed. 67.7 m frontage x 52.1 m deep = 3530 m2, the workbook's 38000 sq ft a floor; 6 storeys above ground (B+G+5). Squared to the nearest road edge and set back 4 m from it; its centre is 51 m from the indicative pin. Replace with the landlord's plot outline."
+ },
+ "a104": {
+  "poly": [
+   [
+    -19.6,
+    -28.7
+   ],
+   [
+    22.4,
+    6.8
+   ],
+   [
+    -4.8,
+    39.1
+   ],
+   [
+    -46.9,
+    3.7
+   ]
+  ],
+  "h": 17.4,
+  "scene_origin": [
+   77.3231094,
+   28.5839319
+  ],
+  "basis": "Indicative plot massing, not surveyed. 54.9 m frontage x 42.3 m deep = 2323 m2, the workbook's 25000 sq ft a floor; 4 storeys above ground (B+G/S+3). Squared to the nearest road edge and set back 6 m from it; its centre is 13 m from the indicative pin. Replace with the landlord's plot outline."
+ },
+ "a14-18-19": {
+  "poly": [
+   [
+    519.6,
+    249.3
+   ],
+   [
+    484.0,
+    219.1
+   ],
+   [
+    460.8,
+    246.4
+   ],
+   [
+    496.3,
+    276.6
+   ]
+  ],
+  "h": 21.3,
+  "scene_origin": [
+   77.3231094,
+   28.5839319
+  ],
+  "basis": "Indicative plot massing, not surveyed. 46.6 m frontage x 35.9 m deep = 1672 m2, the workbook's 18000 sq ft a floor; 5 storeys above ground (B+G/S+2+2 floors of 8k sqft). Squared to the nearest road edge and set back 4 m from it; its centre is 63 m from the indicative pin. Replace with the landlord's plot outline."
+ },
+ "d1": {
+  "poly": [
+   [
+    -476.4,
+    -236.8
+   ],
+   [
+    -438.7,
+    -205.2
+   ],
+   [
+    -462.9,
+    -176.2
+   ],
+   [
+    -500.6,
+    -207.8
+   ]
+  ],
+  "h": 13.5,
+  "scene_origin": [
+   77.3231094,
+   28.5839319
+  ],
+  "basis": "Indicative plot massing, not surveyed. 49.1 m frontage x 37.8 m deep = 1858 m2, the workbook's 20000 sq ft a floor; 3 storeys above ground (B+G+2). Squared to the nearest road edge and set back 6 m from it; its centre is 0 m from the indicative pin. Replace with the landlord's plot outline."
+ }
+}

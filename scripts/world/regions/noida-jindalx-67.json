@@ -1,0 +1,30 @@
+{
+ "about": "Sector 67, Noida, round Magnus Towers (JindalX option 1), with Noida Sector 59 on the Blue Line branch. The pin is the Sector 67 centre only (jindalx/build-data.cjs); the landlord pin is pending.",
+ "lng0": 77.3847901,
+ "lat0": 28.604823,
+ "ky": 110950.0,
+ "clip": [
+  77.3665,
+  28.5945,
+  77.3975,
+  28.6155
+ ],
+ "bundle": "examples/jindalx.bundle.json",
+ "deck_floors": {
+  "magnus-towers": 6
+ },
+ "floor_h": 4.0,
+ "ground_h": 5.0,
+ "metro": {
+  "L1": [
+   "Blue Line",
+   "elevated",
+   "#2a6fd0",
+   "Blue Line"
+  ]
+ },
+ "station_line": "L1",
+ "towers": false,
+ "max_h": 24,
+ "towers_note": "Sector 67 is an industrial sector of low and mid-rise plots: no estimated towers, estimated heights capped at 24 m. Overture's own heights are kept."
+}

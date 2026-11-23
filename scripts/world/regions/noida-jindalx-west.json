@@ -1,0 +1,32 @@
+{
+ "about": "Sectors 3, 4 and 9, Noida: the three JindalX options A104, A14/18/19 and D1, with Noida Sector 15 and Sector 16 on the Blue Line. Pins are indicative (jindalx/build-data.cjs); the plots await landlord confirmation.",
+ "lng0": 77.3231094,
+ "lat0": 28.5839319,
+ "ky": 110950.0,
+ "clip": [
+  77.3085,
+  28.5735,
+  77.3375,
+  28.5945
+ ],
+ "bundle": "examples/jindalx.bundle.json",
+ "deck_floors": {
+  "a104": 4,
+  "a14-18-19": 5,
+  "d1": 3
+ },
+ "floor_h": 3.9,
+ "ground_h": 4.5,
+ "metro": {
+  "L1": [
+   "Blue Line",
+   "elevated",
+   "#2a6fd0",
+   "Blue Line"
+  ]
+ },
+ "station_line": "L1",
+ "towers": false,
+ "max_h": 24,
+ "towers_note": "Sectors 3, 4 and 9 are G+2 to G+5 industrial and office plots: no estimated towers, and estimated heights capped at 24 m (the 30 m surface model reads low blocks too tall, as in Andheri). Overture's own heights are kept."
+}

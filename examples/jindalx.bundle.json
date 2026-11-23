@@ -1,0 +1,773 @@
+{
+ "about": "Build input for scripts/world (prep.py, diorama.py) for the JindalX Noida explorer. Generated from engine/atlases/jindalx-noida.js; routes from scripts/world/routes.py on Overture streets from the indicative pins. Total floors: the workbook Building structure above ground. Grade is a modelling input only (it picks the facade: glass for A, plaster with ribbon windows for B), never shown: Magnus Towers is glass because a glazing contract was awarded for C-2, Sector 67 in Sept 2025 (Faalcon Concepts BSE filing); the others are undocumented, so plaster.",
+ "options": [
+  {
+   "id": "magnus-towers",
+   "n": 1,
+   "name": "Magnus Towers",
+   "lat": 28.604823,
+   "lng": 77.3847901,
+   "precision": "approx",
+   "address": "Magnus towers, Sector 67, Noida",
+   "locality": "Magnus towers, Sector 67, Noida",
+   "routes": [
+    {
+     "kind": "metro",
+     "name": "Noida Sector 59",
+     "lines": [
+      "L1"
+     ],
+     "lat": 28.6065279,
+     "lng": 77.3726828,
+     "m": 1640,
+     "min": 20,
+     "mode": "walk",
+     "path": [
+      [
+       77.38479,
+       28.604823
+      ],
+      [
+       77.384763,
+       28.604762
+      ],
+      [
+       77.383173,
+       28.604888
+      ],
+      [
+       77.383108,
+       28.604011
+      ],
+      [
+       77.38019,
+       28.604232
+      ],
+      [
+       77.379811,
+       28.604188
+      ],
+      [
+       77.37986,
+       28.604895
+      ],
+      [
+       77.379798,
+       28.604908
+      ],
+      [
+       77.379754,
+       28.604154
+      ],
+      [
+       77.379511,
+       28.603961
+      ],
+      [
+       77.379375,
+       28.603989
+      ],
+      [
+       77.379284,
+       28.603972
+      ],
+      [
+       77.378761,
+       28.603692
+      ],
+      [
+       77.378308,
+       28.6035
+      ],
+      [
+       77.376233,
+       28.604539
+      ],
+      [
+       77.375605,
+       28.604974
+      ],
+      [
+       77.375349,
+       28.604761
+      ],
+      [
+       77.374013,
+       28.60513
+      ],
+      [
+       77.374056,
+       28.60526
+      ],
+      [
+       77.373115,
+       28.605829
+      ],
+      [
+       77.372768,
+       28.60593
+      ],
+      [
+       77.372806,
+       28.606595
+      ],
+      [
+       77.372683,
+       28.606528
+      ]
+     ],
+     "dist": "Overture Maps streets (OpenStreetMap), shortest walk from the indicative pin",
+     "src": "https://docs.overturemaps.org/"
+    },
+    {
+     "kind": "metro",
+     "name": "Noida Sector 61",
+     "lines": [
+      "L1"
+     ],
+     "lat": 28.5975854,
+     "lng": 77.3722663,
+     "m": 2000,
+     "min": 25,
+     "mode": "walk",
+     "path": [
+      [
+       77.38479,
+       28.604823
+      ],
+      [
+       77.384763,
+       28.604762
+      ],
+      [
+       77.384511,
+       28.602166
+      ],
+      [
+       77.384464,
+       28.601001
+      ],
+      [
+       77.380488,
+       28.600963
+      ],
+      [
+       77.379677,
+       28.600991
+      ],
+      [
+       77.379673,
+       28.600838
+      ],
+      [
+       77.379574,
+       28.600837
+      ],
+      [
+       77.374855,
+       28.601004
+      ],
+      [
+       77.374849,
+       28.60087
+      ],
+      [
+       77.372933,
+       28.600938
+      ],
+      [
+       77.372627,
+       28.600814
+      ],
+      [
+       77.372254,
+       28.600834
+      ],
+      [
+       77.372162,
+       28.597702
+      ],
+      [
+       77.372266,
+       28.597585
+      ]
+     ],
+     "dist": "Overture Maps streets (OpenStreetMap), shortest walk from the indicative pin",
+     "src": "https://docs.overturemaps.org/"
+    }
+   ],
+   "facts": [
+    {
+     "k": "Total floors",
+     "v": "G+5"
+    },
+    {
+     "k": "Grade",
+     "v": "A"
+    },
+    {
+     "k": "Building structure",
+     "v": "B+G+5"
+    },
+    {
+     "k": "BUA each floor, sqft",
+     "v": "38000"
+    }
+   ]
+  },
+  {
+   "id": "a104",
+   "n": 2,
+   "name": "A104",
+   "lat": 28.5839319,
+   "lng": 77.3231094,
+   "precision": "approx",
+   "address": "A104, Sector 4, Noida",
+   "locality": "A104, Sector 4, Noida",
+   "routes": [
+    {
+     "kind": "metro",
+     "name": "Noida Sector 16",
+     "lines": [
+      "L1"
+     ],
+     "lat": 28.578081,
+     "lng": 77.3177778,
+     "m": 1200,
+     "min": 15,
+     "mode": "walk",
+     "path": [
+      [
+       77.323109,
+       28.583932
+      ],
+      [
+       77.323339,
+       28.583637
+      ],
+      [
+       77.323542,
+       28.583446
+      ],
+      [
+       77.323572,
+       28.583388
+      ],
+      [
+       77.323527,
+       28.583348
+      ],
+      [
+       77.32366,
+       28.583207
+      ],
+      [
+       77.323277,
+       28.582921
+      ],
+      [
+       77.324476,
+       28.581643
+      ],
+      [
+       77.322453,
+       28.580223
+      ],
+      [
+       77.32094,
+       28.57906
+      ],
+      [
+       77.320665,
+       28.578944
+      ],
+      [
+       77.318528,
+       28.577382
+      ],
+      [
+       77.31773,
+       28.578135
+      ],
+      [
+       77.317778,
+       28.578081
+      ]
+     ],
+     "dist": "Overture Maps streets (OpenStreetMap), shortest walk from the indicative pin",
+     "src": "https://docs.overturemaps.org/"
+    },
+    {
+     "kind": "metro",
+     "name": "Noida Sector 15",
+     "lines": [
+      "L1"
+     ],
+     "lat": 28.5848835,
+     "lng": 77.3116118,
+     "m": 1720,
+     "min": 22,
+     "mode": "walk",
+     "path": [
+      [
+       77.323109,
+       28.583932
+      ],
+      [
+       77.323339,
+       28.583637
+      ],
+      [
+       77.323542,
+       28.583446
+      ],
+      [
+       77.323572,
+       28.583388
+      ],
+      [
+       77.323527,
+       28.583348
+      ],
+      [
+       77.32366,
+       28.583207
+      ],
+      [
+       77.323277,
+       28.582921
+      ],
+      [
+       77.321089,
+       28.585277
+      ],
+      [
+       77.320498,
+       28.584854
+      ],
+      [
+       77.320154,
+       28.585298
+      ],
+      [
+       77.319651,
+       28.584917
+      ],
+      [
+       77.319107,
+       28.585375
+      ],
+      [
+       77.318943,
+       28.58539
+      ],
+      [
+       77.318477,
+       28.585763
+      ],
+      [
+       77.318162,
+       28.586185
+      ],
+      [
+       77.31809,
+       28.586103
+      ],
+      [
+       77.317887,
+       28.586406
+      ],
+      [
+       77.315985,
+       28.585325
+      ],
+      [
+       77.315115,
+       28.586494
+      ],
+      [
+       77.31379,
+       28.585781
+      ],
+      [
+       77.31208,
+       28.584785
+      ],
+      [
+       77.311845,
+       28.585133
+      ],
+      [
+       77.311612,
+       28.584884
+      ]
+     ],
+     "dist": "Overture Maps streets (OpenStreetMap), shortest walk from the indicative pin",
+     "src": "https://docs.overturemaps.org/"
+    }
+   ],
+   "facts": [
+    {
+     "k": "Total floors",
+     "v": "G+3"
+    },
+    {
+     "k": "Grade",
+     "v": "B"
+    },
+    {
+     "k": "Building structure",
+     "v": "B+G/S+3"
+    },
+    {
+     "k": "BUA each floor, sqft",
+     "v": "25000"
+    }
+   ]
+  },
+  {
+   "id": "a14-18-19",
+   "n": 3,
+   "name": "A14,18,19",
+   "lat": 28.5866294,
+   "lng": 77.3277564,
+   "precision": "approx",
+   "address": "A14/18/19, Sector 9, Noida",
+   "locality": "A14/18/19, Sector 9, Noida",
+   "routes": [
+    {
+     "kind": "metro",
+     "name": "Noida Sector 16",
+     "lines": [
+      "L1"
+     ],
+     "lat": 28.578081,
+     "lng": 77.3177778,
+     "m": 1670,
+     "min": 21,
+     "mode": "walk",
+     "path": [
+      [
+       77.327756,
+       28.586629
+      ],
+      [
+       77.327687,
+       28.58661
+      ],
+      [
+       77.325224,
+       28.584764
+      ],
+      [
+       77.326354,
+       28.583587
+      ],
+      [
+       77.326465,
+       28.583347
+      ],
+      [
+       77.326452,
+       28.583097
+      ],
+      [
+       77.324476,
+       28.581643
+      ],
+      [
+       77.322453,
+       28.580223
+      ],
+      [
+       77.32094,
+       28.57906
+      ],
+      [
+       77.320665,
+       28.578944
+      ],
+      [
+       77.318528,
+       28.577382
+      ],
+      [
+       77.31773,
+       28.578135
+      ],
+      [
+       77.317778,
+       28.578081
+      ]
+     ],
+     "dist": "Overture Maps streets (OpenStreetMap), shortest walk from the indicative pin",
+     "src": "https://docs.overturemaps.org/"
+    },
+    {
+     "kind": "metro",
+     "name": "Noida Sector 15",
+     "lines": [
+      "L1"
+     ],
+     "lat": 28.5848835,
+     "lng": 77.3116118,
+     "m": 2120,
+     "min": 26,
+     "mode": "walk",
+     "path": [
+      [
+       77.327756,
+       28.586629
+      ],
+      [
+       77.327687,
+       28.58661
+      ],
+      [
+       77.327458,
+       28.586844
+      ],
+      [
+       77.326731,
+       28.586312
+      ],
+      [
+       77.32498,
+       28.588137
+      ],
+      [
+       77.323751,
+       28.587226
+      ],
+      [
+       77.32266,
+       28.586472
+      ],
+      [
+       77.321887,
+       28.587214
+      ],
+      [
+       77.321429,
+       28.587538
+      ],
+      [
+       77.320923,
+       28.587811
+      ],
+      [
+       77.320756,
+       28.587742
+      ],
+      [
+       77.320155,
+       28.588085
+      ],
+      [
+       77.319741,
+       28.587604
+      ],
+      [
+       77.319656,
+       28.587625
+      ],
+      [
+       77.319106,
+       28.587147
+      ],
+      [
+       77.31809,
+       28.586103
+      ],
+      [
+       77.317887,
+       28.586406
+      ],
+      [
+       77.315985,
+       28.585325
+      ],
+      [
+       77.315115,
+       28.586494
+      ],
+      [
+       77.31379,
+       28.585781
+      ],
+      [
+       77.31208,
+       28.584785
+      ],
+      [
+       77.311845,
+       28.585133
+      ],
+      [
+       77.311612,
+       28.584884
+      ]
+     ],
+     "dist": "Overture Maps streets (OpenStreetMap), shortest walk from the indicative pin",
+     "src": "https://docs.overturemaps.org/"
+    }
+   ],
+   "facts": [
+    {
+     "k": "Total floors",
+     "v": "G+4"
+    },
+    {
+     "k": "Grade",
+     "v": "B"
+    },
+    {
+     "k": "Building structure",
+     "v": "B+G/S+2+2 floors of 8k sqft"
+    },
+    {
+     "k": "BUA each floor, sqft",
+     "v": "G,1,2- 18000 3,4- 8000"
+    }
+   ]
+  },
+  {
+   "id": "d1",
+   "n": 4,
+   "name": "D1",
+   "lat": 28.5820683,
+   "lng": 77.3183079,
+   "precision": "approx",
+   "address": "D1, Sector 3, Noida",
+   "locality": "D1, Sector 3, Noida",
+   "routes": [
+    {
+     "kind": "metro",
+     "name": "Noida Sector 16",
+     "lines": [
+      "L1"
+     ],
+     "lat": 28.578081,
+     "lng": 77.3177778,
+     "m": 930,
+     "min": 12,
+     "mode": "walk",
+     "path": [
+      [
+       77.318308,
+       28.582068
+      ],
+      [
+       77.318921,
+       28.582195
+      ],
+      [
+       77.319277,
+       28.581819
+      ],
+      [
+       77.317577,
+       28.580534
+      ],
+      [
+       77.318938,
+       28.579076
+      ],
+      [
+       77.317972,
+       28.578345
+      ],
+      [
+       77.318749,
+       28.577545
+      ],
+      [
+       77.318528,
+       28.577382
+      ],
+      [
+       77.31773,
+       28.578135
+      ],
+      [
+       77.317778,
+       28.578081
+      ]
+     ],
+     "dist": "Overture Maps streets (OpenStreetMap), shortest walk from the indicative pin",
+     "src": "https://docs.overturemaps.org/"
+    },
+    {
+     "kind": "metro",
+     "name": "Noida Sector 15",
+     "lines": [
+      "L1"
+     ],
+     "lat": 28.5848835,
+     "lng": 77.3116118,
+     "m": 1120,
+     "min": 14,
+     "mode": "walk",
+     "path": [
+      [
+       77.318308,
+       28.582068
+      ],
+      [
+       77.318921,
+       28.582195
+      ],
+      [
+       77.317207,
+       28.58093
+      ],
+      [
+       77.316363,
+       28.581823
+      ],
+      [
+       77.315255,
+       28.580992
+      ],
+      [
+       77.314641,
+       28.581573
+      ],
+      [
+       77.313603,
+       28.582642
+      ],
+      [
+       77.311845,
+       28.585133
+      ],
+      [
+       77.311612,
+       28.584884
+      ]
+     ],
+     "dist": "Overture Maps streets (OpenStreetMap), shortest walk from the indicative pin",
+     "src": "https://docs.overturemaps.org/"
+    }
+   ],
+   "facts": [
+    {
+     "k": "Total floors",
+     "v": "G+2"
+    },
+    {
+     "k": "Grade",
+     "v": "B"
+    },
+    {
+     "k": "Building structure",
+     "v": "B+G+2"
+    },
+    {
+     "k": "BUA each floor, sqft",
+     "v": "20000"
+    }
+   ]
+  }
+ ]
+}
