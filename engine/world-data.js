@@ -1,7 +1,6 @@
 /* The data layer of an Atlas explorer: what the 2D atlas knows about each option, said around the 3D.
    The 3D stays the star. A small dock in the header opens one glass panel at the side with four views of the
-   selected building (the offer, the trade-offs, how the four compare, what to confirm), and the guided tour
-   (world-story.js) can open the same panels as it goes.
+   selected building (the offer, the trade-offs, how the four compare, what to confirm).
 
    An atlas opts in with meta.world.dataLayer. Nothing here knows a client or a workbook: every label, key and sentence
    is the atlas's, and every number is read from the atlas at runtime (options[].facts, routes, flag, meta.nextSteps,
@@ -17,9 +16,8 @@
      tabs[]   which views to offer, in order: overview offer tradeoffs compare distances next (default: all that the atlas can fill)
      offer[]  groups for the offer card: { title, ids[] }          compare[]  row ids in the compare table
      pros / cons   the facts keys of the two lists                  currency, locale, fixes{} (misspellings to mend)
-     tour[]   extra tour steps { view, panel, basis, title, text }; text tokens: {name} {<row id>} {pros} {cons}
-              {leads} {best:<row id>} {flag}, the distances {office:near} {office:far} {pair:closest} {pair:farthest}
-              {clusters} {lone}, {token:l} for lower case, and {token|fallback}. A sentence with a token that has no value is dropped.
+     notes{}  per building, what we know about the model: { <option id>: { facade, approach, position: { text, basis } } },
+              shown in To confirm as 'About this model'
    A field the sheet does not give is shown as "Not in the sheet", or left out when no option has it. */
 import { easyTabs } from "./andheri-ui.js";
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -44,7 +42,7 @@ const fmtKm = (d) => `${d < 1 ? d.toFixed(2) : d < 10 ? d.toFixed(1) : Math.roun
 const fmtWalk = (m) => m < 1000 ? `${Math.round(m / 10) * 10} m` : `${(m / 1000).toFixed(1)} km`;
 const listJoin = (a) => a.length < 2 ? a.join("") : a.slice(0, -1).join(", ") + " and " + a[a.length - 1];
 
-export function createDataLayer({ A, W, options, getSel, select, onLayout, isTouring, wake }) {
+export function createDataLayer({ A, W, options, getSel, select, onLayout, wake }) {
   const C = W.dataLayer; if (!C || !Array.isArray(C.rows) || !options.length) return null;
   const rows = C.rows, byId = Object.fromEntries(rows.map((r) => [r.id, r]));
   const loc = C.locale || "en-IN", cur = C.currency || "", grp = (n) => Math.round(n).toLocaleString(loc);
@@ -192,7 +190,10 @@ export function createDataLayer({ A, W, options, getSel, select, onLayout, isTou
   }
   function nextHTML(o) {
     const steps = (A.meta && A.meta.nextSteps) || [], src = (A.facts && A.facts.source) || [];
+    const nt = C.notes && C.notes[o.id], NL = { facade: "The facade", approach: "The way in", position: "Where it stands" }, NB = { imagery: "Modelled from imagery", unverified: "Not yet confirmed", workbook: "From the client's sheet", measured: "Measured on the map" };
+    const about = nt ? `<section><h3 class="mono">About this model</h3><dl class="dp-open">${["position", "facade", "approach"].filter((k) => nt[k]).map((k) => `<dt>${NL[k]}${nt[k].basis ? ` <i class="dp-tag" data-b="${esc(nt[k].basis)}">${esc(NB[nt[k].basis] || nt[k].basis)}</i>` : ""}</dt><dd>${esc(nt[k].text)}</dd>`).join("")}</dl></section>` : "";
     return `<div class="dp-top">${head(o, "To confirm")}</div><h2 class="dp-name sm">Before you decide</h2>
+      ${about}
       ${steps.length ? `<ol class="dp-steps">${steps.map((s) => `<li>${esc(s)}</li>`).join("")}</ol>` : '<p class="dp-empty">Nothing is listed to confirm.</p>'}
       ${src.length ? `<section><h3 class="mono">What the sheet leaves open</h3><dl class="dp-open">${src.map((x) => `<dt>${esc(x.k)}</dt><dd>${esc(x.v)}</dd>`).join("")}</dl></section>` : ""}${srcLine()}`;
   }
@@ -265,7 +266,7 @@ export function createDataLayer({ A, W, options, getSel, select, onLayout, isTou
   panel.innerHTML = `<button type="button" id="data-x" aria-label="Close">×</button><div id="data-body"></div>`;
   document.body.append(panel);
   const bodyEl = panel.querySelector("#data-body");
-  let tab = null, byTour = false, raf = 0;
+  let tab = null, raf = 0;
   const optOf = (id) => options.find((x) => x.id === id) || options[0];
 
   function render(keepScroll) {
@@ -287,11 +288,11 @@ export function createDataLayer({ A, W, options, getSel, select, onLayout, isTou
   function layout() { document.body.classList.toggle("data-open", !!tab); document.body.dataset.dataTab = tab || ""; panel.dataset.w = tab === "compare" ? "wide" : "";
     for (const b of dock.querySelectorAll("button")) { const on = b.dataset.tab === tab; b.classList.toggle("on", on); b.setAttribute("aria-pressed", String(on)); }
     onLayout && onLayout(); wake && wake(900); }
-  function open(t, fromTour) {
-    if (!BUILD[t]) return; const same = tab === t; tab = t; byTour = !!fromTour; panel.hidden = false; if (!same) { panel.classList.remove("in"); void panel.offsetWidth; panel.classList.add("in"); }
+  function open(t) {
+    if (!BUILD[t]) return; const same = tab === t; tab = t; panel.hidden = false; if (!same) { panel.classList.remove("in"); void panel.offsetWidth; panel.classList.add("in"); }
     render(same); layout();
   }
-  function close() { if (!tab) return; tab = null; byTour = false; panel.hidden = true; bodyEl.innerHTML = ""; layout(); }
+  function close() { if (!tab) return; tab = null; panel.hidden = true; bodyEl.innerHTML = ""; layout(); }
 
   dock.addEventListener("click", (e) => { const b = e.target.closest("[data-tab]"); if (!b) return; if (tab === b.dataset.tab) close(); else open(b.dataset.tab); });
   panel.addEventListener("click", (e) => {
@@ -299,53 +300,16 @@ export function createDataLayer({ A, W, options, getSel, select, onLayout, isTou
     const x = e.target.closest("button[data-mx]"); if (x) { pair = x.dataset.mx.split("|"); markPair(); return; }
     const p = e.target.closest("[data-pick]"); if (p && p.dataset.pick !== getSel()) select(p.dataset.pick);
   });
-  addEventListener("keydown", (e) => { if (e.key !== "Escape" || !tab || isTouring()) return; if (/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName || "")) return;
+  addEventListener("keydown", (e) => { if (e.key !== "Escape" || !tab) return; if (/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName || "")) return;
     const t = tab; close(); dock.querySelector(`[data-tab="${t}"]`)?.focus(); });
-  /* the tour card's height, so a panel opened beside it on a phone can sit above it */
-  const sty = () => document.querySelector("#story");
-  if ("ResizeObserver" in window) { const ro = new ResizeObserver(() => { const s = sty(); if (s) document.body.style.setProperty("--story-h", Math.ceil(s.getBoundingClientRect().height) + "px"); }); const t = setInterval(() => { const s = sty(); if (s) { ro.observe(s); clearInterval(t); } }, 400); }
-
-  /* ----------------------------------------------------------------- tour */
-  function dist(k) {
-    const nm = (a) => listJoin(a.map((x) => x.name)), p = (q) => q ? `${q.a.name} and ${q.b.name}, ${fmtKm(q.d)} apart` : "";
-    const h = (x) => x ? `${x.name}, ${homeTxt(x)} by road${isNum(x.roadKm) ? "" : " (est.)"}, about ${homeMin(x).replace(/^~/, "")}` : "";
-    if (k === "office:near") return h(MX.home[0]); if (k === "office:far") return MX.home.length > 1 ? h(MX.home[MX.home.length - 1]) : "";
-    if (k === "pair:closest") return p(MX.close); if (k === "pair:farthest") return MX.far !== MX.close ? p(MX.far) : "";
-    if (k === "clusters") return MX.clusters.map((g) => `${nm(g)} sit within ${fmtKm(MX.spread(g))} of each other`).join("; ");
-    if (k === "lone") return MX.lone.length ? `${nm(MX.lone)} ${MX.lone.length > 1 ? "stand" : "stands"} alone, with no other option within 2.5 km` : "";
-    return "";
-  }
-  const lowFirst = (t) => t.replace(/^([A-Z])(?![A-Z])/, (c) => c.toLowerCase());   // not for "DND" or "A104"
-  function fill(tpl, o) {
-    const get = (k) => {
-      if (k === "name") return o.name; if (k === "pros" || k === "cons") return listJoin(listOf(o, C[k]).map(lowFirst));
-      if (k === "leads") return listJoin(leadsOf(o).map((r) => r.lead)); if (k === "flag") return o.flag && o.flag.v || "";
-      if (k.startsWith("best:")) { const id = k.slice(5); return listJoin(options.filter((x) => bestOf[id] && bestOf[id].has(x.id)).map((x) => x.name)); }
-      if (k.startsWith("office:") || k.startsWith("pair:") || k === "clusters" || k === "lone") return MX ? dist(k) : "";
-      const r = byId[k]; if (!r) return ""; const v = valOf(o, k); return v.missing ? "" : v.lines ? v.lines.join(", ") : v.text + (r.fmt === "money" && v.sub ? " " + v.sub : "");
-    };
-    return String(tpl).split(/(?<=[.!?])\s+(?=[A-Z{])/).map((s) => {
-      let dead = false; const out = s.replace(/\{([^}|]+)(?:\|([^}]*))?\}/g, (_, k, fb) => { let key = k.trim(), low = false; if (key.endsWith(":l")) { key = key.slice(0, -2); low = true; } const v = get(key); if (v) return low ? v.toLowerCase() : v; if (fb != null) return fb; dead = true; return ""; });
-      return dead ? "" : out;
-    }).filter(Boolean).join(" ");
-  }
-  function tourSteps(id, base) {
-    const o = optOf(id), list = (base || []).slice(), extra = [];
-    for (const s of C.tour || []) { const text = fill(s.text || "", o); if (text) extra.push({ view: s.view || "stay", panel: s.panel, basis: s.basis, title: fill(s.title || "", o) || s.title, text }); }
-    const last = list.length ? list.pop() : null;
-    if (last && !last.panel && (A.meta.nextSteps || []).length) last.panel = "next";
-    return [...list, ...extra, ...(last ? [last] : [])];
-  }
-  const tourStep = (s) => { if (s && s.panel && BUILD[s.panel]) open(s.panel, true); else if (byTour) close(); };
-  const tourEnd = () => { if (byTour) close(); };
 
   return {
-    open, close, tourSteps, tourStep, tourEnd,
+    open, close,
     get tab() { return tab; },
     /* the explorer switched building: rebuild the open panel for it */
     select() { if (KEEP.has(tab)) mark(); else if (tab) render(false); },
     /* what the panel takes of the screen, for the camera to frame the rest: null when it is not showing */
     frame() { if (!tab || document.body.classList.contains("walk") || !panel.offsetWidth) return null;
-      return { width: panel.offsetWidth, hud: tab !== "compare" && !isTouring() }; },
+      return { width: panel.offsetWidth, hud: tab !== "compare" }; },
   };
 }

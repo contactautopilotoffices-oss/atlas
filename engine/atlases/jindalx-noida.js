@@ -85,160 +85,6 @@ window.ATLAS = {
         "title": "Noida, in 3D"
       },
       "credit": "Buildings stand where imagery shows them and are modelled from Street View, at the workbook floors; plots, entrances and exact finishes are unconfirmed. Context: Overture Maps, heights estimated. Walks: Overture streets.",
-      "story": {
-        "magnus-towers": [
-          {
-            "view": "overview",
-            "basis": "workbook",
-            "title": "Magnus Towers · Sector 67",
-            "text": "Six floors above ground and a basement, 38,000 sq ft a floor: the largest plate of the four. The only new building on the list, with handover due in December 2026."
-          },
-          {
-            "view": "facade",
-            "basis": "unverified",
-            "title": "The facade",
-            "text": "We checked this against 2026 imagery. The real building is a long, low block with white stone and plaster at the base, glazed lobby bays, dark glass bands and white aluminium fascias, and it is still being glazed. The model you see is our earlier guess, a glass tower, and is being redrawn."
-          },
-          {
-            "view": "approach",
-            "basis": "workbook",
-            "title": "The way in",
-            "text": "On wider roads in a part of Sector 67 that is not dense, with sufficient parking, the sheet says. In the imagery the road front is a continuous boundary wall behind a belt of trees; the likely vehicle gate is on the east road, and the landlord should confirm it."
-          },
-          {
-            "view": "metro",
-            "basis": "measured",
-            "title": "Walk to Sector 59 metro",
-            "text": "2.4 kilometres, about 30 minutes on foot, measured along the streets from the pin. The sheet says Sector 59, ~2KM. The line on the ground is the route."
-          },
-          {
-            "view": "floor",
-            "basis": "workbook",
-            "title": "On offer: 5th floor",
-            "text": "6 lifts a floor, parking at 1:1000, 3 months to move in. Cafeteria: yes, landlord is planning."
-          },
-          {
-            "view": "overview",
-            "basis": "unverified",
-            "title": "What is still open",
-            "text": "The sheet's pin is a road junction. Google places Magnus Greens, plot C-2, about 520 metres south-east, and the model stands in the wrong place. Plot plan and gates must come from the landlord."
-          }
-        ],
-        "a104": [
-          {
-            "view": "overview",
-            "basis": "workbook",
-            "title": "A104 · Sector 4",
-            "text": "Stilt ground floor and three floors above, with a basement, 25,000 sq ft a floor. The sheet calls it new, with handover due in December 2026."
-          },
-          {
-            "view": "facade",
-            "basis": "unverified",
-            "title": "The facade",
-            "text": "The model shows painted plaster. The best match in the imagery is a dark-grey panel and glass block of four levels, with black sunshade fins, but no public page confirms which building is A-104. Treat this facade as unknown until the landlord sends a photo."
-          },
-          {
-            "view": "approach",
-            "basis": "unverified",
-            "title": "The way in",
-            "text": "The sheet says one approach road is narrow and the other has a dump yard. The imagery agrees: a narrow lane about ten metres wide with a guarded steel gate on one side, and a garbage heap on the wide road on the other. Watch for this: 1 Approach road is narrow and the other one has Dumpyard."
-          },
-          {
-            "view": "metro",
-            "basis": "measured",
-            "title": "Walk to Sector 16 metro",
-            "text": "1.2 kilometres, about 15 minutes on foot, measured along the streets from the pin. The sheet says Sector 16, ~800 Mtrs. The line on the ground is the route."
-          },
-          {
-            "view": "floor",
-            "basis": "workbook",
-            "title": "On offer: 1st/2nd floor",
-            "text": "2 lifts a floor, parking at 1:1000, 3 months to move in. Cafeteria: will have to be discussed."
-          },
-          {
-            "view": "overview",
-            "basis": "unverified",
-            "title": "What is still open",
-            "text": "The pin is only the centre of Sector 4. The model stands on small shops, so its position is wrong. The likely building is about 140 metres west, and the landlord must confirm it."
-          }
-        ],
-        "a14-18-19": [
-          {
-            "view": "overview",
-            "basis": "workbook",
-            "title": "A14/18/19 · Sector 9",
-            "text": "Stilt ground floor and four floors: the lower three at 18,000 sq ft, the top two at 8,000. The whole building is available, and it is being upgraded."
-          },
-          {
-            "view": "facade",
-            "basis": "unverified",
-            "title": "The facade",
-            "text": "The model shows painted plaster. The imagery shows something else on Amaltash Marg: a new glass and copper-toned panel front, with an open stilt floor and scaffolding at one edge, so the upgrade is under way. The model is being redrawn."
-          },
-          {
-            "view": "approach",
-            "basis": "workbook",
-            "title": "The way in",
-            "text": "On a main road with a good link to the DND road, the sheet says. In the imagery the entrance is on the divided Amaltash Marg frontage; the lane behind is not confirmed as part of the building. Watch for this: Distance from metro."
-          },
-          {
-            "view": "metro",
-            "basis": "measured",
-            "title": "Walk to Sector 16 metro",
-            "text": "1.5 kilometres, about 19 minutes on foot, measured along the streets from the pin. The sheet says Sector 16, ~2KM. The line on the ground is the route."
-          },
-          {
-            "view": "floor",
-            "basis": "workbook",
-            "title": "On offer: 2nd and 3rd floor",
-            "text": "2 lifts a floor, parking at 1:1000, 4-5 months to move in. Cafeteria: yes, can be planned."
-          },
-          {
-            "view": "overview",
-            "basis": "unverified",
-            "title": "What is still open",
-            "text": "The real A-14 front is about 110 metres from where the model stands, and its frontage is about 13 metres, so the sheet's 18,000 sq ft a floor must include neighbouring plots. The landlord must supply the plot lines."
-          }
-        ],
-        "d1": [
-          {
-            "view": "overview",
-            "basis": "workbook",
-            "title": "D1 · Sector 3",
-            "text": "Ground floor and two floors above, 20,000 sq ft a floor. The whole building is available, and it is being upgraded."
-          },
-          {
-            "view": "facade",
-            "basis": "unverified",
-            "title": "The facade",
-            "text": "The model shows plain plaster. The building we believe is D-1 is cream plaster with large teal windows, some arched, a green glass bay and a round glazed corner tower, behind a wall with sliding gates. It reads as three or four levels, not two. Identity is not yet confirmed."
-          },
-          {
-            "view": "approach",
-            "basis": "unverified",
-            "title": "The way in",
-            "text": "A street of about 13 metres runs along the long face and a second along the end, with a gate on each in the imagery. The sheet says approach roads are wider. Watch for this: Expensive."
-          },
-          {
-            "view": "metro",
-            "basis": "measured",
-            "title": "Walk to Sector 16 metro",
-            "text": "680 metres, about 8 minutes on foot, measured along the streets from the pin. The sheet says Sector 16, ~500 Mtrs. The line on the ground is the route."
-          },
-          {
-            "view": "floor",
-            "basis": "workbook",
-            "title": "On offer: 2nd floor",
-            "text": "3 lifts a floor, parking at 1:1000, 4-5 months to move in. Cafeteria: yes, can be planned."
-          },
-          {
-            "view": "overview",
-            "basis": "unverified",
-            "title": "What is still open",
-            "text": "The model stands about 140 metres from the building we believe is D-1. It rests on third-party place data, and no name plate was read, so the landlord must confirm it."
-          }
-        ]
-      },
       "dataLayer": {
         "currency": "₹",
         "locale": "en-IN",
@@ -419,36 +265,64 @@ window.ATLAS = {
           "walk",
           "office"
         ],
-        "tour": [
-          {
-            "view": "stay",
-            "panel": "offer",
-            "basis": "workbook",
-            "title": "The offer",
-            "text": "{outflow}, tentative, as the broker quotes it. {plate} a floor at {efficiency} efficiency. Offered floor: {floor|not stated}. {timeline:l} to move in."
+        "notes": {
+          "magnus-towers": {
+            "facade": {
+              "basis": "imagery",
+              "text": "Modelled from 2026 imagery and the architect's renders: a long glazed block, white stone and plaster at the base with three entrance portals, dark glass bands under white fascias. It is still being glazed, so finishes may change."
+            },
+            "approach": {
+              "basis": "workbook",
+              "text": "On wider roads in a part of Sector 67 that is not dense, with sufficient parking, the sheet says. In the imagery the road front is a continuous boundary wall behind a belt of trees; the likely vehicle gate is on the east road, and the landlord should confirm it."
+            },
+            "position": {
+              "basis": "unverified",
+              "text": "Placed at Magnus Greens, plot C-2, where Google geocodes it, about 520 metres from the sheet's pin, which was only a road junction. The plot plan and gates still have to come from the landlord."
+            }
           },
-          {
-            "view": "approach",
-            "panel": "tradeoffs",
-            "basis": "workbook",
-            "title": "The trade-offs",
-            "text": "In the sheet's own words, in its favour: {pros|nothing listed}. Against it: {cons|the sheet lists nothing}. Best of the four on: {leads|no headline measure}."
+          "a104": {
+            "facade": {
+              "basis": "unverified",
+              "text": "Modelled on the best match in imagery: charcoal panels, blue-grey glass and black sunshade fins, four levels. No public page confirms that this is A-104, so treat the facade as unconfirmed until the landlord sends a photo."
+            },
+            "approach": {
+              "basis": "unverified",
+              "text": "The sheet says one approach road is narrow and the other has a dump yard. The imagery agrees: a narrow lane about ten metres wide with a guarded steel gate on one side, and a garbage heap on the wide road on the other."
+            },
+            "position": {
+              "basis": "unverified",
+              "text": "Placed on the best candidate seen in imagery, about 140 metres west of the sheet's pin, which was only the middle of Sector 4. No public page names it, so the landlord must confirm."
+            }
           },
-          {
-            "view": "overview",
-            "panel": "compare",
-            "basis": "mixed",
-            "title": "How it compares",
-            "text": "Lowest monthly outflow: {best:outflow}. Largest floor plate: {best:plate}. Shortest walk to a metro, measured: {best:walk}. Earliest move-in: {best:timeline}. Distances from today's office are our estimate from indicative pins."
+          "a14-18-19": {
+            "facade": {
+              "basis": "imagery",
+              "text": "Modelled from Street View: a new glass front with copper-toned bands, an open stilt floor and a grey crown, with scaffolding at one edge as the upgrade goes on."
+            },
+            "approach": {
+              "basis": "workbook",
+              "text": "On a main road with a good link to the DND road, the sheet says. In the imagery the entrance is on the divided Amaltash Marg frontage; the lane behind is not confirmed as part of the building."
+            },
+            "position": {
+              "basis": "unverified",
+              "text": "Placed on the A-14 front plot seen in imagery. Its frontage is only about 13 metres, so the sheet's 18,000 sq ft a floor must include neighbouring plots. The landlord must supply the plot lines."
+            }
           },
-          {
-            "view": "overview",
-            "panel": "distances",
-            "basis": "assumed",
-            "title": "How the four sit around today's office",
-            "text": "Straight lines between the pins, not routed roads. Nearest to today's office: {office:near}. Farthest: {office:far}. {clusters}. {lone}. Closest pair: {pair:closest}. Farthest pair: {pair:farthest}."
+          "d1": {
+            "facade": {
+              "basis": "unverified",
+              "text": "Modelled on the building we believe is D-1: cream render with teal windows, a green glass bay and a round glazed corner tower, behind a railed wall with gates. The identity is not yet confirmed."
+            },
+            "approach": {
+              "basis": "unverified",
+              "text": "A street of about 13 metres runs along the long face and a second along the end, with a gate on each in the imagery. The sheet says approach roads are wider."
+            },
+            "position": {
+              "basis": "unverified",
+              "text": "Placed on the building we believe is D-1, about 140 metres from the sheet's pin. It rests on third-party place data, so the landlord must confirm."
+            }
           }
-        ]
+        }
       },
       "thumbs": {
         "magnus-towers": "r/magnus-towers-hero.jpg",

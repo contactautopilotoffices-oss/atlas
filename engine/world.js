@@ -24,7 +24,6 @@ import * as THREE from "three";
 import {createSceneLighting} from "./andheri-scene-lighting.js";
 import {createWorldLayouts} from "./andheri-world-layouts.js";
 import { applyAndheriTheme, easyTabs, propertySpotlight } from "./andheri-ui.js";
-import { createStory } from "./world-story.js";
 import { createDataLayer } from "./world-data.js";
 import { andheriExperience, applyCanonicalFacts } from "./andheri-experience.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
@@ -881,7 +880,7 @@ async function start(A, W, intro=null) {
     lightingBuilder?.atmosphere();
   }
   function setModeUI() { document.querySelectorAll("#modes button").forEach((b) => { const on=areaMode ? b.id==="mapped-area" : b.dataset.mode===MODE || (MODE==="route" && b.dataset.mode==="walk");b.classList.toggle("on",on);b.setAttribute("aria-pressed",String(on)); }); }
-  $("#modes").addEventListener("click", (e) => { const b = e.target.closest("[data-mode]"); if (!b) return; if (story.open) story.close(); if (b.dataset.mode === "walk") startWalk(); else dollhouse(); });
+  $("#modes").addEventListener("click", (e) => { const b = e.target.closest("[data-mode]"); if (!b) return; if (b.dataset.mode === "walk") startWalk(); else dollhouse(); });
   let drag = null;
   canvas.addEventListener("pointerdown", (e) => { if (MODE === "dollhouse") return; drag = { x: e.clientX, y: e.clientY, yaw: walk.yaw, pitch: walk.pitch, moved: false }; try { canvas.setPointerCapture(e.pointerId); } catch (x) {} });
   canvas.addEventListener("pointermove", (e) => { if (!drag) return; const dx = e.clientX - drag.x, dy = e.clientY - drag.y; if (Math.hypot(dx, dy) > 4) drag.moved = true; walk.yaw = drag.yaw - dx * 0.0042; walk.pitch = clamp(drag.pitch + dy * 0.0036, -0.6, 1.25); });
@@ -970,7 +969,7 @@ async function start(A, W, intro=null) {
       controls.target.copy(fly.b.t); camera.position.copy(fly.b.p); controls.update(); fly = null;
     } else if (first && fly) { controls.target.copy(fly.b.t); const p0 = fly.b.p.clone(); fly = null; camera.position.copy(controls.target.clone().add(p0.clone().sub(controls.target).multiplyScalar(1.6))); flyTo(controls.target.clone(), p0, 2600); }
     try { history.replaceState(null, "", `#${id}`); } catch (e) {}
-    story?.retarget(id); dataUI?.select();
+    dataUI?.select();
   }
   /* the wording is the atlas's when it gives it (W.brand, W.credit), Andheri East's otherwise */
   const BR = W.brand || { kicker: "Autopilot · Flipkart", title: "Andheri East" };
@@ -983,35 +982,7 @@ async function start(A, W, intro=null) {
   $("#strip").addEventListener("click", (e) => { const f = e.target.closest(".film"); if (f && f.dataset.id !== SEL) select(f.dataset.id); });
   addEventListener("resize", () => { camera.aspect = innerWidth / innerHeight; frameOffset(MODE === "dollhouse"); renderer.setSize(innerWidth, innerHeight); composer.setSize(innerWidth, innerHeight); tilt.uniforms.uRes.value.set(innerWidth, innerHeight); wake(); });
 
-  /* the guided tour (engine/world-story.js): the camera goes to the thing, a caption says what it is and how we know */
-  function storyView(kind) {
-    if (!D) return; const o = OPTS.find((x) => x.id === SEL);
-    if (kind === "overview") { dollhouse(1800); controls.autoRotate = false; frameOffset(false); return; }
-    if (kind === "stay") { frameOffset(false); return; }   // a step that shows data and leaves the camera where it is
-    if (MODE !== "dollhouse") dollhouse(0);
-    controls.autoRotate = false; controls.minDistance = 22; frameOffset(false);
-    if (scene.fog) { scene.fog.near = Math.max(scene.fog.near, 700); scene.fog.far = Math.max(scene.fog.far, 2400); }
-    const c = centroid(D.building.foot), h = D.building.h, e = D.building.entrance || c;
-    let ux = e[0] - c[0], uy = e[1] - c[1]; const L = Math.hypot(ux, uy) || 1; ux /= L; uy /= L;
-    const turn = (a) => [ux * Math.cos(a) - uy * Math.sin(a), ux * Math.sin(a) + uy * Math.cos(a)];
-    if (kind === "facade") { const d = Math.max(95, h * 3.6), v = turn(0.5);
-      flyTo(P3(c[0] + ux * 6, c[1] + uy * 6, h * 0.5), P3(e[0] + v[0] * d, e[1] + v[1] * d, Math.max(16, h * 0.9)), 2400); }
-    else if (kind === "approach") { const sc = D.street_cam || [e[0] + ux * 30, e[1] + uy * 30]; let bx = sc[0] - e[0], by = sc[1] - e[1]; const bl = Math.hypot(bx, by) || 1; bx /= bl; by /= bl;
-      const p = P3(sc[0] + bx * 34, sc[1] + by * 34, 16); flyTo(P3(e[0], e[1], 5), p, 2400); }
-    else if (kind === "metro") { const r = (o.routes || []).find((x) => x.kind === "metro"); const dr = routeOf(r); if (dr) { setRoute(dr); renderHUD(o); frameRoute(); } }
-    else if (kind === "floor") { const f = offered(o).floors; if (f.length) flyToFloor(Math.max(...f)); controls.minDistance = 22; }
-  }
-  const story = createStory({
-    steps: (id) => dataUI ? dataUI.tourSteps(id, W.story && W.story[id]) : W.story && W.story[id],
-    go: (view, s) => { storyView(view); dataUI?.tourStep(s); },
-    onOpen: () => { $("#tour-btn")?.setAttribute("aria-pressed", "true"); leaveArea(); },
-    onClose: () => { dataUI?.tourEnd(); $("#tour-btn")?.setAttribute("aria-pressed", "false"); setRoute(routeOf((OPTS.find((x) => x.id === SEL)?.routes || []).find((x) => x.kind === "metro"))); if (MODE === "dollhouse") dollhouse(1400); },
-  });
-  if (W.dataLayer && AUI(W)) dataUI = createDataLayer({ A, W, options: OPTS, getSel: () => SEL, select: (id) => { if (id !== SEL) select(id); }, onLayout: () => frameOffset(frameOn), isTouring: () => story.open, wake });
-  if (W.story) {
-    const t = document.createElement("button"); t.id = "tour-btn"; t.type = "button"; t.textContent = "Tour"; t.setAttribute("aria-pressed", "false");
-    t.onclick = () => story.toggle(SEL); $("#modes").appendChild(t);
-  }
+  if (W.dataLayer && AUI(W)) dataUI = createDataLayer({ A, W, options: OPTS, getSel: () => SEL, select: (id) => { if (id !== SEL) select(id); }, onLayout: () => frameOffset(frameOn), wake });
   const deep = location.hash.slice(1); const first = OPTS.some((o) => o.id === deep) ? deep : OPTS[0].id;
   await select(first, true);
   for (const id of ["#top", "#hud", "#strip"]) $(id).hidden = false;

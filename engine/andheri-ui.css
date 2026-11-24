@@ -6,7 +6,6 @@ body[data-andheri-ui] :is(button,a,select,input):focus-visible{outline:3px solid
 body[data-andheri-ui] :is(button,select){touch-action:manipulation}
 body[data-andheri-ui] button,body[data-andheri-ui] .ap-action{transition:background .18s,color .18s,border-color .18s,transform .22s var(--ap-spring)}
 body[data-andheri-ui] button:active,body[data-andheri-ui] .ap-action:active{transform:scale(.97)}
-
 /* the co-brand lockup: both marks on transparency, never on a plaque */
 body[data-andheri-ui] .ap-lockup{display:inline-flex;align-items:center;gap:12px;flex:none;width:fit-content;max-width:100%;padding:0;background:none;border-radius:0;line-height:1;box-sizing:border-box}
 body[data-andheri-ui] .ap-lockup img{display:block;width:auto;max-width:none;flex:none;padding:0;border:0;filter:none;object-fit:contain;-webkit-user-drag:none;user-select:none}
@@ -18,7 +17,6 @@ body[data-andheri-ui] .ap-lockup[data-tone=light] .ap-x{color:#151a23}
 body[data-andheri-ui] .ap-tabs{position:relative;isolation:isolate}
 body[data-andheri-ui] .ap-tab-indicator{position:absolute;left:0;top:0;z-index:0;pointer-events:none;border-radius:999px;background:var(--fk-blue);box-shadow:0 2px 8px #2145ae20;transition:transform .32s var(--ap-spring),width .32s var(--ap-spring),height .2s}
 body[data-andheri-ui] .ap-tabs button{position:relative;z-index:1;min-height:44px;background:transparent}
-
 /* =============================================================== the explorer
    Dark glass chrome over the 3D model: two floating navbar groups, a property card at left,
    a compact property rail at the bottom, a floor dock at right. */
@@ -27,7 +25,6 @@ body[data-andheri-ui=world]{--bg:#0a0a0b;--ink:#f4f4f5;--mut:rgba(244,244,245,.7
 body[data-andheri-ui=world] .scrim{display:none}
 body[data-andheri-ui=world] .mono{font:500 11px/1.2 var(--ax-mono);letter-spacing:.12em;text-transform:uppercase}
 body[data-andheri-ui=world] :is(#top>*:not(#brand):not(#modes):not(#scene-lighting),#brand,#modes,#scene-lighting summary,#hud,#strip .film,#floors,#walkhud,#route,#hint,#map-credits){-webkit-backdrop-filter:var(--ax-blur);backdrop-filter:var(--ax-blur)}
-
 /* navbar groups */
 body[data-andheri-ui=world] #top{left:20px;right:20px;top:max(16px,env(safe-area-inset-top));gap:10px;align-items:center}
 body[data-andheri-ui=world] #brand{flex-direction:row;align-items:center;gap:0;height:48px;padding:0 18px;border-radius:999px;background:var(--ax-glass);border:1px solid var(--ax-line);box-shadow:var(--ax-shadow)}
@@ -35,7 +32,12 @@ body[data-andheri-ui=world] #brand .ap-lockup .ap-logo{height:12px}
 body[data-andheri-ui=world] #brand .ap-lockup .fk-logo{height:34px}
 body[data-andheri-ui=world] #t-eyebrow,body[data-andheri-ui=world] #t-title{display:none}
 body[data-andheri-ui=world] #ax-back{height:48px;min-height:48px}
-body[data-andheri-ui=world] #ax-back{order:1}body[data-andheri-ui=world] #brand{order:2}body[data-andheri-ui=world] #modes{order:3}body[data-andheri-ui=world] #scene-lighting{order:4}body[data-andheri-ui=world] #to-map{order:5}body[data-andheri-ui=world] #ax-top-sound{order:6}
+body[data-andheri-ui=world] #ax-back{order:1}
+body[data-andheri-ui=world] #brand{order:2}
+body[data-andheri-ui=world] #modes{order:3}
+body[data-andheri-ui=world] #scene-lighting{order:4}
+body[data-andheri-ui=world] #to-map{order:5}
+body[data-andheri-ui=world] #ax-top-sound{order:6}
 body[data-andheri-ui=world] #modes{padding:4px;height:48px;border-radius:999px;background:var(--ax-glass);border:1px solid var(--ax-line);box-shadow:var(--ax-shadow);align-items:center}
 body[data-andheri-ui=world] #modes .ap-tab-indicator{background:#f4f4f5;box-shadow:0 2px 10px rgba(0,0,0,.25)}
 body[data-andheri-ui=world] #modes button{min-height:38px;height:38px;padding:0 15px;gap:7px;border-radius:999px;font:500 13px/1 var(--ax-font);letter-spacing:-.005em;text-transform:none;color:var(--ax-text-2)}
@@ -52,7 +54,6 @@ body[data-andheri-ui=world] #scene-lighting .scene-lighting-panel{top:calc(100% 
 body[data-andheri-ui=world] #scene-lighting .scene-lighting-panel h3{font:600 17px/1.2 var(--ax-font);letter-spacing:-.02em}
 body[data-andheri-ui=world] #scene-lighting .scene-lighting-panel :is(input[type=range]){accent-color:#f4f4f5}
 body[data-andheri-ui=world] #scene-lighting :is(.scene-light-presets button,#scene-reset){border-radius:10px;background:var(--ax-fill);border:1px solid var(--ax-line);color:var(--ax-text)}
-
 /* the property card (EasyUI card + sheet anatomy) */
 body[data-andheri-ui=world] #hud{left:20px;top:calc(var(--world-header-bottom,64px) + 12px);bottom:auto;width:372px;max-height:calc(100dvh - var(--world-header-bottom,64px) - 132px);padding:22px 22px 20px;border-radius:var(--ax-r-lg);background:var(--ax-glass);border:1px solid var(--ax-line);box-shadow:var(--ax-shadow);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.2) transparent}
 body[data-andheri-ui=world] #hud .eyebrow{display:flex;color:var(--ax-text-3)}
@@ -114,7 +115,6 @@ body[data-andheri-ui=world] #spec{font:400 12.5px/1.45 var(--ax-font);gap:6px 16
 body[data-andheri-ui=world] #photo{border-radius:var(--ax-r);border-color:var(--ax-line)}
 body[data-andheri-ui=world] #photo span{font:400 11px/1.4 var(--ax-font);background:rgba(10,10,11,.6)}
 body[data-andheri-ui=world].showing-area #property-spotlight .ax-metro-row{display:none}
-
 /* property rail */
 body[data-andheri-ui=world] #strip{left:20px;right:auto;max-width:calc(100vw - 40px);bottom:max(18px,env(safe-area-inset-bottom));gap:10px;padding:2px}
 body[data-andheri-ui=world] .film{flex:0 0 228px;height:78px;border-radius:18px;border:1px solid var(--ax-line);background-color:#151517;box-shadow:var(--ax-shadow);transition:transform .45s var(--ax-ease),border-color .25s,box-shadow .3s}
@@ -126,7 +126,6 @@ body[data-andheri-ui=world] .film i{margin-top:5px;font:400 12px/1.2 var(--ax-fo
 body[data-andheri-ui=world] .film:hover{transform:translateY(-2px);border-color:var(--ax-line-2)}
 body[data-andheri-ui=world] .film.on{border-color:rgba(255,194,0,.7);box-shadow:0 0 0 1px rgba(255,194,0,.55),var(--ax-shadow)}
 body[data-andheri-ui=world] .film.on .n{color:var(--fk-yellow)}
-
 /* floor dock */
 body[data-andheri-ui=world] #floors{right:20px;width:172px;padding:16px 14px 12px;border-radius:var(--ax-r-lg);background:var(--ax-glass);border:1px solid var(--ax-line);box-shadow:var(--ax-shadow)}
 body[data-andheri-ui=world] #floors .mono{color:var(--ax-text-3)}
@@ -136,20 +135,17 @@ body[data-andheri-ui=world] #floors .fl:hover .b{fill:rgba(255,255,255,.14)}
 body[data-andheri-ui=world] #floors .fl.on .b{fill:var(--fk-yellow);stroke:var(--fk-yellow)}
 body[data-andheri-ui=world] #floors .fl.on text{fill:#141414}
 body[data-andheri-ui=world] #floors .fnote{font:400 11px/1.4 var(--ax-font);color:var(--ax-text-3)}
-
 /* credits */
 body[data-andheri-ui=world] #credit{top:calc(var(--world-header-bottom,64px) + 14px);right:24px;max-width:300px;font:400 10.5px/1.45 var(--ax-font);color:var(--ax-text-3);text-shadow:0 1px 8px rgba(0,0,0,.6)}
 body[data-andheri-ui=world] #map-credits{position:fixed;right:12px;bottom:6px;z-index:4;display:flex;align-items:center;gap:8px;padding:3px 8px;border-radius:8px;background:rgba(10,10,11,.55);border:1px solid var(--ax-line);color:#e4e4e7;font:400 10px/1.2 var(--ax-font)}
 body[data-andheri-ui=world] #map-credits a{color:inherit;text-decoration:none}
 body[data-andheri-ui=world] #map-credits img{display:block;width:76px;height:20px}
-
 /* labels in the scene */
 body[data-andheri-ui=world] .lb.bld b{padding:8px 12px;border-radius:10px;background:var(--fk-yellow);color:#141414;font:600 13px/1 var(--ax-font);letter-spacing:-.005em;text-transform:none;box-shadow:0 6px 18px rgba(0,0,0,.35)}
 body[data-andheri-ui=world] .lb.st{padding:6px 10px 6px 7px;border-radius:10px;background:rgba(14,14,16,.72);font:500 12px/1 var(--ax-font);letter-spacing:0;text-transform:none}
 body[data-andheri-ui=world] .lb.lmk b{padding:6px 10px;border-radius:9px;background:rgba(255,255,255,.94);color:#141414;font:600 11.5px/1 var(--ax-font);letter-spacing:0;text-transform:none}
 body[data-andheri-ui=world] .lb.lmk.prop b{background:var(--fk-yellow);color:#141414;font-size:12.5px}
 body[data-andheri-ui=world] .lb.dist{padding:7px 11px;background:rgba(14,14,16,.8);font:600 13px/1 var(--ax-font);letter-spacing:0}
-
 /* walking and the route walk */
 body[data-andheri-ui=world] #walkhud,body[data-andheri-ui=world] #route,body[data-andheri-ui=world] #hint{background:var(--ax-glass);border:1px solid var(--ax-line);box-shadow:var(--ax-shadow);border-radius:var(--ax-r-lg)}
 body[data-andheri-ui=world] #walkhud b{font:600 30px/1 var(--ax-font);letter-spacing:-.025em;font-variant-numeric:tabular-nums}
@@ -164,7 +160,6 @@ body[data-andheri-ui=world] #route .track b{box-shadow:0 0 0 4px rgba(255,194,0,
 body[data-andheri-ui=world] #route .ctl button{min-height:36px;padding:0 14px;border-radius:999px;border:1px solid var(--ax-line);background:var(--ax-fill);font:500 12.5px/1 var(--ax-font);letter-spacing:0;text-transform:none;color:var(--ax-text)}
 body[data-andheri-ui=world] #route .ctl button:hover{background:var(--ax-fill-2);border-color:var(--ax-line-2)}
 body[data-andheri-ui=world] #mini{border-color:var(--ax-line);background:rgba(14,14,16,.6)}
-
 /* the password gate, in the same system */
 body[data-andheri-ui=world] #gate{background:#0a0a0b url(/media/flipkart-andheri/world/film-stills/privilon-dusk.jpg) 42% 50%/cover no-repeat!important;font-family:var(--ax-font)}
 body[data-andheri-ui=world] #gate::before{background:linear-gradient(180deg,rgba(10,10,11,.5),rgba(10,10,11,.85))}
@@ -179,7 +174,6 @@ body[data-andheri-ui=world] #gate input{min-height:48px;border-radius:12px;backg
 body[data-andheri-ui=world] #gate input:focus{outline:none;border-color:rgba(255,255,255,.4)}
 body[data-andheri-ui=world] #gate .go{min-height:50px;margin-top:4px;border-radius:999px;background:#f4f4f5;color:#0a0a0b;font:600 15px/1 var(--ax-font);letter-spacing:0;text-transform:none}
 body[data-andheri-ui=world] #veil{background:#0a0a0b}
-
 /* CAD and interior chrome share the same calm white/blue surfaces. */
 body[data-andheri-ui=cad],body[data-andheri-ui=interior]{--bg:#eff3fa;--paper:#f8faff;--ink:var(--ap-ink);--sub:var(--ap-muted);--mut:var(--ap-muted);--line:var(--ap-line);--accent:var(--fk-blue);--accent-soft:var(--ap-soft)}
 body[data-andheri-ui=cad] #ptop{border-top:3px solid var(--fk-blue)}
@@ -206,7 +200,6 @@ body[data-andheri-ui=interior] #space-toggle[aria-expanded=false]:after{content:
 body[data-andheri-ui=interior] #spaces[data-collapsed] #space-list{display:none}
 body[data-andheri-ui=interior] #space-list button{min-height:44px}
 @media(hover:hover){body[data-andheri-ui=interior] #tools button:hover{transform:translateY(-2px);box-shadow:0 4px 9px #16336112}}
-
 /* The existing three-property 2D Atlas receives tokens, not data changes. */
 body[data-andheri-ui=atlas]{--bg:#edf2fa;--paper:#fff;--panel:rgba(255,255,255,.94);--panel-solid:#fff;--ink:#182437;--mut:#56647a;--dim:#738299;--line:#dae3f0;--line2:#e9eef6;--acc:var(--fk-blue);--acc2:#345fec;--accbg:#edf2ff;--serif:Inter,system-ui,sans-serif}
 body[data-andheri-ui=atlas] #brand .ap-lockup{padding:0}
@@ -215,7 +208,6 @@ body[data-andheri-ui=atlas] #gate .ap-lockup{margin:0 0 24px;padding:12px 14px}
 body[data-andheri-ui=atlas] #gate .eyebrow{color:#ffc200}
 body[data-andheri-ui=atlas] #gate :is(h1,p){color:#fff}
 body[data-andheri-ui=atlas] #tabs button{min-height:44px}
-
 @media(max-width:860px){
  body[data-andheri-ui] .ap-lockup{gap:9px}
  body[data-andheri-ui] .ap-lockup .ap-logo{height:11px}
@@ -280,52 +272,16 @@ body[data-andheri-ui=atlas] #tabs button{min-height:44px}
  body[data-andheri-ui=interior] #tools :is(button,label){width:100%;font-size:12px;min-width:0;padding:7px;justify-content:center;margin:0;line-height:1.25}
  body[data-andheri-ui=interior] #note{bottom:calc(130px + env(safe-area-inset-bottom));font-size:10px;max-width:230px}
  body[data-andheri-ui=atlas] #brand{min-width:0}
- body[data-andheri-ui=atlas] #top{--top-h:110px}
-
-}
+ body[data-andheri-ui=atlas] #top{--top-h:110px}}
 @media(prefers-reduced-motion:reduce){body[data-andheri-ui] *,body[data-andheri-ui] *:before,body[data-andheri-ui] *:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
-
 /* a client set in type beside Autopilot's mark (no logo file supplied) */
 body[data-andheri-ui] .ap-lockup .ap-client{font:600 15px/1 Geist,Inter,system-ui,sans-serif;letter-spacing:.01em}
 body[data-andheri-ui] .ap-lockup[data-tone=dark] .ap-client{color:#fff}
 body[data-andheri-ui] .ap-lockup[data-tone=light] .ap-client{color:#151a23}
-
-/* the guided tour (engine/world-story.js): the 3D stays the star, a caption card sits low and centre */
-body[data-andheri-ui=world] #story{position:fixed;left:50%;bottom:118px;transform:translateX(-50%);z-index:6;width:min(600px,calc(100vw - 32px));padding:18px 20px 16px;border-radius:22px;color:#fff;
- background:rgba(14,15,18,.62);backdrop-filter:blur(22px) saturate(1.3);-webkit-backdrop-filter:blur(22px) saturate(1.3);border:1px solid rgba(255,255,255,.14);box-shadow:0 24px 60px rgba(0,0,0,.38)}
-body[data-andheri-ui=world] #story[hidden]{display:none}
-body[data-andheri-ui=world] #story header{display:flex;align-items:center;gap:10px}
-body[data-andheri-ui=world] #story #st-count{color:#ffc200;font:500 11px/1 Geist Mono,ui-monospace,monospace;letter-spacing:.14em}
-body[data-andheri-ui=world] #story .st-basis{font:500 10.5px/1 Geist Mono,ui-monospace,monospace;letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.22);color:rgba(255,255,255,.78)}
-body[data-andheri-ui=world] #story .st-basis[data-b=assumed],body[data-andheri-ui=world] #story .st-basis[data-b=unverified]{border-color:#ffc200;color:#ffc200}
-body[data-andheri-ui=world] #story .st-basis[data-b=verified],body[data-andheri-ui=world] #story .st-basis[data-b=measured]{border-color:#7fd6a0;color:#7fd6a0}
-body[data-andheri-ui=world] #story #st-x{margin-left:auto;width:30px;height:30px;border-radius:50%;font-size:20px;line-height:1;color:rgba(255,255,255,.7)}
-body[data-andheri-ui=world] #story #st-x:hover{color:#fff;background:rgba(255,255,255,.12)}
-body[data-andheri-ui=world] #story h3{margin:12px 0 6px;font:650 22px/1.15 Geist,Inter,system-ui,sans-serif;letter-spacing:-.005em}
-body[data-andheri-ui=world] #story p{margin:0;font:400 14.5px/1.5 Geist,Inter,system-ui,sans-serif;color:rgba(255,255,255,.86);max-width:56ch}
-body[data-andheri-ui=world] #story footer{display:flex;align-items:center;gap:10px;margin-top:14px}
-body[data-andheri-ui=world] #story footer button{height:34px;min-width:34px;padding:0 12px;border-radius:999px;border:1px solid rgba(255,255,255,.2);color:#fff;font:600 12.5px/1 Geist,Inter,system-ui,sans-serif;letter-spacing:.02em}
-body[data-andheri-ui=world] #story footer button:hover:not(:disabled){background:rgba(255,255,255,.12)}
-body[data-andheri-ui=world] #story footer button:disabled{opacity:.35}
-body[data-andheri-ui=world] #story #st-play,body[data-andheri-ui=world] #story #st-say.on{background:#ffc200;border-color:#ffc200;color:#17140a}
-body[data-andheri-ui=world] #story #st-dots{display:flex;gap:7px;flex:1;justify-content:center}
-body[data-andheri-ui=world] #story #st-dots button{height:8px;min-width:8px;width:8px;padding:0;border:0;background:rgba(255,255,255,.28);transition:width .25s,background .25s}
-body[data-andheri-ui=world] #story #st-dots button.on{width:24px;background:#ffc200}
-body[data-andheri-ui=world] #story.swap h3,body[data-andheri-ui=world] #story.swap p{animation:st-in .45s ease both}
-@keyframes st-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
-body.touring #hud,body.touring #credit,body.touring #floors,body.touring #line1,body.touring #line2{opacity:0;pointer-events:none;transition:opacity .35s}
-body[data-andheri-ui=world] #tour-btn{font:inherit}
-body[data-andheri-ui=world] #tour-btn[aria-pressed=true]{background:#ffc200;color:#17140a}
-@media (max-width:700px){body[data-andheri-ui=world] #story{bottom:104px;padding:14px 16px}body[data-andheri-ui=world] #story h3{font-size:19px}body[data-andheri-ui=world] #story p{font-size:13.5px}}
-@media (prefers-reduced-motion:reduce){body[data-andheri-ui=world] #story.swap h3,body[data-andheri-ui=world] #story.swap p{animation:none}}
-
 /* the data layer (engine/world-data.js): a dock in the header, one glass panel at the side, the 3D beside it */
 body[data-andheri-ui=world]{--data-w:400px}
 body[data-andheri-ui=world][data-data-tab=compare]{--data-w:620px}
 body[data-andheri-ui=world][data-data-tab=distances]{--data-w:460px}
-body[data-andheri-ui=world].touring{--data-w:380px}
-body[data-andheri-ui=world].touring[data-data-tab=compare]{--data-w:600px}
-body[data-andheri-ui=world].touring[data-data-tab=distances]{--data-w:430px}
 body[data-andheri-ui=world] #data-dock{order:3;display:flex;gap:2px;align-items:center;height:48px;padding:4px;border-radius:999px;background:var(--ax-glass);border:1px solid var(--ax-line);box-shadow:var(--ax-shadow)}
 body[data-andheri-ui=world] #data-dock .ap-tab-indicator{background:#ffc200;box-shadow:0 2px 10px rgba(255,194,0,.25)}
 body[data-andheri-ui=world] #data-dock button{display:flex;align-items:center;gap:7px;height:38px;min-height:38px;padding:0 12px;border-radius:999px;font:500 13px/1 var(--ax-font);letter-spacing:-.005em;color:var(--ax-text-2);white-space:nowrap}
@@ -333,9 +289,7 @@ body[data-andheri-ui=world] #data-dock button:hover{color:var(--ax-text)}
 body[data-andheri-ui=world] #data-dock button.on{color:#17140a;background:transparent}
 body[data-andheri-ui=world] #data-dock svg{width:15px;height:15px;flex:none}
 body[data-andheri-ui=world] :is(#data-dock,#data) :focus-visible{outline:2px solid #ffc200;outline-offset:2px}
-body[data-andheri-ui=world].walk :is(#data,#data-dock),body[data-andheri-ui=world].touring #data-dock{display:none}
 @media(min-width:861px) and (max-width:1379px){body[data-andheri-ui=world].has-data #top{flex-wrap:wrap}body[data-andheri-ui=world] #data-dock{order:9;margin-right:100%}}
-
 body[data-andheri-ui=world] #data{position:fixed;z-index:5;right:20px;top:calc(var(--world-header-bottom,64px) + 12px);width:min(var(--data-w),calc(100vw - 40px));max-height:calc(100dvh - var(--world-header-bottom,64px) - 116px);overflow:auto;overscroll-behavior:contain;padding:22px 22px 18px;border-radius:var(--ax-r-lg);
  background:var(--ax-glass-2);border:1px solid var(--ax-line);box-shadow:var(--ax-shadow);-webkit-backdrop-filter:var(--ax-blur);backdrop-filter:var(--ax-blur);color:var(--ax-text);font:400 14px/1.45 var(--ax-font);scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.2) transparent;-webkit-font-smoothing:antialiased}
 body[data-andheri-ui=world] #data.in{animation:dp-in .45s var(--ax-ease) both}
@@ -398,8 +352,6 @@ body[data-andheri-ui=world] #data .dp-cmp td.best{background:rgba(255,194,0,.13)
 body[data-andheri-ui=world] #data .dp-cmp td.best .dp-v{color:#ffd24d;font-weight:600}
 body[data-andheri-ui=world] #data .dp-cmp .dp-tag{display:block;width:fit-content;margin:5px 0 0}
 body[data-andheri-ui=world] #data .dp-cmp small{font-size:11.5px}
-/* the tour with a panel open: the caption moves to the left, the 3D keeps the middle */
-@media(min-width:861px){body[data-andheri-ui=world].touring.data-open #story{left:20px;transform:none;width:min(560px,calc(100vw - var(--data-w) - 60px))}}
 @media(max-width:860px){
  body[data-andheri-ui=world] #data-dock{position:fixed;left:12px;right:12px;bottom:calc(96px + env(safe-area-inset-bottom));z-index:4;height:44px;padding:3px;overflow-x:auto;scrollbar-width:none;justify-content:space-between;order:0;margin:0}
  body[data-andheri-ui=world] #data-dock::-webkit-scrollbar{display:none}
@@ -410,17 +362,10 @@ body[data-andheri-ui=world] #data .dp-cmp small{font-size:11.5px}
  body[data-andheri-ui=world] #data{left:12px;right:12px;width:auto;top:auto;bottom:calc(150px + env(safe-area-inset-bottom));max-height:min(44dvh,calc(100dvh - var(--world-header-bottom,120px) - 190px));padding:16px 16px 14px;border-radius:20px}
  body[data-andheri-ui=world] #data .dp-name{font-size:25px}
  body[data-andheri-ui=world] #data .dp-big{font-size:30px}
- body[data-andheri-ui=world] #data .dp-scroll{margin:12px -16px 0;padding:0 16px}
- body[data-andheri-ui=world].touring #data{display:none}
-}
+ body[data-andheri-ui=world] #data .dp-scroll{margin:12px -16px 0;padding:0 16px}}
 body[data-andheri-ui=world] #data .dp-row dt small{margin-top:2px}
 body[data-andheri-ui=world] #data .dp-row{grid-template-columns:minmax(0,1fr) auto;max-width:100%}
 body[data-andheri-ui=world] #data .dp-row dd{max-width:230px}
-/* the tour footer on a phone: the 44 px touch rule must not stretch the progress dots */
-body[data-andheri-ui=world] #story #st-dots{flex-wrap:wrap;align-content:center;min-width:0}
-body[data-andheri-ui=world] #story #st-dots button{min-height:8px;height:8px}
-@media(max-width:860px){body[data-andheri-ui=world] #story footer{gap:8px}body[data-andheri-ui=world] #story footer button{min-height:34px;height:34px}body[data-andheri-ui=world] #story #st-dots{gap:3px}body[data-andheri-ui=world] #story #st-dots button{width:6px;min-width:6px}body[data-andheri-ui=world] #story #st-dots button.on{width:14px}body[data-andheri-ui=world] #story #st-count{white-space:nowrap}}
-
 /* data layer: icons only where there is room for six tabs, then the overview list, the distances plan and matrix */
 @media(max-width:1799px){body[data-andheri-ui=world] #data-dock svg{display:none}}
 body[data-andheri-ui=world] #data .dp-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px}
@@ -486,3 +431,6 @@ body[data-andheri-ui=world] #data .dp-bars .tr{height:8px;border-radius:4px;back
 body[data-andheri-ui=world] #data .dp-bars .tr i{display:block;height:100%;border-radius:4px;background:#ffc200}
 body[data-andheri-ui=world] #data .dp-bars .v{text-align:right;font-weight:600;font-variant-numeric:tabular-nums}
 @media(max-width:860px){body[data-andheri-ui=world] #data-dock button{padding:0 9px;font-size:12px}body[data-andheri-ui=world] #data .dp-kpis{grid-template-columns:1fr 1fr}body[data-andheri-ui=world] #data .dp-cards{grid-template-columns:1fr}}
+
+/* the data layer is for the dollhouse; walk mode keeps the street clear */
+body[data-andheri-ui=world].walk :is(#data,#data-dock){display:none}

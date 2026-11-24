@@ -20,7 +20,7 @@ const worldVer = (() => {
 // the 3D explorer (/jindalx-noida/world): one diorama per option, built by scripts/world from two regions
 const origins = {'magnus-towers':[77.3847901,28.604823],'a104':[77.3231094,28.5839319],'a14-18-19':[77.3231094,28.5839319],'d1':[77.3231094,28.5839319]};
 // the data layer of the explorer (engine/world-data.js): what the 2D atlas knows, said beside the 3D. Rows name the workbook's own
-// columns; every figure is read from the atlas at runtime. Words only a person can supply (the tour sentences) live here.
+// columns; every figure is read from the atlas at runtime. Words only a person can supply (notes on the models) live in jindalx/model-notes.json.
 const worldData = {
   currency:'₹', locale:'en-IN', minArea:100, fixes:{Decemeber:'December'}, pros:'Pros', cons:'Cons',
   rows:[
@@ -48,31 +48,10 @@ const worldData = {
     {title:'The building',ids:['structure','grade','parking','cafeteria','timeline']},
     {title:'Getting there',ids:['connectivity','walk','metroSheet','office']}
   ],
-  compare:['rank','reason','outflow','plate','efficiency','carpet','floor','lifts','parking','cafeteria','timeline','connectivity','walk','office'],
-  tour:[
-    {view:'stay',panel:'offer',basis:'workbook',title:'The offer',text:'{outflow}, tentative, as the broker quotes it. {plate} a floor at {efficiency} efficiency. Offered floor: {floor|not stated}. {timeline:l} to move in.'},
-    {view:'approach',panel:'tradeoffs',basis:'workbook',title:'The trade-offs',text:'In the sheet\'s own words, in its favour: {pros|nothing listed}. Against it: {cons|the sheet lists nothing}. Best of the four on: {leads|no headline measure}.'},
-    {view:'overview',panel:'compare',basis:'mixed',title:'How it compares',text:'Lowest monthly outflow: {best:outflow}. Largest floor plate: {best:plate}. Shortest walk to a metro, measured: {best:walk}. Earliest move-in: {best:timeline}. Distances from today\'s office are our estimate from indicative pins.'},
-    {view:'overview',panel:'distances',basis:'assumed',title:'How the four sit around today\'s office',text:'Straight lines between the pins, not routed roads. Nearest to today\'s office: {office:near}. Farthest: {office:far}. {clusters}. {lone}. Closest pair: {pair:closest}. Farthest pair: {pair:farthest}.'}
-  ]
+  compare:['rank','reason','outflow','plate','efficiency','carpet','floor','lifts','parking','cafeteria','timeline','connectivity','walk','office']
 };
-// the guided tour (engine/world-story.js): generated from the workbook and the measured walks, plus jindalx/story-notes.json
-const notes = JSON.parse(fs.readFileSync(path.join(root, 'story-notes.json')));
-const kmOrM = (m) => m < 1000 ? `${Math.round(m / 10) * 10} metres` : `${(m / 1000).toFixed(1)} kilometres`;
-function storyFor(r, id) {
-  const R = Object.fromEntries(Object.entries(r).map(([k, v]) => [k.trim(), String(v).trim()])), g = (k) => R[k] || '', n = notes[id], w = (walks[id] || []).find((x) => x.kind === 'metro');
-  const steps = [
-    { view: 'overview', basis: n.overview.basis, title: n.overview.title, text: n.overview.text },
-    { view: 'facade', basis: n.facade.basis, title: 'The facade', text: n.facade.text },
-    { view: 'approach', basis: n.approach.basis, title: 'The way in', text: n.approach.text + (g('Cons') ? ` Watch for this: ${g('Cons').replace(/\.$/, '')}.` : '') },
-  ];
-  if (w) steps.push({ view: 'metro', basis: 'measured', title: `Walk to ${w.name.replace(/^Noida /, '')} metro`,
-    text: `${kmOrM(w.m)}, about ${w.min} minutes on foot, measured along the streets from the pin. The sheet says ${g('Nearest Metro station')}. The line on the ground is the route.` });
-  steps.push({ view: 'floor', basis: 'workbook', title: `On offer: ${g('Offered floor')} floor`,
-    text: `${g('Lifts each floor')} lifts a floor, parking at ${g('Parking')}, ${g('Timelines').toLowerCase()} to move in. Cafeteria: ${g('Common Cafeteria').toLowerCase()}.` });
-  steps.push({ view: 'overview', basis: n.position.basis, title: 'What is still open', text: n.position.text });
-  return steps;
-}
+// what we know about each model, shown in the To confirm panel: jindalx/model-notes.json
+const notes = JSON.parse(fs.readFileSync(path.join(root, 'model-notes.json')));
 const options = source.options.map((r,i) => ({
   id:ids[i],n:i+1,name:r.Location,lat:positions[i][0],lng:positions[i][1],
   address:r['Address/Sector'],locality:r['Address/Sector'],precision:'approx',
@@ -96,8 +75,7 @@ const bundle = {
       factKeys:{'Micro-market':'Address/Sector','Floor / Unit':'Offered floor','Possession':'Timelines'},
       ui:'andheri',client:'JindalX',brand:{kicker:'Autopilot · JindalX',title:'Noida, in 3D'},
       credit:'Buildings stand where imagery shows them and are modelled from Street View, at the workbook floors; plots, entrances and exact finishes are unconfirmed. Context: Overture Maps, heights estimated. Walks: Overture streets.',
-      story:Object.fromEntries(source.options.map((r,i)=>[ids[i],storyFor(r,ids[i])])),
-      dataLayer:worldData,
+      dataLayer:{...worldData,notes:Object.fromEntries(Object.entries(notes).filter(([k])=>!k.startsWith('_')).map(([k,v])=>[k,{facade:v.facade,approach:v.approach,position:v.position}]))},
       thumbs:Object.fromEntries(ids.map(id=>[id,`r/${id}-hero.jpg`])),renders:Object.fromEntries(ids.map(id=>[id,`r/${id}-street.jpg`]))},
     nextSteps:['Confirm the exact plot pins for all four options before routing site visits.','Reconcile the workbook’s approximately 7 km from the existing office against the verified Sector 125 office pin; no road distance has been verified.','Confirm chargeable area, service scope, deposits, escalation, lock-in and GST.','Validate the December 2026 handover and the separate three-month timelines for Magnus Towers and A104.','Inspect approach roads, shift-change transport, parking and cafeteria proposals.']},
   existing:{id:'jindalx-existing',name:'JindalX · current office',label:'Current office',locality:'Prius Heights, Plot 10/11, 3rd floor, Sector 125, Noida',lat:28.5452606,lng:77.3302287,precision:'building',geoSrc:'https://www.google.com/maps/place/JindalX/data=!4m2!3m1!1s0x0:0xe8b15a782573ec59',geoNote:'Resolved directly from the Maps link supplied in the brief, 20 November 2026.',note:'The supplied workbook states approximately 7 km to every option. Those distances require verification.'},

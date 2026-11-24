@@ -1,0 +1,59 @@
+{
+  "_about": "What we know about each building's model, shown in the explorer's To confirm panel as 'About this model'. 'basis' is shown beside it: workbook, measured, imagery or unverified. Update a line, and its basis, as soon as a fact is confirmed. Written 24 November 2026 after the check against Google imagery (docs/JINDALX_VERIFICATION.md).",
+  "magnus-towers": {
+    "facade": {
+      "basis": "imagery",
+      "text": "Modelled from 2026 imagery and the architect's renders: a long glazed block, white stone and plaster at the base with three entrance portals, dark glass bands under white fascias. It is still being glazed, so finishes may change."
+    },
+    "approach": {
+      "basis": "workbook",
+      "text": "On wider roads in a part of Sector 67 that is not dense, with sufficient parking, the sheet says. In the imagery the road front is a continuous boundary wall behind a belt of trees; the likely vehicle gate is on the east road, and the landlord should confirm it."
+    },
+    "position": {
+      "basis": "unverified",
+      "text": "Placed at Magnus Greens, plot C-2, where Google geocodes it, about 520 metres from the sheet's pin, which was only a road junction. The plot plan and gates still have to come from the landlord."
+    }
+  },
+  "a104": {
+    "facade": {
+      "basis": "unverified",
+      "text": "Modelled on the best match in imagery: charcoal panels, blue-grey glass and black sunshade fins, four levels. No public page confirms that this is A-104, so treat the facade as unconfirmed until the landlord sends a photo."
+    },
+    "approach": {
+      "basis": "unverified",
+      "text": "The sheet says one approach road is narrow and the other has a dump yard. The imagery agrees: a narrow lane about ten metres wide with a guarded steel gate on one side, and a garbage heap on the wide road on the other."
+    },
+    "position": {
+      "basis": "unverified",
+      "text": "Placed on the best candidate seen in imagery, about 140 metres west of the sheet's pin, which was only the middle of Sector 4. No public page names it, so the landlord must confirm."
+    }
+  },
+  "a14-18-19": {
+    "facade": {
+      "basis": "imagery",
+      "text": "Modelled from Street View: a new glass front with copper-toned bands, an open stilt floor and a grey crown, with scaffolding at one edge as the upgrade goes on."
+    },
+    "approach": {
+      "basis": "workbook",
+      "text": "On a main road with a good link to the DND road, the sheet says. In the imagery the entrance is on the divided Amaltash Marg frontage; the lane behind is not confirmed as part of the building."
+    },
+    "position": {
+      "basis": "unverified",
+      "text": "Placed on the A-14 front plot seen in imagery. Its frontage is only about 13 metres, so the sheet's 18,000 sq ft a floor must include neighbouring plots. The landlord must supply the plot lines."
+    }
+  },
+  "d1": {
+    "facade": {
+      "basis": "unverified",
+      "text": "Modelled on the building we believe is D-1: cream render with teal windows, a green glass bay and a round glazed corner tower, behind a railed wall with gates. The identity is not yet confirmed."
+    },
+    "approach": {
+      "basis": "unverified",
+      "text": "A street of about 13 metres runs along the long face and a second along the end, with a gate on each in the imagery. The sheet says approach roads are wider."
+    },
+    "position": {
+      "basis": "unverified",
+      "text": "Placed on the building we believe is D-1, about 140 metres from the sheet's pin. It rests on third-party place data, so the landlord must confirm."
+    }
+  }
+}
