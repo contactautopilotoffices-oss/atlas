@@ -40,7 +40,7 @@ window.ATLAS = {
     "world": {
       "href": "/jindalx-noida/world",
       "data": "/media/jindalx-noida/world/",
-      "ver": "05288006ce",
+      "ver": "1edb919e88",
       "sky": "sky.hdr",
       "poster": "hero.jpg",
       "mapHref": "/engine/?atlas=jindalx-noida",
@@ -81,6 +81,21 @@ window.ATLAS = {
       "ui": "andheri",
       "client": "JindalX",
       "freePan": true,
+      "loader": {
+        "slides": [
+          "r/magnus-towers-load.jpg",
+          "r/a104-load.jpg",
+          "r/a14-18-19-load.jpg",
+          "r/d1-load.jpg"
+        ],
+        "stages": [
+          "Surveying the district",
+          "Raising the buildings",
+          "Growing the trees",
+          "Finishing the textures",
+          "Setting the light"
+        ]
+      },
       "home": "/jindalx/",
       "brand": {
         "kicker": "Autopilot · JindalX",

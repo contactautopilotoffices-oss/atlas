@@ -25,6 +25,7 @@ import {createSceneLighting} from "./andheri-scene-lighting.js";
 import {createWorldLayouts} from "./andheri-world-layouts.js";
 import { applyAndheriTheme, easyTabs, propertySpotlight } from "./andheri-ui.js";
 import { createDataLayer } from "./world-data.js";
+import { premiumLoader } from "./world-loader.js";
 import { andheriExperience, applyCanonicalFacts } from "./andheri-experience.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
@@ -77,6 +78,7 @@ async function boot() {
   const MV = W.ver ? "?v=" + encodeURIComponent(W.ver) : "";
   const poster = W.branding === "autopilot-flipkart" && W.thumbs?.[location.hash.slice(1)] || W.poster;
   if (poster) for (const id of ["#load", "#gate"]) $(id).style.backgroundImage = `url("${W.data}${poster}${MV}")`;
+  if (W.loader && W.branding !== "autopilot-flipkart") premiumLoader({ slides: W.loader.slides || [], stages: W.loader.stages, data: W.data, ver: W.ver ? "?v=" + encodeURIComponent(W.ver) : "" });
   const KEY = SLUG + "-auth"; let authed = !(A.gate && A.gate.hash);
   try { if (sessionStorage.getItem(KEY) === "1") authed = true; } catch (e) {}
   if (!authed) {

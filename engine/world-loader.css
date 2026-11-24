@@ -1,0 +1,44 @@
+/* The explorer's opening screen for an atlas that opts in (meta.world.loader): rendered stills of the buildings behind a
+   HUD that builds the city in front of you. Pure CSS motion; the figures follow the real load. */
+#load.pl{background:#07080a}
+#load.pl::before{background:radial-gradient(ellipse at 50% 55%,rgba(6,7,9,.35),rgba(6,7,9,.86) 70%),linear-gradient(180deg,rgba(6,7,9,.35),rgba(6,7,9,.75));z-index:1}
+#load.pl .pl-slides{position:absolute;inset:0;overflow:hidden}
+#load.pl .pl-slides i{position:absolute;inset:-4%;background:center/cover no-repeat;opacity:0;animation:pl-slide calc(var(--n,4) * 5s) infinite;animation-delay:calc(var(--i) * 5s)}
+@keyframes pl-slide{0%{opacity:0;transform:scale(1)}6%{opacity:1}24%{opacity:1}30%{opacity:0;transform:scale(1.09)}100%{opacity:0;transform:scale(1.09)}}
+#load.pl .pl-grid{position:absolute;inset:0;z-index:1;opacity:.22;background-image:linear-gradient(rgba(255,194,0,.16) 1px,transparent 1px),linear-gradient(90deg,rgba(255,194,0,.16) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse at 50% 55%,#000 15%,transparent 70%);-webkit-mask-image:radial-gradient(ellipse at 50% 55%,#000 15%,transparent 70%)}
+#load.pl .pl-scan{position:absolute;left:0;right:0;height:22vh;z-index:1;top:-22vh;background:linear-gradient(180deg,transparent,rgba(255,194,0,.13) 85%,rgba(255,214,90,.38) 99%,transparent);animation:pl-scan 3.6s linear infinite}
+@keyframes pl-scan{to{top:100vh}}
+#load.pl .pl-corners{position:absolute;inset:22px;z-index:2;pointer-events:none}
+#load.pl .pl-corners b{position:absolute;width:26px;height:26px;border:1.5px solid rgba(255,194,0,.7)}
+#load.pl .pl-corners b:nth-child(1){left:0;top:0;border-right:0;border-bottom:0}#load.pl .pl-corners b:nth-child(2){right:0;top:0;border-left:0;border-bottom:0}
+#load.pl .pl-corners b:nth-child(3){left:0;bottom:0;border-right:0;border-top:0}#load.pl .pl-corners b:nth-child(4){right:0;bottom:0;border-left:0;border-top:0}
+#load.pl .box{position:relative;z-index:3;width:min(520px,calc(100vw - 40px));display:flex;flex-direction:column;align-items:center;text-align:center;gap:0}
+#load.pl .box .ap-lockup{margin-bottom:22px}
+#load.pl .pl-ring{position:relative;width:208px;height:208px;margin:2px 0 14px}
+#load.pl .pl-ring svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+#load.pl .pl-ring .r1{transform-origin:104px 104px;animation:pl-spin 26s linear infinite}
+#load.pl .pl-ring .r2{transform-origin:104px 104px;animation:pl-spin 12s linear infinite reverse}
+#load.pl .pl-ring .r3{transform-origin:104px 104px;animation:pl-spin 48s linear infinite}
+@keyframes pl-spin{to{transform:rotate(360deg)}}
+#load.pl .pl-ring circle{fill:none}
+#load.pl .pl-ring .track{stroke:rgba(255,255,255,.12);stroke-width:3}
+#load.pl .pl-ring .prog{stroke:#ffc200;stroke-width:3;stroke-linecap:round;transform:rotate(-90deg);transform-origin:104px 104px;filter:drop-shadow(0 0 6px rgba(255,194,0,.8));transition:stroke-dashoffset .35s ease-out}
+#load.pl .pl-pct{position:absolute;inset:0;display:grid;place-content:center;text-align:center;color:#fff}
+#load.pl .pl-pct b{font:600 44px/1 Geist,Inter,system-ui,sans-serif;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+#load.pl .pl-pct small{font:500 10.5px/1 "Geist Mono",ui-monospace,monospace;letter-spacing:.2em;color:#ffc200;margin-top:8px;text-transform:uppercase}
+#load.pl h1{margin:0 0 6px;font:650 clamp(30px,6vw,46px)/1.05 Geist,Inter,system-ui,sans-serif;letter-spacing:-.01em;text-transform:none}
+#load.pl #l-msg{margin:0 0 18px;font:400 14px/1.4 Geist,Inter,system-ui,sans-serif;color:rgba(255,255,255,.7)}
+#load.pl .pl-steps{list-style:none;margin:0;padding:0;width:100%;display:grid;gap:7px;text-align:left}
+#load.pl .pl-steps li{display:grid;grid-template-columns:20px 1fr auto;align-items:center;gap:10px;padding:9px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.08);background:rgba(10,11,14,.42);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font:500 13.5px/1.2 Geist,Inter,system-ui,sans-serif;color:rgba(255,255,255,.45);transition:color .3s,border-color .3s,background .3s}
+#load.pl .pl-steps li i{width:10px;height:10px;border-radius:50%;border:1.5px solid rgba(255,255,255,.35);justify-self:center;transition:all .3s}
+#load.pl .pl-steps li em{font:500 10.5px/1 "Geist Mono",ui-monospace,monospace;font-style:normal;letter-spacing:.14em;color:rgba(255,255,255,.35);text-transform:uppercase}
+#load.pl .pl-steps li.on{color:#fff;border-color:rgba(255,194,0,.55);background:rgba(30,24,6,.5)}
+#load.pl .pl-steps li.on i{border-color:#ffc200;box-shadow:0 0 0 3px rgba(255,194,0,.2);animation:pl-pulse 1.1s ease-in-out infinite}
+#load.pl .pl-steps li.on em{color:#ffc200}
+#load.pl .pl-steps li.ok{color:rgba(255,255,255,.88)}
+#load.pl .pl-steps li.ok i{background:#ffc200;border-color:#ffc200}
+#load.pl .pl-steps li.ok em{color:#7fd6a0}
+@keyframes pl-pulse{50%{box-shadow:0 0 0 6px rgba(255,194,0,0)}}
+#load.pl .bar{display:none}
+@media (max-width:560px){#load.pl .pl-ring{width:164px;height:164px}#load.pl .pl-pct b{font-size:34px}#load.pl .pl-steps li{padding:8px 12px;font-size:12.5px}}
+@media (prefers-reduced-motion:reduce){#load.pl .pl-ring .r1,#load.pl .pl-ring .r2,#load.pl .pl-ring .r3,#load.pl .pl-scan,#load.pl .pl-steps li.on i{animation:none}#load.pl .pl-slides i{animation:none}#load.pl .pl-slides i:first-child{opacity:1}}
