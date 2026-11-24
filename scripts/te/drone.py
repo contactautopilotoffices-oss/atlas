@@ -291,7 +291,10 @@ def scatter(name, pts, protos):
         sa = N.new("GeometryNodeInputNamedAttribute"); sa.data_type = "FLOAT"; sa.inputs["Name"].default_value = "s"; L.new(sa.outputs["Attribute"], iop.inputs["Scale"])
         ra = N.new("GeometryNodeInputNamedAttribute"); ra.data_type = "FLOAT"; ra.inputs["Name"].default_value = "rz"
         ce = N.new("ShaderNodeCombineXYZ"); L.new(ra.outputs["Attribute"], ce.inputs["Z"]); L.new(ce.outputs[0], iop.inputs["Rotation"])
-        L.new(iop.outputs[0], go.inputs[0])
+        if opt("--glb"):   # the satellite film needs real geometry, not instances
+            rz_ = N.new("GeometryNodeRealizeInstances"); L.new(iop.outputs[0], rz_.inputs[0]); L.new(rz_.outputs[0], go.inputs[0])
+        else:
+            L.new(iop.outputs[0], go.inputs[0])
         mod = ob.modifiers.new("scatter", "NODES"); mod.node_group = ng
 
 def trees():
@@ -617,6 +620,31 @@ def _fcurves(ad):
 
 # ---------------------------------------------------------------- build and render
 sc.frame_end = 288
+if opt("--glb"):
+    # just the tower, for the satellite film: centred on its footprint, metres, x east, y north, z up from its base
+    hero()
+    obs = [o for o in sc.collection.objects if o.name.startswith(("hero_", "planting_"))]
+    z0 = zg(HC.x, HC.y) - 0.3
+    for o in obs: o.location.x -= HC.x; o.location.y -= HC.y; o.location.z -= z0
+    # glTF carries flat PBR values, not node trees: give each part its sampled colour
+    FLAT = {"TE_brick": ("#8c4128", 0.85, 0.0), "TE_glass": ("#26303a", 0.08, 0.7), "TE_retail": ("#e9c48c", 0.3, 0.0),
+            "TE_slab": ("#d8d0c3", 0.6, 0.0), "TE_upstand": ("#d8d3ca", 0.7, 0.0), "TE_blue_glass": ("#2c5687", 0.05, 0.6),
+            "TE_mullion": ("#3a3c3e", 0.4, 0.6), "TE_planting": ("#3f6b2a", 0.9, 0.0), "TE_paving": ("#b7aea0", 0.8, 0.0), "TE_trunk": ("#4a3a2c", 0.9, 0.0)}
+    for m in bpy.data.materials:
+        key = next((k for k in FLAT if m.name.startswith(k)), None)
+        if not key or not m.node_tree: continue
+        col, ro, me_ = FLAT[key]; N = m.node_tree.nodes; p = N["Principled BSDF"]
+        for l in list(p.inputs["Base Color"].links) + list(p.inputs["Normal"].links) + list(p.inputs["Roughness"].links): m.node_tree.links.remove(l)
+        p.inputs["Base Color"].default_value = hexc(col); p.inputs["Roughness"].default_value = ro; p.inputs["Metallic"].default_value = me_
+        p.inputs["Emission Strength"].default_value = 0.0
+        if key in ("TE_glass", "TE_retail"):   # lit offices and shops behind the glass, as in the render
+            p.inputs["Emission Color"].default_value = hexc("#ffcf96"); p.inputs["Emission Strength"].default_value = 0.35 if key == "TE_glass" else 1.0
+    bpy.ops.object.select_all(action="DESELECT")
+    for o in obs: o.select_set(True)
+    for o in bpy.data.objects:
+        if o.name.startswith("shrub_"): o.hide_render = False; o.hide_viewport = False
+    bpy.ops.export_scene.gltf(filepath=os.path.abspath(opt("--glb")), use_selection=True, export_apply=True, export_yup=True, export_format="GLB")
+    print("glb written", opt("--glb")); sys.exit(0)
 ground(); near_ground(); water(); buildings(); roof_detail(); metro(); trees(); hero(); street(); site_works(); world(); compositor(); camera()
 sc.render.engine = "CYCLES"; cy = sc.cycles; cy.device = "CPU"; cy.samples = SAMPLES; cy.use_adaptive_sampling = True; cy.adaptive_threshold = 0.05
 cy.use_denoising = True; cy.denoiser = "OPENIMAGEDENOISE"

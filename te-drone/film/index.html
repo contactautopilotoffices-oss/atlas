@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Total Environment Drone</title>
+<meta name="viewport" content="width=1920,height=1080">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js"></script>
+<script src="config.local.js"></script>
+<style>
+  html, body { margin: 0; background: #cdd6de; overflow: hidden; }
+  #map { position: absolute; inset: 0; width: 1920px; height: 1080px; }
+  #credit { position: absolute; right: 18px; bottom: 12px; font: 500 13px system-ui, sans-serif; color: rgba(255,255,255,.88); text-shadow: 0 1px 2px rgba(0,0,0,.5); }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="credit">© Mapbox © OpenStreetMap © Maxar</div>
+<script>
+/* Total Environment Whitefield: the drone push over real satellite imagery of Hoodi, with the tower model on its footprint.
+   Driven frame by frame: window.__seek(t) sets the camera for time t (s) and resolves once every tile is drawn.
+   The clouds and grade are added afterwards by scripts/te/clouds.py. */
+mapboxgl.accessToken = window.MAPBOX_TOKEN;
+const LAT0 = 12.9912103, LNG0 = 77.7207093;                  // the founder's pin; the scene metres below are from here
+const KX = Math.cos(LAT0 * Math.PI / 180) * 111320, KY = 110600;
+const G0 = 884.06;                                            // ground at the pin, m above sea level (Copernicus)
+const ll = (x, y) => [LNG0 + x / KX, LAT0 + y / KY];
+const HERO = ll(-23.5, -42.1);                                // centre of the tower footprint (Overture)
+const DUR = 12;
+// the same move as the Blender shot: out of the cloud 560 m out, a slow push in to about 280 m
+const K0 = { pos: [640, -205, 235], look: [-24, -42, 58] }, K1 = { pos: [250, -66, 98], look: [-24, -42, 42] };
+const ease = (k) => k * k * (3 - 2 * k) * 0.7 + k * 0.3;      // eases out of rest, glides, settles
+const lerp = (a, b, k) => a + (b - a) * k;
+
+const map = new mapboxgl.Map({
+  container: 'map', style: 'mapbox://styles/mapbox/standard-satellite',
+  config: { basemap: { lightPreset: 'day', showPointOfInterestLabels: false, showTransitLabels: false, showPlaceLabels: false, showRoadLabels: false, show3dObjects: true } },
+  center: HERO, zoom: 16, pitch: 60, bearing: -70, interactive: false, attributionControl: false,
+  fadeDuration: 0, preserveDrawingBuffer: true, antialias: true, maxPitch: 85,
+});
+window.__DUR = DUR;
+map.on('style.load', () => {
+  map.addSource('te', { type: 'model', models: { tower: { uri: 'te_tower.glb', position: HERO, orientation: [0, 0, 0] } } });
+  map.addLayer({ id: 'te-tower', type: 'model', source: 'te', slot: 'top',
+    paint: { 'model-type': 'common-3d', 'model-cast-shadows': true, 'model-receive-shadows': true, 'model-emissive-strength': 0.6 } });
+  map.setFog({ range: [1.5, 9], color: '#dfe6ee', 'high-color': '#a9c3df', 'horizon-blend': 0.08, 'space-color': '#a9c3df', 'star-intensity': 0 });
+  map.once('idle', () => { window.__ready = true; });
+});
+function idle() {
+  return new Promise((res) => { let done = false; const fin = () => { if (!done) { done = true; res(); } };
+    map.once('idle', fin); map.triggerRepaint(); setTimeout(fin, 60000); });
+}
+window.__seek = async (t) => {
+  const k = ease(Math.min(Math.max(t / DUR, 0), 1));
+  const p = [0, 1, 2].map((i) => lerp(K0.pos[i], K1.pos[i], k)), l = [0, 1, 2].map((i) => lerp(K0.look[i], K1.look[i], k));
+  const cam = map.getFreeCameraOptions();
+  cam.position = mapboxgl.MercatorCoordinate.fromLngLat(ll(p[0], p[1]), p[2]);   // this style has no terrain: heights from 0
+  cam.lookAtPoint(ll(l[0], l[1]));
+  map.setFreeCameraOptions(cam);
+  await idle();
+};
+</script>
+</body>
+</html>

@@ -121,3 +121,7 @@ andheri-project/film/shots/out/
 
 # headless Blender venv and site data
 .w3d/
+
+# the Mapbox token for the TE film page, copied from the site config at capture time
+te-drone/film/config.local.js
+te-drone/out/
