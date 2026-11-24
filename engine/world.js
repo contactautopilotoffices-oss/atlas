@@ -211,7 +211,7 @@ async function start(A, W, intro=null) {
     scene.background = lightingBuilder?.sky||hdr; scene.fog = null; bands.forEach((b) => (b.visible = false));
     probe.update(renderer, scene); probeRT.texture.needsPMREMUpdate = true;
     scene.background = bg; scene.fog = fog; bands.forEach((b, i) => (b.visible = bands_[i])); hide.forEach((o) => (o.visible = true));
-    root.traverse(o=>{if(!o.isMesh)return;for(const m of Array.isArray(o.material)?o.material:[o.material])if(/^ANDHERI_.*[Gg]lass/.test(m.name||'')){m.envMap=probeRT.texture;m.envMapIntensity=1.25;m.needsUpdate=true;}});
+    root.traverse(o=>{if(!o.isMesh)return;for(const m of Array.isArray(o.material)?o.material:[o.material])if(/^(ANDHERI|TE)_.*[Gg]lass/.test(m.name||'')){m.envMap=probeRT.texture;m.envMapIntensity=1.25;m.needsUpdate=true;}});
     for (const [n, m] of Object.entries(MAT)) if (REFLECTS.has(n) && m.envMap !== probeRT.texture) { m.envMap = probeRT.texture; m.envMapIntensity = n.startsWith("wall_") ? 1.9 : 1.4; m.needsUpdate = true; }
     root.traverse(o=>{if(!o.isMesh)return;for(const m of Array.isArray(o.material)?o.material:[o.material])if(m.userData.ao&&REFLECTS.has(m.name)){m.envMap=probeRT.texture;m.envMapIntensity=m.name.startsWith("wall_")?1.9:1.4;m.needsUpdate=true;}});   // AO-baked copies
   }
@@ -226,7 +226,7 @@ async function start(A, W, intro=null) {
     const requested=Number(Q.get('ao')),strength=Q.has('ao')?clamp(Number.isFinite(requested)?requested:1,0,1):realismFor(id)?.55:1;
     for(const t of textures.values())ownedTextures.add(t);
     let count=0;modelRoot.traverse(o=>{if(!o.isMesh||!o.geometry.attributes.uv1)return;let file;for(let p=o;p&&!file;p=p.parent)file=J.maps?.[p.name];const ao=textures.get(file);if(!ao)return;
-      const one=m=>{const copy=m.clone();ownedMaterials.add(copy);copy.aoMap=ao;copy.aoMapIntensity=realismFor(id)&&(REFLECTS.has(m.name)||/^ANDHERI_.*glass/i.test(m.name))?Math.min(strength,.25):strength;copy.userData.ao=true;copy.needsUpdate=true;return copy;};o.material=Array.isArray(o.material)?o.material.map(one):one(o.material);count++;
+      const one=m=>{const copy=m.clone();ownedMaterials.add(copy);copy.aoMap=ao;copy.aoMapIntensity=realismFor(id)&&(REFLECTS.has(m.name)||/^(ANDHERI|TE)_.*glass/i.test(m.name))?Math.min(strength,.25):strength;copy.userData.ao=true;copy.needsUpdate=true;return copy;};o.material=Array.isArray(o.material)?o.material.map(one):one(o.material);count++;
     });document.body.dataset.aoMeshes=String(count);
   }
 
@@ -389,7 +389,7 @@ async function start(A, W, intro=null) {
   const OPTS = A.options.filter((o) => !W.thumbs || W.thumbs[o.id]);   // buildings with a 3D model
   function protoParts(node) {   // every mesh under a prototype, with its transform relative to it
     const out = []; node.updateMatrixWorld(true); const inv = node.matrixWorld.clone().invert();
-    const finish = m => /^(SKY_|ANDHERI_)/.test(m?.name || '') ? m : material(m?.name || 'concrete');
+    const finish = m => /^(SKY_|ANDHERI_|TE_)/.test(m?.name || '') ? m : material(m?.name || 'concrete');
     node.traverse((o) => { if (o.isMesh) out.push({ geo: o.geometry, mat: Array.isArray(o.material) ? o.material.map(finish) : finish(o.material), m: inv.clone().multiply(o.matrixWorld) }); });
     return out;
   }
@@ -424,7 +424,7 @@ async function start(A, W, intro=null) {
       /* a building modelled on its own (the F1 Skymark twin) brings its own PBR materials,
          named SKY_*: keep them, with the scene's sky in their reflections */
       const finish = m => {
-        if (!/^(SKY_|ANDHERI_)/.test(m?.name || '')) return material(m?.name || 'concrete');
+        if (!/^(SKY_|ANDHERI_|TE_)/.test(m?.name || '')) return material(m?.name || 'concrete');
         m.envMapIntensity = 1; if (m.transmission) m.thickness = 0.02; return m;
       };
       o.material = Array.isArray(o.material) ? o.material.map(finish) : finish(o.material);
