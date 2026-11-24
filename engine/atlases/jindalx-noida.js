@@ -83,13 +83,29 @@ window.ATLAS = {
       "freePan": true,
       "loader": {
         "slides": [
-          "r/magnus-towers-load.jpg",
-          "r/a104-load.jpg",
-          "r/a14-18-19-load.jpg",
-          "r/d1-load.jpg"
+          {
+            "src": "r/magnus-towers-load.jpg",
+            "name": "Magnus Towers",
+            "tag": "01 · Sector 67"
+          },
+          {
+            "src": "r/a104-load.jpg",
+            "name": "A104",
+            "tag": "02 · Sector 4"
+          },
+          {
+            "src": "r/a14-18-19-load.jpg",
+            "name": "A14/18/19",
+            "tag": "03 · Sector 9"
+          },
+          {
+            "src": "r/d1-load.jpg",
+            "name": "D1",
+            "tag": "04 · Sector 3"
+          }
         ],
         "stages": [
-          "Surveying the district",
+          "Laying out the environment",
           "Raising the buildings",
           "Growing the trees",
           "Finishing the textures",

@@ -1027,7 +1027,7 @@ async function start(A, W, intro=null) {
   const deep = location.hash.slice(1); const first = OPTS.some((o) => o.id === deep) ? deep : OPTS[0].id;
   await select(first, true);
   for (const id of ["#top", "#hud", "#strip"]) $(id).hidden = false;
-  if(intro)intro.ready({select:(id)=>select(id),selected:()=>SEL});else { $("#l-bar").style.width = "100%"; setTimeout(() => { $("#load").style.transition = "opacity .9s"; $("#load").style.opacity = "0"; setTimeout(() => $("#load").remove(), 950); }, 200); }
+  if(intro)intro.ready({select:(id)=>select(id),selected:()=>SEL});else { $("#l-bar").style.width = "100%"; const hold = window.__plRemain ? window.__plRemain() : 0; setTimeout(() => { $("#load").style.transition = "opacity .9s"; $("#load").style.opacity = "0"; setTimeout(() => $("#load").remove(), 950); }, 200 + hold); }
   if (Q.get("mode") === "walk") startWalk();
   if (OPTS.length <= 6) (window.requestIdleCallback || ((f) => setTimeout(f, 1500)))(() => setTimeout(() => { if (!navigator.connection?.saveData) OPTS.forEach((o) => prefetch(o.id)); }, 2500));
 
