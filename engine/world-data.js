@@ -172,6 +172,10 @@ export function createDataLayer({ A, W, options, getSel, select, onLayout, wake 
       ${hero}${note ? `<p class="dp-note">${esc(note)}</p>` : ""}${rest}${flagHTML(o)}${srcLine()}`;
   }
   function listHTML(items, cls, empty) { return items.length ? `<ul class="dp-ul ${cls}">${items.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : `<p class="dp-empty">${esc(empty)}</p>`; }
+  function prosConsHTML(o) {
+    const pros = listOf(o, C.pros), cons = listOf(o, C.cons);
+    return `<section><h3 class="mono">In its favour</h3>${listHTML(pros, "pro", "Nothing listed yet.")}</section>${cons.length ? `<section><h3 class="mono">Watch for</h3>${listHTML(cons, "con", "")}</section>` : ""}`;
+  }
   function tradeHTML(o) {
     const pros = listOf(o, C.pros), cons = listOf(o, C.cons), leads = leadsOf(o);
     return `<div class="dp-top">${head(o, "Trade-offs")}</div><h2 class="dp-name">${esc(o.name)}</h2>${o.reason ? `<p class="dp-sub">${esc(o.reason)}</p>` : ""}

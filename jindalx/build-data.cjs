@@ -22,38 +22,26 @@ const origins = {'magnus-towers':[77.3847901,28.604823],'a104':[77.3231094,28.58
 // the data layer of the explorer (engine/world-data.js): what the 2D atlas knows, said beside the 3D. Rows name the workbook's own
 // columns; every figure is read from the atlas at runtime.
 const worldData = {
-  currency:'₹', locale:'en-IN', minArea:100, fixes:{Decemeber:'December','Yes, Can be planned':'Yes, can be planned'}, pros:'Pros', cons:'Cons',
-  lists:{
-    'magnus-towers':{pros:['The only new building on the list, with handover in December 2026','Larger floor plates','Sufficient parking','Wider roads and excellent local transport connectivity','Not a dense area'],cons:[]},
-    'a104':{pros:['New building, with handover in December 2026','Larger floor plates','Sufficient parking','Excellent local transport connectivity'],cons:['One approach road is narrow','The other approach road has a dump yard']},
-    'a14-18-19':{pros:['The entire building is available','On the main road, well connected to the DND road','Upgrade of the whole building is under way'],cons:['Distance from the metro']},
-    'd1':{pros:['The entire building is available','On the main road, well connected to the DND road','Upgrade of the whole building is under way','Wider approach roads'],cons:['Expensive']}
-  },
+  // the sheet as it was given: each row is the client's own column, shown as written (no derived figures)
+  tabs:['offer','compare'], fixes:{Decemeber:'December'}, currency:'₹', locale:'en-IN',
   rows:[
-    {id:'rank',label:'Rank',field:'n'},
-    {id:'reason',label:'Reason',field:'reason'},
-    {id:'outflow',label:'Monthly outflow',field:'monthlyOutflow',parse:'money',fmt:'money',suffix:'a month + GST',best:'min',lead:'the lowest monthly outflow',note:'Tentative, plus GST.'},
-    {id:'plate',label:'Floor plate',fact:'BUA each floor, sqft',parse:'max',fmt:'area',unit:'sq ft',best:'max',lead:'the largest floor plate'},
-    {id:'efficiency',label:'Efficiency',fact:'Efficiency',parse:'first',fmt:'percent',best:'max',lead:'the best efficiency'},
-    {id:'carpet',label:'Carpet a floor',hint:'Built-up area × efficiency',calc:'scale',of:'plate',by:'efficiency',unit:'sq ft'},
+    {id:'metro',label:'Nearest metro station',fact:'Nearest Metro station'},
+    {id:'office',label:'Distance from JindalX existing office',fact:'Distance from Jindal X existing office'},
+    {id:'structure',label:'Building structure',fact:'Building structure'},
+    {id:'plate',label:'BUA each floor, sq ft',fact:'BUA each floor, sqft'},
+    {id:'eff',label:'Efficiency',fact:'Efficiency'},
     {id:'floor',label:'Offered floor',fact:'Offered floor'},
-    {id:'lifts',label:'Lifts',fact:'Lifts each floor',parse:'first',suffix:'a floor',best:'max',lead:'the most lifts a floor'},
     {id:'parking',label:'Parking',fact:'Parking'},
-    {id:'cafeteria',label:'Cafeteria',fact:'Common Cafeteria'},
-    {id:'timeline',label:'Timeline to move in',fact:'Timelines',parse:'months',best:'min',lead:'the earliest move-in'},
-    {id:'structure',label:'Structure',fact:'Building structure'},
-    {id:'grade',label:'Grade',fact:'Grade'},
-    {id:'connectivity',label:'Local transport',fact:'Connectivity with local transport'},
-    {id:'walk',label:'Walk to a metro',calc:'walk',best:'min',lead:'the shortest walk to a metro'},
-    {id:'office',label:"From today's office",calc:'roadKm',best:'min',lead:"the closest to today's office"}
+    {id:'cafe',label:'Common cafeteria',fact:'Common Cafeteria'},
+    {id:'conn',label:'Connectivity with local transport',fact:'Connectivity with local transport'},
+    {id:'lifts',label:'Lifts each floor',fact:'Lifts each floor'},
+    {id:'time',label:'Timelines',fact:'Timelines'},
+    {id:'pros',label:'Pros',fact:'Pros'},
+    {id:'cons',label:'Cons',fact:'Cons'},
+    {id:'outflow',label:'Tentative monthly outflow for JindalX',fact:'Tentative Monthly outflow for JindalX'}
   ],
-  offer:[
-    {title:'',ids:['outflow']},
-    {title:'The space',ids:['plate','efficiency','carpet','floor','lifts']},
-    {title:'The building',ids:['structure','grade','parking','cafeteria','timeline']},
-    {title:'Getting there',ids:['connectivity','walk','office']}
-  ],
-  compare:['rank','reason','outflow','plate','efficiency','carpet','floor','lifts','parking','cafeteria','timeline','connectivity','walk','office']
+  offer:[{title:'',ids:['metro','office','structure','plate','eff','floor','parking','cafe','conn','lifts','time','pros','cons','outflow']}],
+  compare:['metro','office','structure','plate','eff','floor','parking','cafe','conn','lifts','time','pros','cons','outflow']
 };
 const options = source.options.map((r,i) => ({
   id:ids[i],n:i+1,name:r.Location,lat:positions[i][0],lng:positions[i][1],
