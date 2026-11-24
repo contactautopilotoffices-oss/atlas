@@ -124,6 +124,20 @@ window.ATLAS = {
           "compare",
           "satellite"
         ],
+        "plans": {
+          "magnus-towers": {
+            "href": "/jindalx/plans.html?id=magnus-towers",
+            "label": "Fifth floor plan"
+          },
+          "a14-18-19": {
+            "href": "/jindalx/plans.html?id=a14-18-19",
+            "label": "Second floor plan"
+          },
+          "d1": {
+            "href": "/jindalx/plans.html?id=d1",
+            "label": "Second floor plan"
+          }
+        },
         "fixes": {
           "Decemeber": "December"
         },

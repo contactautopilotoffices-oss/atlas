@@ -457,3 +457,6 @@ body[data-andheri-ui=world] #data .sat .rt{fill:none;stroke:#ffc200;stroke-width
 body[data-andheri-ui=world] #data .sat .bd circle{fill:#ffc200;stroke:#fff;stroke-width:2}
 body[data-andheri-ui=world] #data .sat .ms rect{fill:#2a6fd0;stroke:#fff;stroke-width:1.6}
 body[data-andheri-ui=world] #data .sat .mm{fill:#fff;stroke:none;font-size:9px}
+
+body[data-andheri-ui=world] #data .dp-plan-link{display:inline-block;margin:10px 0 4px;padding:10px 16px;border-radius:999px;background:#ffc200;color:#17140a;font:650 13.5px/1 Geist,system-ui,sans-serif;text-decoration:none}
+body[data-andheri-ui=world] #data .dp-plan-link:hover{filter:brightness(1.08)}

@@ -168,7 +168,7 @@ export function createDataLayer({ A, W, options, getSel, select, onLayout, wake 
     const note = hr && hr.note ? hr.note : hr && hr.noteFact ? ((A.facts && A.facts.source || []).find((x) => x.k === hr.noteFact) || {}).v : "";
     const rest = groups.map((g, i) => { const ids = g.ids.filter((id) => !(i === 0 && hero && id === first)); const html = ids.map((id) => offerRow(o, id)).join("");
       return html ? `<section>${g.title ? `<h3 class="mono">${esc(g.title)}</h3>` : ""}<dl class="dp-list">${html}</dl></section>` : ""; }).join("");
-    return `<div class="dp-top">${head(o, "The offer")}</div><h2 class="dp-name">${esc(o.name)}</h2><p class="dp-sub">${esc(o.address || o.locality || "")}</p>
+    return `<div class="dp-top">${head(o, "The offer")}</div><h2 class="dp-name">${esc(o.name)}</h2><p class="dp-sub">${esc(o.address || o.locality || "")}</p>${C.plans && C.plans[o.id] ? `<a class="dp-plan-link" href="${esc(C.plans[o.id].href)}">${esc(C.plans[o.id].label || "Floor plan")} \u2192</a>` : ""}
       ${hero}${note ? `<p class="dp-note">${esc(note)}</p>` : ""}${rest}${flagHTML(o)}${srcLine()}`;
   }
   function listHTML(items, cls, empty) { return items.length ? `<ul class="dp-ul ${cls}">${items.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : `<p class="dp-empty">${esc(empty)}</p>`; }
