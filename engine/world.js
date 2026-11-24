@@ -844,17 +844,26 @@ async function start(A, W, intro=null) {
   }
   /* the satellite view: drag to move across the whole slab (the metro station included), right-drag or two fingers to turn,
      scroll to zoom, and look straight down if you like. The view stays inside the slab. Atlases opt in with meta.world.freePan. */
-  let panBox = null, hintTimer = 0, panPad = null;
-  /* a small pad for the same moves: arrows to slide across the city, plus and minus to zoom (a press repeats while held) */
-  function buildPanPad() {
-    panPad = document.createElement("div"); panPad.id = "pan-pad"; panPad.setAttribute("role", "group"); panPad.setAttribute("aria-label", "Move across the city");
-    panPad.innerHTML = '<button data-k="ArrowUp" aria-label="Move forward">\u25b2</button><button data-k="ArrowLeft" aria-label="Move left">\u25c0</button><button data-k="ArrowDown" aria-label="Move back">\u25bc</button><button data-k="ArrowRight" aria-label="Move right">\u25b6</button><button data-z="in" aria-label="Zoom in">+</button><button data-z="out" aria-label="Zoom out">\u2212</button>';
-    document.body.append(panPad);
-    let timer = 0; const press = (b) => { const go = () => { if (b.dataset.k) window.dispatchEvent(new KeyboardEvent("keydown", { key: b.dataset.k, code: b.dataset.k, bubbles: true })); else { zoomStep(b.dataset.z === "in" ? 0.9 : 1.12); } wake(900); }; go(); timer = setInterval(go, 60); };
-    const stop = () => { clearInterval(timer); timer = 0; };
-    panPad.addEventListener("pointerdown", (e) => { const b = e.target.closest("button"); if (b) { e.preventDefault(); press(b); } });
-    for (const ev of ["pointerup", "pointerleave", "pointercancel"]) panPad.addEventListener(ev, stop);
-    addEventListener("keydown", (e) => { if (MODE !== "dollhouse" || /INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName || "")) return; if (e.key === "+" || e.key === "=") { zoomStep(0.9); wake(900); } else if (e.key === "-" || e.key === "_") { zoomStep(1.12); wake(900); } });
+  let panBox = null, hintTimer = 0;
+  /* arrow keys or W A S D slide across the city while held (Shift: faster); + and - zoom. The speed follows how far out you are. */
+  const held = new Set(); let keysOn = false;
+  function initKeys() {
+    if (keysOn) return; keysOn = true;
+    const ok = (e) => MODE === "dollhouse" && !e.ctrlKey && !e.metaKey && !e.altKey && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName || "");
+    const MAP = { ArrowUp: "f", ArrowDown: "b", ArrowLeft: "l", ArrowRight: "r", w: "f", s: "b", a: "l", d: "r", W: "f", S: "b", A: "l", D: "r" };
+    addEventListener("keydown", (e) => { if (!ok(e)) return; const k = MAP[e.key]; if (k) { e.preventDefault(); held.add(k); controls.autoRotate = false; wake(400); } else if (e.key === "+" || e.key === "=") { zoomStep(0.85); wake(600); } else if (e.key === "-" || e.key === "_") { zoomStep(1.18); wake(600); } });
+    addEventListener("keyup", (e) => { const k = MAP[e.key]; if (k) held.delete(k); });
+    addEventListener("blur", () => held.clear());
+    addEventListener("keydown", (e) => { if (e.key === "Shift") held.add("shift"); }); addEventListener("keyup", (e) => { if (e.key === "Shift") held.delete("shift"); });
+  }
+  function stepKeys(dt, fast) {
+    if (!held.size || (held.size === 1 && held.has("shift"))) return;
+    const fwd = controls.target.clone().sub(camera.position); fwd.y = 0; if (fwd.lengthSq() < 1e-6) return; fwd.normalize();
+    const right = new THREE.Vector3(-fwd.z, 0, fwd.x), mv = new THREE.Vector3();
+    if (held.has("f")) mv.add(fwd); if (held.has("b")) mv.sub(fwd); if (held.has("r")) mv.add(right); if (held.has("l")) mv.sub(right);
+    if (!mv.lengthSq()) return;
+    const dist = camera.position.distanceTo(controls.target), v = Math.max(120, dist * 1.6) * (fast ? 2.6 : 1) * dt;
+    mv.normalize().multiplyScalar(v); camera.position.add(mv); controls.target.add(mv); wake(300);
   }
   function zoomStep(f) { const d = camera.position.clone().sub(controls.target), n = clamp(d.length() * f, controls.minDistance, controls.maxDistance); camera.position.copy(controls.target).add(d.setLength(n)); }
   function freePan() {
@@ -864,12 +873,11 @@ async function start(A, W, intro=null) {
     // drag turns and tilts the view as in the model view; right-drag, Shift-drag, two fingers or the arrow keys move across the city
     controls.mouseButtons = { LEFT: THREE.MOUSE.ROTATE, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.PAN };
     controls.touches = { ONE: THREE.TOUCH.ROTATE, TWO: THREE.TOUCH.DOLLY_PAN };
-    controls.listenToKeyEvents(window); controls.keyPanSpeed = 16; controls.keys = { LEFT: "ArrowLeft", UP: "ArrowUp", RIGHT: "ArrowRight", BOTTOM: "ArrowDown" };
-    if (!panPad) buildPanPad();
+    initKeys();
     controls.minPolarAngle = 4 * D2R; controls.maxPolarAngle = 84 * D2R; controls.minDistance = 50; controls.maxDistance = Math.max(1050, slabSize() * 1.4);
     if (scene.fog) { scene.fog.near = Math.max(scene.fog.near, 1400); scene.fog.far = Math.max(scene.fog.far, 5200); }
     camera.far = Math.max(camera.far, 9000); camera.updateProjectionMatrix();
-    const h = $("#hint"); if (h) { h.textContent = "Drag to turn and tilt \u00b7 arrow keys, right-drag or the pad to move across the city \u00b7 scroll to zoom"; h.hidden = false; clearTimeout(hintTimer); hintTimer = setTimeout(() => { if (MODE === "dollhouse") h.hidden = true; }, 7000); }
+    const h = $("#hint"); if (h) { h.textContent = "Drag to turn and tilt \u00b7 arrow keys or W A S D to move across the city (Shift: faster) \u00b7 scroll to zoom"; h.hidden = false; clearTimeout(hintTimer); hintTimer = setTimeout(() => { if (MODE === "dollhouse") h.hidden = true; }, 7000); }
   }
   function clampPan() {
     if (!panBox) return; const t = controls.target, x = clamp(t.x, panBox.x0, panBox.x1), z = clamp(t.z, panBox.z0, panBox.z1);
@@ -1076,7 +1084,7 @@ async function start(A, W, intro=null) {
     if (!STILL && document.body.classList.contains("ax-covered")) { if (now - coveredAt < 400) return; coveredAt = now; }
     const dt = Math.min(STILL ? 0.5 : 0.05, (now - last) / 1000); last = now; ribbonMat.uniforms.uTime.value += dt;
     if (fly) { const t = Math.min(1, (now - fly.t0) / fly.ms), e = ease(t); controls.target.lerpVectors(fly.a.t, fly.b.t, e); camera.position.lerpVectors(fly.a.p, fly.b.p, e); if (t >= 1) fly = null; }
-    if (MODE === "dollhouse") { controls.update(); if (W.freePan && !fly) clampPan(); }
+    if (MODE === "dollhouse") { if (W.freePan && !fly) stepKeys(dt, held.has("shift")); controls.update(); if (W.freePan && !fly) clampPan(); }
     else if (MODE === "walk") stepWalk(dt); else if (MODE === "route") stepRouteWalk(dt);
     if(!areaMode)stepMovers(dt);
     if (forest) forest.update(camera, false);
