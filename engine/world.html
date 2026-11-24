@@ -162,6 +162,10 @@ body.routing #walkhud,body.routing #hint{display:none}
 body.showing-area #floors,body.showing-area #conn,body.showing-area #go,body.showing-area #src,body.showing-area #more,body.showing-area #spec,body.showing-area #photo{display:none!important}
 body.showing-area #credit{display:block}
 @media(max-width:700px){body.project-tools #top{flex-wrap:wrap;gap:10px}body.project-tools #brand{flex:1 0 calc(100% - 100px)}body.project-tools #modes{order:3}body.project-tools #to-map{order:2}body.showing-area #credit{top:auto;bottom:154px;right:16px;max-width:230px;font-size:9px;background:rgba(8,9,11,.65);padding:7px;border-radius:6px}}
+#walk-back{display:none;position:fixed;left:28px;top:96px;z-index:6;padding:12px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.28);background:rgba(14,15,18,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:#fff;font:600 14px/1 var(--disp,system-ui);letter-spacing:.02em;cursor:pointer}
+body.walk #walk-back{display:block}
+#walk-back:hover{background:#ffc200;color:#17140a;border-color:#ffc200}
+@media(max-width:700px){#walk-back{left:16px;top:84px}}
 </style>
 </head>
 <body>

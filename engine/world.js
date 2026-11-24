@@ -880,6 +880,10 @@ async function start(A, W, intro=null) {
     lightingBuilder?.atmosphere();
   }
   function setModeUI() { document.querySelectorAll("#modes button").forEach((b) => { const on=areaMode ? b.id==="mapped-area" : b.dataset.mode===MODE || (MODE==="route" && b.dataset.mode==="walk");b.classList.toggle("on",on);b.setAttribute("aria-pressed",String(on)); }); }
+  /* a plain way out of the street: the button, or Escape, goes back to the model */
+  { const back = document.createElement("button"); back.id = "walk-back"; back.type = "button"; back.textContent = "\u2190 Back to the model";
+    back.onclick = () => { if (MODE !== "dollhouse") dollhouse(); }; document.body.append(back);
+    addEventListener("keydown", (e) => { if (e.key === "Escape" && MODE !== "dollhouse" && !/INPUT|TEXTAREA|SELECT/.test(document.activeElement?.tagName || "")) dollhouse(); }); }
   $("#modes").addEventListener("click", (e) => { const b = e.target.closest("[data-mode]"); if (!b) return; if (b.dataset.mode === "walk") startWalk(); else dollhouse(); });
   let drag = null;
   canvas.addEventListener("pointerdown", (e) => { if (MODE === "dollhouse") return; drag = { x: e.clientX, y: e.clientY, yaw: walk.yaw, pitch: walk.pitch, moved: false }; try { canvas.setPointerCapture(e.pointerId); } catch (x) {} });
