@@ -37,11 +37,10 @@ const worldData = {
     {id:'lifts',label:'Lifts each floor',fact:'Lifts each floor'},
     {id:'time',label:'Timelines',fact:'Timelines'},
     {id:'pros',label:'Pros',fact:'Pros'},
-    {id:'cons',label:'Cons',fact:'Cons'},
     {id:'outflow',label:'Tentative monthly outflow for JindalX',fact:'Tentative Monthly outflow for JindalX'}
   ],
-  offer:[{title:'',ids:['metro','office','structure','plate','eff','floor','parking','cafe','conn','lifts','time','pros','cons','outflow']}],
-  compare:['metro','office','structure','plate','eff','floor','parking','cafe','conn','lifts','time','pros','cons','outflow']
+  offer:[{title:'',ids:['metro','office','structure','plate','eff','floor','parking','cafe','conn','lifts','time','pros','outflow']}],
+  compare:['metro','office','structure','plate','eff','floor','parking','cafe','conn','lifts','time','pros','outflow']
 };
 const options = source.options.map((r,i) => ({
   id:ids[i],n:i+1,name:r.Location,lat:positions[i][0],lng:positions[i][1],
@@ -49,7 +48,7 @@ const options = source.options.map((r,i) => ({
   geoSrc:i===0?'https://www.openstreetmap.org/way/71834192':`https://www.google.com/maps/search/${encodeURIComponent(r['Address/Sector'])}/`,
   monthlyOutflow:prices[i],floorPlate:r['BUA each floor, sqft'].replace(/\s+/g,' '),floorOffered:r['Offered floor'],
   timeline:r.Timelines.trim(),metro:r['Nearest Metro station'],reason:tags[i],
-  facts:Object.entries(r).map(([k,v])=>({k:k.trim(),v:v.trim()||'Not specified in source',src:sourceHref})),
+  facts:Object.entries(r).filter(([k])=>k.trim()!=='Cons').map(([k,v])=>({k:k.trim(),v:v.trim()||'Not specified in source',src:sourceHref})),
   routes:walks[ids[i]]||[]
 }));
 const bundle = {

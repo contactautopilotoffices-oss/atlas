@@ -158,11 +158,6 @@ window.ATLAS = {
             "fact": "Pros"
           },
           {
-            "id": "cons",
-            "label": "Cons",
-            "fact": "Cons"
-          },
-          {
             "id": "outflow",
             "label": "Tentative monthly outflow for JindalX",
             "fact": "Tentative Monthly outflow for JindalX"
@@ -184,7 +179,6 @@ window.ATLAS = {
               "lifts",
               "time",
               "pros",
-              "cons",
               "outflow"
             ]
           }
@@ -202,7 +196,6 @@ window.ATLAS = {
           "lifts",
           "time",
           "pros",
-          "cons",
           "outflow"
         ]
       },
@@ -323,11 +316,6 @@ window.ATLAS = {
         {
           "k": "Pros",
           "v": "The only new(Decemeber 2026 handover) asset with larger floor plates, Sufficient parking area, wider roads and excellent Local transport connectivity. Area is not too dense.",
-          "src": "/jindalx/source-options.json"
-        },
-        {
-          "k": "Cons",
-          "v": "Not specified in source",
           "src": "/jindalx/source-options.json"
         },
         {
@@ -655,11 +643,6 @@ window.ATLAS = {
           "src": "/jindalx/source-options.json"
         },
         {
-          "k": "Cons",
-          "v": "1 Approach road is narrow and the other one has Dumpyard",
-          "src": "/jindalx/source-options.json"
-        },
-        {
           "k": "Tentative Monthly outflow for JindalX",
           "v": "INR 21,50,000/- + GST",
           "src": "/jindalx/source-options.json"
@@ -905,11 +888,6 @@ window.ATLAS = {
         {
           "k": "Pros",
           "v": "Entire building is available, Main road, well connected with DND road, Entire building upgradation is in process",
-          "src": "/jindalx/source-options.json"
-        },
-        {
-          "k": "Cons",
-          "v": "Distance from metro",
           "src": "/jindalx/source-options.json"
         },
         {
@@ -1170,11 +1148,6 @@ window.ATLAS = {
         {
           "k": "Pros",
           "v": "Entire building is available, Main road, well connected with DND road, Entire building upgradation is in process and approach roads are wider",
-          "src": "/jindalx/source-options.json"
-        },
-        {
-          "k": "Cons",
-          "v": "Expensive",
           "src": "/jindalx/source-options.json"
         },
         {
