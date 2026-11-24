@@ -90,7 +90,7 @@ def brick_mat():
             n = nt.nodes.new("ShaderNodeTexImage"); n.image = bpy.data.images.load(os.path.join(ASSETS, f"brick_b_{kind}_2k.jpg"))
             if nc: n.image.colorspace_settings.name = "Non-Color"
             nt.links.new(mp.outputs[0], n.inputs[0]); return n
-        mix = nt.nodes.new("ShaderNodeMixRGB"); mix.blend_type = "MULTIPLY"; mix.inputs[0].default_value = 1; mix.inputs[2].default_value = (0.78, 0.6, 0.55, 1)
+        mix = nt.nodes.new("ShaderNodeMixRGB"); mix.blend_type = "MULTIPLY"; mix.inputs[0].default_value = 1; mix.inputs[2].default_value = (0.6, 0.4, 0.34, 1)
         nt.links.new(t("diff").outputs[0], mix.inputs[1]); nt.links.new(mix.outputs[0], b.inputs["Base Color"])
         nt.links.new(t("rough", True).outputs[0], b.inputs["Roughness"])
         nm = nt.nodes.new("ShaderNodeNormalMap"); nm.inputs["Strength"].default_value = 1.2
@@ -150,8 +150,8 @@ M = {
     "floor": mat("TE_Floor", (0.34, 0.32, 0.3), 0.5),
     "canopy": mat("TE_Canopy", (0.2, 0.2, 0.21), 0.4, 0.6),
     "roof": mat("TE_Roof", (0.5, 0.49, 0.47), 0.9),
-    "leaf": foliage("TE_Leaf", (0.12, 0.24, 0.07), (0.32, 0.46, 0.14)),
-    "leaf2": foliage("TE_LeafDeep", (0.07, 0.17, 0.05), (0.2, 0.33, 0.1)),
+    "leaf": foliage("TE_Leaf", (0.05, 0.12, 0.03), (0.16, 0.27, 0.06)),
+    "leaf2": foliage("TE_LeafDeep", (0.03, 0.08, 0.02), (0.1, 0.19, 0.04)),
     "trunk": mat("TE_Trunk", (0.22, 0.16, 0.1), 0.9),
 }
 ORDER = list(M)
