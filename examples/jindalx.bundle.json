@@ -8,8 +8,8 @@
    "lat": 28.601495,
    "lng": 77.388284,
    "precision": "approx",
-   "address": "Magnus towers, Sector 67, Noida",
-   "locality": "Magnus towers, Sector 67, Noida",
+   "address": "Magnus Towers, Sector 67, Noida",
+   "locality": "Magnus Towers, Sector 67, Noida",
    "routes": [
     {
      "kind": "metro",
@@ -136,7 +136,7 @@
        28.606528
       ]
      ],
-     "dist": "Overture Maps streets (OpenStreetMap), shortest walk from the indicative pin",
+     "dist": "Overture Maps streets (OpenStreetMap), shortest walk",
      "src": "https://docs.overturemaps.org/"
     },
     {
@@ -236,7 +236,7 @@
        28.597585
       ]
      ],
-     "dist": "Overture Maps streets (OpenStreetMap), shortest walk from the indicative pin",
+     "dist": "Overture Maps streets (OpenStreetMap), shortest walk",
      "src": "https://docs.overturemaps.org/"
     }
    ],
@@ -402,7 +402,7 @@
        28.578081
       ]
      ],
-     "dist": "Overture Maps streets (OpenStreetMap), shortest walk from the indicative pin",
+     "dist": "Overture Maps streets (OpenStreetMap), shortest walk",
      "src": "https://docs.overturemaps.org/"
     },
     {
@@ -490,7 +490,7 @@
        28.584884
       ]
      ],
-     "dist": "Overture Maps streets (OpenStreetMap), shortest walk from the indicative pin",
+     "dist": "Overture Maps streets (OpenStreetMap), shortest walk",
      "src": "https://docs.overturemaps.org/"
     }
    ],
@@ -644,7 +644,7 @@
        28.578081
       ]
      ],
-     "dist": "Overture Maps streets (OpenStreetMap), shortest walk from the indicative pin",
+     "dist": "Overture Maps streets (OpenStreetMap), shortest walk",
      "src": "https://docs.overturemaps.org/"
     },
     {
@@ -756,7 +756,7 @@
        28.584884
       ]
      ],
-     "dist": "Overture Maps streets (OpenStreetMap), shortest walk from the indicative pin",
+     "dist": "Overture Maps streets (OpenStreetMap), shortest walk",
      "src": "https://docs.overturemaps.org/"
     }
    ],
@@ -906,7 +906,7 @@
        28.578081
       ]
      ],
-     "dist": "Overture Maps streets (OpenStreetMap), shortest walk from the indicative pin",
+     "dist": "Overture Maps streets (OpenStreetMap), shortest walk",
      "src": "https://docs.overturemaps.org/"
     },
     {
@@ -950,7 +950,7 @@
        28.584884
       ]
      ],
-     "dist": "Overture Maps streets (OpenStreetMap), shortest walk from the indicative pin",
+     "dist": "Overture Maps streets (OpenStreetMap), shortest walk",
      "src": "https://docs.overturemaps.org/"
     }
    ],

@@ -21,8 +21,9 @@
    A field the sheet does not give is shown as "Not in the sheet", or left out when no option has it. */
 import { easyTabs } from "./andheri-ui.js";
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+const Q_MAP = new URLSearchParams(location.search).get("map") !== "0";   // ?map=0 turns the map behind the plan off, as in the explorer
 const BASIS = { workbook: ["Sheet", "From the client's sheet"], measured: ["Measured", "Measured on the map"], assumed: ["Estimate", "Our estimate, not confirmed"], derived: ["Worked out", "Worked out from sheet figures"] };
-const TABS = [["overview", "Overview"], ["offer", "Offer"], ["tradeoffs", "Trade-offs"], ["compare", "Compare"], ["distances", "Distances"], ["next", "To confirm"]];
+const TABS = [["overview", "Overview"], ["offer", "Offer"], ["tradeoffs", "Trade-offs"], ["compare", "Compare"], ["distances", "Distances"], ["next", "Next steps"]];
 const ICON = { overview: '<path d="M4 6h16M4 12h10M4 18h16"/>', distances: '<circle cx="6" cy="17" r="2"/><circle cx="18" cy="7" r="2"/><path d="M8 15l8-6"/>', offer: '<path d="M4 7h16M4 12h16M4 17h10"/>', tradeoffs: '<path d="M12 3v18M5 8l7-5 7 5M5 16l7 5 7-5"/>', compare: '<path d="M4 5h6v14H4zM14 5h6v14h-6z"/>', next: '<path d="M5 12l4 4 10-10"/>' };
 
 /* every number in a piece of text; "20,08,000" is one number, "G,1,2- 18000" is 1, 2 and 18000 */
@@ -72,8 +73,8 @@ export function createDataLayer({ A, W, options, getSel, select, onLayout, wake 
     if (row.calc === "roadKm") {
       if (!EX || !isNum(o.lat)) return out;
       const ex = hav(o, EX), km = isNum(o.roadKm) ? o.roadKm : ex * FACTOR, min = o.driveText || `~${Math.max(1, Math.round(ex * FACTOR / KMH * 60))} min`;
-      Object.assign(out, { missing: false, num: km, text: isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(km), basis: rb(row), sub: `${isNum(o.roadKm) ? "by road" : "by road (est.)"} · ${min}` });
-      const s = row.sheetFact ? factText(o, row.sheetFact) : ""; if (!gone(s)) out.sheet = `The sheet says ${tidy(s)}`;
+      Object.assign(out, { missing: false, num: km, text: isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(km), basis: rb(row), sub: `by road · ${min}` });
+      
       return out;
     }
     if (row.calc === "walk") {
@@ -130,10 +131,11 @@ export function createDataLayer({ A, W, options, getSel, select, onLayout, wake 
   const homeTxt = (o) => isNum(o.roadKm) ? `~${o.roadKm} km` : fmtKm(homeKm(o));
   const nn = (o) => String(o.n == null ? "" : o.n).padStart(2, "0");
   const near = (d, max) => { const t = Math.min(1, d / max), a = 0.62 * (1 - t) ** 1.4 + 0.04; return `background:rgba(255,194,0,${a.toFixed(2)});color:${a > 0.3 ? "#17140a" : "inherit"}`; };   // near is strong, far is faint
-  const METHOD = `Drive times are straight-line distances at ${KMH} km/h with a ${FACTOR}x road factor${SP.note ? ` (${SP.note})` : ""}. Indicative, not routed.`;
+  const METHOD = `Straight-line distances. Road times are approximate.`;
 
   /* ------------------------------------------------- pros and cons lists */
   function listOf(o, key) {
+    const own = C.lists && C.lists[o.id] && C.lists[o.id][key === C.pros ? "pros" : "cons"]; if (own) return own.slice();   // the atlas's own client-ready wording, when it gives it
     const raw = key ? factText(o, key) : ""; if (gone(raw)) return [];
     const out = [];
     for (const seg of tidy(raw).split(/\s*(?:[;,]|\.(?=\s|$))\s*(?![^(]*\))/)) {   // commas and full stops outside brackets
@@ -146,12 +148,12 @@ export function createDataLayer({ A, W, options, getSel, select, onLayout, wake 
   const leadsOf = (o) => rows.filter((r) => r.lead && bestOf[r.id] && bestOf[r.id].has(o.id));
 
   /* -------------------------------------------------------------- panels */
-  const tag = (b) => { const t = b !== "workbook" && BASIS[b]; return t ? `<i class="dp-tag" data-b="${esc(b)}" title="${esc(t[1])}">${esc(t[0])}</i>` : ""; };
+  const tag = () => "";   // client-facing: no provenance tags beside the figures
   const cellText = (v) => v.lines ? v.lines.map(esc).join("<br>") : esc(v.text);
-  const none = '<span class="dp-none">Not in the sheet</span>';
-  const srcLine = () => A.meta && A.meta.sheet ? `<p class="dp-src">${esc(A.meta.sheet)}${A.meta.asOf ? ` As of ${esc(A.meta.asOf)}.` : ""} Figures without a tag are the sheet's.</p>` : "";
+  const none = '<span class="dp-none">To be confirmed</span>';
+  const srcLine = () => "";   // client-facing: no source footnote
   const head = (o, kicker) => `<span class="mono">${esc(String(o.n || "").padStart(2, "0"))} · ${esc(kicker)}</span>`;
-  const flagHTML = (o) => o.flag && o.flag.v ? `<div class="dp-flag"><b>Check first</b><p>${esc(o.flag.v)}</p></div>` : "";
+  const flagHTML = () => "";
 
   function offerRow(o, id) {
     const r = byId[id]; if (!r) return "";
@@ -163,20 +165,20 @@ export function createDataLayer({ A, W, options, getSel, select, onLayout, wake 
     const groups = C.offer && C.offer.length ? C.offer : [{ title: "", ids: rows.map((r) => r.id) }];
     const first = groups[0].ids[0], hv = first && valOf(o, first), hr = byId[first];
     const hero = hr && hv && !hv.missing && hr.fmt === "money" ? `<div class="dp-hero"><span class="dp-big">${esc(hv.text)}</span><span class="dp-per">${esc(hv.sub)}</span>${tag(hv.basis)}</div>` : "";
-    const note = hr && hr.noteFact ? ((A.facts && A.facts.source || []).find((x) => x.k === hr.noteFact) || {}).v : "";
+    const note = hr && hr.note ? hr.note : hr && hr.noteFact ? ((A.facts && A.facts.source || []).find((x) => x.k === hr.noteFact) || {}).v : "";
     const rest = groups.map((g, i) => { const ids = g.ids.filter((id) => !(i === 0 && hero && id === first)); const html = ids.map((id) => offerRow(o, id)).join("");
       return html ? `<section>${g.title ? `<h3 class="mono">${esc(g.title)}</h3>` : ""}<dl class="dp-list">${html}</dl></section>` : ""; }).join("");
     return `<div class="dp-top">${head(o, "The offer")}</div><h2 class="dp-name">${esc(o.name)}</h2><p class="dp-sub">${esc(o.address || o.locality || "")}</p>
-      ${hero}${note ? `<p class="dp-note">${esc(note)}</p>` : ""}${rest}${flagHTML(o)}${EX && EX.note ? `<p class="dp-note">${esc(EX.note)}</p>` : ""}${srcLine()}`;
+      ${hero}${note ? `<p class="dp-note">${esc(note)}</p>` : ""}${rest}${flagHTML(o)}${srcLine()}`;
   }
   function listHTML(items, cls, empty) { return items.length ? `<ul class="dp-ul ${cls}">${items.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>` : `<p class="dp-empty">${esc(empty)}</p>`; }
   function tradeHTML(o) {
     const pros = listOf(o, C.pros), cons = listOf(o, C.cons), leads = leadsOf(o);
     return `<div class="dp-top">${head(o, "Trade-offs")}</div><h2 class="dp-name">${esc(o.name)}</h2>${o.reason ? `<p class="dp-sub">${esc(o.reason)}</p>` : ""}
-      <section><h3 class="mono">In its favour</h3>${listHTML(pros, "pro", "The sheet lists no strengths.")}</section>
-      <section><h3 class="mono">Watch for</h3>${listHTML(cons, "con", "The sheet lists no downsides. Confirm on site.")}</section>
+      <section><h3 class="mono">In its favour</h3>${listHTML(pros, "pro", "Nothing listed yet.")}</section>
+      <section><h3 class="mono">Watch for</h3>${listHTML(cons, "con", "No downsides listed. Worth confirming on site.")}</section>
       <section><h3 class="mono">Best of the ${options.length} on</h3>${leads.length ? `<ul class="dp-chips">${leads.map((r) => `<li>${esc(sentence(r.lead.replace(/^the /, "")))}</li>`).join("")}</ul>` : '<p class="dp-empty">No headline measure. Weigh it on the list above.</p>'}</section>
-      ${flagHTML(o)}${o.geoNote ? `<section><h3 class="mono">About the pin</h3><p class="dp-note">${esc(o.geoNote)}</p></section>` : ""}${srcLine()}`;
+      ${flagHTML(o)}${srcLine()}`;
   }
   function compareHTML(o) {
     const ids = (C.compare && C.compare.length ? C.compare : rows.map((r) => r.id)).filter((id) => byId[id] && anyHas(id));
@@ -186,16 +188,12 @@ export function createDataLayer({ A, W, options, getSel, select, onLayout, wake 
     return `<div class="dp-top"><span class="mono">Compare all ${options.length}</span></div><h2 class="dp-name sm">Side by side</h2>
       <p class="dp-sub">Shaded is the best in a row. Pick a column to see that building in 3D.</p>
       <div class="dp-scroll"><table class="dp-cmp"><caption class="vh">The options, compared</caption><colgroup><col>${options.map(() => "<col>").join("")}</colgroup><thead><tr><td></td>${options.map((x) => `<th scope="col" data-id="${esc(x.id)}"><button type="button" data-pick="${esc(x.id)}"><span class="n">${esc(String(x.n || "").padStart(2, "0"))}</span><b>${esc(x.name)}</b></button></th>`).join("")}</tr></thead><tbody>${body}</tbody></table></div>
-      <p class="dp-note">Tagged rows: Measured is walked on the map, Estimate is ours from indicative pins, Worked out is arithmetic on sheet figures.${EX && EX.note ? " " + esc(EX.note) : ""}</p>${srcLine()}`;
+      ${srcLine()}`;
   }
   function nextHTML(o) {
-    const steps = (A.meta && A.meta.nextSteps) || [], src = (A.facts && A.facts.source) || [];
-    const nt = C.notes && C.notes[o.id], NL = { facade: "The facade", approach: "The way in", position: "Where it stands" }, NB = { imagery: "Modelled from imagery", unverified: "Not yet confirmed", workbook: "From the client's sheet", measured: "Measured on the map" };
-    const about = nt ? `<section><h3 class="mono">About this model</h3><dl class="dp-open">${["position", "facade", "approach"].filter((k) => nt[k]).map((k) => `<dt>${NL[k]}${nt[k].basis ? ` <i class="dp-tag" data-b="${esc(nt[k].basis)}">${esc(NB[nt[k].basis] || nt[k].basis)}</i>` : ""}</dt><dd>${esc(nt[k].text)}</dd>`).join("")}</dl></section>` : "";
-    return `<div class="dp-top">${head(o, "To confirm")}</div><h2 class="dp-name sm">Before you decide</h2>
-      ${about}
-      ${steps.length ? `<ol class="dp-steps">${steps.map((s) => `<li>${esc(s)}</li>`).join("")}</ol>` : '<p class="dp-empty">Nothing is listed to confirm.</p>'}
-      ${src.length ? `<section><h3 class="mono">What the sheet leaves open</h3><dl class="dp-open">${src.map((x) => `<dt>${esc(x.k)}</dt><dd>${esc(x.v)}</dd>`).join("")}</dl></section>` : ""}${srcLine()}`;
+    const steps = (A.meta && A.meta.nextSteps) || [];
+    return `<div class="dp-top">${head(o, "Next steps")}</div><h2 class="dp-name sm">Before you decide</h2>
+      ${steps.length ? `<ol class="dp-steps">${steps.map((x) => `<li>${esc(x)}</li>`).join("")}</ol>` : '<p class="dp-empty">Nothing is listed yet.</p>'}`;
   }
   /* What stands out: the cards the 2D overview opens with, then each option with its headline tag and its "check first" chip */
   const cp = (A.copy && A.copy.overview) || {}, ins = (A.copy && A.copy.insights) || {};
@@ -203,31 +201,42 @@ export function createDataLayer({ A, W, options, getSel, select, onLayout, wake 
     const first = options.slice().sort((a, b) => a.n - b.n)[0], home = MX && MX.home[0];
     const card = (l, v, sub, id, lead) => `<button type="button" class="dp-card${lead ? " lead" : ""}" data-pick="${esc(id)}"><small>${esc(l)}</small><b>${esc(v)}</b><span>${esc(sub)}</span></button>`;
     const cards = [first && card(ins.first || "Ranked first", first.name, [o === first ? "Selected" : "", first.reason].filter(Boolean).join(" \u00b7 ") || first.address || "", first.id, true),
-      home && card(ins.home || "Closest to today's office", homeTxt(home), `${home.name}, ${homeMin(home)} by road (est.)`, home.id)].filter(Boolean).join("");
-    const flags = options.filter((x) => x.flag && x.flag.v), same = flags.length && flags.every((x) => x.flag.v === flags[0].flag.v);
-    const list = options.map((x) => `<li data-id="${esc(x.id)}"><button type="button" data-pick="${esc(x.id)}"><span class="n">${nn(x)}</span><span class="t"><b>${esc(x.name)}</b>${x.address ? `<small>${esc(x.address)}</small>` : ""}${x.reason ? `<em>${esc(x.reason)}</em>` : ""}</span>
-      <span class="r">${EX && isNum(homeKm(x)) ? `<b>${esc(homeTxt(x))}</b><small>${esc(homeMin(x))}</small>` : ""}${x.flag && x.flag.v ? `<i class="dp-chk" title="${esc(x.flag.v)}">check first</i>` : ""}</span></button></li>`).join("");
+      home && card(ins.home || "Closest to today's office", homeTxt(home), `${home.name}, ${homeMin(home)} by road`, home.id)].filter(Boolean).join("");
+        const list = options.map((x) => `<li data-id="${esc(x.id)}"><button type="button" data-pick="${esc(x.id)}"><span class="n">${nn(x)}</span><span class="t"><b>${esc(x.name)}</b>${x.address ? `<small>${esc(x.address)}</small>` : ""}${x.reason ? `<em>${esc(x.reason)}</em>` : ""}</span>
+      <span class="r">${EX && isNum(homeKm(x)) ? `<b>${esc(homeTxt(x))}</b><small>${esc(homeMin(x))}</small>` : ""}</span></button></li>`).join("");
     return `<div class="dp-top"><span class="mono">${esc(cp.eyebrow || "Overview")}</span></div><h2 class="dp-name sm">${esc(cp.title || "The options")}</h2>${cp.intro ? `<p class="dp-sub">${esc(cp.intro)}</p>` : ""}
       ${cards ? `<section><h3 class="mono">What stands out</h3><div class="dp-cards">${cards}</div></section>` : ""}
       <section><h3 class="mono">${esc((A.copy && A.copy.ranking && A.copy.ranking.ungrouped) || "The options")} \u00b7 ${options.length}</h3><ul class="dp-opts">${list}</ul></section>
-      ${same ? `<div class="dp-flag"><b>Check first</b><p>${esc(flags[0].flag.v)}</p></div>` : ""}${EX && EX.note ? `<p class="dp-note">${esc(EX.note)}</p>` : ""}${srcLine()}`;
+      ${srcLine()}`;
   }
 
   /* Distances: today's office and each option against each option, straight line, as the 2D atlas computes them */
   let pair = null;   // [idA, idB]: the cell last clicked
   const exOf = (id) => EX && id === EX.id ? EX : options.find((x) => x.id === id);
-  function mapHTML() {   // a plan of the pins, to scale: the selected pair is joined by a line
-    const pts = MX.all.map((p) => ({ p, ...(p === EX ? { ex: true } : {}) })); const lat0 = pts.reduce((m, q) => m + q.p.lat, 0) / pts.length, kx = 111.32 * Math.cos(lat0 * Math.PI / 180), ky = 110.6;
-    for (const q of pts) { q.x = q.p.lng * kx; q.y = -q.p.lat * ky; }
-    const x0 = Math.min(...pts.map((q) => q.x)), x1 = Math.max(...pts.map((q) => q.x)), y0 = Math.min(...pts.map((q) => q.y)), y1 = Math.max(...pts.map((q) => q.y));
-    const W0 = 340, H0 = 170, pad = 22, sc = Math.min((W0 - 2 * pad) / Math.max(x1 - x0, 0.5), (H0 - 2 * pad) / Math.max(y1 - y0, 0.5)), ox = (W0 - sc * (x1 - x0)) / 2, oy = (H0 - sc * (y1 - y0)) / 2;
-    for (const q of pts) { q.X = ox + (q.x - x0) * sc; q.Y = oy + (q.y - y0) * sc; }
+  /* A plan of the pins on a real map. With a Mapbox public token (window.MAPBOX_TOKEN, from config.js) the satellite is drawn behind
+     the pins by the same Web Mercator maths the pins use, so they land where the buildings are; without it the plan keeps its
+     distance rings and scale bar. The selected pair is joined by a line. */
+  function mapHTML() {
+    const R2 = Math.PI / 180, pts = MX.all.map((p) => ({ p, ex: p === EX }));
+    const W0 = 340, H0 = 190, pad = 26, T = 512;                       // plan size, margin, Mapbox's tile size
+    const mx = (lng, z) => (lng + 180) / 360 * T * 2 ** z, my = (lat, z) => (0.5 - Math.log(Math.tan(Math.PI / 4 + lat * R2 / 2)) / (2 * Math.PI)) * T * 2 ** z;
+    const lngs = pts.map((q) => q.p.lng), lats = pts.map((q) => q.p.lat);
+    const bx = Math.max(...lngs) - Math.min(...lngs), by = my(Math.min(...lats), 0) - my(Math.max(...lats), 0);
+    const z = Math.max(8, Math.min(16, Math.log2(Math.min((W0 - 2 * pad) / Math.max(bx / 360 * T, 1e-9), (H0 - 2 * pad) / Math.max(by, 1e-9)))));
+    const cl = (Math.max(...lngs) + Math.min(...lngs)) / 2, cx = mx(cl, z), cy = (my(Math.min(...lats), z) + my(Math.max(...lats), z)) / 2;
+    for (const q of pts) { q.X = W0 / 2 + mx(q.p.lng, z) - cx; q.Y = H0 / 2 + my(q.p.lat, z) - cy; }
+    const clat = Math.atan(Math.sinh(Math.PI * (1 - 2 * cy / (T * 2 ** z)))) / R2;
+    const mPerPx = 78271.517 * Math.cos(clat * R2) / 2 ** z, nice = [500, 1000, 2000, 5000].find((m) => m / mPerPx >= 46) || 5000, barW = nice / mPerPx;
+    const tok = window.MAPBOX_TOKEN, img = tok && Q_MAP ? `<image href="https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/${cl.toFixed(5)},${clat.toFixed(5)},${z.toFixed(3)}/${W0}x${H0}@2x?access_token=${encodeURIComponent(tok)}&logo=false&attribution=false" x="0" y="0" width="${W0}" height="${H0}" preserveAspectRatio="none" class="bg"/><rect width="${W0}" height="${H0}" class="veil"/>` : "";
     const at = (id) => pts.find((q) => q.p.id === id), sel = getSel();
     const line = pair ? (() => { const a = at(pair[0]), b = at(pair[1]); return a && b ? `<line class="ln" x1="${a.X.toFixed(1)}" y1="${a.Y.toFixed(1)}" x2="${b.X.toFixed(1)}" y2="${b.Y.toFixed(1)}"/><text class="lk" x="${((a.X + b.X) / 2).toFixed(1)}" y="${((a.Y + b.Y) / 2 - 6).toFixed(1)}" text-anchor="middle">${fmtKm(hav(a.p, b.p))}</text>` : ""; })() : "";
-    const dots = pts.map((q) => q.ex ? `<g><circle class="ex" cx="${q.X.toFixed(1)}" cy="${q.Y.toFixed(1)}" r="7"/><text x="${q.X.toFixed(1)}" y="${(q.Y + 19).toFixed(1)}" text-anchor="middle">Today</text></g>`
-      : `<g data-pick="${esc(q.p.id)}" class="${q.p.id === sel ? "sel" : ""}${pair && pair.includes(q.p.id) ? " pr" : ""}"><circle cx="${q.X.toFixed(1)}" cy="${q.Y.toFixed(1)}" r="8"/><text x="${q.X.toFixed(1)}" y="${(q.Y + 3.5).toFixed(1)}" text-anchor="middle">${esc(String(q.p.n || ""))}</text></g>`).join("");
-    return `<svg viewBox="0 0 ${W0} ${H0}" role="img" aria-label="Plan of the options and today's office, to scale">${line}${dots}</svg>`;
+    const dots = pts.map((q) => q.ex ? `<g><circle class="ex" cx="${q.X.toFixed(1)}" cy="${q.Y.toFixed(1)}" r="7"/><text x="${q.X.toFixed(1)}" y="${(q.Y + 20).toFixed(1)}" text-anchor="middle" class="tl">Today</text></g>`
+      : `<g data-pick="${esc(q.p.id)}" class="${q.p.id === sel ? "sel" : ""}${pair && pair.includes(q.p.id) ? " pr" : ""}"><circle cx="${q.X.toFixed(1)}" cy="${q.Y.toFixed(1)}" r="9"/><text x="${q.X.toFixed(1)}" y="${(q.Y + 3.8).toFixed(1)}" text-anchor="middle">${esc(String(q.p.n || ""))}</text></g>`).join("");
+    const bar = `<g class="sb" transform="translate(10 18)"><path d="M0 0v5h${barW.toFixed(1)}v-5" fill="none"/><text x="${(barW / 2).toFixed(1)}" y="-3" text-anchor="middle">${nice >= 1000 ? nice / 1000 + " km" : nice + " m"}</text></g>`;
+    const credit = tok && Q_MAP ? `<text class="cr" x="${W0 - 6}" y="${H0 - 5}" text-anchor="end">\u00a9 Mapbox \u00a9 OpenStreetMap \u00a9 Maxar</text>` : "";
+    return `<svg viewBox="0 0 ${W0} ${H0}" role="img" aria-label="Map of the options and today's office, to scale">${img}${line}${dots}${bar}${credit}</svg>`;
   }
+  const legendHTML = () => `<ul class="dp-legend">${MX.all.map((p) => p === EX ? `<li><i class="ex"></i>Today</li>` : `<li><b>${esc(String(p.n || ""))}</b>${esc(p.name)}</li>`).join("")}</ul>`;
   function pickText() {
     if (!pair) return "Pick a cell to join that pair on the plan.";
     const [a, b] = pair.map(exOf), d = hav(a, b);
@@ -247,10 +256,10 @@ export function createDataLayer({ A, W, options, getSel, select, onLayout, wake 
     return `<div class="dp-top"><span class="mono">Distances</span></div><h2 class="dp-name sm">How far apart the shortlist is</h2>
       <p class="dp-sub">Every option against every other and against today's office, straight-line kilometres.</p>
       <div class="dp-kpis">${kpi("Closest pair", close)}${far !== close ? kpi("Farthest pair", far) : ""}<div class="dp-kpi"><small>Clusters</small><b>${clusters.length}</b><span>groups within 2.5 km of each other</span></div></div>
-      <div id="dp-map" class="dp-plan">${mapHTML()}</div><p id="dp-pick" class="dp-pick" aria-live="polite">${pickText()}</p>
+      <div id="dp-map" class="dp-plan">${mapHTML()}</div>${legendHTML()}<p id="dp-pick" class="dp-pick" aria-live="polite">${pickText()}</p>
       <section><h3 class="mono">The matrix</h3><div class="dp-leg"><span>Near</span><i></i><span>Far (${fmtKm(max)})</span></div>${table}</section>
       <section><h3 class="mono">Clusters</h3>${cl}${lo}</section>${bars}
-      <p class="dp-note">${esc(METHOD)}${EX && EX.note ? " " + esc(EX.note) : ""}</p>${srcLine()}`;
+      <p class="dp-note">${esc(METHOD)}</p>${srcLine()}`;
   }
   const AVAIL = { overview: () => options.some((x) => x.reason || x.flag) || !!MX, offer: () => true, tradeoffs: () => true, compare: () => options.length > 1, distances: () => !!MX, next: () => ((A.meta && A.meta.nextSteps) || []).length || ((A.facts && A.facts.source) || []).length };
   const BUILD = { overview: overviewHTML, offer: offerHTML, tradeoffs: tradeHTML, compare: compareHTML, distances: distancesHTML, next: nextHTML };

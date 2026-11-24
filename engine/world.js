@@ -974,6 +974,7 @@ async function start(A, W, intro=null) {
   /* the wording is the atlas's when it gives it (W.brand, W.credit), Andheri East's otherwise */
   const BR = W.brand || { kicker: "Autopilot · Flipkart", title: "Andheri East" };
   $("#t-eyebrow").textContent = BR.kicker; $("#t-title").textContent = BR.title;
+  (function(){const home=W.home;if(!home)return;const b=document.querySelector("#brand");if(!b)return;b.style.cursor="pointer";b.setAttribute("role","link");b.tabIndex=0;b.title="Back to the proposal";const go=()=>{location.href=home;};b.addEventListener("click",go);b.addEventListener("keydown",e=>{if(e.key==="Enter")go();});})();
   if (!intro && $("#l-title")) $("#l-title").textContent = BR.title;
   $("#to-map").href = W.mapHref || A.path || "/" + SLUG;
   $("#credit").textContent = W.credit || "Built in Blender from Overture Maps footprints. Heights around each building are estimated; the buildings use the deck's floors. Distances: Google Maps.";

@@ -434,3 +434,19 @@ body[data-andheri-ui=world] #data .dp-bars .v{text-align:right;font-weight:600;f
 
 /* the data layer is for the dollhouse; walk mode keeps the street clear */
 body[data-andheri-ui=world].walk :is(#data,#data-dock){display:none}
+
+/* the distances plan on a real map */
+body[data-andheri-ui=world] #data .dp-plan{padding:0;overflow:hidden;background:#1b1d18}
+body[data-andheri-ui=world] #data .dp-plan .veil{fill:rgba(10,12,8,.34)}
+body[data-andheri-ui=world] #data .dp-plan circle{stroke:#fff;stroke-width:1.6;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))}
+body[data-andheri-ui=world] #data .dp-plan circle.ex{fill:rgba(255,255,255,.12);stroke:#9db8ff;stroke-dasharray:3 2.5}
+body[data-andheri-ui=world] #data .dp-plan text{fill:#fff;font:600 9.5px Geist,system-ui,sans-serif;paint-order:stroke;stroke:rgba(0,0,0,.65);stroke-width:2.2px}
+body[data-andheri-ui=world] #data .dp-plan g.sel text{fill:#17140a;stroke:none}
+body[data-andheri-ui=world] #data .dp-plan .tl{font-weight:500}
+body[data-andheri-ui=world] #data .dp-plan .sb path{stroke:#fff;stroke-width:1.4}
+body[data-andheri-ui=world] #data .dp-plan .sb text{font-size:8.5px;font-weight:500}
+body[data-andheri-ui=world] #data .dp-plan .cr{font:400 6.5px Geist,system-ui,sans-serif;stroke:none;fill:rgba(255,255,255,.75)}
+body[data-andheri-ui=world] #data .dp-plan .ln{stroke:#ffc200;stroke-width:2;stroke-dasharray:5 3}
+body[data-andheri-ui=world] #data .dp-legend{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12px;color:rgba(255,255,255,.78)}
+body[data-andheri-ui=world] #data .dp-legend b{display:inline-grid;place-items:center;width:17px;height:17px;margin-right:6px;border-radius:50%;background:#17140a;border:1px solid rgba(255,255,255,.55);font-size:10px;font-weight:600;color:#fff}
+body[data-andheri-ui=world] #data .dp-legend i.ex{display:inline-block;width:12px;height:12px;margin-right:6px;vertical-align:-2px;border-radius:50%;border:1.5px dashed #9db8ff}

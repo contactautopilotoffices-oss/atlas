@@ -83,7 +83,7 @@ for o in json.load(open(RG["bundle"]))["options"]:
         out.append({"kind": "metro", "name": nm, "lines": [RG.get("metro", {}).get(RG.get("station_line", "L1"), ["Metro"])[0]], "lat": round(p[1], 7), "lng": round(p[0], 7),
                     "m": m, "min": max(1, round(m / 80)), "mode": "walk",
                     "path": [[round(a, 6), round(b, 6)] for a, b in shapely.LineString(line).simplify(0.00002).coords],
-                    "dist": "Overture Maps streets (OpenStreetMap), shortest walk from the indicative pin" if o.get("precision") != "building" else "Overture Maps streets (OpenStreetMap), shortest walk",
+                    "dist": "Overture Maps streets (OpenStreetMap), shortest walk" if o.get("precision") != "building" else "Overture Maps streets (OpenStreetMap), shortest walk",
                     "src": "https://docs.overturemaps.org/"})
         print(f'  {o["name"]:12s} -> {nm:22s} {m:5d} m {out[-1]["min"]:3d} min')
     res[o["id"]] = out

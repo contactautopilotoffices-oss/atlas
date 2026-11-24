@@ -18,3 +18,18 @@
 @media(max-width:1050px){.closure-story{gap:35px}.tower{padding:23px}.scrub-row{flex-wrap:wrap;gap:0}.seq{gap:14px 10px}.seq span{font-size:12px}}
 @media(max-width:720px){.closure-story{grid-template-columns:1fr;gap:38px;margin-top:30px}.tower{padding:22px}.floor-row{height:105px}.seq{margin-top:22px}.scrub-row b{font-size:24px}.scrub-row>span{font-size:12px}.occupied{font-size:72px}.closure-proof figure img{height:260px}.closure-proof h3{font-size:28px}}
 @media print{.topbar,.button,.gallery-item i,.text-button,dialog,.scrub,.replay{display:none}.hero{min-height:600px}.wrap{width:92%}section{break-inside:avoid}.hero-photo,.hero-shade{print-color-adjust:exact}.option-card{break-inside:avoid}.gallery-item{print-color-adjust:exact}}
+
+/* the four options in 3D, handing over to Atlas */
+.atlas-options{list-style:none;margin:0 auto 38px;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:16px;max-width:1180px;text-align:left}
+.atlas-options a{display:block;position:relative;border-radius:6px;overflow:hidden;color:#fff;text-decoration:none;background:#2c2723;border:1px solid var(--dark-line);transition:transform .25s var(--ease),border-color .25s}
+.atlas-options a:hover,.atlas-options a:focus-visible{transform:translateY(-4px);border-color:#e5ac87}
+.atlas-options img{display:block;width:100%;aspect-ratio:8/5;object-fit:cover}
+.atlas-options span{display:block;padding:14px 16px 16px}
+.atlas-options small{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#ac9f92}
+.atlas-options b{display:block;font-size:20px;margin:4px 0 6px}
+.atlas-options i{font-style:normal;font-size:13px;color:#e5ac87}
+.final-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.button.ghost{background:transparent;border-color:#8a7b6d;color:var(--paper)}
+.button.ghost:hover{background:#ffffff14}
+@media(max-width:900px){.atlas-options{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:520px){.atlas-options{grid-template-columns:1fr}}
