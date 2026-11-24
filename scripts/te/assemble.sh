@@ -9,7 +9,7 @@ set -e
 R=${1:-.w3d/te/drone}; W=${2:-.w3d/te/work}; OUT=${3:-.w3d/te/te_drone.mp4}; PY=${PY:-.w3d/bin/python}
 N=288
 rm -rf "$W/seq" "$W/full" "$W/graded"; mkdir -p "$W/seq" "$W/full" "$W/graded"
-for STEP in 1 3 6; do
+for STEP in 1 3 6 8; do
   ok=1; for ((f=1; f<=N; f+=STEP)); do [ -f "$R/$(printf %04d $f).png" ] || { ok=0; break; }; done
   [ $ok = 1 ] && break
 done

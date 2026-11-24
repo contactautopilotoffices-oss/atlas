@@ -68,7 +68,7 @@ def brick_mat(name="TE_brick"):
     wv = N.new("ShaderNodeTexWave"); wv.wave_type = "BANDS"; wv.bands_direction = "Z"; wv.inputs["Scale"].default_value = 1.0 / 0.6 / 1.0
     wv.inputs["Distortion"].default_value = 0.0; L.new(tc.outputs["Object"], wv.inputs["Vector"])
     nz = N.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 0.06; nz.inputs["Detail"].default_value = 4; L.new(tc.outputs["Object"], nz.inputs["Vector"])
-    rmp = N.new("ShaderNodeValToRGB"); rmp.color_ramp.elements[0].color = hexc("#93432a"); rmp.color_ramp.elements[1].color = hexc("#b85d34")
+    rmp = N.new("ShaderNodeValToRGB"); rmp.color_ramp.elements[0].color = hexc("#7a3624"); rmp.color_ramp.elements[1].color = hexc("#a04c2e")
     L.new(nz.outputs["Fac"], rmp.inputs[0])
     mx = N.new("ShaderNodeMix"); mx.data_type = "RGBA"; mx.blend_type = "MULTIPLY"; mx.inputs["Factor"].default_value = 0.12
     L.new(rmp.outputs[0], mx.inputs[6]); L.new(wv.outputs["Color"], mx.inputs[7]); L.new(mx.outputs[2], p.inputs["Base Color"])
@@ -124,8 +124,9 @@ def context_mat():
     ro = N.new("ShaderNodeMapRange"); ro.inputs["To Min"].default_value = 0.85; ro.inputs["To Max"].default_value = 0.18; L.new(win.outputs[0], ro.inputs[0]); L.new(ro.outputs[0], p.inputs["Roughness"])
     return m
 
-M_BRICK = brick_mat(); M_GLASS = glass_mat("TE_glass", "#1d252c", warm=1.1); M_RETAIL = glass_mat("TE_retail", "#3a3128", warm=2.5)
-M_SLAB = principled("TE_slab", "#cfc8bc", 0.6); M_UPST = principled("TE_upstand", "#6e6a64", 0.7); M_MULL = principled("TE_mullion", "#3a3c3e", 0.4, 0.6)
+M_BRICK = brick_mat(); M_GLASS = glass_mat("TE_glass", "#1a2026", warm=1.7); M_RETAIL = glass_mat("TE_retail", "#3a3128", warm=2.5)
+M_SLAB = principled("TE_slab", "#ebe7df", 0.55); M_UPST = principled("TE_upstand", "#d8d3ca", 0.7)
+M_BLUE = principled("TE_blue_glass", "#2c5687", 0.04, 0.6); M_MULL = principled("TE_mullion", "#3a3c3e", 0.4, 0.6)
 M_PLANT = foliage_mat("TE_planting", "#2f4a1e", "#5f8a2c"); M_TREE = foliage_mat("TE_tree", "#33501f", "#7a8f3a")
 M_TRUNK = principled("TE_trunk", "#4a3a2c", 0.9); M_CTX = context_mat(); M_PAVE = principled("TE_paving", "#b7aea0", 0.8)
 M_VIADUCT = principled("TE_viaduct", "#c9c4ba", 0.7)
@@ -196,7 +197,14 @@ def buildings():
         a2 = sum(ring[i][0] * ring[(i + 1) % len(ring)][1] - ring[(i + 1) % len(ring)][0] * ring[i][1] for i in range(len(ring)))
         if a2 < 0: ring = ring[::-1]
         cx = sum(p[0] for p in ring) / len(ring); cy = sum(p[1] for p in ring) / len(ring)
-        z0 = zg(cx, cy) - 0.5; z1 = z0 + 0.5 + b["h"]
+        hh = b["h"]
+        open_plot = -10 < cx < 160 and -140 < cy < 15     # east of the tower: an open plot and a warehouse (satellite), stays low
+        if hh <= 30 and 90 < near_d(cx, cy) < 600 and not open_plot:
+            ar = abs(a2) / 2; k = int(b["id"].replace("-", "")[8:12], 16) % 4
+            if ar > 400 or b["cls"] == "apartments": hh = max(hh, 16.0 + 3.2 * k)     # apartment blocks: 5 to 8 storeys
+            elif ar > 90: hh = max(hh, 10.0 + 3.2 * (k % 3))                         # houses: 3 to 5 storeys
+        b["h2"] = hh
+        z0 = zg(cx, cy) - 0.5; z1 = z0 + 0.5 + hh
         tw = township(cx, cy) and b["h"] > 30
         tall = b["h"] > 30     # towers get continuous glass bands, not a punched-window grid
         t = hexc("#a65a38") if tw else tuple(c * 0.85 for c in hexc(TINTS[int(b["id"].replace("-", "")[:8], 16) % len(TINTS)])[:3]) + (1,)
@@ -208,7 +216,7 @@ def buildings():
             F.append((base + i, base + j, base + n + j, base + n + i)); uv.append([(s, 0), (s + L_, 0), (s + L_, z1 - z0), (s, z1 - z0)]); s += L_
             tint.append(t); roof.append(0.0); rib.append(1.0 if tall else 0.0)
         F.append(tuple(base + n + i for i in range(n))); uv.append([(x, y) for x, y in ring]); tint.append(t); roof.append(1.0); rib.append(0.0)
-        if b["h"] < 20 and rnd.random() < 0.45:   # the black plastic water tank on the roof
+        if hh < 24 and rnd.random() < 0.45:   # the black plastic water tank on the roof
             TANKS.append((cx + (rnd.random() - .5) * 2, cy + (rnd.random() - .5) * 2, z1, 0.8 + 0.5 * rnd.random()))
     me = bpy.data.meshes.new("context"); me.from_pydata(V, [], F)
     ul = me.uv_layers.new(); flat = [c for f in uv for p in f for c in p]
@@ -323,7 +331,7 @@ def hero():
         box(M_BRICK, min(s * 23, s * (LH - R)), max(s * 23, s * (LH - R)), -R, R, 0, HT + 2.0)
         for sy in (-1, 1): box(M_GLASS, min(s * 22.2, s * 23.4), max(s * 22.2, s * 23.4), sy * R - 0.25, sy * R + 0.25, 2, HT)
         # the cap's own vertical slit on its outer curve
-        box(M_GLASS, s * (LH + 0.0) - 0.4, s * (LH + 0.0) + 0.4, -0.35, 0.35, 8, HT - 4)
+        box(M_BLUE, min(s * (LH - 0.6), s * (LH + 0.12)), max(s * (LH - 0.6), s * (LH + 0.12)), -1.3, 1.3, 3.0, HT + 1.0)
         box(M_PLANT, min(s * 23, s * (LH - 2)), max(s * 23, s * (LH - 2)), -R + 1.5, R - 1.5, HT + 2.0, HT + 3.2)
     # the central brick spine, proud of both faces, with its small windows
     box(M_BRICK, -6.5, 6.5, -14.4, 14.4, 0, HT + 5.0)
@@ -370,11 +378,11 @@ def hero():
         for k in range(NF):
             z = GH + k * FH + FH + 0.85
             for sy in (-1, 1):
-                for x in np.arange(xa + 1.0, xb - 0.8, 1.3):
+                for x in np.arange(xa + 0.8, xb - 0.6, 1.0):
                     dep = edge(x, xa, xb, k) - 0.6
                     if R2.random() < 0.92:
-                        p = W @ Vector((x + R2.random() * .6, sy * dep, z)); pts.append((p.x, p.y, p.z, 0.6 + 0.6 * R2.random() ** 2, R2.randrange(3)))
-                    if R2.random() < 0.22:   # a small balcony tree now and then, as in the render
+                        p = W @ Vector((x + R2.random() * .6, sy * dep, z)); pts.append((p.x, p.y, p.z, 0.85 + 0.7 * R2.random() ** 2, R2.randrange(3)))
+                    if R2.random() < 0.30:   # a small balcony tree now and then, as in the render
                         p = W @ Vector((x, sy * dep, z)); pts.append((p.x, p.y, p.z, 1.1 + 0.5 * R2.random(), 3))
     for k in range(90):
         x = R2.uniform(-22, 22); y = R2.uniform(-10, 10)
@@ -429,7 +437,7 @@ def roof_detail():
         if b["hero"] or b["h"] > 30: continue
         ring = b["ring"]; cx = sum(p[0] for p in ring) / len(ring); cy = sum(p[1] for p in ring) / len(ring)
         if near_d(cx, cy) > 450: continue
-        z1 = zg(cx, cy) + b["h"]
+        z1 = zg(cx, cy) + b.get("h2", b["h"])
         try:
             P = SP(ring); inner = P.buffer(-0.22, join_style=2)
         except Exception: continue
@@ -515,7 +523,7 @@ def street():
                 kind = R4.random(); me = bus if kind < 0.05 else auto if kind < 0.25 else protos[R4.randrange(len(protos))]
                 ob = obj(f"veh_{n}", me); n += 1
                 v = R4.uniform(4.0, 9.0) * sgn          # m/s, Whitefield Road at morning pace
-                for f in range(1, NFR + 1, 24):
+                for f in (1,):
                     dd = (d + v * (f - 1) / 24.0) % Lr
                     if sgn < 0: dd = (d + v * (f - 1) / 24.0) % Lr
                     p, ang = along(pts, dd)
