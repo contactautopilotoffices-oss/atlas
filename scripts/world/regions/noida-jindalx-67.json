@@ -36,6 +36,6 @@
  "avenue_ndvi": 0.34,
  "walls": "plots",
  "walls_note": "Compound walls round plots that stand in their own ground (see diorama.py boundary_walls): 1.8 to 2.4 m plastered wall with pillars and coping, a gate on the street face, none where buildings stand shoulder to shoulder on the lane. Solid for walk mode.",
- "tree_density": 1.0,
+ "tree_density": 0.5,
  "tree_cap": 16000
 }

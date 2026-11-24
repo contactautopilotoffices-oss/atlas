@@ -34,8 +34,10 @@
  "avenue_spacing": 11,
  "trees_note": "Noida sectors: avenue planting along the main roads, dense planting in parks, a thin scatter elsewhere (the random scatter over all open ground made a carpet: VISUAL_REALISM_AUDIT.md)",
  "greens": "evidence",
+ "tree_density": 0.5,
+ "ndvi_lo": 0.3,
  "greens_note": "Trees only where open data shows greenery: Sentinel-2 L2A NDVI (fetch_ndvi.py) read as canopy cover plus Overture parks; avenue rows only along roads whose NDVI shows an avenue; no scatter over built-up blocks. Needs DATA/ndvi.npy and ndvi_t.json. open_tree_density and roadside_tree_density apply only to the older random scatter.",
- "avenue_ndvi": 0.34,
+ "avenue_ndvi": 0.42,
  "walls": "plots",
  "walls_note": "Compound walls round plots that stand in their own ground (see diorama.py boundary_walls): 1.8 to 2.4 m plastered wall with pillars and coping, a gate on the street face, none where buildings stand shoulder to shoulder on the lane. Solid for walk mode.",
  "tree_cap": 9000

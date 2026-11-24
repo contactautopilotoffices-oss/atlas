@@ -40,7 +40,7 @@ window.ATLAS = {
     "world": {
       "href": "/jindalx-noida/world",
       "data": "/media/jindalx-noida/world/",
-      "ver": "1edb919e88",
+      "ver": "996b2d7671",
       "sky": "sky.hdr",
       "poster": "hero.jpg",
       "mapHref": "/engine/?atlas=jindalx-noida",
@@ -121,7 +121,8 @@ window.ATLAS = {
       "dataLayer": {
         "tabs": [
           "offer",
-          "compare"
+          "compare",
+          "satellite"
         ],
         "fixes": {
           "Decemeber": "December"

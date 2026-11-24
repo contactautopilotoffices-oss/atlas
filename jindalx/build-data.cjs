@@ -23,7 +23,7 @@ const origins = {'magnus-towers':[77.3847901,28.604823],'a104':[77.3231094,28.58
 // columns; every figure is read from the atlas at runtime.
 const worldData = {
   // the sheet as it was given: each row is the client's own column, shown as written (no derived figures)
-  tabs:['offer','compare'], fixes:{Decemeber:'December'}, currency:'₹', locale:'en-IN',
+  tabs:['offer','compare','satellite'], fixes:{Decemeber:'December'}, currency:'₹', locale:'en-IN',
   rows:[
     {id:'metro',label:'Nearest metro station',fact:'Nearest Metro station'},
     {id:'office',label:'Distance from JindalX existing office',fact:'Distance from Jindal X existing office'},

@@ -23,8 +23,8 @@ import { easyTabs } from "./andheri-ui.js";
 const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const Q_MAP = new URLSearchParams(location.search).get("map") !== "0";   // ?map=0 turns the map behind the plan off, as in the explorer
 const BASIS = { workbook: ["Sheet", "From the client's sheet"], measured: ["Measured", "Measured on the map"], assumed: ["Estimate", "Our estimate, not confirmed"], derived: ["Worked out", "Worked out from sheet figures"] };
-const TABS = [["overview", "Overview"], ["offer", "Offer"], ["tradeoffs", "Trade-offs"], ["compare", "Compare"], ["distances", "Distances"], ["next", "Next steps"]];
-const ICON = { overview: '<path d="M4 6h16M4 12h10M4 18h16"/>', distances: '<circle cx="6" cy="17" r="2"/><circle cx="18" cy="7" r="2"/><path d="M8 15l8-6"/>', offer: '<path d="M4 7h16M4 12h16M4 17h10"/>', tradeoffs: '<path d="M12 3v18M5 8l7-5 7 5M5 16l7 5 7-5"/>', compare: '<path d="M4 5h6v14H4zM14 5h6v14h-6z"/>', next: '<path d="M5 12l4 4 10-10"/>' };
+const TABS = [["overview", "Overview"], ["offer", "Offer"], ["tradeoffs", "Trade-offs"], ["compare", "Compare"], ["distances", "Distances"], ["satellite", "Satellite"], ["next", "Next steps"]];
+const ICON = { satellite: '<circle cx="12" cy="12" r="8"/><path d="M12 4c-3 3-3 13 0 16M12 4c3 3 3 13 0 16M4 12h16"/>', overview: '<path d="M4 6h16M4 12h10M4 18h16"/>', distances: '<circle cx="6" cy="17" r="2"/><circle cx="18" cy="7" r="2"/><path d="M8 15l8-6"/>', offer: '<path d="M4 7h16M4 12h16M4 17h10"/>', tradeoffs: '<path d="M12 3v18M5 8l7-5 7 5M5 16l7 5 7-5"/>', compare: '<path d="M4 5h6v14H4zM14 5h6v14h-6z"/>', next: '<path d="M5 12l4 4 10-10"/>' };
 
 /* every number in a piece of text; "20,08,000" is one number, "G,1,2- 18000" is 1, 2 and 18000 */
 function nums(t) {
@@ -265,8 +265,31 @@ export function createDataLayer({ A, W, options, getSel, select, onLayout, wake 
       <section><h3 class="mono">Clusters</h3>${cl}${lo}</section>${bars}
       <p class="dp-note">${esc(METHOD)}</p>${srcLine()}`;
   }
-  const AVAIL = { overview: () => options.some((x) => x.reason || x.flag) || !!MX, offer: () => true, tradeoffs: () => true, compare: () => options.length > 1, distances: () => !!MX, next: () => ((A.meta && A.meta.nextSteps) || []).length || ((A.facts && A.facts.source) || []).length };
-  const BUILD = { overview: overviewHTML, offer: offerHTML, tradeoffs: tradeHTML, compare: compareHTML, distances: distancesHTML, next: nextHTML };
+  /* The property from above, on a real satellite map: the building, the way to the nearest metro station and the station, so the
+     buildings in the 3D can be read against the real place. Needs the Mapbox public token (window.MAPBOX_TOKEN from config.js). */
+  function satHTML(o) {
+    const tok = window.MAPBOX_TOKEN, R2 = Math.PI / 180, T = 512, W0 = 360, H0 = 270, pad = 38;
+    const rt = (o.routes || []).find((r) => r.kind === "metro" && r.path && r.path.length) || null, path = rt ? rt.path : [];
+    const pts = [[o.lng, o.lat], ...path.map((q) => [q[0], q[1]])];
+    const mx = (lng, z) => (lng + 180) / 360 * T * 2 ** z, my = (lat, z) => (0.5 - Math.log(Math.tan(Math.PI / 4 + lat * R2 / 2)) / (2 * Math.PI)) * T * 2 ** z;
+    const lngs = pts.map((q) => q[0]), lats = pts.map((q) => q[1]);
+    const bx = (Math.max(...lngs) - Math.min(...lngs)) / 360 * T, by = my(Math.min(...lats), 0) - my(Math.max(...lats), 0);
+    const z = Math.max(14, Math.min(17.4, Math.log2(Math.min((W0 - 2 * pad) / Math.max(bx, 1e-9), (H0 - 2 * pad) / Math.max(by, 1e-9)))));
+    const cl = (Math.max(...lngs) + Math.min(...lngs)) / 2, cx = mx(cl, z), cy = (my(Math.min(...lats), z) + my(Math.max(...lats), z)) / 2;
+    const X = (lng) => (W0 / 2 + mx(lng, z) - cx).toFixed(1), Y = (lat) => (H0 / 2 + my(lat, z) - cy).toFixed(1);
+    const clat = Math.atan(Math.sinh(Math.PI * (1 - 2 * cy / (T * 2 ** z)))) / R2;
+    const img = tok ? `<image href="https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/static/${cl.toFixed(5)},${clat.toFixed(5)},${z.toFixed(3)}/${W0}x${H0}@2x?access_token=${encodeURIComponent(tok)}&logo=false&attribution=false" width="${W0}" height="${H0}" preserveAspectRatio="none"/><rect class="veil" width="${W0}" height="${H0}"/>` : "";
+    const route = path.length > 1 ? `<polyline class="rt" points="${path.map((q) => X(q[0]) + "," + Y(q[1])).join(" ")}"/>` : "";
+    const st = path.length ? path[path.length - 1] : null;
+    const label = (x, y, t, dy) => `<text x="${x}" y="${+y + dy}" text-anchor="middle">${esc(t)}</text>`;
+    const marks = `${route}<g class="bd"><circle cx="${X(o.lng)}" cy="${Y(o.lat)}" r="9"/>${label(X(o.lng), Y(o.lat), o.name, -15)}</g>${st ? `<g class="ms"><rect x="${+X(st[0]) - 7}" y="${+Y(st[1]) - 7}" width="14" height="14" rx="3"/><text class="mm" x="${X(st[0])}" y="${+Y(st[1]) + 3.4}" text-anchor="middle">M</text>${label(X(st[0]), Y(st[1]), rt.name + " metro", 20)}</g>` : ""}`;
+    const credit = tok ? `<text class="cr" x="${W0 - 6}" y="${H0 - 5}" text-anchor="end">\u00a9 Mapbox \u00a9 OpenStreetMap \u00a9 Maxar</text>` : "";
+    const body = tok ? `<div class="dp-plan sat"><svg viewBox="0 0 ${W0} ${H0}" role="img" aria-label="Satellite view of ${esc(o.name)} and the way to the metro">${img}${marks}${credit}</svg></div>` : '<p class="dp-empty">The satellite view needs the map service, which is not available here.</p>';
+    const walk = rt ? `<p class="dp-sub">${esc(o.name)} to ${esc(rt.name)} metro: ${rt.m < 1000 ? Math.round(rt.m / 10) * 10 + " m" : (rt.m / 1000).toFixed(1) + " km"}${rt.min ? `, about ${rt.min} minutes on foot` : ""}.</p>` : "";
+    return `<div class="dp-top">${head(o, "Satellite")}</div><h2 class="dp-name">${esc(o.name)}</h2>${walk}${body}`;
+  }
+  const AVAIL = { overview: () => options.some((x) => x.reason || x.flag) || !!MX, offer: () => true, tradeoffs: () => true, compare: () => options.length > 1, distances: () => !!MX, satellite: () => !!window.MAPBOX_TOKEN, next: () => ((A.meta && A.meta.nextSteps) || []).length || ((A.facts && A.facts.source) || []).length };
+  const BUILD = { overview: overviewHTML, offer: offerHTML, tradeoffs: tradeHTML, compare: compareHTML, distances: distancesHTML, satellite: satHTML, next: nextHTML };
   const TAB_LIST = (C.tabs || TABS.map((t) => t[0])).filter((k) => BUILD[k] && AVAIL[k]());
 
   /* ---------------------------------------------------------------- shell */
