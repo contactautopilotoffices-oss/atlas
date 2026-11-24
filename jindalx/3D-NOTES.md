@@ -26,7 +26,7 @@ Where the tables below disagree with this section, this section wins.
   `media/jindalx-noida/world/tex/TILES.json`. Procedural: no imagery is copied.
 - **Walks** are recomputed from the new positions: `routes.py` per region, merged into `world-routes.json`, then
   `node jindalx/build-data.cjs` and `node jindalx/make-bundle.cjs`.
-- **Magnus slab** needs `--slab-min 1870`: the Sector 59 station is 2.4 km away by street.
+- **Magnus slab** needs `--slab-min 1870`: the nearest station, Sector 61, is 2.1 km away by street (Sector 59 is 2.4 km).
 - **Environment** (`scripts/world/prep.py` / `diorama.py`): see the vegetation and walls entry in
   `docs/JOURNAL.md`.
 - **Environment needs a Python 3.13 venv** for bpy 5.2.3 (`uv venv --python 3.13 .w3d`).
