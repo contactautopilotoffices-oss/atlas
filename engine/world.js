@@ -787,7 +787,8 @@ async function start(A, W, intro=null) {
     $("#conn").innerHTML = `<div class="mono">From the entrance</div>` + rows.map((r, i) => { const [v, u] = fmtM(r.m); const col = r.kind === "rail" ? "var(--rail)" : (LINE[(r.lines || [])[0]] || ["#3d8fd6"])[0];
       return `<button class="row${ROUTE && ROUTE.name === r.name && ROUTE.kind === r.kind ? " on" : ""}" data-i="${i}"><span class="dot" style="background:${col}"></span><span><b>${esc(r.kind === "rail" ? `${r.name} station` : r.name)}</b><i>${esc((r.lines || []).join(" · "))}${r.kind === "rail" ? " · by road" : " · on foot"}</i></span><span class="v">${v}<small>${u}</small>${r.kind === "rail" || !r.min ? "" : `<em>${r.min} MIN</em>`}</span></button>`; }).join("");
     const r = ROUTE && ROUTE.kind !== "rail" ? ROUTE : rows.find((x) => x.kind === "metro");
-    $("#go").hidden = !r; if (r) $("#go").innerHTML = `Walk to ${esc(r.name)} <span aria-hidden="true">→</span>`;
+    const plan = W.dataLayer && W.dataLayer.plans && W.dataLayer.plans[o.id];   // a building with a floor plan: that is the main action
+    $("#go").hidden = !(r || plan); if (plan) { $("#go").dataset.plan = plan.href; $("#go").innerHTML = `Open the floor plan <span aria-hidden="true">→</span>`; } else { delete $("#go").dataset.plan; if (r) $("#go").innerHTML = `Walk to ${esc(r.name)} <span aria-hidden="true">→</span>`; }
     $("#src").textContent = (A.copy && A.copy.connect && A.copy.connect.note) || "";
     $("#spec").innerHTML = (o.facts || []).filter((f) => !f.src || W.specSourced).map((f) => `<dt>${esc(f.k)}</dt><dd>${esc(f.v)}</dd>`).join("");
     const ph = W.renders && W.renders[o.id]; $("#photo").hidden = !ph || $("#spec").hidden; if (ph) $("#photo img").src = W.data + ph + MV;
@@ -802,7 +803,7 @@ async function start(A, W, intro=null) {
     } }
   $("#more").addEventListener("click", () => { const h = !$("#spec").hidden; $("#spec").hidden = h; $("#photo").hidden = h || !(W.renders && W.renders[SEL]); $("#more").textContent = h ? "Property details" : "Hide details"; });
   $("#conn").addEventListener("click", (e) => { const b = e.target.closest("[data-i]"); if (!b) return; const o = OPTS.find((x) => x.id === SEL); leaveArea();setRoute(routeOf(o.routes[+b.dataset.i])); renderHUD(o); if (MODE === "dollhouse") frameRoute(); });
-  $("#go").addEventListener("click", () => startRouteWalk());
+  $("#go").addEventListener("click", () => { const h = $("#go").dataset.plan; if (h) location.href = h; else startRouteWalk(); });
 
   /* ---------------------------------------------------- cameras ---- */
   let MODE = "dollhouse", fly = null;
