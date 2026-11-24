@@ -1,0 +1,132 @@
+{
+ "options": [
+  {
+   "id": "te-workcations",
+   "n": 1,
+   "name": "Pursuit of a Radical Rhapsody",
+   "lat": 12.9908297,
+   "lng": 77.7204927,
+   "precision": "building",
+   "micro": "hoodi",
+   "reason": "Workcations tower \u00b7 Total Environment \u00b7 ITPL Main Road, Hoodi",
+   "address": "ITPL Main Road (Whitefield Road), Basavanna Nagar, Hoodi, Whitefield, Bengaluru 560048",
+   "locality": "Hoodi, Whitefield",
+   "routes": [
+    {
+     "kind": "metro",
+     "name": "Hoodi",
+     "lines": [
+      "L1"
+     ],
+     "lat": 12.9888029,
+     "lng": 77.711326,
+     "m": 1180,
+     "min": 15,
+     "mode": "walk",
+     "path": [
+      [
+       77.720719,
+       12.991283
+      ],
+      [
+       77.720814,
+       12.991416
+      ],
+      [
+       77.719735,
+       12.992084
+      ],
+      [
+       77.719528,
+       12.992161
+      ],
+      [
+       77.718827,
+       12.992197
+      ],
+      [
+       77.717786,
+       12.992181
+      ],
+      [
+       77.716443,
+       12.992258
+      ],
+      [
+       77.7162,
+       12.992223
+      ],
+      [
+       77.716,
+       12.992159
+      ],
+      [
+       77.715836,
+       12.992037
+      ],
+      [
+       77.714573,
+       12.990868
+      ],
+      [
+       77.713712,
+       12.990177
+      ],
+      [
+       77.712179,
+       12.989232
+      ],
+      [
+       77.711455,
+       12.988822
+      ],
+      [
+       77.711326,
+       12.988803
+      ]
+     ],
+     "dist": "OpenStreetMap streets (Overture), shortest walk",
+     "src": "https://www.openstreetmap.org"
+    }
+   ],
+   "facts": [
+    {
+     "k": "Total floors",
+     "v": "G+19"
+    },
+    {
+     "k": "Developer",
+     "v": "Total Environment"
+    },
+    {
+     "k": "Grade",
+     "v": "A"
+    },
+    {
+     "k": "Building type",
+     "v": "Commercial (managed offices by Autopilot Offices)"
+    },
+    {
+     "k": "Carpet area",
+     "v": "20,476 sq. ft."
+    },
+    {
+     "k": "Seats",
+     "v": "50 to 500"
+    },
+    {
+     "k": "Power",
+     "v": "N+1 generator backup (building)"
+    },
+    {
+     "k": "Terrace",
+     "v": "Double-height terrace garden"
+    },
+    {
+     "k": "Address",
+     "v": "ITPL Main Road, Hoodi, Whitefield"
+    }
+   ]
+  }
+ ]
+}

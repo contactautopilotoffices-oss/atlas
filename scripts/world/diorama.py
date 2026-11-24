@@ -48,7 +48,8 @@ os.makedirs(OUT, exist_ok=True)
 S = json.load(open(SCENE)); WJ = json.load(open(WORLD))
 # buildings the open maps miss, added from survey (scripts/world/refs/*.json "added")
 _RD = os.path.join(os.path.dirname(os.path.abspath(__file__)), "refs")
-for _fn in (sorted(os.listdir(_RD)) if os.path.isdir(_RD) else []):
+_REFS = [] if "--no-refs" in A else (sorted(os.listdir(_RD)) if os.path.isdir(_RD) else [])   # --no-refs: another city; the refs are Andheri's survey
+for _fn in _REFS:
     for _e in json.load(open(os.path.join(_RD, _fn))).get("added", []):
         _ap = Polygon(_e["poly"]); S["buildings"] = [b for b in S["buildings"] if b.get("opt") or not _ap.contains(Polygon(b["p"]).centroid)]   # map slivers inside it
         S["buildings"].append({"p": _e["poly"], "h": _e["h"], "c": _e.get("c", "yes"), "r": 0.5, "added": _e["name"]})
@@ -63,7 +64,7 @@ if "--opt-at" in A:   # --opt-at X,Y: the option's real footprint, when the map 
     min(S["buildings"], key=lambda b: Polygon(b["p"]).centroid.distance(Point(ox_, oy_)))["opt"] = OID
 for _key in ("privilon", "corporate-avenue"):   # options whose outline is fixed in scripts/world/refs/*.json (founder + Google satellite), in every district
     _poly, _h = None, 67.5
-    for _fn in (sorted(os.listdir(_RD)) if os.path.isdir(_RD) else []):
+    for _fn in _REFS:
         _e = json.load(open(os.path.join(_RD, _fn))).get(_key, {})
         if _e.get("poly"): _poly, _h = _e["poly"], _e.get("h", 67.5)
     if not _poly: continue
@@ -498,10 +499,10 @@ def build():
     for nm, lo_, la_, sty in LMK:
         pt = Point((lo_ - S["origin"][0]) * S["k"][0], (la_ - S["origin"][1]) * S["k"][1])
         cand = [(p_.centroid.distance(pt), id(b_)) for b_, p_ in bpolys if p_.area > 1200 and b_.get("opt") != OID and id(b_) not in lmk]
-        if cand: lmk[min(cand)[1]] = (nm, sty, None, None)
+        if cand and min(cand)[0] < 60: lmk[min(cand)[1]] = (nm, sty, None, None)   # only a building actually at the landmark (another city has none)
     # buildings surveyed in Street View (scripts/world/refs/*.json): facade and, where counted, height
     RD = os.path.join(os.path.dirname(os.path.abspath(__file__)), "refs")
-    for fn in sorted(os.listdir(RD)) if os.path.isdir(RD) else []:
+    for fn in _REFS:
         for e in json.load(open(os.path.join(RD, fn))).get("buildings", []):
             pt = Point(e["x"], e["y"]); cand = [(p_.centroid.distance(pt), id(b_)) for b_, p_ in bpolys if b_.get("opt") != OID]
             if cand and min(cand)[0] < 15: lmk[min(cand)[1]] = (e["name"], e["style"], e.get("h"), e.get("ground"))

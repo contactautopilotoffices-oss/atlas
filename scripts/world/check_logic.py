@@ -21,7 +21,7 @@ def run(ctx):
     polys = [(b, p) for b, p in built]
     # 1. surveyed buildings
     rd = os.path.join(os.path.dirname(os.path.abspath(__file__)), "refs")
-    for fn in sorted(os.listdir(rd)):
+    for fn in ([] if "--no-refs" in A else sorted(os.listdir(rd))):   # --no-refs: another city; the refs are Andheri's survey
         J = json.load(open(os.path.join(rd, fn)))
         for e in J.get("buildings", []):
             pt = Point(e["x"], e["y"])

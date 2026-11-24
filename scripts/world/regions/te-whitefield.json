@@ -1,0 +1,11 @@
+{
+ "about": "Hoodi, Whitefield, round Total Environment's Workcations tower (Pursuit of a Radical Rhapsody): the Overture and Copernicus extract scripts/world/fetch.py takes with BB=77.700,12.970,77.742,13.008.",
+ "lng0": 77.7207093, "lat0": 12.9912103, "ky": 110600.0,
+ "clip": [77.703, 12.976, 77.737, 13.004],
+ "bundle": "examples/te-whitefield.bundle.json",
+ "deck_floors": {"te-workcations": 20}, "floor_h": 3.7, "ground_h": 6.0,
+ "metro": {"L1": ["Purple Line", "elevated", "#7b3fa0", "\u0ca8\u0cae\u0ccd\u0cae \u0cae\u0cc6\u0c9f\u0ccd\u0cb0\u0ccb"]},
+ "station_line": "L1",
+ "towers": true, "max_h": 110,
+ "towers_note": "Rhapsody's round residential towers are 102 m (Overture); the rest of Hoodi Rajapalya is low and mid-rise"
+}

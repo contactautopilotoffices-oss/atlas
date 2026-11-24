@@ -138,7 +138,7 @@ M = {
     "glass": mat("TE_Glass", (0.07, 0.09, 0.1), 0.03, 0.15, **{"Transmission Weight": 0.4, "IOR": 1.52, "Specular IOR Level": 1.0}),
     "blueglass": mat("TE_BlueGlass", (0.1, 0.24, 0.46), 0.03, 0.5, **{"Specular IOR Level": 1.0}),
     "winlit": mat("TE_WindowLit", (0.9, 0.78, 0.6), 0.2, 0.0, **{"Emission Color": (1.0, 0.8, 0.55, 1), "Emission Strength": 2.2}),
-    "shopfront": mat("TE_ShopGlass", (0.5, 0.42, 0.32), 0.1, 0.0, **{"Emission Color": (1.0, 0.82, 0.58, 1), "Emission Strength": 1.1}),
+    "shopfront": mat("TE_ShopGlass", (0.16, 0.14, 0.12), 0.08, 0.2, **{"Emission Color": (1.0, 0.82, 0.58, 1), "Emission Strength": 0.35}),
     "goldslot": mat("TE_GoldSlot", (0.86, 0.66, 0.36), 0.3, 0.8, **{"Emission Color": (1.0, 0.78, 0.48, 1), "Emission Strength": 0.6}),
     "slab": mat("TE_SlabWhite", (0.86, 0.84, 0.8), 0.55),
     "planter": mat("TE_Planter", (0.78, 0.76, 0.72), 0.7),
