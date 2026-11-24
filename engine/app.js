@@ -25,6 +25,7 @@
 const A = window.ATLAS || {};
 const SLUG = A.slug || "atlas";
 const M = A.meta || {};
+if(M.branding === "autopilot-flipkart")import("/engine/andheri-ui.js").then(({applyAndheriTheme})=>applyAndheriTheme("atlas"));
 const O = Array.isArray(A.options) ? A.options : [];
 const F = A.facts || {};
 const EX = A.existing || null;

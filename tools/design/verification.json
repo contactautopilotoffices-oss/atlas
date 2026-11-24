@@ -1,0 +1,221 @@
+{
+  "date": "2026-11-23",
+  "state": "Integrated local Andheri MVP with real native rendering; cloud activation and live Higgsfield access pending",
+  "andheri_review_url": "http://localhost:8096/flipkart-andheri/world?mvp=1&map=0#privilon",
+  "designer_tools_url": "http://localhost:8096/engine/design-review.html",
+  "journey_verified_in_chrome": [
+    "Existing Andheri introduction/shortlist",
+    "Privilon property explorer with Design this workspace CTA",
+    "Explore floor plans \u2192 Inventory \u2192 Reception Waiting Area",
+    "Design this room in 3D resolves display inventory ID to source cad-c21",
+    "Same 280-workstation scene opens reception gallery: 180 sq ft, seats unspecified",
+    "Choose Premium Economy reception reference, warm-grey palette and counter suggestion",
+    "Save exact revision \u2192 queue native render \u2192 view real native result in gallery"
+  ],
+  "classification": {
+    "image_records": 198,
+    "unique_image_hashes": 196,
+    "original_sources": 4,
+    "slides": 106,
+    "offering_counts": {
+      "Premium": 156,
+      "Premium Economy": 42
+    },
+    "category_counts": {
+      "non_room_graphic": 22,
+      "non_room_brand": 26,
+      "non_room_people": 5,
+      "unknown": 25,
+      "exterior": 1,
+      "plan": 33,
+      "mixed": 2,
+      "Washroom": 5,
+      "Cafeteria": 11,
+      "moodboard": 4,
+      "Reception": 12,
+      "Training room": 3,
+      "Boardroom": 6,
+      "Meeting room": 13,
+      "Workstations": 14,
+      "Outdoor lounge": 1,
+      "Wellness room": 2,
+      "Locker room": 2,
+      "Lactation room": 2,
+      "Interview room": 1,
+      "Private cabin": 4,
+      "Focus / breakout pod": 2,
+      "Collaboration zone": 2
+    },
+    "support_detail_counts_nonexclusive": {
+      "reception": 12,
+      "waiting_area_visible_or_likely": 10,
+      "Training room": 3,
+      "Boardroom": 6,
+      "Meeting room": 13,
+      "Interview room": 1,
+      "lobby_context_inferred": 4,
+      "possible_entrance_threshold": 1
+    },
+    "room_reference_records": 80,
+    "unknown_records": 25,
+    "human_approved": 0,
+    "designer_validated": 0,
+    "ocr": "Embedded text extracted first. OCR not run. Unsupported originals and uncertain room functions remain explicit.",
+    "priority": "Reception, waiting/lobby/entrance details, meeting/interview/boardroom/training; then workstations and other rooms.",
+    "definitions": "Counts are source-image records, including alternate exports/crops; not a claim of unique completed designs.",
+    "source_inventory": [
+      {
+        "source_path": "assets/Premium/Foundever Indore Proposal Deck -03.pptx",
+        "image_records": 152,
+        "category_counts": {
+          "non_room_graphic": 16,
+          "non_room_brand": 19,
+          "non_room_people": 5,
+          "unknown": 19,
+          "exterior": 1,
+          "plan": 32,
+          "mixed": 2,
+          "Washroom": 5,
+          "Cafeteria": 11,
+          "moodboard": 3,
+          "Reception": 4,
+          "Training room": 3,
+          "Boardroom": 6,
+          "Meeting room": 7,
+          "Workstations": 7,
+          "Outdoor lounge": 1,
+          "Wellness room": 2,
+          "Locker room": 2,
+          "Lactation room": 2,
+          "Interview room": 1,
+          "Private cabin": 4
+        },
+        "reception_views": 4,
+        "unresolved_originals": 19,
+        "reception_note": "Available as reception references; offering eligibility still applies."
+      },
+      {
+        "source_path": "assets/Premium/Lexvia.ai .zip",
+        "image_records": 4,
+        "category_counts": {
+          "Reception": 4
+        },
+        "reception_views": 4,
+        "unresolved_originals": 0,
+        "reception_note": "Available as reception references; offering eligibility still applies."
+      },
+      {
+        "source_path": "assets/Premium Economy/APO_DESIGN_PPT_ALTRUIST_19.05.26.pptx",
+        "image_records": 18,
+        "category_counts": {
+          "non_room_brand": 7,
+          "non_room_graphic": 6,
+          "Workstations": 1,
+          "Reception": 4
+        },
+        "reception_views": 4,
+        "unresolved_originals": 0,
+        "reception_note": "Available as reception references; offering eligibility still applies."
+      },
+      {
+        "source_path": "assets/Premium Economy/APO_Safegold_Office_Design_280826.pptx",
+        "image_records": 24,
+        "category_counts": {
+          "Workstations": 6,
+          "moodboard": 1,
+          "plan": 1,
+          "Focus / breakout pod": 2,
+          "unknown": 6,
+          "Meeting room": 6,
+          "Collaboration zone": 2
+        },
+        "reception_views": 0,
+        "unresolved_originals": 6,
+        "reception_note": "No reception classified among readable source images. Unsupported or ambiguous originals remain unresolved."
+      }
+    ]
+  },
+  "native_results": [
+    {
+      "job_id": "6067a321-09c0-4716-8c31-2d1d5696c166",
+      "context": {
+        "property": "privilon",
+        "plan": "privilon-260-plan1",
+        "room_id": "cad-161",
+        "source_sha256": "3955e655457864955b9b554722535fa935e5ca437c04c0f2806cf9a23a37d9fc",
+        "room_type": "Meeting room"
+      },
+      "geometry_unchanged": true,
+      "mesh_count": 22,
+      "changed_finish_faces": 184,
+      "unapplied_features": [],
+      "status": "review_required",
+      "artifact": "/Users/lohit/Downloads/Atlas/.atlas-design/renders/6067a321-09c0-4716-8c31-2d1d5696c166/native.png"
+    },
+    {
+      "job_id": "689a861e-454a-414c-a1d1-9f647d8f3fae",
+      "context": {
+        "property": "privilon",
+        "plan": "privilon-280-plan1",
+        "room_id": "cad-c21",
+        "source_sha256": "da9d35a07117b3ea317e3dc29212022726e9aa76f52db267110efb5a9718043b",
+        "room_type": "Reception"
+      },
+      "geometry_unchanged": true,
+      "mesh_count": 22,
+      "changed_finish_faces": 36,
+      "unapplied_features": [
+        "reception counter"
+      ],
+      "status": "review_required",
+      "artifact": "/Users/lohit/Downloads/Atlas/.atlas-design/renders/689a861e-454a-414c-a1d1-9f647d8f3fae/native.png"
+    }
+  ],
+  "higgsfield": {
+    "provider": "higgsfield",
+    "model": "kling-image/v4.0/edit",
+    "integration": "native plus up to nine inspiration inputs, signed upload, idempotent submission, polling, private retention, separate review",
+    "live_requests": 0,
+    "credential_configured": false,
+    "paid_authorization": false,
+    "tested": "mock HTTP adapter and API authorization/review separation; not live account/model access"
+  },
+  "supabase": {
+    "existing_atlas_links": "Authenticated read HTTP 200",
+    "design_tables": "HTTP 404 at read-only check",
+    "schema_applied": false,
+    "image_uploads": 0,
+    "cloud_client_writes": 0,
+    "blocker": "Dashboard is signed out; no management token or direct SQL credential available. Prepared SQL awaits application.",
+    "prepared_sql": ".atlas-design/supabase-setup.sql"
+  },
+  "deployment": "not performed",
+  "passed": [
+    "Ingestion and unchanged originals",
+    "Source-ID-safe classification of new/changed sources",
+    "CAD source/room/area/capacity validation including support rooms",
+    "Project/client isolation, revocation, CSRF and revision conflicts",
+    "Queue exclusive claim, idempotency and ownership",
+    "Native versus AI human-review gates and safe HTML handoff",
+    "Higgsfield paid guard, upload authorization omission, input ordering, polling/cancel contract (mock)",
+    "Real Blender native meeting and reception renders",
+    "Session/result restore after refresh and server restart",
+    "Actual Andheri world \u2192 CAD \u2192 support room \u2192 gallery \u2192 native result in Chrome",
+    "JavaScript/Python syntax and git whitespace checks",
+    "Existing CMS regression rerun after integration: 79 passed, 0 failed"
+  ],
+  "registry": {
+    "path": "api/design/_scenes.json",
+    "bytes": 298258,
+    "note": "Compact approved scene/room/hash registry; heavy models remain worker assets."
+  },
+  "primary_client_flow": "2D room \u2192 visual gallery \u2192 enlarge \u2192 select \u2192 Submit \u2192 persisted cross-room preview",
+  "simple_flow_verified_in_chrome": [
+    "723 Avenue 14th floor: Reception & Waiting, 127 sq ft, seats unspecified",
+    "12 reception views across Altruist, Foundever and Lexvia.ai before offering selection",
+    "Full-size source image opened; Altruist reference selected and explicitly submitted",
+    "Second room: 4 Seater Meeting Room-05, 83 sq ft; Safegold choice submitted",
+    "Cross-room summary reloaded and retained both rooms and their source images"
+  ],
+  "primary_review_url": "http://localhost:8096/engine/cad.html?property=723-avenue&variant=723-284&drawing=1&mvp=1"
+}

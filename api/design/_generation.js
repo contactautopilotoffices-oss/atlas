@@ -1,0 +1,18 @@
+'use strict';
+const fs=require('fs'),path=require('path');const scene=require('./_scene'),{error}=require('./_service');
+const CONFIG_VERSION=1;
+function planFor(project,context){const registry=JSON.parse(fs.readFileSync(path.join(__dirname,'_scenes.json'),'utf8'));return registry.projects[project]?.properties[context.property]?.plans.find(p=>p.id===context.plan);}
+function cameraFor(project,context){
+ scene.authoritativeRoom(project,context);const p=planFor(project,context),room=p.rooms.find(r=>r.id===context.room_id);
+ if(context.room_type!=='Meeting room'||!p.native_asset||!room.outline_verified)throw error('This demo needs a meeting room with a registered native scene and verified CAD enclosure.',422);
+ const points=[...room.polygon.matchAll(/(?:M|L)\s*(-?[\d.]+)[ ,]+(-?[\d.]+)/g)].map(m=>[+m[1],+m[2]]);if(points.length<3)throw error('Room camera needs a verified CAD enclosure.',422);
+ const xs=points.map(p=>p[0]),zs=points.map(p=>p[1]),x0=Math.min(...xs),x1=Math.max(...xs),z0=Math.min(...zs),z1=Math.max(...zs);
+ return {position:[x1-Math.min(.4,(x1-x0)*.16),1.6,z1-Math.min(.48,(z1-z0)*.16)],target:[(x0+x1)/2,1.22,(z0+z1)/2],fov:80,aspect:1.44,up:[0,1,0],near:.05,far:1000,cutaway:false,ceiling:false};
+}
+function configuration(reference){const i=reference.record?.interpretations||reference.interpretations||{};return {version:CONFIG_VERSION,groups:[{id:'palette',label:'Palette',choices:[...new Set(Object.values(i.palette||{}).flat())]},{id:'materials_textures',label:'Surfaces & textures',choices:i.materials_textures||[]},{id:'lighting',label:'Lighting',choices:i.lighting||[]}].map(g=>({...g,choices:g.choices.filter(v=>typeof v==='string'&&v.length>0).slice(0,8)})).filter(g=>g.choices.length),authority:'Visible source descriptions. Exact material grades, dimensions and target-room fit require designer review.'};}
+function build(project,event,refs){const c=event.state.context,camera=cameraFor(project,c),selected=event.state.selections.filter(s=>s.preference==='like');if(selected.length!==1)throw error('Choose one meeting-room reference for this demo.',422);const r=refs.find(r=>r.id===selected[0].reference_id);if(!r)throw error('The reference is no longer eligible.',403);const config=configuration(r);if(!selected[0].features.some(f=>config.groups.find(g=>g.id==='palette')?.choices.includes(f)))throw error('Choose a source palette before generating.',422);const allowed=config.groups.flatMap(g=>g.choices);if(selected[0].features.some(f=>!allowed.includes(f)))throw error('Choose only the palette, surfaces and lighting offered by this reference.',422);
+ if(!event.state.finalized||selected[0].features.length<2||selected[0].features.length>3)throw error('Finalize two or three source-supported details before generation.',422);
+ const native=scene.renderSpecification(project,{...event,state:{...event.state,camera}},refs);
+ return {...native,engine:'meeting-visualization',configuration_version:CONFIG_VERSION,reference_library_version:scene.sha(JSON.stringify(refs.map(r=>({id:r.id,hash:r.record.image_sha256,review:r.review_status})))),provider_model:require('./_provider').MODEL,provider_resolution:'2k',demo_credit_units:1,paid_authorization:{explicit_single_request:true,authorized_by:event.owner_id,at:new Date().toISOString(),maximum_images:1,provider:'higgsfield',listed_price_usd:.063},configuration:config,assumptions:[...native.assumptions,'AI output is a visualization, not dimensional certification. Supported provider input is a native scene image plus source image and text; no PostGIS geometry or embeddings are sent.']};
+}
+module.exports={cameraFor,configuration,build,CONFIG_VERSION};

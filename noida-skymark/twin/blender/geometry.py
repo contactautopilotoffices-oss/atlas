@@ -55,7 +55,7 @@ class Shell:
                 if not lm_.empty(): self.R.put("FLOOR", f"ledprofile_{r['slug']}", lm_.build("led_profile", normals=False), props={"room": r["name"]})
             for pm, pc in parts:
                 mm = self.mb()
-                for (x0, y0, x1, y1) in ras.rects(pc): mm.quad(x0, y0, x1, y1, 0.0, pm)
+                self.surface(mm, pc, 0.0, pm)
                 if not mm.empty(): self.R.put("FLOOR", f"{tok(pm)}_{r['slug']}", mm.build(f"floor_{r['slug']}"), props={"room": r["name"], "static": 1})
         # the floor above: its underside is the soffit, seen wherever a room has an open ceiling
         m = self.mb()
@@ -115,6 +115,19 @@ class Shell:
                 if st: cuts.append((mx, my, an, u1 - u0, (st[0] + st[1]) / 2, st[1] - st[0], SILL if facade else GB, HEAD if facade else GT))
                 i = j + 1
         self.runs, self.cuts = runs, cuts; self.SILL, self.HEAD, self.GB, self.GT = SILL, HEAD, GB, GT
+
+    def surface(self, m, cells, z, mat, down=False, step=4):
+        """A flat surface over a cell mask as ONE connected mesh (shared vertices, 10 cm grid, coplanar faces dissolved
+        afterwards in _weld): one UV island per region for the lightmap, no slivers, no T-junction cracks."""
+        ras = self.ras; sub = cells[step // 2::step, step // 2::step]; d = ras.res * step
+        idx = {}; V = []; F = []
+        def vid(i, j):
+            if (i, j) not in idx: idx[(i, j)] = len(V); V.append((ras.x0 + j * d, ras.y0 + i * d, z))
+            return idx[(i, j)]
+        for (i, j) in np.argwhere(sub):
+            q = (vid(i, j), vid(i, j + 1), vid(i + 1, j + 1), vid(i + 1, j))
+            F.append(tuple(reversed(q)) if down else q)
+        if F: m.add(V, F, mat); m.weld = True
 
     def _near_edge(self, x, y, tol):
         for f in self.L["floor"]:
@@ -402,7 +415,7 @@ class Shell:
         for k, r in enumerate(ras.rooms):
             cells = ras.label == k
             if not cells.any(): continue
-            rects = ras.rects(cells); spec, kind = self.ceiling_spec(r); typ = spec.get("type", "plain"); H = spec.get("height", self.H)
+            rects = ras.rects(cells); self._cells = cells; spec, kind = self.ceiling_spec(r); typ = spec.get("type", "plain"); H = spec.get("height", self.H)
             self.ceiling_of[r["name"]] = {"type": typ, "height": H, "kind": kind}
             xs = [p for rc in rects for p in (rc[0], rc[2])]; ys = [p for rc in rects for p in (rc[1], rc[3])]; bb = (min(xs), min(ys), max(xs), max(ys))
             ls = list(lights_by_room.get(r["name"], []))
@@ -421,7 +434,7 @@ class Shell:
 
     def ceil_plain(self, r, rects, bb, spec, H, ls, rnd):
         m = self.mb()
-        for (x0, y0, x1, y1) in rects: m.quad(x0, y0, x1, y1, H, spec.get("board", "gypsum"), down=True)
+        self.surface(m, self._cells, H, spec.get("board", "gypsum"), down=True)
         self.R.put("CEILING", f"{r['slug']}_board", m.build("ceil"), props={"room": r["name"], "static": 1})
         for l in ls: self._mount(r, l["c"][0], l["c"][1], l, "plain", H, l.get("assumed"))
 
@@ -430,7 +443,7 @@ class Shell:
         panels = [l for l in ls if l.get("kind") == "panel600"]
         ox = (panels[0]["c"][0] - t / 2) % t if panels else bb[0] % t; oy = (panels[0]["c"][1] - t / 2) % t if panels else bb[1] % t
         m = self.mb()
-        for (x0, y0, x1, y1) in rects: m.quad(x0, y0, x1, y1, H, spec.get("tile", "ceiling_tile"), down=True)
+        self.surface(m, self._cells, H, spec.get("tile", "ceiling_tile"), down=True)
         self.R.put("CEILING", f"{r['slug']}_tiles", m.build("tiles"), props={"room": r["name"], "static": 1})
         # T-grid: main runners along x (14 mm deep), cross tees along y (12 mm deep): their undersides are 2 mm apart
         g = self.mb(); gm = spec.get("grid", "white_metal")
@@ -500,7 +513,7 @@ class Shell:
 
     def ceil_open(self, r, rects, bb, spec, H, ls, rnd):
         Hs = self.Hs; m = self.mb(); sof = spec.get("soffit", "soffit_paint")
-        for (x0, y0, x1, y1) in rects: m.quad(x0, y0, x1, y1, Hs - 0.003, sof, down=True)
+        self.surface(m, self._cells, Hs - 0.003, sof, down=True)
         self.R.put("CEILING", f"{r['slug']}_soffitpaint", m.build("soffit"), props={"room": r["name"], "static": 1})
         along_x = (bb[2] - bb[0]) >= (bb[3] - bb[1]); L_ = (bb[2] - bb[0]) if along_x else (bb[3] - bb[1]); W_ = (bb[3] - bb[1]) if along_x else (bb[2] - bb[0])
         cx, cy = (bb[0] + bb[2]) / 2, (bb[1] + bb[3]) / 2; rot = 0.0 if along_x else math.pi / 2; M0 = T(cx, cy, 0) @ RZ(rot)
@@ -540,7 +553,7 @@ class Shell:
 
     def ceil_cove(self, r, rects, bb, spec, H, ls, rnd):
         m = self.mb(); board = spec.get("board", "gypsum")
-        for (x0, y0, x1, y1) in rects: m.quad(x0, y0, x1, y1, H, board, down=True)
+        self.surface(m, self._cells, H, board, down=True)
         self.R.put("CEILING", f"{r['slug']}_board", m.build("ceil"), props={"room": r["name"], "static": 1})
         inset = spec.get("inset", 0.6); drop = spec.get("raft_drop", 0.2); big = [rc for rc in rects if rc[2] - rc[0] > 2 * inset + 0.4 and rc[3] - rc[1] > 2 * inset + 0.4]
         raft = None
@@ -565,7 +578,7 @@ class Shell:
 
     def ceil_baffle(self, r, rects, bb, spec, H, ls, rnd):
         Hs = self.Hs; m = self.mb()
-        for (x0, y0, x1, y1) in rects: m.quad(x0, y0, x1, y1, Hs - 0.003, spec.get("soffit", "soffit_paint"), down=True)
+        self.surface(m, self._cells, Hs - 0.003, spec.get("soffit", "soffit_paint"), down=True)
         self.R.put("CEILING", f"{r['slug']}_soffitpaint", m.build("soffit"), props={"room": r["name"], "static": 1})
         b = self.mb(); pitch = spec.get("pitch", 0.15); dep = spec.get("depth", 0.15); wd = spec.get("width", 0.03); mat = spec.get("slat", "oak")
         along_x = (bb[2] - bb[0]) >= (bb[3] - bb[1])

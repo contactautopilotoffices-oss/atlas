@@ -1,0 +1,72 @@
+{
+ "_note": "Friend's Privilon (fitted to G+15 and the CAD plate) and Fleet House, placed in scene metres (origin 72.867E 19.111N). Converted from the explorer's diorama frame, whose origin is (1324.92, -285.74): Privilon at diorama (6.333, 24.331), Fleet House at (-76.331, 22.676). 'clear' polygons are cut out of the pipeline's own context first.",
+ "hero": {
+  "id": "privilon",
+  "glb": "media/flipkart-andheri/world/d-preview/privilon-sm.glb",
+  "x": 1331.25,
+  "y": -261.41,
+  "deg": 77.12
+ },
+ "neighbours": [
+  {
+   "glb": "media/flipkart-andheri/world/d-preview/fleet-house.glb",
+   "x": 1248.59,
+   "y": -263.06,
+   "deg": -22.508
+  }
+ ],
+ "clear": [
+  [
+   [
+    1245.02,
+    -245.14
+   ],
+   [
+    1239.12,
+    -259.14
+   ],
+   [
+    1286.42,
+    -278.74
+   ],
+   [
+    1302.92,
+    -239.44
+   ],
+   [
+    1259.62,
+    -221.54
+   ],
+   [
+    1253.72,
+    -235.54
+   ],
+   [
+    1239.62,
+    -229.64
+   ],
+   [
+    1234.82,
+    -240.94
+   ]
+  ],
+  [
+   [
+    1237.22,
+    -261.14
+   ],
+   [
+    1300.02,
+    -287.24
+   ],
+   [
+    1312.12,
+    -258.04
+   ],
+   [
+    1249.32,
+    -231.94
+   ]
+  ]
+ ]
+}

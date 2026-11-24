@@ -40,3 +40,12 @@ airoli-rtp/experience/tests/
 .env.andheri.local
 Andheri Property Visits */
 andheri-video-edit/
+
+# Confidential reference originals and internal review records are served only
+# through the project-authorized design API/private Supabase bucket.
+assets/Premium/
+assets/Premium Economy/
+tools/design/
+docs/atlas-design-*.md
+.atlas-design/
+.env.design.local

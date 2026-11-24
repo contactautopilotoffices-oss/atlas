@@ -1,0 +1,944 @@
+{
+  "schema_version": 1,
+  "references": [
+    {
+      "id": "bc1023af003f81ebb5cab6db4a167e5f99057d6c777a174d721bb1552c97393a",
+      "record": {
+        "id": "bc1023af003f81ebb5cab6db4a167e5f99057d6c777a174d721bb1552c97393a",
+        "source_id": "8d0c4a78cb273943b8f290cb476e59e24719dcb19d556d34e6e6b547b2d75748",
+        "source_member": "ppt/media/image90.jpeg",
+        "image_sha256": "b3bc0855174236fbbbd659a246c3719921983ab788be47ad4150352b708c558f",
+        "occurrences": [
+          {
+            "slide_id": "8d0c4a78cb273943b8f290cb476e59e24719dcb19d556d34e6e6b547b2d75748:slide40",
+            "slide_member": "ppt/slides/slide40.xml",
+            "embedded_text": [
+              "MEETING ROOM OPTION 1 VIEW 1",
+              "40"
+            ],
+            "relationship_id": "rId2"
+          }
+        ],
+        "offering_tier": "Premium",
+        "review_status": "reviewed",
+        "allowed_projects": [
+          "flipkart-andheri"
+        ],
+        "shared_library_approved": false,
+        "facts": {
+          "project": "Foundever Indore proposal",
+          "client": "Foundever",
+          "property": null,
+          "city": "Indore",
+          "room_type": "Meeting room"
+        },
+        "interpretations": {
+          "design_language": [
+            "contemporary office"
+          ],
+          "palette": {
+            "primary": [
+              "light grey"
+            ],
+            "secondary": [
+              "charcoal"
+            ],
+            "accent": [
+              "blue"
+            ]
+          },
+          "materials_textures": [
+            "textured wall surfaces",
+            "glazed partition"
+          ],
+          "furniture": [
+            "meeting table",
+            "task chairs"
+          ],
+          "lighting": [
+            "linear suspended fixture",
+            "ceiling lights"
+          ]
+        },
+        "confidence": {
+          "room_type": "high: explicit slide title and visual review",
+          "visual_features": "medium: visible appearance, not a specification"
+        },
+        "unknowns": [
+          "property",
+          "verified_dimensions",
+          "material_grades",
+          "cost",
+          "deliverability",
+          "design_intent"
+        ],
+        "review": {
+          "reviewed_by": "assistant-visual-review",
+          "reviewed_at": "2026-11-23",
+          "evidence": [
+            "ppt/slides/slide40.xml",
+            "ppt/media/image90.jpeg"
+          ],
+          "scope": "Visible content and source label review only; designer validation pending",
+          "permission_basis": "User supplied these offering references for the Andheri gallery; project-scoped use only. No shared-library promotion."
+        },
+        "geometry_authority": false,
+        "ocr": {
+          "status": "not_run",
+          "reason": "Embedded slide text extracted first; OCR only for unreadable image text if required."
+        },
+        "title": "Meeting room \u00b7 Option 1 \u00b7 View 1",
+        "source_path": "assets/Premium/Foundever Indore Proposal Deck -03.pptx",
+        "facts_evidence": {
+          "room_type": "explicit slide title plus visual inspection",
+          "offering_tier": "source folder",
+          "client": "supplied source filename and deck title",
+          "city": "deck cover embedded text"
+        }
+      },
+      "room_type": "Meeting room",
+      "offering_tier": "Premium",
+      "allowed_projects": [
+        "flipkart-andheri"
+      ],
+      "shared_library_approved": false,
+      "review_status": "reviewed"
+    },
+    {
+      "id": "abf908376d819169796b67e3ff1252c2b925ae001fe31638050e730481c0b335",
+      "record": {
+        "id": "abf908376d819169796b67e3ff1252c2b925ae001fe31638050e730481c0b335",
+        "source_id": "8d0c4a78cb273943b8f290cb476e59e24719dcb19d556d34e6e6b547b2d75748",
+        "source_member": "ppt/media/image92.png",
+        "image_sha256": "a559c62494689448d3becc87ce376c773c6d6f8040952ad447f6047b6b7a457c",
+        "occurrences": [
+          {
+            "slide_id": "8d0c4a78cb273943b8f290cb476e59e24719dcb19d556d34e6e6b547b2d75748:slide41",
+            "slide_member": "ppt/slides/slide41.xml",
+            "embedded_text": [
+              "MEETING ROOM OPTION 1 VIEW 2",
+              "41"
+            ],
+            "relationship_id": "rId2"
+          }
+        ],
+        "offering_tier": "Premium",
+        "review_status": "reviewed",
+        "allowed_projects": [
+          "flipkart-andheri"
+        ],
+        "shared_library_approved": false,
+        "facts": {
+          "project": "Foundever Indore proposal",
+          "client": "Foundever",
+          "property": null,
+          "city": "Indore",
+          "room_type": "Meeting room"
+        },
+        "interpretations": {
+          "design_language": [
+            "contemporary office"
+          ],
+          "palette": {
+            "primary": [
+              "light grey"
+            ],
+            "secondary": [
+              "charcoal"
+            ],
+            "accent": [
+              "blue"
+            ]
+          },
+          "materials_textures": [
+            "textured wall surfaces",
+            "glazed partition"
+          ],
+          "furniture": [
+            "meeting table",
+            "task chairs"
+          ],
+          "lighting": [
+            "linear suspended fixture",
+            "ceiling lights"
+          ]
+        },
+        "confidence": {
+          "room_type": "high: explicit slide title and visual review",
+          "visual_features": "medium: visible appearance, not a specification"
+        },
+        "unknowns": [
+          "property",
+          "verified_dimensions",
+          "material_grades",
+          "cost",
+          "deliverability",
+          "design_intent"
+        ],
+        "review": {
+          "reviewed_by": "assistant-visual-review",
+          "reviewed_at": "2026-11-23",
+          "evidence": [
+            "ppt/slides/slide41.xml",
+            "ppt/media/image92.png"
+          ],
+          "scope": "Visible content and source label review only; designer validation pending",
+          "permission_basis": "User supplied these offering references for the Andheri gallery; project-scoped use only. No shared-library promotion."
+        },
+        "geometry_authority": false,
+        "ocr": {
+          "status": "not_run",
+          "reason": "Embedded slide text extracted first; OCR only for unreadable image text if required."
+        },
+        "title": "Meeting room \u00b7 Option 1 \u00b7 View 2",
+        "source_path": "assets/Premium/Foundever Indore Proposal Deck -03.pptx",
+        "facts_evidence": {
+          "room_type": "explicit slide title plus visual inspection",
+          "offering_tier": "source folder",
+          "client": "supplied source filename and deck title",
+          "city": "deck cover embedded text"
+        }
+      },
+      "room_type": "Meeting room",
+      "offering_tier": "Premium",
+      "allowed_projects": [
+        "flipkart-andheri"
+      ],
+      "shared_library_approved": false,
+      "review_status": "reviewed"
+    },
+    {
+      "id": "bbc864c15c83c2b9cd5f08f69dec2c8fc8e58185cc2d8dccbb6a5fad40375b6c",
+      "record": {
+        "id": "bbc864c15c83c2b9cd5f08f69dec2c8fc8e58185cc2d8dccbb6a5fad40375b6c",
+        "source_id": "8d0c4a78cb273943b8f290cb476e59e24719dcb19d556d34e6e6b547b2d75748",
+        "source_member": "ppt/media/image94.png",
+        "image_sha256": "41cb5375ec791758396ed98bacf22d82a113df82f86122f07b99f7ab91b528e5",
+        "occurrences": [
+          {
+            "slide_id": "8d0c4a78cb273943b8f290cb476e59e24719dcb19d556d34e6e6b547b2d75748:slide42",
+            "slide_member": "ppt/slides/slide42.xml",
+            "embedded_text": [
+              "MEETING ROOM OPTION 1 VIEW 3",
+              "42"
+            ],
+            "relationship_id": "rId5"
+          }
+        ],
+        "offering_tier": "Premium",
+        "review_status": "reviewed",
+        "allowed_projects": [
+          "flipkart-andheri"
+        ],
+        "shared_library_approved": false,
+        "facts": {
+          "project": "Foundever Indore proposal",
+          "client": "Foundever",
+          "property": null,
+          "city": "Indore",
+          "room_type": "Meeting room"
+        },
+        "interpretations": {
+          "design_language": [
+            "contemporary office"
+          ],
+          "palette": {
+            "primary": [
+              "light grey"
+            ],
+            "secondary": [
+              "charcoal"
+            ],
+            "accent": [
+              "blue"
+            ]
+          },
+          "materials_textures": [
+            "textured wall surfaces",
+            "glazed partition"
+          ],
+          "furniture": [
+            "meeting table",
+            "task chairs"
+          ],
+          "lighting": [
+            "linear suspended fixture",
+            "ceiling lights"
+          ]
+        },
+        "confidence": {
+          "room_type": "high: explicit slide title and visual review",
+          "visual_features": "medium: visible appearance, not a specification"
+        },
+        "unknowns": [
+          "property",
+          "verified_dimensions",
+          "material_grades",
+          "cost",
+          "deliverability",
+          "design_intent"
+        ],
+        "review": {
+          "reviewed_by": "assistant-visual-review",
+          "reviewed_at": "2026-11-23",
+          "evidence": [
+            "ppt/slides/slide42.xml",
+            "ppt/media/image94.png"
+          ],
+          "scope": "Visible content and source label review only; designer validation pending",
+          "permission_basis": "User supplied these offering references for the Andheri gallery; project-scoped use only. No shared-library promotion."
+        },
+        "geometry_authority": false,
+        "ocr": {
+          "status": "not_run",
+          "reason": "Embedded slide text extracted first; OCR only for unreadable image text if required."
+        },
+        "title": "Meeting room \u00b7 Option 1 \u00b7 View 3",
+        "source_path": "assets/Premium/Foundever Indore Proposal Deck -03.pptx",
+        "facts_evidence": {
+          "room_type": "explicit slide title plus visual inspection",
+          "offering_tier": "source folder",
+          "client": "supplied source filename and deck title",
+          "city": "deck cover embedded text"
+        }
+      },
+      "room_type": "Meeting room",
+      "offering_tier": "Premium",
+      "allowed_projects": [
+        "flipkart-andheri"
+      ],
+      "shared_library_approved": false,
+      "review_status": "reviewed"
+    },
+    {
+      "id": "dd4f7f1c8847efb1554b5465a8d138a186b3c4f2086e12daabd432720aa7e9c5",
+      "record": {
+        "id": "dd4f7f1c8847efb1554b5465a8d138a186b3c4f2086e12daabd432720aa7e9c5",
+        "source_id": "8d0c4a78cb273943b8f290cb476e59e24719dcb19d556d34e6e6b547b2d75748",
+        "source_member": "ppt/media/image96.png",
+        "image_sha256": "44ecd363f5a83611e49c89356247c73ac2727abaa6398ae70666cd6b61b58b19",
+        "occurrences": [
+          {
+            "slide_id": "8d0c4a78cb273943b8f290cb476e59e24719dcb19d556d34e6e6b547b2d75748:slide43",
+            "slide_member": "ppt/slides/slide43.xml",
+            "embedded_text": [
+              "MEETING ROOM OPTION 2 VIEW 1",
+              "43"
+            ],
+            "relationship_id": "rId2"
+          }
+        ],
+        "offering_tier": "Premium",
+        "review_status": "reviewed",
+        "allowed_projects": [
+          "flipkart-andheri"
+        ],
+        "shared_library_approved": false,
+        "facts": {
+          "project": "Foundever Indore proposal",
+          "client": "Foundever",
+          "property": null,
+          "city": "Indore",
+          "room_type": "Meeting room"
+        },
+        "interpretations": {
+          "design_language": [
+            "contemporary office"
+          ],
+          "palette": {
+            "primary": [
+              "light grey"
+            ],
+            "secondary": [
+              "charcoal"
+            ],
+            "accent": [
+              "white"
+            ]
+          },
+          "materials_textures": [
+            "textured wall surfaces",
+            "glazed partition"
+          ],
+          "furniture": [
+            "meeting table",
+            "task chairs"
+          ],
+          "lighting": [
+            "linear suspended fixture",
+            "ceiling lights"
+          ]
+        },
+        "confidence": {
+          "room_type": "high: explicit slide title and visual review",
+          "visual_features": "medium: visible appearance, not a specification"
+        },
+        "unknowns": [
+          "property",
+          "verified_dimensions",
+          "material_grades",
+          "cost",
+          "deliverability",
+          "design_intent"
+        ],
+        "review": {
+          "reviewed_by": "assistant-visual-review",
+          "reviewed_at": "2026-11-23",
+          "evidence": [
+            "ppt/slides/slide43.xml",
+            "ppt/media/image96.png"
+          ],
+          "scope": "Visible content and source label review only; designer validation pending",
+          "permission_basis": "User supplied these offering references for the Andheri gallery; project-scoped use only. No shared-library promotion."
+        },
+        "geometry_authority": false,
+        "ocr": {
+          "status": "not_run",
+          "reason": "Embedded slide text extracted first; OCR only for unreadable image text if required."
+        },
+        "title": "Meeting room \u00b7 Option 2 \u00b7 View 1",
+        "source_path": "assets/Premium/Foundever Indore Proposal Deck -03.pptx",
+        "facts_evidence": {
+          "room_type": "explicit slide title plus visual inspection",
+          "offering_tier": "source folder",
+          "client": "supplied source filename and deck title",
+          "city": "deck cover embedded text"
+        }
+      },
+      "room_type": "Meeting room",
+      "offering_tier": "Premium",
+      "allowed_projects": [
+        "flipkart-andheri"
+      ],
+      "shared_library_approved": false,
+      "review_status": "reviewed"
+    },
+    {
+      "id": "445a9271823f7183d1256594c25f7ebf80f12aa04209e5aaa343940bf2a2d426",
+      "record": {
+        "id": "445a9271823f7183d1256594c25f7ebf80f12aa04209e5aaa343940bf2a2d426",
+        "source_id": "8d0c4a78cb273943b8f290cb476e59e24719dcb19d556d34e6e6b547b2d75748",
+        "source_member": "ppt/media/image97.png",
+        "image_sha256": "51e6238d29f0b949dfcc8d9b5a9105d49d76c9a581e6cdda300995b0cc833ec7",
+        "occurrences": [
+          {
+            "slide_id": "8d0c4a78cb273943b8f290cb476e59e24719dcb19d556d34e6e6b547b2d75748:slide44",
+            "slide_member": "ppt/slides/slide44.xml",
+            "embedded_text": [
+              "MEETING ROOM OPTION 2 VIEW 2",
+              "44"
+            ],
+            "relationship_id": "rId2"
+          }
+        ],
+        "offering_tier": "Premium",
+        "review_status": "reviewed",
+        "allowed_projects": [
+          "flipkart-andheri"
+        ],
+        "shared_library_approved": false,
+        "facts": {
+          "project": "Foundever Indore proposal",
+          "client": "Foundever",
+          "property": null,
+          "city": "Indore",
+          "room_type": "Meeting room"
+        },
+        "interpretations": {
+          "design_language": [
+            "contemporary office"
+          ],
+          "palette": {
+            "primary": [
+              "light grey"
+            ],
+            "secondary": [
+              "charcoal"
+            ],
+            "accent": [
+              "white"
+            ]
+          },
+          "materials_textures": [
+            "textured wall surfaces",
+            "glazed partition"
+          ],
+          "furniture": [
+            "meeting table",
+            "task chairs"
+          ],
+          "lighting": [
+            "linear suspended fixture",
+            "ceiling lights"
+          ]
+        },
+        "confidence": {
+          "room_type": "high: explicit slide title and visual review",
+          "visual_features": "medium: visible appearance, not a specification"
+        },
+        "unknowns": [
+          "property",
+          "verified_dimensions",
+          "material_grades",
+          "cost",
+          "deliverability",
+          "design_intent"
+        ],
+        "review": {
+          "reviewed_by": "assistant-visual-review",
+          "reviewed_at": "2026-11-23",
+          "evidence": [
+            "ppt/slides/slide44.xml",
+            "ppt/media/image97.png"
+          ],
+          "scope": "Visible content and source label review only; designer validation pending",
+          "permission_basis": "User supplied these offering references for the Andheri gallery; project-scoped use only. No shared-library promotion."
+        },
+        "geometry_authority": false,
+        "ocr": {
+          "status": "not_run",
+          "reason": "Embedded slide text extracted first; OCR only for unreadable image text if required."
+        },
+        "title": "Meeting room \u00b7 Option 2 \u00b7 View 2",
+        "source_path": "assets/Premium/Foundever Indore Proposal Deck -03.pptx",
+        "facts_evidence": {
+          "room_type": "explicit slide title plus visual inspection",
+          "offering_tier": "source folder",
+          "client": "supplied source filename and deck title",
+          "city": "deck cover embedded text"
+        }
+      },
+      "room_type": "Meeting room",
+      "offering_tier": "Premium",
+      "allowed_projects": [
+        "flipkart-andheri"
+      ],
+      "shared_library_approved": false,
+      "review_status": "reviewed"
+    },
+    {
+      "id": "146ef019f108bc7ca4ff5970627263cd292339d3f95475629e2c13ac32aa5383",
+      "record": {
+        "id": "146ef019f108bc7ca4ff5970627263cd292339d3f95475629e2c13ac32aa5383",
+        "source_id": "8d0c4a78cb273943b8f290cb476e59e24719dcb19d556d34e6e6b547b2d75748",
+        "source_member": "ppt/media/image98.png",
+        "image_sha256": "7a2dc62de75ffbb68bc304d5301c4f87bfb874d1dab16544090a10169a791c14",
+        "occurrences": [
+          {
+            "slide_id": "8d0c4a78cb273943b8f290cb476e59e24719dcb19d556d34e6e6b547b2d75748:slide45",
+            "slide_member": "ppt/slides/slide45.xml",
+            "embedded_text": [
+              "MEETING ROOM OPTION 2 VIEW 3",
+              "45"
+            ],
+            "relationship_id": "rId2"
+          }
+        ],
+        "offering_tier": "Premium",
+        "review_status": "reviewed",
+        "allowed_projects": [
+          "flipkart-andheri"
+        ],
+        "shared_library_approved": false,
+        "facts": {
+          "project": "Foundever Indore proposal",
+          "client": "Foundever",
+          "property": null,
+          "city": "Indore",
+          "room_type": "Meeting room"
+        },
+        "interpretations": {
+          "design_language": [
+            "contemporary office"
+          ],
+          "palette": {
+            "primary": [
+              "light grey"
+            ],
+            "secondary": [
+              "charcoal"
+            ],
+            "accent": [
+              "white"
+            ]
+          },
+          "materials_textures": [
+            "textured wall surfaces",
+            "glazed partition"
+          ],
+          "furniture": [
+            "meeting table",
+            "task chairs"
+          ],
+          "lighting": [
+            "linear suspended fixture",
+            "ceiling lights"
+          ]
+        },
+        "confidence": {
+          "room_type": "high: explicit slide title and visual review",
+          "visual_features": "medium: visible appearance, not a specification"
+        },
+        "unknowns": [
+          "property",
+          "verified_dimensions",
+          "material_grades",
+          "cost",
+          "deliverability",
+          "design_intent"
+        ],
+        "review": {
+          "reviewed_by": "assistant-visual-review",
+          "reviewed_at": "2026-11-23",
+          "evidence": [
+            "ppt/slides/slide45.xml",
+            "ppt/media/image98.png"
+          ],
+          "scope": "Visible content and source label review only; designer validation pending",
+          "permission_basis": "User supplied these offering references for the Andheri gallery; project-scoped use only. No shared-library promotion."
+        },
+        "geometry_authority": false,
+        "ocr": {
+          "status": "not_run",
+          "reason": "Embedded slide text extracted first; OCR only for unreadable image text if required."
+        },
+        "title": "Meeting room \u00b7 Option 2 \u00b7 View 3",
+        "source_path": "assets/Premium/Foundever Indore Proposal Deck -03.pptx",
+        "facts_evidence": {
+          "room_type": "explicit slide title plus visual inspection",
+          "offering_tier": "source folder",
+          "client": "supplied source filename and deck title",
+          "city": "deck cover embedded text"
+        }
+      },
+      "room_type": "Meeting room",
+      "offering_tier": "Premium",
+      "allowed_projects": [
+        "flipkart-andheri"
+      ],
+      "shared_library_approved": false,
+      "review_status": "reviewed"
+    },
+    {
+      "id": "e379b01a37167a4cd9d40d030a84c7c5b67c15fcb8c78e202ad756c015b1bfae",
+      "record": {
+        "id": "e379b01a37167a4cd9d40d030a84c7c5b67c15fcb8c78e202ad756c015b1bfae",
+        "source_id": "098f5afad7ef4ab9e6e8307459c23b131e2331909f750849acd8f5d26ebc494f",
+        "source_member": "ppt/media/image5.png",
+        "image_sha256": "9ee48aaccc8225609a358c43705b11d2c6d379e497998d16472140db37c9c51b",
+        "occurrences": [
+          {
+            "slide_id": "098f5afad7ef4ab9e6e8307459c23b131e2331909f750849acd8f5d26ebc494f:slide7",
+            "slide_member": "ppt/slides/slide7.xml",
+            "embedded_text": [
+              "SAFEGOLD",
+              "\u00d7 AUTOPILOT OFFICES",
+              "MEETING ROOMS",
+              "02 \u00b7 MEETING ROOM",
+              "Lounge meeting room, gold acoustic panel",
+              "AUTOPILOT OFFICES \u00b7 07 / 17"
+            ],
+            "relationship_id": "rId3"
+          }
+        ],
+        "offering_tier": "Premium Economy",
+        "review_status": "reviewed",
+        "allowed_projects": [
+          "flipkart-andheri"
+        ],
+        "shared_library_approved": false,
+        "facts": {
+          "project": "Safegold office design proposal",
+          "client": "Safegold",
+          "property": null,
+          "city": null,
+          "room_type": "Meeting room"
+        },
+        "interpretations": {
+          "design_language": [
+            "contemporary office"
+          ],
+          "palette": {
+            "primary": [
+              "warm beige"
+            ],
+            "secondary": [
+              "dark brown"
+            ],
+            "accent": [
+              "gold"
+            ]
+          },
+          "materials_textures": [
+            "wood-look joinery",
+            "acoustic-look wall panels"
+          ],
+          "furniture": [
+            "lounge seating",
+            "small round table"
+          ],
+          "lighting": [
+            "ceiling panel light"
+          ]
+        },
+        "confidence": {
+          "room_type": "high: explicit slide title and visual review",
+          "visual_features": "medium: visible appearance, not a specification"
+        },
+        "unknowns": [
+          "property",
+          "verified_dimensions",
+          "material_grades",
+          "cost",
+          "deliverability",
+          "design_intent",
+          "city"
+        ],
+        "review": {
+          "reviewed_by": "assistant-visual-review",
+          "reviewed_at": "2026-11-23",
+          "evidence": [
+            "ppt/slides/slide7.xml",
+            "ppt/media/image5.png"
+          ],
+          "scope": "Visible content and source label review only; designer validation pending",
+          "permission_basis": "User supplied these offering references for the Andheri gallery; project-scoped use only. No shared-library promotion."
+        },
+        "geometry_authority": false,
+        "ocr": {
+          "status": "not_run",
+          "reason": "Embedded slide text extracted first; OCR only for unreadable image text if required."
+        },
+        "title": "Meeting lounge \u00b7 Gold accent",
+        "source_path": "assets/Premium Economy/APO_Safegold_Office_Design_280826.pptx",
+        "facts_evidence": {
+          "room_type": "explicit slide title plus visual inspection",
+          "offering_tier": "source folder",
+          "client": "supplied source filename and deck title",
+          "city": "unknown"
+        }
+      },
+      "room_type": "Meeting room",
+      "offering_tier": "Premium Economy",
+      "allowed_projects": [
+        "flipkart-andheri"
+      ],
+      "shared_library_approved": false,
+      "review_status": "reviewed"
+    },
+    {
+      "id": "0e89c845dc442f88a820be9ec3fd8d5a39dead7e62e2c38252fc0bc1e26c9860",
+      "record": {
+        "id": "0e89c845dc442f88a820be9ec3fd8d5a39dead7e62e2c38252fc0bc1e26c9860",
+        "source_id": "098f5afad7ef4ab9e6e8307459c23b131e2331909f750849acd8f5d26ebc494f",
+        "source_member": "ppt/media/image7.png",
+        "image_sha256": "7b6b5728987be1fcbccb07559f983a1f8368b7dd8a9acb771e58c727b5b9b70d",
+        "occurrences": [
+          {
+            "slide_id": "098f5afad7ef4ab9e6e8307459c23b131e2331909f750849acd8f5d26ebc494f:slide8",
+            "slide_member": "ppt/slides/slide8.xml",
+            "embedded_text": [
+              "SAFEGOLD",
+              "\u00d7 AUTOPILOT OFFICES",
+              "MEETING ROOMS",
+              "02 \u00b7 MEETING ROOM",
+              "Light green acoustic wall, daylight setting",
+              "AUTOPILOT OFFICES \u00b7 08 / 17"
+            ],
+            "relationship_id": "rId3"
+          }
+        ],
+        "offering_tier": "Premium Economy",
+        "review_status": "reviewed",
+        "allowed_projects": [
+          "flipkart-andheri"
+        ],
+        "shared_library_approved": false,
+        "facts": {
+          "project": "Safegold office design proposal",
+          "client": "Safegold",
+          "property": null,
+          "city": null,
+          "room_type": "Meeting room"
+        },
+        "interpretations": {
+          "design_language": [
+            "contemporary office"
+          ],
+          "palette": {
+            "primary": [
+              "warm beige"
+            ],
+            "secondary": [
+              "dark brown"
+            ],
+            "accent": [
+              "light green"
+            ]
+          },
+          "materials_textures": [
+            "wood-look joinery",
+            "acoustic-look wall panels"
+          ],
+          "furniture": [
+            "meeting table",
+            "task chairs"
+          ],
+          "lighting": [
+            "ceiling panel light"
+          ]
+        },
+        "confidence": {
+          "room_type": "high: explicit slide title and visual review",
+          "visual_features": "medium: visible appearance, not a specification"
+        },
+        "unknowns": [
+          "property",
+          "verified_dimensions",
+          "material_grades",
+          "cost",
+          "deliverability",
+          "design_intent",
+          "city"
+        ],
+        "review": {
+          "reviewed_by": "assistant-visual-review",
+          "reviewed_at": "2026-11-23",
+          "evidence": [
+            "ppt/slides/slide8.xml",
+            "ppt/media/image7.png"
+          ],
+          "scope": "Visible content and source label review only; designer validation pending",
+          "permission_basis": "User supplied these offering references for the Andheri gallery; project-scoped use only. No shared-library promotion."
+        },
+        "geometry_authority": false,
+        "ocr": {
+          "status": "not_run",
+          "reason": "Embedded slide text extracted first; OCR only for unreadable image text if required."
+        },
+        "title": "Meeting room \u00b7 Green accent \u00b7 Daylight",
+        "source_path": "assets/Premium Economy/APO_Safegold_Office_Design_280826.pptx",
+        "facts_evidence": {
+          "room_type": "explicit slide title plus visual inspection",
+          "offering_tier": "source folder",
+          "client": "supplied source filename and deck title",
+          "city": "unknown"
+        }
+      },
+      "room_type": "Meeting room",
+      "offering_tier": "Premium Economy",
+      "allowed_projects": [
+        "flipkart-andheri"
+      ],
+      "shared_library_approved": false,
+      "review_status": "reviewed"
+    },
+    {
+      "id": "1c2320c063006930ed1f4bf492fd9606cac461ea0f2f4a746853e458a7b1252b",
+      "record": {
+        "id": "1c2320c063006930ed1f4bf492fd9606cac461ea0f2f4a746853e458a7b1252b",
+        "source_id": "098f5afad7ef4ab9e6e8307459c23b131e2331909f750849acd8f5d26ebc494f",
+        "source_member": "ppt/media/image9.png",
+        "image_sha256": "e3d5fe413724db3fda1f70cfbf3d38e515b3ce161ea07f01dc1c875b37e2d16d",
+        "occurrences": [
+          {
+            "slide_id": "098f5afad7ef4ab9e6e8307459c23b131e2331909f750849acd8f5d26ebc494f:slide9",
+            "slide_member": "ppt/slides/slide9.xml",
+            "embedded_text": [
+              "SAFEGOLD",
+              "\u00d7 AUTOPILOT OFFICES",
+              "MEETING ROOMS",
+              "02 \u00b7 MEETING ROOM",
+              "Same room, evening ambience",
+              "AUTOPILOT OFFICES \u00b7 09 / 17"
+            ],
+            "relationship_id": "rId3"
+          }
+        ],
+        "offering_tier": "Premium Economy",
+        "review_status": "reviewed",
+        "allowed_projects": [
+          "flipkart-andheri"
+        ],
+        "shared_library_approved": false,
+        "facts": {
+          "project": "Safegold office design proposal",
+          "client": "Safegold",
+          "property": null,
+          "city": null,
+          "room_type": "Meeting room"
+        },
+        "interpretations": {
+          "design_language": [
+            "contemporary office"
+          ],
+          "palette": {
+            "primary": [
+              "warm beige"
+            ],
+            "secondary": [
+              "dark brown"
+            ],
+            "accent": [
+              "light green"
+            ]
+          },
+          "materials_textures": [
+            "wood-look joinery",
+            "acoustic-look wall panels"
+          ],
+          "furniture": [
+            "meeting table",
+            "task chairs"
+          ],
+          "lighting": [
+            "ceiling panel light"
+          ]
+        },
+        "confidence": {
+          "room_type": "high: explicit slide title and visual review",
+          "visual_features": "medium: visible appearance, not a specification"
+        },
+        "unknowns": [
+          "property",
+          "verified_dimensions",
+          "material_grades",
+          "cost",
+          "deliverability",
+          "design_intent",
+          "city"
+        ],
+        "review": {
+          "reviewed_by": "assistant-visual-review",
+          "reviewed_at": "2026-11-23",
+          "evidence": [
+            "ppt/slides/slide9.xml",
+            "ppt/media/image9.png"
+          ],
+          "scope": "Visible content and source label review only; designer validation pending",
+          "permission_basis": "User supplied these offering references for the Andheri gallery; project-scoped use only. No shared-library promotion."
+        },
+        "geometry_authority": false,
+        "ocr": {
+          "status": "not_run",
+          "reason": "Embedded slide text extracted first; OCR only for unreadable image text if required."
+        },
+        "title": "Meeting room \u00b7 Green accent \u00b7 Evening",
+        "source_path": "assets/Premium Economy/APO_Safegold_Office_Design_280826.pptx",
+        "facts_evidence": {
+          "room_type": "explicit slide title plus visual inspection",
+          "offering_tier": "source folder",
+          "client": "supplied source filename and deck title",
+          "city": "unknown"
+        }
+      },
+      "room_type": "Meeting room",
+      "offering_tier": "Premium Economy",
+      "allowed_projects": [
+        "flipkart-andheri"
+      ],
+      "shared_library_approved": false,
+      "review_status": "reviewed"
+    }
+  ]
+}

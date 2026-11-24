@@ -357,6 +357,7 @@ class Furnisher:
                 self.R.put("LIGHT", "downlight", self.c.proto("downlight", mk), T(x, y, z), props={"assumed": int(l["assumed"]), "lamp": "spot", "lamp_z": -0.01, "room": l["room"]})
         for (r, spec, (cx, cy), zb, along_x) in self.c.extra_pendants:     # one slim linear pendant over a cove raft (meeting / board rooms)
             ln = spec.get("pendant_length", 1.8); drop = 0.6; z = zb - drop
+            if self.c.shell.ceiling_of.get(r["name"], {}).get("type") in ("open", "baffle"): drop = round(self.c.Hs - 0.003 - z, 3)     # hung from the soffit
             me = self.c.proto(("bank", "linear", ln, drop), lambda: self._bank("linear", ln, drop))
             self.R.put("LIGHT", "linearpendant", me, T(cx, cy, z) @ RZ(0 if along_x else math.pi / 2), props={"assumed": 1, "lamp": "none", "room": r["name"]})
 

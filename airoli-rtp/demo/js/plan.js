@@ -1,3 +1,4 @@
+import {roomSections} from '/engine/room-labels.js';
 // The 2D plan: the floor's own CAD linework, its processes (6th) or rooms (4th) colour-coded with a gap between
 // each, and the numbers for whatever is clicked. Smooth pan and zoom (every input moves a goal; the view eases to it).
 const NS = 'http://www.w3.org/2000/svg';
@@ -8,7 +9,7 @@ const esc = value => String(value ?? '—').replace(/[&<>"']/g, c => ({'&':'&amp
 const ftin = (m) => { let i = Math.round(m / .0254), f = Math.floor(i / 12); i -= f * 12; return `${f}'${i}"`; };
 const size = (d) => d ? `${ftin(d[0])} × ${ftin(d[1])}` : '';
 const cache = {};
-export const loadPlan = (id) => cache[id] || (cache[id] = fetch(`data/plan_${id}.json`).then(r => r.json()));
+export const loadPlan = (id, url = `data/plan_${id}.json`) => cache[id] || (cache[id] = fetch(url).then(r => { if (!r.ok) throw new Error('Drawing could not load'); return r.json(); }));
 
 let P = null, view = null, goal = null, raf = 0, sel = null;
 const wrap = $('#svgwrap'), svg = $('#svg');
@@ -44,50 +45,57 @@ function zoomAt(f, px, py) {          // f < 1 zooms in, around the screen point
 const INV = { meeting: ['Meeting rooms', '#8e6fd1'], service: ['Server, electrical & storage', '#e07b39'], wc: ['Washrooms', '#4aa3c8'], cafe: ['Pantry', '#d9a52b'],
   lounge: ['Breakout & landscape', '#5aa64a'], reception: ['Reception & waiting', '#2fb4d6'], core: ['Lobby & core', '#8c8680'] };
 let mode = 'req';
-export async function openPlan(id, onBack) {
+export async function openPlan(id, onBack, options = {}) {
+  const previous = options.preserveView && goal ? { ...goal } : null;
   P = await loadPlan(id); $('#plan').classList.add('on'); sel = null; mode = 'req';
-  $('#ptitle').textContent = P.title; $('#psub').hidden = !P.brief || !!P.source_plan;
-  $('.list-columns span:last-child').hidden = !!P.source_plan;
-  $('.inspector-heading p').textContent = P.source_plan ? 'Select a space to see its seats.' : 'Select a process or supporting space to see its seats, dimensions and area.';
-  $('#psub').textContent = P.brief && !P.source_plan ? `${fmt(P.brief.totals.required)} required · ${fmt(P.brief.totals.achieved)} achieved workstations` : '';
+  $('#ptitle').textContent = P.title; $('#psub').hidden = !P.brief || !!(P.source_plan || P.minimal_details);
+  $('.list-columns span:last-child').hidden = document.body.dataset.andheriUi!=='cad' && !!(P.source_plan || P.minimal_details);
+  $('.inspector-heading p').textContent = (P.source_plan || P.minimal_details) ? 'Select a space to see its seats.' : 'Select a process or supporting space to see its seats, dimensions and area.';
+  $('#psub').textContent = P.brief && !P.source_plan && !P.minimal_details ? `${fmt(P.brief.totals.required)} required · ${fmt(P.brief.totals.achieved)} achieved workstations` : '';
   svg.innerHTML = '';
   const root = el('g', {}, svg);
   el('path', { d: P.plate, fill: '#ffffff', stroke: 'none' }, root);
   if (P.source_plan) el('image', { href: P.source_plan.url, x: 0, y: 0, width: P.source_plan.width, height: P.source_plan.height, 'pointer-events': 'none' }, root);
   const pas = el('g', { 'pointer-events': 'none' }, root);
   for (const o of P.others) if (o.kind === 'passage') el('path', { d: o.d, fill: '#ece8e1', stroke: 'none' }, pas);
+  const andheri=document.body.dataset.andheriUi==='cad';
   P.items = {}; P.inv = [];
   const ig = el('g', { id: 'invg' }, root);
   P.others.forEach((o, i) => { if (o.kind === 'passage' || !INV[o.kind]) return;
-    const it = { ...o, id: 'inv-' + i, kind: 'inv', type: o.kind, group: INV[o.kind][0], color: INV[o.kind][1] }; P.inv.push(it);
+    const it = { ...o, id: 'inv-' + i, kind: 'inv', type: o.kind, group: o.inventory_group || INV[o.kind][0], color: INV[o.kind][1] }; P.inv.push(it);
     const g = el('g', { class: 'z', 'data-id': it.id }, ig);
-    if (o.dims_m) el('path', { d: o.d, fill: it.color, 'fill-opacity': .16, stroke: 'none' }, g);
+    if (o.dims_m || o.display_outline) el('path', { d: o.d || o.display_outline, fill: it.color, 'fill-opacity': .16, stroke: 'none' }, g);
     else el('circle', { cx: o.label[0], cy: -o.label[1], r: P.marker_radius || .55, fill: it.color, 'fill-opacity': .16, stroke: it.color, 'stroke-width': 1.2, 'vector-effect': 'non-scaling-stroke' }, g);   // outline not closed in the drawing: a marker, not a guessed shape
-    g.addEventListener('click', (e) => { if (P.moved || mode !== 'inv') return; e.stopPropagation(); select(it.id, false); });
+    g.addEventListener('click', (e) => { if(P.moved)return;if(mode!=='inv'){if(!andheri)return;setMode('inv');} e.stopPropagation(); select(it.id, false); });
     P.items[it.id] = { z: it, g }; });
   const zg = el('g', { id: 'zoneg' }, root);
   for (const z of P.zones) {
     const g = el('g', { class: 'z', 'data-id': z.id }, zg);
-    const shape = z.d ? {d:z.d,'stroke-linejoin':'round'} : {cx:z.label[0],cy:-z.label[1],r:P.marker_radius || .6};
-    el(z.d ? 'path' : 'circle', { class: 'f', ...shape, fill: z.color, 'fill-opacity': .42, stroke: z.color, 'stroke-width': 1.6, 'vector-effect': 'non-scaling-stroke' }, g);
-    g.addEventListener('click', (e) => { if (P.moved || mode !== 'req') return; e.stopPropagation(); select(z.id, false); });
+    const outline=z.d || z.display_outline;
+    const shape = outline ? {d:outline,'stroke-linejoin':'round'} : {cx:z.label[0],cy:-z.label[1],r:P.marker_radius || .6};
+    el(outline ? 'path' : 'circle', { class: 'f', ...shape, fill: z.color, 'fill-opacity': .42, stroke: z.color, 'stroke-width': 1.6, 'vector-effect': 'non-scaling-stroke' }, g);
+    g.addEventListener('click', (e) => { if(P.moved)return;if(mode!=='req'){if(!andheri)return;setMode('req');} e.stopPropagation(); select(z.id, false); });
     g.addEventListener('mouseenter', () => { if (!sel && mode === 'req') g.querySelector('.f').setAttribute('fill-opacity', .6); });
-    g.addEventListener('mouseleave', () => { if (!sel && mode === 'req') g.querySelector('.f').setAttribute('fill-opacity', .42); });
+    g.addEventListener('mouseleave', () => { if (!sel && mode === 'req') paint(); });
     P.items[z.id] = { z, g };
   }
   const C = P.cad, cg = el('g', { 'pointer-events': 'none', fill: 'none', 'vector-effect': 'non-scaling-stroke', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }, root);
   const L = (d, c, w) => d && el('path', { d, stroke: c, 'stroke-width': w, 'vector-effect': 'non-scaling-stroke' }, cg);
-  L(C.hatch, '#d8d4cc', .4); L(C.furn, '#7d7a75', .45); L(C.doors, '#8a8780', .6); L(C.glass, '#2f86b4', .9); L(C.walls, '#1d1c1a', 1.25);
+  if (document.body.dataset.andheriUi === 'cad') {
+    cg.id='cad-linework';
+    L(C.hatch, '#b4bec8', .55); L(C.furn, '#78899d', .8); L(C.doors, '#b56522', 1.25); L(C.glass, '#0086a2', 1.6); L(C.walls, '#243c54', 2.0);
+  } else { L(C.hatch, '#d8d4cc', .4); L(C.furn, '#7d7a75', .45); L(C.doors, '#8a8780', .6); L(C.glass, '#2f86b4', .9); L(C.walls, '#1d1c1a', 1.25); }
   // labels: the name and the overall width x depth, sized to fit each space
   const lz = el('g', { id: 'labz' }, root), li = el('g', { id: 'labi' }, root);
+  const andheriNames=document.body.dataset.andheriUi==='cad'?new Map(roomSections(P.zones).flatMap(section=>section.rooms.map(({zone,label})=>[zone.id,label]))):new Map();
   const label = (z, g, parent, fs, w1 = 800) => {
-    const t = el('text', { x: z.label[0], y: -z.label[1], 'text-anchor': 'middle', 'font-size': fs, 'font-weight': w1, fill: '#1d1c1a', 'stroke-width': fs * .28 }, parent); t.textContent = z.name;
+    const t = el('text', { x: z.label[0], y: -z.label[1], 'text-anchor': 'middle', 'font-size': fs, 'font-weight': w1, fill: '#1d1c1a', 'stroke-width': fs * .28 }, parent); t.textContent = andheriNames.get(z.id)||z.name;
     const t2 = el('text', { x: z.label[0], y: -z.label[1] + fs * 1.05, 'text-anchor': 'middle', 'font-size': fs * .78, 'font-weight': 600, fill: '#3f3c38', 'stroke-width': fs * .24 }, parent); t2.textContent = z.dims_m ? size(z.dims_m) : (z.cad_sqft ? `${z.cad_sqft} sq ft` : '');
     fitLabel(g, t, t2, fs); };
   for (const z of P.source_plan ? [] : P.zones) label(z, P.items[z.id].g, lz, Math.max(.55, Math.min(1.5, Math.sqrt(z.area_m2) / 7.5)));
   for (const it of P.source_plan ? [] : P.inv) if (it.label) label(it, P.items[it.id].g, li, Math.max(.3, Math.min(.8, Math.sqrt(it.area_sqft / 10.76) / 6)), 700);
   setMode('req');
-  requestAnimationFrame(() => { P.s0 = fitBox(P.bounds).s; view = fitBox(P.bounds); goal = { ...view }; view.s *= 1.15; apply(); kick(); });
+  requestAnimationFrame(() => { P.s0 = fitBox(P.bounds).s; view = previous || fitBox(P.bounds); goal = { ...view }; if (!previous) view.s *= 1.15; apply(); kick(); });
   $('#back').onclick = () => { closePlan(); onBack && onBack(); };
 }
 // shrink a space's two label lines until they sit inside it (long names in small rooms)
@@ -107,26 +115,36 @@ function setMode(m) {
   const req = m === 'req';
   svg.querySelector('#zoneg').style.pointerEvents = req ? '' : 'none'; svg.querySelector('#invg').style.pointerEvents = req ? 'none' : '';
   svg.querySelector('#labz').style.display = req ? '' : 'none'; svg.querySelector('#labi').style.display = req ? 'none' : '';
+  if(document.body.dataset.andheriUi==='cad'){svg.querySelector('#zoneg').style.pointerEvents='auto';svg.querySelector('#invg').style.pointerEvents='auto';}
   paint(); sidebar();
 }
 function paint() {
   const req = mode === 'req';
   for (const [k, { z, g }] of Object.entries(P.items)) {
     const p = g.querySelector('path,circle'), mine = (z.kind === 'inv') !== req, on = !sel || k === sel;
+    if(document.body.dataset.andheriUi==='cad' && p.tagName==='path'){
+      p.setAttribute('fill-opacity',k===sel?.94:sel?.52:.78);
+      p.setAttribute('stroke',z.color);p.setAttribute('stroke-width',k===sel?3:1.5);
+      p.setAttribute('vector-effect','non-scaling-stroke');g.style.opacity=1;continue;
+    }
     if (!mine) { p.setAttribute('fill-opacity', z.kind === 'inv' ? .16 : .08); g.style.opacity = 1; if (z.kind !== 'inv') p.setAttribute('stroke-width', .6); continue; }
     p.setAttribute('fill-opacity', !sel ? (z.kind === 'inv' ? .55 : .42) : k === sel ? .8 : .1); g.style.opacity = on ? 1 : .55;
     if (z.kind !== 'inv') p.setAttribute('stroke-width', k === sel ? 3.2 : 1.6);
   }
 }
 function sidebar() {
-  const row = (z) => {
+  const row = (z,label=z.name) => {
     const seats = z.seats_applicable === false ? 'n/a' : z.seats ?? '–';
     const area = z.kind === 'inv' && !z.dims_m ? (z.cad_sqft ? fmt(z.cad_sqft) + ' sq ft' : 'Boundary review') : (z.area_sqft == null ? 'Boundary review' : fmt(z.area_sqft) + ' sq ft');
-    return `<button class="row" data-id="${z.id}"><i style="background:${z.color}"></i><span>${esc(z.name)}</span><em>${seats}</em>${P.source_plan ? '' : `<small>${area}</small>`}</button>`;
+    return `<button class="row" data-id="${z.id}"><i style="background:${z.color}"></i><span title="${esc(z.name)}">${esc(label)}${(z.tags||[]).includes('Video conferencing')?' <span class="vc" style="font-weight:500;opacity:.75">· video conferencing</span>':''}</span><em>${seats}</em>${document.body.dataset.andheriUi==='cad' ? '<small>'+(z.area_sqft!=null?fmt(z.area_sqft)+' sq ft':z.cad_sqft?fmt(z.cad_sqft)+' sq ft':'—')+'</small>' : P.source_plan || P.minimal_details ? '' : `<small>${area}</small>`}</button>`;
   };
-  if (mode === 'req') $('#list').innerHTML = P.zones.slice().sort((a, b) => b.seats - a.seats).map(row).join('');
-  else { const by = {}; for (const k of Object.keys(INV)) by[INV[k][0]] = []; for (const it of P.inv) by[it.group].push(it);
-    $('#list').innerHTML = Object.entries(by).filter(([, l]) => l.length).map(([g, l]) => `<div class="grp k">${g} · ${l.length}</div>` + l.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })).map(row).join('')).join('') || '<div class="grp">No supporting spaces in this drawing.</div>'; }
+  if(mode==='req' && document.body.dataset.andheriUi==='cad'){
+    $('#list').innerHTML=roomSections(P.zones).map(({title,rooms})=>
+      '<div class="room-key"><i style="background:'+esc(rooms[0].zone.color)+'"></i>'+esc(title)+'</div>'+rooms.map(({zone,label})=>row(zone,label)).join('')
+    ).join('');
+  }else if (mode === 'req') $('#list').innerHTML = P.zones.slice().sort((a, b) => b.seats - a.seats).map(z=>row(z)).join('');
+  else { const by = {}; for (const k of Object.keys(INV)) by[INV[k][0]] = []; for (const it of P.inv) (by[it.group] ||= []).push(it);
+    $('#list').innerHTML = Object.entries(by).filter(([, l]) => l.length).map(([g, l]) => `<div class="grp k">${g} · ${l.length}</div>` + l.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true })).map(z=>row(z)).join('')).join('') || '<div class="grp">No supporting spaces in this drawing.</div>'; }
   $('#list').querySelectorAll('.row').forEach(b => b.onclick = () => select(b.dataset.id, true));
   $('#foot').textContent = (P.source_plan ? 'Proposed layout' : P.source_note) || (mode === 'req' ? 'Seats: one chair block per seat in the drawing. Sizes: overall width × depth of the zone outline.' : 'Every supporting space in the drawing, with its overall width × depth and area.');
 }
@@ -147,10 +165,14 @@ function select(id, zoom) {
   const countNote = z.brief_capacity_count != null && z.seats !== z.brief_capacity_count ? `${z.seats} chairs counted in CAD; the brief describes ${z.brief_capacity}.` : '';
   const noteText = [z.note, countNote].filter(Boolean).join(' ');
   const note = noteText ? `<div class="note">${esc(noteText)}</div>` : z.kind === 'process' && z.sheet_achieved != null && z.seats !== z.sheet_achieved ? `<div class="note">The drawing shows ${z.seats} seats; the brief says ${z.sheet_achieved} achieved.</div>` : '';
-  const title = `<h3><i style="background:${z.color}"></i>${esc(z.name)}</h3>`;
-  s.innerHTML = P.source_plan ? title + (z.seats != null && z.seats_applicable !== false ? `<div class="big"><div><b>${z.seats}</b><span>Seats</span></div></div>` : '') : `<h3><i style="background:${z.color}"></i>${esc(z.name)}</h3>
+  /* Nov 2026: one naming style. The side panel shows the same "Meeting room 1" label as the plan, not the CAD name ("6 Seater Meeting Room-01"). */
+  const shown = document.body.dataset.andheriUi==='cad' ? (roomSections(P.zones).flatMap(sec=>sec.rooms).find(r=>r.zone.id===z.id)||{}).label||z.name : z.name;
+  if ((z.tags||[]).includes('Video conferencing')) rows.push(['Video conferencing', 'Yes']);   // tag only; geometry untouched
+  const title = `<h3><i style="background:${z.color}"></i>${esc(shown)}</h3>`;
+  s.innerHTML = P.source_plan || P.minimal_details ? title + (z.seats != null && z.seats_applicable !== false ? `<div class="big"><div><b>${z.seats}</b><span>Seats</span></div></div>` : '') : `${title}
     <div class="big"><div><b>${z.seats_applicable === false ? 'n/a' : z.seats ?? '–'}</b><span>${z.seat_basis === 'Seats counted (CAD)' ? 'Seats counted' : z.seat_basis ? 'Seats marked' : 'Seats'}</span></div><div><b>${z.area_sqft == null ? 'Review' : fmt(z.area_sqft)}</b><span>Sq ft</span></div></div>
     <table>${rows.map(([a, b]) => `<tr><td>${esc(a)}</td><td>${esc(b)}</td></tr>`).join('')}</table>${note}`;
+  if(document.body.dataset.andheriUi==='cad')document.dispatchEvent(new CustomEvent('atlas-room-selected',{detail:z}));
   const r = $('#list').querySelector(`[data-id="${id}"]`); if (r) r.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   if (zoom) { const bb = P.items[id].g.getBBox(); const f = fitBox([bb.x, -(bb.y + bb.height), bb.x + bb.width, -bb.y], 2.2); f.s = clampS(Math.max(f.s, P.s0 / 6)); Object.assign(goal, f); kick(); }
 }
@@ -176,7 +198,7 @@ $('#zin').onclick = () => zoomAt(.6, wrap.clientWidth / 2, wrap.clientHeight / 2
 $('#zout').onclick = () => zoomAt(1.6, wrap.clientWidth / 2, wrap.clientHeight / 2);
 $('#zfit').onclick = () => { Object.assign(goal, fitBox(P.bounds)); kick(); };
 addEventListener('keydown', (e) => {
-  if (!$('#plan').classList.contains('on') || !goal) return; const st = 60 * goal.s;
+  if (!$('#plan').classList.contains('on') || !goal || /^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement?.tagName) || e.target?.isContentEditable) return; const st = 60 * goal.s;
   const m = { ArrowLeft: [-st, 0], ArrowRight: [st, 0], ArrowUp: [0, -st], ArrowDown: [0, st] }[e.code];
   if (m) { goal.cx += m[0]; goal.cy += m[1]; kick(); e.preventDefault(); }
   if (e.key === '+' || e.key === '=') zoomAt(.7, wrap.clientWidth / 2, wrap.clientHeight / 2);
@@ -184,3 +206,8 @@ addEventListener('keydown', (e) => {
   if (e.code === 'Escape') { if (sel) select(sel, false); else $('#back').click(); }
 });
 addEventListener('resize', () => { if (P && view && $('#plan').classList.contains('on')) { P.s0 = fitBox(P.bounds).s; apply(); } });
+
+// Optional presentation hooks used by the Andheri CAD comparison and guided review.
+export function focusPlanBounds(bounds, padding = 1.2) { if (!P || !goal) return; Object.assign(goal, fitBox(bounds, padding)); kick(); }
+export function planReviewItems() { return P ? Object.values(P.items).map(item => item.z) : []; }
+export function selectPlanReviewItem(id) { if (!P) return; if (id == null) { setMode('req'); return; } const item=P.items[id]; if(!item)return; setMode(item.z.kind === 'inv' ? 'inv' : 'req'); select(id, false); }

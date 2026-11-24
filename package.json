@@ -2,7 +2,7 @@
   "name": "atlas-bkc",
   "version": "1.0.0",
   "private": true,
-  "description": "ATLAS by Autopilot — BKC Digital Twin",
+  "description": "ATLAS by Autopilot \u2014 BKC Digital Twin",
   "scripts": {
     "start": "python3 serve.py",
     "dev": "python3 serve.py",
@@ -23,7 +23,10 @@
     "example:andheri-coworking": "node scripts/examples/andheri-coworking.js",
     "example:flipkart": "node scripts/examples/flipkart-andheri.js",
     "docs:walkthrough": "node scripts/docs/walkthrough.js docs-out && cp docs-out/atlas-walkthrough.pdf docs/",
-    "test:rtp": "node airoli-rtp/experience/tests/audio-v2.test.mjs && node airoli-rtp/experience/tests/route-geometry.test.mjs && node airoli-rtp/demo/tests/floors.test.mjs"
+    "test:rtp": "node airoli-rtp/experience/tests/audio-v2.test.mjs && node airoli-rtp/experience/tests/route-geometry.test.mjs && node airoli-rtp/demo/tests/floors.test.mjs",
+    "design:mvp": "node tools/design/start.cjs",
+    "design:setup": "node tools/design/setup.cjs",
+    "test:design": "python3 tools/design/ingest_test.py && python3 tools/design/classify_test.py && node tools/design/service.test.cjs && node tools/design/api.test.cjs && node tools/design/jobs.test.cjs && node tools/design/provider.test.cjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.128.0",

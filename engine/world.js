@@ -1,3 +1,5 @@
+import {signInDesignProject} from './design-access.js';
+import {enableLocalDesignPreview} from './design-preview.js';
 /* ============================================================================
    ATLAS · Explorer (the 3D world)
 
@@ -61,6 +63,7 @@ async function sha256(t) { const b = await crypto.subtle.digest("SHA-256", new T
 const normId = (v) => String(v).trim().toUpperCase().replace(/[\s-]/g, "");
 function fail(msg) { $("#l-title").textContent = "Not available"; $("#l-msg").textContent = msg; }
 async function boot() {
+  if(SLUG==='flipkart-andheri'||SLUG==='flipkart-andheri-east')await enableLocalDesignPreview(Q);
   try { await script(`/engine/atlases/${SLUG}.js`); } catch (e) { return fail("This atlas has no 3D explorer."); }
   const A = window.ATLAS, W = A && A.meta && A.meta.world;
   if (!A || !W) return fail("This atlas has no 3D explorer.");
@@ -74,7 +77,8 @@ async function boot() {
     $("#load").hidden = true; $("#gate").hidden = false;
     await new Promise((done) => $("#g-form").addEventListener("submit", async (e) => {
       e.preventDefault();
-      if ((await sha256(normId($("#g-id").value) + ":" + normId($("#g-pw").value))) !== A.gate.hash) { $("#g-err").textContent = "That ID and password do not match."; return; }
+      const privateAccess=await signInDesignProject(SLUG,$('#g-id').value,$('#g-pw').value);
+      if (!privateAccess && (await sha256(normId($("#g-id").value) + ":" + normId($("#g-pw").value))) !== A.gate.hash) { $("#g-err").textContent = "That ID and password do not match."; return; }
       try { sessionStorage.setItem(KEY, "1"); } catch (x) {}
       $("#gate").hidden = true; $("#load").hidden = false; done();
     }));
@@ -441,6 +445,52 @@ async function start(A, W, intro=null) {
         o.material=Array.isArray(o.material)?o.material.map(finish):finish(o.material);const materials=Array.isArray(o.material)?o.material:[o.material];if(hero&&materials.every(m=>m.userData.heroGlass||m.transmission>0))o.castShadow=false;
       });
     }
+    /* a hero modelled outside the pipeline replaces the diorama's own (Privilon: SM_PrivilonMumbai, Nov 2026, fitted to G+15 and the CAD plate by andheri-project/privilon-sm/fit_privilon_sm.py).
+       It stands on the old hero's centre and heading; ?hero=old shows the pipeline model,
+       ?hero-flip=1 turns it end for end. */
+    const HERO_SWAP = { privilon: { glb: W.data + "d-preview/privilon-sm.glb", turn: Math.PI / 2 } };
+    const swap = HERO_SWAP[id], oldHero = root.getObjectByName("opt_" + id);
+    if (swap && oldHero && Q.get("hero") !== "old") {
+      const sg = await new Promise((ok, bad) => loader.load(swap.glb + "?v=" + revision, ok, undefined, bad));
+      if (request !== selectionRequest) { disposeImported(importedResources(sg.scene)); return null; }
+      const hero = new THREE.Group(); hero.name = "opt_" + id + "_sm"; hero.add(sg.scene);
+      hero.position.copy(oldHero.position);
+      hero.quaternion.copy(oldHero.quaternion).multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), swap.turn + (Q.get("hero-flip") ? Math.PI : 0)));
+      sg.scene.traverse(o => { if (!o.isMesh) return; o.castShadow = true; o.receiveShadow = true;
+        for (const m of (Array.isArray(o.material) ? o.material : [o.material])) { m.envMapIntensity = 1; ownedMaterials.add(m); } });
+      oldHero.parent.remove(oldHero); root.add(hero);
+    }
+    /* neighbours modelled outside the pipeline (Fleet House beside Privilon, Nov 2026). Each stands at `at`
+       (diorama metres, x east, y north) turned `deg` about the vertical; the merged context geometry, roof props
+       and trees inside `clear` are cut out first. ?neighbours=old keeps the pipeline's own. */
+    const NEIGHBOURS = { privilon: [{ name: "Fleet House", glb: W.data + "d-preview/fleet-house.glb", at: [-76.331, 22.676], deg: -22.508,
+      // boulevard face on the mapped footprint's road edge, west end at its south-west corner; clears the mapped outline and the small block east of it
+      clear: [[[-79.9, 40.6], [-85.8, 26.6], [-38.5, 7.0], [-22.0, 46.3], [-65.3, 64.2], [-71.2, 50.2], [-85.3, 56.1], [-90.1, 44.8]],
+              [[-87.7, 24.6], [-24.9, -1.5], [-12.8, 27.7], [-75.6, 53.8]]] }] };
+    if (NEIGHBOURS[id] && Q.get("neighbours") !== "old") {
+      const inPoly = (P, x, y) => { let c = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const [xi, yi] = P[i], [xj, yj] = P[j];
+        if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; };
+      const polys = NEIGHBOURS[id].flatMap(n => n.clear), cleared = (x, y) => polys.some(P => inPoly(P, x, y));
+      root.updateMatrixWorld(true); const v = new THREE.Vector3();
+      root.traverse(o => {
+        if (!o.isMesh || !/(^|\|)(context|rooftops)_/.test(o.name + "|" + (o.parent?.name || ""))) return;
+        const g = o.geometry, pos = g.attributes.position, idx = g.index ? g.index.array : Array.from({ length: pos.count }, (_, i) => i), keep = [];
+        for (let t = 0; t < idx.length; t += 3) { let cx = 0, cz = 0;
+          for (let k = 0; k < 3; k++) { v.fromBufferAttribute(pos, idx[t + k]).applyMatrix4(o.matrixWorld); cx += v.x; cz += v.z; }
+          if (!cleared(cx / 3, -cz / 3)) keep.push(idx[t], idx[t + 1], idx[t + 2]); }
+        if (keep.length < idx.length) { g.setIndex(keep); g.computeBoundingSphere(); }
+      });
+      if (D.trees) D.trees = D.trees.filter(([x, y]) => !cleared(x, y));
+      for (const n of NEIGHBOURS[id]) {
+        const ng = await new Promise((ok, bad) => loader.load(n.glb + "?v=" + revision, ok, undefined, bad));
+        if (request !== selectionRequest) { disposeImported(importedResources(ng.scene)); return null; }
+        const g = new THREE.Group(); g.name = "nb_" + n.name.toLowerCase().replace(/\W+/g, "_"); g.add(ng.scene);
+        g.position.set(n.at[0], 0, -n.at[1]); g.rotation.y = n.deg * Math.PI / 180;
+        ng.scene.traverse(o => { if (!o.isMesh) return; o.castShadow = true; o.receiveShadow = true;
+          for (const m of (Array.isArray(o.material) ? o.material : [o.material])) { m.envMapIntensity = 1; ownedMaterials.add(m); } });
+        root.add(g);
+      }
+    }
     if(request!==selectionRequest)return null;
     for (const p of Object.values(protos)) p.visible = false;
     const pp = (k) => protos[k] ? protoParts(protos[k]) : [];
@@ -802,7 +852,7 @@ async function start(A, W, intro=null) {
     if (!STILL) requestAnimationFrame(frame);
   }
   if (STILL) frame(performance.now()); else requestAnimationFrame(frame);
-  window.__world = { tick: (n = 1, dt = 0.25) => { for (let i = 0; i < n; i++) { last = performance.now() - dt * 1000; if (fly) fly.t0 -= 1e9; frame(performance.now()); } }, select, startWalk, startRouteWalk, dollhouse, clock, renderer, walk, setRW: (s) => { if (RW) RW.s = s; } };
+  window.__world = { camera, controls, scene, THREE, tick: (n = 1, dt = 0.25) => { for (let i = 0; i < n; i++) { last = performance.now() - dt * 1000; if (fly) fly.t0 -= 1e9; frame(performance.now()); } }, select, startWalk, startRouteWalk, dollhouse, clock, renderer, walk, setRW: (s) => { if (RW) RW.s = s; } };
 }
 
 boot();

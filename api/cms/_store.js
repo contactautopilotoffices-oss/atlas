@@ -162,6 +162,7 @@ async function insert(table, rows) {
   const db = devLoad();
   db.tables[table] = db.tables[table] || [];
   const made = list.map(r => devWithDefaults(db, table, r));
+  if (table === "atlas_design_events" && made.some(m => db.tables[table].some(x => x.project === m.project && x.owner_id === m.owner_id && x.session_id === m.session_id && x.revision === m.revision))) throw new StoreError("duplicate design session revision", 409);
   const pk = PK[table];
   for (const m of made) {
     if (table === "cms_users" && db.tables[table].some(x => x.email === m.email)) throw new StoreError("duplicate key value violates unique constraint (email)", 400);

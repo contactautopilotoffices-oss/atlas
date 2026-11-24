@@ -425,6 +425,7 @@ def export(tenant, L, S, out, A):
     man = {"tenant": tenant, "glb": f"{tenant}.glb", "lod_glb": f"{tenant}_lod.glb", "files": res,
            "frame": "the tenant's CAD plan frame, metres, glTF Y up: three (x, y, z) = plan (x east, height, -north). Not recentred, not rotated: apply the plate fit in the viewer.",
            "decoder": "GLTFLoader.setMeshoptDecoder(MeshoptDecoder); repeated furniture comes as EXT_mesh_gpu_instancing (InstancedMesh); extras.instance_names lists the CAD blocks in instance order",
+           "camera": {"near": 0.1, "far": 2000, "note": "near >= 0.1 m keeps depth precision for the floor-level layers (finishes 3-4 mm apart)"},
            "renderer": {"toneMapping": "AgXToneMapping", "toneMappingExposure": round(2 ** ev, 4), "exposure_ev": ev, "outputColorSpace": "srgb", "useLegacyLights": False},
            "lightmapped_meshes": {"how": "texture = load(lightmap); texture.colorSpace = SRGBColorSpace; texture.flipY = false; texture.channel = 1; material.lightMap = texture; "
                                          "material.lightMapIntensity = lightMapIntensity (below, per node); material.envMapIntensity = 0; no direct lights on these meshes "

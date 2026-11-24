@@ -15,7 +15,8 @@ const SEEN = 'andheri-experience-seen', SOUND = 'andheri-sound';
 export const SHORTLIST = {
   'privilon': {
     n: 1, name: 'Privilon', market: 'Marol', question: 'The commute',
-    building: 'Grade A · G+15 · new tower', offer: 'Single floor plate', offerNote: '260 · 280 · 301 workstations',
+    /* Nov 2026: 11th floor on offer (layout R-01); brochure wording for the height, not G+15. */
+    building: 'Grade A · 14 storeys plus a 15th floor rooftop', offer: '11th floor', offerNote: 'Single floor plate · 260 · 280 · 301 workstations',
     carpet: 11331, condition: 'Bare shell', possession: 'January 2027', status: 'Bare shell · possession January 2027',
     metro: { station: 'Marol Naka', line: 'Line 1', m: 140, min: 2 },
     image: 'world/film-stills/privilon-sunrise.jpg',
@@ -31,7 +32,9 @@ export const SHORTLIST = {
   '723-avenue': {
     n: 3, name: '723 Avenue', market: 'Marol', question: 'The view from the top',
     building: 'Grade A · G+15', offer: '13th and 14th floors', offerNote: 'Plus the terrace above them',
-    carpet: 11331, condition: 'Bare shell', possession: 'Immediate', status: 'Bare shell · possession immediate',
+    /* Nov 2026: 723 Avenue's own carpet (13th + 14th, agent sheet in scripts/examples/andheri-coworking.js); was Privilon's 11,331.
+       TODO(founder): confirm against 723 Avenue's proposal or CAD. */
+    carpet: 12952, condition: 'Bare shell', possession: 'Immediate', status: 'Bare shell · possession immediate',
     metro: { station: 'Marol Naka', line: 'Line 1', m: 700, min: 9 },
     image: 'world/film-stills/723-avenue-dusk.jpg',
   },

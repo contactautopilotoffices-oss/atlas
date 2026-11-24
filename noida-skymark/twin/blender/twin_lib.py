@@ -485,6 +485,12 @@ class MB:
     def empty(self): return not self.f
     def build(self, name, normals=True):
         me = bpy.data.meshes.new(name); me.from_pydata(self.v, [], self.f); me.validate(clean_customdata=False); me.update()
+        if getattr(self, "weld", False):        # grid surfaces: dissolve the coplanar grid into a few big faces
+            for nm in self.names: me.materials.append(self.mats.get(nm))
+            if len(me.polygons) == len(self.fm): me.polygons.foreach_set("material_index", self.fm)
+            bm = bmesh.new(); bm.from_mesh(me)
+            bmesh.ops.dissolve_limit(bm, angle_limit=0.0017, use_dissolve_boundaries=False, verts=bm.verts[:], edges=bm.edges[:], delimit={"MATERIAL"})
+            bm.to_mesh(me); bm.free(); box_uv(me); return me
         for nm in self.names: me.materials.append(self.mats.get(nm))
         if len(me.polygons) == len(self.fm):
             me.polygons.foreach_set("material_index", self.fm); me.polygons.foreach_set("use_smooth", self.smooth)

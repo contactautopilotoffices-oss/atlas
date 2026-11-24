@@ -17,6 +17,7 @@ const ROOT = path.join(__dirname, "..");
 if (!process.env.SUPABASE_SERVICE_ROLE_KEY && !process.env.CMS_DEV_STORE) process.env.CMS_DEV_STORE = path.join(ROOT, ".cms-dev-store.json");
 const PORT = +process.env.PORT || 8090;
 const ROUTES = {
+  "/api/design": () => require("../api/design/index.js"),
   "/api/godseye/feed": () => require("../api/godseye/feed.js"),
   "/api/godseye/ask": () => require("../api/godseye/ask.js"),
   "/api/cms": () => require("../api/cms/index.js"),
@@ -31,11 +32,14 @@ http.createServer((req, res) => {
   const route = ROUTES[url.pathname.replace(/\/$/, "")];
   if (route) return route()(req, res);
   if (url.pathname.startsWith("/api/")) { res.statusCode = 404; return res.end(); }
-  let file = path.normalize(path.join(ROOT, decodeURIComponent(url.pathname)));
+  const decodedPath=decodeURIComponent(url.pathname);
+  if(decodedPath.split('/').some(part=>part.startsWith('.')) || ['/assets/Premium/','/assets/Premium Economy/','/tools/design/'].some(prefix=>decodedPath.startsWith(prefix))){res.statusCode=403;return res.end();}
+  let file = path.normalize(path.join(ROOT, decodedPath));
   if (!file.startsWith(ROOT) || /[\\/]\.cms-dev-store\.json$/.test(file)) { res.statusCode = 403; return res.end(); }
   /* /<atlas id> is the engine page, as the rewrite in vercel.json makes it
      in production: only when nothing on disk answers to that path. */
   if (/^\/[a-z0-9][a-z0-9-]{0,39}$/.test(url.pathname) && !fs.existsSync(file)) file = path.join(ROOT, "engine", "index.html");
+  if (/^\/[a-z0-9][a-z0-9-]{0,39}\/world$/.test(url.pathname) && !fs.existsSync(file)) file = path.join(ROOT, "engine", "world.html");
   if (/^\/[a-z0-9][a-z0-9-]{0,39}\/case$/.test(url.pathname) && !fs.existsSync(file)) file = path.join(ROOT, "casestudy", "index.html");
   if (fs.existsSync(file) && fs.statSync(file).isDirectory()) {
     if (!url.pathname.endsWith("/")) { res.statusCode = 308; res.setHeader("Location", url.pathname + "/" + url.search); return res.end(); }
@@ -47,4 +51,4 @@ http.createServer((req, res) => {
     res.setHeader("Cache-Control", "no-store");
     res.end(buf);
   });
-}).listen(PORT, () => console.log(`ATLAS at http://localhost:${PORT}/  ·  admin at http://localhost:${PORT}/admin/`));
+}).listen(PORT, "127.0.0.1", () => console.log(`ATLAS at http://localhost:${PORT}/  ·  admin at http://localhost:${PORT}/admin/`));

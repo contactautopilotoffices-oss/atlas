@@ -284,3 +284,6 @@ body[data-andheri-ui=atlas] #tabs button{min-height:44px}
 
 }
 @media(prefers-reduced-motion:reduce){body[data-andheri-ui] *,body[data-andheri-ui] *:before,body[data-andheri-ui] *:after{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+/* Scoped design MVP entry points, alongside the existing CAD journey. */
+body[data-andheri-ui=world] #design-workspace-link{display:block;margin-top:10px;padding:12px 14px;border:1px solid #ffffff38;border-radius:10px;background:#ffc200;color:#151a23;font:600 13px/1.3 Geist,Inter,system-ui;text-decoration:none;text-align:center;min-height:44px;box-sizing:border-box}
+body[data-andheri-ui=cad] .room-design-link{display:block;min-height:44px;box-sizing:border-box;margin:12px 0;padding:12px;border-radius:10px;background:#2a55e5;color:#fff;text-align:center;text-decoration:none;font-weight:600}

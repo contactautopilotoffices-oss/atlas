@@ -19,41 +19,62 @@
    "href": "/flipkart-andheri/world",
    "data": "/media/flipkart-andheri/world/",
    "sky": "sky.hdr",
-   "poster": "hero.jpg",
+   "poster": "checkpoint/privilon-confirmed-plot.jpg",
+   "branding": "autopilot-flipkart",
+   "cad": {
+    "corporate-avenue": "/engine/cad.html?property=corporate-avenue",
+    "privilon": "/engine/cad.html?property=privilon"
+   },
+   "mapHref": "/flipkart-andheri-east",
+   "contexts": {
+    "base": "/media/flipkart-andheri/concept/",
+    "radius_m": 600,
+    "reviewOnly": true
+   },
+   "models": {
+    "723-avenue": {
+     "glb": "/media/flipkart-andheri/world/d-preview/723-avenue.glb",
+     "data": "/media/flipkart-andheri/world/d-preview/723-avenue.json",
+     "aoBase": "/media/flipkart-andheri/world/d-preview/"
+    },
+    "privilon": {
+     "glb": "/media/flipkart-andheri/world/d-preview/privilon.glb",
+     "data": "/media/flipkart-andheri/world/d-preview/privilon.json",
+     "aoBase": "/media/flipkart-andheri/world/d-preview/"
+    },
+    "corporate-avenue": {
+     "glb": "/media/flipkart-andheri/world/d-preview/corporate-avenue.glb",
+     "data": "/media/flipkart-andheri/world/d-preview/corporate-avenue.json",
+     "aoBase": "/media/flipkart-andheri/world/d-preview/"
+    }
+   },
+   "credit": "Context: Overture Maps. Source-informed Blender facade studies; unverified dimensions and finishes are indicative. Distances: Google Maps.",
    "thumbs": {
-    "723-avenue": "r/723-avenue-close.jpg",
-    "corporate-avenue": "r/corporate-avenue-close.jpg",
-    "vaman-techno-centre": "r/vaman-techno-centre-close.jpg",
-    "privilon": "r/privilon-close.jpg",
-    "landmark": "r/landmark-close.jpg",
-    "rustomjee-central-park": "r/rustomjee-central-park-close.jpg",
-    "fulcrum": "r/fulcrum-close.jpg"
+    "723-avenue": "checkpoint/723-district-aerial2.jpg",
+    "privilon": "checkpoint/privilon-confirmed-plot.jpg",
+    "corporate-avenue": "checkpoint/corporate-campus.jpg"
    },
    "renders": {
-    "723-avenue": "r/723-avenue-street.jpg",
-    "corporate-avenue": "r/corporate-avenue-street.jpg",
-    "vaman-techno-centre": "r/vaman-techno-centre-street.jpg",
-    "privilon": "r/privilon-street.jpg",
-    "landmark": "r/landmark-street.jpg",
-    "rustomjee-central-park": "r/rustomjee-central-park-street.jpg",
-    "fulcrum": "r/fulcrum-street.jpg"
+    "723-avenue": "checkpoint/723-district-lobby.jpg",
+    "privilon": "checkpoint/privilon-confirmed-plot.jpg",
+    "corporate-avenue": "checkpoint/corporate-campus.jpg"
    }
   },
   "sheet": "Flipkart Property Inventory, Andheri East (Autopilot deck, Nov 2026). Positions and connectivity researched Nov 2026; each carries its source."
  },
  "options": [
   {
-   "id": "723-avenue",
+   "id": "privilon",
    "n": 1,
-   "name": "723 Avenue",
-   "lat": 19.109713,
-   "lng": 72.884422,
-   "precision": "building",
-   "geoSrc": "https://dhcrealty.in/property/wadhwa-723-avenue/",
-   "geoNote": "Plus code 4V5M+VQM printed on the listing, decoded. Marol Co-operative Industrial Estate Road, off Andheri-Kurla Road.",
+   "name": "Privilon",
+   "lat": 19.108207,
+   "lng": 72.879563,
+   "precision": "approx",
+   "geoSrc": "https://exa.ai/library/place/s8x6jf6zts0",
+   "geoNote": "The place page pin sits within 10 m of the Marol Naka station coordinate, so it marks the address, not a footprint. The developer says 'right next to Marol Metro Station'.",
    "micro": "marol",
-   "reason": "PRIORITY 1 · Floor 13th & 14th · Bareshell · Carpet area 11,331 sq. ft. · Possession: Immediately",
-   "address": "Wadhwa 723 Avenue, Marol Co-operative Industrial Estate Road, Sag Baug, Marol, Andheri East, Mumbai 400059",
+   "reason": "PRIORITY 1 · Floor 11th · Bareshell · Carpet area 11,331 sq. ft. · Possession: Jan 2027",
+   "address": "Privilon, Metro Station Marol Naka, Gamdevi, Marol, Andheri East, Mumbai 400059",
    "locality": "Andheri East",
    "routes": [
     {
@@ -65,37 +86,25 @@
      ],
      "lat": 19.108195,
      "lng": 72.879536,
-     "m": 810,
-     "min": 11,
+     "m": 140,
+     "min": 2,
      "mode": "walk",
      "path": [
       [
-       72.884422,
-       19.109713
+       72.879563,
+       19.108207
       ],
       [
-       72.88412,
-       19.10962
+       72.87957,
+       19.10821
       ],
       [
-       72.88387,
-       19.11036
+       72.88014,
+       19.108
       ],
       [
-       72.88315,
-       19.11013
-      ],
-      [
-       72.88245,
-       19.10983
-      ],
-      [
-       72.88132,
-       19.11017
-      ],
-      [
-       72.88071,
-       19.10779
+       72.88013,
+       19.10797
       ],
       [
        72.87953,
@@ -111,75 +120,39 @@
     },
     {
      "kind": "metro",
-     "name": "Saki Naka",
+     "name": "Airport Road",
      "lines": [
       "L1"
      ],
-     "lat": 19.103528,
-     "lng": 72.887962,
-     "m": 940,
-     "min": 13,
+     "lat": 19.11027,
+     "lng": 72.87475,
+     "m": 580,
+     "min": 8,
      "mode": "walk",
      "path": [
       [
-       72.884422,
-       19.109713
+       72.879563,
+       19.108207
       ],
       [
-       72.88412,
-       19.10962
+       72.87957,
+       19.10821
       ],
       [
-       72.88431,
-       19.10907
+       72.87483,
+       19.10997
       ],
       [
-       72.8845,
-       19.10815
+       72.87485,
+       19.11001
       ],
       [
-       72.88448,
-       19.10803
+       72.87467,
+       19.11008
       ],
       [
-       72.88482,
-       19.1079
-      ],
-      [
-       72.8847,
-       19.10762
-      ],
-      [
-       72.88505,
-       19.10746
-      ],
-      [
-       72.88493,
-       19.10719
-      ],
-      [
-       72.88459,
-       19.1068
-      ],
-      [
-       72.88553,
-       19.10576
-      ],
-      [
-       72.88636,
-       19.10474
-      ],
-      [
-       72.88685,
-       19.10434
-      ],
-      [
-       72.88802,
-       19.10361
-      ],
-      [
-       72.887962,
-       19.103528
+       72.87475,
+       19.11027
       ]
      ],
      "src": "https://www.google.com/maps",
@@ -193,36 +166,28 @@
      ],
      "lat": 19.119167,
      "lng": 72.846944,
-     "m": 5500,
+     "m": 4900,
      "mode": "road",
      "path": [
       [
-       72.884422,
-       19.109713
+       72.879563,
+       19.108207
       ],
       [
-       72.88412,
-       19.10962
+       72.87957,
+       19.10821
       ],
       [
-       72.88449,
-       19.10809
+       72.88071,
+       19.10779
       ],
       [
-       72.88387,
-       19.10705
+       72.88065,
+       19.1076
       ],
       [
-       72.8833,
-       19.10727
-      ],
-      [
-       72.88094,
-       19.1075
-      ],
-      [
-       72.87343,
-       19.11031
+       72.87265,
+       19.11057
       ],
       [
        72.86687,
@@ -241,8 +206,8 @@
        19.11092
       ],
       [
-       72.86144,
-       19.11099
+       72.86176,
+       19.11091
       ],
       [
        72.86018,
@@ -305,7 +270,7 @@
     },
     {
      "k": "Floor / Unit",
-     "v": "13th & 14th",
+     "v": "11th",
      "conf": "high"
     },
     {
@@ -315,7 +280,7 @@
     },
     {
      "k": "Total floors",
-     "v": "G+15",
+     "v": "14 storeys plus a 15th floor rooftop",
      "conf": "high"
     },
     {
@@ -350,17 +315,22 @@
     },
     {
      "k": "Parking",
-     "v": "11 Car Parking",
+     "v": "1 car park per 2,000 sq ft carpet",
+     "conf": "high"
+    },
+    {
+     "k": "Parking charges",
+     "v": "To Be Discussed",
      "conf": "high"
     },
     {
      "k": "Fire NOC",
-     "v": "Available",
+     "v": "Jan 2027",
      "conf": "high"
     },
     {
      "k": "OC & CC",
-     "v": "Available",
+     "v": "Jan 2027",
      "conf": "high"
     },
     {
@@ -370,7 +340,7 @@
     },
     {
      "k": "Possession",
-     "v": "Immediately",
+     "v": "Jan 2027",
      "conf": "high"
     },
     {
@@ -708,8 +678,347 @@
    ]
   },
   {
-   "id": "vaman-techno-centre",
+   "id": "723-avenue",
    "n": 3,
+   "name": "723 Avenue",
+   "lat": 19.109713,
+   "lng": 72.884422,
+   "precision": "building",
+   "geoSrc": "https://dhcrealty.in/property/wadhwa-723-avenue/",
+   "geoNote": "Plus code 4V5M+VQM printed on the listing, decoded. Marol Co-operative Industrial Estate Road, off Andheri-Kurla Road.",
+   "micro": "marol",
+   "reason": "PRIORITY 3 · Floor 13th & 14th · Bareshell · Carpet area 12,952 sq. ft. · Possession: Immediately",
+   "address": "Wadhwa 723 Avenue, Marol Co-operative Industrial Estate Road, Sag Baug, Marol, Andheri East, Mumbai 400059",
+   "locality": "Andheri East",
+   "routes": [
+    {
+     "kind": "metro",
+     "name": "Marol Naka",
+     "lines": [
+      "L1",
+      "L3"
+     ],
+     "lat": 19.108195,
+     "lng": 72.879536,
+     "m": 810,
+     "min": 11,
+     "mode": "walk",
+     "path": [
+      [
+       72.884422,
+       19.109713
+      ],
+      [
+       72.88412,
+       19.10962
+      ],
+      [
+       72.88387,
+       19.11036
+      ],
+      [
+       72.88315,
+       19.11013
+      ],
+      [
+       72.88245,
+       19.10983
+      ],
+      [
+       72.88132,
+       19.11017
+      ],
+      [
+       72.88071,
+       19.10779
+      ],
+      [
+       72.87953,
+       19.10819
+      ],
+      [
+       72.879536,
+       19.108195
+      ]
+     ],
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
+    },
+    {
+     "kind": "metro",
+     "name": "Saki Naka",
+     "lines": [
+      "L1"
+     ],
+     "lat": 19.103528,
+     "lng": 72.887962,
+     "m": 940,
+     "min": 13,
+     "mode": "walk",
+     "path": [
+      [
+       72.884422,
+       19.109713
+      ],
+      [
+       72.88412,
+       19.10962
+      ],
+      [
+       72.88431,
+       19.10907
+      ],
+      [
+       72.8845,
+       19.10815
+      ],
+      [
+       72.88448,
+       19.10803
+      ],
+      [
+       72.88482,
+       19.1079
+      ],
+      [
+       72.8847,
+       19.10762
+      ],
+      [
+       72.88505,
+       19.10746
+      ],
+      [
+       72.88493,
+       19.10719
+      ],
+      [
+       72.88459,
+       19.1068
+      ],
+      [
+       72.88553,
+       19.10576
+      ],
+      [
+       72.88636,
+       19.10474
+      ],
+      [
+       72.88685,
+       19.10434
+      ],
+      [
+       72.88802,
+       19.10361
+      ],
+      [
+       72.887962,
+       19.103528
+      ]
+     ],
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
+    },
+    {
+     "kind": "rail",
+     "name": "Andheri",
+     "lines": [
+      "Western and Harbour lines"
+     ],
+     "lat": 19.119167,
+     "lng": 72.846944,
+     "m": 5500,
+     "mode": "road",
+     "path": [
+      [
+       72.884422,
+       19.109713
+      ],
+      [
+       72.88412,
+       19.10962
+      ],
+      [
+       72.88449,
+       19.10809
+      ],
+      [
+       72.88387,
+       19.10705
+      ],
+      [
+       72.8833,
+       19.10727
+      ],
+      [
+       72.88094,
+       19.1075
+      ],
+      [
+       72.87343,
+       19.11031
+      ],
+      [
+       72.86687,
+       19.11214
+      ],
+      [
+       72.8663,
+       19.11168
+      ],
+      [
+       72.86559,
+       19.11142
+      ],
+      [
+       72.8627,
+       19.11092
+      ],
+      [
+       72.86144,
+       19.11099
+      ],
+      [
+       72.86018,
+       19.11147
+      ],
+      [
+       72.85867,
+       19.11177
+      ],
+      [
+       72.85473,
+       19.11318
+      ],
+      [
+       72.85355,
+       19.11338
+      ],
+      [
+       72.85043,
+       19.11508
+      ],
+      [
+       72.84813,
+       19.11529
+      ],
+      [
+       72.84377,
+       19.11625
+      ],
+      [
+       72.84403,
+       19.11652
+      ],
+      [
+       72.84527,
+       19.11619
+      ],
+      [
+       72.84583,
+       19.11622
+      ],
+      [
+       72.84622,
+       19.11922
+      ],
+      [
+       72.846944,
+       19.119167
+      ]
+     ],
+     "src": "https://www.google.com/maps",
+     "dist": "Google Maps"
+    }
+   ],
+   "facts": [
+    {
+     "k": "Micro-market",
+     "v": "Marol",
+     "conf": "high"
+    },
+    {
+     "k": "Floor / Unit",
+     "v": "13th & 14th",
+     "conf": "high"
+    },
+    {
+     "k": "Grade",
+     "v": "A",
+     "conf": "high"
+    },
+    {
+     "k": "Total floors",
+     "v": "G+15",
+     "conf": "high"
+    },
+    {
+     "k": "Building type",
+     "v": "Commercial",
+     "conf": "high"
+    },
+    {
+     "k": "Furnishing",
+     "v": "Bareshell",
+     "conf": "high"
+    },
+    {
+     "k": "Efficiency",
+     "v": "60%",
+     "conf": "high"
+    },
+    {
+     "k": "Carpet area",
+     "v": "12,952 sq. ft.",
+     "conf": "high"
+    },
+    {
+     "k": "Built-up area",
+     "v": "21,586 sq. ft.",
+     "conf": "high"
+    },
+    {
+     "k": "Ceiling height",
+     "v": "11.7 ft",
+     "conf": "high"
+    },
+    {
+     "k": "Parking",
+     "v": "11 Car Parking",
+     "conf": "high"
+    },
+    {
+     "k": "Fire NOC",
+     "v": "Available",
+     "conf": "high"
+    },
+    {
+     "k": "OC & CC",
+     "v": "Available",
+     "conf": "high"
+    },
+    {
+     "k": "DG",
+     "v": "Common area only",
+     "conf": "high"
+    },
+    {
+     "k": "Possession",
+     "v": "Immediately",
+     "conf": "high"
+    },
+    {
+     "k": "Railway by metro",
+     "v": "By metro: from Marol Naka, Line 1 runs to Andheri (Western and Harbour lines) in 4 stops, 3.6 km of track. Andheri is the metro and railway interchange.",
+     "src": "https://en.wikipedia.org/wiki/Line_1_(Mumbai_Metro)",
+     "conf": "medium"
+    }
+   ]
+  },
+  {
+   "id": "vaman-techno-centre",
+   "n": 4,
    "name": "Vaman Techno Centre",
    "lat": 19.111483,
    "lng": 72.882235,
@@ -1005,294 +1314,6 @@
     {
      "k": "Possession",
      "v": "Immediately",
-     "conf": "high"
-    },
-    {
-     "k": "Railway by metro",
-     "v": "By metro: from Marol Naka, Line 1 runs to Andheri (Western and Harbour lines) in 4 stops, 3.6 km of track. Andheri is the metro and railway interchange.",
-     "src": "https://en.wikipedia.org/wiki/Line_1_(Mumbai_Metro)",
-     "conf": "medium"
-    }
-   ]
-  },
-  {
-   "id": "privilon",
-   "n": 4,
-   "name": "Privilon",
-   "lat": 19.108207,
-   "lng": 72.879563,
-   "precision": "approx",
-   "geoSrc": "https://exa.ai/library/place/s8x6jf6zts0",
-   "geoNote": "The place page pin sits within 10 m of the Marol Naka station coordinate, so it marks the address, not a footprint. The developer says 'right next to Marol Metro Station'.",
-   "micro": "marol",
-   "reason": "Floor Multiple · Bareshell · Carpet area 11,331 sq. ft. · Possession: Jan 2027",
-   "address": "Privilon, Metro Station Marol Naka, Gamdevi, Marol, Andheri East, Mumbai 400059",
-   "locality": "Andheri East",
-   "routes": [
-    {
-     "kind": "metro",
-     "name": "Marol Naka",
-     "lines": [
-      "L1",
-      "L3"
-     ],
-     "lat": 19.108195,
-     "lng": 72.879536,
-     "m": 140,
-     "min": 2,
-     "mode": "walk",
-     "path": [
-      [
-       72.879563,
-       19.108207
-      ],
-      [
-       72.87957,
-       19.10821
-      ],
-      [
-       72.88014,
-       19.108
-      ],
-      [
-       72.88013,
-       19.10797
-      ],
-      [
-       72.87953,
-       19.10819
-      ],
-      [
-       72.879536,
-       19.108195
-      ]
-     ],
-     "src": "https://www.google.com/maps",
-     "dist": "Google Maps"
-    },
-    {
-     "kind": "metro",
-     "name": "Airport Road",
-     "lines": [
-      "L1"
-     ],
-     "lat": 19.11027,
-     "lng": 72.87475,
-     "m": 580,
-     "min": 8,
-     "mode": "walk",
-     "path": [
-      [
-       72.879563,
-       19.108207
-      ],
-      [
-       72.87957,
-       19.10821
-      ],
-      [
-       72.87483,
-       19.10997
-      ],
-      [
-       72.87485,
-       19.11001
-      ],
-      [
-       72.87467,
-       19.11008
-      ],
-      [
-       72.87475,
-       19.11027
-      ]
-     ],
-     "src": "https://www.google.com/maps",
-     "dist": "Google Maps"
-    },
-    {
-     "kind": "rail",
-     "name": "Andheri",
-     "lines": [
-      "Western and Harbour lines"
-     ],
-     "lat": 19.119167,
-     "lng": 72.846944,
-     "m": 4900,
-     "mode": "road",
-     "path": [
-      [
-       72.879563,
-       19.108207
-      ],
-      [
-       72.87957,
-       19.10821
-      ],
-      [
-       72.88071,
-       19.10779
-      ],
-      [
-       72.88065,
-       19.1076
-      ],
-      [
-       72.87265,
-       19.11057
-      ],
-      [
-       72.86687,
-       19.11214
-      ],
-      [
-       72.8663,
-       19.11168
-      ],
-      [
-       72.86559,
-       19.11142
-      ],
-      [
-       72.8627,
-       19.11092
-      ],
-      [
-       72.86176,
-       19.11091
-      ],
-      [
-       72.86018,
-       19.11147
-      ],
-      [
-       72.85867,
-       19.11177
-      ],
-      [
-       72.85473,
-       19.11318
-      ],
-      [
-       72.85355,
-       19.11338
-      ],
-      [
-       72.85043,
-       19.11508
-      ],
-      [
-       72.84813,
-       19.11529
-      ],
-      [
-       72.84377,
-       19.11625
-      ],
-      [
-       72.84403,
-       19.11652
-      ],
-      [
-       72.84527,
-       19.11619
-      ],
-      [
-       72.84583,
-       19.11622
-      ],
-      [
-       72.84622,
-       19.11922
-      ],
-      [
-       72.846944,
-       19.119167
-      ]
-     ],
-     "src": "https://www.google.com/maps",
-     "dist": "Google Maps"
-    }
-   ],
-   "facts": [
-    {
-     "k": "Micro-market",
-     "v": "Marol",
-     "conf": "high"
-    },
-    {
-     "k": "Floor / Unit",
-     "v": "Multiple",
-     "conf": "high"
-    },
-    {
-     "k": "Grade",
-     "v": "A",
-     "conf": "high"
-    },
-    {
-     "k": "Total floors",
-     "v": "G+15",
-     "conf": "high"
-    },
-    {
-     "k": "Building type",
-     "v": "Commercial",
-     "conf": "high"
-    },
-    {
-     "k": "Furnishing",
-     "v": "Bareshell",
-     "conf": "high"
-    },
-    {
-     "k": "Efficiency",
-     "v": "60%",
-     "conf": "high"
-    },
-    {
-     "k": "Carpet area",
-     "v": "11,331 sq. ft.",
-     "conf": "high"
-    },
-    {
-     "k": "Built-up area",
-     "v": "18,885 sq. ft.",
-     "conf": "high"
-    },
-    {
-     "k": "Ceiling height",
-     "v": "11.7 ft",
-     "conf": "high"
-    },
-    {
-     "k": "Parking",
-     "v": "5 Car parking",
-     "conf": "high"
-    },
-    {
-     "k": "Parking charges",
-     "v": "To Be Discussed",
-     "conf": "high"
-    },
-    {
-     "k": "Fire NOC",
-     "v": "Jan 2027",
-     "conf": "high"
-    },
-    {
-     "k": "OC & CC",
-     "v": "Jan 2027",
-     "conf": "high"
-    },
-    {
-     "k": "DG",
-     "v": "Common area only",
-     "conf": "high"
-    },
-    {
-     "k": "Possession",
-     "v": "Jan 2027",
      "conf": "high"
     },
     {

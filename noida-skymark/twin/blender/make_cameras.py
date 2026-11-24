@@ -141,7 +141,8 @@ def run(tenant, L, S, out, A):
             ox, oy, oa, w = d["opening"]; nx_, ny_ = -math.sin(oa), math.cos(oa)
             for s in (-1, 1):
                 if inroom(ox + nx_ * 0.6 * s, oy + ny_ * 0.6 * s): rdoors.append((Vector((ox, oy, 0)), Vector((nx_ * s, ny_ * s, 0)), Vector((math.cos(oa), math.sin(oa), 0))))
-        free = lambda x, y, need_f=0.5: D(Ds, x, y) >= 0.3 and D(Df, x, y) >= need_f
+        need = [0.8]          # 0.8 m clear of furniture; relaxed to 0.6 only if no view passes at 0.8
+        free = lambda x, y, need_f=None: D(Ds, x, y) >= 0.3 and D(Df, x, y) >= (need[0] if need_f is None else need_f)
         def pts_entry():
             ps = []
             for dp, dn, dt in rdoors:
@@ -211,7 +212,8 @@ def run(tenant, L, S, out, A):
             if e3 and (e is None or (not e3["fails"] and e["fails"]) or (bool(e3["fails"]) == bool(e["fails"]) and e3["s"] > e["s"])): e = e3
         if e: chosen["entry"] = e
         if not small and area > 12:
-            if subj is not None or centroid is not None:
+          for need[0] in (0.8, 0.6):
+            if (subj is not None or centroid is not None) and "feature" not in chosen:
                 tgt = subj if subj is not None else centroid
                 fc = []
                 for (i, j) in np.argwhere(cells)[::9]:
@@ -219,7 +221,7 @@ def run(tenant, L, S, out, A):
                     if 3.0 <= math.hypot(x - tgt.x, y - tgt.y) <= 5.0 and free(x, y): fc.append((Vector((x, y, EYE)), "3-5 m from the subject"))
                 f_ = search("feature", fc[:: max(1, len(fc) // 25)], lambda p: (tgt, sk or "furniture centroid"), sweep=(-10, 0, 10))
                 if f_ and not f_["fails"]: chosen["feature"] = f_
-            if rdoors:
+            if rdoors and "reverse" not in chosen:
                 dp = rdoors[0][0]; rc = []
                 for (i, j) in np.argwhere(cells)[::9]:
                     x, y = ras.x0 + (j + .5) * ras.res, ras.y0 + (i + .5) * ras.res
@@ -227,13 +229,15 @@ def run(tenant, L, S, out, A):
                 rc.sort(reverse=True)
                 rv = search("reverse", [(Vector((x, y, EYE)), "far end") for _, x, y in rc[:12]], lambda p: (Vector((dp.x, dp.y, 1.2)), "the door"), sweep=(-20, -10, 0, 10, 20))
                 if rv and not rv["fails"]: chosen["reverse"] = rv
-            if centroid is not None:
+            if centroid is not None and "detail" not in chosen and need[0] == 0.8:
                 dc = []
                 for (i, j) in np.argwhere(cells)[::9]:
                     x, y = ras.x0 + (j + .5) * ras.res, ras.y0 + (i + .5) * ras.res
                     if 1.2 <= math.hypot(x - centroid.x, y - centroid.y) <= 2.4 and D(Ds, x, y) >= 0.3 and D(Df, x, y) >= 0.35: dc.append((Vector((x, y, EYE)), "close to the furniture"))
                 dt_ = search("detail", dc[:: max(1, len(dc) // 20)], lambda p: (centroid, "furniture"), sweep=(-10, 0, 10), hfovs=(45,), pitches=(12,))
                 if dt_ and not dt_["fails"] and dt_["m"]["furniture_seen"] >= 2 and dt_["m"]["in_room"] >= 0.7: chosen["detail"] = dt_
+          need[0] = 0.8
+        for k_, c_ in chosen.items(): c_.setdefault("clearance_m", round(D(Df, c_["p"].x, c_["p"].y), 2))
         # hand overrides win
         for ov in overrides:
             if ov.get("room") != r["name"]: continue
@@ -258,7 +262,7 @@ def run(tenant, L, S, out, A):
             plan.append({"name": name, "room": r["name"], "room_slug": r["slug"], "kind": kind, "label": label, "position": [round(v, 3) for v in p], "target": [round(v, 3) for v in tgt],
                          "hfov_deg": hf, "vfov_deg": round(vf, 2), "lens_mm": round(cam.data.lens, 2), "shift_y": round(cam.data.shift_y, 4), "pitch_deg": pitch,
                          "checks": c["m"], "failed": c["fails"], "fallback": bool(c["fails"]), "from": c["from"], "aim": c["aim"]})
-            rep["views"][kind] = {"failed": c["fails"], "from": c["from"], "aim": c["aim"], **c["m"]}
+            rep["views"][kind] = {"failed": c["fails"], "from": c["from"], "aim": c["aim"], "furniture_clearance_m": c.get("clearance_m"), **c["m"]}
         if not rep["views"]: rep["error"] = "NO VIEW"
         report[r["name"]] = rep
     # ---- outputs

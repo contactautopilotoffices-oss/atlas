@@ -118,3 +118,7 @@ andheri-video-edit/.transcode-cache/
 andheri-video-edit/__pycache__/
 !andheri-video-edit/assets/autopilot.png
 andheri-project/film/shots/out/
+
+# Private durable design MVP state, extracted originals, jobs, renders and local secrets.
+.atlas-design/
+.env.design.local

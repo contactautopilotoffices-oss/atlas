@@ -500,6 +500,10 @@
     "api/routes/mappls.js": {
       "maxDuration": 30,
       "includeFiles": "api/routes/_pairs-*.json"
+    },
+    "api/design/index.js": {
+      "maxDuration": 30,
+      "includeFiles": "api/design/_scenes.json"
     }
   },
   "redirects": [
