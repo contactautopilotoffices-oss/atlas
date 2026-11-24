@@ -838,6 +838,25 @@ async function start(A, W, intro=null) {
     }
     for (const id of ["#walkhud", "#compass", "#mini", "#hint", "#route"]) $(id).hidden = true;
     lightingBuilder?.atmosphere();
+    if (W.freePan) freePan();
+  }
+  /* the satellite view: drag to move across the whole slab (the metro station included), right-drag or two fingers to turn,
+     scroll to zoom, and look straight down if you like. The view stays inside the slab. Atlases opt in with meta.world.freePan. */
+  let panBox = null, hintTimer = 0;
+  function freePan() {
+    let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9; for (const [x, y] of D.slab) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
+    panBox = { x0, x1, z0: -y1, z1: -y0 };
+    controls.enablePan = true; controls.screenSpacePanning = false; controls.panSpeed = 1.15;
+    controls.mouseButtons = { LEFT: THREE.MOUSE.PAN, MIDDLE: THREE.MOUSE.DOLLY, RIGHT: THREE.MOUSE.ROTATE };
+    controls.touches = { ONE: THREE.TOUCH.PAN, TWO: THREE.TOUCH.DOLLY_ROTATE };
+    controls.minPolarAngle = 4 * D2R; controls.maxPolarAngle = 84 * D2R; controls.minDistance = 50; controls.maxDistance = Math.max(1050, slabSize() * 1.4);
+    if (scene.fog) { scene.fog.near = Math.max(scene.fog.near, 1400); scene.fog.far = Math.max(scene.fog.far, 5200); }
+    camera.far = Math.max(camera.far, 9000); camera.updateProjectionMatrix();
+    const h = $("#hint"); if (h) { h.textContent = "Drag to move around the city \u00b7 right-drag to turn \u00b7 scroll to zoom"; h.hidden = false; clearTimeout(hintTimer); hintTimer = setTimeout(() => { if (MODE === "dollhouse") h.hidden = true; }, 7000); }
+  }
+  function clampPan() {
+    if (!panBox) return; const t = controls.target, x = clamp(t.x, panBox.x0, panBox.x1), z = clamp(t.z, panBox.z0, panBox.z1);
+    if (x !== t.x || z !== t.z) { camera.position.x += x - t.x; camera.position.z += z - t.z; t.x = x; t.z = z; }
   }
   /* on a wide screen the overlay takes the left, so the view's centre moves right */
   /* An atlas with a data layer (W.dataLayer, engine/world-data.js) has a panel at the side: the view's centre then moves to the middle of
@@ -1040,7 +1059,7 @@ async function start(A, W, intro=null) {
     if (!STILL && document.body.classList.contains("ax-covered")) { if (now - coveredAt < 400) return; coveredAt = now; }
     const dt = Math.min(STILL ? 0.5 : 0.05, (now - last) / 1000); last = now; ribbonMat.uniforms.uTime.value += dt;
     if (fly) { const t = Math.min(1, (now - fly.t0) / fly.ms), e = ease(t); controls.target.lerpVectors(fly.a.t, fly.b.t, e); camera.position.lerpVectors(fly.a.p, fly.b.p, e); if (t >= 1) fly = null; }
-    if (MODE === "dollhouse") controls.update();
+    if (MODE === "dollhouse") { controls.update(); if (W.freePan && !fly) clampPan(); }
     else if (MODE === "walk") stepWalk(dt); else if (MODE === "route") stepRouteWalk(dt);
     if(!areaMode)stepMovers(dt);
     if (forest) forest.update(camera, false);

@@ -80,6 +80,7 @@ window.ATLAS = {
       },
       "ui": "andheri",
       "client": "JindalX",
+      "freePan": true,
       "home": "/jindalx/",
       "brand": {
         "kicker": "Autopilot · JindalX",

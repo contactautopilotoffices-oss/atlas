@@ -60,7 +60,7 @@ const bundle = {
       // the premium look (VISUAL_REALISM_AUDIT.md): open ground textured, AgX tone mapping, the time-of-day studio
       groundTex:'ground_noida',tone:'agx',lighting:true,lightingEV:-0.35,lightingHour:15.75,
       factKeys:{'Micro-market':'Address/Sector','Floor / Unit':'Offered floor','Possession':'Timelines'},
-      ui:'andheri',client:'JindalX',home:'/jindalx/',brand:{kicker:'Autopilot · JindalX',title:'Noida, in 3D'},
+      ui:'andheri',client:'JindalX',freePan:true,home:'/jindalx/',brand:{kicker:'Autopilot · JindalX',title:'Noida, in 3D'},
       credit:'Indicative 3D model. Map data © OpenStreetMap contributors, Overture Maps Foundation.',
       dataLayer:worldData,
       thumbs:Object.fromEntries(ids.map(id=>[id,`r/${id}-hero.jpg`])),renders:Object.fromEntries(ids.map(id=>[id,`r/${id}-street.jpg`]))},
