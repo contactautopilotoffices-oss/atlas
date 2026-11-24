@@ -1,0 +1,82 @@
+[
+ {
+  "word": "A",
+  "start": 0.0,
+  "end": 0.104
+ },
+ {
+  "word": "new",
+  "start": 0.186,
+  "end": 0.337
+ },
+ {
+  "word": "Grade",
+  "start": 0.383,
+  "end": 0.673
+ },
+ {
+  "word": "A",
+  "start": 0.731,
+  "end": 0.848
+ },
+ {
+  "word": "tower,",
+  "start": 0.929,
+  "end": 1.509
+ },
+ {
+  "word": "ground",
+  "start": 1.66,
+  "end": 1.95
+ },
+ {
+  "word": "plus",
+  "start": 1.985,
+  "end": 2.206
+ },
+ {
+  "word": "fifteen.",
+  "start": 2.276,
+  "end": 2.902
+ },
+ {
+  "word": "One",
+  "start": 3.344,
+  "end": 3.68
+ },
+ {
+  "word": "long,",
+  "start": 3.762,
+  "end": 4.133
+ },
+ {
+  "word": "clear",
+  "start": 4.168,
+  "end": 4.447
+ },
+ {
+  "word": "floor",
+  "start": 4.516,
+  "end": 4.748
+ },
+ {
+  "word": "plate.",
+  "start": 4.807,
+  "end": 5.271
+ },
+ {
+  "word": "Possession",
+  "start": 5.596,
+  "end": 6.037
+ },
+ {
+  "word": "in",
+  "start": 6.084,
+  "end": 6.142
+ },
+ {
+  "word": "January.",
+  "start": 6.2,
+  "end": 7.338
+ }
+]

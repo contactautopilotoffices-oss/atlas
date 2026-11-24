@@ -1,0 +1,258 @@
+{
+ "file": "09-a723_2.mp3",
+ "duration_s": 8.452,
+ "words": [
+  {
+   "word": "Inside,",
+   "start": 0.0,
+   "end": 0.534
+  },
+  {
+   "word": "a",
+   "start": 0.557,
+   "end": 0.592
+  },
+  {
+   "word": "bare-shell",
+   "start": 0.673,
+   "end": 1.149
+  },
+  {
+   "word": "floor",
+   "start": 1.207,
+   "end": 1.416
+  },
+  {
+   "word": "ready",
+   "start": 1.463,
+   "end": 1.683
+  },
+  {
+   "word": "to",
+   "start": 1.73,
+   "end": 1.8
+  },
+  {
+   "word": "fit",
+   "start": 1.869,
+   "end": 2.032
+  },
+  {
+   "word": "out",
+   "start": 2.078,
+   "end": 2.183
+  },
+  {
+   "word": "Flipkart's",
+   "start": 2.218,
+   "end": 2.647
+  },
+  {
+   "word": "way.",
+   "start": 2.694,
+   "end": 2.995
+  },
+  {
+   "word": "And",
+   "start": 3.309,
+   "end": 3.437
+  },
+  {
+   "word": "the",
+   "start": 3.483,
+   "end": 3.553
+  },
+  {
+   "word": "terrace",
+   "start": 3.587,
+   "end": 3.889
+  },
+  {
+   "word": "comes",
+   "start": 3.924,
+   "end": 4.133
+  },
+  {
+   "word": "with",
+   "start": 4.168,
+   "end": 4.319
+  },
+  {
+   "word": "it:",
+   "start": 4.365,
+   "end": 4.679
+  },
+  {
+   "word": "Flipkart's",
+   "start": 5.097,
+   "end": 5.584
+  },
+  {
+   "word": "own",
+   "start": 5.631,
+   "end": 5.77
+  },
+  {
+   "word": "place",
+   "start": 5.817,
+   "end": 6.06
+  },
+  {
+   "word": "to",
+   "start": 6.095,
+   "end": 6.153
+  },
+  {
+   "word": "step",
+   "start": 6.211,
+   "end": 6.42
+  },
+  {
+   "word": "out",
+   "start": 6.467,
+   "end": 6.583
+  },
+  {
+   "word": "between",
+   "start": 6.641,
+   "end": 6.931
+  },
+  {
+   "word": "focused",
+   "start": 7.001,
+   "end": 7.384
+  },
+  {
+   "word": "hours.",
+   "start": 7.419,
+   "end": 8.452
+  }
+ ],
+ "normalized_words": [
+  {
+   "word": "Inside,",
+   "start": 0.023,
+   "end": 0.534
+  },
+  {
+   "word": "a",
+   "start": 0.557,
+   "end": 0.592
+  },
+  {
+   "word": "bare-shell",
+   "start": 0.673,
+   "end": 1.149
+  },
+  {
+   "word": "floor",
+   "start": 1.207,
+   "end": 1.416
+  },
+  {
+   "word": "ready",
+   "start": 1.463,
+   "end": 1.683
+  },
+  {
+   "word": "to",
+   "start": 1.73,
+   "end": 1.8
+  },
+  {
+   "word": "fit",
+   "start": 1.869,
+   "end": 2.032
+  },
+  {
+   "word": "out",
+   "start": 2.078,
+   "end": 2.183
+  },
+  {
+   "word": "Flipkart's",
+   "start": 2.218,
+   "end": 2.647
+  },
+  {
+   "word": "way.",
+   "start": 2.694,
+   "end": 2.995
+  },
+  {
+   "word": "And",
+   "start": 3.309,
+   "end": 3.437
+  },
+  {
+   "word": "the",
+   "start": 3.483,
+   "end": 3.553
+  },
+  {
+   "word": "terrace",
+   "start": 3.587,
+   "end": 3.889
+  },
+  {
+   "word": "comes",
+   "start": 3.924,
+   "end": 4.133
+  },
+  {
+   "word": "with",
+   "start": 4.168,
+   "end": 4.319
+  },
+  {
+   "word": "it:",
+   "start": 4.365,
+   "end": 4.679
+  },
+  {
+   "word": "Flipkart's",
+   "start": 5.097,
+   "end": 5.584
+  },
+  {
+   "word": "own",
+   "start": 5.631,
+   "end": 5.77
+  },
+  {
+   "word": "place",
+   "start": 5.817,
+   "end": 6.06
+  },
+  {
+   "word": "to",
+   "start": 6.095,
+   "end": 6.153
+  },
+  {
+   "word": "step",
+   "start": 6.211,
+   "end": 6.42
+  },
+  {
+   "word": "out",
+   "start": 6.467,
+   "end": 6.583
+  },
+  {
+   "word": "between",
+   "start": 6.641,
+   "end": 6.931
+  },
+  {
+   "word": "focused",
+   "start": 7.001,
+   "end": 7.384
+  },
+  {
+   "word": "hours.",
+   "start": 7.419,
+   "end": 7.872
+  }
+ ]
+}

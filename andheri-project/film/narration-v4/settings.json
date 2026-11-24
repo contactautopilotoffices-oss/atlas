@@ -1,0 +1,11 @@
+{
+ "settings": {
+  "similarity_boost": 0.75,
+  "use_speaker_boost": true,
+  "stability": 0.45,
+  "style": 0.3,
+  "speed": 1.0
+ },
+ "chosen": "B (speed 1.00, stability 0.45, style 0.30), from the audition in audition/audition.json",
+ "reason": "Both settings passed speech-to-text on both lines. A (speed 0.95) came out with slightly wider pitch movement (11.3-13.5 vs 10.7-11.9 semitones, 10th-90th percentile) but that is within take-to-take variation: A's opening line was actually shorter than B's. The difference that matters is pace on the long line: A spoke l02 at 2.75 words a second (10.9 s in a 12 s slot), B at 2.99 (10.0 s). Over the whole script (about 365 spoken words) A projects to about 143 s of voice plus breaths against 130 s of script slots, past the 2:10 picture and the 2:20 bed; B projects to about 132 s. B is also the more energetic read the founder asked for, and still well below the Reliable film's rushed 3.7 words a second at default speed. The opener (under black, 8 s slot) came out at 4.2 words a second in both takes, so its tts text carries one written 0.6 s pause between its two sentences; the words are unchanged."
+}

@@ -1,0 +1,208 @@
+{
+ "file": "02-privilon_1.mp3",
+ "duration_s": 6.548,
+ "words": [
+  {
+   "word": "Privilon",
+   "start": 0.0,
+   "end": 0.488
+  },
+  {
+   "word": "is",
+   "start": 0.546,
+   "end": 0.627
+  },
+  {
+   "word": "right",
+   "start": 0.72,
+   "end": 0.964
+  },
+  {
+   "word": "beside",
+   "start": 1.022,
+   "end": 1.324
+  },
+  {
+   "word": "Marol",
+   "start": 1.358,
+   "end": 1.591
+  },
+  {
+   "word": "Naka",
+   "start": 1.649,
+   "end": 1.858
+  },
+  {
+   "word": "metro.",
+   "start": 1.904,
+   "end": 2.334
+  },
+  {
+   "word": "A",
+   "start": 2.45,
+   "end": 2.519
+  },
+  {
+   "word": "hundred",
+   "start": 2.601,
+   "end": 2.868
+  },
+  {
+   "word": "and",
+   "start": 2.902,
+   "end": 2.972
+  },
+  {
+   "word": "forty",
+   "start": 3.019,
+   "end": 3.262
+  },
+  {
+   "word": "metres",
+   "start": 3.32,
+   "end": 3.587
+  },
+  {
+   "word": "from",
+   "start": 3.634,
+   "end": 3.785
+  },
+  {
+   "word": "the",
+   "start": 3.831,
+   "end": 3.901
+  },
+  {
+   "word": "station",
+   "start": 3.936,
+   "end": 4.296
+  },
+  {
+   "word": "steps.",
+   "start": 4.354,
+   "end": 4.853
+  },
+  {
+   "word": "Two",
+   "start": 5.12,
+   "end": 5.283
+  },
+  {
+   "word": "minutes",
+   "start": 5.341,
+   "end": 5.608
+  },
+  {
+   "word": "on",
+   "start": 5.654,
+   "end": 5.735
+  },
+  {
+   "word": "foot.",
+   "start": 5.793,
+   "end": 6.548
+  }
+ ],
+ "normalized_words": [
+  {
+   "word": "Privilon",
+   "start": 0.035,
+   "end": 0.488
+  },
+  {
+   "word": "is",
+   "start": 0.546,
+   "end": 0.627
+  },
+  {
+   "word": "right",
+   "start": 0.72,
+   "end": 0.964
+  },
+  {
+   "word": "beside",
+   "start": 1.022,
+   "end": 1.324
+  },
+  {
+   "word": "Marol",
+   "start": 1.358,
+   "end": 1.591
+  },
+  {
+   "word": "Naka",
+   "start": 1.649,
+   "end": 1.858
+  },
+  {
+   "word": "metro.",
+   "start": 1.904,
+   "end": 2.334
+  },
+  {
+   "word": "A",
+   "start": 2.45,
+   "end": 2.519
+  },
+  {
+   "word": "hundred",
+   "start": 2.601,
+   "end": 2.868
+  },
+  {
+   "word": "and",
+   "start": 2.902,
+   "end": 2.972
+  },
+  {
+   "word": "forty",
+   "start": 3.019,
+   "end": 3.262
+  },
+  {
+   "word": "metres",
+   "start": 3.32,
+   "end": 3.587
+  },
+  {
+   "word": "from",
+   "start": 3.634,
+   "end": 3.785
+  },
+  {
+   "word": "the",
+   "start": 3.831,
+   "end": 3.901
+  },
+  {
+   "word": "station",
+   "start": 3.936,
+   "end": 4.296
+  },
+  {
+   "word": "steps.",
+   "start": 4.354,
+   "end": 4.853
+  },
+  {
+   "word": "Two",
+   "start": 5.12,
+   "end": 5.283
+  },
+  {
+   "word": "minutes",
+   "start": 5.341,
+   "end": 5.608
+  },
+  {
+   "word": "on",
+   "start": 5.654,
+   "end": 5.735
+  },
+  {
+   "word": "foot.",
+   "start": 5.793,
+   "end": 6.165
+  }
+ ]
+}

@@ -1,0 +1,355 @@
+{
+ "about": "Buildings surveyed in Google Street View (imagery Feb 2026, viewed in the web page on 2026-11-21; nothing copied into the model). Each entry overrides the facade, and where given the height, of the Overture footprint whose centroid is nearest (x, y) in scene metres (origin 72.867 E, 19.111 N). Heights marked 'sv' are storeys counted in Street View x storey height; others keep the satellite estimate. 'ground': 'signs' gives the ground and first floor the signboard band. The satellite surface model reads 3-5 times too tall for these low frontage blocks (trees and taller buildings behind blur into them), so every height here is the Street View storey count.",
+ "buildings": [
+  {
+   "name": "Times Square, banded office",
+   "x": 1751,
+   "y": -319,
+   "style": "cw_teal",
+   "h_basis": "dsm",
+   "seen": "19.10745,72.88330 heading 340: blue-teal glass with light horizontal bands, round columns at the podium, entrance pylon 'TIMES SQUARE' on Andheri-Kurla Road"
+  },
+  {
+   "name": "Times Square, curved stepped tower",
+   "x": 1675,
+   "y": -349,
+   "style": "cw_silver",
+   "h": 52,
+   "h_basis": "sv: about 13 storeys; satellite 88 m rejected",
+   "seen": "19.10745,72.88330 heading 340: curved glass tower with stepped balcony bands"
+  },
+  {
+   "name": "Times Square, blue glass block",
+   "x": 1631,
+   "y": -352,
+   "style": "cw_blue",
+   "h_basis": "dsm",
+   "seen": "19.10745,72.88330 heading 300: square blue curtain wall"
+  },
+  {
+   "name": "InSync Analytics (OSM, 7 storeys)",
+   "x": 1781,
+   "y": -174,
+   "style": "ribbon_white",
+   "h": 25,
+   "h_basis": "osm building:levels 7",
+   "seen": "19.10930,72.88400 heading 45"
+  },
+  {
+   "name": "Fleet House",
+   "x": 1270,
+   "y": -249,
+   "style": "ribbon_red",
+   "h": 30,
+   "h_basis": "sv: about 7 storeys",
+   "seen": "19.10840,72.87850 heading 60: glass office with a red band, 'FLEET HOUSE' at street level, beside Marol Naka station; also 19.1085449,72.8787139 heading 60: glass with orange-red vertical bands, Privilon's construction tower rises behind it"
+  },
+  {
+   "name": "Makwana Road residential tower",
+   "x": 1415,
+   "y": -314,
+   "style": "res_ochre",
+   "h_basis": "dsm",
+   "seen": "19.10790,72.88080 heading 300: residential tower, red and yellow balcony bands"
+  },
+  {
+   "name": "Andheri-Kurla Rd no. 111 (Allure Thai, Amara, Sahyog)",
+   "x": 1564,
+   "y": -431,
+   "style": "shophouse",
+   "h": 14,
+   "h_basis": "sv: 4 storeys",
+   "seen": "Street View Feb 2026, 19.107381,72.882021 heading 200",
+   "ground": "signs"
+  },
+  {
+   "name": "Commercial block opposite Times Square (Yes Bank, AU Bank)",
+   "x": 1642,
+   "y": -442,
+   "style": "shophouse",
+   "h": 12,
+   "h_basis": "sv: 3 storeys",
+   "seen": "Street View Feb 2026, 19.107327,72.882782 heading 200",
+   "ground": "signs"
+  },
+  {
+   "name": "Shop row under Marol Naka station, east",
+   "x": 1348,
+   "y": -400,
+   "style": "shophouse",
+   "h": 11,
+   "h_basis": "sv: 3 storeys",
+   "seen": "Street View Feb 2026, 19.108015,72.879739 heading 185",
+   "ground": "signs"
+  },
+  {
+   "name": "Shop row under Marol Naka station, middle",
+   "x": 1336,
+   "y": -400,
+   "style": "shophouse",
+   "h": 10,
+   "h_basis": "sv: 3 storeys",
+   "seen": "Street View Feb 2026, 19.108015,72.879739 heading 185",
+   "ground": "signs"
+  },
+  {
+   "name": "Shop row under Marol Naka station, corner",
+   "x": 1365,
+   "y": -399,
+   "style": "shophouse",
+   "h": 13,
+   "h_basis": "sv: 4 storeys",
+   "seen": "Street View Feb 2026, 19.108015,72.879739 heading 160",
+   "ground": "signs"
+  },
+  {
+   "name": "Shops south of Marol Naka station",
+   "x": 1323,
+   "y": -370,
+   "style": "shophouse",
+   "h": 10,
+   "h_basis": "sv: 3 storeys",
+   "seen": "Street View Feb 2026, 19.108015,72.879739 heading 203",
+   "ground": "signs"
+  },
+  {
+   "name": "Shops south-east of Marol Naka station",
+   "x": 1370,
+   "y": -423,
+   "style": "shophouse",
+   "h": 9,
+   "h_basis": "sv: 3 storeys",
+   "seen": "Street View Feb 2026, 19.107599,72.880500 heading 226",
+   "ground": "signs"
+  },
+  {
+   "name": "Frontage block east of Makwana Road",
+   "x": 1410,
+   "y": -395,
+   "style": "shophouse",
+   "h": 12,
+   "h_basis": "sv: inferred from the frontage either side",
+   "seen": "Street View Feb 2026, 19.107599,72.880500 heading 207",
+   "ground": "signs"
+  },
+  {
+   "name": "Old 3-storey block, north side",
+   "x": 1496,
+   "y": -344,
+   "style": "shophouse",
+   "h": 11,
+   "h_basis": "sv: 3 storeys",
+   "seen": "Street View Feb 2026, 19.107490,72.881261 heading 355",
+   "ground": "signs"
+  },
+  {
+   "name": "Blue-grey ribbon office",
+   "x": 1438,
+   "y": -441,
+   "style": "cw_grey",
+   "h": 20,
+   "h_basis": "sv: 5 storeys",
+   "seen": "Street View Feb 2026, 19.107599,72.880500 heading 150"
+  },
+  {
+   "name": "Office with dark glass grid",
+   "x": 1475,
+   "y": -403,
+   "style": "glass_grid",
+   "h": 24,
+   "h_basis": "sv: 6 storeys",
+   "seen": "Street View Feb 2026, 19.107599,72.880500 heading 150"
+  },
+  {
+   "name": "Gray Craft office",
+   "x": 1714,
+   "y": -455,
+   "style": "cw_blue",
+   "h": 34,
+   "h_basis": "sv: about 8 storeys",
+   "seen": "Street View Feb 2026, 19.107264,72.883580 heading 160"
+  },
+  {
+   "name": "Shops on Marol Co-op Industrial Estate Rd (Rivaz Pizza, Krishna Medicos)",
+   "x": 1745,
+   "y": -212,
+   "style": "shophouse",
+   "h": 8,
+   "h_basis": "sv: 2 storeys",
+   "seen": "Street View Feb 2026, 19.109191,72.884018 heading 260",
+   "ground": "signs"
+  },
+  {
+   "name": "Shops on Marol Co-op Industrial Estate Rd, south",
+   "x": 1731,
+   "y": -246,
+   "style": "shophouse",
+   "h": 8,
+   "h_basis": "sv: 2 storeys",
+   "seen": "Street View Feb 2026, 19.109191,72.884018 heading 232",
+   "ground": "signs"
+  },
+  {
+   "name": "Compound sheds and site south of the road",
+   "x": 1794,
+   "y": -488,
+   "style": "chawl",
+   "h": 6,
+   "h_basis": "sv: sheds behind a wall",
+   "seen": "Street View Feb 2026, 19.106848,72.884369 heading 230"
+  },
+  {
+   "name": "Compound sheds, west",
+   "x": 1772,
+   "y": -504,
+   "style": "chawl",
+   "h": 6,
+   "h_basis": "sv: sheds behind a wall",
+   "seen": "Street View Feb 2026, 19.106848,72.884369 heading 230"
+  },
+  {
+   "name": "Corporate Avenue campus block 1",
+   "x": -848,
+   "y": -26,
+   "style": "cw_grey",
+   "h_basis": "dsm",
+   "seen": "satellite layout only (no Street View inside the campus); facade is an estimate so the campus reads as one office development"
+  },
+  {
+   "name": "Corporate Avenue campus block 2",
+   "x": -837,
+   "y": 26,
+   "style": "cw_grey",
+   "h_basis": "dsm",
+   "seen": "satellite layout only (no Street View inside the campus); facade is an estimate so the campus reads as one office development"
+  },
+  {
+   "name": "Corporate Avenue campus block 3",
+   "x": -843,
+   "y": 57,
+   "style": "cw_grey",
+   "h_basis": "dsm",
+   "seen": "satellite layout only (no Street View inside the campus); facade is an estimate so the campus reads as one office development"
+  },
+  {
+   "name": "Corporate Avenue campus block 4",
+   "x": -796,
+   "y": 18,
+   "style": "cw_grey",
+   "h_basis": "dsm",
+   "seen": "satellite layout only (no Street View inside the campus); facade is an estimate so the campus reads as one office development"
+  },
+  {
+   "name": "Corporate Avenue campus block 5",
+   "x": -821,
+   "y": -53,
+   "style": "cw_grey",
+   "h_basis": "dsm",
+   "seen": "satellite layout only (no Street View inside the campus); facade is an estimate so the campus reads as one office development"
+  },
+  {
+   "name": "Corporate Avenue campus, long block on the main road",
+   "x": -772,
+   "y": 26,
+   "style": "cw_grey",
+   "h": 36,
+   "h_basis": "estimate from satellite shadow",
+   "seen": "satellite layout"
+  },
+  {
+   "name": "Block east of Privilon",
+   "x": 1359,
+   "y": -279,
+   "style": "glass_grid",
+   "h": 24,
+   "h_basis": "estimate: about 6 storeys on Google satellite; the 49 m satellite height reading merges Privilon's construction tower next door",
+   "seen": "Google satellite overlay"
+  }
+ ],
+ "stations": {
+  "Marol Naka (Line 1)": "Street View 19.10812,72.88040 heading 268 and 19.10815,72.87960 heading 90: concourse slab spans the whole road on large grey round piers and blue-painted square columns; the concourse is clad opaque with a billboard band (no full glazing); platform level under a flat grey metal canopy with a deep fascia on blue steel columns; a white-and-blue lift and stair core; covered stairs to the footpath with blue railings and blue roofs; shops and a bank under the deck."
+ },
+ "privilon": {
+  "footprint_xy": [
+   1337,
+   -234
+  ],
+  "seen": "Street View Feb 2026, 19.1085449,72.8787139 heading 60 and 19.10812,72.88040 heading 320: a concrete tower under construction behind Fleet House, north-west of Marol Naka station. Google Maps lists Privilon's office at plus code 4V5H+7RP, which falls on the station building (its sales office, 'Floor 1 - Marol Naka'), not the plot.",
+  "poly": [
+   [
+    1312.8,
+    -291.7
+   ],
+   [
+    1334.6,
+    -296.7
+   ],
+   [
+    1349.7,
+    -231.1
+   ],
+   [
+    1327.8,
+    -226.1
+   ]
+  ],
+  "basis": "Founder: Privilon's road face is on the same line as Fleet House, and the building is one elongated rectangular floor plate (no T), running back from the road. 22.4 m frontage x 67.3 m deep: the floor plate of the developer's CAD (media/flipkart-andheri/cad/privilon-*-plan1.json bounds), which replaced an earlier 25 x 55 m estimate. Axis from the plot strip behind Fleet House; front edge on Fleet House's road-face line. Developer render: ~16 floors, glass with stepped vertical fin zones, two dark vertical slots on the side face, double-height glazed base, Line 1 viaduct alongside."
+ },
+ "added": [
+  {
+   "name": "Corporate Avenue campus, long block on the main road",
+   "poly": [
+    [
+     -776.8,
+     -6.0
+    ],
+    [
+     -748.6,
+     -6.0
+    ],
+    [
+     -748.6,
+     53.9
+    ],
+    [
+     -789.5,
+     53.9
+    ],
+    [
+     -789.5,
+     38.4
+    ],
+    [
+     -776.8,
+     38.4
+    ]
+   ],
+   "h": 36,
+   "c": "commercial",
+   "basis": "missing from Overture and OpenStreetMap; outline traced on Google satellite tiles (Map Tiles API, zoom 19, verification overlay scripts/world/verify_overlay.py): a long north-south block whose wider north end meets Guru Hargovindji Road; height about 9 storeys, estimated.",
+   "note_trim": "South tail cut from y -15.2 to -6.0 (2026-11-23): the Corporate Avenue tower (83 x 41 m canopy, fitted to 79.1 x 35.0 m) stands here; founder to confirm on the Google satellite overlay."
+  }
+ ],
+ "corporate-avenue": {
+  "poly": [
+   [
+    -833.8,
+    -44.4
+   ],
+   [
+    -754.7,
+    -41.9
+   ],
+   [
+    -755.8,
+    -7.0
+   ],
+   [
+    -834.9,
+    -9.5
+   ]
+  ],
+  "note": "Atul Corporate Avenue tower: a 79.1 x 35.0 m box on the OSM footprint's walls (1.8 deg), moved 6.6 m north so it clears the 20 m block to the south-west. Replaces the irregular OSM outline. Founder to confirm on the Google satellite overlay.",
+  "h": 41.8
+ }
+}

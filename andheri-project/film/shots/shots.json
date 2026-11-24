@@ -1,0 +1,227 @@
+{
+ "prv_sunrise": {
+  "frames": 168,
+  "keys": [
+   {
+    "f": 0,
+    "pos": [
+     1446,
+     -414,
+     38
+    ],
+    "look": [
+     1330,
+     -262,
+     28
+    ],
+    "lens": 26
+   },
+   {
+    "f": 167,
+    "pos": [
+     1398,
+     -362,
+     31
+    ],
+    "look": [
+     1330,
+     -262,
+     36
+    ],
+    "lens": 28
+   }
+  ],
+  "pins": {
+   "Privilon": [
+    1330,
+    -265,
+    72
+   ]
+  }
+ },
+ "prv_dusk": {
+  "frames": 168,
+  "keys": [
+   {
+    "f": 0,
+    "pos": [
+     1178,
+     -332,
+     50
+    ],
+    "look": [
+     1330,
+     -262,
+     36
+    ],
+    "lens": 26
+   },
+   {
+    "f": 167,
+    "pos": [
+     1224,
+     -368,
+     40
+    ],
+    "look": [
+     1330,
+     -262,
+     32
+    ],
+    "lens": 28
+   }
+  ],
+  "pins": {
+   "Privilon": [
+    1330,
+    -265,
+    72
+   ]
+  }
+ },
+ "a723_rise": {
+  "frames": 216,
+  "keys": [
+   {
+    "f": 0,
+    "pos": [
+     1742,
+     -242,
+     24
+    ],
+    "look": [
+     1831,
+     -151,
+     30
+    ],
+    "lens": 24
+   },
+   {
+    "f": 140,
+    "pos": [
+     1750,
+     -234,
+     64
+    ],
+    "look": [
+     1831,
+     -151,
+     58
+    ],
+    "lens": 24
+   },
+   {
+    "f": 215,
+    "pos": [
+     1786,
+     -204,
+     94
+    ],
+    "look": [
+     1831,
+     -151,
+     69
+    ],
+    "lens": 26
+   }
+  ],
+  "pins": {
+   "723 Avenue": [
+    1831,
+    -151,
+    72
+   ]
+  }
+ },
+ "close_pullback": {
+  "frames": 192,
+  "keys": [
+   {
+    "f": 0,
+    "pos": [
+     1290,
+     -372,
+     70
+    ],
+    "look": [
+     1330,
+     -262,
+     40
+    ],
+    "lens": 28
+   },
+   {
+    "f": 191,
+    "pos": [
+     1060,
+     -760,
+     430
+    ],
+    "look": [
+     1600,
+     -210,
+     20
+    ],
+    "lens": 30
+   }
+  ],
+  "pins": {
+   "Privilon": [
+    1330,
+    -265,
+    72
+   ],
+   "723 Avenue": [
+    1831,
+    -151,
+    72
+   ],
+   "Times Square": [
+    1751,
+    -319,
+    66
+   ]
+  }
+ },
+ "corp_drone": {
+  "frames": 200,
+  "note": "High descent from the west-north-west: the afternoon sun (az 245) lights the corner block's west side and the white frames; the line of sight passes south of the 83 m campus tower and over the 36.5 m west neighbour.",
+  "keys": [
+   {
+    "f": 0,
+    "pos": [
+     -990,
+     70,
+     125
+    ],
+    "look": [
+     -805,
+     -20,
+     24
+    ],
+    "lens": 30
+   },
+   {
+    "f": 199,
+    "pos": [
+     -925,
+     38,
+     92
+    ],
+    "look": [
+     -798,
+     -26,
+     18
+    ],
+    "lens": 35
+   }
+  ],
+  "pins": {
+   "Corporate Avenue": [
+    -795,
+    -26,
+    44
+   ]
+  }
+ }
+}

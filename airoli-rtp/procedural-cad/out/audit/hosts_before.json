@@ -1,0 +1,12987 @@
+{
+ "about": "Door host assignments of the earlier logic (block-edge flank search + cubicle own-panel fallback), saved before the observer-review fixes, from out_variant/assemblies.json built 20 Nov 2026 00:4x. Door ids and wall ids are the same numbering as now.",
+ "openings": [
+  {
+   "id": "D001",
+   "insert_handle": "82835CC7",
+   "block": "Glass Door",
+   "layer": "DR-GLASS",
+   "kind": "glass_door",
+   "host": "W0304",
+   "flanking_walls": [
+    "W0304"
+   ],
+   "line": [
+    [
+     28.2483,
+     85.4976
+    ],
+    [
+     28.2483,
+     86.6976
+    ]
+   ],
+   "width_m": 1.2,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D002",
+   "insert_handle": "82835D69",
+   "block": "Glass Door",
+   "layer": "DR-GLASS",
+   "kind": "glass_door",
+   "host": "W0269",
+   "flanking_walls": [
+    "W0269",
+    "W0270"
+   ],
+   "line": [
+    [
+     75.492,
+     106.1975
+    ],
+    [
+     76.492,
+     106.1976
+    ]
+   ],
+   "width_m": 1.0,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D003",
+   "insert_handle": "8283648E",
+   "block": "Glass Door",
+   "layer": "DR-GLASS",
+   "kind": "glass_door",
+   "host": null,
+   "flanking_walls": [],
+   "line": [
+    [
+     76.392,
+     106.1225
+    ],
+    [
+     77.292,
+     106.1225
+    ]
+   ],
+   "width_m": 0.9,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D004",
+   "insert_handle": "82836492",
+   "block": "Glass Door",
+   "layer": "DR-GLASS",
+   "kind": "glass_door",
+   "host": null,
+   "flanking_walls": [],
+   "line": [
+    [
+     100.52,
+     107.1475
+    ],
+    [
+     100.52,
+     106.2475
+    ]
+   ],
+   "width_m": 0.9,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D005",
+   "insert_handle": "828364B0",
+   "block": "D-750",
+   "layer": "DOOR",
+   "kind": "solid_door",
+   "host": "W0287",
+   "flanking_walls": [
+    "W0287",
+    "W0286"
+   ],
+   "line": [
+    [
+     102.3175,
+     110.6949
+    ],
+    [
+     102.3175,
+     109.8449
+    ]
+   ],
+   "width_m": 0.85,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D006",
+   "insert_handle": "828364B2",
+   "block": "D-750",
+   "layer": "DOOR",
+   "kind": "solid_door",
+   "host": "W0285",
+   "flanking_walls": [
+    "W0285"
+   ],
+   "line": [
+    [
+     102.2675,
+     108.2475
+    ],
+    [
+     102.2675,
+     107.4975
+    ]
+   ],
+   "width_m": 0.75,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D007",
+   "insert_handle": "828364B5",
+   "block": "D-750",
+   "layer": "DOOR",
+   "kind": "solid_door",
+   "host": "W0285",
+   "flanking_walls": [
+    "W0286",
+    "W0285"
+   ],
+   "line": [
+    [
+     102.3175,
+     109.4949
+    ],
+    [
+     102.3175,
+     108.6449
+    ]
+   ],
+   "width_m": 0.85,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D008",
+   "insert_handle": "828364C2",
+   "block": "D-750",
+   "layer": "DOOR",
+   "kind": "solid_door",
+   "host": "W0290",
+   "flanking_walls": [
+    "W0290",
+    "W0289"
+   ],
+   "line": [
+    [
+     108.22,
+     110.2813
+    ],
+    [
+     108.22,
+     109.4313
+    ]
+   ],
+   "width_m": 0.85,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D009",
+   "insert_handle": "828364C4",
+   "block": "D-750",
+   "layer": "DOOR",
+   "kind": "solid_door",
+   "host": "W0288",
+   "flanking_walls": [
+    "W0288"
+   ],
+   "line": [
+    [
+     108.17,
+     107.0473
+    ],
+    [
+     108.17,
+     106.2973
+    ]
+   ],
+   "width_m": 0.75,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D010",
+   "insert_handle": "828364C6",
+   "block": "D-750",
+   "layer": "DOOR",
+   "kind": "solid_door",
+   "host": "W0288",
+   "flanking_walls": [
+    "W0289",
+    "W0288"
+   ],
+   "line": [
+    [
+     108.22,
+     108.6669
+    ],
+    [
+     108.22,
+     107.8153
+    ]
+   ],
+   "width_m": 0.852,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D011",
+   "insert_handle": "828364DA",
+   "block": "Glass Door",
+   "layer": "DR-GLASS",
+   "kind": "glass_door",
+   "host": null,
+   "flanking_walls": [],
+   "line": [
+    [
+     104.1613,
+     106.1225
+    ],
+    [
+     105.0613,
+     106.1225
+    ]
+   ],
+   "width_m": 0.9,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D012",
+   "insert_handle": "82836BD0",
+   "block": "double door",
+   "layer": "I-FURN",
+   "kind": "solid_door",
+   "host": "W0197",
+   "flanking_walls": [
+    "W0197"
+   ],
+   "line": [
+    [
+     89.1696,
+     92.2726
+    ],
+    [
+     89.1696,
+     94.0726
+    ]
+   ],
+   "width_m": 1.8,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D013",
+   "insert_handle": "82836C41",
+   "block": "Glass Door",
+   "layer": "DR-GLASS",
+   "kind": "glass_door",
+   "host": "W0309",
+   "flanking_walls": [
+    "W0309"
+   ],
+   "line": [
+    [
+     34.0386,
+     94.429
+    ],
+    [
+     34.9387,
+     94.429
+    ]
+   ],
+   "width_m": 0.9,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D014",
+   "insert_handle": "82836C5C",
+   "block": "Glass Door",
+   "layer": "DR-GLASS",
+   "kind": "glass_door",
+   "host": "W0271",
+   "flanking_walls": [
+    "W0271"
+   ],
+   "line": [
+    [
+     94.7761,
+     106.1225
+    ],
+    [
+     95.6761,
+     106.1225
+    ]
+   ],
+   "width_m": 0.9,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D015",
+   "insert_handle": "82836C64",
+   "block": "D-750",
+   "layer": "DOOR",
+   "kind": "solid_door",
+   "host": null,
+   "flanking_walls": [],
+   "line": [
+    [
+     91.4138,
+     108.0708
+    ],
+    [
+     91.4138,
+     108.6699
+    ]
+   ],
+   "width_m": 0.599,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D016",
+   "insert_handle": "82836D3E",
+   "block": "Glass Door",
+   "layer": "DR-GLASS",
+   "kind": "glass_door",
+   "host": "W0310",
+   "flanking_walls": [
+    "W0310"
+   ],
+   "line": [
+    [
+     34.9389,
+     94.429
+    ],
+    [
+     35.8389,
+     94.429
+    ]
+   ],
+   "width_m": 0.9,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D017",
+   "insert_handle": "82836F06",
+   "block": "Glass Door",
+   "layer": "DR-GLASS",
+   "kind": "glass_door",
+   "host": null,
+   "flanking_walls": [],
+   "line": [
+    [
+     99.57,
+     106.2475
+    ],
+    [
+     99.57,
+     107.1475
+    ]
+   ],
+   "width_m": 0.9,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D018",
+   "insert_handle": "82836F14",
+   "block": "Glass Door",
+   "layer": "DR-GLASS",
+   "kind": "glass_door",
+   "host": "W0272",
+   "flanking_walls": [
+    "W0271",
+    "W0272"
+   ],
+   "line": [
+    [
+     96.7093,
+     106.1963
+    ],
+    [
+     97.8409,
+     106.1987
+    ]
+   ],
+   "width_m": 1.132,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D019",
+   "insert_handle": "82836F3B",
+   "block": "D-750",
+   "layer": "DOOR",
+   "kind": "solid_door",
+   "host": null,
+   "flanking_walls": [],
+   "line": [
+    [
+     96.3704,
+     109.9476
+    ],
+    [
+     96.9704,
+     109.9476
+    ]
+   ],
+   "width_m": 0.6,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D020",
+   "insert_handle": "82836F3F",
+   "block": "D-750",
+   "layer": "DOOR",
+   "kind": "solid_door",
+   "host": null,
+   "flanking_walls": [],
+   "line": [
+    [
+     96.9954,
+     109.9476
+    ],
+    [
+     97.5954,
+     109.9476
+    ]
+   ],
+   "width_m": 0.6,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D021",
+   "insert_handle": "82836F41",
+   "block": "D-750",
+   "layer": "DOOR",
+   "kind": "solid_door",
+   "host": null,
+   "flanking_walls": [],
+   "line": [
+    [
+     98.1767,
+     109.9476
+    ],
+    [
+     98.1767,
+     109.3476
+    ]
+   ],
+   "width_m": 0.6,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D022",
+   "insert_handle": "82836F8D",
+   "block": "D-750",
+   "layer": "DOOR",
+   "kind": "solid_door",
+   "host": null,
+   "flanking_walls": [],
+   "line": [
+    [
+     91.4138,
+     108.7199
+    ],
+    [
+     91.4138,
+     109.3191
+    ]
+   ],
+   "width_m": 0.599,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D023",
+   "insert_handle": "82836F8F",
+   "block": "D-750",
+   "layer": "DOOR",
+   "kind": "solid_door",
+   "host": null,
+   "flanking_walls": [],
+   "line": [
+    [
+     91.4138,
+     109.9199
+    ],
+    [
+     91.4138,
+     110.5191
+    ]
+   ],
+   "width_m": 0.599,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D024",
+   "insert_handle": "82838006",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR",
+   "kind": "solid_door",
+   "host": "W0317",
+   "flanking_walls": [
+    "W0317",
+    "W0316"
+   ],
+   "line": [
+    [
+     61.4961,
+     106.2225
+    ],
+    [
+     62.5238,
+     106.2225
+    ]
+   ],
+   "width_m": 1.028,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D025",
+   "insert_handle": "8283802C",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR",
+   "kind": "solid_door",
+   "host": "W0318",
+   "flanking_walls": [
+    "W0318",
+    "W0319"
+   ],
+   "line": [
+    [
+     68.9836,
+     106.2225
+    ],
+    [
+     70.0114,
+     106.2225
+    ]
+   ],
+   "width_m": 1.028,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D026",
+   "insert_handle": "828399FC",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0334",
+   "flanking_walls": [
+    "W0334",
+    "W0333"
+   ],
+   "line": [
+    [
+     48.5542,
+     104.4273
+    ],
+    [
+     47.3542,
+     104.4273
+    ]
+   ],
+   "width_m": 1.2,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D027",
+   "insert_handle": "82839B71",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0332",
+   "flanking_walls": [
+    "W0332"
+   ],
+   "line": [
+    [
+     78.3714,
+     103.391
+    ],
+    [
+     78.3714,
+     104.3097
+    ]
+   ],
+   "width_m": 0.919,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D028",
+   "insert_handle": "82839BAC",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0331",
+   "flanking_walls": [
+    "W0331",
+    "W0332"
+   ],
+   "line": [
+    [
+     78.3339,
+     100.574
+    ],
+    [
+     78.3339,
+     101.648
+    ]
+   ],
+   "width_m": 1.074,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D029",
+   "insert_handle": "82839BC1",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0329",
+   "flanking_walls": [
+    "W0329",
+    "W0330"
+   ],
+   "line": [
+    [
+     78.3339,
+     97.757
+    ],
+    [
+     78.3339,
+     98.656
+    ]
+   ],
+   "width_m": 0.899,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D030",
+   "insert_handle": "82839BD6",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0327",
+   "flanking_walls": [
+    "W0327",
+    "W0328"
+   ],
+   "line": [
+    [
+     78.3339,
+     94.94
+    ],
+    [
+     78.3339,
+     95.839
+    ]
+   ],
+   "width_m": 0.899,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D031",
+   "insert_handle": "82839BE8",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0362",
+   "flanking_walls": [
+    "W0363",
+    "W0362"
+   ],
+   "line": [
+    [
+     79.5773,
+     92.6352
+    ],
+    [
+     78.6782,
+     92.6352
+    ]
+   ],
+   "width_m": 0.899,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D032",
+   "insert_handle": "82839C0E",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0339",
+   "flanking_walls": [
+    "W0339",
+    "W0338"
+   ],
+   "line": [
+    [
+     72.7437,
+     104.4274
+    ],
+    [
+     71.3687,
+     104.4275
+    ]
+   ],
+   "width_m": 1.375,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D033",
+   "insert_handle": "82839C86",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0368",
+   "flanking_walls": [
+    "W0368"
+   ],
+   "line": [
+    [
+     79.64,
+     104.3097
+    ],
+    [
+     79.64,
+     103.391
+    ]
+   ],
+   "width_m": 0.919,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D034",
+   "insert_handle": "82839EFB",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0376",
+   "flanking_walls": [
+    "W0376"
+   ],
+   "line": [
+    [
+     117.4515,
+     106.1475
+    ],
+    [
+     118.3712,
+     106.1475
+    ]
+   ],
+   "width_m": 0.92,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D035",
+   "insert_handle": "8283A348",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0347",
+   "flanking_walls": [
+    "W0347",
+    "W0348"
+   ],
+   "line": [
+    [
+     96.0175,
+     104.4275
+    ],
+    [
+     95.1185,
+     104.4275
+    ]
+   ],
+   "width_m": 0.899,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D036",
+   "insert_handle": "8283A40F",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0337",
+   "flanking_walls": [
+    "W0337",
+    "W0338"
+   ],
+   "line": [
+    [
+     71.2687,
+     104.4275
+    ],
+    [
+     70.3697,
+     104.4275
+    ]
+   ],
+   "width_m": 0.899,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D037",
+   "insert_handle": "8283A422",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0337",
+   "flanking_walls": [
+    "W0336",
+    "W0337"
+   ],
+   "line": [
+    [
+     68.8704,
+     104.4275
+    ],
+    [
+     67.7964,
+     104.4275
+    ]
+   ],
+   "width_m": 1.074,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D038",
+   "insert_handle": "8283D108",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0383",
+   "flanking_walls": [
+    "W0335",
+    "W0383"
+   ],
+   "line": [
+    [
+     61.1797,
+     104.4273
+    ],
+    [
+     59.9796,
+     104.4273
+    ]
+   ],
+   "width_m": 1.2,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D039",
+   "insert_handle": "8283D129",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0341",
+   "flanking_walls": [
+    "W0341",
+    "W0340"
+   ],
+   "line": [
+    [
+     74.1675,
+     104.4275
+    ],
+    [
+     73.2685,
+     104.4275
+    ]
+   ],
+   "width_m": 0.899,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D040",
+   "insert_handle": "8283D585",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0349",
+   "flanking_walls": [
+    "W0349",
+    "W0350"
+   ],
+   "line": [
+    [
+     98.7571,
+     104.4275
+    ],
+    [
+     97.6831,
+     104.4275
+    ]
+   ],
+   "width_m": 1.074,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D041",
+   "insert_handle": "8283D766",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0352",
+   "flanking_walls": [
+    "W0352"
+   ],
+   "line": [
+    [
+     113.2258,
+     104.465
+    ],
+    [
+     112.006,
+     104.465
+    ]
+   ],
+   "width_m": 1.22,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D042",
+   "insert_handle": "8283D892",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0389",
+   "flanking_walls": [
+    "W0389"
+   ],
+   "line": [
+    [
+     127.562,
+     91.0314
+    ],
+    [
+     127.562,
+     91.9501
+    ]
+   ],
+   "width_m": 0.919,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D043",
+   "insert_handle": "8283D918",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0442",
+   "flanking_walls": [
+    "W0442",
+    "W0391"
+   ],
+   "line": [
+    [
+     127.5277,
+     88.6021
+    ],
+    [
+     127.5245,
+     89.5011
+    ]
+   ],
+   "width_m": 0.899,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D044",
+   "insert_handle": "8283DBC7",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": null,
+   "flanking_walls": [],
+   "line": [
+    [
+     125.868,
+     106.1475
+    ],
+    [
+     126.7876,
+     106.1475
+    ]
+   ],
+   "width_m": 0.92,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D045",
+   "insert_handle": "8283DD58",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR",
+   "kind": "solid_door",
+   "host": "W0321",
+   "flanking_walls": [
+    "W0321",
+    "W0322"
+   ],
+   "line": [
+    [
+     88.3861,
+     106.2225
+    ],
+    [
+     89.4139,
+     106.2225
+    ]
+   ],
+   "width_m": 1.028,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D046",
+   "insert_handle": "8283DD6A",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR",
+   "kind": "solid_door",
+   "host": "W0321",
+   "flanking_walls": [
+    "W0321",
+    "W0320"
+   ],
+   "line": [
+    [
+     81.2461,
+     106.2225
+    ],
+    [
+     82.2738,
+     106.2225
+    ]
+   ],
+   "width_m": 1.028,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D047",
+   "insert_handle": "8283DD7C",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR",
+   "kind": "solid_door",
+   "host": "W0398",
+   "flanking_walls": [
+    "W0398",
+    "W0397"
+   ],
+   "line": [
+    [
+     80.2301,
+     111.3536
+    ],
+    [
+     80.2301,
+     112.3814
+    ]
+   ],
+   "width_m": 1.028,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D048",
+   "insert_handle": "8283DD8E",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR",
+   "kind": "solid_door",
+   "host": "W0402",
+   "flanking_walls": [
+    "W0402",
+    "W0401"
+   ],
+   "line": [
+    [
+     90.4301,
+     112.3814
+    ],
+    [
+     90.4301,
+     111.3536
+    ]
+   ],
+   "width_m": 1.028,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D049",
+   "insert_handle": "8283DDE1",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0409",
+   "flanking_walls": [
+    "W0409",
+    "W0413"
+   ],
+   "line": [
+    [
+     51.684,
+     106.185
+    ],
+    [
+     52.583,
+     106.1853
+    ]
+   ],
+   "width_m": 0.899,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D050",
+   "insert_handle": "8283DDF2",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0412",
+   "flanking_walls": [
+    "W0412"
+   ],
+   "line": [
+    [
+     41.7402,
+     106.1475
+    ],
+    [
+     42.6589,
+     106.1475
+    ]
+   ],
+   "width_m": 0.919,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D051",
+   "insert_handle": "8283DE9A",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0411",
+   "flanking_walls": [
+    "W0414",
+    "W0411"
+   ],
+   "line": [
+    [
+     34.0323,
+     97.8104
+    ],
+    [
+     34.9313,
+     97.8101
+    ]
+   ],
+   "width_m": 0.899,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D052",
+   "insert_handle": "8283E414",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0366",
+   "flanking_walls": [
+    "W0366",
+    "W0367"
+   ],
+   "line": [
+    [
+     79.6775,
+     101.7761
+    ],
+    [
+     79.6775,
+     100.8771
+    ]
+   ],
+   "width_m": 0.899,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D053",
+   "insert_handle": "8283E42B",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0364",
+   "flanking_walls": [
+    "W0364",
+    "W0365"
+   ],
+   "line": [
+    [
+     79.6775,
+     99.2623
+    ],
+    [
+     79.6775,
+     98.3633
+    ]
+   ],
+   "width_m": 0.899,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D054",
+   "insert_handle": "8283E4A6",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0344",
+   "flanking_walls": [
+    "W0344",
+    "W0345"
+   ],
+   "line": [
+    [
+     89.4359,
+     104.4275
+    ],
+    [
+     88.5369,
+     104.4275
+    ]
+   ],
+   "width_m": 0.899,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D055",
+   "insert_handle": "8283E74D",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0427",
+   "flanking_walls": [
+    "W0427"
+   ],
+   "line": [
+    [
+     92.4279,
+     103.391
+    ],
+    [
+     92.4279,
+     104.3097
+    ]
+   ],
+   "width_m": 0.919,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D056",
+   "insert_handle": "8283E765",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0425",
+   "flanking_walls": [
+    "W0425",
+    "W0426"
+   ],
+   "line": [
+    [
+     92.3904,
+     100.8771
+    ],
+    [
+     92.3904,
+     101.7761
+    ]
+   ],
+   "width_m": 0.899,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D057",
+   "insert_handle": "8283E77B",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0423",
+   "flanking_walls": [
+    "W0423",
+    "W0424"
+   ],
+   "line": [
+    [
+     92.3904,
+     98.3633
+    ],
+    [
+     92.3904,
+     99.2623
+    ]
+   ],
+   "width_m": 0.899,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D058",
+   "insert_handle": "8283E7FF",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0420",
+   "flanking_walls": [
+    "W0420",
+    "W0432"
+   ],
+   "line": [
+    [
+     90.469,
+     91.6687
+    ],
+    [
+     89.5695,
+     91.6687
+    ]
+   ],
+   "width_m": 0.899,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D059",
+   "insert_handle": "8283E838",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0421",
+   "flanking_walls": [
+    "W0421",
+    "W0422"
+   ],
+   "line": [
+    [
+     92.3904,
+     95.8495
+    ],
+    [
+     92.3904,
+     96.7485
+    ]
+   ],
+   "width_m": 0.899,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D060",
+   "insert_handle": "8283E907",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0350",
+   "flanking_walls": [
+    "W0350"
+   ],
+   "line": [
+    [
+     100.3066,
+     104.465
+    ],
+    [
+     99.3879,
+     104.465
+    ]
+   ],
+   "width_m": 0.919,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D061",
+   "insert_handle": "8283E959",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0351",
+   "flanking_walls": [
+    "W0351"
+   ],
+   "line": [
+    [
+     101.4609,
+     104.465
+    ],
+    [
+     100.5422,
+     104.465
+    ]
+   ],
+   "width_m": 0.919,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D062",
+   "insert_handle": "8283E9D7",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0374",
+   "flanking_walls": [
+    "W0374"
+   ],
+   "line": [
+    [
+     110.5008,
+     90.9006
+    ],
+    [
+     110.5008,
+     91.8193
+    ]
+   ],
+   "width_m": 0.919,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D063",
+   "insert_handle": "8283EA7D",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0436",
+   "flanking_walls": [
+    "W0436",
+    "W0437"
+   ],
+   "line": [
+    [
+     111.6468,
+     90.7828
+    ],
+    [
+     110.7478,
+     90.7828
+    ]
+   ],
+   "width_m": 0.899,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D064",
+   "insert_handle": "8283EAEF",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0392",
+   "flanking_walls": [
+    "W0392"
+   ],
+   "line": [
+    [
+     127.562,
+     89.8771
+    ],
+    [
+     127.562,
+     90.7957
+    ]
+   ],
+   "width_m": 0.919,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D065",
+   "insert_handle": "8283EB1B",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0446",
+   "flanking_walls": [
+    "W0446",
+    "W0445"
+   ],
+   "line": [
+    [
+     128.5642,
+     88.3585
+    ],
+    [
+     127.6652,
+     88.3585
+    ]
+   ],
+   "width_m": 0.899,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D066",
+   "insert_handle": "8283EB37",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": null,
+   "flanking_walls": [],
+   "line": [
+    [
+     124.1839,
+     106.1475
+    ],
+    [
+     125.1036,
+     106.1475
+    ]
+   ],
+   "width_m": 0.92,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D067",
+   "insert_handle": "8283EB49",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": null,
+   "flanking_walls": [],
+   "line": [
+    [
+     123.029,
+     106.1475
+    ],
+    [
+     123.9487,
+     106.1475
+    ]
+   ],
+   "width_m": 0.92,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D068",
+   "insert_handle": "8283F018",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0233",
+   "flanking_walls": [
+    "W0233"
+   ],
+   "line": [
+    [
+     130.9676,
+     101.4017
+    ],
+    [
+     130.9676,
+     102.3023
+    ]
+   ],
+   "width_m": 0.901,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D069",
+   "insert_handle": "8283F089",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": null,
+   "flanking_walls": [],
+   "line": [
+    [
+     134.5019,
+     101.4017
+    ],
+    [
+     135.428,
+     101.4017
+    ]
+   ],
+   "width_m": 0.926,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D070",
+   "insert_handle": "8283F0A4",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": null,
+   "flanking_walls": [],
+   "line": [
+    [
+     136.547,
+     98.829
+    ],
+    [
+     136.7776,
+     97.9387
+    ]
+   ],
+   "width_m": 0.92,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D071",
+   "insert_handle": "8283F0B7",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": null,
+   "flanking_walls": [],
+   "line": [
+    [
+     136.1512,
+     99.9184
+    ],
+    [
+     136.4747,
+     99.0576
+    ]
+   ],
+   "width_m": 0.92,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D072",
+   "insert_handle": "8283F0CA",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": null,
+   "flanking_walls": [],
+   "line": [
+    [
+     136.9313,
+     97.0639
+    ],
+    [
+     137.0143,
+     96.148
+    ]
+   ],
+   "width_m": 0.92,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D073",
+   "insert_handle": "8283F0E9",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "host": "W0449",
+   "flanking_walls": [
+    "W0449"
+   ],
+   "line": [
+    [
+     130.0787,
+     100.5638
+    ],
+    [
+     130.0787,
+     99.6441
+    ]
+   ],
+   "width_m": 0.92,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D074",
+   "insert_handle": "8284043F",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "host": "W0394",
+   "flanking_walls": [
+    "W0394"
+   ],
+   "line": [
+    [
+     87.2498,
+     106.2762
+    ],
+    [
+     85.88,
+     106.2762
+    ]
+   ],
+   "width_m": 1.37,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D075",
+   "insert_handle": "82840440",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "host": "W0403",
+   "flanking_walls": [
+    "W0403"
+   ],
+   "line": [
+    [
+     85.88,
+     108.2002
+    ],
+    [
+     85.88,
+     107.2275
+    ]
+   ],
+   "width_m": 0.973,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D076",
+   "insert_handle": "82840449",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "host": "W0403",
+   "flanking_walls": [
+    "W0403"
+   ],
+   "line": [
+    [
+     85.88,
+     109.1515
+    ],
+    [
+     85.88,
+     108.1788
+    ]
+   ],
+   "width_m": 0.973,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D077",
+   "insert_handle": "8284044A",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "host": "W0462",
+   "flanking_walls": [
+    "W0462"
+   ],
+   "line": [
+    [
+     87.2498,
+     110.1029
+    ],
+    [
+     85.88,
+     110.1029
+    ]
+   ],
+   "width_m": 1.37,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D078",
+   "insert_handle": "8284044B",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "host": "W0465",
+   "flanking_walls": [
+    "W0465"
+   ],
+   "line": [
+    [
+     87.2498,
+     111.0542
+    ],
+    [
+     85.88,
+     111.0542
+    ]
+   ],
+   "width_m": 1.37,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D079",
+   "insert_handle": "8284044C",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "host": "W0466",
+   "flanking_walls": [
+    "W0466"
+   ],
+   "line": [
+    [
+     87.2498,
+     112.0055
+    ],
+    [
+     85.88,
+     112.0055
+    ]
+   ],
+   "width_m": 1.37,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D080",
+   "insert_handle": "8284044D",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "host": "W0404",
+   "flanking_walls": [
+    "W0404"
+   ],
+   "line": [
+    [
+     85.88,
+     112.9568
+    ],
+    [
+     85.88,
+     111.9842
+    ]
+   ],
+   "width_m": 0.973,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D081",
+   "insert_handle": "828404A6",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "host": "W0469",
+   "flanking_walls": [
+    "W0469"
+   ],
+   "line": [
+    [
+     89.1737,
+     111.8615
+    ],
+    [
+     89.1737,
+     113.2313
+    ]
+   ],
+   "width_m": 1.37,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D082",
+   "insert_handle": "828404C0",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "host": "W0475",
+   "flanking_walls": [
+    "W0475"
+   ],
+   "line": [
+    [
+     83.3153,
+     109.6213
+    ],
+    [
+     83.3153,
+     108.2515
+    ]
+   ],
+   "width_m": 1.37,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D083",
+   "insert_handle": "828404C1",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "host": "W0472",
+   "flanking_walls": [
+    "W0472"
+   ],
+   "line": [
+    [
+     82.3639,
+     108.2515
+    ],
+    [
+     83.3366,
+     108.2515
+    ]
+   ],
+   "width_m": 0.973,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D084",
+   "insert_handle": "828404C9",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "host": "W0479",
+   "flanking_walls": [
+    "W0479"
+   ],
+   "line": [
+    [
+     85.73,
+     112.3013
+    ],
+    [
+     84.3602,
+     112.3013
+    ]
+   ],
+   "width_m": 1.37,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D085",
+   "insert_handle": "828404CA",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "host": "W0404",
+   "flanking_walls": [
+    "W0404"
+   ],
+   "line": [
+    [
+     85.73,
+     113.2527
+    ],
+    [
+     85.73,
+     112.28
+    ]
+   ],
+   "width_m": 0.973,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D086",
+   "insert_handle": "828404CB",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "host": "W0478",
+   "flanking_walls": [
+    "W0478"
+   ],
+   "line": [
+    [
+     83.5386,
+     112.3013
+    ],
+    [
+     82.1688,
+     112.3013
+    ]
+   ],
+   "width_m": 1.37,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D087",
+   "insert_handle": "828404CC",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "host": "W0478",
+   "flanking_walls": [
+    "W0478"
+   ],
+   "line": [
+    [
+     83.5386,
+     113.2527
+    ],
+    [
+     82.1688,
+     113.2527
+    ]
+   ],
+   "width_m": 1.37,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D088",
+   "insert_handle": "828404CE",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR",
+   "kind": "solid_door",
+   "host": "W0406",
+   "flanking_walls": [
+    "W0406",
+    "W0405"
+   ],
+   "line": [
+    [
+     80.4112,
+     113.3062
+    ],
+    [
+     81.4389,
+     113.3063
+    ]
+   ],
+   "width_m": 1.028,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D089",
+   "insert_handle": "828404E2",
+   "block": "A$C03859404",
+   "layer": "WS-DOOR",
+   "kind": "solid_door",
+   "host": null,
+   "flanking_walls": [],
+   "line": [
+    [
+     84.93,
+     109.6213
+    ],
+    [
+     84.2986,
+     109.6213
+    ]
+   ],
+   "width_m": 0.631,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D090",
+   "insert_handle": "828405A1",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "host": "W0453",
+   "flanking_walls": [
+    "W0453"
+   ],
+   "line": [
+    [
+     66.4205,
+     107.2506
+    ],
+    [
+     65.0506,
+     107.2506
+    ]
+   ],
+   "width_m": 1.37,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D091",
+   "insert_handle": "828405A2",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "host": "W0458",
+   "flanking_walls": [
+    "W0458"
+   ],
+   "line": [
+    [
+     66.4205,
+     108.2019
+    ],
+    [
+     65.0506,
+     108.2019
+    ]
+   ],
+   "width_m": 1.37,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D092",
+   "insert_handle": "828405A3",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "host": "W0461",
+   "flanking_walls": [
+    "W0461"
+   ],
+   "line": [
+    [
+     66.4205,
+     109.1533
+    ],
+    [
+     65.0506,
+     109.1533
+    ]
+   ],
+   "width_m": 1.37,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D093",
+   "insert_handle": "828405A4",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "host": "W0464",
+   "flanking_walls": [
+    "W0464"
+   ],
+   "line": [
+    [
+     66.4205,
+     110.1046
+    ],
+    [
+     65.0506,
+     110.1046
+    ]
+   ],
+   "width_m": 1.37,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D094",
+   "insert_handle": "828405A5",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "host": "W0046",
+   "flanking_walls": [
+    "W0046",
+    "W0098"
+   ],
+   "line": [
+    [
+     66.34,
+     111.1725
+    ],
+    [
+     65.29,
+     111.135
+    ]
+   ],
+   "width_m": 1.051,
+   "width_why": "gap between the two wall ends either side of the door block"
+  },
+  {
+   "id": "D095",
+   "insert_handle": "828405C4",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "host": "W0457",
+   "flanking_walls": [
+    "W0457"
+   ],
+   "line": [
+    [
+     67.9362,
+     108.1806
+    ],
+    [
+     66.5664,
+     108.1806
+    ]
+   ],
+   "width_m": 1.37,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D096",
+   "insert_handle": "828405C5",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "host": "W0463",
+   "flanking_walls": [
+    "W0463"
+   ],
+   "line": [
+    [
+     67.9362,
+     110.1046
+    ],
+    [
+     66.5664,
+     110.1046
+    ]
+   ],
+   "width_m": 1.37,
+   "width_why": "edge of the door block along the wall (one or no flanking wall end found)"
+  },
+  {
+   "id": "D097",
+   "insert_handle": "828405C6",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "host": "W0485",
+   "flanking_walls": [
+    "W0485",
+    "W0101"
+   ],
+   "line": [
+    [
+     68.1275,
+     111.135
+    ],
+    [
+     66.4205,
+     111.0453
+    ]
+   ],
+   "width_m": 1.709,
+   "width_why": "gap between the two wall ends either side of the door block"
+  }
+ ],
+ "walls": {
+  "W0001": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     129.9968,
+     82.0038
+    ],
+    [
+     130.5572,
+     82.1899
+    ],
+    [
+     131.1094,
+     82.3992
+    ],
+    [
+     131.6525,
+     82.6312
+    ],
+    [
+     132.1855,
+     82.8855
+    ],
+    [
+     132.7074,
+     83.1618
+    ],
+    [
+     133.2174,
+     83.4594
+    ],
+    [
+     133.7147,
+     83.778
+    ],
+    [
+     134.1983,
+     84.117
+    ],
+    [
+     134.6674,
+     84.4757
+    ],
+    [
+     135.1212,
+     84.8536
+    ],
+    [
+     135.5589,
+     85.25
+    ],
+    [
+     135.9798,
+     85.6642
+    ],
+    [
+     136.3832,
+     86.0956
+    ],
+    [
+     136.7682,
+     86.5433
+    ],
+    [
+     137.1344,
+     87.0066
+    ],
+    [
+     137.481,
+     87.4847
+    ],
+    [
+     137.8075,
+     87.9768
+    ],
+    [
+     138.1133,
+     88.482
+    ],
+    [
+     138.3978,
+     88.9995
+    ],
+    [
+     138.6606,
+     89.5284
+    ],
+    [
+     138.9013,
+     90.0677
+    ],
+    [
+     139.1193,
+     90.6165
+    ],
+    [
+     139.3144,
+     91.1739
+    ],
+    [
+     139.4862,
+     91.7389
+    ],
+    [
+     139.6343,
+     92.3105
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "828335A9",
+    "828335B2"
+   ]
+  },
+  "W0002": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     129.9968,
+     82.0036
+    ],
+    [
+     130.5572,
+     82.1897
+    ],
+    [
+     131.1094,
+     82.399
+    ],
+    [
+     131.6525,
+     82.631
+    ],
+    [
+     132.1855,
+     82.8853
+    ],
+    [
+     132.7074,
+     83.1616
+    ],
+    [
+     133.2174,
+     83.4592
+    ],
+    [
+     133.7147,
+     83.7778
+    ],
+    [
+     134.1983,
+     84.1168
+    ],
+    [
+     134.6674,
+     84.4755
+    ],
+    [
+     135.1212,
+     84.8534
+    ],
+    [
+     135.5589,
+     85.2498
+    ],
+    [
+     135.9798,
+     85.664
+    ],
+    [
+     136.3831,
+     86.0954
+    ],
+    [
+     136.7682,
+     86.5431
+    ],
+    [
+     137.1344,
+     87.0064
+    ],
+    [
+     137.481,
+     87.4845
+    ],
+    [
+     137.8075,
+     87.9766
+    ],
+    [
+     138.1133,
+     88.4819
+    ],
+    [
+     138.3978,
+     88.9993
+    ],
+    [
+     138.6606,
+     89.5282
+    ],
+    [
+     138.9013,
+     90.0675
+    ],
+    [
+     139.1193,
+     90.6163
+    ],
+    [
+     139.3144,
+     91.1737
+    ],
+    [
+     139.4862,
+     91.7387
+    ],
+    [
+     139.6343,
+     92.3104
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "8283363D",
+    "828335B2"
+   ]
+  },
+  "W0003": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     129.9968,
+     82.0036
+    ],
+    [
+     130.5573,
+     82.1898
+    ],
+    [
+     131.1096,
+     82.3991
+    ],
+    [
+     131.6528,
+     82.6311
+    ],
+    [
+     132.1859,
+     82.8855
+    ],
+    [
+     132.7079,
+     83.1618
+    ],
+    [
+     133.218,
+     83.4596
+    ],
+    [
+     133.7153,
+     83.7783
+    ],
+    [
+     134.199,
+     84.1173
+    ],
+    [
+     134.6682,
+     84.4761
+    ],
+    [
+     135.122,
+     84.8541
+    ],
+    [
+     135.5598,
+     85.2507
+    ],
+    [
+     135.9808,
+     85.665
+    ],
+    [
+     136.3841,
+     86.0965
+    ],
+    [
+     136.7693,
+     86.5443
+    ],
+    [
+     137.1354,
+     87.0078
+    ],
+    [
+     137.4821,
+     87.486
+    ],
+    [
+     137.8086,
+     87.9783
+    ],
+    [
+     138.1143,
+     88.4836
+    ],
+    [
+     138.3988,
+     89.0012
+    ],
+    [
+     138.6616,
+     89.5302
+    ],
+    [
+     138.9022,
+     90.0697
+    ],
+    [
+     139.1202,
+     90.6186
+    ],
+    [
+     139.3152,
+     91.1762
+    ],
+    [
+     139.4869,
+     91.7413
+    ],
+    [
+     139.635,
+     92.3131
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "82833640",
+    "828335A9"
+   ]
+  },
+  "W0004": {
+   "type": "brick_block",
+   "axis": [
+    [
+     110.9284,
+     112.7086
+    ],
+    [
+     110.4283,
+     112.7641
+    ],
+    [
+     109.928,
+     112.8174
+    ],
+    [
+     109.4275,
+     112.8686
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828337A3",
+    "828337A4"
+   ]
+  },
+  "W0005": {
+   "type": "brick_block",
+   "axis": [
+    [
+     130.1679,
+     82.2807
+    ],
+    [
+     130.6693,
+     82.4522
+    ],
+    [
+     131.1639,
+     82.6426
+    ],
+    [
+     131.6509,
+     82.8516
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828345A6",
+    "82834D23"
+   ]
+  },
+  "W0006": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     42.5022,
+     80.9029
+    ],
+    [
+     43.0908,
+     80.8695
+    ],
+    [
+     43.6794,
+     80.8371
+    ],
+    [
+     44.2681,
+     80.8056
+    ],
+    [
+     44.8568,
+     80.7749
+    ],
+    [
+     45.4456,
+     80.7452
+    ],
+    [
+     46.0344,
+     80.7163
+    ],
+    [
+     46.6232,
+     80.6884
+    ],
+    [
+     47.2121,
+     80.6613
+    ],
+    [
+     47.8011,
+     80.6351
+    ],
+    [
+     48.39,
+     80.6099
+    ],
+    [
+     48.9791,
+     80.5855
+    ],
+    [
+     49.5681,
+     80.562
+    ],
+    [
+     50.1572,
+     80.5394
+    ],
+    [
+     50.7463,
+     80.5177
+    ],
+    [
+     51.3355,
+     80.4969
+    ],
+    [
+     51.9246,
+     80.4769
+    ],
+    [
+     52.5138,
+     80.4579
+    ],
+    [
+     53.1031,
+     80.4398
+    ],
+    [
+     53.6923,
+     80.4226
+    ],
+    [
+     54.2816,
+     80.4062
+    ],
+    [
+     54.871,
+     80.3908
+    ],
+    [
+     55.4603,
+     80.3762
+    ],
+    [
+     56.0497,
+     80.3626
+    ],
+    [
+     56.639,
+     80.3498
+    ],
+    [
+     57.2284,
+     80.3379
+    ],
+    [
+     57.8178,
+     80.327
+    ],
+    [
+     58.4073,
+     80.3169
+    ],
+    [
+     58.9967,
+     80.3077
+    ],
+    [
+     59.5862,
+     80.2994
+    ],
+    [
+     60.1757,
+     80.292
+    ],
+    [
+     60.7651,
+     80.2855
+    ],
+    [
+     61.3546,
+     80.2799
+    ],
+    [
+     61.9441,
+     80.2752
+    ],
+    [
+     62.5336,
+     80.2714
+    ],
+    [
+     63.1231,
+     80.2685
+    ],
+    [
+     63.7126,
+     80.2665
+    ],
+    [
+     64.3022,
+     80.2653
+    ],
+    [
+     64.8917,
+     80.2651
+    ],
+    [
+     65.4812,
+     80.2658
+    ],
+    [
+     66.0707,
+     80.2673
+    ],
+    [
+     66.6602,
+     80.2698
+    ],
+    [
+     67.2497,
+     80.2731
+    ],
+    [
+     67.8392,
+     80.2773
+    ],
+    [
+     68.4287,
+     80.2825
+    ],
+    [
+     69.0182,
+     80.2885
+    ],
+    [
+     69.6077,
+     80.2954
+    ],
+    [
+     70.1972,
+     80.3032
+    ],
+    [
+     70.7866,
+     80.3119
+    ],
+    [
+     71.3761,
+     80.3216
+    ],
+    [
+     71.9655,
+     80.3321
+    ],
+    [
+     72.5549,
+     80.3434
+    ],
+    [
+     73.1443,
+     80.3557
+    ],
+    [
+     73.7336,
+     80.3689
+    ],
+    [
+     74.323,
+     80.383
+    ]
+   ],
+   "thickness_m": 0.0128,
+   "handles": [
+    "82834B75",
+    "82834B78"
+   ]
+  },
+  "W0007": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     90.5389,
+     115.8758
+    ],
+    [
+     89.9618,
+     115.9315
+    ],
+    [
+     89.3841,
+     115.9807
+    ],
+    [
+     88.8059,
+     116.0234
+    ],
+    [
+     88.2273,
+     116.0595
+    ],
+    [
+     87.6483,
+     116.089
+    ],
+    [
+     87.069,
+     116.112
+    ],
+    [
+     86.4894,
+     116.1284
+    ],
+    [
+     85.9097,
+     116.1382
+    ],
+    [
+     85.33,
+     116.1415
+    ],
+    [
+     84.7502,
+     116.1382
+    ],
+    [
+     84.1705,
+     116.1284
+    ],
+    [
+     83.591,
+     116.112
+    ],
+    [
+     83.0117,
+     116.089
+    ],
+    [
+     82.4327,
+     116.0595
+    ],
+    [
+     81.854,
+     116.0234
+    ],
+    [
+     81.2758,
+     115.9807
+    ],
+    [
+     80.6981,
+     115.9315
+    ],
+    [
+     80.1211,
+     115.8758
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "82834BCA",
+    "82834BCC"
+   ]
+  },
+  "W0008": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     53.3951,
+     113.4999
+    ],
+    [
+     52.8006,
+     113.4752
+    ],
+    [
+     52.2062,
+     113.4495
+    ],
+    [
+     51.6118,
+     113.4226
+    ],
+    [
+     51.0175,
+     113.3947
+    ],
+    [
+     50.4232,
+     113.3656
+    ],
+    [
+     49.829,
+     113.3354
+    ],
+    [
+     49.2348,
+     113.3041
+    ],
+    [
+     48.6407,
+     113.2717
+    ],
+    [
+     48.0467,
+     113.2382
+    ],
+    [
+     47.4527,
+     113.2036
+    ],
+    [
+     46.8588,
+     113.1679
+    ],
+    [
+     46.265,
+     113.1311
+    ],
+    [
+     45.6712,
+     113.0932
+    ],
+    [
+     45.0775,
+     113.0541
+    ],
+    [
+     44.4839,
+     113.014
+    ],
+    [
+     43.8903,
+     112.9727
+    ],
+    [
+     43.2969,
+     112.9304
+    ],
+    [
+     42.7035,
+     112.8869
+    ],
+    [
+     42.1102,
+     112.8423
+    ],
+    [
+     41.5169,
+     112.7967
+    ],
+    [
+     40.9238,
+     112.7499
+    ],
+    [
+     40.3307,
+     112.702
+    ],
+    [
+     39.7378,
+     112.653
+    ],
+    [
+     39.1449,
+     112.6029
+    ],
+    [
+     38.5521,
+     112.5517
+    ],
+    [
+     37.9595,
+     112.4994
+    ],
+    [
+     37.3669,
+     112.446
+    ],
+    [
+     36.7744,
+     112.3914
+    ],
+    [
+     36.182,
+     112.3358
+    ],
+    [
+     35.5898,
+     112.2791
+    ],
+    [
+     34.9976,
+     112.2213
+    ],
+    [
+     34.4055,
+     112.1623
+    ],
+    [
+     33.8136,
+     112.1023
+    ],
+    [
+     33.2218,
+     112.0411
+    ],
+    [
+     32.6301,
+     111.9789
+    ],
+    [
+     32.0385,
+     111.9155
+    ],
+    [
+     31.447,
+     111.8511
+    ],
+    [
+     30.8556,
+     111.7855
+    ],
+    [
+     30.2644,
+     111.7189
+    ],
+    [
+     29.6733,
+     111.6511
+    ],
+    [
+     29.0823,
+     111.5822
+    ],
+    [
+     28.4914,
+     111.5123
+    ],
+    [
+     27.9007,
+     111.4412
+    ],
+    [
+     27.3101,
+     111.369
+    ],
+    [
+     26.7197,
+     111.2957
+    ],
+    [
+     26.1294,
+     111.2214
+    ],
+    [
+     25.5392,
+     111.1459
+    ],
+    [
+     24.9492,
+     111.0693
+    ],
+    [
+     24.3593,
+     110.9917
+    ],
+    [
+     23.7695,
+     110.9129
+    ],
+    [
+     23.1799,
+     110.833
+    ],
+    [
+     22.5905,
+     110.752
+    ],
+    [
+     22.0012,
+     110.67
+    ],
+    [
+     21.4121,
+     110.5868
+    ],
+    [
+     20.8231,
+     110.5025
+    ],
+    [
+     20.2342,
+     110.4172
+    ],
+    [
+     19.6456,
+     110.3307
+    ],
+    [
+     19.0571,
+     110.2431
+    ],
+    [
+     18.4687,
+     110.1545
+    ],
+    [
+     17.8806,
+     110.0647
+    ],
+    [
+     17.2926,
+     109.9739
+    ],
+    [
+     16.7047,
+     109.8819
+    ],
+    [
+     16.1171,
+     109.7889
+    ],
+    [
+     15.5296,
+     109.6947
+    ],
+    [
+     14.9423,
+     109.5995
+    ],
+    [
+     14.3551,
+     109.5032
+    ],
+    [
+     13.7682,
+     109.4057
+    ],
+    [
+     13.1814,
+     109.3072
+    ],
+    [
+     12.5948,
+     109.2076
+    ],
+    [
+     12.0084,
+     109.1069
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "82834C73",
+    "82834C74"
+   ]
+  },
+  "W0009": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     53.3949,
+     113.4999
+    ],
+    [
+     52.8005,
+     113.4752
+    ],
+    [
+     52.2061,
+     113.4495
+    ],
+    [
+     51.6117,
+     113.4226
+    ],
+    [
+     51.0174,
+     113.3947
+    ],
+    [
+     50.4231,
+     113.3656
+    ],
+    [
+     49.8289,
+     113.3354
+    ],
+    [
+     49.2347,
+     113.3041
+    ],
+    [
+     48.6406,
+     113.2717
+    ],
+    [
+     48.0466,
+     113.2382
+    ],
+    [
+     47.4526,
+     113.2036
+    ],
+    [
+     46.8587,
+     113.1679
+    ],
+    [
+     46.2649,
+     113.1311
+    ],
+    [
+     45.6711,
+     113.0932
+    ],
+    [
+     45.0774,
+     113.0541
+    ],
+    [
+     44.4838,
+     113.014
+    ],
+    [
+     43.8902,
+     112.9727
+    ],
+    [
+     43.2967,
+     112.9304
+    ],
+    [
+     42.7033,
+     112.8869
+    ],
+    [
+     42.11,
+     112.8423
+    ],
+    [
+     41.5168,
+     112.7967
+    ],
+    [
+     40.9237,
+     112.7499
+    ],
+    [
+     40.3306,
+     112.702
+    ],
+    [
+     39.7377,
+     112.653
+    ],
+    [
+     39.1448,
+     112.6029
+    ],
+    [
+     38.552,
+     112.5517
+    ],
+    [
+     37.9593,
+     112.4994
+    ],
+    [
+     37.3668,
+     112.446
+    ],
+    [
+     36.7743,
+     112.3914
+    ],
+    [
+     36.1819,
+     112.3358
+    ],
+    [
+     35.5896,
+     112.2791
+    ],
+    [
+     34.9975,
+     112.2213
+    ],
+    [
+     34.4054,
+     112.1623
+    ],
+    [
+     33.8135,
+     112.1023
+    ],
+    [
+     33.2216,
+     112.0411
+    ],
+    [
+     32.6299,
+     111.9789
+    ],
+    [
+     32.0383,
+     111.9155
+    ],
+    [
+     31.4469,
+     111.8511
+    ],
+    [
+     30.8555,
+     111.7855
+    ],
+    [
+     30.2643,
+     111.7189
+    ],
+    [
+     29.6731,
+     111.6511
+    ],
+    [
+     29.0822,
+     111.5822
+    ],
+    [
+     28.4913,
+     111.5123
+    ],
+    [
+     27.9006,
+     111.4412
+    ],
+    [
+     27.31,
+     111.369
+    ],
+    [
+     26.7196,
+     111.2957
+    ],
+    [
+     26.1292,
+     111.2214
+    ],
+    [
+     25.5391,
+     111.1459
+    ],
+    [
+     24.949,
+     111.0693
+    ],
+    [
+     24.3591,
+     110.9916
+    ],
+    [
+     23.7694,
+     110.9129
+    ],
+    [
+     23.1798,
+     110.833
+    ],
+    [
+     22.5904,
+     110.752
+    ],
+    [
+     22.0011,
+     110.67
+    ],
+    [
+     21.4119,
+     110.5868
+    ],
+    [
+     20.8229,
+     110.5025
+    ],
+    [
+     20.2341,
+     110.4172
+    ],
+    [
+     19.6455,
+     110.3307
+    ],
+    [
+     19.0569,
+     110.2431
+    ],
+    [
+     18.4686,
+     110.1545
+    ],
+    [
+     17.8804,
+     110.0647
+    ],
+    [
+     17.2924,
+     109.9739
+    ],
+    [
+     16.7046,
+     109.8819
+    ],
+    [
+     16.1169,
+     109.7889
+    ],
+    [
+     15.5295,
+     109.6947
+    ],
+    [
+     14.9421,
+     109.5995
+    ],
+    [
+     14.355,
+     109.5032
+    ],
+    [
+     13.7681,
+     109.4057
+    ],
+    [
+     13.1813,
+     109.3072
+    ],
+    [
+     12.5947,
+     109.2076
+    ],
+    [
+     12.0083,
+     109.1069
+    ]
+   ],
+   "thickness_m": 0.0121,
+   "handles": [
+    "82834C78",
+    "82834C74"
+   ]
+  },
+  "W0010": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     42.7464,
+     112.8901
+    ],
+    [
+     42.1523,
+     112.8455
+    ],
+    [
+     41.5582,
+     112.7999
+    ],
+    [
+     40.9642,
+     112.7531
+    ],
+    [
+     40.3704,
+     112.7052
+    ],
+    [
+     39.7766,
+     112.6562
+    ],
+    [
+     39.1829,
+     112.6061
+    ],
+    [
+     38.5893,
+     112.5549
+    ],
+    [
+     37.9958,
+     112.5026
+    ],
+    [
+     37.4023,
+     112.4492
+    ],
+    [
+     36.809,
+     112.3947
+    ],
+    [
+     36.2158,
+     112.339
+    ],
+    [
+     35.6227,
+     112.2823
+    ],
+    [
+     35.0297,
+     112.2244
+    ],
+    [
+     34.4369,
+     112.1655
+    ],
+    [
+     33.8441,
+     112.1054
+    ],
+    [
+     33.2514,
+     112.0442
+    ],
+    [
+     32.6589,
+     111.9819
+    ],
+    [
+     32.0664,
+     111.9186
+    ],
+    [
+     31.4741,
+     111.8541
+    ],
+    [
+     30.882,
+     111.7885
+    ],
+    [
+     30.2899,
+     111.7218
+    ],
+    [
+     29.698,
+     111.6539
+    ],
+    [
+     29.1061,
+     111.585
+    ],
+    [
+     28.5145,
+     111.515
+    ],
+    [
+     27.9229,
+     111.4439
+    ],
+    [
+     27.3315,
+     111.3716
+    ],
+    [
+     26.7402,
+     111.2983
+    ],
+    [
+     26.1491,
+     111.2239
+    ],
+    [
+     25.5581,
+     111.1483
+    ],
+    [
+     24.9672,
+     111.0717
+    ],
+    [
+     24.3765,
+     110.9939
+    ],
+    [
+     23.7859,
+     110.9151
+    ],
+    [
+     23.1955,
+     110.8351
+    ],
+    [
+     22.6053,
+     110.7541
+    ],
+    [
+     22.0151,
+     110.6719
+    ],
+    [
+     21.4252,
+     110.5887
+    ],
+    [
+     20.8354,
+     110.5043
+    ],
+    [
+     20.2457,
+     110.4188
+    ],
+    [
+     19.6562,
+     110.3323
+    ],
+    [
+     19.0669,
+     110.2446
+    ],
+    [
+     18.4777,
+     110.1558
+    ],
+    [
+     17.8888,
+     110.066
+    ],
+    [
+     17.2999,
+     109.975
+    ],
+    [
+     16.7113,
+     109.8829
+    ],
+    [
+     16.1228,
+     109.7898
+    ],
+    [
+     15.5345,
+     109.6955
+    ],
+    [
+     14.9464,
+     109.6002
+    ],
+    [
+     14.3584,
+     109.5037
+    ],
+    [
+     13.7706,
+     109.4061
+    ],
+    [
+     13.1831,
+     109.3075
+    ],
+    [
+     12.5957,
+     109.2077
+    ],
+    [
+     12.0084,
+     109.1069
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "82834CB7",
+    "82834C73"
+   ]
+  },
+  "W0011": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     111.2086,
+     112.8971
+    ],
+    [
+     110.6172,
+     112.9637
+    ],
+    [
+     110.0254,
+     113.0274
+    ],
+    [
+     109.4333,
+     113.0881
+    ],
+    [
+     108.841,
+     113.1459
+    ],
+    [
+     108.2483,
+     113.2007
+    ],
+    [
+     107.6554,
+     113.2525
+    ],
+    [
+     107.0622,
+     113.3013
+    ],
+    [
+     106.4688,
+     113.3472
+    ],
+    [
+     105.8751,
+     113.3901
+    ],
+    [
+     105.2813,
+     113.4299
+    ],
+    [
+     104.6872,
+     113.4669
+    ],
+    [
+     104.093,
+     113.5008
+    ],
+    [
+     103.4986,
+     113.5318
+    ],
+    [
+     102.9041,
+     113.5597
+    ],
+    [
+     102.3095,
+     113.5847
+    ],
+    [
+     101.7147,
+     113.6067
+    ],
+    [
+     101.1198,
+     113.6258
+    ],
+    [
+     100.5248,
+     113.6418
+    ],
+    [
+     99.9298,
+     113.6548
+    ],
+    [
+     99.3347,
+     113.6649
+    ],
+    [
+     98.7395,
+     113.672
+    ],
+    [
+     98.1444,
+     113.6761
+    ],
+    [
+     97.5492,
+     113.6772
+    ],
+    [
+     96.954,
+     113.6753
+    ]
+   ],
+   "thickness_m": 0.0117,
+   "handles": [
+    "82834D0D",
+    "82834D12"
+   ]
+  },
+  "W0012": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     137.0263,
+     94.6445
+    ],
+    [
+     137.0581,
+     95.1602
+    ],
+    [
+     137.0659,
+     95.6767
+    ],
+    [
+     137.0499,
+     96.1931
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283F080",
+    "8283F09F"
+   ]
+  },
+  "W0013": {
+   "type": "brick_block",
+   "axis": [
+    [
+     29.3098,
+     85.3468
+    ],
+    [
+     30.0931,
+     85.3468
+    ]
+   ],
+   "thickness_m": 0.3005,
+   "handles": [
+    "8283359E",
+    "828335C5"
+   ]
+  },
+  "W0014": {
+   "type": "brick_block",
+   "axis": [
+    [
+     31.0931,
+     85.3476
+    ],
+    [
+     31.8764,
+     85.3476
+    ]
+   ],
+   "thickness_m": 0.3,
+   "handles": [
+    "82833558",
+    "828335CA"
+   ]
+  },
+  "W0015": {
+   "type": "brick_block",
+   "axis": [
+    [
+     32.1014,
+     85.3476
+    ],
+    [
+     32.8513,
+     85.3476
+    ]
+   ],
+   "thickness_m": 0.3,
+   "handles": [
+    "828335D1",
+    "828335CA"
+   ]
+  },
+  "W0016": {
+   "type": "brick_block",
+   "axis": [
+    [
+     33.8513,
+     85.3476
+    ],
+    [
+     34.7514,
+     85.3476
+    ]
+   ],
+   "thickness_m": 0.3,
+   "handles": [
+    "828335D2",
+    "82834D08"
+   ]
+  },
+  "W0017": {
+   "type": "brick_block",
+   "axis": [
+    [
+     41.2,
+     79.8541
+    ],
+    [
+     40.493,
+     80.5611
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283355D",
+    "828335EE"
+   ]
+  },
+  "W0018": {
+   "type": "brick_block",
+   "axis": [
+    [
+     37.9045,
+     83.1497
+    ],
+    [
+     36.5886,
+     84.4656
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283357E",
+    "82833582"
+   ]
+  },
+  "W0019": {
+   "type": "brick_block",
+   "axis": [
+    [
+     35.9522,
+     85.102
+    ],
+    [
+     35.8045,
+     85.2497
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283357C",
+    "8283357D"
+   ]
+  },
+  "W0020": {
+   "type": "brick_block",
+   "axis": [
+    [
+     38.0394,
+     90.537
+    ],
+    [
+     38.0393,
+     91.2848
+    ]
+   ],
+   "thickness_m": 0.3,
+   "handles": [
+    "828335EF",
+    "828335F0",
+    "828335F5"
+   ]
+  },
+  "W0021": {
+   "type": "brick_block",
+   "axis": [
+    [
+     38.0393,
+     91.5778
+    ],
+    [
+     38.0392,
+     92.2619
+    ]
+   ],
+   "thickness_m": 0.3,
+   "handles": [
+    "828335F0",
+    "828335F1"
+   ]
+  },
+  "W0022": {
+   "type": "brick_block",
+   "axis": [
+    [
+     38.0401,
+     93.2619
+    ],
+    [
+     38.04,
+     94.0778
+    ]
+   ],
+   "thickness_m": 0.3,
+   "handles": [
+    "8283355F",
+    "828335F2"
+   ]
+  },
+  "W0023": {
+   "type": "brick_block",
+   "axis": [
+    [
+     43.4528,
+     82.2682
+    ],
+    [
+     42.8266,
+     82.8945
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828335A0",
+    "828335A1"
+   ]
+  },
+  "W0024": {
+   "type": "brick_block",
+   "axis": [
+    [
+     40.2369,
+     85.4841
+    ],
+    [
+     38.922,
+     86.799
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833580",
+    "82833581"
+   ]
+  },
+  "W0025": {
+   "type": "brick_block",
+   "axis": [
+    [
+     36.8007,
+     86.0566
+    ],
+    [
+     37.943,
+     87.1989
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833583",
+    "82833584"
+   ]
+  },
+  "W0026": {
+   "type": "brick_block",
+   "axis": [
+    [
+     130.07,
+     84.4471
+    ],
+    [
+     130.07,
+     92.6726
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833587",
+    "82833589"
+   ]
+  },
+  "W0027": {
+   "type": "brick_block",
+   "axis": [
+    [
+     130.07,
+     102.1441
+    ],
+    [
+     130.07,
+     106.1475
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833585",
+    "82833586"
+   ]
+  },
+  "W0028": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     38.8955,
+     86.7725
+    ],
+    [
+     38.2591,
+     87.4089
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833591",
+    "82834D22"
+   ]
+  },
+  "W0029": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     38.9485,
+     86.8255
+    ],
+    [
+     38.3121,
+     87.4619
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833592",
+    "82834D22"
+   ]
+  },
+  "W0030": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     36.6151,
+     84.4921
+    ],
+    [
+     35.9787,
+     85.1285
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283359B",
+    "82834D1D"
+   ]
+  },
+  "W0031": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     36.562,
+     84.4391
+    ],
+    [
+     35.9256,
+     85.0755
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283359C",
+    "82834D1D"
+   ]
+  },
+  "W0032": {
+   "type": "brick_block",
+   "axis": [
+    [
+     42.4399,
+     82.6448
+    ],
+    [
+     42.705,
+     82.9099
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828335A2",
+    "828335A4"
+   ]
+  },
+  "W0033": {
+   "type": "brick_block",
+   "axis": [
+    [
+     40.4776,
+     80.6826
+    ],
+    [
+     40.7428,
+     80.9477
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828335A3",
+    "828335A5"
+   ]
+  },
+  "W0034": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     40.7693,
+     80.9212
+    ],
+    [
+     42.4664,
+     82.6183
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "828335B1",
+    "82834D13"
+   ]
+  },
+  "W0035": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     40.7163,
+     80.9742
+    ],
+    [
+     42.4133,
+     82.6713
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "828335B3",
+    "82834D13"
+   ]
+  },
+  "W0036": {
+   "type": "brick_block",
+   "axis": [
+    [
+     35.0514,
+     82.7216
+    ],
+    [
+     37.9393,
+     82.7216
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828335B8",
+    "828335BD"
+   ]
+  },
+  "W0037": {
+   "type": "brick_block",
+   "axis": [
+    [
+     40.666,
+     85.2804
+    ],
+    [
+     40.666,
+     88.3361
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828335BB",
+    "828335BF",
+    "82835CCA"
+   ]
+  },
+  "W0038": {
+   "type": "brick_block",
+   "axis": [
+    [
+     29.3101,
+     82.8716
+    ],
+    [
+     31.8764,
+     82.8716
+    ]
+   ],
+   "thickness_m": 0.45,
+   "handles": [
+    "828335C1",
+    "828335B8"
+   ]
+  },
+  "W0039": {
+   "type": "brick_block",
+   "axis": [
+    [
+     32.1014,
+     82.8716
+    ],
+    [
+     34.7514,
+     82.8716
+    ]
+   ],
+   "thickness_m": 0.45,
+   "handles": [
+    "82834D0A",
+    "828335B8"
+   ]
+  },
+  "W0040": {
+   "type": "brick_block",
+   "axis": [
+    [
+     138.695,
+     92.3869
+    ],
+    [
+     139.566,
+     92.3869
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828335D4",
+    "828335D5",
+    "82833604"
+   ]
+  },
+  "W0041": {
+   "type": "brick_block",
+   "axis": [
+    [
+     53.1073,
+     111.1725
+    ],
+    [
+     53.8073,
+     111.1725
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828339B7",
+    "828339B8"
+   ]
+  },
+  "W0042": {
+   "type": "brick_block",
+   "axis": [
+    [
+     55.9073,
+     111.1725
+    ],
+    [
+     58.6904,
+     111.1725
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828336B9",
+    "828336BA"
+   ]
+  },
+  "W0043": {
+   "type": "brick_block",
+   "axis": [
+    [
+     61.39,
+     111.1725
+    ],
+    [
+     61.7391,
+     111.1725
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828336DC",
+    "828336E4"
+   ]
+  },
+  "W0044": {
+   "type": "brick_block",
+   "axis": [
+    [
+     62.3392,
+     111.1725
+    ],
+    [
+     63.1238,
+     111.1725
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833728",
+    "82833727",
+    "828336E3",
+    "828336D9"
+   ]
+  },
+  "W0045": {
+   "type": "brick_block",
+   "axis": [
+    [
+     64.1591,
+     111.1725
+    ],
+    [
+     64.69,
+     111.1725
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828336E2",
+    "828336D6",
+    "828336E1",
+    "828336D8"
+   ]
+  },
+  "W0046": {
+   "type": "brick_block",
+   "axis": [
+    [
+     66.34,
+     111.1725
+    ],
+    [
+     66.9625,
+     111.1725
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828336D5",
+    "828336E0",
+    "828336D4"
+   ]
+  },
+  "W0047": {
+   "type": "brick_block",
+   "axis": [
+    [
+     67.5625,
+     111.1725
+    ],
+    [
+     68.1275,
+     111.1725
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828336D3",
+    "828336DF",
+    "828336D2"
+   ]
+  },
+  "W0048": {
+   "type": "brick_block",
+   "axis": [
+    [
+     68.7275,
+     111.1725
+    ],
+    [
+     69.2925,
+     111.1725
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828336D1",
+    "828336DE",
+    "828336D0"
+   ]
+  },
+  "W0049": {
+   "type": "brick_block",
+   "axis": [
+    [
+     69.8925,
+     111.1725
+    ],
+    [
+     70.1175,
+     111.1725
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828336CF",
+    "828336DD"
+   ]
+  },
+  "W0050": {
+   "type": "brick_block",
+   "axis": [
+    [
+     100.5425,
+     111.1725
+    ],
+    [
+     100.7675,
+     111.1725
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833749",
+    "82833757"
+   ]
+  },
+  "W0051": {
+   "type": "brick_block",
+   "axis": [
+    [
+     101.3675,
+     111.1725
+    ],
+    [
+     101.9325,
+     111.1725
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283370B",
+    "8283374A",
+    "8283374C"
+   ]
+  },
+  "W0052": {
+   "type": "brick_block",
+   "axis": [
+    [
+     102.5325,
+     111.1725
+    ],
+    [
+     103.0975,
+     111.1725
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283374E",
+    "82833756",
+    "8283374B"
+   ]
+  },
+  "W0053": {
+   "type": "brick_block",
+   "axis": [
+    [
+     103.6975,
+     111.1725
+    ],
+    [
+     104.32,
+     111.1725
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283374D",
+    "8283375A",
+    "82833750"
+   ]
+  },
+  "W0054": {
+   "type": "brick_block",
+   "axis": [
+    [
+     105.97,
+     111.1725
+    ],
+    [
+     106.9362,
+     111.1725
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283374F",
+    "82833758",
+    "8283375C",
+    "82833753"
+   ]
+  },
+  "W0055": {
+   "type": "brick_block",
+   "axis": [
+    [
+     107.5362,
+     111.1725
+    ],
+    [
+     108.3207,
+     111.1725
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833751",
+    "82833759",
+    "828337A0",
+    "828337A1"
+   ]
+  },
+  "W0056": {
+   "type": "brick_block",
+   "axis": [
+    [
+     108.9209,
+     111.1725
+    ],
+    [
+     109.27,
+     111.1725
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833755",
+    "8283375B"
+   ]
+  },
+  "W0057": {
+   "type": "brick_block",
+   "axis": [
+    [
+     111.07,
+     111.1725
+    ],
+    [
+     111.22,
+     111.1725
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833961",
+    "82833962"
+   ]
+  },
+  "W0058": {
+   "type": "brick_block",
+   "axis": [
+    [
+     111.97,
+     111.1725
+    ],
+    [
+     114.6925,
+     111.1725
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833734",
+    "82833737"
+   ]
+  },
+  "W0059": {
+   "type": "brick_block",
+   "axis": [
+    [
+     116.7925,
+     111.1725
+    ],
+    [
+     117.3026,
+     111.1725
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828336C9",
+    "82833735"
+   ]
+  },
+  "W0060": {
+   "type": "brick_block",
+   "axis": [
+    [
+     31.9889,
+     83.0966
+    ],
+    [
+     31.9889,
+     85.1976
+    ]
+   ],
+   "thickness_m": 0.225,
+   "handles": [
+    "828335EA",
+    "828335EB"
+   ]
+  },
+  "W0061": {
+   "type": "brick_block",
+   "axis": [
+    [
+     38.0396,
+     88.7849
+    ],
+    [
+     38.0396,
+     89.537
+    ]
+   ],
+   "thickness_m": 0.2998,
+   "handles": [
+    "828335F9",
+    "82834D07"
+   ]
+  },
+  "W0062": {
+   "type": "brick_block",
+   "axis": [
+    [
+     38.1893,
+     91.4313
+    ],
+    [
+     40.441,
+     91.4313
+    ]
+   ],
+   "thickness_m": 0.2929,
+   "handles": [
+    "828335FB",
+    "82833617"
+   ]
+  },
+  "W0063": {
+   "type": "brick_block",
+   "axis": [
+    [
+     40.5907,
+     88.7861
+    ],
+    [
+     40.5907,
+     91.2848
+    ]
+   ],
+   "thickness_m": 0.2995,
+   "handles": [
+    "82833622",
+    "82835CCA",
+    "82833623"
+   ]
+  },
+  "W0064": {
+   "type": "brick_block",
+   "axis": [
+    [
+     40.591,
+     91.5776
+    ],
+    [
+     40.591,
+     94.0776
+    ]
+   ],
+   "thickness_m": 0.3,
+   "handles": [
+    "82833620",
+    "82833621",
+    "82835CCA"
+   ]
+  },
+  "W0065": {
+   "type": "brick_block",
+   "axis": [
+    [
+     41.3053,
+     79.8557
+    ],
+    [
+     43.4527,
+     82.0367
+    ]
+   ],
+   "thickness_m": 0.149,
+   "handles": [
+    "8283362E",
+    "8283362F"
+   ]
+  },
+  "W0066": {
+   "type": "acp",
+   "axis": [
+    [
+     96.7926,
+     113.5313
+    ],
+    [
+     96.7926,
+     114.2063
+    ]
+   ],
+   "thickness_m": 0.025,
+   "handles": [
+    "82833657",
+    "82834BDF"
+   ]
+  },
+  "W0067": {
+   "type": "acp",
+   "axis": [
+    [
+     73.8676,
+     113.6313
+    ],
+    [
+     73.8676,
+     114.2063
+    ]
+   ],
+   "thickness_m": 0.025,
+   "handles": [
+    "82833658",
+    "82834ACA",
+    "828336A3",
+    "82834BF4"
+   ]
+  },
+  "W0068": {
+   "type": "railing",
+   "axis": [
+    [
+     40.3274,
+     83.1132
+    ],
+    [
+     38.3828,
+     85.0578
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833690",
+    "82834B5F"
+   ]
+  },
+  "W0069": {
+   "type": "railing",
+   "axis": [
+    [
+     40.2743,
+     83.0602
+    ],
+    [
+     38.3298,
+     85.0047
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833690",
+    "82834B5D"
+   ]
+  },
+  "W0070": {
+   "type": "brick_block",
+   "axis": [
+    [
+     60.5925,
+     107.4975
+    ],
+    [
+     60.5925,
+     108.2475
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828336AF",
+    "828336B0",
+    "82833C6F",
+    "82833C71"
+   ]
+  },
+  "W0071": {
+   "type": "brick_block",
+   "axis": [
+    [
+     60.5925,
+     109.5227
+    ],
+    [
+     60.5925,
+     110.6478
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833C6E",
+    "82833C70"
+   ]
+  },
+  "W0072": {
+   "type": "brick_block",
+   "axis": [
+    [
+     55.9073,
+     107.4225
+    ],
+    [
+     60.5175,
+     107.4225
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828336B8",
+    "828336B5"
+   ]
+  },
+  "W0073": {
+   "type": "brick_block",
+   "axis": [
+    [
+     60.6675,
+     107.4225
+    ],
+    [
+     61.24,
+     107.4225
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828336B5",
+    "828336B6"
+   ]
+  },
+  "W0074": {
+   "type": "brick_block",
+   "axis": [
+    [
+     70.2675,
+     107.4225
+    ],
+    [
+     71.265,
+     107.4225
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828336C2",
+    "828336C3"
+   ]
+  },
+  "W0075": {
+   "type": "brick_block",
+   "axis": [
+    [
+     99.395,
+     107.4225
+    ],
+    [
+     100.3925,
+     107.4225
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283373C",
+    "8283373D"
+   ]
+  },
+  "W0076": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     58.6904,
+     111.21
+    ],
+    [
+     59.59,
+     111.21
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "828336BB",
+    "828348E6"
+   ]
+  },
+  "W0077": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     59.74,
+     111.21
+    ],
+    [
+     60.49,
+     111.21
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "828337BF",
+    "82834842"
+   ]
+  },
+  "W0078": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     61.739,
+     111.21
+    ],
+    [
+     62.3392,
+     111.21
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "828336FF",
+    "828348DF"
+   ]
+  },
+  "W0079": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     63.1237,
+     111.21
+    ],
+    [
+     63.7237,
+     111.21
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "828336FD",
+    "828348E0"
+   ]
+  },
+  "W0080": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     64.69,
+     111.21
+    ],
+    [
+     65.29,
+     111.21
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "828336FB",
+    "828348E1"
+   ]
+  },
+  "W0081": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     65.74,
+     111.21
+    ],
+    [
+     66.34,
+     111.21
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "828336F9",
+    "828348E2"
+   ]
+  },
+  "W0082": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     66.9625,
+     111.21
+    ],
+    [
+     67.5625,
+     111.21
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "828336F7",
+    "828348E3"
+   ]
+  },
+  "W0083": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     68.1275,
+     111.21
+    ],
+    [
+     68.7275,
+     111.21
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "828336F5",
+    "828348E4"
+   ]
+  },
+  "W0084": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     69.2925,
+     111.21
+    ],
+    [
+     69.8925,
+     111.21
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "828336F3",
+    "828348E5"
+   ]
+  },
+  "W0085": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     100.7675,
+     111.21
+    ],
+    [
+     101.3675,
+     111.21
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283376D",
+    "8283486A"
+   ]
+  },
+  "W0086": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     101.9325,
+     111.21
+    ],
+    [
+     102.5325,
+     111.21
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283376E",
+    "82834869"
+   ]
+  },
+  "W0087": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     103.0975,
+     111.21
+    ],
+    [
+     103.6975,
+     111.21
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833770",
+    "82834868"
+   ]
+  },
+  "W0088": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     104.32,
+     111.21
+    ],
+    [
+     104.92,
+     111.21
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833772",
+    "82834867"
+   ]
+  },
+  "W0089": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     105.37,
+     111.21
+    ],
+    [
+     105.97,
+     111.21
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833775",
+    "82834864"
+   ]
+  },
+  "W0090": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     106.9362,
+     111.21
+    ],
+    [
+     107.5362,
+     111.21
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833774",
+    "82834866"
+   ]
+  },
+  "W0091": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     108.3208,
+     111.21
+    ],
+    [
+     108.9209,
+     111.21
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833778",
+    "82834865"
+   ]
+  },
+  "W0092": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     110.17,
+     111.21
+    ],
+    [
+     110.92,
+     111.21
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "828337C5",
+    "82834841"
+   ]
+  },
+  "W0093": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     111.22,
+     111.21
+    ],
+    [
+     112.12,
+     111.21
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833738",
+    "8283486B"
+   ]
+  },
+  "W0094": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     58.6904,
+     111.135
+    ],
+    [
+     59.59,
+     111.135
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "828336BC",
+    "828348E6"
+   ]
+  },
+  "W0095": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     59.74,
+     111.135
+    ],
+    [
+     60.49,
+     111.135
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "828337C0",
+    "82834842"
+   ]
+  },
+  "W0096": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     61.739,
+     111.135
+    ],
+    [
+     62.3392,
+     111.135
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "828336FE",
+    "828348DF"
+   ]
+  },
+  "W0097": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     63.1237,
+     111.135
+    ],
+    [
+     63.7237,
+     111.135
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "828336FC",
+    "828348E0"
+   ]
+  },
+  "W0098": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     64.69,
+     111.135
+    ],
+    [
+     65.29,
+     111.135
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "828336FA",
+    "828348E1"
+   ]
+  },
+  "W0099": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     65.74,
+     111.135
+    ],
+    [
+     66.34,
+     111.135
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "828336F8",
+    "828348E2"
+   ]
+  },
+  "W0100": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     66.9625,
+     111.135
+    ],
+    [
+     67.5625,
+     111.135
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "828336F6",
+    "828348E3"
+   ]
+  },
+  "W0101": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     68.1275,
+     111.135
+    ],
+    [
+     68.7275,
+     111.135
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "828336F4",
+    "828348E4"
+   ]
+  },
+  "W0102": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     69.2925,
+     111.135
+    ],
+    [
+     69.8925,
+     111.135
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "828336F2",
+    "828348E5"
+   ]
+  },
+  "W0103": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     100.7675,
+     111.135
+    ],
+    [
+     101.3675,
+     111.135
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283376B",
+    "8283486A"
+   ]
+  },
+  "W0104": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     101.9325,
+     111.135
+    ],
+    [
+     102.5325,
+     111.135
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283376A",
+    "82834869"
+   ]
+  },
+  "W0105": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     103.0975,
+     111.135
+    ],
+    [
+     103.6975,
+     111.135
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283376F",
+    "82834868"
+   ]
+  },
+  "W0106": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     104.32,
+     111.135
+    ],
+    [
+     104.92,
+     111.135
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833771",
+    "82834867"
+   ]
+  },
+  "W0107": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     105.37,
+     111.135
+    ],
+    [
+     105.97,
+     111.135
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833773",
+    "82834864"
+   ]
+  },
+  "W0108": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     106.9362,
+     111.135
+    ],
+    [
+     107.5362,
+     111.135
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833776",
+    "82834866"
+   ]
+  },
+  "W0109": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     108.3208,
+     111.135
+    ],
+    [
+     108.9209,
+     111.135
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833777",
+    "82834865"
+   ]
+  },
+  "W0110": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     110.17,
+     111.135
+    ],
+    [
+     110.92,
+     111.135
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "828337C6",
+    "82834841"
+   ]
+  },
+  "W0111": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     111.22,
+     111.135
+    ],
+    [
+     112.12,
+     111.135
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833739",
+    "8283486B"
+   ]
+  },
+  "W0112": {
+   "type": "brick_block",
+   "axis": [
+    [
+     70.2675,
+     109.2975
+    ],
+    [
+     71.265,
+     109.2975
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828336C6",
+    "828336C7"
+   ]
+  },
+  "W0113": {
+   "type": "brick_block",
+   "axis": [
+    [
+     99.395,
+     109.2975
+    ],
+    [
+     100.3925,
+     109.2975
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833740",
+    "82833741"
+   ]
+  },
+  "W0114": {
+   "type": "brick_block",
+   "axis": [
+    [
+     70.1925,
+     107.4975
+    ],
+    [
+     70.1925,
+     109.2225
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833708",
+    "82833704"
+   ]
+  },
+  "W0115": {
+   "type": "brick_block",
+   "axis": [
+    [
+     70.1925,
+     109.3725
+    ],
+    [
+     70.1925,
+     111.0975
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833704",
+    "82833707"
+   ]
+  },
+  "W0116": {
+   "type": "brick_block",
+   "axis": [
+    [
+     70.1925,
+     111.2475
+    ],
+    [
+     70.1925,
+     113.5934
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828336CA",
+    "82833706"
+   ]
+  },
+  "W0117": {
+   "type": "brick_block",
+   "axis": [
+    [
+     61.315,
+     107.4975
+    ],
+    [
+     61.315,
+     110.6478
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828336CC",
+    "828336CE",
+    "82833C77"
+   ]
+  },
+  "W0118": {
+   "type": "brick_block",
+   "axis": [
+    [
+     61.315,
+     111.2475
+    ],
+    [
+     61.315,
+     113.429
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828336CB",
+    "828336CD"
+   ]
+  },
+  "W0119": {
+   "type": "rcc",
+   "axis": [
+    [
+     61.39,
+     111.9225
+    ],
+    [
+     65.4575,
+     111.9225
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833700",
+    "82833701"
+   ]
+  },
+  "W0120": {
+   "type": "rcc",
+   "axis": [
+    [
+     65.5725,
+     111.9225
+    ],
+    [
+     70.1175,
+     111.9225
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833702",
+    "82833703"
+   ]
+  },
+  "W0121": {
+   "type": "rcc",
+   "axis": [
+    [
+     100.5425,
+     111.9225
+    ],
+    [
+     105.0875,
+     111.9225
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283377E",
+    "82833780"
+   ]
+  },
+  "W0122": {
+   "type": "rcc",
+   "axis": [
+    [
+     105.2025,
+     111.9225
+    ],
+    [
+     109.27,
+     111.9225
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833779",
+    "8283377A"
+   ]
+  },
+  "W0123": {
+   "type": "brick_block",
+   "axis": [
+    [
+     54.6323,
+     107.4975
+    ],
+    [
+     54.6323,
+     111.0914
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833709",
+    "8283370A"
+   ]
+  },
+  "W0124": {
+   "type": "railing",
+   "axis": [
+    [
+     56.2675,
+     109.335
+    ],
+    [
+     59.0175,
+     109.335
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833726",
+    "828348DD"
+   ]
+  },
+  "W0125": {
+   "type": "railing",
+   "axis": [
+    [
+     111.6425,
+     109.335
+    ],
+    [
+     114.3925,
+     109.335
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283379F",
+    "8283485E"
+   ]
+  },
+  "W0126": {
+   "type": "railing",
+   "axis": [
+    [
+     56.2675,
+     109.26
+    ],
+    [
+     59.0175,
+     109.26
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833726",
+    "828348DB"
+   ]
+  },
+  "W0127": {
+   "type": "railing",
+   "axis": [
+    [
+     111.6425,
+     109.26
+    ],
+    [
+     114.3925,
+     109.26
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283379F",
+    "8283485C"
+   ]
+  },
+  "W0128": {
+   "type": "brick_block",
+   "axis": [
+    [
+     110.0675,
+     107.4975
+    ],
+    [
+     110.0675,
+     108.2475
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283372A",
+    "8283372B",
+    "82833C60",
+    "82833C62"
+   ]
+  },
+  "W0129": {
+   "type": "brick_block",
+   "axis": [
+    [
+     110.0675,
+     109.5227
+    ],
+    [
+     110.0675,
+     110.6478
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833C5F",
+    "82833C61"
+   ]
+  },
+  "W0130": {
+   "type": "brick_block",
+   "axis": [
+    [
+     110.995,
+     111.2475
+    ],
+    [
+     110.995,
+     112.6341
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283372D",
+    "828337B3"
+   ]
+  },
+  "W0131": {
+   "type": "brick_block",
+   "axis": [
+    [
+     116.0276,
+     107.4975
+    ],
+    [
+     116.0276,
+     110.3475
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283372E",
+    "82833785"
+   ]
+  },
+  "W0132": {
+   "type": "brick_block",
+   "axis": [
+    [
+     100.4675,
+     107.4975
+    ],
+    [
+     100.4675,
+     109.2225
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833784",
+    "82833781"
+   ]
+  },
+  "W0133": {
+   "type": "brick_block",
+   "axis": [
+    [
+     100.4675,
+     109.3725
+    ],
+    [
+     100.4675,
+     111.0975
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833781",
+    "82833782"
+   ]
+  },
+  "W0134": {
+   "type": "brick_block",
+   "axis": [
+    [
+     100.4675,
+     111.2475
+    ],
+    [
+     100.4675,
+     113.4973
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833744",
+    "82833783"
+   ]
+  },
+  "W0135": {
+   "type": "brick_block",
+   "axis": [
+    [
+     109.345,
+     107.4975
+    ],
+    [
+     109.345,
+     110.6475
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833746",
+    "82833748"
+   ]
+  },
+  "W0136": {
+   "type": "brick_block",
+   "axis": [
+    [
+     109.345,
+     111.2475
+    ],
+    [
+     109.345,
+     112.794
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833745",
+    "82833747"
+   ]
+  },
+  "W0137": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     111.214,
+     111.2475
+    ],
+    [
+     111.214,
+     112.8911
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "828337B4",
+    "828337B5"
+   ]
+  },
+  "W0138": {
+   "type": "brick_block",
+   "axis": [
+    [
+     59.665,
+     111.0975
+    ],
+    [
+     59.665,
+     113.4017
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828337BA",
+    "828337BC",
+    "828337C8"
+   ]
+  },
+  "W0139": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     59.446,
+     111.2475
+    ],
+    [
+     59.446,
+     113.6816
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "828337BD",
+    "828337BE"
+   ]
+  },
+  "W0140": {
+   "type": "brick_block",
+   "axis": [
+    [
+     111.07,
+     111.0975
+    ],
+    [
+     111.07,
+     111.2475
+    ]
+   ],
+   "thickness_m": 0.3,
+   "handles": [
+    "828337C4",
+    "82833960"
+   ]
+  },
+  "W0141": {
+   "type": "brick_block",
+   "axis": [
+    [
+     134.52,
+     86.7619
+    ],
+    [
+     134.52,
+     88.5619
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833917",
+    "82833918"
+   ]
+  },
+  "W0142": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     133.545,
+     88.5244
+    ],
+    [
+     134.445,
+     88.5244
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833930",
+    "828345BA"
+   ]
+  },
+  "W0143": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     133.545,
+     88.4494
+    ],
+    [
+     134.445,
+     88.4494
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833931",
+    "828345BA"
+   ]
+  },
+  "W0144": {
+   "type": "brick_block",
+   "axis": [
+    [
+     133.47,
+     85.1119
+    ],
+    [
+     133.47,
+     86.6119
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833A95",
+    "82833A92"
+   ]
+  },
+  "W0145": {
+   "type": "brick_block",
+   "axis": [
+    [
+     133.47,
+     86.7619
+    ],
+    [
+     133.47,
+     88.5618
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283393F",
+    "82833A92"
+   ]
+  },
+  "W0146": {
+   "type": "brick_block",
+   "axis": [
+    [
+     131.045,
+     83.8369
+    ],
+    [
+     131.62,
+     83.8369
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833944",
+    "82833945"
+   ]
+  },
+  "W0147": {
+   "type": "brick_block",
+   "axis": [
+    [
+     131.695,
+     82.92
+    ],
+    [
+     131.695,
+     83.7619
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833946",
+    "82833947"
+   ]
+  },
+  "W0148": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     130.145,
+     83.7994
+    ],
+    [
+     131.045,
+     83.7994
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833949",
+    "828345A5"
+   ]
+  },
+  "W0149": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     130.145,
+     83.8744
+    ],
+    [
+     131.045,
+     83.8744
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283394A",
+    "828345A5"
+   ]
+  },
+  "W0150": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     53.4013,
+     111.2475
+    ],
+    [
+     53.4013,
+     113.4938
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "82833952",
+    "828339B4",
+    "828339B1"
+   ]
+  },
+  "W0151": {
+   "type": "unknown",
+   "axis": [
+    [
+     53.4073,
+     113.7719
+    ],
+    [
+     59.44,
+     113.7719
+    ]
+   ],
+   "thickness_m": 0.0512,
+   "handles": [
+    "82833953",
+    "82833955"
+   ]
+  },
+  "W0152": {
+   "type": "unknown",
+   "axis": [
+    [
+     111.22,
+     113.7725
+    ],
+    [
+     117.2526,
+     113.7725
+    ]
+   ],
+   "thickness_m": 0.05,
+   "handles": [
+    "8283395C",
+    "8283395D"
+   ]
+  },
+  "W0153": {
+   "type": "unknown",
+   "axis": [
+    [
+     117.2776,
+     111.2475
+    ],
+    [
+     117.2776,
+     113.7475
+    ]
+   ],
+   "thickness_m": 0.05,
+   "handles": [
+    "8283395A",
+    "8283395B"
+   ]
+  },
+  "W0154": {
+   "type": "unknown",
+   "axis": [
+    [
+     111.195,
+     112.9075
+    ],
+    [
+     111.195,
+     113.7475
+    ]
+   ],
+   "thickness_m": 0.05,
+   "handles": [
+    "8283395E",
+    "8283395F"
+   ]
+  },
+  "W0155": {
+   "type": "brick_block",
+   "axis": [
+    [
+     79.715,
+     81.8481
+    ],
+    [
+     79.715,
+     82.9471
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833983",
+    "82833986"
+   ]
+  },
+  "W0156": {
+   "type": "brick_block",
+   "axis": [
+    [
+     78.3724,
+     80.697
+    ],
+    [
+     78.3724,
+     80.9481
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833984",
+    "82833985",
+    "8283450D",
+    "8283450F"
+   ]
+  },
+  "W0157": {
+   "type": "brick_block",
+   "axis": [
+    [
+     79.79,
+     81.7731
+    ],
+    [
+     80.0917,
+     81.7731
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833987",
+    "82833988"
+   ]
+  },
+  "W0158": {
+   "type": "brick_block",
+   "axis": [
+    [
+     90.5682,
+     81.7731
+    ],
+    [
+     90.87,
+     81.7731
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283399E",
+    "8283399F"
+   ]
+  },
+  "W0159": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     80.09,
+     81.8106
+    ],
+    [
+     80.99,
+     81.8106
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283398A",
+    "8283450B"
+   ]
+  },
+  "W0160": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     89.67,
+     81.8106
+    ],
+    [
+     90.57,
+     81.8106
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "828339A1",
+    "828344B0"
+   ]
+  },
+  "W0161": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     80.09,
+     81.7356
+    ],
+    [
+     80.99,
+     81.7356
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283398B",
+    "8283450B"
+   ]
+  },
+  "W0162": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     89.67,
+     81.7356
+    ],
+    [
+     90.57,
+     81.7356
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "828339A2",
+    "828344B0"
+   ]
+  },
+  "W0163": {
+   "type": "brick_block",
+   "axis": [
+    [
+     83.53,
+     79.6563
+    ],
+    [
+     83.53,
+     81.1121
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283398D",
+    "8283398E"
+   ]
+  },
+  "W0164": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     87.0136,
+     79.4969
+    ],
+    [
+     87.2047,
+     79.5006
+    ]
+   ],
+   "thickness_m": 0.0118,
+   "handles": [
+    "82833994",
+    "828339A4"
+   ]
+  },
+  "W0165": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     86.8327,
+     79.4932
+    ],
+    [
+     87.0132,
+     79.4967
+    ]
+   ],
+   "thickness_m": 0.0123,
+   "handles": [
+    "82833994",
+    "828339A4"
+   ]
+  },
+  "W0166": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     86.662,
+     79.4898
+    ],
+    [
+     86.8323,
+     79.493
+    ]
+   ],
+   "thickness_m": 0.0127,
+   "handles": [
+    "82833994",
+    "828339A4"
+   ]
+  },
+  "W0167": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     86.5011,
+     79.4865
+    ],
+    [
+     86.6616,
+     79.4895
+    ]
+   ],
+   "thickness_m": 0.0131,
+   "handles": [
+    "82833994",
+    "828339A4"
+   ]
+  },
+  "W0168": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     86.3497,
+     79.4836
+    ],
+    [
+     86.5007,
+     79.4863
+    ]
+   ],
+   "thickness_m": 0.0135,
+   "handles": [
+    "82833994",
+    "828339A4"
+   ]
+  },
+  "W0169": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     86.2075,
+     79.4808
+    ],
+    [
+     86.3494,
+     79.4834
+    ]
+   ],
+   "thickness_m": 0.0139,
+   "handles": [
+    "82833994",
+    "828339A4"
+   ]
+  },
+  "W0170": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     86.0742,
+     79.4783
+    ],
+    [
+     86.2072,
+     79.4806
+    ]
+   ],
+   "thickness_m": 0.0142,
+   "handles": [
+    "82833994",
+    "828339A4"
+   ]
+  },
+  "W0171": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     85.9493,
+     79.476
+    ],
+    [
+     86.0738,
+     79.4781
+    ]
+   ],
+   "thickness_m": 0.0146,
+   "handles": [
+    "82833994",
+    "828339A4"
+   ]
+  },
+  "W0172": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     85.8326,
+     79.4739
+    ],
+    [
+     85.949,
+     79.4758
+    ]
+   ],
+   "thickness_m": 0.0149,
+   "handles": [
+    "82833994",
+    "828339A4"
+   ]
+  },
+  "W0173": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     85.7237,
+     79.472
+    ],
+    [
+     85.8323,
+     79.4737
+    ]
+   ],
+   "thickness_m": 0.0151,
+   "handles": [
+    "82833994",
+    "828339A4"
+   ]
+  },
+  "W0174": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     85.6223,
+     79.4702
+    ],
+    [
+     85.7234,
+     79.4718
+    ]
+   ],
+   "thickness_m": 0.0154,
+   "handles": [
+    "82833994",
+    "828339A4"
+   ]
+  },
+  "W0175": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     84.6176,
+     79.4634
+    ],
+    [
+     84.3269,
+     79.4694
+    ]
+   ],
+   "thickness_m": 0.017,
+   "handles": [
+    "82833994",
+    "828339A4"
+   ]
+  },
+  "W0176": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     84.3265,
+     79.4694
+    ],
+    [
+     84.0362,
+     79.4774
+    ]
+   ],
+   "thickness_m": 0.017,
+   "handles": [
+    "82833994",
+    "828339A4"
+   ]
+  },
+  "W0177": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     84.0356,
+     79.4774
+    ],
+    [
+     83.7456,
+     79.4873
+    ]
+   ],
+   "thickness_m": 0.017,
+   "handles": [
+    "82833994",
+    "828339A4"
+   ]
+  },
+  "W0178": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     83.745,
+     79.4874
+    ],
+    [
+     83.4553,
+     79.4993
+    ]
+   ],
+   "thickness_m": 0.017,
+   "handles": [
+    "82833994",
+    "828339A4"
+   ]
+  },
+  "W0179": {
+   "type": "brick_block",
+   "axis": [
+    [
+     87.13,
+     79.6563
+    ],
+    [
+     87.13,
+     81.1121
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833995",
+    "82833996"
+   ]
+  },
+  "W0180": {
+   "type": "brick_block",
+   "axis": [
+    [
+     90.945,
+     80.697
+    ],
+    [
+     90.945,
+     80.9481
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283399B",
+    "8283399C",
+    "828344B2",
+    "828344B4"
+   ]
+  },
+  "W0181": {
+   "type": "brick_block",
+   "axis": [
+    [
+     90.945,
+     81.8481
+    ],
+    [
+     90.945,
+     82.9471
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283399A",
+    "8283399D"
+   ]
+  },
+  "W0182": {
+   "type": "brick_block",
+   "axis": [
+    [
+     90.87,
+     80.8225
+    ],
+    [
+     91.02,
+     80.8225
+    ]
+   ],
+   "thickness_m": 0.2512,
+   "handles": [
+    "828339A0",
+    "828344B3",
+    "828344B1"
+   ]
+  },
+  "W0183": {
+   "type": "brick_block",
+   "axis": [
+    [
+     53.1823,
+     111.2475
+    ],
+    [
+     53.1823,
+     113.3459
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828339B5",
+    "828339B9"
+   ]
+  },
+  "W0184": {
+   "type": "brick_block",
+   "axis": [
+    [
+     131.3442,
+     89.8368
+    ],
+    [
+     131.7885,
+     89.8368
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833A62",
+    "82833A63"
+   ]
+  },
+  "W0185": {
+   "type": "brick_block",
+   "axis": [
+    [
+     132.0885,
+     89.9119
+    ],
+    [
+     133.389,
+     89.9119
+    ]
+   ],
+   "thickness_m": 0.3001,
+   "handles": [
+    "82833A64",
+    "82833A65"
+   ]
+  },
+  "W0186": {
+   "type": "brick_block",
+   "axis": [
+    [
+     132.0885,
+     92.3119
+    ],
+    [
+     132.5383,
+     92.3119
+    ]
+   ],
+   "thickness_m": 0.3,
+   "handles": [
+    "82833A6A",
+    "82833A6D"
+   ]
+  },
+  "W0187": {
+   "type": "brick_block",
+   "axis": [
+    [
+     133.5383,
+     92.3119
+    ],
+    [
+     133.9885,
+     92.3119
+    ]
+   ],
+   "thickness_m": 0.3,
+   "handles": [
+    "82833A6B",
+    "82833A6E"
+   ]
+  },
+  "W0188": {
+   "type": "brick_block",
+   "axis": [
+    [
+     134.2885,
+     92.3119
+    ],
+    [
+     134.7383,
+     92.3119
+    ]
+   ],
+   "thickness_m": 0.3,
+   "handles": [
+    "82833A6F",
+    "82833A6B"
+   ]
+  },
+  "W0189": {
+   "type": "brick_block",
+   "axis": [
+    [
+     135.7383,
+     92.3119
+    ],
+    [
+     136.1885,
+     92.3119
+    ]
+   ],
+   "thickness_m": 0.3,
+   "handles": [
+    "82833A6C",
+    "82833A70"
+   ]
+  },
+  "W0190": {
+   "type": "brick_block",
+   "axis": [
+    [
+     136.4885,
+     92.3119
+    ],
+    [
+     136.9388,
+     92.3119
+    ]
+   ],
+   "thickness_m": 0.3,
+   "handles": [
+    "82833A71",
+    "82833A6C"
+   ]
+  },
+  "W0191": {
+   "type": "brick_block",
+   "axis": [
+    [
+     131.9385,
+     90.0619
+    ],
+    [
+     131.9385,
+     92.1619
+    ]
+   ],
+   "thickness_m": 0.3,
+   "handles": [
+    "82833A72",
+    "82833A73"
+   ]
+  },
+  "W0192": {
+   "type": "brick_block",
+   "axis": [
+    [
+     133.545,
+     86.6869
+    ],
+    [
+     134.445,
+     86.6869
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833A93",
+    "82833A94"
+   ]
+  },
+  "W0193": {
+   "type": "brick_block",
+   "axis": [
+    [
+     89.3449,
+     94.4731
+    ],
+    [
+     89.345,
+     95.9731
+    ]
+   ],
+   "thickness_m": 0.3508,
+   "handles": [
+    "82833A99",
+    "82833AAC"
+   ]
+  },
+  "W0194": {
+   "type": "brick_block",
+   "axis": [
+    [
+     81.4907,
+     91.7875
+    ],
+    [
+     82.44,
+     91.7875
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833A9C",
+    "82833A9D"
+   ]
+  },
+  "W0195": {
+   "type": "brick_block",
+   "axis": [
+    [
+     83.44,
+     91.7875
+    ],
+    [
+     84.39,
+     91.7875
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833AA0",
+    "82833AA1"
+   ]
+  },
+  "W0196": {
+   "type": "brick_block",
+   "axis": [
+    [
+     81.415,
+     91.8625
+    ],
+    [
+     81.415,
+     92.6726
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833AA5",
+    "82833AA6"
+   ]
+  },
+  "W0197": {
+   "type": "brick_block",
+   "axis": [
+    [
+     89.2451,
+     90.7775
+    ],
+    [
+     89.2451,
+     92.2726
+    ]
+   ],
+   "thickness_m": 0.1496,
+   "handles": [
+    "82833AA7",
+    "82833AA9"
+   ]
+  },
+  "W0198": {
+   "type": "brick_block",
+   "axis": [
+    [
+     89.595,
+     81.6981
+    ],
+    [
+     89.595,
+     82.9471
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828344AF",
+    "828344B7",
+    "828344BE"
+   ]
+  },
+  "W0199": {
+   "type": "brick_block",
+   "axis": [
+    [
+     89.595,
+     95.9731
+    ],
+    [
+     89.595,
+     96.8735
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833AAA",
+    "82833AAB"
+   ]
+  },
+  "W0200": {
+   "type": "brick_block",
+   "axis": [
+    [
+     81.315,
+     94.4726
+    ],
+    [
+     81.315,
+     96.8735
+    ]
+   ],
+   "thickness_m": 0.35,
+   "handles": [
+    "82833AAE",
+    "82833AB0",
+    "82833AB1"
+   ]
+  },
+  "W0201": {
+   "type": "brick_block",
+   "axis": [
+    [
+     83.8675,
+     87.1621
+    ],
+    [
+     83.8675,
+     88.0621
+    ]
+   ],
+   "thickness_m": 0.225,
+   "handles": [
+    "82833AB5",
+    "82833ACC"
+   ]
+  },
+  "W0202": {
+   "type": "brick_block",
+   "axis": [
+    [
+     83.68,
+     83.1771
+    ],
+    [
+     83.68,
+     87.0121
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833AC5",
+    "82833AC3",
+    "82833ABB"
+   ]
+  },
+  "W0203": {
+   "type": "brick_block",
+   "axis": [
+    [
+     83.68,
+     87.1621
+    ],
+    [
+     83.68,
+     88.0621
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833AB5",
+    "82833ABB"
+   ]
+  },
+  "W0204": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     84.6175,
+     87.1621
+    ],
+    [
+     84.6175,
+     88.0621
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833AB6",
+    "82833ECD"
+   ]
+  },
+  "W0205": {
+   "type": "brick_block",
+   "axis": [
+    [
+     83.755,
+     87.0871
+    ],
+    [
+     84.73,
+     87.0871
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833AC0",
+    "82833AC1"
+   ]
+  },
+  "W0206": {
+   "type": "brick_block",
+   "axis": [
+    [
+     85.93,
+     87.0871
+    ],
+    [
+     86.905,
+     87.0871
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833AC4",
+    "82833AC6"
+   ]
+  },
+  "W0207": {
+   "type": "brick_block",
+   "axis": [
+    [
+     86.98,
+     83.1771
+    ],
+    [
+     86.98,
+     84.9471
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833AE9",
+    "82833AC8",
+    "82833ACB"
+   ]
+  },
+  "W0208": {
+   "type": "brick_block",
+   "axis": [
+    [
+     86.98,
+     85.0621
+    ],
+    [
+     86.98,
+     87.0121
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833AC8",
+    "82833ACA"
+   ]
+  },
+  "W0209": {
+   "type": "brick_block",
+   "axis": [
+    [
+     86.98,
+     87.1621
+    ],
+    [
+     86.98,
+     88.0625
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833AC7",
+    "82833ACA",
+    "82833AE8"
+   ]
+  },
+  "W0210": {
+   "type": "brick_block",
+   "axis": [
+    [
+     86.7925,
+     87.1621
+    ],
+    [
+     86.7925,
+     88.0621
+    ]
+   ],
+   "thickness_m": 0.225,
+   "handles": [
+    "82833AC7",
+    "82833ACD"
+   ]
+  },
+  "W0211": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     84.6925,
+     87.1621
+    ],
+    [
+     84.6925,
+     88.0621
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833ACE",
+    "82833ECD"
+   ]
+  },
+  "W0212": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     85.9675,
+     87.1621
+    ],
+    [
+     85.9675,
+     88.0621
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833ACF",
+    "82833ECE"
+   ]
+  },
+  "W0213": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     86.0425,
+     87.1621
+    ],
+    [
+     86.0425,
+     88.0621
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833AD0",
+    "82833ECE"
+   ]
+  },
+  "W0214": {
+   "type": "brick_block",
+   "axis": [
+    [
+     85.93,
+     88.1375
+    ],
+    [
+     86.3699,
+     88.1375
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833AD3",
+    "82833AD4",
+    "82833EAF",
+    "82833EB1"
+   ]
+  },
+  "W0215": {
+   "type": "brick_block",
+   "axis": [
+    [
+     86.15,
+     88.0625
+    ],
+    [
+     86.15,
+     88.2125
+    ]
+   ],
+   "thickness_m": 0.44,
+   "handles": [
+    "82833AD5",
+    "82833EB0"
+   ]
+  },
+  "W0216": {
+   "type": "brick_block",
+   "axis": [
+    [
+     81.49,
+     83.0225
+    ],
+    [
+     81.8725,
+     83.0225
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833AEB",
+    "82833AEC"
+   ]
+  },
+  "W0217": {
+   "type": "brick_block",
+   "axis": [
+    [
+     83.0725,
+     83.0225
+    ],
+    [
+     83.4549,
+     83.0225
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833AF7",
+    "82833AF8"
+   ]
+  },
+  "W0218": {
+   "type": "brick_block",
+   "axis": [
+    [
+     87.205,
+     83.0225
+    ],
+    [
+     87.5875,
+     83.0225
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833AEA",
+    "82833AF5"
+   ]
+  },
+  "W0219": {
+   "type": "brick_block",
+   "axis": [
+    [
+     88.7875,
+     83.0225
+    ],
+    [
+     89.17,
+     83.0225
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833AF0",
+    "82833AF1"
+   ]
+  },
+  "W0220": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     81.8725,
+     82.985
+    ],
+    [
+     83.0725,
+     82.985
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833AEE",
+    "82833EB3"
+   ]
+  },
+  "W0221": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     87.5875,
+     82.985
+    ],
+    [
+     88.7875,
+     82.985
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833AF3",
+    "82833EB2"
+   ]
+  },
+  "W0222": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     81.8725,
+     83.06
+    ],
+    [
+     83.0725,
+     83.06
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833AEF",
+    "82833EB3"
+   ]
+  },
+  "W0223": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     87.5875,
+     83.06
+    ],
+    [
+     88.7875,
+     83.06
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833AF4",
+    "82833EB2"
+   ]
+  },
+  "W0224": {
+   "type": "brick_block",
+   "axis": [
+    [
+     86.6699,
+     90.7025
+    ],
+    [
+     87.4199,
+     90.7025
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833AFF",
+    "82833B01"
+   ]
+  },
+  "W0225": {
+   "type": "brick_block",
+   "axis": [
+    [
+     88.4199,
+     90.7025
+    ],
+    [
+     89.1699,
+     90.7025
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833B00",
+    "82833B02"
+   ]
+  },
+  "W0226": {
+   "type": "brick_block",
+   "axis": [
+    [
+     83.3653,
+     95.9735
+    ],
+    [
+     83.3653,
+     96.8735
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833B04",
+    "82833B05"
+   ]
+  },
+  "W0227": {
+   "type": "brick_block",
+   "axis": [
+    [
+     83.4403,
+     95.8985
+    ],
+    [
+     88.2696,
+     95.8985
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833B06",
+    "82833B07"
+   ]
+  },
+  "W0228": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     88.2696,
+     95.936
+    ],
+    [
+     89.1696,
+     95.936
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833B0B",
+    "82833EAE"
+   ]
+  },
+  "W0229": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     88.2696,
+     95.861
+    ],
+    [
+     89.1696,
+     95.861
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833B0C",
+    "82833EAE"
+   ]
+  },
+  "W0230": {
+   "type": "brick_block",
+   "axis": [
+    [
+     81.49,
+     96.9485
+    ],
+    [
+     83.2903,
+     96.9485
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833E93",
+    "82833E94"
+   ]
+  },
+  "W0231": {
+   "type": "brick_block",
+   "axis": [
+    [
+     83.4403,
+     96.9485
+    ],
+    [
+     89.52,
+     96.9485
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833E94",
+    "82833B0E",
+    "82833B0D"
+   ]
+  },
+  "W0232": {
+   "type": "brick_block",
+   "axis": [
+    [
+     130.82,
+     102.9699
+    ],
+    [
+     130.82,
+     108.6194
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833B17",
+    "82833B19"
+   ]
+  },
+  "W0233": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     130.8575,
+     102.0699
+    ],
+    [
+     130.8575,
+     102.9699
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833B1A",
+    "82833E74"
+   ]
+  },
+  "W0234": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     130.7825,
+     102.0699
+    ],
+    [
+     130.7825,
+     102.9699
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833B1B",
+    "82833E74"
+   ]
+  },
+  "W0235": {
+   "type": "brick_block",
+   "axis": [
+    [
+     130.145,
+     101.9949
+    ],
+    [
+     130.895,
+     101.9949
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82833E76",
+    "82833E75",
+    "82833B1D"
+   ]
+  },
+  "W0236": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     110.03,
+     108.6227
+    ],
+    [
+     110.03,
+     109.5227
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833C63",
+    "82833C64"
+   ]
+  },
+  "W0237": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     110.1068,
+     108.6227
+    ],
+    [
+     110.1068,
+     109.5227
+    ]
+   ],
+   "thickness_m": 0.0787,
+   "handles": [
+    "82833C64",
+    "82833C6A"
+   ]
+  },
+  "W0238": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     60.555,
+     108.6227
+    ],
+    [
+     60.555,
+     109.5227
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833C74",
+    "82833C76"
+   ]
+  },
+  "W0239": {
+   "type": "window_glazing",
+   "axis": [
+    [
+     60.63,
+     108.6227
+    ],
+    [
+     60.63,
+     109.521
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833C76",
+    "82833C7B"
+   ]
+  },
+  "W0240": {
+   "type": "railing",
+   "axis": [
+    [
+     85.2925,
+     82.7121
+    ],
+    [
+     85.2925,
+     85.5121
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833EC8",
+    "82833EC9"
+   ]
+  },
+  "W0241": {
+   "type": "railing",
+   "axis": [
+    [
+     85.3675,
+     82.7121
+    ],
+    [
+     85.3675,
+     85.5121
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833EC8",
+    "82833ECB"
+   ]
+  },
+  "W0242": {
+   "type": "railing",
+   "axis": [
+    [
+     131.7325,
+     85.4129
+    ],
+    [
+     131.7325,
+     88.1629
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833F88",
+    "82833F8C"
+   ]
+  },
+  "W0243": {
+   "type": "railing",
+   "axis": [
+    [
+     131.8075,
+     85.4129
+    ],
+    [
+     131.8075,
+     88.1629
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82833F8A",
+    "82833F8C"
+   ]
+  },
+  "W0244": {
+   "type": "brick_block",
+   "axis": [
+    [
+     90.7941,
+     81.6981
+    ],
+    [
+     90.7941,
+     81.8481
+    ]
+   ],
+   "thickness_m": 0.4518,
+   "handles": [
+    "828344B5",
+    "8283399D"
+   ]
+  },
+  "W0245": {
+   "type": "brick_block",
+   "axis": [
+    [
+     81.065,
+     81.6981
+    ],
+    [
+     81.065,
+     82.9471
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283450A",
+    "82834512",
+    "82834519"
+   ]
+  },
+  "W0246": {
+   "type": "brick_block",
+   "axis": [
+    [
+     79.8658,
+     81.6981
+    ],
+    [
+     79.8658,
+     81.8481
+    ]
+   ],
+   "thickness_m": 0.4518,
+   "handles": [
+    "82834510",
+    "82833986"
+   ]
+  },
+  "W0247": {
+   "type": "acp",
+   "axis": [
+    [
+     73.7176,
+     113.6313
+    ],
+    [
+     73.7176,
+     114.2063
+    ]
+   ],
+   "thickness_m": 0.025,
+   "handles": [
+    "82834AC5",
+    "82834BE7",
+    "82834BEF"
+   ]
+  },
+  "W0248": {
+   "type": "acp",
+   "axis": [
+    [
+     73.7301,
+     114.2188
+    ],
+    [
+     73.8551,
+     114.2188
+    ]
+   ],
+   "thickness_m": 0.025,
+   "handles": [
+    "82834AC7",
+    "82834AC9",
+    "82834BF1",
+    "82834BF3"
+   ]
+  },
+  "W0249": {
+   "type": "acp",
+   "axis": [
+    [
+     96.8051,
+     114.2188
+    ],
+    [
+     96.9301,
+     114.2188
+    ]
+   ],
+   "thickness_m": 0.025,
+   "handles": [
+    "82834BDC",
+    "82834BDE"
+   ]
+  },
+  "W0250": {
+   "type": "acp",
+   "axis": [
+    [
+     96.1993,
+     80.3055
+    ],
+    [
+     96.1993,
+     80.5971
+    ]
+   ],
+   "thickness_m": 0.025,
+   "handles": [
+    "82834B61",
+    "82834B68"
+   ]
+  },
+  "W0251": {
+   "type": "acp",
+   "axis": [
+    [
+     96.3115,
+     80.2906
+    ],
+    [
+     96.2115,
+     80.293
+    ]
+   ],
+   "thickness_m": 0.025,
+   "handles": [
+    "82834B62",
+    "82834B67"
+   ]
+  },
+  "W0252": {
+   "type": "acp",
+   "axis": [
+    [
+     96.3243,
+     80.303
+    ],
+    [
+     96.3243,
+     80.6851
+    ]
+   ],
+   "thickness_m": 0.025,
+   "handles": [
+    "82834B63",
+    "82834B66"
+   ]
+  },
+  "W0253": {
+   "type": "acp",
+   "axis": [
+    [
+     96.2618,
+     80.3055
+    ],
+    [
+     96.2618,
+     80.6221
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "82834B66",
+    "82834B68"
+   ]
+  },
+  "W0254": {
+   "type": "acp",
+   "axis": [
+    [
+     74.4482,
+     80.6596
+    ],
+    [
+     83.33,
+     80.6596
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82834CB0",
+    "82834CB1"
+   ]
+  },
+  "W0255": {
+   "type": "acp",
+   "axis": [
+    [
+     87.3302,
+     80.6596
+    ],
+    [
+     96.2118,
+     80.6596
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82834B69",
+    "82834B6A",
+    "82834CDA"
+   ]
+  },
+  "W0256": {
+   "type": "acp",
+   "axis": [
+    [
+     74.4732,
+     80.6096
+    ],
+    [
+     83.33,
+     80.6096
+    ]
+   ],
+   "thickness_m": 0.025,
+   "handles": [
+    "82834CAF",
+    "82834CB1"
+   ]
+  },
+  "W0257": {
+   "type": "acp",
+   "axis": [
+    [
+     87.355,
+     80.6096
+    ],
+    [
+     96.1868,
+     80.6096
+    ]
+   ],
+   "thickness_m": 0.025,
+   "handles": [
+    "82834B6A",
+    "82834B6B",
+    "82834C90",
+    "82834CDA"
+   ]
+  },
+  "W0258": {
+   "type": "acp",
+   "axis": [
+    [
+     74.4607,
+     80.3055
+    ],
+    [
+     74.4607,
+     80.5971
+    ]
+   ],
+   "thickness_m": 0.025,
+   "handles": [
+    "82834B6C",
+    "82834B73"
+   ]
+  },
+  "W0259": {
+   "type": "acp",
+   "axis": [
+    [
+     74.3485,
+     80.2906
+    ],
+    [
+     74.4485,
+     80.293
+    ]
+   ],
+   "thickness_m": 0.025,
+   "handles": [
+    "82834B6D",
+    "82834B72"
+   ]
+  },
+  "W0260": {
+   "type": "acp",
+   "axis": [
+    [
+     74.3357,
+     80.303
+    ],
+    [
+     74.3357,
+     80.6851
+    ]
+   ],
+   "thickness_m": 0.025,
+   "handles": [
+    "82834B6E",
+    "82834B71"
+   ]
+  },
+  "W0261": {
+   "type": "acp",
+   "axis": [
+    [
+     74.3982,
+     80.3055
+    ],
+    [
+     74.3982,
+     80.6221
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "82834B71",
+    "82834B73"
+   ]
+  },
+  "W0262": {
+   "type": "acp",
+   "axis": [
+    [
+     73.7051,
+     113.5813
+    ],
+    [
+     80.1551,
+     113.5813
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "82834BE4",
+    "82834BE6"
+   ]
+  },
+  "W0263": {
+   "type": "acp",
+   "axis": [
+    [
+     90.5051,
+     113.5813
+    ],
+    [
+     96.7801,
+     113.5813
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "82834BCE",
+    "82834BD0"
+   ]
+  },
+  "W0264": {
+   "type": "acp",
+   "axis": [
+    [
+     90.6426,
+     113.6313
+    ],
+    [
+     90.6426,
+     115.8698
+    ]
+   ],
+   "thickness_m": 0.025,
+   "handles": [
+    "82834BD1",
+    "82834BD3"
+   ]
+  },
+  "W0265": {
+   "type": "acp",
+   "axis": [
+    [
+     96.9426,
+     113.5313
+    ],
+    [
+     96.9426,
+     114.2063
+    ]
+   ],
+   "thickness_m": 0.025,
+   "handles": [
+    "82834BD9",
+    "82834BDB"
+   ]
+  },
+  "W0266": {
+   "type": "acp",
+   "axis": [
+    [
+     80.0176,
+     113.6313
+    ],
+    [
+     80.0176,
+     115.8698
+    ]
+   ],
+   "thickness_m": 0.025,
+   "handles": [
+    "82834BE8",
+    "82834BEA"
+   ]
+  },
+  "W0267": {
+   "type": "acp",
+   "axis": [
+    [
+     87.343,
+     79.4996
+    ],
+    [
+     87.3425,
+     80.5971
+    ]
+   ],
+   "thickness_m": 0.025,
+   "handles": [
+    "82834D02",
+    "82834D04"
+   ]
+  },
+  "W0268": {
+   "type": "acp",
+   "axis": [
+    [
+     83.3175,
+     79.495
+    ],
+    [
+     83.3175,
+     80.5971
+    ]
+   ],
+   "thickness_m": 0.025,
+   "handles": [
+    "82834D15",
+    "82834D17"
+   ]
+  },
+  "W0269": {
+   "type": "unknown",
+   "axis": [
+    [
+     70.7412,
+     106.1975
+    ],
+    [
+     75.492,
+     106.1975
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "82835D63",
+    "82835D5A"
+   ]
+  },
+  "W0270": {
+   "type": "unknown",
+   "axis": [
+    [
+     76.492,
+     106.1976
+    ],
+    [
+     79.64,
+     106.1976
+    ]
+   ],
+   "thickness_m": 0.1003,
+   "handles": [
+    "82835D5B",
+    "82835D64",
+    "82835D7D"
+   ]
+  },
+  "W0271": {
+   "type": "unknown",
+   "axis": [
+    [
+     95.7761,
+     106.1963
+    ],
+    [
+     96.7093,
+     106.1963
+    ]
+   ],
+   "thickness_m": 0.0977,
+   "handles": [
+    "82836F17",
+    "82836F17"
+   ]
+  },
+  "W0272": {
+   "type": "unknown",
+   "axis": [
+    [
+     97.8409,
+     106.1987
+    ],
+    [
+     99.545,
+     106.1987
+    ]
+   ],
+   "thickness_m": 0.0977,
+   "handles": [
+    "82836F04",
+    "82836F09"
+   ]
+  },
+  "W0273": {
+   "type": "unknown",
+   "axis": [
+    [
+     100.545,
+     106.1987
+    ],
+    [
+     102.6613,
+     106.1987
+    ]
+   ],
+   "thickness_m": 0.0977,
+   "handles": [
+    "82836483",
+    "8283648F"
+   ]
+  },
+  "W0274": {
+   "type": "unknown",
+   "axis": [
+    [
+     70.6912,
+     106.2475
+    ],
+    [
+     70.6912,
+     107.3475
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "82835D60",
+    "82835D61",
+    "82836C67"
+   ]
+  },
+  "W0275": {
+   "type": "unknown",
+   "axis": [
+    [
+     76.4422,
+     106.248
+    ],
+    [
+     76.4414,
+     110.9475
+    ]
+   ],
+   "thickness_m": 0.0996,
+   "handles": [
+    "82835D67",
+    "82835D7D",
+    "82835D68"
+   ]
+  },
+  "W0276": {
+   "type": "unknown",
+   "axis": [
+    [
+     80.49,
+     107.4975
+    ],
+    [
+     80.49,
+     110.9475
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "82835D71",
+    "82835D73",
+    "82835D7C"
+   ]
+  },
+  "W0277": {
+   "type": "unknown",
+   "axis": [
+    [
+     79.64,
+     106.1974
+    ],
+    [
+     76.492,
+     106.1979
+    ]
+   ],
+   "thickness_m": 0.1003,
+   "handles": [
+    "82835D7D",
+    "82835D5B"
+   ]
+  },
+  "W0278": {
+   "type": "unknown",
+   "axis": [
+    [
+     80.4397,
+     92.6226
+    ],
+    [
+     81.34,
+     92.6226
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "828360E6",
+    "828360E8"
+   ]
+  },
+  "W0279": {
+   "type": "unknown",
+   "axis": [
+    [
+     89.57,
+     107.7275
+    ],
+    [
+     89.57,
+     110.9475
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "82836484",
+    "82836486"
+   ]
+  },
+  "W0280": {
+   "type": "unknown",
+   "axis": [
+    [
+     104.1113,
+     107.4975
+    ],
+    [
+     104.1113,
+     111.0975
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "8283649D",
+    "8283649F"
+   ]
+  },
+  "W0281": {
+   "type": "unknown",
+   "axis": [
+    [
+     104.2113,
+     107.4975
+    ],
+    [
+     104.2113,
+     111.0975
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "8283649D",
+    "828364A4",
+    "828364A6"
+   ]
+  },
+  "W0282": {
+   "type": "unknown",
+   "axis": [
+    [
+     104.2613,
+     107.3975
+    ],
+    [
+     105.1613,
+     107.3975
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "828364A1",
+    "828364A3"
+   ]
+  },
+  "W0283": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     102.2675,
+     109.8949
+    ],
+    [
+     104.0613,
+     109.8949
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "828364AB",
+    "828364AB",
+    "828364AD"
+   ]
+  },
+  "W0284": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     102.2675,
+     108.6949
+    ],
+    [
+     104.0613,
+     108.6949
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "828364AC",
+    "828364AC",
+    "828364B1"
+   ]
+  },
+  "W0285": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     102.3175,
+     108.2475
+    ],
+    [
+     102.3175,
+     108.6449
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "828364B1",
+    "828364B1"
+   ]
+  },
+  "W0286": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     102.3175,
+     109.4949
+    ],
+    [
+     102.3175,
+     109.8449
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "828364AD",
+    "828364AD"
+   ]
+  },
+  "W0287": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     102.3175,
+     110.6949
+    ],
+    [
+     102.3175,
+     111.0975
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "828364B4",
+    "828364B4"
+   ]
+  },
+  "W0288": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     108.22,
+     107.0473
+    ],
+    [
+     108.22,
+     107.8153
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "828364C3",
+    "828364C3"
+   ]
+  },
+  "W0289": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     108.22,
+     108.6669
+    ],
+    [
+     108.22,
+     109.4313
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "828364C1",
+    "828364C1"
+   ]
+  },
+  "W0290": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     108.22,
+     110.2813
+    ],
+    [
+     108.22,
+     111.0973
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "828364BE",
+    "828364BE"
+   ]
+  },
+  "W0291": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     108.17,
+     109.4813
+    ],
+    [
+     109.27,
+     109.4813
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "828364BF",
+    "828364BF"
+   ]
+  },
+  "W0292": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     108.17,
+     107.8653
+    ],
+    [
+     109.27,
+     107.8653
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "828364C0",
+    "828364C0"
+   ]
+  },
+  "W0293": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     106.2884,
+     107.3673
+    ],
+    [
+     106.2884,
+     111.0973
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "828364C8",
+    "828364C8"
+   ]
+  },
+  "W0294": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     93.1013,
+     110.3773
+    ],
+    [
+     93.5991,
+     110.3773
+    ]
+   ],
+   "thickness_m": 0.02,
+   "handles": [
+    "82836C51",
+    "82836C51"
+   ]
+  },
+  "W0295": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     106.3384,
+     110.3773
+    ],
+    [
+     106.8361,
+     110.3773
+    ]
+   ],
+   "thickness_m": 0.02,
+   "handles": [
+    "828364CA",
+    "828364CA"
+   ]
+  },
+  "W0296": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     93.1014,
+     109.6273
+    ],
+    [
+     93.5991,
+     109.6273
+    ]
+   ],
+   "thickness_m": 0.02,
+   "handles": [
+    "82836C53",
+    "82836C53"
+   ]
+  },
+  "W0297": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     106.3384,
+     109.6273
+    ],
+    [
+     106.8361,
+     109.6273
+    ]
+   ],
+   "thickness_m": 0.02,
+   "handles": [
+    "828364CC",
+    "828364CC"
+   ]
+  },
+  "W0298": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     93.1014,
+     108.8773
+    ],
+    [
+     93.5991,
+     108.8773
+    ]
+   ],
+   "thickness_m": 0.02,
+   "handles": [
+    "82836C55",
+    "82836C55"
+   ]
+  },
+  "W0299": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     106.3384,
+     108.8773
+    ],
+    [
+     106.8361,
+     108.8773
+    ]
+   ],
+   "thickness_m": 0.02,
+   "handles": [
+    "828364CE",
+    "828364CE"
+   ]
+  },
+  "W0300": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     93.1034,
+     108.1273
+    ],
+    [
+     93.6011,
+     108.1273
+    ]
+   ],
+   "thickness_m": 0.02,
+   "handles": [
+    "82836C57",
+    "82836C57"
+   ]
+  },
+  "W0301": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     106.3364,
+     108.1273
+    ],
+    [
+     106.8341,
+     108.1273
+    ]
+   ],
+   "thickness_m": 0.02,
+   "handles": [
+    "828364D0",
+    "828364D0"
+   ]
+  },
+  "W0302": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     93.1034,
+     107.3773
+    ],
+    [
+     93.6011,
+     107.3773
+    ]
+   ],
+   "thickness_m": 0.02,
+   "handles": [
+    "82836C59",
+    "82836C59"
+   ]
+  },
+  "W0303": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     106.3364,
+     107.3773
+    ],
+    [
+     106.8341,
+     107.3773
+    ]
+   ],
+   "thickness_m": 0.02,
+   "handles": [
+    "828364D2",
+    "828364D2"
+   ]
+  },
+  "W0304": {
+   "type": "unknown",
+   "axis": [
+    [
+     28.165,
+     86.6976
+    ],
+    [
+     28.165,
+     94.1631
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "82836C3F",
+    "82836C40"
+   ]
+  },
+  "W0305": {
+   "type": "unknown",
+   "axis": [
+    [
+     28.165,
+     96.2821
+    ],
+    [
+     28.165,
+     105.9975
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "82836C44",
+    "82836C45"
+   ]
+  },
+  "W0306": {
+   "type": "unknown",
+   "axis": [
+    [
+     28.165,
+     107.4975
+    ],
+    [
+     28.165,
+     111.1651
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "82836C42",
+    "82836C43"
+   ]
+  },
+  "W0307": {
+   "type": "unknown",
+   "axis": [
+    [
+     95.7261,
+     106.1475
+    ],
+    [
+     95.7261,
+     111.0975
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "82836C4C",
+    "82836C4A",
+    "82836C4B",
+    "82836F1F",
+    "82836F1C"
+   ]
+  },
+  "W0308": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     93.6491,
+     107.3673
+    ],
+    [
+     93.6491,
+     111.0973
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "82836C4F",
+    "82836C4F"
+   ]
+  },
+  "W0309": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     29.0515,
+     94.479
+    ],
+    [
+     34.0026,
+     94.479
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "8282E19C",
+    "8282E19C"
+   ]
+  },
+  "W0310": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     35.875,
+     94.479
+    ],
+    [
+     37.8539,
+     94.479
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "8282E2B9",
+    "8282E2B9"
+   ]
+  },
+  "W0311": {
+   "type": "unknown",
+   "axis": [
+    [
+     97.7908,
+     106.2498
+    ],
+    [
+     97.7908,
+     109.2475
+    ]
+   ],
+   "thickness_m": 0.1001,
+   "handles": [
+    "82836F0C",
+    "82836F10",
+    "82836F12"
+   ]
+  },
+  "W0312": {
+   "type": "unknown",
+   "axis": [
+    [
+     97.8409,
+     109.2976
+    ],
+    [
+     99.395,
+     109.2976
+    ]
+   ],
+   "thickness_m": 0.1001,
+   "handles": [
+    "82836F13",
+    "82836F11"
+   ]
+  },
+  "W0313": {
+   "type": "unknown",
+   "axis": [
+    [
+     94.7761,
+     107.4475
+    ],
+    [
+     95.6761,
+     107.4475
+    ]
+   ],
+   "thickness_m": 0.1,
+   "handles": [
+    "82836F1E",
+    "82836F1E"
+   ]
+  },
+  "W0314": {
+   "type": "mixed",
+   "axis": [
+    [
+     125.7503,
+     106.1475
+    ],
+    [
+     125.7503,
+     109.9167
+    ]
+   ],
+   "thickness_m": 0.0747,
+   "handles": [
+    "82837757",
+    "82837757"
+   ]
+  },
+  "W0315": {
+   "type": "brick_block",
+   "axis": [
+    [
+     61.443,
+     106.1475
+    ],
+    [
+     61.443,
+     106.2975
+    ]
+   ],
+   "thickness_m": 0.1061,
+   "handles": [
+    "82838016",
+    "82838016"
+   ]
+  },
+  "W0316": {
+   "type": "brick_block",
+   "axis": [
+    [
+     61.39,
+     106.2225
+    ],
+    [
+     61.4961,
+     106.2225
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82838016",
+    "82838016"
+   ]
+  },
+  "W0317": {
+   "type": "brick_block",
+   "axis": [
+    [
+     62.5238,
+     106.2225
+    ],
+    [
+     66.4236,
+     106.2225
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "82838017",
+    "82838017"
+   ]
+  },
+  "W0318": {
+   "type": "brick_block",
+   "axis": [
+    [
+     67.9236,
+     106.2225
+    ],
+    [
+     68.9836,
+     106.2225
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283803D",
+    "8283803D"
+   ]
+  },
+  "W0319": {
+   "type": "brick_block",
+   "axis": [
+    [
+     70.0114,
+     106.2225
+    ],
+    [
+     70.1175,
+     106.2225
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283803C",
+    "8283803C"
+   ]
+  },
+  "W0320": {
+   "type": "brick_block",
+   "axis": [
+    [
+     81.14,
+     106.2225
+    ],
+    [
+     81.2461,
+     106.2225
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283DD7A",
+    "8283DD7A"
+   ]
+  },
+  "W0321": {
+   "type": "brick_block",
+   "axis": [
+    [
+     82.2738,
+     106.2225
+    ],
+    [
+     88.3861,
+     106.2225
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283DD69",
+    "8283DD69"
+   ]
+  },
+  "W0322": {
+   "type": "brick_block",
+   "axis": [
+    [
+     89.4139,
+     106.2225
+    ],
+    [
+     89.52,
+     106.2225
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283DD68",
+    "8283DD68"
+   ]
+  },
+  "W0323": {
+   "type": "brick_block",
+   "axis": [
+    [
+     70.0644,
+     106.1475
+    ],
+    [
+     70.0644,
+     106.2975
+    ]
+   ],
+   "thickness_m": 0.1061,
+   "handles": [
+    "8283803C",
+    "8283803C"
+   ]
+  },
+  "W0324": {
+   "type": "brick_block",
+   "axis": [
+    [
+     66.4986,
+     106.2976
+    ],
+    [
+     66.4905,
+     111.0974
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283803E",
+    "8283803E"
+   ]
+  },
+  "W0325": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     111.9258,
+     90.9136
+    ],
+    [
+     127.562,
+     90.9136
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283819F",
+    "8283819F"
+   ]
+  },
+  "W0326": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     65.3592,
+     80.5367
+    ],
+    [
+     65.3592,
+     95.6021
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82839A47",
+    "82839A47"
+   ]
+  },
+  "W0327": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     78.3339,
+     92.6726
+    ],
+    [
+     78.3339,
+     94.94
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82839BD1",
+    "82839BD1"
+   ]
+  },
+  "W0328": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     78.3339,
+     95.839
+    ],
+    [
+     78.3339,
+     95.939
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82839BD2",
+    "82839BD2"
+   ]
+  },
+  "W0329": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     78.3339,
+     96.014
+    ],
+    [
+     78.3339,
+     97.757
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82839BBC",
+    "82839BBC"
+   ]
+  },
+  "W0330": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     78.3339,
+     98.656
+    ],
+    [
+     78.3339,
+     98.756
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82839BBD",
+    "82839BBD"
+   ]
+  },
+  "W0331": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     78.3339,
+     98.831
+    ],
+    [
+     78.3339,
+     100.574
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82839BA7",
+    "82839BA7"
+   ]
+  },
+  "W0332": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     78.3339,
+     101.648
+    ],
+    [
+     78.3339,
+     103.391
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82839B6B",
+    "82839B6B"
+   ]
+  },
+  "W0333": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     41.64,
+     104.4273
+    ],
+    [
+     47.3542,
+     104.4273
+    ]
+   ],
+   "thickness_m": 0.0756,
+   "handles": [
+    "8283CF2B",
+    "8283CF2B"
+   ]
+  },
+  "W0334": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     48.5542,
+     104.4273
+    ],
+    [
+     55.0288,
+     104.4273
+    ]
+   ],
+   "thickness_m": 0.0756,
+   "handles": [
+    "8283D095",
+    "8283D095"
+   ]
+  },
+  "W0335": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     55.1044,
+     104.4273
+    ],
+    [
+     59.9796,
+     104.4273
+    ]
+   ],
+   "thickness_m": 0.0756,
+   "handles": [
+    "8283D107",
+    "8283D107"
+   ]
+  },
+  "W0336": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     66.2972,
+     104.4275
+    ],
+    [
+     67.7964,
+     104.4275
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283A41F",
+    "8283A41F"
+   ]
+  },
+  "W0337": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     68.8704,
+     104.4275
+    ],
+    [
+     70.3697,
+     104.4275
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283A40B",
+    "8283A40B"
+   ]
+  },
+  "W0338": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     71.2687,
+     104.4275
+    ],
+    [
+     71.3687,
+     104.4275
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283A40C",
+    "8283A40C"
+   ]
+  },
+  "W0339": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     72.7437,
+     104.4274
+    ],
+    [
+     73.0935,
+     104.4274
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82839C1E",
+    "82839C1E"
+   ]
+  },
+  "W0340": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     73.1685,
+     104.4275
+    ],
+    [
+     73.2685,
+     104.4275
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283D127",
+    "8283D127"
+   ]
+  },
+  "W0341": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     74.1675,
+     104.4275
+    ],
+    [
+     75.8068,
+     104.4275
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283D126",
+    "8283D126"
+   ]
+  },
+  "W0342": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     75.8818,
+     104.4275
+    ],
+    [
+     78.3714,
+     104.4275
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82839B6C",
+    "82839B6C"
+   ]
+  },
+  "W0343": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     79.64,
+     104.4275
+    ],
+    [
+     82.457,
+     104.4275
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82839C80",
+    "82839C80"
+   ]
+  },
+  "W0344": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     82.532,
+     104.4275
+    ],
+    [
+     88.5369,
+     104.4275
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82839C5C",
+    "82839C5C"
+   ]
+  },
+  "W0345": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     89.4359,
+     104.4275
+    ],
+    [
+     89.5359,
+     104.4275
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E791",
+    "8283E791"
+   ]
+  },
+  "W0346": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     89.6109,
+     104.4275
+    ],
+    [
+     92.4279,
+     104.4275
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E748",
+    "8283E748"
+   ]
+  },
+  "W0347": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     93.7029,
+     104.4275
+    ],
+    [
+     95.1185,
+     104.4275
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283A343",
+    "8283A343"
+   ]
+  },
+  "W0348": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     96.0175,
+     104.4275
+    ],
+    [
+     96.1175,
+     104.4275
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283A344",
+    "8283A344"
+   ]
+  },
+  "W0349": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     96.1925,
+     104.4275
+    ],
+    [
+     97.6831,
+     104.4275
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283D582",
+    "8283D582"
+   ]
+  },
+  "W0350": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     98.7571,
+     104.4275
+    ],
+    [
+     99.3879,
+     104.4275
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E918",
+    "8283E918"
+   ]
+  },
+  "W0351": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     101.4609,
+     104.4275
+    ],
+    [
+     110.4258,
+     104.4275
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E96A",
+    "8283E96A"
+   ]
+  },
+  "W0352": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     113.2258,
+     104.4275
+    ],
+    [
+     127.4873,
+     104.4275
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283D776",
+    "8283D776"
+   ]
+  },
+  "W0353": {
+   "type": "mixed",
+   "axis": [
+    [
+     66.2972,
+     101.6105
+    ],
+    [
+     71.4437,
+     101.6105
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283A432",
+    "8283A432"
+   ]
+  },
+  "W0354": {
+   "type": "mixed",
+   "axis": [
+    [
+     73.0935,
+     101.6105
+    ],
+    [
+     78.3714,
+     101.6105
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283D139",
+    "8283D139",
+    "82839B6E",
+    "82839B6E"
+   ]
+  },
+  "W0355": {
+   "type": "mixed",
+   "axis": [
+    [
+     93.6279,
+     101.6105
+    ],
+    [
+     98.6821,
+     101.6105
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283A345",
+    "8283A345",
+    "8283D584",
+    "8283D584"
+   ]
+  },
+  "W0356": {
+   "type": "mixed",
+   "axis": [
+    [
+     75.8443,
+     92.6726
+    ],
+    [
+     75.8443,
+     95.939
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82839BD4",
+    "82839BD4"
+   ]
+  },
+  "W0357": {
+   "type": "mixed",
+   "axis": [
+    [
+     75.8443,
+     96.014
+    ],
+    [
+     75.8443,
+     98.756
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82839BBF",
+    "82839BBF"
+   ]
+  },
+  "W0358": {
+   "type": "mixed",
+   "axis": [
+    [
+     75.8443,
+     98.831
+    ],
+    [
+     75.8443,
+     101.573
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82839BAA",
+    "82839BAA"
+   ]
+  },
+  "W0359": {
+   "type": "mixed",
+   "axis": [
+    [
+     75.8443,
+     101.648
+    ],
+    [
+     75.8443,
+     104.465
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82839B6F",
+    "82839B6F"
+   ]
+  },
+  "W0360": {
+   "type": "mixed",
+   "axis": [
+    [
+     75.7232,
+     98.7935
+    ],
+    [
+     78.3714,
+     98.7935
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82839BA9",
+    "82839BA9"
+   ]
+  },
+  "W0361": {
+   "type": "mixed",
+   "axis": [
+    [
+     75.8068,
+     95.9765
+    ],
+    [
+     78.3714,
+     95.9765
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82839BBE",
+    "82839BBE"
+   ]
+  },
+  "W0362": {
+   "type": "mixed",
+   "axis": [
+    [
+     75.8068,
+     92.6352
+    ],
+    [
+     78.6782,
+     92.6352
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82839BD3",
+    "82839BD3"
+   ]
+  },
+  "W0363": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     79.5773,
+     92.6352
+    ],
+    [
+     80.4397,
+     92.6352
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82839BF8",
+    "82839BF8"
+   ]
+  },
+  "W0364": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     79.6775,
+     96.9235
+    ],
+    [
+     79.6775,
+     98.3633
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E427",
+    "8283E427"
+   ]
+  },
+  "W0365": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     79.6775,
+     99.2623
+    ],
+    [
+     79.6775,
+     99.3623
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E428",
+    "8283E428"
+   ]
+  },
+  "W0366": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     79.6775,
+     99.4373
+    ],
+    [
+     79.6775,
+     100.8771
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E410",
+    "8283E410"
+   ]
+  },
+  "W0367": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     79.6775,
+     101.7761
+    ],
+    [
+     79.6775,
+     101.8761
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E411",
+    "8283E411"
+   ]
+  },
+  "W0368": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     79.6775,
+     101.9511
+    ],
+    [
+     79.6775,
+     103.391
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82839C81",
+    "82839C81"
+   ]
+  },
+  "W0369": {
+   "type": "mixed",
+   "axis": [
+    [
+     82.4945,
+     96.9235
+    ],
+    [
+     82.4945,
+     104.465
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E429",
+    "8283E429",
+    "8283E412",
+    "8283E412",
+    "82839C83",
+    "82839C83"
+   ]
+  },
+  "W0370": {
+   "type": "mixed",
+   "axis": [
+    [
+     79.64,
+     101.9136
+    ],
+    [
+     82.532,
+     101.9136
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82839C84",
+    "82839C84"
+   ]
+  },
+  "W0371": {
+   "type": "mixed",
+   "axis": [
+    [
+     89.5359,
+     101.9136
+    ],
+    [
+     92.4279,
+     101.9136
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E74C",
+    "8283E74C"
+   ]
+  },
+  "W0372": {
+   "type": "mixed",
+   "axis": [
+    [
+     81.1397,
+     96.874
+    ],
+    [
+     79.6403,
+     96.886
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82839CD2",
+    "82839CD2"
+   ]
+  },
+  "W0373": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     100.4244,
+     80.974
+    ],
+    [
+     100.4244,
+     104.465
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82839DFD",
+    "82839DFD"
+   ]
+  },
+  "W0374": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     110.4633,
+     91.8193
+    ],
+    [
+     110.4633,
+     97.5676
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E9E8",
+    "8283E9E8"
+   ]
+  },
+  "W0375": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     110.4633,
+     97.6426
+    ],
+    [
+     110.4633,
+     104.465
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82839EA0",
+    "82839EA0"
+   ]
+  },
+  "W0376": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     117.303,
+     106.185
+    ],
+    [
+     117.4712,
+     106.185
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "82839F0B",
+    "82839F0B"
+   ]
+  },
+  "W0377": {
+   "type": "mixed",
+   "axis": [
+    [
+     93.6654,
+     91.6312
+    ],
+    [
+     93.6654,
+     101.573
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E629",
+    "8283E629"
+   ]
+  },
+  "W0378": {
+   "type": "mixed",
+   "axis": [
+    [
+     93.6654,
+     101.648
+    ],
+    [
+     93.6654,
+     104.465
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283A346",
+    "8283A346"
+   ]
+  },
+  "W0379": {
+   "type": "mixed",
+   "axis": [
+    [
+     71.4062,
+     101.648
+    ],
+    [
+     71.4062,
+     104.465
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283A40A",
+    "8283A40A"
+   ]
+  },
+  "W0380": {
+   "type": "mixed",
+   "axis": [
+    [
+     68.8329,
+     101.648
+    ],
+    [
+     68.8329,
+     104.465
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283A40D",
+    "8283A40D"
+   ]
+  },
+  "W0381": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     41.6025,
+     95.9726
+    ],
+    [
+     41.6025,
+     104.4651
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283CF27",
+    "8283CF27"
+   ]
+  },
+  "W0382": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     55.0666,
+     80.5831
+    ],
+    [
+     55.0666,
+     104.4651
+    ]
+   ],
+   "thickness_m": 0.0756,
+   "handles": [
+    "8283D0A7",
+    "8283D0A7"
+   ]
+  },
+  "W0383": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     66.2216,
+     104.4272
+    ],
+    [
+     61.1797,
+     104.4273
+    ]
+   ],
+   "thickness_m": 0.0756,
+   "handles": [
+    "8283D118",
+    "8283D118"
+   ]
+  },
+  "W0384": {
+   "type": "mixed",
+   "axis": [
+    [
+     66.2593,
+     95.5265
+    ],
+    [
+     66.2594,
+     104.4649
+    ]
+   ],
+   "thickness_m": 0.0756,
+   "handles": [
+    "8283D123",
+    "8283D123"
+   ]
+  },
+  "W0385": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     65.3967,
+     95.5643
+    ],
+    [
+     66.2215,
+     95.5643
+    ]
+   ],
+   "thickness_m": 0.0756,
+   "handles": [
+    "8283D124",
+    "8283D124"
+   ]
+  },
+  "W0386": {
+   "type": "mixed",
+   "axis": [
+    [
+     73.131,
+     101.648
+    ],
+    [
+     73.131,
+     104.465
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283D125",
+    "8283D125"
+   ]
+  },
+  "W0387": {
+   "type": "mixed",
+   "axis": [
+    [
+     96.155,
+     101.573
+    ],
+    [
+     96.155,
+     104.465
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283D581",
+    "8283D581"
+   ]
+  },
+  "W0388": {
+   "type": "mixed",
+   "axis": [
+    [
+     98.7196,
+     101.573
+    ],
+    [
+     98.7196,
+     104.465
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283D596",
+    "8283D596"
+   ]
+  },
+  "W0389": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     127.5247,
+     91.9501
+    ],
+    [
+     127.5246,
+     104.465
+    ]
+   ],
+   "thickness_m": 0.0747,
+   "handles": [
+    "8283D5F9",
+    "8283D5F9"
+   ]
+  },
+  "W0390": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     111.9258,
+     96.7545
+    ],
+    [
+     127.4873,
+     96.7545
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283D778",
+    "8283D778"
+   ]
+  },
+  "W0391": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     127.5245,
+     89.5011
+    ],
+    [
+     127.5245,
+     89.6011
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283D917",
+    "8283D917"
+   ]
+  },
+  "W0392": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     127.5245,
+     89.6761
+    ],
+    [
+     127.5245,
+     89.8771
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283EB0C",
+    "8283EB0C"
+   ]
+  },
+  "W0393": {
+   "type": "brick_block",
+   "axis": [
+    [
+     89.4669,
+     106.1475
+    ],
+    [
+     89.4669,
+     106.2975
+    ]
+   ],
+   "thickness_m": 0.1061,
+   "handles": [
+    "8283DD68",
+    "8283DD68"
+   ]
+  },
+  "W0394": {
+   "type": "brick_block",
+   "axis": [
+    [
+     85.73,
+     106.2138
+    ],
+    [
+     85.88,
+     106.2138
+    ]
+   ],
+   "thickness_m": 0.1327,
+   "handles": [
+    "8283DD69",
+    "8283DD9F"
+   ]
+  },
+  "W0395": {
+   "type": "brick_block",
+   "axis": [
+    [
+     81.193,
+     106.1475
+    ],
+    [
+     81.193,
+     106.2975
+    ]
+   ],
+   "thickness_m": 0.1061,
+   "handles": [
+    "8283DD7A",
+    "8283DD7A"
+   ]
+  },
+  "W0396": {
+   "type": "brick_block",
+   "axis": [
+    [
+     80.3581,
+     113.2312
+    ],
+    [
+     80.3581,
+     113.3812
+    ]
+   ],
+   "thickness_m": 0.1061,
+   "handles": [
+    "8283DD7B",
+    "828404DE"
+   ]
+  },
+  "W0397": {
+   "type": "brick_block",
+   "axis": [
+    [
+     80.2301,
+     111.2475
+    ],
+    [
+     80.2301,
+     111.3536
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283DD8C",
+    "8283DD8C"
+   ]
+  },
+  "W0398": {
+   "type": "brick_block",
+   "axis": [
+    [
+     80.2301,
+     112.3814
+    ],
+    [
+     80.2301,
+     113.3813
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283DD7B",
+    "8283DD7B",
+    "828404DE"
+   ]
+  },
+  "W0399": {
+   "type": "brick_block",
+   "axis": [
+    [
+     80.1551,
+     111.3006
+    ],
+    [
+     80.3051,
+     111.3006
+    ]
+   ],
+   "thickness_m": 0.1061,
+   "handles": [
+    "8283DD8C",
+    "8283DD8C"
+   ]
+  },
+  "W0400": {
+   "type": "brick_block",
+   "axis": [
+    [
+     90.3551,
+     111.3006
+    ],
+    [
+     90.505,
+     111.3006
+    ]
+   ],
+   "thickness_m": 0.1061,
+   "handles": [
+    "8283DD9E",
+    "8283DD9E"
+   ]
+  },
+  "W0401": {
+   "type": "brick_block",
+   "axis": [
+    [
+     90.4301,
+     111.2475
+    ],
+    [
+     90.4301,
+     111.3536
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283DD9E",
+    "8283DD9E"
+   ]
+  },
+  "W0402": {
+   "type": "brick_block",
+   "axis": [
+    [
+     90.4301,
+     112.3814
+    ],
+    [
+     90.4301,
+     113.3813
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283DD8D",
+    "8283DD8D",
+    "8283DDA0"
+   ]
+  },
+  "W0403": {
+   "type": "brick_block",
+   "axis": [
+    [
+     85.805,
+     108.1015
+    ],
+    [
+     85.805,
+     108.2515
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828404BA",
+    "8283DD9F"
+   ]
+  },
+  "W0404": {
+   "type": "brick_block",
+   "axis": [
+    [
+     85.805,
+     113.2313
+    ],
+    [
+     85.805,
+     113.3813
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283DD9F",
+    "8283DDA0",
+    "8283DDA1"
+   ]
+  },
+  "W0405": {
+   "type": "brick_block",
+   "axis": [
+    [
+     80.3051,
+     113.3062
+    ],
+    [
+     80.4112,
+     113.3062
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828404DE",
+    "828404DE"
+   ]
+  },
+  "W0406": {
+   "type": "brick_block",
+   "axis": [
+    [
+     81.4389,
+     113.3063
+    ],
+    [
+     85.73,
+     113.3063
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283DDA1",
+    "8283DDA1",
+    "828404CD"
+   ]
+  },
+  "W0407": {
+   "type": "brick_block",
+   "axis": [
+    [
+     85.88,
+     113.3063
+    ],
+    [
+     90.3551,
+     113.3063
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "8283DDA0",
+    "8283DDA0"
+   ]
+  },
+  "W0408": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     35.1194,
+     106.1853
+    ],
+    [
+     39.6894,
+     106.1853
+    ]
+   ],
+   "thickness_m": 0.0756,
+   "handles": [
+    "8283E338",
+    "8283E338"
+   ]
+  },
+  "W0409": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     52.583,
+     106.1853
+    ],
+    [
+     53.2073,
+     106.1853
+    ]
+   ],
+   "thickness_m": 0.0756,
+   "handles": [
+    "8283DDA2",
+    "8283DDA2"
+   ]
+  },
+  "W0410": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     39.7272,
+     97.7726
+    ],
+    [
+     39.7272,
+     106.2231
+    ]
+   ],
+   "thickness_m": 0.0756,
+   "handles": [
+    "8283DDA3",
+    "8283DDA3"
+   ]
+  },
+  "W0411": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     34.0323,
+     97.8104
+    ],
+    [
+     28.215,
+     97.8111
+    ]
+   ],
+   "thickness_m": 0.0756,
+   "handles": [
+    "8283DDA4",
+    "8283DDA4"
+   ]
+  },
+  "W0412": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     42.6588,
+     106.185
+    ],
+    [
+     51.509,
+     106.185
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283DDF1",
+    "8283DDF1"
+   ]
+  },
+  "W0413": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     51.584,
+     106.185
+    ],
+    [
+     51.684,
+     106.185
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283DDE0",
+    "8283DDE0"
+   ]
+  },
+  "W0414": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     34.9313,
+     97.8101
+    ],
+    [
+     39.6894,
+     97.8101
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283DE99",
+    "8283DE99"
+   ]
+  },
+  "W0415": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     35.1572,
+     106.2231
+    ],
+    [
+     35.1572,
+     111.9699
+    ]
+   ],
+   "thickness_m": 0.0756,
+   "handles": [
+    "8283E339",
+    "8283E339"
+   ]
+  },
+  "W0416": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     51.5465,
+     106.1475
+    ],
+    [
+     51.5465,
+     113.2268
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E3CA",
+    "8283E3CA"
+   ]
+  },
+  "W0417": {
+   "type": "mixed",
+   "axis": [
+    [
+     78.5843,
+     84.2975
+    ],
+    [
+     78.5863,
+     92.5976
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E3E2",
+    "8283E3E2"
+   ]
+  },
+  "W0418": {
+   "type": "mixed",
+   "axis": [
+    [
+     79.64,
+     99.3998
+    ],
+    [
+     82.532,
+     99.3998
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E413",
+    "8283E413"
+   ]
+  },
+  "W0419": {
+   "type": "mixed",
+   "axis": [
+    [
+     89.5359,
+     99.3998
+    ],
+    [
+     92.4279,
+     99.3998
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E764",
+    "8283E764"
+   ]
+  },
+  "W0420": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     90.469,
+     91.6687
+    ],
+    [
+     93.6279,
+     91.6687
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E627",
+    "8283E627"
+   ]
+  },
+  "W0421": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     92.3904,
+     94.5476
+    ],
+    [
+     92.3904,
+     95.8495
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E836",
+    "8283E836"
+   ]
+  },
+  "W0422": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     92.3904,
+     96.7485
+    ],
+    [
+     92.3904,
+     96.8485
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E837",
+    "8283E837"
+   ]
+  },
+  "W0423": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     92.3904,
+     96.9235
+    ],
+    [
+     92.3904,
+     98.3633
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E778",
+    "8283E778"
+   ]
+  },
+  "W0424": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     92.3904,
+     99.2623
+    ],
+    [
+     92.3904,
+     99.3623
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E779",
+    "8283E779"
+   ]
+  },
+  "W0425": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     92.3904,
+     99.4373
+    ],
+    [
+     92.3904,
+     100.8771
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E761",
+    "8283E761"
+   ]
+  },
+  "W0426": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     92.3904,
+     101.7761
+    ],
+    [
+     92.3904,
+     101.8761
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E762",
+    "8283E762"
+   ]
+  },
+  "W0427": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     92.3904,
+     101.9511
+    ],
+    [
+     92.3904,
+     103.391
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E749",
+    "8283E749"
+   ]
+  },
+  "W0428": {
+   "type": "mixed",
+   "axis": [
+    [
+     89.5734,
+     96.9235
+    ],
+    [
+     89.5734,
+     99.3623
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E77A",
+    "8283E77A"
+   ]
+  },
+  "W0429": {
+   "type": "mixed",
+   "axis": [
+    [
+     89.5734,
+     99.4373
+    ],
+    [
+     89.5734,
+     101.8761
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E78E",
+    "8283E78E"
+   ]
+  },
+  "W0430": {
+   "type": "mixed",
+   "axis": [
+    [
+     89.5734,
+     101.9511
+    ],
+    [
+     89.5734,
+     104.465
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E790",
+    "8283E790"
+   ]
+  },
+  "W0431": {
+   "type": "mixed",
+   "axis": [
+    [
+     89.5359,
+     96.886
+    ],
+    [
+     92.4279,
+     96.886
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E7FE",
+    "8283E7FE"
+   ]
+  },
+  "W0432": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     89.5695,
+     91.6687
+    ],
+    [
+     89.3204,
+     91.6717
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E80F",
+    "8283E80F"
+   ]
+  },
+  "W0433": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     95.2774,
+     80.8471
+    ],
+    [
+     95.2774,
+     91.6312
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E8A9",
+    "8283E8A9"
+   ]
+  },
+  "W0434": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     93.7029,
+     91.6687
+    ],
+    [
+     95.3149,
+     91.6687
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E8AC",
+    "8283E8AC"
+   ]
+  },
+  "W0435": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     100.4619,
+     97.6051
+    ],
+    [
+     110.5008,
+     97.6051
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283E9AA",
+    "8283E9AA"
+   ]
+  },
+  "W0436": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     100.4619,
+     90.7828
+    ],
+    [
+     110.7478,
+     90.7828
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283EA13",
+    "8283EA13"
+   ]
+  },
+  "W0437": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     111.6468,
+     90.7828
+    ],
+    [
+     111.8508,
+     90.7828
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283EA8D",
+    "8283EA8D"
+   ]
+  },
+  "W0438": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     111.8883,
+     81.1338
+    ],
+    [
+     111.8883,
+     104.465
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283EAA4",
+    "8283EAA4",
+    "8283EAA5",
+    "8283EAA5"
+   ]
+  },
+  "W0439": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     78.5468,
+     84.26
+    ],
+    [
+     79.64,
+     84.26
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283EAB7",
+    "8283EAB7"
+   ]
+  },
+  "W0440": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     119.3647,
+     81.5243
+    ],
+    [
+     119.3647,
+     89.6761
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283EAEB",
+    "8283EAEB"
+   ]
+  },
+  "W0441": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     119.4022,
+     89.6386
+    ],
+    [
+     127.562,
+     89.6386
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283EB02",
+    "8283EB02"
+   ]
+  },
+  "W0442": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     127.5277,
+     85.654
+    ],
+    [
+     127.5277,
+     88.6021
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283EB0E",
+    "8283EB0E"
+   ]
+  },
+  "W0443": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     126.8433,
+     82.0154
+    ],
+    [
+     126.8433,
+     85.729
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283EB0F",
+    "8283EB0F"
+   ]
+  },
+  "W0444": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     126.8808,
+     85.6915
+    ],
+    [
+     127.4902,
+     85.6915
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283EB10",
+    "8283EB10"
+   ]
+  },
+  "W0445": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     127.5652,
+     88.3585
+    ],
+    [
+     127.6652,
+     88.3585
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283EB1A",
+    "8283EB1A"
+   ]
+  },
+  "W0446": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     128.5642,
+     88.3585
+    ],
+    [
+     129.995,
+     88.3585
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283EB2B",
+    "8283EB2B"
+   ]
+  },
+  "W0447": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     124.0663,
+     106.1475
+    ],
+    [
+     124.0663,
+     110.3865
+    ]
+   ],
+   "thickness_m": 0.0747,
+   "handles": [
+    "8283EB34",
+    "8283EB34"
+   ]
+  },
+  "W0448": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     122.3823,
+     106.1475
+    ],
+    [
+     122.3823,
+     110.7941
+    ]
+   ],
+   "thickness_m": 0.0747,
+   "handles": [
+    "8283EB59",
+    "8283EB59"
+   ]
+  },
+  "W0449": {
+   "type": "glass_partition",
+   "axis": [
+    [
+     130.116,
+     95.9726
+    ],
+    [
+     130.116,
+     99.6441
+    ]
+   ],
+   "thickness_m": 0.0747,
+   "handles": [
+    "8283F04F",
+    "8283F04F"
+   ]
+  },
+  "W0450": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     136.9195,
+     97.1809
+    ],
+    [
+     139.727,
+     97.1809
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283F07E",
+    "8283F07E"
+   ]
+  },
+  "W0451": {
+   "type": "pop_gypsum",
+   "axis": [
+    [
+     136.514,
+     98.9457
+    ],
+    [
+     139.0624,
+     100.0563
+    ]
+   ],
+   "thickness_m": 0.0768,
+   "handles": [
+    "8283F082",
+    "8283F082"
+   ]
+  },
+  "W0452": {
+   "type": "mixed",
+   "axis": [
+    [
+     135.4441,
+     101.4434
+    ],
+    [
+     137.8816,
+     102.6004
+    ]
+   ],
+   "thickness_m": 0.075,
+   "handles": [
+    "8283F084",
+    "8283F084"
+   ]
+  },
+  "W0453": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     65.0506,
+     107.24
+    ],
+    [
+     66.4205,
+     107.24
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840412",
+    "82840412",
+    "82840414"
+   ]
+  },
+  "W0454": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     85.88,
+     107.2382
+    ],
+    [
+     87.2498,
+     107.2382
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840412",
+    "82840412",
+    "82840414"
+   ]
+  },
+  "W0455": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     65.0506,
+     106.2886
+    ],
+    [
+     66.4205,
+     106.2886
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840414",
+    "82840414"
+   ]
+  },
+  "W0456": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     85.88,
+     106.2869
+    ],
+    [
+     87.2498,
+     106.2869
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840414",
+    "82840414"
+   ]
+  },
+  "W0457": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     65.0506,
+     108.1913
+    ],
+    [
+     66.4205,
+     108.1913
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840412",
+    "82840412",
+    "82840414"
+   ]
+  },
+  "W0458": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     66.5664,
+     108.1913
+    ],
+    [
+     67.9362,
+     108.1913
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840414",
+    "82840414"
+   ]
+  },
+  "W0459": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     85.88,
+     108.1895
+    ],
+    [
+     87.2498,
+     108.1895
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840412",
+    "82840412",
+    "82840414"
+   ]
+  },
+  "W0460": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     65.0506,
+     109.1426
+    ],
+    [
+     66.4205,
+     109.1426
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840412",
+    "82840412",
+    "82840414"
+   ]
+  },
+  "W0461": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     66.5664,
+     109.1426
+    ],
+    [
+     67.9362,
+     109.1426
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840412",
+    "82840412",
+    "82840414"
+   ]
+  },
+  "W0462": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     85.88,
+     109.1408
+    ],
+    [
+     87.2498,
+     109.1408
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840412",
+    "82840412",
+    "82840414"
+   ]
+  },
+  "W0463": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     65.0506,
+     110.094
+    ],
+    [
+     66.4205,
+     110.094
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840412",
+    "82840412",
+    "82840414"
+   ]
+  },
+  "W0464": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     66.5664,
+     110.094
+    ],
+    [
+     67.9362,
+     110.094
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840412",
+    "82840412",
+    "82840414"
+   ]
+  },
+  "W0465": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     85.88,
+     110.0922
+    ],
+    [
+     87.2498,
+     110.0922
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840412",
+    "82840412",
+    "82840414"
+   ]
+  },
+  "W0466": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     85.88,
+     111.0435
+    ],
+    [
+     87.2498,
+     111.0435
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840412",
+    "82840412",
+    "82840414"
+   ]
+  },
+  "W0467": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     85.88,
+     111.9948
+    ],
+    [
+     87.2498,
+     111.9948
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840412",
+    "82840412",
+    "82840414"
+   ]
+  },
+  "W0468": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     85.88,
+     112.9462
+    ],
+    [
+     87.2498,
+     112.9462
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840412",
+    "82840412"
+   ]
+  },
+  "W0469": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     89.1631,
+     111.8615
+    ],
+    [
+     89.1631,
+     113.2313
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840412",
+    "82840412"
+   ]
+  },
+  "W0470": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     88.2117,
+     111.8615
+    ],
+    [
+     88.2117,
+     113.2313
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840414",
+    "82840414"
+   ]
+  },
+  "W0471": {
+   "type": "brick_block",
+   "axis": [
+    [
+     88.3461,
+     107.6525
+    ],
+    [
+     89.52,
+     107.6525
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828404A8",
+    "828404A8"
+   ]
+  },
+  "W0472": {
+   "type": "brick_block",
+   "axis": [
+    [
+     82.5137,
+     108.1789
+    ],
+    [
+     82.3637,
+     108.1794
+    ]
+   ],
+   "thickness_m": 0.1557,
+   "handles": [
+    "828404B7",
+    "828404BA"
+   ]
+  },
+  "W0473": {
+   "type": "brick_block",
+   "axis": [
+    [
+     82.4344,
+     107.6016
+    ],
+    [
+     82.4384,
+     108.1009
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828404B7",
+    "828404B7"
+   ]
+  },
+  "W0474": {
+   "type": "brick_block",
+   "axis": [
+    [
+     82.3639,
+     108.1765
+    ],
+    [
+     85.73,
+     108.1765
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828404BA",
+    "828404BA"
+   ]
+  },
+  "W0475": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     83.3259,
+     108.2515
+    ],
+    [
+     83.3259,
+     109.6213
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840412",
+    "82840412",
+    "82840414"
+   ]
+  },
+  "W0476": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     84.2773,
+     108.2515
+    ],
+    [
+     84.2773,
+     109.6213
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840414",
+    "82840414",
+    "828404E4"
+   ]
+  },
+  "W0477": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     82.3746,
+     108.2515
+    ],
+    [
+     82.3746,
+     109.6213
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840412",
+    "82840412"
+   ]
+  },
+  "W0478": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     82.1688,
+     112.2907
+    ],
+    [
+     83.5386,
+     112.2907
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840412",
+    "82840412",
+    "82840414"
+   ]
+  },
+  "W0479": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     84.3602,
+     112.2907
+    ],
+    [
+     85.73,
+     112.2907
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840412",
+    "82840412",
+    "82840414"
+   ]
+  },
+  "W0480": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     82.1688,
+     111.3393
+    ],
+    [
+     83.5386,
+     111.3393
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840414",
+    "82840414"
+   ]
+  },
+  "W0481": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     84.3602,
+     111.3393
+    ],
+    [
+     85.73,
+     111.3393
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840414",
+    "82840414"
+   ]
+  },
+  "W0482": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     82.1688,
+     113.242
+    ],
+    [
+     83.5386,
+     113.242
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840412",
+    "82840412"
+   ]
+  },
+  "W0483": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     84.3602,
+     113.242
+    ],
+    [
+     85.73,
+     113.242
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840412",
+    "82840412"
+   ]
+  },
+  "W0484": {
+   "type": "brick_block",
+   "axis": [
+    [
+     82.0938,
+     111.3192
+    ],
+    [
+     82.0938,
+     113.2313
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828404CD",
+    "828404CD"
+   ]
+  },
+  "W0485": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     65.0506,
+     111.0453
+    ],
+    [
+     66.4205,
+     111.0453
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840412",
+    "82840412"
+   ]
+  },
+  "W0486": {
+   "type": "panel_partial_height",
+   "axis": [
+    [
+     66.5664,
+     111.0453
+    ],
+    [
+     67.9362,
+     111.0453
+    ]
+   ],
+   "thickness_m": 0.0213,
+   "handles": [
+    "82840412",
+    "82840412"
+   ]
+  },
+  "W0487": {
+   "type": "brick_block",
+   "axis": [
+    [
+     63.2986,
+     107.7277
+    ],
+    [
+     63.2905,
+     111.0973
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828405AB",
+    "828405AB"
+   ]
+  },
+  "W0488": {
+   "type": "brick_block",
+   "axis": [
+    [
+     63.2987,
+     107.7278
+    ],
+    [
+     63.2982,
+     107.8778
+    ]
+   ],
+   "thickness_m": 0.1534,
+   "handles": [
+    "828405BA",
+    "828405AB"
+   ]
+  },
+  "W0489": {
+   "type": "brick_block",
+   "axis": [
+    [
+     62.7221,
+     107.7985
+    ],
+    [
+     63.2214,
+     107.8025
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828405BA",
+    "828405BA"
+   ]
+  },
+  "W0490": {
+   "type": "brick_block",
+   "axis": [
+    [
+     63.2984,
+     107.7278
+    ],
+    [
+     63.2989,
+     107.8773
+    ]
+   ],
+   "thickness_m": 0.1538,
+   "handles": [
+    "828405C0",
+    "828405BA"
+   ]
+  },
+  "W0491": {
+   "type": "brick_block",
+   "axis": [
+    [
+     63.8752,
+     107.7985
+    ],
+    [
+     63.3759,
+     107.8025
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828405C0",
+    "828405C0"
+   ]
+  },
+  "W0492": {
+   "type": "brick_block",
+   "axis": [
+    [
+     68.999,
+     107.7985
+    ],
+    [
+     70.1156,
+     107.8025
+    ]
+   ],
+   "thickness_m": 0.15,
+   "handles": [
+    "828405D5",
+    "828405D5"
+   ]
+  },
+  "W0493": {
+   "type": "brick_block",
+   "axis": [
+    [
+     60.9412,
+     113.4991
+    ],
+    [
+     61.2387,
+     113.504
+    ]
+   ],
+   "thickness_m": 0.1499,
+   "handles": [
+    "828336BD",
+    "828336BE"
+   ]
+  },
+  "W0494": {
+   "type": "brick_block",
+   "axis": [
+    [
+     60.4913,
+     113.4912
+    ],
+    [
+     60.8636,
+     113.4978
+    ]
+   ],
+   "thickness_m": 0.1499,
+   "handles": [
+    "828336BD",
+    "828336BE"
+   ]
+  },
+  "W0495": {
+   "type": "brick_block",
+   "axis": [
+    [
+     60.1136,
+     113.4841
+    ],
+    [
+     60.4886,
+     113.4912
+    ]
+   ],
+   "thickness_m": 0.1499,
+   "handles": [
+    "828336BD",
+    "828336BE"
+   ]
+  },
+  "W0496": {
+   "type": "brick_block",
+   "axis": [
+    [
+     59.7385,
+     113.4766
+    ],
+    [
+     60.0415,
+     113.4827
+    ]
+   ],
+   "thickness_m": 0.1499,
+   "handles": [
+    "828336BD",
+    "828336BE"
+   ]
+  },
+  "W0497": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     96.3368,
+     80.5309
+    ],
+    [
+     98.4433,
+     80.5415
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "82834CAD",
+    "82834CB2"
+   ]
+  },
+  "W0498": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     98.4433,
+     80.5415
+    ],
+    [
+     100.5496,
+     80.563
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "82834CAD",
+    "82834CB2"
+   ]
+  },
+  "W0499": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     100.5497,
+     80.563
+    ],
+    [
+     102.6557,
+     80.5953
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "82834CAD",
+    "82834CB2"
+   ]
+  },
+  "W0500": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     102.6559,
+     80.5954
+    ],
+    [
+     104.7615,
+     80.6386
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "82834CAD",
+    "82834CB2"
+   ]
+  },
+  "W0501": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     104.7619,
+     80.6386
+    ],
+    [
+     106.867,
+     80.6926
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "82834CAD",
+    "82834CB2"
+   ]
+  },
+  "W0502": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     106.8675,
+     80.6926
+    ],
+    [
+     108.9722,
+     80.7575
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "82834CAD",
+    "82834CB2"
+   ]
+  },
+  "W0503": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     108.9727,
+     80.7576
+    ],
+    [
+     111.077,
+     80.8333
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "82834CAD",
+    "82834CB2"
+   ]
+  },
+  "W0504": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     111.0776,
+     80.8333
+    ],
+    [
+     113.1813,
+     80.9199
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "82834CAD",
+    "82834CB2"
+   ]
+  },
+  "W0505": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     113.182,
+     80.92
+    ],
+    [
+     115.2852,
+     81.0174
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "82834CAD",
+    "82834CB2"
+   ]
+  },
+  "W0506": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     115.286,
+     81.0174
+    ],
+    [
+     117.3885,
+     81.1257
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "82834CAD",
+    "82834CB2"
+   ]
+  },
+  "W0507": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     117.3895,
+     81.1257
+    ],
+    [
+     119.4913,
+     81.2448
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "82834CAD",
+    "82834CB2"
+   ]
+  },
+  "W0508": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     119.4923,
+     81.2449
+    ],
+    [
+     121.5935,
+     81.3748
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "82834CAD",
+    "82834CB2"
+   ]
+  },
+  "W0509": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     121.5946,
+     81.3749
+    ],
+    [
+     123.6951,
+     81.5157
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "82834CAD",
+    "82834CB2"
+   ]
+  },
+  "W0510": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     123.6963,
+     81.5158
+    ],
+    [
+     125.796,
+     81.6673
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "82834CAD",
+    "82834CB2"
+   ]
+  },
+  "W0511": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     125.7972,
+     81.6674
+    ],
+    [
+     127.8961,
+     81.8298
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "82834CAD",
+    "82834CB2"
+   ]
+  },
+  "W0512": {
+   "type": "curtain_wall",
+   "axis": [
+    [
+     127.8975,
+     81.8299
+    ],
+    [
+     129.9955,
+     82.0032
+    ]
+   ],
+   "thickness_m": 0.012,
+   "handles": [
+    "82834CAD",
+    "82834CB2"
+   ]
+  }
+ }
+}

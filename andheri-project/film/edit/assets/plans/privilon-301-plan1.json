@@ -1,0 +1,166 @@
+{
+ "id": "privilon-301-plan1",
+ "bounds": [
+  0,
+  0,
+  67.3,
+  22.4
+ ],
+ "desks": 301,
+ "totals": {
+  "work_seats": 301,
+  "all_seats": null
+ },
+ "zones": [
+  {
+   "name": "4 Seater Meeting Room-02",
+   "label": [
+    40.652,
+    9.495
+   ],
+   "group": "Meeting room",
+   "seats": 4,
+   "color": "#8964bf"
+  },
+  {
+   "name": "4 Seater Meeting Room-03",
+   "label": [
+    43.277,
+    9.495
+   ],
+   "group": "Meeting room",
+   "seats": 4,
+   "color": "#8964bf"
+  },
+  {
+   "name": "6 Seater Meeting Room-01",
+   "label": [
+    17.992,
+    9.495
+   ],
+   "group": "Meeting room",
+   "seats": 6,
+   "color": "#8964bf"
+  },
+  {
+   "name": "Phone booth 04",
+   "label": [
+    58.219,
+    17.481
+   ],
+   "group": "Phone booth",
+   "seats": null,
+   "color": "#94735c"
+  },
+  {
+   "name": "Phone booth 03",
+   "label": [
+    57.244,
+    17.411
+   ],
+   "group": "Phone booth",
+   "seats": null,
+   "color": "#94735c"
+  },
+  {
+   "name": "Phone booth 02",
+   "label": [
+    56.369,
+    17.411
+   ],
+   "group": "Phone booth",
+   "seats": null,
+   "color": "#94735c"
+  },
+  {
+   "name": "Phone booth 01",
+   "label": [
+    55.394,
+    17.411
+   ],
+   "group": "Phone booth",
+   "seats": null,
+   "color": "#94735c"
+  },
+  {
+   "name": "4 Seater Meeting Room-01",
+   "label": [
+    26.041,
+    9.496
+   ],
+   "group": "Meeting room",
+   "seats": 4,
+   "color": "#8964bf"
+  },
+  {
+   "name": "4 Seater Meeting Room-04",
+   "label": [
+    14.992,
+    10.314
+   ],
+   "group": "Meeting room",
+   "seats": 4,
+   "color": "#8964bf"
+  },
+  {
+   "name": "4 Seater Meeting Room-05",
+   "label": [
+    12.367,
+    10.314
+   ],
+   "group": "Meeting room",
+   "seats": 4,
+   "color": "#8964bf"
+  },
+  {
+   "name": "6 Seater Meeting Room-02",
+   "label": [
+    6.644,
+    10.314
+   ],
+   "group": "Meeting room",
+   "seats": 6,
+   "color": "#8964bf"
+  },
+  {
+   "name": "4 Seater Meeting Room-06",
+   "label": [
+    9.742,
+    10.314
+   ],
+   "group": "Meeting room",
+   "seats": 4,
+   "color": "#8964bf"
+  },
+  {
+   "name": "Workstation zone 1",
+   "label": [
+    11.334,
+    7.195
+   ],
+   "group": "Workstations",
+   "seats": 121,
+   "color": "#287f91"
+  },
+  {
+   "name": "Workstation zone 2",
+   "label": [
+    53.662,
+    5.502
+   ],
+   "group": "Workstations",
+   "seats": 180,
+   "color": "#287f91"
+  },
+  {
+   "name": "22 Seater Collapsible Conference Room",
+   "label": [
+    36.779,
+    6.173
+   ],
+   "group": "Training & conference",
+   "seats": 22,
+   "color": "#3b7dd8"
+  }
+ ]
+}

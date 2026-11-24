@@ -1,0 +1,36 @@
+<template><style>@font-face{font-family:Urbanist;src:url('assets/fonts/Urbanist.ttf')}
+@font-face{font-family:'Instrument Serif';src:url('assets/fonts/InstrumentSerif-Regular.ttf')}
+#root{width:1920px;height:1080px;position:relative;overflow:hidden;font-family:Urbanist,sans-serif;color:#fff}
+#close-stage{background:radial-gradient(1100px 600px at 50% 45%,#121c2c,#05070b 75%)}
+.l1{position:absolute;left:0;right:0;top:250px;text-align:center;font-family:'Instrument Serif',serif;font-style:italic;font-size:84px}
+.stats{position:absolute;left:0;right:0;top:400px;display:flex;justify-content:center;gap:120px}
+.stat{text-align:center}.stat small{display:block;font-size:28px;color:#aab3bf;letter-spacing:.14em;text-transform:uppercase;margin-top:8px}
+.odo{display:inline-flex;font-size:104px;line-height:1;height:1em;overflow:hidden;font-weight:600;font-variant-numeric:tabular-nums}
+.odo .col{display:inline-block;height:1em;overflow:hidden;width:.62em;text-align:center}.odo .strip{display:flex;flex-direction:column}.odo .strip i{font-style:normal;height:1em;display:block}
+.odo .comma{width:.28em}.plus{font-size:80px;color:#ffc200;font-weight:600}
+.ways{position:absolute;left:0;right:0;top:640px;display:flex;justify-content:center;gap:56px;font-size:36px;color:#dfe4ea;letter-spacing:.02em}
+.belief{position:absolute;left:0;right:0;top:640px;text-align:center;font-family:'Instrument Serif',serif;font-style:italic;font-size:64px;color:#ffc200}
+.belief2{position:absolute;left:0;right:0;top:724px;text-align:center;font-size:30px;color:#dfe4ea;letter-spacing:.06em}
+.lock{position:absolute;left:0;right:0;top:440px;display:flex;align-items:center;justify-content:center;gap:56px;opacity:0}
+.lock img{height:72px;width:auto;object-fit:contain}.lock .x{font-size:44px;color:#8b95a3;font-weight:300}
+.end{position:absolute;left:0;right:0;top:600px;text-align:center;font-family:'Instrument Serif',serif;font-style:italic;font-size:58px;opacity:0}
+.cta{position:absolute;left:0;right:0;top:700px;text-align:center;font-size:28px;letter-spacing:.24em;text-transform:uppercase;color:#ffc200;opacity:0}</style>
+<div id="root" data-composition-id="close" data-width="1920" data-height="1080" data-duration="23.8">
+<div id="close-stage" class="clip" data-start="0" data-duration="23.8" data-track-index="1" data-layout-allow-overflow data-layout-allow-overlap><div id="g1"><div class="l1" id="l1">We're Autopilot.</div>
+<div class="stats"><div class="stat"><span class="odo" id="o1" style="min-width:3.38em;display:inline-block;text-align:right">0</span><span class="plus">+</span><small>seats delivered</small></div><div class="stat"><span class="odo" id="o2" style="min-width:1.24em;display:inline-block;text-align:right">0</span><span class="plus">+</span><small>centres</small></div><div class="stat"><span class="odo" id="o3" style="min-width:0.62em;display:inline-block;text-align:right">0</span><small>cities</small></div></div>
+<div class="ways"><span id="w1">Pick the building.</span><span id="w2">Plan every seat.</span><span id="w3">Run it like our own.</span></div>
+<div class="belief" id="bl">Pehle vyavahar, phir vyapar.</div><div class="belief2" id="bl2">Relationship first, business next.</div></div>
+<div class="lock" id="lock"><img src="assets/brand/autopilot-white.png" alt="Autopilot"><span class="x">×</span><img src="assets/brand/flipkart-logo-reverse.svg" alt="Flipkart"></div>
+<div class="end" id="end">Andheri East. Let's choose it together.</div><div class="cta" id="cta">Enter the experience</div></div></div>
+<script>(function(){const tl=gsap.timeline({paused:true});function odoTo(id, value, at, dur, digits){  const el = document.getElementById(id), st = (window.__odo = window.__odo || {}), from = st[id] || 0; st[id] = value;  const p = {v: from};  tl.fromTo(p, {v: from}, {v: value, duration: dur + 0.25, ease: 'power3.out', immediateRender: false,    onUpdate: () => { el.textContent = Math.round(p.v).toLocaleString('en-US'); }}, at);}
+tl.from('#l1',{opacity:0,y:20,filter:'blur(6px)',duration:0.9,ease:'power3.out'},0.4);
+tl.from('#close-stage .stats',{opacity:0,y:20,duration:0.7,ease:'power3.out'},1.3);
+odoTo('o1',15000,1.6,1.2,5); odoTo('o2',20,3.1,1.0,2); odoTo('o3',7,4.05,0.9,1);
+tl.from('#w1',{opacity:0,y:14,duration:0.6,ease:'power3.out'},5.6).from('#w2',{opacity:0,y:14,duration:0.6,ease:'power3.out'},7.1).from('#w3',{opacity:0,y:14,duration:0.6,ease:'power3.out'},9.1);
+tl.to('#close-stage .ways',{opacity:0,duration:0.5},10.6);
+tl.from('#bl',{opacity:0,y:18,duration:0.9,ease:'power3.out'},10.95).from('#bl2',{opacity:0,duration:0.8},13.3);
+tl.to('#g1',{opacity:0,duration:0.7,ease:'power1.in'},15.1);
+tl.to('#lock',{opacity:1,duration:0.9,ease:'power2.out'},15.5).from('#lock',{scale:0.96,duration:1.3,ease:'power3.out'},15.5);
+tl.to('#end',{opacity:1,duration:0.8},16.0).to('#cta',{opacity:1,duration:0.8},17.4);
+tl.to('#lock,#end,#cta',{opacity:0,duration:1.2},22.4);
+window.__timelines['close']=tl;})();</script></template>

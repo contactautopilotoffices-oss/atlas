@@ -1,0 +1,950 @@
+{
+ "about": "Every rule that turns drawing evidence into build data. Change a number here and re-run run.sh: the schema file, FreeCAD model, IFC, DXF, JSON and trace page are all regenerated from it. Each rule names the evidence it uses; anything that is not evidence is under 'defaults' and is marked as assumed in every output.",
+ "pairing": {
+  "wall_layers": [
+   "walls",
+   "WS-WALL",
+   "WS-WALL-PRTN",
+   "WS-WALL-PHRT",
+   "WS-GLAZ-GLAS",
+   "PARTITION",
+   "WALL",
+   "PR-FULL HT",
+   "PR- GLASS",
+   "PR-LINE",
+   "STRUCTURAL GLAZING",
+   "WINDOW",
+   "A.C.P.CLADDING",
+   "A.C.P. CLADDING",
+   "RAILING",
+   "RCC  FINS",
+   "I-FURN"
+  ],
+  "min_segment_m": 0.05,
+  "min_pair_overlap_m": 0.1,
+  "parallel_tol_deg": 1.5,
+  "arc_centre_tol_m": 0.08,
+  "arc_facet_m": 0.6,
+  "coincident_reach_m": 0.06,
+  "coincident_min_overlap_m": 0.3,
+  "thickness_range_m": {
+   "_default": [
+    0.015,
+    0.46
+   ],
+   "walls": [
+    0.04,
+    0.46
+   ],
+   "WS-WALL": [
+    0.04,
+    0.3
+   ],
+   "WS-WALL-PRTN": [
+    0.04,
+    0.16
+   ],
+   "WS-WALL-PHRT": [
+    0.01,
+    0.06
+   ],
+   "WS-GLAZ-GLAS": [
+    0.005,
+    0.12
+   ],
+   "PARTITION": [
+    0.04,
+    0.16
+   ],
+   "WALL": [
+    0.01,
+    0.16
+   ],
+   "PR-FULL HT": [
+    0.04,
+    0.16
+   ],
+   "PR- GLASS": [
+    0.005,
+    0.06
+   ],
+   "PR-LINE": [
+    0.005,
+    0.06
+   ],
+   "STRUCTURAL GLAZING": [
+    0.004,
+    0.06
+   ],
+   "WINDOW": [
+    0.03,
+    0.16
+   ],
+   "A.C.P.CLADDING": [
+    0.01,
+    0.12
+   ],
+   "A.C.P. CLADDING": [
+    0.01,
+    0.12
+   ],
+   "RAILING": [
+    0.03,
+    0.12
+   ],
+   "RCC  FINS": [
+    0.05,
+    0.4
+   ],
+   "I-FURN": [
+    0.08,
+    0.12
+   ]
+  },
+  "min_length_m_by_layer": {
+   "I-FURN": 0.8
+  }
+ },
+ "columns": {
+  "layers": [
+   "Column",
+   "Structural Column",
+   "column-hatch"
+  ],
+  "min_area_m2": 0.03,
+  "max_area_m2": 4.0
+ },
+ "hatch": {
+  "hatch_line_layers": [
+   "wall hatch"
+  ],
+  "masonry_min_lines_per_m": 3.0
+ },
+ "text": {
+  "reach_m": 1.2
+ },
+ "door_blocks": {
+  "DOOR_SNGL@WS-DOOR-GLAZ": {
+   "kind": "glass_door",
+   "leaves": 1,
+   "evidence": "block DOOR_SNGL on layer WS-DOOR-GLAZ (glazed door layer)"
+  },
+  "DOOR_SNGL@WS-DOOR": {
+   "kind": "solid_door",
+   "leaves": 1,
+   "evidence": "block DOOR_SNGL on layer WS-DOOR (door layer, not glazed)"
+  },
+  "A$C03859404@WS-DOOR": {
+   "kind": "solid_door",
+   "leaves": 1,
+   "evidence": "unnamed door block on layer WS-DOOR"
+  },
+  "D-750@DOOR": {
+   "kind": "solid_door",
+   "leaves": 1,
+   "evidence": "block D-750 on layer DOOR"
+  },
+  "Glass Door@DR-GLASS": {
+   "kind": "glass_door",
+   "leaves": 1,
+   "evidence": "block 'Glass Door' on layer DR-GLASS"
+  },
+  "double door": {
+   "kind": "solid_door",
+   "leaves": 2,
+   "evidence": "block 'double door'"
+  },
+  "A$C9e4b0bea@WS-WALL-PRTN": {
+   "kind": "cubicle_door",
+   "leaves": 1,
+   "evidence": "toilet cubicle block (20 mm partial-height panels on WS-WALL-PHRT plus a door swing)"
+  }
+ },
+ "defaults": {
+  "about": "One coherent default set: common Indian office fit-out build-ups (founder decision 19 Nov 2026: 'Use defaults, mark them'). Every value below is source=default in every output and is listed in ASK_DESIGNER.md for confirmation.",
+  "false_ceiling_m": 2.9,
+  "false_ceiling_note": "founder's range 2.7-2.9 m; the web twin uses 3.05 m from an earlier client-team instruction (10 ft). One number; see ASK_DESIGNER Q-H1.",
+  "soffit_m": 3.35,
+  "floor_to_floor_m": 3.6,
+  "slab_m": 0.25,
+  "ffl_above_ground_m": 22.2,
+  "door_head_m": 2.4,
+  "railing_height_m": 1.0,
+  "cubicle_panel": {
+   "z0_m": 0.15,
+   "z1_m": 2.1
+  },
+  "glass_pane_mm": 12,
+  "glass_channel_m": 0.05,
+  "gypsum_buildup": "2 x 12.5 mm gypsum board on 50 mm GI metal studs (75 mm overall); 100 mm overall when the drawing gives no thickness",
+  "masonry_buildup": "solid concrete block (AAC/CC) with 12 mm cement plaster both faces; 230 mm when the drawing gives no thickness",
+  "undrawn_thickness_m": {
+   "pop_gypsum": 0.1,
+   "brick_block": 0.23,
+   "glass_partition": 0.075
+  },
+  "door_frame": {
+   "glass_door": "aluminium 45 x 75 mm",
+   "solid_door": "hardwood 50 x 100 mm with 12 mm beading",
+   "cubicle_door": "aluminium/HPL cubicle hardware, no frame"
+  },
+  "door_leaf_mm": {
+   "glass_door": 12,
+   "solid_door": 35,
+   "cubicle_door": 20
+  },
+  "header_by_host": {
+   "glass_partition": {
+    "kind": "glass_transom",
+    "frame": "aluminium transom bar 45 x 75 mm at door head"
+   },
+   "full_height_glass": {
+    "kind": "glass_transom",
+    "frame": "aluminium transom bar 45 x 75 mm at door head"
+   },
+   "pop_gypsum": {
+    "kind": "pop_bulkhead",
+    "frame": "gypsum board on metal stud header, POP finish"
+   },
+   "mixed": {
+    "kind": "pop_bulkhead",
+    "frame": "gypsum board on metal stud header, POP finish"
+   },
+   "brick_block": {
+    "kind": "lintel_masonry",
+    "frame": "RCC lintel 150 mm deep, block and plaster above"
+   },
+   "rcc": {
+    "kind": "lintel_masonry",
+    "frame": "RCC wall over the opening"
+   },
+   "panel_partial_height": {
+    "kind": "none_open_above",
+    "frame": "cubicle panels stop at 2.1 m; nothing above"
+   },
+   "_none": {
+    "kind": "pop_bulkhead",
+    "frame": "gypsum board on metal stud header, POP finish"
+   }
+  }
+ },
+ "materials": {
+  "glass_clear_12": {
+   "label": "12 mm toughened clear glass",
+   "color": [
+    0.55,
+    0.8,
+    0.9
+   ],
+   "transparency": 60
+  },
+  "aluminium": {
+   "label": "aluminium section, powder coated",
+   "color": [
+    0.25,
+    0.25,
+    0.28
+   ],
+   "transparency": 0
+  },
+  "gypsum_pop": {
+   "label": "gypsum board on metal studs, POP finish",
+   "color": [
+    0.93,
+    0.9,
+    0.82
+   ],
+   "transparency": 0
+  },
+  "masonry_block": {
+   "label": "concrete block with cement plaster",
+   "color": [
+    0.78,
+    0.52,
+    0.42
+   ],
+   "transparency": 0
+  },
+  "rcc": {
+   "label": "reinforced concrete",
+   "color": [
+    0.6,
+    0.6,
+    0.6
+   ],
+   "transparency": 0
+  },
+  "acp": {
+   "label": "aluminium composite panel",
+   "color": [
+    0.75,
+    0.75,
+    0.8
+   ],
+   "transparency": 0
+  },
+  "hpl_panel": {
+   "label": "HPL cubicle panel 20 mm",
+   "color": [
+    0.55,
+    0.45,
+    0.65
+   ],
+   "transparency": 0
+  },
+  "steel_railing": {
+   "label": "MS/SS railing",
+   "color": [
+    0.35,
+    0.35,
+    0.35
+   ],
+   "transparency": 0
+  },
+  "unknown": {
+   "label": "type not settled by the drawing",
+   "color": [
+    0.9,
+    0.2,
+    0.6
+   ],
+   "transparency": 0
+  },
+  "door_solid": {
+   "label": "35 mm flush door leaf",
+   "color": [
+    0.55,
+    0.38,
+    0.22
+   ],
+   "transparency": 0
+  },
+  "slab": {
+   "label": "RCC slab with screed",
+   "color": [
+    0.82,
+    0.82,
+    0.8
+   ],
+   "transparency": 0
+  },
+  "ceiling": {
+   "label": "false ceiling",
+   "color": [
+    0.97,
+    0.97,
+    0.97
+   ],
+   "transparency": 70
+  },
+  "plaster": {
+   "label": "12 mm cement plaster",
+   "color": [
+    0.9,
+    0.88,
+    0.82
+   ],
+   "transparency": 0
+  },
+  "gypsum_board": {
+   "label": "12.5 mm gypsum board, POP finish",
+   "color": [
+    0.95,
+    0.94,
+    0.9
+   ],
+   "transparency": 0
+  },
+  "stud_cavity": {
+   "label": "GI metal studs with mineral wool",
+   "color": [
+    0.8,
+    0.8,
+    0.75
+   ],
+   "transparency": 0
+  },
+  "hardwood_frame": {
+   "label": "hardwood door frame with beading",
+   "color": [
+    0.36,
+    0.24,
+    0.14
+   ],
+   "transparency": 0
+  }
+ },
+ "wall_rules": [
+  {
+   "id": "R01-column-outline",
+   "when": {
+    "in_column_frac_gt": 0.5
+   },
+   "drop": "the two lines are a column's own outline; the column is built from its outline instead"
+  },
+  {
+   "id": "R02-structural-glazing",
+   "when": {
+    "layer_in": [
+     "STRUCTURAL GLAZING"
+    ]
+   },
+   "type": "curtain_wall",
+   "confidence": 0.9,
+   "why": "layer STRUCTURAL GLAZING: the building's structural-glazing facade line"
+  },
+  {
+   "id": "R03-acp",
+   "when": {
+    "layer_in": [
+     "A.C.P.CLADDING",
+     "A.C.P. CLADDING"
+    ]
+   },
+   "type": "acp",
+   "confidence": 0.9,
+   "why": "layer A.C.P.CLADDING: aluminium composite panel cladding"
+  },
+  {
+   "id": "R04-window",
+   "when": {
+    "layer_in": [
+     "WINDOW"
+    ]
+   },
+   "type": "window_glazing",
+   "confidence": 0.8,
+   "why": "layer WINDOW, 75 mm line pair (window frame depth)"
+  },
+  {
+   "id": "R05-railing",
+   "when": {
+    "layer_in": [
+     "RAILING"
+    ]
+   },
+   "type": "railing",
+   "confidence": 0.85,
+   "why": "layer RAILING"
+  },
+  {
+   "id": "R06-rcc-fins",
+   "when": {
+    "layer_in": [
+     "RCC  FINS"
+    ]
+   },
+   "type": "rcc",
+   "confidence": 0.85,
+   "why": "layer 'RCC  FINS': reinforced-concrete fins"
+  },
+  {
+   "id": "R07-glass-partition",
+   "when": {
+    "layer_in": [
+     "WS-GLAZ-GLAS",
+     "PR- GLASS"
+    ]
+   },
+   "type": "glass_partition",
+   "confidence": 0.9,
+   "why": "glazing layer (WS-GLAZ-GLAS = glazing/glass in the layer naming the fit-out designer uses; PR- GLASS = partition glass)"
+  },
+  {
+   "id": "R08-partial-height-panel",
+   "when": {
+    "layer_in": [
+     "WS-WALL-PHRT",
+     "WALL"
+    ],
+    "thickness_mm": [
+     10,
+     40
+    ]
+   },
+   "type": "panel_partial_height",
+   "confidence": 0.7,
+   "why": "PHRT = partial-height wall in the designer's layer naming; 20 mm line pair = cubicle board"
+  },
+  {
+   "id": "R09-fitout-partition",
+   "when": {
+    "layer_in": [
+     "WS-WALL-PRTN",
+     "PARTITION",
+     "PR-FULL HT"
+    ],
+    "thickness_mm": [
+     60,
+     130
+    ]
+   },
+   "type": "pop_gypsum",
+   "confidence": 0.7,
+   "why": "partition layer with a 75-100 mm line pair: dry-wall partition thickness"
+  },
+  {
+   "id": "R10-masonry-hatched",
+   "when": {
+    "layer_in": [
+     "walls",
+     "WS-WALL"
+    ],
+    "thickness_mm": [
+     100,
+     460
+    ],
+    "hatch_lines_per_m_ge": 3.0
+   },
+   "type": "brick_block",
+   "confidence": 0.85,
+   "why": "wall layer, 100-460 mm line pair with wall-hatch lines between the faces (masonry hatch)"
+  },
+  {
+   "id": "R11-masonry-fitout",
+   "when": {
+    "layer_in": [
+     "WS-WALL"
+    ],
+    "thickness_mm": [
+     100,
+     300
+    ]
+   },
+   "type": "brick_block",
+   "confidence": 0.65,
+   "why": "fit-out WALL layer (not partition), 105-150 mm line pair: block wall thickness"
+  },
+  {
+   "id": "R12-masonry-unhatched",
+   "when": {
+    "layer_in": [
+     "walls"
+    ],
+    "thickness_mm": [
+     100,
+     460
+    ]
+   },
+   "type": "brick_block",
+   "confidence": 0.5,
+   "why": "base-building wall layer, 100-460 mm line pair, no hatch: masonry or RCC cannot be told apart"
+  },
+  {
+   "id": "R13-thin-wall-line",
+   "when": {
+    "layer_in": [
+     "walls"
+    ],
+    "thickness_mm": [
+     30,
+     99
+    ]
+   },
+   "type": "unknown",
+   "confidence": 0.3,
+   "why": "base-building wall layer but only 30-99 mm apart: lining, shaft board or a drafting double line"
+  },
+  {
+   "id": "R14-wall-on-furniture-layer",
+   "when": {
+    "layer_in": [
+     "I-FURN"
+    ]
+   },
+   "type": "unknown",
+   "confidence": 0.3,
+   "why": "a 100 mm line pair on the furniture layer I-FURN (lobby/toilet walls drawn on the wrong layer): it is a wall, but the layer says nothing about its make-up"
+  },
+  {
+   "id": "R99-fallback",
+   "when": {},
+   "type": "unknown",
+   "confidence": 0.2,
+   "why": "no rule matched"
+  }
+ ],
+ "assemblies": {
+  "about": "Vertical composition per wall type, as bands from the finished floor (z = 0). Heights are names resolved from 'defaults': FC = false ceiling, SOFFIT = slab soffit, F2F = floor to floor. All are source=default. 'layers' is the build-up through the thickness (IfcMaterialLayerSet): fixed layers in metres, REST = drawn thickness minus the fixed layers.",
+  "glass_partition": {
+   "top": "FC",
+   "bands": [
+    [
+     "aluminium",
+     0,
+     "0.05"
+    ],
+    [
+     "glass_clear_12",
+     "0.05",
+     "FC-0.05"
+    ],
+    [
+     "aluminium",
+     "FC-0.05",
+     "FC"
+    ]
+   ],
+   "q": [
+    "Q-G1",
+    "Q-H1"
+   ]
+  },
+  "full_height_glass": {
+   "top": "SOFFIT",
+   "bands": [
+    [
+     "aluminium",
+     0,
+     "0.05"
+    ],
+    [
+     "glass_clear_12",
+     "0.05",
+     "SOFFIT-0.05"
+    ],
+    [
+     "aluminium",
+     "SOFFIT-0.05",
+     "SOFFIT"
+    ]
+   ],
+   "q": [
+    "Q-G1"
+   ]
+  },
+  "pop_gypsum": {
+   "top": "SOFFIT",
+   "bands": [
+    [
+     "gypsum_pop",
+     0,
+     "SOFFIT"
+    ]
+   ],
+   "q": [
+    "Q-P1",
+    "Q-P2"
+   ],
+   "layers": [
+    [
+     "gypsum_board",
+     0.0125
+    ],
+    [
+     "stud_cavity",
+     "REST"
+    ],
+    [
+     "gypsum_board",
+     0.0125
+    ]
+   ]
+  },
+  "brick_block": {
+   "top": "SOFFIT",
+   "bands": [
+    [
+     "masonry_block",
+     0,
+     "SOFFIT"
+    ]
+   ],
+   "q": [
+    "Q-M1"
+   ],
+   "layers": [
+    [
+     "plaster",
+     0.012
+    ],
+    [
+     "masonry_block",
+     "REST"
+    ],
+    [
+     "plaster",
+     0.012
+    ]
+   ]
+  },
+  "rcc": {
+   "top": "SOFFIT",
+   "bands": [
+    [
+     "rcc",
+     0,
+     "SOFFIT"
+    ]
+   ],
+   "q": [
+    "Q-M2"
+   ],
+   "layers": [
+    [
+     "plaster",
+     0.012
+    ],
+    [
+     "rcc",
+     "REST"
+    ],
+    [
+     "plaster",
+     0.012
+    ]
+   ]
+  },
+  "curtain_wall": {
+   "top": "F2F",
+   "bands": [
+    [
+     "glass_clear_12",
+     0,
+     "F2F"
+    ]
+   ],
+   "q": [
+    "Q-F1"
+   ]
+  },
+  "acp": {
+   "top": "F2F",
+   "bands": [
+    [
+     "acp",
+     0,
+     "F2F"
+    ]
+   ],
+   "q": [
+    "Q-F2"
+   ]
+  },
+  "window_glazing": {
+   "top": "SOFFIT",
+   "bands": [
+    [
+     "glass_clear_12",
+     0,
+     "SOFFIT"
+    ]
+   ],
+   "q": [
+    "Q-F3"
+   ]
+  },
+  "panel_partial_height": {
+   "top": "2.1",
+   "bands": [
+    [
+     "hpl_panel",
+     "0.15",
+     "2.1"
+    ]
+   ],
+   "q": [
+    "Q-W1"
+   ]
+  },
+  "railing": {
+   "top": "1.0",
+   "bands": [
+    [
+     "steel_railing",
+     0,
+     "1.0"
+    ]
+   ],
+   "q": [
+    "Q-F4"
+   ]
+  },
+  "mixed": {
+   "top": "SOFFIT",
+   "bands": [
+    [
+     "gypsum_pop",
+     0,
+     "0.9"
+    ],
+    [
+     "glass_clear_12",
+     "0.9",
+     "2.4"
+    ],
+    [
+     "gypsum_pop",
+     "2.4",
+     "SOFFIT"
+    ]
+   ],
+   "q": [
+    "Q-P3"
+   ]
+  },
+  "unknown": {
+   "top": "SOFFIT",
+   "bands": [
+    [
+     "unknown",
+     0,
+     "SOFFIT"
+    ]
+   ],
+   "q": [
+    "Q-U1",
+    "Q-U2"
+   ]
+  }
+ },
+ "overrides": [
+  {
+   "id": "O1-meeting-fronts-pop-glass-pop",
+   "enabled": true,
+   "why": "EXAMPLE rule (off in the main run): turn the dry-wall partitions that close the meeting rooms into POP + glass + POP. The drawing does not say this; it shows that one rule change regenerates the floor.",
+   "when": {
+    "type": "pop_gypsum",
+    "near_text_regex": "MEETING|CONFERENCE",
+    "near_text_reach_m": 3.0
+   },
+   "set": {
+    "type": "mixed"
+   }
+  }
+ ],
+ "questions": {
+  "Q-H1": {
+   "group": "Heights",
+   "ask": "What is the false-ceiling height (finished floor to underside of ceiling) in 603/604? We used 2.90 m (the web twin uses 3.05 m from an earlier client-team note).",
+   "default": "2.90 m"
+  },
+  "Q-H2": {
+   "group": "Heights",
+   "ask": "Slab soffit and floor-to-floor height? We used soffit 3.35 m, floor to floor 3.60 m, so 0.25 m of slab and screed.",
+   "default": "3.35 m / 3.60 m"
+  },
+  "Q-D1": {
+   "group": "Doors",
+   "ask": "Door head height (top of the door leaf/frame) for all doors? We used 2.10 m.",
+   "default": "2.10 m"
+  },
+  "Q-D2": {
+   "group": "Doors",
+   "ask": "Above glass doors in glass partitions: glass transom up to the false ceiling (our default), a POP bulkhead, or a full-height door?",
+   "default": "glass transom to false ceiling"
+  },
+  "Q-D3": {
+   "group": "Doors",
+   "ask": "Above doors in dry-wall partitions and block walls: the wall continues above the door (POP bulkhead / lintel, our default), or a glass fanlight?",
+   "default": "POP bulkhead (dry wall) / RCC lintel (block)"
+  },
+  "Q-D4": {
+   "group": "Doors",
+   "ask": "Door frame and beading: glass doors in 45 x 75 mm aluminium (the drawing draws 44 x 75 mm jambs), solid doors in 50 x 100 mm hardwood with 12 mm beading?",
+   "default": "as stated"
+  },
+  "Q-D5": {
+   "group": "Doors",
+   "ask": "Door leaves: 12 mm toughened glass for glazed doors, 35 mm flush for solid doors? Any fire-rated doors (none are marked)?",
+   "default": "as stated, none fire-rated"
+  },
+  "Q-A1": {
+   "group": "Arches",
+   "ask": "Are any openings arched (or arch plus window)? The plan has no arch marks, so none were built. If yes, give spring height and radius per opening, or mark them on a layer A-OPEN-ARCH.",
+   "default": "no arches"
+  },
+  "Q-G1": {
+   "group": "Glass partitions",
+   "ask": "Glass partitions (WS-GLAZ-GLAS, drawn 75 mm deep): 12 mm toughened clear glass in a 75 mm aluminium channel top and bottom, floor to false ceiling? Any frosted band or film (height range)? Anything above the false ceiling?",
+   "default": "12 mm clear, 50 mm channels, floor to false ceiling, nothing above"
+  },
+  "Q-P1": {
+   "group": "Dry-wall partitions",
+   "ask": "Partitions on WS-WALL-PRTN (drawn 75 mm): gypsum board on metal studs or POP on block? Board layers and stud size?",
+   "default": "2 x 12.5 mm gypsum on 50 mm studs, POP finish"
+  },
+  "Q-P2": {
+   "group": "Dry-wall partitions",
+   "ask": "Do dry-wall partitions run to the slab soffit (our default, for sound) or stop at the false ceiling?",
+   "default": "to soffit"
+  },
+  "Q-P3": {
+   "group": "Dry-wall partitions",
+   "ask": "Is any partition a POP + glass + POP wall (solid below, glass vision panel, solid above)? If so, which ones and the band heights (we would use 0-0.9 / 0.9-2.4 / 2.4-ceiling).",
+   "default": "none (the drawing shows no mixed walls)"
+  },
+  "Q-M1": {
+   "group": "Core and wet-area walls",
+   "ask": "Core and toilet walls on layer 'walls' (150/225/300 mm): block, brick or RCC? Unhatched ones especially.",
+   "default": "concrete block, plastered, to soffit"
+  },
+  "Q-M2": {
+   "group": "Core and wet-area walls",
+   "ask": "RCC fins on the north face: confirm size and full height.",
+   "default": "RCC, floor to soffit"
+  },
+  "Q-F1": {
+   "group": "Facade",
+   "ask": "Structural glazing: glass make-up, mullion spacing and spandrel/back-pan at the slab edge? We built plain glass slab to slab.",
+   "default": "clear glass slab to slab, no mullions"
+  },
+  "Q-F2": {
+   "group": "Facade",
+   "ask": "ACP cladding: which bands of the facade are ACP and their heights? We built the ACP lines full height.",
+   "default": "full storey height"
+  },
+  "Q-F3": {
+   "group": "Facade",
+   "ask": "Windows on layer WINDOW: sill height, head height and frame? We built glass from floor to soffit.",
+   "default": "glass floor to soffit"
+  },
+  "Q-F4": {
+   "group": "Facade",
+   "ask": "Railing height and type at the facade and balconies?",
+   "default": "1.0 m steel railing"
+  },
+  "Q-W1": {
+   "group": "Toilets",
+   "ask": "Toilet cubicles (WS-WALL-PHRT, 20 mm): HPL panels 0.15-2.1 m above floor?",
+   "default": "HPL 20 mm, 0.15 to 2.10 m"
+  },
+  "Q-U1": {
+   "group": "Unclear lines",
+   "ask": "Lines on the 'walls' layer only 30-99 mm apart (shaft and lift-well linings?): what are they?",
+   "default": "built as 'type not settled' in magenta"
+  },
+  "Q-C1": {
+   "group": "Columns",
+   "ask": "Columns: RCC, full height to soffit, plastered/boxed? Any column cladding?",
+   "default": "RCC, floor to soffit, no cladding"
+  },
+  "Q-S1": {
+   "group": "Slab and ceiling",
+   "ask": "False-ceiling type per zone (grid, gypsum, open) and the plate edge: we approximated the slab outline from the facade lines.",
+   "default": "one flat ceiling over the whole offer"
+  },
+  "Q-U2": {
+   "group": "Unclear lines",
+   "ask": "The lobby and toilet-block walls around (70-100, 106-111) are drawn on the furniture layer I-FURN, 100 mm apart: what are they (block, dry wall, glass)? Please move them to a wall layer.",
+   "default": "built as 'type not settled' in magenta"
+  },
+  "Q-D6": {
+   "group": "Doors",
+   "ask": "40 doors are drawn with no wall piece ending at their swing (list in out/audit/HOST_AUDIT.md): 20 toilet-cubicle doors (their side panels are drawn only as 20 x 79 mm stubs), 4 'Glass Door' blocks, 6 'D-750', 8 'DOOR_SNGL', 1 small door and the double door near (89.3, 92.3), of which only one leaf is read. Which wall does each sit in? Please draw the wall ends or cubicle side panels up to the door.",
+   "default": "built freestanding on the drawn swing line, no wall linked"
+  },
+  "Q-D7": {
+   "group": "Doors",
+   "ask": "Door sizes: for each door type, please give four widths: the structural (rough) opening, the frame outside size, the clear passage width, and the leaf width. The drawing fixes the opening only where wall ends or jambs are drawn. Elsewhere we know only the leaf (from the swing; for example 0.681 m in a block named 'D-750'), and the block name is not reliable: 'D-750' is inserted at three sizes.",
+   "default": "structural opening = leaf + one default frame width each side; clear width unknown"
+  }
+ },
+ "variant": {
+  "why": "Demonstration of regeneration: change two rules and re-run. (1) door head 2.10 m -> 2.40 m for every door; (2) turn on the example rule O1, which makes every dry-wall partition next to a meeting or conference room a POP + glass + POP wall (POP 0-0.9 m, glass 0.9-2.4 m, POP 2.4 m to soffit). Neither change comes from the drawing or the designer: it only shows that one edit rebuilds the model, IFC, DXF, JSON and trace page.",
+  "set": {
+   "defaults.door_head_m": 2.4,
+   "overrides.0.enabled": true
+  }
+ }
+}

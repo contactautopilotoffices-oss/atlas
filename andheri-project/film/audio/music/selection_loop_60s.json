@@ -1,0 +1,25 @@
+{
+ "file": "selection_loop_60s.wav",
+ "mp3": "selection_loop_60s.mp3",
+ "length_s": 60.0,
+ "sample_rate": 44100,
+ "bars": "6-18 then 13-19 of loop_source_v1 (80 BPM, 3.000 s bars)",
+ "segments_source_s": [
+  [
+   18.02,
+   57.02
+  ],
+  [
+   39.02,
+   60.02
+  ]
+ ],
+ "crossfade_s": 0.3,
+ "loudness_lufs": -19.99,
+ "true_peak_dbtp": -8.45,
+ "lra_lu": 1.6,
+ "seam_jump": 0.00082,
+ "median_jump": 0.00329,
+ "p99_9_jump": 0.01408,
+ "note": "Loop the WAV sample-accurately (Web Audio AudioBufferSourceNode.loop = true). The MP3 is for convenience: MP3 encoding adds padding, so an <audio loop> of it can leave a short gap."
+}

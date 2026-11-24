@@ -1,0 +1,40 @@
+{
+  "project": "Reliable Tech Park, B Wing, Airoli - 6th floor, Offices 603 & 604 (Altruist)",
+  "dwg_name": "20261118_6TH FLOOR (1).dwg",
+  "dwg_date_note": "newest of the two 6th-floor drawings (received 19 Nov 2026)",
+  "unit_factor_override": null,
+  "origin_drawing_units": [
+    5822230.6,
+    5845000
+  ],
+  "plan_window_m": [
+    0.0,
+    0.0,
+    143.5,
+    123.5
+  ],
+  "offer_clip_m": [
+    23.6,
+    72.7,
+    142.5,
+    118.4
+  ],
+  "cad_m_to_rtp_local": [
+    [
+      -0.017520335880570323,
+      0.9998465071352862,
+      -5806.266959601679
+    ],
+    [
+      -0.999846507135286,
+      -0.017520335880570104,
+      6050.644235356758
+    ]
+  ],
+  "frame_note": "rtp_local = M @ [x_cad_m, y_cad_m, 1] where x_cad_m = drawing units x 0.001 (full drawing coordinates, not plan-relative). Same matrix as airoli-rtp/rtp6-c/rtp6-c-floor6.twin.layout.json (frame.cad_m_to_rtp_local), registered on 184 of 185 columns.",
+  "level": 6,
+  "ffl_m": 22.2,
+  "ffl_source": "default (assumed): 0.6 m plinth + 3.6 m x 6 floors; client team instruction 19 Nov 2026, not in the drawing",
+  "scope": "offer",
+  "scope_note": "Founder decision 19 Nov 2026: build Offices 603 & 604 (Altruist) only, from '20261118_6TH FLOOR (1).dwg'. Elements are kept when their centre lies inside offer_clip_m (the same clip as airoli-rtp/rtp6-c)."
+}

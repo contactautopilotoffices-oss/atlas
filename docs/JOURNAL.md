@@ -1,5 +1,176 @@
 # Atlas — Development Journal
 
+## 2026-11-23 — Atlas: a playbook so any Claude can make an Andheri-style property film
+
+**The way the Andheri film and experience were built is now written down as one skill, "property-film-studio", that any Claude session in this project loads on its own.**
+
+- **Why:** the founder wants the next property film (any client, any city) to start from what Andheri taught, not from scratch, and to be easy for newcomers.
+- **Structural decisions:** one short main page with the ten-stage pipeline and the rules, plus nine detailed chapters (intake questions, site from a map pin, Blender modelling/texturing/lighting, shots and maps, ElevenLabs audio, the ffmpeg edit, the web experience, the voice agent, and pitfalls). The alternative, one long page, would be loaded in full every time and was rejected.
+- **What works now:** asking "make a film like Andheri for this building" walks Claude through the questions to ask first, how to survey the site from a latitude and longitude, how to settle a building's plot (as done for Privilon), the lighting presets, how to use every core of the Mac, ready-to-use ElevenLabs voice, sound and music prompts, and how to ship.
+- **Left undone:** the voice agent chapter is a plan, not a built feature; the baked-lightmap web pipeline is described but Andheri only shipped ambient-occlusion bakes so far.
+- **Open questions for the founder:** should the voice agent be the next build, and may it quote rent?
+
+## 2026-11-23 — Atlas: the Andheri film plays inside the experience, then the three buildings
+
+**A 140-second film in Alka's voice now opens the Flipkart Andheri experience: Enter, watch, and the three buildings appear as cards that open the 3D explorer.**
+
+- **Why:** the founder asked for a premium film by morning. It shows the three modelled buildings, pins them, draws the metro walks the way Google Maps does, and leads straight into the choice of building, with transparent Flipkart (blue and yellow) and Autopilot logos.
+- **What works now:**
+  - **The experience.** The page opens on the new Privilon at blue hour. **Enter the experience** becomes available once the 3D city has loaded, then plays the film with sound. When it ends, or on Skip, the three cards roll in (Privilon, Corporate Avenue, 723 Avenue), each with an image from the new renders. A card opens the explorer at that building, which now shows the remodelled Privilon (beside Fleet House) and Corporate Avenue's new tower. **Shortlist** brings the cards back.
+  - **The film,** 140 s:
+    - the title on black;
+    - a satellite descent through cloud;
+    - the Marol Naka interchange with all three pinned;
+    - **Privilon** at sunrise and at dusk;
+    - its floor drawn three ways (260 / 280 / 301 seats);
+    - **Corporate Avenue** from the air in afternoon sun, with its two floors (6,207 sq ft each);
+    - **723 Avenue** rising at dusk with its floors lit and the terrace;
+    - a walk from the metro for each building (140 m, 850 m, 700 m);
+    - a closing pull-back over all three with pins;
+    - Autopilot's record and "Pehle vyavahar, phir vyapar".
+  - **Corporate Avenue** is a modelled building after the developer's render, standing on the campus with its gates on the main road.
+- **Founder's morning review and fixes:**
+  - The corner logo flickered: it was burnt into the film and jumped corners. It was removed.
+  - The film stuttered: clips were sped up or slowed down at playback, and the 3D city loaded while the film played. Clips are now re-timed smoothly in advance, and the film waits for the city to load.
+  - Rolling numbers overlapped: all figures now count up as plain text.
+  - The old Privilon still appeared on the cards, in the explorer and at the end of the film. The new building is now used everywhere.
+  - **Fleet House** was reported missing. It is in place: the red-banded block beside Privilon, labelled in the explorer. In the frame the founder sent, it was hidden behind a nearer block.
+  - Narration fix: Chakala is two Line 1 stops west of Marol Naka, not one. Alka's line was re-recorded.
+- **Structural decisions:**
+  - **The edit follows the voice.** It is a HyperFrames project (`andheri-project/film/edit/`), rebuilt by one command, with each picture fitted to its voice line.
+  - **All cores are used.** The frame-smoothing step works on all ten cores at once, and the film renders in about two minutes.
+  - **Corporate Avenue's outline is fixed by hand**, in the survey file beside Privilon's. The open-map outline put the modelled tower into its neighbours.
+- **Left undone:**
+  - The explorer's new 3D files are heavy (Corporate Avenue 80 MB, Privilon 24 MB). They load fine locally, but need compressing before deployment. The compression tool download needs the founder's permission.
+  - No cars or people in the shots. BlenderKit needs the founder's own install and sign-in.
+- **Open questions for the founder:**
+  - Which metro distances to show: the deck's (140 / 850 / 700 m), which are in the film, or the measured ones (80–162 m, 908–989 m, 698–780 m).
+  - Whether Corporate Avenue's tower and the trimmed long block stand right on Google satellite.
+  - 723 Avenue's floors, and Corporate Avenue's condition.
+  - Details in `andheri-project/film/MORNING-NOTES.md`.
+
+## 2026-11-23 — Atlas: Privilon remodelled and lit by the real sun; intro film script
+
+**Privilon is now one long glass floor plate on Fleet House's frontage line, modelled from the developer's render with real depth, lit with photographed skies and the computed sun for sunrise, sunset and blue hour.**
+
+- **Why:** the founder found Privilon set too far back and the wrong shape (a T), and wants a premium intro film for Flipkart where sunrise and sunset on Privilon matter.
+- **Structural decisions:**
+  - Privilon is a separate modelled building (`scripts/world/privilon_hero.py`), not a generic block. It has modelled fins, mullions, slab bands, two recessed dark slots with bronze edges, a recessed lobby on granite columns, and lit ceilings with a downlight grid behind the glass that switch on at dusk.
+  - Its outline (25 m road face by 55 m deep, front edge on Fleet House's road line) is recorded in `scripts/world/refs/marol_corridor.json` and checked on the Google satellite sheet.
+  - Light uses free CC0 skies and scanned textures from Poly Haven, now reachable from this Mac, and the sun's real position for Marol in late November. Sunrise is at about 07:00 from 112 degrees and sunset at about 17:55 from 248 degrees, so the long east face takes the morning sun and the west face the evening sun.
+- **What works now:**
+  - Three full-HD renders in `media/flipkart-andheri/world/privilon-hero/`: blue hour, sunrise and sunset.
+  - A film script and production plan in `andheri-project/film/SCRIPT.md`: about 115 seconds, one clear reason per building, and only deck figures.
+- **Logic gate:** `scripts/world/check_logic.py` now runs inside every build and stops it if the scene breaks reality. It checks that every surveyed building is standing, that nothing stands on a carriageway or inside a station's clearance, that the property is present with nothing overlapping it, and that no camera starts inside a building. It was added after the founder found Fleet House missing (the old pin's tag had deleted it) and buildings on the road.
+- The founder rejected the feature-led script and Alka's voice: the film must speak as the Reliable Tech Park film does. That means Autopilot as the partner helping Flipkart make the right call, Flipkart's questions first, then our record and belief. Draft 3 (`andheri-project/film/SCRIPT.md`) is rewritten in that language for Lily, the Reliable film's voice; an opening sample is in `auditions/lily-opening.mp3`. Earlier, the founder had chosen **Alka** (natural, warm Indian English) from three auditions. The full narration is recorded one section at a time (about 83 seconds), so a changed figure means re-recording one line, not the film.
+- The founder confirmed the 723 terrace is available to Flipkart; the script now says so.
+- **Left undone:**
+  - The photographed skies show their own horizon (a bridge, a car park) behind the district; this needs a sky-only horizon.
+  - Neighbouring buildings are still flat painted boxes; the next step is modelled depth within about 100 m of each film shot.
+  - The explorer preview still has the earlier Privilon.
+- **Open questions for the founder:**
+  - Metro walking distances: the explorer and the route data disagree (Privilon 140 m against 40 m; Corporate Avenue 920 m to WEH against 850 m to Chakala; 723 Avenue 810 m against 700 m).
+
+
+## 2026-11-21 — Atlas: Andheri district twin, first realism checkpoint
+
+**Tested whether Google can supply a real 3D Andheri (it cannot), then upgraded the existing Andheri district builder: 723 Avenue now matches the photograph and the city around it is weathered and hazy. Two checkpoint stills are ready for review.**
+
+- **Why:** the founder wants the area around 723 Avenue, Corporate Avenue and Privilon to feel like a real place, as Google's 3D city does in New York. ChatGPT's attempt produced either a lone tower or a flat satellite map.
+- **What was established:**
+  - Google's Map Tiles API was tested with the founder's key. At New York the finest tiles stand up to 265 m (real buildings). At 723 Avenue, Marol Naka, Times Square, Privilon, Corporate Avenue and even BKC they are flat, 18 m at most. Google has no 3D buildings for Mumbai, so no import tool or key can produce that look here. The city must be modelled.
+  - The OpenStreetMap file the founder offered holds only about 1,500 buildings for this strip. The builder uses Overture Maps instead (OpenStreetMap plus Google's and Microsoft's building outlines), with heights read from the Copernicus satellite surface model.
+- **Structural decisions:**
+  - Reused the existing district builder (`scripts/world`) instead of writing a new one. It already models roads, footpaths, the Line 1 viaduct, stations, water tanks and trees. A fresh build would have repeated that work.
+  - The generated 723 tower is replaced by the earlier photo-matched facade study (dark fins, opaque divisions, WADHWA crown). It lands on the same footprint within 4 cm.
+  - New photographic aerial stills (GPU, real haze, no tilt-shift), so the scene reads as a drone photograph, not a model on a table.
+  - All new behaviour is behind options (`--slab-min`, `--hero-blend`, `--render aerial aerial2`), so the live explorer's existing outputs are unchanged.
+- **What works now:**
+  - One command rebuilds a 1.1 km square of Marol around 723 Avenue (about 500 m in every direction) and renders three views in about 30 seconds:
+    - an overview from across Andheri-Kurla Road;
+    - a view along the road under the Line 1 viaduct;
+    - a close view of 723.
+  - The stills are in `media/flipkart-andheri/world/checkpoint/`.
+  - After the founder's review, the milky haze was removed for clear daylight.
+  - Times Square (the 8,600 m² complex north of the road) and the Le Western hotel are named landmarks in glass curtain wall.
+  - Office blocks across the area now use six glass and ribbon-window facades instead of one.
+  - **Street View survey** (the normal Google Maps page in Chrome, imagery Feb 2026; nothing copied into the model):
+    - Six buildings along the corridor now carry what was seen there, recorded in `scripts/world/refs/marol_corridor.json` with the viewpoint for each: the three Times Square buildings, InSync Analytics, Fleet House and the Makwana Road tower.
+    - The Times Square curved tower was cut from a satellite reading of 88 m to about 13 storeys (52 m).
+  - **Line 1 stations now follow Marol Naka as photographed:**
+    - large grey round piers on the median and blue square columns at the deck edge;
+    - an opaque concourse with a billboard band in place of a glass box;
+    - a near-flat grey canopy on blue columns;
+    - blue stair canopies, and a white-and-blue lift core at each end.
+  - The viaduct and station concrete is now weathered grey instead of near-white.
+  - **Live preview:** the upgraded district loads in the walkable explorer at `/flipkart-andheri/world?preview=723-avenue#723-avenue` (3.5 MB). The published model in `d/` is unchanged until the founder approves it.
+  - **Baked light in the live explorer:** Blender bakes ambient occlusion (how much open sky each surface sees) for the whole 723 district into 15 maps in about 2.5 minutes. The explorer applies them to 132 meshes, so streets, building bases, corners and the space under the viaduct darken as they do in the stills, while the sun and its shadows stay live. The 723 tower itself is not yet baked: its model has no second UV set.
+  - The founder could not arrange a drone or a photo walk. Google imagery may be used only as reference, not pasted onto the models, so further realism means painting each building's facade from what Street View shows.
+  - The explorer labels Times Square and Fleet House in the 3D view. The preview also uses the same AgX colour handling as the Blender stills, so its light and contrast match them more closely.
+  - **Corridor facades from a Street View walk:** 16 more buildings along Andheri-Kurla Road and 723's lane are recorded in `scripts/world/refs/marol_corridor.json` (22 in all). Three new painted facades match what the road actually has: worn 3-4 storey commercial blocks, a ground-floor band of shutters and dense signboards, and a dark glass-grid office.
+    - The satellite heights read these low frontage blocks 3-5 times too tall: Andheri-Kurla Rd no. 111 was 55 m and is 4 storeys. Every surveyed height is now the Street View storey count, which turns the road from a row of white towers into the low, busy frontage it is.
+    - Many taller buildings set back from the road still carry satellite heights and stock facades.
+  - **723 street lobby** from the developer's brochure: a glazed double-height entrance under a dark canopy with a lit soffit and the name, a stone reception desk, a timber-fin feature wall with lift doors, and a granite forecourt with steps and a ramp. In Feb 2026 Street View the ground floor is still behind hoarding, so this is the developer's design, not the as-built lobby; the interior finishes are a proposal.
+  - **Privilon moved to its real plot.** The map pin had put it on Fleet House's footprint. Street View shows a concrete tower under construction behind Fleet House, north-west of Marol Naka station, and Privilon now stands there (`--opt-at 1337,-234`). Fleet House is an ordinary 7-storey neighbour again. The earlier Privilon facade study was shaped for the wrong footprint, so Privilon is now generated from the deck's floors; its facade is generic until the brochure facade is refitted.
+  - From Privilon, 723 Avenue now appears as itself: the photo-matched tower with its rooftop, on its own footprint, with a yellow '723 Avenue' pin (`--neighbour-hero`). It was a generic block before.
+  - **Corporate Avenue as a gated campus.** The founder confirmed that Flipkart's floors are in Atul Corporate Avenue (the south block) and that both gates are on Guru Hargovindji Road. The district now has the campus from the main road to Atul: a compound wall, two gates with pillars, boom barriers, security cabins and a CORPORATE AVENUE name beam, paved driveways and parking, and a tree line. The other campus blocks are re-skinned as office glass. There is no Street View inside the campus, so gate details and facades are estimates from the satellite layout. The earlier pale-frame facade study stays on Atul Corporate Avenue. The founder confirmed the campus's 83 m tower is real, so its satellite height stands.
+  - **Layout checked against Google satellite.** `scripts/world/verify_overlay.py` uses the founder's Map Tiles key to lay the model's footprints over Google satellite tiles. The sheet is for review only and is never put into a model or published.
+    - It showed Corporate Avenue's long block on the main road is missing from both Overture and OpenStreetMap; it is now traced from the imagery and added, and the two gates sit on the road either side of it.
+    - It showed that a rule in the old builder deleted every building that touched the clearance around a Line 1 station, which left empty lots by Marol Naka. Buildings are now trimmed to the clearance instead; only the station buildings themselves are removed.
+    - Google's Geocoding API returns no building outlines or entrances for India, so it confirms positions only.
+  - **Privilon's plot confirmed** by the founder on the Google satellite sheet: the strip behind Fleet House. The brochure facade study (vertical fin zones, smooth glazed middle bay) is now rotated and scaled onto that 62 x 20 m footprint (`--hero-fit`); it was shaped for a 63 x 43 m footprint, so its fins are compressed front to back.
+  - The preview link takes several properties: `?preview=723-avenue,privilon`.
+  - 723 Avenue now has the rooftop garden from the developer's brochure: a timber deck, a curving planted band with trees, checkerboard paving, a glazed pavilion with timber fins and a glass railing. The layout is read from the brochure; sizes are estimates. The brochure image is kept with the 723 photos.
+- **Left undone:**
+  - About 60 more significant buildings in the 723 to Marol Naka corridor still use generic facades; each needs its own Street View look. The Line 3 entrances are still the generic canopy.
+  - The neighbouring buildings still look too clean and uniform. Every facade has the same punched windows, and the satellite heights flatten most of them to 5–8 storeys.
+  - Corporate Avenue (2.5 km west) and Privilon are not yet in a checkpoint still.
+  - Times Square and the Marol Naka station are in the scene but not yet framed in a shot.
+  - Nothing is published to the live explorer.
+  - The NotebookLM push was not attempted: `add_source` is known to be broken.
+- **Open questions for the founder:**
+  - Can the developer confirm Privilon's plot and storey count (the brochure says 14)?
+  - Is this direction worth more time, given that a modelled city will never match Google's photographed New York?
+  - Privilon is under construction and absent from all map data. Can someone confirm its exact plot beside Marol Naka station?
+  - The Maps key was pasted in chat. Should it be restricted or replaced in Google Cloud?
+
+## 2026-11-20 — Atlas: procedural semantic CAD proof for RTP 603 & 604
+
+**The 6th-floor fit-out drawing for Offices 603 & 604 now becomes a FreeCAD/IFC model and a semantic DXF. Every wall and door carries its type, size, build-up and header, and records where each value came from.**
+
+
+- **Why:** a 2D layout does not say whether a line is glass or POP, how tall a wall is, or what sits above a door, so our 3D models were guessing. This shows the guessing can be replaced by rules that read the drawing, with every assumption marked and listed for the designer.
+
+- **Structural decisions:**
+  - One schema-checked file (`assemblies.json`) sits between the drawing and every output. The 3D model, IFC, DXF and web JSON are all generated from it. The alternative, typing walls inside the 3D builder, lost because nothing could then be traced or checked.
+  - Every value carries a source (`cad` or `default`) and a confidence.
+  - Door openings are read from the swing the designer drew, not from the block's outline. The outline version cut away cubicle panels that should have stayed.
+  - Doors that do not line up with a drawn wall are built standing on their own, not forced onto the nearest wall.
+
+- **What works now:**
+  - One command (`run.sh`) reads the DWG and rebuilds everything in about 35 seconds.
+  - 95% of the 512 wall pieces are typed from drawing evidence (layer, line spacing, hatch), and every door's kind and width come from the drawing.
+  - Every door has a header (glass transom, POP bulkhead or lintel), except cubicle doors, which have nothing above them by rule.
+  - A checker measures the built model against the specification, and the build reports failure when a check fails.
+  - The final build passes all 7,044 checks with 0 failures (variant: 7,199 with 0). Those include a cross-check that every door header in the exported records has a matching 3D piece of the same material.
+  - One build on the way failed 6 checks, because a default door frame cut the ends off two walls. The checker caught it, it was fixed, and the floor was rebuilt.
+  - The trace page lets anyone click a wall and see the drawing lines it came from.
+  - Changing one rule regenerates the whole floor. The demonstration run sets the door head to 2.4 m and turns the meeting-room partitions into POP + glass + POP. It is hypothetical, not from the drawing.
+
+- **Left undone:**
+  - Heights, vertical build-ups and header types are all defaults, because the drawing has none.
+  - 40 of 97 doors have no host wall in the drawing: 20 are toilet-cubicle doors, and one double door is only half read.
+  - 25 walls cannot be typed (21 of them are drawn on the furniture layer).
+  - The exact opening size is unresolved for 18 doors: the leaf is known, but the leaf is not the opening.
+  - Wall corners are not joined.
+  - The Blender builder's door headers are only a proposal (`BLENDER_HEADER_PROPOSAL.md`), because another worker is editing that folder.
+  - Nothing published; committed locally only, not pushed.
+
+- **Open questions for the founder:**
+  - False ceiling 2.90 m (your range) or 3.05 m (what the web twin uses)?
+  - Should the designer be asked to adopt the layer and tag standard in FEASIBILITY.md for future drawings?
+  - Who sends the 25 questions in ASK_DESIGNER.md to the designer?
+
 ## 2026-11-19 — Atlas: Reliable Tech Park (Airoli) twin for Altruist
 
 **A new client-ready 3D twin of Reliable Tech Park, Airoli, for Altruist: the real building and its surroundings, the 4th-floor suite and both 6th-floor layouts. Everything comes from the design team's drawings, lit by the real sun and published at a new link.**

@@ -1,27 +1,34 @@
-// Native adaptations of EasyUI GlassNavbar, AnimatedTabs and FloatingActionDock.
+// Native adaptations of EasyUI GlassNavbar, AnimatedTabs, FloatingActionDock and AnimatedNumber.
 // Source links and MIT notice: /engine/vendor/easyui/README.md.
-const asset='/media/flipkart-andheri/brand/';
-export function brandLockup(){
- const node=document.createElement('div');node.className='ap-lockup';node.setAttribute('aria-label','Autopilot for Flipkart');
- node.innerHTML=`<img class="ap-logo" src="/airoli-rtp/brand/autopilot-wordmark-white.png" alt="Autopilot" width="880" height="112"><span class="ap-brand-divider" aria-hidden="true"></span><span class="ap-client"><img class="fk-symbol" src="${asset}flipkart-mark.png" alt="" width="104" height="88"><img class="fk-wordmark" src="${asset}flipkart-wordmark.png" alt="Flipkart" width="276" height="108"></span>`;
- return node;
-}
+import { brandLockup } from './andheri-brand.js';
+import { SHORTLIST, odometer, rollIn, ICON } from './andheri-experience.js';
+export { brandLockup };
+
+const FONTS = 'https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap';
 export function applyAndheriTheme(surface){
  document.body.dataset.andheriUi=surface;
  if(!document.querySelector('link[data-andheri-theme]')){
   const css=document.createElement('link');css.rel='stylesheet';css.href='/engine/andheri-ui.css';css.dataset.andheriTheme='';document.head.appendChild(css);
  }
+ if(surface==='world'&&!document.querySelector('link[data-andheri-fonts]')){
+  const f=document.createElement('link');f.rel='stylesheet';f.href=FONTS;f.dataset.andheriFonts='';document.head.appendChild(f);
+  const x=document.createElement('link');x.rel='stylesheet';x.href='/engine/andheri-experience.css';x.dataset.andheriExperience='';document.head.appendChild(x);
+ }
+ // The world is dark (photography and 3D); CAD, interior and the 2D atlas have light headers.
+ const tone=surface==='world'?'dark':'light';
  const brand=document.querySelector(surface==='cad'?'.plan-brand':surface==='interior'?'header>#brand':'#brand');
  if(brand&&!brand.querySelector('.ap-lockup')){
-  if(brand.tagName==='IMG')brand.replaceWith(brandLockup());else brand.prepend(brandLockup());
+  if(brand.tagName==='IMG')brand.replaceWith(brandLockup(tone));else brand.prepend(brandLockup(tone));
  }
- for(const box of document.querySelectorAll('#gate .box,#load .box'))if(!box.querySelector('.ap-lockup'))box.prepend(brandLockup());
+ for(const box of document.querySelectorAll('#gate .box,#load .box'))if(!box.querySelector('.ap-lockup'))box.prepend(brandLockup('dark'));
  if(surface==='atlas'){
-  const logo=document.querySelector('#gate .logo');if(logo&&!logo.parentElement.querySelector('.ap-lockup'))logo.replaceWith(brandLockup());
+  const logo=document.querySelector('#gate .logo');if(logo&&!logo.parentElement.querySelector('.ap-lockup'))logo.replaceWith(brandLockup('dark'));
   document.querySelector('#brand>.logo')?.setAttribute('hidden','');
  }
  if(surface==='world')new ResizeObserver(()=>document.body.style.setProperty('--world-header-bottom',Math.ceil(document.querySelector('#top').getBoundingClientRect().bottom)+'px')).observe(document.querySelector('#top'));
- const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=surface==='world'?'#0b1630':'#ffffff';
+ let meta=document.querySelector('meta[name="theme-color"]');
+ if(!meta&&surface==='world'){meta=document.createElement('meta');meta.name='theme-color';document.head.append(meta);}
+ if(meta)meta.content=surface==='world'?'#0a0a0b':'#ffffff';
 }
 export function easyTabs(nav,{tabs=false,panel}={}){
  if(!nav||nav.dataset.easyTabs)return;nav.dataset.easyTabs='';nav.classList.add('ap-tabs');
@@ -45,36 +52,30 @@ export function easyTabs(nav,{tabs=false,panel}={}){
 }
 
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const fact=(o,k)=>(o.facts||[]).find(f=>f.k===k)?.v||'';
-const nearest=o=>(o.routes||[]).filter(r=>r.kind==='metro'&&Number.isFinite(r.m)).sort((a,b)=>a.m-b.m)[0];
-const distance=r=>r.m>=1000?`${(r.m/1000).toFixed(1)} km`:`${Math.round(r.m)} m`;
-function factsMarkup(o){return ['Carpet area','Floor / Unit','Furnishing'].map(k=>`<div><span>${k==='Floor / Unit'?'On offer':esc(k)}</span><b>${esc(fact(o,k)||'—')}</b></div>`).join('');}
+const stationKey=s=>String(s||'').toLowerCase().replace(/\s*\(.*\)/,'').trim();
+/* The property card at the top of the explorer's panel: canonical facts, rolling figures,
+   and the nearest-metro row that draws the walk. */
+let lastSpot='';
 export function propertySpotlight(o,onRoute){
  let panel=document.querySelector('#property-spotlight');
  if(!panel){panel=document.createElement('div');panel.id='property-spotlight';document.querySelector('#line2').after(panel);}
- const r=nearest(o);
- panel.innerHTML=`<div class="ap-property-facts">${factsMarkup(o)}</div>${r?`<button class="ap-metro-card" aria-label="View walking route to ${esc(r.name)} metro"><span><small>NEAREST METRO</small><b>${esc(r.name)}</b><em>${esc((r.lines||[]).join(' · '))}</em></span><span class="metro-distance"><strong>${distance(r)}</strong><small>${r.min?`${r.min} min walk`:'On foot'} <i aria-hidden="true">↗</i></small></span></button>`:''}`;
- panel.querySelector('button')?.addEventListener('click',()=>onRoute(r));
-}
-export function twinIntro(o){
- const load=document.querySelector('#load');load.classList.add('twin-intro');load.style.removeProperty('background-image');load.setAttribute('role','dialog');load.setAttribute('aria-modal','true');load.setAttribute('aria-label','Enter the digital twin');
- const background=[...document.querySelectorAll('#c,#top,#hud,#strip,#floors,#credit,#map-credits')];background.forEach(n=>n.inert=true);
- const r=nearest(o);
- load.innerHTML=`<div class="twin-intro-top"><span id="intro-brand"></span><button id="intro-sound" type="button" aria-pressed="true">Sound on</button></div>
- <div class="twin-intro-body"><div class="twin-construction" aria-hidden="true"><div class="twin-orbit"></div><svg viewBox="0 0 520 400" fill="none"><defs><linearGradient id="twin-ink" x1="30" y1="300" x2="430" y2="30" gradientUnits="userSpaceOnUse"><stop stop-color="#2A55E5"/><stop offset="1" stop-color="#FFC200"/></linearGradient></defs><g class="twin-grid" stroke="#ffffff10"><path d="M40 280L260 160L480 280L260 400Z M95 250L315 370 M150 220L370 340 M205 190L425 310 M95 310L315 190 M150 340L370 220 M205 370L425 250"/></g><g class="twin-floor floor-1"><path d="M100 230L270 140L420 220L250 310Z"/></g><g class="twin-floor floor-2"><path d="M100 180L270 90L420 170L250 260Z"/></g><g class="twin-floor floor-3"><path d="M100 130L270 40L420 120L250 210Z"/></g><g class="twin-columns"><path d="M100 230V130M270 140V40M420 220V120M250 310V210"/></g><path class="twin-route" d="M30 340L90 307L155 340L250 288"/><circle class="twin-node" cx="30" cy="340" r="6"/><circle class="twin-node destination" cx="250" cy="288" r="7"/></svg><span class="twin-visual-label">LOCATION · SPACE · POSSIBILITY</span></div>
- <div class="twin-intro-copy"><p class="twin-eyebrow">ANDHERI EAST · A DIGITAL TWIN EXPERIENCE</p><h1 id="l-title">A new perspective<br>on your next office.</h1><div class="intro-property">${esc(o.name)}</div>${r?`<div class="intro-metro"><strong>${distance(r)}</strong><span>to ${esc(r.name)} metro${r.min?`<br><b>${r.min} minutes on foot</b>`:''}</span></div>`:''}<div class="ap-property-facts intro-facts">${factsMarkup(o)}</div><div class="intro-progress"><div class="bar"><i id="l-bar"></i></div><p id="l-msg" role="status">Preparing geometry, surroundings and light…</p></div><button id="intro-enter" class="ap-action" hidden>Enter digital twin <span aria-hidden="true">↗</span></button><p class="intro-source">Connectivity from the supplied route data.</p></div></div>`;
- document.querySelector('#intro-brand').append(brandLockup());
- const sound=document.querySelector('#intro-sound'),enter=document.querySelector('#intro-enter');
- const cue=new Audio(asset+'twin-arrival.mp3'),tick=new Audio(asset+'selection-tick.mp3');cue.volume=.22;tick.volume=.12;
- let enabled=true;try{enabled=sessionStorage.getItem('andheri-sound')!=='off';}catch{}
- const sync=()=>{sound.textContent=enabled?'Sound on':'Sound off';sound.setAttribute('aria-pressed',String(enabled));sound.setAttribute('aria-label',enabled?'Mute sound effects':'Enable sound effects');};sync();
- sound.onclick=()=>{enabled=!enabled;sync();if(!enabled){cue.pause();tick.pause();}try{sessionStorage.setItem('andheri-sound',enabled?'on':'off');}catch{}};
- const play=a=>{if(enabled){a.currentTime=0;a.play().catch(()=>{});}};
- load.tabIndex=-1;load.focus({preventScroll:true});
- return {
-  selection:()=>play(tick),
-  ready(){load.classList.add('twin-ready');document.querySelector('#l-bar').style.width='100%';document.querySelector('#l-msg').textContent='Your digital twin is ready.';enter.hidden=false;
-   enter.onclick=()=>{play(cue);load.classList.add('twin-entering');sound.classList.add('twin-sound-floating');document.body.append(sound);setTimeout(()=>{load.remove();background.forEach(n=>n.inert=false);const title=document.querySelector("#name");title.tabIndex=-1;title.focus({preventScroll:true});},750);};
-  }
- };
+ const c=SHORTLIST[o.id];
+ const eyebrow=document.querySelector('#h-eyebrow');
+ if(!c){panel.innerHTML='';return;}
+ const route=(o.routes||[]).find(r=>r.kind==='metro'&&stationKey(r.name)===stationKey(c.metro.station))||(o.routes||[]).find(r=>r.kind==='metro');
+ if(eyebrow)eyebrow.textContent=`${String(c.n).padStart(2,'0')} · ${c.market} · ${c.question}`;
+ panel.innerHTML=`<p class="ax-spot-sub">${esc(c.building)}</p>
+  <div class="ax-spot-stats">
+   <div><small>Carpet area</small><strong data-slot="carpet"></strong>${c.carpetNote?`<em>${esc(c.carpetNote)}</em>`:''}</div>
+   <div><small>On offer</small><strong class="ax-stat-text">${esc(c.offer)}</strong><em>${esc(c.offerNote)}</em></div>
+  </div>
+  <p class="ax-spot-status"><i aria-hidden="true"></i>${esc(c.status)}</p>
+  ${route?`<button type="button" class="ax-metro-row" aria-label="Show the walk to ${esc(c.metro.station)} metro, ${c.metro.m} metres, ${c.metro.min} minutes"><span class="ax-metro-ico">${ICON.walk}</span><span class="ax-metro-name"><small>Nearest metro · ${esc(c.metro.line)}</small><b>${esc(c.metro.station)}</b></span><span class="ax-metro-val" data-slot="metro"></span></button>`:''}`;
+ const carpet=panel.querySelector('[data-slot=carpet]');carpet.append(odometer(c.carpet),Object.assign(document.createElement('span'),{className:'ax-unit',textContent:' sq ft'}));
+ const metro=panel.querySelector('[data-slot=metro]');
+ if(metro){metro.append(odometer(c.metro.m),Object.assign(document.createElement('span'),{className:'ax-unit',textContent:' m'}));
+  const sub=document.createElement('small');sub.append(odometer(c.metro.min),Object.assign(document.createElement('span'),{textContent:' min walk'}));metro.append(sub);}
+ panel.querySelector('.ax-metro-row')?.addEventListener('click',()=>onRoute(route));
+ // roll the figures when the property changes, not on every route click
+ if(lastSpot!==o.id){lastSpot=o.id;rollIn(panel,{delay:120});}
 }

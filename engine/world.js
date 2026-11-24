@@ -23,7 +23,8 @@
 import * as THREE from "three";
 import {createSceneLighting} from "./andheri-scene-lighting.js";
 import {createWorldLayouts} from "./andheri-world-layouts.js";
-import { applyAndheriTheme, easyTabs, twinIntro, propertySpotlight } from "./andheri-ui.js";
+import { applyAndheriTheme, easyTabs, propertySpotlight } from "./andheri-ui.js";
+import { andheriExperience, applyCanonicalFacts } from "./andheri-experience.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { RGBELoader } from "three/addons/loaders/RGBELoader.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -63,7 +64,7 @@ async function boot() {
   try { await script(`/engine/atlases/${SLUG}.js`); } catch (e) { return fail("This atlas has no 3D explorer."); }
   const A = window.ATLAS, W = A && A.meta && A.meta.world;
   if (!A || !W) return fail("This atlas has no 3D explorer.");
-  if(W.branding==="autopilot-flipkart")applyAndheriTheme("world");
+  if(W.branding==="autopilot-flipkart"){applyAndheriTheme("world");applyCanonicalFacts(A.options);}
   document.title = `${A.meta.title} · Explorer`;
   const poster = W.branding === "autopilot-flipkart" && W.thumbs?.[location.hash.slice(1)] || W.poster;
   if (poster) for (const id of ["#load", "#gate"]) $(id).style.backgroundImage = `url("${W.data}${poster}")`;
@@ -86,7 +87,7 @@ async function boot() {
   }
   const options=A.options.filter(o=>!W.thumbs||W.thumbs[o.id]);
   const first=options.find(o=>o.id===location.hash.slice(1))||options[0];
-  const intro=W.branding==="autopilot-flipkart"?twinIntro(first):null;
+  const intro=W.branding==="autopilot-flipkart"?andheriExperience({options,first:first?.id}):null;
   start(A, W, intro).catch((e) => { console.error(e); fail("The explorer could not load: " + e.message); });
 }
 
@@ -95,7 +96,10 @@ async function start(A, W, intro=null) {
   if(W.contexts || W.cad)document.body.classList.add('project-tools');
   if(W.mapHref)$("#to-map").href=W.mapHref;
   const canvas = $("#c");
-  const previewIds = new Set((Q.get("preview") || "").split(",").filter(Boolean));
+  // the Flipkart Andheri explorer opens on the re-modelled buildings (d-preview: new Privilon, Corporate Avenue's tower)
+  // unless ?preview= names others; ?preview=none shows the older district models
+  const defaultPreview = W.branding === "autopilot-flipkart" ? "privilon,corporate-avenue,723-avenue" : "";
+  const previewIds = new Set(((Q.get("preview") ?? defaultPreview) === "none" ? "" : (Q.get("preview") ?? defaultPreview)).split(",").filter(Boolean));
   const realismFor = id => W.branding === "autopilot-flipkart" && REALISM_IDS.has(id) &&
     (W.models?.[id]?.aoBase || previewIds.has(id));
   let lightingBuilder=null,worldLayouts=null;
@@ -781,12 +785,14 @@ async function start(A, W, intro=null) {
   const deep = location.hash.slice(1); const first = OPTS.some((o) => o.id === deep) ? deep : OPTS[0].id;
   await select(first, true);
   for (const id of ["#top", "#hud", "#strip"]) $(id).hidden = false;
-  if(intro)intro.ready();else { $("#l-bar").style.width = "100%"; setTimeout(() => { $("#load").style.transition = "opacity .9s"; $("#load").style.opacity = "0"; setTimeout(() => $("#load").remove(), 950); }, 200); }
+  if(intro)intro.ready({select:(id)=>select(id),selected:()=>SEL});else { $("#l-bar").style.width = "100%"; setTimeout(() => { $("#load").style.transition = "opacity .9s"; $("#load").style.opacity = "0"; setTimeout(() => $("#load").remove(), 950); }, 200); }
   if (Q.get("mode") === "walk") startWalk();
 
   /* -------------------------------------------------------- loop ---- */
-  let last = performance.now(); const clock = { frames: 0 };
+  let last = performance.now(), coveredAt = 0; const clock = { frames: 0 };
   function frame(now) {
+    // while the full-screen opening, film or shortlist covers the canvas, draw a frame only every 400 ms
+    if (!STILL && document.body.classList.contains("ax-covered")) { if (now - coveredAt < 400) { requestAnimationFrame(frame); return; } coveredAt = now; }
     const dt = Math.min(STILL ? 0.5 : 0.05, (now - last) / 1000); last = now; ribbonMat.uniforms.uTime.value += dt;
     if (fly) { const t = Math.min(1, (now - fly.t0) / fly.ms), e = ease(t); controls.target.lerpVectors(fly.a.t, fly.b.t, e); camera.position.lerpVectors(fly.a.p, fly.b.p, e); if (t >= 1) fly = null; }
     if (MODE === "dollhouse") controls.update();

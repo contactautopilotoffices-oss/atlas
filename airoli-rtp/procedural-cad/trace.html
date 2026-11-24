@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RTP 603/604 Trace</title>
+<style>
+  :root { --bg:#f4f4f1; --panel:#ffffff; --ink:#1d1d1f; --mute:#6b6b70; --line:#dedede; --accent:#0b6e99; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:13px/1.4 -apple-system, "Segoe UI", Roboto, sans-serif; color:var(--ink); background:var(--bg); height:100vh; display:flex; flex-direction:column; }
+  header { padding:8px 14px; border-bottom:1px solid var(--line); background:var(--panel); display:flex; gap:16px; align-items:baseline; flex-wrap:wrap; }
+  header h1 { font-size:15px; margin:0; }
+  header .sub { color:var(--mute); }
+  main { flex:1; display:grid; grid-template-columns: 1fr 1fr 360px; min-height:0; }
+  .view { position:relative; border-right:1px solid var(--line); min-width:0; min-height:0; }
+  .view .tag { position:absolute; left:8px; top:6px; background:rgba(255,255,255,.9); padding:2px 8px; border-radius:4px; font-weight:600; z-index:2; pointer-events:none; }
+  .view .hint { position:absolute; left:8px; bottom:6px; color:var(--mute); background:rgba(255,255,255,.85); padding:2px 6px; border-radius:4px; z-index:2; pointer-events:none; }
+  canvas { display:block; width:100%; height:100%; }
+  aside { background:var(--panel); overflow:auto; padding:10px 12px; }
+  aside h2 { font-size:14px; margin:6px 0; }
+  .legend { display:flex; flex-wrap:wrap; gap:4px 10px; margin:6px 0 10px; }
+  .legend label { display:flex; align-items:center; gap:4px; cursor:pointer; user-select:none; }
+  .sw { width:12px; height:12px; border-radius:2px; display:inline-block; }
+  table { border-collapse:collapse; width:100%; margin:4px 0 10px; }
+  td, th { border-bottom:1px solid #eee; padding:3px 4px; vertical-align:top; text-align:left; overflow-wrap:anywhere; }
+  th { color:var(--mute); font-weight:500; width:34%; }
+  .src { font-size:11px; padding:0 5px; border-radius:8px; color:#fff; white-space:nowrap; }
+  .src.cad { background:#2b8a3e; } .src.default { background:#e8590c; } .src.designer { background:#1971c2; } .src.client { background:#7048e8; }
+  .conf { display:inline-block; width:46px; height:6px; background:#eee; border-radius:3px; vertical-align:middle; margin-left:4px; }
+  .conf i { display:block; height:100%; background:#495057; border-radius:3px; }
+  code { font-size:11.5px; background:#f1f3f5; padding:0 3px; border-radius:3px; }
+  .why { color:var(--mute); font-size:12px; }
+  .bands { display:flex; flex-direction:column-reverse; border:1px solid #ccc; width:70px; height:150px; float:right; margin:0 0 6px 8px; }
+  .bands div { display:flex; align-items:center; justify-content:center; font-size:9px; color:#222; border-top:1px solid rgba(0,0,0,.15); text-align:center; }
+  .stat { color:var(--mute); }
+  button { font:inherit; padding:2px 8px; }
+  @media (max-width: 900px) { main { grid-template-columns: 1fr; grid-template-rows: 45vh 45vh auto; } .view { border-right:0; border-bottom:1px solid var(--line); } }
+</style>
+<script type="importmap">{ "imports": { "three": "/engine/vendor/three/three.module.min.js", "three/addons/": "/engine/vendor/three/jsm/" } }</script>
+</head>
+<body>
+<header>
+  <h1>RTP 6th floor, Offices 603 &amp; 604: drawing to model, traced</h1>
+  <span class="sub" id="sub">loading…</span>
+  <span class="sub">value sources: <span class="src cad">cad</span> read from the drawing · <span class="src default">default</span> assumed, in ASK_DESIGNER.md · <span class="src designer">designer</span> · <span class="src client">client</span></span>
+  <span class="sub" id="variant"></span>
+</header>
+<main>
+  <div class="view" id="v2d"><span class="tag">Drawing linework (DWG), coloured by inferred type</span><canvas id="c2d"></canvas><span class="hint">drag to pan, wheel to zoom, click a line</span></div>
+  <div class="view" id="v3d"><span class="tag">FreeCAD model (from the same rules)</span><span class="hint">drag to orbit, right-drag to pan, click an element</span></div>
+  <aside>
+    <h2>Wall types</h2>
+    <div class="legend" id="legend"></div>
+    <div><button id="b-iso">Axonometric</button> <button id="b-top">Top</button> <button id="b-clear">Clear selection</button> <label><input type="checkbox" id="ceil"> ceiling</label></div>
+    <div id="info"><p class="why">Click a line in the drawing or an element in the model. Each wall, door and column shows where every value came from: <span class="src cad">cad</span> read from the drawing (with the entity handle and layer), or <span class="src default">default</span> assumed and listed in ASK_DESIGNER.md.</p></div>
+  </aside>
+</main>
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const TYPE_COL = { glass_partition:'#1fa2d6', full_height_glass:'#0b6e99', pop_gypsum:'#e8b04a', mixed:'#d9480f', brick_block:'#a0522d', rcc:'#555555',
+  curtain_wall:'#3b5bdb', acp:'#9c36b5', window_glazing:'#66d9e8', panel_partial_height:'#8f6fbf', railing:'#222222', unknown:'#ff2d95',
+  door:'#d6336c', column:'#777777' };
+const MAT_COL = { glass:'#8fd0ea', pop:'#efe6d0', brick:'#c8846b', rcc:'#9a9a9a', acp:'#bfbfcc', aluminium:'#3f3f46', hpl:'#8f78b5', steel:'#444', unknown:'#ff2d95', timber:'#8b5a2b', ceiling:'#fafafa' };
+const qs = new URLSearchParams(location.search);
+const base = qs.get('data') || 'out/';
+const [D, M] = await Promise.all([fetch(base + 'trace_data.json').then(r => r.json()), fetch(base + 'rtp6_floor6.mesh.json').then(r => r.json()).catch(() => null)]);
+const E = D.elements;
+const typeOf = id => { const e = E[id]; if (!e) return null; return e.cls === 'wall' ? e.type.value : (e.cls === 'opening' ? 'door' : 'column'); };
+if (base.includes('variant')) document.getElementById('variant').innerHTML = '<b style="color:#c92a2a">HYPOTHETICAL VARIANT: door head 2.4 m and rule O1 (POP + glass + POP) switched on to show regeneration. Not from the drawing, not from the designer.</b>';
+document.getElementById('sub').textContent = `${D.drawing} · ${D.counts.lines.toLocaleString()} drawing entities in the offer, ${D.counts.linked.toLocaleString()} linked to ${Object.keys(E).length} model elements`;
+
+// ---------------------------------------------------------------- legend / filters
+const hidden = new Set();
+const counts = {};
+for (const e of Object.values(E)) { const t = e.cls === 'wall' ? e.type.value : (e.cls === 'opening' ? 'door' : 'column'); counts[t] = (counts[t] || 0) + 1; }
+const leg = document.getElementById('legend');
+for (const [t, c] of Object.entries(TYPE_COL)) {
+  if (!counts[t]) continue;
+  const l = document.createElement('label');
+  l.innerHTML = `<input type="checkbox" checked><span class="sw" style="background:${c}"></span>${t.replace(/_/g, ' ')} <span class="stat">${counts[t]}</span>`;
+  l.querySelector('input').onchange = ev => { ev.target.checked ? hidden.delete(t) : hidden.add(t); draw2d(); apply3dVisibility(); };
+  leg.appendChild(l);
+}
+
+// ---------------------------------------------------------------- 2D canvas
+const cv = document.getElementById('c2d'), ctx = cv.getContext('2d');
+const [X0, Y0, X1, Y1] = D.offer_clip_m;
+let view = { s: 1, ox: 0, oy: 0 };
+let selected = null;
+function fit() {
+  const r = cv.getBoundingClientRect(); cv.width = r.width * devicePixelRatio; cv.height = r.height * devicePixelRatio;
+  view.s = Math.min(cv.width / (X1 - X0), cv.height / (Y1 - Y0)) * 0.96;
+  view.ox = cv.width / 2 - (X0 + X1) / 2 * view.s; view.oy = cv.height / 2 + (Y0 + Y1) / 2 * view.s;
+}
+const sx = x => x * view.s + view.ox, sy = y => -y * view.s + view.oy;
+function colOfLine(l) { if (!l.el || !l.el.length) return null; const t = typeOf(l.el[0]); return t; }
+function draw2d() {
+  ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, cv.width, cv.height);
+  ctx.lineCap = 'round';
+  for (const pass of [0, 1, 2]) {
+    for (const l of D.lines) {
+      if (l.txt) { if (pass === 2 && view.s > 6) { ctx.fillStyle = '#888'; ctx.font = `${Math.max(9, l.hgt * view.s)}px sans-serif`; ctx.fillText(l.txt.split('\n')[0], sx(l.at[0]), sy(l.at[1])); } continue; }
+      const t = colOfLine(l);
+      const sel = selected && l.el && l.el.includes(selected);
+      if (pass === 0 && t) continue; if (pass === 1 && (!t || sel)) continue; if (pass === 2 && !sel) continue;
+      if (t && hidden.has(t)) continue;
+      ctx.strokeStyle = sel ? '#ff0000' : (t ? TYPE_COL[t] : '#c9c9c9');
+      ctx.lineWidth = (sel ? 3 : (t ? 1.6 : 0.8)) * devicePixelRatio;
+      ctx.beginPath(); const p = l.p; ctx.moveTo(sx(p[0]), sy(p[1])); for (let i = 2; i < p.length; i += 2) ctx.lineTo(sx(p[i]), sy(p[i + 1])); ctx.stroke();
+    }
+  }
+}
+// spatial index for picking
+const GRID = 1.0, grid = new Map();
+D.lines.forEach((l, i) => { if (!l.p) return; for (let k = 0; k < l.p.length; k += 2) { const key = Math.floor(l.p[k] / GRID) + ',' + Math.floor(l.p[k + 1] / GRID); if (!grid.has(key)) grid.set(key, new Set()); grid.get(key).add(i); } });
+function segDist(px, py, ax, ay, bx, by) { const dx = bx - ax, dy = by - ay, L = dx * dx + dy * dy; let t = L ? ((px - ax) * dx + (py - ay) * dy) / L : 0; t = Math.max(0, Math.min(1, t)); return Math.hypot(px - ax - t * dx, py - ay - t * dy); }
+function pick2d(mx, my) {
+  const x = (mx - view.ox) / view.s, y = -(my - view.oy) / view.s, tol = 6 * devicePixelRatio / view.s;
+  let best = null, bd = 1e9; const cx = Math.floor(x / GRID), cy = Math.floor(y / GRID);
+  for (let i = -1; i <= 1; i++) for (let j = -1; j <= 1; j++) { const s = grid.get((cx + i) + ',' + (cy + j)); if (!s) continue;
+    for (const k of s) { const l = D.lines[k]; const p = l.p; for (let q = 0; q + 3 < p.length; q += 2) { const d = segDist(x, y, p[q], p[q + 1], p[q + 2], p[q + 3]); const pen = l.el && l.el.length ? 0 : tol * 0.5; if (d + pen < bd) { bd = d + pen; best = l; } } } }
+  return bd < tol * 1.5 ? best : null;
+}
+let drag = null;
+cv.addEventListener('mousedown', e => { drag = { x: e.clientX, y: e.clientY, ox: view.ox, oy: view.oy, moved: false }; });
+window.addEventListener('mousemove', e => { if (!drag) return; const dx = (e.clientX - drag.x) * devicePixelRatio, dy = (e.clientY - drag.y) * devicePixelRatio; if (Math.abs(dx) + Math.abs(dy) > 4) drag.moved = true; view.ox = drag.ox + dx; view.oy = drag.oy + dy; draw2d(); });
+window.addEventListener('mouseup', e => { if (drag && !drag.moved && e.target === cv) { const r = cv.getBoundingClientRect(); const l = pick2d((e.clientX - r.left) * devicePixelRatio, (e.clientY - r.top) * devicePixelRatio); if (l) { if (l.el && l.el.length) select(l.el[0], l); else showRaw(l); } } drag = null; });
+cv.addEventListener('wheel', e => { e.preventDefault(); const r = cv.getBoundingClientRect(); const mx = (e.clientX - r.left) * devicePixelRatio, my = (e.clientY - r.top) * devicePixelRatio; const k = Math.exp(-e.deltaY * 0.0015); view.ox = mx - (mx - view.ox) * k; view.oy = my - (my - view.oy) * k; view.s *= k; draw2d(); }, { passive: false });
+
+// ---------------------------------------------------------------- 3D
+const host = document.getElementById('v3d');
+const renderer = new THREE.WebGLRenderer({ antialias: true }); renderer.setPixelRatio(devicePixelRatio); host.appendChild(renderer.domElement);
+const scene = new THREE.Scene(); scene.background = new THREE.Color('#eef0f2');
+const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 2000);
+const controls = new OrbitControls(camera, renderer.domElement);
+scene.add(new THREE.HemisphereLight(0xffffff, 0x8899aa, 1.1)); const dl = new THREE.DirectionalLight(0xffffff, 1.2); dl.position.set(-40, -60, 90); scene.add(dl);
+const cx = (X0 + X1) / 2, cy = (Y0 + Y1) / 2;
+const root = new THREE.Group(); root.position.set(-cx, -cy, 0); scene.add(root);
+camera.up.set(0, 0, 1);
+const byId = new Map(); const pickables = [];
+if (M) {
+  const mats = {};
+  const matFor = (m, role) => {
+    const key = m + '|' + role;
+    if (!mats[key]) { const c = (M.materials[m] && M.materials[m].color) ? new THREE.Color(...M.materials[m].color) : new THREE.Color(MAT_COL[m] || '#cccccc');
+      const tr = M.materials[m] ? M.materials[m].transparency || 0 : 0;
+      mats[key] = new THREE.MeshLambertMaterial({ color: c, transparent: tr > 0, opacity: tr > 0 ? Math.max(0.25, 1 - tr / 100) : 1, side: THREE.DoubleSide, depthWrite: tr === 0 }); }
+    return mats[key];
+  };
+  for (const m of M.meshes) {
+    if (!m.positions || !m.positions.length) continue;
+    const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(m.positions, 3)); g.setIndex(m.indices); g.computeVertexNormals();
+    const mesh = new THREE.Mesh(g, matFor(m.material, m.role)); mesh.userData = m;
+    const sid = m.spec_id || m.id;
+    mesh.userData.sid = sid;
+    if (/^(SLAB|FALSE_CEILING)/.test(sid)) { mesh.userData.structural = sid; if (sid.startsWith('FALSE_CEILING')) mesh.visible = false; }
+    root.add(mesh); pickables.push(mesh);
+    if (!byId.has(sid)) byId.set(sid, []); byId.get(sid).push(mesh);
+    const edges = new THREE.LineSegments(new THREE.EdgesGeometry(g, 30), new THREE.LineBasicMaterial({ color: 0x333333, transparent: true, opacity: 0.25 })); mesh.add(edges);
+  }
+}
+function sidOf(mesh) { return mesh.userData.sid; }
+function apply3dVisibility() { for (const m of pickables) { const s = sidOf(m); if (m.userData.structural) continue; const t = typeOf(s); m.visible = !(t && hidden.has(t)); } }
+function iso() { camera.position.set(-70, -100, 85); controls.target.set(0, 0, 0); controls.update(); }
+function top() { camera.position.set(0, -0.01, 140); controls.target.set(0, 0, 0); controls.update(); }
+iso();
+document.getElementById('b-iso').onclick = iso; document.getElementById('b-top').onclick = top;
+document.getElementById('b-clear').onclick = () => select(null);
+document.getElementById('ceil').onchange = e => { for (const m of byId.get('FALSE_CEILING') || []) m.visible = e.target.checked; };
+function resize() { const r = host.getBoundingClientRect(); renderer.setSize(r.width, r.height); camera.aspect = r.width / r.height; camera.updateProjectionMatrix(); fit(); draw2d(); }
+window.addEventListener('resize', resize); resize();
+const ray = new THREE.Raycaster(); let down3 = null;
+renderer.domElement.addEventListener('pointerdown', e => down3 = [e.clientX, e.clientY]);
+renderer.domElement.addEventListener('pointerup', e => {
+  if (!down3 || Math.hypot(e.clientX - down3[0], e.clientY - down3[1]) > 4) return;
+  const r = renderer.domElement.getBoundingClientRect();
+  ray.setFromCamera(new THREE.Vector2((e.clientX - r.left) / r.width * 2 - 1, -(e.clientY - r.top) / r.height * 2 + 1), camera);
+  const hit = ray.intersectObjects(pickables.filter(m => m.visible), false).find(h => !h.object.userData.structural);
+  if (hit) select(sidOf(hit.object), null, hit.object.userData);
+});
+const hiMat = new THREE.MeshLambertMaterial({ color: 0xff2020, emissive: 0x550000, side: THREE.DoubleSide });
+let hiMeshes = [];
+function highlight(id) {
+  for (const [m, mat] of hiMeshes) m.material = mat; hiMeshes = [];
+  if (!id) return;
+  for (const m of byId.get(id) || []) { hiMeshes.push([m, m.material]); m.material = hiMat; }
+}
+(function loop() { requestAnimationFrame(loop); renderer.render(scene, camera); })();
+
+// ---------------------------------------------------------------- info panel
+const chip = a => a ? `<span class="src ${a.source}">${a.source}</span><span class="conf" title="confidence ${a.confidence}"><i style="width:${Math.round(a.confidence * 100)}%"></i></span>` : '';
+const fmt = v => v === null ? '<i>not drawn</i>' : (Array.isArray(v) && v.length && v[0] && v[0].material) ? v.map(b => b.z0_m !== undefined ? `${b.material.replace(/_/g, ' ')} ${b.z0_m}–${b.z1_m} m` : `${b.material.replace(/_/g, ' ')} ${Math.round(b.thickness_m * 10000) / 10} mm`).join('<br>') : typeof v === 'number' ? (Math.round(v * 1000) / 1000).toString() : (Array.isArray(v) ? (v.length > 4 ? `${v.length} points` : JSON.stringify(v)) : (typeof v === 'object' && v ? Object.entries(v).filter(([k, x]) => x !== null && x !== undefined).map(([k, x]) => `${k}: ${Array.isArray(x) ? x.join(' x ') : x}`).join(', ') : String(v)));
+const row = (k, a, extra = '') => a ? `<tr><th>${k}</th><td>${fmt(a.value)} ${chip(a)}${a.rule ? ` <code>${a.rule}</code>` : ''}${a.q ? ` <code>${[].concat(a.q).join(' ')}</code>` : ''}${a.why ? `<div class="why">${a.why}</div>` : ''}${extra}</td></tr>` : '';
+function bandsHtml(bands, top) {
+  const H = Math.max(top, ...bands.map(b => b.z1_m));
+  return `<div class="bands" title="vertical composition">${bands.map(b => `<div style="height:${(b.z1_m - b.z0_m) / H * 100}%;background:${MAT_COL[{ glass_clear_12: 'glass', gypsum_pop: 'pop', masonry_block: 'brick', hpl_panel: 'hpl', steel_railing: 'steel' }[b.material] || b.material] || '#ddd'}">${b.material.replace(/_/g, ' ')}<br>${b.z0_m}–${b.z1_m}</div>`).join('')}</div>`;
+}
+function select(id, line, meshInfo) {
+  selected = id; draw2d(); highlight(id);
+  const info = document.getElementById('info');
+  if (!id) { info.innerHTML = ''; return; }
+  const e = E[id]; if (!e) { info.innerHTML = `<p>${id}: not in the assembly file (${meshInfo ? meshInfo.role : ''})</p>`; return; }
+  let h = `<h2>${id} · ${e.cls === 'wall' ? e.type.value.replace(/_/g, ' ') : e.cls === 'opening' ? e.kind.value.replace(/_/g, ' ') : 'column'}</h2>`;
+  if (e.cls === 'wall') {
+    h += bandsHtml(e.bands.value, e.height_m.value);
+    h += `<table>${row('Type', e.type)}${row('Thickness (m)', e.thickness_m)}${row('Length (m)', e.length_m)}${row('Height (m)', e.height_m)}${row('Bands (bottom to top)', e.bands)}${row('Layers (through thickness)', e.layers)}</table>`;
+    const c = e.cad;
+    h += `<h2>From the drawing</h2><table><tr><th>Layer(s)</th><td>${c.layers.map(x => `<code>${x}</code>`).join(' ')}</td></tr>
+      <tr><th>Face entities</th><td>${c.face_handles.map(x => `<code>${x}</code>`).join(' ')}${c.in_blocks.length ? `<div class="why">inside block ${c.in_blocks.join(', ')}</div>` : ''}</td></tr>
+      <tr><th>Line spacing</th><td>${c.spacing_mm} mm</td></tr>
+      <tr><th>Hatch between faces</th><td>${c.hatch_lines_between_faces} wall-hatch lines (${c.hatch_lines_per_m}/m)${c.hatch_fills.length ? `; fills: ${c.hatch_fills.map(f => `${f.pattern} on ${f.layer}${f.top ? ' (' + f.top + ')' : ''}`).join(', ')}` : ''}</td></tr>
+      <tr><th>Text nearby</th><td>${c.texts_near.length ? c.texts_near.map(t => `“${t.text.replace(/\n/g, ' ')}” <code>${t.handle}</code> ${t.dist_m} m`).join('<br>') : 'none'}</td></tr></table>`;
+    const doors = Object.values(E).filter(o => o.cls === 'opening' && o.host.value === id);
+    if (doors.length) h += `<p>Doors in this wall: ${doors.map(o => `<a href="#" data-id="${o.id}">${o.id}</a>`).join(', ')}</p>`;
+  } else if (e.cls === 'opening') {
+    h += `<table>${row('Kind', e.kind)}${row('Host wall', e.host, e.host.value ? ` <a href="#" data-id="${e.host.value}">open</a>` : '')}${row('Structural opening (m), modelled', e.opening_width_m)}${row('Frame outside (m)', e.frame_outside_width_m)}${row('Clear passage (m)', e.clear_width_m)}${row('Leaf (m)', e.leaf_width_m)}${row('Nominal (block name)', e.nominal_width_m)}${row('Head (m)', e.head_m)}${row('Header above', e.header)}${row('Frame / beading', e.frame)}${row('Leaf', e.leaf)}</table>
+      <h2>From the drawing</h2><table><tr><th>Block</th><td><code>${e.cad.block}</code> on <code>${e.cad.layer}</code>, insert <code>${e.cad.insert_handle}</code>, rotation ${e.cad.rotation_deg}°</td></tr>
+      <tr><th>Frame sections drawn</th><td>${e.cad.jamb_sections.length ? e.cad.jamb_sections.map(x => `<code>${x}</code>`).join(' ') : 'none'}</td></tr>
+      <tr><th>Flanking wall ends</th><td>${e.cad.flanking_walls.join(', ') || 'none found'}</td></tr></table>`;
+  } else {
+    h += `<table>${row('Type', e.type)}${row('Height (m)', e.height_m)}<tr><th>Size (m)</th><td>${e.size_m.join(' x ')}</td></tr><tr><th>Drawing entities</th><td>${e.cad.evidence.map(x => `<code>${x.handle}</code> ${x.layer} ${x.type}${x.solid ? ' (solid fill)' : ''}`).join('<br>')}</td></tr></table>`;
+  }
+  const parts = (byId.get(id) || []).map(m => m.userData);
+  if (parts.length) h += `<h2>Built in 3D as</h2><table>${parts.map(p => `<tr><th>${p.role || ''}</th><td>${p.type} · ${p.material}${p.guid ? ` <code title="IFC GlobalId">${p.guid}</code>` : ''}</td></tr>`).join('')}</table>`;
+  else h += `<p class="why">No 3D mesh found for this id.</p>`;
+  info.innerHTML = h;
+  info.querySelectorAll('a[data-id]').forEach(a => a.onclick = ev => { ev.preventDefault(); select(a.dataset.id); });
+}
+function showRaw(l) {
+  selected = null; draw2d(); highlight(null);
+  document.getElementById('info').innerHTML = `<h2>Drawing entity <code>${l.h}</code></h2><table><tr><th>Layer</th><td><code>${l.L}</code></td></tr><tr><th>Type</th><td>${l.t}</td></tr><tr><th>Block</th><td>${l.blk || '-'}</td></tr></table><p class="why">This line is not part of any wall, door or column in the model (not paired, furniture, stair, duct or annotation).</p>`;
+}
+window.__trace = { select, iso, top, E, byId };
+</script>
+</body>
+</html>

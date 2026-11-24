@@ -1,0 +1,127 @@
+[
+ {
+  "word": "A",
+  "start": 0.0,
+  "end": 0.104
+ },
+ {
+  "word": "bare-shell",
+  "start": 0.186,
+  "end": 0.592
+ },
+ {
+  "word": "floor,",
+  "start": 0.65,
+  "end": 1.126
+ },
+ {
+  "word": "ready",
+  "start": 1.37,
+  "end": 1.602
+ },
+ {
+  "word": "to",
+  "start": 1.649,
+  "end": 1.707
+ },
+ {
+  "word": "fit",
+  "start": 1.776,
+  "end": 1.916
+ },
+ {
+  "word": "out",
+  "start": 1.962,
+  "end": 2.09
+ },
+ {
+  "word": "your",
+  "start": 2.148,
+  "end": 2.264
+ },
+ {
+  "word": "way,",
+  "start": 2.322,
+  "end": 2.496
+ },
+ {
+  "word": "with",
+  "start": 2.519,
+  "end": 2.67
+ },
+ {
+  "word": "your",
+  "start": 2.717,
+  "end": 2.833
+ },
+ {
+  "word": "own",
+  "start": 2.902,
+  "end": 3.053
+ },
+ {
+  "word": "open-air",
+  "start": 3.111,
+  "end": 3.483
+ },
+ {
+  "word": "breakout",
+  "start": 3.518,
+  "end": 3.913
+ },
+ {
+  "word": "above",
+  "start": 3.982,
+  "end": 4.261
+ },
+ {
+  "word": "it.",
+  "start": 4.307,
+  "end": 4.54
+ },
+ {
+  "word": "A",
+  "start": 4.981,
+  "end": 5.05
+ },
+ {
+  "word": "place",
+  "start": 5.12,
+  "end": 5.375
+ },
+ {
+  "word": "to",
+  "start": 5.41,
+  "end": 5.48
+ },
+ {
+  "word": "step",
+  "start": 5.538,
+  "end": 5.77
+ },
+ {
+  "word": "outside",
+  "start": 5.828,
+  "end": 6.223
+ },
+ {
+  "word": "between",
+  "start": 6.269,
+  "end": 6.594
+ },
+ {
+  "word": "the",
+  "start": 6.641,
+  "end": 6.711
+ },
+ {
+  "word": "hard",
+  "start": 6.769,
+  "end": 6.966
+ },
+ {
+  "word": "hours.",
+  "start": 7.012,
+  "end": 7.895
+ }
+]

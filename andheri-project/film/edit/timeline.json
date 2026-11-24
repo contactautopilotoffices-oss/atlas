@@ -1,0 +1,130 @@
+{
+ "total": 140.0,
+ "cues": [
+  {
+   "beat": "title",
+   "start": 0.0,
+   "end": 8.0
+  },
+  {
+   "beat": "descent",
+   "natural_s": 12.0,
+   "rate": 1.0
+  },
+  {
+   "beat": "descent",
+   "start": 8.0,
+   "end": 20.0
+  },
+  {
+   "beat": "interchange",
+   "natural_s": 7.12,
+   "rate": 0.959
+  },
+  {
+   "beat": "interchange",
+   "start": 20.0,
+   "end": 27.3
+  },
+  {
+   "beat": "prv_sunrise",
+   "natural_s": 4.75,
+   "rate": 1.458
+  },
+  {
+   "beat": "prv_sunrise",
+   "start": 27.3,
+   "end": 32.1
+  },
+  {
+   "beat": "route_privilon",
+   "natural_s": 4.88,
+   "rate": 1.224
+  },
+  {
+   "beat": "route_privilon",
+   "start": 32.1,
+   "end": 37.0
+  },
+  {
+   "beat": "prv_dusk",
+   "natural_s": 7.12,
+   "rate": 0.972
+  },
+  {
+   "beat": "prv_dusk",
+   "start": 37.0,
+   "end": 44.2
+  },
+  {
+   "beat": "plan-privilon",
+   "start": 44.2,
+   "end": 56.0
+  },
+  {
+   "beat": "corp_drone",
+   "natural_s": 8.33,
+   "rate": 0.992
+  },
+  {
+   "beat": "corp_drone",
+   "start": 56.0,
+   "end": 64.4
+  },
+  {
+   "beat": "plan-corporate",
+   "start": 64.4,
+   "end": 77.0
+  },
+  {
+   "beat": "route_corporate",
+   "natural_s": 5.75,
+   "rate": 1.034
+  },
+  {
+   "beat": "route_corporate",
+   "start": 77.0,
+   "end": 82.8
+  },
+  {
+   "beat": "a723_rise",
+   "natural_s": 8.54,
+   "rate": 1.047
+  },
+  {
+   "beat": "a723_rise",
+   "start": 82.8,
+   "end": 91.4
+  },
+  {
+   "beat": "plan-723",
+   "start": 91.4,
+   "end": 100.0
+  },
+  {
+   "beat": "route_723",
+   "natural_s": 5.17,
+   "rate": 1.154
+  },
+  {
+   "beat": "route_723",
+   "start": 100.0,
+   "end": 105.2
+  },
+  {
+   "beat": "close_pullback",
+   "natural_s": 7.92,
+   "rate": 0.727
+  },
+  {
+   "beat": "close_pullback",
+   "start": 105.2,
+   "end": 116.2
+  },
+  {
+   "beat": "close",
+   "start": 116.2,
+   "end": 140.0
+  }
+ ]
+}

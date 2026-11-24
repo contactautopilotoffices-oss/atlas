@@ -16,11 +16,18 @@ try{
   document.querySelector('.plan-eyebrow').textContent='Autopilot · Flipkart';
   document.title=data.title;
   await openPlan(plan.id,back);
+  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const comments=document.createElement('section');comments.id='all-comments';comments.hidden=true;document.querySelector('#plan').append(comments);
+  const commentsButton=document.createElement('button');commentsButton.className='comments-button';commentsButton.type='button';commentsButton.textContent='◉ Comments';document.querySelector('#ptop').append(commentsButton);
+  async function loadComments(roomId){const r=await fetch(`/api/cms?r=layout-feedback&property=${encodeURIComponent(property)}&variant=${encodeURIComponent(variant.id)}${roomId?'&roomId='+encodeURIComponent(roomId):''}`);const d=await r.json();return d.comments||[];}
+  commentsButton.onclick=async()=>{comments.hidden=!comments.hidden;if(!comments.hidden){const rows=await loadComments();comments.innerHTML=rows.length?rows.map(c=>`<article><b>${esc(c.room)}</b><span>${esc(c.name)} · ${new Date(c.createdAt).toLocaleString()}</span><p>${esc(c.note)}</p></article>`).join(''):'<p>No saved comments for this layout.</p>'}};
   document.addEventListener('atlas-room-selected',({detail:room})=>{
     const form=document.createElement('form');
     form.className='room-feedback';
     form.innerHTML='<details><summary>Give design feedback</summary><label>Your name<input name="reviewer" autocomplete="name" required maxlength="100"></label><textarea required maxlength="2000" aria-label="Feedback for the design team" placeholder="What would you change in this space?"></textarea><button>Send feedback</button><output role="status"></output></details>';
     document.querySelector('#sel').append(form);
+    const roomComments=document.createElement('div');roomComments.className='room-comments';form.append(roomComments);
+    loadComments(room.id).then(rows=>{roomComments.innerHTML=rows.length?rows.map(c=>`<article><b>${esc(c.name)}</b><time>${new Date(c.createdAt).toLocaleString()}</time><p>${esc(c.note)}</p></article>`).join(''):'<p>No saved comments for this room.</p>'});
     form.elements.reviewer.value=sessionStorage.getItem('atlas-reviewer-name')||'';
     form.onsubmit=async event=>{
       event.preventDefault();
@@ -31,7 +38,7 @@ try{
       try{
         const response=await fetch('/api/cms?r=layout-feedback',{method:'POST',headers:{'Content-Type':'application/json','x-cms':'1'},body:JSON.stringify({reviewer,property,variant:variant.id,floor:plan.name,room:room.name,roomId:room.id,note:field.value.trim()})});
         if(!response.ok||!(await response.json()).saved)throw Error();
-        sessionStorage.setItem('atlas-reviewer-name',reviewer);field.value='';status.textContent='Sent to the design team.';
+        sessionStorage.setItem('atlas-reviewer-name',reviewer);field.value='';status.textContent='Saved to the design review log.';loadComments(room.id).then(rows=>{roomComments.innerHTML=rows.map(c=>`<article><b>${esc(c.name)}</b><time>${new Date(c.createdAt).toLocaleString()}</time><p>${esc(c.note)}</p></article>`).join('')});
       }catch{status.textContent='Could not send. Your note is here to retry.';}
       finally{button.disabled=false;}
     };

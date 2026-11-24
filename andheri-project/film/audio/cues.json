@@ -1,0 +1,810 @@
+{
+ "film": "Flipkart x Autopilot: Andheri East, the shortlist (script draft 4)",
+ "status": "provisional: the integrator re-times to the final picture",
+ "how_to_retime": "Edit tools/mix.py: pin a line's speech start with AT_OVERRIDE {'line id': film seconds}, or change FIRST_SPEECH / SLOT_LEAD / GAP_SAME / GAP_NEW_SECTION; move picture effects in PICTURE_SFX (word-synced counter rolls and ticks follow her words automatically); then run python3 -I tools/mix.py from andheri-project/film/audio (about a minute). It rewrites the mix, the three stems, this file and the placement in narration-v4/vo.json. To mix by hand instead: every VO line is narration-v4/<id>.mp3 at 'at' with 'gain_db'; the bed is music/bed_v2.mp3 at 0 with music.gain_db, dipped by ducking.depth_db over ducking.regions; each effect is its file at 'at' for play_s with its fades and gain_db (ambiences also dip sfx_depth_db under the voice).",
+ "length_s": 140.0,
+ "sample_rate": 48000,
+ "bit_depth": 24,
+ "master": {
+  "file": "mix_provisional.wav",
+  "target_lufs": -16.0,
+  "true_peak_ceiling_dbtp": -1.5,
+  "measured_lufs": -16.0,
+  "measured_true_peak_dbtp": -1.8,
+  "lra_lu": 3.3,
+  "master_gain_db": 2.07,
+  "limiter": "4x oversampled alimiter, ceiling -1.8 dBFS"
+ },
+ "stems": {
+  "files": [
+   "stems/vo.wav",
+   "stems/music.wav",
+   "stems/sfx.wav"
+  ],
+  "note": "each at its mix level with the master gain applied, before the limiter; vo + music + sfx = the mix apart from limiting",
+  "lufs": {
+   "vo": -15.88,
+   "music": -28.8,
+   "sfx": -33.39
+  }
+ },
+ "sections": [
+  {
+   "name": "Open",
+   "from": 0,
+   "to": 27
+  },
+  {
+   "name": "Privilon",
+   "from": 27,
+   "to": 56
+  },
+  {
+   "name": "Corporate Avenue",
+   "from": 56,
+   "to": 81
+  },
+  {
+   "name": "723 Avenue",
+   "from": 81,
+   "to": 104
+  },
+  {
+   "name": "Autopilot",
+   "from": 104,
+   "to": 130
+  },
+  {
+   "name": "Tail",
+   "from": 130,
+   "to": 140.0
+  }
+ ],
+ "music": {
+  "file": "music/bed_v2.mp3",
+  "at": 0.0,
+  "base_level_lufs": -23.0,
+  "gain_db": -8.1,
+  "choice": "bed_v2 is used. Both takes have no vocals and follow the section plan. bed_v1 opens with a pad swelling out of silence and its low piano note only at 0:05, runs at about 76 BPM, and stays flat from Corporate Avenue to 723 Avenue. bed_v2 opens on one low D piano note at 0:00 under black (then single low notes a bar apart, G at 0:03 and A at 0:06). It is a measured 80 BPM (3.000 s bars), and it lifts at every section: section RMS -22.0 / -18.6 / -15.4 / -14.6 / -13.1 / -12.6 dBFS from the open to Autopilot. It resolves at about 2:06 and decays to silence by about 2:16.",
+  "ducking": {
+   "depth_db": -8.0,
+   "attack_s": 0.25,
+   "release_s": 0.8,
+   "merge_gaps_under_s": 0.9,
+   "sfx_depth_db": -5.0,
+   "sfx_not_ducked": [
+    "sfx_counter_roll",
+    "sfx_ui_tick",
+    "sfx_ui_tick_crisp"
+   ],
+   "regions": [
+    [
+     1.6,
+     7.03
+    ],
+    [
+     8.3,
+     18.52
+    ],
+    [
+     20.3,
+     55.11
+    ],
+    [
+     56.3,
+     135.0
+    ]
+   ]
+  },
+  "voice_over_music_db_while_speaking": {
+   "median": 12.4,
+   "p10": 6.9
+  },
+  "voice_over_music_and_sfx_db_while_speaking": {
+   "median": 11.5,
+   "p10": 6.5,
+   "min": -2.4
+  }
+ },
+ "vo_level_lufs": -18.0,
+ "vo": [
+  {
+   "id": "l01_open",
+   "section": "Open",
+   "file": "../narration-v4/l01_open.mp3",
+   "at": 1.6,
+   "speech_from": 1.6,
+   "speech_to": 6.115,
+   "script_slot": [
+    0,
+    8
+   ],
+   "starts_late_by_s": 1.6,
+   "overruns_slot_by_s": 0,
+   "gain_db": 3.78,
+   "text": "Let's not start with a list of buildings. Let's start with how your people get to work."
+  },
+  {
+   "id": "l02_descent",
+   "section": "Open",
+   "file": "../narration-v4/l02_descent.mp3",
+   "at": 8.3,
+   "speech_from": 8.3,
+   "speech_to": 17.908,
+   "script_slot": [
+    8,
+    20
+   ],
+   "starts_late_by_s": 0.3,
+   "overruns_slot_by_s": 0,
+   "gain_db": 3.61,
+   "text": "Flipkart asked us for space in Andheri East. We walked the micro-market, checked every building against the deck, and brought it down to three. Each one answers a different question."
+  },
+  {
+   "id": "l03_marol",
+   "section": "Open",
+   "file": "../narration-v4/l03_marol.mp3",
+   "at": 20.3,
+   "speech_from": 20.3,
+   "speech_to": 26.45,
+   "script_slot": [
+    20,
+    27
+   ],
+   "starts_late_by_s": 0.3,
+   "overruns_slot_by_s": 0,
+   "gain_db": 4.46,
+   "text": "Two of them are at Marol Naka, where Metro Line One meets Line Three. The third is two stops west, in Chakala."
+  },
+  {
+   "id": "l04_privilon_commute",
+   "section": "Privilon",
+   "file": "../narration-v4/l04_privilon_commute.mp3",
+   "at": 27.45,
+   "speech_from": 27.45,
+   "speech_to": 36.096,
+   "script_slot": [
+    27,
+    37
+   ],
+   "starts_late_by_s": 0.45,
+   "overruns_slot_by_s": 0,
+   "gain_db": 4.97,
+   "text": "First, the commute. Privilon stands right beside Marol Naka station. A hundred and forty metres from the station steps. Two minutes on foot, in any weather."
+  },
+  {
+   "id": "l05_privilon_tower",
+   "section": "Privilon",
+   "file": "../narration-v4/l05_privilon_tower.mp3",
+   "at": 37.3,
+   "speech_from": 37.3,
+   "speech_to": 43.97,
+   "script_slot": [
+    37,
+    44
+   ],
+   "starts_late_by_s": 0.3,
+   "overruns_slot_by_s": 0,
+   "gain_db": 4.92,
+   "text": "A new Grade A tower, ground plus fifteen. One long, clear floor plate. Possession in January."
+  },
+  {
+   "id": "l06_privilon_plans",
+   "section": "Privilon",
+   "file": "../narration-v4/l06_privilon_plans.mp3",
+   "at": 44.57,
+   "speech_from": 44.57,
+   "speech_to": 54.567,
+   "script_slot": [
+    44,
+    56
+   ],
+   "starts_late_by_s": 0.57,
+   "overruns_slot_by_s": 0,
+   "gain_db": 4.2,
+   "text": "We've drawn the floor three ways: two sixty, two eighty, and three hundred and one seats. Every chair counted from the drawing. So the floor you sign is the floor that grows with you."
+  },
+  {
+   "id": "l07_corporate_speed",
+   "section": "Corporate Avenue",
+   "file": "../narration-v4/l07_corporate_speed.mp3",
+   "at": 56.3,
+   "speech_from": 56.3,
+   "speech_to": 64.15,
+   "script_slot": [
+    56,
+    64
+   ],
+   "starts_late_by_s": 0.3,
+   "overruns_slot_by_s": 0.15,
+   "gain_db": 4.97,
+   "text": "Second, speed. Corporate Avenue in Chakala is a gated office campus, with two floors ready now. Ready the day you are."
+  },
+  {
+   "id": "l08_corporate_floors",
+   "section": "Corporate Avenue",
+   "file": "../narration-v4/l08_corporate_floors.mp3",
+   "at": 64.75,
+   "speech_from": 64.75,
+   "speech_to": 76.765,
+   "script_slot": [
+    64,
+    76
+   ],
+   "starts_late_by_s": 0.75,
+   "overruns_slot_by_s": 0.77,
+   "gain_db": 4.96,
+   "text": "The third and fourth floors. Six thousand two hundred square feet of carpet on each, twelve thousand four hundred together. Two floors means two teams with their own space, one stair apart, under one roof."
+  },
+  {
+   "id": "l09_corporate_metro",
+   "section": "Corporate Avenue",
+   "file": "../narration-v4/l09_corporate_metro.mp3",
+   "at": 77.365,
+   "speech_from": 77.365,
+   "speech_to": 81.883,
+   "script_slot": [
+    76,
+    81
+   ],
+   "starts_late_by_s": 1.36,
+   "overruns_slot_by_s": 0.88,
+   "gain_db": 4.11,
+   "text": "Chakala metro is eight hundred and fifty metres away. About eleven minutes on foot."
+  },
+  {
+   "id": "l10_a723_top",
+   "section": "723 Avenue",
+   "file": "../narration-v4/l10_a723_top.mp3",
+   "at": 82.883,
+   "speech_from": 82.883,
+   "speech_to": 91.147,
+   "script_slot": [
+    81,
+    90
+   ],
+   "starts_late_by_s": 1.88,
+   "overruns_slot_by_s": 1.15,
+   "gain_db": 5.09,
+   "text": "Third, the view from the top. At 723 Avenue, Flipkart takes the thirteenth and fourteenth floors, and the terrace above them comes with it."
+  },
+  {
+   "id": "l11_a723_terrace",
+   "section": "723 Avenue",
+   "file": "../narration-v4/l11_a723_terrace.mp3",
+   "at": 91.747,
+   "speech_from": 91.747,
+   "speech_to": 98.921,
+   "script_slot": [
+    90,
+    100
+   ],
+   "starts_late_by_s": 1.75,
+   "overruns_slot_by_s": 0,
+   "gain_db": 4.3,
+   "text": "A bare-shell floor, ready to fit out your way, with your own open-air breakout above it. A place to step outside between the hard hours."
+  },
+  {
+   "id": "l12_a723_metro",
+   "section": "723 Avenue",
+   "file": "../narration-v4/l12_a723_metro.mp3",
+   "at": 100.3,
+   "speech_from": 100.3,
+   "speech_to": 104.601,
+   "script_slot": [
+    100,
+    104
+   ],
+   "starts_late_by_s": 0.3,
+   "overruns_slot_by_s": 0.6,
+   "gain_db": 3.01,
+   "text": "Marol Naka metro is seven hundred metres away. About nine minutes on foot."
+  },
+  {
+   "id": "l13_close_choose",
+   "section": "Autopilot",
+   "file": "../narration-v4/l13_close_choose.mp3",
+   "at": 105.601,
+   "speech_from": 105.601,
+   "speech_to": 115.984,
+   "script_slot": [
+    104,
+    116
+   ],
+   "starts_late_by_s": 1.6,
+   "overruns_slot_by_s": 0,
+   "gain_db": 5.48,
+   "text": "Three buildings. The commute, the speed, the view from the top. You choose what matters most, and we'll show you every seat and every rupee before a single wall goes up."
+  },
+  {
+   "id": "l14_close_autopilot",
+   "section": "Autopilot",
+   "file": "../narration-v4/l14_close_autopilot.mp3",
+   "at": 116.584,
+   "speech_from": 116.584,
+   "speech_to": 131.618,
+   "script_slot": [
+    116,
+    126
+   ],
+   "starts_late_by_s": 0.58,
+   "overruns_slot_by_s": 5.62,
+   "gain_db": 4.25,
+   "text": "We're Autopilot. Fifteen thousand seats, twenty centres, seven cities. We pick the building first, plan it to the last chair, and then we run it like it's our own. Pehle vyavahar, phir vyapar. Relationship first, business next."
+  },
+  {
+   "id": "l15_close_together",
+   "section": "Autopilot",
+   "file": "../narration-v4/l15_close_together.mp3",
+   "at": 132.218,
+   "speech_from": 132.218,
+   "speech_to": 134.632,
+   "script_slot": [
+    126,
+    130
+   ],
+   "starts_late_by_s": 6.22,
+   "overruns_slot_by_s": 4.63,
+   "gain_db": 5.66,
+   "text": "Andheri East. Let's choose it together."
+  }
+ ],
+ "sfx": [
+  {
+   "id": "sfx_wind_clouds@5.50",
+   "file": "sfx/sfx_wind_clouds.mp3",
+   "at": 5.5,
+   "play_s": 12.0,
+   "fade_in": 2.5,
+   "fade_out": 3.0,
+   "level_lufs": -30,
+   "gain_db": -7.83,
+   "ducked_under_voice_db": -5.0,
+   "what": "wind through cloud, bridging out of black into the descent (0:08-0:20)",
+   "sync": "picture (script time)"
+  },
+  {
+   "id": "sfx_cloud_whoosh@7.60",
+   "file": "sfx/sfx_cloud_whoosh.mp3",
+   "at": 7.6,
+   "play_s": 4.0,
+   "fade_in": 0.0,
+   "fade_out": 0.8,
+   "level_lufs": -27,
+   "gain_db": -6.65,
+   "ducked_under_voice_db": -5.0,
+   "what": "cut from black into cloud at 0:08 (peak about 0.6 s in)",
+   "sync": "picture (script time)"
+  },
+  {
+   "id": "sfx_city_far@12.00",
+   "file": "sfx/sfx_city_far.mp3",
+   "at": 12.0,
+   "play_s": 16.0,
+   "fade_in": 4.0,
+   "fade_out": 3.0,
+   "level_lufs": -34,
+   "gain_db": 6.93,
+   "ducked_under_voice_db": -5.0,
+   "what": "Mumbai far below: the city, the airport, Andheri East",
+   "sync": "picture (script time)"
+  },
+  {
+   "id": "sfx_ui_tick@17.60",
+   "file": "sfx/sfx_ui_tick.mp3",
+   "at": 17.6,
+   "play_s": 0.48,
+   "fade_in": 0.0,
+   "fade_out": 0.05,
+   "level_lufs": -30,
+   "gain_db": -0.25,
+   "ducked_under_voice_db": 0.0,
+   "what": "pin 1 lands",
+   "sync": "picture (script time)"
+  },
+  {
+   "id": "sfx_ui_tick@18.30",
+   "file": "sfx/sfx_ui_tick.mp3",
+   "at": 18.3,
+   "play_s": 0.48,
+   "fade_in": 0.0,
+   "fade_out": 0.05,
+   "level_lufs": -30,
+   "gain_db": -0.25,
+   "ducked_under_voice_db": 0.0,
+   "what": "pin 2 lands",
+   "sync": "picture (script time)"
+  },
+  {
+   "id": "sfx_ui_tick@19.00",
+   "file": "sfx/sfx_ui_tick.mp3",
+   "at": 19.0,
+   "play_s": 0.48,
+   "fade_in": 0.0,
+   "fade_out": 0.05,
+   "level_lufs": -30,
+   "gain_db": -0.25,
+   "ducked_under_voice_db": 0.0,
+   "what": "pin 3 lands",
+   "sync": "picture (script time)"
+  },
+  {
+   "id": "sfx_metro_viaduct@19.50",
+   "file": "sfx/sfx_metro_viaduct.mp3",
+   "at": 19.5,
+   "play_s": 10.0,
+   "fade_in": 0.5,
+   "fade_out": 1.5,
+   "level_lufs": -32,
+   "gain_db": -19.13,
+   "ducked_under_voice_db": -5.0,
+   "what": "Line 1 train on the Marol Naka viaduct (pass peaks about 22-25.5 s)",
+   "sync": "picture (script time)"
+  },
+  {
+   "id": "sfx_riser@23.50",
+   "file": "sfx/sfx_riser.mp3",
+   "at": 23.5,
+   "play_s": 4.0,
+   "fade_in": 0.3,
+   "fade_out": 0.3,
+   "level_lufs": -30,
+   "gain_db": -1.59,
+   "ducked_under_voice_db": -5.0,
+   "what": "riser into Privilon (crests at 0:27)",
+   "sync": "picture (script time)"
+  },
+  {
+   "id": "sfx_city_far@27.00",
+   "file": "sfx/sfx_city_far.mp3",
+   "at": 27.0,
+   "play_s": 10.0,
+   "fade_in": 1.5,
+   "fade_out": 2.0,
+   "level_lufs": -36,
+   "gain_db": 4.93,
+   "ducked_under_voice_db": -5.0,
+   "what": "Privilon sunrise, the city waking",
+   "sync": "picture (script time)"
+  },
+  {
+   "id": "sfx_evening_traffic@37.00",
+   "file": "sfx/sfx_evening_traffic.mp3",
+   "at": 37.0,
+   "play_s": 7.5,
+   "fade_in": 1.0,
+   "fade_out": 1.5,
+   "level_lufs": -35,
+   "gain_db": -1.51,
+   "ducked_under_voice_db": -5.0,
+   "what": "Privilon at dusk",
+   "sync": "picture (script time)"
+  },
+  {
+   "id": "sfx_metro_viaduct@37.80",
+   "file": "sfx/sfx_metro_viaduct.mp3",
+   "at": 37.8,
+   "play_s": 7.0,
+   "fade_in": 0.5,
+   "fade_out": 1.5,
+   "level_lufs": -34,
+   "gain_db": -21.13,
+   "ducked_under_voice_db": -5.0,
+   "what": "distant train on the viaduct alongside Privilon at dusk",
+   "sync": "picture (script time)"
+  },
+  {
+   "id": "sfx_ui_tick_crisp@44.20",
+   "file": "sfx/sfx_ui_tick_crisp.mp3",
+   "at": 44.2,
+   "play_s": 0.045,
+   "fade_in": 0.0,
+   "fade_out": 0.015,
+   "level_lufs": -30,
+   "gain_db": -8.15,
+   "ducked_under_voice_db": 0.0,
+   "what": "CAD: Privilon plate draws in",
+   "sync": "picture (script time)"
+  },
+  {
+   "id": "sfx_counter_roll@46.32",
+   "file": "sfx/sfx_counter_roll.mp3",
+   "at": 46.317,
+   "play_s": 1.48,
+   "fade_in": 0.0,
+   "fade_out": 0.2,
+   "level_lufs": -35,
+   "gain_db": -13.91,
+   "ducked_under_voice_db": 0.0,
+   "what": "counter: 260 seats",
+   "sync": "voice: \"two sixty\" in l06_privilon_plans"
+  },
+  {
+   "id": "sfx_counter_roll@47.15",
+   "file": "sfx/sfx_counter_roll.mp3",
+   "at": 47.153,
+   "play_s": 1.48,
+   "fade_in": 0.0,
+   "fade_out": 0.2,
+   "level_lufs": -35,
+   "gain_db": -13.91,
+   "ducked_under_voice_db": 0.0,
+   "what": "counter: 280 seats",
+   "sync": "voice: \"two eighty\" in l06_privilon_plans"
+  },
+  {
+   "id": "sfx_counter_roll@48.08",
+   "file": "sfx/sfx_counter_roll.mp3",
+   "at": 48.082,
+   "play_s": 1.48,
+   "fade_in": 0.0,
+   "fade_out": 0.2,
+   "level_lufs": -35,
+   "gain_db": -13.91,
+   "ducked_under_voice_db": 0.0,
+   "what": "counter: 301 seats",
+   "sync": "voice: \"three hundred and one\" in l06_privilon_plans"
+  },
+  {
+   "id": "sfx_riser@52.50",
+   "file": "sfx/sfx_riser.mp3",
+   "at": 52.5,
+   "play_s": 4.0,
+   "fade_in": 0.3,
+   "fade_out": 0.3,
+   "level_lufs": -30,
+   "gain_db": -1.59,
+   "ducked_under_voice_db": -5.0,
+   "what": "riser into Corporate Avenue (crests at 0:56)",
+   "sync": "picture (script time)"
+  },
+  {
+   "id": "sfx_evening_traffic@56.00",
+   "file": "sfx/sfx_evening_traffic.mp3",
+   "at": 56.0,
+   "play_s": 8.0,
+   "fade_in": 1.0,
+   "fade_out": 1.5,
+   "level_lufs": -35,
+   "gain_db": -1.51,
+   "ducked_under_voice_db": -5.0,
+   "what": "drone along Guru Hargovindji Road and through the gates",
+   "sync": "picture (script time)"
+  },
+  {
+   "id": "sfx_ui_tick_crisp@64.20",
+   "file": "sfx/sfx_ui_tick_crisp.mp3",
+   "at": 64.2,
+   "play_s": 0.045,
+   "fade_in": 0.0,
+   "fade_out": 0.015,
+   "level_lufs": -30,
+   "gain_db": -8.15,
+   "ducked_under_voice_db": 0.0,
+   "what": "CAD: Corporate Avenue 3rd floor",
+   "sync": "picture (script time)"
+  },
+  {
+   "id": "sfx_ui_tick_crisp@65.26",
+   "file": "sfx/sfx_ui_tick_crisp.mp3",
+   "at": 65.257,
+   "play_s": 0.045,
+   "fade_in": 0.0,
+   "fade_out": 0.015,
+   "level_lufs": -30,
+   "gain_db": -8.15,
+   "ducked_under_voice_db": 0.0,
+   "what": "CAD: the 4th floor stacks on",
+   "sync": "voice: \"fourth\" in l08_corporate_floors"
+  },
+  {
+   "id": "sfx_counter_roll@66.25",
+   "file": "sfx/sfx_counter_roll.mp3",
+   "at": 66.253,
+   "play_s": 1.48,
+   "fade_in": 0.0,
+   "fade_out": 0.2,
+   "level_lufs": -35,
+   "gain_db": -13.91,
+   "ducked_under_voice_db": 0.0,
+   "what": "counter: 6,207 sq ft (said 6,200)",
+   "sync": "voice: \"six thousand two hundred\" in l08_corporate_floors"
+  },
+  {
+   "id": "sfx_counter_roll@69.67",
+   "file": "sfx/sfx_counter_roll.mp3",
+   "at": 69.666,
+   "play_s": 1.48,
+   "fade_in": 0.0,
+   "fade_out": 0.2,
+   "level_lufs": -35,
+   "gain_db": -13.91,
+   "ducked_under_voice_db": 0.0,
+   "what": "counter: 12,414 sq ft (said 12,400)",
+   "sync": "voice: \"twelve thousand four hundred\" in l08_corporate_floors"
+  },
+  {
+   "id": "sfx_ui_tick_crisp@76.20",
+   "file": "sfx/sfx_ui_tick_crisp.mp3",
+   "at": 76.2,
+   "play_s": 0.045,
+   "fade_in": 0.0,
+   "fade_out": 0.015,
+   "level_lufs": -30,
+   "gain_db": -8.15,
+   "ducked_under_voice_db": 0.0,
+   "what": "map: the walk to Chakala metro",
+   "sync": "picture (script time)"
+  },
+  {
+   "id": "sfx_riser@77.50",
+   "file": "sfx/sfx_riser.mp3",
+   "at": 77.5,
+   "play_s": 4.0,
+   "fade_in": 0.3,
+   "fade_out": 0.3,
+   "level_lufs": -30,
+   "gain_db": -1.59,
+   "ducked_under_voice_db": -5.0,
+   "what": "riser into 723 Avenue (crests at 1:21)",
+   "sync": "picture (script time)"
+  },
+  {
+   "id": "sfx_counter_roll@78.23",
+   "file": "sfx/sfx_counter_roll.mp3",
+   "at": 78.23,
+   "play_s": 1.48,
+   "fade_in": 0.0,
+   "fade_out": 0.2,
+   "level_lufs": -35,
+   "gain_db": -13.91,
+   "ducked_under_voice_db": 0.0,
+   "what": "counter: 850 m",
+   "sync": "voice: \"eight hundred and fifty\" in l09_corporate_metro"
+  },
+  {
+   "id": "sfx_wind_clouds@85.00",
+   "file": "sfx/sfx_wind_clouds.mp3",
+   "at": 85.0,
+   "play_s": 6.0,
+   "fade_in": 2.0,
+   "fade_out": 2.0,
+   "level_lufs": -37,
+   "gain_db": -14.83,
+   "ducked_under_voice_db": -5.0,
+   "what": "high air over the 723 terrace",
+   "sync": "picture (script time)"
+  },
+  {
+   "id": "sfx_ui_tick_crisp@90.20",
+   "file": "sfx/sfx_ui_tick_crisp.mp3",
+   "at": 90.2,
+   "play_s": 0.045,
+   "fade_in": 0.0,
+   "fade_out": 0.015,
+   "level_lufs": -30,
+   "gain_db": -8.15,
+   "ducked_under_voice_db": 0.0,
+   "what": "CAD: 723 Avenue 13th floor",
+   "sync": "picture (script time)"
+  },
+  {
+   "id": "sfx_ui_tick_crisp@94.81",
+   "file": "sfx/sfx_ui_tick_crisp.mp3",
+   "at": 94.808,
+   "play_s": 0.045,
+   "fade_in": 0.0,
+   "fade_out": 0.015,
+   "level_lufs": -30,
+   "gain_db": -8.15,
+   "ducked_under_voice_db": 0.0,
+   "what": "CAD: terrace zone \"Flipkart breakout\" marked",
+   "sync": "voice: \"open-air breakout\" in l11_a723_terrace"
+  },
+  {
+   "id": "sfx_ui_tick_crisp@100.20",
+   "file": "sfx/sfx_ui_tick_crisp.mp3",
+   "at": 100.2,
+   "play_s": 0.045,
+   "fade_in": 0.0,
+   "fade_out": 0.015,
+   "level_lufs": -30,
+   "gain_db": -8.15,
+   "ducked_under_voice_db": 0.0,
+   "what": "map: the walk to Marol Naka",
+   "sync": "picture (script time)"
+  },
+  {
+   "id": "sfx_counter_roll@101.28",
+   "file": "sfx/sfx_counter_roll.mp3",
+   "at": 101.281,
+   "play_s": 1.48,
+   "fade_in": 0.0,
+   "fade_out": 0.2,
+   "level_lufs": -35,
+   "gain_db": -13.91,
+   "ducked_under_voice_db": 0.0,
+   "what": "counter: 700 m",
+   "sync": "voice: \"seven hundred\" in l12_a723_metro"
+  },
+  {
+   "id": "sfx_evening_traffic@104.00",
+   "file": "sfx/sfx_evening_traffic.mp3",
+   "at": 104.0,
+   "play_s": 12.0,
+   "fade_in": 2.0,
+   "fade_out": 2.5,
+   "level_lufs": -34,
+   "gain_db": -0.51,
+   "ducked_under_voice_db": -5.0,
+   "what": "dusk pull-back over all three pins",
+   "sync": "picture (script time)"
+  },
+  {
+   "id": "sfx_metro_viaduct@106.50",
+   "file": "sfx/sfx_metro_viaduct.mp3",
+   "at": 106.5,
+   "play_s": 8.0,
+   "fade_in": 1.0,
+   "fade_out": 2.0,
+   "level_lufs": -36,
+   "gain_db": -23.13,
+   "ducked_under_voice_db": -5.0,
+   "what": "a distant evening train in the pull-back",
+   "sync": "picture (script time)"
+  },
+  {
+   "id": "sfx_logo_impact@116.00",
+   "file": "sfx/sfx_logo_impact.mp3",
+   "at": 116.0,
+   "play_s": 5.0,
+   "fade_in": 0.0,
+   "fade_out": 1.0,
+   "level_lufs": -25,
+   "gain_db": -9.5,
+   "ducked_under_voice_db": -5.0,
+   "what": "Autopilot x Flipkart lockup (impact, shimmer about 1.5 s in)",
+   "sync": "picture (script time)"
+  },
+  {
+   "id": "sfx_counter_roll@117.74",
+   "file": "sfx/sfx_counter_roll.mp3",
+   "at": 117.739,
+   "play_s": 0.9,
+   "fade_in": 0.0,
+   "fade_out": 0.2,
+   "level_lufs": -37,
+   "gain_db": -15.91,
+   "ducked_under_voice_db": 0.0,
+   "what": "counter: 15,000+ seats",
+   "sync": "voice: \"fifteen thousand\" in l14_close_autopilot"
+  },
+  {
+   "id": "sfx_counter_roll@119.20",
+   "file": "sfx/sfx_counter_roll.mp3",
+   "at": 119.202,
+   "play_s": 0.9,
+   "fade_in": 0.0,
+   "fade_out": 0.2,
+   "level_lufs": -37,
+   "gain_db": -15.91,
+   "ducked_under_voice_db": 0.0,
+   "what": "counter: 20+ centres",
+   "sync": "voice: \"twenty\" in l14_close_autopilot"
+  },
+  {
+   "id": "sfx_counter_roll@120.17",
+   "file": "sfx/sfx_counter_roll.mp3",
+   "at": 120.165,
+   "play_s": 0.9,
+   "fade_in": 0.0,
+   "fade_out": 0.2,
+   "level_lufs": -37,
+   "gain_db": -15.91,
+   "ducked_under_voice_db": 0.0,
+   "what": "counter: 7 cities",
+   "sync": "voice: \"seven\" in l14_close_autopilot"
+  }
+ ],
+ "vo_speech_total_s": 117.54
+}

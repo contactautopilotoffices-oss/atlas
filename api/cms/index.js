@@ -896,6 +896,12 @@ R['POST layout-feedback'] = async (req,res,b) => {
   await store.insert('broker_submissions',{link_slug:'flipkart-andheri',property_id:b.property,kind:'update',broker_name:b.reviewer.trim(),payload:{type:'layout-feedback',variant:b.variant,floor:b.floor,roomId:b.roomId,room:b.room},source_note:[b.variant,b.floor,b.room].join(' · '),note:b.note.trim()});
   return {saved:true};
 };
+R['GET layout-feedback'] = async (req,res,b,url) => {
+  const property = clip(url.get('property') || '', 60), variant = clip(url.get('variant') || '', 60), roomId = clip(url.get('roomId') || '', 160);
+  if (!property || !variant) fail(400, 'Property and layout are required.');
+  const rows = await store.select('broker_submissions', { eq: { link_slug: 'flipkart-andheri', property_id: property }, order: 'created_at.desc', limit: 200 });
+  return { comments: rows.filter(r => r.payload?.type === 'layout-feedback' && r.payload?.variant === variant && (!roomId || r.payload?.roomId === roomId)).map(r => ({ name:r.broker_name || 'Reviewer', room:r.payload.room, roomId:r.payload.roomId, floor:r.payload.floor, note:r.note, createdAt:r.created_at })) };
+};
 /* ------------------------------------------------------------ handler --- */
 module.exports = async (req, res) => {
   try {

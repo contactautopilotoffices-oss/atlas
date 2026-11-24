@@ -1,0 +1,4 @@
+# Superseded build outputs (kept locally, not versioned)
+out_prev/
+out_variant_prev/
+__pycache__/

@@ -1,0 +1,198 @@
+{
+ "file": "05-corporate_1.mp3",
+ "duration_s": 6.548,
+ "words": [
+  {
+   "word": "Corporate",
+   "start": 0.0,
+   "end": 0.499
+  },
+  {
+   "word": "Avenue,",
+   "start": 0.534,
+   "end": 0.952
+  },
+  {
+   "word": "in",
+   "start": 0.987,
+   "end": 1.08
+  },
+  {
+   "word": "Chakala,",
+   "start": 1.138,
+   "end": 1.683
+  },
+  {
+   "word": "is",
+   "start": 1.707,
+   "end": 1.8
+  },
+  {
+   "word": "a",
+   "start": 1.846,
+   "end": 1.869
+  },
+  {
+   "word": "gated",
+   "start": 1.939,
+   "end": 2.264
+  },
+  {
+   "word": "office",
+   "start": 2.31,
+   "end": 2.577
+  },
+  {
+   "word": "campus.",
+   "start": 2.612,
+   "end": 3.204
+  },
+  {
+   "word": "It",
+   "start": 3.518,
+   "end": 3.646
+  },
+  {
+   "word": "is",
+   "start": 3.692,
+   "end": 3.773
+  },
+  {
+   "word": "already",
+   "start": 3.82,
+   "end": 4.145
+  },
+  {
+   "word": "furnished,",
+   "start": 4.191,
+   "end": 4.644
+  },
+  {
+   "word": "and",
+   "start": 4.667,
+   "end": 4.807
+  },
+  {
+   "word": "ready",
+   "start": 4.865,
+   "end": 5.074
+  },
+  {
+   "word": "to",
+   "start": 5.132,
+   "end": 5.201
+  },
+  {
+   "word": "move",
+   "start": 5.271,
+   "end": 5.48
+  },
+  {
+   "word": "into",
+   "start": 5.515,
+   "end": 5.689
+  },
+  {
+   "word": "today.",
+   "start": 5.759,
+   "end": 6.548
+  }
+ ],
+ "normalized_words": [
+  {
+   "word": "Corporate",
+   "start": 0.046,
+   "end": 0.499
+  },
+  {
+   "word": "Avenue,",
+   "start": 0.534,
+   "end": 0.952
+  },
+  {
+   "word": "in",
+   "start": 0.987,
+   "end": 1.08
+  },
+  {
+   "word": "Chakala,",
+   "start": 1.138,
+   "end": 1.683
+  },
+  {
+   "word": "is",
+   "start": 1.707,
+   "end": 1.8
+  },
+  {
+   "word": "a",
+   "start": 1.846,
+   "end": 1.869
+  },
+  {
+   "word": "gated",
+   "start": 1.939,
+   "end": 2.264
+  },
+  {
+   "word": "office",
+   "start": 2.31,
+   "end": 2.577
+  },
+  {
+   "word": "campus.",
+   "start": 2.612,
+   "end": 3.204
+  },
+  {
+   "word": "It",
+   "start": 3.518,
+   "end": 3.646
+  },
+  {
+   "word": "is",
+   "start": 3.692,
+   "end": 3.773
+  },
+  {
+   "word": "already",
+   "start": 3.82,
+   "end": 4.145
+  },
+  {
+   "word": "furnished,",
+   "start": 4.191,
+   "end": 4.644
+  },
+  {
+   "word": "and",
+   "start": 4.667,
+   "end": 4.807
+  },
+  {
+   "word": "ready",
+   "start": 4.865,
+   "end": 5.074
+  },
+  {
+   "word": "to",
+   "start": 5.132,
+   "end": 5.201
+  },
+  {
+   "word": "move",
+   "start": 5.271,
+   "end": 5.48
+  },
+  {
+   "word": "into",
+   "start": 5.515,
+   "end": 5.689
+  },
+  {
+   "word": "today.",
+   "start": 5.759,
+   "end": 6.188
+  }
+ ]
+}

@@ -1,0 +1,69 @@
+{
+ "voice": {
+  "id": "Z1oY2Vw237R6ALt5CZcD",
+  "name": "Alka S - Natural, Warm, Ecom-Ready",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+   "stability": 0.5,
+   "similarity_boost": 0.75,
+   "style": 0.2,
+   "use_speaker_boost": true,
+   "speed": 1.05
+  }
+ },
+ "chosen": "founder, 23 Nov 2026, from three auditions",
+ "blocks": [
+  {
+   "id": "open",
+   "text": "Flipkart is choosing its next home in Andheri East. Three buildings made the shortlist. Each one solves a different problem."
+  },
+  {
+   "id": "marol",
+   "text": "Two of them sit at Marol Naka, where Metro Line One meets Line Three. The third is a short ride west, in Chakala."
+  },
+  {
+   "id": "privilon_1",
+   "text": "Privilon is right beside Marol Naka metro. A hundred and forty metres from the station steps. Two minutes on foot."
+  },
+  {
+   "id": "privilon_2",
+   "text": "A new Grade A tower, ground plus fifteen, with one long, clear floor plate."
+  },
+  {
+   "id": "privilon_3",
+   "text": "On one floor, the plan works at two hundred and sixty, two hundred and eighty, or three hundred and one seats, so the floor can grow with the team."
+  },
+  {
+   "id": "corporate_1",
+   "text": "Corporate Avenue, in Chakala, is a gated office campus. It is already furnished, and ready to move into today."
+  },
+  {
+   "id": "corporate_2",
+   "text": "Two floors, the third and the fourth. Twelve thousand four hundred square feet of carpet each. Two plans per floor let separate teams keep their own space, one stair apart."
+  },
+  {
+   "id": "corporate_3",
+   "text": "Western Express Highway metro is twelve minutes on foot."
+  },
+  {
+   "id": "a723_1",
+   "text": "723 Avenue gives Flipkart the top of a new building: the thirteenth and fourteenth floors, with the open terrace above."
+  },
+  {
+   "id": "a723_2",
+   "text": "Inside, a bare-shell floor ready to fit out Flipkart's way. And the terrace comes with it: Flipkart's own place to step out between focused hours."
+  },
+  {
+   "id": "a723_3",
+   "text": "Marol Naka metro is about ten minutes away."
+  },
+  {
+   "id": "close_1",
+   "text": "Three buildings. Three ways for Flipkart's teams to work together."
+  },
+  {
+   "id": "close_2",
+   "text": "Walk through each one, compare the plans, and tell us what matters. We'll take it from there."
+  }
+ ]
+}

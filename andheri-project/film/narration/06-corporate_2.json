@@ -1,0 +1,308 @@
+{
+ "file": "06-corporate_2.mp3",
+ "duration_s": 10.913,
+ "words": [
+  {
+   "word": "Two",
+   "start": 0.0,
+   "end": 0.221
+  },
+  {
+   "word": "floors,",
+   "start": 0.279,
+   "end": 0.731
+  },
+  {
+   "word": "the",
+   "start": 0.824,
+   "end": 0.94
+  },
+  {
+   "word": "third",
+   "start": 1.01,
+   "end": 1.3
+  },
+  {
+   "word": "and",
+   "start": 1.37,
+   "end": 1.509
+  },
+  {
+   "word": "the",
+   "start": 1.567,
+   "end": 1.637
+  },
+  {
+   "word": "fourth.",
+   "start": 1.683,
+   "end": 2.171
+  },
+  {
+   "word": "Twelve",
+   "start": 2.589,
+   "end": 2.926
+  },
+  {
+   "word": "thousand",
+   "start": 2.972,
+   "end": 3.355
+  },
+  {
+   "word": "four",
+   "start": 3.437,
+   "end": 3.622
+  },
+  {
+   "word": "hundred",
+   "start": 3.669,
+   "end": 3.936
+  },
+  {
+   "word": "square",
+   "start": 3.971,
+   "end": 4.261
+  },
+  {
+   "word": "feet",
+   "start": 4.296,
+   "end": 4.47
+  },
+  {
+   "word": "of",
+   "start": 4.516,
+   "end": 4.574
+  },
+  {
+   "word": "carpet",
+   "start": 4.656,
+   "end": 5.004
+  },
+  {
+   "word": "each.",
+   "start": 5.074,
+   "end": 5.538
+  },
+  {
+   "word": "Two",
+   "start": 6.026,
+   "end": 6.2
+  },
+  {
+   "word": "plans",
+   "start": 6.269,
+   "end": 6.548
+  },
+  {
+   "word": "per",
+   "start": 6.606,
+   "end": 6.757
+  },
+  {
+   "word": "floor",
+   "start": 6.827,
+   "end": 7.047
+  },
+  {
+   "word": "let",
+   "start": 7.105,
+   "end": 7.233
+  },
+  {
+   "word": "separate",
+   "start": 7.291,
+   "end": 7.697
+  },
+  {
+   "word": "teams",
+   "start": 7.732,
+   "end": 7.988
+  },
+  {
+   "word": "keep",
+   "start": 8.057,
+   "end": 8.266
+  },
+  {
+   "word": "their",
+   "start": 8.313,
+   "end": 8.464
+  },
+  {
+   "word": "own",
+   "start": 8.51,
+   "end": 8.626
+  },
+  {
+   "word": "space,",
+   "start": 8.673,
+   "end": 9.149
+  },
+  {
+   "word": "one",
+   "start": 9.346,
+   "end": 9.567
+  },
+  {
+   "word": "stair",
+   "start": 9.601,
+   "end": 9.81
+  },
+  {
+   "word": "apart.",
+   "start": 9.857,
+   "end": 10.913
+  }
+ ],
+ "normalized_words": [
+  {
+   "word": "Two",
+   "start": 0.023,
+   "end": 0.221
+  },
+  {
+   "word": "floors,",
+   "start": 0.279,
+   "end": 0.731
+  },
+  {
+   "word": "the",
+   "start": 0.824,
+   "end": 0.94
+  },
+  {
+   "word": "third",
+   "start": 1.01,
+   "end": 1.3
+  },
+  {
+   "word": "and",
+   "start": 1.37,
+   "end": 1.509
+  },
+  {
+   "word": "the",
+   "start": 1.567,
+   "end": 1.637
+  },
+  {
+   "word": "fourth.",
+   "start": 1.683,
+   "end": 2.171
+  },
+  {
+   "word": "Twelve",
+   "start": 2.589,
+   "end": 2.926
+  },
+  {
+   "word": "thousand",
+   "start": 2.972,
+   "end": 3.355
+  },
+  {
+   "word": "four",
+   "start": 3.437,
+   "end": 3.622
+  },
+  {
+   "word": "hundred",
+   "start": 3.669,
+   "end": 3.936
+  },
+  {
+   "word": "square",
+   "start": 3.971,
+   "end": 4.261
+  },
+  {
+   "word": "feet",
+   "start": 4.296,
+   "end": 4.47
+  },
+  {
+   "word": "of",
+   "start": 4.516,
+   "end": 4.574
+  },
+  {
+   "word": "carpet",
+   "start": 4.656,
+   "end": 5.004
+  },
+  {
+   "word": "each.",
+   "start": 5.074,
+   "end": 5.538
+  },
+  {
+   "word": "Two",
+   "start": 6.026,
+   "end": 6.2
+  },
+  {
+   "word": "plans",
+   "start": 6.269,
+   "end": 6.548
+  },
+  {
+   "word": "per",
+   "start": 6.606,
+   "end": 6.757
+  },
+  {
+   "word": "floor",
+   "start": 6.827,
+   "end": 7.047
+  },
+  {
+   "word": "let",
+   "start": 7.105,
+   "end": 7.233
+  },
+  {
+   "word": "separate",
+   "start": 7.291,
+   "end": 7.697
+  },
+  {
+   "word": "teams",
+   "start": 7.732,
+   "end": 7.988
+  },
+  {
+   "word": "keep",
+   "start": 8.057,
+   "end": 8.266
+  },
+  {
+   "word": "their",
+   "start": 8.313,
+   "end": 8.464
+  },
+  {
+   "word": "own",
+   "start": 8.51,
+   "end": 8.626
+  },
+  {
+   "word": "space,",
+   "start": 8.673,
+   "end": 9.149
+  },
+  {
+   "word": "one",
+   "start": 9.346,
+   "end": 9.567
+  },
+  {
+   "word": "stair",
+   "start": 9.601,
+   "end": 9.81
+  },
+  {
+   "word": "apart.",
+   "start": 9.857,
+   "end": 10.333
+  }
+ ]
+}

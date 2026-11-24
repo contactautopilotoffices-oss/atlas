@@ -1,0 +1,67 @@
+[
+ {
+  "id": "route_privilon",
+  "name": "Privilon",
+  "station": "Marol Naka",
+  "exit": "NE stairs, street level",
+  "measured_m": 80,
+  "stairs_m": 19,
+  "measured_from_stair_top_m": 98,
+  "measured_from_platform_centre_m": 162,
+  "canonical_m": 140,
+  "canonical_min": 2,
+  "door_connector_m": 10.4,
+  "osm_ways": [
+   666061008,
+   1103453738
+  ],
+  "gap_joins_used": 0,
+  "method": "Dijkstra on walkable OSM highway ways (Overpass, 23 Nov 2026); drawn and measured from the foot of the station stairs to the door; private campus roads only inside the destination campus",
+  "source": "\u00a9 OpenStreetMap contributors (ODbL)"
+ },
+ {
+  "id": "route_corporate",
+  "name": "Corporate Avenue",
+  "station": "Chakala (J B Nagar)",
+  "exit": "W1 stairs, street level",
+  "measured_m": 908,
+  "stairs_m": 5,
+  "measured_from_stair_top_m": 913,
+  "measured_from_platform_centre_m": 989,
+  "canonical_m": 850,
+  "canonical_min": 11,
+  "door_connector_m": 34.4,
+  "osm_ways": [
+   183286150,
+   665877159,
+   681314336,
+   1124942666
+  ],
+  "gap_joins_used": 1,
+  "method": "Dijkstra on walkable OSM highway ways (Overpass, 23 Nov 2026); drawn and measured from the foot of the station stairs to the door; private campus roads only inside the destination campus",
+  "source": "\u00a9 OpenStreetMap contributors (ODbL)"
+ },
+ {
+  "id": "route_723",
+  "name": "723 Avenue",
+  "station": "Marol Naka",
+  "exit": "NE stairs, street level",
+  "measured_m": 698,
+  "stairs_m": 19,
+  "measured_from_stair_top_m": 717,
+  "measured_from_platform_centre_m": 780,
+  "canonical_m": 700,
+  "canonical_min": 9,
+  "door_connector_m": 21.7,
+  "osm_ways": [
+   102523206,
+   666061008,
+   1103453738,
+   1152599022,
+   1152599024
+  ],
+  "gap_joins_used": 0,
+  "method": "Dijkstra on walkable OSM highway ways (Overpass, 23 Nov 2026); drawn and measured from the foot of the station stairs to the door; private campus roads only inside the destination campus",
+  "source": "\u00a9 OpenStreetMap contributors (ODbL)"
+ }
+]

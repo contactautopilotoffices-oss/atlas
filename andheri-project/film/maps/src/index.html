@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Andheri film maps</title>
+<meta name="viewport" content="width=1920,height=1080">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.10.0/mapbox-gl.js"></script>
+<script src="/config.js"></script>
+<link href="style.css" rel="stylesheet">
+</head>
+<body>
+<div id="stage">
+  <div id="map"></div>
+  <canvas id="clouds"></canvas>
+  <canvas id="dots"></canvas>
+  <div id="grade"></div>
+  <div id="ov"></div>
+  <div id="credit"><img src="mapbox-logo.svg" alt="Mapbox"><span></span></div>
+</div>
+<svg width="0" height="0" style="position:absolute">
+  <defs id="filters"></defs>
+</svg>
+<script type="module" src="app.js"></script>
+</body>
+</html>

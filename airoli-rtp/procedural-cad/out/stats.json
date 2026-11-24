@@ -1,0 +1,144 @@
+{
+ "walls": 512,
+ "wall_m": 1280.7,
+ "walls_typed_from_cad": 487,
+ "walls_typed_from_cad_m": 1196.7,
+ "walls_typed_from_cad_high_conf": 328,
+ "walls_typed_from_cad_high_conf_m": 731.3,
+ "walls_unknown": 25,
+ "walls_unknown_m": 83.9,
+ "by_type": {
+  "pop_gypsum": {
+   "n": 71,
+   "m": 357.0,
+   "rules": {
+    "R09-fitout-partition": 71
+   }
+  },
+  "curtain_wall": {
+   "n": 43,
+   "m": 257.9,
+   "rules": {
+    "R02-structural-glazing": 43
+   }
+  },
+  "brick_block": {
+   "n": 172,
+   "m": 227.1,
+   "rules": {
+    "R10-masonry-hatched": 123,
+    "R12-masonry-unhatched": 13,
+    "R11-masonry-fitout": 36
+   }
+  },
+  "glass_partition": {
+   "n": 58,
+   "m": 150.9,
+   "rules": {
+    "R07-glass-partition": 58
+   }
+  },
+  "unknown": {
+   "n": 25,
+   "m": 83.9,
+   "rules": {
+    "R13-thin-wall-line": 4,
+    "R14-wall-on-furniture-layer": 21
+   }
+  },
+  "acp": {
+   "n": 24,
+   "m": 59.8,
+   "rules": {
+    "R03-acp": 24
+   }
+  },
+  "window_glazing": {
+   "n": 66,
+   "m": 54.6,
+   "rules": {
+    "R04-window": 66
+   }
+  },
+  "panel_partial_height": {
+   "n": 39,
+   "m": 44.7,
+   "rules": {
+    "R08-partial-height-panel": 39
+   }
+  },
+  "railing": {
+   "n": 10,
+   "m": 27.6,
+   "rules": {
+    "R05-railing": 10
+   }
+  },
+  "rcc": {
+   "n": 4,
+   "m": 17.2,
+   "rules": {
+    "R06-rcc-fins": 4
+   }
+  }
+ },
+ "by_rule": {
+  "R02-structural-glazing": 43,
+  "R10-masonry-hatched": 123,
+  "R07-glass-partition": 58,
+  "R12-masonry-unhatched": 13,
+  "R04-window": 66,
+  "R03-acp": 24,
+  "R05-railing": 10,
+  "R06-rcc-fins": 4,
+  "R13-thin-wall-line": 4,
+  "R14-wall-on-furniture-layer": 21,
+  "R09-fitout-partition": 71,
+  "R08-partial-height-panel": 39,
+  "R11-masonry-fitout": 36
+ },
+ "openings": 97,
+ "openings_typed_from_cad": 97,
+ "openings_by_kind": {
+  "glass_door": 54,
+  "solid_door": 21,
+  "cubicle_door": 22
+ },
+ "openings_hosted": 58,
+ "openings_hosted_both_sides": 39,
+ "openings_with_header": 76,
+ "headers_by_kind": {
+  "pop_bulkhead": 35,
+  "lintel_masonry": 9,
+  "glass_transom": 32,
+  "none_open_above": 21
+ },
+ "frames_from_cad": 86,
+ "door_width_sources": {
+  "opening_width_m": {
+   "default": 8,
+   "cad": 89
+  },
+  "frame_outside_width_m": {
+   "default": 13,
+   "cad": 84
+  },
+  "clear_width_m": {
+   "default": 13,
+   "cad": 84
+  },
+  "leaf_width_m": {
+   "cad": 97
+  }
+ },
+ "doors_with_nominal_from_name": 12,
+ "arches": 0,
+ "columns": 71,
+ "columns_rcc_from_hatch": 65,
+ "attributes": {
+  "default": 2356,
+  "cad": 3066
+ },
+ "dropped_pieces": 9,
+ "overrides_applied": []
+}

@@ -1,0 +1,151 @@
+{
+ "composition_plan": {
+  "positive_global_styles": [
+   "premium cinematic underscore for a corporate real-estate film",
+   "soft felt piano",
+   "warm string ensemble",
+   "gentle steady pulse from softly repeated muted piano and a low warm synth pulse",
+   "80 BPM",
+   "D major",
+   "elegant, assured, modern, warm",
+   "instrumental",
+   "restrained dynamics that leave room for a voice-over"
+  ],
+  "negative_global_styles": [
+   "vocals",
+   "choir",
+   "humming",
+   "drum kit",
+   "snare",
+   "hi-hats",
+   "claps",
+   "EDM",
+   "trap",
+   "dubstep",
+   "trailer hits",
+   "braams",
+   "cheesy corporate stock music",
+   "ukulele",
+   "whistling",
+   "glockenspiel",
+   "electric guitar",
+   "lead synth",
+   "bombastic brass"
+  ],
+  "sections": [
+   {
+    "section_name": "Under black",
+    "positive_local_styles": [
+     "a single low felt piano note, struck once, left to ring",
+     "near silence around it",
+     "the faintest warm air of a pad underneath"
+    ],
+    "negative_local_styles": [
+     "melody",
+     "strings",
+     "pulse",
+     "chords"
+    ],
+    "duration_ms": 8000,
+    "lines": []
+   },
+   {
+    "section_name": "Through the clouds to Marol Naka",
+    "positive_local_styles": [
+     "airy high strings and a soft pad swell in slowly",
+     "the gentle pulse begins, very soft",
+     "a sense of descending and arriving",
+     "sparse"
+    ],
+    "negative_local_styles": [
+     "loud",
+     "busy",
+     "drums"
+    ],
+    "duration_ms": 19000,
+    "lines": []
+   },
+   {
+    "section_name": "Privilon",
+    "positive_local_styles": [
+     "first subtle lift",
+     "felt piano motif over warm strings",
+     "gentle steady pulse",
+     "sunrise warmth",
+     "calm forward motion under the voice"
+    ],
+    "negative_local_styles": [
+     "loud",
+     "dramatic",
+     "busy"
+    ],
+    "duration_ms": 29000,
+    "lines": []
+   },
+   {
+    "section_name": "Corporate Avenue",
+    "positive_local_styles": [
+     "a second subtle lift, slightly brighter",
+     "pulse a touch fuller",
+     "warm cello line joins the piano",
+     "purposeful, clear"
+    ],
+    "negative_local_styles": [
+     "loud",
+     "dramatic",
+     "tension"
+    ],
+    "duration_ms": 25000,
+    "lines": []
+   },
+   {
+    "section_name": "723 Avenue",
+    "positive_local_styles": [
+     "a third lift, a sense of height and open air",
+     "strings open into a higher register",
+     "piano motif in a higher octave",
+     "still restrained"
+    ],
+    "negative_local_styles": [
+     "loud",
+     "epic",
+     "tension"
+    ],
+    "duration_ms": 23000,
+    "lines": []
+   },
+   {
+    "section_name": "Autopilot",
+    "positive_local_styles": [
+     "piano and full warm strings swell with quiet confidence",
+     "pulse steady and full",
+     "heartfelt, assured, building to the resolve"
+    ],
+    "negative_local_styles": [
+     "bombastic",
+     "epic trailer",
+     "percussion hits"
+    ],
+    "duration_ms": 22000,
+    "lines": []
+   },
+   {
+    "section_name": "Resolve",
+    "positive_local_styles": [
+     "a confident resolve to the tonic D major chord",
+     "one last low piano note",
+     "long natural decay into silence"
+    ],
+    "negative_local_styles": [
+     "new theme",
+     "build",
+     "pulse"
+    ],
+    "duration_ms": 14000,
+    "lines": []
+   }
+  ]
+ },
+ "model_id": "music_v1",
+ "respect_sections_durations": true
+}

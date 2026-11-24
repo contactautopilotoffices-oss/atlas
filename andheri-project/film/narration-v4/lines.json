@@ -1,0 +1,511 @@
+{
+ "source": "andheri-project/film/SCRIPT.md, draft 4 (23 Nov 2026), the narrator column, word for word",
+ "note": "text = the script line exactly; tts = what was sent to ElevenLabs (respellings only, same words); terms = key words the speech-to-text transcript must contain (each group passes if any alternative is found)",
+ "lines": [
+  {
+   "id": "l01_open",
+   "slot": [
+    0,
+    8
+   ],
+   "section": "Open",
+   "text": "Let's not start with a list of buildings. Let's start with how your people get to work.",
+   "tts": "Let's not start with a list of buildings. <break time=\"0.6s\" /> Let's start with how your people get to work.",
+   "terms": [
+    [
+     "list of buildings"
+    ],
+    [
+     "your people"
+    ],
+    [
+     "get to work"
+    ]
+   ]
+  },
+  {
+   "id": "l02_descent",
+   "slot": [
+    8,
+    20
+   ],
+   "section": "Open",
+   "text": "Flipkart asked us for space in Andheri East. We walked the micro-market, checked every building against the deck, and brought it down to three. Each one answers a different question.",
+   "tts": "Flipkart asked us for space in Andheri East. We walked the micro-market, checked every building against the deck, and brought it down to three. Each one answers a different question.",
+   "terms": [
+    [
+     "flipkart"
+    ],
+    [
+     "andheri east"
+    ],
+    [
+     "micro market",
+     "micromarket"
+    ],
+    [
+     "against the deck"
+    ],
+    [
+     "down to three",
+     "down to 3"
+    ],
+    [
+     "different question"
+    ]
+   ]
+  },
+  {
+   "id": "l03_marol",
+   "slot": [
+    20,
+    27
+   ],
+   "section": "Open",
+   "text": "Two of them are at Marol Naka, where Metro Line One meets Line Three. The third is two stops west, in Chakala.",
+   "tts": "Two of them are at Marol Naka, where Metro Line One meets Line Three. The third is two stops west, in Chakala.",
+   "terms": [
+    [
+     "two of them",
+     "2 of them"
+    ],
+    [
+     "marol naka"
+    ],
+    [
+     "line one",
+     "line 1"
+    ],
+    [
+     "line three",
+     "line 3"
+    ],
+    [
+     "two stops west",
+     "2 stops west"
+    ],
+    [
+     "chakala"
+    ]
+   ]
+  },
+  {
+   "id": "l04_privilon_commute",
+   "slot": [
+    27,
+    37
+   ],
+   "section": "Privilon",
+   "text": "First, the commute. Privilon stands right beside Marol Naka station. A hundred and forty metres from the station steps. Two minutes on foot, in any weather.",
+   "tts": "First, the commute. Priv-i-lon stands right beside Marol Naka station. A hundred and forty metres from the station steps. Two minutes on foot, in any weather.",
+   "terms": [
+    [
+     "the commute"
+    ],
+    [
+     "privilon",
+     "privillon",
+     "privi lon",
+     "pri vi lon"
+    ],
+    [
+     "marol naka"
+    ],
+    [
+     "a hundred and forty",
+     "one hundred and forty",
+     "hundred and forty",
+     "140"
+    ],
+    [
+     "metres",
+     "meters"
+    ],
+    [
+     "two minutes",
+     "2 minutes"
+    ],
+    [
+     "any weather"
+    ]
+   ],
+   "term_notes": "Take 1 (plain spelling) was heard as 'Breville on' (and 'Merrill Naka'). Takes 2 and 3 send the respellings 'Pri-vi-lon' and 'Priv-i-lon' and are heard as 'Privillon': the same sounds as Privilon with a doubled l, so it is accepted, as AUDIO_NOTES accepted 'anyone' for 'any one'. Speech-to-text does not know the name, so it never spells it 'Privilon'; in the full mix it wrote 'Previlleon'. Take 3 is used (tighter, 8.7 s in the 10 s slot)."
+  },
+  {
+   "id": "l05_privilon_tower",
+   "slot": [
+    37,
+    44
+   ],
+   "section": "Privilon",
+   "text": "A new Grade A tower, ground plus fifteen. One long, clear floor plate. Possession in January.",
+   "tts": "A new Grade A tower, ground plus fifteen. One long, clear floor plate. Possession in January.",
+   "terms": [
+    [
+     "grade a"
+    ],
+    [
+     "ground plus fifteen",
+     "ground plus 15",
+     "ground 15"
+    ],
+    [
+     "floor plate"
+    ],
+    [
+     "possession"
+    ],
+    [
+     "january"
+    ]
+   ]
+  },
+  {
+   "id": "l06_privilon_plans",
+   "slot": [
+    44,
+    56
+   ],
+   "section": "Privilon",
+   "text": "We've drawn the floor three ways: two sixty, two eighty, and three hundred and one seats. Every chair counted from the drawing. So the floor you sign is the floor that grows with you.",
+   "tts": "We've drawn the floor three ways: two sixty, two eighty, and three hundred and one seats. Every chair counted from the drawing. So the floor you sign is the floor that grows with you.",
+   "terms": [
+    [
+     "three ways",
+     "3 ways"
+    ],
+    [
+     "two sixty",
+     "260",
+     "2 60"
+    ],
+    [
+     "two eighty",
+     "280",
+     "2 80"
+    ],
+    [
+     "three hundred and one",
+     "301"
+    ],
+    [
+     "every chair"
+    ],
+    [
+     "grows with you"
+    ]
+   ]
+  },
+  {
+   "id": "l07_corporate_speed",
+   "slot": [
+    56,
+    64
+   ],
+   "section": "Corporate Avenue",
+   "text": "Second, speed. Corporate Avenue in Chakala is a gated office campus, with two floors ready now. Ready the day you are.",
+   "tts": "Second, speed. Corporate Avenue in Chakala is a gated office campus, with two floors ready now. Ready the day you are.",
+   "terms": [
+    [
+     "second speed"
+    ],
+    [
+     "corporate avenue"
+    ],
+    [
+     "chakala"
+    ],
+    [
+     "gated office campus"
+    ],
+    [
+     "two floors",
+     "2 floors"
+    ],
+    [
+     "ready now"
+    ],
+    [
+     "ready the day you are"
+    ]
+   ]
+  },
+  {
+   "id": "l08_corporate_floors",
+   "slot": [
+    64,
+    76
+   ],
+   "section": "Corporate Avenue",
+   "text": "The third and fourth floors. Six thousand two hundred square feet of carpet on each, twelve thousand four hundred together. Two floors means two teams with their own space, one stair apart, under one roof.",
+   "tts": "The third and fourth floors. Six thousand two hundred square feet of carpet on each, twelve thousand four hundred together. Two floors means two teams with their own space, one stair apart, under one roof.",
+   "terms": [
+    [
+     "third and fourth",
+     "3rd and 4th"
+    ],
+    [
+     "six thousand two hundred",
+     "6200",
+     "6 200"
+    ],
+    [
+     "square feet"
+    ],
+    [
+     "carpet"
+    ],
+    [
+     "twelve thousand four hundred",
+     "12400",
+     "12 400"
+    ],
+    [
+     "two teams",
+     "2 teams"
+    ],
+    [
+     "one stair apart",
+     "1 stair apart"
+    ],
+    [
+     "under one roof",
+     "under 1 roof"
+    ]
+   ]
+  },
+  {
+   "id": "l09_corporate_metro",
+   "slot": [
+    76,
+    81
+   ],
+   "section": "Corporate Avenue",
+   "text": "Chakala metro is eight hundred and fifty metres away. About eleven minutes on foot.",
+   "tts": "Chakala metro is eight hundred and fifty metres away. About eleven minutes on foot.",
+   "terms": [
+    [
+     "chakala"
+    ],
+    [
+     "eight hundred and fifty",
+     "850"
+    ],
+    [
+     "metres",
+     "meters"
+    ],
+    [
+     "eleven minutes",
+     "11 minutes"
+    ]
+   ]
+  },
+  {
+   "id": "l10_a723_top",
+   "slot": [
+    81,
+    90
+   ],
+   "section": "723 Avenue",
+   "text": "Third, the view from the top. At 723 Avenue, Flipkart takes the thirteenth and fourteenth floors, and the terrace above them comes with it.",
+   "tts": "Third, the view from the top. At Seven Twenty-Three Avenue, Flipkart takes the thirteenth and fourteenth floors, and the terrace above them comes with it.",
+   "terms": [
+    [
+     "view from the top"
+    ],
+    [
+     "seven twenty three",
+     "723",
+     "7 23"
+    ],
+    [
+     "avenue"
+    ],
+    [
+     "flipkart"
+    ],
+    [
+     "thirteenth",
+     "13th"
+    ],
+    [
+     "fourteenth",
+     "14th"
+    ],
+    [
+     "terrace"
+    ]
+   ]
+  },
+  {
+   "id": "l11_a723_terrace",
+   "slot": [
+    90,
+    100
+   ],
+   "section": "723 Avenue",
+   "text": "A bare-shell floor, ready to fit out your way, with your own open-air breakout above it. A place to step outside between the hard hours.",
+   "tts": "A bare-shell floor, ready to fit out your way, with your own open-air breakout above it. A place to step outside between the hard hours.",
+   "terms": [
+    [
+     "bare shell"
+    ],
+    [
+     "fit out"
+    ],
+    [
+     "open air"
+    ],
+    [
+     "breakout",
+     "break out"
+    ],
+    [
+     "step outside"
+    ],
+    [
+     "hard hours"
+    ]
+   ]
+  },
+  {
+   "id": "l12_a723_metro",
+   "slot": [
+    100,
+    104
+   ],
+   "section": "723 Avenue",
+   "text": "Marol Naka metro is seven hundred metres away. About nine minutes on foot.",
+   "tts": "Marol Naka metro is seven hundred metres away. About nine minutes on foot.",
+   "terms": [
+    [
+     "marol naka"
+    ],
+    [
+     "seven hundred",
+     "700"
+    ],
+    [
+     "metres",
+     "meters"
+    ],
+    [
+     "nine minutes",
+     "9 minutes"
+    ]
+   ]
+  },
+  {
+   "id": "l13_close_choose",
+   "slot": [
+    104,
+    116
+   ],
+   "section": "Autopilot",
+   "text": "Three buildings. The commute, the speed, the view from the top. You choose what matters most, and we'll show you every seat and every rupee before a single wall goes up.",
+   "tts": "Three buildings. The commute, the speed, the view from the top. You choose what matters most, and we'll show you every seat and every rupee before a single wall goes up.",
+   "terms": [
+    [
+     "three buildings",
+     "3 buildings"
+    ],
+    [
+     "the commute"
+    ],
+    [
+     "the speed"
+    ],
+    [
+     "view from the top"
+    ],
+    [
+     "what matters most"
+    ],
+    [
+     "every seat"
+    ],
+    [
+     "every rupee"
+    ],
+    [
+     "single wall"
+    ]
+   ]
+  },
+  {
+   "id": "l14_close_autopilot",
+   "slot": [
+    116,
+    126
+   ],
+   "section": "Autopilot",
+   "text": "We're Autopilot. Fifteen thousand seats, twenty centres, seven cities. We pick the building first, plan it to the last chair, and then we run it like it's our own. Pehle vyavahar, phir vyapar. Relationship first, business next.",
+   "tts": "We're Autopilot. Fifteen thousand seats, twenty centres, seven cities. We pick the building first, plan it to the last chair, and then we run it like it's our own. Pehle vyavhaar, phir vyapaar. Relationship first, business next.",
+   "terms": [
+    [
+     "autopilot",
+     "auto pilot"
+    ],
+    [
+     "fifteen thousand",
+     "15000",
+     "15 000"
+    ],
+    [
+     "twenty centres",
+     "twenty centers",
+     "20 centres",
+     "20 centers"
+    ],
+    [
+     "seven cities",
+     "7 cities"
+    ],
+    [
+     "last chair"
+    ],
+    [
+     "our own"
+    ],
+    [
+     "@pehle"
+    ],
+    [
+     "@vyavhaar"
+    ],
+    [
+     "@phir"
+    ],
+    [
+     "@vyapaar"
+    ],
+    [
+     "relationship first"
+    ],
+    [
+     "business next"
+    ]
+   ]
+  },
+  {
+   "id": "l15_close_together",
+   "slot": [
+    126,
+    130
+   ],
+   "section": "Autopilot",
+   "text": "Andheri East. Let's choose it together.",
+   "tts": "Andheri East. <break time=\"0.5s\" /> Let's choose it together.",
+   "terms": [
+    [
+     "andheri east"
+    ],
+    [
+     "choose it together"
+    ]
+   ],
+   "term_notes": "Speech-to-text never wrote 'Andheri East' for this line on its own (6 takes: 'And here he is', 'And here east', 'Under East', 'And here is', 'And there is'; respellings 'Undheri' and Devanagari 'अंधेरी' and a slower read did not change it). Control: the 'Andheri East' cut out of l02, which speech-to-text writes correctly inside its sentence, is heard as 'Under East' when isolated. So the failure is the speech-to-text's need for context, not her pronunciation. With l02's 'Flipkart asked us for space in' spliced in front, every take is heard as 'Andheri East. Let's choose it together'. Take 2 is used (plain spelling, the chosen settings, a 0.5 s pause)."
+  }
+ ]
+}

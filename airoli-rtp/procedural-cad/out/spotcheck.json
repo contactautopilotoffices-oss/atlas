@@ -1,0 +1,797 @@
+{
+ "dimensions": [
+  {
+   "handle": "82836F7B",
+   "layer": "I-FURN",
+   "dimension_m": 1.06975,
+   "points_m": [
+    [
+     93.45859,
+     106.29751
+    ],
+    [
+     93.64908,
+     107.36727
+    ]
+   ],
+   "p1_on_model_face": null,
+   "p2_on_model_face": {
+    "wall": "W0308",
+    "type": "pop_gypsum",
+    "off_mm": 0.0
+   },
+   "both_on_model": false
+  },
+  {
+   "handle": "82836F7C",
+   "layer": "I-FURN",
+   "dimension_m": 3.73,
+   "points_m": [
+    [
+     93.70409,
+     107.36727
+    ],
+    [
+     93.69912,
+     111.09727
+    ]
+   ],
+   "p1_on_model_face": {
+    "wall": "W0308",
+    "type": "pop_gypsum",
+    "off_mm": 5.0
+   },
+   "p2_on_model_face": {
+    "wall": "W0308",
+    "type": "pop_gypsum",
+    "off_mm": 0.0
+   },
+   "both_on_model": true
+  },
+  {
+   "handle": "82836F7D",
+   "layer": "I-FURN",
+   "dimension_m": 1.07701,
+   "points_m": [
+    [
+     93.69908,
+     107.36727
+    ],
+    [
+     94.77609,
+     107.39752
+    ]
+   ],
+   "p1_on_model_face": {
+    "wall": "W0308",
+    "type": "pop_gypsum",
+    "off_mm": 0.0
+   },
+   "p2_on_model_face": {
+    "wall": "W0313",
+    "type": "unknown",
+    "off_mm": 0.0
+   },
+   "both_on_model": true
+  },
+  {
+   "handle": "82836F7E",
+   "layer": "I-FURN",
+   "dimension_m": 0.90005,
+   "points_m": [
+    [
+     94.77609,
+     107.39752
+    ],
+    [
+     95.67614,
+     107.39752
+    ]
+   ],
+   "p1_on_model_face": {
+    "wall": "W0313",
+    "type": "unknown",
+    "off_mm": 0.0
+   },
+   "p2_on_model_face": {
+    "wall": "W0307",
+    "type": "unknown",
+    "off_mm": 0.0
+   },
+   "both_on_model": true
+  },
+  {
+   "handle": "82836F7F",
+   "layer": "I-FURN",
+   "dimension_m": 2.18526,
+   "points_m": [
+    [
+     91.41382,
+     107.38558
+    ],
+    [
+     93.59908,
+     107.36727
+    ]
+   ],
+   "p1_on_model_face": null,
+   "p2_on_model_face": {
+    "wall": "W0302",
+    "type": "panel_partial_height",
+    "off_mm": 0.0
+   },
+   "both_on_model": false
+  },
+  {
+   "handle": "82836F82",
+   "layer": "I-FURN",
+   "dimension_m": 1.96464,
+   "points_m": [
+    [
+     95.77614,
+     107.08502
+    ],
+    [
+     97.74078,
+     107.08502
+    ]
+   ],
+   "p1_on_model_face": {
+    "wall": "W0307",
+    "type": "unknown",
+    "off_mm": 0.0
+   },
+   "p2_on_model_face": {
+    "wall": "W0311",
+    "type": "unknown",
+    "off_mm": 0.0
+   },
+   "both_on_model": true
+  },
+  {
+   "handle": "82836F83",
+   "layer": "I-FURN",
+   "dimension_m": 1.5003,
+   "points_m": [
+    [
+     96.37581,
+     107.2462
+    ],
+    [
+     96.37581,
+     108.7465
+    ]
+   ],
+   "p1_on_model_face": null,
+   "p2_on_model_face": null,
+   "both_on_model": false
+  },
+  {
+   "handle": "82836F84",
+   "layer": "I-FURN",
+   "dimension_m": 1.20113,
+   "points_m": [
+    [
+     96.14137,
+     108.7465
+    ],
+    [
+     96.14137,
+     109.94764
+    ]
+   ],
+   "p1_on_model_face": null,
+   "p2_on_model_face": null,
+   "both_on_model": false
+  },
+  {
+   "handle": "82836F85",
+   "layer": "I-FURN",
+   "dimension_m": 0.6,
+   "points_m": [
+    [
+     96.37042,
+     109.94764
+    ],
+    [
+     96.97042,
+     109.94764
+    ]
+   ],
+   "p1_on_model_face": null,
+   "p2_on_model_face": null,
+   "both_on_model": false
+  },
+  {
+   "handle": "82836F86",
+   "layer": "I-FURN",
+   "dimension_m": 0.59428,
+   "points_m": [
+    [
+     95.77614,
+     109.96014
+    ],
+    [
+     96.37042,
+     109.94764
+    ]
+   ],
+   "p1_on_model_face": {
+    "wall": "W0307",
+    "type": "unknown",
+    "off_mm": 0.0
+   },
+   "p2_on_model_face": null,
+   "both_on_model": false
+  },
+  {
+   "handle": "82836F87",
+   "layer": "I-FURN",
+   "dimension_m": 1.19428,
+   "points_m": [
+    [
+     95.77614,
+     110.66505
+    ],
+    [
+     96.97042,
+     110.66505
+    ]
+   ],
+   "p1_on_model_face": {
+    "wall": "W0307",
+    "type": "unknown",
+    "off_mm": 0.0
+   },
+   "p2_on_model_face": null,
+   "both_on_model": false
+  },
+  {
+   "handle": "82836F88",
+   "layer": "I-FURN",
+   "dimension_m": 1.18128,
+   "points_m": [
+    [
+     96.99542,
+     110.76432
+    ],
+    [
+     98.1767,
+     110.74658
+    ]
+   ],
+   "p1_on_model_face": null,
+   "p2_on_model_face": null,
+   "both_on_model": false
+  },
+  {
+   "handle": "82836F89",
+   "layer": "I-FURN",
+   "dimension_m": 1.19328,
+   "points_m": [
+    [
+     98.2017,
+     110.336
+    ],
+    [
+     99.39498,
+     110.30612
+    ]
+   ],
+   "p1_on_model_face": null,
+   "p2_on_model_face": null,
+   "both_on_model": false
+  },
+  {
+   "handle": "82836F8A",
+   "layer": "I-FURN",
+   "dimension_m": 1.59988,
+   "points_m": [
+    [
+     99.15036,
+     109.34764
+    ],
+    [
+     99.15036,
+     110.94751
+    ]
+   ],
+   "p1_on_model_face": {
+    "wall": "W0312",
+    "type": "unknown",
+    "off_mm": 0.0
+   },
+   "p2_on_model_face": null,
+   "both_on_model": false
+  },
+  {
+   "handle": "82836F8B",
+   "layer": "I-FURN",
+   "dimension_m": 1.12491,
+   "points_m": [
+    [
+     97.9624,
+     109.9726
+    ],
+    [
+     97.9624,
+     111.09751
+    ]
+   ],
+   "p1_on_model_face": null,
+   "p2_on_model_face": null,
+   "both_on_model": false
+  },
+  {
+   "handle": "82836F90",
+   "layer": "I-FURN",
+   "dimension_m": 1.1724,
+   "points_m": [
+    [
+     90.5612,
+     107.49751
+    ],
+    [
+     90.5612,
+     108.66992
+    ]
+   ],
+   "p1_on_model_face": null,
+   "p2_on_model_face": null,
+   "both_on_model": false
+  },
+  {
+   "handle": "82836F91",
+   "layer": "I-FURN",
+   "dimension_m": 1.15001,
+   "points_m": [
+    [
+     90.62936,
+     108.71991
+    ],
+    [
+     90.62936,
+     109.86992
+    ]
+   ],
+   "p1_on_model_face": null,
+   "p2_on_model_face": null,
+   "both_on_model": false
+  },
+  {
+   "handle": "82836F92",
+   "layer": "I-FURN",
+   "dimension_m": 1.0276,
+   "points_m": [
+    [
+     90.7029,
+     109.91991
+    ],
+    [
+     90.66451,
+     110.94751
+    ]
+   ],
+   "p1_on_model_face": null,
+   "p2_on_model_face": null,
+   "both_on_model": false
+  },
+  {
+   "handle": "82836F93",
+   "layer": "I-FURN",
+   "dimension_m": 1.74384,
+   "points_m": [
+    [
+     89.61998,
+     107.6329
+    ],
+    [
+     91.36382,
+     107.67134
+    ]
+   ],
+   "p1_on_model_face": null,
+   "p2_on_model_face": null,
+   "both_on_model": false
+  },
+  {
+   "handle": "82836F94",
+   "layer": "I-FURN",
+   "dimension_m": 2.18527,
+   "points_m": [
+    [
+     91.41381,
+     107.78372
+    ],
+    [
+     93.59908,
+     107.78369
+    ]
+   ],
+   "p1_on_model_face": null,
+   "p2_on_model_face": {
+    "wall": "W0308",
+    "type": "pop_gypsum",
+    "off_mm": 0.0
+   },
+   "both_on_model": false
+  },
+  {
+   "handle": "82836F95",
+   "layer": "I-FURN",
+   "dimension_m": 0.5724,
+   "points_m": [
+    [
+     91.41382,
+     107.49751
+    ],
+    [
+     91.41381,
+     108.06992
+    ]
+   ],
+   "p1_on_model_face": null,
+   "p2_on_model_face": null,
+   "both_on_model": false
+  },
+  {
+   "handle": "82836F96",
+   "layer": "I-FURN",
+   "dimension_m": 0.6,
+   "points_m": [
+    [
+     91.41381,
+     108.06992
+    ],
+    [
+     91.41381,
+     108.66992
+    ]
+   ],
+   "p1_on_model_face": null,
+   "p2_on_model_face": null,
+   "both_on_model": false
+  },
+  {
+   "handle": "82836F97",
+   "layer": "I-FURN",
+   "dimension_m": 0.60017,
+   "points_m": [
+    [
+     91.41381,
+     108.71991
+    ],
+    [
+     91.41381,
+     109.32008
+    ]
+   ],
+   "p1_on_model_face": null,
+   "p2_on_model_face": null,
+   "both_on_model": false
+  },
+  {
+   "handle": "82836F98",
+   "layer": "I-FURN",
+   "dimension_m": 0.54983,
+   "points_m": [
+    [
+     91.41381,
+     109.32008
+    ],
+    [
+     91.41382,
+     109.86992
+    ]
+   ],
+   "p1_on_model_face": null,
+   "p2_on_model_face": null,
+   "both_on_model": false
+  },
+  {
+   "handle": "82836F99",
+   "layer": "I-FURN",
+   "dimension_m": 0.60017,
+   "points_m": [
+    [
+     91.41382,
+     109.91991
+    ],
+    [
+     91.41382,
+     110.52008
+    ]
+   ],
+   "p1_on_model_face": null,
+   "p2_on_model_face": null,
+   "both_on_model": false
+  },
+  {
+   "handle": "82836F9A",
+   "layer": "I-FURN",
+   "dimension_m": 0.57843,
+   "points_m": [
+    [
+     91.41382,
+     110.51908
+    ],
+    [
+     91.41382,
+     111.09751
+    ]
+   ],
+   "p1_on_model_face": null,
+   "p2_on_model_face": null,
+   "both_on_model": false
+  }
+ ],
+ "dimensions_both_points_on_model": 4,
+ "dimensions_total": 26,
+ "passages": [
+  {
+   "handle": "8283DFAC",
+   "label": "5'6\" PASSAGE  WIDE",
+   "at": [
+    51.21,
+    105.37
+   ],
+   "label_m": 1.676,
+   "model_clear_m": 1.682,
+   "between": [
+    "W0412",
+    "W0334"
+   ],
+   "wall_types": [
+    "glass_partition",
+    "glass_partition"
+   ],
+   "diff_mm": 6
+  },
+  {
+   "handle": "8283DFAE",
+   "label": "5'6\" PASSAGE  WIDE",
+   "at": [
+    78.51,
+    105.37
+   ],
+   "label_m": 1.676,
+   "model_clear_m": null,
+   "between": null,
+   "wall_types": null,
+   "diff_mm": null
+  },
+  {
+   "handle": "8283DFB0",
+   "label": "5'6\" PASSAGE  WIDE",
+   "at": [
+    112.23,
+    105.37
+   ],
+   "label_m": 1.676,
+   "model_clear_m": null,
+   "between": null,
+   "wall_types": null,
+   "diff_mm": null
+  },
+  {
+   "handle": "8283DFB2",
+   "label": "6' PASSAGE  WIDE",
+   "at": [
+    128.49,
+    96.15
+   ],
+   "label_m": 1.829,
+   "model_clear_m": 2.517,
+   "between": [
+    "W0449",
+    "W0389"
+   ],
+   "wall_types": [
+    "glass_partition",
+    "glass_partition"
+   ],
+   "diff_mm": 688
+  },
+  {
+   "handle": "8283DFB4",
+   "label": "6' PASSAGE  WIDE",
+   "at": [
+    40.64,
+    98.62
+   ],
+   "label_m": 1.829,
+   "model_clear_m": 1.8,
+   "between": [
+    "W0381",
+    "W0410"
+   ],
+   "wall_types": [
+    "pop_gypsum",
+    "pop_gypsum"
+   ],
+   "diff_mm": -29
+  }
+ ],
+ "door_names": [
+  {
+   "id": "D005",
+   "block": "D-750",
+   "insert_scale": [
+    1.0,
+    1.0
+   ],
+   "name_m": 0.75,
+   "opening_m": 0.85,
+   "opening_source": "cad",
+   "frame_outside_m": 0.75,
+   "clear_m": 0.65,
+   "leaf_m": 0.681,
+   "opening_minus_name_mm": 100
+  },
+  {
+   "id": "D006",
+   "block": "D-750",
+   "insert_scale": [
+    1.0,
+    1.0
+   ],
+   "name_m": 0.75,
+   "opening_m": 0.75,
+   "opening_source": "cad",
+   "frame_outside_m": 0.75,
+   "clear_m": 0.65,
+   "leaf_m": 0.681,
+   "opening_minus_name_mm": 0
+  },
+  {
+   "id": "D007",
+   "block": "D-750",
+   "insert_scale": [
+    1.0,
+    1.0
+   ],
+   "name_m": 0.75,
+   "opening_m": 0.85,
+   "opening_source": "cad",
+   "frame_outside_m": 0.75,
+   "clear_m": 0.65,
+   "leaf_m": 0.681,
+   "opening_minus_name_mm": 100
+  },
+  {
+   "id": "D008",
+   "block": "D-750",
+   "insert_scale": [
+    1.0,
+    1.0
+   ],
+   "name_m": 0.75,
+   "opening_m": 0.85,
+   "opening_source": "cad",
+   "frame_outside_m": 0.75,
+   "clear_m": 0.65,
+   "leaf_m": 0.681,
+   "opening_minus_name_mm": 100
+  },
+  {
+   "id": "D009",
+   "block": "D-750",
+   "insert_scale": [
+    1.0,
+    1.0
+   ],
+   "name_m": 0.75,
+   "opening_m": 0.75,
+   "opening_source": "cad",
+   "frame_outside_m": 0.75,
+   "clear_m": 0.65,
+   "leaf_m": 0.681,
+   "opening_minus_name_mm": 0
+  },
+  {
+   "id": "D010",
+   "block": "D-750",
+   "insert_scale": [
+    1.0,
+    1.0
+   ],
+   "name_m": 0.75,
+   "opening_m": 0.852,
+   "opening_source": "cad",
+   "frame_outside_m": 0.75,
+   "clear_m": 0.65,
+   "leaf_m": 0.681,
+   "opening_minus_name_mm": 102
+  },
+  {
+   "id": "D015",
+   "block": "D-750",
+   "insert_scale": [
+    0.7988955721081558,
+    0.7988955721081558
+   ],
+   "name_m": 0.75,
+   "opening_m": 0.599,
+   "opening_source": "cad",
+   "frame_outside_m": 0.599,
+   "clear_m": 0.519,
+   "leaf_m": 0.544,
+   "opening_minus_name_mm": -151
+  },
+  {
+   "id": "D019",
+   "block": "D-750",
+   "insert_scale": [
+    0.8,
+    0.8
+   ],
+   "name_m": 0.75,
+   "opening_m": 0.6,
+   "opening_source": "cad",
+   "frame_outside_m": 0.6,
+   "clear_m": 0.52,
+   "leaf_m": 0.545,
+   "opening_minus_name_mm": -150
+  },
+  {
+   "id": "D020",
+   "block": "D-750",
+   "insert_scale": [
+    -0.8,
+    0.8
+   ],
+   "name_m": 0.75,
+   "opening_m": 0.6,
+   "opening_source": "cad",
+   "frame_outside_m": 0.6,
+   "clear_m": 0.52,
+   "leaf_m": 0.545,
+   "opening_minus_name_mm": -150
+  },
+  {
+   "id": "D021",
+   "block": "D-750",
+   "insert_scale": [
+    0.8,
+    0.8
+   ],
+   "name_m": 0.75,
+   "opening_m": 0.6,
+   "opening_source": "cad",
+   "frame_outside_m": 0.6,
+   "clear_m": 0.52,
+   "leaf_m": 0.545,
+   "opening_minus_name_mm": -150
+  },
+  {
+   "id": "D022",
+   "block": "D-750",
+   "insert_scale": [
+    -0.7988955721081558,
+    0.7988955721081558
+   ],
+   "name_m": 0.75,
+   "opening_m": 0.599,
+   "opening_source": "cad",
+   "frame_outside_m": 0.599,
+   "clear_m": 0.519,
+   "leaf_m": 0.544,
+   "opening_minus_name_mm": -151
+  },
+  {
+   "id": "D023",
+   "block": "D-750",
+   "insert_scale": [
+    -0.7988955721081558,
+    0.7988955721081558
+   ],
+   "name_m": 0.75,
+   "opening_m": 0.599,
+   "opening_source": "cad",
+   "frame_outside_m": 0.599,
+   "clear_m": 0.519,
+   "leaf_m": 0.544,
+   "opening_minus_name_mm": -151
+  }
+ ]
+}

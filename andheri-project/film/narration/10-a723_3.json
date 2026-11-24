@@ -1,0 +1,88 @@
+{
+ "file": "10-a723_3.mp3",
+ "duration_s": 2.601,
+ "words": [
+  {
+   "word": "Marol",
+   "start": 0.0,
+   "end": 0.337
+  },
+  {
+   "word": "Naka",
+   "start": 0.395,
+   "end": 0.662
+  },
+  {
+   "word": "metro",
+   "start": 0.72,
+   "end": 0.987
+  },
+  {
+   "word": "is",
+   "start": 1.033,
+   "end": 1.091
+  },
+  {
+   "word": "about",
+   "start": 1.138,
+   "end": 1.358
+  },
+  {
+   "word": "ten",
+   "start": 1.382,
+   "end": 1.544
+  },
+  {
+   "word": "minutes",
+   "start": 1.591,
+   "end": 1.858
+  },
+  {
+   "word": "away.",
+   "start": 1.892,
+   "end": 2.601
+  }
+ ],
+ "normalized_words": [
+  {
+   "word": "Marol",
+   "start": 0.023,
+   "end": 0.337
+  },
+  {
+   "word": "Naka",
+   "start": 0.395,
+   "end": 0.662
+  },
+  {
+   "word": "metro",
+   "start": 0.72,
+   "end": 0.987
+  },
+  {
+   "word": "is",
+   "start": 1.033,
+   "end": 1.091
+  },
+  {
+   "word": "about",
+   "start": 1.138,
+   "end": 1.358
+  },
+  {
+   "word": "ten",
+   "start": 1.382,
+   "end": 1.544
+  },
+  {
+   "word": "minutes",
+   "start": 1.591,
+   "end": 1.858
+  },
+  {
+   "word": "away.",
+   "start": 1.892,
+   "end": 2.264
+  }
+ ]
+}

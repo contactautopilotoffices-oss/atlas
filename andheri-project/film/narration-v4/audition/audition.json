@@ -1,0 +1,132 @@
+{
+ "settings": {
+  "A": {
+   "similarity_boost": 0.75,
+   "use_speaker_boost": true,
+   "stability": 0.45,
+   "style": 0.3,
+   "speed": 0.95
+  },
+  "B": {
+   "similarity_boost": 0.75,
+   "use_speaker_boost": true,
+   "stability": 0.45,
+   "style": 0.3,
+   "speed": 1.0
+  }
+ },
+ "lines": {
+  "A_l01_open": {
+   "file": "audition/A_l01_open.mp3",
+   "slot_s": 8,
+   "duration_s": 4.458,
+   "speech_start_s": 0.0,
+   "speech_end_s": 3.763,
+   "speech_s": 3.763,
+   "words_per_s": 4.52,
+   "internal_pauses_s": [
+    0.39
+   ],
+   "loudness_lufs": -21.53,
+   "true_peak_dbtp": -4.27,
+   "lra_lu": 2.7,
+   "f0_median_hz": 254.0,
+   "f0_spread_st": 13.45,
+   "stt_text": "Let's not start with a list of buildings. Let's start with how your people get to work.",
+   "stt_pass": true,
+   "stt_terms": {
+    "list of buildings": true,
+    "your people": true,
+    "get to work": true
+   }
+  },
+  "A_l02_descent": {
+   "file": "audition/A_l02_descent.mp3",
+   "slot_s": 12,
+   "duration_s": 11.471,
+   "speech_start_s": 0.0,
+   "speech_end_s": 10.9,
+   "speech_s": 10.9,
+   "words_per_s": 2.75,
+   "internal_pauses_s": [
+    0.68,
+    0.14,
+    0.22,
+    0.22,
+    0.23,
+    1.1,
+    0.26
+   ],
+   "loudness_lufs": -21.87,
+   "true_peak_dbtp": -2.4,
+   "lra_lu": 1.1,
+   "f0_median_hz": 227.0,
+   "f0_spread_st": 11.28,
+   "stt_text": "Flipkart asked us for space in Andheri East. We walked the micro market, checked every building against the deck, and brought it down to three. Each one answers a different question.",
+   "stt_pass": true,
+   "stt_terms": {
+    "flipkart": true,
+    "andheri east": true,
+    "micro market|micromarket": true,
+    "against the deck": true,
+    "down to three|down to 3": true,
+    "different question": true
+   }
+  },
+  "B_l01_open": {
+   "file": "audition/B_l01_open.mp3",
+   "slot_s": 8,
+   "duration_s": 4.969,
+   "speech_start_s": 0.0,
+   "speech_end_s": 4.086,
+   "speech_s": 4.086,
+   "words_per_s": 4.16,
+   "internal_pauses_s": [
+    0.42
+   ],
+   "loudness_lufs": -22.29,
+   "true_peak_dbtp": -4.74,
+   "lra_lu": 2.0,
+   "f0_median_hz": 235.3,
+   "f0_spread_st": 11.93,
+   "stt_text": "Let's not start with a list of buildings. Let's start with how your people get to work",
+   "stt_pass": true,
+   "stt_terms": {
+    "list of buildings": true,
+    "your people": true,
+    "get to work": true
+   }
+  },
+  "B_l02_descent": {
+   "file": "audition/B_l02_descent.mp3",
+   "slot_s": 12,
+   "duration_s": 10.728,
+   "speech_start_s": 0.122,
+   "speech_end_s": 10.143,
+   "speech_s": 10.021,
+   "words_per_s": 2.99,
+   "internal_pauses_s": [
+    0.39,
+    0.15,
+    0.76,
+    0.71
+   ],
+   "loudness_lufs": -21.7,
+   "true_peak_dbtp": -3.48,
+   "lra_lu": 2.5,
+   "f0_median_hz": 210.5,
+   "f0_spread_st": 10.74,
+   "stt_text": "Flipkart asked us for space in Andheri East. We walked the micro market, checked every building against the deck, and brought it down to three. Each one answers a different question",
+   "stt_pass": true,
+   "stt_terms": {
+    "flipkart": true,
+    "andheri east": true,
+    "micro market|micromarket": true,
+    "against the deck": true,
+    "down to three|down to 3": true,
+    "different question": true
+   }
+  }
+ },
+ "counter_before": 13415
+}

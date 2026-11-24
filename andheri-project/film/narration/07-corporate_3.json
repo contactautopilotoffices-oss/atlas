@@ -1,0 +1,98 @@
+{
+ "file": "07-corporate_3.mp3",
+ "duration_s": 3.762,
+ "words": [
+  {
+   "word": "Western",
+   "start": 0.0,
+   "end": 0.546
+  },
+  {
+   "word": "Express",
+   "start": 0.604,
+   "end": 1.045
+  },
+  {
+   "word": "Highway",
+   "start": 1.115,
+   "end": 1.486
+  },
+  {
+   "word": "metro",
+   "start": 1.556,
+   "end": 1.916
+  },
+  {
+   "word": "is",
+   "start": 1.997,
+   "end": 2.09
+  },
+  {
+   "word": "twelve",
+   "start": 2.159,
+   "end": 2.461
+  },
+  {
+   "word": "minutes",
+   "start": 2.485,
+   "end": 2.752
+  },
+  {
+   "word": "on",
+   "start": 2.798,
+   "end": 2.879
+  },
+  {
+   "word": "foot.",
+   "start": 2.949,
+   "end": 3.762
+  }
+ ],
+ "normalized_words": [
+  {
+   "word": "Western",
+   "start": 0.023,
+   "end": 0.546
+  },
+  {
+   "word": "Express",
+   "start": 0.604,
+   "end": 1.045
+  },
+  {
+   "word": "Highway",
+   "start": 1.115,
+   "end": 1.486
+  },
+  {
+   "word": "metro",
+   "start": 1.556,
+   "end": 1.916
+  },
+  {
+   "word": "is",
+   "start": 1.997,
+   "end": 2.09
+  },
+  {
+   "word": "twelve",
+   "start": 2.159,
+   "end": 2.461
+  },
+  {
+   "word": "minutes",
+   "start": 2.485,
+   "end": 2.752
+  },
+  {
+   "word": "on",
+   "start": 2.798,
+   "end": 2.879
+  },
+  {
+   "word": "foot.",
+   "start": 2.949,
+   "end": 3.332
+  }
+ ]
+}

@@ -1,0 +1,19 @@
+{
+ "file": "mix_provisional.mp3",
+ "model": "scribe_v1",
+ "full_mix": {
+  "text": "Let's not start with a list of buildings. Let's start with how your people get to work. Flipkart asked us for space in Andheri East. We walked the micro market, checked every building against the deck, and brought it down to three. Each one answers a different question. Two of them are at Marol Naka, where Metro Line one meets line three. The third is one stop west in Chakala. First, the commute. Privilon stands right beside Marol Naka Station, a hundred and forty meters from the station steps, two minutes on foot in any weather. A new Grade A tower, ground plus fifteen, one long clear floor plate, possession in January. We've drawn the floor three ways: two-sixty, two-eighty, and three hundred and one seats. Every chair counted from the drawing, so the floor you sign is the floor that grows with you. Second, speed. Corporate Avenue in Chakala is a gated office campus with two floors ready now. Ready the day you are. The third and fourth floors, six thousand two hundred square feet of carpet on each, twelve thousand four hundred together. Two floors means two teams with their own space, one stair apart, under one roof. Chakala Metro is eight hundred and fifty meters away, about eleven minutes on foot. Third, the view from the top. At Seven Twenty-Three Avenue, Flipkart takes the thirteenth and fourteenth floors, and the terrace above them comes with it. A bare shell floor ready to fit out your way with your own open air breakout above it. A place to step outside between the hard hours. Marol Naka Metro is seven hundred meters away, about nine minutes on foot. Three buildings: the commute, the speed, the view from the top. You choose what matters most, and we'll show you every seat and every rupee before a single wall goes up. We're Otto Pilot. Fifteen thousand seats, twenty centers, seven cities. We pick the building first, plan it to the last chair, and then we run it like it's our own. Pehle vyavhar, phir vyapar. Relationship first, business next. Andheri East, let's choose it together. ",
+  "all_key_terms_found": false,
+  "missing": [
+   "autopilot|auto pilot"
+  ]
+ },
+ "tail_from_115s": {
+  "text": "Single wall goes up. We're autopilot. Fifteen thousand seats, twenty centers, seven cities. We pick the building first, plan it to the last chair, and then we run it like it's our own. Pehle vyavahar, phir vyapar. Relationship first, business next. And HairEast, let's choose it together.",
+  "l14_l15_terms_found": false,
+  "missing": [
+   "andheri east"
+  ]
+ },
+ "note": "one transcript of the whole mix checked against every line's key words; on one earlier run scribe stopped transcribing after 'like it's our own', so the last 25 s are also checked on their own"
+}

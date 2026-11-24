@@ -1,0 +1,4638 @@
+{
+ "rows": [
+  {
+   "door": "D001",
+   "insert_handle": "82835CC7",
+   "block": "Glass Door",
+   "layer": "DR-GLASS",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0304",
+    "host_type": "unknown",
+    "host_handles": [
+     "82836C3F",
+     "82836C40"
+    ],
+    "line": [
+     [
+      28.2483,
+      85.4976
+     ],
+     [
+      28.2483,
+      86.6976
+     ]
+    ],
+    "width_m": 1.2,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": "W0304",
+    "line": [
+     [
+      28.1941,
+      85.532
+     ],
+     [
+      28.215,
+      86.6976
+     ]
+    ],
+    "width_m": 1.166,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. UNRESOLVED: no wall ends or jambs fix the opening; modelled as the drawn swing (leaf) plus a default 45 mm frame each side where no wall is in the way"
+   }
+  },
+  {
+   "door": "D002",
+   "insert_handle": "82835D69",
+   "block": "Glass Door",
+   "layer": "DR-GLASS",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0269",
+    "host_type": "unknown",
+    "host_handles": [
+     "82835D63",
+     "82835D5A"
+    ],
+    "line": [
+     [
+      75.492,
+      106.1975
+     ],
+     [
+      76.492,
+      106.1976
+     ]
+    ],
+    "width_m": 1.0,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0269",
+    "line": [
+     [
+      75.492,
+      106.1975
+     ],
+     [
+      76.492,
+      106.1976
+     ]
+    ],
+    "width_m": 1.0,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D003",
+   "insert_handle": "8283648E",
+   "block": "Glass Door",
+   "layer": "DR-GLASS",
+   "kind": "glass_door",
+   "status": "unhosted before and now",
+   "before": {
+    "host": null,
+    "host_type": null,
+    "host_handles": null,
+    "line": [
+     [
+      76.392,
+      106.1225
+     ],
+     [
+      77.292,
+      106.1225
+     ]
+    ],
+    "width_m": 0.9,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      76.4516,
+      106.1181
+     ],
+     [
+      76.4545,
+      107.0037
+     ]
+    ],
+    "width_m": 0.886,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. UNRESOLVED: no wall ends or jambs fix the opening; modelled as the drawn swing (leaf) plus a default 45 mm frame each side where no wall is in the way"
+   }
+  },
+  {
+   "door": "D004",
+   "insert_handle": "82836492",
+   "block": "Glass Door",
+   "layer": "DR-GLASS",
+   "kind": "glass_door",
+   "status": "unhosted before and now",
+   "before": {
+    "host": null,
+    "host_type": null,
+    "host_handles": null,
+    "line": [
+     [
+      100.52,
+      107.1475
+     ],
+     [
+      100.52,
+      106.2475
+     ]
+    ],
+    "width_m": 0.9,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      100.5606,
+      106.2621
+     ],
+     [
+      100.545,
+      107.1925
+     ]
+    ],
+    "width_m": 0.931,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. UNRESOLVED: no wall ends or jambs fix the opening; modelled as the drawn swing (leaf) plus a default 45 mm frame each side where no wall is in the way"
+   }
+  },
+  {
+   "door": "D005",
+   "insert_handle": "828364B0",
+   "block": "D-750",
+   "layer": "DOOR",
+   "kind": "solid_door",
+   "status": "same host",
+   "before": {
+    "host": "W0287",
+    "host_type": "pop_gypsum",
+    "host_handles": [
+     "828364B4",
+     "828364B4"
+    ],
+    "line": [
+     [
+      102.3175,
+      110.6949
+     ],
+     [
+      102.3175,
+      109.8449
+     ]
+    ],
+    "width_m": 0.85,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0287",
+    "line": [
+     [
+      102.3175,
+      110.6949
+     ],
+     [
+      102.3175,
+      109.8449
+     ]
+    ],
+    "width_m": 0.85,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D006",
+   "insert_handle": "828364B2",
+   "block": "D-750",
+   "layer": "DOOR",
+   "kind": "solid_door",
+   "status": "same host",
+   "before": {
+    "host": "W0285",
+    "host_type": "pop_gypsum",
+    "host_handles": [
+     "828364B1",
+     "828364B1"
+    ],
+    "line": [
+     [
+      102.2675,
+      108.2475
+     ],
+     [
+      102.2675,
+      107.4975
+     ]
+    ],
+    "width_m": 0.75,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": "W0285",
+    "line": [
+     [
+      102.3325,
+      107.4975
+     ],
+     [
+      102.3325,
+      108.2475
+     ]
+    ],
+    "width_m": 0.75,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D007",
+   "insert_handle": "828364B5",
+   "block": "D-750",
+   "layer": "DOOR",
+   "kind": "solid_door",
+   "status": "same host",
+   "before": {
+    "host": "W0285",
+    "host_type": "pop_gypsum",
+    "host_handles": [
+     "828364B1",
+     "828364B1"
+    ],
+    "line": [
+     [
+      102.3175,
+      109.4949
+     ],
+     [
+      102.3175,
+      108.6449
+     ]
+    ],
+    "width_m": 0.85,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0285",
+    "line": [
+     [
+      102.3175,
+      109.4949
+     ],
+     [
+      102.3175,
+      108.6449
+     ]
+    ],
+    "width_m": 0.85,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D008",
+   "insert_handle": "828364C2",
+   "block": "D-750",
+   "layer": "DOOR",
+   "kind": "solid_door",
+   "status": "same host",
+   "before": {
+    "host": "W0290",
+    "host_type": "pop_gypsum",
+    "host_handles": [
+     "828364BE",
+     "828364BE"
+    ],
+    "line": [
+     [
+      108.22,
+      110.2813
+     ],
+     [
+      108.22,
+      109.4313
+     ]
+    ],
+    "width_m": 0.85,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0290",
+    "line": [
+     [
+      108.22,
+      110.2813
+     ],
+     [
+      108.22,
+      109.4313
+     ]
+    ],
+    "width_m": 0.85,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D009",
+   "insert_handle": "828364C4",
+   "block": "D-750",
+   "layer": "DOOR",
+   "kind": "solid_door",
+   "status": "same host",
+   "before": {
+    "host": "W0288",
+    "host_type": "pop_gypsum",
+    "host_handles": [
+     "828364C3",
+     "828364C3"
+    ],
+    "line": [
+     [
+      108.17,
+      107.0473
+     ],
+     [
+      108.17,
+      106.2973
+     ]
+    ],
+    "width_m": 0.75,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": "W0288",
+    "line": [
+     [
+      108.235,
+      106.2973
+     ],
+     [
+      108.235,
+      107.0473
+     ]
+    ],
+    "width_m": 0.75,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D010",
+   "insert_handle": "828364C6",
+   "block": "D-750",
+   "layer": "DOOR",
+   "kind": "solid_door",
+   "status": "same host",
+   "before": {
+    "host": "W0288",
+    "host_type": "pop_gypsum",
+    "host_handles": [
+     "828364C3",
+     "828364C3"
+    ],
+    "line": [
+     [
+      108.22,
+      108.6669
+     ],
+     [
+      108.22,
+      107.8153
+     ]
+    ],
+    "width_m": 0.852,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0288",
+    "line": [
+     [
+      108.22,
+      108.6669
+     ],
+     [
+      108.22,
+      107.8153
+     ]
+    ],
+    "width_m": 0.852,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D011",
+   "insert_handle": "828364DA",
+   "block": "Glass Door",
+   "layer": "DR-GLASS",
+   "kind": "glass_door",
+   "status": "unhosted before and now",
+   "before": {
+    "host": null,
+    "host_type": null,
+    "host_handles": null,
+    "line": [
+     [
+      104.1613,
+      106.1225
+     ],
+     [
+      105.0613,
+      106.1225
+     ]
+    ],
+    "width_m": 0.9,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      104.1759,
+      106.1631
+     ],
+     [
+      105.1063,
+      106.1475
+     ]
+    ],
+    "width_m": 0.931,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. UNRESOLVED: no wall ends or jambs fix the opening; modelled as the drawn swing (leaf) plus a default 45 mm frame each side where no wall is in the way"
+   }
+  },
+  {
+   "door": "D012",
+   "insert_handle": "82836BD0",
+   "block": "double door",
+   "layer": "I-FURN",
+   "kind": "solid_door",
+   "status": "same host",
+   "before": {
+    "host": "W0197",
+    "host_type": "brick_block",
+    "host_handles": [
+     "82833AA7",
+     "82833AA9"
+    ],
+    "line": [
+     [
+      89.1696,
+      92.2726
+     ],
+     [
+      89.1696,
+      94.0726
+     ]
+    ],
+    "width_m": 1.8,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": "W0197",
+    "line": [
+     [
+      89.1696,
+      94.0726
+     ],
+     [
+      89.1696,
+      92.2726
+     ]
+    ],
+    "width_m": 1.8,
+    "how": "one flanking wall end",
+    "why": "modelled opening = structural opening. double door: the frame line drawn across both leaves in the block"
+   }
+  },
+  {
+   "door": "D013",
+   "insert_handle": "82836C41",
+   "block": "Glass Door",
+   "layer": "DR-GLASS",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0309",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "8282E19C",
+     "8282E19C"
+    ],
+    "line": [
+     [
+      34.0386,
+      94.429
+     ],
+     [
+      34.9387,
+      94.429
+     ]
+    ],
+    "width_m": 0.9,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": "W0309",
+    "line": [
+     [
+      34.0532,
+      94.4696
+     ],
+     [
+      34.9837,
+      94.454
+     ]
+    ],
+    "width_m": 0.931,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. UNRESOLVED: no wall ends or jambs fix the opening; modelled as the drawn swing (leaf) plus a default 45 mm frame each side where no wall is in the way"
+   }
+  },
+  {
+   "door": "D014",
+   "insert_handle": "82836C5C",
+   "block": "Glass Door",
+   "layer": "DR-GLASS",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0271",
+    "host_type": "unknown",
+    "host_handles": [
+     "82836F17",
+     "82836F17"
+    ],
+    "line": [
+     [
+      94.7761,
+      106.1225
+     ],
+     [
+      95.6761,
+      106.1225
+     ]
+    ],
+    "width_m": 0.9,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": "W0271",
+    "line": [
+     [
+      95.6616,
+      106.1631
+     ],
+     [
+      94.7311,
+      106.1475
+     ]
+    ],
+    "width_m": 0.931,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. UNRESOLVED: no wall ends or jambs fix the opening; modelled as the drawn swing (leaf) plus a default 45 mm frame each side where no wall is in the way"
+   }
+  },
+  {
+   "door": "D015",
+   "insert_handle": "82836C64",
+   "block": "D-750",
+   "layer": "DOOR",
+   "kind": "solid_door",
+   "status": "unhosted before and now",
+   "before": {
+    "host": null,
+    "host_type": null,
+    "host_handles": null,
+    "line": [
+     [
+      91.4138,
+      108.0708
+     ],
+     [
+      91.4138,
+      108.6699
+     ]
+    ],
+    "width_m": 0.599,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      91.3619,
+      108.6699
+     ],
+     [
+      91.3619,
+      108.0708
+     ]
+    ],
+    "width_m": 0.599,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D016",
+   "insert_handle": "82836D3E",
+   "block": "Glass Door",
+   "layer": "DR-GLASS",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0310",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "8282E2B9",
+     "8282E2B9"
+    ],
+    "line": [
+     [
+      34.9389,
+      94.429
+     ],
+     [
+      35.8389,
+      94.429
+     ]
+    ],
+    "width_m": 0.9,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": "W0310",
+    "line": [
+     [
+      35.8244,
+      94.4696
+     ],
+     [
+      34.8939,
+      94.454
+     ]
+    ],
+    "width_m": 0.931,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. UNRESOLVED: no wall ends or jambs fix the opening; modelled as the drawn swing (leaf) plus a default 45 mm frame each side where no wall is in the way"
+   }
+  },
+  {
+   "door": "D017",
+   "insert_handle": "82836F06",
+   "block": "Glass Door",
+   "layer": "DR-GLASS",
+   "kind": "glass_door",
+   "status": "unhosted before and now",
+   "before": {
+    "host": null,
+    "host_type": null,
+    "host_handles": null,
+    "line": [
+     [
+      99.57,
+      106.2475
+     ],
+     [
+      99.57,
+      107.1475
+     ]
+    ],
+    "width_m": 0.9,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      99.5293,
+      106.2621
+     ],
+     [
+      99.545,
+      107.1925
+     ]
+    ],
+    "width_m": 0.931,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. UNRESOLVED: no wall ends or jambs fix the opening; modelled as the drawn swing (leaf) plus a default 45 mm frame each side where no wall is in the way"
+   }
+  },
+  {
+   "door": "D018",
+   "insert_handle": "82836F14",
+   "block": "Glass Door",
+   "layer": "DR-GLASS",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0272",
+    "host_type": "unknown",
+    "host_handles": [
+     "82836F04",
+     "82836F09"
+    ],
+    "line": [
+     [
+      96.7093,
+      106.1963
+     ],
+     [
+      97.8409,
+      106.1987
+     ]
+    ],
+    "width_m": 1.132,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0272",
+    "line": [
+     [
+      96.7093,
+      106.1963
+     ],
+     [
+      97.8409,
+      106.1987
+     ]
+    ],
+    "width_m": 1.132,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D019",
+   "insert_handle": "82836F3B",
+   "block": "D-750",
+   "layer": "DOOR",
+   "kind": "solid_door",
+   "status": "unhosted before and now",
+   "before": {
+    "host": null,
+    "host_type": null,
+    "host_handles": null,
+    "line": [
+     [
+      96.3704,
+      109.9476
+     ],
+     [
+      96.9704,
+      109.9476
+     ]
+    ],
+    "width_m": 0.6,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      96.9704,
+      109.9996
+     ],
+     [
+      96.3704,
+      109.9996
+     ]
+    ],
+    "width_m": 0.6,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D020",
+   "insert_handle": "82836F3F",
+   "block": "D-750",
+   "layer": "DOOR",
+   "kind": "solid_door",
+   "status": "unhosted before and now",
+   "before": {
+    "host": null,
+    "host_type": null,
+    "host_handles": null,
+    "line": [
+     [
+      96.9954,
+      109.9476
+     ],
+     [
+      97.5954,
+      109.9476
+     ]
+    ],
+    "width_m": 0.6,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      96.9954,
+      109.9996
+     ],
+     [
+      97.5954,
+      109.9996
+     ]
+    ],
+    "width_m": 0.6,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D021",
+   "insert_handle": "82836F41",
+   "block": "D-750",
+   "layer": "DOOR",
+   "kind": "solid_door",
+   "status": "unhosted before and now",
+   "before": {
+    "host": null,
+    "host_type": null,
+    "host_handles": null,
+    "line": [
+     [
+      98.1767,
+      109.9476
+     ],
+     [
+      98.1767,
+      109.3476
+     ]
+    ],
+    "width_m": 0.6,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      98.2287,
+      109.3476
+     ],
+     [
+      98.2287,
+      109.9476
+     ]
+    ],
+    "width_m": 0.6,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D022",
+   "insert_handle": "82836F8D",
+   "block": "D-750",
+   "layer": "DOOR",
+   "kind": "solid_door",
+   "status": "unhosted before and now",
+   "before": {
+    "host": null,
+    "host_type": null,
+    "host_handles": null,
+    "line": [
+     [
+      91.4138,
+      108.7199
+     ],
+     [
+      91.4138,
+      109.3191
+     ]
+    ],
+    "width_m": 0.599,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      91.3619,
+      108.7199
+     ],
+     [
+      91.3619,
+      109.3191
+     ]
+    ],
+    "width_m": 0.599,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D023",
+   "insert_handle": "82836F8F",
+   "block": "D-750",
+   "layer": "DOOR",
+   "kind": "solid_door",
+   "status": "unhosted before and now",
+   "before": {
+    "host": null,
+    "host_type": null,
+    "host_handles": null,
+    "line": [
+     [
+      91.4138,
+      109.9199
+     ],
+     [
+      91.4138,
+      110.5191
+     ]
+    ],
+    "width_m": 0.599,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      91.3619,
+      109.9199
+     ],
+     [
+      91.3619,
+      110.5191
+     ]
+    ],
+    "width_m": 0.599,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D024",
+   "insert_handle": "82838006",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR",
+   "kind": "solid_door",
+   "status": "same host",
+   "before": {
+    "host": "W0317",
+    "host_type": "brick_block",
+    "host_handles": [
+     "82838017",
+     "82838017"
+    ],
+    "line": [
+     [
+      61.4961,
+      106.2225
+     ],
+     [
+      62.5238,
+      106.2225
+     ]
+    ],
+    "width_m": 1.028,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0317",
+    "line": [
+     [
+      61.4961,
+      106.2225
+     ],
+     [
+      62.5238,
+      106.2225
+     ]
+    ],
+    "width_m": 1.028,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D025",
+   "insert_handle": "8283802C",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR",
+   "kind": "solid_door",
+   "status": "same host",
+   "before": {
+    "host": "W0318",
+    "host_type": "brick_block",
+    "host_handles": [
+     "8283803D",
+     "8283803D"
+    ],
+    "line": [
+     [
+      68.9836,
+      106.2225
+     ],
+     [
+      70.0114,
+      106.2225
+     ]
+    ],
+    "width_m": 1.028,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0318",
+    "line": [
+     [
+      68.9836,
+      106.2225
+     ],
+     [
+      70.0114,
+      106.2225
+     ]
+    ],
+    "width_m": 1.028,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D026",
+   "insert_handle": "828399FC",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0334",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "8283D095",
+     "8283D095"
+    ],
+    "line": [
+     [
+      48.5542,
+      104.4273
+     ],
+     [
+      47.3542,
+      104.4273
+     ]
+    ],
+    "width_m": 1.2,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0334",
+    "line": [
+     [
+      48.5542,
+      104.4273
+     ],
+     [
+      47.3542,
+      104.4273
+     ]
+    ],
+    "width_m": 1.2,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D027",
+   "insert_handle": "82839B71",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0332",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "82839B6B",
+     "82839B6B"
+    ],
+    "line": [
+     [
+      78.3714,
+      103.391
+     ],
+     [
+      78.3714,
+      104.3097
+     ]
+    ],
+    "width_m": 0.919,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": "W0332",
+    "line": [
+     [
+      78.2964,
+      104.29
+     ],
+     [
+      78.2964,
+      103.391
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D028",
+   "insert_handle": "82839BAC",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0331",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "82839BA7",
+     "82839BA7"
+    ],
+    "line": [
+     [
+      78.3339,
+      100.574
+     ],
+     [
+      78.3339,
+      101.648
+     ]
+    ],
+    "width_m": 1.074,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0331",
+    "line": [
+     [
+      78.3339,
+      100.574
+     ],
+     [
+      78.3339,
+      101.648
+     ]
+    ],
+    "width_m": 1.074,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D029",
+   "insert_handle": "82839BC1",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0329",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "82839BBC",
+     "82839BBC"
+    ],
+    "line": [
+     [
+      78.3339,
+      97.757
+     ],
+     [
+      78.3339,
+      98.656
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0329",
+    "line": [
+     [
+      78.3339,
+      97.757
+     ],
+     [
+      78.3339,
+      98.656
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D030",
+   "insert_handle": "82839BD6",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0327",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "82839BD1",
+     "82839BD1"
+    ],
+    "line": [
+     [
+      78.3339,
+      94.94
+     ],
+     [
+      78.3339,
+      95.839
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0327",
+    "line": [
+     [
+      78.3339,
+      94.94
+     ],
+     [
+      78.3339,
+      95.839
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D031",
+   "insert_handle": "82839BE8",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0362",
+    "host_type": "pop_gypsum",
+    "host_handles": [
+     "82839BD3",
+     "82839BD3"
+    ],
+    "line": [
+     [
+      79.5773,
+      92.6352
+     ],
+     [
+      78.6782,
+      92.6352
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0362",
+    "line": [
+     [
+      79.5773,
+      92.6352
+     ],
+     [
+      78.6782,
+      92.6352
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D032",
+   "insert_handle": "82839C0E",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0339",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "82839C1E",
+     "82839C1E"
+    ],
+    "line": [
+     [
+      72.7437,
+      104.4274
+     ],
+     [
+      71.3687,
+      104.4275
+     ]
+    ],
+    "width_m": 1.375,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0339",
+    "line": [
+     [
+      72.7437,
+      104.4274
+     ],
+     [
+      71.3687,
+      104.4275
+     ]
+    ],
+    "width_m": 1.375,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D033",
+   "insert_handle": "82839C86",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0368",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "82839C81",
+     "82839C81"
+    ],
+    "line": [
+     [
+      79.64,
+      104.3097
+     ],
+     [
+      79.64,
+      103.391
+     ]
+    ],
+    "width_m": 0.919,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": "W0368",
+    "line": [
+     [
+      79.715,
+      104.29
+     ],
+     [
+      79.715,
+      103.391
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D034",
+   "insert_handle": "82839EFB",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0376",
+    "host_type": "pop_gypsum",
+    "host_handles": [
+     "82839F0B",
+     "82839F0B"
+    ],
+    "line": [
+     [
+      117.4515,
+      106.1475
+     ],
+     [
+      118.3712,
+      106.1475
+     ]
+    ],
+    "width_m": 0.92,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": "W0376",
+    "line": [
+     [
+      117.4712,
+      106.2225
+     ],
+     [
+      118.3712,
+      106.2225
+     ]
+    ],
+    "width_m": 0.9,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D035",
+   "insert_handle": "8283A348",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0347",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "8283A343",
+     "8283A343"
+    ],
+    "line": [
+     [
+      96.0175,
+      104.4275
+     ],
+     [
+      95.1185,
+      104.4275
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0347",
+    "line": [
+     [
+      96.0175,
+      104.4275
+     ],
+     [
+      95.1185,
+      104.4275
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D036",
+   "insert_handle": "8283A40F",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0337",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "8283A40B",
+     "8283A40B"
+    ],
+    "line": [
+     [
+      71.2687,
+      104.4275
+     ],
+     [
+      70.3697,
+      104.4275
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0337",
+    "line": [
+     [
+      71.2687,
+      104.4275
+     ],
+     [
+      70.3697,
+      104.4275
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D037",
+   "insert_handle": "8283A422",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0337",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "8283A40B",
+     "8283A40B"
+    ],
+    "line": [
+     [
+      68.8704,
+      104.4275
+     ],
+     [
+      67.7964,
+      104.4275
+     ]
+    ],
+    "width_m": 1.074,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0337",
+    "line": [
+     [
+      68.8704,
+      104.4275
+     ],
+     [
+      67.7964,
+      104.4275
+     ]
+    ],
+    "width_m": 1.074,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D038",
+   "insert_handle": "8283D108",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0383",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "8283D118",
+     "8283D118"
+    ],
+    "line": [
+     [
+      61.1797,
+      104.4273
+     ],
+     [
+      59.9796,
+      104.4273
+     ]
+    ],
+    "width_m": 1.2,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0383",
+    "line": [
+     [
+      61.1797,
+      104.4273
+     ],
+     [
+      59.9796,
+      104.4273
+     ]
+    ],
+    "width_m": 1.2,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D039",
+   "insert_handle": "8283D129",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0341",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "8283D126",
+     "8283D126"
+    ],
+    "line": [
+     [
+      74.1675,
+      104.4275
+     ],
+     [
+      73.2685,
+      104.4275
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0341",
+    "line": [
+     [
+      74.1675,
+      104.4275
+     ],
+     [
+      73.2685,
+      104.4275
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D040",
+   "insert_handle": "8283D585",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0349",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "8283D582",
+     "8283D582"
+    ],
+    "line": [
+     [
+      98.7571,
+      104.4275
+     ],
+     [
+      97.6831,
+      104.4275
+     ]
+    ],
+    "width_m": 1.074,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0349",
+    "line": [
+     [
+      98.7571,
+      104.4275
+     ],
+     [
+      97.6831,
+      104.4275
+     ]
+    ],
+    "width_m": 1.074,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D041",
+   "insert_handle": "8283D766",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0352",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "8283D776",
+     "8283D776"
+    ],
+    "line": [
+     [
+      113.2258,
+      104.465
+     ],
+     [
+      112.006,
+      104.465
+     ]
+    ],
+    "width_m": 1.22,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": "W0352",
+    "line": [
+     [
+      112.0258,
+      104.3895
+     ],
+     [
+      113.2258,
+      104.3895
+     ]
+    ],
+    "width_m": 1.2,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D042",
+   "insert_handle": "8283D892",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0389",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "8283D5F9",
+     "8283D5F9"
+    ],
+    "line": [
+     [
+      127.562,
+      91.0314
+     ],
+     [
+      127.562,
+      91.9501
+     ]
+    ],
+    "width_m": 0.919,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": "W0389",
+    "line": [
+     [
+      127.487,
+      91.0511
+     ],
+     [
+      127.487,
+      91.9501
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D043",
+   "insert_handle": "8283D918",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0442",
+    "host_type": "pop_gypsum",
+    "host_handles": [
+     "8283EB0E",
+     "8283EB0E"
+    ],
+    "line": [
+     [
+      127.5277,
+      88.6021
+     ],
+     [
+      127.5245,
+      89.5011
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0442",
+    "line": [
+     [
+      127.5277,
+      88.6021
+     ],
+     [
+      127.5245,
+      89.5011
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D044",
+   "insert_handle": "8283DBC7",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "unhosted before and now",
+   "before": {
+    "host": null,
+    "host_type": null,
+    "host_handles": null,
+    "line": [
+     [
+      125.868,
+      106.1475
+     ],
+     [
+      126.7876,
+      106.1475
+     ]
+    ],
+    "width_m": 0.92,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      125.8876,
+      106.2225
+     ],
+     [
+      126.7876,
+      106.2225
+     ]
+    ],
+    "width_m": 0.9,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D045",
+   "insert_handle": "8283DD58",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR",
+   "kind": "solid_door",
+   "status": "same host",
+   "before": {
+    "host": "W0321",
+    "host_type": "brick_block",
+    "host_handles": [
+     "8283DD69",
+     "8283DD69"
+    ],
+    "line": [
+     [
+      88.3861,
+      106.2225
+     ],
+     [
+      89.4139,
+      106.2225
+     ]
+    ],
+    "width_m": 1.028,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0321",
+    "line": [
+     [
+      88.3861,
+      106.2225
+     ],
+     [
+      89.4139,
+      106.2225
+     ]
+    ],
+    "width_m": 1.028,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D046",
+   "insert_handle": "8283DD6A",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR",
+   "kind": "solid_door",
+   "status": "same host",
+   "before": {
+    "host": "W0321",
+    "host_type": "brick_block",
+    "host_handles": [
+     "8283DD69",
+     "8283DD69"
+    ],
+    "line": [
+     [
+      81.2461,
+      106.2225
+     ],
+     [
+      82.2738,
+      106.2225
+     ]
+    ],
+    "width_m": 1.028,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0321",
+    "line": [
+     [
+      81.2461,
+      106.2225
+     ],
+     [
+      82.2738,
+      106.2225
+     ]
+    ],
+    "width_m": 1.028,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D047",
+   "insert_handle": "8283DD7C",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR",
+   "kind": "solid_door",
+   "status": "same host",
+   "before": {
+    "host": "W0398",
+    "host_type": "brick_block",
+    "host_handles": [
+     "8283DD7B",
+     "8283DD7B",
+     "828404DE"
+    ],
+    "line": [
+     [
+      80.2301,
+      111.3536
+     ],
+     [
+      80.2301,
+      112.3814
+     ]
+    ],
+    "width_m": 1.028,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0398",
+    "line": [
+     [
+      80.2301,
+      111.3536
+     ],
+     [
+      80.2301,
+      112.3814
+     ]
+    ],
+    "width_m": 1.028,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D048",
+   "insert_handle": "8283DD8E",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR",
+   "kind": "solid_door",
+   "status": "same host",
+   "before": {
+    "host": "W0402",
+    "host_type": "brick_block",
+    "host_handles": [
+     "8283DD8D",
+     "8283DD8D",
+     "8283DDA0"
+    ],
+    "line": [
+     [
+      90.4301,
+      112.3814
+     ],
+     [
+      90.4301,
+      111.3536
+     ]
+    ],
+    "width_m": 1.028,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0402",
+    "line": [
+     [
+      90.4301,
+      112.3814
+     ],
+     [
+      90.4301,
+      111.3536
+     ]
+    ],
+    "width_m": 1.028,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D049",
+   "insert_handle": "8283DDE1",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0409",
+    "host_type": "pop_gypsum",
+    "host_handles": [
+     "8283DDA2",
+     "8283DDA2"
+    ],
+    "line": [
+     [
+      51.684,
+      106.185
+     ],
+     [
+      52.583,
+      106.1853
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0409",
+    "line": [
+     [
+      51.684,
+      106.185
+     ],
+     [
+      52.583,
+      106.1853
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D050",
+   "insert_handle": "8283DDF2",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0412",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "8283DDF1",
+     "8283DDF1"
+    ],
+    "line": [
+     [
+      41.7402,
+      106.1475
+     ],
+     [
+      42.6589,
+      106.1475
+     ]
+    ],
+    "width_m": 0.919,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": "W0412",
+    "line": [
+     [
+      41.7599,
+      106.2225
+     ],
+     [
+      42.6589,
+      106.2225
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D051",
+   "insert_handle": "8283DE9A",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0411",
+    "host_type": "pop_gypsum",
+    "host_handles": [
+     "8283DDA4",
+     "8283DDA4"
+    ],
+    "line": [
+     [
+      34.0323,
+      97.8104
+     ],
+     [
+      34.9313,
+      97.8101
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0411",
+    "line": [
+     [
+      34.0323,
+      97.8104
+     ],
+     [
+      34.9313,
+      97.8101
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D052",
+   "insert_handle": "8283E414",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0366",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "8283E410",
+     "8283E410"
+    ],
+    "line": [
+     [
+      79.6775,
+      101.7761
+     ],
+     [
+      79.6775,
+      100.8771
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0366",
+    "line": [
+     [
+      79.6775,
+      101.7761
+     ],
+     [
+      79.6775,
+      100.8771
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D053",
+   "insert_handle": "8283E42B",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0364",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "8283E427",
+     "8283E427"
+    ],
+    "line": [
+     [
+      79.6775,
+      99.2623
+     ],
+     [
+      79.6775,
+      98.3633
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0364",
+    "line": [
+     [
+      79.6775,
+      99.2623
+     ],
+     [
+      79.6775,
+      98.3633
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D054",
+   "insert_handle": "8283E4A6",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0344",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "82839C5C",
+     "82839C5C"
+    ],
+    "line": [
+     [
+      89.4359,
+      104.4275
+     ],
+     [
+      88.5369,
+      104.4275
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0344",
+    "line": [
+     [
+      89.4359,
+      104.4275
+     ],
+     [
+      88.5369,
+      104.4275
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D055",
+   "insert_handle": "8283E74D",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0427",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "8283E749",
+     "8283E749"
+    ],
+    "line": [
+     [
+      92.4279,
+      103.391
+     ],
+     [
+      92.4279,
+      104.3097
+     ]
+    ],
+    "width_m": 0.919,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": "W0427",
+    "line": [
+     [
+      92.3529,
+      104.29
+     ],
+     [
+      92.3529,
+      103.391
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D056",
+   "insert_handle": "8283E765",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0425",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "8283E761",
+     "8283E761"
+    ],
+    "line": [
+     [
+      92.3904,
+      100.8771
+     ],
+     [
+      92.3904,
+      101.7761
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0425",
+    "line": [
+     [
+      92.3904,
+      100.8771
+     ],
+     [
+      92.3904,
+      101.7761
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D057",
+   "insert_handle": "8283E77B",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0423",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "8283E778",
+     "8283E778"
+    ],
+    "line": [
+     [
+      92.3904,
+      98.3633
+     ],
+     [
+      92.3904,
+      99.2623
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0423",
+    "line": [
+     [
+      92.3904,
+      98.3633
+     ],
+     [
+      92.3904,
+      99.2623
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D058",
+   "insert_handle": "8283E7FF",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0420",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "8283E627",
+     "8283E627"
+    ],
+    "line": [
+     [
+      90.469,
+      91.6687
+     ],
+     [
+      89.5695,
+      91.6687
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0420",
+    "line": [
+     [
+      90.469,
+      91.6687
+     ],
+     [
+      89.5695,
+      91.6687
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D059",
+   "insert_handle": "8283E838",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0421",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "8283E836",
+     "8283E836"
+    ],
+    "line": [
+     [
+      92.3904,
+      95.8495
+     ],
+     [
+      92.3904,
+      96.7485
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0421",
+    "line": [
+     [
+      92.3904,
+      95.8495
+     ],
+     [
+      92.3904,
+      96.7485
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D060",
+   "insert_handle": "8283E907",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0350",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "8283E918",
+     "8283E918"
+    ],
+    "line": [
+     [
+      100.3066,
+      104.465
+     ],
+     [
+      99.3879,
+      104.465
+     ]
+    ],
+    "width_m": 0.919,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": "W0350",
+    "line": [
+     [
+      100.2869,
+      104.39
+     ],
+     [
+      99.3879,
+      104.39
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D061",
+   "insert_handle": "8283E959",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0351",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "8283E96A",
+     "8283E96A"
+    ],
+    "line": [
+     [
+      101.4609,
+      104.465
+     ],
+     [
+      100.5422,
+      104.465
+     ]
+    ],
+    "width_m": 0.919,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": "W0351",
+    "line": [
+     [
+      100.5619,
+      104.39
+     ],
+     [
+      101.4609,
+      104.39
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D062",
+   "insert_handle": "8283E9D7",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0374",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "8283E9E8",
+     "8283E9E8"
+    ],
+    "line": [
+     [
+      110.5008,
+      90.9006
+     ],
+     [
+      110.5008,
+      91.8193
+     ]
+    ],
+    "width_m": 0.919,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": "W0374",
+    "line": [
+     [
+      110.4258,
+      90.9203
+     ],
+     [
+      110.4258,
+      91.8193
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D063",
+   "insert_handle": "8283EA7D",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0436",
+    "host_type": "pop_gypsum",
+    "host_handles": [
+     "8283EA13",
+     "8283EA13"
+    ],
+    "line": [
+     [
+      111.6468,
+      90.7828
+     ],
+     [
+      110.7478,
+      90.7828
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0436",
+    "line": [
+     [
+      111.6468,
+      90.7828
+     ],
+     [
+      110.7478,
+      90.7828
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D064",
+   "insert_handle": "8283EAEF",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0392",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "8283EB0C",
+     "8283EB0C"
+    ],
+    "line": [
+     [
+      127.562,
+      89.8771
+     ],
+     [
+      127.562,
+      90.7957
+     ]
+    ],
+    "width_m": 0.919,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": "W0392",
+    "line": [
+     [
+      127.487,
+      90.7761
+     ],
+     [
+      127.487,
+      89.8771
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D065",
+   "insert_handle": "8283EB1B",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0446",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "8283EB2B",
+     "8283EB2B"
+    ],
+    "line": [
+     [
+      128.5642,
+      88.3585
+     ],
+     [
+      127.6652,
+      88.3585
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0446",
+    "line": [
+     [
+      128.5642,
+      88.3585
+     ],
+     [
+      127.6652,
+      88.3585
+     ]
+    ],
+    "width_m": 0.899,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D066",
+   "insert_handle": "8283EB37",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "unhosted before and now",
+   "before": {
+    "host": null,
+    "host_type": null,
+    "host_handles": null,
+    "line": [
+     [
+      124.1839,
+      106.1475
+     ],
+     [
+      125.1036,
+      106.1475
+     ]
+    ],
+    "width_m": 0.92,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      124.2036,
+      106.2225
+     ],
+     [
+      125.1036,
+      106.2225
+     ]
+    ],
+    "width_m": 0.9,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D067",
+   "insert_handle": "8283EB49",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "unhosted before and now",
+   "before": {
+    "host": null,
+    "host_type": null,
+    "host_handles": null,
+    "line": [
+     [
+      123.029,
+      106.1475
+     ],
+     [
+      123.9487,
+      106.1475
+     ]
+    ],
+    "width_m": 0.92,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      123.929,
+      106.2225
+     ],
+     [
+      123.029,
+      106.2225
+     ]
+    ],
+    "width_m": 0.9,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D068",
+   "insert_handle": "8283F018",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "host lost",
+   "before": {
+    "host": "W0233",
+    "host_type": "window_glazing",
+    "host_handles": [
+     "82833B1A",
+     "82833E74"
+    ],
+    "line": [
+     [
+      130.9676,
+      101.4017
+     ],
+     [
+      130.9676,
+      102.3023
+     ]
+    ],
+    "width_m": 0.901,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      130.9875,
+      101.4772
+     ],
+     [
+      131.8938,
+      101.4772
+     ]
+    ],
+    "width_m": 0.906,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   },
+   "before_host_vs_current_opening": {
+    "parallel": 0.0,
+    "offset_m": 1.036,
+    "overlap_m": -0.593,
+    "gap_m": 0.593,
+    "wall_length_m": 0.9,
+    "rel": "not in line with the drawn opening"
+   },
+   "before_host_vs_its_own_opening": {
+    "parallel": 1.0,
+    "offset_m": 0.11,
+    "overlap_m": 0.232,
+    "gap_m": 0.0,
+    "wall_length_m": 0.9,
+    "rel": "not in line with the drawn opening"
+   },
+   "verdict": "earlier host was wrong: it is not in line with the drawn door swing"
+  },
+  {
+   "door": "D069",
+   "insert_handle": "8283F089",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "unhosted before and now",
+   "before": {
+    "host": null,
+    "host_type": null,
+    "host_handles": null,
+    "line": [
+     [
+      134.5019,
+      101.4017
+     ],
+     [
+      135.428,
+      101.4017
+     ]
+    ],
+    "width_m": 0.926,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      134.5217,
+      101.4772
+     ],
+     [
+      135.428,
+      101.4772
+     ]
+    ],
+    "width_m": 0.906,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D070",
+   "insert_handle": "8283F0A4",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "unhosted before and now",
+   "before": {
+    "host": null,
+    "host_type": null,
+    "host_handles": null,
+    "line": [
+     [
+      136.547,
+      98.829
+     ],
+     [
+      136.7776,
+      97.9387
+     ]
+    ],
+    "width_m": 0.92,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      136.62,
+      98.8463
+     ],
+     [
+      136.8547,
+      97.9399
+     ]
+    ],
+    "width_m": 0.936,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D071",
+   "insert_handle": "8283F0B7",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "unhosted before and now",
+   "before": {
+    "host": null,
+    "host_type": null,
+    "host_handles": null,
+    "line": [
+     [
+      136.1512,
+      99.9184
+     ],
+     [
+      136.4747,
+      99.0576
+     ]
+    ],
+    "width_m": 0.92,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      136.5467,
+      99.0793
+     ],
+     [
+      136.2127,
+      99.968
+     ]
+    ],
+    "width_m": 0.949,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D072",
+   "insert_handle": "8283F0CA",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "unhosted before and now",
+   "before": {
+    "host": null,
+    "host_type": null,
+    "host_handles": null,
+    "line": [
+     [
+      136.9313,
+      97.0639
+     ],
+     [
+      137.0143,
+      96.148
+     ]
+    ],
+    "width_m": 0.92,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      137.0071,
+      97.0578
+     ],
+     [
+      137.0896,
+      96.1481
+     ]
+    ],
+    "width_m": 0.913,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D073",
+   "insert_handle": "8283F0E9",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR-GLAZ",
+   "kind": "glass_door",
+   "status": "same host",
+   "before": {
+    "host": "W0449",
+    "host_type": "glass_partition",
+    "host_handles": [
+     "8283F04F",
+     "8283F04F"
+    ],
+    "line": [
+     [
+      130.0787,
+      100.5638
+     ],
+     [
+      130.0787,
+      99.6441
+     ]
+    ],
+    "width_m": 0.92,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": "W0449",
+    "line": [
+     [
+      130.1537,
+      100.5441
+     ],
+     [
+      130.1537,
+      99.6441
+     ]
+    ],
+    "width_m": 0.9,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D074",
+   "insert_handle": "8284043F",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "status": "host lost",
+   "before": {
+    "host": "W0394",
+    "host_type": "brick_block",
+    "host_handles": [
+     "8283DD69",
+     "8283DD9F"
+    ],
+    "line": [
+     [
+      87.2498,
+      106.2762
+     ],
+     [
+      85.88,
+      106.2762
+     ]
+    ],
+    "width_m": 1.37,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      87.2284,
+      107.1369
+     ],
+     [
+      87.2284,
+      106.2975
+     ]
+    ],
+    "width_m": 0.839,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   },
+   "before_host_vs_current_opening": {
+    "parallel": 0.0,
+    "offset_m": 0.923,
+    "overlap_m": -1.348,
+    "gap_m": 1.348,
+    "wall_length_m": 0.15,
+    "rel": "not in line with the drawn opening"
+   },
+   "before_host_vs_its_own_opening": {
+    "parallel": 1.0,
+    "offset_m": 0.062,
+    "overlap_m": 0.0,
+    "gap_m": 0.0,
+    "wall_length_m": 0.15,
+    "rel": "ends at the drawn opening (flank)"
+   },
+   "verdict": "earlier host was wrong: it is not in line with the drawn door swing"
+  },
+  {
+   "door": "D075",
+   "insert_handle": "82840440",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "status": "host lost",
+   "before": {
+    "host": "W0403",
+    "host_type": "brick_block",
+    "host_handles": [
+     "828404BA",
+     "8283DD9F"
+    ],
+    "line": [
+     [
+      85.88,
+      108.2002
+     ],
+     [
+      85.88,
+      107.2275
+     ]
+    ],
+    "width_m": 0.973,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      87.2285,
+      108.0882
+     ],
+     [
+      87.2285,
+      107.2489
+     ]
+    ],
+    "width_m": 0.839,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   },
+   "before_host_vs_current_opening": {
+    "parallel": 1.0,
+    "offset_m": 1.423,
+    "overlap_m": -0.013,
+    "gap_m": 0.013,
+    "wall_length_m": 0.15,
+    "rel": "not in line with the drawn opening"
+   },
+   "before_host_vs_its_own_opening": {
+    "parallel": 1.0,
+    "offset_m": 0.075,
+    "overlap_m": 0.099,
+    "gap_m": 0.0,
+    "wall_length_m": 0.15,
+    "rel": "runs through the drawn opening"
+   },
+   "verdict": "earlier host was wrong: it is not in line with the drawn door swing"
+  },
+  {
+   "door": "D076",
+   "insert_handle": "82840449",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "status": "host lost",
+   "before": {
+    "host": "W0403",
+    "host_type": "brick_block",
+    "host_handles": [
+     "828404BA",
+     "8283DD9F"
+    ],
+    "line": [
+     [
+      85.88,
+      109.1515
+     ],
+     [
+      85.88,
+      108.1788
+     ]
+    ],
+    "width_m": 0.973,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      87.2285,
+      109.0395
+     ],
+     [
+      87.2285,
+      108.2002
+     ]
+    ],
+    "width_m": 0.839,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   },
+   "before_host_vs_current_opening": {
+    "parallel": 1.0,
+    "offset_m": 1.423,
+    "overlap_m": 0.051,
+    "gap_m": 0.0,
+    "wall_length_m": 0.15,
+    "rel": "not in line with the drawn opening"
+   },
+   "before_host_vs_its_own_opening": {
+    "parallel": 1.0,
+    "offset_m": 0.075,
+    "overlap_m": 0.073,
+    "gap_m": 0.0,
+    "wall_length_m": 0.15,
+    "rel": "runs through the drawn opening"
+   },
+   "verdict": "earlier host was wrong: it is not in line with the drawn door swing"
+  },
+  {
+   "door": "D077",
+   "insert_handle": "8284044A",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "status": "host lost",
+   "before": {
+    "host": "W0462",
+    "host_type": "panel_partial_height",
+    "host_handles": [
+     "82840412",
+     "82840412",
+     "82840414"
+    ],
+    "line": [
+     [
+      87.2498,
+      110.1029
+     ],
+     [
+      85.88,
+      110.1029
+     ]
+    ],
+    "width_m": 1.37,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      87.2285,
+      109.9908
+     ],
+     [
+      87.2285,
+      109.1515
+     ]
+    ],
+    "width_m": 0.839,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   },
+   "before_host_vs_current_opening": {
+    "parallel": 0.0,
+    "offset_m": 0.85,
+    "overlap_m": 0.0,
+    "gap_m": 0.021,
+    "wall_length_m": 1.37,
+    "rel": "not in line with the drawn opening"
+   },
+   "before_host_vs_its_own_opening": {
+    "parallel": 1.0,
+    "offset_m": 0.962,
+    "overlap_m": 1.37,
+    "gap_m": 0.0,
+    "wall_length_m": 1.37,
+    "rel": "not in line with the drawn opening"
+   },
+   "verdict": "earlier host was wrong: it is not in line with the drawn door swing"
+  },
+  {
+   "door": "D078",
+   "insert_handle": "8284044B",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "status": "host lost",
+   "before": {
+    "host": "W0465",
+    "host_type": "panel_partial_height",
+    "host_handles": [
+     "82840412",
+     "82840412",
+     "82840414"
+    ],
+    "line": [
+     [
+      87.2498,
+      111.0542
+     ],
+     [
+      85.88,
+      111.0542
+     ]
+    ],
+    "width_m": 1.37,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      87.2285,
+      110.9422
+     ],
+     [
+      87.2285,
+      110.1029
+     ]
+    ],
+    "width_m": 0.839,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   },
+   "before_host_vs_current_opening": {
+    "parallel": 0.0,
+    "offset_m": 0.85,
+    "overlap_m": 0.0,
+    "gap_m": 0.021,
+    "wall_length_m": 1.37,
+    "rel": "not in line with the drawn opening"
+   },
+   "before_host_vs_its_own_opening": {
+    "parallel": 1.0,
+    "offset_m": 0.962,
+    "overlap_m": 1.37,
+    "gap_m": 0.0,
+    "wall_length_m": 1.37,
+    "rel": "not in line with the drawn opening"
+   },
+   "verdict": "earlier host was wrong: it is not in line with the drawn door swing"
+  },
+  {
+   "door": "D079",
+   "insert_handle": "8284044C",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "status": "host lost",
+   "before": {
+    "host": "W0466",
+    "host_type": "panel_partial_height",
+    "host_handles": [
+     "82840412",
+     "82840412",
+     "82840414"
+    ],
+    "line": [
+     [
+      87.2498,
+      112.0055
+     ],
+     [
+      85.88,
+      112.0055
+     ]
+    ],
+    "width_m": 1.37,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      87.2284,
+      111.8935
+     ],
+     [
+      87.2284,
+      111.0542
+     ]
+    ],
+    "width_m": 0.839,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   },
+   "before_host_vs_current_opening": {
+    "parallel": 0.0,
+    "offset_m": 0.85,
+    "overlap_m": 0.0,
+    "gap_m": 0.021,
+    "wall_length_m": 1.37,
+    "rel": "not in line with the drawn opening"
+   },
+   "before_host_vs_its_own_opening": {
+    "parallel": 1.0,
+    "offset_m": 0.962,
+    "overlap_m": 1.37,
+    "gap_m": 0.0,
+    "wall_length_m": 1.37,
+    "rel": "not in line with the drawn opening"
+   },
+   "verdict": "earlier host was wrong: it is not in line with the drawn door swing"
+  },
+  {
+   "door": "D080",
+   "insert_handle": "8284044D",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "status": "host lost",
+   "before": {
+    "host": "W0404",
+    "host_type": "brick_block",
+    "host_handles": [
+     "8283DD9F",
+     "8283DDA0",
+     "8283DDA1"
+    ],
+    "line": [
+     [
+      85.88,
+      112.9568
+     ],
+     [
+      85.88,
+      111.9842
+     ]
+    ],
+    "width_m": 0.973,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      87.2285,
+      112.8448
+     ],
+     [
+      87.2285,
+      112.0055
+     ]
+    ],
+    "width_m": 0.839,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   },
+   "before_host_vs_current_opening": {
+    "parallel": 1.0,
+    "offset_m": 1.423,
+    "overlap_m": -0.386,
+    "gap_m": 0.386,
+    "wall_length_m": 0.15,
+    "rel": "not in line with the drawn opening"
+   },
+   "before_host_vs_its_own_opening": {
+    "parallel": 1.0,
+    "offset_m": 0.075,
+    "overlap_m": -0.275,
+    "gap_m": 0.275,
+    "wall_length_m": 0.15,
+    "rel": "ends at the drawn opening (flank)"
+   },
+   "verdict": "earlier host was wrong: it is not in line with the drawn door swing"
+  },
+  {
+   "door": "D081",
+   "insert_handle": "828404A6",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "status": "host lost",
+   "before": {
+    "host": "W0469",
+    "host_type": "panel_partial_height",
+    "host_handles": [
+     "82840412",
+     "82840412"
+    ],
+    "line": [
+     [
+      89.1737,
+      111.8615
+     ],
+     [
+      89.1737,
+      113.2313
+     ]
+    ],
+    "width_m": 1.37,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      89.0617,
+      111.8829
+     ],
+     [
+      88.2224,
+      111.8829
+     ]
+    ],
+    "width_m": 0.839,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   },
+   "before_host_vs_current_opening": {
+    "parallel": 0.0,
+    "offset_m": 0.941,
+    "overlap_m": 0.0,
+    "gap_m": 0.021,
+    "wall_length_m": 1.37,
+    "rel": "not in line with the drawn opening"
+   },
+   "before_host_vs_its_own_opening": {
+    "parallel": 1.0,
+    "offset_m": 0.011,
+    "overlap_m": 1.37,
+    "gap_m": 0.0,
+    "wall_length_m": 1.37,
+    "rel": "lies inside the drawn opening (would be eaten by the cut)"
+   },
+   "verdict": "earlier host was wrong: the earlier opening covered the whole wall and the cut destroyed it"
+  },
+  {
+   "door": "D082",
+   "insert_handle": "828404C0",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "status": "host lost",
+   "before": {
+    "host": "W0475",
+    "host_type": "panel_partial_height",
+    "host_handles": [
+     "82840412",
+     "82840412",
+     "82840414"
+    ],
+    "line": [
+     [
+      83.3153,
+      109.6213
+     ],
+     [
+      83.3153,
+      108.2515
+     ]
+    ],
+    "width_m": 1.37,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      83.4273,
+      109.6
+     ],
+     [
+      84.2666,
+      109.6
+     ]
+    ],
+    "width_m": 0.839,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   },
+   "before_host_vs_current_opening": {
+    "parallel": 0.0,
+    "offset_m": 0.941,
+    "overlap_m": 0.0,
+    "gap_m": 0.021,
+    "wall_length_m": 1.37,
+    "rel": "not in line with the drawn opening"
+   },
+   "before_host_vs_its_own_opening": {
+    "parallel": 1.0,
+    "offset_m": 0.011,
+    "overlap_m": 1.37,
+    "gap_m": 0.0,
+    "wall_length_m": 1.37,
+    "rel": "lies inside the drawn opening (would be eaten by the cut)"
+   },
+   "verdict": "earlier host was wrong: the earlier opening covered the whole wall and the cut destroyed it"
+  },
+  {
+   "door": "D083",
+   "insert_handle": "828404C1",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "status": "host lost",
+   "before": {
+    "host": "W0472",
+    "host_type": "brick_block",
+    "host_handles": [
+     "828404B7",
+     "828404BA"
+    ],
+    "line": [
+     [
+      82.3639,
+      108.2515
+     ],
+     [
+      83.3366,
+      108.2515
+     ]
+    ],
+    "width_m": 0.973,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      82.4759,
+      109.6
+     ],
+     [
+      83.3153,
+      109.6
+     ]
+    ],
+    "width_m": 0.839,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   },
+   "before_host_vs_current_opening": {
+    "parallel": 1.0,
+    "offset_m": 1.424,
+    "overlap_m": 0.043,
+    "gap_m": 0.0,
+    "wall_length_m": 0.15,
+    "rel": "not in line with the drawn opening"
+   },
+   "before_host_vs_its_own_opening": {
+    "parallel": 1.0,
+    "offset_m": 0.075,
+    "overlap_m": 0.15,
+    "gap_m": 0.0,
+    "wall_length_m": 0.15,
+    "rel": "lies inside the drawn opening (would be eaten by the cut)"
+   },
+   "verdict": "earlier host was wrong: the earlier opening covered the whole wall and the cut destroyed it"
+  },
+  {
+   "door": "D084",
+   "insert_handle": "828404C9",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "status": "host lost",
+   "before": {
+    "host": "W0479",
+    "host_type": "panel_partial_height",
+    "host_handles": [
+     "82840412",
+     "82840412",
+     "82840414"
+    ],
+    "line": [
+     [
+      85.73,
+      112.3013
+     ],
+     [
+      84.3602,
+      112.3013
+     ]
+    ],
+    "width_m": 1.37,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      84.3815,
+      112.1893
+     ],
+     [
+      84.3815,
+      111.35
+     ]
+    ],
+    "width_m": 0.839,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   },
+   "before_host_vs_current_opening": {
+    "parallel": 0.0,
+    "offset_m": 0.941,
+    "overlap_m": 0.0,
+    "gap_m": 0.021,
+    "wall_length_m": 1.37,
+    "rel": "not in line with the drawn opening"
+   },
+   "before_host_vs_its_own_opening": {
+    "parallel": 1.0,
+    "offset_m": 0.011,
+    "overlap_m": 1.37,
+    "gap_m": 0.0,
+    "wall_length_m": 1.37,
+    "rel": "lies inside the drawn opening (would be eaten by the cut)"
+   },
+   "verdict": "earlier host was wrong: the earlier opening covered the whole wall and the cut destroyed it"
+  },
+  {
+   "door": "D085",
+   "insert_handle": "828404CA",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "status": "host lost",
+   "before": {
+    "host": "W0404",
+    "host_type": "brick_block",
+    "host_handles": [
+     "8283DD9F",
+     "8283DDA0",
+     "8283DDA1"
+    ],
+    "line": [
+     [
+      85.73,
+      113.2527
+     ],
+     [
+      85.73,
+      112.28
+     ]
+    ],
+    "width_m": 0.973,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      84.3815,
+      113.1407
+     ],
+     [
+      84.3815,
+      112.3013
+     ]
+    ],
+    "width_m": 0.839,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   },
+   "before_host_vs_current_opening": {
+    "parallel": 1.0,
+    "offset_m": 1.424,
+    "overlap_m": -0.091,
+    "gap_m": 0.091,
+    "wall_length_m": 0.15,
+    "rel": "not in line with the drawn opening"
+   },
+   "before_host_vs_its_own_opening": {
+    "parallel": 1.0,
+    "offset_m": 0.075,
+    "overlap_m": 0.021,
+    "gap_m": 0.0,
+    "wall_length_m": 0.15,
+    "rel": "ends at the drawn opening (flank)"
+   },
+   "verdict": "earlier host was wrong: it is not in line with the drawn door swing"
+  },
+  {
+   "door": "D086",
+   "insert_handle": "828404CB",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "status": "host lost",
+   "before": {
+    "host": "W0478",
+    "host_type": "panel_partial_height",
+    "host_handles": [
+     "82840412",
+     "82840412",
+     "82840414"
+    ],
+    "line": [
+     [
+      83.5386,
+      112.3013
+     ],
+     [
+      82.1688,
+      112.3013
+     ]
+    ],
+    "width_m": 1.37,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      83.5173,
+      112.1893
+     ],
+     [
+      83.5173,
+      111.35
+     ]
+    ],
+    "width_m": 0.839,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   },
+   "before_host_vs_current_opening": {
+    "parallel": 0.0,
+    "offset_m": 0.941,
+    "overlap_m": 0.0,
+    "gap_m": 0.021,
+    "wall_length_m": 1.37,
+    "rel": "not in line with the drawn opening"
+   },
+   "before_host_vs_its_own_opening": {
+    "parallel": 1.0,
+    "offset_m": 0.011,
+    "overlap_m": 1.37,
+    "gap_m": 0.0,
+    "wall_length_m": 1.37,
+    "rel": "lies inside the drawn opening (would be eaten by the cut)"
+   },
+   "verdict": "earlier host was wrong: the earlier opening covered the whole wall and the cut destroyed it"
+  },
+  {
+   "door": "D087",
+   "insert_handle": "828404CC",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "status": "host lost",
+   "before": {
+    "host": "W0478",
+    "host_type": "panel_partial_height",
+    "host_handles": [
+     "82840412",
+     "82840412",
+     "82840414"
+    ],
+    "line": [
+     [
+      83.5386,
+      113.2527
+     ],
+     [
+      82.1688,
+      113.2527
+     ]
+    ],
+    "width_m": 1.37,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      83.5173,
+      113.1407
+     ],
+     [
+      83.5173,
+      112.3013
+     ]
+    ],
+    "width_m": 0.839,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   },
+   "before_host_vs_current_opening": {
+    "parallel": 0.0,
+    "offset_m": 0.85,
+    "overlap_m": 0.0,
+    "gap_m": 0.021,
+    "wall_length_m": 1.37,
+    "rel": "not in line with the drawn opening"
+   },
+   "before_host_vs_its_own_opening": {
+    "parallel": 1.0,
+    "offset_m": 0.962,
+    "overlap_m": 1.37,
+    "gap_m": 0.0,
+    "wall_length_m": 1.37,
+    "rel": "not in line with the drawn opening"
+   },
+   "verdict": "earlier host was wrong: it is not in line with the drawn door swing"
+  },
+  {
+   "door": "D088",
+   "insert_handle": "828404CE",
+   "block": "DOOR_SNGL",
+   "layer": "WS-DOOR",
+   "kind": "solid_door",
+   "status": "same host",
+   "before": {
+    "host": "W0406",
+    "host_type": "brick_block",
+    "host_handles": [
+     "8283DDA1",
+     "8283DDA1",
+     "828404CD"
+    ],
+    "line": [
+     [
+      80.4112,
+      113.3062
+     ],
+     [
+      81.4389,
+      113.3063
+     ]
+    ],
+    "width_m": 1.028,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0406",
+    "line": [
+     [
+      80.4112,
+      113.3062
+     ],
+     [
+      81.4389,
+      113.3063
+     ]
+    ],
+    "width_m": 1.028,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D089",
+   "insert_handle": "828404E2",
+   "block": "A$C03859404",
+   "layer": "WS-DOOR",
+   "kind": "solid_door",
+   "status": "unhosted before and now",
+   "before": {
+    "host": null,
+    "host_type": null,
+    "host_handles": null,
+    "line": [
+     [
+      84.93,
+      109.6213
+     ],
+     [
+      84.2986,
+      109.6213
+     ]
+    ],
+    "width_m": 0.631,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      84.2986,
+      109.6036
+     ],
+     [
+      84.93,
+      109.6036
+     ]
+    ],
+    "width_m": 0.631,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   }
+  },
+  {
+   "door": "D090",
+   "insert_handle": "828405A1",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "status": "host lost",
+   "before": {
+    "host": "W0453",
+    "host_type": "panel_partial_height",
+    "host_handles": [
+     "82840412",
+     "82840412",
+     "82840414"
+    ],
+    "line": [
+     [
+      66.4205,
+      107.2506
+     ],
+     [
+      65.0506,
+      107.2506
+     ]
+    ],
+    "width_m": 1.37,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      65.072,
+      107.1386
+     ],
+     [
+      65.072,
+      106.2993
+     ]
+    ],
+    "width_m": 0.839,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   },
+   "before_host_vs_current_opening": {
+    "parallel": 0.0,
+    "offset_m": 0.941,
+    "overlap_m": 0.0,
+    "gap_m": 0.021,
+    "wall_length_m": 1.37,
+    "rel": "not in line with the drawn opening"
+   },
+   "before_host_vs_its_own_opening": {
+    "parallel": 1.0,
+    "offset_m": 0.011,
+    "overlap_m": 1.37,
+    "gap_m": 0.0,
+    "wall_length_m": 1.37,
+    "rel": "lies inside the drawn opening (would be eaten by the cut)"
+   },
+   "verdict": "earlier host was wrong: the earlier opening covered the whole wall and the cut destroyed it"
+  },
+  {
+   "door": "D091",
+   "insert_handle": "828405A2",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "status": "host lost",
+   "before": {
+    "host": "W0458",
+    "host_type": "panel_partial_height",
+    "host_handles": [
+     "82840414",
+     "82840414"
+    ],
+    "line": [
+     [
+      66.4205,
+      108.2019
+     ],
+     [
+      65.0506,
+      108.2019
+     ]
+    ],
+    "width_m": 1.37,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      65.072,
+      108.09
+     ],
+     [
+      65.072,
+      107.2506
+     ]
+    ],
+    "width_m": 0.839,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   },
+   "before_host_vs_current_opening": {
+    "parallel": 0.0,
+    "offset_m": 0.941,
+    "overlap_m": -1.494,
+    "gap_m": 1.494,
+    "wall_length_m": 1.37,
+    "rel": "not in line with the drawn opening"
+   },
+   "before_host_vs_its_own_opening": {
+    "parallel": 1.0,
+    "offset_m": 0.011,
+    "overlap_m": -0.146,
+    "gap_m": 0.146,
+    "wall_length_m": 1.37,
+    "rel": "ends at the drawn opening (flank)"
+   },
+   "verdict": "earlier host was wrong: it is not in line with the drawn door swing"
+  },
+  {
+   "door": "D092",
+   "insert_handle": "828405A3",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "status": "host lost",
+   "before": {
+    "host": "W0461",
+    "host_type": "panel_partial_height",
+    "host_handles": [
+     "82840412",
+     "82840412",
+     "82840414"
+    ],
+    "line": [
+     [
+      66.4205,
+      109.1533
+     ],
+     [
+      65.0506,
+      109.1533
+     ]
+    ],
+    "width_m": 1.37,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      65.072,
+      109.0413
+     ],
+     [
+      65.072,
+      108.2019
+     ]
+    ],
+    "width_m": 0.839,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   },
+   "before_host_vs_current_opening": {
+    "parallel": 0.0,
+    "offset_m": 0.941,
+    "overlap_m": -1.494,
+    "gap_m": 1.494,
+    "wall_length_m": 1.37,
+    "rel": "not in line with the drawn opening"
+   },
+   "before_host_vs_its_own_opening": {
+    "parallel": 1.0,
+    "offset_m": 0.011,
+    "overlap_m": -0.146,
+    "gap_m": 0.146,
+    "wall_length_m": 1.37,
+    "rel": "ends at the drawn opening (flank)"
+   },
+   "verdict": "earlier host was wrong: it is not in line with the drawn door swing"
+  },
+  {
+   "door": "D093",
+   "insert_handle": "828405A4",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "status": "host lost",
+   "before": {
+    "host": "W0464",
+    "host_type": "panel_partial_height",
+    "host_handles": [
+     "82840412",
+     "82840412",
+     "82840414"
+    ],
+    "line": [
+     [
+      66.4205,
+      110.1046
+     ],
+     [
+      65.0506,
+      110.1046
+     ]
+    ],
+    "width_m": 1.37,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      65.072,
+      109.9926
+     ],
+     [
+      65.072,
+      109.1533
+     ]
+    ],
+    "width_m": 0.839,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   },
+   "before_host_vs_current_opening": {
+    "parallel": 0.0,
+    "offset_m": 0.941,
+    "overlap_m": -1.494,
+    "gap_m": 1.494,
+    "wall_length_m": 1.37,
+    "rel": "not in line with the drawn opening"
+   },
+   "before_host_vs_its_own_opening": {
+    "parallel": 1.0,
+    "offset_m": 0.011,
+    "overlap_m": -0.146,
+    "gap_m": 0.146,
+    "wall_length_m": 1.37,
+    "rel": "ends at the drawn opening (flank)"
+   },
+   "verdict": "earlier host was wrong: it is not in line with the drawn door swing"
+  },
+  {
+   "door": "D094",
+   "insert_handle": "828405A5",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "status": "same host",
+   "before": {
+    "host": "W0046",
+    "host_type": "brick_block",
+    "host_handles": [
+     "828336D5",
+     "828336E0",
+     "828336D4"
+    ],
+    "line": [
+     [
+      66.34,
+      111.1725
+     ],
+     [
+      65.29,
+      111.135
+     ]
+    ],
+    "width_m": 1.051,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0046",
+    "line": [
+     [
+      66.34,
+      111.1725
+     ],
+     [
+      65.29,
+      111.135
+     ]
+    ],
+    "width_m": 1.051,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  },
+  {
+   "door": "D095",
+   "insert_handle": "828405C4",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "status": "host lost",
+   "before": {
+    "host": "W0457",
+    "host_type": "panel_partial_height",
+    "host_handles": [
+     "82840412",
+     "82840412",
+     "82840414"
+    ],
+    "line": [
+     [
+      67.9362,
+      108.1806
+     ],
+     [
+      66.5664,
+      108.1806
+     ]
+    ],
+    "width_m": 1.37,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      67.9149,
+      109.0413
+     ],
+     [
+      67.9149,
+      108.202
+     ]
+    ],
+    "width_m": 0.839,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   },
+   "before_host_vs_current_opening": {
+    "parallel": 0.0,
+    "offset_m": 0.85,
+    "overlap_m": -1.494,
+    "gap_m": 1.494,
+    "wall_length_m": 1.37,
+    "rel": "not in line with the drawn opening"
+   },
+   "before_host_vs_its_own_opening": {
+    "parallel": 1.0,
+    "offset_m": 0.011,
+    "overlap_m": -0.146,
+    "gap_m": 0.146,
+    "wall_length_m": 1.37,
+    "rel": "ends at the drawn opening (flank)"
+   },
+   "verdict": "earlier host was wrong: it is not in line with the drawn door swing"
+  },
+  {
+   "door": "D096",
+   "insert_handle": "828405C5",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "status": "host lost",
+   "before": {
+    "host": "W0463",
+    "host_type": "panel_partial_height",
+    "host_handles": [
+     "82840412",
+     "82840412",
+     "82840414"
+    ],
+    "line": [
+     [
+      67.9362,
+      110.1046
+     ],
+     [
+      66.5664,
+      110.1046
+     ]
+    ],
+    "width_m": 1.37,
+    "how": "edge of the door block along the wall (one or no flanking wall end found)"
+   },
+   "now": {
+    "host": null,
+    "line": [
+     [
+      67.9149,
+      109.9926
+     ],
+     [
+      67.9149,
+      109.1533
+     ]
+    ],
+    "width_m": 0.839,
+    "how": "swing arc",
+    "why": "modelled opening = structural opening. structural opening taken at the outer faces of the two jambs drawn in the block (fixing gap to the wall not drawn)"
+   },
+   "before_host_vs_current_opening": {
+    "parallel": 0.0,
+    "offset_m": 0.941,
+    "overlap_m": -1.494,
+    "gap_m": 1.494,
+    "wall_length_m": 1.37,
+    "rel": "not in line with the drawn opening"
+   },
+   "before_host_vs_its_own_opening": {
+    "parallel": 1.0,
+    "offset_m": 0.011,
+    "overlap_m": -0.146,
+    "gap_m": 0.146,
+    "wall_length_m": 1.37,
+    "rel": "ends at the drawn opening (flank)"
+   },
+   "verdict": "earlier host was wrong: it is not in line with the drawn door swing"
+  },
+  {
+   "door": "D097",
+   "insert_handle": "828405C6",
+   "block": "A$C9e4b0bea",
+   "layer": "WS-WALL-PRTN",
+   "kind": "cubicle_door",
+   "status": "same host",
+   "before": {
+    "host": "W0485",
+    "host_type": "panel_partial_height",
+    "host_handles": [
+     "82840412",
+     "82840412"
+    ],
+    "line": [
+     [
+      68.1275,
+      111.135
+     ],
+     [
+      66.4205,
+      111.0453
+     ]
+    ],
+    "width_m": 1.709,
+    "how": "gap between the two wall ends either side of the door block"
+   },
+   "now": {
+    "host": "W0485",
+    "line": [
+     [
+      68.1275,
+      111.135
+     ],
+     [
+      66.4205,
+      111.0453
+     ]
+    ],
+    "width_m": 1.709,
+    "how": "two flanking wall ends",
+    "why": "modelled opening = structural opening. structural opening: gap between the two wall ends either side of the door"
+   }
+  }
+ ],
+ "counts": {
+  "same host": 58,
+  "unhosted before and now": 18,
+  "earlier host was wrong: it is not in line with the drawn door swing": 15,
+  "host lost": 21,
+  "earlier host was wrong: the earlier opening covered the whole wall and the cut destroyed it": 6
+ },
+ "summary": {
+  "doors": 97,
+  "hosted": 58,
+  "host_relation": {
+   "gap": 58,
+   "none": 39
+  },
+  "true_wall_voids": 0,
+  "gap_doors": 58,
+  "freestanding_unhosted": 39,
+  "unhosted_by_reason": {
+   "Glass Door block on DR-GLASS: no wall piece ends at its drawn swing": 4,
+   "D-750: no wall piece ends at its drawn swing": 6,
+   "DOOR_SNGL: no wall piece ends at its drawn swing": 8,
+   "cubicle door: the drawn gap is in the cubicle side, where the only drawn pieces are 20 x 79 mm stubs (too short to be read as walls)": 20,
+   "A$C03859404: no wall piece ends at its drawn swing": 1
+  },
+  "headers_by_kind": {
+   "pop_bulkhead": 35,
+   "lintel_masonry": 9,
+   "glass_transom": 32,
+   "none_open_above": 21
+  },
+  "header_pieces_built": 76,
+  "frames_by_source": {
+   "default": 11,
+   "cad": 86
+  },
+  "closed_side_by_tie_break": [],
+  "unresolved_associations": 39,
+  "before_after": {
+   "same host": 58,
+   "unhosted before and now": 18,
+   "earlier host was wrong: it is not in line with the drawn door swing": 15,
+   "host lost": 21,
+   "earlier host was wrong: the earlier opening covered the whole wall and the cut destroyed it": 6
+  }
+ }
+}
