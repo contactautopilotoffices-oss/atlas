@@ -74,6 +74,8 @@ for _key in ("privilon", "corporate-avenue"):   # options whose outline is fixed
     S["buildings"] = [b for b in S["buildings"] if not (_op.contains(Polygon(b["p"]).centroid) or Polygon(b["p"]).intersection(_op).area > min(100, 0.25 * Polygon(b["p"]).area))]
     S["buildings"].append({"p": _poly, "h": _h, "c": "commercial", "r": 0.5, "opt": _key})
 OPTB = next(b for b in S["buildings"] if b.get("opt") == OID)
+# --brick-zone X0,Y0,X1,Y1 (scene metres): towers over 30 m inside it take the te_brick facade, not a Mumbai default
+BRICKZ = box(*(float(v) for v in A[A.index("--brick-zone") + 1].split(","))) if "--brick-zone" in A else None
 # --neighbour-hero ID=BLEND (repeatable): another shortlisted property standing in this district, shown with its
 # own facade study and a pin, not as a generic block (723 Avenue is visible from Privilon)
 NEIGH = dict(A[i + 1].split("=", 1) for i, a in enumerate(A) if a == "--neighbour-hero")
@@ -218,6 +220,7 @@ MOD = {"res_cream": (6, 12), "res_peach": (6, 12), "res_grey": (6, 12), "res_och
        "shop": (6, 4.5), "chawl": (4, 3), "opt_glass": (6, 16.4), "opt_plaster": (6, 16.4), "glass723": (6, 4.1), "retail723": (7.2, 5.6),
        "cw_teal": (6, 4.1), "cw_blue": (6, 4.1), "cw_grey": (6, 4.1), "cw_silver": (6, 4.1), "ribbon_red": (6, 4.1), "ribbon_white": (6, 4.1),
        "shophouse": (6, 12), "signs": (6, 4.5), "glass_grid": (6, 4.1)}   # corridor facades from Street View (tex_corridor.py)
+if "--brick-zone" in A: MOD["te_brick"] = (6, 12)   # Total Environment brick towers (te-whitefield/world/tex_te_brick.py)
 for k in MOD: mat("wall_" + k, tex=k + ".jpg", rtex=k + "_r.jpg", glass=k in ("com_glass", "opt_glass", "com_ribbon", "opt_plaster", "res_tower", "glass723", "retail723") or k.startswith(("cw_", "ribbon_")))
 mat("fin_723", "#3d4752", 0.45, 0.35); mat("pier_723", "#32373d", 0.5, 0.3); mat("band_723", "#c8cbcd", 0.55, 0.15); mat("frame_723", "#d9dcde", 0.35, 0.7)
 mat("acp_grey", "#b8bcbf", 0.4, 0.55); mat("acp_red", "#ad322c", 0.42, 0.35); mat("acp_white", "#e7e7e3", 0.45, 0.25); mat("fin_white", "#ecebe7", 0.5, 0.1)
@@ -519,6 +522,7 @@ def build():
                 nm_ = lmk[id(b)][0].split(",")[0].split(" (")[0]; c_ = q.centroid
                 if SLAB.buffer(-30).contains(c_) and (nm_ not in LANDMARKS or LANDMARKS[nm_]["h"] < hgt):
                     lx_, ly_ = L(c_.x, c_.y); LANDMARKS[nm_] = {"name": nm_, "x": round(lx_, 1), "y": round(ly_, 1), "h": round(hgt, 1)}
+            elif BRICKZ is not None and BRICKZ.contains(q.centroid) and hgt > 30: style = "te_brick"   # --brick-zone: a developer's own brick towers (Rhapsody)
             elif a < 70: style = "chawl"
             elif hgt > 45: style = "res_tower" if r_.random() < 0.6 else "com_glass"
             elif b["c"] in ("commercial", "office", "retail", "hotel") or (a > 1500 and r_.random() < 0.5): style = OFFICE[int(b["r"] * 991) % len(OFFICE)]
