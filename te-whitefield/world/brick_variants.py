@@ -13,6 +13,8 @@ for a bump in Blender and normals.py). A swatch sheet with the names goes to OUT
   stack           stack bond, joints aligned both ways: a crisp contemporary facade
   jali            a brick screen with every other header left out: light and air through the wall
   wirecut_dark    running bond in dark wire-cut brick with raked joints: a deeper, more uniform tone
+  terracotta_weave  the drums' terracotta skin from the founder's reference: small units on a 45 degree weave, bright orange
+  jali_diagonal   the perforated brick screen from the founder's reference: a diagonal lattice with open, shaded diamonds
 """
 import os, sys, random
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
@@ -101,6 +103,46 @@ def jali(name, pal, mortar, seed):
     col = finish(name, col, hgt, "dark")                                                   # the voids read dark (shade behind)
     return col
 
+def diag_weave(name, seed):
+    """the drum's terracotta skin (founder's reference: the curved end with the logo): small units, about 120 x 40 mm,
+    laid on a 45 degree diagonal in alternating directions, so from a distance it reads as a fine woven orange"""
+    rnd = random.Random(seed); big = S * 2
+    col = Image.new("RGB", (big, big), (150, 82, 48)); d = ImageDraw.Draw(col); hgt = Image.new("L", (big, big), 0); dh = ImageDraw.Draw(hgt)
+    pal = [(206, 112, 62), (196, 104, 58), (214, 122, 70), (186, 98, 54), (220, 130, 76)]
+    u, v, g = 0.12 * PX, 0.04 * PX, 0.008 * PX
+    for r in range(int(big / (v + g)) + 2):
+        for c in range(int(big / (u + g)) + 2):
+            x0, y0 = c * (u + g) + (r % 2) * (u + g) / 2, r * (v + g)
+            cc = pal[rnd.randrange(len(pal))]
+            d.rectangle([x0, y0, x0 + u, y0 + v], fill=cc); dh.rectangle([x0, y0, x0 + u, y0 + v], fill=220)
+    col = col.rotate(45, resample=Image.BICUBIC); hgt = hgt.rotate(45, resample=Image.BICUBIC)
+    o = (big - S) // 2; col = col.crop((o, o, o + S, o + S)); hgt = hgt.crop((o, o, o + S, o + S))
+    base = Image.new("RGB", (S, S), (150, 82, 48)); col = Image.composite(col, base, hgt.point(lambda q: 255 if q > 60 else 0))
+    col = Image.blend(col, Image.effect_noise((S, S), 22).convert("RGB"), 0.05).filter(ImageFilter.GaussianBlur(0.6))
+    col.save(os.path.join(OUT, f"{name}_diff.jpg"), quality=92); hgt.filter(ImageFilter.GaussianBlur(0.8)).save(os.path.join(OUT, f"{name}_h.png"))
+    hgt.point(lambda q: 200 if q > 60 else 240).save(os.path.join(OUT, f"{name}_rough.jpg"), quality=90)
+    return col
+
+def diag_jali(name, seed):
+    """the perforated screen (founder's reference: brick panels between concrete columns): bricks set on a diagonal
+    lattice with open diamonds between them, dark where the shade behind shows through"""
+    rnd = random.Random(seed); big = S * 2
+    col = Image.new("RGB", (big, big), (52, 40, 34)); d = ImageDraw.Draw(col); hgt = Image.new("L", (big, big), 0); dh = ImageDraw.Draw(hgt)
+    pal = [(184, 92, 52), (170, 84, 48), (196, 102, 58), (160, 78, 44), (204, 112, 64)]
+    bl, bh, gap = 0.23 * PX, 0.075 * PX, 0.06 * PX
+    for r in range(int(big / (bh + gap)) + 2):
+        for c in range(int(big / (bl + gap)) + 2):
+            x0, y0 = c * (bl + gap) + (r % 2) * (bl + gap) / 2, r * (bh + gap)
+            cc = pal[rnd.randrange(len(pal))]
+            d.rectangle([x0, y0, x0 + bl, y0 + bh], fill=cc); dh.rectangle([x0, y0, x0 + bl, y0 + bh], fill=230)
+            d.rectangle([x0, y0 + bh - 0.012 * PX, x0 + bl, y0 + bh], fill=tuple(int(q * 0.7) for q in cc))   # each brick's lower edge in shade
+    col = col.rotate(30, resample=Image.BICUBIC); hgt = hgt.rotate(30, resample=Image.BICUBIC)
+    o = (big - S) // 2; col = col.crop((o, o, o + S, o + S)); hgt = hgt.crop((o, o, o + S, o + S))
+    col = Image.blend(col, Image.effect_noise((S, S), 22).convert("RGB"), 0.05).filter(ImageFilter.GaussianBlur(0.6))
+    col.save(os.path.join(OUT, f"{name}_diff.jpg"), quality=92); hgt.filter(ImageFilter.GaussianBlur(0.8)).save(os.path.join(OUT, f"{name}_h.png"))
+    hgt.point(lambda q: 200 if q > 60 else 250).save(os.path.join(OUT, f"{name}_rough.jpg"), quality=90)
+    return col
+
 VARIANTS = [
     ("stretcher", lambda: running("stretcher", PAL["red_brown"], "light", 1)),
     ("flemish", lambda: flemish("flemish", PAL["red_brown"], "light", 2)),
@@ -108,14 +150,16 @@ VARIANTS = [
     ("stack", lambda: stack("stack", PAL["red_brown"], "light", 4)),
     ("jali", lambda: jali("jali", PAL["red_brown"], "dark", 5)),
     ("wirecut_dark", lambda: running("wirecut_dark", PAL["dark"], "dark", 6)),
+    ("terracotta_weave", lambda: diag_weave("terracotta_weave", 7)),
+    ("jali_diagonal", lambda: diag_jali("jali_diagonal", 8)),
 ]
 tiles = [(nm, fn()) for nm, fn in VARIANTS]
 # the swatch sheet: each variant at about 1.2 m square (the true scale reads), with its name
-sw = 360; sheet = Image.new("RGB", (sw * 3 + 40, (sw + 50) * 2 + 20), (245, 243, 238)); dr = ImageDraw.Draw(sheet)
+sw = 360; sheet = Image.new("RGB", (sw * 4 + 50, (sw + 50) * 2 + 20), (245, 243, 238)); dr = ImageDraw.Draw(sheet)
 try: font = ImageFont.truetype("DejaVuSans-Bold.ttf", 22)
 except Exception: font = ImageFont.load_default()
 for i, (nm, t) in enumerate(tiles):
-    x, y = 10 + (i % 3) * (sw + 10), 10 + (i // 3) * (sw + 50)
+    x, y = 10 + (i % 4) * (sw + 10), 10 + (i // 4) * (sw + 50)
     sheet.paste(t.crop((0, 0, S // 2 + 1, S // 2 + 1)).resize((sw, sw), Image.LANCZOS), (x, y))
     dr.text((x + 4, y + sw + 10), f"{i + 1}. {nm.replace('_', ' ')}", fill=(30, 30, 30), font=font)
 sheet.save(os.path.join(OUT, "swatches.jpg"), quality=92)

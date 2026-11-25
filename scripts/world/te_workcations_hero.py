@@ -338,5 +338,6 @@ if "--preview" in A:   # a look check: sky, sun, the drone's three-quarter view 
     cam.rotation_euler = look.to_track_quat("-Z", "Y").to_euler()
     sc.render.engine = "CYCLES"; sc.cycles.device = "CPU"; sc.cycles.samples = 24; sc.cycles.use_denoising = True
     sc.view_settings.view_transform = "AgX"; sc.view_settings.look = "AgX - Medium High Contrast"
+    sc.view_settings.exposure = -0.9 if ASSETS else 0.0   # the HDRI and the sun together over-expose the brick to salmon
     sc.render.resolution_x, sc.render.resolution_y = (540, 675) if "--small" in A else (1080, 1350); sc.render.filepath = os.path.abspath(png)
     bpy.ops.render.render(write_still=True); print("PREVIEW", png)
