@@ -66,12 +66,16 @@ For each page, from its PNG:
 The daily review keeps this list current: it adds what it finds, removes
 what it fixes, and fixes the worst one to three first.
 
-- Occupancy page: the threshold labels (running costs covered, every cost
-  covered, with ads) and the "most rivals" box collide above the bar.
-- Several pages end in the top half (levers, risks, infrastructure, the
-  pipeline pages, the price ladder): the content does not use the height.
-- Market point pages with a single chart leave the chart small and the
-  right column sparse.
-- "How full rival centres run": the operator names under the bars are dense
-  and hard to read.
-- The wider corridor tables wrap occupancy onto two lines.
+- Table pages open their rows to use spare height (casestudy/index.html,
+  fitTables, up to 6 mm a row): they now reach close to the foot, but levers
+  (six rows) reads airy rather than full.
+- Getting there (page 12): rows may open up to 10 mm under a foot box now,
+  but four short rows a table still leave a narrow band above the box.
+- The buildings side by side (page 11): the table now runs the page width at
+  body size with its boxes in a row at the foot; with a two-line source, the
+  boxes sit close to it.
+- Side columns of a table page: two boxes now read as two panels (the first
+  grows to meet the second); a first box with little text (levers) is a tall
+  frame with space at its foot.
+- Openers with no figures (07 in the Andheri workbook) now set the title low
+  like a part title; with no photograph either, the band is still plain.
