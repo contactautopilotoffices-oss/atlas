@@ -13,7 +13,8 @@ at the gate, the satellite view):
   - a central brick spine standing proud of both long faces, with a column of small windows each floor
   - between them, glazed bays: floor-to-ceiling glass behind balconies whose white slab edges bow outwards across
     each bay, with deep planters and trees on every floor (render)
-  - shops at the ground floor behind a canopy (render: lit shopfronts), a roof garden with trees and a glass pavilion
+  - a glazed ground floor under a canopy: lobby and shops with a lit ceiling, timber back wall, reception desk,
+    planters and columns behind clear glass (render: lit shopfronts); a roof garden with trees and a glass pavilion
 Ground 6.0 m, then 19 floors at 3.7 m (Total Environment: G+19), 76.3 m to the roof; Overture measures 74 m.
 Estimated, not from CAD: the end radius (12 m), spine width (13 m), balcony depth (1.2 to 1.9 m bow), slit widths.
 Materials are named TE_* so the web explorer keeps them. Brick is painted here at true size (128 px a metre),
@@ -145,10 +146,13 @@ M = {
     "soil": mat("TE_Soil", (0.18, 0.12, 0.08), 0.95),
     "mullion": mat("TE_Mullion", (0.16, 0.17, 0.18), 0.35, 0.8),
     "ceiling": interior("TE_Ceiling", 7.0),
-    "shop": interior("TE_ShopCeiling", 12.0),
+    "shop": interior("TE_LobbyCeiling", 16.0),
     "core": mat("TE_Core", (0.06, 0.06, 0.065), 0.8),
     "floor": mat("TE_Floor", (0.34, 0.32, 0.3), 0.5),
     "canopy": mat("TE_Canopy", (0.2, 0.2, 0.21), 0.4, 0.6),
+    "stone": mat("TE_Stone", (0.62, 0.58, 0.52), 0.35),
+    "lobbyglass": mat("TE_LobbyGlass", (0.8, 0.85, 0.86), 0.02, 0.0, **{"Transmission Weight": 0.95, "IOR": 1.1, "Specular IOR Level": 0.25}),
+    "timber": mat("TE_Timber", (0.42, 0.26, 0.14), 0.5),
     "roof": mat("TE_Roof", (0.5, 0.49, 0.47), 0.9),
     "leaf": foliage("TE_Leaf", (0.05, 0.12, 0.03), (0.16, 0.27, 0.06)),
     "leaf2": foliage("TE_LeafDeep", (0.03, 0.08, 0.02), (0.1, 0.19, 0.04)),
@@ -232,11 +236,27 @@ for sx in (-1, 1):
         face([bm.verts.new(p) for p in ((xa, y, GH), (xb, y, GH), (xb, y, H), (xa, y, H))][::(1 if sy < 0 else -1)], "glass")
         for mx in [xa + i * (xb - xa) / 6 for i in range(7)]:
             box(mx - 0.05, y - 0.1, GH, mx + 0.05, y + 0.1, H, "mullion")
-    # ground floor shops behind a canopy (render: lit shopfronts)
+    # the ground floor: a glazed lobby and shops, really modelled so the glass shows a lit room (as Privilon's base):
+    # clear glass with mullions every 2.75 m, a stone floor, a lit ceiling with downlights, a timber back wall,
+    # a reception desk, planters and round columns, under a canopy
+    box(xa, -10.5, 0.0, xb, 10.5, 0.2, "stone")                                     # lobby floor
+    box(xa, -10.4, GH - 1.0, xb, 10.4, GH - 0.9, "shop")                            # lit ceiling, downlights every 1.2 m
+    box(xa + 0.3, -5.4, 0.2, xb - 0.3, 5.4, GH - 1.0, "timber")                     # the back wall (the core) in timber
     for sy in (-1, 1):
         y = sy * 10.6
-        face([bm.verts.new(p) for p in ((xa, y, 0.2), (xb, y, 0.2), (xb, y, GH - 0.7), (xa, y, GH - 0.7))][::(1 if sy < 0 else -1)], "shopfront")
-    box(xa, -10.4, GH - 0.9, xb, 10.4, GH - 0.8, "shop")
+        face([bm.verts.new(p) for p in ((xa, y, 0.2), (xb, y, 0.2), (xb, y, GH - 0.7), (xa, y, GH - 0.7))][::(1 if sy < 0 else -1)], "lobbyglass")
+        for mx in [xa + i * (xb - xa) / 6 for i in range(7)]:
+            box(mx - 0.06, y - 0.08, 0.2, mx + 0.06, y + 0.08, GH - 0.7, "mullion")
+        box(xa, y - 0.1, GH - 0.95, xb, y + 0.1, GH - 0.7, "mullion")              # head rail
+        # inside: reception desk, planters and two round columns
+        mx_ = (xa + xb) / 2
+        box(mx_ - 2.6, sy * 6.6 - 0.45, 0.2, mx_ + 2.6, sy * 6.6 + 0.45, 1.25, "stone")
+        box(mx_ - 2.7, sy * 6.6 - 0.55, 1.25, mx_ + 2.7, sy * 6.6 + 0.55, 1.32, "timber")
+        for px_ in (xa + 1.6, xb - 1.6):
+            box(px_ - 0.5, sy * 9.2 - 0.5, 0.2, px_ + 0.5, sy * 9.2 + 0.5, 0.8, "planter")
+            bush(px_, sy * 9.2, 0.75, 0.75, deep=True)
+        for cx_ in (xa + (xb - xa) / 3, xa + 2 * (xb - xa) / 3):
+            bmesh.ops.create_cone(bm, cap_ends=True, segments=16, radius1=0.35, radius2=0.35, depth=GH - 1.2, matrix=Matrix.Translation((cx_, sy * 8.2, (GH - 1.2) / 2 + 0.2)))
     box(xa, -12.6, GH - 0.7, xb, 12.6, GH - 0.35, "canopy")
     us = [xa + (xb - xa) * i / 16 for i in range(17)]
     for k in range(NF):
