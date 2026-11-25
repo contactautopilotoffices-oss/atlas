@@ -243,15 +243,21 @@ def ico(c, r, m, sub=1):
     for f in {f for v in res["verts"] for f in v.link_faces}:
         f.material_index = ORDER.index(m); f.smooth = True
         for l in f.loops: l[uvl].uv = (l.vert.co.x, l.vert.co.z)
+PLANTS = os.path.abspath(A[A.index("--plants") + 1]) if "--plants" in A else None   # Poly Haven CC0 plant scans (glTF)
+PL = []   # planting placements (kind, x, y, z, size, turn), instanced from the scans after the mesh is built
+def plant(kind, x, y, z, s): PL.append((kind, x, y, z, s, rnd.uniform(0, 2 * math.pi)))
 def bush(x, y, z, s, deep=False):
+    if PLANTS: return plant("bush", x, y, z - 0.35, s)
     for k in range(3):
         ico((x + (rnd.random() - .5) * s, y + (rnd.random() - .5) * s * .6, z + s * (0.35 + 0.3 * rnd.random())), s * (0.4 + 0.25 * rnd.random()), "leaf2" if deep or rnd.random() < .4 else "leaf")
 def tree(x, y, z, s, red=False):
+    if PLANTS: return plant("tree", x, y, z, s)
     box(x - .06 * s, y - .06 * s, z, x + .06 * s, y + .06 * s, z + 1.2 * s, "trunk")
     for k in range(4):
         ico((x + (rnd.random() - .5) * s * .9, y + (rnd.random() - .5) * s * .9, z + s * (1.3 + 0.6 * rnd.random())), s * (0.5 + 0.3 * rnd.random()), "leaf_red" if red else ("leaf" if rnd.random() < .6 else "leaf2"))
 def vine(x, y, z, length):
     """trailing planting hanging from a balcony edge: a chain of small leaf clumps"""
+    if PLANTS: return plant("trail", x, y, z + 0.6, length)
     for k in range(int(length / 0.3)):
         ico((x + rnd.uniform(-.12, .12), y + rnd.uniform(-.06, .06), z - k * 0.3), rnd.uniform(0.16, 0.26) * (1 - 0.4 * k / max(1, length / 0.3)), "leaf" if rnd.random() < .5 else "leaf2", sub=1)
 
@@ -362,14 +368,16 @@ for sx in (-1, 1):
             bed = inn + inn2[::-1]
             prism(bed if sy > 0 else bed[::-1], z + FH, z + FH + 0.85, "soil")
             # planting spilling over the edge, and a small tree now and then (render)
-            uu = [xa + (xb - xa) * i / 24 for i in range(1, 24)]
+            uu = [xa + (xb - xa) * i / (34 if PLANTS else 24) for i in range(1, 34 if PLANTS else 24)]
             for u in uu:
                 e = edge(u, xa, xb, k)
-                if rnd.random() < 0.5: bush(u + rnd.uniform(-.25, .25), sy * (e - 0.55), z + FH + 0.7, rnd.uniform(0.7, 1.1), deep=rnd.random() < .3)
-                if rnd.random() < 0.6: ico((u, sy * (e + 0.12), z + FH + 0.5), rnd.uniform(0.35, 0.6), "leaf")   # spilling over the edge
+                if rnd.random() < (0.92 if PLANTS else 0.5): bush(u + rnd.uniform(-.25, .25), sy * (e - 0.55), z + FH + 0.7, rnd.uniform(0.7, 1.1), deep=rnd.random() < .3)
+                if rnd.random() < 0.6:
+                    if PLANTS: plant("trail", u, sy * (e - 0.05), z + FH + 0.85, rnd.uniform(0.8, 1.2))
+                    else: ico((u, sy * (e + 0.12), z + FH + 0.5), rnd.uniform(0.35, 0.6), "leaf")   # spilling over the edge
                 if rnd.random() < 0.22:                                                                     # vines hanging below the slab
                     vine(u, sy * (e + 0.12), z + FH + 0.2, rnd.uniform(0.9, 1.8))
-                if rnd.random() < 0.35:                                                                     # flowers (render: pink, white, red)
+                if rnd.random() < 0.35 and not PLANTS:                                                      # flowers (render: pink, white, red)
                     for _f in range(4):   # a cluster of small blooms, not one ball
                         ico((u + rnd.uniform(-.4, .4), sy * (e - 0.35 + rnd.uniform(-.2, .2)), z + FH + 1.25 + rnd.uniform(0, .3)), rnd.uniform(0.05, 0.09), rnd.choice(["flower_pink", "flower_white", "flower_white", "flower_red"]), sub=1)
                 if rnd.random() < 0.10: tree(u, sy * (e - 0.6), z + FH + 0.85, rnd.uniform(1.0, 1.4))
@@ -404,6 +412,48 @@ ob["night"] = 0.0
 ob["source_basis"] = "Workcations tower from the developer render, sales model video, street photograph and satellite view; end radius, spine and balcony sizes estimated"
 bv = ob.modifiers.new("bevel", "BEVEL"); bv.width = 0.012; bv.segments = 1; bv.limit_method = "ANGLE"
 print("TE_HERO", len(me.vertices), "verts", len(me.polygons), "faces", "H", round(H, 1))
+if PLANTS and PL:
+    # real plants: each kind is a few Poly Haven scans, imported once and instanced on points (geometry nodes)
+    KINDS = {"bush": ["calathea_orbifolia_01", "anthurium_botany_01", "fern_02", "shrub_03", "shrub_02", "shrub_04"],
+             "trail": ["periwinkle_plant", "fern_02"], "tree": ["pachira_aquatica_01"]}
+    HEIGHT = {"bush": 1.35, "trail": 0.85, "tree": 2.6}   # metres, at size 1
+    protos = {}
+    for kind, names in KINDS.items():
+        for nm in names:
+            if nm in protos: continue
+            before = set(bpy.data.objects)
+            bpy.ops.import_scene.gltf(filepath=os.path.join(PLANTS, nm, nm + ".gltf"))
+            new = [o for o in set(bpy.data.objects) - before]
+            col = bpy.data.collections.new("proto_" + nm); sc.collection.children.link(col)
+            for o in new:
+                for c in list(o.users_collection): c.objects.unlink(o)
+                col.objects.link(o)
+            zs = [(o.matrix_world @ Vector(c)).z for o in new if o.type == "MESH" for c in o.bound_box]
+            protos[nm] = (col, max(zs) - min(zs) if zs else 1.0)
+            sc.collection.children.unlink(col)   # out of the scene: instanced only (hiding it would hide the instances too)
+    W_ = Matrix.Translation((0, 0, 0))
+    for kind, names in KINDS.items():
+        for i, nm in enumerate(names):
+            P = [p for j, p in enumerate(PL) if p[0] == kind and (j % len(names)) == i]
+            if not P: continue
+            col, ht = protos[nm]
+            pm = bpy.data.meshes.new(f"plants_{kind}_{nm}"); pm.from_pydata([(p[1], p[2], p[3]) for p in P], [], [])
+            a = pm.attributes.new("s", "FLOAT", "POINT"); a.data.foreach_set("value", [HEIGHT[kind] * p[4] / ht for p in P])
+            r = pm.attributes.new("rz", "FLOAT", "POINT"); r.data.foreach_set("value", [p[5] for p in P])
+            po = bpy.data.objects.new(f"plants_{kind}_{nm}", pm); sc.collection.objects.link(po)
+            ng = bpy.data.node_groups.new(f"gn_{kind}_{nm}", "GeometryNodeTree")
+            ng.interface.new_socket("Geometry", in_out="INPUT", socket_type="NodeSocketGeometry"); ng.interface.new_socket("Geometry", in_out="OUTPUT", socket_type="NodeSocketGeometry")
+            N, L = ng.nodes, ng.links; gi = N.new("NodeGroupInput"); go = N.new("NodeGroupOutput")
+            m2p = N.new("GeometryNodeMeshToPoints"); L.new(gi.outputs[0], m2p.inputs["Mesh"])
+            ci = N.new("GeometryNodeCollectionInfo"); ci.inputs["Collection"].default_value = col; ci.transform_space = "ORIGINAL"
+            iop = N.new("GeometryNodeInstanceOnPoints"); L.new(m2p.outputs[0], iop.inputs["Points"]); L.new(ci.outputs[0], iop.inputs["Instance"])
+            sa = N.new("GeometryNodeInputNamedAttribute"); sa.data_type = "FLOAT"; sa.inputs["Name"].default_value = "s"; L.new(sa.outputs["Attribute"], iop.inputs["Scale"])
+            ra = N.new("GeometryNodeInputNamedAttribute"); ra.data_type = "FLOAT"; ra.inputs["Name"].default_value = "rz"
+            ce = N.new("ShaderNodeCombineXYZ"); L.new(ra.outputs["Attribute"], ce.inputs["Z"])
+            if kind == "trail": ce.inputs["X"].default_value = 0.0
+            L.new(ce.outputs[0], iop.inputs["Rotation"]); L.new(iop.outputs[0], go.inputs[0])
+            po.modifiers.new("plants", "NODES").node_group = ng
+    print("plants", {k: sum(1 for p in PL if p[0] == k) for k in KINDS})
 bpy.ops.wm.save_as_mainfile(filepath=OUT)
 
 if "--preview" in A:   # a look check: sky, sun, the drone's three-quarter view from the east-south-east
@@ -430,6 +480,17 @@ if "--preview" in A:   # a look check: sky, sun, the drone's three-quarter view 
     cd = bpy.data.cameras.new("c"); cd.lens = 40; cam = bpy.data.objects.new("c", cd); sc.collection.objects.link(cam); sc.camera = cam
     cam.location = (58, -120, 12); look = Vector((-4, 0, 40)) - cam.location; cd.lens = 34; cd.shift_y = 0.08   # the developer render's viewpoint
     tb = bmesh.new()   # foreground trees and a verge, as in the render
+    if PLANTS:
+        before = set(bpy.data.objects)
+        bpy.ops.import_scene.gltf(filepath=os.path.join(PLANTS, "jacaranda_tree", "jacaranda_tree.gltf"))
+        jac = [o for o in set(bpy.data.objects) - before]; jcol = bpy.data.collections.new("proto_jacaranda"); sc.collection.children.link(jcol)
+        for o in jac:
+            for c in list(o.users_collection): c.objects.unlink(o)
+            jcol.objects.link(o)
+        sc.collection.children.unlink(jcol)
+        for k_, (x_, y_, s_, r_) in enumerate(((-48, -60, 1.1, 2.1), (92, -28, 1.0, 4.0))):
+            inst = bpy.data.objects.new(f"jacaranda_{k_}", None); inst.instance_type = "COLLECTION"; inst.instance_collection = jcol
+            inst.location = (x_, y_, 0); inst.scale = (s_, s_, s_); inst.rotation_euler = (0, 0, r_); sc.collection.objects.link(inst)
     for x_, y_, s_ in ():
         bmesh.ops.create_cone(tb, cap_ends=True, segments=8, radius1=0.25, radius2=0.18, depth=s_, matrix=Matrix.Translation((x_, y_, s_ / 2)))
         for k_ in range(7):
@@ -440,6 +501,6 @@ if "--preview" in A:   # a look check: sky, sun, the drone's three-quarter view 
     cam.rotation_euler = look.to_track_quat("-Z", "Y").to_euler()
     sc.render.engine = "CYCLES"; sc.cycles.device = "CPU"; sc.cycles.samples = int(A[A.index("--samples") + 1]) if "--samples" in A else 24; sc.cycles.use_denoising = True
     sc.view_settings.view_transform = "AgX"; sc.view_settings.look = "AgX - Medium High Contrast"
-    sc.view_settings.exposure = -1.1 if ASSETS else 0.0; sc.view_settings.look = "AgX - High Contrast"   # the HDRI and the sun together over-expose the brick to salmon
+    sc.view_settings.exposure = -1.3 if ASSETS else 0.0; sc.view_settings.look = "AgX - High Contrast"   # the HDRI and the sun together over-expose the brick to salmon
     sc.render.resolution_x, sc.render.resolution_y = (540, 675) if "--small" in A else (1080, 1350); sc.render.filepath = os.path.abspath(png)
     bpy.ops.render.render(write_still=True); print("PREVIEW", png)
