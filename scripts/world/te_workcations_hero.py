@@ -1,7 +1,7 @@
 """Total Environment Workcations (Pursuit of a Radical Rhapsody, Hoodi), modelled the way Privilon was: one object,
 real depth, true-scale UVs, node materials, lit interiors behind the glass.
 
-  .w3d/bin/python scripts/world/te_workcations_hero.py OUT.blend TEX_DIR [--assets ASSET_DIR] [--preview OUT.png]
+  .w3d/bin/python scripts/world/te_workcations_hero.py OUT.blend TEX_DIR [--assets ASSET_DIR] [--brick-tex STEM] [--preview OUT.png]
 
 Built in its own frame: x along the long axis (82.7 m), y across (24 m body, 28.8 m at the spine), z up, centred on
 the footprint. diorama.py places it with --hero-blend OUT.blend --hero-fit.
@@ -81,18 +81,38 @@ def mat(name, col, rough, metal=0.0, **kw):
     return m
 
 ASSETS = os.path.abspath(A[A.index("--assets") + 1]) if "--assets" in A else None   # Poly Haven CC0 scans, as Privilon
+BRICKTEX = A[A.index("--brick-tex") + 1] if "--brick-tex" in A else None   # a pattern iteration: te-whitefield/world/brick_variants.py <stem>
 def brick_mat():
+    if BRICKTEX:   # <stem>_diff.jpg / _rough.jpg / _h.png, a 2.4 m tile, tint already in the image (exports to the web as is)
+        m = bpy.data.materials.new("TE_Brick"); m.use_nodes = True; nt = m.node_tree; b = nt.nodes["Principled BSDF"]
+        tc = nt.nodes.new("ShaderNodeTexCoord"); mp = nt.nodes.new("ShaderNodeMapping"); mp.inputs["Scale"].default_value = (1 / 2.4, 1 / 2.4, 1)
+        nt.links.new(tc.outputs["UV"], mp.inputs[0])
+        def t(suffix, nc=False):
+            n = nt.nodes.new("ShaderNodeTexImage"); n.image = bpy.data.images.load(os.path.abspath(BRICKTEX + suffix))
+            if nc: n.image.colorspace_settings.name = "Non-Color"
+            nt.links.new(mp.outputs[0], n.inputs[0]); return n
+        nt.links.new(t("_diff.jpg").outputs[0], b.inputs["Base Color"]); nt.links.new(t("_rough.jpg", True).outputs[0], b.inputs["Roughness"])
+        bp = nt.nodes.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.4; bp.inputs["Distance"].default_value = 0.01
+        nt.links.new(t("_h.png", True).outputs[0], bp.inputs["Height"]); nt.links.new(bp.outputs[0], b.inputs["Normal"])
+        return m
     if ASSETS and os.path.exists(os.path.join(ASSETS, "brick_b_diff_2k.jpg")):
         # large_red_bricks (Poly Haven, CC0), about 1.8 m a tile, tinted to the street photograph's red-brown
         m = bpy.data.materials.new("TE_Brick"); m.use_nodes = True; nt = m.node_tree; b = nt.nodes["Principled BSDF"]
         tc = nt.nodes.new("ShaderNodeTexCoord"); mp = nt.nodes.new("ShaderNodeMapping"); mp.inputs["Scale"].default_value = (1 / 1.8, 1 / 1.8, 1)
         nt.links.new(tc.outputs["UV"], mp.inputs[0])
+        # the tint is baked into a copy of the scan: glTF (the web explorer) carries an image wired straight to the
+        # base colour, not a multiply node, so a node-tinted brick exports white
+        from PIL import Image
+        tinted = os.path.join(TEX, "te_brick_scan_diff.jpg")
+        if not os.path.exists(tinted):
+            r_, g_, b_ = Image.open(os.path.join(ASSETS, "brick_b_diff_2k.jpg")).convert("RGB").split()
+            Image.merge("RGB", (r_.point(lambda v: int(v * 0.6)), g_.point(lambda v: int(v * 0.4)), b_.point(lambda v: int(v * 0.34)))).save(tinted, quality=92)
         def t(kind, nc=False):
-            n = nt.nodes.new("ShaderNodeTexImage"); n.image = bpy.data.images.load(os.path.join(ASSETS, f"brick_b_{kind}_2k.jpg"))
+            n = nt.nodes.new("ShaderNodeTexImage")
+            n.image = bpy.data.images.load(tinted if kind == "diff" else os.path.join(ASSETS, f"brick_b_{kind}_2k.jpg"))
             if nc: n.image.colorspace_settings.name = "Non-Color"
             nt.links.new(mp.outputs[0], n.inputs[0]); return n
-        mix = nt.nodes.new("ShaderNodeMixRGB"); mix.blend_type = "MULTIPLY"; mix.inputs[0].default_value = 1; mix.inputs[2].default_value = (0.6, 0.4, 0.34, 1)
-        nt.links.new(t("diff").outputs[0], mix.inputs[1]); nt.links.new(mix.outputs[0], b.inputs["Base Color"])
+        nt.links.new(t("diff").outputs[0], b.inputs["Base Color"])
         nt.links.new(t("rough", True).outputs[0], b.inputs["Roughness"])
         nm = nt.nodes.new("ShaderNodeNormalMap"); nm.inputs["Strength"].default_value = 1.2
         nt.links.new(t("nor", True).outputs[0], nm.inputs["Color"]); nt.links.new(nm.outputs[0], b.inputs["Normal"])
@@ -128,8 +148,8 @@ def interior(name, glow):
 def foliage(name, a, b2):
     m = bpy.data.materials.new(name); m.use_nodes = True; nt = m.node_tree; b = nt.nodes["Principled BSDF"]
     oi = nt.nodes.new("ShaderNodeObjectInfo"); nz = nt.nodes.new("ShaderNodeTexNoise"); nz.inputs["Scale"].default_value = 2.2
-    ramp = nt.nodes.new("ShaderNodeValToRGB"); ramp.color_ramp.elements[0].color = (*a, 1); ramp.color_ramp.elements[1].color = (*b2, 1)
-    nt.links.new(nz.outputs["Fac"], ramp.inputs[0]); nt.links.new(ramp.outputs[0], b.inputs["Base Color"])
+    # a solid green (a colour ramp exports white to glTF); the noise only drives the bump, for Cycles
+    b.inputs["Base Color"].default_value = tuple((x + y) / 2 for x, y in zip(a, b2)) + (1,)
     b.inputs["Roughness"].default_value = 0.85; b.inputs["Subsurface Weight"].default_value = 0.1
     bp = nt.nodes.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.7; nt.links.new(nz.outputs["Fac"], bp.inputs["Height"]); nt.links.new(bp.outputs[0], b.inputs["Normal"])
     return m
@@ -318,5 +338,5 @@ if "--preview" in A:   # a look check: sky, sun, the drone's three-quarter view 
     cam.rotation_euler = look.to_track_quat("-Z", "Y").to_euler()
     sc.render.engine = "CYCLES"; sc.cycles.device = "CPU"; sc.cycles.samples = 24; sc.cycles.use_denoising = True
     sc.view_settings.view_transform = "AgX"; sc.view_settings.look = "AgX - Medium High Contrast"
-    sc.render.resolution_x, sc.render.resolution_y = 1080, 1350; sc.render.filepath = os.path.abspath(png)
+    sc.render.resolution_x, sc.render.resolution_y = (540, 675) if "--small" in A else (1080, 1350); sc.render.filepath = os.path.abspath(png)
     bpy.ops.render.render(write_still=True); print("PREVIEW", png)
