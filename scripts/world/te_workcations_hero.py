@@ -26,8 +26,8 @@ from mathutils import Vector, Matrix
 
 A = sys.argv[sys.argv.index("--") + 1:] if "--" in sys.argv else sys.argv[1:]
 OUT, TEX = os.path.abspath(A[0]), os.path.abspath(A[1]); os.makedirs(TEX, exist_ok=True)
-LH, R = 41.35, 12.0              # half length; end-tower radius
-BAY0, BAY1 = 6.5, 23.0           # glazed bays run from the spine edge to the end towers (|x|)
+LH, R = 41.35, 9.5               # half length; end-tower radius (the render: drums narrower than the bays)
+BAY0, BAY1 = 6.5, 28.5           # glazed bays run from the spine edge to the end towers (|x|)
 GLASS_Y = 9.4                    # glass line (|y|)
 GH, FH, NF = 6.0, 3.7, 19
 H = GH + NF * FH                 # 76.3 m
@@ -103,10 +103,10 @@ def brick_mat():
         # the tint is baked into a copy of the scan: glTF (the web explorer) carries an image wired straight to the
         # base colour, not a multiply node, so a node-tinted brick exports white
         from PIL import Image
-        tinted = os.path.join(TEX, "te_brick_scan_diff.jpg")
+        tinted = os.path.join(TEX, "te_brick_scan_orange_diff.jpg")
         if not os.path.exists(tinted):
             r_, g_, b_ = Image.open(os.path.join(ASSETS, "brick_b_diff_2k.jpg")).convert("RGB").split()
-            Image.merge("RGB", (r_.point(lambda v: int(v * 0.6)), g_.point(lambda v: int(v * 0.4)), b_.point(lambda v: int(v * 0.34)))).save(tinted, quality=92)
+            Image.merge("RGB", (r_.point(lambda v: int(v * 0.78)), g_.point(lambda v: int(v * 0.5)), b_.point(lambda v: int(v * 0.36)))).save(tinted, quality=92)
         def t(kind, nc=False):
             n = nt.nodes.new("ShaderNodeTexImage")
             n.image = bpy.data.images.load(tinted if kind == "diff" else os.path.join(ASSETS, f"brick_b_{kind}_2k.jpg"))
@@ -154,9 +154,50 @@ def foliage(name, a, b2):
     bp = nt.nodes.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.7; nt.links.new(nz.outputs["Fac"], bp.inputs["Height"]); nt.links.new(bp.outputs[0], b.inputs["Normal"])
     return m
 
+def tex_mat(name, stem, tile, tint=None):
+    """an image-tiled PBR material wired so glTF keeps it (image straight to base colour, roughness, bump)"""
+    m = bpy.data.materials.new(name); m.use_nodes = True; nt = m.node_tree; b = nt.nodes["Principled BSDF"]
+    tc = nt.nodes.new("ShaderNodeTexCoord"); mp = nt.nodes.new("ShaderNodeMapping"); mp.inputs["Scale"].default_value = (1 / tile, 1 / tile, 1)
+    nt.links.new(tc.outputs["UV"], mp.inputs[0])
+    def t(path, nc=False):
+        n = nt.nodes.new("ShaderNodeTexImage"); n.image = bpy.data.images.load(os.path.abspath(path))
+        if nc: n.image.colorspace_settings.name = "Non-Color"
+        nt.links.new(mp.outputs[0], n.inputs[0]); return n
+    nt.links.new(t(stem + "_diff.jpg").outputs[0], b.inputs["Base Color"]); nt.links.new(t(stem + "_rough.jpg", True).outputs[0], b.inputs["Roughness"])
+    hp = stem + "_h.png" if os.path.exists(stem + "_h.png") else (stem + "_nor_2k.jpg" if os.path.exists(stem + "_nor_2k.jpg") else None)
+    if hp and hp.endswith(".png"):
+        bp = nt.nodes.new("ShaderNodeBump"); bp.inputs["Strength"].default_value = 0.4; bp.inputs["Distance"].default_value = 0.01
+        nt.links.new(t(hp, True).outputs[0], bp.inputs["Height"]); nt.links.new(bp.outputs[0], b.inputs["Normal"])
+    return m
+VAR = A[A.index("--variants") + 1] if "--variants" in A else None   # te-whitefield/world/brick_variants.py output
+def concrete_mat():
+    if ASSETS and os.path.exists(os.path.join(ASSETS, "concrete_diff_2k.jpg")):
+        m = bpy.data.materials.new("TE_Concrete"); m.use_nodes = True; nt = m.node_tree; b = nt.nodes["Principled BSDF"]
+        tc = nt.nodes.new("ShaderNodeTexCoord"); mp = nt.nodes.new("ShaderNodeMapping"); mp.inputs["Scale"].default_value = (1 / 2.0, 1 / 2.0, 1)
+        nt.links.new(tc.outputs["UV"], mp.inputs[0])
+        for kind, inp, nc in (("diff", "Base Color", False), ("rough", "Roughness", True)):
+            n = nt.nodes.new("ShaderNodeTexImage"); n.image = bpy.data.images.load(os.path.join(ASSETS, f"concrete_{kind}_2k.jpg"))
+            if nc: n.image.colorspace_settings.name = "Non-Color"
+            nt.links.new(mp.outputs[0], n.inputs[0]); nt.links.new(n.outputs[0], b.inputs[inp])
+        n = nt.nodes.new("ShaderNodeTexImage"); n.image = bpy.data.images.load(os.path.join(ASSETS, "concrete_nor_2k.jpg")); n.image.colorspace_settings.name = "Non-Color"
+        nt.links.new(mp.outputs[0], n.inputs[0]); nm = nt.nodes.new("ShaderNodeNormalMap"); nt.links.new(n.outputs[0], nm.inputs["Color"]); nt.links.new(nm.outputs[0], b.inputs["Normal"])
+        return m
+    return mat("TE_Concrete", (0.5, 0.49, 0.47), 0.75)
 M = {
-    "brick": brick_mat(),
-    "glass": mat("TE_Glass", (0.07, 0.09, 0.1), 0.03, 0.15, **{"Transmission Weight": 0.4, "IOR": 1.52, "Specular IOR Level": 1.0}),
+    "brick": tex_mat("TE_Brick", os.path.join(VAR, "stretcher_orange"), 2.4) if VAR and os.path.exists(os.path.join(VAR, "stretcher_orange_diff.jpg")) else brick_mat(),
+    "spine": tex_mat("TE_SpineWeave", os.path.join(VAR, "terracotta_weave"), 2.4) if VAR else brick_mat(),
+    "concrete": concrete_mat(),
+    "band": mat("TE_BandCourse", (0.74, 0.5, 0.34), 0.7),
+    "fascia": mat("TE_Fascia", (0.3, 0.17, 0.09), 0.5),
+    "sign": mat("TE_Sign", (0.95, 0.9, 0.8), 0.4, 0.0, **{"Emission Color": (1.0, 0.92, 0.78, 1), "Emission Strength": 1.5}),
+    "logo": mat("TE_Logo", (0.95, 0.95, 0.94), 0.35),
+    "warmwall": mat("TE_InteriorWall", (0.7, 0.56, 0.4), 0.8, 0.0, **{"Emission Color": (1.0, 0.8, 0.55, 1), "Emission Strength": 1.6}),
+    "desk": mat("TE_Desk", (0.55, 0.42, 0.3), 0.5),
+    "flower_pink": mat("TE_FlowerPink", (0.75, 0.25, 0.4), 0.7),
+    "flower_white": mat("TE_FlowerWhite", (0.9, 0.88, 0.82), 0.7),
+    "flower_red": mat("TE_FlowerRed", (0.62, 0.1, 0.07), 0.7),
+    "leaf_red": mat("TE_LeafRed", (0.36, 0.08, 0.05), 0.8),
+    "glass": mat("TE_Glass", (0.3, 0.26, 0.2), 0.03, 0.0, **{"Transmission Weight": 0.85, "IOR": 1.45, "Specular IOR Level": 0.6}),
     "blueglass": mat("TE_BlueGlass", (0.1, 0.24, 0.46), 0.03, 0.5, **{"Specular IOR Level": 1.0}),
     "winlit": mat("TE_WindowLit", (0.9, 0.78, 0.6), 0.2, 0.0, **{"Emission Color": (1.0, 0.8, 0.55, 1), "Emission Strength": 2.2}),
     "shopfront": mat("TE_ShopGlass", (0.16, 0.14, 0.12), 0.08, 0.2, **{"Emission Color": (1.0, 0.82, 0.58, 1), "Emission Strength": 0.35}),
@@ -165,7 +206,7 @@ M = {
     "planter": mat("TE_Planter", (0.78, 0.76, 0.72), 0.7),
     "soil": mat("TE_Soil", (0.18, 0.12, 0.08), 0.95),
     "mullion": mat("TE_Mullion", (0.16, 0.17, 0.18), 0.35, 0.8),
-    "ceiling": interior("TE_Ceiling", 7.0),
+    "ceiling": interior("TE_Ceiling", 16.0),
     "shop": interior("TE_LobbyCeiling", 16.0),
     "core": mat("TE_Core", (0.06, 0.06, 0.065), 0.8),
     "floor": mat("TE_Floor", (0.34, 0.32, 0.3), 0.5),
@@ -174,7 +215,7 @@ M = {
     "lobbyglass": mat("TE_LobbyGlass", (0.8, 0.85, 0.86), 0.02, 0.0, **{"Transmission Weight": 0.95, "IOR": 1.1, "Specular IOR Level": 0.25}),
     "timber": mat("TE_Timber", (0.42, 0.26, 0.14), 0.5),
     "roof": mat("TE_Roof", (0.5, 0.49, 0.47), 0.9),
-    "leaf": foliage("TE_Leaf", (0.05, 0.12, 0.03), (0.16, 0.27, 0.06)),
+    "leaf": foliage("TE_Leaf", (0.09, 0.2, 0.04), (0.22, 0.36, 0.09)),
     "leaf2": foliage("TE_LeafDeep", (0.03, 0.08, 0.02), (0.1, 0.19, 0.04)),
     "trunk": mat("TE_Trunk", (0.22, 0.16, 0.1), 0.9),
 }
@@ -205,10 +246,14 @@ def ico(c, r, m, sub=1):
 def bush(x, y, z, s, deep=False):
     for k in range(3):
         ico((x + (rnd.random() - .5) * s, y + (rnd.random() - .5) * s * .6, z + s * (0.35 + 0.3 * rnd.random())), s * (0.4 + 0.25 * rnd.random()), "leaf2" if deep or rnd.random() < .4 else "leaf")
-def tree(x, y, z, s):
+def tree(x, y, z, s, red=False):
     box(x - .06 * s, y - .06 * s, z, x + .06 * s, y + .06 * s, z + 1.2 * s, "trunk")
     for k in range(4):
-        ico((x + (rnd.random() - .5) * s * .9, y + (rnd.random() - .5) * s * .9, z + s * (1.3 + 0.6 * rnd.random())), s * (0.5 + 0.3 * rnd.random()), "leaf" if rnd.random() < .6 else "leaf2")
+        ico((x + (rnd.random() - .5) * s * .9, y + (rnd.random() - .5) * s * .9, z + s * (1.3 + 0.6 * rnd.random())), s * (0.5 + 0.3 * rnd.random()), "leaf_red" if red else ("leaf" if rnd.random() < .6 else "leaf2"))
+def vine(x, y, z, length):
+    """trailing planting hanging from a balcony edge: a chain of small leaf clumps"""
+    for k in range(int(length / 0.3)):
+        ico((x + rnd.uniform(-.12, .12), y + rnd.uniform(-.06, .06), z - k * 0.3), rnd.uniform(0.16, 0.26) * (1 - 0.4 * k / max(1, length / 0.3)), "leaf" if rnd.random() < .5 else "leaf2", sub=1)
 
 # ------------------------------------------------------------------ the end towers: brick cylinders with the blue slit
 SEG = 64
@@ -237,12 +282,21 @@ for s in (-1, 1):
         (tree if k % 3 == 0 else bush)(cx + r * math.cos(a) * .85, r * math.sin(a), H + 1.6, rnd.uniform(1.4, 2.6))
 
 # ------------------------------------------------------------------ the spine: brick, proud of both faces, a window column
-box(-6.5, -14.4, 0, 6.5, 14.4, H + 4.5, "brick")
+# the founder's close-up: a fine diamond-weave brick skin, one wide window per floor set 0.3 m into the wall,
+# a light band course at every floor
+box(-6.5, -14.1, 0, 6.5, 14.1, H + 4.5, "spine")
+WX = 1.55
 for k in range(NF + 1):
-    z = GH + k * FH - 1.9 if k else 2.2
+    z0 = GH + (k - 1) * FH if k else 0.0; z1 = GH + k * FH
+    wz0, wz1 = (z1 - FH + 1.1, z1 - FH + 2.25) if k else (1.6, 2.9)
     for sy in (-1, 1):
-        for cxw in (-2.7, 2.7):
-            box(cxw - 1.0, sy * 14.4 - 0.08, z, cxw + 1.0, sy * 14.4 + 0.08, z + 1.25, "winlit")   # warm-lit, as the render's spine
+        y0, y1 = sorted((sy * 14.1, sy * 14.4))
+        box(-6.5, y0, z0, -WX, y1, z1, "spine"); box(WX, y0, z0, 6.5, y1, z1, "spine")        # piers either side
+        box(-WX, y0, z0, WX, y1, wz0, "spine"); box(-WX, y0, wz1, WX, y1, z1, "spine")        # below and above the window
+        box(-WX, sy * 14.1 - 0.02, wz0, WX, sy * 14.1 + 0.02, wz1, "winlit")                  # the lit window, 0.3 m back
+        box(-WX, y0 - 0.02, wz1 - 0.12, WX, y1 + 0.02, wz1, "fascia")                         # the dark head of the opening
+        box(-6.5, y0 - 0.03, z1 - 0.12, 6.5, y1 + 0.03, z1, "band")                           # band course
+box(-6.5, -14.4, H + 0.2, 6.5, 14.4, H + 4.5, "spine")
 
 # ------------------------------------------------------------------ the glazed bays with bowed, planted balconies
 def edge(u, xa, xb, k):
@@ -250,7 +304,9 @@ def edge(u, xa, xb, k):
 for sx in (-1, 1):
     xa, xb = sorted((sx * BAY0, sx * BAY1))
     # core (the glass never sees through) and the glass skin
-    box(xa + 1.5, -5.5, GH, xb - 1.5, 5.5, H, "core")
+    box(xa + 1.5, -5.5, GH, xb - 1.5, 5.5, H, "warmwall")                     # the core, as a warm-lit back wall
+    for cx_ in (xa + 0.45, (xa + xb) / 2, xb - 0.45):                              # exposed concrete columns (render)
+        for sy in (-1, 1): box(cx_ - 0.3, sy * (GLASS_Y + 0.15) - 0.3, GH, cx_ + 0.3, sy * (GLASS_Y + 0.15) + 0.3, H, "concrete")
     for sy in (-1, 1):
         y = sy * GLASS_Y
         face([bm.verts.new(p) for p in ((xa, y, GH), (xb, y, GH), (xb, y, H), (xa, y, H))][::(1 if sy < 0 else -1)], "glass")
@@ -278,19 +334,30 @@ for sx in (-1, 1):
         for cx_ in (xa + (xb - xa) / 3, xa + 2 * (xb - xa) / 3):
             bmesh.ops.create_cone(bm, cap_ends=True, segments=16, radius1=0.35, radius2=0.35, depth=GH - 1.2, matrix=Matrix.Translation((cx_, sy * 8.2, (GH - 1.2) / 2 + 0.2)))
     box(xa, -12.6, GH - 0.7, xb, 12.6, GH - 0.35, "canopy")
+    for sy in (-1, 1):                                                              # the shop fascia with signs (render)
+        y0, y1 = sorted((sy * 12.6, sy * 12.75))
+        box(xa, y0, GH - 0.35, xb, y1, GH + 0.25, "fascia")
+        for k_ in range(3):
+            c_ = xa + (xb - xa) * (k_ + 0.5) / 3
+            box(c_ - 1.6, y0 - (0.04 if sy < 0 else 0), GH - 0.2, c_ + 1.6, y1 + (0.04 if sy > 0 else 0), GH + 0.1, "sign")
     us = [xa + (xb - xa) * i / 16 for i in range(17)]
     for k in range(NF):
         z = GH + k * FH
         box(xa + 0.4, -GLASS_Y + 0.6, z + FH - 0.42, xb - 0.4, GLASS_Y - 0.6, z + FH - 0.38, "ceiling")    # lit ceiling 0.6 m behind the glass
         for sy in (-1, 1):
+            box(xa, sy * GLASS_Y - 0.06, z + 2.55, xb, sy * GLASS_Y + 0.06, z + 2.62, "mullion")         # transom (render)
+            for dx in (0.3, 0.55, 0.8):                                                                  # desks along the glass
+                dxx = xa + (xb - xa) * dx
+                box(dxx - 0.8, sy * (GLASS_Y - 2.2) - 0.4, z, dxx + 0.8, sy * (GLASS_Y - 2.2) + 0.4, z + 0.75, "desk")
+        for sy in (-1, 1):
             ed = [edge(u, xa, xb, k) for u in us]
             out = [(u, sy * e) for u, e in zip(us, ed)]
             slab = [(xb, sy * (GLASS_Y - 0.2)), (xa, sy * (GLASS_Y - 0.2))] + out
             if sy < 0: slab = slab[::-1]
-            prism(slab, z + FH - 0.3, z + FH, "slab")
+            prism(slab, z + FH - 0.45, z + FH, "concrete")
             inn = [(u, sy * (e - 0.22)) for u, e in zip(us, ed)]
             band = out + inn[::-1]
-            prism(band if sy > 0 else band[::-1], z + FH, z + FH + 1.0, "planter")
+            prism(band if sy > 0 else band[::-1], z + FH, z + FH + 1.0, "concrete")
             inn2 = [(u, sy * (e - 1.05)) for u, e in zip(us, ed)]
             bed = inn + inn2[::-1]
             prism(bed if sy > 0 else bed[::-1], z + FH, z + FH + 0.85, "soil")
@@ -298,8 +365,13 @@ for sx in (-1, 1):
             uu = [xa + (xb - xa) * i / 24 for i in range(1, 24)]
             for u in uu:
                 e = edge(u, xa, xb, k)
-                bush(u + rnd.uniform(-.25, .25), sy * (e - 0.55), z + FH + 0.7, rnd.uniform(0.85, 1.3), deep=rnd.random() < .5)
-                if rnd.random() < 0.45: ico((u, sy * (e + 0.1), z + FH + 0.55), rnd.uniform(0.35, 0.6), "leaf")   # spilling over the edge
+                if rnd.random() < 0.5: bush(u + rnd.uniform(-.25, .25), sy * (e - 0.55), z + FH + 0.7, rnd.uniform(0.7, 1.1), deep=rnd.random() < .3)
+                if rnd.random() < 0.6: ico((u, sy * (e + 0.12), z + FH + 0.5), rnd.uniform(0.35, 0.6), "leaf")   # spilling over the edge
+                if rnd.random() < 0.22:                                                                     # vines hanging below the slab
+                    vine(u, sy * (e + 0.12), z + FH + 0.2, rnd.uniform(0.9, 1.8))
+                if rnd.random() < 0.35:                                                                     # flowers (render: pink, white, red)
+                    for _f in range(4):   # a cluster of small blooms, not one ball
+                        ico((u + rnd.uniform(-.4, .4), sy * (e - 0.35 + rnd.uniform(-.2, .2)), z + FH + 1.25 + rnd.uniform(0, .3)), rnd.uniform(0.05, 0.09), rnd.choice(["flower_pink", "flower_white", "flower_white", "flower_red"]), sub=1)
                 if rnd.random() < 0.10: tree(u, sy * (e - 0.6), z + FH + 0.85, rnd.uniform(1.0, 1.4))
 
 # ------------------------------------------------------------------ the roof: garden slab, trees, glass pavilion
@@ -311,6 +383,20 @@ for k in range(40):
     if 8 < x < 20 and -5 < y < 5 or -7 < x < 7: continue
     (tree if k % 4 == 0 else bush)(x, y, H + 0.9, rnd.uniform(1.2, 2.4))
 
+# the wordmark near the top of the west drum, wrapped onto its curve (render: "TotalEnvironment" in white)
+cu = bpy.data.curves.new("logo", "FONT"); cu.body = "TotalEnvironment"; cu.size = 1.9; cu.extrude = 0.03; cu.align_x = "CENTER"
+lo = bpy.data.objects.new("logo", cu); sc.collection.objects.link(lo)
+lme = bpy.data.meshes.new_from_object(lo.evaluated_get(bpy.context.evaluated_depsgraph_get())); bpy.data.objects.remove(lo)
+cxL, RR, a0, zL = -(LH - R), R + 0.05, 0.25, H - 3.6
+vmap = {}
+for v in lme.vertices:
+    a = a0 + v.co.x / RR; r_ = RR + v.co.z
+    vmap[v.index] = bm.verts.new((cxL + r_ * math.sin(a), -r_ * math.cos(a), zL + v.co.y))
+for pl in lme.polygons:
+    try:
+        f = bm.faces.new([vmap[i] for i in pl.vertices]); f.material_index = ORDER.index("logo")
+    except ValueError: pass
+bpy.data.meshes.remove(lme)
 me = bpy.data.meshes.new("opt_te-workcations"); bm.to_mesh(me); bm.free()
 for m in ORDER: me.materials.append(M[m])
 ob = bpy.data.objects.new("opt_te-workcations", me); sc.collection.objects.link(ob)
@@ -327,17 +413,33 @@ if "--preview" in A:   # a look check: sky, sun, the drone's three-quarter view 
     if ASSETS and os.path.exists(hd):
         env = nt.nodes.new("ShaderNodeTexEnvironment"); env.image = bpy.data.images.load(hd)
         nt.links.new(env.outputs[0], nt.nodes["Background"].inputs[0]); nt.nodes["Background"].inputs[1].default_value = 0.8
+        # the camera sees a clean sky (the HDRI's horizon is someone else's mountains); light still comes from the HDRI
+        sky = nt.nodes.new("ShaderNodeTexSky"); sky.sky_type = "MULTIPLE_SCATTERING"; sky.sun_elevation = math.radians(35); sky.sun_disc = False
+        bgs = nt.nodes.new("ShaderNodeBackground"); bgs.inputs[1].default_value = 0.35; nt.links.new(sky.outputs[0], bgs.inputs[0])
+        lp = nt.nodes.new("ShaderNodeLightPath"); mx = nt.nodes.new("ShaderNodeMixShader")
+        nt.links.new(lp.outputs["Is Camera Ray"], mx.inputs[0]); nt.links.new(nt.nodes["Background"].outputs[0], mx.inputs[1]); nt.links.new(bgs.outputs[0], mx.inputs[2])
+        nt.links.new(mx.outputs[0], nt.nodes["World Output"].inputs["Surface"])
     else:
         sk = nt.nodes.new("ShaderNodeTexSky"); sk.sky_type = "MULTIPLE_SCATTERING"; sk.sun_elevation = math.radians(28); sk.sun_rotation = math.radians(-30); sk.sun_disc = False
         nt.links.new(sk.outputs[0], nt.nodes["Background"].inputs[0]); nt.nodes["Background"].inputs[1].default_value = 0.25
-    sun = bpy.data.lights.new("sun", "SUN"); sun.energy = 4.5; so = bpy.data.objects.new("sun", sun); sc.collection.objects.link(so); so.rotation_euler = (math.radians(55), 0, math.radians(125))
+    sun = bpy.data.lights.new("sun", "SUN"); sun.energy = 6.5; sun.color = (1.0, 0.84, 0.66); sun.angle = math.radians(1.5)
+    so = bpy.data.objects.new("sun", sun); sc.collection.objects.link(so)
+    so.rotation_euler = (-Vector((-0.75, 0.55, -0.36))).to_track_quat("Z", "Y").to_euler()   # warm late sun raking across the long face from the south-east
     gp = bpy.data.meshes.new("g"); gpo = bpy.data.objects.new("ground", gp); sc.collection.objects.link(gpo)
-    b2 = bmesh.new(); bmesh.ops.create_grid(b2, x_segments=1, y_segments=1, size=300); b2.to_mesh(gp); b2.free(); gp.materials.append(mat("g", (0.42, 0.38, 0.32), 0.9))
+    b2 = bmesh.new(); bmesh.ops.create_grid(b2, x_segments=1, y_segments=1, size=300); b2.to_mesh(gp); b2.free(); gp.materials.append(tex_mat("ground_grass", os.path.join(ASSETS, "grass"), 3.0) if ASSETS and os.path.exists(os.path.join(ASSETS, "grass_diff_2k.jpg")) and False else mat("g", (0.3, 0.33, 0.2), 0.95))
     cd = bpy.data.cameras.new("c"); cd.lens = 40; cam = bpy.data.objects.new("c", cd); sc.collection.objects.link(cam); sc.camera = cam
-    cam.location = (70, -150, 55); look = Vector((0, 0, 38)) - cam.location
+    cam.location = (58, -120, 12); look = Vector((-4, 0, 40)) - cam.location; cd.lens = 34; cd.shift_y = 0.08   # the developer render's viewpoint
+    tb = bmesh.new()   # foreground trees and a verge, as in the render
+    for x_, y_, s_ in ():
+        bmesh.ops.create_cone(tb, cap_ends=True, segments=8, radius1=0.25, radius2=0.18, depth=s_, matrix=Matrix.Translation((x_, y_, s_ / 2)))
+        for k_ in range(7):
+            r0 = bmesh.ops.create_icosphere(tb, subdivisions=2, radius=s_ * rnd.uniform(0.3, 0.45), matrix=Matrix.Translation((x_ + rnd.uniform(-1, 1) * s_ * .45, y_ + rnd.uniform(-1, 1) * s_ * .3, s_ * rnd.uniform(0.9, 1.5))))
+            for v_ in r0["verts"]: v_.co += Vector((rnd.random() - .5, rnd.random() - .5, rnd.random() - .5)) * s_ * 0.08
+    tm = bpy.data.meshes.new("fg"); tb.to_mesh(tm); tb.free(); tm.materials.append(M["leaf"]); to = bpy.data.objects.new("fg", tm); sc.collection.objects.link(to)
+    for pg in tm.polygons: pg.use_smooth = True
     cam.rotation_euler = look.to_track_quat("-Z", "Y").to_euler()
-    sc.render.engine = "CYCLES"; sc.cycles.device = "CPU"; sc.cycles.samples = 24; sc.cycles.use_denoising = True
+    sc.render.engine = "CYCLES"; sc.cycles.device = "CPU"; sc.cycles.samples = int(A[A.index("--samples") + 1]) if "--samples" in A else 24; sc.cycles.use_denoising = True
     sc.view_settings.view_transform = "AgX"; sc.view_settings.look = "AgX - Medium High Contrast"
-    sc.view_settings.exposure = -0.9 if ASSETS else 0.0   # the HDRI and the sun together over-expose the brick to salmon
+    sc.view_settings.exposure = -1.1 if ASSETS else 0.0; sc.view_settings.look = "AgX - High Contrast"   # the HDRI and the sun together over-expose the brick to salmon
     sc.render.resolution_x, sc.render.resolution_y = (540, 675) if "--small" in A else (1080, 1350); sc.render.filepath = os.path.abspath(png)
     bpy.ops.render.render(write_still=True); print("PREVIEW", png)

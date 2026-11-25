@@ -26,6 +26,7 @@ L, Hh, HD, J = 0.23, 0.075, 0.11, 0.012              # brick length, height, hea
 PAL = {
     "red_brown": [(150, 66, 40), (138, 58, 36), (160, 76, 46), (126, 54, 34), (168, 84, 52), (144, 70, 44), (118, 50, 32)],
     "dark":      [(92, 44, 32), (84, 40, 30), (100, 50, 36), (76, 36, 28), (108, 54, 38)],
+    "orange":    [(170, 84, 48), (160, 78, 44), (178, 92, 54), (152, 72, 42), (186, 98, 58), (166, 82, 50)],   # the render's drums
 }
 MORTAR = {"light": (182, 168, 150), "grey": (128, 122, 114), "dark": (70, 62, 56)}
 
@@ -151,6 +152,7 @@ VARIANTS = [
     ("jali", lambda: jali("jali", PAL["red_brown"], "dark", 5)),
     ("wirecut_dark", lambda: running("wirecut_dark", PAL["dark"], "dark", 6)),
     ("terracotta_weave", lambda: diag_weave("terracotta_weave", 7)),
+    ("stretcher_orange", lambda: running("stretcher_orange", PAL["orange"], "light", 9)),
     ("jali_diagonal", lambda: diag_jali("jali_diagonal", 8)),
 ]
 tiles = [(nm, fn()) for nm, fn in VARIANTS]
