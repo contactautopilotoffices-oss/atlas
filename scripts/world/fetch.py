@@ -9,11 +9,15 @@ N19 E072, cropped to the same box. No API key is needed for either.
 Writes building, segment, water, land_use, infrastructure .parquet files,
 dsm.npy and dsm_t.json (the crop's affine transform).
 """
-import os, sys, time, json, urllib.request
+import os, sys, time, json, math, urllib.request
 import pyarrow.fs as pafs, pyarrow.parquet as pq, pyarrow as pa, pyarrow.compute as pc
 from concurrent.futures import ThreadPoolExecutor
 REL="release/2026-10-21.0"
 BB=(72.838,19.094,72.896,19.128)
+# --region FILE (scripts/world/regions/*.json): its clip box and its Copernicus tile instead of Andheri East
+if "--region" in sys.argv:
+    _i=sys.argv.index("--region"); _rg=json.load(open(sys.argv[_i+1])); del sys.argv[_i:_i+2]
+    BB=tuple(_rg["clip"])
 s3=pafs.S3FileSystem(anonymous=True, region="us-west-2")
 def rgs(path):
     f=pq.ParquetFile(path, filesystem=s3); md=f.metadata; hits=[]
@@ -49,7 +53,9 @@ import numpy as np, rasterio
 from rasterio.windows import from_bounds
 tif = os.path.join(OUTD, "dsm.tif")
 if not os.path.exists(tif):
-    urllib.request.urlretrieve("https://copernicus-dem-30m.s3.amazonaws.com/Copernicus_DSM_COG_10_N19_00_E072_00_DEM/Copernicus_DSM_COG_10_N19_00_E072_00_DEM.tif", tif)
+    _n,_e=int(math.floor(BB[1])),int(math.floor(BB[0]))
+    _t=f"Copernicus_DSM_COG_10_N{_n:02d}_00_E{_e:03d}_00_DEM"
+    urllib.request.urlretrieve(f"https://copernicus-dem-30m.s3.amazonaws.com/{_t}/{_t}.tif", tif)
 with rasterio.open(tif) as r:
     win = from_bounds(BB[0], BB[1], BB[2], BB[3], r.transform)
     np.save(os.path.join(OUTD, "dsm.npy"), r.read(1, window=win))

@@ -1,0 +1,673 @@
+{
+ "about": "Build input for scripts/world (prep.py, diorama.py) for the JindalX Noida explorer. Generated from engine/atlases/jindalx-noida.js; routes from scripts/world/routes.py on Overture streets from the pins (the buildings seen in imagery, docs/JINDALX_VERIFICATION.md). Total floors: the workbook Building structure above ground. Grade is a modelling input only (it picks the facade: glass for A, plaster with ribbon windows for B), never shown: Magnus Towers is glass because a glazing contract was awarded for C-2, Sector 67 in Sept 2025 (Faalcon Concepts BSE filing); the others are undocumented, so plaster.",
+ "options": [
+  {
+   "id": "magnus-towers",
+   "n": 1,
+   "name": "Magnus Towers",
+   "lat": 28.601495,
+   "lng": 77.388284,
+   "precision": "approx",
+   "address": "Magnus Towers, Sector 67, Noida",
+   "locality": "Magnus Towers, Sector 67, Noida",
+   "routes": [
+    {
+     "kind": "metro",
+     "name": "Noida Sector 59",
+     "lines": [
+      "Blue Line"
+     ],
+     "lat": 28.6065279,
+     "lng": 77.3726828,
+     "m": 2000,
+     "min": 25,
+     "mode": "walk",
+     "path": [
+      [
+       77.389062,
+       28.601508
+      ],
+      [
+       77.38924,
+       28.601497
+      ],
+      [
+       77.389193,
+       28.60107
+      ],
+      [
+       77.389094,
+       28.600997
+      ],
+      [
+       77.388815,
+       28.600898
+      ],
+      [
+       77.386277,
+       28.600833
+      ],
+      [
+       77.379757,
+       28.600828
+      ],
+      [
+       77.377483,
+       28.600928
+      ],
+      [
+       77.372,
+       28.601099
+      ],
+      [
+       77.372292,
+       28.601267
+      ],
+      [
+       77.372413,
+       28.603956
+      ],
+      [
+       77.372483,
+       28.604115
+      ],
+      [
+       77.372584,
+       28.606533
+      ],
+      [
+       77.372683,
+       28.606528
+      ]
+     ],
+     "dist": "Overture Maps streets (OpenStreetMap), shortest walk",
+     "src": "https://docs.overturemaps.org/"
+    }
+   ],
+   "facts": [
+    {
+     "k": "Total floors",
+     "v": "G+5"
+    },
+    {
+     "k": "Grade",
+     "v": "A"
+    },
+    {
+     "k": "Address/Sector",
+     "v": "Magnus towers, Sector 67, Noida",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Location",
+     "v": "Magnus Towers",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Nearest Metro station",
+     "v": "Sector 59, ~2KM",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Distance from Jindal X existing office",
+     "v": "~7 KM",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Building structure",
+     "v": "B+G+5",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "BUA each floor, sqft",
+     "v": "38000",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Efficiency",
+     "v": "0.65",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Offered floor",
+     "v": "5th",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Parking",
+     "v": "1:1000",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Common Cafeteria",
+     "v": "Yes, landlord is planning",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Connectivity with local transport",
+     "v": "Excellent",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Lifts each floor",
+     "v": "6",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Timelines",
+     "v": "3 Months",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Pros",
+     "v": "The only new(Decemeber 2026 handover) asset with larger floor plates, Sufficient parking area, wider roads and excellent Local transport connectivity. Area is not too dense.",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Cons",
+     "v": "Not specified in source",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Tentative Monthly outflow for JindalX",
+     "v": "INR 20,08,000/- + GST",
+     "src": "/jindalx/source-options.json"
+    }
+   ]
+  },
+  {
+   "id": "a104",
+   "n": 2,
+   "name": "A104",
+   "lat": 28.584006,
+   "lng": 77.321683,
+   "precision": "approx",
+   "address": "A104, Sector 4, Noida",
+   "locality": "A104, Sector 4, Noida",
+   "routes": [
+    {
+     "kind": "metro",
+     "name": "Noida Sector 16",
+     "lines": [
+      "Blue Line"
+     ],
+     "lat": 28.578081,
+     "lng": 77.3177778,
+     "m": 800,
+     "min": 10,
+     "mode": "walk",
+     "path": [
+      [
+       77.321299,
+       28.583933
+      ],
+      [
+       77.321234,
+       28.583886
+      ],
+      [
+       77.321108,
+       28.58402
+      ],
+      [
+       77.320012,
+       28.583234
+      ],
+      [
+       77.320116,
+       28.583076
+      ],
+      [
+       77.318921,
+       28.582195
+      ],
+      [
+       77.319277,
+       28.581819
+      ],
+      [
+       77.317577,
+       28.580534
+      ],
+      [
+       77.318938,
+       28.579076
+      ],
+      [
+       77.317972,
+       28.578345
+      ],
+      [
+       77.317302,
+       28.578997
+      ],
+      [
+       77.317182,
+       28.57892
+      ],
+      [
+       77.317076,
+       28.579024
+      ],
+      [
+       77.316945,
+       28.578921
+      ],
+      [
+       77.317778,
+       28.578081
+      ]
+     ],
+     "dist": "Overture Maps streets (OpenStreetMap), shortest walk",
+     "src": "https://docs.overturemaps.org/"
+    }
+   ],
+   "facts": [
+    {
+     "k": "Total floors",
+     "v": "G+3"
+    },
+    {
+     "k": "Grade",
+     "v": "B"
+    },
+    {
+     "k": "Address/Sector",
+     "v": "A104, Sector 4, Noida",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Location",
+     "v": "A104",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Nearest Metro station",
+     "v": "Sector 16, ~800 Mtrs",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Distance from Jindal X existing office",
+     "v": "~7KM",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Building structure",
+     "v": "B+G/S+3",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "BUA each floor, sqft",
+     "v": "25000",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Efficiency",
+     "v": "0.65",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Offered floor",
+     "v": "1st/2nd",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Parking",
+     "v": "1:1000",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Common Cafeteria",
+     "v": "Will have to be discussed",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Connectivity with local transport",
+     "v": "Excellent",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Lifts each floor",
+     "v": "2",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Timelines",
+     "v": "3 Months",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Pros",
+     "v": "The only new(Decemeber 2026 handover) asset with larger floor plates, Sufficient parking area, Excellent Local transport connectivity.",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Cons",
+     "v": "1 Approach road is narrow and the other one has Dumpyard",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Tentative Monthly outflow for JindalX",
+     "v": "INR 21,50,000/- + GST",
+     "src": "/jindalx/source-options.json"
+    }
+   ]
+  },
+  {
+   "id": "a14-18-19",
+   "n": 3,
+   "name": "A14,18,19",
+   "lat": 28.585363,
+   "lng": 77.328785,
+   "precision": "approx",
+   "address": "A14/18/19, Sector 9, Noida",
+   "locality": "A14/18/19, Sector 9, Noida",
+   "routes": [
+    {
+     "kind": "metro",
+     "name": "Noida Sector 16",
+     "lines": [
+      "Blue Line"
+     ],
+     "lat": 28.578081,
+     "lng": 77.3177778,
+     "m": 1900,
+     "min": 24,
+     "mode": "walk",
+     "path": [
+      [
+       77.32891,
+       28.585239
+      ],
+      [
+       77.329098,
+       28.58504
+      ],
+      [
+       77.324476,
+       28.581643
+      ],
+      [
+       77.322453,
+       28.580223
+      ],
+      [
+       77.321492,
+       28.579484
+      ],
+      [
+       77.32065,
+       28.580372
+      ],
+      [
+       77.317972,
+       28.578345
+      ],
+      [
+       77.317302,
+       28.578997
+      ],
+      [
+       77.317182,
+       28.57892
+      ],
+      [
+       77.317076,
+       28.579024
+      ],
+      [
+       77.316945,
+       28.578921
+      ],
+      [
+       77.317778,
+       28.578081
+      ]
+     ],
+     "dist": "Overture Maps streets (OpenStreetMap), shortest walk",
+     "src": "https://docs.overturemaps.org/"
+    }
+   ],
+   "facts": [
+    {
+     "k": "Total floors",
+     "v": "G+4"
+    },
+    {
+     "k": "Grade",
+     "v": "B"
+    },
+    {
+     "k": "Address/Sector",
+     "v": "A14/18/19, Sector 9, Noida",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Location",
+     "v": "A14,18,19",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Nearest Metro station",
+     "v": "Sector 16, ~2KM",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Distance from Jindal X existing office",
+     "v": "~7KM",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Building structure",
+     "v": "B+G/S+2+2 floors of 8k sqft",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "BUA each floor, sqft",
+     "v": "G,1,2- 18000                                                      3,4- 8000",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Efficiency",
+     "v": "0.65",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Offered floor",
+     "v": "2nd and 3rd",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Parking",
+     "v": "1:1000",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Common Cafeteria",
+     "v": "Yes, Can be planned",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Connectivity with local transport",
+     "v": "Excellent",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Lifts each floor",
+     "v": "2",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Timelines",
+     "v": "4-5 Months",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Pros",
+     "v": "Entire building is available, Main road, well connected with DND road, Entire building upgradation is in process",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Cons",
+     "v": "Distance from metro",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Tentative Monthly outflow for JindalX",
+     "v": "INR 18,50,000/- + GST",
+     "src": "/jindalx/source-options.json"
+    }
+   ]
+  },
+  {
+   "id": "d1",
+   "n": 4,
+   "name": "D1",
+   "lat": 28.581692,
+   "lng": 77.316915,
+   "precision": "approx",
+   "address": "D1, Sector 3, Noida",
+   "locality": "D1, Sector 3, Noida",
+   "routes": [
+    {
+     "kind": "metro",
+     "name": "Noida Sector 16",
+     "lines": [
+      "Blue Line"
+     ],
+     "lat": 28.578081,
+     "lng": 77.3177778,
+     "m": 500,
+     "min": 6,
+     "mode": "walk",
+     "path": [
+      [
+       77.316741,
+       28.58192
+      ],
+      [
+       77.31664,
+       28.582027
+      ],
+      [
+       77.315255,
+       28.580992
+      ],
+      [
+       77.315885,
+       28.580378
+      ],
+      [
+       77.31578,
+       28.580298
+      ],
+      [
+       77.317026,
+       28.579066
+      ],
+      [
+       77.316899,
+       28.578969
+      ],
+      [
+       77.317778,
+       28.578081
+      ]
+     ],
+     "dist": "Overture Maps streets (OpenStreetMap), shortest walk",
+     "src": "https://docs.overturemaps.org/"
+    }
+   ],
+   "facts": [
+    {
+     "k": "Total floors",
+     "v": "G+2"
+    },
+    {
+     "k": "Grade",
+     "v": "B"
+    },
+    {
+     "k": "Address/Sector",
+     "v": "D1, Sector 3, Noida",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Location",
+     "v": "D1",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Nearest Metro station",
+     "v": "Sector 16, ~500 Mtrs",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Distance from Jindal X existing office",
+     "v": "~7KM",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Building structure",
+     "v": "B+G+2",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "BUA each floor, sqft",
+     "v": "20000",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Efficiency",
+     "v": "0.65",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Offered floor",
+     "v": "2nd",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Parking",
+     "v": "1:1000",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Common Cafeteria",
+     "v": "Yes, Can be planned",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Connectivity with local transport",
+     "v": "Excellent",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Lifts each floor",
+     "v": "3",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Timelines",
+     "v": "4-5 Months",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Pros",
+     "v": "Entire building is available, Main road, well connected with DND road, Entire building upgradation is in process and approach roads are wider",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Cons",
+     "v": "Expensive",
+     "src": "/jindalx/source-options.json"
+    },
+    {
+     "k": "Tentative Monthly outflow for JindalX",
+     "v": "INR 24,50,000/- + GST",
+     "src": "/jindalx/source-options.json"
+    }
+   ]
+  }
+ ]
+}

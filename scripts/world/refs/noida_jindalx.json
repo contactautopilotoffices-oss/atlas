@@ -1,0 +1,169 @@
+{
+ "about": "Indicative plot massings for the JindalX options (scripts/world/plot_massing.py). Floor plate and storeys from the client's workbook (JindalX options.xlsx); position from the indicative pins in jindalx/build-data.cjs; orientation squared to the nearest Overture road. Not surveyed: confirm the plot with the landlord, then replace the outline.",
+ "magnus-towers": {
+  "poly": [
+   [
+    275.79,
+    -381.0
+   ],
+   [
+    406.78,
+    -383.0
+   ],
+   [
+    407.21,
+    -355.0
+   ],
+   [
+    276.22,
+    -353.0
+   ]
+  ],
+  "h": 25.0,
+  "scene_origin": [
+   77.3847901,
+   28.604823
+  ],
+  "basis": "Magnus Greens (plot C-2, Sector 67): traced from Google z20 satellite 2026 and Street View 2025-26 (review only, nothing copied): a 131 x 28 m block, G+5 per the workbook, 25 m. Footprint +-4 m; the boundary-wall plot is not established (part of a larger walled campus), so the plot is the block grown by 10.5 m, which matches the wall seen at about y=-392. Gate: a probable construction gate on the east road (low confidence), snapped to the plot's east wall. No gate in the road-front wall.",
+  "front_toward": [
+   341.0,
+   -420.0
+  ],
+  "gates": [
+   [
+    431,
+    -368
+   ]
+  ]
+ },
+ "a104": {
+  "poly": [
+   [
+    -171.62,
+    6.24
+   ],
+   [
+    -148.53,
+    -22.9
+   ],
+   [
+    -107.3,
+    9.76
+   ],
+   [
+    -130.38,
+    38.9
+   ]
+  ],
+  "h": 16.5,
+  "scene_origin": [
+   77.3231094,
+   28.5839319
+  ],
+  "basis": "A-104 (identity inferred, LOW confidence): the vacant charcoal-ACP and blue-glass block ~140 m west of the old pin, outline traced from Google z20 satellite 2026 (+-5 m), regularised to a rectangle (roof plate ~1,950 m2 vs the workbook's 2,323 m2). Steel sliding gate and guard hut on the narrow west lane (front faces that lane); a solid compound wall to the wide east road. Landlord must supply the plot plan.",
+  "front_toward": [
+   -181,
+   -3
+  ],
+  "gates": [
+   [
+    -181,
+    -3
+   ]
+  ]
+ },
+ "a14-18-19": {
+  "poly": [
+   [
+    560.13,
+    144.07
+   ],
+   [
+    568.47,
+    151.79
+   ],
+   [
+    548.78,
+    173.07
+   ],
+   [
+    540.45,
+    165.35
+   ]
+  ],
+  "h": 18.7,
+  "scene_origin": [
+   77.3231094,
+   28.5839319
+  ],
+  "basis": "A-14 only (the front plot, 452 m2: 12.6 m frontage x 36 m on Amaltash Marg), NOT the A-14/18/19 amalgam: the workbook's 18,000 sq ft a floor cannot stand on it, and A-18/19 are probably rear plots. 'plot' is the traced plot; 'poly' (what the explorer collides with) is the building inside it: 4 m forecourt in front, 0.6 m at the sides, 3 m behind. G+4 on an open stilt floor, no set-back upper block (the 2026 imagery shows none). One entrance gate on the frontage.",
+  "plot": [
+   [
+    562.41,
+    140.73
+   ],
+   [
+    571.63,
+    149.26
+   ],
+   [
+    547.21,
+    175.69
+   ],
+   [
+    537.99,
+    167.17
+   ]
+  ],
+  "front_toward": [
+   567,
+   145
+  ],
+  "gates": [
+   [
+    569.0,
+    142.8
+   ]
+  ]
+ },
+ "d1": {
+  "poly": [
+   [
+    -633.07,
+    -237.56
+   ],
+   [
+    -604.19,
+    -277.68
+   ],
+   [
+    -577.77,
+    -258.65
+   ],
+   [
+    -606.65,
+    -218.54
+   ]
+  ],
+  "h": 12.5,
+  "scene_origin": [
+   77.3231094,
+   28.5839319
+  ],
+  "basis": "D-1: outline traced from Street View and Google z21 roof edges (+-4 m, ~1,600 m2), regularised to a rectangle. The NW end (with the round glazed corner tower and the green glass bay) is the front; gates at the proposal's two points (SW frontage gate, NW forecourt gate; low-medium). B+G+2 per the workbook (the imagery shows 3 to 4 levels).",
+  "front_toward": [
+   -619,
+   -228
+  ],
+  "gates": [
+   [
+    -612,
+    -266
+   ],
+   [
+    -619,
+    -228
+   ]
+  ]
+ }
+}

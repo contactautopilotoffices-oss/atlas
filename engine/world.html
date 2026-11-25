@@ -162,6 +162,10 @@ body.routing #walkhud,body.routing #hint{display:none}
 body.showing-area #floors,body.showing-area #conn,body.showing-area #go,body.showing-area #src,body.showing-area #more,body.showing-area #spec,body.showing-area #photo{display:none!important}
 body.showing-area #credit{display:block}
 @media(max-width:700px){body.project-tools #top{flex-wrap:wrap;gap:10px}body.project-tools #brand{flex:1 0 calc(100% - 100px)}body.project-tools #modes{order:3}body.project-tools #to-map{order:2}body.showing-area #credit{top:auto;bottom:154px;right:16px;max-width:230px;font-size:9px;background:rgba(8,9,11,.65);padding:7px;border-radius:6px}}
+#walk-back{display:none;position:fixed;left:28px;top:96px;z-index:6;padding:12px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.28);background:rgba(14,15,18,.72);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);color:#fff;font:600 14px/1 var(--disp,system-ui);letter-spacing:.02em;cursor:pointer}
+body.walk #walk-back{display:block}
+#walk-back:hover{background:#ffc200;color:#17140a;border-color:#ffc200}
+@media(max-width:700px){#walk-back{left:16px;top:84px}}
 </style>
 </head>
 <body>
@@ -170,7 +174,7 @@ body.showing-area #credit{display:block}
 <div id="labels"></div>
 
 <header id="top" hidden>
-  <div id="brand"><span class="mono" id="t-eyebrow">Autopilot · Flipkart</span><b id="t-title">Andheri East</b></div>
+  <div id="brand"><span class="mono" id="t-eyebrow">Autopilot</span><b id="t-title">&nbsp;</b></div>
   <nav id="modes" aria-label="View">
     <button data-mode="dollhouse" class="on"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l9 5v10l-9 5-9-5V7z"/><path d="M12 22V12M21 7l-9 5-9-5"/></svg>Dollhouse</button>
     <button data-mode="walk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4" r="2"/><path d="M10 22l2-7 3 3v6M8 12l3-4 3 2 3 1M11 8l-1 6"/></svg>Walk</button>
@@ -201,7 +205,7 @@ body.showing-area #credit{display:block}
 <div id="route" hidden></div>
 <div id="veil"></div>
 
-<div id="load"><div class="box"><div class="mono" style="color:var(--acc)">Autopilot · Explorer</div><h1 id="l-title">Andheri East</h1><p id="l-msg">Loading the model.</p><div class="bar"><i id="l-bar"></i></div></div></div>
+<div id="load"><div class="box"><div class="mono" style="color:var(--acc)">Autopilot · Explorer</div><h1 id="l-title">&nbsp;</h1><p id="l-msg">Loading the model.</p><div class="bar"><i id="l-bar"></i></div></div></div>
 <div id="gate" hidden><form class="box" id="g-form" autocomplete="on"><div class="mono" style="color:var(--acc)">Autopilot · Explorer</div><h1>Sign in</h1><p>Use the access ID and password you were given.</p>
   <input id="g-id" placeholder="Access ID" autocomplete="username" required><input id="g-pw" type="password" placeholder="Password" autocomplete="current-password" required>
   <button class="go" type="submit">Enter</button><div id="g-err"></div></form></div>

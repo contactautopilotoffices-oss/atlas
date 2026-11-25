@@ -1,0 +1,44 @@
+{
+ "about": "Sectors 3, 4 and 9, Noida: the three JindalX options A104, A14/18/19 and D1, with Noida Sector 15 and Sector 16 on the Blue Line. Pins are indicative (jindalx/build-data.cjs); the plots await landlord confirmation.",
+ "lng0": 77.3231094,
+ "lat0": 28.5839319,
+ "ky": 110950.0,
+ "clip": [
+  77.3085,
+  28.5735,
+  77.3375,
+  28.5945
+ ],
+ "bundle": "examples/jindalx.bundle.json",
+ "deck_floors": {
+  "a104": 4,
+  "a14-18-19": 5,
+  "d1": 3
+ },
+ "floor_h": 3.9,
+ "ground_h": 4.5,
+ "metro": {
+  "L1": [
+   "Blue Line",
+   "elevated",
+   "#2a6fd0",
+   "Blue Line"
+  ]
+ },
+ "station_line": "L1",
+ "towers": false,
+ "max_h": 24,
+ "towers_note": "Sectors 3, 4 and 9 are G+2 to G+5 industrial and office plots: no estimated towers, and estimated heights capped at 24 m (the 30 m surface model reads low blocks too tall, as in Andheri). Overture's own heights are kept.",
+ "open_tree_density": 0.3,
+ "roadside_tree_density": 0.55,
+ "avenue_spacing": 11,
+ "trees_note": "Noida sectors: avenue planting along the main roads, dense planting in parks, a thin scatter elsewhere (the random scatter over all open ground made a carpet: VISUAL_REALISM_AUDIT.md)",
+ "greens": "evidence",
+ "tree_density": 0.5,
+ "ndvi_lo": 0.3,
+ "greens_note": "Trees only where open data shows greenery: Sentinel-2 L2A NDVI (fetch_ndvi.py) read as canopy cover plus Overture parks; avenue rows only along roads whose NDVI shows an avenue; no scatter over built-up blocks. Needs DATA/ndvi.npy and ndvi_t.json. open_tree_density and roadside_tree_density apply only to the older random scatter.",
+ "avenue_ndvi": 0.42,
+ "walls": "plots",
+ "walls_note": "Compound walls round plots that stand in their own ground (see diorama.py boundary_walls): 1.8 to 2.4 m plastered wall with pillars and coping, a gate on the street face, none where buildings stand shoulder to shoulder on the lane. Solid for walk mode.",
+ "tree_cap": 9000
+}

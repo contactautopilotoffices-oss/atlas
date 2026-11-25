@@ -1,0 +1,644 @@
+{
+ "_about": "Specs for scripts/world/hero_building.py: one entry per JindalX option, as the 2025-26 imagery shows the buildings (docs/JINDALX_VERIFICATION.md): 'facade' picks a spec-driven family (magnus, acp, a14, stucco); 'boxes' are the storeys' plans (metres from the front-left corner, levels l0..l1), 'bays' the Magnus podium openings, 'wall' the boundary style. 'known' lists what the workbook or a public filing says, 'assumed' what is inferred from imagery or design choice.",
+ "refs": "refs/noida_jindalx.json",
+ "magnus-towers": {
+  "name": "MAGNUS TOWERS",
+  "sign": "MAGNUS GREENS",
+  "grade": "A",
+  "facade": "magnus",
+  "ground": "podium",
+  "floors": 5,
+  "ground_h": 5.0,
+  "floor_h": 4.0,
+  "seed": 67,
+  "boxes": [
+   {
+    "x": [
+     0,
+     46
+    ],
+    "y": [
+     0
+    ],
+    "l": [
+     0,
+     1
+    ],
+    "kind": "podium"
+   },
+   {
+    "x": [
+     46,
+     86
+    ],
+    "y": [
+     2.5
+    ],
+    "l": [
+     0,
+     1
+    ],
+    "kind": "podium"
+   },
+   {
+    "x": [
+     86,
+     131
+    ],
+    "y": [
+     0
+    ],
+    "l": [
+     0,
+     1
+    ],
+    "kind": "podium"
+   },
+   {
+    "x": [
+     0,
+     46
+    ],
+    "y": [
+     2.0
+    ],
+    "l": [
+     1,
+     3
+    ],
+    "kind": "punch_dark"
+   },
+   {
+    "x": [
+     46,
+     86
+    ],
+    "y": [
+     2.5
+    ],
+    "l": [
+     1,
+     5
+    ],
+    "kind": "glass",
+    "terrace": true
+   },
+   {
+    "x": [
+     86,
+     131
+    ],
+    "y": [
+     2.0
+    ],
+    "l": [
+     1,
+     3
+    ],
+    "kind": "glass"
+   },
+   {
+    "x": [
+     0,
+     46
+    ],
+    "y": [
+     0
+    ],
+    "l": [
+     3,
+     5
+    ],
+    "kind": "white"
+   },
+   {
+    "x": [
+     86,
+     131
+    ],
+    "y": [
+     0
+    ],
+    "l": [
+     3,
+     5
+    ],
+    "kind": "white",
+    "terrace": true
+   },
+   {
+    "x": [
+     3,
+     46
+    ],
+    "y": [
+     4
+    ],
+    "l": [
+     5,
+     6
+    ],
+    "kind": "white",
+    "terrace": true
+   },
+   {
+    "x": [
+     46,
+     86
+    ],
+    "y": [
+     8
+    ],
+    "l": [
+     5,
+     6
+    ],
+    "kind": "white",
+    "terrace": true
+   },
+   {
+    "x": [
+     98,
+     126
+    ],
+    "y": [
+     6
+    ],
+    "l": [
+     5,
+     6
+    ],
+    "kind": "white",
+    "terrace": true
+   },
+   {
+    "x": [
+     10,
+     26
+    ],
+    "y": [
+     10,
+     20
+    ],
+    "l": [
+     6,
+     7
+    ],
+    "kind": "sign"
+   }
+  ],
+  "bays": [
+   {
+    "x": [
+     3,
+     19
+    ],
+    "kind": "glass"
+   },
+   {
+    "x": [
+     23,
+     35
+    ],
+    "kind": "portal",
+    "label": "3"
+   },
+   {
+    "x": [
+     48,
+     64
+    ],
+    "kind": "glass"
+   },
+   {
+    "x": [
+     67,
+     79
+    ],
+    "kind": "portal",
+    "label": "2"
+   },
+   {
+    "x": [
+     89,
+     104
+    ],
+    "kind": "glass"
+   },
+   {
+    "x": [
+     107,
+     119
+    ],
+    "kind": "portal",
+    "label": "1"
+   },
+   {
+    "x": [
+     121,
+     129
+    ],
+    "kind": "glass"
+   }
+  ],
+  "pergola": {
+   "level": 5,
+   "x": [
+    102,
+    122
+   ],
+   "y": [
+    8,
+    18
+   ]
+  },
+  "plant": [
+   {
+    "level": 5,
+    "x": 60,
+    "y": 20,
+    "w": 9,
+    "d": 6,
+    "h": 3.2
+   },
+   {
+    "level": 5,
+    "x": "W-8",
+    "y": "D-5",
+    "w": 2.6,
+    "d": 2.6,
+    "h": 3.0,
+    "shape": "tank"
+   },
+   {
+    "level": 5,
+    "x": "W-12",
+    "y": "D-5",
+    "w": 2.6,
+    "d": 2.6,
+    "h": 3.0,
+    "shape": "tank"
+   },
+   {
+    "level": 5,
+    "x": 30,
+    "y": "D-4",
+    "w": 7,
+    "d": 4,
+    "h": 2.6
+   }
+  ],
+  "wall": {
+   "mat": "hero_concrete",
+   "base": 2.0,
+   "rail": null,
+   "pillar": 4.0,
+   "pmat": "hero_concrete"
+  },
+  "gate_w": 7.0,
+  "gate_h": 2.2,
+  "hut": 0,
+  "tree_belt": {
+   "pad": 16,
+   "rows": [
+    [
+     16,
+     6,
+     1.2
+    ],
+    [
+     21,
+     6,
+     1.4
+    ],
+    [
+     26,
+     6,
+     1.4
+    ],
+    [
+     31,
+     6,
+     1.4
+    ]
+   ]
+  },
+  "bougainvillea": false,
+  "known": [
+   "B+G+5, 38,000 sq ft a floor, Grade A (workbook)",
+   "new building, December 2026 handover (workbook)",
+   "6 lifts a floor (workbook)",
+   "Magnus Greens, plot C-2 Sector 67: a ~131 x 28 m block (Google geocode and satellite 2026); a glass and glazing contract for C-2, Sept 2025 (Faalcon Concepts BSE filing)",
+   "architect renders (Sanjiv Tandon): white stone and plaster podium with glazed lobby bays, dark glass bands, stepped white aluminium-panel fascias, planted terraces, a rooftop pergola, a MAGNUS GREENS sign tower, three numbered entrances",
+   "boundary wall and a dense tree belt between the building and Sector 67 Rd (Street View 2026)"
+  ],
+  "assumed": [
+   "the tiering: which wing steps where (read off the renders, not the drawings)",
+   "the plot is the block grown by 10.5 m; the east-road gate is low confidence",
+   "rooftop plant",
+   "the 38,000 sq ft a floor is not reproduced: the traced block is 3,670 m2 on the footprint, about 36,500 sq ft a floor"
+  ],
+  "cams": {
+   "property": [
+    [
+     -100,
+     -95,
+     52
+    ],
+    [
+     0,
+     0,
+     9
+    ],
+    30
+   ],
+   "closeup": [
+    [
+     -26,
+     -22.5,
+     3.0
+    ],
+    [
+     -18,
+     -14,
+     12
+    ],
+    24
+   ],
+   "landscape": [
+    [
+     70,
+     -19,
+     3.4
+    ],
+    [
+     30,
+     -14,
+     9
+    ],
+    22
+   ]
+  }
+ },
+ "a104": {
+  "name": "A-104",
+  "grade": "B",
+  "facade": "acp",
+  "ground": "glazed",
+  "floors": 3,
+  "ground_h": 4.5,
+  "floor_h": 4.0,
+  "seed": 104,
+  "boxes": [
+   {
+    "x": [
+     0,
+     "W"
+    ],
+    "y": [
+     0
+    ],
+    "l": [
+     0,
+     4
+    ],
+    "kind": "acp"
+   }
+  ],
+  "entrance_x": 0.0,
+  "plant": [
+   {
+    "level": 3,
+    "x": 4,
+    "y": -4,
+    "w": 5,
+    "d": 4,
+    "h": 3.0
+   }
+  ],
+  "wall": {
+   "mat": "hero_concrete",
+   "base": 2.4,
+   "rail": null,
+   "pillar": 4.0,
+   "pmat": "hero_concrete",
+   "wire": true
+  },
+  "plot_buffer": 8.0,
+  "gate_w": 6.0,
+  "gate_h": 2.2,
+  "hut": 0,
+  "known": [
+   "B+G/S+3: basement, ground, three floors above (workbook)",
+   "25,000 sq ft a floor, Grade B (workbook)",
+   "new building, December 2026 handover (workbook)",
+   "2 lifts a floor (workbook)"
+  ],
+  "assumed": [
+   "WHICH building: the vacant charcoal-ACP and blue-glass block west of the old pin, inferred, low confidence",
+   "charcoal ACP, blue-grey reflective glazing bands, black sunshade fins, awning windows, flat bare roof (Street View 2026)",
+   "steel sliding gate and guard hut on the narrow west lane, solid wall to the wide east road",
+   "plot, parking, planting"
+  ],
+  "front_tree_step": 9.0
+ },
+ "a14-18-19": {
+  "name": "A-14",
+  "grade": "B",
+  "facade": "a14",
+  "ground": "stilt",
+  "floors": 4,
+  "ground_h": 4.3,
+  "floor_h": 3.6,
+  "seed": 1418,
+  "boxes": [
+   {
+    "x": [
+     0,
+     "W"
+    ],
+    "y": [
+     0
+    ],
+    "l": [
+     0,
+     1
+    ],
+    "kind": "stilt"
+   },
+   {
+    "x": [
+     0,
+     "W"
+    ],
+    "y": [
+     0
+    ],
+    "l": [
+     1,
+     5
+    ],
+    "kind": "a14",
+    "no_front_par": true
+   }
+  ],
+  "scaffold": {
+   "x": [
+    0,
+    3.6
+   ],
+   "levels": 2
+  },
+  "plant": [
+   {
+    "level": 4,
+    "x": -3,
+    "y": -3,
+    "w": 3.2,
+    "d": 3.4,
+    "h": 2.8,
+    "mat": "hero_plaster_white"
+   },
+   {
+    "level": 4,
+    "x": 4,
+    "y": -3,
+    "w": 1.7,
+    "d": 1.7,
+    "h": 1.8,
+    "shape": "tank"
+   },
+   {
+    "level": 4,
+    "x": 7,
+    "y": -3,
+    "w": 1.7,
+    "d": 1.7,
+    "h": 1.8,
+    "shape": "tank"
+   }
+  ],
+  "wall": {
+   "mat": "hero_plaster_white",
+   "base": 0.55,
+   "rail": 1.15,
+   "pillar": 3.0,
+   "pmat": "hero_plaster_white"
+  },
+  "gate_w": 4.5,
+  "gate_h": 1.2,
+  "inner_inset": 1.0,
+  "front_strip_y": 1.0,
+  "known": [
+   "A-14, Sector 9: a 12.6 m frontage x 36 m plot on Amaltash Marg (satellite and Street View 2026, +-4 m)",
+   "B+G+4: an open stilt ground floor and four floors above (myHQ and Amadhi list B+G+4, 5 floors; the workbook says B+G/S+2+2)",
+   "dark grey ACP crown with an angled white cornice, copper-tone ACP bands between full-width ribbon glazing, white plaster side walls",
+   "scaffolding at the left (SW) edge of the front, April 2026",
+   "entrance and forecourt on the Amaltash Marg frontage"
+  ],
+  "assumed": [
+   "A-18 and A-19 are not modelled: they are probably rear plots, and 18,000 sq ft a floor cannot stand on A-14 alone",
+   "no set-back upper block: the imagery shows none, so the workbook's '+2 floors of 8,000 sq ft' is not modelled",
+   "setbacks (4 m front, 0.6 m sides, 3 m rear), depth 36 m (a standard 450 m2 plot), the rear, roof plant"
+  ]
+ },
+ "d1": {
+  "name": "D-1",
+  "grade": "B",
+  "facade": "stucco",
+  "ground": "lobby",
+  "floors": 2,
+  "ground_h": 4.5,
+  "floor_h": 4.0,
+  "seed": 31,
+  "boxes": [
+   {
+    "x": [
+     0,
+     "W"
+    ],
+    "y": [
+     0
+    ],
+    "l": [
+     0,
+     3
+    ],
+    "kind": "stucco",
+    "cut": [
+     "W-5.8",
+     0,
+     "W",
+     5.8
+    ]
+   },
+   {
+    "tower": {
+     "at": [
+      "W-2.9",
+      2.9
+     ],
+     "r": 2.9
+    },
+    "l": [
+     0,
+     3
+    ],
+    "kind": "tower"
+   }
+  ],
+  "plant": [
+   {
+    "level": 2,
+    "x": "W-8",
+    "y": "D-5",
+    "w": 6.5,
+    "d": 5,
+    "h": 3.2,
+    "mat": "hero_plaster_cream"
+   },
+   {
+    "level": 2,
+    "x": -3,
+    "y": "D-6",
+    "w": 1.8,
+    "d": 1.8,
+    "h": 2.0,
+    "shape": "tank"
+   },
+   {
+    "level": 2,
+    "x": -6,
+    "y": "D-6",
+    "w": 1.8,
+    "d": 1.8,
+    "h": 2.0,
+    "shape": "tank"
+   }
+  ],
+  "wall": {
+   "mat": "hero_plaster_cream",
+   "base": 0.8,
+   "rail": 1.8,
+   "pillar": 3.4,
+   "pmat": "hero_plaster_white"
+  },
+  "plot_buffer": 5.5,
+  "gate_w": 5.5,
+  "gate_h": 1.8,
+  "hut": null,
+  "known": [
+   "B+G+2, 20,000 sq ft a floor, Grade B (workbook)",
+   "cream or white plaster with stucco band cornices, large teal-tinted punched windows, a green glass curtain bay and a round glazed corner tower with a drum cap at the NW end (Street View 2026)",
+   "boundary wall ~1.5 m with black steel railings and sliding gates; surface parking in the forecourt",
+   "3 to 4 levels seen (workbook B+G+2)"
+  ],
+  "assumed": [
+   "the NW end (tower and green glass bay) as the front; gate positions are low-medium confidence",
+   "outline regularised from oblique roof edges",
+   "arched double-height windows are drawn as rectangles",
+   "roof plant, rear"
+  ],
+  "front_tree_step": 9.0
+ }
+}

@@ -10,6 +10,8 @@ trim-*.ps1
 !media/**/*.jpg
 !media/**/*.jpeg
 !media/**/*.png
+# Before-and-after images for VISUAL_REALISM_REPORT.md
+!docs/visual-realism/*.jpg
 *.mp4
 *.MP4
 *.mov
@@ -65,6 +67,7 @@ noida-skymark/twin/_build/
 noida-skymark/twin/web/_review/
 noida-skymark/twin/assets/
 **/*.blend
+!assets/blender/*.blend
 **/*.blend1
 **/*.raw.glb
 **/*.exr

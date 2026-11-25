@@ -25,7 +25,8 @@
 const A = window.ATLAS || {};
 const SLUG = A.slug || "atlas";
 const M = A.meta || {};
-if(M.branding === "autopilot-flipkart")import("/engine/andheri-ui.js").then(({applyAndheriTheme})=>applyAndheriTheme("atlas"));
+if(M.branding === "autopilot-flipkart" || M.world?.ui === "andheri")import("/engine/andheri-ui.js").then(({applyAndheriTheme})=>applyAndheriTheme("atlas", M.branding === "autopilot-flipkart" ? "" : M.world?.client));
+setTimeout(()=>{(function(){const home=M.home;if(!home)return;const b=document.querySelector("#brand");if(!b)return;b.style.cursor="pointer";b.setAttribute("role","link");b.tabIndex=0;b.title="Back to the proposal";const go=()=>{location.href=home;};b.addEventListener("click",go);b.addEventListener("keydown",e=>{if(e.key==="Enter")go();});})();},0);
 const O = Array.isArray(A.options) ? A.options : [];
 const F = A.facts || {};
 const EX = A.existing || null;
@@ -2247,7 +2248,7 @@ function renderDistance() {
     ${lone.length ? `<div class="fact"><span class="k">Stand-alone</span> <span class="note">(no other option within 2.5 km)</span><br>${lone.map(optLink).join(" · ")}</div>` : ""}
     ${homeBars ? `<h3>${esc(say("distance.moves", "How far each option moves the team from today's office"))}</h3>
     <div class="nb">${homeBars}</div>` : ""}
-    <p class="note" style="margin-top:8px">Road distances from today's office are the client's sheet. The matrix above is straight-line. ${esc(METHOD)}</p>`;
+    <p class="note" style="margin-top:8px">${esc(say("distance.note", `Road distances from today's office are the client's sheet. The matrix above is straight-line. ${METHOD}`))}</p>`;
 }
 
 /* ---------- Talent ---------- */

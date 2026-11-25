@@ -38,6 +38,12 @@ close-up quality. The browser shows it with three.js in two ways:
 - **The plinth** is the slab's cut edge, in soil. It is what makes it read as
   a dollhouse.
 
+## Property models (JindalX)
+
+The JindalX options are modelled one by one, building and plot, by `hero_building.py` from a spec
+file, and placed into their dioramas with `--exterior` and `--site`. See `heroes/README.md` for how to
+regenerate and change them.
+
 ## Pipeline
 
 ```
@@ -101,6 +107,33 @@ three.js.
 
 `build.py` and `finish.py` are the earlier whole-district model. The atlas
 sign-in backdrop (`blender-wide`/`blender-tall`) still comes from them.
+
+## Greens and compound walls (region flags, JindalX Noida)
+
+Two region-file flags (`scripts/world/regions/noida-jindalx-*.json`). Andheri and Skymark do not set them and build as before.
+
+- `"greens": "evidence"` puts trees only where open data shows greenery.
+  - `fetch_ndvi.py DATA --region R.json` writes a 10 m NDVI (`ndvi.npy`, `ndvi_t.json`) from the dry, leaf-on
+    Sentinel-2 L2A scenes of April to June (Copernicus, open licence, read from the AWS Open Data copy through Earth Search;
+    no key). `prep.py` reads it as canopy cover (NDVI 0.23 to 0.50, parks from 0.18), places trees by cover with a 5 to 6.4 m
+    blue-noise spacing, plants an avenue row only along a main road whose NDVI beside it shows trees, and scatters nothing over
+    built-up blocks. Overture's `land_cover` here is one generalised polygon for the whole clip, so it is not used; the Overture
+    parks lower the bar a park has to clear. `scene.json` trees are `[x, y, scale, species]`; `tree_cap` (diorama) keeps the
+    largest trees when a slab is over the page's budget. Ground under dense canopy gets a grass patch (`land.canopy`).
+  - `diorama.py` then builds the richer tree models (`protos()`, "v2"): branching trunks, crowns of outward-facing leaf sprays
+    with soft crown normals, a shrub skirt, three species in the page's three tree slots. Their leaf atlases come from
+    `leaf_atlas.py` (`hero_textures.py TEX --leaves`): `leaves_broad`, `_young`, `_ashoka`, `_frond`, `_under`.
+- `"walls": "plots"` adds compound walls (`boundary_walls()` in `diorama.py`): plots are rebuilt from the building clusters
+  and the streets, and walled on the street face (with a gate: two pillars, leaves open) and on lines shared with a
+  neighbouring plot, 1.8 to 2.4 m, plastered with coping and pillars. No wall where a building stands within 9 m of the
+  line (build-to-line facades, shopfront lanes), none across a footway, none in the modelled property's own plot. The wall
+  footprints go into the page's `blocks` (walk mode collides) and `check_logic.py` fails a wall in a road or a building.
+
+```bash
+.w3d/bin/python scripts/world/fetch_ndvi.py /tmp/jx/west --region scripts/world/regions/noida-jindalx-west.json
+.w3d/bin/python scripts/world/hero_textures.py /tmp/jx/tex --leaves        # then copy the five leaves_*.png beside the other textures
+# prep.py and diorama.py as in jindalx/3D-NOTES.md; DATA needs ndvi.npy and ndvi_t.json next to the parquet files
+```
 
 ## What is real and what is estimated
 

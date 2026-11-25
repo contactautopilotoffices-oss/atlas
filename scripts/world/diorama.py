@@ -31,7 +31,7 @@ metres (origin at the slab's centre, x east, y north).
 --render writes Cycles stills: hero (the dollhouse from above), street (from
 the footpath at eye height, verticals kept straight) and station.
 """
-import sys, os, json, math, random
+import hashlib, sys, os, json, math, random
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "realism"))   # film-quality modules (realism/*.py)
 import numpy as np
 import bpy, bmesh
@@ -48,8 +48,14 @@ os.makedirs(OUT, exist_ok=True)
 S = json.load(open(SCENE)); WJ = json.load(open(WORLD))
 # buildings the open maps miss, added from survey (scripts/world/refs/*.json "added")
 _RD = os.path.join(os.path.dirname(os.path.abspath(__file__)), "refs")
+# a refs file is in one region's metres: its "scene_origin" (entry or file), else Andheri East's (72.867 E, 19.111 N)
+def _same_region(e, f):
+    o = e.get("scene_origin") or f.get("scene_origin") or [72.867, 19.111]
+    return all(abs(a - b) < 1e-6 for a, b in zip(o, S["origin"]))
 for _fn in (sorted(os.listdir(_RD)) if os.path.isdir(_RD) else []):
-    for _e in json.load(open(os.path.join(_RD, _fn))).get("added", []):
+    _f = json.load(open(os.path.join(_RD, _fn)))
+    for _e in _f.get("added", []):
+        if not _same_region(_e, _f): continue
         _ap = Polygon(_e["poly"]); S["buildings"] = [b for b in S["buildings"] if b.get("opt") or not _ap.contains(Polygon(b["p"]).centroid)]   # map slivers inside it
         S["buildings"].append({"p": _e["poly"], "h": _e["h"], "c": _e.get("c", "yes"), "r": 0.5, "added": _e["name"]})
 BUNDLE = json.load(open(S.get("bundle", "examples/flipkart-andheri.bundle.json")))
@@ -61,18 +67,36 @@ if "--opt-at" in A:   # --opt-at X,Y: the option's real footprint, when the map 
     for b in S["buildings"]:
         if b.get("opt") == OID: del b["opt"]
     min(S["buildings"], key=lambda b: Polygon(b["p"]).centroid.distance(Point(ox_, oy_)))["opt"] = OID
-for _key in ("privilon", "corporate-avenue"):   # options whose outline is fixed in scripts/world/refs/*.json (founder + Google satellite), in every district
+for _key in dict.fromkeys(["privilon", "corporate-avenue"] + [o["id"] for o in BUNDLE["options"]]):   # options whose outline is fixed in scripts/world/refs/*.json (founder + Google satellite, or a plot massing from the deck's floor plate), in every district
     _poly, _h = None, 67.5
     for _fn in (sorted(os.listdir(_RD)) if os.path.isdir(_RD) else []):
-        _e = json.load(open(os.path.join(_RD, _fn))).get(_key, {})
+        _f = json.load(open(os.path.join(_RD, _fn))); _e = _f.get(_key, {})
+        if not _same_region(_e, _f): continue   # made in another region's metres
         if _e.get("poly"): _poly, _h = _e["poly"], _e.get("h", 67.5)
     if not _poly: continue
     _op = Polygon(_poly)
     for b in S["buildings"]:   # the old pin's footprint is a real neighbour (Privilon's pin sat on Fleet House): keep it, drop the tag
         if b.get("opt") == _key: del b["opt"]
     S["buildings"] = [b for b in S["buildings"] if not (_op.contains(Polygon(b["p"]).centroid) or Polygon(b["p"]).intersection(_op).area > min(100, 0.25 * Polygon(b["p"]).area))]
+    for b in S["buildings"]:   # what still touches the outline is trimmed back to it (the largest piece left, 0.5 m clear)
+        _bp = Polygon(b["p"]).buffer(0)
+        if b.get("opt") or not _bp.intersects(_op) or _bp.intersection(_op).area < 0.5: continue
+        _rest = _bp.difference(_op.buffer(0.5, join_style="mitre"))
+        _rest = max(getattr(_rest, "geoms", [_rest]), key=lambda g: g.area) if not _rest.is_empty else None
+        if _rest is not None and _rest.geom_type == "Polygon" and _rest.area > 20: b["p"] = [list(c) for c in _rest.exterior.coords[:-1]]; b["trimmed"] = _key
+        else: b["drop"] = True
+    S["buildings"] = [b for b in S["buildings"] if not b.get("drop")]
     S["buildings"].append({"p": _poly, "h": _h, "c": "commercial", "r": 0.5, "opt": _key})
 OPTB = next(b for b in S["buildings"] if b.get("opt") == OID)
+# --site FILE (scripts/world/hero_building.py writes OUT.glb.site.json): a modelled plot. The district's random trees
+# and street lamps inside it are dropped; its own trees (x, y, type, scale) are planted with the page's tree models,
+# and its entrance and street camera are used for the walk start and the street still.
+SITE = json.load(open(A[A.index("--site") + 1])) if "--site" in A else None
+if SITE:
+    _plot = Polygon(SITE["plot"]).buffer(0.5); shapely.prepare(_plot)
+    _n0 = len(S["trees"]); S["trees"] = [t for t in S["trees"] if not _plot.contains(Point(t[0], t[1]))]
+    WJ["lamps"] = [l for l in WJ["lamps"] if not _plot.contains(Point(l[0], l[1]))]
+    print(f"site: {_n0 - len(S['trees'])} district trees dropped inside the plot, {len(SITE['trees'])} planted")
 # --neighbour-hero ID=BLEND (repeatable): another shortlisted property standing in this district, shown with its
 # own facade study and a pin, not as a generic block (723 Avenue is visible from Privilon)
 NEIGH = dict(A[i + 1].split("=", 1) for i, a in enumerate(A) if a == "--neighbour-hero")
@@ -211,6 +235,11 @@ def mat(name, col="#808080", rough=0.8, metal=0.0, tex=None, rtex=None, glass=Fa
         try: m.surface_render_method = "BLENDED"
         except Exception: pass
     MATS[name] = m; return m
+
+def use_mat(name, *a, **k):
+    """The named material if the scene already has it (a modelled hero brings its own, and a second one would export as NAME.001, which the page does not know)."""
+    if name in bpy.data.materials: MATS[name] = bpy.data.materials[name]; return MATS[name]
+    return mat(name, *a, **k)
 
 WALL_STYLES = ["res_cream", "res_peach", "res_grey", "res_ochre"]
 MOD = {"res_cream": (6, 12), "res_peach": (6, 12), "res_grey": (6, 12), "res_ochre": (6, 12), "res_tower": (6, 12), "com_ribbon": (8, 16), "com_glass": (6, 16),
@@ -465,7 +494,7 @@ def build():
     pl.build("plinth", MATS)
     gr = MB([])
     flat(gr, SL, 0.0, "ground", 6)
-    for k, m, z in (("green", "grass", 0.03), ("water", "water", 0.02)):
+    for k, m, z in (("green", "grass", 0.03), ("canopy", "grass", 0.035), ("water", "water", 0.02)):
         g = unary_union([Polygon(r[0], r[1:]).buffer(0) for r in (S["land"].get(k) or [])]) if S["land"].get(k) else None
         if g is not None: flat(gr, lpoly(g.intersection(SLAB).difference(built)), z, m, 6)
     flat(gr, lpoly(road_all), 0.06, "asphalt", 6)
@@ -498,11 +527,13 @@ def build():
     for nm, lo_, la_, sty in LMK:
         pt = Point((lo_ - S["origin"][0]) * S["k"][0], (la_ - S["origin"][1]) * S["k"][1])
         cand = [(p_.centroid.distance(pt), id(b_)) for b_, p_ in bpolys if p_.area > 1200 and b_.get("opt") != OID and id(b_) not in lmk]
-        if cand: lmk[min(cand)[1]] = (nm, sty, None, None)
+        if cand and min(cand)[0] < 400: lmk[min(cand)[1]] = (nm, sty, None, None)   # Andheri only: never tag a building in another city
     # buildings surveyed in Street View (scripts/world/refs/*.json): facade and, where counted, height
     RD = os.path.join(os.path.dirname(os.path.abspath(__file__)), "refs")
     for fn in sorted(os.listdir(RD)) if os.path.isdir(RD) else []:
-        for e in json.load(open(os.path.join(RD, fn))).get("buildings", []):
+        _f = json.load(open(os.path.join(RD, fn)))
+        if not _same_region({}, _f): continue
+        for e in _f.get("buildings", []):
             pt = Point(e["x"], e["y"]); cand = [(p_.centroid.distance(pt), id(b_)) for b_, p_ in bpolys if b_.get("opt") != OID]
             if cand and min(cand)[0] < 15: lmk[min(cand)[1]] = (e["name"], e["style"], e.get("h"), e.get("ground"))
     road_near = unary_union([ROAD["major"], ROAD["minor"]]).buffer(6)
@@ -608,7 +639,19 @@ def build():
             t2.rotation_euler = (math.pi / 2, 0, ang); t2.location = (sx + nx * 0.6, sy + ny * 0.6, H + dz)
     entrance = (mx + nx * 0.5, my + ny * 0.5); walk0 = (mx + nx * 16, my + ny * 16)
     back = max(38.0, H * 0.62); street_cam = None
+    # --cam-on-road: on narrow streets lined both sides (Noida's sector blocks) the first clear spot 38 m out is a gap
+    # between the buildings opposite; stand on the carriageway in front of the face instead, when there is one
+    ON_ROAD = "--cam-on-road" in A
+    if ON_ROAD:
+        for kk in (0.55, 0.45, 0.65, 0.35, 0.8):
+            for side in (0.0, 0.3, -0.3, 0.6, -0.6):
+                c_ = (mx + nx * back * kk + math.cos(ang) * back * side, my + ny * back * kk + math.sin(ang) * back * side)
+                q_ = Point(c_[0] + OX, c_[1] + OY)
+                if roads.contains(q_) and not built.buffer(1.5).contains(q_) and not KEEP_OUT.contains(q_) and not built.intersects(LineString([(c_[0] + OX, c_[1] + OY), (mx + nx * 8 + OX, my + ny * 8 + OY)])):
+                    street_cam = c_; break
+            if street_cam: break
     for side in (0.35, -0.35, 0.6, -0.6, 0.0, 0.9, -0.9):
+        if street_cam: break
         for kk in (1.0, 0.8, 1.25, 0.65, 1.5):
             c_ = (mx + nx * back * kk + math.cos(ang) * back * side, my + ny * back * kk + math.sin(ang) * back * side)
             if not built.buffer(1.5).contains(Point(c_[0] + OX, c_[1] + OY)) and not KEEP_OUT.contains(Point(c_[0] + OX, c_[1] + OY)) and not built.intersects(LineString([(c_[0] + OX, c_[1] + OY), (mx + nx * 8 + OX, my + ny * 8 + OY)])):
@@ -625,11 +668,14 @@ def build():
                     street_cam = (c_[0] - OX, c_[1] - OY); break
             if street_cam: break
     street_cam = street_cam or (mx + nx * back, my + ny * back)
+    if SITE:   # the modelled plot knows where its entrance and its best street view are
+        entrance = L(*SITE["entrance"]); street_cam = L(*SITE["street_cam"])
     # make sure the walk starts on open ground (footpath or road)
     # and not under the station's stairs or viaduct, where the eye would sit inside the structure
     def _open(w): q = Point(w[0] + OX, w[1] + OY); return not built.contains(q) and not KEEP_OUT.contains(q)
     cands = [(mx + nx * d - ny * t, my + ny * d + nx * t) for d in range(16, 64, 4) for t in (0, -8, 8, -16, 16)]
-    walk0 = next((w for w in cands if _open(w)), walk0)
+    walk0 = next((w for w in cands if _open(w) and (not ON_ROAD or roads.contains(Point(w[0] + OX, w[1] + OY)))), None) or next((w for w in cands if _open(w)), walk0)
+    if SITE: walk0 = street_cam
 
     # --- the metro ---
     mt = MB([]); stn = MB([]); STATIONS = []
@@ -759,11 +805,163 @@ def build():
             boxm(l3, ex, ey, 3.6, 4.4, 8, 0.2, 0.3, "sign_l3")
     mt.build("metro", MATS); stn.build("stations", MATS); l3.build("entries_l3", MATS)
 
+    # --- compound walls round the plots (region flag "walls": "plots") ---
+    if S.get("walls") == "plots":
+        for nm_ in ("hero_plaster_cream", "hero_plaster_white", "hero_plaster_b"): use_mat(nm_, "#d8d0c0", 0.85, tex=nm_ + ".jpg")
+        use_mat("door_metal", "#2a2c2e", 0.35, 0.8); use_mat("concrete", "#a9a59c", 0.8)
+        clear_ = unary_union([Point(entrance[0] + OX, entrance[1] + OY).buffer(7), Point(walk0[0] + OX, walk0[1] + OY).buffer(5), Point(street_cam[0] + OX, street_cam[1] + OY).buffer(5)])
+        boundary_walls(bpolys, ROAD, road_all, clear_)
     # --- prototypes: trees, palm, lamp, cars, a Line 1 car ---
     protos()
     return {"entrance": entrance, "walk0": walk0, "street_cam": street_cam, "stations": STATIONS, "H": H, "floors": floors, "glassy": glassy, "canopy_ang": ang}
 
+WALLS = {"polys": [], "lines": [], "stats": {}}   # solid footprints and centre lines of the compound walls (page_data adds the footprints to "blocks")
+def boundary_walls(bpolys, ROAD, road_all, keep_clear):
+    """Compound walls round the plots that stand in their own ground (region flag "walls": "plots").
+
+    Noida's sectors are sold as walled plots, but the open maps draw only the buildings. A plot is rebuilt from the buildings and
+    the streets: buildings less than 6 m apart are one compound; its plot is the ground within 11 m of it, out to the footpath
+    edge (2.7 m off the carriageway) and no further than half way to the next compound. The wall runs along the plot's street face
+    and along the line it shares with a neighbouring plot, 1.8 to 2.4 m of plastered brick with a coping and a pillar every 4 m,
+    and not where a building is the boundary itself (shopfront lanes and plots built wall to wall get none). The street face has a
+    gate: two taller pillars and the leaves swung open. The wall is 0.3 m thick and solid for walk mode; the gate gap is not."""
+    SMAX, WT = 11.0, 0.3
+    foot_edge = road_all.buffer(2.7)
+    free = SLAB.difference(foot_edge)
+    hero = Polygon(SITE["plot"]).buffer(1.5) if SITE else Polygon()
+    allb = unary_union([p for b, p in bpolys]).buffer(0.8, quad_segs=2)
+    bl = [(b, p) for b, p in bpolys if b.get("opt") != OID and not p.intersects(hero) and p.area > 12]
+    if not bl: return
+    U = unary_union([p.buffer(3.0, quad_segs=2) for b, p in bl])
+    comps = list(U.geoms) if hasattr(U, "geoms") else [U]
+    clus = []
+    for c in comps:
+        C = c.buffer(-3.0 + 0.05, quad_segs=2)
+        if C.is_empty: continue
+        for Cp in (C.geoms if hasattr(C, "geoms") else [C]):
+            if Cp.geom_type == "Polygon" and Cp.area > 30: clus.append(Cp)
+    ct = shapely.STRtree(clus)
+    bt = shapely.STRtree([p for b, p in bl])
+    plots = []
+    for i, C in enumerate(clus):
+        claim = C.buffer(SMAX, quad_segs=3).intersection(free).union(C)
+        for j in ct.query(C.buffer(2 * SMAX + 1)):
+            if j == i: continue
+            d = C.distance(clus[j]); claim = claim.difference(clus[j].buffer(max(0.6, d / 2 - 0.15), quad_segs=3))
+        claim = claim.union(C).buffer(0.5, quad_segs=2).buffer(-0.5, quad_segs=2)
+        parts = [g for g in (claim.geoms if hasattr(claim, "geoms") else [claim]) if g.geom_type == "Polygon" and g.intersects(C)]
+        if not parts: continue
+        P = unary_union(parts); P = Polygon(max(P.geoms, key=lambda g: g.area).exterior) if hasattr(P, "geoms") else Polygon(P.exterior)
+        P = P.simplify(0.7)
+        bi = [bl[k][1] for k in bt.query(P) if bl[k][1].intersects(C)]
+        built_area = unary_union(bi).intersection(P).area if bi else 0.0
+        plots.append((i, C, P, built_area, unary_union(bi) if bi else Polygon()))
+    n_plots = n_gate = 0; length = 0.0; wall_lines, polys, gates = [], [], []
+    mb = MB([]); acc = []
+    h_ = lambda s_: int(hashlib.md5(s_.encode()).hexdigest()[:6], 16) / 0xffffff
+    PLASTER = ["hero_plaster_cream", "hero_plaster_white", "hero_plaster_b", "hero_plaster_cream"]
+    plot_polys = [p for _, _, p, _, _ in plots]; pt = shapely.STRtree(plot_polys)
+    for idx, (i, C, P, ba, BI) in enumerate(plots):
+        if P.area < 90 or ba / max(P.area, 1) > 0.88: continue   # fully built: the building is the boundary
+        ring = P.exterior; rid = f"{round(C.centroid.x)},{round(C.centroid.y)}"
+        free_ring = ring.difference(BI.buffer(1.0, quad_segs=2))           # where a building does not stand on the line
+        if free_ring.is_empty: continue
+        street = foot_edge.boundary.buffer(0.9)                              # the street face
+        party = unary_union([plot_polys[j] for j in pt.query(P.buffer(1.0)) if j != idx]).buffer(0.9) if len(pt.query(P.buffer(1.0))) > 1 else Polygon()
+        keep = free_ring.intersection(unary_union([street, party])) if not party.is_empty else free_ring.intersection(street)
+        keep = keep.difference(ROAD["foot"].buffer(0.6)).difference(keep_clear).difference(allb)
+        if acc:   # a shared line is walled once: only the walls already placed near this plot matter
+            bx0, by0, bx1, by1 = P.bounds; near_ = [a for a in acc if a.bounds[0] < bx1 + 1 and a.bounds[2] > bx0 - 1 and a.bounds[1] < by1 + 1 and a.bounds[3] > by0 - 1]
+            if near_: keep = keep.difference(unary_union(near_).buffer(0.9))
+        # build-to-line: a stretch of the boundary with a building within 9 m of it (3 m on a shared line) is a facade or a service strip, not
+        # a yard (the map's road widths are generic, so buildings drawn 4 m back from the footpath still front the street): no wall there
+        segs = []
+        for l in (keep.geoms if hasattr(keep, "geoms") else [keep]):
+            if l.geom_type != "LineString" or l.length < 4.0: continue
+            cs = np.asarray(l.coords); cut = [0]   # straight pieces: split at corners sharper than 35 degrees
+            for k_ in range(1, len(cs) - 1):
+                v0, v1 = cs[k_] - cs[k_ - 1], cs[k_ + 1] - cs[k_]
+                if abs(math.atan2(v0[0] * v1[1] - v0[1] * v1[0], v0 @ v1)) > math.radians(35): cut.append(k_)
+            cut.append(len(cs) - 1)
+            for a_, b_ in zip(cut[:-1], cut[1:]):
+                pc = LineString(cs[a_:b_ + 1])
+                if pc.length < 9.0: continue
+                chord = math.hypot(*(cs[b_] - cs[a_]))
+                if pc.length / max(chord, 1e-6) > 1.12: continue
+                n_ch = max(1, int(round(pc.length / 6.0))); run = []
+                for c_ in range(n_ch):
+                    ch = shapely.ops.substring(pc, pc.length * c_ / n_ch, pc.length * (c_ + 1) / n_ch)
+                    is_street = ch.distance(foot_edge.boundary) < 1.2
+                    strip = ch.buffer(9.0 if is_street else 3.0, cap_style="flat").intersection(P)
+                    cov = BI.intersection(strip).area / max(strip.area, 1.0)
+                    if cov < (0.10 if is_street else 0.02) and (is_street or pc.length >= 18): run.append(ch)
+                    elif run: segs.append(shapely.ops.linemerge(run) if len(run) > 1 else run[0]); run = []
+                if run: segs.append(shapely.ops.linemerge(run) if len(run) > 1 else run[0])
+        segs = [l for l in segs if l.geom_type == "LineString" and l.length >= 9.0]
+        if not segs: continue
+        n_plots += 1; col = PLASTER[int(h_(rid) * 4) % 4]; H = round(1.8 + 0.6 * h_(rid + "h"), 2); acc.extend(segs)
+        gate_done = 0; bc = C.centroid; street_segs = [s for s in segs if s.distance(foot_edge.boundary) < 1.2]
+        order_s = sorted(street_segs, key=lambda s: -s.length)
+        gate_for = {id(s): (s.length >= 7.0 and k < (2 if s.length > 25 else 1)) for k, s in enumerate(order_s)}
+        pieces = []
+        for s in segs:
+            if gate_for.get(id(s)):
+                gw = 4.2 if P.area > 600 else 3.0; t0 = s.project(bc); t0 = min(max(t0, gw / 2 + 1.2), s.length - gw / 2 - 1.2)
+                if t0 - gw / 2 > 1.0 and s.length - t0 - gw / 2 > 1.0 or True:
+                    a = shapely.ops.substring(s, 0, t0 - gw / 2); b = shapely.ops.substring(s, t0 + gw / 2, s.length)
+                    for q_ in (a, b):
+                        if q_.length > 0.8: pieces.append(q_)
+                    g0 = s.interpolate(t0 - gw / 2); g1 = s.interpolate(t0 + gw / 2); gates.append((g0.x, g0.y, g1.x, g1.y, col, P)); n_gate += 1; continue
+            pieces.append(s)
+        for s in pieces:
+            pts = [(x, y) for x, y in s.simplify(0.3).coords]; length += s.length
+            wall_lines.append(s); polys.append(s.buffer(WT / 2, cap_style="flat", join_style="mitre"))
+            wall_run(mb, [L(x, y) for x, y in pts], H, WT, col)
+    # gates: two taller pillars, the leaves swung open into the plot
+    for (x0, y0, x1, y1, col, P) in gates:
+        dx, dy = x1 - x0, y1 - y0; gl = math.hypot(dx, dy); ux, uy = dx / gl, dy / gl; nx, ny = -uy, ux
+        mx_, my_ = (x0 + x1) / 2, (y0 + y1) / 2
+        if not P.contains(Point(mx_ + nx * 3, my_ + ny * 3)): nx, ny = -nx, -ny      # into the plot
+        WALLS.setdefault("gates", []).append((mx_, my_, -nx, -ny, gl))
+        for (px_, py_) in ((x0, y0), (x1, y1)):
+            lx, ly = L(px_, py_); ang = math.atan2(uy, ux)
+            boxm(mb, lx, ly, 0, 2.9, 0.62, 0.62, ang, col, 2.4)
+        for sgn, (px_, py_) in ((1, (x0, y0)), (-1, (x1, y1))):   # a leaf hinged on each pillar, swung open into the plot: one double-sided plane
+            Lf = gl / 2 - 0.35; ax2, ay2 = L(px_ + sgn * ux * 0.42 + nx * 0.4, py_ + sgn * uy * 0.42 + ny * 0.4)
+            mb.quad((ax2, ay2, 0.15), (ax2 + nx * Lf, ay2 + ny * Lf, 0.15), (ax2 + nx * Lf, ay2 + ny * Lf, 1.95), (ax2, ay2, 1.95), [(0, 0), (1, 0), (1, 1), (0, 1)], "door_metal")
+    mb.build("compound_walls", MATS)
+    WALLS["polys"], WALLS["lines"] = polys, wall_lines
+    WALLS["stats"] = {"plots": len(plots), "walled": n_plots, "gates": n_gate, "length_m": round(length)}
+    print("boundary walls:", WALLS["stats"])
+    json.dump({"lines": [[[round(a, 1), round(b, 1)] for a, b in l.coords] for l in wall_lines], "plots": [[[round(a, 1), round(b, 1)] for a, b in p.exterior.coords] for _, _, p, _, _ in plots], "gates": [[round(v, 1) for v in g[:4]] for g in gates]},
+              open(os.path.join(OUT, f"{OID}-walls.json"), "w"), separators=(",", ":"))
+
+def wall_run(mb, pts, H, T, col):
+    """A plastered wall along a polyline: two faces and a top (the coping is the top band of the faces and a slab a little wider than the wall),
+    and a pillar at the ends and about every 5.5 m. Kept to few quads: a district has kilometres of it and the page downloads every vertex."""
+    P = np.asarray(pts, float)
+    if len(P) < 2: return
+    S_ = 0.0; Hc = H + 0.07; cw = T / 2 + 0.05
+    for k in range(len(P) - 1):
+        (ax, ay), (bx_, by) = P[k], P[k + 1]; d = math.hypot(bx_ - ax, by - ay)
+        if d < 0.05: continue
+        ux, uy = (bx_ - ax) / d, (by - ay) / d; nx, ny = -uy * T / 2, ux * T / 2
+        for sgn in (1, -1):   # the two faces
+            A0, B0 = (ax + sgn * nx, ay + sgn * ny), (bx_ + sgn * nx, by + sgn * ny)
+            q = [(A0[0], A0[1], -0.05), (B0[0], B0[1], -0.05), (B0[0], B0[1], Hc), (A0[0], A0[1], Hc)]
+            uv = [((S_) / 2.4, 0), ((S_ + d) / 2.4, 0), ((S_ + d) / 2.4, (Hc + 0.05) / 2.4), ((S_) / 2.4, (Hc + 0.05) / 2.4)]
+            if sgn < 0: q, uv = q[::-1], uv[::-1]
+            mb.quad(*q, uv, col)
+        c0 = [(ax - uy * cw, ay + ux * cw), (bx_ - uy * cw, by + ux * cw), (bx_ + uy * cw, by - ux * cw), (ax + uy * cw, ay - ux * cw)]
+        mb.quad(*[(x, y, Hc) for x, y in c0], [(0, 0), (d, 0), (d, 1), (0, 1)], "concrete")
+        n = max(1, int(round(d / 5.5)))
+        for m_ in range(n + (1 if k == len(P) - 2 else 0)):
+            t = m_ / n; px_, py_ = ax + (bx_ - ax) * t, ay + (by - ay) * t
+            boxm(mb, px_, py_, -0.05, H + 0.3, 0.46, 0.46, math.atan2(uy, ux), col, 2.4)
+        S_ += d
+
 def protos():
+    V2 = S.get("greens") == "evidence"   # the richer tree models, only where a region asks for them
     def tree(name, crowns, trunk_h, trunk_r):
         mb = MB([]); cyl(mb, 0, 0, 0, trunk_h, trunk_r, trunk_r, 0, "trunk", 10)
         me_ = mb.build(name, MATS); bm = bmesh.new()
@@ -789,7 +987,10 @@ def protos():
         cm.materials.append(MATS["leaf_b" if name.endswith("_b") else "leaf"]); co = bpy.data.objects.new(name + "_crown", cm); bpy.context.scene.collection.objects.link(co); co.parent = me_
         return me_
     mat("trunk", "#5b4a3b", 0.9); mat("leaf", "#4d7a33", 0.75); mat("leaf_b", "#3f6a2c", 0.75); mat("frond", "#5c8a36", 0.7)
-    for k, img in (("leaf", "leaves_a.png"), ("leaf_b", "leaves_b.png")):   # leaf cards: colour and cut-out from the texture
+    mat("leaf_palm", "#5c8a36", 0.75)
+    if V2:
+        for nm_, c_ in (("leaf_broad", "#6a9a3c"), ("leaf_young", "#6e9a3c"), ("leaf_ashoka", "#4f8a3c"), ("leaf_frond", "#5c8a36"), ("leaf_under", "#4f7f36")): mat(nm_, c_, 0.75)
+    for k, img in (("leaf", "leaves_a.png"), ("leaf_b", "leaves_b.png"), ("leaf_palm", "leaves_palm.png"), *((("leaf_broad", "leaves_broad.png"), ("leaf_young", "leaves_young.png"), ("leaf_ashoka", "leaves_ashoka.png"), ("leaf_frond", "leaves_frond.png"), ("leaf_under", "leaves_under.png")) if V2 else ())):   # leaf cards: colour and cut-out from the texture
         nt = MATS[k].node_tree; b_ = nt.nodes.get("Principled BSDF"); im = nt.nodes.new("ShaderNodeTexImage"); im.image = bpy.data.images.load(os.path.join(TEX, img))
         nt.links.new(im.outputs["Color"], b_.inputs["Base Color"]); nt.links.new(im.outputs["Alpha"], b_.inputs["Alpha"]); b_.inputs["Subsurface Weight"].default_value = 0.1
         try: MATS[k].surface_render_method = "DITHERED"
@@ -799,23 +1000,193 @@ def protos():
         cr = nt.nodes.new("ShaderNodeValToRGB"); cr.color_ramp.elements[0].color = hexc("#2c4f1f"); cr.color_ramp.elements[1].color = hexc("#7c9a43")
         nt.links.new(nz.outputs["Fac"], cr.inputs[0]); nt.links.new(cr.outputs[0], nt.nodes.get("Principled BSDF").inputs["Base Color"])
         nt.nodes.get("Principled BSDF").inputs["Subsurface Weight"].default_value = 0.15
-    tree("proto_tree_a", [(0, 0, 7.5, 4.6, 2.6), (2.6, 1.0, 6.8, 3.0, 2.0), (-2.4, -1.2, 7.0, 3.2, 2.1), (0.6, -2.5, 6.6, 2.8, 1.9), (-0.8, 2.3, 8.0, 2.6, 1.8)], 5.5, 0.32)
-    tree("proto_tree_b", [(0, 0, 4.5, 1.9, 3.2), (0, 0, 7.5, 1.6, 2.8), (0, 0, 10.0, 1.1, 2.0)], 3.0, 0.22)
-    # coconut palm: a leaning trunk and fronds
-    mb = MB([]); hgt = 11.0
-    for k in range(10):
-        z0, z1 = k * hgt / 10, (k + 1) * hgt / 10; lx0, lx1 = 0.04 * (z0 / hgt) ** 2 * hgt, 0.04 * (z1 / hgt) ** 2 * hgt
-        cyl(mb, lx0, 0, z0, z1, 0.2 - 0.005 * k, 0.2 - 0.005 * k, 0, "trunk", 8, cap=False)
-    tip = (0.04 * hgt, 0, hgt)
-    for f in range(12):
-        a = f / 12 * math.tau; pts_ = []
-        for t in np.linspace(0, 1, 7):
-            r_ = 4.8 * t; z = tip[2] + 1.2 * t - 3.4 * t * t; pts_.append((tip[0] + math.cos(a) * r_, tip[1] + math.sin(a) * r_, z))
-        for i in range(len(pts_) - 1):
-            wdt = 0.55 * math.sin(math.pi * (i + 0.5) / 6) + 0.05; p0, p1 = pts_[i], pts_[i + 1]
-            nxx, nyy = -math.sin(a) * wdt, math.cos(a) * wdt
-            mb.quad((p0[0] + nxx, p0[1] + nyy, p0[2]), (p0[0] - nxx, p0[1] - nyy, p0[2]), (p1[0] - nxx, p1[1] - nyy, p1[2]), (p1[0] + nxx, p1[1] + nyy, p1[2]), [(0, 0)] * 4, "frond")
-    mb.build("proto_palm", MATS)
+    # --- the tree models (VISUAL_REALISM_AUDIT.md): branches and clusters of leaf cards, not balls of cards ---
+    def tube(mb, p0, p1, r0, r1, m, seg=6):
+        """A tapered tube between two 3D points (branches, a leaning trunk)."""
+        p0, p1 = np.array(p0, float), np.array(p1, float); ax_ = p1 - p0; L_ = np.linalg.norm(ax_); ax_ /= L_
+        up = np.array([0, 0, 1.0]) if abs(ax_[2]) < 0.9 else np.array([1.0, 0, 0]); e1 = np.cross(ax_, up); e1 /= np.linalg.norm(e1); e2 = np.cross(ax_, e1)
+        for k in range(seg):
+            a0, a1 = k / seg * math.tau, (k + 1) / seg * math.tau
+            q = [p0 + r0 * (math.cos(a0) * e1 + math.sin(a0) * e2), p0 + r0 * (math.cos(a1) * e1 + math.sin(a1) * e2), p1 + r1 * (math.cos(a1) * e1 + math.sin(a1) * e2), p1 + r1 * (math.cos(a0) * e1 + math.sin(a0) * e2)]
+            mb.quad(*[tuple(v) for v in q], [(k / seg, 0), ((k + 1) / seg, 0), ((k + 1) / seg, L_ / 2), (k / seg, L_ / 2)], m)
+    def cards(bm, uv, rr, centre, radius, n, size, flatten=0.75, hang=False, shell=0.55):
+        """Leaf cards in a cluster: on and just inside a sphere, mostly facing out, crossed in pairs."""
+        cx_, cy_, cz_ = centre
+        for _ in range(n):
+            th, ph = rr.uniform(0, math.tau), math.acos(rr.uniform(-0.55, 1.0))
+            rad = radius * rr.uniform(shell, 1.0)
+            ox, oy, oz = math.sin(ph) * math.cos(th), math.sin(ph) * math.sin(th), math.cos(ph) * flatten
+            px_, py_, pz_ = cx_ + ox * rad, cy_ + oy * rad, cz_ + oz * rad
+            s_ = size * rr.uniform(0.8, 1.2)
+            for k in range(2):
+                a = th + math.pi / 2 + k * math.pi / 2 + rr.uniform(-0.3, 0.3)
+                tl = rr.uniform(-0.15, 0.15) if hang else rr.uniform(-0.7, 0.7)
+                ex, ey = math.cos(a) * s_ / 2, math.sin(a) * s_ / 2
+                fx, fy, fz = -math.sin(a) * math.sin(tl) * s_ / 2, math.cos(a) * math.sin(tl) * s_ / 2, math.cos(tl) * s_ / 2
+                vs = [bm.verts.new((px_ + sx * ex + sy * fx, py_ + sx * ey + sy * fy, pz_ + sy * fz)) for sx, sy in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
+                f = bm.faces.new(vs)
+                for lp, (uu, vv) in zip(f.loops, ((0, 0), (1, 0), (1, 1), (0, 1))): lp[uv].uv = (uu, vv)
+    def crown_obj(name, parent, mat_name, fill):
+        bm = bmesh.new(); uv = bm.loops.layers.uv.new("UVMap"); fill(bm, uv, random.Random(name))
+        cm = bpy.data.meshes.new(name + "_c"); bm.to_mesh(cm); bm.free()
+        for p_ in cm.polygons: p_.use_smooth = True
+        cm.materials.append(MATS[mat_name]); co = bpy.data.objects.new(name + "_crown", cm); bpy.context.scene.collection.objects.link(co); co.parent = parent
+    if V2:
+        # ================================================================================================================
+        # tree models v2 (region flag "greens": "evidence"): branching trunks, crowns of outward-facing leaf sprays with
+        # light tips and shaded interiors, soft crown normals, a shrub skirt for ground contact. Three species fill the
+        # page's three tree slots: proto_tree_a broadleaf (neem / jamun), proto_tree_b ashoka, proto_palm.
+        # ================================================================================================================
+        class CardSet:
+            def __init__(s): s.V, s.F, s.UV, s.N = [], [], [], []
+            def card(s, bottom, up, side, w, h, cen, zk=1.0, up_mix=0.3, bend=0.0):
+                """A quad whose bottom edge centre is `bottom`, rising along `up` by h, w wide along `side`; normals bulge away from `cen`."""
+                b = np.array(bottom, float); u = np.array(up, float); u /= np.linalg.norm(u) + 1e-9; sd = np.array(side, float); sd -= u * (sd @ u); sd /= np.linalg.norm(sd) + 1e-9
+                qs = [b - sd * w / 2, b + sd * w / 2, b + sd * w / 2 + u * h, b - sd * w / 2 + u * h]
+                if bend: qs[2] = qs[2] + np.cross(u, sd) * bend; qs[3] = qs[3] + np.cross(u, sd) * bend
+                i0 = len(s.V)
+                for q, uv in zip(qs, ((0, 0), (1, 0), (1, 1), (0, 1))):
+                    r = (q - np.array(cen)) * np.array([1, 1, zk]); nn = r / (np.linalg.norm(r) + 1e-9); nn = nn * (1 - up_mix) + np.array([0, 0, 1.0]) * up_mix; nn /= np.linalg.norm(nn)
+                    s.V.append(tuple(q)); s.UV.append(uv); s.N.append(tuple(nn))
+                s.F.append((i0, i0 + 1, i0 + 2, i0 + 3))
+        def crown_mesh(cs, name, parent, mat_name):
+            if not cs.F: return
+            Vn = np.array(cs.V); Nn = np.array(cs.N); F2 = []
+            for f in cs.F:   # the front face must be the one the crown normal points out of: a card wound the other way shades as if it faced into the crown (a black cone)
+                g = np.cross(Vn[f[1]] - Vn[f[0]], Vn[f[3]] - Vn[f[0]]); F2.append(tuple(f[::-1]) if g @ Nn[list(f)].sum(0) < 0 else tuple(f))
+            me = bpy.data.meshes.new(name); me.from_pydata(cs.V, [], F2); me.update()
+            uvl = me.uv_layers.new(name="UVMap")
+            for lp in me.loops: uvl.data[lp.index].uv = cs.UV[lp.vertex_index]
+            me.normals_split_custom_set_from_vertices(cs.N)
+            for p_ in me.polygons: p_.use_smooth = True
+            me.materials.append(MATS[mat_name]); co = bpy.data.objects.new(name, me); bpy.context.scene.collection.objects.link(co); co.parent = parent
+        def ring_tube(mb, pts, radii, m, seg=8):
+            for k in range(len(pts) - 1): tube(mb, pts[k], pts[k + 1], radii[k], radii[k + 1], m, seg)
+        def unit(v): v = np.array(v, float); return v / (np.linalg.norm(v) + 1e-9)
+        def skirt(cs, rr, n=12, r0=0.5, r1=1.3, size=(0.9, 1.4)):
+            for k in range(n):
+                a = k / n * math.tau + rr.uniform(-0.25, 0.25); rad = rr.uniform(r0, r1)
+                cs.card((math.cos(a) * rad, math.sin(a) * rad, 0.0), (math.cos(a) * 0.55, math.sin(a) * 0.55, 0.85), (-math.sin(a), math.cos(a), 0), rr.uniform(*size), rr.uniform(*size) * 0.9, (0, 0, 0.1), up_mix=0.5)
+        # --- proto_tree_a: neem / jamun style broadleaf -----------------------------------------------------------------
+        rr = random.Random("neemV2"); mb = MB([])
+        lean = np.array([0.14, 0.06, 0.0])
+        ring_tube(mb, [(0, 0, 0), (0.0, 0.0, 0.45), (0.05, 0.02, 1.3), (0.12, 0.05, 2.2), (0.14, 0.06, 3.0)], [0.62, 0.40, 0.31, 0.27, 0.24], "trunk", 10)
+        for k in range(5):   # buttress roots: low, flaring tubes
+            a = k / 5 * math.tau + 0.3; tube(mb, (math.cos(a) * 0.1, math.sin(a) * 0.1, 0.5), (math.cos(a) * 0.85, math.sin(a) * 0.85, 0.0), 0.15, 0.05, "trunk", 5)
+        tips, mids = [], []
+        base = np.array([0.14, 0.06, 2.95]); nl = 5
+        for k in range(nl):
+            az = k / nl * math.tau + rr.uniform(-0.3, 0.3); el = math.radians(rr.uniform(34, 54)); Ln = rr.uniform(2.4, 3.2)
+            d1 = np.array([math.cos(az) * math.cos(el), math.sin(az) * math.cos(el), math.sin(el)]); p1 = base + d1 * Ln
+            tube(mb, base, p1, 0.2, 0.12, "trunk", 6); mids.append(p1)
+            for j, sgn in enumerate((-1, 1)):   # each limb forks in two
+                az2 = az + sgn * rr.uniform(0.35, 0.6); el2 = el + rr.uniform(-0.18, 0.12); L2 = rr.uniform(1.7, 2.5)
+                d2 = np.array([math.cos(az2) * math.cos(el2), math.sin(az2) * math.cos(el2), math.sin(el2)]); p2 = p1 + d2 * L2
+                tube(mb, p1, p2, 0.12, 0.05, "trunk", 5); tips.append(p2)
+        me_ = mb.build("proto_tree_a", MATS)
+        cen = (0.2, 0.0, 6.4); ZK = 1.5
+        dark, young = CardSet(), CardSet()
+        def clump(c, r, n, size):
+            for _ in range(n):
+                th, ph = rr.uniform(0, math.tau), math.acos(rr.uniform(-0.35, 1.0)); nd = np.array([math.sin(ph) * math.cos(th), math.sin(ph) * math.sin(th), math.cos(ph)])
+                tgt = (young if (nd[2] > 0.42 and rr.random() < 0.72) or rr.random() < 0.12 else dark)
+                ctr = np.array(c); bottom = ctr + nd * r * rr.uniform(0.22, 0.5)
+                up = unit(nd + np.array([rr.uniform(-0.3, 0.3), rr.uniform(-0.3, 0.3), 0.18]))
+                sz = size * rr.uniform(0.85, 1.2)
+                tgt.card(bottom, up, (rr.uniform(-1, 1), rr.uniform(-1, 1), rr.uniform(-0.4, 0.4)), sz * rr.uniform(0.9, 1.15), sz, cen, ZK, 0.3, bend=rr.uniform(-0.15, 0.15))
+        for t in tips: clump(t + np.array([0, 0, 0.5]), rr.uniform(1.9, 2.4), 28, 2.35)
+        for m_ in mids: clump(m_ + np.array([0, 0, 0.9]), 1.7, 12, 2.2)
+        clump(np.array([0.2, 0, 8.2]), 2.3, 24, 2.4)
+        for _ in range(46):   # infill through the crown's middle, so the silhouette is solid but the sky shows between clumps
+            th = rr.uniform(0, math.tau); rad = rr.uniform(0.5, 3.4); z = rr.uniform(5.3, 8.4)
+            pos = np.array([math.cos(th) * rad, math.sin(th) * rad, z]); nd = unit(pos - np.array(cen) * [1, 1, 1] + [0, 0, 0.6])
+            dark.card(pos - nd * 0.3, nd, (rr.uniform(-1, 1), rr.uniform(-1, 1), 0), 2.1, 2.2, cen, ZK, 0.3)
+        sk = CardSet(); skirt(sk, rr, 14)
+        crown_mesh(dark, "proto_tree_a_crown", me_, "leaf_broad"); crown_mesh(young, "proto_tree_a_crown2", me_, "leaf_young"); crown_mesh(sk, "proto_tree_a_crown3", me_, "leaf_under")
+        print("proto_tree_a cards", len(dark.F), len(young.F), len(sk.F))
+        # --- proto_tree_b: ashoka ----------------------------------------------------------------------------------------
+        rr = random.Random("ashokaV2"); mb = MB([])
+        ring_tube(mb, [(0, 0, 0), (0, 0, 0.4), (0, 0, 2.5), (0, 0, 6.5), (0, 0, 10.6)], [0.32, 0.22, 0.19, 0.13, 0.04], "trunk", 8)
+        me_ = mb.build("proto_tree_b", MATS); cs = CardSet(); cen = (0, 0, 5.8)
+        for i in range(40):   # rings of hanging sprays up a narrow cone; the leaves hang almost straight, so it reads as a column of drooping leaf, not tiers
+            z = 1.3 + i * 0.235; frac = (z - 1.3) / 9.4; rad = 1.6 * (1 - frac) ** 0.8 + 0.1; n = int(4 + rad * 3.4)
+            for k in range(n):
+                a = k / n * math.tau + rr.uniform(-0.4, 0.4) + i * 0.9; r_ = rad * rr.uniform(0.6, 1.0); sz = rr.uniform(1.1, 1.55) * (1.0 - 0.3 * frac)
+                top = np.array([math.cos(a) * r_, math.sin(a) * r_, z + sz * 0.6]); out = np.array([math.cos(a), math.sin(a), 0.0])
+                cs.card(top, unit(np.array([0, 0, -1.0]) + out * (0.1 + 0.18 * (1 - frac)) + np.array([rr.uniform(-0.1, 0.1), rr.uniform(-0.1, 0.1), 0])), (-math.sin(a), math.cos(a), 0), sz * 1.0, sz, (0, 0, z - 1.5), 2.6, 0.2)
+        crown_mesh(cs, "proto_tree_b_crown", me_, "leaf_ashoka")
+        print("proto_tree_b cards", len(cs.F))
+        # --- proto_palm ---------------------------------------------------------------------------------------------------
+        rr = random.Random("palmV2"); mb = MB([]); hgt = 10.2; prev = (0, 0, 0)
+        for k in range(1, 11):
+            z = k * hgt / 10; nxt = (0.45 * (z / hgt) ** 2, 0.1 * (z / hgt) ** 2, z); tube(mb, prev, nxt, 0.28 - 0.011 * k + (0.04 if k % 2 == 0 else 0.0), 0.28 - 0.011 * (k + 1) + (0.04 if k % 2 == 1 else 0.0), "trunk", 8); prev = nxt
+        tube(mb, prev, (prev[0], prev[1], hgt + 1.0), 0.2, 0.14, "frond", 8); me_ = mb.build("proto_palm", MATS); tip = np.array([prev[0], prev[1], hgt + 0.85])
+        cs = CardSet()
+        for f in range(16):
+            a = f / 16 * math.tau + rr.uniform(-0.12, 0.12); rise = rr.uniform(0.0, 1.0) * (0.6 if f % 2 else 1.0); Lf = rr.uniform(3.7, 4.5); nrm = np.array([-math.sin(a), math.cos(a), 0])
+            pts_ = [tip + np.array([math.cos(a) * Lf * t, math.sin(a) * Lf * t, rise * t * 2.4 - 2.8 * t * t]) for t in np.linspace(0, 1, 5)]
+            for i in range(4):   # each frond a shallow V: two strips folded down about the rachis
+                p0, p1 = pts_[i], pts_[i + 1]; w0, w1 = 0.95 * (0.5 + 0.5 * math.sin(math.pi * (i / 4 + 0.12))), 0.95 * (0.5 + 0.5 * math.sin(math.pi * ((i + 1) / 4 + 0.08)))
+                for sg in (1, -1):
+                    v = [p0, p1, p1 + nrm * sg * w1 + np.array([0, 0, -0.38 * w1]), p0 + nrm * sg * w0 + np.array([0, 0, -0.38 * w0])]
+                    i0 = len(cs.V); cs.V.extend([tuple(x) for x in v]); u0, u1 = i / 4, (i + 1) / 4; vv = (0.5, 0.5, 1.0 if sg > 0 else 0.0, 1.0 if sg > 0 else 0.0)
+                    cs.UV.extend([(u0, 0.5), (u1, 0.5), (u1, 1.0 if sg > 0 else 0.0), (u0, 1.0 if sg > 0 else 0.0)])
+                    for x in v: nn = unit(np.array([x[0] - tip[0], x[1] - tip[1], 0.9])); cs.N.append(tuple(nn))
+                    cs.F.append((i0, i0 + 1, i0 + 2, i0 + 3))
+        crown_mesh(cs, "proto_palm_crown", me_, "leaf_frond")
+        print("proto_palm cards", len(cs.F))
+    else:
+        # neem-like broadleaf (Azadirachta indica, the commonest street tree in Noida): a short trunk, five spreading
+        # limbs, a wide rounded crown of leaf clusters; about 9.5 m tall and 9 m across at scale 1
+        mb = MB([]); rr = random.Random("neem")
+        tube(mb, (0, 0, 0), (0.15, 0.05, 3.1), 0.34, 0.24, "trunk", 8)
+        ends = []
+        for k in range(5):
+            a = k / 5 * math.tau + rr.uniform(-0.3, 0.3); rad = rr.uniform(2.4, 3.3); top = rr.uniform(5.6, 6.8)
+            mid = (0.15 + math.cos(a) * rad * 0.45, 0.05 + math.sin(a) * rad * 0.45, 4.4)
+            end = (math.cos(a) * rad, math.sin(a) * rad, top); tube(mb, (0.15, 0.05, 3.0), mid, 0.2, 0.13, "trunk", 6); tube(mb, mid, end, 0.13, 0.06, "trunk", 5)
+            ends.append(end)
+        me_ = mb.build("proto_tree_a", MATS)
+        def neem_fill(bm, uv, rr):
+            for e in ends: cards(bm, uv, rr, (e[0], e[1], e[2] + 0.6), rr.uniform(1.9, 2.4), 30, 1.5)
+            for k in range(4):
+                a = k / 4 * math.tau + 0.4; cards(bm, uv, rr, (math.cos(a) * 1.4, math.sin(a) * 1.4, 7.6), 2.2, 30, 1.5)
+            cards(bm, uv, rr, (0.2, 0, 8.4), 2.0, 26, 1.4)
+        crown_obj("proto_tree_a", me_, "leaf", neem_fill)
+        # ashoka (Polyalthia longifolia, planted in rows along Noida plot boundaries): tall, narrow, conical, drooping
+        # leaves from the ground almost to the tip; about 11 m tall and 3.4 m across at scale 1
+        mb = MB([]); tube(mb, (0, 0, 0), (0, 0, 10.6), 0.2, 0.05, "trunk", 6); me_ = mb.build("proto_tree_b", MATS)
+        def ashoka_fill(bm, uv, rr):
+            for i in range(34):
+                z = 1.6 + i * 0.27; rad = 1.75 * (1 - (z - 1.6) / 10.0) ** 0.9 + 0.15
+                for _ in range(int(5 + rad * 4)):
+                    th = rr.uniform(0, math.tau); r_ = rad * rr.uniform(0.6, 1.0); s_ = rr.uniform(1.0, 1.35)
+                    px_, py_ = math.cos(th) * r_, math.sin(th) * r_; a = th + math.pi / 2 + rr.uniform(-0.4, 0.4)
+                    ex, ey = math.cos(a) * s_ / 2, math.sin(a) * s_ / 2
+                    vs = [bm.verts.new((px_ + sx * ex, py_ + sx * ey, z + sy * s_ * 0.6)) for sx, sy in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
+                    f = bm.faces.new(vs)
+                    for lp, (uu, vv) in zip(f.loops, ((0, 0), (1, 0), (1, 1), (0, 1))): lp[uv].uv = (uu, vv)
+        crown_obj("proto_tree_b", me_, "leaf_b", ashoka_fill)
+        # palm (royal or foxtail, planted at entrances): a smooth, slightly curving trunk and 14 arching fronds
+        mb = MB([]); hgt = 10.5; prev = (0, 0, 0)
+        for k in range(1, 9):
+            z = k * hgt / 8; nxt = (0.35 * (z / hgt) ** 2, 0, z); tube(mb, prev, nxt, 0.24 - 0.008 * k, 0.24 - 0.008 * (k + 1), "trunk", 8); prev = nxt
+        tube(mb, prev, (prev[0], 0, hgt + 1.1), 0.18, 0.12, "frond", 8)   # the green crownshaft
+        me_ = mb.build("proto_palm", MATS); tip = (prev[0], 0, hgt + 0.9)
+        def palm_fill(bm, uv, rr):
+            for f in range(14):
+                a = f / 14 * math.tau + rr.uniform(-0.15, 0.15); rise = rr.uniform(0.2, 0.9); Lf = rr.uniform(3.6, 4.4)
+                pts_ = [(tip[0] + math.cos(a) * Lf * t, tip[1] + math.sin(a) * Lf * t, tip[2] + rise * t * 2.2 - 2.6 * t * t) for t in np.linspace(0, 1, 4)]
+                for i in range(3):
+                    p0, p1 = pts_[i], pts_[i + 1]; w0, w1 = 0.9 * (0.55 + 0.45 * math.sin(math.pi * (i / 3 + 0.15))), 0.9 * (0.55 + 0.45 * math.sin(math.pi * ((i + 1) / 3 + 0.05)))
+                    nx_, ny_ = -math.sin(a), math.cos(a)
+                    vs = [bm.verts.new((p0[0] + nx_ * w0, p0[1] + ny_ * w0, p0[2])), bm.verts.new((p1[0] + nx_ * w1, p1[1] + ny_ * w1, p1[2])),
+                          bm.verts.new((p1[0] - nx_ * w1, p1[1] - ny_ * w1, p1[2])), bm.verts.new((p0[0] - nx_ * w0, p0[1] - ny_ * w0, p0[2]))]
+                    f_ = bm.faces.new(vs)
+                    for lp, (uu, vv) in zip(f_.loops, ((i / 3, 1), ((i + 1) / 3, 1), ((i + 1) / 3, 0), (i / 3, 0))): lp[uv].uv = (uu, vv)
+                # a second, crossed card along the same frond so it has thickness from the side
+                pass
+        crown_obj("proto_palm", me_, "leaf_palm", palm_fill)
     mb = MB([]); cyl(mb, 0, 0, 0, 9.0, 0.09, 0.09, 0, "metal", 8); boxm(mb, 1.0, 0, 8.8, 8.95, 2.2, 0.08, 0, "metal"); boxm(mb, 2.0, 0, 8.6, 8.9, 0.8, 0.3, 0, "lamp_head")
     mat("lamp_head", "#e6e2d6", 0.4, emit="#fff0d0", ek=0.0); mb.build("proto_lamp", MATS)
     mat("car_body", "#ffffff", 0.22, 0.55); mat("car_glass", "#1a2026", 0.04, 0.6); mat("tyre", "#161616", 0.9); mat("hub", "#b9bcbf", 0.3, 0.9)
@@ -890,11 +1261,26 @@ def page_data(info):
     # keep the view from the street to the entrance open
     E, W0 = info["entrance"], info["street_cam"]
     sight = LineString([W0, E]).buffer(9).union(Point(*W0).buffer(14)).union(Point(*info["walk0"]).buffer(10))
-    for x, y, k in list(S["trees"]) + [(x_, y_, 1.0) for x_, y_ in EXTRA_TREES]:
-        if not inside(x, y, 6): continue
+    EV = S.get("greens") == "evidence"   # trees from open data (prep.py): [x, y, scale, species]; the older scatter is [x, y, k] with a random species
+    TL = list(S["trees"])
+    if EV:
+        ins = [t for t in TL if inside(t[0], t[1], 6)]
+        cap = S.get("tree_cap") or 0
+        if cap and len(ins) > cap: ins = sorted(ins, key=lambda t: -t[2])[:cap]   # over the page's budget: the small, isolated trees go first
+        wl = unary_union([l.buffer(1.1) for l in WALLS["lines"]]) if WALLS["lines"] else None
+        if wl is not None: shapely.prepare(wl)
+        TL = ins
+    for tt in TL + [(x_, y_, 1.0) for x_, y_ in EXTRA_TREES]:
+        x, y = tt[0], tt[1]
+        if not EV and not inside(x, y, 6): continue
         lx, ly = L(x, y)
         if sight.contains(Point(lx, ly)): continue
-        t = 2 if rnd.random() < 0.18 else 1 if rnd.random() < 0.3 else 0; trees.append([round(lx, 1), round(ly, 1), t, round(k, 2), round(rnd.random() * 6.28, 2)])
+        if EV and len(tt) > 3:
+            if wl is not None and wl.contains(Point(x, y)): continue    # no tree through a compound wall
+            trees.append([round(lx, 1), round(ly, 1), int(tt[3]), round((tt[2] - 0.75) / 0.35, 2), round(rnd.random() * 6.28, 2)]); continue
+        k = tt[2]; t = 2 if rnd.random() < 0.18 else 1 if rnd.random() < 0.3 else 0; trees.append([round(lx, 1), round(ly, 1), t, round(k, 2), round(rnd.random() * 6.28, 2)])
+    for x, y, t, k in (SITE["trees"] if SITE else []):   # the plot's own planting: species and size as designed
+        lx, ly = L(x, y); trees.append([round(lx, 1), round(ly, 1), int(t), round(k, 2), round(rnd.random() * 6.28, 2)])
     lamps = [[*map(lambda v: round(v, 1), L(x, y))] for x, y in WJ["lamps"] if inside(x, y, 4)]
     traffic = []
     for t in WJ["traffic"]:
@@ -911,9 +1297,10 @@ def page_data(info):
     routes = [{"kind": r["kind"], "name": r["name"], "m": r["m"], "min": r.get("min"), "path": [[round(a, 1), round(b, 1)] for a, b in (L(x, y) for x, y in r["path"])]} for r in SO["routes"]]
     return {"id": OID, "name": BO["name"], "origin": [round(OX, 2), round(OY, 2)], "slab": [[round(a, 1), round(b, 1)] for a, b in SL.exterior.coords],
             "building": {"foot": [[round(a, 1), round(b, 1)] for a, b in (L(x, y) for x, y in OPTB["p"])], "h": round(info["H"], 1), "floors": info["floors"], "glassy": info["glassy"],
+                         **({"upper": {"from": SITE["upper"]["from"], "foot": [[round(a, 1), round(b, 1)] for a, b in (L(x, y) for x, y in SITE["upper"]["foot"])]}} if SITE and SITE.get("upper") else {}),
                          "entrance": [round(v, 1) for v in info["entrance"]], "facing": round(info["canopy_ang"], 3)},
             "walk0": [round(v, 1) for v in info["walk0"]], "street_cam": [round(v, 1) for v in info["street_cam"]], "stations": info["stations"], "landmarks": [m for m in LANDMARKS.values() if m.get("prop") or m["name"] in ("Times Square", "Fleet House")], "routes": routes,
-            "trees": trees, "lamps": lamps, "traffic": traffic, "metro": metro, "blocks": blds}
+            "trees": trees, "lamps": lamps, "traffic": traffic, "metro": metro, "blocks": blds + [[[round(a, 1), round(b, 1)] for a, b in (L(x, y) for x, y in w.exterior.coords)] for w in WALLS["polys"] if w.geom_type == "Polygon"]}
 
 # ---------------------------------------------------------------- export ----
 def export(path):
@@ -1426,7 +1813,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); import check_log
 SHOT_CAMS = {"prv_street": (1405, -380, 30), "prv_west": (1175, -300, 70), "prv_aerial": (1262, -430, 105), "road": (1440, -378, 24)}
 _rk = A[A.index("--render") + 1:] if "--render" in A else []
 check_logic.run({"S": S, "A": A, "OID": OID, "OUT": OUT, "L": L, "built": LOGIC.get("built", []), "ROAD": LOGIC["road"],
-                 "SLAB": SLAB, "METRO_CLEAR": METRO_CLEAR, "on_road": LOGIC.get("on_road", []),
+                 "SLAB": SLAB, "METRO_CLEAR": METRO_CLEAR, "on_road": LOGIC.get("on_road", []), "walls": WALLS["polys"], "wall_stats": WALLS["stats"],
                  "cameras": [SHOT_CAMS[k] for k in _rk if k in SHOT_CAMS] +
                             ([tuple(k["pos"]) for k in json.load(open(A[A.index("--anim") + 1]))[A[A.index("--anim") + 2]]["keys"]] if "--anim" in A else [])})
 if "--hero-blend" in A: swap_hero(A[A.index("--hero-blend") + 1])
@@ -1496,6 +1883,9 @@ if "--render" in A:
         elif k == "campus":   # from over the main road, looking down at the gates and the compound
             c_ = Polygon(OPTB["p"]).centroid
             aerial(data, info, "campus", az_off=((c_.x + 70, c_.y + 210, 120), (c_.x - 5, c_.y + 40, 0), 32))
+        elif k == "walls" and WALLS.get("gates"):   # eye height, 13 m out from the compound gate nearest the property: its wall, pillars and open leaves
+            e_ = (info["entrance"][0] + OX, info["entrance"][1] + OY); gx_, gy_, ox_, oy_, gl_ = min(WALLS["gates"], key=lambda g: math.hypot(g[0] - e_[0], g[1] - e_[1]) + (400 if g[4] < 3.5 else 0))
+            aerial(data, info, "walls", az_off=((gx_ + ox_ * 14 - oy_ * 3, gy_ + oy_ * 14 + ox_ * 3, 1.7), (gx_, gy_, 1.6), 30))
         elif k == "roof": aerial(data, info, "roof", az_off=((1831 + 95, -151 - 120, 165), (1831, -151, 58), 35))
         elif k == "overview": aerial(data, info, "overview", az_off=((1690, -1000, 390), (1765, -265, 12), 30))
         else: render(k, data, info)

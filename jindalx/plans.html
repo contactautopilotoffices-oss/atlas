@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>Floor plans · JindalX</title>
+<style>
+:root{--ink:#fff;--acc:#ffc200;--glass:rgba(14,15,18,.72)}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{background:#0b0c0e;color:var(--ink);font:400 14px/1.4 Geist,Inter,system-ui,sans-serif;overflow:hidden}
+header{position:fixed;top:14px;left:14px;right:14px;z-index:5;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.pill{padding:10px 16px;border-radius:999px;background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.16);color:#fff;text-decoration:none;font-weight:600;font-size:13.5px;cursor:pointer}
+.pill:hover,.pill.on{background:var(--acc);color:#17140a;border-color:var(--acc)}
+.tabs{display:flex;gap:8px;flex-wrap:wrap}
+#stage{position:fixed;inset:0;cursor:grab;touch-action:none}#stage.drag{cursor:grabbing}
+#sheet{position:absolute;left:0;top:0;transform-origin:0 0;background:#fff;border-radius:6px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+svg{display:block}
+.z{stroke-width:2;vector-effect:non-scaling-stroke}
+.k-workspace{fill:rgba(80,140,255,.16);stroke:rgba(60,110,230,.6)}.k-lobby{fill:rgba(255,80,190,.38);stroke:#e0309a}.k-passage{fill:rgba(255,194,0,.42);stroke:#d99a00}.k-service{fill:rgba(40,180,140,.34);stroke:#14997a}
+.z:hover{stroke-width:3.5}
+#legend{position:fixed;left:14px;bottom:14px;z-index:5;padding:12px 16px;border-radius:16px;background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.16);display:grid;gap:7px;font-size:13px}
+#legend b{font:500 11px/1 ui-monospace,monospace;letter-spacing:.14em;text-transform:uppercase;color:var(--acc)}
+#legend i{display:inline-block;width:14px;height:14px;border-radius:3px;margin-right:9px;vertical-align:-2px;border:1.5px solid}
+#tip{position:fixed;z-index:6;pointer-events:none;padding:6px 10px;border-radius:8px;background:#000c;font-size:12.5px;display:none}
+#note{position:fixed;right:14px;bottom:14px;z-index:5;max-width:320px;font-size:12px;color:rgba(255,255,255,.62);text-align:right}
+</style></head><body>
+<header><a class="pill" id="back" href="/jindalx-noida/world">← Back to the 3D</a><div class="tabs" id="tabs"></div></header>
+<div id="stage"><div id="sheet"></div></div>
+<div id="legend"></div><div id="tip"></div><p id="note">Drag to move · scroll or pinch to zoom · double-click to fit</p>
+<script>
+const KEYS={workspace:["Open floor","#4f8cff"],lobby:["Lobby","#ff50be"],passage:["Passages, stairs and lifts","#ffc200"],service:["Built-up: toilets, rooms and services","#28b48c"]};
+const ORDER=["magnus-towers","a104","a14-18-19","d1"],NAMES={"magnus-towers":"Magnus Towers · 5th","a14-18-19":"A14/18/19 · 2nd","d1":"D1 · 2nd"};
+const q=new URLSearchParams(location.search);let DATA={},cur=q.get("id")||"magnus-towers";
+const stage=document.getElementById("stage"),sheet=document.getElementById("sheet"),tip=document.getElementById("tip");
+let s=1,tx=0,ty=0,W=1,H=1;
+function apply(){sheet.style.transform=`translate(${tx}px,${ty}px) scale(${s})`}
+function fit(){const m=90,vw=innerWidth,vh=innerHeight-(vw<700?150:110);s=Math.min((vw-28)/W,vh/H);tx=(vw-W*s)/2;ty=70+(vh-H*s)/2+10;apply()}
+function show(id){cur=id;const p=DATA[id];if(!p)return;history.replaceState(null,"","?id="+id);
+ W=p.size[0];H=p.size[1];sheet.style.width=W+"px";sheet.style.height=H+"px";
+ const zs=p.zones.map(z=>`<polygon class="z k-${z.kind}" points="${z.points.map(a=>a.join(",")).join(" ")}" data-n="${z.name}"/>`).join("");
+ sheet.innerHTML=`<svg viewBox="0 0 ${W} ${H}" width="${W}" height="${H}"><image href="${p.image}" width="${W}" height="${H}"/>${zs}</svg>`;
+ document.querySelectorAll("#tabs .pill").forEach(b=>b.classList.toggle("on",b.dataset.id===id));
+ document.getElementById("back").href="/jindalx-noida/world#"+id;
+ document.getElementById("legend").innerHTML=(p.asDrawn?'<b>Colours as drawn by the architect</b><span><i style="background:#cfe3ff;border-color:#7fb0ee"></i>Hall: the open floor</span><span><i style="background:#ffc6f5;border-color:#d97ad0"></i>Lift lobby</span><span><i style="background:#e0d4ee;border-color:#a98bc8"></i>Rooms</span><span><i style="background:#fdf6cf;border-color:#d8c870"></i>Pantry and break area</span><span><i style="background:#fbdcc4;border-color:#d9a070"></i>Toilets</span><span><i style="background:#e4e4d6;border-color:#a8a890"></i>Terrace and balcony</span>':'<b>Floor colour key</b>'+Object.entries(KEYS).map(([k,[n,c]])=>`<span><i style="background:${c}55;border-color:${c}"></i>${n}</span>`).join(""));
+ fit()}
+fetch("/media/jindalx-noida/plans/plans.json").then(r=>r.json()).then(d=>{DATA=d;const t=document.getElementById("tabs");
+ t.innerHTML=ORDER.filter(i=>d[i]).map(i=>`<button class="pill" data-id="${i}">${NAMES[i]}</button>`).join("");t.onclick=e=>{const b=e.target.closest("button");if(b)show(b.dataset.id)};show(d[cur]?cur:Object.keys(d)[0])});
+let drag=null;
+stage.addEventListener("pointerdown",e=>{drag={x:e.clientX-tx,y:e.clientY-ty};stage.classList.add("drag");stage.setPointerCapture(e.pointerId)});
+stage.addEventListener("pointermove",e=>{if(drag){tx=e.clientX-drag.x;ty=e.clientY-drag.y;apply()}
+ const z=e.target.closest&&e.target.closest(".z");if(z){tip.textContent=z.dataset.n;tip.style.display="block";tip.style.left=e.clientX+14+"px";tip.style.top=e.clientY+14+"px"}else tip.style.display="none"});
+stage.addEventListener("pointerup",()=>{drag=null;stage.classList.remove("drag")});
+stage.addEventListener("wheel",e=>{e.preventDefault();const f=Math.exp(-e.deltaY*(e.ctrlKey?.01:.0015));const ns=Math.max(.15,Math.min(8,s*f));tx=e.clientX-(e.clientX-tx)*ns/s;ty=e.clientY-(e.clientY-ty)*ns/s;s=ns;apply()},{passive:false});
+stage.addEventListener("dblclick",fit);addEventListener("resize",fit);
+</script></body></html>

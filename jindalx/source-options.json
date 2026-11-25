@@ -5,7 +5,7 @@
     {
       "Address/Sector": "Magnus towers, Sector 67, Noida",
       "Location": "Magnus Towers",
-      "Nearest Metro station": "Sector 59, ~2KM",
+      "Nearest Metro station": "Sector 59, ~2 KM",
       "Distance from Jindal X existing office": "~7 KM",
       "Building structure": "B+G+5",
       "BUA each floor, sqft": "38000",
@@ -17,7 +17,6 @@
       "Lifts each floor": "6",
       "Timelines": "3 Months ",
       "Pros ": "The only new(Decemeber 2026 handover) asset with larger floor plates, Sufficient parking area, wider roads and excellent Local transport connectivity. Area is not too dense. ",
-      "Cons": "",
       "Tentative Monthly outflow for JindalX": "INR 20,08,000/- + GST"
     },
     {
@@ -35,13 +34,12 @@
       "Lifts each floor": "2",
       "Timelines": "3 Months ",
       "Pros ": "The only new(Decemeber 2026 handover) asset with larger floor plates, Sufficient parking area, Excellent Local transport connectivity. ",
-      "Cons": "1 Approach road is narrow and the other one has Dumpyard",
       "Tentative Monthly outflow for JindalX": "INR 21,50,000/- + GST"
     },
     {
       "Address/Sector": "A14/18/19, Sector 9, Noida",
       "Location": "A14,18,19",
-      "Nearest Metro station": "Sector 16, ~2KM",
+      "Nearest Metro station": "Sector 16, 1.9 KM",
       "Distance from Jindal X existing office": "~7KM",
       "Building structure": "B+G/S+2+2 floors of 8k sqft",
       "BUA each floor, sqft": "G,1,2- 18000                                                      3,4- 8000",
@@ -53,13 +51,12 @@
       "Lifts each floor": "2",
       "Timelines": "4-5 Months",
       "Pros ": "Entire building is available, Main road, well connected with DND road, Entire building upgradation is in process",
-      "Cons": "Distance from metro",
       "Tentative Monthly outflow for JindalX": "INR 18,50,000/- + GST"
     },
     {
       "Address/Sector": "D1, Sector 3, Noida",
       "Location": "D1",
-      "Nearest Metro station": "Sector 16, ~500 Mtrs",
+      "Nearest Metro station": "Sector 16, 500 Mtrs",
       "Distance from Jindal X existing office": "~7KM",
       "Building structure": "B+G+2",
       "BUA each floor, sqft": "20000",
@@ -71,7 +68,6 @@
       "Lifts each floor": "3",
       "Timelines": "4-5 Months",
       "Pros ": "Entire building is available, Main road, well connected with DND road, Entire building upgradation is in process and approach roads are wider",
-      "Cons": "Expensive",
       "Tentative Monthly outflow for JindalX": "INR 24,50,000/- + GST"
     }
   ]
